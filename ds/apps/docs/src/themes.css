@@ -1,50 +1,96 @@
 /* --- IMPORTACIÓN DE TOKENS ORIGINALES --- */
 @import '../../../packages/tokens/src/css/base.css';
-@import '../../../packages/tokens/src/css/theme-ep.css';
-@import '../../../packages/tokens/src/css/theme-estar-protegidos.css';
-@import '../../../packages/tokens/src/css/theme-client-b.css';
-@import '../../../packages/tokens/src/css/theme-client-a.css';
 
 /* --- BRIDGE: Mapeo de Brand Tokens a Semantic Tokens --- */
 
+/* Estilos comunes para todos los temas */
 .theme-estar-protegidos,
-.theme-ep,
-.theme-client-b,
-.theme-client-a {
-  /* Shadcn standard */
-  --background: var(--brand-surface);
-  --foreground: var(--neutral-900);
+.theme-salud,
+.theme-viaje,
+.theme-hogar,
+.theme-finanzas {
   --border: var(--brand-outline);
   --input: var(--brand-outline);
-  
-  /* Shared Config (Tu local) */
-  --color-background: var(--brand-surface);
-  --color-text: var(--neutral-900);
+  --radius: 0.75rem;
 }
 
-/* Mapeo específico Estar Protegidos */
-.theme-estar-protegidos, .theme-ep {
-  --primary: var(--brand-primary);
-  --primary-foreground: var(--text-on-primary);
-  --secondary: var(--brand-secondary);
-  --secondary-foreground: #ffffff;
-  --ring: var(--brand-primary);
-
-  /* Variables de conveniencia para accesibilidad */
-  --on-primary: var(--text-on-primary);
-  --color-primary: var(--brand-primary);
-  --color-secondary: var(--brand-secondary);
+/* 1. ESTAR PROTEGIDOS (Marca Madre) */
+.theme-estar-protegidos {
+  --background: #F6F3EE;
+  --foreground: #1C1B17;
+  --primary: #57C19A;
+  --primary-foreground: #00382B;
+  --secondary: #00745A;
+  --secondary-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --accent: #8CCFBA;
+  --accent-foreground: #00382B;
+  --ring: #57C19A;
+  --font-family-heading: 'Poppins', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
 }
 
-/* Mapeo específico Client B */
-.theme-client-b {
-  --primary: var(--brand-primary);
-  --primary-foreground: var(--text-on-primary);
-  --secondary: var(--brand-secondary);
-  --secondary-foreground: #ffffff;
-  --ring: var(--brand-primary);
+/* 2. PROTEGE TU SALUD */
+.theme-salud {
+  --background: #F8F7F4;
+  --foreground: #1D1B16;
+  --primary: #22C7A9;
+  --primary-foreground: #00382D;
+  --secondary: #6BAF9D;
+  --secondary-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --accent: #CDEEEB;
+  --accent-foreground: #00201A;
+  --ring: #22C7A9;
+  --font-family-heading: 'Poppins', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
+}
 
-  --on-primary: var(--text-on-primary);
-  --color-primary: var(--brand-primary);
-  --color-secondary: var(--brand-secondary);
+/* 3. PROTEGE TU VIAJE */
+.theme-viaje {
+  --background: #F6EFE8;
+  --foreground: #1F1B16;
+  --primary: #ED914D;
+  --primary-foreground: #492100;
+  --secondary: #FFB48A;
+  --secondary-foreground: #390B00;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --accent: #FFD9B5;
+  --accent-foreground: #2C1600;
+  --ring: #ED914D;
+  --font-family-heading: 'Montserrat', sans-serif;
+  --font-family-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* 4. PROTEGE TU HOGAR */
+.theme-hogar {
+  --background: #E9E5DB;
+  --foreground: #1C1C17;
+  --primary: #4F704A;
+  --primary-foreground: #FFFFFF;
+  --secondary: #3A523C;
+  --secondary-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --accent: #C9D7B8;
+  --accent-foreground: #1A2111;
+  --ring: #4F704A;
+}
+
+/* 5. PROTEGE TUS FINANZAS */
+.theme-finanzas {
+  --background: #F2E9D9;
+  --foreground: #201A11;
+  --primary: #263A45;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1D1D1D;
+  --secondary-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --accent: #FBD7A5;
+  --accent-foreground: #261900;
+  --ring: #263A45;
 }

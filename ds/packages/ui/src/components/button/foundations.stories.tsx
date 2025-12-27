@@ -31,7 +31,7 @@ export const TypographyAndColors = () => (
     </section>
 
     <section className="flex gap-4">
-      <Button variant="default">Button Primary</Button>
+      <Button variant="primary">Button Primary</Button>
       <Button variant="outline">Button Outline</Button>
     </section>
   </div>

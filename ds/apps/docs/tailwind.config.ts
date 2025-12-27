@@ -26,6 +26,15 @@ const config: Config = {
           DEFAULT: "var(--destructive)",
           foreground: "var(--destructive-foreground)",
         },
+        // Colores para estados hover y elementos sutiles
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
         // Mapeo de texto accesible (on-colors)
         "on-primary": "var(--on-primary)",
         brand: {
