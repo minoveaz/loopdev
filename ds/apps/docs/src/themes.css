@@ -1,0 +1,37 @@
+/* --- IMPORTACIÓN DE TOKENS ORIGINALES --- */
+@import '../../../packages/tokens/src/css/base.css';
+@import '../../../packages/tokens/src/css/theme-ep.css';
+@import '../../../packages/tokens/src/css/theme-estar-protegidos.css';
+@import '../../../packages/tokens/src/css/theme-client-b.css';
+@import '../../../packages/tokens/src/css/theme-client-a.css';
+
+/* --- BRIDGE: Mapeo de Brand Tokens a Semantic Tokens (shadcn) --- */
+
+/* Estilos comunes para todos los temas de marca */
+.theme-estar-protegidos,
+.theme-ep,
+.theme-client-b,
+.theme-client-a {
+  --background: var(--brand-surface);
+  --foreground: var(--neutral-900);
+  --border: var(--brand-outline);
+  --input: var(--brand-outline);
+}
+
+/* Mapeo específico Estar Protegidos */
+.theme-estar-protegidos, .theme-ep {
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--text-on-primary);
+  --secondary: var(--brand-secondary);
+  --secondary-foreground: #ffffff;
+  --ring: var(--brand-primary);
+}
+
+/* Mapeo específico Client B */
+.theme-client-b {
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--text-on-primary);
+  --secondary: var(--brand-secondary);
+  --secondary-foreground: #ffffff;
+  --ring: var(--brand-primary);
+}
