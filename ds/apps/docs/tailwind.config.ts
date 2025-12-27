@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Soporte para variables Shadcn
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
@@ -26,6 +27,17 @@ const config: Config = {
           DEFAULT: "var(--destructive)",
           foreground: "var(--destructive-foreground)",
         },
+        // Soporte para variables Shared Config (Local)
+        brand: {
+          primary: "var(--brand-primary)",
+          secondary: "var(--brand-secondary)",
+          surface: "var(--brand-surface)",
+          outline: "var(--brand-outline)",
+        },
+        state: {
+          success: "var(--state-success)",
+          error: "var(--state-error)",
+        }
       },
     },
   },

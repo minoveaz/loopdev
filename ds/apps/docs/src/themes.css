@@ -5,26 +5,35 @@
 @import '../../../packages/tokens/src/css/theme-client-b.css';
 @import '../../../packages/tokens/src/css/theme-client-a.css';
 
-/* --- BRIDGE: Mapeo de Brand Tokens a Semantic Tokens (shadcn) --- */
+/* --- BRIDGE: Mapeo de Brand Tokens a Semantic Tokens --- */
 
-/* Estilos comunes para todos los temas de marca */
 .theme-estar-protegidos,
 .theme-ep,
 .theme-client-b,
 .theme-client-a {
+  /* Shadcn standard */
   --background: var(--brand-surface);
   --foreground: var(--neutral-900);
   --border: var(--brand-outline);
   --input: var(--brand-outline);
+  
+  /* Shared Config (Tu local) */
+  --color-background: var(--brand-surface);
+  --color-text: var(--neutral-900);
 }
 
 /* Mapeo específico Estar Protegidos */
 .theme-estar-protegidos, .theme-ep {
+  /* Para componentes Shadcn */
   --primary: var(--brand-primary);
   --primary-foreground: var(--text-on-primary);
   --secondary: var(--brand-secondary);
   --secondary-foreground: #ffffff;
   --ring: var(--brand-primary);
+
+  /* Para componentes que usan tu Shared Config */
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-secondary);
 }
 
 /* Mapeo específico Client B */
@@ -34,4 +43,7 @@
   --secondary: var(--brand-secondary);
   --secondary-foreground: #ffffff;
   --ring: var(--brand-primary);
+
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-secondary);
 }
