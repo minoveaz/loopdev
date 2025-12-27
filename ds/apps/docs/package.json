@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "echo 'No dev server'",
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build",
+    "build-storybook": "storybook build",
     "lint": "eslint . || echo 'No lint config'",
     "typecheck": "tsc --noEmit || echo 'No tsconfig'"
   },
