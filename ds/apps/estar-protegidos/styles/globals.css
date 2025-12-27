@@ -1,0 +1,8 @@
+@import "../../../packages/tokens/src/css/base.css";
+@import "../../../packages/tokens/src/css/theme-ep.css";
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}

@@ -1,0 +1,30 @@
+.theme-estar-protegidos {
+  /* Fonts */
+  --font-family-heading: 'Poppins', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
+
+  /* Colors (Exactos MarketingStudio) */
+  --brand-primary: #57C19A;
+  --brand-secondary: #00745A;
+  --brand-tertiary: #124559;
+  
+  /* Pasteles */
+  --brand-pastel-1: #8CCFBA;
+  --brand-pastel-2: #AFCDEB;
+  
+  --brand-surface: #F6F3EE;
+  --brand-outline: #324450;
+
+  /* Semantic */
+  --text-on-primary: #00382B;
+  --text-on-secondary: #FFFFFF;
+  
+  --btn-primary-bg: var(--brand-primary);
+  --btn-primary-text: var(--text-on-primary);
+  --btn-secondary-bg: var(--brand-secondary);
+  --btn-secondary-text: #FFFFFF;
+  
+  /* Para variantes pastel de botones o cards */
+  --component-pastel-bg: var(--brand-pastel-1);
+  --component-pastel-text: #00382B;
+}

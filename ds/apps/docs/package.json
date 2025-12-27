@@ -7,5 +7,18 @@
     "dev": "echo 'No dev server'",
     "lint": "eslint . || echo 'No lint config'",
     "typecheck": "tsc --noEmit || echo 'No tsconfig'"
+  },
+  "dependencies": {
+    "@loopdev/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "8.6.15",
+    "@storybook/react": "8.6.15",
+    "@storybook/react-vite": "8.6.15",
+    "@storybook/testing-library": "0.2.2",
+    "@storybook/addon-a11y": "8.6.15",
+    "@storybook/addon-docs": "8.6.15",
+    "@storybook/addon-onboarding": "8.6.15",
+    "storybook": "8.6.15"
   }
 }

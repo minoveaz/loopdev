@@ -1,8 +1,28 @@
 :root {
-  --color-primary: #2563eb;
-  --color-secondary: #f59e42;
-  --color-background: #fff;
-  --color-text: #222;
-  --radius-default: 0.5rem;
-  --radius-lg: 1rem;
+  /* --- TYPOGRAPHY CORE --- */
+  --font-family-body: 'Inter', system-ui, sans-serif;
+  --font-family-heading: 'Poppins', system-ui, sans-serif;
+
+  /* --- BRAND CORE --- */
+  --brand-primary: #000000;
+  --brand-secondary: #4b5563;
+  --brand-surface: #ffffff;
+  --brand-outline: #e5e7eb;
+
+  /* --- STATE COLORS --- */
+  --state-success: #22c55e;
+  --state-error: #ef4444;
+  --state-warning: #f59e0b;
+  --state-info: #3b82f6;
+
+  /* --- NEUTRALS --- */
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-600: #4b5563;
+  --neutral-900: #111827;
+
+  /* --- SEMANTIC TEXT --- */
+  --text-heading: var(--neutral-900);
+  --text-body: var(--neutral-600);
+  --text-on-primary: #ffffff;
 }

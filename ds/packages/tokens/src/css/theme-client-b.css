@@ -1,6 +1,21 @@
-:root {
-  --color-primary: #7c3aed;
-  --color-secondary: #fbbf24;
-  --color-background: #f3f4f6;
-  --color-text: #1f2937;
+.theme-client-b {
+  /* Fonts (Opción 1: Moderna & Tecnológica) */
+  --font-family-heading: 'Montserrat', sans-serif;
+  --font-family-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* Colors (Vibrantes) */
+  --brand-primary: #ED914D; /* Naranja */
+  --brand-secondary: #FFB48A; /* Coral */
+  
+  /* Pasteles (Generados o específicos) */
+  --brand-pastel-1: #FFD9B5;
+  --brand-pastel-2: #BCD7EC;
+
+  --brand-surface: #F6EFE8;
+  --brand-outline: #1F1B16;
+
+  /* Semantic */
+  --text-on-primary: #492100;
+  --btn-primary-bg: var(--brand-primary);
+  --btn-primary-text: var(--text-on-primary);
 }
