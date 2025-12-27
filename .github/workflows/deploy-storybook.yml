@@ -3,9 +3,6 @@ name: Deploy Storybook to GitHub Pages
 on:
   push:
     branches: ["main"]
-    paths:
-      - "ds/**"
-
   workflow_dispatch:
 
 permissions:
@@ -25,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ds # IMPORTANTE: Ejecutar comandos dentro de la subcarpeta ds
+        working-directory: ds
 
     steps:
       - name: Checkout
@@ -53,7 +50,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'ds/apps/docs/storybook-static' # Ruta desde la raíz del repo
+          path: 'ds/apps/docs/storybook-static'
 
       - name: Deploy to GitHub Pages
         id: deployment
