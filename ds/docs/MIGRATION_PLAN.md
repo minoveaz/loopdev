@@ -59,4 +59,9 @@ Cada componente migrado debe cumplir:
 4. **Paso 4:** Implementar el primer **Snippet Complejo** (ej: GlassCard).
 
 ---
+## 🏗️ Deuda Técnica & Backlog de Ingeniería
+- [ ] **[Automation]** Crear script `pnpm audit-components` para escanear automáticamente el uso de componentes en `marketingStudio` y generar el reporte de dependencias.
+- [ ] **[Documentation]** Integrar importación automática de MDX desde `loopdev/ds` hacia `marketingStudio` para evitar duplicidad de texto.
+
+---
 *Última actualización: 27 de Diciembre, 2025*

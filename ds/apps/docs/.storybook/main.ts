@@ -29,6 +29,14 @@ const config: StorybookConfig = {
           '@loopdev/ui': path.resolve(__dirname, '../../../packages/ui/src'),
         },
       },
+      server: {
+        fs: {
+          // Permitir servir archivos desde la raíz del monorepo (necesario para packages/ui)
+          allow: [
+            path.resolve(__dirname, '../../..'),
+          ],
+        },
+      },
     });
   },
 };

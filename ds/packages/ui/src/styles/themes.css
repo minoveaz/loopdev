@@ -1,14 +1,13 @@
-/* --- IMPORTACIÓN DE TOKENS ORIGINALES --- */
-@import '../../../packages/tokens/src/css/base.css';
+/* --- LOS TOKENS SE IMPORTAN DIRECTAMENTE EN EL PROYECTO PARA EVITAR ERRORES DE RESOLUCIÓN --- */
 
 /* --- BRIDGE: Mapeo de Brand Tokens a Semantic Tokens --- */
 
 /* Estilos comunes para todos los temas */
 .theme-estar-protegidos,
-.theme-salud,
-.theme-viaje,
-.theme-hogar,
-.theme-finanzas {
+.theme-protege-tu-salud,
+.theme-protege-tu-viaje,
+.theme-protege-tu-hogar,
+.theme-protege-tus-finanzas {
   --border: var(--brand-outline);
   --input: var(--brand-outline);
   --radius: 0.75rem;
@@ -32,7 +31,7 @@
 }
 
 /* 2. PROTEGE TU SALUD */
-.theme-salud {
+.theme-protege-tu-salud {
   --background: #F8F7F4;
   --foreground: #1D1B16;
   --primary: #22C7A9;
@@ -49,7 +48,7 @@
 }
 
 /* 3. PROTEGE TU VIAJE */
-.theme-viaje {
+.theme-protege-tu-viaje {
   --background: #F6EFE8;
   --foreground: #1F1B16;
   --primary: #ED914D;
@@ -66,7 +65,7 @@
 }
 
 /* 4. PROTEGE TU HOGAR */
-.theme-hogar {
+.theme-protege-tu-hogar {
   --background: #E9E5DB;
   --foreground: #1C1C17;
   --primary: #4F704A;
@@ -81,7 +80,7 @@
 }
 
 /* 5. PROTEGE TUS FINANZAS */
-.theme-finanzas {
+.theme-protege-tus-finanzas {
   --background: #F2E9D9;
   --foreground: #201A11;
   --primary: #263A45;

@@ -1,7 +1,12 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
+
+// Estilos globales de la aplicación de Docs
 import '../src/tailwind.css';
-import '../src/themes.css';
+
+// Estilos compartidos de la librería UI (vía alias configurado en main.ts)
+import '@loopdev/ui/styles/base-variables.css';
+import '@loopdev/ui/styles/themes.css';
 
 const preview: Preview = {
   parameters: {
@@ -21,7 +26,6 @@ const preview: Preview = {
     },
   },
   
-  // Definimos los dos filtros globales
   globalTypes: {
     company: {
       name: 'Empresa',
@@ -45,10 +49,10 @@ const preview: Preview = {
         icon: 'grid',
         items: [
           { value: 'estar-protegidos', title: 'Estar Protegidos (Main)' },
-          { value: 'salud', title: 'Protege tu Salud' },
-          { value: 'viaje', title: 'Protege tu Viaje' },
-          { value: 'hogar', title: 'Protege tu Hogar' },
-          { value: 'finanzas', title: 'Protege tus Finanzas' },
+          { value: 'protege-tu-salud', title: 'Protege tu Salud' },
+          { value: 'protege-tu-viaje', title: 'Protege tu Viaje' },
+          { value: 'protege-tu-hogar', title: 'Protege tu Hogar' },
+          { value: 'protege-tus-finanzas', title: 'Protege tus Finanzas' },
         ],
         showName: true,
       },
@@ -58,12 +62,7 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const { company, brand } = context.globals;
-      
-      // LÓGICA DE JERARQUÍA:
-      // Si la empresa es 'ep' (Estar Protegidos), usamos la sub-marca elegida.
-      // Si es cualquier otra empresa, usamos el ID de la empresa como tema.
       const activeThemeClass = company === 'ep' ? `theme-${brand}` : `theme-${company}`;
-      
       const isDocs = context.viewMode === 'docs';
 
       return (
@@ -112,7 +111,7 @@ const preview: Preview = {
               {company === 'ep' ? `Grupo: Estar Protegidos > ${brand}` : `Empresa: ${company}`}
             </p>
             <p style={{ margin: '4px 0 0 0', opacity: 0.6 }}>
-              Font: <span style={{ fontFamily: 'var(--font-family-heading)' }}>Heading</span> | Body
+              Font: <span style={{ fontFamily: 'var(--font-family-heading)' }}>Heading Font</span> | Body Font
             </p>
           </div>
         </div>

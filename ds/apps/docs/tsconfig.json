@@ -9,7 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@loopdev/ui": ["../../packages/ui/src"]
+      "@loopdev/ui": ["../../packages/ui/src"],
+      "@loopdev/ui/*": ["../../packages/ui/src/*"]
     }
   },
   "include": ["src", "stories", ".storybook"]

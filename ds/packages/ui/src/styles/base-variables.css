@@ -1,0 +1,28 @@
+:root {
+  /* Tipografías de Marca (Default) */
+  --font-family-heading: 'Poppins', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
+
+  --background: #ffffff;
+  --foreground: #111827;
+
+  --primary: #111827; /* Negro Azulado (Neutral 900) */
+  --primary-foreground: #ffffff;
+
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #111827;
+
+  --radius: 0.5rem;
+}
