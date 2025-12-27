@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import '../../../packages/ui/src/styles/globals.css'; // Importa Tailwind y estilos base de la UI
+import '../src/tailwind.css'; // Importación local segura
 
 const preview: Preview = {
   parameters: {
