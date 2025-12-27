@@ -22,10 +22,10 @@ export const TypographyAndColors = () => (
       <div className="p-4 bg-brand-secondary text-white rounded-lg">
         Brand Secondary
       </div>
-      <div className="p-4 bg-brand-pastel-1 text-brand-primary rounded-lg font-medium">
+      <div className="p-4 bg-brand-pastel-1 text-on-primary rounded-lg font-medium">
         Brand Pastel 1
       </div>
-      <div className="p-4 bg-brand-pastel-2 text-brand-secondary rounded-lg font-medium">
+      <div className="p-4 bg-brand-pastel-2 text-on-primary rounded-lg font-medium">
         Brand Pastel 2
       </div>
     </section>

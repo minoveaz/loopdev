@@ -24,14 +24,14 @@
 
 /* Mapeo específico Estar Protegidos */
 .theme-estar-protegidos, .theme-ep {
-  /* Para componentes Shadcn */
   --primary: var(--brand-primary);
   --primary-foreground: var(--text-on-primary);
   --secondary: var(--brand-secondary);
   --secondary-foreground: #ffffff;
   --ring: var(--brand-primary);
 
-  /* Para componentes que usan tu Shared Config */
+  /* Variables de conveniencia para accesibilidad */
+  --on-primary: var(--text-on-primary);
   --color-primary: var(--brand-primary);
   --color-secondary: var(--brand-secondary);
 }
@@ -44,6 +44,7 @@
   --secondary-foreground: #ffffff;
   --ring: var(--brand-primary);
 
+  --on-primary: var(--text-on-primary);
   --color-primary: var(--brand-primary);
   --color-secondary: var(--brand-secondary);
 }
