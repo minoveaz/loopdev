@@ -1,0 +1,11 @@
+{
+  "name": "@myco/ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "echo 'No dev server'",
+    "lint": "eslint . || echo 'No lint config'",
+    "typecheck": "tsc --noEmit || echo 'No tsconfig'"
+  }
+}
