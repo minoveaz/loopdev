@@ -3,8 +3,9 @@ name: Deploy Storybook to GitHub Pages
 on:
   push:
     branches: ["main"]
+    paths:
+      - "ds/**"
 
-  # Permite ejecutarlo manualmente desde la pestaña Actions
   workflow_dispatch:
 
 permissions:
@@ -22,6 +23,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ds # IMPORTANTE: Ejecutar comandos dentro de la subcarpeta ds
 
     steps:
       - name: Checkout
@@ -49,7 +53,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'apps/docs/storybook-static'
+          path: 'ds/apps/docs/storybook-static' # Ruta desde la raíz del repo
 
       - name: Deploy to GitHub Pages
         id: deployment
