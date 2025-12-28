@@ -11,12 +11,14 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       <textarea
         ref={ref}
         className={cn(
-          "flex min-h-[120px] w-full rounded-2xl border-2 bg-[var(--lpd-color-bg-base)] px-4 py-3 text-sm transition-all outline-none custom-scrollbar resize-none",
-          "placeholder:text-[var(--lpd-color-text-muted)] placeholder:opacity-50",
+          "w-full border rounded-lg outline-none transition-all duration-200 custom-scrollbar resize-none",
+          "px-4 py-2.5 min-h-[120px]",
+          "text-sm bg-white dark:bg-slate-900",
+          "placeholder:text-slate-400 placeholder:font-medium",
           "disabled:cursor-not-allowed disabled:opacity-50",
           error 
-            ? "border-red-500 focus:border-red-600 focus:ring-4 focus:ring-red-500/10" 
-            : "border-[var(--lpd-color-border-subtle)] focus:border-[var(--lpd-color-brand-primary)] focus:ring-4 focus:ring-[var(--lpd-color-brand-primary)]/10 hover:border-[var(--lpd-color-text-muted)]/30",
+            ? "border-[var(--lpd-color-error)] text-[var(--lpd-color-error)] focus:ring-4 focus:ring-[var(--lpd-color-error)]/10" 
+            : "border-slate-300 dark:border-slate-600 text-[#0d121b] dark:text-white focus:border-[var(--lpd-color-brand-primary)] focus:ring-4 focus:ring-[var(--lpd-color-brand-primary)]/10",
           className
         )}
         {...props}

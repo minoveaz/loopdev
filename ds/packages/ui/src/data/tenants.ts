@@ -16,7 +16,7 @@ export interface TenantData {
 
 export const TENANT_DATA: Record<TenantId, TenantData> = {
   'loopdev': {
-    name: 'LoopDev',
+    name: 'loop.dev',
     settings: {
       layout: {
         sidebarDefaultVariant: 'collapsed',
@@ -27,13 +27,13 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
     },
     strategy: {
       purpose: 'Powering modern brand systems with design engineering excellence.',
-      promise: 'Scale your design system without friction.',
-      personality: ['Innovative', 'Precise', 'Collaborative', 'Technical'],
+      promise: 'Scale your design system with precision and generative workflows.',
+      personality: ['Technical', 'Precise', 'Modular', 'Innovative'],
       voice: {
-        base: 'Professional and technical yet accessible.',
-        traits: ['Clear', 'Authoritative', 'Supportive']
+        base: 'Calculated and professional yet accessible.',
+        traits: ['Clear', 'Structural', 'Generative']
       },
-      territory: ['Design Systems', 'Frontend Engineering', 'Brand Consistency']
+      territory: ['Design Systems', 'Frontend Engineering', 'AI Orchestration']
     }
   },
   'estar-protegidos': {

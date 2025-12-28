@@ -31,7 +31,7 @@ export const Field: React.FC<FieldProps> = ({
     <Stack gap={1.5} className={cn("w-full", className)}>
       {label && (
         <Inline gap={1} align="center">
-          <Label htmlFor={id}>{label}</Label>
+          <Label htmlFor={id} error={!!error}>{label}</Label>
           {required && <RequiredIndicator />}
         </Inline>
       )}

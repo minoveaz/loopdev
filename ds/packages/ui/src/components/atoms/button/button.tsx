@@ -2,26 +2,26 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Loader2 } from "lucide-react"
-
 import { cn } from "@/helpers/cn"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-lpd-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lpd-brand-primary disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] disabled:active:scale-100",
+  "inline-flex items-center justify-center whitespace-nowrap text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[var(--lpd-color-brand-primary)]/20 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] disabled:active:scale-100",
   {
     variants: {
       variant: {
-        primary: "bg-lpd-brand-primary text-lpd-text-onPrimary hover:brightness-110 shadow-lpd-sm",
-        secondary: "bg-lpd-brand-secondary text-lpd-text-base hover:brightness-105 shadow-lpd-sm",
-        outline: "border-2 border-lpd-brand-primary bg-transparent text-lpd-brand-primary hover:bg-lpd-brand-primary/5",
-        ghost: "hover:bg-lpd-slate-100 text-lpd-text-base",
-        link: "text-lpd-brand-primary underline-offset-4 hover:underline p-0 h-auto",
-        destructive: "bg-red-600 text-white hover:bg-red-700",
+        primary: "bg-[var(--lpd-color-brand-primary)] text-white shadow-lg shadow-[var(--lpd-color-brand-primary)]/30 hover:brightness-110",
+        secondary: "bg-[var(--lpd-color-bg-base)] border border-[var(--lpd-color-border-subtle)] text-[var(--lpd-color-text-base)] hover:bg-[var(--lpd-color-bg-subtle)] hover:border-[var(--lpd-color-text-muted)]/30 shadow-sm",
+        outline: "border-2 border-[var(--lpd-color-brand-primary)] bg-transparent text-[var(--lpd-color-brand-primary)] hover:bg-[var(--lpd-color-brand-primary)]/5",
+        ghost: "text-[var(--lpd-color-text-muted)] hover:text-[var(--lpd-color-brand-primary)] hover:bg-[var(--lpd-color-brand-primary)]/5",
+        tertiary: "text-[var(--lpd-color-brand-primary)] hover:bg-[var(--lpd-color-brand-primary)]/5 p-0 h-auto",
+        energy: "bg-[var(--lpd-color-brand-secondary)] text-[var(--lpd-color-slate-900)] shadow-lg shadow-[var(--lpd-color-brand-secondary)]/30 hover:brightness-105",
+        destructive: "bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/20",
       },
       size: {
-        default: "h-10 min-w-[100px] px-6 py-2.5 rounded-lpd-md",
-        sm: "h-9 min-w-[80px] px-3 py-1.5 rounded-lpd-sm text-lpd-xs",
-        lg: "h-12 min-w-[120px] px-8 py-3.5 rounded-lpd-lg text-lpd-base",
-        icon: "h-10 w-10 rounded-lpd-md",
+        default: "h-10 px-5 rounded-lg",
+        sm: "h-9 px-3 text-xs rounded-md",
+        lg: "h-12 px-8 text-base rounded-xl",
+        icon: "h-10 w-10 rounded-lg bg-[var(--lpd-color-bg-subtle)] text-[var(--lpd-color-text-muted)] hover:text-[var(--lpd-color-brand-primary)] hover:bg-[var(--lpd-color-bg-base)] border border-transparent hover:border-[var(--lpd-color-border-subtle)]",
       },
     },
     defaultVariants: {
@@ -65,9 +65,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {!isLoading && leftIcon && <span className="mr-2">{leftIcon}</span>}
-        {children}
-        {!isLoading && rightIcon && <span className="ml-2">{rightIcon}</span>}
+        {!isLoading && leftIcon && <span className="mr-2 inline-flex">{leftIcon}</span>}
+        <span className="leading-none">{children}</span>
+        {!isLoading && rightIcon && <span className="ml-2 inline-flex">{rightIcon}</span>}
       </Comp>
     )
   }

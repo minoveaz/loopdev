@@ -1,28 +1,83 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './button';
-import { Mail, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, ArrowRight, Plus, Settings, Trash2, Zap } from 'lucide-react';
+import { Stack, Inline, Container, Box } from '@/components/layout';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'Atoms/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'destructive', 'outline', 'ghost', 'link'],
+      options: ['primary', 'secondary', 'tertiary', 'energy', 'outline', 'ghost', 'destructive'],
     },
     size: {
       control: 'select',
       options: ['default', 'sm', 'lg', 'icon'],
     },
     isLoading: { control: 'boolean' },
-    asChild: { control: 'boolean' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Button>;
+
+export const Gallery: Story = {
+  render: () => (
+    <Container className="py-12">
+      <Stack gap={12}>
+        {/* Core Variations */}
+        <section className="space-y-6">
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] opacity-40 border-b pb-2">Variations</h3>
+          <Inline gap={4} align="center">
+            <Button variant="primary">Primary Action</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="tertiary">Tertiary</Button>
+            <Button variant="energy" leftIcon={<Zap size={16} />}>Energy CTA</Button>
+            <Button variant="outline">Outline</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="destructive" leftIcon={<Trash2 size={16} />}>Delete</Button>
+          </Inline>
+        </section>
+
+        {/* Sizes */}
+        <section className="space-y-6">
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] opacity-40 border-b pb-2">Sizes</h3>
+          <Inline gap={4} align="center">
+            <Button size="sm">Small (36px)</Button>
+            <Button size="default">Default (40px)</Button>
+            <Button size="lg">Large (48px)</Button>
+          </Inline>
+        </section>
+
+        {/* Icon Buttons */}
+        <section className="space-y-6">
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] opacity-40 border-b pb-2">Icon Support</h3>
+          <Inline gap={4} align="center">
+            <Button size="icon"><Plus size={20} /></Button>
+            <Button size="icon"><Settings size={20} /></Button>
+            <Button variant="primary" leftIcon={<Mail size={18} />}>Send Message</Button>
+            <Button variant="secondary" rightIcon={<ArrowRight size={18} />}>Learn More</Button>
+          </Inline>
+        </section>
+
+        {/* States */}
+        <section className="space-y-6">
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] opacity-40 border-b pb-2">States</h3>
+          <Inline gap={4} align="center">
+            <Button variant="primary" isLoading>Processing</Button>
+            <Button variant="secondary" disabled>Disabled Action</Button>
+            <Box padding={2} className="ring-4 ring-[var(--lpd-color-brand-primary)]/20 rounded-xl">
+              <Button variant="primary">Focused Look</Button>
+            </Box>
+          </Inline>
+        </section>
+      </Stack>
+    </Container>
+  ),
+};
 
 export const Primary: Story = {
   args: {
@@ -31,71 +86,10 @@ export const Primary: Story = {
   },
 };
 
-export const WithIcons: Story = {
+export const Energy: Story = {
   args: {
-    variant: 'primary',
-    children: 'Send Email',
-    leftIcon: <Mail size={16} />,
-    rightIcon: <ArrowRight size={16} />,
+    variant: 'energy',
+    children: 'Launch System',
+    leftIcon: <Zap size={18} />,
   },
-};
-
-export const Loading: Story = {
-  args: {
-    variant: 'primary',
-    children: 'Processing',
-    isLoading: true,
-  },
-};
-
-export const Destructive: Story = {
-  args: {
-    variant: 'destructive',
-    children: 'Delete Account',
-  },
-};
-
-export const Outline: Story = {
-  args: {
-    variant: 'outline',
-    children: 'Outline Button',
-  },
-};
-
-export const Ghost: Story = {
-  args: {
-    variant: 'ghost',
-    children: 'Ghost Button',
-  },
-};
-
-export const AllVariants: Story = {
-  render: (args) => (
-    <div className="flex flex-wrap gap-4 items-center p-4">
-      <Button {...args} variant="primary">Primary</Button>
-      <Button {...args} variant="secondary">Secondary</Button>
-      <Button {...args} variant="destructive">Destructive</Button>
-      <Button {...args} variant="outline">Outline</Button>
-      <Button {...args} variant="ghost">Ghost</Button>
-      <Button {...args} variant="link">Link</Button>
-    </div>
-  ),
-};
-
-export const ButtonStates: Story = {
-  render: (args) => (
-    <div className="flex flex-col gap-6 p-4">
-      <div className="flex flex-wrap gap-4 items-center">
-        <Button {...args}>Normal Button</Button>
-        <Button {...args} leftIcon={<Mail size={16} />}>Left Icon</Button>
-        <Button {...args} rightIcon={<ArrowRight size={16} />}>Right Icon</Button>
-        <Button {...args} leftIcon={<Mail size={16} />} rightIcon={<ArrowRight size={16} />}>Both Icons</Button>
-      </div>
-      <div className="flex flex-wrap gap-4 items-center">
-        <Button {...args} isLoading>Loading State</Button>
-        <Button {...args} disabled>Disabled State</Button>
-        <Button {...args} variant="outline" isLoading>Outline Loading</Button>
-      </div>
-    </div>
-  ),
 };

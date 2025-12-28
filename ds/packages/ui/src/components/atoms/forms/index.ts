@@ -5,6 +5,7 @@ export * from './RequiredIndicator';
 export * from './Input';
 export * from './TextArea';
 export * from './Switch';
+export * from './NumberInput';
 export * from './Checkbox';
 export * from './RadioGroup';
 export * from './Select';

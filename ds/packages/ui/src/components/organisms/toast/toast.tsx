@@ -11,10 +11,11 @@ export const Toaster = () => {
       className="toaster group"
       toastOptions={{
         classNames: {
-          toast: "group toast rounded-2xl border-[var(--lpd-color-border-subtle)] bg-[var(--lpd-color-bg-base)] text-[var(--lpd-color-text-base)] shadow-xl font-sans",
-          description: "text-[var(--lpd-color-text-muted)]",
+          toast: "group toast rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-[var(--lpd-color-text-base)] shadow-2xl font-sans p-4",
+          description: "text-xs text-slate-500 mt-1 font-medium",
+          title: "text-sm font-bold",
           actionButton: "bg-[var(--lpd-color-brand-primary)] text-white font-bold",
-          cancelButton: "bg-[var(--lpd-color-bg-subtle)] text-[var(--lpd-color-text-base)]",
+          cancelButton: "bg-slate-100 text-slate-600",
           success: "text-green-600",
           error: "text-red-600",
         },

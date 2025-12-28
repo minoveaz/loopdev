@@ -1,9 +1,24 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Field } from './Field';
-import { Input, TextArea, Switch, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Checkbox, RadioGroup, RadioGroupItem, Label } from '@/components/atoms/forms';
+import { 
+  Input, 
+  TextArea, 
+  Switch, 
+  Select, 
+  SelectTrigger, 
+  SelectValue, 
+  SelectContent, 
+  SelectItem, 
+  Checkbox, 
+  RadioGroup, 
+  RadioGroupItem, 
+  Label, 
+  NumberInput 
+} from '@/components/atoms/forms';
 import { Stack, Box, Inline } from '@/components/layout';
 import { Button } from '@/components/atoms/button';
+import { Mail, Lock, Eye } from 'lucide-react';
 
 const meta: Meta<typeof Field> = {
   title: 'Forms/Field Molecule',
@@ -22,13 +37,35 @@ type Story = StoryObj<typeof Field>;
 
 export const TextInput: Story = {
   render: () => (
+    <Stack gap={6}>
+      <Field 
+        label="Email Address" 
+        helperText="We'll use this for account notifications."
+        id="email"
+        required
+      >
+        <Input id="email" type="email" placeholder="name@loop.dev" leftIcon={<Mail />} />
+      </Field>
+
+      <Field 
+        label="Password" 
+        id="password"
+        required
+      >
+        <Input id="password" type="password" defaultValue="password123" leftIcon={<Lock />} rightIcon={<Eye className="cursor-pointer hover:text-primary transition-colors" />} />
+      </Field>
+    </Stack>
+  ),
+};
+
+export const NumberInputField: Story = {
+  render: () => (
     <Field 
-      label="Campaign Name" 
-      helperText="Enter a unique name for your marketing initiative."
-      id="campaign-name"
-      required
+      label="Token Limit" 
+      helperText="Maximum tokens allowed for AI generation."
+      id="token-limit"
     >
-      <Input id="campaign-name" placeholder="Summer 2025 Launch" />
+      <NumberInput id="token-limit" defaultValue="2048" min={0} max={4096} step={128} />
     </Field>
   ),
 };
@@ -36,12 +73,12 @@ export const TextInput: Story = {
 export const InputWithError: Story = {
   render: () => (
     <Field 
-      label="Email Address" 
-      error="Please enter a valid email address."
-      id="email"
+      label="Project Name" 
+      error="This project name is already taken."
+      id="project-name"
       required
     >
-      <Input id="email" type="email" defaultValue="invalid-email" error />
+      <Input id="project-name" defaultValue="Untitled Project" error />
     </Field>
   ),
 };
@@ -159,6 +196,10 @@ export const FullForm: Story = {
               <SelectItem value="us">United States</SelectItem>
             </SelectContent>
           </Select>
+        </Field>
+
+        <Field label="Token Limit">
+          <NumberInput defaultValue="2048" />
         </Field>
 
         <Box padding={6} background="base" radius="2xl" border>
