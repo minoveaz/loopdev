@@ -11,36 +11,28 @@ Este documento define los estándares técnicos, la arquitectura y los pasos par
 | **Fase 1** | Cimentación y Design System (Foundations) | ✅ Completado |
 | **Fase 2** | Arquitectura de Multitenencia (TenantProvider) | ✅ Completado |
 | **Fase 2.5** | Layout Foundations & App Shell | ✅ Completado |
-| **Fase 2.6** | SaaS Core Foundations (Atómica) | ✅ Completado (Forms Init) |
+| **Fase 2.6** | SaaS Core Foundations (Atómica) | 🚧 En Desarrollo |
 
 ---
 
 ## 1. Organización del Design System (Atomic Design)
 
-Para garantizar la escalabilidad al 100%, todos los componentes deben clasificarse en uno de estos niveles:
-
 | Categoría | Qué contiene | Ejemplos Actuales |
 | :--- | :--- | :--- |
-| **`atoms/`** | Elementos básicos e indivisibles. | `Button`, `Input`, `Label`, `TextArea`, `Switch`. |
-| **`molecules/`** | Combinación de átomos para una función simple. | `Field`, `Tooltip`, `Popover`, `Divider`. |
+| **`atoms/`** | Elementos básicos e indivisibles. | `Button`, `Input`, **`Illustrations`** (37 items). |
+| **`molecules/`** | Combinación de átomos para una función simple. | `Field`, `Tooltip`, `Popover`. |
 | **`organisms/`** | Secciones complejas y funcionales de la UI. | `TopBar`, `LeftSidebar`, `Dialog`, `Footers`. |
 | **`layout/`** | **Foundations** (Primitivos de espacio). | `Stack`, `Grid`, `Box`, `Container`, `Center`. |
 | **`templates/`** | Orquestación de la página. | `AppShell`, `BrandIdentityView`. |
 
 ---
 
-## 2. Estándares de Formularios
+## 2. Estándares Visuales (Ilustraciones)
 
-Para mantener la consistencia en la entrada de datos, todos los campos deben ser orquestados por la molécula `Field`.
-
-### 2.1. Anatomía de un Campo
-- **Label**: Atomo accesible para describir el input.
-- **RequiredIndicator**: Marcador visual de obligatoriedad.
-- **Input/TextArea**: El átomo de captura de datos.
-- **Helper/ErrorMessage**: Texto de soporte o validación.
-
-### 2.2. Lógica de Estado
-Los inputs aceptan una prop `error` (boolean) que tiñe los bordes de rojo y activa el foco de error, independientemente de si se muestra el mensaje de error textual.
+Las ilustraciones se tratan como **Átomos Dinámicos**.
+- **Base común:** Heredan de `IllustrationBase` para control de `stroke` y `viewBox`.
+- **Theming:** No usan colores fijos; consumen `--lpd-color-brand-primary` y `secondary`.
+- **Categorización:** Organizadas en carpetas por dominio (tech, home, travel, etc.).
 
 ---
 
@@ -50,12 +42,12 @@ Los inputs aceptan una prop `error` (boolean) que tiñe los bordes de rojo y act
 Utilizar siempre el alias `@/` para imports internos. Los componentes de alto nivel (`organisms`) deben importar sus primitivos desde `@/components/layout`.
 
 ### 3.2. SaaS Logic
-Cada Tenant define su estilo visual (`base` vs `brand`) y comportamiento inicial (ej. sidebar colapsado) en el `TENANT_DATA`. El sistema reacciona automáticamente.
+Cada Tenant define su estilo visual (`base` vs `brand`) en el `TENANT_DATA`. El sistema reacciona automáticamente.
 
 ---
 
 ## 4. Componentes Listos para Usar
-- **Atoms**: `Button`, `Input`, `Label`, `TextArea`, `Switch`, `RequiredIndicator`, `HelperText`, `ErrorMessage`.
+- **Atoms**: `Button`, `Input`, `Label`, `TextArea`, `Switch`, **Full Illustration Set**.
 - **Molecules**: `Field`, `Tooltip`, `Popover`.
 - **Organisms**: `Dialog`, `AlertDialog`, `Drawer`, `Toaster`, `Headers`, `Sidebars`, `Footers`.
 - **Templates**: `AppShell`, `BrandIdentityView`.
