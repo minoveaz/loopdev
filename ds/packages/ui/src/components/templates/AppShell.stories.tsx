@@ -4,7 +4,7 @@ import { AppShell } from './AppShell';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { LeftSidebar, type SidebarItem } from '@/components/organisms/LeftSidebar';
 import { RightSidebar } from '@/components/organisms/RightSidebar';
-import { BrandIdentityView } from '@/components/brand-identity-view';
+import { BrandIdentityView } from './brand-identity-view';
 import { Button } from '@/components/atoms/button';
 import { useTenant } from '@/providers/tenant-provider';
 import { TENANT_DATA } from '@/data/tenants';
