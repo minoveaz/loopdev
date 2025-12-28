@@ -1,0 +1,28 @@
+:root {
+  /* --- System UI Heights --- */
+  /* Valores base que pueden ser sobrescritos por el puente nativo */
+  --lpd-platform-status-bar: env(safe-area-inset-top, 20px);
+  --lpd-platform-nav-bar: 44px; /* iOS standard */
+  --lpd-platform-tab-bar: 49px; /* iOS standard */
+  --lpd-platform-android-header: 56px; /* Material standard */
+
+  /* --- Iconography Standards --- */
+  --lpd-icon-size-xs: 16px;
+  --lpd-icon-size-sm: 20px;
+  --lpd-icon-size-md: 24px;
+  --lpd-icon-size-lg: 32px;
+  --lpd-icon-size-xl: 48px;
+
+  /* --- Mobile Visual Language --- */
+  /* iOS Blur (Requiere backdrop-filter) */
+  --lpd-ios-blur: saturate(180%) blur(20px);
+  --lpd-ios-bg-translucent: rgba(255, 255, 255, 0.7);
+
+  /* Android Ripple / State Overlay */
+  --lpd-android-ripple-color: rgba(0, 0, 0, 0.1);
+  --lpd-android-shadow-elevation: 0 2px 4px rgba(0,0,0,0.2);
+
+  /* --- Gestures & Safety --- */
+  --lpd-home-indicator-height: env(safe-area-inset-bottom, 0px);
+  --lpd-min-interactive-size: 44px; /* Apple minimum touch target */
+}

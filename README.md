@@ -116,6 +116,19 @@ Por eso:
 
 ---
 
+🚀 **Proyectos en Desarrollo & Roadmap Activo**
+
+Actualmente estamos ejecutando la transformación de nuestro ecosistema para operar bajo un modelo SaaS multitenant. Nuestro primer gran hito es la reconstrucción de **MarketingStudio**.
+
+**Hitos Principales:**
+- **Transformación SaaS:** Desacoplamiento de productos específicos hacia módulos agnósticos en el monorepo LoopDev.
+- **Design System Centralizado:** Migración y estandarización de componentes UI desde proyectos legacy hacia `@loopdev/ds`.
+- **Arquitectura Multitenant:** Implementación de sistemas de inyección de temas y configuración por cliente.
+
+👉 [Consulta el Roadmap Detallado de MarketingStudio aquí](./docs/ROADMAP.md)
+
+---
+
 🤝 **Cómo trabajamos**
 - Entendemos el problema y el contexto del negocio
 - Diseñamos una solución escalable

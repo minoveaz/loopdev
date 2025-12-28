@@ -1,0 +1,20 @@
+:root {
+  /* Durations */
+  --lpd-duration-75: 75ms;
+  --lpd-duration-100: 100ms;
+  --lpd-duration-150: 150ms;
+  --lpd-duration-200: 200ms;
+  --lpd-duration-300: 300ms;
+  --lpd-duration-500: 500ms;
+  --lpd-duration-700: 700ms;
+  --lpd-duration-1000: 1000ms;
+
+  /* Easings */
+  --lpd-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --lpd-shadow-out: cubic-bezier(0, 0, 0.2, 1);
+  --lpd-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --lpd-ease-linear: linear;
+  
+  /* Specialized */
+  --lpd-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}

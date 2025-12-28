@@ -3,7 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@loopdev/tokens": ["../tokens"],
+      "@loopdev/tokens/*": ["../tokens/src/*"]
     },
     "outDir": "./dist",
     "rootDir": "src"

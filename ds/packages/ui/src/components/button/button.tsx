@@ -6,25 +6,22 @@ import { Loader2 } from "lucide-react"
 import { cn } from "../../helpers/cn"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] disabled:active:scale-100",
+  "inline-flex items-center justify-center whitespace-nowrap text-lpd-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lpd-brand-primary disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] disabled:active:scale-100",
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground hover:brightness-110 shadow-sm border border-transparent",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm border border-transparent",
-        outline:
-          "border-2 border-primary bg-transparent text-primary hover:bg-primary/5",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm border border-transparent",
-        ghost: "hover:bg-accent hover:text-accent-foreground border border-transparent",
-        link: "text-primary underline-offset-4 hover:underline p-0 h-auto",
+        primary: "bg-lpd-brand-primary text-lpd-text-onPrimary hover:brightness-110 shadow-lpd-sm",
+        secondary: "bg-lpd-brand-secondary text-lpd-text-base hover:brightness-105 shadow-lpd-sm",
+        outline: "border-2 border-lpd-brand-primary bg-transparent text-lpd-brand-primary hover:bg-lpd-brand-primary/5",
+        ghost: "hover:bg-lpd-slate-100 text-lpd-text-base",
+        link: "text-lpd-brand-primary underline-offset-4 hover:underline p-0 h-auto",
+        destructive: "bg-red-600 text-white hover:bg-red-700",
       },
       size: {
-        default: "h-10 px-5 py-2.5",
-        sm: "h-9 rounded-md px-3 py-1.5 text-xs",
-        lg: "h-12 rounded-md px-8 py-3.5 text-base",
-        icon: "h-10 w-10",
+        default: "h-10 min-w-[100px] px-6 py-2.5 rounded-lpd-md",
+        sm: "h-9 min-w-[80px] px-3 py-1.5 rounded-lpd-sm text-lpd-xs",
+        lg: "h-12 min-w-[120px] px-8 py-3.5 rounded-lpd-lg text-lpd-base",
+        icon: "h-10 w-10 rounded-lpd-md",
       },
     },
     defaultVariants: {

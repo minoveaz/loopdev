@@ -1,0 +1,11 @@
+:root {
+  --lpd-radius-none: 0px;
+  --lpd-radius-xs: 0.125rem;  /* 2px */
+  --lpd-radius-sm: 0.25rem;   /* 4px */
+  --lpd-radius-md: 0.375rem;  /* 6px */
+  --lpd-radius-lg: 0.5rem;    /* 8px */
+  --lpd-radius-xl: 0.75rem;   /* 12px */
+  --lpd-radius-2xl: 1rem;     /* 16px */
+  --lpd-radius-3xl: 1.5rem;   /* 24px */
+  --lpd-radius-full: 9999px;
+}

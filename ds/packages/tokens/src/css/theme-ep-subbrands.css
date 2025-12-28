@@ -1,0 +1,33 @@
+/* --- SUB-MARCAS REALES (Fuente: brandData.ts) --- */
+
+/* 1. PROTEGE TU SALUD */
+.theme-estar-protegidos[data-subbrand="protege-salud"] {
+  --lpd-color-brand-primary: #22C7A9;
+  --lpd-color-brand-secondary: #6BAF9D;
+  --lpd-color-bg-base: #F8F7F4;
+  --lpd-color-text-base: #00382D;
+}
+
+/* 2. PROTEGE TU VIAJE */
+.theme-estar-protegidos[data-subbrand="protege-viaje"] {
+  --lpd-color-brand-primary: #ED914D;
+  --lpd-color-brand-secondary: #FFB48A;
+  --lpd-color-bg-base: #F6EFE8;
+  --lpd-color-text-base: #492100;
+}
+
+/* 3. PROTEGE TU HOGAR */
+.theme-estar-protegidos[data-subbrand="protege-hogar"] {
+  --lpd-color-brand-primary: #4F704A;
+  --lpd-color-brand-secondary: #3A523C;
+  --lpd-color-bg-base: #E9E5DB;
+  --lpd-color-text-base: #1C1C17;
+}
+
+/* 4. PROTEGE TUS FINANZAS */
+.theme-estar-protegidos[data-subbrand="protege-finanzas"] {
+  --lpd-color-brand-primary: #263A45;
+  --lpd-color-brand-secondary: #FBD7A5;
+  --lpd-color-bg-base: #F2E9D9;
+  --lpd-color-text-base: #1D1D1D;
+}

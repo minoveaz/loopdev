@@ -1,0 +1,11 @@
+/* Importación de fuentes de marca LoopDev */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+
+/* Fallback y configuraciones adicionales si fueran necesarias en el futuro */
+body {
+  font-family: var(--lpd-font-sans);
+}
+
+code, pre {
+  font-family: var(--lpd-font-mono);
+}
