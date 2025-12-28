@@ -42,11 +42,12 @@ Este documento detalla la ruta estratégica para reconstruir MarketingStudio baj
     - [x] **Drawer:** Paneles laterales táctiles.
     - [x] **Toast:** Sistema global de notificaciones.
     - [x] **Tooltip / Popover:** Ayuda contextual.
-- [ ] **2.6.2. Form Foundations & Atoms:** ⏳
-    - [ ] **Form Atoms:** Label, HelperText, ErrorMessage, RequiredIndicator.
-    - [ ] **Field Wrapper:** Orquestador de átomos (Molecule).
-    - [ ] **Agnostic Inputs (Atoms):** Text, TextArea, Number, Password.
-    - [ ] **Selection Inputs (Atoms/Molecules):** Select, Checkbox, Radio, Switch.
+- [x] **2.6.2. Form Foundations & Atoms:** ✅
+    - [x] **Form Atoms:** Label, HelperText, ErrorMessage, RequiredIndicator.
+    - [x] **Field Wrapper:** Orquestador de átomos (Molecule).
+    - [x] **Agnostic Inputs (Atoms):** Text, TextArea, Switch.
+    - [ ] **Selection Inputs (Atoms/Molecules):** Select, Checkbox, Radio.
+    - [ ] **Advanced Inputs:** DatePicker, FileUpload, MultiSelect.
 - [ ] **2.6.3. User & Auth Context (Identity, RBAC).**
 
 ---
@@ -65,12 +66,4 @@ Este documento detalla la ruta estratégica para reconstruir MarketingStudio baj
 
 - [ ] **3.1. Reconstrucción del Brand Center.**
 - [ ] **3.2. Módulo de Campañas y Activos.**
-
----
-
-## Principios de Desarrollo en LoopDev
-1. **Atomic-Design:** Estructura 100% escalable (Atoms, Molecules, Organisms, Templates).
-2. **Atomic-Agnostic:** Los componentes no conocen al cliente, solo consumen tokens y settings.
-3. **Config-First:** El comportamiento visual se define en el Tenant Data.
-4. **Layout-First:** Uso estricto de primitivos estructurales (cero márgenes manuales).
-5. **Responsive-Native:** Componentes listos para Web Apps móviles.
+- [ ] **3.3. Módulo de IA (Intelligence).**

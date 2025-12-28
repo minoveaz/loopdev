@@ -11,7 +11,7 @@ Este documento define los estándares técnicos, la arquitectura y los pasos par
 | **Fase 1** | Cimentación y Design System (Foundations) | ✅ Completado |
 | **Fase 2** | Arquitectura de Multitenencia (TenantProvider) | ✅ Completado |
 | **Fase 2.5** | Layout Foundations & App Shell | ✅ Completado |
-| **Fase 2.6** | SaaS Core Foundations (Atómica) | 🚧 En Desarrollo |
+| **Fase 2.6** | SaaS Core Foundations (Atómica) | ✅ Completado (Forms Init) |
 
 ---
 
@@ -21,24 +21,26 @@ Para garantizar la escalabilidad al 100%, todos los componentes deben clasificar
 
 | Categoría | Qué contiene | Ejemplos Actuales |
 | :--- | :--- | :--- |
-| **`atoms/`** | Elementos básicos e indivisibles. | `Button`, `Input` (base), `Label`. |
-| **`molecules/`** | Combinación de átomos para una función simple. | `Tooltip`, `Popover`, `Divider`. |
+| **`atoms/`** | Elementos básicos e indivisibles. | `Button`, `Input`, `Label`, `TextArea`, `Switch`. |
+| **`molecules/`** | Combinación de átomos para una función simple. | `Field`, `Tooltip`, `Popover`, `Divider`. |
 | **`organisms/`** | Secciones complejas y funcionales de la UI. | `TopBar`, `LeftSidebar`, `Dialog`, `Footers`. |
 | **`layout/`** | **Foundations** (Primitivos de espacio). | `Stack`, `Grid`, `Box`, `Container`, `Center`. |
 | **`templates/`** | Orquestación de la página. | `AppShell`, `BrandIdentityView`. |
 
 ---
 
-## 2. Estándares de Composición
+## 2. Estándares de Formularios
 
-### 2.1. Primitivos de Composición
-- **`Stack` / `Inline` / `Grid`**: Gestionan toda la distribución espacial.
-- **`Box`**: El átomo para paddings y fondos controlados.
-- **`Center` / `TwoPaneLayout`**: Patrones comunes de alineación y datos.
+Para mantener la consistencia en la entrada de datos, todos los campos deben ser orquestados por la molécula `Field`.
 
-### 2.2. Patrones de Navegación SaaS
-- **`AppShell`**: Orquestador de 3 columnas (Left | Main | Right) compatible con mobile Safe Areas.
-- **`Contextual Headers`**: Nivel 1 (Identidad Global) y Nivel 2 (Navegación de Página).
+### 2.1. Anatomía de un Campo
+- **Label**: Atomo accesible para describir el input.
+- **RequiredIndicator**: Marcador visual de obligatoriedad.
+- **Input/TextArea**: El átomo de captura de datos.
+- **Helper/ErrorMessage**: Texto de soporte o validación.
+
+### 2.2. Lógica de Estado
+Los inputs aceptan una prop `error` (boolean) que tiñe los bordes de rojo y activa el foco de error, independientemente de si se muestra el mensaje de error textual.
 
 ---
 
@@ -53,7 +55,7 @@ Cada Tenant define su estilo visual (`base` vs `brand`) y comportamiento inicial
 ---
 
 ## 4. Componentes Listos para Usar
-- **Atoms**: `Button`.
-- **Molecules**: `Tooltip`, `Popover`.
+- **Atoms**: `Button`, `Input`, `Label`, `TextArea`, `Switch`, `RequiredIndicator`, `HelperText`, `ErrorMessage`.
+- **Molecules**: `Field`, `Tooltip`, `Popover`.
 - **Organisms**: `Dialog`, `AlertDialog`, `Drawer`, `Toaster`, `Headers`, `Sidebars`, `Footers`.
 - **Templates**: `AppShell`, `BrandIdentityView`.
