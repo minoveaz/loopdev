@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms/button';
 import { Activity, Sparkles, MessageSquare, Star, Search } from 'lucide-react';
 
 const meta: Meta<typeof RightSidebar> = {
-  title: 'Organisms/Layout/RightSidebar',
+  title: '🏗️ Organisms/Navigation/RightSidebar',
   component: RightSidebar,
   parameters: {
     layout: 'fullscreen',

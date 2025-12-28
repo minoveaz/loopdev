@@ -7,7 +7,7 @@ import { Stack, Inline, Box } from '@/components/layout/foundations';
 import { Info, Settings, Trash2, Share2, HelpCircle } from 'lucide-react';
 
 const meta: Meta = {
-  title: 'Overlays/Small Overlays',
+  title: '🧩 Molecules/Floating/Overlays',
   decorators: [
     (Story) => (
       <TooltipProvider>

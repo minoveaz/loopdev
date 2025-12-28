@@ -1,15 +1,21 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Logo, Brackets } from './index';
-import { Stack, Inline, Box, Container } from '@/components/layout';
+import { Stack, Box, Container } from '@/components/layout';
 
-const meta: Meta = {
-  title: 'Atoms/Branding',
+const Grid = ({ children, className, gap = 4 }: any) => (
+  <div className={`grid gap-${gap} ${className}`}>{children}</div>
+);
+
+const meta: Meta<typeof Logo> = {
+  title: '⚛️ Atoms/Identity/Branding',
+  component: Logo,
 };
 
 export default meta;
+type Story = StoryObj<typeof Logo>;
 
-export const LogoShowcase: StoryObj = {
+export const LogoShowcase: Story = {
   render: () => (
     <Container className="py-12">
       <Stack gap={12}>
@@ -95,7 +101,3 @@ export const SupportingElements: StoryObj = {
     </Container>
   )
 };
-
-const Grid = ({ children, className, gap = 4 }: any) => (
-  <div className={`grid gap-${gap} ${className}`}>{children}</div>
-);

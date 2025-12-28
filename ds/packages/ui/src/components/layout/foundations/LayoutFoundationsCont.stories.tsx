@@ -4,7 +4,7 @@ import { Divider, Center, TwoPaneLayout, Sticky, Box, Stack, Inline, Container }
 import { Button } from '@/components/atoms/button';
 
 const meta: Meta = {
-  title: 'Layout/Foundations (Utilities)',
+  title: '💎 Foundations/Layout (Utilities)',
   parameters: {
     layout: 'fullscreen',
   },

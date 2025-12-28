@@ -14,7 +14,7 @@ import { Stack, Inline } from '@/components/layout/foundations';
 import { Trash2 } from 'lucide-react';
 
 const meta: Meta = {
-  title: 'Overlays/Alert & Notifications',
+  title: '🏗️ Organisms/Feedback/Alerts & Toasts',
 };
 
 export default meta;

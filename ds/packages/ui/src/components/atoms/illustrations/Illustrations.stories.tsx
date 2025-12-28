@@ -11,7 +11,7 @@ import * as Claims from './claims';
 import * as Sales from './sales';
 
 const meta: Meta = {
-  title: 'Atoms/Illustrations',
+  title: '⚛️ Atoms/Visuals/Illustrations',
 };
 
 export default meta;

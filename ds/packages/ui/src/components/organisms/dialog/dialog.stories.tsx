@@ -5,7 +5,7 @@ import { Button } from '@/components/atoms/button';
 import { Stack, Box } from '@/components/layout/foundations';
 
 const meta: Meta = {
-  title: 'Overlays/Dialog',
+  title: '🏗️ Organisms/Overlays/Dialog (Modal)',
   component: Dialog,
 };
 

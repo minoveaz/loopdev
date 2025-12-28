@@ -5,7 +5,7 @@ import { Mail, ArrowRight, Plus, Settings, Trash2, Zap } from 'lucide-react';
 import { Stack, Inline, Container, Box } from '@/components/layout';
 
 const meta: Meta<typeof Button> = {
-  title: 'Atoms/Button',
+  title: '⚛️ Atoms/Action/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {

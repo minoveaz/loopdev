@@ -15,7 +15,7 @@ import { SaaSFooter, MobileNav } from '@/components/organisms/footers';
 import { cn } from '@/helpers/cn';
 
 const meta: Meta<typeof AppShell> = {
-  title: 'Layout/AppShell',
+  title: '🖥️ Templates/AppShell (Master)',
   component: AppShell,
   parameters: {
     layout: 'fullscreen',

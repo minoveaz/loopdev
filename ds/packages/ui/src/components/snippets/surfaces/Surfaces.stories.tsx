@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms/button';
 import { Zap, ShieldCheck, Globe } from 'lucide-react';
 
 const meta: Meta = {
-  title: 'Snippets/Surfaces',
+  title: '🏗️ Organisms/Marketing/Surfaces',
 };
 
 export default meta;

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Box, Bleed, FullBleed, AspectRatio, Container, Section, Stack } from './index';
 
 const meta: Meta = {
-  title: 'Layout/Foundations (Advanced)',
+  title: '💎 Foundations/Layout (Advanced)',
   parameters: {
     layout: 'fullscreen',
   },

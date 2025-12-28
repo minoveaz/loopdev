@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Container, Section, Stack, Inline, Grid } from './index';
 
 const meta: Meta = {
-  title: 'Layout/Foundations',
+  title: '💎 Foundations/Layout (Core)',
   parameters: {
     layout: 'fullscreen',
   },

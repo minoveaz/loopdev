@@ -4,7 +4,7 @@ import { CleanHero, FeatureBento, TrustedPartners, ConversionCallout } from './i
 import { Container, Stack } from '@/components/layout';
 
 const meta: Meta = {
-  title: 'Snippets/Marketing',
+  title: '🏗️ Organisms/Marketing/Patterns',
 };
 
 export default meta;

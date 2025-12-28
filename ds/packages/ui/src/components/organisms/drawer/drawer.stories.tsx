@@ -6,7 +6,7 @@ import { Stack, Box, Grid, Inline } from '@/components/layout/foundations';
 import { Settings, User, Bell, Shield, Info } from 'lucide-react';
 
 const meta: Meta = {
-  title: 'Overlays/Drawer',
+  title: '🏗️ Organisms/Overlays/Drawer (Panels)',
   component: Drawer,
 };
 

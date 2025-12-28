@@ -5,7 +5,7 @@ import { Stack, Grid, Box, Container } from '@/components/layout';
 import { Hash, Server, ShieldCheck, User, CheckCircle, X } from 'lucide-react';
 
 const meta: Meta = {
-  title: 'Atoms/Visualization',
+  title: '⚛️ Atoms/Feedback/Visualization',
 };
 
 export default meta;

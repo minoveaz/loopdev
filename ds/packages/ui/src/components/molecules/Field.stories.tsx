@@ -21,7 +21,7 @@ import { Button } from '@/components/atoms/button';
 import { Mail, Lock, Eye } from 'lucide-react';
 
 const meta: Meta<typeof Field> = {
-  title: 'Forms/Field Molecule',
+  title: '🧩 Molecules/Forms/Field Group',
   component: Field,
   decorators: [
     (Story) => (

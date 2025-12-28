@@ -7,7 +7,7 @@ import { Home, Search, Bell, User, Plus } from 'lucide-react';
 import { TenantProvider } from '@/providers/tenant-provider';
 
 const meta: Meta<typeof SaaSFooter> = {
-  title: 'Layout/Footers',
+  title: '🏗️ Organisms/Global/Footers',
   component: SaaSFooter,
   decorators: [
     (Story) => (
