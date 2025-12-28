@@ -60,7 +60,7 @@ Cada componente migrado debe cumplir:
 
 ---
 ## 🏗️ Deuda Técnica & Backlog de Ingeniería
-- [ ] **[Automation]** Crear script `pnpm audit-components` para escanear automáticamente el uso de componentes en `marketingStudio` y generar el reporte de dependencias.
+- [x] **[Automation]** Crear script `pnpm audit-usage` para escanear automáticamente el uso de componentes en `marketingStudio` y generar el reporte de dependencias.
 - [ ] **[Documentation]** Integrar importación automática de MDX desde `loopdev/ds` hacia `marketingStudio` para evitar duplicidad de texto.
 
 ---
