@@ -8,3 +8,5 @@ export * from './TopBar';
 export * from './PageHeader';
 export * from './SidebarToggle';
 export * from './footers';
+export * from './Hero';
+export * from './BentoGrid';

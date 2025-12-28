@@ -11,3 +11,4 @@ export * from './Divider';
 export * from './Center';
 export * from './TwoPaneLayout';
 export * from './Sticky';
+export * from './InfiniteMarquee';
