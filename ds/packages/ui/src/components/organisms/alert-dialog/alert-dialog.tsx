@@ -2,7 +2,7 @@ import React from 'react';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 import { cn } from '@/helpers/cn';
 import { Stack, Inline, Box } from '@/components/layout';
-import { Button } from '../button';
+import { Button } from '@/components/atoms/button';
 
 export const AlertDialog = AlertDialogPrimitive.Root;
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
