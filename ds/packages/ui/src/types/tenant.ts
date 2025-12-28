@@ -27,11 +27,20 @@ export interface TenantConfig {
     light: string;
     dark: string;
   };
-  strategy: BrandStrategy; // Obligatorio y centralizado
+  strategy: BrandStrategy;
   subbrands?: Record<SubbrandId, SubbrandConfig>;
   features: string[];
   settings: {
     defaultSubbrand?: SubbrandId;
     allowCustomThemes: boolean;
+    layout: {
+      sidebarDefaultVariant: 'expanded' | 'collapsed';
+      /** Visual style for the sidebars: 'base' (white/subtle) or 'brand' (using tenant primary/secondary colors) */
+      sidebarStyle: 'base' | 'brand';
+      /** Visual style for the top header: 'base' or 'brand' */
+      headerStyle: 'base' | 'brand';
+      rightSidebarHasRail: boolean;
+      primaryHeaderHeight: number;
+    }
   };
 }

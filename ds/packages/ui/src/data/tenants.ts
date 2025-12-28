@@ -4,11 +4,27 @@ export interface TenantData {
   name: string;
   logoUrl?: string;
   strategy: BrandStrategy;
+  settings: {
+    layout: {
+      /** Determines if the left sidebar starts with labels visible ('expanded') or just icons ('collapsed') */
+      sidebarDefaultVariant: 'expanded' | 'collapsed';
+      /** If true, the right sidebar will include a vertical icon rail for internal navigation (Hub style) */
+      rightSidebarHasRail: boolean;
+    }
+  };
 }
 
 export const TENANT_DATA: Record<TenantId, TenantData> = {
   'loopdev': {
     name: 'LoopDev',
+    settings: {
+      layout: {
+        sidebarDefaultVariant: 'collapsed',
+        sidebarStyle: 'base', // Minimalist white sidebar
+        headerStyle: 'base',  // Minimalist white header
+        rightSidebarHasRail: false,
+      }
+    },
     strategy: {
       purpose: 'Powering modern brand systems with design engineering excellence.',
       promise: 'Scale your design system without friction.',
@@ -22,6 +38,14 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
   },
   'estar-protegidos': {
     name: 'Estar Protegidos',
+    settings: {
+      layout: {
+        sidebarDefaultVariant: 'expanded',
+        sidebarStyle: 'brand', // Strong brand identity in sidebars
+        headerStyle: 'brand',  // Brand accent in header
+        rightSidebarHasRail: true,
+      }
+    },
     strategy: {
       purpose: 'Hacer que protegerse deje de ser confuso, estresante y opaco.',
       promise: 'Protección clara, sin sorpresas y con acompañamiento real.',
@@ -35,6 +59,12 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
   },
   'client-b': {
     name: 'Client B',
+    settings: {
+      layout: {
+        sidebarDefaultVariant: 'expanded', // Standard enterprise layout
+        rightSidebarHasRail: false,      // Single-purpose inspector
+      }
+    },
     strategy: {
       purpose: 'Standardizing corporate identity for enterprise scale.',
       promise: 'Efficiency through consistency.',
