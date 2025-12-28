@@ -7,3 +7,7 @@ export * from './Box';
 export * from './Bleed';
 export * from './AspectRatio';
 export * from './SafeArea';
+export * from './Divider';
+export * from './Center';
+export * from './TwoPaneLayout';
+export * from './Sticky';

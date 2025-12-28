@@ -1,17 +1,17 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { AppShell } from './AppShell';
-import { PageHeader } from './PageHeader';
-import { LeftSidebar, SidebarItem } from './LeftSidebar';
-import { RightSidebar } from './RightSidebar';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { LeftSidebar, type SidebarItem } from '@/components/organisms/LeftSidebar';
+import { RightSidebar } from '@/components/organisms/RightSidebar';
 import { BrandIdentityView } from '@/components/brand-identity-view';
-import { Button } from '@/components/button';
+import { Button } from '@/components/atoms/button';
 import { useTenant } from '@/providers/tenant-provider';
 import { TENANT_DATA } from '@/data/tenants';
 import { Save, Share2, LayoutDashboard, Target, Briefcase, BarChart3, Activity, Plus, Bell, Sparkles, MessageSquare, Home, Search, User } from 'lucide-react';
 import { TenantProvider } from '@/providers/tenant-provider';
-import { Stack, Inline, Box, Container, Grid } from './foundations';
-import { SaaSFooter, MobileNav } from './footers';
+import { Stack, Inline, Box, Container, Grid } from '@/components/layout/foundations';
+import { SaaSFooter, MobileNav } from '@/components/organisms/footers';
 import { cn } from '@/helpers/cn';
 
 const meta: Meta<typeof AppShell> = {
@@ -87,7 +87,6 @@ export const FullSaaSLayout: Story = {
           leftSidebar={
             <LeftSidebar 
               items={sidebarItems} 
-              variant={config.settings.layout.sidebarDefaultVariant} 
             />
           }
           rightSidebar={
@@ -252,7 +251,7 @@ export const FocusMode: Story = {
   render: () => {
     return (
       <AppShell
-        leftSidebar={<LeftSidebar items={sidebarItems} variant="collapsed" />}
+        leftSidebar={<LeftSidebar items={sidebarItems} />}
         header={
           <PageHeader
             title="Focus Mode"

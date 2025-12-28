@@ -2,6 +2,7 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const config: StorybookConfig = {
+  // Atomic Design Structure: searching for all stories recursively in src/
   stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
     "@storybook/addon-onboarding",

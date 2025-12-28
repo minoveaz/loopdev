@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTenant } from '@/providers/tenant-provider';
 import { TENANT_DATA } from '@/data/tenants';
 import { cn } from '@/helpers/cn';
-import { Stack, Box, Inline } from './foundations';
+import { Stack, Box, Inline } from '@/components/layout';
 import { ChevronRight } from 'lucide-react';
 
 export interface SidebarItem {
@@ -13,24 +13,25 @@ export interface SidebarItem {
   active?: boolean;
 }
 
+import { useLayout } from '@/providers/layout-provider';
+
 export interface LeftSidebarProps {
   items: SidebarItem[];
   onItemClick?: (id: string) => void;
-  variant?: 'expanded' | 'collapsed';
   className?: string;
 }
 
 export const LeftSidebar: React.FC<LeftSidebarProps> = ({ 
   items, 
   onItemClick,
-  variant = 'expanded',
   className 
 }) => {
   const { tenant } = useTenant();
+  const { sidebarVariant } = useLayout();
   const data = TENANT_DATA[tenant];
   const [activeFlyout, setActiveFlyout] = useState<string | null>(null);
-  const isCollapsed = variant === 'collapsed';
-  const isBrandStyle = data.settings.layout.sidebarStyle === 'brand';
+  const isCollapsed = sidebarVariant === 'collapsed';
+  const isBrandStyle = (data.settings.layout as any).sidebarStyle === 'brand';
 
   const handleItemClick = (item: SidebarItem) => {
     if (item.flyoutContent) {

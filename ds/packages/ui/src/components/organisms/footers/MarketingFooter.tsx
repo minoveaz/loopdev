@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Grid, Stack, Inline } from '../foundations';
+import { Box, Container, Grid, Stack, Inline } from '@/components/layout';
 import { cn } from '@/helpers/cn';
 import { useTenant } from '@/providers/tenant-provider';
 import { TENANT_DATA } from '@/data/tenants';

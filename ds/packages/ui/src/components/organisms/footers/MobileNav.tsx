@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Inline, SafeArea, Stack } from '../foundations';
+import { Box, Inline, SafeArea, Stack } from '@/components/layout';
 import { cn } from '@/helpers/cn';
 
 export interface MobileNavItem {

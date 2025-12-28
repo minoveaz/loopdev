@@ -12,6 +12,8 @@ import "@loopdev/tokens/src/css/theme-client-b.css";
 import "@loopdev/tokens/src/css/theme-ep-subbrands.css";
 
 import { TenantProvider, type Tenant, type Subbrand } from "../src/providers/tenant-provider";
+import { LayoutProvider } from "../src/providers/layout-provider";
+import { Toaster } from "../src/components/organisms/toast/toast";
 
 const preview: Preview = {
   parameters: {
@@ -60,41 +62,44 @@ const preview: Preview = {
       
       return (
         <TenantProvider tenant={tenant} subbrand={activeSubbrand}>
-          <div 
-            className={themeClass} 
-            data-subbrand={activeSubbrand !== 'none' ? activeSubbrand : undefined}
-            style={{ 
-              fontFamily: 'var(--lpd-font-sans)',
-              color: 'var(--lpd-color-text-base)',
-              background: 'var(--lpd-color-bg-base)',
-              padding: isFullscreen ? '0' : 'var(--lpd-space-12)',
-              minHeight: isFullscreen ? '0' : '100vh',
-              width: '100%',
-              display: isFullscreen ? 'block' : 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-            }}
-          >
-            <div style={{ 
-              position: 'relative', 
-              width: '100%', 
-              height: isFullscreen ? '100vh' : 'auto',
-              display: isFullscreen ? 'block' : 'flex', 
-              justifyContent: 'center' 
-            }}>
-              <Story />
-              
-              {/* Info Badge */}
+          <LayoutProvider>
+            <Toaster />
+            <div 
+              className={themeClass} 
+              data-subbrand={activeSubbrand !== 'none' ? activeSubbrand : undefined}
+              style={{ 
+                fontFamily: 'var(--lpd-font-sans)',
+                color: 'var(--lpd-color-text-base)',
+                background: 'var(--lpd-color-bg-base)',
+                padding: isFullscreen ? '0' : 'var(--lpd-space-12)',
+                minHeight: isFullscreen ? '0' : '100vh',
+                width: '100%',
+                display: isFullscreen ? 'block' : 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
               <div style={{ 
-                position: 'fixed', bottom: '1rem', left: '1rem',
-                fontSize: '10px', fontFamily: 'monospace', opacity: 0.5,
-                pointerEvents: 'none', zIndex: 9999
+                position: 'relative', 
+                width: '100%', 
+                height: isFullscreen ? '100vh' : 'auto',
+                display: isFullscreen ? 'block' : 'flex', 
+                justifyContent: 'center' 
               }}>
-                Context: {tenant} {activeSubbrand !== 'none' ? `> ${activeSubbrand}` : ''}
+                <Story />
+                
+                {/* Info Badge */}
+                <div style={{ 
+                  position: 'fixed', bottom: '1rem', left: '1rem',
+                  fontSize: '10px', fontFamily: 'monospace', opacity: 0.5,
+                  pointerEvents: 'none', zIndex: 9999
+                }}>
+                  Context: {tenant} {activeSubbrand !== 'none' ? `> ${activeSubbrand}` : ''}
+                </div>
               </div>
             </div>
-          </div>
+          </LayoutProvider>
         </TenantProvider>
       );
     },

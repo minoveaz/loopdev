@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cn } from '@/helpers/cn';
-import { Box, Stack, Inline } from './foundations';
+import { Box, Stack, Inline } from '@/components/layout';
 import { X } from 'lucide-react';
 
 export interface RightSidebarTab {

@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Loader2 } from "lucide-react"
 
-import { cn } from "../../helpers/cn"
+import { cn } from "@/helpers/cn"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap text-lpd-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lpd-brand-primary disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] disabled:active:scale-100",

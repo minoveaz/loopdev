@@ -2,7 +2,7 @@ import React from 'react';
 import { useTenant } from '@/providers/tenant-provider';
 import { TENANT_DATA } from '@/data/tenants';
 import { cn } from '@/helpers/cn';
-import { Inline, Stack, SafeArea, Box } from './foundations';
+import { Inline, Stack, SafeArea, Box } from '@/components/layout';
 import { Bell, User, Search, Menu } from 'lucide-react';
 
 export interface TopBarProps {

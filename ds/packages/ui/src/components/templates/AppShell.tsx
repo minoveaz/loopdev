@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { TopBar } from './TopBar';
-import { Sidebar } from './Sidebar';
-import { Stack, Container, SafeArea } from './foundations';
+import { TopBar } from '../organisms/TopBar';
+import { LeftSidebar } from '../organisms/LeftSidebar';
+import { Stack, Container, SafeArea } from '@/components/layout';
 import { cn } from '@/helpers/cn';
+
+import { useLayout } from '@/providers/layout-provider';
 
 export interface AppShellProps {
   children: React.ReactNode;
   header?: React.ReactNode; 
-  footer?: React.ReactNode; // Slot for SaaSFooter or MarketingFooter
+  footer?: React.ReactNode; 
   leftSidebar?: React.ReactNode;
   rightSidebar?: React.ReactNode;
-  hideSidebar?: boolean; // Controls left sidebar visibility
-  isImmersive?: boolean; // Hides all sidebars for immersive mode
+  hideSidebar?: boolean; 
+  isImmersive?: boolean; 
 }
 
 export const AppShell: React.FC<AppShellProps> = ({ 
@@ -23,14 +25,16 @@ export const AppShell: React.FC<AppShellProps> = ({
   hideSidebar = false,
   isImmersive = false
 }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const { isRightSidebarOpen } = useLayout();
+  
   const showLeftSidebar = !hideSidebar && !isImmersive && leftSidebar;
-  const showRightSidebar = !isImmersive && rightSidebar;
+  const showRightSidebar = !isImmersive && rightSidebar && isRightSidebarOpen;
 
   return (
     <Stack gap={0} className="h-screen overflow-hidden bg-[var(--lpd-color-bg-base)] text-[var(--lpd-color-text-base)]">
       {/* TopBar wraps its own SafeArea top */}
-      <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <TopBar onMenuClick={() => setMobileSidebarOpen(!mobileSidebarOpen)} />
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* LEFT COLUMN: LeftSidebar */}
@@ -40,11 +44,11 @@ export const AppShell: React.FC<AppShellProps> = ({
           </div>
         )}
 
-        {/* Mobile Sidebar Overlay (Uses same leftSidebar slot) */}
-        {showLeftSidebar && sidebarOpen && (
+        {/* Mobile Sidebar Overlay */}
+        {showLeftSidebar && mobileSidebarOpen && (
           <div 
             className="fixed inset-0 z-50 bg-black/50 md:hidden transition-opacity"
-            onClick={() => setSidebarOpen(false)}
+            onClick={() => setMobileSidebarOpen(false)}
           />
         )}
 
@@ -52,7 +56,7 @@ export const AppShell: React.FC<AppShellProps> = ({
         {showLeftSidebar && (
           <div className={cn(
             "fixed inset-y-0 left-0 z-50 transform md:hidden transition-transform duration-300 ease-in-out",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
           )}>
             <SafeArea top className="h-full bg-white shadow-2xl">
               {leftSidebar}
