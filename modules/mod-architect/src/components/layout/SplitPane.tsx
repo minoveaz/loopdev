@@ -1,6 +1,6 @@
 import { Box, Stack, Inline } from '@loopdev/ui';
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Code2, Eye } from 'lucide-react';
 
 interface SplitPaneProps {
@@ -13,54 +13,54 @@ interface SplitPaneProps {
 export const SplitPane = ({ 
   left, 
   right, 
-  leftTitle = 'Legacy Blueprint', 
-  rightTitle = 'Design System Target'
+  leftTitle = 'Source Blueprint', 
+  rightTitle = 'System Output'
 }: SplitPaneProps) => {
   return (
     <Box 
-      className="h-full grid grid-cols-2 divide-x divide-[var(--lpd-color-border-subtle)]"
-      background="subtle"
+      className="h-full grid grid-cols-2 divide-x divide-slate-100"
+      background="base"
     >
-      {/* Columna Izquierda: El Origen */}
-      <Stack gap={0} className="h-full overflow-hidden bg-slate-50/50">
+      {/* Panel Izquierdo: El Diseño (Mock) */}
+      <Stack gap={0} className="h-full overflow-hidden bg-slate-50/30">
         <Box 
-          paddingX={4} 
-          paddingY={2}
-          background="base"
-          className="shrink-0 border-b border-[var(--lpd-color-border-subtle)]"
+          paddingX={5} 
+          paddingY={3}
+          className="shrink-0 border-b border-slate-100 bg-white/50 backdrop-blur-sm"
         >
           <Inline justify="between" align="center">
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
-              <Eye size={12} /> {leftTitle}
+              <Eye size={14} className="text-slate-300" /> {leftTitle}
             </span>
           </Inline>
         </Box>
-        <div className="flex-1 overflow-auto p-6 flex items-start justify-center">
-          <div className="w-full max-w-2xl shadow-sm rounded-xl border border-dashed border-slate-300 bg-white min-h-[400px]">
-            {left}
+        <div className="flex-1 overflow-auto p-8 flex items-start justify-center custom-scrollbar-thin">
+          <div className="w-full max-w-3xl shadow-2xl rounded-2xl border border-white bg-white/80 min-h-[500px] p-1">
+             <div className="w-full h-full rounded-[calc(1rem-1px)] border border-dashed border-slate-200 bg-slate-50/50 flex items-center justify-center">
+                {left}
+             </div>
           </div>
         </div>
       </Stack>
 
-      {/* Columna Derecha: El Destino (Código Transformado) */}
+      {/* Panel Derecho: El Código Atómico */}
       <Stack gap={0} className="h-full overflow-hidden">
         <Box 
-          paddingX={4} 
-          paddingY={2}
-          background="base"
-          className="shrink-0 border-b border-[var(--lpd-color-border-subtle)]"
+          paddingX={5} 
+          paddingY={3}
+          className="shrink-0 border-b border-slate-100 bg-white"
         >
           <Inline justify="between" align="center">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--lpd-color-brand-primary)] flex items-center gap-2">
-              <Code2 size={12} /> {rightTitle}
+            <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-600 flex items-center gap-2">
+              <Code2 size={14} /> {rightTitle}
             </span>
-            <div className="flex gap-1">
-               <div className="w-2 h-2 rounded-full bg-emerald-500" />
-               <div className="w-2 h-2 rounded-full bg-slate-200" />
+            <div className="flex gap-1.5">
+               <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-sm" />
+               <div className="w-2.5 h-2.5 rounded-full bg-slate-100" />
             </div>
           </Inline>
         </Box>
-        <div className="flex-1 overflow-auto p-6 bg-white">
+        <div className="flex-1 overflow-auto p-0 bg-white custom-scrollbar-thin">
           {right}
         </div>
       </Stack>

@@ -1,4 +1,4 @@
-import type { Blueprint } from '@/core/types';
+import type { Blueprint } from '../core/types';
 
 interface BlueprintListProps {
   blueprints: Blueprint[];

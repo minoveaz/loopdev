@@ -1,4 +1,4 @@
-import type { MigrationStats } from '@/core/types';
+import type { MigrationStats } from '../core/types';
 
 interface ArchitectStatsProps {
   stats: MigrationStats;
