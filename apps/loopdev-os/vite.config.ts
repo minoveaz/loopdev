@@ -10,11 +10,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@mock-loopdev': path.resolve(__dirname, '../../../mock-loopdev'),
+      // Alias directo a la carpeta de blueprints dentro del módulo
+      '@blueprints': path.resolve(__dirname, '../../modules/mod-architect/src/blueprints'),
     },
   },
   server: {
     host: true,
+    fs: {
+      // Permitir que Vite sirva archivos de todo el monorepo
+      allow: ['..']
+    },
     hmr: {
       overlay: true
     }
