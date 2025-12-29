@@ -1,8 +1,8 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../helpers/cn';
 
-import { InfiniteMarquee } from '@/components/layout/foundations/InfiniteMarquee';
-import { Grid } from '@/components/layout/foundations/Grid';
+import { InfiniteMarquee } from '../../components/layout/foundations/InfiniteMarquee';
+import { Grid } from '../../components/layout/foundations/Grid';
 
 export interface LogoItem {
   name: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Logo, Brackets } from './index';
-import { Stack, Box, Container } from '@/components/layout';
+import { Stack, Box, Container } from '../../../components/layout';
 
 const Grid = ({ children, className, gap = 4 }: any) => (
   <div className={`grid gap-${gap} ${className}`}>{children}</div>

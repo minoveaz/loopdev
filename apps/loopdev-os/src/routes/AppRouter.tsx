@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from '@/pages/public/LandingPage';
 import { TenantDashboard } from '@/pages/workspace/TenantDashboard';
 import { StudioLayout } from '@/layouts/studio/StudioLayout';
+import BlueprintPreview from '@/pages/admin/BlueprintPreview';
 import { ArchitectDashboard } from '@loopdev/mod-architect';
 
 /**
@@ -22,6 +23,9 @@ const AppRouter = () => {
         <Route index element={<div>Admin Dashboard (WIP)</div>} />
         <Route path="architect" element={<ArchitectDashboard />} />
       </Route>
+
+      {/* 2.1 Isolated Preview Route (Iframe Sandbox) */}
+      <Route path="/admin/preview/:componentName" element={<BlueprintPreview />} />
 
       {/* 3. Tenant Scope (The Workspace) */}
       <Route path="/:tenantId">

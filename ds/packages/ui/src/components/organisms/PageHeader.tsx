@@ -1,6 +1,6 @@
 import React from 'react';
-import { Inline, Stack, Box, Container } from '@/components/layout';
-import { cn } from '@/helpers/cn';
+import { Inline, Stack, Box, Container } from '../../components/layout';
+import { cn } from '../../helpers/cn';
 
 export interface PageHeaderProps {
   title: string;

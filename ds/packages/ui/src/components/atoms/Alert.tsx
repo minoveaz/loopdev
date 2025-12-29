@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../helpers/cn';
 import { Info, CheckCircle, AlertTriangle, XCircle, X } from 'lucide-react';
 
 export type AlertVariant = 'info' | 'success' | 'warning' | 'error';

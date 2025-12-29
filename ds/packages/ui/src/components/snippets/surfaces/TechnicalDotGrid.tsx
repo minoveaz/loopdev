@@ -1,6 +1,6 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { Box, Stack, Inline } from '@/components/layout';
+import { cn } from '../../../helpers/cn';
+import { Box, Stack, Inline } from '../../../components/layout';
 import { BarChart3 } from 'lucide-react';
 
 export interface TechnicalDotGridProps {

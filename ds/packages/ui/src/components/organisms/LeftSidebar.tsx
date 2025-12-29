@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useTenant } from '@/providers/tenant-provider';
-import { TENANT_DATA } from '@/data/tenants';
-import { cn } from '@/helpers/cn';
-import { Stack, Box, Inline } from '@/components/layout';
+import { useTenant } from '../../providers/tenant-provider';
+import { TENANT_DATA } from '../../data/tenants';
+import { cn } from '../../helpers/cn';
+import { Stack, Box, Inline } from '../../components/layout';
 import { ChevronRight } from 'lucide-react';
 
 export interface SidebarItem {
@@ -13,7 +13,7 @@ export interface SidebarItem {
   active?: boolean;
 }
 
-import { useLayout } from '@/providers/layout-provider';
+import { useLayout } from '../../providers/layout-provider';
 
 export interface LeftSidebarProps {
   items: SidebarItem[];

@@ -1,8 +1,8 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { Button } from '@/components/atoms/button';
-import { Badge } from '@/components/atoms/Badge';
-import { Stack, Inline, Box, Container } from '@/components/layout';
+import { cn } from '../../helpers/cn';
+import { Button } from '../../components/atoms/button';
+import { Badge } from '../../components/atoms/Badge';
+import { Stack, Inline, Box, Container } from '../../components/layout';
 import { ArrowRight, PlayCircle } from 'lucide-react';
 
 export interface HeroProps {

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as SwitchPrimitive from '@radix-ui/react-switch';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../../helpers/cn';
 
 export const Switch = React.forwardRef<
   HTMLButtonElement,

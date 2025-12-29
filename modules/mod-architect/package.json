@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@loopdev/ui": "workspace:*",
-    "clsx": "^2.1.0"
+    "clsx": "^2.1.0",
+    "lucide-react": "0.395.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

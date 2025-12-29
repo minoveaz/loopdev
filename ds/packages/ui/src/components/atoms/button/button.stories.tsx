@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './button';
 import { Mail, ArrowRight, Plus, Settings, Trash2, Zap } from 'lucide-react';
-import { Stack, Inline, Container, Box } from '@/components/layout';
+import { Stack, Inline, Container, Box } from '../../../components/layout';
 
 const meta: Meta<typeof Button> = {
   title: '⚛️ Atoms/Action/Button',

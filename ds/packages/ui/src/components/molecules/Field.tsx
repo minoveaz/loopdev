@@ -1,7 +1,7 @@
 import React from 'react';
-import { Label, HelperText, ErrorMessage, RequiredIndicator } from '@/components/atoms/forms';
-import { Stack, Inline } from '@/components/layout';
-import { cn } from '@/helpers/cn';
+import { Label, HelperText, ErrorMessage, RequiredIndicator } from '../../components/atoms/forms';
+import { Stack, Inline } from '../../components/layout';
+import { cn } from '../../helpers/cn';
 
 export interface FieldProps {
   children: React.ReactNode;

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Divider, Center, TwoPaneLayout, Sticky, Box, Stack, Inline, Container } from './index';
-import { Button } from '@/components/atoms/button';
+import { Button } from '../../../components/atoms/button';
 
 const meta: Meta = {
   title: '💎 Foundations/Layout (Utilities)',

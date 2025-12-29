@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../../helpers/cn';
 
 export type BoxSpace = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20;
 export type BoxRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full';

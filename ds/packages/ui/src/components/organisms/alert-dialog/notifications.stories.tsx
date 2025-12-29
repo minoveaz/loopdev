@@ -8,9 +8,9 @@ import {
   AlertDialogAction, 
   AlertDialogCancel 
 } from './alert-dialog';
-import { Button } from '@/components/atoms/button';
-import { toast } from '@/components/organisms/toast';
-import { Stack, Inline } from '@/components/layout/foundations';
+import { Button } from '../../../components/atoms/button';
+import { toast } from '../../../components/organisms/toast';
+import { Stack, Inline } from '../../../components/layout/foundations';
 import { Trash2 } from 'lucide-react';
 
 const meta: Meta = {

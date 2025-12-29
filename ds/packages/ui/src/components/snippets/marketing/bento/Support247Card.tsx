@@ -1,5 +1,5 @@
 import React from 'react';
-import { BentoItem } from '@/components/organisms/BentoGrid';
+import { BentoItem } from '../../../../components/organisms/BentoGrid';
 
 export const Support247Card = () => (
   <BentoItem 

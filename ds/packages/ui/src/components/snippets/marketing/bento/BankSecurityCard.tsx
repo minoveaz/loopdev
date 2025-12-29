@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lock } from 'lucide-react';
-import { BentoItem } from '@/components/organisms/BentoGrid';
+import { BentoItem } from '../../../../components/organisms/BentoGrid';
 
 export const BankSecurityCard = () => (
   <BentoItem 

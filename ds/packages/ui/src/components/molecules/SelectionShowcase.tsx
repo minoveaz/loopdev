@@ -1,7 +1,7 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { Stack, Inline, Box, Container } from '@/components/layout';
-import { Button, Checkbox, Label, RadioGroup, RadioGroupItem } from '@/components/atoms';
+import { cn } from '../../helpers/cn';
+import { Stack, Inline, Box, Container } from '../../components/layout';
+import { Button, Checkbox, Label, RadioGroup, RadioGroupItem } from '../../components/atoms';
 
 export const SelectionShowcase = () => {
   return (

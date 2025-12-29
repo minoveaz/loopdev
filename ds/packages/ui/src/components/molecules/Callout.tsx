@@ -1,8 +1,8 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { Button } from '@/components/atoms/button';
+import { cn } from '../../helpers/cn';
+import { Button } from '../../components/atoms/button';
 import { Megaphone, ArrowRight } from 'lucide-react';
-import { Stack, Inline, Box } from '@/components/layout';
+import { Stack, Inline, Box } from '../../components/layout';
 
 export interface CalloutProps {
   title: string;

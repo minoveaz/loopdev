@@ -15,9 +15,9 @@ import {
   RadioGroupItem, 
   Label, 
   NumberInput 
-} from '@/components/atoms/forms';
-import { Stack, Box, Inline } from '@/components/layout';
-import { Button } from '@/components/atoms/button';
+} from '../../components/atoms/forms';
+import { Stack, Box, Inline } from '../../components/layout';
+import { Button } from '../../components/atoms/button';
 import { Mail, Lock, Eye } from 'lucide-react';
 
 const meta: Meta<typeof Field> = {

@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { GlassCard, TechnicalDotGrid, MeshHero } from './index';
-import { Container, Stack, Grid, Box } from '@/components/layout';
-import { Button } from '@/components/atoms/button';
+import { Container, Stack, Grid, Box } from '../../../components/layout';
+import { Button } from '../../../components/atoms/button';
 import { Zap, ShieldCheck, Globe } from 'lucide-react';
 
 const meta: Meta = {

@@ -1,9 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/molecules/tooltip';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../../components/molecules/tooltip';
 import { Popover, PopoverTrigger, PopoverContent } from './popover';
-import { Button } from '@/components/atoms/button';
-import { Stack, Inline, Box } from '@/components/layout/foundations';
+import { Button } from '../../../components/atoms/button';
+import { Stack, Inline, Box } from '../../../components/layout/foundations';
 import { Info, Settings, Trash2, Share2, HelpCircle } from 'lucide-react';
 
 const meta: Meta = {

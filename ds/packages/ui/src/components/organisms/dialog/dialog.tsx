@@ -1,8 +1,8 @@
 import React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { cn } from '@/helpers/cn';
-import { Stack, Inline, Box } from '@/components/layout';
+import { cn } from '../../../helpers/cn';
+import { Stack, Inline, Box } from '../../../components/layout';
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Container, Inline } from '@/components/layout';
-import { cn } from '@/helpers/cn';
+import { Box, Container, Inline } from '../../../components/layout';
+import { cn } from '../../../helpers/cn';
 
 export interface SaaSFooterProps {
   version?: string;

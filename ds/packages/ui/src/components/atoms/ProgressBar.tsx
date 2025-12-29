@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../helpers/cn';
 
 export interface ProgressBarProps {
   value: number; // 0 to 100

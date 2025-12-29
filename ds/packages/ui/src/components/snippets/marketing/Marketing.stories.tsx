@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CleanHero, FeatureBento, TrustedPartners, ConversionCallout } from './index';
-import { Container, Stack } from '@/components/layout';
+import { Container, Stack } from '../../../components/layout';
 
 const meta: Meta = {
   title: '🏗️ Organisms/Marketing/Patterns',

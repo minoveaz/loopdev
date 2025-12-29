@@ -1,6 +1,6 @@
 import React from 'react';
-import { LogoCloud } from '@/components/molecules/LogoCloud';
-import { Box } from '@/components/layout';
+import { LogoCloud } from '../../../components/molecules/LogoCloud';
+import { Box } from '../../../components/layout';
 
 // Helper local para el demo
 const PlaceholderLogo = ({ text }: { text: string }) => (

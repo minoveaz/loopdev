@@ -1,6 +1,6 @@
 import React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../../helpers/cn';
 
 export const RadioGroup = RadioGroupPrimitive.Root;
 

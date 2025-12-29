@@ -1,6 +1,6 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { Stack, Box } from '@/components/layout';
+import { cn } from '../../../helpers/cn';
+import { Stack, Box } from '../../../components/layout';
 import { Sparkles } from 'lucide-react';
 
 export interface MeshHeroProps {

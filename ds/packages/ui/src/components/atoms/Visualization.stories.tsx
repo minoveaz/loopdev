@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Alert, ProgressBar, Skeleton, Tag, Badge, Avatar } from './index';
-import { Stack, Grid, Box, Container } from '@/components/layout';
+import { Stack, Grid, Box, Container } from '../../components/layout';
 import { Hash, Server, ShieldCheck, User, CheckCircle, X } from 'lucide-react';
 
 const meta: Meta = {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { BentoGrid } from '@/components/organisms/BentoGrid';
-import { Box } from '@/components/layout';
+import { BentoGrid } from '../../../components/organisms/BentoGrid';
+import { Box } from '../../../components/layout';
 
 // Import individual bento cards
 import { PolicyManagementCard } from './bento/PolicyManagementCard';

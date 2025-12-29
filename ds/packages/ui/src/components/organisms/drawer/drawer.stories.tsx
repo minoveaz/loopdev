@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Drawer, DrawerTrigger, DrawerContent, DrawerFooter, DrawerClose } from './drawer';
-import { Button } from '@/components/atoms/button';
-import { Stack, Box, Grid, Inline } from '@/components/layout/foundations';
+import { Button } from '../../../components/atoms/button';
+import { Stack, Box, Grid, Inline } from '../../../components/layout/foundations';
 import { Settings, User, Bell, Shield, Info } from 'lucide-react';
 
 const meta: Meta = {

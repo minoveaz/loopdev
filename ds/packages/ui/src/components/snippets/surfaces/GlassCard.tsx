@@ -1,6 +1,6 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { Box, Stack } from '@/components/layout';
+import { cn } from '../../../helpers/cn';
+import { Box, Stack } from '../../../components/layout';
 
 export interface GlassCardProps {
   title?: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../../helpers/cn';
 
 export type StackGap = 0 | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16;
 

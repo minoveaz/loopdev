@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTenant } from '@/providers/tenant-provider';
-import { TENANT_STRATEGIES } from '@/data/tenants';
+import { useTenant } from '../../providers/tenant-provider';
+import { TENANT_STRATEGIES } from '../../data/tenants';
 
 export const BrandIdentityView: React.FC = () => {
   const { tenant, subbrand } = useTenant();

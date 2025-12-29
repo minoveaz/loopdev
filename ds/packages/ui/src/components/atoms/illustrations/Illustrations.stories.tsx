@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Stack, Grid, Box, Container } from '@/components/layout';
+import { Stack, Grid, Box, Container } from '../../../components/layout';
 import * as Tech from './tech';
 import * as Home from './home';
 import * as Travel from './travel';

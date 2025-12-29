@@ -1,6 +1,6 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { Box, Inline } from '@/components/layout';
+import { cn } from '../../helpers/cn';
+import { Box, Inline } from '../../components/layout';
 import { X } from 'lucide-react';
 
 export interface RightSidebarTab {

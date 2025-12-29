@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLayout } from '@/providers/layout-provider';
+import { useLayout } from '../../providers/layout-provider';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../helpers/cn';
 
 export interface SidebarToggleProps {
   className?: string;

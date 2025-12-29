@@ -1,7 +1,7 @@
 import React from 'react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
-import { cn } from '@/helpers/cn';
-import { Box } from '@/components/layout';
+import { cn } from '../../../helpers/cn';
+import { Box } from '../../../components/layout';
 
 export const Popover = PopoverPrimitive.Root;
 export const PopoverTrigger = PopoverPrimitive.Trigger;

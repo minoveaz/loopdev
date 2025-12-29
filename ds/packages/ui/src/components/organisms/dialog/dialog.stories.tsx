@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Dialog, DialogTrigger, DialogContent, DialogFooter, DialogClose } from './dialog';
-import { Button } from '@/components/atoms/button';
-import { Stack, Box } from '@/components/layout/foundations';
+import { Button } from '../../../components/atoms/button';
+import { Stack, Box } from '../../../components/layout/foundations';
 
 const meta: Meta = {
   title: '🏗️ Organisms/Overlays/Dialog (Modal)',

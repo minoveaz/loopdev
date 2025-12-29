@@ -1,8 +1,8 @@
 import React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 import { X } from 'lucide-react';
-import { cn } from '@/helpers/cn';
-import { Stack, Inline, Box, SafeArea } from '@/components/layout';
+import { cn } from '../../../helpers/cn';
+import { Stack, Inline, Box, SafeArea } from '../../../components/layout';
 
 export const Drawer = DrawerPrimitive.Root;
 export const DrawerTrigger = DrawerPrimitive.Trigger;

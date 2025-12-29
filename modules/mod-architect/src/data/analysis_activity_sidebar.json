@@ -1,0 +1,25 @@
+{
+  "componentName": "ActivitySidebar",
+  "zones": [
+    {
+      "zone": "Navigation Rail",
+      "status": "detected",
+      "target": "atoms/NavRail"
+    },
+    {
+      "zone": "Header Section",
+      "status": "detected",
+      "target": "organisms/SidebarHeader"
+    },
+    {
+      "zone": "Scrollable Body",
+      "status": "detected",
+      "target": "organisms/SidebarBody"
+    }
+  ],
+  "antipatterns": {
+    "hardcodedColors": [],
+    "legacyIcons": 9,
+    "inlineStyles": 0
+  }
+}

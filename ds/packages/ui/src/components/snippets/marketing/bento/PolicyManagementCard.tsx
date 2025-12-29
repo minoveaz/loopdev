@@ -1,6 +1,6 @@
 import React from 'react';
-import { BentoItem } from '@/components/organisms/BentoGrid';
-import { Box, Stack } from '@/components/layout';
+import { BentoItem } from '../../../../components/organisms/BentoGrid';
+import { Box, Stack } from '../../../../components/layout';
 
 export interface PolicyManagementCardProps {
   title?: string;

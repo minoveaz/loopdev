@@ -1,6 +1,6 @@
 import React from 'react';
 import { Gift } from 'lucide-react';
-import { Callout } from '@/components/molecules/Callout';
+import { Callout } from '../../../components/molecules/Callout';
 
 /**
  * Snippet: marketing/ConversionCallout

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../../helpers/cn';
 
 export interface TwoPaneLayoutProps {
   master: React.ReactNode;

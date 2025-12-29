@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { RightSidebar } from './RightSidebar';
-import { Stack, Inline, Box } from '@/components/layout';
-import { Button } from '@/components/atoms/button';
+import { Stack, Inline, Box } from '../../components/layout';
+import { Button } from '../../components/atoms/button';
 import { Activity, Sparkles, MessageSquare, Star, Search } from 'lucide-react';
 
 const meta: Meta<typeof RightSidebar> = {

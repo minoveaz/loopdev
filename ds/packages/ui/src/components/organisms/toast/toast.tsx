@@ -1,6 +1,6 @@
 import React from 'react';
 import { Toaster as Sonner } from 'sonner';
-import { useTenant } from '@/providers/tenant-provider';
+import { useTenant } from '../../../providers/tenant-provider';
 
 export const Toaster = () => {
   const { tenant } = useTenant();

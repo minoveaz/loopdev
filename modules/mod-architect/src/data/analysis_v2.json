@@ -1,0 +1,31 @@
+{
+  "componentName": "ActivitySidebar",
+  "filePath": "mock-loopdev/components/layout/ActivitySidebar.tsx",
+  "detectedComponents": [
+    "ActivitySidebar"
+  ],
+  "zones": [
+    {
+      "id": "nav-rail",
+      "name": "Navigation Rail"
+    },
+    {
+      "id": "header",
+      "name": "Sidebar Header"
+    },
+    {
+      "id": "body",
+      "name": "Scrollable Body"
+    }
+  ],
+  "stats": {
+    "legacyIcons": 9,
+    "inlineStyles": 0,
+    "colorIssues": 3
+  },
+  "hardcodedColors": [
+    "#1e293b",
+    "#161e2e",
+    "#0d121b"
+  ]
+}
