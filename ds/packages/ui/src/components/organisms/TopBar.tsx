@@ -1,24 +1,68 @@
 import React from 'react';
-import { useTenant } from '@/providers/tenant-provider';
-import { TENANT_DATA } from '@/data/tenants';
-import { cn } from '@/helpers/cn';
-import { Inline, Stack, SafeArea, Box } from '@/components/layout';
+import { useTenant } from '../../providers/tenant-provider';
+import { TENANT_DATA } from '../../data/tenants';
+import { cn } from '../../helpers/cn';
+import { Inline, Stack, SafeArea, Box } from '../../components/layout';
 import { Bell, User, Search, Menu } from 'lucide-react';
 
 export interface TopBarProps {
+  children?: React.ReactNode;
+  className?: string;
   onMenuClick?: () => void;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
+export const TopBarLeft: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <Inline gap={4} wrap={false} className={cn("shrink-0", className)}>
+    {children}
+  </Inline>
+);
+
+export const TopBarCenter: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <Box className={cn("hidden md:flex flex-1 max-w-md relative", className)}>
+    {children}
+  </Box>
+);
+
+export const TopBarRight: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <Inline gap={2} align="center" className={cn("shrink-0", className)}>
+    {children}
+  </Inline>
+);
+
+export const TopBar: React.FC<TopBarProps> & {
+  Left: typeof TopBarLeft;
+  Center: typeof TopBarCenter;
+  Right: typeof TopBarRight;
+} = ({ children, className, onMenuClick }) => {
   const { tenant, subbrand } = useTenant();
   const data = TENANT_DATA[tenant];
   
-  // Safe check for settings and layout
   const headerStyle = data?.settings?.layout?.headerStyle || 'base';
   const isBrandStyle = headerStyle === 'brand';
 
-  if (!data) return null; // Prevent crash if tenant data is missing
+  if (!data) return null;
 
+  // If children are provided, we render a flexible TopBar
+  if (children) {
+    return (
+      <SafeArea top as="header" className={cn(
+        "sticky top-0 z-40 w-full border-b transition-colors duration-300",
+        isBrandStyle 
+          ? "bg-[var(--lpd-color-brand-primary)] border-black/5 text-[var(--lpd-color-text-base)] shadow-sm" 
+          : "bg-[var(--lpd-color-bg-base)] border-[var(--lpd-color-border-subtle)] text-[var(--lpd-color-text-base)]",
+        className
+      )}>
+        {!isBrandStyle && <div className="absolute top-0 left-0 right-0 h-0.5 bg-[var(--lpd-color-brand-primary)] opacity-70" />}
+        <Box className="h-16 px-4 md:px-6">
+          <Inline justify="between" align="center" className="h-full" gap={4} wrap={false}>
+            {children}
+          </Inline>
+        </Box>
+      </SafeArea>
+    );
+  }
+
+  // Default legacy behavior
   return (
     <SafeArea top as="header" className={cn(
       "sticky top-0 z-40 w-full border-b transition-colors duration-300",
@@ -26,14 +70,12 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
         ? "bg-[var(--lpd-color-brand-primary)] border-black/5 text-[var(--lpd-color-text-base)] shadow-sm" 
         : "bg-[var(--lpd-color-bg-base)] border-[var(--lpd-color-border-subtle)] text-[var(--lpd-color-text-base)]"
     )}>
-      {/* Brand Accent Line (only for non-brand style) */}
       {!isBrandStyle && <div className="absolute top-0 left-0 right-0 h-0.5 bg-[var(--lpd-color-brand-primary)] opacity-70" />}
       
       <Box className="h-16 px-4 md:px-6">
         <Inline justify="between" align="center" className="h-full" gap={4} wrap={false}>
           
-          {/* LEFT: Identity & Mobile Toggle */}
-          <Inline gap={4} wrap={false} className="shrink-0">
+          <TopBarLeft>
             <button 
               onClick={onMenuClick}
               className={cn(
@@ -60,10 +102,9 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
                 )}
               </Stack>
             </Inline>
-          </Inline>
+          </TopBarLeft>
 
-          {/* CENTER: Global Search (Agnostic) */}
-          <Box className="hidden md:flex flex-1 max-w-md relative">
+          <TopBarCenter>
             <Search className={cn(
               "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4",
               isBrandStyle ? "opacity-40" : "text-[var(--lpd-color-text-muted)]"
@@ -78,10 +119,9 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
                   : "bg-[var(--lpd-color-bg-subtle)] text-[var(--lpd-color-text-base)] focus:ring-[var(--lpd-color-brand-primary)]"
               )}
             />
-          </Box>
+          </TopBarCenter>
 
-          {/* RIGHT: User Actions */}
-          <Inline gap={2} align="center" className="shrink-0">
+          <TopBarRight>
             <button className={cn(
               "p-2 rounded-full transition-colors relative",
               isBrandStyle ? "hover:bg-black/5" : "hover:bg-[var(--lpd-color-bg-subtle)]"
@@ -101,10 +141,14 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
               </Box>
               <span className="hidden lg:block text-xs font-bold truncate max-w-[100px]">Admin User</span>
             </Inline>
-          </Inline>
+          </TopBarRight>
 
         </Inline>
       </Box>
     </SafeArea>
   );
 };
+
+TopBar.Left = TopBarLeft;
+TopBar.Center = TopBarCenter;
+TopBar.Right = TopBarRight;

@@ -8,6 +8,10 @@ export interface TenantData {
     layout: {
       /** Determines if the left sidebar starts with labels visible ('expanded') or just icons ('collapsed') */
       sidebarDefaultVariant: 'expanded' | 'collapsed';
+      /** Sidebar color style */
+      sidebarStyle?: 'base' | 'brand';
+      /** Header color style */
+      headerStyle?: 'base' | 'brand';
       /** If true, the right sidebar will include a vertical icon rail for internal navigation (Hub style) */
       rightSidebarHasRail: boolean;
     }

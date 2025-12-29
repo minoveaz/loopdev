@@ -1,6 +1,6 @@
 import React from 'react';
-import { cn } from '@/helpers/cn';
-import { StackGap } from './Stack';
+import { cn } from '../../../helpers/cn';
+import type { StackGap } from './Stack';
 
 export interface GridProps {
   children: React.ReactNode;

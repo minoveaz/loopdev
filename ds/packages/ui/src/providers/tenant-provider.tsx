@@ -1,5 +1,5 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import type { TenantId, SubbrandId } from '@/types/tenant';
+import React, { createContext, useContext, type ReactNode } from 'react';
+import type { TenantId, SubbrandId } from '../types/tenant';
 
 export type Tenant = TenantId;
 export type Subbrand = SubbrandId;
