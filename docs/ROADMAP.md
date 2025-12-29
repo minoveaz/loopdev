@@ -1,59 +1,72 @@
 # Roadmap de Transformación SaaS: De MarketingStudio a LoopDev
 
-Este documento detalla la ruta estratégica para reconstruir MarketingStudio bajo los estándares de **loopdev**, transformándolo en una plataforma SaaS multitenant, modular y altamente reutilizable.
+Este documento detalla la ruta estratégica para reconstruir MarketingStudio bajo los estándares de **loopdev**, transformándolo en una plataforma SaaS multitenant y modular.
 
 ---
 
 ## Fase 1: Cimentación y Estandarización (Core & DS) ✅
-**Objetivo:** Establecer las bases técnicas y la interfaz de usuario bajo el estándar de **Atomic Design**.
+**Objetivo:** Establecer las bases técnicas y la interfaz bajo el estándar de **Atomic Design**.
 
 - [x] **1.1. Configuración de Monorepo (Turbo/PNPM).**
-- [x] **1.2. Evolución del Design System (loopdev/ds):** Estructura Atómica.
+- [x] **1.2. Evolución del Design System (loopdev/ds):** Estructura Atómica y Activos.
 - [x] **1.3. Sistema de Theming Dinámico (Design Tokens).**
 
 ---
 
-## Fase 2: Arquitectura Modular y Multi-tenancy 🚧
-**Objetivo:** Desacoplar la lógica de negocio de la UI y los datos del cliente.
+## Fase 2: Arquitectura Modular y Multi-tenancy ✅
+**Objetivo:** Desacoplar la lógica de negocio de la UI y configurar el monorepo maestro.
 
-- [x] **2.1. Abstracción de Identidad (Tenant Context).**
-- [x] **2.2. Layout Foundations:** Shell, Sidebars, Footers y Primitivos.
-- [x] **2.3. Interactive Overlays:** Dialogs, Drawers, Toasts.
-- [x] **2.4. Form Foundations:** Atoms y Field Molecule.
-- [ ] **2.5. Root Monorepo Evolution:** Reubicar el workspace a la raíz para soportar `/apps` y `/modules`.
-
----
-
-## Fase 3: LoopDev Auditor Module (`mod-auditor`) 🏗️ (NUEVO)
-**Objetivo:** Crear un módulo funcional reutilizable para auditar y migrar diseños a producción.
-
-- [ ] **3.1. Infrastructure:** Crear `loopdev/modules/mod-auditor` con soporte para `@loopdev/ui`.
-- [ ] **3.2. Migration Engine:** Motor que compara Blueprints (mockups) vs Componentes Atómicos.
-- [ ] **3.3. Approval Workflow:** Interfaz de validación A/B con manifest de aprobación JSON.
-- [ ] **3.4. Automation Bridge:** Integración del script de conversión inteligente.
+- [x] **2.1. Root Monorepo Evolution:** Workspace reubicado a la raíz para soportar `/apps` y `/modules`.
+- [x] **2.2. Folder Standards:** Estructura de 3 capas (UI > Modules > Apps) y 3 niveles de Admin.
+- [x] **2.3. Layout Foundations:** AppShell, Sidebars, Footers y Primitivos responsivos.
+- [x] **2.4. SaaS Core Foundations:** Overlays (Radix), Toasts (Sonner) y Form Atoms.
 
 ---
 
-## Fase 4: Portal LoopDev & Real-world Validation 🚀
-**Objetivo:** Lanzar el primer producto oficial usando la nueva arquitectura modular.
+## Fase 1: Cimentación y Estandarización (Core & DS) ✅
+**Objetivo:** Establecer las bases técnicas y la interfaz bajo el estándar de **Atomic Design**.
 
-- [ ] **4.1. App Scaffolding:** Crear `loopdev/apps/loopdev-portal`.
-- [ ] **4.2. Functional Porting:** Migrar la landing del diseñador usando el `mod-auditor`.
-- [ ] **4.3. Multi-tenant Validation:** Validar que el portal reacciona a diferentes marcas.
+- [x] **1.1. Configuración de Monorepo (Turbo/PNPM).**
+- [x] **1.2. Evolución del Design System (loopdev/ds):** Estructura Atómica y Activos.
+- [x] **1.3. Sistema de Theming Dinámico (Design Tokens).**
+- [x] **1.4. LoopDev Developer Manifesto:** Definición de estándares de ingeniería (MVVM/Hooks, No Hardcoding, Docs-First). ✅ (HOY)
+- [x] **1.5. AI-Context Protocol:** Creación de guías de contexto para agentes de IA. ✅ (HOY)
 
 ---
 
-## Fase 5: Re-implementación de Módulos Core ⏳
-**Objetivo:** Portar los módulos pesados de MarketingStudio.
+## Fase 2: Arquitectura Modular y Multi-tenancy ✅
+**Objetivo:** Desacoplar la lógica de negocio de la UI y configurar el monorepo maestro.
 
-- [ ] **5.1. Módulo de Brand Center.**
-- [ ] **5.2. Módulo de Campañas y Activos.**
-- [ ] **5.3. Módulo de Inteligencia IA.**
+- [x] **2.1. Root Monorepo Evolution:** Workspace reubicado a la raíz.
+- [x] **2.2. Folder Standards:** Estructura de 3 capas (UI > Modules > Apps).
+- [x] **2.3. Layout Foundations:** AppShell, Sidebars, Footers y Primitivos responsivos.
+- [x] **2.4. SaaS Core Foundations:** Overlays (Radix), Toasts (Sonner) y Form Atoms.
+
+---
+
+## Fase 3: LoopDev Architect Module (`mod-architect`) 🏗️
+**Objetivo:** Implementar la lógica del Architect para automatizar la migración del Portal.
+
+- [x] **3.1. Core Implementation:** Definición de tipos y arquitectura interna (Model/Brain/Body). ✅ (HOY)
+- [x] **3.2. Workbench UI:** Implementación del `SplitPane` (Lienzo Dividido) para comparación A/B. ✅ (HOY)
+- [ ] **3.3. Blueprint Indexer:** Lógica para leer los archivos de `mock-loopdev` como fuentes de datos reales.
+- [ ] **3.4. AI-Transformation Engine:** Integración de lógica para proponer cambios atómicos.
+
+---
+
+## Fase 4: Portal LoopDev-OS 🚀
+**Objetivo:** Lanzar la primera versión funcional del Sistema Operativo de LoopDev.
+
+- [x] **4.1. App Scaffolding:** Inicialización de `apps/loopdev-os` con Vite y React Router. ✅ (HOY)
+- [x] **4.2. Routing Architecture:** Configuración de rutas `/`, `/admin` y `/:tenantId`. ✅ (HOY)
+- [x] **4.3. Studio Layout Integration:** Implementación del Shell Inmersivo (Header + RightSidebar) usando el Design System. ✅ (HOY)
+- [ ] **4.4. Porting Designer Landing:** Implementar la página principal usando los nuevos Snippets.
+- [ ] **4.5. Navigation Engine:** Sidebar dinámico basado en registro de módulos.
 
 ---
 
 ## Principios de Arquitectura LoopDev
 1. **Three-Layer-Reuse:** UI (Librería) > Módulos (Lógica) > Apps (Productos).
-2. **Atomic-Agnostic:** Componentes y lógica que no conocen al cliente final.
-3. **Audit-Driven-Development:** Todo componente nuevo debe pasar por el módulo de auditoría.
-4. **Config-First:** El comportamiento se define en el Tenant Data.
+2. **Atomic-Agnostic:** Componentes orientados a tokens y settings.
+3. **Audit-Driven-Development:** Todo diseño externo pasa por el `mod-auditor`.
+4. **Branding-in-Code:** Identidad dinámica y escalable.

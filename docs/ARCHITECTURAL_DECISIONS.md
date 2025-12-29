@@ -80,3 +80,38 @@ El vivero de componentes y tokens de identidad visual.
 - `packages/ui/`: Librería de componentes React (Atoms, Molecules, Organisms).
 - `packages/tokens/`: Cimientos de diseño (Colores, Spacing, Typography).
 - `apps/docs/`: Storybook oficial del sistema de diseño.
+
+    1 loopdev/
+    2   ├── apps/
+    3   │   └── loopdev-os/             # EL ORQUESTADOR (Cascarón)
+    4   │       ├── src/
+    5   │       │   ├── routes/
+    6   │       │   │   ├── public.tsx  # / (Landing), /login
+    7   │       │   │   ├── suite.tsx   # /:tenantId/dashboard, /:tenantId/crm...
+    8   │       │   │   └── admin.tsx   # /admin/tenants, /admin/auditor...
+    9   │       │   ├── layouts/
+   10   │       │   │   ├── Marketing.tsx # Para la Landing
+   11   │       │   │   └── Shell.tsx     # El AppShell que inyecta el sidebar dinámico
+   12   │       │   └── registry/
+   13   │       │       └── modules.ts  # Registro de qué módulos están activos
+   14   │
+   15   ├── modules/                    # LA LÓGICA (Funcionalidad pura)
+   16   │   ├── mod-auditor/            # Tu herramienta de DesignOps
+   17   │   ├── mod-marketing-studio/
+   18   │   │   ├── src/
+   19   │   │   │   ├── views/
+   20   │   │   │   │   ├── workspace/  # Uso diario (Brand Center)
+   21   │   │   │   │   └── admin/      # Config del módulo (Brand Settings)
+   22   │   │   │   └── store/          # Estado interno del módulo
+   23   │   ├── mod-crm/
+   24   │   │   ├── src/
+   25   │   │   │   ├── views/
+   26   │   │   │   │   ├── workspace/  # Uso diario (Leads, Pólizas)
+   27   │   │   │   │   └── admin/      # Config del módulo (Custom Fields)
+   28   │   │   └── ...
+   29   │   └── mod-core-shared/        # Auth, SDK, Permissions, i18n
+   30   │
+   31   ├── ds/                         # EL ADN (UI & Tokens)
+   32   │   └── packages/
+   33   │       ├── ui/                 # Componentes Atómicos (Librería)
+   34   │       └── tokens/             # Variables de Diseño

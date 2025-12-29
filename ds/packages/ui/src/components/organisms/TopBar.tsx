@@ -12,7 +12,12 @@ export interface TopBarProps {
 export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
   const { tenant, subbrand } = useTenant();
   const data = TENANT_DATA[tenant];
-  const isBrandStyle = data.settings.layout.headerStyle === 'brand';
+  
+  // Safe check for settings and layout
+  const headerStyle = data?.settings?.layout?.headerStyle || 'base';
+  const isBrandStyle = headerStyle === 'brand';
+
+  if (!data) return null; // Prevent crash if tenant data is missing
 
   return (
     <SafeArea top as="header" className={cn(
