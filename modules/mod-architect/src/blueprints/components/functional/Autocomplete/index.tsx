@@ -11,7 +11,7 @@ import {
   SearchFooter,
   NoResults
 } from './components';
-import { SearchResult } from './utils';
+import type { SearchResult } from './utils';
 
 interface AutocompleteProps {
   initialQuery?: string;

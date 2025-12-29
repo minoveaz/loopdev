@@ -2,7 +2,7 @@
 import React from 'react';
 import { useActionMenu } from './useActionMenu';
 import { MenuContainer, MenuTrigger, MenuDropdown, MenuItem, MenuDivider } from './components';
-import { ActionMenuItem } from './utils';
+import type { ActionMenuItem } from './utils';
 
 // We export the sub-components to allow Composition Pattern
 // <ActionMenu.Item ... />

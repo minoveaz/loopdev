@@ -1,0 +1,2200 @@
+[
+  {
+    "id": "app",
+    "name": "App",
+    "category": "General",
+    "description": "Discovery blueprint from General module.",
+    "filePath": "App.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "Accordion (Parts)",
+    "category": "Components",
+    "description": "Extracted from pages/system/NavigationStructure.tsx",
+    "filePath": "components/functional/Accordion/components.tsx",
+    "exports": [
+      "AccordionWrapper",
+      "AccordionHeader",
+      "AccordionBody",
+      "AccordionContainer"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 4
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "Accordion",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/Accordion/index.tsx",
+    "exports": [
+      "Accordion"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "ActionMenu (Parts)",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/ActionMenu/components.tsx",
+    "exports": [
+      "MenuContainer",
+      "MenuTrigger",
+      "MenuDropdown",
+      "MenuItem",
+      "MenuDivider"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#1E293B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 2,
+      "complexityScore": 4
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "ActionMenu",
+    "category": "Components",
+    "description": "We export the sub-components to allow Composition Pattern",
+    "filePath": "components/functional/ActionMenu/index.tsx",
+    "exports": [
+      "ActionMenu"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "Autocomplete (Parts)",
+    "category": "Components",
+    "description": "Dynamic Highlighting Component",
+    "filePath": "components/functional/Autocomplete/components.tsx",
+    "exports": [
+      "AutocompleteContainer",
+      "SearchLabel",
+      "SearchInput",
+      "DropdownContainer",
+      "GroupHeader",
+      "NoResults",
+      "ResultItem",
+      "SearchFooter"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 3,
+      "complexityScore": 9
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "Autocomplete",
+    "category": "Components",
+    "description": "Mock Data",
+    "filePath": "components/functional/Autocomplete/index.tsx",
+    "exports": [
+      "Autocomplete"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "Breadcrumbs (Parts)",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/Breadcrumbs/components.tsx",
+    "exports": [
+      "BreadcrumbContainer",
+      "BreadcrumbSeparator",
+      "BreadcrumbItem",
+      "BreadcrumbActiveItem"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "Breadcrumbs",
+    "category": "Components",
+    "description": "Default last item to active style if not specified",
+    "filePath": "components/functional/Breadcrumbs/index.tsx",
+    "exports": [
+      "Breadcrumbs"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "DataTable (Parts)",
+    "category": "Components",
+    "description": "--- Generic Types ---",
+    "filePath": "components/functional/DataTable/components.tsx",
+    "exports": [
+      "TableContainer",
+      "DataTableHeader",
+      "DataTableContent",
+      "DataTableFooter",
+      "BulkActionsBar",
+      "Toolbar",
+      "ActiveFilters",
+      "TableHead",
+      "TableRow",
+      "Pagination"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#1E293B",
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0,
+      "legacyIconUsage": 15,
+      "complexityScore": 35
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "DataTable",
+    "category": "Components",
+    "description": "Handlers bridging hook logic with props",
+    "filePath": "components/functional/DataTable/index.tsx",
+    "exports": [
+      "DataTable"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "DateRangePicker (Parts)",
+    "category": "Components",
+    "description": "Replaced bg-blue-50 with bg-primary/10 for strict theming",
+    "filePath": "components/functional/DateRangePicker/components.tsx",
+    "exports": [
+      "DateInputDisplay",
+      "CalendarHeader",
+      "CalendarGrid"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 3,
+      "complexityScore": 5
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "DateRangePicker",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/DateRangePicker/index.tsx",
+    "exports": [
+      "DateRangePicker"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 3
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "Drawer (Parts)",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/Drawer/components.tsx",
+    "exports": [
+      "DrawerOverlay",
+      "DrawerPanel",
+      "DrawerFooter"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#1E293B",
+        "#0D121B",
+        "#161E2E"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 8
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "Drawer",
+    "category": "Components",
+    "description": "Use Portal to render outside the DOM hierarchy if needed (defaults to document.body)",
+    "filePath": "components/functional/Drawer/index.tsx",
+    "exports": [
+      "Drawer"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "EmptyState (Parts)",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/EmptyState/components.tsx",
+    "exports": [
+      "EmptyStateIcon",
+      "EmptyStateContent",
+      "EmptyStateContainer"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#FFD025",
+        "#0D121B",
+        "#161E2E"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 3
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "EmptyState",
+    "category": "Components",
+    "description": "e.g. \"?\" or \"!\"",
+    "filePath": "components/functional/EmptyState/index.tsx",
+    "exports": [
+      "EmptyState"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "ErrorBoundary",
+    "category": "Components",
+    "description": "Update state so the next render will show the fallback UI.",
+    "filePath": "components/functional/ErrorBoundary/index.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 2
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "FileUploader (Parts)",
+    "category": "Components",
+    "description": "--- Types ---",
+    "filePath": "components/functional/FileUploader/components.tsx",
+    "exports": [
+      "UploadDropZone",
+      "FileListItem"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 1,
+      "legacyIconUsage": 4,
+      "complexityScore": 8
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "FileUploader",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/FileUploader/index.tsx",
+    "exports": [
+      "FileUploader"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 2
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "MultiLevelSidebar (Parts)",
+    "category": "Components",
+    "description": "--- Types ---",
+    "filePath": "components/functional/MultiLevelSidebar/components.tsx",
+    "exports": [
+      "SidebarContainer",
+      "SidebarHeader",
+      "NavList",
+      "NavItem",
+      "NestedContainer"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 2,
+      "complexityScore": 11
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "MultiLevelSidebar",
+    "category": "Components",
+    "description": "Special rendering for expanded parent to match the specific \"Card\" design in NavigationStructure.tsx",
+    "filePath": "components/functional/MultiLevelSidebar/index.tsx",
+    "exports": [
+      "MultiLevelSidebar"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 2
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "NestedTabs (Parts)",
+    "category": "Components",
+    "description": "--- Styles extracted from NavigationStructure.tsx ---",
+    "filePath": "components/functional/NestedTabs/components.tsx",
+    "exports": [
+      "TabContainer",
+      "TabList",
+      "TabTrigger",
+      "TabContentContainer"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 4
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "NestedTabs",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/NestedTabs/index.tsx",
+    "exports": [
+      "NestedTabs"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "NotificationCenter (Parts)",
+    "category": "Components",
+    "description": "--- Components ---",
+    "filePath": "components/functional/NotificationCenter/components.tsx",
+    "exports": [
+      "CenterContainer",
+      "CenterHeader",
+      "NotificationItem",
+      "CenterFooter",
+      "EmptyView"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 3,
+      "complexityScore": 14
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "NotificationCenter",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/functional/NotificationCenter/index.tsx",
+    "exports": [
+      "NotificationCenter"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "Stepper (Parts)",
+    "category": "Components",
+    "description": "--- Types ---",
+    "filePath": "components/functional/Stepper/components.tsx",
+    "exports": [
+      "StepperContainer",
+      "ProgressBar",
+      "StepIndicator",
+      "StepperControls"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 1,
+      "legacyIconUsage": 2,
+      "complexityScore": 6
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "Stepper",
+    "category": "Components",
+    "description": "Optional icon override if provided in data",
+    "filePath": "components/functional/Stepper/index.tsx",
+    "exports": [
+      "Stepper"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 3
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "TagInput (Parts)",
+    "category": "Components",
+    "description": "--- Styles extracted from pages/system/ComplexForms.tsx ---",
+    "filePath": "components/functional/TagInput/components.tsx",
+    "exports": [
+      "Container",
+      "Label",
+      "InputWrapper",
+      "TagItem",
+      "InputField",
+      "HelperText",
+      "ApiInfo"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#B39700",
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0,
+      "legacyIconUsage": 2,
+      "complexityScore": 8
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "TagInput",
+    "category": "Components",
+    "description": "Notify parent on change (effect or callback wrapper could be used, simplified here)",
+    "filePath": "components/functional/TagInput/index.tsx",
+    "exports": [
+      "TagInput"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components",
+    "name": "VerticalStepper (Parts)",
+    "category": "Components",
+    "description": "Styles based on NotificationsAndWorkflows.tsx reference",
+    "filePath": "components/functional/VerticalStepper/components.tsx",
+    "exports": [
+      "StepperContainer",
+      "StepRow",
+      "StepLeftRail",
+      "StepIndicator",
+      "StepContentWrapper"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 8
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "VerticalStepper",
+    "category": "Components",
+    "description": "Defaulting to 2nd step active to match visual reference",
+    "filePath": "components/functional/VerticalStepper/index.tsx",
+    "exports": [
+      "VerticalStepper"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "activitysidebar",
+    "name": "ActivitySidebar",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/layout/ActivitySidebar.tsx",
+    "exports": [
+      "ActivitySidebar"
+    ],
+    "dependencies": {
+      "fonts": [
+        "Inter",
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#1E293B",
+        "#161E2E",
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0,
+      "legacyIconUsage": 9,
+      "complexityScore": 28
+    },
+    "status": "stable"
+  },
+  {
+    "id": "rightflyout",
+    "name": "RightFlyout",
+    "category": "Components",
+    "description": "Discovery blueprint from Components module.",
+    "filePath": "components/layout/RightFlyout.tsx",
+    "exports": [
+      "RightFlyout"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Lucide React"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 16
+    },
+    "status": "stable"
+  },
+  {
+    "id": "sidebar",
+    "name": "Sidebar",
+    "category": "Components",
+    "description": "Map icons to Lucide components for better control",
+    "filePath": "components/layout/Sidebar.tsx",
+    "exports": [
+      "Sidebar"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols",
+        "Lucide React"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 2,
+      "complexityScore": 16
+    },
+    "status": "stable"
+  },
+  {
+    "id": "systemlayout",
+    "name": "SystemLayout",
+    "category": "Components",
+    "description": "Search Data Definition",
+    "filePath": "components/layout/SystemLayout.tsx",
+    "exports": [
+      "SystemLayout"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols",
+        "Lucide React"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#1E293B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 14
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "Actions",
+    "category": "Components",
+    "description": "Semantic wrappers allow global updates to \"Edit\" behavior/iconography",
+    "filePath": "components/ui/Actions/index.tsx",
+    "exports": [
+      "EditAction",
+      "DeleteAction",
+      "ViewAction",
+      "CopyAction"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "designsystem",
+    "name": "DesignSystem",
+    "category": "Components",
+    "description": "--- Types ---",
+    "filePath": "components/ui/DesignSystem.tsx",
+    "exports": [
+      "Button",
+      "Badge",
+      "Card",
+      "SectionHeader",
+      "CodeBlock",
+      "GridPattern"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Lucide React"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 5
+    },
+    "status": "stable"
+  },
+  {
+    "id": "iconbutton",
+    "name": "IconButton",
+    "category": "Components",
+    "description": "Variant Definitions using Design System Tokens",
+    "filePath": "components/ui/IconButton.tsx",
+    "exports": [
+      "IconButton"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 2,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "index",
+    "name": "General",
+    "category": "General",
+    "description": "Discovery blueprint from General module.",
+    "filePath": "index.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "examplesone",
+    "name": "ExamplesOne",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/ExamplesOne.tsx",
+    "exports": [
+      "ExamplesOne"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols",
+        "Lucide React"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 3,
+      "legacyIconUsage": 2,
+      "complexityScore": 43
+    },
+    "status": "stable"
+  },
+  {
+    "id": "examplesthree",
+    "name": "ExamplesThree",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/ExamplesThree.tsx",
+    "exports": [
+      "ExamplesThree"
+    ],
+    "dependencies": {
+      "fonts": [
+        "Inter",
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 6,
+      "complexityScore": 94
+    },
+    "status": "stable"
+  },
+  {
+    "id": "landingpage",
+    "name": "LandingPage",
+    "category": "Pages",
+    "description": "Check initial state from DOM",
+    "filePath": "pages/LandingPage.tsx",
+    "exports": [
+      "LandingPage"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Lucide React"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#135BEC",
+        "#FBBF24",
+        "#0F172A",
+        "#F8FAFC",
+        "#E2E8F0"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 111
+    },
+    "status": "stable"
+  },
+  {
+    "id": "functionallibrary",
+    "name": "FunctionalLibrary",
+    "category": "Pages",
+    "description": "Import Modular Data",
+    "filePath": "pages/functional/FunctionalLibrary.tsx",
+    "exports": [
+      "FunctionalLibrary"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#F8F9FC",
+        "#0B0F17",
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0,
+      "legacyIconUsage": 2,
+      "complexityScore": 8
+    },
+    "status": "stable"
+  },
+  {
+    "id": "bentocard",
+    "name": "BentoCard",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/functional/components/BentoCard.tsx",
+    "exports": [
+      "BentoCard"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#161E2E"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 8
+    },
+    "status": "stable"
+  },
+  {
+    "id": "actions",
+    "name": "actions",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/functional/data/actions.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 2
+    },
+    "status": "stable"
+  },
+  {
+    "id": "feedback",
+    "name": "feedback",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/functional/data/feedback.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 2
+    },
+    "status": "stable"
+  },
+  {
+    "id": "forms",
+    "name": "forms",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/functional/data/forms.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 4
+    },
+    "status": "stable"
+  },
+  {
+    "id": "navigation",
+    "name": "navigation",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/functional/data/navigation.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 11
+    },
+    "status": "stable"
+  },
+  {
+    "id": "overlays",
+    "name": "overlays",
+    "category": "Pages",
+    "description": "--- Local Interactive Wrappers for Overlays ---",
+    "filePath": "pages/functional/data/overlays.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 5
+    },
+    "status": "stable"
+  },
+  {
+    "id": "tables",
+    "name": "tables",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/functional/data/tables.tsx",
+    "exports": [],
+    "dependencies": {
+      "fonts": [],
+      "icons": []
+    },
+    "visualTokens": {
+      "colors": []
+    },
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "advancedui",
+    "name": "AdvancedUI",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/AdvancedUI.tsx",
+    "exports": [
+      "AdvancedUI"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#0F1115"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 1,
+      "legacyIconUsage": 10,
+      "complexityScore": 77
+    },
+    "status": "stable"
+  },
+  {
+    "id": "advancedui2",
+    "name": "AdvancedUI2",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/AdvancedUI2.tsx",
+    "exports": [
+      "AdvancedUI2"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#0F1115"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 2,
+      "legacyIconUsage": 10,
+      "complexityScore": 97
+    },
+    "status": "stable"
+  },
+  {
+    "id": "applicationexamples",
+    "name": "ApplicationExamples",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/ApplicationExamples.tsx",
+    "exports": [
+      "ApplicationExamples"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Lucide React"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 0,
+      "complexityScore": 56
+    },
+    "status": "stable"
+  },
+  {
+    "id": "automationrules",
+    "name": "AutomationRules",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/AutomationRules.tsx",
+    "exports": [
+      "AutomationRules"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#13151B",
+        "#FACC15",
+        "#CBD5E1",
+        "#442"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 6,
+      "inlineStyles": 1,
+      "legacyIconUsage": 13,
+      "complexityScore": 114
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "collaboration",
+    "name": "Collaboration",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/Collaboration.tsx",
+    "exports": [
+      "Collaboration"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0,
+      "legacyIconUsage": 19,
+      "complexityScore": 77
+    },
+    "status": "stable"
+  },
+  {
+    "id": "colorstokens",
+    "name": "ColorsTokens",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/ColorsTokens.tsx",
+    "exports": [
+      "ColorsTokens"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#135BEC",
+        "#FFD700",
+        "#B39700",
+        "#4A3F00",
+        "#665C00",
+        "#E6C200",
+        "#1E293B",
+        "#0F172A",
+        "#F8FAFC",
+        "#FFFFFF"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 12,
+      "inlineStyles": 1,
+      "legacyIconUsage": 6,
+      "complexityScore": 75
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "complexforms",
+    "name": "ComplexForms",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/ComplexForms.tsx",
+    "exports": [
+      "ComplexForms"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 9
+    },
+    "status": "stable"
+  },
+  {
+    "id": "datatables",
+    "name": "DataTables",
+    "category": "Pages",
+    "description": "--- 1. Data & Helpers from Original Static File ---",
+    "filePath": "pages/system/DataTables.tsx",
+    "exports": [
+      "DataTables"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 26
+    },
+    "status": "stable"
+  },
+  {
+    "id": "datavisualizations",
+    "name": "DataVisualizations",
+    "category": "Pages",
+    "description": "Example configuration using design tokens</span>",
+    "filePath": "pages/system/DataVisualizations.tsx",
+    "exports": [
+      "DataVisualizations"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#0A3AA0",
+        "#135BEC",
+        "#FFD700",
+        "#1E293B",
+        "#0F172A",
+        "#CBD5E1",
+        "#F1F5F9",
+        "#FFFFFF"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 10,
+      "inlineStyles": 2,
+      "legacyIconUsage": 7,
+      "complexityScore": 154
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "designprinciples",
+    "name": "DesignPrinciples",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/DesignPrinciples.tsx",
+    "exports": [
+      "DesignPrinciples"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#334155",
+        "#135BEC"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 4,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 78
+    },
+    "status": "stable"
+  },
+  {
+    "id": "foundationcomponents",
+    "name": "FoundationComponents",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/FoundationComponents.tsx",
+    "exports": [
+      "FoundationComponents"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#0E4AC4"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0,
+      "legacyIconUsage": 14,
+      "complexityScore": 49
+    },
+    "status": "stable"
+  },
+  {
+    "id": "illustrations",
+    "name": "Illustrations",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/Illustrations.tsx",
+    "exports": [
+      "Illustrations"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#CBD5E1",
+        "#135BEC",
+        "#E2E8F0",
+        "#EAB308",
+        "#94A3B8"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 7,
+      "inlineStyles": 0,
+      "legacyIconUsage": 4,
+      "complexityScore": 39
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "interactionpatterns",
+    "name": "InteractionPatterns",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/InteractionPatterns.tsx",
+    "exports": [
+      "InteractionPatterns"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0,
+      "legacyIconUsage": 12,
+      "complexityScore": 57
+    },
+    "status": "stable"
+  },
+  {
+    "id": "kanbanboard",
+    "name": "KanbanBoard",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/KanbanBoard.tsx",
+    "exports": [
+      "KanbanBoard"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#0B0F17",
+        "#EAB308",
+        "#135BEC"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 0,
+      "legacyIconUsage": 22,
+      "complexityScore": 88
+    },
+    "status": "stable"
+  },
+  {
+    "id": "kanbanelements",
+    "name": "KanbanElements",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/KanbanElements.tsx",
+    "exports": [
+      "KanbanElements"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#0B0F17",
+        "#64748B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 4,
+      "inlineStyles": 1,
+      "legacyIconUsage": 11,
+      "complexityScore": 73
+    },
+    "status": "stable"
+  },
+  {
+    "id": "managementediting",
+    "name": "ManagementEditing",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/ManagementEditing.tsx",
+    "exports": [
+      "ManagementEditing"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#161E2C",
+        "#856404",
+        "#FFD700",
+        "#B39700",
+        "#1E293B",
+        "#0F172A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 8,
+      "inlineStyles": 0,
+      "legacyIconUsage": 27,
+      "complexityScore": 65
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "metricskpis",
+    "name": "MetricsKPIs",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/MetricsKPIs.tsx",
+    "exports": [
+      "MetricsKPIs"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#1E293B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0,
+      "legacyIconUsage": 11,
+      "complexityScore": 68
+    },
+    "status": "stable"
+  },
+  {
+    "id": "navigationstructure",
+    "name": "NavigationStructure",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/NavigationStructure.tsx",
+    "exports": [
+      "NavigationStructure"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#1E293B",
+        "#0F172A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 4,
+      "inlineStyles": 0,
+      "legacyIconUsage": 8,
+      "complexityScore": 75
+    },
+    "status": "stable"
+  },
+  {
+    "id": "notificationsandworkflows",
+    "name": "NotificationsAndWorkflows",
+    "category": "Pages",
+    "description": "Example Usage</span>{'\\n'}",
+    "filePath": "pages/system/NotificationsAndWorkflows.tsx",
+    "exports": [
+      "NotificationsAndWorkflows"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#FFD025",
+        "#1E293B",
+        "#0F172A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 0,
+      "legacyIconUsage": 7,
+      "complexityScore": 39
+    },
+    "status": "stable"
+  },
+  {
+    "id": "overlaysfeedback",
+    "name": "OverlaysFeedback",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/OverlaysFeedback.tsx",
+    "exports": [
+      "OverlaysFeedback"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#0B0F17",
+        "#1E293B",
+        "#0F172A"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 0,
+      "legacyIconUsage": 8,
+      "complexityScore": 54
+    },
+    "status": "stable"
+  },
+  {
+    "id": "overview",
+    "name": "Overview",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/Overview.tsx",
+    "exports": [
+      "Overview"
+    ],
+    "dependencies": {
+      "fonts": [
+        "Inter",
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#101622",
+        "#F6F6F8",
+        "#2D3442",
+        "#135BEC",
+        "#FACC15"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 1,
+      "legacyIconUsage": 22,
+      "complexityScore": 119
+    },
+    "status": "stable"
+  },
+  {
+    "id": "settingsexamples",
+    "name": "SettingsExamples",
+    "category": "Pages",
+    "description": "User config override</div>",
+    "filePath": "pages/system/SettingsExamples.tsx",
+    "exports": [
+      "SettingsExamples"
+    ],
+    "dependencies": {
+      "fonts": [
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#64748B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 1,
+      "legacyIconUsage": 17,
+      "complexityScore": 105
+    },
+    "status": "stable"
+  },
+  {
+    "id": "typography",
+    "name": "Typography",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/Typography.tsx",
+    "exports": [
+      "Typography"
+    ],
+    "dependencies": {
+      "fonts": [
+        "Inter",
+        "JetBrains Mono"
+      ],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B",
+        "#4C669A",
+        "#8F3A2C"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0,
+      "legacyIconUsage": 1,
+      "complexityScore": 43
+    },
+    "status": "stable"
+  },
+  {
+    "id": "userrolemanagement",
+    "name": "UserRoleManagement",
+    "category": "Pages",
+    "description": "Discovery blueprint from Pages module.",
+    "filePath": "pages/system/UserRoleManagement.tsx",
+    "exports": [
+      "UserRoleManagement"
+    ],
+    "dependencies": {
+      "fonts": [],
+      "icons": [
+        "Material Symbols"
+      ]
+    },
+    "visualTokens": {
+      "colors": [
+        "#0D121B"
+      ]
+    },
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0,
+      "legacyIconUsage": 16,
+      "complexityScore": 75
+    },
+    "status": "stable"
+  }
+]

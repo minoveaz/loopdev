@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Tag } from './utils';
+import type { Tag } from './utils';
 
 // --- Styles extracted from pages/system/ComplexForms.tsx ---
 

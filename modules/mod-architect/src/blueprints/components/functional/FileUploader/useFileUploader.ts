@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { FileRecord } from './components';
+import type { FileRecord } from './components';
 
 export const useFileUploader = (
   maxSizeInBytes: number,

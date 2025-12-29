@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Tag, generateId } from './utils';
+import { type Tag, generateId } from './utils';
 
 export const useTagInput = (initialTags: Tag[] = [], maxTags: number = 10, onAddTag?: (tag: Tag) => void) => {
   const [tags, setTags] = useState<Tag[]>(initialTags);

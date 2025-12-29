@@ -12,6 +12,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       // Alias directo a la carpeta de blueprints dentro del módulo
       '@blueprints': path.resolve(__dirname, '../../modules/mod-architect/src/blueprints'),
+      '@architect-data': path.resolve(__dirname, '../../modules/mod-architect/src/data'),
     },
   },
   server: {

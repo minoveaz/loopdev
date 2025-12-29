@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect, memo } from 'react';
-import { SortConfig, ColumnDef } from './utils';
+import type { SortConfig, ColumnDef } from './utils';
 import { EditAction, DeleteAction } from '../components/ui/Actions';
 import { ActionMenu } from '../components/functional/ActionMenu';
 

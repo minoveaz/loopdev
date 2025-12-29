@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { SortConfig, getRelativeTimeValue, downloadAsCSV, ColumnDef } from './utils';
+import { type SortConfig, getRelativeTimeValue, downloadAsCSV, type ColumnDef } from './utils';
 
 // We make the hook generic <T>
 export const useDataTable = <T extends Record<string, any>>(

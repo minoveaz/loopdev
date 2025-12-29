@@ -1,6 +1,6 @@
 
 import { useState, useCallback } from 'react';
-import { Notification, INITIAL_NOTIFICATIONS } from './utils';
+import { type Notification, INITIAL_NOTIFICATIONS } from './utils';
 
 export const useNotificationSystem = (initialData: Notification[] = INITIAL_NOTIFICATIONS) => {
   const [notifications, setNotifications] = useState<Notification[]>(initialData);

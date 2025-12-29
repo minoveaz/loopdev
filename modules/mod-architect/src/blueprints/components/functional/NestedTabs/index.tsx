@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNestedTabs } from './useNestedTabs';
 import { TabContainer, TabList, TabTrigger, TabContentContainer } from './components';
-import { TabItem } from './utils';
+import type { TabItem } from './utils';
 
 export interface NestedTabsProps {
   items: TabItem[];

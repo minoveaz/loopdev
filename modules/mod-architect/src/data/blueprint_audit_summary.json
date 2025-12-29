@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-12-29T23:09:31.655Z",
+  "totalComponents": 75,
+  "totalIssues": 151,
+  "topDebtComponents": [
+    {
+      "name": "DataVisualizations",
+      "score": 154
+    },
+    {
+      "name": "Overview",
+      "score": 119
+    },
+    {
+      "name": "AutomationRules",
+      "score": 114
+    },
+    {
+      "name": "LandingPage",
+      "score": 111
+    },
+    {
+      "name": "SettingsExamples",
+      "score": 105
+    }
+  ]
+}

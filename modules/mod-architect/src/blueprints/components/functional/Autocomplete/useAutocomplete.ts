@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { SearchResult } from './utils';
+import type { SearchResult } from './utils';
 
 export const useAutocomplete = (initialQuery: string = '', initialResults: SearchResult[]) => {
   const [query, setQuery] = useState(initialQuery);

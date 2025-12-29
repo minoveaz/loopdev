@@ -2,7 +2,7 @@
 import React from 'react';
 import { useStepper } from './useStepper';
 import { StepperContainer, ProgressBar, StepIndicator, StepperControls } from './components';
-import { StepItem, DEFAULT_STEPS } from './utils';
+import { type StepItem, DEFAULT_STEPS } from './utils';
 
 interface StepperProps {
   steps?: StepItem[];

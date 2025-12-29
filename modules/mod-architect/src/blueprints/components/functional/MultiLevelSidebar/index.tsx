@@ -2,7 +2,7 @@
 import React from 'react';
 import { useMultiLevelSidebar } from './useMultiLevelSidebar';
 import { SidebarContainer, SidebarHeader, NavList, NavItem, NestedContainer } from './components';
-import { SidebarItem, hasChildren } from './utils';
+import { type SidebarItem, hasChildren } from './utils';
 
 export interface MultiLevelSidebarProps {
   items: SidebarItem[];

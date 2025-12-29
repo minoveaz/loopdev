@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAccordion } from './useAccordion';
 import { AccordionContainer, AccordionWrapper, AccordionHeader, AccordionBody } from './components';
-import { AccordionItemData } from './utils';
+import type { AccordionItemData } from './utils';
 
 export interface AccordionProps {
   items: AccordionItemData[];

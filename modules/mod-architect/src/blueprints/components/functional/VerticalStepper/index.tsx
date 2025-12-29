@@ -2,7 +2,7 @@
 import React from 'react';
 import { useVerticalStepper } from './useVerticalStepper';
 import { StepperContainer, StepRow, StepLeftRail, StepIndicator, StepContentWrapper } from './components';
-import { VerticalStep, PROJECT_SETUP_STEPS } from './utils';
+import { type VerticalStep, PROJECT_SETUP_STEPS } from './utils';
 
 interface VerticalStepperProps {
   steps?: VerticalStep[];

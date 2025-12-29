@@ -14,7 +14,7 @@ import {
   TableRow, 
   Pagination 
 } from './components';
-import { ColumnDef } from './utils';
+import type { ColumnDef } from './utils';
 
 export interface DataTableProps<T> {
   data: T[];

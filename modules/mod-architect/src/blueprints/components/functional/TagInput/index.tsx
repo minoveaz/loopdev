@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTagInput } from './useTagInput';
 import { Container, Label, InputWrapper, TagItem, InputField, HelperText, ApiInfo } from './components';
-import { Tag, DEFAULT_TAGS } from './utils';
+import { type Tag, DEFAULT_TAGS } from './utils';
 
 interface TagInputProps {
   initialTags?: Tag[];
