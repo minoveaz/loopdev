@@ -34,12 +34,9 @@ export const SplitPane = ({
             </span>
           </Inline>
         </Box>
-        <div className="flex-1 overflow-auto p-8 flex items-start justify-center custom-scrollbar-thin">
-          <div className="w-full max-w-3xl shadow-2xl rounded-2xl border border-white bg-white/80 min-h-[500px] p-1">
-             <div className="w-full h-full rounded-[calc(1rem-1px)] border border-dashed border-slate-200 bg-slate-50/50 flex items-center justify-center">
-                {left}
-             </div>
-          </div>
+        {/* El Canvas ahora ocupa todo el espacio sin márgenes ni tarjetas */}
+        <div className="flex-1 relative bg-slate-100/20">
+          {left}
         </div>
       </Stack>
 

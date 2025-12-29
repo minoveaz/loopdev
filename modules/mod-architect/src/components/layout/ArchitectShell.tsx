@@ -12,9 +12,11 @@ interface ArchitectShellProps {
  */
 export const ArchitectShell = ({ children, isLoading }: ArchitectShellProps) => {
   return (
-    <div className="flex flex-col h-full bg-[#f8f9fc] relative overflow-hidden">
-      {/* Visual Foundation */}
-      <TechnicalBackground />
+    <div className="flex flex-col min-h-full bg-[#f8f9fc] relative">
+      {/* Visual Foundation - Fixed so it doesn't scroll away */}
+      <div className="fixed inset-0 z-0">
+        <TechnicalBackground />
+      </div>
 
       {/* Progress Bar (Global for the module) */}
       {isLoading && (

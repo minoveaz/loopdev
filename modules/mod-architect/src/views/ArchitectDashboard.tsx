@@ -23,8 +23,8 @@ export const ArchitectDashboard = () => {
       <ArchitectHeader stats={stats} />
       
       {/* 2. Main Workbench (The Split Pane area) */}
-      <div className="flex-1 min-h-0 px-8 pb-8">
-        <div className="h-full rounded-2xl border border-slate-200/60 bg-white/40 backdrop-blur-sm overflow-hidden shadow-sm">
+      <div className="px-8 pb-12">
+        <div className="h-[800px] rounded-2xl border border-slate-200/60 bg-white/40 backdrop-blur-sm overflow-hidden shadow-sm">
           <SplitPane 
             left={
               <BlueprintCanvas componentName="ActivitySidebar" />
