@@ -54,9 +54,33 @@ El proyecto se gestiona como un único espacio de trabajo de PNPM en la raíz de
 ### 3.2. Branding System
 Toda la identidad (Logos, Colores, Brackets) vive en la Capa 1 como componentes dinámicos que reaccionan al `TenantProvider`.
 
+## 4. Frontend Architecture Standards
+
+### 4.1. The Workbench Pattern (Tool Modules)
+All internal tools (like Architect, Designer, or Manager) must follow a 3-layer orchestration to ensure consistency and prevent "Mega-Files".
+
+| Layer | Location | Responsibility | Rule |
+| :--- | :--- | :--- | :--- |
+| **Shell** | `components/layout/` | Visual Foundation | Handles `TechnicalBackground`, themes, and global loading progress. |
+| **View (Coordinator)** | `views/` | Data Orchestration | Connects hooks to UI. **No raw CSS or complex JSX allowed here.** |
+| **Domain Components** | `components/dashboard/` | Pure UI | Specialized pieces (Header, Stats, List) that only receive props. |
+
+**Example structure:**
+```text
+src/
+├── components/
+│   ├── layout/ArchitectShell.tsx
+│   └── dashboard/ArchitectHeader.tsx
+└── views/ArchitectDashboard.tsx (The Brain)
+```
+
+### 4.2. Design System Integrity
+- **No Inline Backgrounds:** Always use `TechnicalBackground` or `TechnicalGrid` from `@loopdev/ui` for module foundations.
+- **Composition over Rigidity:** If a Design System component (like `TopBar`) is too rigid, refactor it into sub-components (`TopBar.Left`, `TopBar.Right`) instead of creating a duplicate.
+
 ---
 
-## 4. Checklist para Nuevos Módulos
+## 5. Checklist para Nuevos Módulos
 - [ ] ¿Usa exclusivamente componentes de `@loopdev/ui`?
 - [ ] ¿Es agnóstico a la App donde se inyectará?
 - [ ] ¿Tiene un manifiesto de configuración claro?

@@ -33,6 +33,20 @@ Respetamos estrictamente estas fronteras. **No alucines importaciones cruzadas.*
 
 ---
 
+## 🏗️ Patrones de Diseño Obligatorios
+
+### 1. The Workbench Pattern (Tool Modules)
+Para herramientas internas (Architect, etc.):
+- **Shell Layer:** Fondo técnico y carga.
+- **Coordinator Layer:** Lógica y orquestación.
+- **Domain Layer:** Componentes puros de UI.
+
+### 2. Cerebro vs Músculo (MVVM)
+- Lógica en Custom Hooks (`Brain`).
+- UI en componentes puros (`Body`).
+
+---
+
 ## 🛠️ Comandos Esenciales (Desde la raíz `loopdev/`)
 
 - **Instalar:** `pnpm install`

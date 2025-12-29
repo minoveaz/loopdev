@@ -29,8 +29,8 @@ Este documento detalla la ruta estratégica para reconstruir MarketingStudio baj
 - [x] **1.1. Configuración de Monorepo (Turbo/PNPM).**
 - [x] **1.2. Evolución del Design System (loopdev/ds):** Estructura Atómica y Activos.
 - [x] **1.3. Sistema de Theming Dinámico (Design Tokens).**
-- [x] **1.4. LoopDev Developer Manifesto:** Definición de estándares de ingeniería (MVVM/Hooks, No Hardcoding, Docs-First). ✅ (HOY)
-- [x] **1.5. AI-Context Protocol:** Creación de guías de contexto para agentes de IA. ✅ (HOY)
+- [x] **1.4. LoopDev Developer Manifesto:** Definición de estándares de ingeniería (MVVM/Hooks, No Hardcoding, Docs-First). ✅
+- [x] **1.5. AI-Context Protocol:** Creación de guías de contexto para agentes de IA. ✅
 
 ---
 
@@ -41,14 +41,15 @@ Este documento detalla la ruta estratégica para reconstruir MarketingStudio baj
 - [x] **2.2. Folder Standards:** Estructura de 3 capas (UI > Modules > Apps).
 - [x] **2.3. Layout Foundations:** AppShell, Sidebars, Footers y Primitivos responsivos.
 - [x] **2.4. SaaS Core Foundations:** Overlays (Radix), Toasts (Sonner) y Form Atoms.
+- [x] **2.5. Frontend Architecture Standards:** Workbench Pattern documentado. ✅
 
 ---
 
 ## Fase 3: LoopDev Architect Module (`mod-architect`) 🏗️
 **Objetivo:** Implementar la lógica del Architect para automatizar la migración del Portal.
 
-- [x] **3.1. Core Implementation:** Definición de tipos y arquitectura interna (Model/Brain/Body). ✅ (HOY)
-- [x] **3.2. Workbench UI:** Implementación del `SplitPane` (Lienzo Dividido) para comparación A/B. ✅ (HOY)
+- [x] **3.1. Core Implementation:** Definición de tipos y arquitectura interna (Model/Brain/Body). ✅
+- [x] **3.2. Workbench UI:** Implementación del `SplitPane` (Lienzo Dividido) para comparación A/B. ✅
 - [ ] **3.3. Blueprint Indexer:** Lógica para leer los archivos de `mock-loopdev` como fuentes de datos reales.
 - [ ] **3.4. AI-Transformation Engine:** Integración de lógica para proponer cambios atómicos.
 
@@ -57,11 +58,11 @@ Este documento detalla la ruta estratégica para reconstruir MarketingStudio baj
 ## Fase 4: Portal LoopDev-OS 🚀
 **Objetivo:** Lanzar la primera versión funcional del Sistema Operativo de LoopDev.
 
-- [x] **4.1. App Scaffolding:** Inicialización de `apps/loopdev-os` con Vite y React Router. ✅ (HOY)
-- [x] **4.2. Routing Architecture:** Configuración de rutas `/`, `/admin` y `/:tenantId`. ✅ (HOY)
-- [x] **4.3. Studio Layout Integration:** Implementación del Shell Inmersivo (Header + RightSidebar) usando el Design System. ✅ (HOY)
+- [x] **4.1. App Scaffolding:** Inicialización de `apps/loopdev-os` con Vite y React Router. ✅
+- [x] **4.2. Routing Architecture:** Configuración de rutas `/`, `/admin` y `/:tenantId`. ✅
+- [x] **4.3. Studio Layout Integration:** Implementación del Shell Inmersivo (Header + RightSidebar) usando el Design System. ✅
 - [ ] **4.4. Porting Designer Landing:** Implementar la página principal usando los nuevos Snippets.
-- [ ] **4.5. Navigation Engine:** Sidebar dinámico basado en registro de módulos.
+- [x] **4.5. Navigation Engine:** Registro de módulos inicial creado. ✅
 
 ---
 

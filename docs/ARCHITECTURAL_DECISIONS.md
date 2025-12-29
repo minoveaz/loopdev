@@ -42,9 +42,10 @@ Para soportar el modelo SaaS, el sistema gestiona tres niveles de jerarquía:
 
 ## 🛠️ Estándares de Ingeniería
 
-- **Dynamic Navigation**: El Sidebar se construye leyendo un registro de módulos activos.
+- **Dynamic Navigation**: El Sidebar se construye leyendo un registro de módulos activos en `src/registry/modules.ts`.
 - **Core SDK**: El acceso a datos se centraliza en `@loopdev/mod-core-shared`.
 - **Capability-Based Permissions**: El acceso se define por capacidades técnicas, no por roles estáticos.
+- **The Workbench Pattern**: Las herramientas de auditoría y diseño utilizan una arquitectura de 3 capas (Shell, Coordinator, Domain) para manejar lienzos complejos sin degradar el rendimiento o la legibilidad.
 
 ---
 
