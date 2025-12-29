@@ -1,0 +1,10 @@
+packages:
+  # Design System Layer
+  - 'ds/packages/*'
+  - 'ds/apps/*'
+  
+  # Business Logic Layer
+  - 'modules/*'
+  
+  # Applications Layer
+  - 'apps/*'

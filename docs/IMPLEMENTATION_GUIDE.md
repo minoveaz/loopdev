@@ -1,6 +1,6 @@
 # Guía de Implementación: Ecosistema SaaS LoopDev
 
-Este documento define los estándares técnicos, la arquitectura y los pasos para escalar el ecosistema LoopDev, utilizando **MarketingStudio** como base funcional y transformándolo en un producto SaaS multitenant y agnóstico.
+Este documento define la arquitectura de **Tres Capas** para escalar el ecosistema LoopDev, garantizando 100% de reutilización entre productos.
 
 ---
 
@@ -8,46 +8,55 @@ Este documento define los estándares técnicos, la arquitectura y los pasos par
 
 | Fase | Descripción | Estado |
 | :--- | :--- | :--- |
-| **Fase 1** | Cimentación y Design System (Foundations) | ✅ Completado |
-| **Fase 2** | Arquitectura de Multitenencia (TenantProvider) | ✅ Completado |
-| **Fase 2.5** | Layout Foundations & App Shell | ✅ Completado |
-| **Fase 2.6** | SaaS Core Foundations (Atómica) | ✅ Completado |
-| **Fase 2.8** | Identidad LoopDev & Portal | 🚧 En Desarrollo |
+| **Capa 1** | Design System (Foundations & UI) | ✅ Maduro |
+| **Capa 2** | Módulos Funcionales (Lógica Compartida) | 🚧 Iniciado |
+| **Capa 3** | Aplicaciones (Productos Finales) | ⏳ Pendiente |
+
+*Última actualización: 28 de diciembre de 2025*
 
 ---
 
-## 1. Estándares de Marca en Código (Branding Atoms)
+## 1. Arquitectura de Tres Capas
 
-En LoopDev, el branding no es estático. Los logos y elementos de soporte se implementan como componentes SVG que reaccionan al tema.
+Para lograr escalabilidad masiva, dividimos el código en tres fronteras claras:
 
-### 1.1. Componentes de Identidad
-- **`Logo`**: Soporta variantes `horizontal`, `vertical` e `isotype`.
-- **`Brackets`**: Elemento de soporte `{ }` utilizado para encuadrar contenido técnico o estratégico.
+### 1.1. Capa 1: UI Library (`ds/packages/ui`)
+- **Qué es**: Componentes atómicos puros.
+- **Regla**: Prohibida la lógica de negocio o llamadas a API específicas.
+- **Salida**: Botones, Inputs, Modales, Layouts.
+
+### 1.2. Capa 2: Functional Modules (`modules/`)
+- **Qué es**: Piezas de lógica reutilizables con su propia UI.
+- **Ejemplo**: `mod-auditor`, `mod-weather`, `mod-auth`.
+- **Regla**: Consumen la Capa 1 y exponen funcionalidades completas.
+
+### 1.3. Capa 3: Applications (`apps/`)
+- **Qué es**: El producto final que usa el cliente.
+- **Ejemplo**: `portal-loopdev`, `marketing-studio`.
+- **Regla**: Orquestan módulos y definen las rutas.
 
 ---
 
-## 2. Estándares de Diseño Premium (Snippets)
+## 2. El Módulo de Auditoría (`mod-auditor`)
 
-### 2.1. Superficies (Surfaces)
-- **`GlassSurface`**: Efecto translúcido con desenfoque (`backdrop-filter`) y borde de baja opacidad.
-- **`MeshHero`**: Fondos con degradados radiales dinámicos.
+Este módulo es una herramienta de **DesignOps** diseñada para:
+1. Leer código React proveniente de diseño ("Blueprints").
+2. Generar versiones atómicas automáticas usando el motor de conversión.
+3. Permitir la aprobación visual A/B antes de mover el código a producción.
 
 ---
 
 ## 3. Principios de Ingeniería
 
-### 3.1. Token Calibration
-Los colores y espaciados deben sincronizarse con el diseño de alta fidelidad:
-- **Structure (Primary)**: #135BEC
-- **Energy (Accent)**: #FFD025
-- **Space (Dark BG)**: #0F1115
+### 3.1. Root Monorepo
+El proyecto se gestiona como un único espacio de trabajo de PNPM en la raíz de `loopdev/`. Esto permite que una App en `/apps` importe un módulo en `/modules` y este a su vez use el DS en `/ds` de forma instantánea.
 
-### 3.2. Clean Imports & Atomic Structure
-Seguir rigurosamente el esquema `atoms/`, `molecules/`, `organisms/`, `templates/`.
+### 3.2. Branding System
+Toda la identidad (Logos, Colores, Brackets) vive en la Capa 1 como componentes dinámicos que reaccionan al `TenantProvider`.
 
 ---
 
-## 4. Componentes Listos para Usar (Actualizado)
-- **Atoms**: `Button`, `Input`, `Select`, `Badge`, `Avatar`, **Full Illustration Set**.
-- **Molecules**: `Field`, `Tooltip`, `Popover`, `LogoCloud`, `Callout`.
-- **Organisms**: `Dialog`, `Drawer`, `Toaster`, `AppShell`, `Headers`, `Sidebars`, `Hero`, `BentoGrid`.
+## 4. Checklist para Nuevos Módulos
+- [ ] ¿Usa exclusivamente componentes de `@loopdev/ui`?
+- [ ] ¿Es agnóstico a la App donde se inyectará?
+- [ ] ¿Tiene un manifiesto de configuración claro?
