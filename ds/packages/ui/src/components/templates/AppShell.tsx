@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import { TopBar } from '../organisms/TopBar';
 import { LeftSidebar } from '../organisms/LeftSidebar';
-import { Stack, Container, SafeArea } from '@/components/layout';
-import { cn } from '@/helpers/cn';
+import { Stack, Container, SafeArea } from '../../components/layout';
+import { cn } from '../../helpers/cn';
 
-import { useLayout } from '@/providers/layout-provider';
+import { useLayout } from '../../providers/layout-provider';
 
 export interface AppShellProps {
   children: React.ReactNode;
+  topBar?: React.ReactNode;
   header?: React.ReactNode; 
   footer?: React.ReactNode; 
   leftSidebar?: React.ReactNode;
   rightSidebar?: React.ReactNode;
   hideSidebar?: boolean; 
+  showTopBar?: boolean;
   isImmersive?: boolean; 
+  isFullWidth?: boolean;
 }
 
 export const AppShell: React.FC<AppShellProps> = ({ 
   children, 
+  topBar,
   header, 
   footer,
   leftSidebar, 
   rightSidebar,
   hideSidebar = false,
-  isImmersive = false
+  showTopBar = true,
+  isImmersive = false,
+  isFullWidth = false
 }) => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const { isRightSidebarOpen } = useLayout();
@@ -33,8 +39,10 @@ export const AppShell: React.FC<AppShellProps> = ({
 
   return (
     <Stack gap={0} className="h-screen overflow-hidden bg-[var(--lpd-color-bg-base)] text-[var(--lpd-color-text-base)]">
-      {/* TopBar wraps its own SafeArea top */}
-      <TopBar onMenuClick={() => setMobileSidebarOpen(!mobileSidebarOpen)} />
+      {/* Render custom topBar, default TopBar, or nothing */}
+      {showTopBar && (
+        topBar || <TopBar onMenuClick={() => setMobileSidebarOpen(!mobileSidebarOpen)} />
+      )}
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* LEFT COLUMN: LeftSidebar */}
@@ -69,11 +77,18 @@ export const AppShell: React.FC<AppShellProps> = ({
           {/* Optional Level 2 Header */}
           {header && <div className="shrink-0">{header}</div>}
 
-          <main className="flex-1 overflow-y-auto relative outline-none focus:outline-none custom-scrollbar bg-[var(--lpd-color-bg-subtle)]/30">
+          <main className={cn(
+            "flex-1 overflow-y-auto relative outline-none focus:outline-none custom-scrollbar",
+            !isFullWidth && "bg-[var(--lpd-color-bg-subtle)]/30"
+          )}>
             <div className="min-h-full flex flex-col">
-              <Container size="xl" className="py-8 flex-1">
-                {children}
-              </Container>
+              {isFullWidth ? (
+                children
+              ) : (
+                <Container size="xl" className="py-8 flex-1">
+                  {children}
+                </Container>
+              )}
               
               {/* Optional Footer */}
               {footer && <div className="shrink-0">{footer}</div>}

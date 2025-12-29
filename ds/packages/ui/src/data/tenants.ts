@@ -9,11 +9,13 @@ export interface TenantData {
       /** Determines if the left sidebar starts with labels visible ('expanded') or just icons ('collapsed') */
       sidebarDefaultVariant: 'expanded' | 'collapsed';
       /** Sidebar color style */
-      sidebarStyle?: 'base' | 'brand';
+      sidebarStyle: 'base' | 'brand';
       /** Header color style */
-      headerStyle?: 'base' | 'brand';
+      headerStyle: 'base' | 'brand';
       /** If true, the right sidebar will include a vertical icon rail for internal navigation (Hub style) */
       rightSidebarHasRail: boolean;
+      /** Default height for the primary header */
+      primaryHeaderHeight: number;
     }
   };
 }
@@ -24,9 +26,10 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
     settings: {
       layout: {
         sidebarDefaultVariant: 'collapsed',
-        sidebarStyle: 'base', // Minimalist white sidebar
-        headerStyle: 'base',  // Minimalist white header
+        sidebarStyle: 'base',
+        headerStyle: 'base',
         rightSidebarHasRail: false,
+        primaryHeaderHeight: 64,
       }
     },
     strategy: {
@@ -45,9 +48,10 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
     settings: {
       layout: {
         sidebarDefaultVariant: 'expanded',
-        sidebarStyle: 'brand', // Strong brand identity in sidebars
-        headerStyle: 'brand',  // Brand accent in header
+        sidebarStyle: 'brand',
+        headerStyle: 'brand',
         rightSidebarHasRail: true,
+        primaryHeaderHeight: 64,
       }
     },
     strategy: {
@@ -65,8 +69,11 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
     name: 'Client B',
     settings: {
       layout: {
-        sidebarDefaultVariant: 'expanded', // Standard enterprise layout
-        rightSidebarHasRail: false,      // Single-purpose inspector
+        sidebarDefaultVariant: 'expanded',
+        sidebarStyle: 'base',
+        headerStyle: 'base',
+        rightSidebarHasRail: false,
+        primaryHeaderHeight: 64,
       }
     },
     strategy: {
