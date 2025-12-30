@@ -4,15 +4,16 @@ import { Maximize2, ExternalLink } from 'lucide-react';
 
 interface BlueprintCanvasProps {
   componentName: string;
+  theme?: 'dark' | 'light';
 }
 
 /**
  * @component BlueprintCanvas
  * @description Renders the isolated visual preview of a blueprint using an Iframe.
  */
-export const BlueprintCanvas = ({ componentName }: BlueprintCanvasProps) => {
+export const BlueprintCanvas = ({ componentName, theme = 'dark' }: BlueprintCanvasProps) => {
   // Ahora apuntamos al entry point independiente para aislamiento total
-  const previewUrl = `/sandbox.html?componentName=${componentName}`;
+  const previewUrl = `/sandbox.html?componentName=${componentName}&theme=${theme}`;
 
   return (
     <Stack gap={0} className="h-full w-full">

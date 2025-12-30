@@ -1,12 +1,14 @@
 import { Box, Stack, Inline } from '@loopdev/ui';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
-import { Code2, Eye, ExternalLink } from 'lucide-react';
+import { Code2, Eye, ExternalLink, Sun, Moon } from 'lucide-react';
 
 interface SplitPaneProps {
   left: ReactNode;
   right: ReactNode;
   componentName?: string;
+  sandboxTheme?: 'dark' | 'light';
+  onThemeToggle?: () => void;
   leftTitle?: string;
   rightTitle?: string;
 }
@@ -15,6 +17,8 @@ export const SplitPane = ({
   left, 
   right, 
   componentName,
+  sandboxTheme = 'dark',
+  onThemeToggle,
   leftTitle = 'Source Blueprint', 
   rightTitle = 'System Output'
 }: SplitPaneProps) => {
@@ -34,16 +38,30 @@ export const SplitPane = ({
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
               <Eye size={14} className="text-slate-300" /> {leftTitle}
             </span>
-            {/* Botón para abrir el preview en una ventana independiente */}
-            {componentName && (
-              <button 
-                onClick={() => window.open(`/admin/preview/${componentName}`, '_blank')}
-                className="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"
-                title="Open in new window"
-              >
-                <ExternalLink size={14} />
-              </button>
-            )}
+            
+            <Inline gap={2}>
+              {/* Theme Toggle */}
+              {onThemeToggle && (
+                <button 
+                  onClick={onThemeToggle}
+                  className="p-1.5 text-slate-400 hover:text-amber-500 transition-colors"
+                  title={`Switch to ${sandboxTheme === 'dark' ? 'light' : 'dark'} mode`}
+                >
+                  {sandboxTheme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+                </button>
+              )}
+
+              {/* Botón para abrir el preview en una ventana independiente */}
+              {componentName && (
+                <button 
+                  onClick={() => window.open(`/sandbox.html?componentName=${componentName}&theme=${sandboxTheme}`, '_blank')}
+                  className="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"
+                  title="Open in new window"
+                >
+                  <ExternalLink size={14} />
+                </button>
+              )}
+            </Inline>
           </Inline>
         </Box>
         {/* El Canvas ahora ocupa todo el espacio sin márgenes ni tarjetas */}

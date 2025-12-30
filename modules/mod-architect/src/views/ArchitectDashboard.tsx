@@ -15,6 +15,7 @@ import { BlueprintCanvas } from '../components/canvas/BlueprintCanvas';
  */
 export const ArchitectDashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState('ActivitySidebar');
+  const [sandboxTheme, setSandboxTheme] = useState<'dark' | 'light'>('dark');
   const { stats, isLoading: isRegistryLoading } = useArchitectRegistry();
   const { report, isLoading: isAuditLoading } = useArchitectAudit();
 
@@ -41,12 +42,14 @@ export const ArchitectDashboard = () => {
           <div className="flex-1 min-w-0">
             <SplitPane 
               left={
-                <BlueprintCanvas componentName={selectedComponent} />
+                <BlueprintCanvas componentName={selectedComponent} theme={sandboxTheme} />
               }
               right={
                 report ? <AuditReportView report={report} /> : <div className="p-10 text-slate-400 font-medium italic">Analyzing structure...</div>
               }
               componentName={selectedComponent}
+              sandboxTheme={sandboxTheme}
+              onThemeToggle={() => setSandboxTheme(t => t === 'dark' ? 'light' : 'dark')}
               leftTitle={`Sandbox: ${selectedComponent}`}
               rightTitle="Architect Intelligence Report"
             />
