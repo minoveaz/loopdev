@@ -11,15 +11,16 @@ interface BlueprintCanvasProps {
  * @description Renders the isolated visual preview of a blueprint using an Iframe.
  */
 export const BlueprintCanvas = ({ componentName }: BlueprintCanvasProps) => {
-  const previewUrl = `/admin/preview/${componentName}`;
+  // Ahora apuntamos al entry point independiente para aislamiento total
+  const previewUrl = `/sandbox.html?componentName=${componentName}`;
 
   return (
     <Stack gap={0} className="h-full w-full">
-      {/* El Iframe Aislado */}
+      {/* El Iframe Aislado - Ahora con sandbox real */}
       <div className="flex-1 relative">
         <iframe 
           src={previewUrl}
-          className="absolute inset-0 w-full h-full border-none"
+          className="absolute inset-0 w-full h-full border-none bg-white"
           title={`Preview of ${componentName}`}
         />
       </div>
