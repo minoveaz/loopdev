@@ -10,8 +10,8 @@ interface DateRangePickerProps {
 }
 
 export const DateRangePicker: React.FC<DateRangePickerProps> = ({ 
-  initialStartDate = null, 
-  initialEndDate = null,
+  initialStartDate = new Date(), 
+  initialEndDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Default 1 week range
   onRangeChange,
   className = ""
 }) => {

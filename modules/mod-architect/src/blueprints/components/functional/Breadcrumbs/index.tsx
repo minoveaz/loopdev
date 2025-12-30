@@ -7,7 +7,14 @@ export interface BreadcrumbsProps {
   className?: string;
 }
 
-export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className }) => {
+export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ 
+  items = [
+    { label: 'Home', href: '#' },
+    { label: 'Components', href: '#' },
+    { label: 'Breadcrumbs', active: true }
+  ], 
+  className 
+}) => {
   const { items: displayItems } = useBreadcrumbs(items);
 
   if (!displayItems || displayItems.length === 0) return null;

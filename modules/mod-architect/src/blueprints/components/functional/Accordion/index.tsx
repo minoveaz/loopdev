@@ -9,7 +9,17 @@ export interface AccordionProps {
   className?: string;
 }
 
-export const Accordion: React.FC<AccordionProps> = ({ items, allowMultiple = false, className }) => {
+const DEFAULT_ITEMS: AccordionItemData[] = [
+  { id: '1', title: 'What is LoopDev?', content: 'LoopDev is a next-gen digital product OS.' },
+  { id: '2', title: 'How does the Architect work?', content: 'It automates Design System migration using AI.' },
+  { id: '3', title: 'Is it scalable?', content: 'Absolutely, it is built for mass enterprise scale.' }
+];
+
+export const Accordion: React.FC<AccordionProps> = ({ 
+  items = DEFAULT_ITEMS, 
+  allowMultiple = false, 
+  className 
+}) => {
   const { isExpanded, toggle } = useAccordion(allowMultiple);
 
   return (

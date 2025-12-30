@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { ErrorBoundary } from '@blueprints/components/functional/ErrorBoundary';
 import { useDataTable } from '@blueprints/components/functional/DataTable/useDataTable';
 import { 
   TableContainer, 
@@ -17,8 +16,8 @@ import {
 import type { ColumnDef } from '@blueprints/components/functional/DataTable/utils';
 
 export interface DataTableProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
+  data?: T[];
+  columns?: ColumnDef<T>[];
   className?: string;
   onAddRecord?: () => void;
   onEditRecord?: (item: T) => void;
@@ -26,10 +25,23 @@ export interface DataTableProps<T> {
   renderExpandedRow?: (item: T) => React.ReactNode;
 }
 
+const DEFAULT_DATA = [
+  { id: '1', name: 'Project Alpha', status: 'Active', budget: '$12,000' },
+  { id: '2', name: 'Project Beta', status: 'Pending', budget: '$8,500' },
+  { id: '3', name: 'Internal Tools', status: 'Active', budget: '$4,000' },
+  { id: '4', name: 'Website Redesign', status: 'Done', budget: '$15,000' },
+];
+
+const DEFAULT_COLUMNS = [
+  { key: 'name', header: 'Project Name', sortable: true },
+  { key: 'status', header: 'Status', sortable: true },
+  { key: 'budget', header: 'Budget', sortable: true }
+];
+
 const DataTableContentWrapper = <T extends { id: string }>({ 
-  data, 
-  columns, 
-  className, 
+  data = DEFAULT_DATA as unknown as T[], 
+  columns = DEFAULT_COLUMNS as unknown as ColumnDef<T>[], 
+  className = "w-full max-w-5xl", 
   onAddRecord, 
   onEditRecord,
   onDeleteRecord,
@@ -66,13 +78,12 @@ const DataTableContentWrapper = <T extends { id: string }>({
     handleExport
   } = useDataTable(data, columns);
 
-  // Handlers bridging hook logic with props
+  // Handlers
   const handleEdit = (item: T) => {
     if (onEditRecord) onEditRecord(item);
   };
 
   const handleDelete = (id: string) => {
-    deleteItem(id);
     if (onDeleteRecord) onDeleteRecord(id);
   };
 
@@ -158,9 +169,10 @@ const DataTableContentWrapper = <T extends { id: string }>({
   );
 };
 
-// Generic Wrapper
-export const DataTable = <T extends { id: string }>(props: DataTableProps<T>) => (
-  <ErrorBoundary>
+export const DataTable = <T extends { id: string }>(props: DataTableProps<T>) => {
+  return (
     <DataTableContentWrapper {...props} />
-  </ErrorBoundary>
-);
+  );
+};
+
+export default DataTable;

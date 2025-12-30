@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ComponentEntry } from '@blueprints/pages/functional/types';
+import type { ComponentEntry } from '@blueprints/pages/functional/types';
 
 interface BentoCardProps {
   item: ComponentEntry;
@@ -40,7 +40,16 @@ const BentoCardContent: React.FC<{ children: React.ReactNode }> = ({ children })
   </div>
 );
 
-export const BentoCard: React.FC<BentoCardProps> = ({ item }) => {
+const DEFAULT_ITEM: ComponentEntry = {
+  id: 'demo',
+  title: 'Bento Card',
+  category: 'Showcase',
+  description: 'Hover to reveal details about this component.',
+  size: 'medium',
+  component: <div className="text-4xl">💎</div>
+};
+
+export const BentoCard: React.FC<BentoCardProps> = ({ item = DEFAULT_ITEM }) => {
   return (
     <div 
       className={`

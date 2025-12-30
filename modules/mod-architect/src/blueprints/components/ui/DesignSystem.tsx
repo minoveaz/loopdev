@@ -15,7 +15,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 // --- Components ---
 
 export const Button: React.FC<ButtonProps> = ({ 
-  children, 
+  children = 'Action Button', 
   variant = 'primary', 
   size = 'md', 
   icon, 
@@ -52,7 +52,7 @@ export const Button: React.FC<ButtonProps> = ({
 };
 
 export const Badge: React.FC<{ children: React.ReactNode; variant?: 'primary' | 'energy' | 'neutral' }> = ({ 
-  children, 
+  children = 'Status', 
   variant = 'primary' 
 }) => {
   const styles = {
@@ -70,7 +70,7 @@ export const Badge: React.FC<{ children: React.ReactNode; variant?: 'primary' | 
 };
 
 export const Card: React.FC<{ children: React.ReactNode; className?: string; hoverEffect?: boolean }> = ({ 
-  children, 
+  children = <div className="p-4">Card content goes here.</div>, 
   className = '',
   hoverEffect = false
 }) => {
@@ -87,7 +87,11 @@ export const Card: React.FC<{ children: React.ReactNode; className?: string; hov
   );
 };
 
-export const SectionHeader: React.FC<{ title: string; subtitle?: string; context?: string }> = ({ title, subtitle, context }) => (
+export const SectionHeader: React.FC<{ title?: string; subtitle?: string; context?: string }> = ({ 
+  title = "Section Title", 
+  subtitle, 
+  context 
+}) => (
   <div className="mb-10">
     {context && (
       <div className="flex items-center gap-2 mb-4">
@@ -105,7 +109,10 @@ export const SectionHeader: React.FC<{ title: string; subtitle?: string; context
   </div>
 );
 
-export const CodeBlock: React.FC<{ code: string; language?: string }> = ({ code, language = 'typescript' }) => (
+export const CodeBlock: React.FC<{ code?: string; language?: string }> = ({ 
+  code = "console.log('Hello LoopDev');", 
+  language = 'typescript' 
+}) => (
   <div className="bg-gray-900 rounded-lg p-4 font-mono text-xs md:text-sm text-gray-300 border border-gray-800 overflow-x-auto">
     <pre><code>{code}</code></pre>
   </div>

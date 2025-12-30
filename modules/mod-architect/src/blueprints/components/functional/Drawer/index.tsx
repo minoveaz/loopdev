@@ -21,8 +21,8 @@ interface DrawerMainProps {
 const DrawerMain: React.FC<DrawerMainProps> = ({ 
   isOpen, 
   onClose, 
-  children, 
-  title, 
+  children = <div className="p-6">This is the default content of the drawer. You can put any component or text here.</div>, 
+  title = "Blueprint Drawer", 
   size = 'md',
   actions,
   portalTarget

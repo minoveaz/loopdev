@@ -11,7 +11,7 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 }
 
 export const IconButton: React.FC<IconButtonProps> = ({ 
-  icon, 
+  icon = 'settings', 
   variant = 'neutral', 
   tooltip, 
   className = '', 

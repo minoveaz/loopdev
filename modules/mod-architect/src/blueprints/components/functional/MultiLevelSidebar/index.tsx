@@ -60,7 +60,19 @@ const SidebarItemRenderer: React.FC<{
   );
 };
 
-export const MultiLevelSidebar: React.FC<MultiLevelSidebarProps> = ({ items, className }) => {
+const DEFAULT_ITEMS: SidebarItem[] = [
+  { id: '1', label: 'Dashboard', icon: 'dashboard' },
+  { id: '2', label: 'Systems', icon: 'settings', children: [
+    { id: '2-1', label: 'Architect' },
+    { id: '2-2', label: 'Designer' }
+  ]},
+  { id: '3', label: 'Library', icon: 'science' }
+];
+
+export const MultiLevelSidebar: React.FC<MultiLevelSidebarProps> = ({ 
+  items = DEFAULT_ITEMS, 
+  className 
+}) => {
   const { activeId, isExpanded, handleItemClick } = useMultiLevelSidebar();
 
   return (

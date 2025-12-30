@@ -52,11 +52,14 @@ interface PaginationProps {
 
 // --- Layout Components ---
 
-export const TableContainer: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <div className={`bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col ${className}`}>
-    {children}
-  </div>
-);
+export const TableContainer: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => {
+  console.log('TableContainer: Rendering');
+  return (
+    <div className={`bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col ${className}`}>
+      {children}
+    </div>
+  );
+};
 
 export const DataTableHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="flex flex-col border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark z-20 relative rounded-t-xl">

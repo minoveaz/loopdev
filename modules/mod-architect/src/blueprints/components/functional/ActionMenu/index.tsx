@@ -14,10 +14,19 @@ interface ActionMenuProps {
   // Option B: Composition
   children?: React.ReactNode;
   align?: 'left' | 'right';
+  isOpen?: boolean;
 }
 
-const ActionMenuMain: React.FC<ActionMenuProps> = ({ items, children, align = 'right' }) => {
-  const { isOpen, toggle, close, containerRef } = useActionMenu();
+const DEFAULT_ITEMS: ActionMenuItem[] = [
+  { id: '1', label: 'Edit Blueprint', icon: 'edit', onClick: () => console.log('Edit clicked') },
+  { id: '2', label: 'Duplicate', icon: 'content_copy', onClick: () => console.log('Duplicate clicked') },
+  { id: '3', label: 'Share Access', icon: 'share', onClick: () => console.log('Share clicked') },
+  { id: '4', label: 'Delete Component', icon: 'delete', onClick: () => console.log('Delete clicked'), variant: 'danger' }
+];
+
+const ActionMenuMain: React.FC<ActionMenuProps> = ({ items = DEFAULT_ITEMS, children, align = 'right', isOpen: externalIsOpen }) => {
+  const { isOpen: internalIsOpen, toggle, close, containerRef } = useActionMenu();
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
   return (
     <MenuContainer innerRef={containerRef}>
@@ -53,3 +62,5 @@ export const ActionMenu = Object.assign(ActionMenuMain, {
   Item: MenuItem,
   Divider: MenuDivider
 });
+
+export default ActionMenu;

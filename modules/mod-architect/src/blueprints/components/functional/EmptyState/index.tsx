@@ -13,8 +13,8 @@ export interface EmptyStateProps {
 
 export const EmptyState: React.FC<EmptyStateProps> = ({ 
   icon = 'search_off', 
-  title, 
-  description, 
+  title = "No Blueprints Found", 
+  description = "We couldn't find any components matching your search criteria. Try adjusting your filters.", 
   action, 
   iconBadge,
   className = '',
