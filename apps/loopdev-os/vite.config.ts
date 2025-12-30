@@ -18,11 +18,18 @@ export default defineConfig({
   server: {
     host: true,
     fs: {
-      // Permitir que Vite sirva archivos de todo el monorepo
       allow: ['..']
     },
     hmr: {
       overlay: true
     }
-  }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        sandbox: path.resolve(__dirname, 'sandbox.html'),
+      },
+    },
+  },
 })
