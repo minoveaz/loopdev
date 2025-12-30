@@ -1,0 +1,12 @@
+[
+  {
+    "id": "official-action-menu",
+    "name": "OFFICIAL: ActionMenu",
+    "category": "Official",
+    "description": "Refactored ActionMenu using Semantic Tokens.",
+    "filePath": "../components/common/ActionMenu/index.tsx",
+    "exports": ["ActionMenu"],
+    "audit": { "hardcodedColors": 0, "inlineStyles": 0 },
+    "status": "stable"
+  }
+]
