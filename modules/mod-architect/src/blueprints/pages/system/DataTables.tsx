@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { DataTable } from '@blueprints/components/functional/DataTable/index';
 import type { ColumnDef } from '@blueprints/components/functional/DataTable/utils';
-import { Drawer, useDrawer } from '@blueprints/components/functional/Drawer';
+import { Drawer, useDrawer } from '@blueprints/components/functional/Drawer/index';
 
 // --- 1. Data & Helpers from Original Static File ---
 

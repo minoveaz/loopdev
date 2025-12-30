@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ErrorBoundary } from '@blueprints/components/functional/ErrorBoundary';
+import { ErrorBoundary } from '@blueprints/components/functional/ErrorBoundary/index';
 import { useNotificationSystem } from '@blueprints/components/functional/NotificationCenter/useNotificationSystem';
 import { CenterContainer, CenterHeader, NotificationItem, CenterFooter, EmptyView } from '@blueprints/components/functional/NotificationCenter/components';
 

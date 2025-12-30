@@ -1,8 +1,8 @@
 
 import React, { useState, useRef, useEffect, memo } from 'react';
 import type { SortConfig, ColumnDef } from '@blueprints/components/functional/DataTable/utils';
-import { EditAction, DeleteAction } from '@blueprints/components/ui/Actions';
-import { ActionMenu } from '@blueprints/components/functional/ActionMenu';
+import { EditAction, DeleteAction } from '@blueprints/components/ui/Actions/index';
+import { ActionMenu } from '@blueprints/components/functional/ActionMenu/index';
 
 // --- Generic Types ---
 

@@ -1,16 +1,16 @@
 
 import React, { useState, useMemo } from 'react';
 import { ComponentCategory } from '@blueprints/pages/functional/types';
-import { BentoCard } from '@blueprints/components/BentoCard';
+import { BentoCard } from '@blueprints/pages/functional/components/BentoCard';
 import { EmptyState } from '@blueprints/components/functional/EmptyState/index';
 
 // Import Modular Data
-import { formsData } from '@blueprints/data/forms';
-import { navigationData } from '@blueprints/data/navigation';
-import { overlaysData } from '@blueprints/data/overlays';
-import { feedbackData } from '@blueprints/data/feedback';
-import { tablesData } from '@blueprints/data/tables';
-import { actionsData } from '@blueprints/data/actions';
+import { formsData } from '@blueprints/pages/functional/data/forms';
+import { navigationData } from '@blueprints/pages/functional/data/navigation';
+import { overlaysData } from '@blueprints/pages/functional/data/overlays';
+import { feedbackData } from '@blueprints/pages/functional/data/feedback';
+import { tablesData } from '@blueprints/pages/functional/data/tables';
+import { actionsData } from '@blueprints/pages/functional/data/actions';
 
 // Combine all data sources
 const COMPONENT_REGISTRY = [

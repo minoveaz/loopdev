@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import registry from '@architect-data/blueprint_registry.json';
 
-// Error handling global para diagnóstico en el sandbox
+// Error handling global para diagnóstico
 window.onerror = function(message, source, lineno, colno, error) {
   console.error('SANDBOX RUNTIME ERROR:', message, error);
   const root = document.getElementById('sandbox-root');
@@ -18,15 +18,17 @@ window.onerror = function(message, source, lineno, colno, error) {
   }
 };
 
-// 3 saltos (../../../) para llegar a la raíz del monorepo desde loopdev/apps/loopdev-os/src/
-const components = import.meta.glob('../../../modules/mod-architect/src/blueprints/**/*.tsx');
+// 3 saltos (../../../) para llegar a la carpeta de módulos desde loopdev/apps/loopdev-os/src/
+const components = import.meta.glob('../../../modules/mod-architect/src/**/*.tsx');
 
 const SandboxLoader = () => {
   const params = new URLSearchParams(window.location.search);
   const componentName = params.get('componentName');
   const theme = params.get('theme') || 'dark';
 
-  const blueprint = (registry as any[]).find(b => b.name === componentName);
+  // Intentar buscar el blueprint en el registro
+  const blueprint = (registry as any[]).find(b => b.name === componentName) || 
+                    (componentName === 'OFFICIAL: ActionMenu' ? { name: 'OFFICIAL: ActionMenu', filePath: '../components/common/ActionMenu/index.tsx', exports: ['ActionMenu'], category: 'Official' } : null);
 
   // Aplicar tema al vuelo
   React.useEffect(() => {
@@ -41,33 +43,30 @@ const SandboxLoader = () => {
   }, [theme]);
 
   if (!blueprint) {
-    return <div className="p-10 text-slate-400 font-mono text-center">Component [{componentName}] not found in registry.</div>;
+    return <div className="p-10 text-slate-400 font-mono text-center">Component [{componentName}] not found.</div>;
   }
 
   const TargetComponent = lazy(async () => {
-    // Reconstruir la ruta EXACTA que Vite generó en el mapa de glob
-    const fullPath = `../../../modules/mod-architect/src/blueprints/${blueprint.filePath}`;
-    const importer = components[fullPath];
+    // Reconstruir la ruta exacta
+    const isOfficial = blueprint.filePath.startsWith('../');
+    const fullPath = isOfficial 
+      ? `../../../modules/mod-architect/src/${blueprint.filePath.replace('../', '')}`
+      : `../../../modules/mod-architect/src/blueprints/${blueprint.filePath}`;
     
-    // El layout siempre está en una ruta conocida relativa a este archivo
+    const importer = components[fullPath];
     const layoutPath = '../../../modules/mod-architect/src/blueprints/components/layout/SystemLayout.tsx';
     const layoutImporter = components[layoutPath];
 
     if (!importer) {
       console.error('SandboxLoader: File not found in glob map:', fullPath);
-      console.log('Available glob keys:', Object.keys(components));
       return { default: () => (
         <div className="p-10 text-red-500 font-mono">
           <h3 className="font-bold">Path Resolution Error</h3>
           <p>Target: {fullPath}</p>
-          <div className="mt-4 p-2 bg-slate-100 rounded text-[10px] text-slate-700">
-            <strong>Check:</strong> Does the file exist in <code>modules/mod-architect/src/blueprints/</code>?
-          </div>
         </div>
       )};
     }
 
-    // Cargar componente y layout en paralelo
     const [module, layoutModule]: any = await Promise.all([
       importer(),
       layoutImporter ? layoutImporter() : Promise.resolve({ SystemLayout: ({ children }: any) => <>{children}</> })
@@ -82,7 +81,10 @@ const SandboxLoader = () => {
     return {
       default: () => (
         <MemoryRouter>
-          <div className={needsLayout || blueprint.name === 'LandingPage' ? 'w-full' : 'flex items-center justify-center min-h-screen'}>
+          <div className={needsLayout || blueprint.name === 'LandingPage' 
+            ? 'w-full min-h-screen' 
+            : 'w-full min-h-screen flex items-center justify-center p-8'
+          }>
             {needsLayout ? (
               <Routes>
                 <Route element={<SystemLayout />}>
@@ -99,7 +101,7 @@ const SandboxLoader = () => {
   });
 
   return (
-    <Suspense fallback={<div className="p-10 text-indigo-500 font-bold animate-pulse text-center">Resolving Component: {blueprint.name}...</div>}>
+    <Suspense fallback={<div className="p-10 text-indigo-500 font-bold animate-pulse text-center">Resolving Designer DNA...</div>}>
       <TargetComponent />
     </Suspense>
   );
