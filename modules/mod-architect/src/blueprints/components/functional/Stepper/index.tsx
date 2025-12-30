@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useStepper } from './useStepper';
-import { StepperContainer, ProgressBar, StepIndicator, StepperControls } from './components';
-import { type StepItem, DEFAULT_STEPS } from './utils';
+import { useStepper } from '@blueprints/components/functional/Stepper/useStepper';
+import { StepperContainer, ProgressBar, StepIndicator, StepperControls } from '@blueprints/components/functional/Stepper/components';
+import { type StepItem, DEFAULT_STEPS } from '@blueprints/components/functional/Stepper/utils';
 
 interface StepperProps {
   steps?: StepItem[];

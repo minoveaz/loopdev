@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { IconButton, IconButtonProps } from '../IconButton';
+import { IconButton, IconButtonProps } from '@blueprints/components/ui/IconButton';
 
 // Semantic wrappers allow global updates to "Edit" behavior/iconography
 // while keeping the implementation details abstract for consumers.

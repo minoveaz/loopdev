@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { type Notification, getIconForType, getStylesForType } from './utils';
+import { type Notification, getIconForType, getStylesForType } from '@blueprints/components/functional/NotificationCenter/utils';
 
 // --- Components ---
 

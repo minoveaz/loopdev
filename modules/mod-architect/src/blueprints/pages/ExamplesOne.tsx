@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Badge } from '../components/ui/DesignSystem';
+import { Button, Card, Badge } from '@blueprints/components/ui/DesignSystem';
 import { BarChart3, Users, TrendingUp, Globe, MoreHorizontal, ArrowRight, Activity, Zap } from 'lucide-react';
 
 export const ExamplesOne: React.FC = () => {

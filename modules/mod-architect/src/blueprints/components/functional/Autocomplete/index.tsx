@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useAutocomplete } from './useAutocomplete';
+import { useAutocomplete } from '@blueprints/components/functional/Autocomplete/useAutocomplete';
 import { 
   AutocompleteContainer, 
   SearchLabel, 
@@ -10,8 +10,8 @@ import {
   ResultItem, 
   SearchFooter,
   NoResults
-} from './components';
-import type { SearchResult } from './utils';
+} from '@blueprints/components/functional/Autocomplete/components';
+import type { SearchResult } from '@blueprints/components/functional/Autocomplete/utils';
 
 interface AutocompleteProps {
   initialQuery?: string;

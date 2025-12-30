@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { ComponentEntry } from '../types';
-import { Breadcrumbs } from '../components/functional/Breadcrumbs/index';
-import { MultiLevelSidebar } from '../components/functional/MultiLevelSidebar/index';
-import { Accordion } from '../components/functional/Accordion/index';
-import { NestedTabs } from '../components/functional/NestedTabs/index';
-import { Stepper } from '../components/functional/Stepper/index';
-import { VerticalStepper } from '../components/functional/VerticalStepper/index';
+import { ComponentEntry } from '@blueprints/pages/functional/types';
+import { Breadcrumbs } from '@blueprints/components/functional/Breadcrumbs/index';
+import { MultiLevelSidebar } from '@blueprints/components/functional/MultiLevelSidebar/index';
+import { Accordion } from '@blueprints/components/functional/Accordion/index';
+import { NestedTabs } from '@blueprints/components/functional/NestedTabs/index';
+import { Stepper } from '@blueprints/components/functional/Stepper/index';
+import { VerticalStepper } from '@blueprints/components/functional/VerticalStepper/index';
 
 export const navigationData: ComponentEntry[] = [
   {

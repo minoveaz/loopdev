@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { getItemStyles } from './utils';
+import { getItemStyles } from '@blueprints/components/functional/ActionMenu/utils';
 
 export const MenuContainer: React.FC<{ children: React.ReactNode; innerRef: React.RefObject<HTMLDivElement | null> }> = ({ children, innerRef }) => (
   <div className="relative inline-block text-left" ref={innerRef}>

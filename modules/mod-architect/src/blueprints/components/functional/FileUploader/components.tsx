@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { formatSize, getFileIcon, getIconColorBg } from './utils';
+import { formatSize, getFileIcon, getIconColorBg } from '@blueprints/components/functional/FileUploader/utils';
 
 // --- Types ---
 export interface FileRecord {

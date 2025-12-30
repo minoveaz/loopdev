@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { type SearchResult, getIconForType, getIconStyles } from './utils';
+import { type SearchResult, getIconForType, getIconStyles } from '@blueprints/components/functional/Autocomplete/utils';
 
 export const AutocompleteContainer: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
   <div className={`bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm h-full flex flex-col justify-start ${className}`}>

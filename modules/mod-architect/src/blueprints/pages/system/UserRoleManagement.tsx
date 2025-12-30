@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { SectionHeader, Button, Badge } from '../components/ui/DesignSystem';
+import { SectionHeader, Button, Badge } from '@blueprints/components/ui/DesignSystem';
 
 export const UserRoleManagement: React.FC = () => {
   return (

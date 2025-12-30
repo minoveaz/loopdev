@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { ComponentEntry } from '../types';
-import { Drawer, useDrawer } from '../components/functional/Drawer/index';
+import { ComponentEntry } from '@blueprints/pages/functional/types';
+import { Drawer, useDrawer } from '@blueprints/components/functional/Drawer/index';
 
 // --- Local Interactive Wrappers for Overlays ---
 const DrawerShowcase = () => {

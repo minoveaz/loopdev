@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { ComponentEntry } from '../types';
-import { IconButton } from '../components/ui/IconButton';
-import { EditAction, DeleteAction, ViewAction, CopyAction } from '../components/ui/Actions/index';
-import { ActionMenu } from '../components/functional/ActionMenu/index';
+import { ComponentEntry } from '@blueprints/pages/functional/types';
+import { IconButton } from '@blueprints/components/ui/IconButton';
+import { EditAction, DeleteAction, ViewAction, CopyAction } from '@blueprints/components/ui/Actions/index';
+import { ActionMenu } from '@blueprints/components/functional/ActionMenu/index';
 
 export const actionsData: ComponentEntry[] = [
   {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAccordion } from './useAccordion';
-import { AccordionContainer, AccordionWrapper, AccordionHeader, AccordionBody } from './components';
-import type { AccordionItemData } from './utils';
+import { useAccordion } from '@blueprints/components/functional/Accordion/useAccordion';
+import { AccordionContainer, AccordionWrapper, AccordionHeader, AccordionBody } from '@blueprints/components/functional/Accordion/components';
+import type { AccordionItemData } from '@blueprints/components/functional/Accordion/utils';
 
 export interface AccordionProps {
   items: AccordionItemData[];

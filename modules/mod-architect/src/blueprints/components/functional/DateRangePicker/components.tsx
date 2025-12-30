@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { DAYS, MONTHS, getDaysInMonth, getFirstDayOfMonth, formatDate, isSameDay } from './utils';
+import { DAYS, MONTHS, getDaysInMonth, getFirstDayOfMonth, formatDate, isSameDay } from '@blueprints/components/functional/DateRangePicker/utils';
 
 export const DateInputDisplay: React.FC<{ label: string; date: Date | null; icon: string }> = ({ label, date, icon }) => (
   <div className="flex flex-col gap-1.5">

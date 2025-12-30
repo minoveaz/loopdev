@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useVerticalStepper } from './useVerticalStepper';
-import { StepperContainer, StepRow, StepLeftRail, StepIndicator, StepContentWrapper } from './components';
-import { type VerticalStep, PROJECT_SETUP_STEPS } from './utils';
+import { useVerticalStepper } from '@blueprints/components/functional/VerticalStepper/useVerticalStepper';
+import { StepperContainer, StepRow, StepLeftRail, StepIndicator, StepContentWrapper } from '@blueprints/components/functional/VerticalStepper/components';
+import { type VerticalStep, PROJECT_SETUP_STEPS } from '@blueprints/components/functional/VerticalStepper/utils';
 
 interface VerticalStepperProps {
   steps?: VerticalStep[];

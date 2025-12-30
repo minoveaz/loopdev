@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionHeader, Card, Button, Badge, GridPattern } from '../components/ui/DesignSystem';
+import { SectionHeader, Card, Button, Badge, GridPattern } from '@blueprints/components/ui/DesignSystem';
 import { Infinity, LayoutDashboard, Mail, FileText, ArrowRight } from 'lucide-react';
 
 export const ApplicationExamples: React.FC = () => {

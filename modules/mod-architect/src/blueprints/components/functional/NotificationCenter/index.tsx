@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { ErrorBoundary } from '../components/functional/ErrorBoundary';
-import { useNotificationSystem } from './useNotificationSystem';
-import { CenterContainer, CenterHeader, NotificationItem, CenterFooter, EmptyView } from './components';
+import { ErrorBoundary } from '@blueprints/components/functional/ErrorBoundary';
+import { useNotificationSystem } from '@blueprints/components/functional/NotificationCenter/useNotificationSystem';
+import { CenterContainer, CenterHeader, NotificationItem, CenterFooter, EmptyView } from '@blueprints/components/functional/NotificationCenter/components';
 
 export interface NotificationCenterProps {
   className?: string;

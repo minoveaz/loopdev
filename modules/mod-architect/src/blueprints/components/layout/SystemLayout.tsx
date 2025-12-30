@@ -1,12 +1,11 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Sidebar } from '../components/layout/Sidebar';
-import { RightFlyout } from '../components/layout/RightFlyout';
-import { ActivitySidebar } from '../components/layout/ActivitySidebar';
+import { Sidebar } from '@blueprints/components/layout/Sidebar';
+import { RightFlyout } from '@blueprints/components/layout/RightFlyout';
+import { ActivitySidebar } from '@blueprints/components/layout/ActivitySidebar';
 import { Menu, Search, Bell, Sun, Moon } from 'lucide-react';
-import { Button } from '../components/ui/DesignSystem';
-import { EmptyState } from '../components/functional/EmptyState/index';
+import { Button } from '@blueprints/components/ui/DesignSystem';
+import { EmptyState } from '@blueprints/components/functional/EmptyState/index';
 
 // Search Data Definition
 const SEARCH_ITEMS = [

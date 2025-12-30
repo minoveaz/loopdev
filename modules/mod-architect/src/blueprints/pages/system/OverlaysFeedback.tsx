@@ -1,5 +1,5 @@
 import React from 'react';
-import { EmptyState } from '../components/functional/EmptyState/index';
+import { EmptyState } from '@blueprints/components/functional/EmptyState/index';
 
 export const OverlaysFeedback: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { EmptyStateContainer, EmptyStateIcon, EmptyStateContent } from './components';
+import { EmptyStateContainer, EmptyStateIcon, EmptyStateContent } from '@blueprints/components/functional/EmptyState/components';
 
 export interface EmptyStateProps {
   icon?: string;

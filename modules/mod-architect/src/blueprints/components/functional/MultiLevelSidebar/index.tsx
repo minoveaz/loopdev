@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useMultiLevelSidebar } from './useMultiLevelSidebar';
-import { SidebarContainer, SidebarHeader, NavList, NavItem, NestedContainer } from './components';
-import { type SidebarItem, hasChildren } from './utils';
+import { useMultiLevelSidebar } from '@blueprints/components/functional/MultiLevelSidebar/useMultiLevelSidebar';
+import { SidebarContainer, SidebarHeader, NavList, NavItem, NestedContainer } from '@blueprints/components/functional/MultiLevelSidebar/components';
+import { type SidebarItem, hasChildren } from '@blueprints/components/functional/MultiLevelSidebar/utils';
 
 export interface MultiLevelSidebarProps {
   items: SidebarItem[];

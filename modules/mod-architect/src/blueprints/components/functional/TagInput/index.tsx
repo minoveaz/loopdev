@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useTagInput } from './useTagInput';
-import { Container, Label, InputWrapper, TagItem, InputField, HelperText, ApiInfo } from './components';
-import { type Tag, DEFAULT_TAGS } from './utils';
+import { useTagInput } from '@blueprints/components/functional/TagInput/useTagInput';
+import { Container, Label, InputWrapper, TagItem, InputField, HelperText, ApiInfo } from '@blueprints/components/functional/TagInput/components';
+import { type Tag, DEFAULT_TAGS } from '@blueprints/components/functional/TagInput/utils';
 
 interface TagInputProps {
   initialTags?: Tag[];

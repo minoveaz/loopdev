@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, Settings, ExternalLink, Download, Share2 } from 'lucide-react';
-import { Button } from '../components/ui/DesignSystem';
+import { Button } from '@blueprints/components/ui/DesignSystem';
 
 interface RightFlyoutProps {
   isOpen: boolean;

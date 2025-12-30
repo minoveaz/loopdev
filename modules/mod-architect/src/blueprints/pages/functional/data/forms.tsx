@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { ComponentEntry } from '../types';
-import { DateRangePicker } from '../components/functional/DateRangePicker/index';
-import { FileUploader } from '../components/functional/FileUploader/index';
-import { Autocomplete } from '../components/functional/Autocomplete/index';
-import { TagInput } from '../components/functional/TagInput/index';
+import { ComponentEntry } from '@blueprints/pages/functional/types';
+import { DateRangePicker } from '@blueprints/components/functional/DateRangePicker/index';
+import { FileUploader } from '@blueprints/components/functional/FileUploader/index';
+import { Autocomplete } from '@blueprints/components/functional/Autocomplete/index';
+import { TagInput } from '@blueprints/components/functional/TagInput/index';
 
 export const formsData: ComponentEntry[] = [
   {

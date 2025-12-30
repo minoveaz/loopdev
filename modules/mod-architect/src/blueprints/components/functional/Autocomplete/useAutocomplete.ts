@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import type { SearchResult } from './utils';
+import type { SearchResult } from '@blueprints/components/functional/Autocomplete/utils';
 
 export const useAutocomplete = (initialQuery: string = '', initialResults: SearchResult[]) => {
   const [query, setQuery] = useState(initialQuery);

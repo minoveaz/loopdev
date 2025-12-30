@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { type SortConfig, getRelativeTimeValue, downloadAsCSV, type ColumnDef } from './utils';
+import { type SortConfig, getRelativeTimeValue, downloadAsCSV, type ColumnDef } from '@blueprints/components/functional/DataTable/utils';
 
 // We make the hook generic <T>
 export const useDataTable = <T extends Record<string, any>>(

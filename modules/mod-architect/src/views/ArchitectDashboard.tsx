@@ -46,6 +46,7 @@ export const ArchitectDashboard = () => {
               right={
                 report ? <AuditReportView report={report} /> : <div className="p-10 text-slate-400 font-medium italic">Analyzing structure...</div>
               }
+              componentName={selectedComponent}
               leftTitle={`Sandbox: ${selectedComponent}`}
               rightTitle="Architect Intelligence Report"
             />

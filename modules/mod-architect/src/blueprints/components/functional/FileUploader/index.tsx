@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { UploadDropZone, FileListItem } from './components';
-import { useFileUploader } from './useFileUploader';
+import { UploadDropZone, FileListItem } from '@blueprints/components/functional/FileUploader/components';
+import { useFileUploader } from '@blueprints/components/functional/FileUploader/useFileUploader';
 
 interface FileUploaderProps {
   onUpload?: (files: File[]) => void;

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ComponentEntry } from '../types';
+import { ComponentEntry } from '@blueprints/pages/functional/types';
 
 interface BentoCardProps {
   item: ComponentEntry;

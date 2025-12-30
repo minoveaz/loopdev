@@ -1,6 +1,6 @@
 import React from 'react';
-import { DateInputDisplay, CalendarHeader, CalendarGrid } from './components';
-import { useDateRangePicker } from './useDateRangePicker';
+import { DateInputDisplay, CalendarHeader, CalendarGrid } from '@blueprints/components/functional/DateRangePicker/components';
+import { useDateRangePicker } from '@blueprints/components/functional/DateRangePicker/useDateRangePicker';
 
 interface DateRangePickerProps {
   initialStartDate?: Date | null;

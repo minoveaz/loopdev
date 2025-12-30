@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useActionMenu } from './useActionMenu';
-import { MenuContainer, MenuTrigger, MenuDropdown, MenuItem, MenuDivider } from './components';
-import type { ActionMenuItem } from './utils';
+import { useActionMenu } from '@blueprints/components/functional/ActionMenu/useActionMenu';
+import { MenuContainer, MenuTrigger, MenuDropdown, MenuItem, MenuDivider } from '@blueprints/components/functional/ActionMenu/components';
+import type { ActionMenuItem } from '@blueprints/components/functional/ActionMenu/utils';
 
 // We export the sub-components to allow Composition Pattern
 // <ActionMenu.Item ... />

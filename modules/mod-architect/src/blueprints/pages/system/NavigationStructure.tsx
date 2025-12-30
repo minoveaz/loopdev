@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumbs } from '../components/functional/Breadcrumbs/index';
+import { Breadcrumbs } from '@blueprints/components/functional/Breadcrumbs/index';
 
 export const NavigationStructure: React.FC = () => {
   return (

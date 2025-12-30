@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { ErrorBoundary } from '../components/functional/ErrorBoundary';
-import { useDataTable } from './useDataTable';
+import { ErrorBoundary } from '@blueprints/components/functional/ErrorBoundary';
+import { useDataTable } from '@blueprints/components/functional/DataTable/useDataTable';
 import { 
   TableContainer, 
   DataTableHeader,
@@ -13,8 +13,8 @@ import {
   TableHead, 
   TableRow, 
   Pagination 
-} from './components';
-import type { ColumnDef } from './utils';
+} from '@blueprints/components/functional/DataTable/components';
+import type { ColumnDef } from '@blueprints/components/functional/DataTable/utils';
 
 export interface DataTableProps<T> {
   data: T[];

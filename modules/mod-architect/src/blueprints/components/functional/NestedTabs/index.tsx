@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useNestedTabs } from './useNestedTabs';
-import { TabContainer, TabList, TabTrigger, TabContentContainer } from './components';
-import type { TabItem } from './utils';
+import { useNestedTabs } from '@blueprints/components/functional/NestedTabs/useNestedTabs';
+import { TabContainer, TabList, TabTrigger, TabContentContainer } from '@blueprints/components/functional/NestedTabs/components';
+import type { TabItem } from '@blueprints/components/functional/NestedTabs/utils';
 
 export interface NestedTabsProps {
   items: TabItem[];

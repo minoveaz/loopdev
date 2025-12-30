@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { ComponentEntry } from '../types';
-import { DataTable } from '../components/functional/DataTable/index';
+import { ComponentEntry } from '@blueprints/pages/functional/types';
+import { DataTable } from '@blueprints/components/functional/DataTable/index';
 
 const MOCK_DATA = [
   { id: '1', name: 'Project Alpha', status: 'Active', budget: '$12,000' },

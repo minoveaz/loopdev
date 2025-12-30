@@ -1,6 +1,6 @@
 import React from 'react';
-import { useBreadcrumbs, BreadcrumbItemData } from './useBreadcrumbs';
-import { BreadcrumbContainer, BreadcrumbItem, BreadcrumbActiveItem, BreadcrumbSeparator } from './components';
+import { useBreadcrumbs, BreadcrumbItemData } from '@blueprints/components/functional/Breadcrumbs/useBreadcrumbs';
+import { BreadcrumbContainer, BreadcrumbItem, BreadcrumbActiveItem, BreadcrumbSeparator } from '@blueprints/components/functional/Breadcrumbs/components';
 
 export interface BreadcrumbsProps {
   items: BreadcrumbItemData[];

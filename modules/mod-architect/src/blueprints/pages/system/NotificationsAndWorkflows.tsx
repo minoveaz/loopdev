@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { NotificationCenter } from '../components/functional/NotificationCenter/index';
-import { Stepper } from '../components/functional/Stepper/index';
-import { VerticalStepper } from '../components/functional/VerticalStepper/index';
+import { NotificationCenter } from '@blueprints/components/functional/NotificationCenter/index';
+import { Stepper } from '@blueprints/components/functional/Stepper/index';
+import { VerticalStepper } from '@blueprints/components/functional/VerticalStepper/index';
 
 export const NotificationsAndWorkflows: React.FC = () => {
   return (

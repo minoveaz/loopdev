@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { ComponentEntry } from '../types';
-import { EmptyState } from '../components/functional/EmptyState/index';
-import { NotificationCenter } from '../components/functional/NotificationCenter/index';
+import { ComponentEntry } from '@blueprints/pages/functional/types';
+import { EmptyState } from '@blueprints/components/functional/EmptyState/index';
+import { NotificationCenter } from '@blueprints/components/functional/NotificationCenter/index';
 
 export const feedbackData: ComponentEntry[] = [
   {

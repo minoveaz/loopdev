@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { DrawerOverlay, DrawerPanel, DrawerFooter } from './components';
-import { useDrawer } from './useDrawer';
+import { DrawerOverlay, DrawerPanel, DrawerFooter } from '@blueprints/components/functional/Drawer/components';
+import { useDrawer } from '@blueprints/components/functional/Drawer/useDrawer';
 
 interface DrawerComposition {
   Footer: typeof DrawerFooter;

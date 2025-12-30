@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { Tag } from './utils';
+import type { Tag } from '@blueprints/components/functional/TagInput/utils';
 
 // --- Styles extracted from pages/system/ComplexForms.tsx ---
 

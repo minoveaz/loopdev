@@ -1,11 +1,12 @@
 import { Box, Stack, Inline } from '@loopdev/ui';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
-import { Code2, Eye } from 'lucide-react';
+import { Code2, Eye, ExternalLink } from 'lucide-react';
 
 interface SplitPaneProps {
   left: ReactNode;
   right: ReactNode;
+  componentName?: string;
   leftTitle?: string;
   rightTitle?: string;
 }
@@ -13,6 +14,7 @@ interface SplitPaneProps {
 export const SplitPane = ({ 
   left, 
   right, 
+  componentName,
   leftTitle = 'Source Blueprint', 
   rightTitle = 'System Output'
 }: SplitPaneProps) => {
@@ -32,6 +34,16 @@ export const SplitPane = ({
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
               <Eye size={14} className="text-slate-300" /> {leftTitle}
             </span>
+            {/* Botón para abrir el preview en una ventana independiente */}
+            {componentName && (
+              <button 
+                onClick={() => window.open(`/admin/preview/${componentName}`, '_blank')}
+                className="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"
+                title="Open in new window"
+              >
+                <ExternalLink size={14} />
+              </button>
+            )}
           </Inline>
         </Box>
         {/* El Canvas ahora ocupa todo el espacio sin márgenes ni tarjetas */}

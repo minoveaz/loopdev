@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import type { FileRecord } from './components';
+import type { FileRecord } from '@blueprints/components/functional/FileUploader/components';
 
 export const useFileUploader = (
   maxSizeInBytes: number,
