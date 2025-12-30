@@ -21,6 +21,10 @@ export const ArchitectDashboard = () => {
 
   const isLoading = isRegistryLoading || isAuditLoading;
 
+  // Verificamos si existe una versión oficial para este componente
+  const hasOfficial = selectedComponent === 'ActionMenu'; 
+  const officialName = hasOfficial ? `OFFICIAL: ${selectedComponent}` : null;
+
   return (
     <ArchitectShell isLoading={isLoading}>
       {/* 1. Module Header with Identity & KPIs */}
@@ -44,13 +48,17 @@ export const ArchitectDashboard = () => {
               left={
                 <BlueprintCanvas componentName={selectedComponent} theme={sandboxTheme} />
               }
+              center={
+                hasOfficial ? <BlueprintCanvas componentName={officialName!} theme={sandboxTheme} /> : null
+              }
               right={
                 report ? <AuditReportView report={report} /> : <div className="p-10 text-slate-400 font-medium italic">Analyzing structure...</div>
               }
               componentName={selectedComponent}
               sandboxTheme={sandboxTheme}
               onThemeToggle={() => setSandboxTheme(t => t === 'dark' ? 'light' : 'dark')}
-              leftTitle={`Sandbox: ${selectedComponent}`}
+              leftTitle={`Blueprint: ${selectedComponent}`}
+              centerTitle={`Official: ${selectedComponent}`}
               rightTitle="Architect Intelligence Report"
             />
           </div>
