@@ -1,10 +1,6 @@
-export * from './button';
-export * from './forms';
-export * from './illustrations';
-export * from './branding';
+export * from './Button';
+export * from './Icon';
+export * from './IconRegistry';export * from './Typography';
 export * from './Badge';
-export * from './Avatar';
-export * from './Alert';
-export * from './ProgressBar';
-export * from './Skeleton';
-export * from './Tag';
+export * from './Label';
+export * from './Divider';
