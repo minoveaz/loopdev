@@ -4,3 +4,6 @@ export * from './IconRegistry';export * from './Typography';
 export * from './Badge';
 export * from './Label';
 export * from './Divider';
+export * from './IconButton';
+export * from './Motion';
+export * from './ZIndex';

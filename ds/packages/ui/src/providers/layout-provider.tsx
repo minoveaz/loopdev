@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useTenant } from '../providers/tenant-provider';
+import { useTenant } from './tenant-provider';
 import { TENANT_DATA } from '../data/tenants';
 
 interface LayoutContextType {
