@@ -10,7 +10,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'ghost', 'energy'],
+      options: ['primary', 'secondary', 'outline', 'ghost', 'energy', 'danger'],
     },
     size: {
       control: 'select',
@@ -21,23 +21,19 @@ const meta: Meta<typeof Button> = {
     fullWidth: { control: 'boolean' },
   },
   parameters: {
-    // Cambiamos a fullscreen para que el decorador controle todo el lienzo
     layout: 'fullscreen',
   },
   decorators: [
     (Story) => (
-      <div className="relative w-full h-[400px] flex flex-col items-center justify-center p-8">
-        {/* Posicionamiento absoluto real en la esquina superior izquierda del lienzo */}
+      <div className="relative w-full min-h-[400px] flex flex-col items-center justify-center p-8">
         <div className="absolute top-8 left-8 z-50">
           <CertificationStamp 
-            version="v1.2.0" 
+            version="v1.2.1" 
             phase={1} 
             date="2026-01-01" 
             className="scale-90 origin-top-left opacity-90 hover:opacity-100 transition-opacity shadow-2xl"
           />
         </div>
-        
-        {/* Contenedor del componente centrado */}
         <div className="flex items-center justify-center w-full h-full pt-12">
           <Story />
         </div>
@@ -61,6 +57,14 @@ export const WithIcon: Story = {
     children: 'AI Action',
     variant: 'energy',
     startIcon: 'auto_awesome',
+  },
+};
+
+export const Danger: Story = {
+  args: {
+    children: 'Delete Workspace',
+    variant: 'danger',
+    startIcon: 'delete_forever',
   },
 };
 
@@ -125,6 +129,7 @@ export const Variants: Story = {
       <Button variant="outline">Outline</Button>
       <Button variant="ghost">Ghost</Button>
       <Button variant="energy">Energy IA</Button>
+      <Button variant="danger">Danger</Button>
     </div>
   ),
 };

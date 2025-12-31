@@ -3,7 +3,7 @@ import { useButton } from './useButton';
 import { ButtonContent } from './components';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'energy';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'energy' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   isLoading?: boolean;

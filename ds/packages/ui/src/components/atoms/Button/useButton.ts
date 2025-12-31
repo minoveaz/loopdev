@@ -13,6 +13,7 @@ export const useButton = (props: any) => {
       case 'outline': return "border-2 border-[var(--comp-primary,#135bec)] text-[var(--comp-primary,#135bec)] hover:bg-[var(--comp-primary-soft,rgba(19,91,236,0.05))]";
       case 'ghost': return "text-text-muted hover:text-[var(--comp-primary,#135bec)] hover:bg-gray-100 dark:hover:bg-gray-800";
       case 'energy': return "bg-accent hover:bg-accent-hover text-text-main shadow-lg shadow-energy/20 focus:ring-energy";
+      case 'danger': return "border-2 border-danger text-danger hover:bg-danger/5 focus:ring-danger";
       default: return "";
     }
   }, [variant]);

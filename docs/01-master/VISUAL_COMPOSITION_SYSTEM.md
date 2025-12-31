@@ -96,12 +96,16 @@ Regla: nunca para texto largo.
 
 ## 3. Superficies y Profundidad (Depth Architecture)
 
-* **Deep Space:** `#0F1115` (fondo base)
-* **Laboratory Canvas:** `#0D121B` (interacción técnica)
-* **Surface:** `#181B21` + borde slate
-* **Glass:** `rgba(255,255,255,0.03)` + blur
+* **Deep Space:** Fondo base.
+* **Laboratory Canvas:** Interacción técnica.
+* **Surface:** Contenedores de información.
+* **Glass:** Capas de overlay.
 
-Profundidad se comunica por contraste y borde, nunca por sombras negras pesadas.
+### 3.1 Texturas Técnicas (The Grid Policy)
+Las superficies de LoopDev no son planas; usan "texturas de ingeniería" para denotar precisión:
+1.  **Blueprint Grid (Líneas 40px/8px):** Uso en Cards, Modals y Layouts. Simboliza arquitectura.
+2.  **Neural Grid (Puntos 24px):** Uso exclusivo en componentes de IA, Generative Previews y Dashboards. Simboliza datos vivos.
+*Regla de opacidad:* Siempre entre 3% y 12% para no competir con el contenido.
 
 ---
 

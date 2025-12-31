@@ -56,4 +56,11 @@ describe('Button Primitive', () => {
     expect(screen.getByText('check')).toBeInTheDocument();
   });
 
+  it('applies the danger variant class correctly', () => {
+    render(<Button variant="danger">Delete</Button>);
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('text-danger');
+    expect(button.className).toContain('border-danger');
+  });
+
 });
