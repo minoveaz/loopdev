@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { Preview } from "@storybook/react";
 
 // Estilos Globales
@@ -6,23 +6,38 @@ import "../src/styles/globals.css";
 import "../src/styles/fonts.css";
 
 // Foundations y Temas
-import "@loopdev/tokens/src/foundations/index.css";
-import "@loopdev/tokens/src/css/theme-estar-protegidos.css";
-import "@loopdev/tokens/src/css/theme-client-b.css";
-import "@loopdev/tokens/src/css/theme-ep-subbrands.css";
+import "../../tokens/src/css/base.css";
+import "../../tokens/src/css/theme-estar-protegidos.css";
+import "../../tokens/src/css/theme-client-b.css";
+import "../../tokens/src/css/theme-ep-subbrands.css";
 
-import { TenantProvider, type Tenant, type Subbrand } from "../src/providers/tenant-provider";
+import { TenantProvider } from "../src/providers/tenant-provider";
 import { LayoutProvider } from "../src/providers/layout-provider";
-import { Toaster } from "../src/components/organisms/toast/toast";
 
 const preview: Preview = {
   parameters: {
     layout: 'centered',
+    backgrounds: {
+      disable: true, // Disable default backgrounds to use our own logic
+    }
   },
   globalTypes: {
-    theme: {
-      name: "Tenant Principal",
-      description: "Selecciona el cliente raíz",
+    themeMode: {
+      name: "Appearance",
+      description: "Toggle between light and dark mode",
+      defaultValue: "dark",
+      toolbar: {
+        icon: "mirror",
+        items: [
+          { value: "light", title: "Light Mode", icon: "sun" },
+          { value: "dark", title: "Dark Mode", icon: "moon" },
+        ],
+        showName: true,
+      },
+    },
+    tenant: {
+      name: "Tenant",
+      description: "Select the brand tenant",
       defaultValue: "loopdev",
       toolbar: {
         icon: "category",
@@ -34,70 +49,49 @@ const preview: Preview = {
         showName: true,
       },
     },
-    subbrand: {
-      name: "Sub-marca (EP Only)",
-      description: "Sub-marcas específicas de Estar Protegidos",
-      defaultValue: "none",
-      toolbar: {
-        icon: "structure",
-        items: [
-          { value: "none", title: "Ninguna / General" },
-          { value: "protege-salud", title: "Protege tu Salud" },
-          { value: "protege-viaje", title: "Protege tu Viaje" },
-          { value: "protege-hogar", title: "Protege tu Hogar" },
-          { value: "protege-finanzas", title: "Protege tus Finanzas" },
-        ],
-        showName: true,
-      },
-    },
   },
   decorators: [
     (Story, context) => {
-      const { theme, subbrand } = context.globals;
-      const tenant = theme as Tenant;
-      const activeSubbrand = (theme === 'estar-protegidos' && subbrand !== 'none') ? (subbrand as Subbrand) : 'none';
+      const { themeMode, tenant } = context.globals;
       
-      const themeClass = theme === 'loopdev' ? '' : `theme-${theme}`;
-      const isFullscreen = context.parameters.layout === 'fullscreen';
-      
+      // Update the class on the html element for Tailwind's 'class' dark mode strategy
+      useEffect(() => {
+        const html = document.documentElement;
+        if (themeMode === 'dark') {
+          html.classList.add('dark');
+        } else {
+          html.classList.remove('dark');
+        }
+      }, [themeMode]);
+
+      const themeClass = tenant === 'loopdev' ? '' : `theme-${tenant}`;
+
       return (
-        <TenantProvider tenant={tenant} subbrand={activeSubbrand}>
+        <TenantProvider tenant={tenant}>
           <LayoutProvider>
-            <Toaster />
             <div 
-              className={themeClass} 
-              data-subbrand={activeSubbrand !== 'none' ? activeSubbrand : undefined}
+              className={`${themeClass} ${themeMode === 'dark' ? 'dark' : ''}`}
               style={{ 
-                fontFamily: 'var(--lpd-font-sans)',
+                fontFamily: 'Inter, sans-serif',
                 color: 'var(--lpd-color-text-base)',
                 background: 'var(--lpd-color-bg-base)',
-                padding: isFullscreen ? '0' : 'var(--lpd-space-12)',
-                minHeight: isFullscreen ? '0' : '100vh',
+                padding: '2rem',
+                minHeight: '100vh',
                 width: '100%',
-                display: isFullscreen ? 'block' : 'flex',
+                display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                transition: 'background-color 0.3s ease, color 0.3s ease'
               }}
             >
-              <div style={{ 
-                position: 'relative', 
-                width: '100%', 
-                height: isFullscreen ? '100vh' : 'auto',
-                display: isFullscreen ? 'block' : 'flex', 
-                justifyContent: 'center' 
-              }}>
-                <Story />
-                
-                {/* Info Badge */}
-                <div style={{ 
-                  position: 'fixed', bottom: '1rem', left: '1rem',
-                  fontSize: '10px', fontFamily: 'monospace', opacity: 0.5,
-                  pointerEvents: 'none', zIndex: 9999
-                }}>
-                  Context: {tenant} {activeSubbrand !== 'none' ? `> ${activeSubbrand}` : ''}
-                </div>
-              </div>
+              <style>
+                {`
+                  .material-symbols-outlined {
+                    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+                  }
+                `}
+              </style>
+              <Story />
             </div>
           </LayoutProvider>
         </TenantProvider>
