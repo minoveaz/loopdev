@@ -251,10 +251,13 @@ Focus Ring:
 
 ## 17. Loading Strategy
 
-* > 1s → Skeleton
-* Acción local → Spinner
-* Simple → Optimistic UI
-* Crítico → Blocking overlay
+* **> 1s:** Uso obligatorio de **Skeletons** (Ghost UI).
+* **Acción local:** Uso de **Spinner** (Atomic).
+* **IA Process:** Uso de **GenerativePreviewSkeleton** (Aura púrpura) o **AILoader**.
+* **Estructura del Skeleton:**
+    *   **Shimmer:** Animación de barrido para superficies pequeñas/medianas.
+    *   **Pulse:** Animación de opacidad para superficies grandes o tablas masivas (Rendimiento).
+    *   **A11y:** Respetar `prefers-reduced-motion` desactivando animaciones automáticamente.
 
 ---
 

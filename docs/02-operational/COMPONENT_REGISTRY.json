@@ -48,6 +48,20 @@
         "attention_guides": true,
         "dynamic_theming": true
       }
+    },
+    {
+      "id": "skeleton-v1",
+      "name": "Skeleton",
+      "status": "stable",
+      "category": "Feedback",
+      "phase": 2,
+      "capabilities": {
+        "shimmer_animation": true,
+        "pulse_animation": true,
+        "text_mimicry": true,
+        "massive_rendering": true,
+        "a11y_silent": true
+      }
     }
   ]
 }

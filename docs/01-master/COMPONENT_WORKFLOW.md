@@ -1,7 +1,7 @@
-# Component Lifecycle & Agile Workflow v1.4
+# Component Lifecycle & Agile Workflow v1.5
 
 ## Propósito
-Este documento define el proceso de ingeniería E2E. Implementamos la **colocación de requerimientos** mediante archivos `userHistories.md` para garantizar que la lógica y las pruebas estén alineadas al contrato original.
+Este documento define el proceso de ingeniería E2E. Implementamos la **colocación de requerimientos** mediante archivos `userHistories.md` y garantizamos la **integridad visual** mediante historias de espejo en Storybook.
 
 ---
 
@@ -19,19 +19,21 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
 1. **Sprint 1 (Brain/Body):** Implementación del componente.
 2. **Sprint 2 (Testing):** Creación de tests en Vitest que validen **cada historia** definida en `userHistories.md`.
 3. **Sprint 3 (Docs):** Historias de Storybook que demuestren visualmente el cumplimiento de las historias.
+   - **Regla de Espejo:** Toda historia de estrés en `userHistories.md` DEBE tener una historia en Storybook con el prefijo `Stress`.
 
 ---
 
 ## 🔍 Fase 3: Auditoría Externa
 - **Action:** El Auditor independiente valida el código contra el archivo `userHistories.md`.
-- **Checkpoint:** ¿El componente cumple todo lo prometido en el contrato de historias?
+- **Checkpoint Storybook:** ¿El Auditor puede ver visualmente los casos de estrés en Storybook?
 
 ---
 
 ## 🗄️ Fase 4: Persistencia & Certificación (DoD)
 - [ ] **Registry Sync:** Registro en `COMPONENT_REGISTRY.json`.
 - [ ] **Seal Applied:** Sello `Loopdev.lab` en Storybook.
-- [ ] **Final Log:** Cierre del hito en `ENGINEERING_LOG.md`.
+- [ ] **Audit Log Updated:** Registro de la intervención en `ENGINEERING_LOG.md`.
+- [ ] **Zero Errors:** Compilación de TypeScript y Tests en 100% verde.
 
 ---
 *Protocolo de Gestión E2E - LoopDev Engineering Board*

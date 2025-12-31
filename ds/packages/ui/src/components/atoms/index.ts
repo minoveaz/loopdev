@@ -12,3 +12,4 @@ export * from './LogoSpinner';
 export * from './AILoader';
 export * from './CertificationStamp';
 export * from './EmptyState';
+export * from './Skeleton';

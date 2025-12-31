@@ -129,8 +129,8 @@ Verifica:
 
 * README.md presente y completo
 * API documentada
-* estados descritos
-* notas IA incluidas
+* presencia de `userHistories.md` y suite de tests (.test.tsx)
+* **Validación Visual de Estrés:** El archivo `.stories.tsx` debe contener historias con el prefijo `Stress` para cada caso definido en `userHistories.md`.
 
 ---
 
