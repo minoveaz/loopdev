@@ -85,6 +85,7 @@ Verifica:
 * ausencia de lógica en `index.tsx`
 * uso correcto de `components.tsx`
 * fixtures tipados y realistas
+* presencia de `userHistories.md` y suite de tests (.test.tsx)
 
 ---
 
@@ -94,7 +95,7 @@ Verifica:
 
 * ausencia de hex hardcodeados
 * uso correcto de variables `--comp-*`
-* overrides funcionales en `Example.tsx`
+* historias de Storybook funcionales con el tema dinámico
 * no dependencia de contexto global oculto
 
 ---

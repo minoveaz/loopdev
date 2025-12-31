@@ -85,11 +85,12 @@ components/functional/<ComponentName>/
 ├── components.tsx      (Sub-componentes internos)
 ├── types.ts            (Interfaces TS)
 ├── fixtures.ts         (Datos de prueba realistas)
-├── Example.tsx         (Escenario de validación)
 ├── README.md           (Documentación técnica y UX)
-├── userHistories.md    (Contrato de historias y casos de estrés) <-- NUEVO
+├── userHistories.md    (Contrato de historias y casos de estrés)
 └── <ComponentName>.test.tsx (Suite de pruebas obligatoria)
 ```
+
+**Nota:** El archivo `Example.tsx` solo es obligatorio durante la fase de Laboratorio (`mockv2`). En producción, la validación se realiza mediante Historias de Storybook.
 
 ---
 

@@ -35,6 +35,19 @@
         "dynamic_messages": true,
         "innovation_brackets": true
       }
+    },
+    {
+      "id": "empty-state-v1",
+      "name": "EmptyState",
+      "status": "stable",
+      "category": "Feedback",
+      "phase": 2,
+      "capabilities": {
+        "technical_grid": true,
+        "ai_processing_mode": true,
+        "attention_guides": true,
+        "dynamic_theming": true
+      }
     }
   ]
 }
