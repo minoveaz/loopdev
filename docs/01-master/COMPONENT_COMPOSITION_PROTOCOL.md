@@ -87,6 +87,7 @@ components/functional/<ComponentName>/
 ├── fixtures.ts         (Datos de prueba realistas)
 ├── Example.tsx         (Escenario de validación)
 ├── README.md           (Documentación técnica y UX)
+├── userHistories.md    (Contrato de historias y casos de estrés) <-- NUEVO
 └── <ComponentName>.test.tsx (Suite de pruebas obligatoria)
 ```
 
