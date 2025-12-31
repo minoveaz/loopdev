@@ -7,3 +7,4 @@ export * from './Divider';
 export * from './IconButton';
 export * from './Motion';
 export * from './ZIndex';
+export * from './Spinner';

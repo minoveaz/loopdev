@@ -32,6 +32,22 @@ export const Default: Story = {
   },
 };
 
+export const DatabasePrimary: Story = {
+  args: {
+    children: 'Brand Status',
+    status: 'primary',
+    variant: 'solid',
+  },
+};
+
+export const DatabaseDanger: Story = {
+  args: {
+    children: 'System Error',
+    status: 'error',
+    variant: 'solid',
+  },
+};
+
 export const EnergyLive: Story = {
   args: {
     children: 'AI Optimizing',

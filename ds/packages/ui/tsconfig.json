@@ -7,8 +7,7 @@
       "@loopdev/tokens": ["../tokens"],
       "@loopdev/tokens/*": ["../tokens/src/*"]
     },
-    "outDir": "./dist",
-    "rootDir": "src"
+    "outDir": "./dist"
   },
-  "include": ["src"]
+  "include": ["src", "vitest.shims.d.ts", "vitest.setup.ts"]
 }

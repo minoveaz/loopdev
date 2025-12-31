@@ -10,7 +10,7 @@ export const useBadge = (props: any) => {
   } = props;
 
   const dynamicStyles = useMemo(() => {
-    // 1. Core Styles based on status (Visual Composition Guide v3.8)
+    // 1. PRIMARY STATUS (Conectado a la DB)
     if (status === 'primary') {
       if (variant === 'solid') return 'bg-[var(--comp-primary,#135bec)] text-white border-transparent';
       if (variant === 'outline') return 'bg-transparent border border-[var(--comp-primary,#135bec)]/30 text-[var(--comp-primary,#135bec)]';
@@ -18,11 +18,19 @@ export const useBadge = (props: any) => {
       if (variant === 'glass') return 'bg-white/5 backdrop-blur-md border border-white/10 text-[var(--comp-primary,#135bec)] shadow-[0_0_8px_var(--comp-primary-shadow,rgba(19,91,236,0.2))]';
     }
     
+    // 2. ERROR / DANGER STATUS (Conectado a la DB)
+    if (status === 'error') {
+      if (variant === 'solid') return 'bg-[var(--lpd-color-status-error,#EF4444)] text-white border-transparent';
+      if (variant === 'outline') return 'bg-transparent border border-[var(--lpd-color-status-error,#EF4444)]/30 text-[var(--lpd-color-status-error,#EF4444)]';
+      if (variant === 'ghost') return 'bg-[var(--lpd-color-status-error,#EF4444)]/10 text-[var(--lpd-color-status-error,#EF4444)] border-[var(--lpd-color-status-error,#EF4444)]/20';
+      if (variant === 'glass') return 'bg-white/5 backdrop-blur-md border border-white/10 text-[var(--lpd-color-status-error,#EF4444)] shadow-[0_0_8px_var(--lpd-color-status-error,#EF4444)]';
+    }
+
     if (status === 'energy') {
-      if (variant === 'solid') return 'bg-energy text-slate-900 border-transparent font-black';
-      if (variant === 'outline') return 'bg-transparent border border-energy/30 text-yellow-600 dark:text-energy-vivid';
-      if (variant === 'ghost') return 'bg-energy/10 text-yellow-700 dark:text-energy-vivid border-energy/20';
-      if (variant === 'glass') return 'bg-white/5 backdrop-blur-md border border-white/10 text-energy-vivid shadow-[0_0_8px_rgba(255,208,37,0.2)]';
+      if (variant === 'solid') return 'bg-[var(--lpd-color-brand-energy,#FFD025)] text-slate-900 border-transparent font-black';
+      if (variant === 'outline') return 'bg-transparent border border-[var(--lpd-color-brand-energy,#FFD025)]/30 text-yellow-600 dark:text-[var(--lpd-color-brand-energy,#FFD025)]';
+      if (variant === 'ghost') return 'bg-[var(--lpd-color-brand-energy,#FFD025)]/10 text-yellow-700 dark:text-[var(--lpd-color-brand-energy,#FFD025)] border-[var(--lpd-color-brand-energy,#FFD025)]/20';
+      if (variant === 'glass') return 'bg-white/5 backdrop-blur-md border border-white/10 text-[var(--lpd-color-brand-energy,#FFD025)] shadow-[0_0_8px_rgba(255,208,37,0.2)]';
     }
 
     if (status === 'innovation') {
@@ -32,17 +40,10 @@ export const useBadge = (props: any) => {
       if (variant === 'glass') return 'bg-white/5 backdrop-blur-md border border-white/10 text-purple-400 shadow-[0_0_8px_rgba(147,51,234,0.2)]';
     }
 
-    if (status === 'error') {
-      if (variant === 'solid') return 'bg-danger text-white border-transparent';
-      if (variant === 'outline') return 'bg-transparent border border-danger/30 text-danger';
-      if (variant === 'ghost') return 'bg-danger-soft text-danger dark:text-red-400 border-danger/20';
-      if (variant === 'glass') return 'bg-white/5 backdrop-blur-md border border-white/10 text-danger shadow-[0_0_8px_rgba(239,68,68,0.2)]';
-    }
-
     if (status === 'success') {
-      if (variant === 'solid') return 'bg-status-success text-white border-transparent';
-      if (variant === 'outline') return 'bg-transparent border border-status-success/30 text-status-success dark:text-emerald-400';
-      if (variant === 'ghost') return 'bg-status-success/10 text-status-success dark:text-emerald-400 border-status-success/20';
+      if (variant === 'solid') return 'bg-[var(--lpd-color-status-success,#10B981)] text-white border-transparent';
+      if (variant === 'outline') return 'bg-transparent border border-[var(--lpd-color-status-success,#10B981)]/30 text-[var(--lpd-color-status-success,#10B981)]';
+      if (variant === 'ghost') return 'bg-[var(--lpd-color-status-success,#10B981)]/10 text-[var(--lpd-color-status-success,#10B981)] border-[var(--lpd-color-status-success,#10B981)]/20';
       return 'bg-white/5 backdrop-blur-md border border-white/10 text-emerald-400';
     }
     

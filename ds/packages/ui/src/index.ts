@@ -8,3 +8,4 @@ export * from './providers/tenant-provider';
 export * from './providers/layout-provider';
 export * from './types/tenant';
 export * from './helpers/cn';
+export * from './providers/dynamic-theme-provider';

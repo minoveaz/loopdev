@@ -7,7 +7,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   isLoading?: boolean;
-  icon?: string;
+  startIcon?: string;
+  endIcon?: string;
 }
 
 /**
@@ -17,7 +18,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  * @status stable
  */
 export const Button: React.FC<ButtonProps> = (props) => {
-  const { finalClassName, children, icon, isLoading, ...rest } = useButton(props);
+  // Extraemos startIcon y endIcon para NO pasarlos al <button> como atributo HTML
+  const { finalClassName, children, isLoading, startIcon, endIcon, ...rest } = useButton(props);
 
   return (
     <button 
@@ -25,7 +27,11 @@ export const Button: React.FC<ButtonProps> = (props) => {
       aria-busy={isLoading}
       {...rest}
     >
-      <ButtonContent isLoading={isLoading} icon={icon}>
+      <ButtonContent 
+        isLoading={isLoading} 
+        startIcon={startIcon} 
+        endIcon={endIcon}
+      >
         {children}
       </ButtonContent>
     </button>

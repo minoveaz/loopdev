@@ -34,7 +34,7 @@ export const Energy: Story = {
   args: {
     variant: 'energy',
     children: 'AI Action',
-    icon: 'auto_awesome',
+    startIcon: 'auto_awesome',
   },
 };
 

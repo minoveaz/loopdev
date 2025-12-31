@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 export const useButton = (props: any) => {
   // Fix: Correctly destructure children and className from props, as they are now explicitly defined in ButtonProps
-  const { variant = 'primary', size = 'md', fullWidth = false, isLoading, children, className, ...rest } = props;
+  const { variant = 'primary', size = 'md', fullWidth = false, isLoading, children, className, startIcon, endIcon, disabled, ...rest } = props;
 
   const baseStyles = "inline-flex items-center justify-center font-bold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -28,14 +28,18 @@ export const useButton = (props: any) => {
 
   const widthStyle = fullWidth ? "w-full" : "";
 
-  // Fix: Use the destructured className
   const finalClassName = `${baseStyles} ${variantStyles} ${sizeStyles} ${widthStyle} ${className || ''}`;
+
+  // Lógica crítica: El botón se deshabilita si está disabled O si está cargando
+  const isDisabled = disabled || isLoading;
 
   return {
     finalClassName,
     isLoading,
-    icon: props.icon,
+    startIcon, // Pasamos explícitamente startIcon para que index.tsx lo reciba
+    endIcon,   // Pasamos explícitamente endIcon
     children,
+    disabled: isDisabled, // Override del prop disabled original
     ...rest,
   };
 };
