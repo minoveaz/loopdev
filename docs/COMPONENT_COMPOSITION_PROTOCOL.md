@@ -1,277 +1,170 @@
-# COMPONENT_COMPOSITION_PROTOCOL.md
+# COMPONENT_COMPOSITION_PROTOCOL
 
-Single Source of Truth (SSOT) para Diseño → Ensamblaje → Revisión → Migración a SaaS (LoopDev / loop.dev)
-Versión: 1.0 (Oficial)
-Estado: Activo
-Owner: Design Systems Lead + Frontend Platform Lead
-Aplica a: Todos los componentes UI/UX y componentes funcionales React que se publican en el ecosistema SaaS (multitenant)
+**Single Source of Truth (SSOT) para Diseño → Ingeniería → Calidad → SaaS**
+**Producto:** LoopDev / LoopSaaS
+**Versión:** 1.1 (Enterprise Ready - Complete Edition)
+**Estado:** Activo
+**Owner:** Design Systems Lead + Frontend Platform Lead
+**Aplica a:** Todos los componentes UI/UX del ecosistema SaaS
+
+---
+
+## Prefacio · Jerarquía del Sistema
+
+Este protocolo **opera sobre** y **depende explícitamente de**:
+
+* **VISUAL_COMPOSITION_SYSTEM v3.8** (fundamentos visuales)
+* **COMPONENT_TESTING_PROTOCOL v1.0** (estándares de calidad)
+* **COMPONENT_WORKFLOW v1.2** (gestión ágil y persistencia de datos)
 
 ---
 
 ## 0) Propósito y principio rector
 
-Este documento define el protocolo único para construir componentes en LoopDev desde el diseño hasta su publicación en el SaaS.
-
-**Meta principal (no negociable):**
-Pasar de “Blueprint / Mockup” a “Componente Productivo” debe ser copy/paste + configuración, sin refactors tardíos, sin hardcoding, sin sorpresas visuales.
-
-**Tres pilares:**
-1. **Coherencia Sistémica:** todo componente “se siente LoopDev”.
-2. **Portabilidad Real:** se puede extraer/reusar en otros productos sin dependencias invisibles.
-3. **Multitenancy Ready:** el componente se adapta a marca/tenant sin tocar código fuente.
+Este documento define el protocolo único para construir componentes en LoopDev. La meta es pasar de un "Blueprint" a un "Componente Productivo" con un proceso industrial: **Indestructible, Accesible y Plenamente Personalizable vía Data.**
 
 ---
 
-## 1) Equipos, responsabilidades y handoff
+## 1) Equipos y Responsabilidades (Ciclo Ágil)
 
 ### 1.1 Equipos
-- **Equipo A — Diseño (Design System / UI):** define estructura, estados, tokens, reglas visuales y contratos de interacción.
-- **Equipo B — Ensamblaje (Component Assembly):** implementa el componente React encapsulado siguiendo el patrón LoopDev (Brain/Body + overrides + fixtures + Example).
-- **Equipo C — Revisión & Migración a SaaS (SaaS Integrators / Governance):** audita, normaliza, indexa y publica en el repositorio SaaS.
+* **Equipo A — Diseño:** Define estructura, tokens y contratos visuales (DoR).
+* **Equipo B — Ingeniería:** Implementa el patrón Brain/Body y la suite de tests.
+* **Equipo C — Gobernanza:** Audita la integración con la base de datos y certifica el DoD.
 
-### 1.2 Regla crítica
-Nadie “interpreta” el diseño. Si hay ambigüedad, se corrige en Diseño y se actualiza el contrato. Lo contrario genera divergencia y deuda técnica.
-
-### 1.3 Entregables por fase (obligatorios)
-
-**Diseño entrega:**
-- Spec de componente (anatomía + layout)
-- Estados (default/hover/active/disabled/loading/empty/error/success)
-- Tokens y roles semánticos (color/typography/spacing/radius)
-- A11y spec (focus order, roles, labels, keyboard interactions)
-- Motion spec (duraciones/curvas/props animadas)
-- Reglas de densidad (high/low density si aplica)
-
-**Ensamblaje entrega:**
-- Carpeta autocontenida con estructura estándar
-- Example.tsx funcional con overrides de marca
-- Fixtures tipados + README + metadata indexer block
-- Cumplimiento Visual Logic (v3.7) + tokens + dark/light
-- Tests mínimos (según categoría)
-
-**Revisión/Migración entrega:**
-- Validación con checklist y auditoría automática (Architect)
-- Normalización (nombres, categorías, metadata, compatibilidad)
-- Registro en índice del SaaS + versión + notas de release
+### 1.2 El Ciclo de Vida (DoR & DoD)
+Nadie inicia un componente sin el **Definition of Readiness** (Blueprint validado + User Story). Nadie cierra un componente sin el **Definition of Done** (Tests en verde + Registry en Firestore).
 
 ---
 
-## 2) Lenguaje del sistema: “Visual Logic v3.7” como ley
+## 2) Lenguaje del sistema visual (autoridad)
 
-Antes de escribir una línea de código, el componente debe cumplir:
-- Tokens de color y superficies (sin hex hardcodeado)
-- Tipografía dual (Inter / JetBrains Mono) por contexto
-- Grid & spacing (unidad base 4px)
-- Depth Architecture (Deep Space / Laboratory Canvas / Surface)
-- Brackets como operadores ({} como estructura, no adorno)
-- AI Ghost para features de IA (bordes/gradientes/estados)
-
-**Regla de aceptación:** si el componente “se ve correcto” pero rompe el sistema (ej. sombras arbitrarias, spacing fuera de grid, color directo), se rechaza.
+Todo componente **debe cumplir** el **VISUAL_COMPOSITION_SYSTEM v3.8**:
+* Tipografía dual (Inter / JetBrains Mono).
+* Grid base de 4px.
+* Profundidad (Deep Space, Surface, Canvas, Glass).
+* Brackets `{}` como operadores estructurales.
 
 ---
 
-## 3) Taxonomía oficial de componentes (para evitar caos)
+## 3) Taxonomía oficial de componentes
 
-Todo componente debe pertenecer a una categoría (y solo una):
-- **Foundations:** tokens, typography, surfaces, spacing helpers.
-- **Primitives:** Button, Badge, Input, Tooltip…
-- **Composites:** DataTable, KanbanBoard, FiltersPanel…
-- **Layouts:** PageShell, SidebarLayout, SplitPane…
-- **Patterns:** Threading, Timeline, AI Ghost blocks…
-- **Pages:** solo si es una pantalla completa reutilizable.
-
-**Prohibido:** “componentes híbridos” sin categoría. Si mezcla demasiadas responsabilidades → se divide.
+Todo componente debe pertenecer a **una única categoría**:
+* **Foundations** — Tokens, typography, spacing helpers.
+* **Primitives** — Button, Badge, Input, Icon, Spinner.
+* **Composites** — DataTable, KanbanBoard, SearchPanel.
+* **Layouts** — PageShell, Sidebar, SplitPane.
+* **Patterns** — AI Ghost blocks, Threading.
 
 ---
 
-## 4) Proceso end-to-end (pipeline oficial)
+## 4) Proceso de Desarrollo (Pipeline)
 
-### 4.1 Fase D0 — Diseño (Definition of Ready)
-Un componente entra a desarrollo solo si tiene su Checklist D0 completo:
-- Anatomía definida (slots / regiones / jerarquía)
-- Estados definidos (incluye empty/loading/error)
-- Responsive definido (al menos 2 breakpoints si aplica)
-- A11y definido (teclado + focus + roles)
-- Tokens mapeados (no colores “visuales”, sino roles)
-- Motion definido (duración + easing)
-- Densidad definida (high density vs low density si aplica)
-- Uso de {} y patrones LoopDev si aplica
+### 4.1 Fase B1 — Ensamblaje (Engineering)
+* Arquitectura **Brain vs Body (MVVM)**.
+* Soporte nativo para **Dark / Light mode**.
+* Cero HEX hardcodeados.
+* `Example.tsx` con demostración de overrides.
 
-### 4.2 Fase B1 — Ensamblaje (Implementation Standard)
-- Brain/Body separado (MVVM)
-- Zero hardcoding de hex (ni uno)
-- Soporta dark y light
-- Example.tsx demuestra override de marca
-- Fixtures tipados (sin mocks improvisados)
-- README con API, props, estados y notas para LLM (Fase AI)
-- Metadata indexer block en archivo raíz
-- A11y mínimo: keyboard navigation + focus visible + labels
+### 4.2 Fase Q1 — Calidad (Quality Guard)
+* **Unit Tests:** Cobertura de renderizado y lógica de variantes con Vitest.
+* **A11y:** Navegación por teclado y roles ARIA.
 
-### 4.3 Fase C1 — Revisión (Governance & Indexing)
-- Pasa auditoría automática (Architect) sin violaciones críticas
-- No inline styles (style={{…}}) excepto casos aprobados
-- No accesos globales (window/document) sin guards
-- No dependencias ocultas (CSS global, assets no declarados)
-- Metadata completa: @component, @description, @category
-- API estable + tipado estricto
-- Compatibilidad multitenant verificada
-
-### 4.4 Fase S1 — Publicación a SaaS (Release)
-- Se asigna versión (semver)
-- Se registra en el índice del SaaS
-- Se incluyen notas de release
-- Se etiqueta compatibilidad (tenants / themes)
+### 4.3 Fase D1 — Persistencia (Data Awareness)
+* Integración con el **DynamicThemeProvider**.
+* Registro de metadatos en la base de datos (Component Registry).
 
 ---
 
-## 5) Estructura estándar del componente (carpeta autocontenida)
+## 5) Estructura estándar del componente
 
-Ubicación recomendada: `components/functional/<ComponentName>/`
-
-- `index.tsx` → **The Body** (JSX + composición, sin lógica compleja)
-- `use<ComponentName>.ts` → **The Brain** (estado, efectos, handlers)
-- `components.tsx` → subcomponentes internos (solo uso local)
-- `types.ts` → contratos TypeScript (exportados si aplica)
-- `utils.ts` → helpers puros (sin side-effects)
-- `fixtures.ts` → datos mock tipados
-- `Example.tsx` → demo local tipo story + pruebas de overrides
-- `README.md` → documentación técnica + contexto AI
-- `(opcional) styles.css` → solo si es CSS module/local y justificado
+```
+components/functional/<ComponentName>/
+├── index.tsx           (The Body: JSX Puro)
+├── use<ComponentName>.ts (The Brain: ViewModel/Lógica)
+├── components.tsx      (Sub-componentes internos)
+├── types.ts            (Interfaces TS)
+├── fixtures.ts         (Datos de prueba realistas)
+├── Example.tsx         (Escenario de validación)
+├── README.md           (Documentación técnica y UX)
+└── <ComponentName>.test.tsx (Suite de pruebas obligatoria)
+```
 
 ---
 
 ## 6) Contrato de metadata (Indexer Ready)
 
-Cada archivo raíz público (normalmente index.tsx) debe abrir con:
-
 ```tsx
 /**
  * @component ComponentName
- * @description Breve explicación de qué hace y cuándo usarlo
- * @category Primitives | Composites | Layouts | Patterns | Pages
+ * @description Propósito claro y contexto de uso.
+ * @category Primitives | Composites | Layouts | Patterns
  * @status stable | beta | experimental
+ * @version 1.x.x
  */
 ```
 
 ---
 
-## 7) Tokens y multitenancy
+## 7) Tokens y Multitenancy (Dynamic Theming)
 
-- Prohibición total de Hex en JSX/CSS.
-- Fuente de verdad: Tokens LoopDev + Overrides locales por componente (--comp-prefix).
-
-### 7.1 Mapeo de Tokens Semánticos Oficiales (v1.0)
-Todo diseño y ensamblaje debe usar exclusivamente estos roles:
-
-| Token Semántico | Color Hex | Propósito |
-| :--- | :--- | :--- |
-| `primary` | `#135BEC` | Botones principales, enlaces, branding activo. |
-| `primary-dark` | `#0B46BE` | Estados hover de elementos primarios. |
-| `energy` | `#FFD025` | Highlights técnicos, alertas, puntos de estado IA. |
-| `background-light`| `#F8F9FC` | Fondo base de aplicaciones en modo claro. |
-| `background-dark` | `#0F1115` | Fondo base de aplicaciones en modo oscuro. |
-| `surface-dark` | `#181B21` | Tarjetas y paneles sobre el fondo oscuro. |
-| `border-dark` | `#2D3442` | Líneas de división y bordes en modo oscuro. |
-| `text-main` | `#0F172A` | Texto principal en modo claro / Títulos. |
-| `text-muted` | `#64748B` | Texto secundario, descripciones o captions. |
+* Los componentes deben ser **"Theme Aware"**.
+* **Zero Hardcoding Policy:** 
+    * Prohibido usar HEX incluso en historias de ejemplo. Usar escala estándar de Tailwind (w-1, w-2...).
+    * Prohibido realizar cálculos geométricos en JS. Usar propiedades CSS como `aspect-ratio`.
+* Se deben usar variables CSS de componente (`--comp-*`) que hereden de los tokens globales (`--lpd-*`).
 
 ---
 
 ## 8) Brain vs Body (MVVM LoopDev)
 
-### 8.1 Objetivo
-Testear y mantener el componente sin que la UI esconda estado.
-- **Brain (useX):** estado + handlers + side-effects controlados.
-- **Body (index):** render + composición + wiring de handlers.
-- **components.tsx:** piezas presentacionales (pure UI).
-
-### 8.2 Reglas
-- El Brain retorna un ViewModel (estado derivado + callbacks).
-- El Body no calcula reglas complejas: solo “consume ViewModel”.
+* **Brain:** Solo lógica, estados (`useState`, `useEffect`), y cálculos de clases.
+* **Body:** Solo renderizado. Recibe el "ViewModel" del Brain.
+* **components.tsx:** UI pura y piezas presentacionales.
 
 ---
 
-## 9) Accesibilidad (A11y) como estándar de salida
+## 9) Accesibilidad (Bloqueante)
 
-Bloqueante para SaaS (mínimo):
-- Navegación por teclado completa
-- Focus visible y consistente
-- Roles correctos (buttons, dialogs, menus, lists)
-- Labels accesibles (aria-label, aria-labelledby)
-- Contraste suficiente (especialmente en dark mode)
-- Estados disabled y loading comunicados
+* `focus-visible` obligatorio para navegación por teclado.
+* Contraste WCAG AA en ambos temas.
+* Atributos `aria-*` dinámicos (ej. `aria-busy` durante carga).
 
 ---
 
-## 10) Estados obligatorios y comportamiento consistente
+## 10) Testing Protocol (Vitest)
 
-Todo componente debe contemplar: default, hover/active, focus, disabled, loading, empty, error.
-**Regla crítica:** Los estados no se “inventan” en QA. Se definen en Diseño (D0).
-
----
-
-## 11) Motion: “Loop Momentum”
-
-- **hover:** ~150ms
-- **overlays/drawers:** ~300ms
-- **AI gradients:** 3s–8s (loop continuo)
-- **Curvas:** `cubic-bezier(0.25, 0.1, 0.25, 1.0)` (base)
+Todo componente de producción debe pasar:
+1. **Render Test:** ¿Se muestra el contenido?
+2. **Variant Test:** ¿Cambia la clase CSS al cambiar la prop?
+3. **Action Test:** ¿El `onClick` se dispara? ¿El `disabled` bloquea?
+4. **Icon Test:** Verificación de glifos de Material Symbols.
 
 ---
 
-## 12) Iconografía, tipografía, assets
+## 11) Motion — Loop Momentum
 
-- **Iconos:** lucide-react o Material Symbols Outlined (solo).
-- **Fuentes:** font-sans (Inter) y font-mono (JetBrains Mono).
-- **SVGs:** Prohibido inline SVGs gigantes (usar assets).
-
----
-
-## 13) IA: estándar “AI Augmentation” (Fase 3)
-
-El README debe incluir:
-- Intención del componente (para qué existe).
-- Props principales y ejemplos.
-- “Prompt context” (cómo describirlo para herramientas/LLMs).
-- Fixtures representativos (realistas).
+* Animaciones sincronizadas con `MOTION` tokens.
+* Duraciones estándar: standard (250ms), fast (150ms), slow (400ms).
+* Curvas de aceleración: standard, emphasize, decelerate.
 
 ---
 
-## 14) Testing mínimo (no negociable)
+## 12) IA — AI Augmentation
 
-- **Primitives:** render básico + interacción base (click/focus).
-- **Composites:** al menos 1 test de comportamiento (state -> UI).
-- **Layouts:** test smoke + routing/slots.
+El `README.md` y las `fixtures.ts` deben estar diseñados para ser consumidos por una IA:
+* Explicar la "intención" del componente.
+* Proporcionar datos de ejemplo complejos que simulen respuestas de un LLM.
 
 ---
 
-## 15) Excepciones
+## 13) Excepciones
 
 Cualquier excepción requiere comentario en código con razón + alternativa intentada + ticket de seguimiento.
 
 ---
 
-## 16) Checklists finales (para pegar en PR)
-
-### 16.1 Checklist de Ensamblaje (B1)
-- [ ] Carpeta autocontenida con estructura SSOT
-- [ ] Brain/Body separado
-- [ ] Example.tsx con override de marca
-- [ ] Fixtures.ts tipado y útil
-- [ ] README completo (API + estados + notas IA)
-- [ ] Dark/light ok
-- [ ] A11y mínimo ok
-
-### 16.2 Checklist de Migración SaaS (C1)
-- [ ] Metadata indexer completa
-- [ ] Taxonomía correcta
-- [ ] Auditoría Architect sin críticos
-- [ ] API estable + tipos estrictos
-- [ ] Override multitenant validado
-
----
-
-## 17) Convenciones de nombres y exports
+## 14) Convenciones de nombres y exports
 
 - **Carpeta y export principal:** ComponentName (PascalCase)
 - **Hook:** useComponentName
@@ -280,30 +173,34 @@ Cualquier excepción requiere comentario en código con razón + alternativa int
 
 ---
 
-## 18) Definición de “Done” (DoD)
+## 15) Checklists Finales (Definition of Done)
 
-- **Done (Assembly):** cumple B1 + demo + fixtures + README.
-- **Done (SaaS-ready):** cumple B1 + C1 + tests + versionado.
-- **Done (Stable):** adopción real + cero violaciones + docs maduras.
-
----
-
-## 19) Apéndice: unificación de guías previas
-
-Este protocolo sustituye y unifica: Portabilidad + Atomic Loop, Visual Composition v3.7, LoopDev Ready Standard y AI Augmentation.
+Un componente está **Done** si y solo si:
+* [ ] **Assembly:** cumple B1 + demo + fixtures + README.
+* [ ] **SaaS-ready:** B1 + C1 + tests + versionado.
+* [ ] **Certification:** Sello `Loopdev.lab` visible en Storybook.
+* [ ] **Stable:** adopción real + cero violaciones + docs maduras.
 
 ---
 
-## 20) Plantillas (recomendadas)
+# Reglas de Dependencia entre Fases (Phase Dependency Rules)
 
-### 20.1 Plantilla README (mínima)
-- Qué es / cuándo usarlo
-- API (props + tipos)
-- Estados (loading/empty/error)
-- Theming / Overrides
-- Notas IA
+> **Cada fase de desarrollo SOLO puede consumir componentes definidos en fases anteriores.**
 
-### 20.2 Plantilla Example.tsx (mínima)
-- Render default con fixtures
-- Render con overrides de marca
-- Toggle de estados (loading/empty/error)
+1. ✅ **DEBE** reutilizar componentes previos (ej. Button usa Icon).
+2. ❌ **NO PUEDE** redefinir fundamentos existentes.
+3. ❌ **NO PUEDE** crear variantes paralelas de componentes base.
+
+---
+
+# Compatibilidad de Modo Claro y Oscuro (Theme Mode)
+
+> **Dark-first, pero Light-mode obligatorio.**
+
+* Prohibido asumir un único color de fondo.
+* Prohibido depender de contrastes válidos solo en un modo.
+* Todos los colores deben derivar de tokens semánticos.
+
+---
+
+**Fin del documento — COMPONENT_COMPOSITION_PROTOCOL v1.1 (Complete Edition)**

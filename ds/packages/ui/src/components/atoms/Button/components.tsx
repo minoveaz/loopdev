@@ -23,18 +23,18 @@ export const ButtonContent: React.FC<ButtonContentProps> = ({
         <Icon 
           name="progress_activity" 
           size="md" 
-          className="animate-spin mr-2"
+          className="animate-spin mr-2 shrink-0"
         />
       )}
       
       {showStartIcon && (
-        <Icon name={startIcon} size="md" className="mr-2" />
+        <Icon name={startIcon} size="md" className="mr-2 shrink-0" />
       )}
       
-      <span>{children}</span>
+      <span className="truncate min-w-0">{children}</span>
 
       {endIcon && (
-        <Icon name={endIcon} size="md" className="ml-2" />
+        <Icon name={endIcon} size="md" className="ml-2 shrink-0" />
       )}
     </>
   );

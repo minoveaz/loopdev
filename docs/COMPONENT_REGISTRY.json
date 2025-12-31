@@ -1,0 +1,40 @@
+{
+  "project": "LoopDev SaaS",
+  "registry_version": "1.0",
+  "last_updated": "2026-01-01",
+  "components": [
+    {
+      "id": "button-v1",
+      "name": "Button",
+      "status": "stable",
+      "phase": 1,
+      "capabilities": {
+        "dynamic_theming": true,
+        "dual_icons": true,
+        "loading_state": true
+      }
+    },
+    {
+      "id": "logo-spinner-v1",
+      "name": "LogoSpinner",
+      "status": "stable",
+      "phase": 2,
+      "capabilities": {
+        "momentum_animation": true,
+        "gradient_sync": true,
+        "extreme_scaling": true
+      }
+    },
+    {
+      "id": "ai-loader-v1",
+      "name": "AILoader",
+      "status": "stable",
+      "phase": 2,
+      "capabilities": {
+        "typewriter_effect": true,
+        "dynamic_messages": true,
+        "innovation_brackets": true
+      }
+    }
+  ]
+}

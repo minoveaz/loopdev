@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { MOTION } from './index';
+import { CertificationStamp } from '../CertificationStamp';
 
 const MotionShowcase = () => {
   const [selectedDuration, setSelectedDuration] = useState<keyof typeof MOTION.duration>('standard');
@@ -93,6 +94,27 @@ const meta: Meta = {
   title: 'Atoms/Foundations/Motion',
   component: MotionShowcase,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
+  decorators: [
+    (Story) => (
+      <div className="relative w-full min-h-[600px] flex flex-col items-center justify-center p-8">
+        <div className="absolute top-8 left-8 z-50">
+          <CertificationStamp 
+            status="experimental"
+            version="v1.0.0" 
+            phase={0} 
+            date="2026-01-01" 
+            className="scale-90 origin-top-left opacity-90 hover:opacity-100 transition-opacity shadow-2xl"
+          />
+        </div>
+        <div className="flex items-center justify-center w-full h-full pt-24">
+          <Story />
+        </div>
+      </div>
+    ),
+  ],
 };
 
 export default meta;

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Z_INDEX } from './index';
+import { CertificationStamp } from '../CertificationStamp';
 
 const ZIndexShowcase = () => {
   const layers = Object.entries(Z_INDEX).sort((a, b) => a[1] - b[1]);
@@ -49,6 +50,27 @@ const meta: Meta = {
   title: 'Atoms/Foundations/ZIndex',
   component: ZIndexShowcase,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
+  decorators: [
+    (Story) => (
+      <div className="relative w-full min-h-[700px] flex flex-col items-center justify-center p-8">
+        <div className="absolute top-8 left-8 z-50">
+          <CertificationStamp 
+            status="experimental"
+            version="v1.0.0" 
+            phase={0} 
+            date="2026-01-01" 
+            className="scale-90 origin-top-left opacity-90 hover:opacity-100 transition-opacity shadow-2xl"
+          />
+        </div>
+        <div className="flex items-center justify-center w-full h-full pt-32">
+          <Story />
+        </div>
+      </div>
+    ),
+  ],
 };
 
 export default meta;

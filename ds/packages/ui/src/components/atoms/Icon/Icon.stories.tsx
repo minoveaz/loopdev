@@ -2,6 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from './index';
 import { ICON_REGISTRY } from '../IconRegistry';
+import { CertificationStamp } from '../CertificationStamp';
 
 const meta: Meta<typeof Icon> = {
   title: 'Atoms/Foundations/Icon',
@@ -18,6 +19,27 @@ const meta: Meta<typeof Icon> = {
     },
     color: { control: 'color' },
   },
+  parameters: {
+    layout: 'fullscreen',
+  },
+  decorators: [
+    (Story) => (
+      <div className="relative w-full min-h-[300px] flex flex-col items-center justify-center p-8">
+        <div className="absolute top-8 left-8 z-50">
+          <CertificationStamp 
+            status="beta"
+            version="v1.0.0" 
+            phase={0} 
+            date="2026-01-01" 
+            className="scale-90 origin-top-left opacity-90 hover:opacity-100 transition-opacity shadow-2xl"
+          />
+        </div>
+        <div className="flex items-center justify-center w-full h-full pt-16">
+          <Story />
+        </div>
+      </div>
+    ),
+  ],
 };
 
 export default meta;
@@ -41,11 +63,11 @@ export const Boxed: Story = {
 
 export const AllIcons: Story = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '20px' }}>
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 w-full max-w-4xl mx-auto">
       {Object.entries(ICON_REGISTRY.actions).map(([key, name]) => (
-        <div key={key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+        <div key={key} className="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
           <Icon name={name} variant="boxed" size="md" />
-          <span style={{ fontSize: '10px', fontWeight: 'bold', fontFamily: 'monospace' }}>{key}</span>
+          <span className="text-[10px] font-bold font-mono text-slate-500 uppercase tracking-tighter">{key}</span>
         </div>
       ))}
     </div>

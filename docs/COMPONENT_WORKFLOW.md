@@ -46,6 +46,7 @@ Garantizan que el componente sea "Headless" visualmente.
 - [ ] **Theme Reactive:** 100% funcional con cualquier combinación de colores de la DB.
 - [ ] **Vitest Suite:** Cobertura de casos de borde (Edge Cases).
 - [ ] **A11y:** Navegación por teclado y lectores de pantalla.
+- [ ] **Audit Log Updated:** Registro de la intervención en `ENGINEERING_LOG.md`.
 
 ---
 

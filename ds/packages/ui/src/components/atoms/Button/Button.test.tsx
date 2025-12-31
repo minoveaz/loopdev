@@ -40,4 +40,20 @@ describe('Button Primitive', () => {
     expect(screen.getByText('arrow_forward')).toBeInTheDocument();
   });
 
+  it('handles extremely long text without crashing', () => {
+    const longText = 'A'.repeat(1000);
+    render(<Button>{longText}</Button>);
+    expect(screen.getByText(longText)).toBeInTheDocument();
+  });
+
+  it('maintains structure when both icons and loading state are active', () => {
+    render(<Button startIcon="add" endIcon="check" isLoading>Text</Button>);
+    // El startIcon debe desaparecer para dar lugar al spinner
+    expect(screen.queryByText('add')).not.toBeInTheDocument();
+    // El spinner debe estar presente
+    expect(screen.getByText('progress_activity')).toBeInTheDocument();
+    // El endIcon debe permanecer
+    expect(screen.getByText('check')).toBeInTheDocument();
+  });
+
 });

@@ -4,7 +4,7 @@ export const useButton = (props: any) => {
   // Fix: Correctly destructure children and className from props, as they are now explicitly defined in ButtonProps
   const { variant = 'primary', size = 'md', fullWidth = false, isLoading, children, className, startIcon, endIcon, disabled, ...rest } = props;
 
-  const baseStyles = "inline-flex items-center justify-center font-bold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseStyles = "inline-flex items-center justify-center font-bold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed max-w-full overflow-hidden";
 
   const variantStyles = useMemo(() => {
     switch (variant) {

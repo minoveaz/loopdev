@@ -59,4 +59,11 @@ const renderWithProviders = (ui: React.ReactElement) => {
 3. **NO** dejar componentes sin test al promover a producción.
 
 ---
+
+## ⚠️ Advertencias Técnicas (Layout Blindness)
+**Importante:** Vitest y JSDOM simulan el DOM pero **no tienen motor de renderizado (layout engine)**.
+- **No detectan:** Desbordamientos (overflow), colisiones flexbox, fallos de `z-index` visual o problemas de `aspect-ratio`.
+- **Mitigación:** Estos casos deben validarse mediante **Historias de Estrés** en Storybook y, en el futuro, con **Visual Regression Testing** (Playwright/Chromatic).
+
+---
 *Protocolo de Ingeniería de Calidad - LoopDev*
