@@ -18,7 +18,7 @@ const preview: Preview = {
   parameters: {
     layout: 'centered',
     backgrounds: {
-      disable: true, // Disable default backgrounds to use our own logic
+      disable: true,
     }
   },
   globalTypes: {
@@ -54,7 +54,6 @@ const preview: Preview = {
     (Story, context) => {
       const { themeMode, tenant } = context.globals;
       
-      // Update the class on the html element for Tailwind's 'class' dark mode strategy
       useEffect(() => {
         const html = document.documentElement;
         if (themeMode === 'dark') {
@@ -70,7 +69,7 @@ const preview: Preview = {
         <TenantProvider tenant={tenant}>
           <LayoutProvider>
             <div 
-              className={`${themeClass} ${themeMode === 'dark' ? 'dark' : ''}`}
+              className={`${themeClass} ${themeMode === 'dark' ? 'dark' : ''} bg-grid-40`}
               style={{ 
                 fontFamily: 'Inter, sans-serif',
                 color: 'var(--lpd-color-text-base)',
@@ -81,7 +80,8 @@ const preview: Preview = {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'background-color 0.3s ease, color 0.3s ease'
+                transition: 'background-color 0.3s ease, color 0.3s ease',
+                position: 'relative'
               }}
             >
               <style>
