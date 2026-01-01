@@ -65,6 +65,28 @@ UI (ds)
 
 ---
 
+## 📜 ADR 004: Contract-First Architecture
+
+Para eliminar la discrepancia de datos entre Frontend y Backend, establecemos una "Constitución de Datos" compartida.
+
+### 1. El Paquete `@loopdev/contracts`
+- **Ubicación:** `loopdev/packages/contracts`.
+- **Contenido:** Esquemas de validación (Zod) e interfaces TypeScript inferidas.
+- **Responsabilidad:** Definir la forma de los datos (Dominio) y los mensajes (API).
+
+### 2. Regla de "Single Source of Truth"
+- El Frontend **NO** define interfaces manuales para las respuestas de API. Importa el tipo del contrato.
+- El Backend **NO** valida el body de un request manualmente. Usa `schema.parse()`.
+- **Database Alignment:** Las migraciones de SQL deben reflejar fielmente el contrato Zod.
+
+### 3. Flujo de Desarrollo (The Phase 0 Rule)
+Antes de escribir cualquier lógica de UI o Endpoint:
+1.  Definir el Dominio en texto (`DOMAIN.md`).
+2.  Definir el Contrato en código (`brand.schema.ts`).
+3.  Solo entonces, implementar en paralelo Front y Back.
+
+---
+
 ## 🛠️ Estándares de Ingeniería
 
 - **Dynamic Navigation**: El Sidebar se construye leyendo un registro de módulos activos.
@@ -85,7 +107,10 @@ UI (ds)
 - `modp-core/`: El motor común (Auth, SDK, i18n).
 - `mod-auditor/`: Herramienta de DesignOps.
 
-### 3. Design System (`/ds`)
+### 3. Shared Logic (`/packages`)
+- `packages/contracts/`: Esquemas Zod y Tipos compartidos.
+
+### 4. Design System (`/ds`)
 - `packages/ui/`: Librería `@loopdev/ui`.
 - `packages/tokens/`: `@loopdev/tokens`.
 - `apps/docs/`: Storybook oficial.

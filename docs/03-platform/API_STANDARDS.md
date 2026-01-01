@@ -1,74 +1,111 @@
-# API Standards v1.0
+# API & Communication Standards v1.0
 
-## 🎯 Propósito
-Definir los estándares de comunicación entre el Frontend y el Backend para garantizar consistencia, seguridad y facilidad de integración en el ecosistema LoopDev.
+> **Authority:** Platform Engineering
+> **Scope:** All REST APIs within `loopdev-os` (Next.js API Routes, Supabase Functions).
+> **Enforcement:** Mandatory for Code Review.
 
 ---
 
-## 1. Formato de Respuesta Único
-Todas las respuestas de la API deben seguir esta estructura base:
+## 1. Core Philosophy: Predictability
+The API is a product used by our Frontend developers. It must be predictable, typed, and semantic.
+*   **JSON Only:** All requests and responses must use `Content-Type: application/json`.
+*   **RESTful-ish:** We use HTTP verbs (GET, POST, PATCH, DELETE) semantically, but pragmatism wins over dogma.
 
-```json
-{
-  "success": boolean,
-  "data": null | object | array,
-  "error": null | {
-    "code": string,      // Ej: "AUTH_EXPIRED"
-    "message": string,   // Mensaje legible para dev
-    "details": object,   // Opcional: errores de validación
-    "traceId": string    // Para seguimiento en logs
-  },
-  "meta": {              // Opcional: paginación, etc.
-    "timestamp": string
-  }
+---
+
+## 2. The Response Envelope
+We never return raw data arrays or primitives at the root level. All successful responses use a standard envelope.
+
+### 2.1 Success Response (`2xx`)
+```typescript
+interface SuccessResponse<T> {
+  data: T;           // The resource or collection requested
+  meta?: {           // Optional metadata (pagination, tracing)
+    page?: number;
+    limit?: number;
+    total?: number;
+    traceId: string;
+  };
+}
+```
+
+### 2.2 Error Response (`4xx`, `5xx`)
+Errors must be machine-readable first, human-readable second.
+```typescript
+interface ErrorResponse {
+  error: {
+    code: string;        // Immutable string code (e.g., "RESOURCE_NOT_FOUND")
+    message: string;     // English human-readable description (for devs/logs)
+    details?: any;       // Validation errors (Zod issues)
+    traceId: string;     // Correlation ID for logs
+  };
 }
 ```
 
 ---
 
-## 2. Naming Conventions (Endpoints)
-- **Casing:** `kebab-case` para las URLs.
-- **Pluralización:** Usar sustantivos en plural para las colecciones (ej: `/tenants`, `/brands`).
-- **Versatilidad:** Prefijo `/v1/` obligatorio.
+## 3. Standard Data Types
+
+| Data Type | Format | Example | Why? |
+| :--- | :--- | :--- | :--- |
+| **ID** | UUID v4 | `"550e8400-e29b..."` | Security (unpredictable) & Mergability. |
+| **Date** | ISO-8601 (UTC) | `"2024-01-30T14:00:00Z"` | No timezone hell. Frontend formats to local. |
+| **Money** | Integer (Cents) | `1999` (= $19.99) | Floating point math errors (`0.1 + 0.2 != 0.3`). |
+| **Flags** | Boolean | `true` / `false` | No `0` or `1` or `"yes"`. |
 
 ---
 
-## 3. Paginación
-- Estándar recomendado: **Cursor-based pagination** para colecciones grandes.
-- Parámetros: `limit`, `cursor`.
+## 4. HTTP Status Codes (Semantics)
+
+We restrict usage to a simplified subset of HTTP codes to reduce cognitive load.
+
+| Code | Meaning | Context |
+| :--- | :--- | :--- |
+| **200** | OK | Generic success (GET, PATCH). |
+| **201** | Created | Resource created successfully (POST). |
+| **204** | No Content | Action successful, nothing to return (DELETE). |
+| **400** | Bad Request | Validation failed (Zod error). |
+| **401** | Unauthorized | User is not logged in (Missing/Invalid Token). |
+| **403** | Forbidden | User logged in but lacks Permission (RBAC). |
+| **404** | Not Found | Resource does not exist (or tenant mismatch). |
+| **409** | Conflict | Domain rule violation (e.g., Duplicate Email). |
+| **429** | Too Many Requests | Rate limit hit. |
+| **500** | Internal Error | Unhandled exception (Bug). |
 
 ---
 
-## 4. Códigos de Estado HTTP
-- `200 OK`: Éxito con retorno de datos.
-- `201 Created`: Recurso creado exitosamente.
-- `400 Bad Request`: Error de validación en el cliente.
-- `401 Unauthorized`: No hay sesión activa.
-- `403 Forbidden`: Sesión activa pero sin permisos para el recurso/tenant.
-- `404 Not Found`: Recurso no existe.
-- `500 Internal Server Error`: Fallo no controlado en el servidor.
+## 5. Pagination Standard
+We default to **Offset-based** pagination for admin tables.
 
----
+**Query Params:**
+*   `?page=1` (default)
+*   `?limit=20` (default, max 100)
 
-## 5. Notificaciones en Tiempo Real (Events)
-Cuando el backend emite una notificación vía WebSocket o SSE, el payload debe seguir este contrato para ser compatible con el **Toast System**:
-
+**Response Meta:**
 ```json
-{
-  "event": "notification_trigger",
-  "payload": {
-    "tenantId": "uuid",
-    "variant": "success | error | warning | info",
-    "title": "string",
-    "description": "string",
-    "metadata": "string", // Ej: Error code o ID
-    "action": {
-      "label": "string",
-      "callback_url": "string"
-    }
-  }
+"meta": {
+  "page": 1,
+  "limit": 20,
+  "total": 154,
+  "totalPages": 8
 }
 ```
 
 ---
-*Gobernanza de Plataforma - LoopDev Engineering*
+
+## 6. Error Catalog (Common)
+
+| Error Code | Status | Description |
+| :--- | :--- | :--- |
+| `VALIDATION_ERROR` | 400 | Zod schema validation failed. Returns `details` array. |
+| `TENANT_MISMATCH` | 403 | Attempting to access data from another tenant. |
+| `INSUFFICIENT_PERMISSIONS` | 403 | User role does not allow this action. |
+| `RESOURCE_NOT_FOUND` | 404 | ID does not exist or was deleted. |
+| `INTERNAL_SERVER_ERROR` | 500 | Something exploded. Check logs with `traceId`. |
+
+---
+
+## 7. Versioning Strategy
+*   **URL Versioning:** `/api/v1/...`
+*   Changes that break the contract require a new version (v2).
+*   Adding fields is **non-breaking**. Removing/Renaming fields is **breaking**.

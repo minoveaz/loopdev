@@ -10,16 +10,16 @@
 
 ### 0.1 Dominio y Estándares
 - [x] **Dominio:** Crear `docs/05-operations/BRAND_HUB_DOMAIN.md`. (✅ Completado)
-- [ ] **API Standard:** Crear `docs/03-platform/API_STANDARDS.md` definiendo:
-    - [ ] Envelope: `{ data: T, meta: Paginator, error: null }`
-    - [ ] HTTP Codes: `200`, `201`, `400`, `401`, `403`, `404`, `500`.
-    - [ ] ISO-8601 para fechas.
+- [x] **API Standard:** Crear `docs/03-platform/API_STANDARDS.md` definiendo:
+    - [x] Envelope: `{ data: T, meta: Paginator, error: null }`
+    - [x] HTTP Codes: `200`, `201`, `400`, `401`, `403`, `404`, `500`.
+    - [x] ISO-8601 para fechas.
 
 ### 0.2 Package `@loopdev/contracts`
 Crear un workspace interno para compartir tipos entre Front y Back.
-- [ ] **Scaffolding:** `packages/contracts/package.json` (TS only, no react).
-- [ ] **Config:** `tsconfig.json` estricto.
-- [ ] **Schema: Brand:** Crear `src/brands/brand.schema.ts` (Zod).
+- [x] **Scaffolding:** `packages/contracts/package.json` (TS only, no react).
+- [x] **Config:** `tsconfig.json` estricto.
+- [x] **Schema: Brand:** Crear `src/brands/brand.schema.ts` (Zod).
     - `id`: uuid
     - `tenant_id`: uuid
     - `name`: string (min 2)
@@ -27,7 +27,7 @@ Crear un workspace interno para compartir tipos entre Front y Back.
     - `status`: 'draft' | 'published' | 'archived'
 - [ ] **Schema: Asset:** Crear `src/brands/asset.schema.ts`.
 - [ ] **Schema: Palette:** Crear `src/brands/palette.schema.ts` (Tokens).
-- [ ] **Export:** `index.ts` exportando tipos inferidos (`z.infer`).
+- [x] **Export:** `index.ts` exportando tipos inferidos (`z.infer`).
 
 ---
 
@@ -45,29 +45,28 @@ Crear un workspace interno para compartir tipos entre Front y Back.
     - Policy: "Admins can create/edit brands of their own tenant".
 - [ ] **Seeding:** Script SQL para poblar 3 marcas de prueba en el tenant `demo`.
 
-### 1.2 API Core (Next.js Handlers)
-Rutas en `apps/loopdev-os/app/api/...`
-- [ ] **GET /api/v1/brands:**
-    - Validar sesión (Supabase Auth).
-    - Leer `tenant_id` del usuario.
-    - Select supabase + Paginación.
-- [ ] **POST /api/v1/brands:**
-    - Validar Body con Zod (`@loopdev/contracts`).
-    - Insert supabase.
-    - Retornar `201` + objeto creado.
-- [ ] **GET /api/v1/brands/[id]:**
-    - Validar ownership (RLS lo hace, pero manejar 404).
+### 1.2 Next.js Architecture (The App Shell)
+**Objetivo:** Configurar el entorno Next.js para soportar Auth y Multi-tenancy.
+- [x] **Scaffolding:** Crear `apps/loopdev-os` (Next.js App Router + TypeScript). ✅
+- [x] **Monorepo Link:** Conectar `@loopdev/ui` y `@loopdev/contracts`. ✅
+- [x] **Supabase SSR:** Instalar `@supabase/ssr` y configurar clientes (Server/Client/Middleware). ✅
+- [x] **Auth Middleware:** Proteger rutas `/dashboard/*` y redirigir a Login. ✅
+- [x] **Data Layer:** Configurar `TanStack Query` y `QueryProvider`. ✅
+- [ ] **API Routes (Optional):** Crear `/api/v1/brands` solo si la lógica RLS es insuficiente.
 
-### 1.3 Testing de Infra
-- [ ] **Curl / Bruno Collection:** Verificar endpoints manualmente.
-- [ ] **Audit Log check:** Verificar que `created_by` se guardó correctamente.
+### 1.3 Testing de Infra infraestructura activa en Supabase Cloud. ✅
 
 ---
 
 ## 🟢 FASE 2: UI Vertical Slice (The Face)
 **Objetivo:** Conectar el Frontend a la API. Primera interacción real del usuario.
 
-### 2.1 Service Layer (Frontend)
+### 2.1 Authentication Gate
+- [ ] **DS Dependency:** Certificar componente `Input` en `@loopdev/ui`.
+- [ ] **Login Page:** Implementar `/src/app/login/page.tsx` usando `Button` y `Input`.
+- [ ] **Auth Callback:** Configurar `/src/app/auth/callback/route.ts` para manejo de sesiones.
+
+### 2.2 Service Layer (Frontend)
 - [ ] **Fetcher:** Implementar `lib/api-client.ts` (wrapper de fetch con manejo de tokens).
 - [ ] **Hooks:** Implementar `hooks/useBrands.ts` (TanStack Query).
     - `useBrandsList()`
