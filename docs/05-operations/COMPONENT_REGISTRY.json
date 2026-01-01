@@ -4,15 +4,21 @@
   "last_updated": "2026-01-02T19:45:00Z",
   "components": [
     {
-      "id": "button-v1",
+      "id": "button-v2",
       "name": "Button",
       "status": "stable",
-      "phase": 1,
-      "certification_timestamp": "2026-01-01T14:00:00Z",
+      "phase": 2,
+      "certification": {
+        "front": "certified",
+        "infra": "certified"
+      },
+      "certification_timestamp": "2026-01-02T19:50:00Z",
       "capabilities": {
         "dynamic_theming": true,
         "dual_icons": true,
-        "loading_state": true
+        "loading_state": true,
+        "rbac_security": true,
+        "auto_disable_on_forbidden": true
       }
     },
     {

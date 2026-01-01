@@ -2,6 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './index';
 import { CertificationStamp } from '../CertificationStamp';
+import { InfraStamp } from '../InfraStamp';
 
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Primitives/Button',
@@ -26,12 +27,19 @@ const meta: Meta<typeof Button> = {
   decorators: [
     (Story) => (
       <div className="relative w-full min-h-[400px] flex flex-col items-center justify-center p-8">
-        <div className="absolute top-8 left-8 z-50">
+        <div className="absolute top-8 left-8 flex flex-col gap-4 z-50">
           <CertificationStamp 
-            version="v1.2.1" 
-            phase={1} 
-            date="2026-01-01" 
-            className="scale-90 origin-top-left opacity-90 hover:opacity-100 transition-opacity shadow-2xl"
+            status="certified"
+            version="v2.0.0" 
+            phase={2} 
+            date="2026-01-02" 
+            className="scale-90 origin-top-left opacity-90 shadow-2xl"
+          />
+          <InfraStamp 
+            status="certified"
+            layer="security"
+            date="2026-01-02"
+            className="scale-90 origin-top-left opacity-90 shadow-xl"
           />
         </div>
         <div className="flex items-center justify-center w-full h-full pt-12">

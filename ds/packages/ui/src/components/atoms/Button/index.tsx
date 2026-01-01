@@ -9,6 +9,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   isLoading?: boolean;
   startIcon?: string;
   endIcon?: string;
+  /**
+   * RBAC Security: The required permission to interact with this button.
+   * If the user lacks this permission, the button is automatically disabled.
+   * @example "create:user"
+   */
+  permission?: string;
 }
 
 /**

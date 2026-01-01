@@ -1,8 +1,13 @@
 import { useMemo } from 'react';
+import { useAuth } from '../../../modules/auth';
 
 export const useButton = (props: any) => {
   // Fix: Correctly destructure children and className from props, as they are now explicitly defined in ButtonProps
-  const { variant = 'primary', size = 'md', fullWidth = false, isLoading, children, className, startIcon, endIcon, disabled, ...rest } = props;
+  const { variant = 'primary', size = 'md', fullWidth = false, isLoading, children, className, startIcon, endIcon, disabled, permission, ...rest } = props;
+
+  // RBAC Integration (Infra Awareness)
+  const { hasPermission } = useAuth();
+  const isAllowed = permission ? hasPermission(permission) : true;
 
   const baseStyles = "inline-flex items-center justify-center font-bold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed max-w-full overflow-hidden";
 
@@ -29,18 +34,27 @@ export const useButton = (props: any) => {
 
   const widthStyle = fullWidth ? "w-full" : "";
 
-  const finalClassName = `${baseStyles} ${variantStyles} ${sizeStyles} ${widthStyle} ${className || ''}`;
+  // Logic Upgrade: Button also gets class 'rbac-restricted' if blocked by permission for easier testing
+  const rbacStyle = !isAllowed ? "opacity-40 cursor-not-allowed grayscale" : "";
 
-  // Lógica crítica: El botón se deshabilita si está disabled O si está cargando
-  const isDisabled = disabled || isLoading;
+  const finalClassName = `${baseStyles} ${variantStyles} ${sizeStyles} ${widthStyle} ${rbacStyle} ${className || ''}`;
+
+  // Lógica crítica: El botón se deshabilita si está disabled, cargando O si falta el permiso
+  const isDisabled = disabled || isLoading || !isAllowed;
+
+  // Accesibilidad: Si está deshabilitado por permisos, explicamos por qué en el title
+  const title = !isAllowed ? "No tienes permisos para realizar esta acción." : props.title;
 
   return {
     finalClassName,
     isLoading,
-    startIcon, // Pasamos explícitamente startIcon para que index.tsx lo reciba
-    endIcon,   // Pasamos explícitamente endIcon
+    startIcon, 
+    endIcon,   
     children,
-    disabled: isDisabled, // Override del prop disabled original
+    disabled: isDisabled, 
+    title,
+    'data-permission': permission, // Telemetría
+    'aria-disabled': isDisabled,
     ...rest,
   };
 };
