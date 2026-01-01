@@ -15,7 +15,7 @@ Este protocolo **opera sobre** y **depende explícitamente de**:
 
 * **VISUAL_COMPOSITION_SYSTEM v3.8** (fundamentos visuales)
 * **COMPONENT_TESTING_PROTOCOL v1.0** (estándares de calidad)
-* **COMPONENT_WORKFLOW v1.2** (gestión ágil y persistencia de datos)
+* **COMPONENT_WORKFLOW v1.5** (gestión ágil y persistencia de datos)
 
 ---
 
@@ -64,7 +64,7 @@ Todo componente debe pertenecer a **una única categoría**:
 * Arquitectura **Brain vs Body (MVVM)**.
 * Soporte nativo para **Dark / Light mode**.
 * Cero HEX hardcodeados.
-* `Example.tsx` con demostración de overrides.
+* Historias de Storybook demostrando todos los estados.
 
 ### 4.2 Fase Q1 — Calidad (Quality Guard)
 * **Unit Tests:** Cobertura de renderizado y lógica de variantes con Vitest.

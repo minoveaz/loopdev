@@ -2,10 +2,11 @@ import type { Config } from 'tailwindcss';
 import sharedConfig from '@loopdev/tailwind-config';
 
 const config: Config = {
+  presets: [sharedConfig],
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  presets: [sharedConfig],
+  darkMode: 'class', // Forzamos el modo clase para Storybook y SaaS
   theme: {
     extend: {
       colors: {
@@ -52,7 +53,6 @@ const config: Config = {
         'innovation-soft-purple': {
           DEFAULT: 'rgba(147, 51, 234, 0.1)',
         },
-        // Movido aquí para que bg-border-subtle funcione
         'border-subtle': 'var(--lpd-color-border-subtle, #e2e8f0)',
       },
       backgroundImage: {

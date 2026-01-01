@@ -11,6 +11,7 @@
   .dark {
     --grid-line-color: rgba(255, 255, 255, 0.04);
     --dot-color: rgba(255, 255, 255, 0.1);
+    color: var(--lpd-color-text-base);
   }
 
   html, body {

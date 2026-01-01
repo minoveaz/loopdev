@@ -17,7 +17,10 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
 
 - **Fases Restantes:**
   - **Básicas:** El "qué" y "para qué".
-  - **Estrés:** Puntos de quiebre (Texto masivo, contenedores estrechos).
+  - **Estrés:** Puntos de quiebre técnicos.
+    - **Contenido masivo:** Textos largos y traducciones.
+    - **Contenedores estrechos:** Adaptabilidad visual.
+    - **Contraste Extremo (NUEVO):** Validación de legibilidad sobre el fondo más oscuro y más claro permitido.
   - **Multitenancy:** Adaptabilidad a 100+ clientes (Tokens dinámicos).
 
 - **Blueprint Validated:** Diseño aprobado visualmente en `mockv2`.
@@ -35,6 +38,7 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
 
 ## 🔍 Fase 3: Auditoría Externa
 - **Action:** El Auditor independiente valida el código contra el `userHistories.md`.
+- **Tools:** Uso de `AUDIT_UI_PROMPT.md` para frontend o `AUDIT_INFRA_PROMPT.md` para plataforma.
 - **Checkpoint Visual:** ¿El componente respeta los 4 pilares del Bloque 0?
 
 ---

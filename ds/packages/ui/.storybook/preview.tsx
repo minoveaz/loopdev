@@ -12,6 +12,7 @@ import { TenantProvider } from "../src/providers/tenant-provider";
 import { LayoutProvider } from "../src/providers/layout-provider";
 import { DynamicThemeProvider } from "../src/providers/dynamic-theme-provider";
 
+// Componente Wrapper para manejar la lógica de los Globales de Storybook
 const StoryWrapper = ({ children, context }: any) => {
   const { themeMode, primaryColor, energyColor } = context.globals;
   
@@ -24,6 +25,7 @@ const StoryWrapper = ({ children, context }: any) => {
     }
   }, [themeMode]);
 
+  // Sincronizamos con el DynamicThemeProvider
   const dbConfig = React.useMemo(() => ({
     colors: {
       primary: primaryColor,
@@ -39,20 +41,21 @@ const StoryWrapper = ({ children, context }: any) => {
       <TenantProvider tenant="loopdev">
         <LayoutProvider>
           <div 
-            className={`${themeMode === 'dark' ? 'dark' : ''} bg-grid-40`}
+            className={`${themeMode === 'dark' ? 'dark' : ''} bg-grid-40 min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300`}
             style={{ 
               fontFamily: 'Inter, sans-serif',
-              color: 'var(--lpd-color-text-base)',
-              background: 'var(--lpd-color-bg-base)',
               padding: '2rem',
-              minHeight: '100vh',
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'background-color 0.3s ease, color 0.3s ease'
+              position: 'relative'
             }}
           >
+            {/* Inject Material Symbols configuration for the iframe */}
+            <style>
+              {`
+                .material-symbols-outlined {
+                  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+                }
+              `}
+            </style>
             {children}
           </div>
         </LayoutProvider>
@@ -63,7 +66,7 @@ const StoryWrapper = ({ children, context }: any) => {
 
 const preview: Preview = {
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
     backgrounds: { disable: true }
   },
   globalTypes: {
