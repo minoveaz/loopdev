@@ -147,3 +147,17 @@ El módulo Brand Hub se considera terminado cuando:
 3. Se pueden subir assets y se ven en la galería.
 4. No hay errores de consola ni de tipos.
 5. El código pasa el linter y build.
+
+---
+
+## 🔵 FASE 6: Automatización de Tooling (The Catalyst)
+**Objetivo:** Crear herramientas internas que aceleren el ciclo de diseño a producción.
+
+> ⚠️ **ESTADO: DEUDA TÉCNICA**
+> La implementación del HTML Ingestor y la unificación del laboratorio (`mockv2` -> `loopdev/apps/lab`) se posponen para priorizar la infraestructura de Layouts v1.
+
+### 6.1 HTML Ingestor
+- [ ] **Scoping:** Definir la arquitectura del módulo `mod-html-ingestor`.
+- [ ] **Core Logic:** Implementar el parser de HTML a React con `cheerio`.
+- [ ] **UI:** Crear la interfaz en Marketing Studio para la subida de archivos.
+- [ ] **CI/CD:** Generar PRs automáticos con los componentes convertidos.

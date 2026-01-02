@@ -1,0 +1,49 @@
+# 🧱 Layout System — LoopDev (Complete v1)
+
+> **Estado:** Activo
+> **Tipo:** Infraestructura de UX / Plataforma
+> **Alcance:** Apps · Product Modules · Platform Modules
+> **Objetivo:** Definir un **sistema de layouts estándar, reutilizable y gobernado** que soporte todo el ecosistema LoopDev.
+
+---
+
+## 0️⃣ Principio rector
+> **Los layouts son infraestructura, no decoración.**
+- Un layout **no contiene lógica de negocio**.
+- Un layout define **zonas, responsabilidades y límites**.
+- Los layouts viven en `@loopdev/ui/src/components/layout`.
+
+---
+
+## 1️⃣ Layouts oficiales (v1)
+- **App Shell:** Contenedor raíz del SaaS (Header + Sidebar + Main).
+- **Module Workspace:** Base para vistas internas de un módulo.
+- **Page:** Plantilla de página estándar (Formularios, Dashboards).
+- **Split View:** Trabajo dual (Lista ↔ Inspector).
+- **Settings:** Configuración y preferencias.
+- **Public:** Vistas no autenticadas (Login, Landing).
+
+---
+
+## 🛡️ Protocolo de Certificación de Layouts (🔵🔵)
+
+Para alcanzar el estatus **Certified v1 — Full**, un Layout debe superar los 4 Jueces Especializados:
+
+### 1. Test de Composición (Slots) — [Vitest]
+- **Validación:** El layout debe renderizar correctamente sus huecos dinámicos (Header Slot, Sidebar Slot, Content Slot).
+- **Regla:** Los slots no deben romperse si se les pasa contenido nulo o vacío.
+
+### 2. Test de Resiliencia de Contenedor — [Chromatic]
+- **Validación:** El comportamiento del scroll y las áreas fijas debe ser infalible.
+- **Escenario de Estrés:** Validar historias con "Contenido Infinito" para asegurar que el Header/Sidebar permanecen estables.
+
+### 3. Test de Adaptabilidad (Responsive) — [Playwright]
+- **Validación:** El layout debe ser operativo en Desktop (1440px), Tablet (768px) y Mobile (375px).
+- **Gate:** En móvil, el sidebar debe colapsar o transicionar a un menú accesible.
+
+### 4. Test de Integridad de Superficie — [Axe-core]
+- **Validación:** Los layouts definen las grandes superficies (`Deep Space`, `Surface`).
+- **A11y:** El contraste en el fondo del layout debe garantizar legibilidad WCAG AA para cualquier componente hijo en ambos temas.
+
+---
+*Gobernanza de Layouts - LoopDev Engineering Board*

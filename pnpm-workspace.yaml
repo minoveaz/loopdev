@@ -11,3 +11,4 @@ packages:
   
   # Applications Layer (Products)
   - 'apps/*'
+  - 'mockv2' # Agregado para que Turbo/PNPM reconozcan el lab de mockv2

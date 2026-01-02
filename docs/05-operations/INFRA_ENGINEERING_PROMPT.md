@@ -56,11 +56,19 @@ Todo desarrollo debe integrar simultáneamente tres dimensiones:
 
 ---
 
-## 🏁 Certificación
-Un trabajo se considera exitoso solo si:
-- Cumple el DoD de Infraestructura.
-- Pasa la `INFRA_CERTIFICATION_CHECKLIST`.
-- El código es 100% auditable sin conocimiento implícito.
+## 🛡️ The Quality Shield (Backend & Security)
+Para alcanzar el estatus Infra_Certified, cada entrega debe:
+1. **Snyk Scan:** Superar obligatoriamente el escaneo de vulnerabilidades y fugas de secretos (`npx snyk test --all-projects`).
+2. **Contracts Gate:** Cualquier cambio en esquemas o API debe actualizar `@loopdev/contracts` y registrar un `changeset`.
+3. **API Integrity:** Validar la consistencia de datos y errores mediante tests funcionales en Playwright.
 
 ---
-*Protocolo de Ingeniería de Plataforma - LoopDev Engineering Board v1.0*
+
+## 🏁 Certificación
+Un trabajo se considera exitoso solo si:
+- Cumple el DoD de Infraestructura y el Snyk Scan no detecta vulnerabilidades críticas.
+- Se ha creado el Changeset correspondiente para asegurar la trazabilidad del release.
+- El código es 100% auditable, multi-tenant safe y cumple con el RBAC v1.
+
+---
+*Protocolo de Ingeniería de Plataforma - LoopDev Engineering Board v1.1*
