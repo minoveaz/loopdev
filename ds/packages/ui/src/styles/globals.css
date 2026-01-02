@@ -1,19 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body {
-    font-family: var(--font-family-body), sans-serif;
-    color: var(--text-body);
-    background-color: var(--brand-surface);
+  :root {
+    --grid-line-color: rgba(15, 23, 42, 0.04);
+    --dot-color: rgba(15, 23, 42, 0.1);
   }
 
-  h1, h2, h3, h4, h5, h6, .font-heading {
-    font-family: var(--font-family-heading), sans-serif;
-    color: var(--text-heading);
-    font-weight: 700;
+  .dark {
+    --grid-line-color: rgba(255, 255, 255, 0.04);
+    --dot-color: rgba(255, 255, 255, 0.1);
+    color: var(--lpd-color-text-base);
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--lpd-font-sans), sans-serif;
+    color: var(--lpd-color-text-base);
+    background-color: var(--lpd-color-bg-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  .bg-grid-40 { 
+    background-size: 40px 40px; 
+    background-image: linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px); 
+  }
+
+  code, pre {
+    font-family: var(--lpd-font-mono), monospace;
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite linear;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }

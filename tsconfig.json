@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "verbatimModuleSyntax": true,
+    "baseUrl": ".",
+    "paths": {
+      "@loopdev/ui": ["ds/packages/ui/src/index.ts"],
+      "@loopdev/ui/*": ["ds/packages/ui/src/*"],
+      "@loopdev/mod-architect": ["modules/mod-architect/src/index.ts"],
+      "@loopdev/mod-architect/*": ["modules/mod-architect/src/*"]
+    }
+  }
+}

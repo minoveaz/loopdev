@@ -1,21 +1,14 @@
 .theme-client-b {
-  /* Fonts (Opción 1: Moderna & Tecnológica) */
-  --font-family-heading: 'Montserrat', sans-serif;
-  --font-family-body: 'Plus Jakarta Sans', sans-serif;
+  /* Fonts */
+  --lpd-font-sans: 'Poppins', sans-serif;
 
-  /* Colors (Vibrantes) */
-  --brand-primary: #ED914D; /* Naranja */
-  --brand-secondary: #FFB48A; /* Coral */
-  
-  /* Pasteles (Generados o específicos) */
-  --brand-pastel-1: #FFD9B5;
-  --brand-pastel-2: #BCD7EC;
+  /* Mapeo a los tokens de LoopDev (Client B Palette) */
+  --lpd-color-brand-primary: #ec4899; /* Pink */
+  --lpd-color-brand-secondary: #8b5cf6; /* Violet */
+  --lpd-color-bg-base: #faf5ff;
+  --lpd-color-text-base: #4c1d95;
 
-  --brand-surface: #F6EFE8;
-  --brand-outline: #1F1B16;
-
-  /* Semantic */
-  --text-on-primary: #492100;
-  --btn-primary-bg: var(--brand-primary);
-  --btn-primary-text: var(--text-on-primary);
+  /* Legacy */
+  --brand-primary: #ec4899;
+  --brand-secondary: #8b5cf6;
 }

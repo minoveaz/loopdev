@@ -1,0 +1,13 @@
+:root {
+  --lpd-z-hide: -1;
+  --lpd-z-base: 0;
+  --lpd-z-docked: 10;
+  --lpd-z-dropdown: 1000;
+  --lpd-z-sticky: 1100;
+  --lpd-z-banner: 1200;
+  --lpd-z-overlay: 1300;
+  --lpd-z-modal: 1400;
+  --lpd-z-popover: 1500;
+  --lpd-z-toast: 1600;
+  --lpd-z-tooltip: 1700;
+}

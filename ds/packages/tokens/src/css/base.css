@@ -1,28 +1,45 @@
 :root {
   /* --- TYPOGRAPHY CORE --- */
-  --font-family-body: 'Inter', system-ui, sans-serif;
-  --font-family-heading: 'Poppins', system-ui, sans-serif;
+  --lpd-font-sans: 'Inter', system-ui, sans-serif;
+  --lpd-font-mono: 'JetBrains Mono', system-ui, sans-serif;
 
-  /* --- BRAND CORE --- */
-  --brand-primary: #000000;
-  --brand-secondary: #4b5563;
-  --brand-surface: #ffffff;
-  --brand-outline: #e5e7eb;
+  /* --- BRAND CORE (LoopDev Standard) --- */
+  --lpd-color-brand-primary: #135BEC;
+  --lpd-color-brand-secondary: #4b5563;
+  --lpd-color-brand-energy: #FFD025;
+  --lpd-color-brand-surface: #ffffff;
+  --lpd-color-brand-outline: #e2e8f0;
+  --lpd-color-border-subtle: #e2e8f0;
+  --lpd-color-innovation-purple: #9333EA;
 
   /* --- STATE COLORS --- */
-  --state-success: #22c55e;
-  --state-error: #ef4444;
-  --state-warning: #f59e0b;
-  --state-info: #3b82f6;
+  --lpd-color-status-success: #10B981;
+  --lpd-color-status-error: #EF4444;
+  --lpd-color-status-warning: #FFD025;
+  --lpd-color-status-info: #3b82f6;
 
   /* --- NEUTRALS --- */
-  --neutral-50: #f9fafb;
-  --neutral-100: #f3f4f6;
-  --neutral-600: #4b5563;
-  --neutral-900: #111827;
+  --lpd-color-neutral-50: #f9fafb;
+  --lpd-color-neutral-100: #f3f4f6;
+  --lpd-color-neutral-600: #4b5563;
+  --lpd-color-neutral-900: #0f172a;
 
   /* --- SEMANTIC TEXT --- */
-  --text-heading: var(--neutral-900);
-  --text-body: var(--neutral-600);
-  --text-on-primary: #ffffff;
+  --lpd-color-text-base: #0f172a;
+  --lpd-color-text-muted: #64748b;
+  --lpd-color-text-on-primary: #ffffff;
+
+  /* --- BACKGROUNDS --- */
+  --lpd-color-bg-base: #f8f9fc;
+  --lpd-color-bg-subtle: #f1f5f9;
+}
+
+.dark {
+  --lpd-color-brand-surface: #181b21;
+  --lpd-color-brand-outline: #2d3442;
+  --lpd-color-border-subtle: #2d3442;
+  --lpd-color-text-base: #f8fafc;
+  --lpd-color-text-muted: #94a3b8;
+  --lpd-color-bg-base: #0f1115;
+  --lpd-color-bg-subtle: #1e293b;
 }

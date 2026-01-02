@@ -1,0 +1,1070 @@
+[
+  {
+    "id": "app-tsx",
+    "name": "App",
+    "category": "General",
+    "description": "Blueprint from General",
+    "filePath": "App.tsx",
+    "exports": [],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-accordion-components-tsx",
+    "name": "Accordion (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Accordion/components.tsx",
+    "exports": [
+      "AccordionWrapper",
+      "AccordionHeader",
+      "AccordionBody",
+      "AccordionContainer"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-accordion-index-tsx",
+    "name": "Accordion",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Accordion/index.tsx",
+    "exports": [
+      "Accordion"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-actionmenu-components-tsx",
+    "name": "ActionMenu (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/ActionMenu/components.tsx",
+    "exports": [
+      "MenuContainer",
+      "MenuTrigger",
+      "MenuDropdown",
+      "MenuItem",
+      "MenuDivider"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-actionmenu-index-tsx",
+    "name": "ActionMenu",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/ActionMenu/index.tsx",
+    "exports": [
+      "ActionMenu"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-autocomplete-components-tsx",
+    "name": "Autocomplete (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Autocomplete/components.tsx",
+    "exports": [
+      "AutocompleteContainer",
+      "SearchLabel",
+      "SearchInput",
+      "DropdownContainer",
+      "GroupHeader",
+      "NoResults",
+      "ResultItem",
+      "SearchFooter"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-autocomplete-index-tsx",
+    "name": "Autocomplete",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Autocomplete/index.tsx",
+    "exports": [
+      "Autocomplete"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-breadcrumbs-components-tsx",
+    "name": "Breadcrumbs (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Breadcrumbs/components.tsx",
+    "exports": [
+      "BreadcrumbContainer",
+      "BreadcrumbSeparator",
+      "BreadcrumbItem",
+      "BreadcrumbActiveItem"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-breadcrumbs-index-tsx",
+    "name": "Breadcrumbs",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Breadcrumbs/index.tsx",
+    "exports": [
+      "Breadcrumbs"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-datatable-components-tsx",
+    "name": "DataTable (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/DataTable/components.tsx",
+    "exports": [
+      "TableContainer",
+      "DataTableHeader",
+      "DataTableContent",
+      "DataTableFooter",
+      "BulkActionsBar",
+      "Toolbar",
+      "ActiveFilters",
+      "TableHead",
+      "TableRow",
+      "Pagination"
+    ],
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-datatable-index-tsx",
+    "name": "DataTable",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/DataTable/index.tsx",
+    "exports": [
+      "DataTable"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-daterangepicker-components-tsx",
+    "name": "DateRangePicker (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/DateRangePicker/components.tsx",
+    "exports": [
+      "DateInputDisplay",
+      "CalendarHeader",
+      "CalendarGrid"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-daterangepicker-index-tsx",
+    "name": "DateRangePicker",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/DateRangePicker/index.tsx",
+    "exports": [
+      "DateRangePicker"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-drawer-components-tsx",
+    "name": "Drawer (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Drawer/components.tsx",
+    "exports": [
+      "DrawerOverlay",
+      "DrawerPanel",
+      "DrawerFooter"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-drawer-index-tsx",
+    "name": "Drawer",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Drawer/index.tsx",
+    "exports": [
+      "Drawer"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-emptystate-components-tsx",
+    "name": "EmptyState (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/EmptyState/components.tsx",
+    "exports": [
+      "EmptyStateIcon",
+      "EmptyStateContent",
+      "EmptyStateContainer"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-emptystate-index-tsx",
+    "name": "EmptyState",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/EmptyState/index.tsx",
+    "exports": [
+      "EmptyState"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-fileuploader-components-tsx",
+    "name": "FileUploader (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/FileUploader/components.tsx",
+    "exports": [
+      "UploadDropZone",
+      "FileListItem"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-fileuploader-index-tsx",
+    "name": "FileUploader",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/FileUploader/index.tsx",
+    "exports": [
+      "FileUploader"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-multilevelsidebar-components-tsx",
+    "name": "MultiLevelSidebar (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/MultiLevelSidebar/components.tsx",
+    "exports": [
+      "SidebarContainer",
+      "SidebarHeader",
+      "NavList",
+      "NavItem",
+      "NestedContainer"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-multilevelsidebar-index-tsx",
+    "name": "MultiLevelSidebar",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/MultiLevelSidebar/index.tsx",
+    "exports": [
+      "MultiLevelSidebar"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-nestedtabs-components-tsx",
+    "name": "NestedTabs (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/NestedTabs/components.tsx",
+    "exports": [
+      "TabContainer",
+      "TabList",
+      "TabTrigger",
+      "TabContentContainer"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-nestedtabs-index-tsx",
+    "name": "NestedTabs",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/NestedTabs/index.tsx",
+    "exports": [
+      "NestedTabs"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-notificationcenter-components-tsx",
+    "name": "NotificationCenter (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/NotificationCenter/components.tsx",
+    "exports": [
+      "CenterContainer",
+      "CenterHeader",
+      "NotificationItem",
+      "CenterFooter",
+      "EmptyView"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-notificationcenter-index-tsx",
+    "name": "NotificationCenter",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/NotificationCenter/index.tsx",
+    "exports": [
+      "NotificationCenter"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-stepper-components-tsx",
+    "name": "Stepper (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Stepper/components.tsx",
+    "exports": [
+      "StepperContainer",
+      "ProgressBar",
+      "StepIndicator",
+      "StepperControls"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-stepper-index-tsx",
+    "name": "Stepper",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/Stepper/index.tsx",
+    "exports": [
+      "Stepper"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-taginput-components-tsx",
+    "name": "TagInput (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/TagInput/components.tsx",
+    "exports": [
+      "Container",
+      "Label",
+      "InputWrapper",
+      "TagItem",
+      "InputField",
+      "HelperText",
+      "ApiInfo"
+    ],
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-taginput-index-tsx",
+    "name": "TagInput",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/TagInput/index.tsx",
+    "exports": [
+      "TagInput"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-verticalstepper-components-tsx",
+    "name": "VerticalStepper (Parts)",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/VerticalStepper/components.tsx",
+    "exports": [
+      "StepperContainer",
+      "StepRow",
+      "StepLeftRail",
+      "StepIndicator",
+      "StepContentWrapper"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-functional-verticalstepper-index-tsx",
+    "name": "VerticalStepper",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/functional/VerticalStepper/index.tsx",
+    "exports": [
+      "VerticalStepper"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-layout-activitysidebar-tsx",
+    "name": "ActivitySidebar",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/layout/ActivitySidebar.tsx",
+    "exports": [
+      "ActivitySidebar"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-layout-rightflyout-tsx",
+    "name": "RightFlyout",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/layout/RightFlyout.tsx",
+    "exports": [
+      "RightFlyout"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-layout-sidebar-tsx",
+    "name": "Sidebar",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/layout/Sidebar.tsx",
+    "exports": [
+      "Sidebar"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-layout-systemlayout-tsx",
+    "name": "SystemLayout",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/layout/SystemLayout.tsx",
+    "exports": [
+      "SystemLayout"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-ui-actions-index-tsx",
+    "name": "Actions",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/ui/Actions/index.tsx",
+    "exports": [
+      "EditAction",
+      "DeleteAction",
+      "ViewAction",
+      "CopyAction"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-ui-designsystem-tsx",
+    "name": "DesignSystem",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/ui/DesignSystem.tsx",
+    "exports": [
+      "Button",
+      "Badge",
+      "Card",
+      "SectionHeader",
+      "CodeBlock",
+      "GridPattern"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "components-ui-iconbutton-tsx",
+    "name": "IconButton",
+    "category": "Components",
+    "description": "Blueprint from Components",
+    "filePath": "components/ui/IconButton.tsx",
+    "exports": [
+      "IconButton"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-examplesone-tsx",
+    "name": "ExamplesOne",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/ExamplesOne.tsx",
+    "exports": [
+      "ExamplesOne"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 3
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-examplesthree-tsx",
+    "name": "ExamplesThree",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/ExamplesThree.tsx",
+    "exports": [
+      "ExamplesThree"
+    ],
+    "audit": {
+      "hardcodedColors": 0,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-landingpage-tsx",
+    "name": "LandingPage",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/LandingPage.tsx",
+    "exports": [
+      "LandingPage"
+    ],
+    "audit": {
+      "hardcodedColors": 9,
+      "inlineStyles": 0
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "pages-functional-functionallibrary-tsx",
+    "name": "FunctionalLibrary",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/functional/FunctionalLibrary.tsx",
+    "exports": [
+      "FunctionalLibrary"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-functional-components-bentocard-tsx",
+    "name": "BentoCard",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/functional/components/BentoCard.tsx",
+    "exports": [
+      "BentoCard"
+    ],
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-advancedui-tsx",
+    "name": "AdvancedUI",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/AdvancedUI.tsx",
+    "exports": [
+      "AdvancedUI"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-advancedui2-tsx",
+    "name": "AdvancedUI2",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/AdvancedUI2.tsx",
+    "exports": [
+      "AdvancedUI2"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 2
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-applicationexamples-tsx",
+    "name": "ApplicationExamples",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/ApplicationExamples.tsx",
+    "exports": [
+      "ApplicationExamples"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-automationrules-tsx",
+    "name": "AutomationRules",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/AutomationRules.tsx",
+    "exports": [
+      "AutomationRules"
+    ],
+    "audit": {
+      "hardcodedColors": 6,
+      "inlineStyles": 1
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "pages-system-collaboration-tsx",
+    "name": "Collaboration",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/Collaboration.tsx",
+    "exports": [
+      "Collaboration"
+    ],
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-colorstokens-tsx",
+    "name": "ColorsTokens",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/ColorsTokens.tsx",
+    "exports": [
+      "ColorsTokens"
+    ],
+    "audit": {
+      "hardcodedColors": 17,
+      "inlineStyles": 1
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "pages-system-complexforms-tsx",
+    "name": "ComplexForms",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/ComplexForms.tsx",
+    "exports": [
+      "ComplexForms"
+    ],
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-datatables-tsx",
+    "name": "DataTables",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/DataTables.tsx",
+    "exports": [
+      "DataTables"
+    ],
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-datavisualizations-tsx",
+    "name": "DataVisualizations",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/DataVisualizations.tsx",
+    "exports": [
+      "DataVisualizations"
+    ],
+    "audit": {
+      "hardcodedColors": 10,
+      "inlineStyles": 2
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "pages-system-designprinciples-tsx",
+    "name": "DesignPrinciples",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/DesignPrinciples.tsx",
+    "exports": [
+      "DesignPrinciples"
+    ],
+    "audit": {
+      "hardcodedColors": 4,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-foundationcomponents-tsx",
+    "name": "FoundationComponents",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/FoundationComponents.tsx",
+    "exports": [
+      "FoundationComponents"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-illustrations-tsx",
+    "name": "Illustrations",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/Illustrations.tsx",
+    "exports": [
+      "Illustrations"
+    ],
+    "audit": {
+      "hardcodedColors": 8,
+      "inlineStyles": 0
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "pages-system-interactionpatterns-tsx",
+    "name": "InteractionPatterns",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/InteractionPatterns.tsx",
+    "exports": [
+      "InteractionPatterns"
+    ],
+    "audit": {
+      "hardcodedColors": 2,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-kanbanboard-tsx",
+    "name": "KanbanBoard",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/KanbanBoard.tsx",
+    "exports": [
+      "KanbanBoard"
+    ],
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-kanbanelements-tsx",
+    "name": "KanbanElements",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/KanbanElements.tsx",
+    "exports": [
+      "KanbanElements"
+    ],
+    "audit": {
+      "hardcodedColors": 4,
+      "inlineStyles": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-managementediting-tsx",
+    "name": "ManagementEditing",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/ManagementEditing.tsx",
+    "exports": [
+      "ManagementEditing"
+    ],
+    "audit": {
+      "hardcodedColors": 8,
+      "inlineStyles": 0
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "pages-system-metricskpis-tsx",
+    "name": "MetricsKPIs",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/MetricsKPIs.tsx",
+    "exports": [
+      "MetricsKPIs"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-navigationstructure-tsx",
+    "name": "NavigationStructure",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/NavigationStructure.tsx",
+    "exports": [
+      "NavigationStructure"
+    ],
+    "audit": {
+      "hardcodedColors": 4,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-notificationsandworkflows-tsx",
+    "name": "NotificationsAndWorkflows",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/NotificationsAndWorkflows.tsx",
+    "exports": [
+      "NotificationsAndWorkflows"
+    ],
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-overlaysfeedback-tsx",
+    "name": "OverlaysFeedback",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/OverlaysFeedback.tsx",
+    "exports": [
+      "OverlaysFeedback"
+    ],
+    "audit": {
+      "hardcodedColors": 5,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-overview-tsx",
+    "name": "Overview",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/Overview.tsx",
+    "exports": [
+      "Overview"
+    ],
+    "audit": {
+      "hardcodedColors": 6,
+      "inlineStyles": 1
+    },
+    "status": "high-debt"
+  },
+  {
+    "id": "pages-system-settingsexamples-tsx",
+    "name": "SettingsExamples",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/SettingsExamples.tsx",
+    "exports": [
+      "SettingsExamples"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 1
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-typography-tsx",
+    "name": "Typography",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/Typography.tsx",
+    "exports": [
+      "Typography"
+    ],
+    "audit": {
+      "hardcodedColors": 3,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  },
+  {
+    "id": "pages-system-userrolemanagement-tsx",
+    "name": "UserRoleManagement",
+    "category": "Pages",
+    "description": "Blueprint from Pages",
+    "filePath": "pages/system/UserRoleManagement.tsx",
+    "exports": [
+      "UserRoleManagement"
+    ],
+    "audit": {
+      "hardcodedColors": 1,
+      "inlineStyles": 0
+    },
+    "status": "stable"
+  }
+]

@@ -1,5 +1,5 @@
 {
-  "name": "@myco/tailwind-config",
+  "name": "@loopdev/tailwind-config",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

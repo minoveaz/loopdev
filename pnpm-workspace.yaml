@@ -1,0 +1,13 @@
+packages:
+  # Design System Layer (UI & Visual)
+  - 'ds/packages/*'
+  - 'ds/apps/*'
+  
+  # Shared Logic Layer (Contracts, Hooks, Utils)
+  - 'packages/*'
+
+  # Business Logic Layer (Modules)
+  - 'modules/*'
+  
+  # Applications Layer (Products)
+  - 'apps/*'

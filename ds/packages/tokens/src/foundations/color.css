@@ -1,0 +1,66 @@
+:root {
+  /* --- Primitivos: Blue (Primary: #135BEC) --- */
+  --lpd-color-blue-50: #eff6ff;
+  --lpd-color-blue-100: #dbeafe;
+  --lpd-color-blue-200: #bfdbfe;
+  --lpd-color-blue-300: #93c5fd;
+  --lpd-color-blue-400: #60a5fa;
+  --lpd-color-blue-500: #3b82f6;
+  --lpd-color-blue-600: #135BEC; /* Designer Primary */
+  --lpd-color-blue-700: #0e4ac4;
+  --lpd-color-blue-800: #0b46be;
+  --lpd-color-blue-900: #1e3a8a;
+  --lpd-color-blue-950: #172554;
+
+  /* --- Primitivos: Energy (Yellow: #FFD025) --- */
+  --lpd-color-yellow-50: #fffbeb;
+  --lpd-color-yellow-100: #fef3c7;
+  --lpd-color-yellow-200: #fde68a;
+  --lpd-color-yellow-300: #fcd34d;
+  --lpd-color-yellow-400: #FFD025; /* Designer Energy */
+  --lpd-color-yellow-500: #f59e0b;
+  --lpd-color-yellow-600: #d97706;
+  --lpd-color-yellow-700: #b45309;
+
+  /* --- Primitivos: Space (Slate Dark: #0F1115) --- */
+  --lpd-color-slate-50: #f8fafc;
+  --lpd-color-slate-100: #f1f5f9;
+  --lpd-color-slate-200: #e2e8f0;
+  --lpd-color-slate-300: #cbd5e1;
+  --lpd-color-slate-400: #94a3b8;
+  --lpd-color-slate-500: #64748b;
+  --lpd-color-slate-600: #475569;
+  --lpd-color-slate-700: #334155;
+  --lpd-color-slate-800: #181b21;
+  --lpd-color-slate-900: #0F1115; /* Designer Space */
+  --lpd-color-slate-950: #080a0d;
+
+  /* --- Neutros Base --- */
+  --lpd-color-white: #ffffff;
+  --lpd-color-black: #000000;
+
+  /* --- SEMÁNTICOS (Uso en la App) --- */
+  
+  /* Brand */
+  --lpd-color-brand-primary: var(--lpd-color-blue-600);
+  --lpd-color-brand-secondary: var(--lpd-color-yellow-400);
+
+  /* Surface */
+  --lpd-color-bg-base: var(--lpd-color-white);
+  --lpd-color-bg-subtle: var(--lpd-color-slate-50);
+  --lpd-color-bg-surface: var(--lpd-color-white);
+  --lpd-color-bg-space: var(--lpd-color-slate-900);
+  --lpd-color-bg-glass: rgba(255, 255, 255, 0.03);
+  --lpd-color-border-glass: rgba(255, 255, 255, 0.08);
+
+  /* State Colors */
+  --lpd-color-success: #22c55e;
+  --lpd-color-warning: #f59e0b;
+  --lpd-color-error: #ef4444;
+
+  /* Text */
+  --lpd-color-text-main: #0f172a;
+  --lpd-color-text-base: var(--lpd-color-slate-900);
+  --lpd-color-text-muted: var(--lpd-color-slate-500);
+  --lpd-color-text-on-primary: var(--lpd-color-white);
+}

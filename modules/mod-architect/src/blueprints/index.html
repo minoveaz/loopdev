@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>loop.dev - Operating System for Digital Growth</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              primary: {
+                DEFAULT: '#135bec',
+                dark: '#0b46be',
+                light: '#4f85f0',
+              },
+              accent: {
+                DEFAULT: '#FFD025', // Updated Technical Yellow
+                hover: '#eac026',
+              },
+              energy: {
+                DEFAULT: '#fbbf24', // Keep for compatibility
+                vivid: '#FFD025',   
+              },
+              background: {
+                light: '#f8f9fc',
+                dark: '#0f1115', // Updated dark bg
+                subtle: '#f8fafc',
+                'subtle-dark': '#181b21',
+              },
+              surface: {
+                light: '#ffffff',
+                dark: '#181b21', // Updated surface dark
+              },
+              border: {
+                light: '#e2e8f0',
+                dark: '#2d3442',
+              },
+              text: {
+                main: '#0f172a',
+                muted: '#64748b',
+                light: '#f8fafc',
+              },
+              // New Glass UI tokens
+              'glass-border': "rgba(255, 255, 255, 0.08)",
+              'glass-surface': "rgba(255, 255, 255, 0.03)",
+            },
+            backgroundImage: {
+              'grid-pattern': "linear-gradient(to right, rgba(19, 91, 236, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(19, 91, 236, 0.05) 1px, transparent 1px)",
+              'grid-pattern-dark': "linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)",
+              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+              'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+              'blend-mesh': 'radial-gradient(at 0% 0%, rgba(19, 91, 236, 0.3) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(255, 208, 37, 0.2) 0px, transparent 50%)',
+            },
+            animation: {
+              'shimmer-slow': 'shimmer 3s infinite linear',
+            },
+            keyframes: {
+              shimmer: {
+                '0%': { transform: 'translateX(-100%)' },
+                '100%': { transform: 'translateX(100%)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #334155;
+      }
+
+      /* Custom Range Input */
+      input[type=range] {
+          -webkit-appearance: none; 
+          background: transparent; 
+      }
+      input[type=range]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          height: 16px;
+          width: 16px;
+          border-radius: 50%;
+          background: #FFD025;
+          cursor: pointer;
+          margin-top: -6px; 
+          box-shadow: 0 0 10px rgba(255, 208, 37, 0.5);
+      }
+      input[type=range]::-webkit-slider-runnable-track {
+          width: 100%;
+          height: 4px;
+          cursor: pointer;
+          background: #334155;
+          border-radius: 2px;
+      }
+      .light input[type=range]::-webkit-slider-runnable-track {
+          background: #e2e8f0;
+      }
+
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      /* Custom Grid Pattern from HTML */
+      .bg-grid-pattern-custom {
+          background-size: 40px 40px;
+          background-image: linear-gradient(to right, #2d3442 1px, transparent 1px),
+                            linear-gradient(to bottom, #2d3442 1px, transparent 1px);
+          opacity: 0.1;
+      }
+      
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+      .material-symbols-outlined.fill-1 {
+        font-variation-settings: 'FILL' 1;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.11.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "path": "https://esm.sh/path@^0.12.7",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light antialiased selection:bg-primary/30 selection:text-primary overflow-hidden">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

@@ -8,6 +8,7 @@
     "lint": "turbo lint",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
+    "audit-usage": "node scripts/audit-usage.js",
     "clean": "turbo clean && rimraf node_modules .turbo"
   },
   "devDependencies": {

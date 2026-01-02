@@ -1,0 +1,45 @@
+:root {
+  /* Font Families */
+  --lpd-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --lpd-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Font Sizes */
+  --lpd-font-size-xs: 0.75rem;     /* 12px */
+  --lpd-font-size-sm: 0.875rem;    /* 14px */
+  --lpd-font-size-base: 1rem;      /* 16px */
+  --lpd-font-size-lg: 1.125rem;    /* 18px */
+  --lpd-font-size-xl: 1.25rem;     /* 20px */
+  --lpd-font-size-2xl: 1.5rem;     /* 24px */
+  --lpd-font-size-3xl: 1.875rem;   /* 30px */
+  --lpd-font-size-4xl: 2.25rem;    /* 36px */
+  --lpd-font-size-5xl: 3rem;       /* 48px */
+  --lpd-font-size-6xl: 3.75rem;    /* 60px */
+  --lpd-font-size-7xl: 4.5rem;     /* 72px */
+
+  /* Font Weights */
+  --lpd-font-weight-thin: 100;
+  --lpd-font-weight-extralight: 200;
+  --lpd-font-weight-light: 300;
+  --lpd-font-weight-normal: 400;
+  --lpd-font-weight-medium: 500;
+  --lpd-font-weight-semibold: 600;
+  --lpd-font-weight-bold: 700;
+  --lpd-font-weight-extrabold: 800;
+  --lpd-font-weight-black: 900;
+
+  /* Line Heights */
+  --lpd-leading-none: 1;
+  --lpd-leading-tight: 1.25;
+  --lpd-leading-snug: 1.375;
+  --lpd-leading-normal: 1.5;
+  --lpd-leading-relaxed: 1.625;
+  --lpd-leading-loose: 2;
+
+  /* Letter Spacing */
+  --lpd-tracking-tighter: -0.05em;
+  --lpd-tracking-tight: -0.025em;
+  --lpd-tracking-normal: 0em;
+  --lpd-tracking-wide: 0.025em;
+  --lpd-tracking-wider: 0.05em;
+  --lpd-tracking-widest: 0.1em;
+}
