@@ -1,6 +1,7 @@
 export * from './Button';
 export * from './Icon';
-export * from './IconRegistry';export * from './Typography';
+export * from './IconRegistry';
+export * from './Typography';
 export * from './Badge';
 export * from './Label';
 export * from './Divider';
@@ -15,3 +16,4 @@ export * from './EmptyState';
 export * from './Skeleton';
 export * from './InfraStamp';
 export * from './Toast';
+export * from './Input';

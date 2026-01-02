@@ -1,7 +1,7 @@
 {
   "project": "LoopDev SaaS",
   "registry_version": "1.1",
-  "last_updated": "2026-01-02T19:45:00Z",
+  "last_updated": "2026-01-02T23:58:00Z",
   "components": [
     {
       "id": "button-v2",
@@ -94,6 +94,26 @@
         "text_mimicry": true,
         "massive_rendering": true,
         "a11y_silent": true
+      }
+    },
+    {
+      "id": "input-v1",
+      "name": "Input",
+      "status": "stable",
+      "category": "Primitives",
+      "phase": 3,
+      "certification": {
+        "front": "certified",
+        "infra": "certified"
+      },
+      "certification_timestamp": "2026-01-02T23:55:00Z",
+      "capabilities": {
+        "multi_tenant_branding": true,
+        "industrial_accessibility": true,
+        "security_password_toggle": true,
+        "neural_grid_feedback": true,
+        "extreme_layout_resilience": true,
+        "api_error_contract_sync": true
       }
     }
   ]

@@ -7,6 +7,7 @@ export interface LabelProps {
   required?: boolean;
   className?: string;
   as?: any;
+  htmlFor?: string;
   textSize?: string;
   textWeight?: string;
 }

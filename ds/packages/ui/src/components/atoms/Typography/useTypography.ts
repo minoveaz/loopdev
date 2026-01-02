@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { cn } from '@/helpers/cn';
+import { cn } from '../../../helpers/cn';
 
 /**
  * @hook useTypography

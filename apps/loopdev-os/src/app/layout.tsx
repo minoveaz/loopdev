@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import QueryProvider from "@/providers/QueryProvider";
 
 // Importamos los estilos globales de nuestro Design System
-import "@loopdev/ui/src/styles/globals.css";
+import "@loopdev/ui/styles/globals.css";
 // Los estilos locales de la app (Tailwind)
 import "./globals.css";
 

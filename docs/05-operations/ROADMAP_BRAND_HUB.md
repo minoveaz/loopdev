@@ -62,7 +62,7 @@ Crear un workspace interno para compartir tipos entre Front y Back.
 **Objetivo:** Conectar el Frontend a la API. Primera interacción real del usuario.
 
 ### 2.1 Authentication Gate
-- [ ] **DS Dependency:** Certificar componente `Input` en `@loopdev/ui`.
+- [x] **DS Dependency:** Certificar componente `Input` en `@loopdev/ui`. ✅
 - [ ] **Login Page:** Implementar `/src/app/login/page.tsx` usando `Button` y `Input`.
 - [ ] **Auth Callback:** Configurar `/src/app/auth/callback/route.ts` para manejo de sesiones.
 
