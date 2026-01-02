@@ -16,4 +16,7 @@ export * from './EmptyState';
 export * from './Skeleton';
 export * from './InfraStamp';
 export * from './Toast';
+export { ToastViewport } from './Toast/components';
+export { toast } from './Toast/toastStore';
 export * from './Input';
+export * from './QualityShield';

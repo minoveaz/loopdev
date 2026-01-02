@@ -15,12 +15,14 @@
     "build": "tsc --project tsconfig.json",
     "dev": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "chromatic": "chromatic",
     "lint": "eslint . || echo 'No lint config'",
     "typecheck": "tsc --noEmit || echo 'No tsconfig'"
   },
   "devDependencies": {
     "@loopdev/tailwind-config": "workspace:*",
     "@loopdev/tokens": "workspace:*",
+    "@storybook/addon-a11y": "8.6.15",
     "@storybook/addon-essentials": "8.6.15",
     "@storybook/addon-interactions": "8.6.15",
     "@storybook/addon-links": "8.6.15",
@@ -36,6 +38,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "autoprefixer": "10.4.20",
+    "chromatic": "^13.3.4",
     "jsdom": "^27.4.0",
     "postcss": "8.4.49",
     "storybook": "8.6.15",

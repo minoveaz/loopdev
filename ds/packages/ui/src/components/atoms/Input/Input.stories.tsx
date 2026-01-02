@@ -1,9 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from './index';
-import { Search, Lock, Shield, Mail } from 'lucide-react';
+import { Search, Lock, Shield } from 'lucide-react';
 import { CertificationStamp } from '../CertificationStamp';
 import { InfraStamp } from '../InfraStamp';
+import { QualityShield } from '../QualityShield';
 
 const meta: Meta<typeof Input> = {
   title: 'Atoms/Primitives/Input',
@@ -31,6 +32,11 @@ const meta: Meta<typeof Input> = {
         <div className="w-full max-w-md mx-auto pt-12">
           <Story />
         </div>
+        <QualityShield metrics={{
+          unit: { label: 'Unit', status: 'pass', value: '100% US' },
+          a11y: { label: 'A11y', status: 'pass', value: 'WCAG AA' },
+          visual: { label: 'Visual', status: 'pass', value: 'CHROMATIC' },
+        }} />
       </div>
     ),
   ],

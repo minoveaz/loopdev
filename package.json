@@ -12,6 +12,7 @@
     "ds:build": "pnpm --filter @loopdev/ui build"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "@types/node": "^25.0.3",
     "rimraf": "^6.0.0",
     "turbo": "^2.0.0",

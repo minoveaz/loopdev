@@ -16,26 +16,22 @@ Button/
 
 ---
 
-## 🛠️ Los 4 Pilares del Test
+## 🛠️ Los 5 Pilares del Test
 
 ### 1. Renderizado Básico (The Smoke Test)
 Verificar que el componente se monta sin explotar y muestra el contenido esperado.
-- **Acción:** `render(<Component>Text</Component>)`
-- **Expectativa:** `expect(screen.getByText(/text/i)).toBeInTheDocument()`
 
-### 2. Lógica de Variantes (Prop Mapping)
-No probamos si Tailwind funciona, probamos que nuestra lógica asigna la clase correcta.
-- **Acción:** Pasar props como `variant`, `size` o `status`.
-- **Expectativa:** Verificar que la clase CSS esperada esté presente en `className`.
+### 2. Accesibilidad (Axe-core Audit)
+**Obligatorio para v1.** El componente debe pasar el check de Axe-core en Storybook con 0 violaciones graves.
 
-### 3. Estados de Interacción
-Probar estados dinámicos como `isLoading`, `disabled` o `active`.
-- **Importante:** Validar que `disabled` bloquee realmente los eventos de click.
+### 3. Lógica de Variantes (Prop Mapping)
+Validar que las clases CSS esperadas estén presentes en `className`.
 
-### 4. Integridad de Marca (Iconografía)
-Dado que usamos Material Symbols (fuente), los iconos se buscan por su glifo textual.
-- **Acción:** `render(<Icon name="add" />)`
-- **Expectativa:** `expect(screen.getByText('add')).toBeInTheDocument()`
+### 4. Estados de Interacción (Flow Shield)
+Probar estados dinámicos. Para flujos complejos entre páginas, usar **Playwright** para simular el comportamiento real del navegador.
+
+### 5. Integridad de Marca (Chromatic Visual QA)
+Uso de Chromatic para detectar regresiones visuales de píxeles antes de cualquier merge.
 
 ---
 
