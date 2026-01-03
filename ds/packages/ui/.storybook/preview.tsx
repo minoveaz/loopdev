@@ -14,7 +14,8 @@ import { DynamicThemeProvider } from "../src/providers/dynamic-theme-provider";
 
 // Componente Wrapper para manejar la lógica de los Globales de Storybook
 const StoryWrapper = ({ children, context }: any) => {
-  const { themeMode, primaryColor, energyColor } = context.globals;
+  const { themeMode, primaryColor, energyColor, tenant, subbrand } = context.globals;
+  const isFullscreen = context.parameters.layout === 'fullscreen';
   
   useEffect(() => {
     const html = document.documentElement;
@@ -36,15 +37,17 @@ const StoryWrapper = ({ children, context }: any) => {
     borderRadius: "12px"
   }), [primaryColor, energyColor]);
 
+  const themeClass = tenant === 'loopdev' ? '' : `theme-${tenant}`;
+
   return (
     <DynamicThemeProvider config={dbConfig}>
-      <TenantProvider tenant="loopdev">
+      <TenantProvider tenant={tenant} subbrand={subbrand}>
         <LayoutProvider>
           <div 
-            className={`${themeMode === 'dark' ? 'dark' : ''} bg-grid-40 min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300`}
+            className={`${themeClass} ${themeMode === 'dark' ? 'dark' : ''} bg-grid-40 min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300`}
             style={{ 
               fontFamily: 'Inter, sans-serif',
-              padding: '2rem',
+              padding: isFullscreen ? '0' : '2rem',
               position: 'relative'
             }}
           >
@@ -78,6 +81,36 @@ const preview: Preview = {
         items: [
           { value: "light", title: "Light Mode", icon: "sun" },
           { value: "dark", title: "Dark Mode", icon: "moon" },
+        ],
+        showName: true,
+      },
+    },
+    tenant: {
+      name: "Tenant",
+      description: "Select the brand tenant",
+      defaultValue: "loopdev",
+      toolbar: {
+        icon: "category",
+        items: [
+          { value: "loopdev", title: "LoopDev (Brand)" },
+          { value: "estar-protegidos", title: "Estar Protegidos" },
+          { value: "client-b", title: "Cliente B" },
+        ],
+        showName: true,
+      },
+    },
+    subbrand: {
+      name: "Sub-brand",
+      description: "Select the specific sub-brand",
+      defaultValue: "none",
+      toolbar: {
+        icon: "structure",
+        items: [
+          { value: "none", title: "General" },
+          { value: "protege-salud", title: "Protege tu Salud" },
+          { value: "protege-viaje", title: "Protege tu Viaje" },
+          { value: "protege-hogar", title: "Protege tu Hogar" },
+          { value: "protege-finanzas", title: "Protege tus Finanzas" },
         ],
         showName: true,
       },
