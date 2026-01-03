@@ -37,6 +37,12 @@ Debes auditar basándote exclusivamente en:
 - [ ] **Sello de Calidad:** ¿Aparece el `CertificationStamp` arriba a la izquierda con el estado real de madurez?
 - [ ] **Modos de Color:** ¿Es 100% funcional y legible en Light y Dark Mode?
 
+### 4. Layouts & Chasis (v1.1)
+- [ ] **Topmost Priority:** ¿La tecla Escape y el Backdrop cierran solo el panel superior activo (Inspector > Nav)?
+- [ ] **Scroll Lock:** ¿Se bloquea el scroll del contenido principal cuando hay un panel abierto en modo overlay?
+- [ ] **Determinismo:** ¿Los anchos y visibilidad dependen de estados derivados claros (`navMode`) y no de flags crudos?
+- [ ] **Interacción de Capas:** ¿El `overlaySlot` permite interactuar con su contenido sin bloqueos del wrapper?
+
 ---
 
 ## 📊 Formato del Reporte

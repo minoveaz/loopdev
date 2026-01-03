@@ -16,7 +16,7 @@
 ---
 
 ## 1️⃣ Layouts oficiales (v1)
-- **App Shell:** Contenedor raíz del SaaS (Header + Sidebar + Main).
+- **App Shell (Certified v1.1):** Contenedor raíz del SaaS. Implementa comportamiento híbrido (Push en Desktop / Overlay en Mobile), gestión de estados determinista (`navMode`, `contextMode`), soporte de densidad y accesibilidad avanzada (Topmost Escape, Mobile Scroll Lock).
 - **Module Workspace:** Base para vistas internas de un módulo.
 - **Page:** Plantilla de página estándar (Formularios, Dashboards).
 - **Split View:** Trabajo dual (Lista ↔ Inspector).
@@ -27,7 +27,7 @@
 
 ## 🛡️ Protocolo de Certificación de Layouts (🔵🔵)
 
-Para alcanzar el estatus **Certified v1 — Full**, un Layout debe superar los 4 Jueces Especializados:
+Para alcanzar el estatus **Certified v1 — Full**, un Layout debe superar los 5 Jueces Especializados:
 
 ### 1. Test de Composición (Slots) — [Vitest]
 - **Validación:** El layout debe renderizar correctamente sus huecos dinámicos (Header Slot, Sidebar Slot, Content Slot).
@@ -44,6 +44,10 @@ Para alcanzar el estatus **Certified v1 — Full**, un Layout debe superar los 4
 ### 4. Test de Integridad de Superficie — [Axe-core]
 - **Validación:** Los layouts definen las grandes superficies (`Deep Space`, `Surface`).
 - **A11y:** El contraste en el fondo del layout debe garantizar legibilidad WCAG AA para cualquier componente hijo en ambos temas.
+
+### 5. Test de Gestión de Estados (Topmost) — [Unit]
+- **Validación:** La tecla Escape y el Backdrop deben cerrar solo el panel activo superior (priorizando Inspector sobre Nav).
+- **Interacción:** El scroll del contenido principal debe bloquearse en modo overlay para evitar el "scroll bleed".
 
 ---
 *Gobernanza de Layouts - LoopDev Engineering Board*

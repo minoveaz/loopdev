@@ -115,6 +115,26 @@
         "extreme_layout_resilience": true,
         "api_error_contract_sync": true
       }
+    },
+    {
+      "id": "app-shell-v1.1.1",
+      "name": "AppShell",
+      "status": "stable",
+      "category": "Layouts",
+      "phase": 4,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-03T13:10:00Z",
+      "capabilities": {
+        "deterministic_modes": true,
+        "hybrid_push_overlay": true,
+        "topmost_escape_priority": true,
+        "zero_hardcoding_tokens": true,
+        "mobile_scroll_lock": true,
+        "interactive_overlay_slot": true,
+        "density_support": true
+      }
     }
   ]
 }
