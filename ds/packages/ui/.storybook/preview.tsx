@@ -6,6 +6,7 @@ import "../src/styles/globals.css";
 import "../src/styles/fonts.css";
 
 // Foundations y Temas
+import "../../tokens/src/foundations/index.css";
 import "../../tokens/src/css/base.css";
 
 import { TenantProvider } from "../src/providers/tenant-provider";
