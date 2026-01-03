@@ -26,6 +26,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     styleTokens, 
     isNavVisible, 
     isContextVisible, 
+    scrollbarClass
   } = useAppShell(props);
 
   return (
@@ -64,7 +65,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           `}
           style={{ width: 'var(--app-shell-nav-width)' }}
         >
-          <div className="h-full flex flex-col overflow-y-auto custom-scrollbar overflow-x-hidden">
+          <div className={`h-full flex flex-col overflow-y-auto ${scrollbarClass} overflow-x-hidden`}>
             {navSlot}
           </div>
         </aside>
@@ -83,8 +84,8 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
         </header>
 
         <div className="flex flex-1 min-h-0 overflow-hidden relative bg-[var(--lpd-color-bg-subtle)] dark:bg-[var(--lpd-color-bg-space)]">
-          <main role="main" className="flex-1 overflow-y-auto custom-scrollbar relative z-10">
-            <div className="p-4 @lg:p-8">
+          <main role="main" className={`flex-1 overflow-y-auto ${scrollbarClass} relative z-10`}>
+            <div style={{ padding: 'var(--app-shell-main-padding)' }}>
               {children}
             </div>
           </main>
@@ -96,7 +97,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
               aria-label="Context Panel"
               style={{ width: 'var(--app-shell-context-width)' }}
               className={`
-                border-l border-[var(--lpd-color-brand-outline)] dark:border-[var(--lpd-color-border-glass)] bg-[var(--lpd-color-bg-surface)] dark:bg-[var(--lpd-color-bg-space)] flex-shrink-0 overflow-y-auto custom-scrollbar 
+                border-l border-[var(--lpd-color-brand-outline)] dark:border-[var(--lpd-color-border-glass)] bg-[var(--lpd-color-bg-surface)] dark:bg-[var(--lpd-color-bg-space)] flex-shrink-0 overflow-y-auto ${scrollbarClass} 
                 transition-all duration-300 z-[45] overflow-hidden
                 
                 /* Mobile/Tablet: OVERLAY */

@@ -152,6 +152,8 @@ export const IndustrialOS: Story = {
     children: <IndustrialContent />,
     config: {
       context: 'normal',
+      density: 'comfortable',
+      showScrollbars: true,
     },
   },
 };
