@@ -17,3 +17,4 @@ export * from './Skeleton';
 export * from './InfraStamp';
 export * from './Toast';
 export * from './Input';
+export * from './QualityShield';

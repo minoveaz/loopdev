@@ -16,7 +16,8 @@
     "dev": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "eslint . || echo 'No lint config'",
-    "typecheck": "tsc --noEmit || echo 'No tsconfig'"
+    "typecheck": "tsc --noEmit || echo 'No tsconfig'",
+    "chromatic": "npx chromatic --project-token=chpt_8ca17c38b451083"
   },
   "devDependencies": {
     "@loopdev/tailwind-config": "workspace:*",
