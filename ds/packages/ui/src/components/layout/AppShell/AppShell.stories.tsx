@@ -5,41 +5,6 @@ import { QualityShield } from '../../atoms/QualityShield';
 import { CertificationStamp } from '../../atoms/CertificationStamp';
 import { Icon } from '../../atoms/Icon';
 
-const meta: Meta<typeof AppShell> = {
-  title: 'Layouts/AppShell',
-  component: AppShell,
-  tags: ['autodocs'],
-  parameters: {
-    layout: 'fullscreen',
-  },
-  argTypes: {
-    config: {
-      control: 'object',
-    },
-  },
-  decorators: [
-    (Story) => (
-      <div className="w-full h-screen relative">
-        <CertificationStamp 
-          status="certified" 
-          version="v1.0.0" 
-          phase="1" 
-          className="fixed top-4 left-4 z-[100]" 
-        />
-        <Story />
-        <QualityShield metrics={{
-          unit: { label: 'Unit', status: 'pass', value: '100% US' },
-          a11y: { label: 'A11y', status: 'pass', value: 'WCAG AA' },
-          visual: { label: 'Visual', status: 'pass', value: 'HYBRID' },
-        }} />
-      </div>
-    ),
-  ],
-};
-
-export default meta;
-type Story = StoryObj<typeof AppShell>;
-
 // MOCKS DE SLOTS INDUSTRIALES
 const MockNav = ({ collapsed }: { collapsed?: boolean }) => (
   <div className="p-4 space-y-8 overflow-x-hidden">
@@ -120,7 +85,18 @@ const IndustrialContent = () => (
   </div>
 );
 
-export const IndustrialOS: Story = {
+const meta: Meta<typeof AppShell> = {
+  title: 'Layouts/AppShell',
+  component: AppShell,
+  tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
+  argTypes: {
+    config: {
+      control: 'object',
+    },
+  },
   render: (args) => {
     const [leftOpen, setLeftOpen] = useState(true);
     const [rightOpen, setRightOpen] = useState(true);
@@ -128,27 +104,52 @@ export const IndustrialOS: Story = {
     return (
       <AppShell 
         {...args}
-        navSlot={<MockNav collapsed={!leftOpen} />}
+        navSlot={args.navSlot || <MockNav collapsed={!leftOpen} />}
         headerSlot={
-          <MockHeader 
-            leftOpen={leftOpen} 
-            rightOpen={rightOpen} 
-            onToggleLeft={() => setLeftOpen(!leftOpen)}
-            onToggleRight={() => setRightOpen(!rightOpen)}
-            mode={args.config?.context?.toUpperCase()}
-          />
+          args.headerSlot || (
+            <MockHeader 
+              leftOpen={leftOpen} 
+              rightOpen={rightOpen} 
+              onToggleLeft={() => setLeftOpen(!leftOpen)}
+              onToggleRight={() => setRightOpen(!rightOpen)}
+              mode={args.config?.context?.toUpperCase()}
+            />
+          )
         }
         config={{ ...args.config, isLeftSidebarOpen: leftOpen, isRightSidebarOpen: rightOpen }}
         onToggleLeftSidebar={() => setLeftOpen(!leftOpen)}
         onToggleRightSidebar={() => setRightOpen(!rightOpen)}
-      >
-        <IndustrialContent />
-      </AppShell>
+      />
     );
   },
+  decorators: [
+    (Story) => (
+      <div className="w-full h-screen relative">
+        <CertificationStamp 
+          status="certified" 
+          version="v1.0.0" 
+          phase="1" 
+          className="fixed top-4 left-4 z-[100]" 
+        />
+        <Story />
+        <QualityShield metrics={{
+          unit: { label: 'Unit', status: 'pass', value: '100% US' },
+          a11y: { label: 'A11y', status: 'pass', value: 'WCAG AA' },
+          visual: { label: 'Visual', status: 'pass', value: 'HYBRID' },
+        }} />
+      </div>
+    ),
+  ],
+};
+
+export default meta;
+type Story = StoryObj<typeof AppShell>;
+
+export const IndustrialOS: Story = {
   args: {
     contextSlot: <div className="p-6 space-y-4 font-mono"><div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Context Panel</div><div className="h-32 bg-slate-100 dark:bg-slate-900 rounded-xl border border-[var(--lpd-color-brand-outline)] flex items-center justify-center text-slate-400 text-[10px]">PREVIEW_LAYER</div></div>,
     footerSlot: <div className="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-widest font-mono flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>v1.2.0-beta // System Operational</div>,
+    children: <IndustrialContent />,
     config: {
       context: 'normal',
     },

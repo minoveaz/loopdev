@@ -14,7 +14,13 @@ import { DynamicThemeProvider } from "../src/providers/dynamic-theme-provider";
 
 // Componente Wrapper para manejar la lógica de los Globales de Storybook
 const StoryWrapper = ({ children, context }: any) => {
-  const { themeMode, primaryColor, energyColor, tenant, subbrand } = context.globals;
+  const { 
+    themeMode = 'dark', 
+    primaryColor = '#135BEC', 
+    energyColor = '#FFD025', 
+    tenant = 'loopdev', 
+    subbrand = 'none' 
+  } = context.globals || {};
   const isFullscreen = context.parameters.layout === 'fullscreen';
   
   useEffect(() => {

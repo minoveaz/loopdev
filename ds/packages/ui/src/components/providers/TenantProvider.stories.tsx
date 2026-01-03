@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useTenant, TenantProvider } from './tenant-provider';
+import { useTenant } from '../../providers/tenant-provider';
 
 const TenantInspector = () => {
   const { tenant, subbrand } = useTenant();
