@@ -1,12 +1,3 @@
-export * from './components/atoms';
-export * from './components/layout';
-// export * from './components/molecules';
-// export * from './components/organisms';
-// export * from './components/templates';
-// export * from './components/layout';
-// export * from './components/snippets';
-export * from './providers/tenant-provider';
-export * from './providers/layout-provider';
-export * from './types/tenant';
-export * from './helpers/cn';
-export * from './providers/dynamic-theme-provider';
+export * from './src/components/ui/button';
+// Agregando la nueva exportación del ModuleWorkspace
+export * from './src/components/layout/ModuleWorkspace';
