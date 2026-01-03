@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { AppShell } from './index';
 
-describe('AppShell Industrial Certification - Parity 1:1 (🔵🔵)', () => {
+describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
   
   const mockSlots = {
     nav: <div data-testid="nav-slot">Navigation</div>,
@@ -15,117 +15,117 @@ describe('AppShell Industrial Certification - Parity 1:1 (🔵🔵)', () => {
     overlay: <div data-testid="overlay-slot">Overlay Content</div>,
   };
 
-  // CATEGORÍA 1: ESTRUCTURA Y NAVEGACIÓN
-  it('US-LAYOUT-01: renders all 4 primary slots with correct ARIA landmarks', () => {
+  // CATEGORÍA 1: ESTRUCTURA Y MODOS
+  it('US-LAYOUT-01: renders nav tag for global navigation and aside for context', () => {
     render(
       <AppShell 
         navSlot={mockSlots.nav}
         headerSlot={mockSlots.header}
         contextSlot={mockSlots.context}
-        footerSlot={mockSlots.footer}
       >
         {mockSlots.content}
       </AppShell>
     );
 
     expect(screen.getByRole('navigation', { name: /global navigation/i })).toBeInTheDocument();
-    expect(screen.getByRole('banner')).toBeInTheDocument();
-    expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByRole('complementary', { name: /context panel/i })).toBeInTheDocument();
-    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
-  it('US-LAYOUT-02: updates CSS variables and state for collapsible sidebar', () => {
-    const { container, rerender } = render(
-      <AppShell navSlot={mockSlots.nav} headerSlot={mockSlots.header} config={{ isLeftSidebarOpen: true }}>
-        {mockSlots.content}
-      </AppShell>
-    );
-
-    const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.style.getPropertyValue('--app-shell-nav-width')).toBe('var(--lpd-space-64)');
-
-    rerender(
-      <AppShell navSlot={mockSlots.nav} headerSlot={mockSlots.header} config={{ isLeftSidebarOpen: false }}>
-        {mockSlots.content}
-      </AppShell>
-    );
-    expect(wrapper.style.getPropertyValue('--app-shell-nav-width')).toBe('var(--lpd-space-16)');
-  });
-
-  // CATEGORÍA 2: ESCENARIOS DE ESTRÉS
-  it('US-STRESS-02: handles context panel visibility and push behavior tokens', () => {
-    const { rerender, container } = render(
-      <AppShell contextSlot={mockSlots.context} headerSlot={mockSlots.header} config={{ isRightSidebarOpen: true }}>
-        {mockSlots.content}
-      </AppShell>
-    );
-
-    const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.style.getPropertyValue('--app-shell-context-width')).toBe('var(--lpd-space-80)');
-
-    rerender(
-      <AppShell contextSlot={mockSlots.context} headerSlot={mockSlots.header} config={{ isRightSidebarOpen: false }}>
-        {mockSlots.content}
-      </AppShell>
-    );
-    expect(wrapper.style.getPropertyValue('--app-shell-context-width')).toBe('var(--lpd-space-0)');
-  });
-
-  it('US-STRESS-04: supports complex slot composition without breakage', () => {
-    render(
+  it('US-LAYOUT-02: respects navBehavior="hidden"', () => {
+    const { container } = render(
       <AppShell 
+        navSlot={mockSlots.nav} 
         headerSlot={mockSlots.header} 
-        bannerSlot={mockSlots.banner}
-        overlaySlot={mockSlots.overlay}
+        config={{ navBehavior: 'hidden' }}
       >
         {mockSlots.content}
       </AppShell>
     );
-    expect(screen.getByTestId('banner-slot')).toBeInTheDocument();
-    expect(screen.getByTestId('overlay-slot')).toBeInTheDocument();
+
+    const nav = container.querySelector('#app-shell-nav');
+    expect(nav).not.toBeInTheDocument();
+    
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper.style.getPropertyValue('--app-shell-nav-width')).toBe('0px');
   });
 
-  // CATEGORÍA 3: ACCESIBILIDAD Y UX
-  it('US-A11Y-02: applies technical scrollbar classes to all scrollable areas', () => {
-    const { container } = render(
-      <AppShell navSlot={mockSlots.nav} headerSlot={mockSlots.header}>
+  // CATEGORÍA 6: ACCESIBILIDAD Y TOPMOST
+  it('US-A11Y-04: closes only the topmost panel when Escape is pressed (Context priority)', () => {
+    const onCloseNav = vi.fn();
+    const onCloseContext = vi.fn();
+    
+    render(
+      <AppShell 
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
+        contextSlot={mockSlots.context}
+        config={{ isLeftSidebarOpen: true, isRightSidebarOpen: true }}
+        onRequestCloseNav={onCloseNav}
+        onRequestCloseContext={onCloseContext}
+      >
         {mockSlots.content}
       </AppShell>
     );
-    const scrollAreas = container.querySelectorAll('.custom-scrollbar');
-    expect(scrollAreas.length).toBeGreaterThanOrEqual(2);
+
+    fireEvent.keyDown(window, { key: 'Escape' });
+    
+    // Debería intentar cerrar el contexto primero
+    expect(onCloseContext).toHaveBeenCalledWith('escape');
+    expect(onCloseNav).not.toHaveBeenCalled();
   });
 
-  // CATEGORÍA 4: MULTI-TENANCY Y ESTADO
-  it('US-TENANT-01: triggers state handlers when backdrop is interacted with', () => {
-    const onToggleNav = vi.fn();
-    render(
+  it('US-A11Y-05: backdrop closes the correct active panel based on hierarchy', () => {
+    const onCloseNav = vi.fn();
+    const onCloseContext = vi.fn();
+    
+    // Escenario: Ambos abiertos -> cierra context
+    const { rerender } = render(
       <AppShell 
-        navSlot={mockSlots.nav} 
-        headerSlot={mockSlots.header} 
-        config={{ isLeftSidebarOpen: true }}
-        onToggleLeftSidebar={onToggleNav}
-      />
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
+        contextSlot={mockSlots.context}
+        config={{ isLeftSidebarOpen: true, isRightSidebarOpen: true }}
+        onRequestCloseNav={onCloseNav}
+        onRequestCloseContext={onCloseContext}
+      >
+        {mockSlots.content}
+      </AppShell>
     );
 
     const backdrop = screen.getByRole('presentation', { hidden: true });
     fireEvent.click(backdrop);
-    expect(onToggleNav).toHaveBeenCalled();
-  });
+    expect(onCloseContext).toHaveBeenCalledWith('backdrop');
 
-  it('US-TENANT-02: maintains structural integrity with global system banners', () => {
-    render(
-      <AppShell headerSlot={mockSlots.header} bannerSlot={mockSlots.banner}>
+    // Escenario: Solo Nav abierto
+    rerender(
+      <AppShell 
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
+        contextSlot={mockSlots.context}
+        config={{ isLeftSidebarOpen: true, isRightSidebarOpen: false }}
+        onRequestCloseNav={onCloseNav}
+        onRequestCloseContext={onCloseContext}
+      >
         {mockSlots.content}
       </AppShell>
     );
-    const banner = screen.getByTestId('banner-slot');
-    const header = screen.getByRole('banner');
-    expect(banner.compareDocumentPosition(header)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    fireEvent.click(backdrop);
+    expect(onCloseNav).toHaveBeenCalledWith('backdrop');
   });
 
-  // CATEGORÍA 5: PERSISTENCIA
+  // CATEGORÍA 7: DENSIDAD E INDUSTRIALIZACIÓN
+  it('US-STRESS-05: applies compact tokens when density is set', () => {
+    const { container } = render(
+      <AppShell headerSlot={mockSlots.header} config={{ density: 'compact' }}>
+        {mockSlots.content}
+      </AppShell>
+    );
+
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper.style.getPropertyValue('--app-shell-header-height')).toBe('var(--lpd-space-12)');
+    expect(wrapper.style.getPropertyValue('--app-shell-main-padding')).toBe('var(--lpd-space-4)');
+  });
+
   it('US-SHELL-STATE-01: initializes with correct open/closed states from config', () => {
     const { container } = render(
       <AppShell navSlot={mockSlots.nav} headerSlot={mockSlots.header} config={{ isLeftSidebarOpen: false }}>

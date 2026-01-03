@@ -37,7 +37,7 @@ const meta: Meta<typeof Button> = {
           />
           <InfraStamp 
             status="certified"
-            layer="security"
+            security="RLS_OK"
             date="2026-01-02"
             className="scale-90 origin-top-left opacity-90 shadow-xl"
           />

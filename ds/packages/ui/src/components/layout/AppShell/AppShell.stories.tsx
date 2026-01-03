@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { AppShell } from './index';
+import { LayoutContext, LayoutDensity } from './types';
 import { QualityShield } from '../../atoms/QualityShield';
 import { CertificationStamp } from '../../atoms/CertificationStamp';
 import { Icon } from '../../atoms/Icon';
 
-// MOCKS DE SLOTS INDUSTRIALES
+/**
+ * MOCKS DE CONTENIDO INDUSTRIAL
+ */
 const MockNav = ({ collapsed }: { collapsed?: boolean }) => (
   <div className="p-4 space-y-8 overflow-x-hidden">
     <div className={`flex items-center gap-3 px-2 shrink-0 ${collapsed && 'justify-center px-0'}`}>
@@ -69,7 +72,7 @@ const IndustrialContent = () => (
   <div className="space-y-8 pb-32">
     <header className="space-y-2">
       <div className="text-[var(--lpd-color-brand-primary)] font-mono text-[10px] font-bold uppercase tracking-[0.2em]">System / Brand_Hub / Assets</div>
-      <h1 className="text-3xl font-bold tracking-tight">Industrial Assets</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-[var(--lpd-color-text-base)]">Industrial Assets</h1>
     </header>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: 6 }).map((_, i) => (
@@ -85,6 +88,39 @@ const IndustrialContent = () => (
   </div>
 );
 
+/**
+ * COMPONENTE INTERACTIVO PARA STORYBOOK
+ */
+const InteractiveShell = (args: any) => {
+  const [leftOpen, setLeftOpen] = useState(args.config?.isLeftSidebarOpen ?? true);
+  const [rightOpen, setRightOpen] = useState(args.config?.isRightSidebarOpen ?? true);
+  
+  return (
+    <AppShell 
+      {...args}
+      navSlot={args.navSlot || <MockNav collapsed={!leftOpen} />}
+      headerSlot={
+        args.headerSlot || (
+          <MockHeader 
+            leftOpen={leftOpen} 
+            rightOpen={rightOpen} 
+            onToggleLeft={() => setLeftOpen(!leftOpen)}
+            onToggleRight={() => setRightOpen(!rightOpen)}
+            mode={args.config?.context?.toUpperCase() || 'NORMAL'}
+          />
+        )
+      }
+      config={{ ...args.config, isLeftSidebarOpen: leftOpen, isRightSidebarOpen: rightOpen }}
+      onToggleLeftSidebar={() => setLeftOpen(!leftOpen)}
+      onToggleRightSidebar={() => setRightOpen(!rightOpen)}
+      onRequestCloseNav={() => setLeftOpen(false)}
+      onRequestCloseContext={() => setRightOpen(false)}
+    >
+      {args.children || <IndustrialContent />}
+    </AppShell>
+  );
+};
+
 const meta: Meta<typeof AppShell> = {
   title: 'Layouts/AppShell',
   component: AppShell,
@@ -97,37 +133,13 @@ const meta: Meta<typeof AppShell> = {
       control: 'object',
     },
   },
-  render: (args) => {
-    const [leftOpen, setLeftOpen] = useState(true);
-    const [rightOpen, setRightOpen] = useState(true);
-    
-    return (
-      <AppShell 
-        {...args}
-        navSlot={args.navSlot || <MockNav collapsed={!leftOpen} />}
-        headerSlot={
-          args.headerSlot || (
-            <MockHeader 
-              leftOpen={leftOpen} 
-              rightOpen={rightOpen} 
-              onToggleLeft={() => setLeftOpen(!leftOpen)}
-              onToggleRight={() => setRightOpen(!rightOpen)}
-              mode={args.config?.context?.toUpperCase()}
-            />
-          )
-        }
-        config={{ ...args.config, isLeftSidebarOpen: leftOpen, isRightSidebarOpen: rightOpen }}
-        onToggleLeftSidebar={() => setLeftOpen(!leftOpen)}
-        onToggleRightSidebar={() => setRightOpen(!rightOpen)}
-      />
-    );
-  },
+  render: (args) => <InteractiveShell {...args} />,
   decorators: [
     (Story) => (
       <div className="w-full h-screen relative">
         <CertificationStamp 
           status="certified" 
-          version="v1.0.0" 
+          version="v1.1.0" 
           phase="1" 
           className="fixed top-4 left-4 z-[100]" 
         />
@@ -145,25 +157,29 @@ const meta: Meta<typeof AppShell> = {
 export default meta;
 type Story = StoryObj<typeof AppShell>;
 
-export const IndustrialOS: Story = {
-  args: {
-    contextSlot: <div className="p-6 space-y-4 font-mono"><div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Context Panel</div><div className="h-32 bg-slate-100 dark:bg-slate-900 rounded-xl border border-[var(--lpd-color-brand-outline)] flex items-center justify-center text-slate-400 text-[10px]">PREVIEW_LAYER</div></div>,
-    footerSlot: <div className="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-widest font-mono flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>v1.2.0-beta // System Operational</div>,
-    children: <IndustrialContent />,
-    config: {
-      context: 'normal',
-      density: 'comfortable',
-      showScrollbars: true,
-    },
+const BASE_ARGS = {
+  contextSlot: <div className="p-6 space-y-4 font-mono"><div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Context Panel</div><div className="h-32 bg-slate-100 dark:bg-slate-900 rounded-xl border border-[var(--lpd-color-brand-outline)] flex items-center justify-center text-slate-400 text-[10px]">PREVIEW_LAYER</div></div>,
+  footerSlot: <div className="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-widest font-mono flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>v1.2.0-beta // System Operational</div>,
+  config: {
+    context: 'normal' as LayoutContext,
+    density: 'comfortable' as LayoutDensity,
+    showScrollbars: true,
   },
 };
 
+export const IndustrialOS: Story = {
+  args: {
+    ...BASE_ARGS
+  }
+};
+
 /**
- * ESCENARIOS DE ESTRÉS
+ * ESCENARIOS DE ESTRÉS INDUSTRIAL (v1.1)
  */
+
 export const NarrativeOverload: Story = {
   args: {
-    ...IndustrialOS.args,
+    ...BASE_ARGS,
     children: (
       <div className="space-y-8">
         <h1 className="text-3xl font-bold tracking-tight text-[var(--lpd-color-text-base)]">Scroll Resilience Test</h1>
@@ -179,7 +195,7 @@ export const NarrativeOverload: Story = {
 
 export const InspectorSaturation: Story = {
   args: {
-    ...IndustrialOS.args,
+    ...BASE_ARGS,
     contextSlot: (
       <div className="p-6 space-y-6">
         <h3 className="text-xs font-black uppercase tracking-tighter text-[var(--lpd-color-text-base)] opacity-40">AI_Inspector_Log</h3>
@@ -199,13 +215,89 @@ export const InspectorSaturation: Story = {
   },
 };
 
+export const SidebarSaturation: Story = {
+  args: {
+    ...BASE_ARGS,
+    navSlot: (
+      <div className="p-4 space-y-4">
+        <div className="font-black text-[10px] text-slate-400 uppercase tracking-widest border-b border-white/5 pb-2">Technical_Inventory</div>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-3 p-2 text-slate-500 hover:text-white cursor-pointer transition-colors group">
+            <div className="w-4 h-4 bg-slate-800 rounded group-hover:bg-[var(--lpd-color-brand-primary)] transition-colors" />
+            <span className="text-[10px] font-mono uppercase tracking-tighter">Module_Asset_Node_0x0{i}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+};
+
+export const DeepNavigation: Story = {
+  args: {
+    ...BASE_ARGS,
+    headerSlot: (
+      <div className="flex items-center px-2 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-2 text-[10px] font-mono whitespace-nowrap">
+          <span className="text-[var(--lpd-color-brand-primary)]">root</span>
+          <span className="text-slate-600">/</span>
+          <span className="text-[var(--lpd-color-brand-primary)]">marketing_studio</span>
+          <span className="text-slate-600">/</span>
+          <span className="text-[var(--lpd-color-brand-primary)]">campaign_manager</span>
+          <span className="text-slate-600">/</span>
+          <span className="text-[var(--lpd-color-brand-primary)]">q4_seasonal_promos</span>
+          <span className="text-slate-600">/</span>
+          <span className="text-[var(--lpd-color-brand-primary)]">assets</span>
+          <span className="text-slate-600">/</span>
+          <span className="text-[var(--lpd-color-text-base)] font-black uppercase">banner_hero_v2_final.png</span>
+        </div>
+      </div>
+    )
+  }
+};
+
+export const ToastSpam: Story = {
+  args: {
+    ...BASE_ARGS,
+    overlaySlot: (
+      <div className="absolute bottom-8 right-8 flex flex-col gap-2 max-w-xs w-full pointer-events-auto">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="p-4 bg-slate-900 border border-white/10 rounded-lg shadow-2xl animate-in slide-in-from-right duration-300">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="flex-1">
+                <p className="text-[10px] font-bold text-white uppercase">System_Sync_0{i}</p>
+                <p className="text-[10px] text-slate-400">Data cluster successfully verified.</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+};
+
+export const EmptyWorkspace: Story = {
+  args: {
+    ...BASE_ARGS,
+    children: (
+      <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-40">
+        <Icon name="deployed_code" size="xl" />
+        <div className="space-y-1">
+          <p className="text-xs font-black uppercase tracking-widest text-[var(--lpd-color-text-base)]">No_Active_Module</p>
+          <p className="text-[10px] font-mono text-[var(--lpd-color-text-muted)]">Select a node from the global navigation to begin architecture.</p>
+        </div>
+      </div>
+    )
+  }
+};
+
 export const GlobalBanner: Story = {
   args: {
-    ...IndustrialOS.args,
+    ...BASE_ARGS,
     bannerSlot: (
       <div className="w-full bg-[var(--lpd-color-status-warning)] py-2 px-6 flex items-center justify-between">
         <div className="flex items-center gap-2 text-slate-900">
-          <Icon name="warning" size="xs" />
+          <Icon name="warning" size="sm" />
           <span className="text-[10px] font-black uppercase tracking-widest">System_Maintenance: Scheduled for 03:00 UTC</span>
         </div>
         <button className="text-[8px] font-bold underline uppercase tracking-tighter text-slate-900">Dismiss</button>
@@ -219,8 +311,9 @@ export const MobileReality: Story = {
     viewport: { defaultViewport: 'mobile1' },
   },
   args: {
-    ...IndustrialOS.args,
+    ...BASE_ARGS,
     config: {
+      ...BASE_ARGS.config,
       isLeftSidebarOpen: false,
       isRightSidebarOpen: false,
     },
