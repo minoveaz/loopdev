@@ -1,7 +1,7 @@
 {
   "project": "LoopDev SaaS",
   "registry_version": "1.1",
-  "last_updated": "2026-01-02T23:58:00Z",
+  "last_updated": "2026-01-03T22:30:00Z",
   "components": [
     {
       "id": "button-v2",
@@ -134,6 +134,24 @@
         "mobile_scroll_lock": true,
         "interactive_overlay_slot": true,
         "density_support": true
+      }
+    },
+    {
+      "id": "module-workspace-v1.4.0",
+      "name": "ModuleWorkspace",
+      "status": "stable",
+      "category": "Layouts",
+      "phase": 4,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-03T22:30:00Z",
+      "capabilities": {
+        "industrial_focus_trap": true,
+        "deterministic_push_overlay": true,
+        "topmost_state_management": true,
+        "full_tokenization": true,
+        "resilient_slots": true
       }
     }
   ]
