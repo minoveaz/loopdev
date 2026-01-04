@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Icon, Button } from '@loopdev/ui';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 
 const StatItem = ({ label, value, color }: { label: string, value: string, color: string }) => (
   <div className="space-y-1">

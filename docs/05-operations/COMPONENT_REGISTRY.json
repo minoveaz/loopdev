@@ -153,6 +153,86 @@
         "full_tokenization": true,
         "resilient_slots": true
       }
+    },
+    {
+      "id": "engineering-seal-v1",
+      "name": "EngineeringSeal",
+      "status": "stable",
+      "category": "Primitives",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T10:00:00Z",
+      "capabilities": {
+        "status_color_mapping": true,
+        "bracket_encapsulation": true,
+        "dual_typography_alignment": true
+      }
+    },
+    {
+      "id": "theme-toggle-v1",
+      "name": "ThemeToggle",
+      "status": "stable",
+      "category": "Primitives",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T11:00:00Z",
+      "capabilities": {
+        "technical_glass_styling": true,
+        "smooth_state_transitions": true,
+        "theme_persistence_support": true
+      }
+    },
+    {
+      "id": "system-status-v1",
+      "name": "SystemStatus",
+      "status": "stable",
+      "category": "Primitives",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T12:00:00Z",
+      "capabilities": {
+        "pulse_animation": true,
+        "technical_formatting": true,
+        "multi_state_support": true
+      }
+    },
+    {
+      "id": "blueprint-background-v1",
+      "name": "BlueprintBackground",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T13:00:00Z",
+      "capabilities": {
+        "technical_atmosphere_encapsulation": true,
+        "multi_intensity_support": true,
+        "scanline_effect_integrated": true
+      }
+    },
+    {
+      "id": "technical-surface-v1",
+      "name": "TechnicalSurface",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T14:00:00Z",
+      "capabilities": {
+        "theme_aware_variants": true,
+        "depth_architecture_mapping": true,
+        "integrated_blueprint_grid": true
+      }
     }
   ]
 }

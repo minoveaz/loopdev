@@ -28,8 +28,8 @@ export default function LoginPage() {
       setError(error.message);
       setIsLoading(false);
     } else {
-      // Redirigir al dashboard en caso de éxito
-      router.push('/dashboard');
+      // Redirigir al Launchpad (Selector de Suites)
+      router.push('/launchpad');
     }
   };
 
@@ -88,9 +88,9 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-danger/10 border border-danger/20 text-danger-soft p-3 rounded-lg flex items-center gap-3 text-xs">
-                <AlertCircle size={16} />
-                <span>{error}</span>
+              <div className="bg-red-500/15 border border-red-500/30 text-red-200 p-3 rounded-lg flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-1">
+                <AlertCircle size={16} className="text-red-400 shrink-0" />
+                <span className="leading-relaxed font-medium">{error}</span>
               </div>
             )}
 

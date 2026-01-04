@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import sharedConfig from '@loopdev/tailwind-config';
+import sharedConfig from '../../ds/packages/tailwind-config';
 
 const config: Config = {
   presets: [sharedConfig],
@@ -22,6 +22,9 @@ const config: Config = {
           dark: 'var(--lpd-color-brand-surface, #181b21)', 
           glass: 'rgba(255, 255, 255, 0.03)',
         },
+        background: {
+          dark: '#0f1115',
+        },
         text: {
           main: 'var(--lpd-color-text-base, #0f172a)',
           muted: 'var(--lpd-color-text-muted, #64748b)',
@@ -31,6 +34,9 @@ const config: Config = {
           DEFAULT: 'var(--lpd-color-status-error, #EF4444)',
           soft: 'rgba(239, 68, 68, 0.1)',
           vivid: '#f43f5e',
+        },
+        energy: {
+          yellow: 'var(--lpd-color-brand-energy, #FFD025)',
         },
         'border-subtle': 'var(--lpd-color-border-subtle, #e2e8f0)',
       },
