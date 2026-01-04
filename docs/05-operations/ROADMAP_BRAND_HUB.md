@@ -35,15 +35,9 @@ Crear un workspace interno para compartir tipos entre Front y Back.
 **Objetivo:** Persistencia segura y API CRUD básica. Sin UI todavía.
 
 ### 1.1 Base de Datos (Supabase)
-- [ ] **Migration 001:** Crear tabla `brands`.
-    - PK: `id` (uuid, default gen_random_uuid)
-    - FK: `tenant_id` (not null)
-    - Audit: `created_at`, `updated_at`, `created_by`.
-- [ ] **RLS Policies (Seguridad):**
-    - `Enable RLS on brands`.
-    - Policy: "Users can view brands of their own tenant".
-    - Policy: "Admins can create/edit brands of their own tenant".
-- [ ] **Seeding:** Script SQL para poblar 3 marcas de prueba en el tenant `demo`.
+- [x] **Migration 001:** Crear tabla `brands`. (✅ Completado)
+- [x] **RLS Policies (Seguridad):** (✅ Completado)
+- [x] **Seeding:** Script SQL para poblar 3 marcas de prueba. (✅ Completado)
 
 ### 1.2 Next.js Architecture (The App Shell)
 **Objetivo:** Configurar el entorno Next.js para soportar Auth y Multi-tenancy.
@@ -63,7 +57,7 @@ Crear un workspace interno para compartir tipos entre Front y Back.
 
 ### 2.1 Authentication Gate
 - [x] **DS Dependency:** Certificar componente `Input` en `@loopdev/ui`. ✅
-- [ ] **Login Page:** Implementar `/src/app/login/page.tsx` usando `Button` y `Input`.
+- [x] **Login Page:** Implementar `/src/app/login/page.tsx`. (✅ Completado)
 - [ ] **Auth Callback:** Configurar `/src/app/auth/callback/route.ts` para manejo de sesiones.
 
 ### 2.2 Service Layer (Frontend)

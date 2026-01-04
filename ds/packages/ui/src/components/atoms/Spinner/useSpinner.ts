@@ -1,3 +1,7 @@
+'use client';
+
+'use client';
+
 import { useMemo } from 'react';
 import { cn } from '../../../helpers/cn';
 import type { SpinnerProps } from './types';

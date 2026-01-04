@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useMemo } from 'react';
 
 export type InfraStampStatus = 'certified' | 'audit' | 'lab';

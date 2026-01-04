@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import { useTypography } from './useTypography';
+import type { TypographyProps, HeadingProps } from './types';
 
 /**
  * @component Text
@@ -7,7 +10,7 @@ import { useTypography } from './useTypography';
  * @category Foundations
  * @status stable
  */
-export const Text = (props: any) => {
+export const Text = (props: TypographyProps & Record<string, unknown>) => {
   const { classes, Component } = useTypography(props);
   const { children, size, weight, variant, className, as, ...rest } = props;
   return <Component className={classes} {...rest}>{children}</Component>;
@@ -19,8 +22,13 @@ export const Text = (props: any) => {
  * @category Foundations
  * @status stable
  */
-export const Heading = ({ size = '3xl', weight = 'black', ...props }) => (
-  <Text size={size} weight={weight} as="h1" {...props} />
+export const Heading: React.FC<HeadingProps & React.HTMLAttributes<HTMLHeadingElement>> = ({ 
+  size = '3xl', 
+  weight = 'black', 
+  as = 'h1',
+  ...props 
+}) => (
+  <Text size={size} weight={weight} as={as} {...props} />
 );
 
 /**

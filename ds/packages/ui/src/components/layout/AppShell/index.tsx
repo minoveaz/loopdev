@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { AppShellProps } from './types';
 import { useAppShell } from './useAppShell';

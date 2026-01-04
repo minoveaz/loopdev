@@ -110,11 +110,84 @@ components/functional/<ComponentName>/
 
 ## 7) Tokens y Multitenancy (Dynamic Theming)
 
-* Los componentes deben ser **"Theme Aware"**.
-* **Zero Hardcoding Policy:** 
-    * Prohibido usar HEX incluso en historias de ejemplo. Usar escala estándar de Tailwind (w-1, w-2...).
-    * Prohibido realizar cálculos geométricos en JS. Usar propiedades CSS como `aspect-ratio`.
-* Se deben usar variables CSS de componente (`--comp-*`) que hereden de los tokens globales (`--lpd-*`).
+### 7.1 Zero Hardcoding Policy (OBLIGATORIO)
+
+**Regla fundamental:** Todo valor visual debe derivar de tokens del Design System.
+
+**❌ PROHIBIDO:**
+```tsx
+// NO HACER ESTO
+<div className="text-2xl text-[#135bec] bg-[#181b21]">
+  <span style={{ fontSize: '24px', color: '#135bec' }}>
+    Bad Example
+  </span>
+</div>
+```
+
+**✅ CORRECTO:**
+```tsx
+// Usando componentes tipográficos del DS
+import { Text, Heading } from '@loopdev/ui';
+
+<div className="bg-surface-dark">
+  <Heading size="2xl" className="text-primary">
+    Good Example
+  </Heading>
+</div>
+
+// O usando clases de Tailwind con tokens
+<div className="text-lpd-2xl text-primary bg-surface-dark">
+  Good Example
+</div>
+
+// O usando variables CSS directamente
+<div style={{ 
+  fontSize: 'var(--lpd-font-size-2xl)',
+  color: 'var(--lpd-color-brand-primary)' 
+}}>
+  Good Example
+</div>
+```
+
+### 7.2 Tokens Disponibles
+
+Ver documentación completa en: [DESIGN_TOKENS_USAGE.md](./DESIGN_TOKENS_USAGE.md)
+
+**Tipografía:**
+- Tamaños: `nano`, `xs`, `sm`, `base`, `lg`, `xl`, `2xl`-`7xl`
+- Pesos: `normal`, `medium`, `semibold`, `bold`, `black`
+- Familias: `--lpd-font-sans` (Inter), `--lpd-font-mono` (JetBrains Mono)
+
+**Colores:**
+- Estructurales: `--lpd-color-brand-primary`, `--lpd-color-brand-energy`
+- Superficies: `--lpd-color-bg-base`, `--lpd-color-brand-surface`
+- Estados: `--lpd-color-status-success`, `--lpd-color-status-error`
+- Texto: `--lpd-color-text-base`, `--lpd-color-text-muted`
+
+**Espaciado:**
+- Escala: `--lpd-space-1` (4px) hasta `--lpd-space-12` (48px)
+
+**Border Radius:**
+- Escala: `--lpd-radius-sm` hasta `--lpd-radius-full`
+
+### 7.3 Validación Automática
+
+Antes de cada commit, ejecutar:
+```bash
+pnpm validate:tokens
+```
+
+Este script verifica que todos los tokens estén sincronizados entre:
+1. CSS Variables (typography.css)
+2. Tailwind Config (fontSize + safelist)
+3. Tailwind Merge (cn.ts)
+4. TypeScript Types (types.ts)
+
+### 7.4 Multitenancy & Dynamic Theming
+
+* Los componentes deben usar variables CSS de componente (`--comp-*`) que hereden de los tokens globales (`--lpd-*`).
+* Integración con `DynamicThemeProvider` para personalización por tenant.
+* Prohibido realizar cálculos geométricos en JS. Usar propiedades CSS como `aspect-ratio`.
 
 ---
 

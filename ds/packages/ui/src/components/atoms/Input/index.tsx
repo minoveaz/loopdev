@@ -1,4 +1,7 @@
+'use client';
+
 import React, { forwardRef } from 'react';
+import { cn } from '../../../lib/utils';
 import { InputProps } from './types';
 import { useInput } from './useInput';
 import { IconWrapper, LoadingSpinner, PasswordToggle } from './components';
@@ -46,7 +49,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         <Label 
           as="label"
           htmlFor={inputId} 
-          className={error ? 'text-red-500' : ''}
+          size="xs"
+          weight="black"
+          className={cn("uppercase tracking-widest mb-1", error ? 'text-danger' : 'text-text-muted')}
         >
           {label}
         </Label>

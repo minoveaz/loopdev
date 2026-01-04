@@ -18,3 +18,4 @@ export * from './InfraStamp';
 export * from './Toast';
 export * from './Input';
 export * from './QualityShield';
+export * from './TechnicalCanvas';

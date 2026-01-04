@@ -44,6 +44,9 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
 ---
 
 ## 🗄️ Fase 4: Persistencia & Certificación (DoD)
+
+> ⚠️ **REGLA DE ORO:** El sello `LOOPDEV.LAB` (`CertificationStamp`) y el `InfraStamp` solo pueden ser inyectados en el código de producción **tras el cierre exitoso de la Fase 3 (Auditoría)** y la corrección de todos sus hallazgos. Cualquier componente con sellos pero sin auditoría registrada será rechazado automáticamente.
+
 - [ ] **Registry Sync:** Registro en `COMPONENT_REGISTRY.json`.
 - [ ] **Seal Applied:** Sello `Loopdev.lab` en Storybook arriba a la izquierda.
 - [ ] **Audit Log Updated:** Registro del hito en `ENGINEERING_LOG.md`.

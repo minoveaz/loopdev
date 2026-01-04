@@ -1,11 +1,48 @@
-import { useMemo } from 'react';
+'use client';
+
 import { cn } from '../../../helpers/cn';
+import type { TypographyProps, TypographySize, TypographyWeight, TypographyVariant } from './types';
+
+/**
+ * Mapeo de tamaños a clases de Tailwind
+ * IMPORTANTE: Estas clases deben coincidir con las definidas en:
+ * - @loopdev/tokens/src/foundations/typography.css
+ * - @loopdev/tailwind-config/tailwind.preset.js (safelist)
+ * - helpers/cn.ts (extendTailwindMerge)
+ */
+const sizeMap: Record<TypographySize, string> = {
+  nano: 'text-lpd-nano',
+  xs: 'text-lpd-xs',
+  sm: 'text-lpd-sm',
+  base: 'text-lpd-base',
+  lg: 'text-lpd-lg',
+  xl: 'text-lpd-xl',
+  '2xl': 'text-lpd-2xl',
+  '3xl': 'text-lpd-3xl',
+  '4xl': 'text-lpd-4xl',
+  '5xl': 'text-lpd-5xl',
+  '6xl': 'text-lpd-6xl',
+  '7xl': 'text-lpd-7xl',
+};
+
+const weightMap: Record<TypographyWeight, string> = {
+  normal: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
+  bold: 'font-bold',
+  black: 'font-black',
+};
+
+const variantMap: Record<TypographyVariant, string> = {
+  sans: 'font-sans',
+  mono: 'font-mono',
+};
 
 /**
  * @hook useTypography
  * @description Lógica de mapeo de estilos para la primitiva Text.
  */
-export const useTypography = (props: any) => {
+export const useTypography = (props: TypographyProps) => {
   const { 
     size = 'base', 
     weight = 'normal', 
@@ -14,35 +51,10 @@ export const useTypography = (props: any) => {
     as = 'span' 
   } = props;
 
-  const sizeMap: Record<string, string> = {
-    xs: 'text-[10px]',
-    sm: 'text-[12px]',
-    base: 'text-[14px]',
-    lg: 'text-[16px]',
-    xl: 'text-[18px]',
-    '2xl': 'text-[24px]',
-    '3xl': 'text-[30px]',
-    '4xl': 'text-[36px]',
-    '5xl': 'text-[48px]',
-  };
-
-  const weightMap: Record<string, string> = {
-    normal: 'font-normal',
-    medium: 'font-medium',
-    semibold: 'font-semibold',
-    bold: 'font-bold',
-    black: 'font-black',
-  };
-
-  const variantMap: Record<string, string> = {
-    sans: 'font-sans',
-    mono: 'font-mono',
-  };
-
   const classes = cn(
-    variantMap[variant] || variantMap.sans,
-    sizeMap[size] || sizeMap.base,
-    weightMap[weight] || weightMap.normal,
+    variantMap[variant],
+    sizeMap[size],
+    weightMap[weight],
     className
   );
 

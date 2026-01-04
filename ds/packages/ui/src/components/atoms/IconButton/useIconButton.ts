@@ -1,3 +1,7 @@
+'use client';
+
+'use client';
+
 import { useMemo } from 'react';
 
 export const useIconButton = (props: any) => {

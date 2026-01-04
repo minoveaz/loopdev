@@ -2,6 +2,22 @@
 const preset = {
   darkMode: 'class',
   content: [], 
+  // Safelist: Garantiza que las clases dinámicas del DS nunca sean eliminadas por purge
+  safelist: [
+    // Typography scale - usado dinámicamente por useTypography
+    'text-lpd-nano',
+    'text-lpd-xs',
+    'text-lpd-sm',
+    'text-lpd-base',
+    'text-lpd-lg',
+    'text-lpd-xl',
+    'text-lpd-2xl',
+    'text-lpd-3xl',
+    'text-lpd-4xl',
+    'text-lpd-5xl',
+    'text-lpd-6xl',
+    'text-lpd-7xl',
+  ],
   theme: {
     extend: {
       colors: {
@@ -46,10 +62,18 @@ const preset = {
         mono: ['var(--lpd-font-mono)', 'monospace'],
       },
       fontSize: {
+        'lpd-nano': 'var(--lpd-font-size-nano)',
         'lpd-xs': 'var(--lpd-font-size-xs)',
         'lpd-sm': 'var(--lpd-font-size-sm)',
         'lpd-base': 'var(--lpd-font-size-base)',
+        'lpd-lg': 'var(--lpd-font-size-lg)',
+        'lpd-xl': 'var(--lpd-font-size-xl)',
         'lpd-2xl': 'var(--lpd-font-size-2xl)',
+        'lpd-3xl': 'var(--lpd-font-size-3xl)',
+        'lpd-4xl': 'var(--lpd-font-size-4xl)',
+        'lpd-5xl': 'var(--lpd-font-size-5xl)',
+        'lpd-6xl': 'var(--lpd-font-size-6xl)',
+        'lpd-7xl': 'var(--lpd-font-size-7xl)',
       },
       boxShadow: {
         'lpd-sm': 'var(--lpd-shadow-sm)',

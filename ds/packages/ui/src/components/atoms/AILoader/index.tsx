@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useAILoader } from './useAILoader';
 import { AILoaderProps } from './types';

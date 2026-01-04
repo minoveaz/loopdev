@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useSkeleton } from './useSkeleton';
 import { SkeletonProps } from './types';

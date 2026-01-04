@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useEffect, useMemo } from 'react';
 
 export interface ThemeConfig {

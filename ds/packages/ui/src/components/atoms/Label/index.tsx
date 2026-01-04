@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useLabel } from './useLabel';
 import { Text } from '../Typography';

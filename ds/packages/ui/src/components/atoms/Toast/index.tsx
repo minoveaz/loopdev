@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef } from 'react';
 import { useToastItem } from './useToastItem';
 import { ToastProps } from './types';

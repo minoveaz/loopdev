@@ -1,4 +1,6 @@
-import React, { createContext, useContext, type ReactNode } from 'react';
+'use client';
+
+import React, { createContext, useContext, useState, useMemo } from 'react';
 import type { TenantId, SubbrandId } from '../types/tenant';
 
 export type Tenant = TenantId;

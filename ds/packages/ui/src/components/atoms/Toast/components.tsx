@@ -1,3 +1,7 @@
+'use client';
+
+'use client';
+
 import React, { useMemo } from 'react';
 import { useToastStore } from './useToastStore';
 import { ToastItem } from './index';

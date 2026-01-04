@@ -1,3 +1,7 @@
+/* === LOOPDEV UI: Import Official Tokens === */
+@import '../../../tokens/src/foundations/index.css';
+@import '../../../tokens/src/css/base.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +10,7 @@
   :root {
     --grid-line-color: rgba(15, 23, 42, 0.04);
     --dot-color: rgba(15, 23, 42, 0.1);
+    /* Typography: Now inherited from @loopdev/tokens */
   }
 
   .dark {

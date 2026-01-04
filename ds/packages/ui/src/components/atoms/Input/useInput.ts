@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useId, useMemo } from 'react';
 import { InputProps } from './types';
 import { clsx, type ClassValue } from 'clsx';
@@ -42,18 +44,18 @@ export const useInput = (props: InputProps) => {
 
   const wrapperClasses = cn(
     "relative flex items-center transition-all duration-200 group border rounded-lg overflow-hidden",
-    // Variants
-    variant === 'outline' && "bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-800",
-    variant === 'filled' && "bg-slate-100 dark:bg-slate-900 border-transparent",
-    variant === 'ghost' && "bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-slate-900/50",
+    // Variants - Usando tokens semánticos
+    variant === 'outline' && "bg-surface-light dark:bg-surface-dark border-border-subtle",
+    variant === 'filled' && "bg-background-subtle dark:bg-background-subtle-dark border-transparent",
+    variant === 'ghost' && "bg-transparent border-transparent hover:bg-surface-light/50 dark:hover:bg-surface-dark/50",
     // States
-    isFocused && "ring-2 ring-[var(--lpd-color-brand-primary)]/20 border-[var(--lpd-color-brand-primary)]",
-    error && "border-[var(--lpd-color-error)] ring-[var(--lpd-color-error)]/10",
-    !error && !isFocused && "hover:border-slate-400 dark:hover:border-slate-700"
+    isFocused && "ring-2 ring-primary/20 border-primary",
+    error && "border-danger ring-danger/10",
+    !error && !isFocused && "hover:border-primary/40 dark:hover:border-primary/40"
   );
 
   const inputClasses = cn(
-    "w-full bg-transparent border-none focus:ring-0 outline-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400/80",
+    "w-full bg-transparent border-none focus:ring-0 outline-none text-text-main dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80",
     // Sizes
     size === 'sm' && "px-3 py-1.5 text-xs",
     size === 'md' && "px-4 py-2.5 text-sm",

@@ -1,3 +1,7 @@
+'use client';
+
+'use client';
+
 import { useMemo, useEffect, useRef, useCallback } from 'react';
 import { ToastProps, ToastVariant } from './types';
 import { toast } from './toastStore';

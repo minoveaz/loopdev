@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useId } from 'react';
 
 export const InfinityPath: React.FC<{ duration: string }> = ({ duration }) => {
