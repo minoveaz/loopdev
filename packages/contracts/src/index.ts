@@ -1,6 +1,9 @@
 // Export Brands Module
 export * from './brands/brand';
 
+// Export Platform Navigation Contracts
+export * from './platform/navigation';
+
 // Common API Schemas (Basados en API_STANDARDS.md)
 import { z } from 'zod';
 

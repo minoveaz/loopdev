@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   },
   productionBrowserSourceMaps: false,
   compress: true,
+  staticPageGenerationTimeout: 120, // Más tiempo para páginas estáticas
 };
 
 export default nextConfig;
