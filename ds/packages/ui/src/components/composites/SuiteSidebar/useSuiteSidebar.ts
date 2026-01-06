@@ -11,13 +11,15 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
   const { 
     schema, 
     navMode, 
+    context = 'normal',
     accessMap, 
     activeModuleId,
     className = '' 
   } = props;
 
-  // 1. Estado de Densidad
-  const isRail = navMode === 'rail';
+  // 1. Estado de Densidad (Ahora consciente del contexto)
+  // En modo focus o inmersivo, siempre queremos el modo Rail.
+  const isRail = navMode === 'rail' || context === 'focus' || context === 'inmersive';
 
   // 2. Procesamiento de Navegación (Filtrado y Ordenación)
   const visibleGroups = useMemo(() => {
@@ -36,15 +38,13 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
       .filter(group => group.items.length > 0)
       .sort((a, b) => a.priority - b.priority);
   }, [schema.groups, accessMap]);
-
-  // 3. Composición de Clases del Contenedor
-  // Delegamos el grueso del estilo al TechnicalSurface, aquí gestionamos el layout flex
+  
+  // El resto del hook no cambia...
   const containerClasses = `
     flex flex-col h-full w-full transition-all duration-300
     ${className}
   `.replace(/\s+/g, ' ').trim();
 
-  // 4. Lógica de Scroll y Áreas Fijas
   const scrollAreaClasses = `
     flex-1 min-h-0 overflow-y-auto overflow-x-hidden
     ${isRail ? 'scrollbar-hide' : 'scrollbar-hide hover:scrollbar-default'}

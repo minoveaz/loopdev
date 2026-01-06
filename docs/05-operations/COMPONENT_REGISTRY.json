@@ -410,6 +410,39 @@
         "technical_scrollbar_styling": true,
         "visibility_control": true
       }
+    },
+    {
+      "id": "command-bar-trigger-v1",
+      "name": "CommandBarTrigger",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T21:55:00Z",
+      "capabilities": {
+        "adaptive_mode_support": true,
+        "os_level_shortcut_display": true,
+        "command_palette_integration": true
+      }
+    },
+    {
+      "id": "suite-header-v1",
+      "name": "SuiteHeader",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T22:20:00Z",
+      "capabilities": {
+        "three_capsule_architecture": true,
+        "overlay_safety_inertness": true,
+        "responsive_degradation": true,
+        "slot_based_extension": true
+      }
     }
   ]
 }

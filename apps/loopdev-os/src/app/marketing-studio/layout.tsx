@@ -10,22 +10,22 @@ import {
   SystemStatus,
   Text as LpdText,
   Icon,
-  UserAvatar
+  UserAvatar,
+  SuiteHeader,
+  CommandBarTrigger
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { NavMode } from '@loopdev/contracts';
+import { NavMode, LayoutContext } from '@loopdev/contracts';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
   
-  // Estado de Navegación del Shell
   const [navMode, setNavMode] = useState<NavMode>('expanded');
+  const [context, setContext] = useState<LayoutContext>('normal');
 
-  // Determinar el módulo activo basado en la ruta de forma robusta
   const getActiveModule = () => {
-    if (pathname === '/marketing-studio') return 'overview';
     if (pathname.startsWith('/marketing-studio/brands')) return 'brand-hub';
     if (pathname.startsWith('/marketing-studio/content')) return 'content-engine';
     if (pathname.startsWith('/marketing-studio/dam')) return 'dam';
@@ -34,77 +34,59 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 
   const activeModuleId = getActiveModule();
 
-  // Configuración de permisos simulada (Multitenant Ready)
   const accessMap = {
     'overview': 'enabled',
     'brand-hub': 'enabled',
-    'content-engine': 'enabled',
-    'dam': 'enabled',
-    'settings': 'enabled'
+    'content-engine': 'disabled',
+    'dam': 'coming-soon'
   };
 
   return (
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
-        navBehavior: 'auto'
+        navBehavior: 'auto',
+        context: context,
       }}
       onToggleLeftSidebar={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
       navSlot={
         <SuiteSidebar 
           schema={MARKETING_STUDIO_SCHEMA}
           navMode={navMode}
+          context={context}
           activeModuleId={activeModuleId}
           accessMap={accessMap}
           onExitToOS={() => router.push('/launchpad')}
           onNavigate={(route) => router.push(route.routeId)}
           onToggleNavMode={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
           profileSlot={
-            <div className={`flex items-center gap-3 w-full ${navMode === 'rail' ? 'justify-center' : 'px-2'}`}>
-               <UserAvatar 
-                 name={user?.email || 'User'} 
-                 size="sm" 
-                 withStatus 
-                 status="online" 
-               />
-               {navMode === 'expanded' && (
-                 <div className="flex-1 min-w-0">
-                   <LpdText size="xs" weight="bold" className="truncate block dark:text-white text-slate-900">
-                     {user?.email?.split('@')[0]}
-                   </LpdText>
-                   <LpdText size="nano" className="text-text-muted truncate block uppercase tracking-tighter">
-                     Tenant_Admin
-                   </LpdText>
-                 </div>
-               )}
-            </div>
+            <UserAvatar 
+              name={user?.email || 'User'} 
+              size={navMode === 'rail' ? 'md' : 'sm'}
+              withStatus 
+              status="online" 
+            />
           }
         />
       }
       headerSlot={
-        <div className="flex items-center justify-between w-full h-full">
-          <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary">
-              <Icon name="hub" size="sm" />
+        <SuiteHeader 
+          leftSlot={<div>{/* Placeholder para SuiteSwitcher y ContextPath */}</div>}
+          centerSlot={<CommandBarTrigger onOpen={() => {}} />}
+          rightSlot={
+            <div className="flex items-center gap-4">
+              <SystemStatus state="operational" id={user?.id} label="TID" />
+              <ThemeToggle variant="technical" size="md" />
+              <button 
+                onClick={() => signOut()}
+                className="p-2 text-slate-400 dark:text-text-muted hover:text-danger dark:hover:text-danger transition-colors rounded-lg hover:bg-danger/5 dark:hover:bg-danger/10"
+                title="Sign Out"
+              >
+                <Icon name="logout" size="sm" />
+              </button>
             </div>
-            <div>
-              <LpdText size="nano" weight="black" className="text-primary uppercase tracking-[0.2em] leading-none mb-1">Marketing Studio</LpdText>
-              <LpdText size="xs" weight="bold" className="text-slate-900 dark:text-white leading-none">Workspace_Active</LpdText>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <SystemStatus state="operational" id={user?.id} label="ID" />
-            <ThemeToggle variant="technical" size="md" />
-            <button 
-              onClick={() => signOut()}
-              className="p-2 text-slate-400 dark:text-text-muted hover:text-danger dark:hover:text-danger transition-colors rounded-lg hover:bg-danger/5 dark:hover:bg-danger/10"
-              title="Sign Out"
-            >
-              <Icon name="logout" size="sm" />
-            </button>
-          </div>
-        </div>
+          }
+        />
       }
     >
       {children}

@@ -4,7 +4,8 @@ import {
   NavMode, 
   AccessMap, 
   TelemetryMap, 
-  NavRouteRef 
+  NavRouteRef,
+  LayoutContext // Importamos el tipo de contexto oficial
 } from '@loopdev/contracts';
 
 /**
@@ -17,6 +18,8 @@ export interface SuiteSidebarProps {
   schema: NavigationSchema;
   /** Modo actual del Sidebar (controlado por AppShell) */
   navMode: NavMode;
+  /** Contexto de enfoque global de la aplicación */
+  context?: LayoutContext;
   /** ID del módulo activo (para Momentum y Focus) */
   activeModuleId?: string;
   /** Mapa de permisos en tiempo real */
