@@ -23,7 +23,7 @@ const config: Config = {
           glass: 'rgba(255, 255, 255, 0.03)',
         },
         background: {
-          dark: '#0f1115',
+          dark: '#05070a',
         },
         text: {
           main: 'var(--lpd-color-text-base, #0f172a)',

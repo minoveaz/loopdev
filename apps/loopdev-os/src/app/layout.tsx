@@ -32,16 +32,13 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased font-sans`}>
         <QueryProvider>
           <AuthProvider>
-            <DynamicThemeProvider config={{
-              fontFamily: 'var(--font-inter)',
-              colors: {
-                primary: '#135bec',
-                energy: '#FFD700',
-                surface: '#181b21',
-                background: '#0f1115'
-              }
-            }}>
-              {children}
+                      <DynamicThemeProvider config={{
+                        fontFamily: 'var(--font-inter)',
+                        colors: {
+                          primary: '#135bec',
+                          energy: '#FFD025',
+                        }
+                      }}>              {children}
             </DynamicThemeProvider>
           </AuthProvider>
         </QueryProvider>

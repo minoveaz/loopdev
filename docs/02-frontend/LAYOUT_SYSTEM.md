@@ -16,7 +16,7 @@
 ---
 
 ## 1️⃣ Layouts oficiales (v1)
-- **App Shell (Certified v1.1):** Contenedor raíz del SaaS. Implementa comportamiento híbrido (Push en Desktop / Overlay en Mobile), gestión de estados determinista (`navMode`, `contextMode`), soporte de densidad y accesibilidad avanzada (Topmost Escape, Mobile Scroll Lock).
+- **App Shell (Certified v1.1):** Contenedor raíz del SaaS. Implementa comportamiento híbrido (Push en Desktop / Overlay en Mobile), gestión de estados determinista (`navMode`, `contextMode`), soporte de densidad y accesibilidad avanzada (Topmost Escape, Mobile Scroll Lock). Para la guía de implementación, ver **[SHELL_ARCHITECTURE.md](./SHELL_ARCHITECTURE.md)**.
 - **Module Workspace:** Base para vistas internas de un módulo.
 - **Page:** Plantilla de página estándar (Formularios, Dashboards).
 - **Split View:** Trabajo dual (Lista ↔ Inspector).

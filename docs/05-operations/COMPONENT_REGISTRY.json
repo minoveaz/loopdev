@@ -233,6 +233,183 @@
         "depth_architecture_mapping": true,
         "integrated_blueprint_grid": true
       }
+    },
+    {
+      "id": "suite-sidebar-v1",
+      "name": "SuiteSidebar",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T15:00:00Z",
+      "capabilities": {
+        "navigation_schema_driven": true,
+        "rail_mode_support": true,
+        "multitenant_access_logic": true,
+        "live_context_pulse": true
+      }
+    },
+    {
+      "id": "status-pulse-v1",
+      "name": "StatusPulse",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T17:30:00Z",
+      "capabilities": {
+        "semantic_color_mapping": true,
+        "momentum_animation": true,
+        "technical_glow_effect": true
+      }
+    },
+    {
+      "id": "user-avatar-v1",
+      "name": "UserAvatar",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T17:45:00Z",
+      "capabilities": {
+        "image_fallback_to_initials": true,
+        "status_pulse_integration": true,
+        "premium_gradient_styling": true
+      }
+    },
+    {
+      "id": "identity-bar-v1",
+      "name": "IdentityBar",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T18:05:00Z",
+      "capabilities": {
+        "dynamic_orientation_support": true,
+        "tenant_color_aware": true,
+        "technical_precision_rendering": true
+      }
+    },
+    {
+      "id": "nav-sidebar-item-v1",
+      "name": "NavSidebarItem",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T19:00:00Z",
+      "capabilities": {
+        "hybrid_rail_expanded_modes": true,
+        "governance_access_states": true,
+        "momentum_active_pulse": true,
+        "technical_tooltips_integrated": true
+      }
+    },
+    {
+      "id": "exit-hatch-v1",
+      "name": "ExitHatch",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T19:05:00Z",
+      "capabilities": {
+        "reverse_movement_animation": true,
+        "rail_center_alignment": true,
+        "system_typography_compliant": true
+      }
+    },
+    {
+      "id": "technical-label-v1",
+      "name": "TechnicalLabel",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T19:15:00Z",
+      "capabilities": {
+        "precision_nano_typography": true,
+        "extended_tracking_support": true,
+        "semantic_variant_mapping": true
+      }
+    },
+    {
+      "id": "sidebar-footer-v1",
+      "name": "SidebarFooter",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T19:20:00Z",
+      "capabilities": {
+        "unified_control_console": true,
+        "responsive_profile_layout": true,
+        "identity_atom_integration": true
+      }
+    },
+    {
+      "id": "technical-tooltip-v1",
+      "name": "TechnicalTooltip",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T20:25:00Z",
+      "capabilities": {
+        "radix_accessibility_engine": true,
+        "technical_terminal_aesthetic": true,
+        "blue_bracket_identity": true,
+        "smart_positioning_support": true
+      }
+    },
+    {
+      "id": "nav-group-v1",
+      "name": "NavGroup",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T21:10:00Z",
+      "capabilities": {
+        "technical_label_integration": true,
+        "rail_mode_rhythm": true
+      }
+    },
+    {
+      "id": "scroll-area-v1",
+      "name": "ScrollArea",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T21:10:00Z",
+      "capabilities": {
+        "technical_scrollbar_styling": true,
+        "visibility_control": true
+      }
     }
   ]
 }

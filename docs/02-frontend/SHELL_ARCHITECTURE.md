@@ -1,6 +1,6 @@
-# 🏗️ Shell Architecture — LoopDev OS (v1.0)
+# 🏗️ Shell Architecture — LoopDev OS (v1.1)
 
-> **Estado:** Activo / Autoridad Técnica
+> **Estado:** Activo / Autoridad Técnica v1.1
 > **Tipo:** Estándar de Composición de Plataforma
 > **Alcance:** Apps · Suites · Módulos Operativos
 > **Objetivo:** Garantizar una experiencia de usuario inmutable y escalable mediante la estandarización de los contenedores y piezas de navegación.
@@ -16,9 +16,9 @@ LoopDev OS no se construye como una colección de páginas web, sino como un **S
 
 ---
 
-## 1️⃣ Los 6 Componentes Estándar
+## 1️⃣ Los 6 Componentes Estándar del Chasis
 
-Para que cualquier suite (Marketing, CRM, Finanzas) sea idéntica en comportamiento, es obligatorio el uso de estos 6 componentes compuestos:
+Para que cualquier suite sea idéntica en comportamiento, es obligatorio el uso de estos 6 componentes compuestos y de layout:
 
 ### A. Nivel Suite (Inyectados en `AppShell`)
 
@@ -26,60 +26,63 @@ Para que cualquier suite (Marketing, CRM, Finanzas) sea idéntica en comportamie
 | :--- | :--- | :--- |
 | **`SuiteSidebar`** | `navSlot` | Navegación entre los grandes módulos de la suite. |
 | **`SuiteHeader`** | `headerSlot` | Identidad de la suite, telemetría del sistema y perfil. |
-| **`SuiteContextPanel`** | `contextSlot` | Información ambiental (Actividad global, créditos, equipo). |
+| **`SuiteContextPanel`** | `contextSlot` | Información ambiental y telemetría de la suite. |
 
 ### B. Nivel Módulo (Inyectados en `ModuleWorkspace`)
 
 | Componente | Slot | Objetivo |
 | :--- | :--- | :--- |
 | **`ModuleSidebar`** | `sidebarSlot` | Navegación interna por las herramientas del módulo. |
-| **`ModuleToolbar`** | `toolbarSlot` | Acciones inmediatas sobre el objeto activo (Save, Historial). |
+| **`ModuleToolbar`** | `toolbarSlot` | Acciones inmediatas sobre el objeto activo. |
 | **`ModuleInspector`** | `inspectorSlot` | Control granular y edición de propiedades técnicas. |
 
 ---
 
-## 2️⃣ Matriz de Responsabilidades de Slots
+## 2️⃣ The Sidebar Blueprint (Implementación de Referencia)
 
-| Slot | Suite Level (AppShell) | Module Level (Workspace) |
-| :--- | :--- | :--- |
-| **Izquierda** | **Foco:** Cambio de Módulo. | **Foco:** Cambio de Herramienta. |
-| **Superior** | **Foco:** "¿Dónde estoy y quién soy?". | **Foco:** "¿Qué puedo hacer ahora?". |
-| **Derecha** | **Foco:** "¿Qué está pasando?". | **Foco:** "¿Cómo es este objeto?". |
-| **Centro** | Renderiza el `ModuleWorkspace`. | Renderiza el `Lienzo de Trabajo`. |
-
----
-
-## 3️⃣ Guía de Implementación: "Patrón de Suite"
-
-Para crear una nueva suite (ej: `CRM`), el equipo de ingeniería debe seguir estos pasos:
-
-### 1. Definir la Configuración de Suite
-Crear un objeto de datos que contenga los módulos, iconos y rutas. Este objeto alimentará al `SuiteSidebar`.
-
-### 2. Implementar el Suite Layout
-En el `layout.tsx` de la suite, invocar el `AppShell` inyectando los componentes `SuiteSidebar` y `SuiteHeader`.
+Este es el JSX oficial que debe usarse en el `layout.tsx` de cualquier suite para garantizar la consistencia.
 
 ```tsx
-// Ejemplo estándar
-<AppShell
-  navSlot={<SuiteSidebar config={CRM_CONFIG} />}
-  headerSlot={<SuiteHeader title="Sales & CRM" />}
->
-  {children}
-</AppShell>
-```
+// En el layout.tsx de la suite
+import { AppShell, SuiteSidebar, SuiteHeader, YOUR_SUITE_SCHEMA } from '@loopdev/ui';
 
-### 3. Implementar el Module Layout (opcional)
-Si la página es un módulo operativo, inyectar el `ModuleWorkspace` dentro del `AppShell`.
+export default function SuiteLayout({ children }) {
+  // 1. Hooks de estado y navegación
+  const [navMode, setNavMode] = useState('expanded');
+  const activeModule = useActiveModule(); // Hook de lógica de negocio
+
+  // 2. Renderizado del Chasis
+  return (
+    <AppShell
+      config={{ isLeftSidebarOpen: navMode === 'expanded' }}
+      onToggleLeftSidebar={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
+      
+      navSlot={
+        <SuiteSidebar
+          schema={YOUR_SUITE_SCHEMA}
+          navMode={navMode}
+          activeModuleId={activeModule.id}
+          accessMap={usePermissions()}
+          onNavigate={(route) => router.push(route)}
+          onToggleNavMode={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
+        />
+      }
+      
+      headerSlot={<SuiteHeader suiteName={YOUR_SUITE_SCHEMA.suite.suiteName} />}
+    >
+      {children}
+    </AppShell>
+  );
+}
+```
 
 ---
 
-## 4️⃣ Reglas No Negociables
+## 3️⃣ Reglas No Negociables del Shell
 
-1.  **Prioridad de Paneles:** El `ModuleInspector` siempre tiene prioridad visual sobre el `SuiteContextPanel`. Nunca deben estar abiertos ambos simultáneamente.
-2.  **Identidad:** El `SuiteHeader` debe mostrar siempre el `SystemStatus` oficial.
-3.  **Navegación:** Todo `SuiteSidebar` debe incluir obligatoriamente el botón "Back to OS" (retorno al Launchpad).
-4.  **Zero Hardcoding:** Estos componentes deben consumir exclusivamente tokens del Design System para asegurar la paridad entre suites.
+1.  **Prioridad de Paneles:** El `ModuleInspector` siempre tiene prioridad visual sobre el `SuiteContextPanel`.
+2.  **Identidad Consistente:** `SuiteHeader` y `SuiteSidebar` deben consumir la misma `SuiteIdentity` del schema.
+3.  **Navegación Desacoplada:** Toda la estructura de navegación debe vivir en un `schema.ts` y no estar hardcodeada.
 
 ---
 *Arquitectura de Shell - LoopDev Engineering Board*

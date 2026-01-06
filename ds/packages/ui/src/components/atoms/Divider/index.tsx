@@ -1,54 +1,43 @@
+'use client';
+
 import React from 'react';
 import { useDivider } from './useDivider';
-import { Text } from '../Typography';
+import { Text as LpdText } from '../Typography';
+import { DividerProps } from './types';
 
 /**
- * @component Divider
- * @description Separador visual para contenido, con soporte para orientación y etiquetas.
+ * @component Divider (Technical Standard v1.1)
+ * @description Separador visual de alta precisión. Soporta grosores de 0.5px.
  * @category Primitives
- * @status stable
  */
-export const Divider = (props: any) => {
+export const Divider: React.FC<DividerProps> = (props) => {
   const {
     label,
     isHorizontal,
     containerClasses,
     lineClasses,
-    labelWrapperClasses,
-    ...rest
+    labelWrapperClasses
   } = useDivider(props);
 
-  // Fallback visual directo si el token falla
-  const lineStyle = { backgroundColor: 'var(--lpd-color-border-subtle, #e2e8f0)' };
-
   if (!label) {
-    if (isHorizontal) {
-      return (
-        <div 
-          className={`h-px w-full bg-border-subtle ${props.className || ''}`} 
-          style={lineStyle}
-          {...rest}
-          role="separator"
-        />
-      );
-    }
     return (
       <div 
-        className={`w-px min-h-[1em] self-stretch bg-border-subtle ${props.className || ''}`} 
-        style={lineStyle}
-        {...rest}
+        className={containerClasses}
         role="separator"
-      />
+        aria-orientation={isHorizontal ? 'horizontal' : 'vertical'}
+      >
+        <div className={lineClasses} />
+      </div>
     );
   }
 
   return (
-    <div className={containerClasses} {...rest} role="separator">
-      <div className={lineClasses} style={lineStyle} />
-      <Text as="span" size="xs" weight="medium" className={`shrink-0 ${labelWrapperClasses}`}>
+    <div className={containerClasses} role="separator" aria-orientation="horizontal">
+      <div className={lineClasses} />
+      <LpdText as="span" size="nano" weight="black" className={`shrink-0 uppercase tracking-widest opacity-40 ${labelWrapperClasses}`}>
         {label}
-      </Text>
-      <div className={lineClasses} style={lineStyle} />
+      </LpdText>
+      <div className={lineClasses} />
     </div>
   );
 };

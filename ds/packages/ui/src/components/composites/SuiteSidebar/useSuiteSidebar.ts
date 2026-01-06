@@ -46,8 +46,8 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
 
   // 4. Lógica de Scroll y Áreas Fijas
   const scrollAreaClasses = `
-    flex-1 overflow-y-auto overflow-x-hidden
-    scrollbar-none hover:scrollbar-thin scrollbar-thumb-primary/20
+    flex-1 min-h-0 overflow-y-auto overflow-x-hidden
+    ${isRail ? 'scrollbar-hide' : 'scrollbar-hide hover:scrollbar-default'}
   `.replace(/\s+/g, ' ').trim();
 
   return {

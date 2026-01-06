@@ -8,8 +8,9 @@ import {
   MARKETING_STUDIO_SCHEMA,
   ThemeToggle,
   SystemStatus,
-  Text,
-  Icon
+  Text as LpdText,
+  Icon,
+  UserAvatar
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { NavMode } from '@loopdev/contracts';
@@ -22,8 +23,16 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   // Estado de Navegación del Shell
   const [navMode, setNavMode] = useState<NavMode>('expanded');
 
-  // Determinar el módulo activo basado en la ruta
-  const activeModuleId = pathname.split('/').pop() || 'overview';
+  // Determinar el módulo activo basado en la ruta de forma robusta
+  const getActiveModule = () => {
+    if (pathname === '/marketing-studio') return 'overview';
+    if (pathname.startsWith('/marketing-studio/brands')) return 'brand-hub';
+    if (pathname.startsWith('/marketing-studio/content')) return 'content-engine';
+    if (pathname.startsWith('/marketing-studio/dam')) return 'dam';
+    return 'overview';
+  };
+
+  const activeModuleId = getActiveModule();
 
   // Configuración de permisos simulada (Multitenant Ready)
   const accessMap = {
@@ -36,7 +45,10 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 
   return (
     <AppShell
-      navMode={navMode}
+      config={{
+        isLeftSidebarOpen: navMode === 'expanded',
+        navBehavior: 'auto'
+      }}
       onToggleLeftSidebar={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
       navSlot={
         <SuiteSidebar 
@@ -48,15 +60,21 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           onNavigate={(route) => router.push(route.routeId)}
           onToggleNavMode={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
           profileSlot={
-            <div className="flex items-center gap-3 px-2 py-1 mb-2">
-               <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
-                 {user?.email?.charAt(0).toUpperCase()}
-               </div>
+            <div className={`flex items-center gap-3 w-full ${navMode === 'rail' ? 'justify-center' : 'px-2'}`}>
+               <UserAvatar 
+                 name={user?.email || 'User'} 
+                 size="sm" 
+                 withStatus 
+                 status="online" 
+               />
                {navMode === 'expanded' && (
                  <div className="flex-1 min-w-0">
-                   <Text size="nano" weight="bold" className="truncate block dark:text-white text-slate-900">
+                   <LpdText size="xs" weight="bold" className="truncate block dark:text-white text-slate-900">
                      {user?.email?.split('@')[0]}
-                   </Text>
+                   </LpdText>
+                   <LpdText size="nano" className="text-text-muted truncate block uppercase tracking-tighter">
+                     Tenant_Admin
+                   </LpdText>
                  </div>
                )}
             </div>
@@ -66,12 +84,12 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       headerSlot={
         <div className="flex items-center justify-between w-full h-full">
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary">
               <Icon name="hub" size="sm" />
             </div>
             <div>
-              <Text size="nano" weight="black" className="text-primary uppercase tracking-[0.2em] leading-none mb-1">Marketing Studio</Text>
-              <Text size="xs" weight="bold" className="dark:text-white text-slate-900 leading-none">Workspace_Active</Text>
+              <LpdText size="nano" weight="black" className="text-primary uppercase tracking-[0.2em] leading-none mb-1">Marketing Studio</LpdText>
+              <LpdText size="xs" weight="bold" className="text-slate-900 dark:text-white leading-none">Workspace_Active</LpdText>
             </div>
           </div>
 
@@ -80,7 +98,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             <ThemeToggle variant="technical" size="md" />
             <button 
               onClick={() => signOut()}
-              className="p-2 text-text-muted hover:text-danger transition-colors rounded-lg hover:bg-danger/10"
+              className="p-2 text-slate-400 dark:text-text-muted hover:text-danger dark:hover:text-danger transition-colors rounded-lg hover:bg-danger/5 dark:hover:bg-danger/10"
               title="Sign Out"
             >
               <Icon name="logout" size="sm" />

@@ -13,6 +13,8 @@ export interface TechnicalSurfaceProps {
   variant?: SurfaceVariant;
   /** Nivel de elevación y sombra */
   depth?: SurfaceDepth;
+  /** Control de desbordamiento de contenido */
+  overflow?: 'hidden' | 'visible' | 'auto';
   /** Habilitar micro-grilla técnica interna */
   withGrid?: boolean;
   /** Clase CSS adicional para paddings o dimensiones */

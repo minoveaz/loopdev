@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { SystemStatusProps } from './types';
+import { StatusPulse } from '../StatusPulse';
+import { SystemStatusProps, SystemStatusState } from './types';
 import { useSystemStatus } from './useSystemStatus';
 
 /**
@@ -11,13 +12,18 @@ import { useSystemStatus } from './useSystemStatus';
  * @phase 1
  */
 export const SystemStatus: React.FC<SystemStatusProps> = (props) => {
-  const { currentConfig, containerClasses, formattedId, label } = useSystemStatus(props);
+  const { currentConfig, containerClasses, formattedId, label, state } = useSystemStatus(props);
+
+  // Mapeo de estado local a variante de StatusPulse
+  const pulseVariant = state === 'operational' ? 'success' : 
+                       state === 'degraded' ? 'energy' : 
+                       state === 'outage' ? 'danger' : 'info';
 
   return (
     <div className={containerClasses} role="status">
-      {/* Indicador de Salud (Punto de Pulso) */}
+      {/* Indicador de Salud (Usando el nuevo Átomo Oficial) */}
       <div className="flex items-center gap-2">
-        <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${currentConfig.dot}`} />
+        <StatusPulse variant={pulseVariant} size="sm" />
         <span className={`uppercase font-bold tracking-tight ${currentConfig.text}`}>
           {currentConfig.label}
         </span>

@@ -8,6 +8,7 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
   const { 
     variant = 'surface', 
     depth = 'flat', 
+    overflow = 'hidden',
     className = '',
     onClick 
   } = props;
@@ -26,11 +27,19 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
     overlay: 'border-black/10 dark:border-white/20 shadow-2xl',
   };
 
-  // 3. Composición de clases indestructible
+  // 3. Mapeo de Overflow
+  const overflowMap = {
+    hidden: 'overflow-hidden',
+    visible: 'overflow-visible',
+    auto: 'overflow-auto',
+  };
+
+  // 4. Composición de clases indestructible
   const surfaceClasses = `
-    group relative overflow-hidden rounded-xl border transition-all duration-300
+    relative rounded-xl border transition-all duration-300
     ${variantMap[variant]}
     ${depthMap[depth]}
+    ${overflowMap[overflow]}
     ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''}
     ${className}
   `.replace(/\s+/g, ' ').trim();

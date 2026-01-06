@@ -20,7 +20,9 @@ export const useBrandLogo = (props: BrandLogoProps) => {
   const currentSize = sizeMap[size];
 
   // Lógica de clases para el contenedor principal
-  const containerClasses = `inline-flex items-center ${currentSize.gap} ${className}`;
+  // El gap solo se aplica si mostramos el logo completo (isotipo + texto)
+  const gapClass = variant === 'full' ? currentSize.gap : '';
+  const containerClasses = `inline-flex items-center ${gapClass} ${className}`;
 
   // Lógica de clases para el texto (Reactividad de tema)
   const textClasses = `font-black tracking-tighter ${currentSize.text} ${

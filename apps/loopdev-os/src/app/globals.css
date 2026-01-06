@@ -7,8 +7,7 @@
 @tailwind utilities;
 
 body {
-  background: #05070a;
-  color: white;
+  @apply bg-white dark:bg-[#05070a] text-slate-900 dark:text-white transition-colors duration-300;
   font-size: var(--lpd-font-size-base);
 }
 

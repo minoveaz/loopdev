@@ -81,7 +81,10 @@ const preset = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/container-queries'),
+    require('tailwind-scrollbar-hide'),
+  ],
 };
 
 module.exports = preset;

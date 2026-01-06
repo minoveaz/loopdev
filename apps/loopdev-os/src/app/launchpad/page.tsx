@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
-import { Heading, Text, Icon, TechnicalCanvas, BrandLogo, UIKitIllustration, EngineeringSeal, SuiteCard, ThemeToggle, SystemStatus, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
+import { Heading, Text as LpdText, Icon, TechnicalCanvas, BrandLogo, UIKitIllustration, EngineeringSeal, SuiteCard, ThemeToggle, SystemStatus, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
 import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
 
 export default function LaunchpadPage() {
@@ -29,9 +29,9 @@ export default function LaunchpadPage() {
             <BrandLogo variant="full" size="md" />
             <div className="h-8 w-px bg-black/10 dark:bg-white/10 hidden md:block"></div>
             <div>
-              <Text size="sm" weight="bold" className="text-slate-900 dark:text-white">
+              <LpdText size="sm" weight="bold" className="text-slate-900 dark:text-white">
                 Welcome, <span className="text-primary font-black">{user?.email?.split('@')[0]}</span>
-              </Text>
+              </LpdText>
             </div>
           </div>
 
@@ -48,7 +48,7 @@ export default function LaunchpadPage() {
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 lg:p-24">
         <div className="w-full max-w-6xl">
           <div className="mb-16">
-            <Text size="nano" weight="black" className="text-primary tracking-[0.5em] uppercase mb-4">Core_Suites_Available</Text>
+            <LpdText size="nano" weight="black" className="text-primary tracking-[0.5em] uppercase mb-4">Core_Suites_Available</LpdText>
             <Heading size="3xl" weight="bold" className="dark:text-white text-slate-900 tracking-tight max-w-2xl">
               Initialize your <span className="text-primary font-black">Work Context</span> to start building.
             </Heading>
