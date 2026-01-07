@@ -8,3 +8,4 @@ export * from './ContextPath';
 export * from './UserMenu';
 export * from './NotificationCenter';
 export * from './QuickActionMenu';
+export * from './ModuleWorkspace';

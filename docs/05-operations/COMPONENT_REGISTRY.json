@@ -562,6 +562,24 @@
         "technical_shortcut_support": true,
         "group_based_organization": true
       }
+    },
+    {
+      "id": "module-workspace-v1.4.0",
+      "name": "ModuleWorkspace",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-07T15:30:00Z",
+      "capabilities": {
+        "three_pane_layout": true,
+        "focus_modes": true,
+        "responsive_overlays": true,
+        "context_integration": true,
+        "zero_hardcoding": true
+      }
     }
   ]
 }
