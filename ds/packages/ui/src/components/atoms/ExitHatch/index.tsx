@@ -2,7 +2,7 @@
 
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
-import { Text as LpdText } from '../Typography';
+import { LpdText } from '../Typography';
 import { ExitHatchProps } from './types';
 import { useExitHatch } from './useExitHatch';
 

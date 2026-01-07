@@ -8,22 +8,42 @@ import {
   MARKETING_STUDIO_SCHEMA,
   ThemeToggle,
   SystemStatus,
-  Text as LpdText,
+  LpdText,
   Icon,
   UserAvatar,
   SuiteHeader,
-  CommandBarTrigger
+  CommandBarTrigger,
+  SuiteSwitcher,
+  ContextPath,
+  AVAILABLE_SUITES_FIXTURES,
+  UserMenu,
+  NotificationCenter,
+  NOTIFICATION_CENTER_FIXTURES,
+  Divider,
+  QuickActionMenu,
+  QUICK_ACTION_FIXTURES
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
+import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext } from '@loopdev/contracts';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
+  const { 
+    notifications, 
+    unreadCount, 
+    markAsRead, 
+    markAllAsRead, 
+    removeNotification,
+    clearAll 
+  } = useNotifications(NOTIFICATION_CENTER_FIXTURES.recent);
   
   const [navMode, setNavMode] = useState<NavMode>('expanded');
   const [context, setContext] = useState<LayoutContext>('normal');
+
+  const currentSuite = MARKETING_STUDIO_SCHEMA.suite;
 
   const getActiveModule = () => {
     if (pathname.startsWith('/marketing-studio/brands')) return 'brand-hub';
@@ -71,19 +91,54 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       }
       headerSlot={
         <SuiteHeader 
-          leftSlot={<div>{/* Placeholder para SuiteSwitcher y ContextPath */}</div>}
+          leftSlot={
+            <div className="flex items-center gap-4">
+              <SuiteSwitcher 
+                currentSuite={currentSuite as any}
+                availableSuites={AVAILABLE_SUITES_FIXTURES}
+                onSuiteChange={(id) => id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)}
+              />
+              <Divider orientation="vertical" thickness="technical" className="h-4" />
+              <ContextPath 
+                segments={[
+                  { id: 'suite', label: 'Marketing', href: '/marketing-studio' },
+                  { 
+                    id: 'module', 
+                    label: activeModuleId === 'brand-hub' ? 'Brand Hub' : 
+                           activeModuleId === 'content-engine' ? 'Content Engine' :
+                           activeModuleId === 'dam' ? 'Digital Assets' : 'Dashboard',
+                    isActive: true 
+                  }
+                ]} 
+              />
+            </div>
+          }
           centerSlot={<CommandBarTrigger onOpen={() => {}} />}
           rightSlot={
             <div className="flex items-center gap-4">
+              <QuickActionMenu groups={QUICK_ACTION_FIXTURES.marketing} />
+              <Divider orientation="vertical" thickness="technical" className="h-4" />
+
               <SystemStatus state="operational" id={user?.id} label="TID" />
+              <Divider orientation="vertical" thickness="technical" className="h-4" />
+              
+              <NotificationCenter 
+                notifications={notifications}
+                unreadCount={unreadCount}
+                onMarkAsRead={markAsRead}
+                onMarkAllRead={markAllAsRead}
+                onRemove={removeNotification}
+                onClear={clearAll}
+                onViewAll={() => console.log('Open SuiteContextPanel')}
+              />
+
               <ThemeToggle variant="technical" size="md" />
-              <button 
-                onClick={() => signOut()}
-                className="p-2 text-slate-400 dark:text-text-muted hover:text-danger dark:hover:text-danger transition-colors rounded-lg hover:bg-danger/5 dark:hover:bg-danger/10"
-                title="Sign Out"
-              >
-                <Icon name="logout" size="sm" />
-              </button>
+              <UserMenu 
+                userName={user?.email || 'User'}
+                userEmail={user?.email}
+                userRole="Tenant_Admin"
+                onLogout={() => signOut()}
+              />
             </div>
           }
         />

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Text, Heading, Code } from './index';
+import { LpdText, Heading, Code } from './index';
 import { CertificationStamp } from '../CertificationStamp';
 
 const meta: Meta<typeof Text> = {
@@ -61,7 +61,7 @@ export const MainHeading: Story = {
 export const TechnicalCode: Story = {
   render: () => (
     <div className="flex flex-col gap-4 items-center">
-      <Text size="sm" weight="bold">System Output:</Text>
+      <LpdText size="sm" weight="bold">System Output:</LpdText>
       <Code>const architect = new LoopDev();</Code>
     </div>
   ),

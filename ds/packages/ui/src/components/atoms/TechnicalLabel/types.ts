@@ -7,6 +7,7 @@ import { ReactNode } from 'react';
 
 export type TechnicalLabelVariant = 'primary' | 'muted' | 'subtle' | 'white';
 export type TechnicalLabelSize = 'nano' | 'xs';
+export type TechnicalLabelWeight = 'medium' | 'semibold' | 'bold' | 'black';
 
 export interface TechnicalLabelProps {
   /** Contenido de la etiqueta */
@@ -15,6 +16,10 @@ export interface TechnicalLabelProps {
   variant?: TechnicalLabelVariant;
   /** Tamaño industrial */
   size?: TechnicalLabelSize;
+  /** Peso tipográfico */
+  weight?: TechnicalLabelWeight;
+  /** Familia tipográfica */
+  fontFamily?: 'sans' | 'mono';
   /** Forzar transformación a mayúsculas */
   isUppercase?: boolean;
   /** Espaciado entre letras extra */

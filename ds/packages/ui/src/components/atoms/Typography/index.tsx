@@ -5,12 +5,12 @@ import { useTypography } from './useTypography';
 import type { TypographyProps, HeadingProps } from './types';
 
 /**
- * @component Text
+ * @component LpdText
  * @description Primitiva tipográfica base alineada a v3.8. Soporta Inter y JetBrains Mono.
  * @category Foundations
  * @status stable
  */
-export const Text = (props: TypographyProps & Record<string, unknown>) => {
+export const LpdText = (props: TypographyProps & Record<string, unknown>) => {
   const { classes, Component } = useTypography(props);
   const { children, size, weight, variant, className, as, ...rest } = props;
   return <Component className={classes} {...rest}>{children}</Component>;
@@ -28,7 +28,7 @@ export const Heading: React.FC<HeadingProps & React.HTMLAttributes<HTMLHeadingEl
   as = 'h1',
   ...props 
 }) => (
-  <Text size={size} weight={weight} as={as} {...props} />
+  <LpdText size={size} weight={weight} as={as} {...props} />
 );
 
 /**
@@ -38,7 +38,7 @@ export const Heading: React.FC<HeadingProps & React.HTMLAttributes<HTMLHeadingEl
  * @status stable
  */
 export const Code = ({ variant = 'mono', className = '', ...props }) => (
-  <Text 
+  <LpdText 
     variant={variant} 
     className={`bg-surface-glass px-1.5 py-0.5 rounded border border-border-subtle text-text-muted ${className}`} 
     {...props} 

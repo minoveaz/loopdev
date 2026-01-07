@@ -67,12 +67,12 @@ export const useAppShell = (props: AppShellProps) => {
       '--app-shell-header-height': isCompact ? 'var(--lpd-space-12)' : 'var(--lpd-space-16)',
       '--app-shell-footer-height': isCompact ? 'var(--lpd-space-8)' : 'var(--lpd-space-10)',
       '--app-shell-main-padding': isCompact ? 'var(--lpd-space-4)' : 'var(--lpd-space-8)',
-      // Z-Indexes Diferenciados
-      '--app-shell-z-backdrop': '35',
-      '--app-shell-z-nav': '45',
-      '--app-shell-z-context': '50', 
-      '--app-shell-z-header': '20',
-      '--app-shell-z-overlay': '100',
+      // Z-Indexes Diferenciados (Industrial Scale)
+      '--app-shell-z-backdrop': '4000',
+      '--app-shell-z-nav': '4100',
+      '--app-shell-z-context': '4100', 
+      '--app-shell-z-header': '4200',
+      '--app-shell-z-overlay': '5000',
     };
   }, [navMode, contextMode, density]);
 

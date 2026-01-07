@@ -1,7 +1,7 @@
 import {
   TechnicalSurface,
   BrandLogo,
-  Text as LpdText,
+  LpdText,
   Heading,
   Divider,
   ExitHatch,

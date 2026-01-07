@@ -25,4 +25,19 @@
   --ring: #111827;
 
   --radius: 0.5rem;
+
+  /* --- LABORATORY SYSTEM: HIGH FIDELITY TOKENS --- */
+  --lpd-color-bg-laboratory: #0d121b;
+  --lpd-color-bg-surface-elevated: #181b21;
+  --lpd-color-border-technical: rgba(255, 255, 255, 0.05);
+  --lpd-color-border-subtle: rgba(255, 255, 255, 0.08);
+  
+  /* Innovation Scale */
+  --lpd-color-innovation-purple: #9333EA;
+  --lpd-color-innovation-soft: rgba(147, 51, 234, 0.1);
+
+  /* Typography Density */
+  --lpd-font-size-technical: 10px;
+  --lpd-font-size-micro: 9px;
+  --lpd-font-size-nano: 8px;
 }

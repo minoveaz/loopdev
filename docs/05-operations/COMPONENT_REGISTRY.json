@@ -443,6 +443,125 @@
         "responsive_degradation": true,
         "slot_based_extension": true
       }
+    },
+    {
+      "id": "suite-switcher-v1",
+      "name": "SuiteSwitcher",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T22:30:00Z",
+      "capabilities": {
+        "radix_dropdown_engine": true,
+        "active_suite_check": true,
+        "governance_access_support": true,
+        "back_to_os_shortcut": true
+      }
+    },
+    {
+      "id": "technical-dropdown-v1",
+      "name": "TechnicalDropdown",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T22:45:00Z",
+      "capabilities": {
+        "radix_logic_abstraction": true,
+        "unified_glass_aesthetic": true,
+        "technical_group_labels": true,
+        "smart_positioning_system": true
+      }
+    },
+    {
+      "id": "context-path-v1",
+      "name": "ContextPath",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-04T23:15:00Z",
+      "capabilities": {
+        "smart_collapse_algorithm": true,
+        "breadcrumb_navigation_support": true,
+        "technical_separator_variants": true,
+        "active_level_authority": true
+      }
+    },
+    {
+      "id": "technical-menu-item-v1",
+      "name": "TechnicalMenuItem",
+      "status": "stable",
+      "category": "Foundations",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-05T11:50:00Z",
+      "capabilities": {
+        "standard_action_layout": true,
+        "shortcut_hint_integrated": true,
+        "semantic_danger_variant": true,
+        "automatic_accessibility_roles": true
+      }
+    },
+    {
+      "id": "user-menu-v1",
+      "name": "UserMenu",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-05T12:00:00Z",
+      "capabilities": {
+        "role_awareness_technical_tags": true,
+        "avatar_trigger_integration": true,
+        "session_management_actions": true,
+        "technical_dropdown_inheritance": true
+      }
+    },
+    {
+      "id": "notification-center-v1",
+      "name": "NotificationCenter",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-05T12:15:00Z",
+      "capabilities": {
+        "smart_badge_counter": true,
+        "technical_alert_types": true,
+        "radix_popover_engine": true,
+        "view_all_action_integrated": true
+      }
+    },
+    {
+      "id": "quick-action-menu-v1",
+      "name": "QuickActionMenu",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-05T12:40:00Z",
+      "capabilities": {
+        "context_aware_actions": true,
+        "rotation_feedback_animation": true,
+        "technical_shortcut_support": true,
+        "group_based_organization": true
+      }
     }
   ]
 }

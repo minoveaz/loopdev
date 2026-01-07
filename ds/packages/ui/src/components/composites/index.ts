@@ -3,3 +3,8 @@ export * from './SuiteSidebar';
 export * from './SidebarFooter';
 export * from './SidebarIdentity';
 export * from './SuiteHeader';
+export * from './SuiteSwitcher';
+export * from './ContextPath';
+export * from './UserMenu';
+export * from './NotificationCenter';
+export * from './QuickActionMenu';

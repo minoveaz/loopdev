@@ -6,7 +6,7 @@ import { ToastProps } from './types';
 import { Icon } from '../Icon';
 import { LogoSpinner } from '../LogoSpinner';
 import { Button } from '../Button';
-import { Text } from '../Typography';
+import { LpdText } from '../Typography';
 import { toast } from './toastStore';
 
 /**
@@ -69,9 +69,9 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
       {/* 3. Narrative Section */}
       <div className="relative z-10 flex-1 min-w-0 space-y-1">
         <div className="flex items-center justify-between gap-2">
-          <Text weight="black" size="sm" className={`truncate leading-tight ${titleColorClass}`}>
+          <LpdText weight="black" size="sm" className={`truncate leading-tight ${titleColorClass}`}>
             {title}
-          </Text>
+          </LpdText>
           {/* Metadata Brackets */}
           {metadata && (
             <span className={`font-mono text-[10px] font-bold shrink-0 ${accentColorClass} flex items-center gap-1 px-1.5 py-0.5 rounded border ${visualConfig.metaBg}`}>
@@ -83,9 +83,9 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
         </div>
         
         {description && (
-          <Text size="xs" variant="muted" className={`leading-relaxed line-clamp-2 ${isWarning ? 'text-slate-800' : 'dark:text-slate-400'}`}>
+          <LpdText size="xs" variant="muted" className={`leading-relaxed line-clamp-2 ${isWarning ? 'text-slate-800' : 'dark:text-slate-400'}`}>
             {description}
-          </Text>
+          </LpdText>
         )}
 
         {/* 4. Action Section */}

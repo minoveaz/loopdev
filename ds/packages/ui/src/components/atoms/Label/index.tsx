@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useLabel } from './useLabel';
-import { Text } from '../Typography';
+import { LpdText } from '../Typography';
 
 export interface LabelProps {
   children: React.ReactNode;
@@ -24,9 +24,9 @@ export const Label: React.FC<LabelProps> = (props) => {
   const { textComponentProps, children, required } = useLabel(props);
 
   return (
-    <Text {...textComponentProps}>
+    <LpdText {...textComponentProps}>
       {children}
-      {required && <span className="text-danger ml-1" title="Required field">*</span>}
-    </Text>
+      {required && <RequiredIndicator />}
+    </LpdText>
   );
 };

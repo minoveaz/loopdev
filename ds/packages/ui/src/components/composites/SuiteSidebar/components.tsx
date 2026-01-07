@@ -4,7 +4,7 @@ import React from 'react';
 
 import { NavGroup, NavItem, AccessMap, TelemetryMap, NavRouteRef } from '@loopdev/contracts';
 
-import { Icon, Text as LpdText, Badge, StatusPulse, IdentityBar, NavSidebarItem, ExitHatch, TechnicalLabel, NavGroup as NavGroupAtom } from '../../atoms';
+import { Icon, LpdText, Badge, StatusPulse, IdentityBar, NavSidebarItem, ExitHatch, TechnicalLabel, NavGroup as NavGroupAtom } from '../../atoms';
 
 import * as LucideIcons from 'lucide-react';
 

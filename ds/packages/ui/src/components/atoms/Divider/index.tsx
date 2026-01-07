@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useDivider } from './useDivider';
-import { Text as LpdText } from '../Typography';
+import { LpdText } from '../Typography';
 import { DividerProps } from './types';
 
 /**

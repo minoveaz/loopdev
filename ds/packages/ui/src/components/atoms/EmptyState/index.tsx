@@ -3,7 +3,7 @@ import { useEmptyState } from './useEmptyState';
 import { EmptyStateVisual, AIBracketVisual } from './components';
 import { EmptyStateProps } from './types';
 import { Icon } from '../Icon';
-import { Text, Heading } from '../Typography';
+import { LpdText, Heading } from '../Typography';
 import { AILoader } from '../AILoader';
 
 /**
@@ -87,14 +87,13 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
             <AILoader messages={loadingMessages} speed="fast" />
           </div>
         ) : (
-          <Text 
-            variant="muted" 
-            size={props.size === 'sm' ? 'xs' : 'sm'}
-            className="leading-relaxed"
-          >
-            {description}
-          </Text>
-        )}
+                    <LpdText 
+                      size="sm" 
+                      variant="muted" 
+                      className="max-w-xs mx-auto mb-10 leading-relaxed text-center"
+                    >
+                      {description}
+                    </LpdText>        )}
       </div>
 
       {/* 4. Functional Section */}

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Text as LpdText } from '../Typography';
+import { LpdText } from '../Typography';
 import { TechnicalLabelProps } from './types';
 import { useTechnicalLabel } from './useTechnicalLabel';
 

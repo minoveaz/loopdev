@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading, Text, Button, Icon } from '@loopdev/ui';
+import { Heading, LpdText, Button, Icon } from '@loopdev/ui';
 
 // Datos de ejemplo (placeholder)
 const mockBrands = [
@@ -34,9 +34,9 @@ const BrandCard = ({ brand }: { brand: any }) => (
     </div>
     
     <Heading size="md" className="text-white mb-1 group-hover:text-primary transition-colors">{brand.name}</Heading>
-    <Text size="sm" className="text-text-muted mb-4 truncate">
-      {brand.description || 'No description available'}
-    </Text>
+    <LpdText size="sm" className="text-text-muted mb-4 truncate">
+      {brand.description}
+    </LpdText>
     
     <div className="flex items-center gap-4 text-xs text-text-muted border-t border-white/5 pt-4">
       <div className="flex items-center gap-1">
@@ -79,7 +79,7 @@ export default function BrandHubPage() {
              <span className="h-px w-8 bg-primary/20"></span>
           </div>
           <Heading size="2xl" weight="bold" className="text-white">Brand Hub</Heading>
-          <Text className="text-text-muted">Centraliza y gobierna la identidad visual de tus productos.</Text>
+          <LpdText className="text-text-muted">Centraliza y gobierna la identidad visual de tus productos.</LpdText>
         </div>
         
         {/* Acciones */}
@@ -92,7 +92,7 @@ export default function BrandHubPage() {
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 flex items-center gap-3">
           <Icon name="error" />
-          <Text size="sm">Error loading brands. Please try again later.</Text>
+          <LpdText size="sm">Error loading brands. Please try again later.</LpdText>
         </div>
       )}
 
@@ -113,9 +113,9 @@ export default function BrandHubPage() {
                 <Icon name="auto_awesome_motion" className="text-text-muted" size="md" />
              </div>
              <Heading size="sm" className="text-white mb-2">No brands found</Heading>
-             <Text size="sm" className="text-text-muted mb-6 max-w-xs">
+             <LpdText size="sm" className="text-text-muted mb-6 max-w-xs">
                You haven't created any brands yet. Start by creating your first brand identity.
-             </Text>
+             </LpdText>
              <Button variant="primary" startIcon="add">Create First Brand</Button>
           </div>
         )}

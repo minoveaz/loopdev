@@ -33,6 +33,8 @@ export * from './NavSidebarItem';
 export * from './ExitHatch';
 export * from './TechnicalLabel';
 export * from './TechnicalTooltip';
+export * from './TechnicalDropdown';
+export * from './TechnicalMenuItem';
 export * from './CommandBarTrigger';
 export * from './NavGroup';
 export * from './ScrollArea';

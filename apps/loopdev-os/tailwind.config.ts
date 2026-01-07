@@ -20,10 +20,12 @@ const config: Config = {
         surface: {
           light: '#ffffff',
           dark: 'var(--lpd-color-brand-surface, #181b21)', 
+          elevated: 'var(--lpd-color-bg-surface-elevated, #181b21)',
           glass: 'rgba(255, 255, 255, 0.03)',
         },
         background: {
           dark: '#05070a',
+          laboratory: 'var(--lpd-color-bg-laboratory, #0d121b)',
         },
         text: {
           main: 'var(--lpd-color-text-base, #0f172a)',
@@ -38,7 +40,12 @@ const config: Config = {
         energy: {
           yellow: 'var(--lpd-color-brand-energy, #FFD025)',
         },
-        'border-subtle': 'var(--lpd-color-border-subtle, #e2e8f0)',
+        'border-subtle': 'var(--lpd-color-border-subtle, rgba(255, 255, 255, 0.08))',
+        'border-technical': 'var(--lpd-color-border-technical, rgba(255, 255, 255, 0.05))',
+      },
+      fontSize: {
+        technical: 'var(--lpd-font-size-technical, 10px)',
+        micro: 'var(--lpd-font-size-micro, 9px)',
       },
       // fontSize: Heredado del preset @loopdev/tailwind-config (Single Source of Truth)
     }

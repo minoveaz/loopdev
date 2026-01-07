@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading, Text, Icon } from '@loopdev/ui';
+import { Heading, LpdText, Icon } from '@loopdev/ui';
 import Link from 'next/link';
 
 const ModuleCard = ({ title, description, icon, href, status }: { title: string, description: string, icon: string, href: string, status: string }) => (
@@ -12,13 +12,13 @@ const ModuleCard = ({ title, description, icon, href, status }: { title: string,
         </div>
         <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/5 border border-white/5">
           <div className={`w-1.5 h-1.5 rounded-full ${status === 'Active' ? 'bg-energy-yellow' : 'bg-text-muted'}`}></div>
-          <Text size="nano" weight="black" className="uppercase tracking-widest text-[8px]">{status}</Text>
+          <LpdText size="nano" weight="black" className="uppercase tracking-widest text-[8px]">{status}</LpdText>
         </div>
       </div>
       <Heading size="md" weight="bold" className="text-white mb-2 group-hover:text-primary transition-colors">{title}</Heading>
-      <Text size="sm" className="text-text-muted leading-relaxed">
+      <LpdText size="sm" className="text-text-muted leading-relaxed">
         {description}
-      </Text>
+      </LpdText>
     </div>
   </Link>
 );
@@ -34,9 +34,9 @@ export default function MarketingStudioDashboard() {
         <Heading size="3xl" weight="bold" className="text-white tracking-tight">
           Marketing Studio
         </Heading>
-        <Text className="text-text-muted text-lg max-w-2xl">
+        <LpdText className="text-text-muted text-lg max-w-2xl">
           El centro de control para la identidad de tu marca y la generación de contenido inteligente.
-        </Text>
+        </LpdText>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -72,20 +72,20 @@ export default function MarketingStudioDashboard() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
-              <Text size="nano" weight="black" className="text-text-muted uppercase mb-1">Brands Managed</Text>
-              <Text size="xl" weight="bold" className="text-white">12</Text>
+              <LpdText size="nano" weight="black" className="text-text-muted uppercase mb-1">Brands Managed</LpdText>
+              <LpdText size="xl" weight="bold" className="text-white">12</LpdText>
             </div>
             <div>
-              <Text size="nano" weight="black" className="text-text-muted uppercase mb-1">Assets Stored</Text>
-              <Text size="xl" weight="bold" className="text-white">1.2k</Text>
+              <LpdText size="nano" weight="black" className="text-text-muted uppercase mb-1">Assets Stored</LpdText>
+              <LpdText size="xl" weight="bold" className="text-white">1.2k</LpdText>
             </div>
             <div>
-              <Text size="nano" weight="black" className="text-text-muted uppercase mb-1">Campaigns Active</Text>
-              <Text size="xl" weight="bold" className="text-white">8</Text>
+              <LpdText size="nano" weight="black" className="text-text-muted uppercase mb-1">Campaigns Active</LpdText>
+              <LpdText size="xl" weight="bold" className="text-white">8</LpdText>
             </div>
             <div>
-              <Text size="nano" weight="black" className="text-text-muted uppercase mb-1">AI Credits</Text>
-              <Text size="xl" weight="bold" className="text-white">84%</Text>
+              <LpdText size="nano" weight="black" className="text-text-muted uppercase mb-1">AI Credits</LpdText>
+              <LpdText size="xl" weight="bold" className="text-white">84%</LpdText>
             </div>
           </div>
         </div>

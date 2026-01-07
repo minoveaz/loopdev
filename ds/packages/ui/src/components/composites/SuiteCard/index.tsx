@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Heading, Text } from '../../atoms/Typography';
+import { Heading, LpdText } from '../../atoms/Typography';
 import { EngineeringSeal } from '../../atoms/EngineeringSeal';
 import { TechnicalSurface } from '../../atoms/TechnicalSurface';
 import { SuiteCardProps } from './types';
@@ -49,18 +49,18 @@ export const SuiteCard: React.FC<SuiteCardProps> = (props) => {
             {title}
           </Heading>
           
-          <Text size="sm" className="text-text-muted leading-relaxed mb-8">
+          <LpdText size="sm" className="text-text-muted leading-relaxed mb-8">
             {description}
-          </Text>
+          </LpdText>
         </div>
 
         {/* Footer: Status Pulse y Acción */}
         <div className="mt-auto pt-6 border-t border-black/5 dark:border-white/5 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <div className={`w-1.5 h-1.5 rounded-full ${isLocked ? 'bg-slate-300 dark:bg-white/10' : 'bg-energy-yellow animate-pulse'}`}></div>
-            <Text size="nano" weight="black" className="font-mono uppercase tracking-[0.2em] text-text-muted">
+            <LpdText size="nano" weight="black" className="font-mono uppercase tracking-[0.2em] text-text-muted">
               {isLocked ? 'Auth_Required' : 'System_Ready'}
-            </Text>
+            </LpdText>
           </div>
           {!isLocked && (
             <ArrowRight 

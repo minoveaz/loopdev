@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Text, Heading, TechnicalCanvas } from '@loopdev/ui';
+import { Button, Input, LpdText, Heading, TechnicalCanvas } from '@loopdev/ui';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
@@ -46,7 +46,7 @@ export default function LoginPage() {
           <div className="mb-10 text-center space-y-4">
             <div className="inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              <Text size="nano" weight="black" className="text-primary tracking-widest uppercase">Node_Primary_Active</Text>
+              <LpdText size="nano" weight="black" className="text-primary tracking-widest uppercase">Node_Primary_Active</LpdText>
             </div>
             <div className="space-y-1">
               <Heading size="2xl" weight="bold" className="text-white tracking-tighter flex items-center justify-center gap-1">
@@ -54,7 +54,7 @@ export default function LoginPage() {
                 <span>loop.dev</span>
                 <span className="text-primary font-light">{"}"}</span>
               </Heading>
-              <Text size="nano" weight="bold" className="text-text-muted uppercase tracking-widest">Infrastructure_Gateway</Text>
+              <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest">Infrastructure_Gateway</LpdText>
             </div>
           </div>
 
@@ -84,8 +84,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Text as="button" type="button" size="nano" weight="black" className="absolute top-0 right-0 text-primary/60 hover:text-primary uppercase tracking-widest h-6 flex items-center pr-1 z-20 cursor-pointer transition-colors">Recuperar</Text>
-            </div>
+                              <LpdText as="button" type="button" size="nano" weight="black" className="absolute top-0 right-0 text-primary/60 hover:text-primary uppercase tracking-widest h-6 flex items-center pr-1 z-20 cursor-pointer transition-colors">Recuperar</LpdText>            </div>
 
             {error && (
               <div className="bg-red-500/15 border border-red-500/30 text-red-200 p-3 rounded-lg flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-1">
