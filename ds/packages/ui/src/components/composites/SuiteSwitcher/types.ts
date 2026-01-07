@@ -15,6 +15,8 @@ export interface SuiteSwitcherProps {
   accessMap?: Record<string, 'enabled' | 'disabled' | 'hidden'>;
   /** Callback al seleccionar una nueva suite */
   onSuiteChange: (suiteId: string) => void;
+  /** Callback al cambiar el estado de apertura */
+  onOpenChange?: (open: boolean) => void;
   /** Clase CSS adicional */
   className?: string;
 }

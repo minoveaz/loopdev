@@ -10,17 +10,16 @@ export const useSuiteHeader = (props: SuiteHeaderProps) => {
   // 1. Composición de Clases del Contenedor (Chasis Inmutable)
   const containerClasses = `
     w-full border-b flex items-center px-4 md:px-6
-    transition-colors duration-300 select-none
-    border-black/5 dark:border-white/10
-    bg-white/80 dark:bg-background-dark/80
-    dark:backdrop-blur-md
-    ${isInert ? 'pointer-events-none opacity-50' : ''}
+    transition-all duration-500 select-none
+    border-border-technical
+    bg-shell-canvas
+    ${isInert ? 'pointer-events-none cursor-default shadow-none' : 'shadow-sm'}
     ${className}
   `.replace(/\s+/g, ' ').trim();
 
-  // 2. Estilos para la altura fija industrial
+  // 2. Estilos para la altura sincronizada con el chasis
   const style = {
-    height: 'var(--lpd-header-height, 56px)',
+    height: 'var(--app-shell-header-height, 56px)',
   };
 
   return {

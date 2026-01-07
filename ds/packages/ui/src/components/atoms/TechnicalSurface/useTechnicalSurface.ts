@@ -17,7 +17,7 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
   const variantMap = {
     surface: 'bg-white dark:bg-surface-dark',
     glass: 'bg-white/80 dark:bg-surface-dark/60 backdrop-blur-md',
-    canvas: 'bg-slate-50 dark:bg-black/20',
+    canvas: 'bg-shell-canvas',
   };
 
   // 2. Mapeo de Profundidad (Bordes y Sombras)

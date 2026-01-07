@@ -42,6 +42,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   
   const [navMode, setNavMode] = useState<NavMode>('expanded');
   const [context, setContext] = useState<LayoutContext>('normal');
+  const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   const currentSuite = MARKETING_STUDIO_SCHEMA.suite;
 
@@ -67,6 +68,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         isLeftSidebarOpen: navMode === 'expanded',
         navBehavior: 'auto',
         context: context,
+        activeOverlay: activeOverlay,
       }}
       onToggleLeftSidebar={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
       navSlot={
@@ -91,11 +93,13 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       }
       headerSlot={
         <SuiteHeader 
+          isInert={activeOverlay !== null}
           leftSlot={
             <div className="flex items-center gap-4">
               <SuiteSwitcher 
                 currentSuite={currentSuite as any}
                 availableSuites={AVAILABLE_SUITES_FIXTURES}
+                onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
                 onSuiteChange={(id) => id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)}
               />
               <Divider orientation="vertical" thickness="technical" className="h-4" />
@@ -116,7 +120,10 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           centerSlot={<CommandBarTrigger onOpen={() => {}} />}
           rightSlot={
             <div className="flex items-center gap-4">
-              <QuickActionMenu groups={QUICK_ACTION_FIXTURES.marketing} />
+              <QuickActionMenu 
+                groups={QUICK_ACTION_FIXTURES.marketing} 
+                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
+              />
               <Divider orientation="vertical" thickness="technical" className="h-4" />
 
               <SystemStatus state="operational" id={user?.id} label="TID" />
@@ -125,6 +132,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <NotificationCenter 
                 notifications={notifications}
                 unreadCount={unreadCount}
+                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
                 onMarkAsRead={markAsRead}
                 onMarkAllRead={markAllAsRead}
                 onRemove={removeNotification}
@@ -137,6 +145,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 userName={user?.email || 'User'}
                 userEmail={user?.email}
                 userRole="Tenant_Admin"
+                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
                 onLogout={() => signOut()}
               />
             </div>

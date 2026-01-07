@@ -3,7 +3,7 @@
  * @description Contratos de tipado para el átomo de telemetría StatusPulse.
  */
 
-export type StatusPulseVariant = 'success' | 'energy' | 'danger' | 'primary' | 'info' | 'neutral';
+export type StatusPulseVariant = 'success' | 'energy' | 'danger' | 'primary' | 'info' | 'neutral' | 'innovation';
 export type StatusPulseSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export interface StatusPulseProps {

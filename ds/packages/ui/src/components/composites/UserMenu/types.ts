@@ -23,6 +23,8 @@ export interface UserMenuProps {
   onProfileClick?: () => void;
   /** Callback para ir a facturación */
   onBillingClick?: () => void;
+  /** Callback al cambiar el estado de apertura */
+  onOpenChange?: (open: boolean) => void;
   
   /** Clase CSS adicional */
   className?: string;

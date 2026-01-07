@@ -17,6 +17,10 @@ const config: Config = {
           dark: '#0b46be',
           light: '#4f85f0',
         },
+        shell: {
+          canvas: 'var(--lpd-shell-canvas)',
+          surface: 'var(--lpd-shell-surface)',
+        },
         surface: {
           light: '#ffffff',
           dark: 'var(--lpd-color-brand-surface, #181b21)', 
@@ -39,6 +43,12 @@ const config: Config = {
         },
         energy: {
           yellow: 'var(--lpd-color-brand-energy, #FFD025)',
+        },
+        'innovation-purple': {
+          DEFAULT: 'var(--lpd-color-innovation-purple, #9333EA)',
+        },
+        'innovation-soft-purple': {
+          DEFAULT: 'var(--lpd-color-innovation-soft, rgba(147, 51, 234, 0.1))',
         },
         'border-subtle': 'var(--lpd-color-border-subtle, rgba(255, 255, 255, 0.08))',
         'border-technical': 'var(--lpd-color-border-technical, rgba(255, 255, 255, 0.05))',

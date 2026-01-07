@@ -21,16 +21,6 @@ export const SuiteHeader: React.FC<SuiteHeaderProps> = (props) => {
       role="banner"
       aria-hidden={isInert}
     >
-      {/* Accesibilidad: Salto al contenido principal */}
-      <a 
-        href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md z-[3000] shadow-2xl"
-        aria-label="Skip to main content"
-        title="Skip to main content"
-      >
-        Skip to main content
-      </a>
-
       {/* Cápsula Izquierda: Orientación */}
       <div className="flex items-center gap-4 flex-1 min-w-0">
         {leftSlot}

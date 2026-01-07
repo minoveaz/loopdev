@@ -1,6 +1,6 @@
 # Guía de Composición Visual loop.dev
 
-## **Version 3.8 — Ready System**
+## **Version 3.9 — High Fidelity Standard**
 
 > **Status:** Active / Production Ready
 > **Owner:** LoopDev Design System
@@ -96,12 +96,18 @@ Regla: nunca para texto largo.
 
 ## 3. Superficies y Profundidad (Depth Architecture)
 
-* **Deep Space:** Fondo base.
-* **Laboratory Canvas:** Interacción técnica.
-* **Surface:** Contenedores de información.
-* **Glass:** Capas de overlay.
+### 3.1 Niveles de Superficie (Jerarquía de Contraste)
+El sistema utiliza una escala de profundidad de 3 niveles para garantizar el contraste en interfaces densas:
+1.  **Deep Space (Background Base):** `#0d121b` (Azul noche profundo). Uso: fondo de aplicación.
+2.  **Elevated Surface:** `#181b21` (Gris carbón). Uso: Dropdowns, Modales, Popovers. Permite que el componente destaque sobre el fondo.
+3.  **Technical Canvas:** `#ffffff` (Claro) / `#0d121b` (Oscuro). Uso: Sidebars y Headers integrados en el chasis.
 
-### 3.1 Texturas Técnicas (The Grid Policy)
+### 3.2 Bordes de Alta Definición (Technical Borders)
+La precisión se comunica mediante líneas casi invisibles:
+-   **Standard Border:** 1px sólido (border-slate-200 / border-white/10).
+-   **Technical Border:** 0.5px de grosor (rgba(0,0,0,0.05) / rgba(255,255,255,0.05)). Uso: separadores internos de menús y breadcrumbs.
+
+### 3.3 Texturas Técnicas (The Grid Policy)
 Las superficies de LoopDev no son planas; usan "texturas de ingeniería" para denotar precisión:
 1.  **Blueprint Grid (Líneas 40px/8px):** Uso en Cards, Modals y Layouts. Simboliza arquitectura.
 2.  **Neural Grid (Puntos 24px):** Uso exclusivo en componentes de IA, Generative Previews y Dashboards. Simboliza datos vivos.
@@ -111,15 +117,14 @@ Las superficies de LoopDev no son planas; usan "texturas de ingeniería" para de
 
 ## 4. Tipografía Dual
 
-### Inter
-
-* Display: weight 900, tracking -0.05em
-* UI Labels: weight 700, uppercase, 10px
+### Inter (Sans)
+- **Display:** weight 900, tracking -0.05em.
+- **UI Labels (Technical):** weight 700, 10px (`text-technical`). Uso: títulos de grupo en menús.
+- **UI Labels (Micro):** weight 700, 9px (`text-micro`). Uso: marcas de estado.
 
 ### JetBrains Mono
-
-* Uso: IDs, logs, timestamps, shortcuts
-* Regla: datos vivos en `font-bold`
+- **Uso:** IDs, logs, timestamps, shortcuts, breadcrumbs jerárquicos.
+- **Regla:** datos vivos en `font-bold`.
 
 ---
 

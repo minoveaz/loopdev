@@ -10,12 +10,23 @@
   :root {
     --grid-line-color: rgba(15, 23, 42, 0.04);
     --dot-color: rgba(15, 23, 42, 0.1);
+    --lpd-color-border-technical: rgba(0, 0, 0, 0.05);
+    
+    /* Semantic Shell Colors (Light Mode) */
+    --lpd-shell-canvas: #ffffff;
+    --lpd-shell-surface: #f8fafc;
     /* Typography: Now inherited from @loopdev/tokens */
   }
 
   .dark {
     --grid-line-color: rgba(255, 255, 255, 0.04);
     --dot-color: rgba(255, 255, 255, 0.1);
+    --lpd-color-border-technical: rgba(255, 255, 255, 0.05);
+    
+    /* Semantic Shell Colors (Dark Mode - Lab Standard) */
+    --lpd-shell-canvas: #0d121b;
+    --lpd-shell-surface: #181b21;
+    
     color: var(--lpd-color-text-base);
   }
 

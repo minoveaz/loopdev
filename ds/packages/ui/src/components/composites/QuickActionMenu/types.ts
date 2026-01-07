@@ -32,6 +32,8 @@ export interface QuickActionGroup {
 export interface QuickActionMenuProps {
   /** Grupos de acciones a mostrar */
   groups: QuickActionGroup[];
+  /** Callback al cambiar el estado de apertura */
+  onOpenChange?: (open: boolean) => void;
   /** Clase CSS adicional para el disparador */
   className?: string;
 }

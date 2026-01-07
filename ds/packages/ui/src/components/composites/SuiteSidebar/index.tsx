@@ -53,7 +53,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
       variant="canvas"
       depth="flat"
       overflow="visible"
-      className={`${containerClasses} h-full border-r border-black/5 dark:border-white/5`}
+      className={`${containerClasses} h-full border-r border-border-technical bg-shell-canvas`}
     >
       <div className="flex flex-col h-full">
 

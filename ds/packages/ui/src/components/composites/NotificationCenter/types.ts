@@ -37,6 +37,8 @@ export interface NotificationCenterProps {
   onClear?: () => void;
   /** Callback para abrir el panel completo */
   onViewAll: () => void;
+  /** Callback al cambiar el estado de apertura */
+  onOpenChange?: (open: boolean) => void;
   /** Clase CSS adicional */
   className?: string;
 }

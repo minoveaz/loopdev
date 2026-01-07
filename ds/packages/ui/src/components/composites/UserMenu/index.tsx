@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   TechnicalDropdown, 
   TechnicalMenuItem, 
@@ -21,7 +21,8 @@ import { useUserMenu } from './useUserMenu';
  * @phase 1
  */
 export const UserMenu: React.FC<UserMenuProps> = (props) => {
-  const { userSrc, onLogout, onProfileClick, onSettingsClick, onBillingClick } = props;
+  const { userSrc, onLogout, onProfileClick, onSettingsClick, onBillingClick, onOpenChange } = props;
+  const [isOpen, setIsOpen] = useState(false);
   const { 
     userName, 
     displayEmail, 
@@ -29,9 +30,16 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
     headerClasses 
   } = useUserMenu(props);
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    onOpenChange?.(open);
+  };
+
   return (
     <TechnicalDropdown 
       align="end" 
+      open={isOpen}
+      onOpenChange={handleOpenChange}
       trigger={
         <button className="rounded-full hover:ring-4 hover:ring-primary/5 transition-all duration-500">
           <UserAvatar 

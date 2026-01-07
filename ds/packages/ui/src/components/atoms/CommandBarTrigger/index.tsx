@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Search, Command } from 'lucide-react';
+import { Terminal } from 'lucide-react';
+import { StatusPulse } from '../StatusPulse';
 import { CommandBarTriggerProps } from './types';
 import { useCommandBarTrigger } from './useCommandBarTrigger';
 
@@ -12,7 +13,7 @@ import { useCommandBarTrigger } from './useCommandBarTrigger';
  * @phase 1
  */
 export const CommandBarTrigger: React.FC<CommandBarTriggerProps> = (props) => {
-  const { placeholder = 'Search or type a command...', shortcut = '⌘K', onOpen } = props;
+  const { placeholder = 'Run a command...', shortcut = '⌘K', onOpen } = props;
   const { 
     isIconMode,
     containerClasses,
@@ -26,7 +27,10 @@ export const CommandBarTrigger: React.FC<CommandBarTriggerProps> = (props) => {
       className={containerClasses}
       aria-label="Abrir paleta de comandos"
     >
-      <Search size={16} className="text-text-muted/80 group-hover:text-primary transition-colors" />
+      <div className="flex items-center gap-2">
+        <Terminal size={14} className="text-text-muted/80 group-hover:text-primary transition-colors" />
+        <StatusPulse variant="innovation" size="md" className="opacity-100" />
+      </div>
 
       {!isIconMode && (
         <>

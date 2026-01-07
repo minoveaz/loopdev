@@ -20,7 +20,8 @@ export const useStatusPulse = (props: StatusPulseProps) => {
     danger: 'bg-danger shadow-[0_0_8px_rgba(239,68,68,0.4)]',
     primary: 'bg-primary shadow-[0_0_8px_rgba(19,91,236,0.4)]',
     info: 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.4)]',
-    neutral: 'bg-slate-400 dark:bg-slate-600 shadow-none'
+    neutral: 'bg-slate-300 dark:bg-white/20',
+    innovation: 'bg-purple-600 dark:bg-innovation-purple shadow-purple-500/50',
   };
 
   // 2. Mapeo de Tamaños Industriales

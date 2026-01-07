@@ -40,7 +40,7 @@ export const ContextPath: React.FC<ContextPathProps> = (props) => {
                   <TechnicalLabel 
                     variant={isLast ? 'white' : 'muted'} 
                     size="nano"
-                    weight="bold"
+                    weight={isLast ? 'bold' : 'medium'}
                     fontFamily="mono"
                     isUppercase={false}
                     className="cursor-inherit whitespace-nowrap"

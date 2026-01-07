@@ -27,10 +27,6 @@
   --radius: 0.5rem;
 
   /* --- LABORATORY SYSTEM: HIGH FIDELITY TOKENS --- */
-  --lpd-color-bg-laboratory: #0d121b;
-  --lpd-color-bg-surface-elevated: #181b21;
-  --lpd-color-border-technical: rgba(255, 255, 255, 0.05);
-  --lpd-color-border-subtle: rgba(255, 255, 255, 0.08);
   
   /* Innovation Scale */
   --lpd-color-innovation-purple: #9333EA;

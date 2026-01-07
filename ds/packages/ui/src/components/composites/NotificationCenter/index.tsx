@@ -23,8 +23,9 @@ import {
  * @phase 1
  */
 export const NotificationCenter: React.FC<NotificationCenterProps> = (props) => {
-  const { onViewAll, onMarkAsRead, onMarkAllRead, onClear, onRemove } = props;
+  const { onViewAll, onMarkAsRead, onMarkAllRead, onClear, onRemove, onOpenChange } = props;
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
+  const [isOpen, setIsOpen] = useState(false);
   
   const { 
     notifications, 
@@ -39,9 +40,16 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = (props) => 
     return true;
   });
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    onOpenChange?.(open);
+  };
+
   return (
     <TechnicalDropdown 
       align="end" 
+      open={isOpen}
+      onOpenChange={handleOpenChange}
       className="w-full max-w-sm p-0 overflow-hidden bg-white dark:bg-surface-elevated shadow-2xl border-none" 
       trigger={
         <button className="relative p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all group" aria-label="Abrir centro de notificaciones">

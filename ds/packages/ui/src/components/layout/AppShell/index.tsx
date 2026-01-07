@@ -38,8 +38,16 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
   return (
     <div 
       style={styleTokens as React.CSSProperties}
-      className={`flex h-screen w-full bg-white dark:bg-background-dark text-slate-900 dark:text-white overflow-hidden font-sans @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
+      className={`flex h-screen w-full bg-white dark:bg-laboratory text-slate-900 dark:text-white overflow-hidden font-sans @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
     >
+      {/* Accesibilidad: Primer elemento del DOM para navegación por teclado */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-lg z-[5000] shadow-2xl font-bold uppercase text-[10px] tracking-widest"
+      >
+        Skip to main content
+      </a>
+
       {/* 0. BACKDROP */}
       {(isNavOpen || isContextOpen) && (
         <div 
@@ -84,13 +92,14 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
         <header 
           role="banner"
           style={{ height: 'var(--app-shell-header-height)' }}
-          className="w-full border-b border-black/5 dark:border-white/10 flex items-center px-6 bg-white dark:bg-background-dark/80 dark:backdrop-blur-md shrink-0 relative z-[var(--app-shell-z-header)] select-none"
+          className="w-full shrink-0 relative z-[var(--app-shell-z-header)] select-none"
         >
           {headerSlot}
         </header>
 
         <div className="flex flex-1 min-h-0 overflow-hidden relative bg-white dark:bg-background-dark">
           <main 
+            id="main-content"
             role="main" 
             className={`flex-1 overflow-y-auto ${scrollbarClass} relative z-10 ${(isNavOpen || isContextOpen) ? '@max-lg:pointer-events-none @max-lg:overflow-hidden' : ''}`}
           >

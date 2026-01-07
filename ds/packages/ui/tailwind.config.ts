@@ -30,6 +30,10 @@ const config: Config = {
           subtle: '#f8fafc',
           'subtle-dark': '#181b21',
         },
+        shell: {
+          canvas: 'var(--lpd-shell-canvas)',
+          surface: 'var(--lpd-shell-surface)',
+        },
         surface: {
           light: '#ffffff',
           dark: 'var(--lpd-color-brand-surface, #181b21)', 
