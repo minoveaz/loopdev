@@ -8,3 +8,8 @@
 
 ## [x] Track: Module Essentials Kit (Header, Toolbar, Sidebar, Inspector)
 *Link: [./conductor/tracks/module-essentials_20260107/](./conductor/tracks/module-essentials_20260107/)*
+
+---
+
+## [~] Track: Design System Architectural Reorganization (Atoms & Composites)
+*Link: [./conductor/tracks/ds-refactor-org_20260107/](./conductor/tracks/ds-refactor-org_20260107/)*
