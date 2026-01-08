@@ -3,7 +3,7 @@
 ## Phase 1: Ideation & Contract (DoR)
 - [x] Task: Create component directories for `ModuleHeader`, `ModuleToolbar`, `ModuleSidebar`, and `InspectorPanel`. 487eb95
 - [x] Task: Define `userHistories.md` for each component incorporating Bloque 0 rules. 19e6633
-- [~] Task: Create `types.ts` for each component based on the approved spec.
+- [x] Task: Create `types.ts` for each component based on the approved spec. cee29d2
 - [ ] Task: Conductor - User Manual Verification 'Definition of Readiness' (Protocol in workflow.md)
 
 ## Phase 2: Development & Hardening
