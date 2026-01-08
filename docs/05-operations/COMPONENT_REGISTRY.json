@@ -1,649 +1,133 @@
 {
   "project": "LoopDev SaaS",
-  "registry_version": "1.1",
-  "last_updated": "2026-01-03T22:30:00Z",
+  "registry_version": "1.2",
+  "last_updated": "2026-01-07T18:00:00Z",
   "components": [
+    {
+      "id": "typography-v1",
+      "name": "Typography",
+      "status": "stable",
+      "type": "atom",
+      "category": "foundations",
+      "phase": 1,
+      "certification": { "front": "certified" }
+    },
     {
       "id": "button-v2",
       "name": "Button",
       "status": "stable",
+      "type": "atom",
+      "category": "inputs",
       "phase": 2,
-      "certification": {
-        "front": "certified",
-        "infra": "certified"
-      },
-      "certification_timestamp": "2026-01-02T19:50:00Z",
-      "capabilities": {
-        "dynamic_theming": true,
-        "dual_icons": true,
-        "loading_state": true,
-        "rbac_security": true,
-        "auto_disable_on_forbidden": true
-      }
-    },
-    {
-      "id": "logo-spinner-v1",
-      "name": "LogoSpinner",
-      "status": "stable",
-      "phase": 2,
-      "certification_timestamp": "2026-01-01T16:00:00Z",
-      "capabilities": {
-        "momentum_animation": true,
-        "gradient_sync": true,
-        "extreme_scaling": true
-      }
-    },
-    {
-      "id": "ai-loader-v1",
-      "name": "AILoader",
-      "status": "stable",
-      "phase": 2,
-      "certification_timestamp": "2026-01-01T16:00:00Z",
-      "capabilities": {
-        "typewriter_effect": true,
-        "dynamic_messages": true,
-        "innovation_brackets": true
-      }
-    },
-    {
-      "id": "empty-state-v1",
-      "name": "EmptyState",
-      "status": "stable",
-      "category": "Feedback",
-      "phase": 2,
-      "certification_timestamp": "2026-01-01T18:00:00Z",
-      "capabilities": {
-        "technical_grid": true,
-        "ai_processing_mode": true,
-        "attention_guides": true,
-        "dynamic_theming": true
-      }
-    },
-    {
-      "id": "toast-system-v2.4.1",
-      "name": "Toast",
-      "status": "stable",
-      "category": "Feedback",
-      "phase": 2,
-      "certification": {
-        "front": "certified",
-        "infra": "certified"
-      },
-      "certification_timestamp": "2026-01-02T19:30:00Z",
-      "capabilities": {
-        "dynamic_updating": true,
-        "intelligent_deduplication": true,
-        "pause_on_hover": true,
-        "glassmorphism_v2": true,
-        "multi_tenant_scope": true,
-        "stability_throttle": true,
-        "auto_telemetry": true,
-        "collision_free_ids": true
-      }
-    },
-    {
-      "id": "skeleton-v1",
-      "name": "Skeleton",
-      "status": "stable",
-      "category": "Feedback",
-      "phase": 2,
-      "certification_timestamp": "2026-01-01T12:00:00Z",
-      "capabilities": {
-        "shimmer_animation": true,
-        "pulse_animation": true,
-        "text_mimicry": true,
-        "massive_rendering": true,
-        "a11y_silent": true
-      }
+      "certification": { "front": "certified", "infra": "certified" }
     },
     {
       "id": "input-v1",
       "name": "Input",
       "status": "stable",
-      "category": "Primitives",
+      "type": "atom",
+      "category": "inputs",
       "phase": 3,
-      "certification": {
-        "front": "certified",
-        "infra": "certified"
-      },
-      "certification_timestamp": "2026-01-02T23:55:00Z",
-      "capabilities": {
-        "multi_tenant_branding": true,
-        "industrial_accessibility": true,
-        "security_password_toggle": true,
-        "neural_grid_feedback": true,
-        "extreme_layout_resilience": true,
-        "api_error_contract_sync": true
-      }
+      "certification": { "front": "certified", "infra": "certified" }
     },
     {
-      "id": "app-shell-v1.1.1",
+      "id": "badge-v1",
+      "name": "Badge",
+      "status": "stable",
+      "type": "atom",
+      "category": "indicators",
+      "phase": 1,
+      "certification": { "front": "certified" }
+    },
+    {
+      "id": "empty-state-v1",
+      "name": "EmptyState",
+      "status": "stable",
+      "type": "atom",
+      "category": "feedback",
+      "phase": 2,
+      "certification": { "front": "certified" }
+    },
+    {
+      "id": "toast-v2",
+      "name": "Toast",
+      "status": "stable",
+      "type": "atom",
+      "category": "feedback",
+      "phase": 2,
+      "certification": { "front": "certified", "infra": "certified" }
+    },
+    {
+      "id": "app-shell-v1.1",
       "name": "AppShell",
       "status": "stable",
-      "category": "Layouts",
+      "type": "composite",
+      "category": "shell",
       "phase": 4,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-03T13:10:00Z",
-      "capabilities": {
-        "deterministic_modes": true,
-        "hybrid_push_overlay": true,
-        "topmost_escape_priority": true,
-        "zero_hardcoding_tokens": true,
-        "mobile_scroll_lock": true,
-        "interactive_overlay_slot": true,
-        "density_support": true
-      }
+      "certification": { "front": "certified" }
     },
     {
-      "id": "module-workspace-v1.4.0",
+      "id": "module-workspace-v1.4",
       "name": "ModuleWorkspace",
       "status": "stable",
-      "category": "Layouts",
-      "phase": 4,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-03T22:30:00Z",
-      "capabilities": {
-        "industrial_focus_trap": true,
-        "deterministic_push_overlay": true,
-        "topmost_state_management": true,
-        "full_tokenization": true,
-        "resilient_slots": true
-      }
-    },
-    {
-      "id": "engineering-seal-v1",
-      "name": "EngineeringSeal",
-      "status": "stable",
-      "category": "Primitives",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T10:00:00Z",
-      "capabilities": {
-        "status_color_mapping": true,
-        "bracket_encapsulation": true,
-        "dual_typography_alignment": true
-      }
-    },
-    {
-      "id": "theme-toggle-v1",
-      "name": "ThemeToggle",
-      "status": "stable",
-      "category": "Primitives",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T11:00:00Z",
-      "capabilities": {
-        "technical_glass_styling": true,
-        "smooth_state_transitions": true,
-        "theme_persistence_support": true
-      }
-    },
-    {
-      "id": "system-status-v1",
-      "name": "SystemStatus",
-      "status": "stable",
-      "category": "Primitives",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T12:00:00Z",
-      "capabilities": {
-        "pulse_animation": true,
-        "technical_formatting": true,
-        "multi_state_support": true
-      }
-    },
-    {
-      "id": "blueprint-background-v1",
-      "name": "BlueprintBackground",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T13:00:00Z",
-      "capabilities": {
-        "technical_atmosphere_encapsulation": true,
-        "multi_intensity_support": true,
-        "scanline_effect_integrated": true
-      }
-    },
-    {
-      "id": "technical-surface-v1",
-      "name": "TechnicalSurface",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T14:00:00Z",
-      "capabilities": {
-        "theme_aware_variants": true,
-        "depth_architecture_mapping": true,
-        "integrated_blueprint_grid": true
-      }
-    },
-    {
-      "id": "suite-sidebar-v1",
-      "name": "SuiteSidebar",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T15:00:00Z",
-      "capabilities": {
-        "navigation_schema_driven": true,
-        "rail_mode_support": true,
-        "multitenant_access_logic": true,
-        "live_context_pulse": true
-      }
-    },
-    {
-      "id": "status-pulse-v1",
-      "name": "StatusPulse",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T17:30:00Z",
-      "capabilities": {
-        "semantic_color_mapping": true,
-        "momentum_animation": true,
-        "technical_glow_effect": true
-      }
-    },
-    {
-      "id": "user-avatar-v1",
-      "name": "UserAvatar",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T17:45:00Z",
-      "capabilities": {
-        "image_fallback_to_initials": true,
-        "status_pulse_integration": true,
-        "premium_gradient_styling": true
-      }
-    },
-    {
-      "id": "identity-bar-v1",
-      "name": "IdentityBar",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T18:05:00Z",
-      "capabilities": {
-        "dynamic_orientation_support": true,
-        "tenant_color_aware": true,
-        "technical_precision_rendering": true
-      }
-    },
-    {
-      "id": "nav-sidebar-item-v1",
-      "name": "NavSidebarItem",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T19:00:00Z",
-      "capabilities": {
-        "hybrid_rail_expanded_modes": true,
-        "governance_access_states": true,
-        "momentum_active_pulse": true,
-        "technical_tooltips_integrated": true
-      }
-    },
-    {
-      "id": "exit-hatch-v1",
-      "name": "ExitHatch",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T19:05:00Z",
-      "capabilities": {
-        "reverse_movement_animation": true,
-        "rail_center_alignment": true,
-        "system_typography_compliant": true
-      }
-    },
-    {
-      "id": "technical-label-v1",
-      "name": "TechnicalLabel",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T19:15:00Z",
-      "capabilities": {
-        "precision_nano_typography": true,
-        "extended_tracking_support": true,
-        "semantic_variant_mapping": true
-      }
-    },
-    {
-      "id": "sidebar-footer-v1",
-      "name": "SidebarFooter",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T19:20:00Z",
-      "capabilities": {
-        "unified_control_console": true,
-        "responsive_profile_layout": true,
-        "identity_atom_integration": true
-      }
-    },
-    {
-      "id": "technical-tooltip-v1",
-      "name": "TechnicalTooltip",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T20:25:00Z",
-      "capabilities": {
-        "radix_accessibility_engine": true,
-        "technical_terminal_aesthetic": true,
-        "blue_bracket_identity": true,
-        "smart_positioning_support": true
-      }
-    },
-    {
-      "id": "nav-group-v1",
-      "name": "NavGroup",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T21:10:00Z",
-      "capabilities": {
-        "technical_label_integration": true,
-        "rail_mode_rhythm": true
-      }
-    },
-    {
-      "id": "scroll-area-v1",
-      "name": "ScrollArea",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T21:10:00Z",
-      "capabilities": {
-        "technical_scrollbar_styling": true,
-        "visibility_control": true
-      }
-    },
-    {
-      "id": "command-bar-trigger-v1",
-      "name": "CommandBarTrigger",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T21:55:00Z",
-      "capabilities": {
-        "adaptive_mode_support": true,
-        "os_level_shortcut_display": true,
-        "command_palette_integration": true
-      }
-    },
-    {
-      "id": "suite-header-v1",
-      "name": "SuiteHeader",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T22:20:00Z",
-      "capabilities": {
-        "three_capsule_architecture": true,
-        "overlay_safety_inertness": true,
-        "responsive_degradation": true,
-        "slot_based_extension": true
-      }
-    },
-    {
-      "id": "suite-switcher-v1",
-      "name": "SuiteSwitcher",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T22:30:00Z",
-      "capabilities": {
-        "radix_dropdown_engine": true,
-        "active_suite_check": true,
-        "governance_access_support": true,
-        "back_to_os_shortcut": true
-      }
-    },
-    {
-      "id": "technical-dropdown-v1",
-      "name": "TechnicalDropdown",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T22:45:00Z",
-      "capabilities": {
-        "radix_logic_abstraction": true,
-        "unified_glass_aesthetic": true,
-        "technical_group_labels": true,
-        "smart_positioning_system": true
-      }
-    },
-    {
-      "id": "context-path-v1",
-      "name": "ContextPath",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-04T23:15:00Z",
-      "capabilities": {
-        "smart_collapse_algorithm": true,
-        "breadcrumb_navigation_support": true,
-        "technical_separator_variants": true,
-        "active_level_authority": true
-      }
-    },
-    {
-      "id": "technical-menu-item-v1",
-      "name": "TechnicalMenuItem",
-      "status": "stable",
-      "category": "Foundations",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-05T11:50:00Z",
-      "capabilities": {
-        "standard_action_layout": true,
-        "shortcut_hint_integrated": true,
-        "semantic_danger_variant": true,
-        "automatic_accessibility_roles": true
-      }
-    },
-    {
-      "id": "user-menu-v1",
-      "name": "UserMenu",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-05T12:00:00Z",
-      "capabilities": {
-        "role_awareness_technical_tags": true,
-        "avatar_trigger_integration": true,
-        "session_management_actions": true,
-        "technical_dropdown_inheritance": true
-      }
-    },
-    {
-      "id": "notification-center-v1",
-      "name": "NotificationCenter",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-05T12:15:00Z",
-      "capabilities": {
-        "smart_badge_counter": true,
-        "technical_alert_types": true,
-        "radix_popover_engine": true,
-        "view_all_action_integrated": true
-      }
-    },
-    {
-      "id": "quick-action-menu-v1",
-      "name": "QuickActionMenu",
-      "status": "stable",
-      "category": "Composites",
-      "phase": 1,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-05T12:40:00Z",
-      "capabilities": {
-        "context_aware_actions": true,
-        "rotation_feedback_animation": true,
-        "technical_shortcut_support": true,
-        "group_based_organization": true
-      }
-    },
-    {
-      "id": "module-workspace-v1.4.0",
-      "name": "ModuleWorkspace",
-      "status": "stable",
-      "category": "Composites",
+      "type": "composite",
+      "category": "workspace",
       "phase": 2,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-07T15:30:00Z",
-      "capabilities": {
-        "three_pane_layout": true,
-        "focus_modes": true,
-        "responsive_overlays": true,
-        "context_integration": true,
-        "zero_hardcoding": true
-      }
+      "certification": { "front": "certified" }
     },
     {
       "id": "module-header-v1",
       "name": "ModuleHeader",
       "status": "stable",
-      "category": "Composites",
+      "type": "composite",
+      "category": "workspace",
       "phase": 2,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-07T16:00:00Z",
-      "capabilities": {
-        "hierarchical_breadcrumbs": true,
-        "domain_status_indicators": true,
-        "sidebar_toggle_sync": true
-      }
+      "certification": { "front": "certified" }
     },
     {
-      "id": "module-toolbar-v1",
-      "name": "ModuleToolbar",
+      "id": "suite-sidebar-v1",
+      "name": "SuiteSidebar",
       "status": "stable",
-      "category": "Composites",
-      "phase": 2,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-07T16:00:00Z",
-      "capabilities": {
-        "situational_rendering": true,
-        "bulk_action_support": true,
-        "view_toggle_slots": true
-      }
+      "type": "composite",
+      "category": "shell",
+      "phase": 1,
+      "certification": { "front": "certified" }
     },
     {
-      "id": "module-sidebar-v1",
-      "name": "ModuleSidebar",
+      "id": "identity-bar-v1",
+      "name": "IdentityBar",
       "status": "stable",
-      "category": "Composites",
-      "phase": 2,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-07T16:00:00Z",
-      "capabilities": {
-        "scroll_area_integrated": true,
-        "local_search_support": true,
-        "standardized_padding": true
-      }
+      "type": "atom",
+      "category": "surfaces",
+      "phase": 1,
+      "certification": { "front": "certified" }
     },
     {
-      "id": "inspector-panel-v1",
-      "name": "InspectorPanel",
+      "id": "exit-hatch-v1",
+      "name": "ExitHatch",
       "status": "stable",
-      "category": "Composites",
-      "phase": 2,
-      "certification": {
-        "front": "certified"
-      },
-      "certification_timestamp": "2026-01-07T16:00:00Z",
-      "capabilities": {
-        "dedicated_close_mechanism": true,
-        "property_section_scrolling": true,
-        "ai_assistant_ready": true
-      }
+      "type": "atom",
+      "category": "surfaces",
+      "phase": 1,
+      "certification": { "front": "certified" }
+    },
+    {
+      "id": "nav-group-v1",
+      "name": "NavGroup",
+      "status": "stable",
+      "type": "atom",
+      "category": "navigation",
+      "phase": 1,
+      "certification": { "front": "certified" }
+    },
+    {
+      "id": "nav-sidebar-item-v1",
+      "name": "NavSidebarItem",
+      "status": "stable",
+      "type": "atom",
+      "category": "navigation",
+      "phase": 1,
+      "certification": { "front": "certified" }
     }
   ]
 }

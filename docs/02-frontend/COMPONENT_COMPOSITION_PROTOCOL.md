@@ -49,12 +49,21 @@ Todo componente **debe cumplir** el **VISUAL_COMPOSITION_SYSTEM v3.8**:
 
 ## 3) Taxonomía oficial de componentes
 
-Todo componente debe pertenecer a **una única categoría**:
-* **Foundations** — Tokens, typography, spacing helpers.
-* **Primitives** — Button, Badge, Input, Icon, Spinner.
-* **Composites** — DataTable, KanbanBoard, SearchPanel.
-* **Layouts** — PageShell, Sidebar, SplitPane.
-* **Patterns** — AI Ghost blocks, Threading.
+Todo componente debe pertenecer a **una única categoría** dentro de su tipo (Átomo o Composite):
+
+### Atoms (`components/atoms/`)
+*   **foundations/** — Typography, ZIndex, Motion, BlueprintBackground.
+*   **indicators/** — Badge, StatusPulse, Spinner, CertificationStamp.
+*   **inputs/** — Button, IconButton, Input, ThemeToggle.
+*   **surfaces/** — TechnicalSurface, Divider, ScrollArea, BrandLogo.
+*   **feedback/** — Skeleton, EmptyState, Toast.
+*   **navigation/** — NavGroup, NavSidebarItem.
+
+### Composites (`components/composites/`)
+*   **shell/** — AppShell, SuiteSidebar, SuiteHeader, SuiteSwitcher.
+*   **workspace/** — ModuleWorkspace, ModuleHeader, ModuleToolbar, InspectorPanel.
+*   **navigation/** — ContextPath, UserMenu.
+*   **utilities/** — NotificationCenter, QuickActionMenu, SuiteCard.
 
 ---
 
@@ -78,16 +87,15 @@ Todo componente debe pertenecer a **una única categoría**:
 
 ## 5) Estructura estándar del componente
 
-```
-components/functional/<ComponentName>/
-├── index.tsx           (The Body: JSX Puro)
-├── use<ComponentName>.ts (The Brain: ViewModel/Lógica)
-├── components.tsx      (Sub-componentes internos)
-├── types.ts            (Interfaces TS)
-├── fixtures.ts         (Datos de prueba realistas)
-├── README.md           (Documentación técnica y UX)
-├── userHistories.md    (Contrato de historias y casos de estrés)
-└── <ComponentName>.test.tsx (Suite de pruebas obligatoria)
+```text
+src/components/[atoms|composites]/[category]/<ComponentName>/
+├── index.tsx           (Body: Presentación y JSX)
+├── use<ComponentName>.ts (Brain: ViewModel/Lógica)
+├── types.ts            (Contrato de Props)
+├── fixtures.tsx        (Mocks para Stories/Tests)
+├── <ComponentName>.test.tsx (Suite de pruebas obligatoria)
+├── <ComponentName>.stories.tsx (Documentación visual)
+└── userHistories.md    (Historias de usuario y Bloque 0)
 ```
 
 **Nota:** El archivo `Example.tsx` solo es obligatorio durante la fase de Laboratorio (`mockv2`). En producción, la validación se realiza mediante Historias de Storybook.

@@ -11,5 +11,5 @@
 
 ---
 
-## [~] Track: Design System Architectural Reorganization (Atoms & Composites)
+## [x] Track: Design System Architectural Reorganization (Atoms & Composites)
 *Link: [./conductor/tracks/ds-refactor-org_20260107/](./conductor/tracks/ds-refactor-org_20260107/)*

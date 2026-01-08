@@ -11,7 +11,7 @@
 > **Los layouts son infraestructura, no decoración.**
 - Un layout **no contiene lógica de negocio**.
 - Un layout define **zonas, responsabilidades y límites**.
-- Los layouts viven en `@loopdev/ui/src/components/layout`.
+- Los layouts viven en `@loopdev/ui/src/components/composites/shell`.
 
 ---
 
