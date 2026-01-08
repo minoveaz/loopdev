@@ -1,7 +1,7 @@
 # Plan: Module Essentials Kit Implementation
 
 ## Phase 1: Ideation & Contract (DoR)
-- [~] Task: Create component directories for `ModuleHeader`, `ModuleToolbar`, `ModuleSidebar`, and `InspectorPanel`.
+- [x] Task: Create component directories for `ModuleHeader`, `ModuleToolbar`, `ModuleSidebar`, and `InspectorPanel`. 487eb95
 - [ ] Task: Define `userHistories.md` for each component incorporating Bloque 0 rules.
 - [ ] Task: Create `types.ts` for each component based on the approved spec.
 - [ ] Task: Conductor - User Manual Verification 'Definition of Readiness' (Protocol in workflow.md)
