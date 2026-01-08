@@ -9,3 +9,7 @@ export * from './UserMenu';
 export * from './NotificationCenter';
 export * from './QuickActionMenu';
 export * from './ModuleWorkspace';
+export * from './ModuleHeader';
+export * from './ModuleToolbar';
+export * from './ModuleSidebar';
+export * from './InspectorPanel';

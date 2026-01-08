@@ -580,6 +580,70 @@
         "context_integration": true,
         "zero_hardcoding": true
       }
+    },
+    {
+      "id": "module-header-v1",
+      "name": "ModuleHeader",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-07T16:00:00Z",
+      "capabilities": {
+        "hierarchical_breadcrumbs": true,
+        "domain_status_indicators": true,
+        "sidebar_toggle_sync": true
+      }
+    },
+    {
+      "id": "module-toolbar-v1",
+      "name": "ModuleToolbar",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-07T16:00:00Z",
+      "capabilities": {
+        "situational_rendering": true,
+        "bulk_action_support": true,
+        "view_toggle_slots": true
+      }
+    },
+    {
+      "id": "module-sidebar-v1",
+      "name": "ModuleSidebar",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-07T16:00:00Z",
+      "capabilities": {
+        "scroll_area_integrated": true,
+        "local_search_support": true,
+        "standardized_padding": true
+      }
+    },
+    {
+      "id": "inspector-panel-v1",
+      "name": "InspectorPanel",
+      "status": "stable",
+      "category": "Composites",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "certification_timestamp": "2026-01-07T16:00:00Z",
+      "capabilities": {
+        "dedicated_close_mechanism": true,
+        "property_section_scrolling": true,
+        "ai_assistant_ready": true
+      }
     }
   ]
 }

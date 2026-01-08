@@ -6,5 +6,5 @@
 
 ---
 
-## [~] Track: Module Essentials Kit (Header, Toolbar, Sidebar, Inspector)
+## [x] Track: Module Essentials Kit (Header, Toolbar, Sidebar, Inspector)
 *Link: [./conductor/tracks/module-essentials_20260107/](./conductor/tracks/module-essentials_20260107/)*
