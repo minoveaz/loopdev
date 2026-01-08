@@ -13,3 +13,8 @@
 
 ## [x] Track: Design System Architectural Reorganization (Atoms & Composites)
 *Link: [./conductor/tracks/ds-refactor-org_20260107/](./conductor/tracks/ds-refactor-org_20260107/)*
+
+---
+
+## [ ] Track: Suite Home System (Home Landing Template)
+*Link: [./conductor/tracks/suite-dashboard_20260107/](./conductor/tracks/suite-dashboard_20260107/)*
