@@ -13,6 +13,7 @@ export * from './workspace/ModuleToolbar';
 export * from './workspace/ModuleSidebar';
 export * from './workspace/InspectorPanel';
 export * from './workspace/SuiteHomeLayout';
+export * from './workspace/ModuleCard';
 
 // navigation
 export * from './navigation/ContextPath';

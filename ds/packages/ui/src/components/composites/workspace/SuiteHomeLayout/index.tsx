@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, BlueprintBackground } from '../../../atoms';
+import { LpdText, BlueprintBackground, TechnicalCard } from '../../../atoms';
 import { SuiteHomeLayoutProps } from './types';
 import { SuiteHomeHero } from './SuiteHomeHero';
 import { SuiteHomeNotices } from './SuiteHomeNotices';
@@ -12,14 +12,16 @@ import { ActivityFeed } from '../../utilities/ActivityFeed';
 
 /**
  * @component SuiteHomeLayout
- * @description Chasis Maestro de Suite (v3.0).
- * Impone un orden industrial basado en un grid de 12 columnas.
+ * @description Chasis Maestro de Suite (v3.9).
+ * Impone un orden industrial basado en un grid de 12 columnas con cabeceras unificadas.
  */
 export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
   const { 
     title, 
     subtitle, 
-    contextLine, 
+    contextLine,
+    icon,
+    tone,
     notices = [],
     quickActions = [],
     metrics = [],
@@ -27,8 +29,64 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
     activity = [],
     userState = 'active',
     onViewActivityAll,
+    modulesTitle = 'Suite Modules',
     className = ''
   } = props;
+
+  // Helper para Títulos de Sección (ADN Industrial)
+  const SectionHeader = ({ title }: { title: string }) => (
+    <div className="flex items-center justify-between mb-6">
+      <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest">
+        {`// ${title}`}
+      </LpdText>
+    </div>
+  );
+
+  // 1. Lógica de Prioridad Dinámica
+  const renderActivationLayer = () => {
+    const quickStart = (
+      <div className="flex flex-col">
+        <SectionHeader title="Quick Start" />
+        <SuiteHomeQuickStart actions={quickActions} />
+      </div>
+    );
+    const insights = (
+      <div className="flex flex-col">
+        <SectionHeader title="Executive Glance" />
+        <SuiteHomeInsights metrics={metrics} />
+      </div>
+    );
+
+    if (userState === 'new') {
+      return (
+        <>
+          <div className="col-span-12 xl:col-span-8">{quickStart}</div>
+          <div className="col-span-12 xl:col-span-4">{insights}</div>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div className="col-span-12 xl:col-span-4">{insights}</div>
+        <div className="col-span-12 xl:col-span-8">{quickStart}</div>
+      </>
+    );
+  };
+
+  // 2. Helper para renderizar el feed con el envoltorio industrial
+  const renderActivityCard = (gridClasses: string) => (
+    <aside className={gridClasses}>
+      <SectionHeader title="Recent Activity" />
+      <TechnicalCard variant="interactive" className="p-6 shadow-sm">
+        <ActivityFeed 
+          items={activity as any} 
+          title="Project History" // El título interno del componente es secundario
+          onViewAll={onViewActivityAll}
+        />
+      </TechnicalCard>
+    </aside>
+  );
 
   return (
     <div className={`relative flex flex-col w-full min-h-screen bg-shell-canvas ${className}`}>
@@ -40,7 +98,9 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
         <SuiteHomeHero 
           title={title} 
           subtitle={subtitle} 
-          contextLine={contextLine} 
+          contextLine={contextLine}
+          icon={icon}
+          tone={tone}
         />
         <SuiteHomeNotices notices={notices} />
 
@@ -48,33 +108,34 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
         <main className="flex-1 px-8 py-10">
           <div className="max-w-[1600px] mx-auto flex flex-col gap-16">
             
-            {/* SECCIÓN A: MÉTRICAS Y ACCIONES (ACTIVACIÓN) */}
+            {/* SECCIÓN A: ACTIVACIÓN (Métricas y Acciones) */}
             <section className="grid grid-cols-12 gap-8 items-start">
-              <div className="col-span-12 lg:col-span-8">
-                <SuiteHomeQuickStart actions={quickActions} />
-              </div>
-              <div className="col-span-12 lg:col-span-4">
-                <SuiteHomeInsights metrics={metrics} />
-              </div>
+              {renderActivationLayer()}
             </section>
 
-            {/* SECCIÓN B: ESTACIONES Y MEMORIA (OPERACIÓN) */}
+            {/* SECCIÓN B: OPERACIÓN (Módulos y Memoria) */}
             <section className="grid grid-cols-12 gap-12 items-start">
-              {/* Bloque Izquierdo: Módulos (8 cols) */}
-              <div className="col-span-12 xl:col-span-8 flex flex-col gap-6">
-                <SuiteHomeModules modules={modules} />
+              
+              {/* Bloque Izquierdo: Módulos (8 cols en XL) */}
+              <div className="col-span-12 xl:col-span-8 flex flex-col gap-10">
+                <div className="flex flex-col">
+                  <SectionHeader title={modulesTitle} />
+                  <SuiteHomeModules modules={modules} />
+                </div>
+                
+                {/* MODO TABLET/LAPTOP: Timeline al final del bloque de módulos */}
+                <div className="hidden lg:block xl:hidden">
+                  {renderActivityCard("col-span-12")}
+                </div>
               </div>
 
-              {/* Bloque Derecho: Actividad (4 cols) */}
-              <aside className="col-span-12 xl:col-span-4 sticky top-8">
-                <div className="p-6 bg-surface-elevated border border-border-technical rounded-2xl shadow-sm">
-                  <ActivityFeed 
-                    items={activity as any} 
-                    title="System Activity" 
-                    onViewAll={onViewActivityAll}
-                  />
-                </div>
-              </aside>
+              {/* Bloque Derecho: Actividad (4 cols en XL) */}
+              {renderActivityCard("hidden xl:block xl:col-span-4 sticky top-8")}
+
+              {/* MODO MOBILE: Timeline al final de todo */}
+              <div className="col-span-12 lg:hidden mt-8">
+                {renderActivityCard("col-span-12")}
+              </div>
             </section>
 
           </div>

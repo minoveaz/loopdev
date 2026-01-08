@@ -2,11 +2,11 @@
 
 ## Phase 1: The Standard (TechnicalCard)
 - [x] Task: Create `atoms/surfaces/TechnicalCard` with support for `flat` and `interactive` modes. cd74b7a
-- [~] Task: Integrate `TechnicalCard` into `ActivityFeed` and `SuiteHomeModules`.
-- [ ] Task: Conductor - User Manual Verification 'Card Standard Validated'
+- [x] Task: Integrate `TechnicalCard` into `ActivityFeed` and `SuiteHomeModules`. 32f911b
+- [~] Task: Conductor - User Manual Verification 'Card Standard Validated'
 
 ## Phase 2: The Identity (SuiteHomeHero)
-- [ ] Task: Refactor `SuiteHomeHero` with the new command-lockup style.
+- [~] Task: Refactor `SuiteHomeHero` with the new command-lockup style and TechnicalIsotype.
 - [ ] Task: Add suite isotype support (Icon in technical circle).
 - [ ] Task: Conductor - User Manual Verification 'Hero High-Fidelity'
 

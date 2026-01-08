@@ -15,13 +15,13 @@ export const TechnicalCard: React.FC<TechnicalCardProps> = ({
   className,
   ...props
 }) => {
-  const baseClasses = "rounded-2xl border border-border-technical transition-all duration-300 overflow-hidden";
+  const baseClasses = "group rounded-2xl border border-border-technical transition-all duration-300";
   
   const variantClasses = {
-    flat: "bg-surface-elevated",
+    flat: "bg-surface-elevated overflow-hidden",
     interactive: "bg-surface-elevated cursor-pointer hover:border-primary/40 hover:shadow-[0_0_20px_rgba(19,91,236,0.15)] hover:scale-[1.01] active:scale-[0.99]",
-    warning: "bg-surface-elevated border-energy-yellow/30 shadow-[0_0_15px_rgba(250,204,21,0.05)]",
-    disabled: "bg-surface-elevated opacity-50 grayscale cursor-not-allowed pointer-events-none"
+    warning: "bg-surface-elevated border-energy-yellow/30 shadow-[0_0_15px_rgba(250,204,21,0.05)] overflow-hidden",
+    disabled: "bg-surface-elevated opacity-50 grayscale cursor-not-allowed pointer-events-none overflow-hidden"
   };
 
   return (

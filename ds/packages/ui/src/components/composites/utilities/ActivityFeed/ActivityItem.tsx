@@ -6,8 +6,7 @@ import { ActivityItemProps } from './types';
 
 /**
  * @component ActivityItem
- * @description Réplica técnica exacta del "Project History" del Lab v2.4.
- * Adaptado para usar tokens industriales de LoopDev OS.
+ * @description Molécula de evento con hover aislado mediante Named Groups.
  */
 export const ActivityItem: React.FC<ActivityItemProps> = (props) => {
   const { 
@@ -21,7 +20,6 @@ export const ActivityItem: React.FC<ActivityItemProps> = (props) => {
     isLast 
   } = props;
 
-  // Tonos extraídos del Lab v2.4
   const toneClasses = {
     primary: 'bg-blue-50 dark:bg-blue-900/20 text-primary border-blue-100 dark:border-blue-900/30',
     warning: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-500 border-yellow-100 dark:border-yellow-900/30',
@@ -30,24 +28,23 @@ export const ActivityItem: React.FC<ActivityItemProps> = (props) => {
   };
 
   return (
-    <div className={`relative pl-12 ${isLast ? '' : 'pb-8'} group`}>
+    <div className={`relative pl-12 ${isLast ? '' : 'pb-8'} group/item`}>
       
-      {/* 1. NODO FLOTANTE (ADN Lab) */}
-      {/* La máscara debe coincidir con el fondo de la tarjeta (surface-elevated) */}
+      {/* 1. NODO FLOTANTE */}
       <div className="absolute left-0 top-0 p-1 bg-surface-elevated z-10 rounded-full">
         <div className={`
-          w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 group-hover:scale-110 shadow-sm
+          w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 group-hover/item:scale-110 shadow-sm
           ${toneClasses[tone]}
         `}>
           <Icon name={icon} size="sm" className="block" />
         </div>
       </div>
 
-      {/* 2. CONTENIDO (Jerarquía Lab) */}
+      {/* 2. CONTENIDO */}
       <div className="flex flex-col">
         <div className="flex justify-between items-start">
           <span 
-            className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer leading-tight"
+            className="text-sm font-medium text-slate-900 dark:text-white group-hover/item:text-primary transition-colors cursor-pointer leading-tight"
             onClick={() => href && (window.location.href = href)}
           >
             {action}

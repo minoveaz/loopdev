@@ -16,6 +16,7 @@ export * from './indicators/QualityShield';
 export * from './indicators/EngineeringSeal';
 export * from './indicators/InfraStamp';
 export * from './indicators/SystemStatus';
+export * from './indicators/TechnicalIsotype';
 
 // inputs
 export * from './inputs/Button';

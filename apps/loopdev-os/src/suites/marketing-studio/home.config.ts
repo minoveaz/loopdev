@@ -8,6 +8,8 @@ export const getMarketingStudioHomeConfig = (router: any): Omit<SuiteHomeLayoutP
   title: 'Marketing Studio',
   subtitle: 'The control center for your brand identity and intelligent content generation.',
   contextLine: 'Working on brand: Loop Health · Last activity: 2h',
+  icon: 'auto_awesome_motion',
+  tone: 'primary',
   
   notices: [
     {
@@ -77,6 +79,8 @@ export const getMarketingStudioHomeConfig = (router: any): Omit<SuiteHomeLayoutP
       onOpen: () => console.log('Open Assets')
     }
   ],
+
+  modulesTitle: 'Suite Modules',
 
   activity: [
     { id: 'a1', action: 'Edited Brand Guidelines', module: 'Brand Hub', timestamp: '3h ago', href: '/marketing-studio/brands', icon: 'edit_document', tone: 'neutral', description: 'Updated primary color palette for' },

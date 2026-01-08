@@ -54,6 +54,12 @@ export interface SuiteHomeLayoutProps {
   /** Información dinámica de contexto (ej: 'Marca activa: X') */
   contextLine?: string;
 
+  /** Icono de identidad de la suite */
+  icon?: string;
+
+  /** Tono semántico de la suite */
+  tone?: 'primary' | 'energy' | 'innovation' | 'neutral';
+
   /** Estado del usuario para priorización de bloques */
   userState: 'new' | 'active';
 
@@ -68,6 +74,9 @@ export interface SuiteHomeLayoutProps {
 
   /** Listado de módulos operativos */
   modules: SuiteHomeModule[];
+
+  /** Título de la sección de módulos */
+  modulesTitle?: string;
 
   /** Feed de actividad reciente */
   activity: SuiteHomeActivityItem[];
