@@ -55,7 +55,7 @@ Este documento es la **fuente única de la verdad** para el diseño y ensamblaje
 3. **Profundidad = superficies + bordes, no sombras negras**
 4. **Tipografía dual = autoridad (Inter) + precisión (JetBrains Mono)**
 5. **Movimiento = feedback funcional, no ornamento**
-6. **{ } = operadores estructurales, no decoración**
+6. **{ } = operadores estructurales, no decoración.** La firma oficial de estado se implementa mediante el componente `TechnicalStatusBadge`.
 7. **Todo componente debe ser multitenant-ready**
 
 > Si un componente se ve "correcto" pero rompe estas reglas, **no es aceptado**.

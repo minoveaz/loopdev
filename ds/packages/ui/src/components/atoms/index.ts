@@ -17,6 +17,7 @@ export * from './indicators/EngineeringSeal';
 export * from './indicators/InfraStamp';
 export * from './indicators/SystemStatus';
 export * from './indicators/TechnicalIsotype';
+export * from './indicators/TechnicalStatusBadge';
 
 // inputs
 export * from './inputs/Button';

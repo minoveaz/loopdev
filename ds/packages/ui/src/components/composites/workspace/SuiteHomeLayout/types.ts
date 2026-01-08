@@ -26,14 +26,26 @@ export interface SuiteHomeModule {
   onOpen: () => void;
 }
 
-export interface SuiteHomeNotice {
+/**
+ * @interface SuiteNotice
+ * @description Contrato de gobernanza para avisos de sistema.
+ */
+export interface SuiteNotice {
   id: string;
-  message: string;
-  tone: 'warning' | 'info' | 'danger';
-  action?: {
+  severity: 'info' | 'warning' | 'danger' | 'success';
+  scope?: 'system' | 'suite' | 'module' | 'integration';
+  title: string;
+  description?: string;
+  primaryAction: {
     label: string;
     onClick: () => void;
   };
+  secondaryAction?: {
+    label: string;
+    onClick: () => void;
+  };
+  dismissible?: boolean;
+  icon?: string;
 }
 
 export interface SuiteHomeActivityItem {
@@ -42,6 +54,9 @@ export interface SuiteHomeActivityItem {
   module: string;
   timestamp: string;
   href: string;
+  icon?: string;
+  tone?: 'primary' | 'warning' | 'neutral' | 'success';
+  description?: string;
 }
 
 export interface SuiteHomeLayoutProps {
@@ -64,13 +79,16 @@ export interface SuiteHomeLayoutProps {
   userState: 'new' | 'active';
 
   /** Alertas de gobernanza */
-  notices?: SuiteHomeNotice[];
+  notices?: SuiteNotice[];
 
   /** Acciones de arranque rápido */
   quickActions: SuiteHomeAction[];
 
   /** Métricas ejecutivas */
   metrics: SuiteHomeMetric[];
+
+  /** Título de la sección de métricas */
+  insightsTitle?: string;
 
   /** Listado de módulos operativos */
   modules: SuiteHomeModule[];

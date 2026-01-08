@@ -53,7 +53,7 @@ Todo componente debe pertenecer a **una única categoría** dentro de su tipo (�
 
 ### Atoms (`components/atoms/`)
 *   **foundations/** — Typography, ZIndex, Motion, BlueprintBackground.
-*   **indicators/** — Badge, StatusPulse, Spinner, CertificationStamp.
+*   **indicators/** — Badge, StatusPulse, Spinner, CertificationStamp, TechnicalStatusBadge.
 *   **inputs/** — Button, IconButton, Input, ThemeToggle.
 *   **surfaces/** — TechnicalSurface, Divider, ScrollArea, BrandLogo.
 *   **feedback/** — Skeleton, EmptyState, Toast.

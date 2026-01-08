@@ -1,7 +1,7 @@
 {
   "project": "LoopDev SaaS",
-  "registry_version": "1.2",
-  "last_updated": "2026-01-07T18:00:00Z",
+  "registry_version": "1.3",
+  "last_updated": "2026-01-08T11:00:00Z",
   "components": [
     {
       "id": "typography-v1",
@@ -13,121 +13,103 @@
       "certification": { "front": "certified" }
     },
     {
-      "id": "button-v2",
-      "name": "Button",
+      "id": "technical-card-v1",
+      "name": "TechnicalCard",
       "status": "stable",
       "type": "atom",
-      "category": "inputs",
+      "category": "surfaces",
       "phase": 2,
-      "certification": { "front": "certified", "infra": "certified" }
+      "certification": { "front": "certified" },
+      "capabilities": {
+        "technical_borders_05px": true,
+        "blue_glow_interaction": true,
+        "multitheme_reactivity": true
+      }
     },
     {
-      "id": "input-v1",
-      "name": "Input",
-      "status": "stable",
-      "type": "atom",
-      "category": "inputs",
-      "phase": 3,
-      "certification": { "front": "certified", "infra": "certified" }
-    },
-    {
-      "id": "badge-v1",
-      "name": "Badge",
+      "id": "technical-isotype-v1",
+      "name": "TechnicalIsotype",
       "status": "stable",
       "type": "atom",
       "category": "indicators",
-      "phase": 1,
-      "certification": { "front": "certified" }
+      "phase": 2,
+      "certification": { "front": "certified" },
+      "capabilities": {
+        "dual_ring_design": true,
+        "latent_life_pulse": true,
+        "multitheme_transparency": true
+      }
     },
     {
-      "id": "empty-state-v1",
-      "name": "EmptyState",
+      "id": "technical-status-badge-v1",
+      "name": "TechnicalStatusBadge",
       "status": "stable",
       "type": "atom",
-      "category": "feedback",
+      "category": "indicators",
       "phase": 2,
-      "certification": { "front": "certified" }
+      "certification": { "front": "certified" },
+      "capabilities": {
+        "bracket_syntax_automation": true,
+        "shimmer_active_state": true,
+        "status_pulse_integration": true,
+        "semantic_severity_mapping": true
+      }
     },
     {
-      "id": "toast-v2",
-      "name": "Toast",
-      "status": "stable",
-      "type": "atom",
-      "category": "feedback",
-      "phase": 2,
-      "certification": { "front": "certified", "infra": "certified" }
-    },
-    {
-      "id": "app-shell-v1.1",
-      "name": "AppShell",
+      "id": "activity-feed-v1",
+      "name": "ActivityFeed",
       "status": "stable",
       "type": "composite",
-      "category": "shell",
-      "phase": 4,
-      "certification": { "front": "certified" }
+      "category": "utilities",
+      "phase": 2,
+      "certification": { "front": "certified" },
+      "capabilities": {
+        "continuous_timeline_hitch": true,
+        "floating_status_nodes": true,
+        "asset_preview_support": true
+      }
     },
     {
-      "id": "module-workspace-v1.4",
-      "name": "ModuleWorkspace",
+      "id": "system-notice-rail-v1",
+      "name": "SystemNoticeRail",
+      "status": "stable",
+      "type": "composite",
+      "category": "utilities",
+      "phase": 2,
+      "certification": { "front": "certified" },
+      "capabilities": {
+        "operational_governance": true,
+        "severity_priority_engine": true,
+        "high_contrast_light_mode": true
+      }
+    },
+    {
+      "id": "module-card-v1",
+      "name": "ModuleCard",
       "status": "stable",
       "type": "composite",
       "category": "workspace",
       "phase": 2,
-      "certification": { "front": "certified" }
+      "certification": { "front": "certified" },
+      "capabilities": {
+        "five_layer_design": true,
+        "dynamic_title_gradient": true,
+        "ambient_light_spotlight": true
+      }
     },
     {
-      "id": "module-header-v1",
-      "name": "ModuleHeader",
+      "id": "suite-home-layout-v1",
+      "name": "SuiteHomeLayout",
       "status": "stable",
       "type": "composite",
       "category": "workspace",
       "phase": 2,
-      "certification": { "front": "certified" }
-    },
-    {
-      "id": "suite-sidebar-v1",
-      "name": "SuiteSidebar",
-      "status": "stable",
-      "type": "composite",
-      "category": "shell",
-      "phase": 1,
-      "certification": { "front": "certified" }
-    },
-    {
-      "id": "identity-bar-v1",
-      "name": "IdentityBar",
-      "status": "stable",
-      "type": "atom",
-      "category": "surfaces",
-      "phase": 1,
-      "certification": { "front": "certified" }
-    },
-    {
-      "id": "exit-hatch-v1",
-      "name": "ExitHatch",
-      "status": "stable",
-      "type": "atom",
-      "category": "surfaces",
-      "phase": 1,
-      "certification": { "front": "certified" }
-    },
-    {
-      "id": "nav-group-v1",
-      "name": "NavGroup",
-      "status": "stable",
-      "type": "atom",
-      "category": "navigation",
-      "phase": 1,
-      "certification": { "front": "certified" }
-    },
-    {
-      "id": "nav-sidebar-item-v1",
-      "name": "NavSidebarItem",
-      "status": "stable",
-      "type": "atom",
-      "category": "navigation",
-      "phase": 1,
-      "certification": { "front": "certified" }
+      "certification": { "front": "certified" },
+      "capabilities": {
+        "activation_priority_engine": true,
+        "responsive_grid_8_4": true,
+        "suite_agnostic_config": true
+      }
     }
   ]
 }

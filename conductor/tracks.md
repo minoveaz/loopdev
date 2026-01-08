@@ -16,10 +16,20 @@
 
 ---
 
-## [ ] Track: Suite Home System (Home Landing Template)
+## [x] Track: Suite Home System (Home Landing Template)
 *Link: [./conductor/tracks/suite-home_20260107/](./conductor/tracks/suite-home_20260107/)*
 
 ---
 
-## [ ] Track: Suite Home Hardening (Refactor v3.9)
+## [x] Track: Suite Home Hardening (Refactor v3.9)
 *Link: [./conductor/tracks/suite-home-hardening_20260107/](./conductor/tracks/suite-home-hardening_20260107/)*
+
+---
+
+## [x] Track: System Notice Rail (Industrial Governance)
+*Link: [./conductor/tracks/suite-notices-rail_20260108/](./conductor/tracks/suite-notices-rail_20260108/)*
+
+---
+
+## [x] Track: Technical Status Badge (Intelligent Health Sensor)
+*Link: [./conductor/tracks/technical-status-badge_20260108/](./conductor/technical-status-badge_20260108/)*

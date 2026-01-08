@@ -13,10 +13,10 @@ export default function LaunchpadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-background-dark transition-colors duration-300 flex flex-col font-sans selection:bg-primary/30 relative overflow-hidden">
+    <div className="min-h-screen bg-shell-canvas transition-colors duration-300 flex flex-col font-sans selection:bg-primary/30 relative overflow-hidden">
       
-      {/* 1. Technical Atmosphere */}
-      <BlueprintBackground intensity="low" withScanline />
+      {/* 1. Technical Atmosphere (Standardized) */}
+      <BlueprintBackground variant="monochrome" intensity="high" className="fixed inset-0 pointer-events-none" />
 
       {/* 2. Asymmetric Header */}
       <TechnicalSurface 

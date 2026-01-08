@@ -28,3 +28,7 @@ export * from './utilities/QuickActionMenu';
 export * from './utilities/SuiteCard';
 
 export * from './utilities/ActivityFeed';
+
+export * from './utilities/SystemNoticeRail';
+
+

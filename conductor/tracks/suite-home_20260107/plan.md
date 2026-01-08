@@ -18,13 +18,13 @@
 - [x] Task: Conductor - User Manual Verification 'DS Chassis Complete'
 
 ## Phase 3: Suite Implementation (Marketing Studio)
-- [~] Task: Create `marketingStudio.home.config.ts`.
-- [~] Task: Implement the `/marketing-studio` landing using the config.
-- [ ] Task: Verify real data integration (Mocks first, then Supabase contract).
-- [ ] Task: Conductor - User Manual Verification 'Suite Active'
+- [x] Task: Create `marketingStudio.home.config.ts`.
+- [x] Task: Implement the `/marketing-studio` landing using the config.
+- [x] Task: Verify real data integration (Mocks first, then Supabase contract).
+- [x] Task: Conductor - User Manual Verification 'Suite Active'
 
 ## Phase 4: Persistence & Certification (DoD)
-- [ ] Task: Register in `COMPONENT_REGISTRY.json`.
-- [ ] Task: Apply `CertificationStamp`.
-- [ ] Task: Update `ENGINEERING_LOG.md`.
-- [ ] Task: Conductor - User Manual Verification 'Definition of Done'
+- [x] Task: Register in `COMPONENT_REGISTRY.json`.
+- [x] Task: Apply `CertificationStamp`.
+- [x] Task: Update `ENGINEERING_LOG.md`.
+- [x] Task: Conductor - User Manual Verification 'Definition of Done'

@@ -14,9 +14,31 @@ export const getMarketingStudioHomeConfig = (router: any): Omit<SuiteHomeLayoutP
   notices: [
     {
       id: 'n1',
-      message: 'You have 8 unclassified assets in the Brand Hub.',
-      tone: 'info',
-      action: { label: 'Classify Now', onClick: () => router.push('/marketing-studio/brands') }
+      severity: 'info',
+      scope: 'module',
+      title: 'Unclassified Assets',
+      description: 'You have 8 new files in the Brand Hub that need metadata.',
+      primaryAction: { 
+        label: 'Classify Now', 
+        onClick: () => router.push('/marketing-studio/brands') 
+      },
+      dismissible: true
+    },
+    {
+      id: 'n2',
+      severity: 'warning',
+      scope: 'system',
+      title: 'AI Credits Low',
+      description: 'System-wide generative credits are at 15%.',
+      primaryAction: { 
+        label: 'Top Up', 
+        onClick: () => console.log('Top up credits') 
+      },
+      secondaryAction: {
+        label: 'View Limits',
+        onClick: () => console.log('View limits')
+      },
+      dismissible: false
     }
   ],
 
@@ -24,21 +46,21 @@ export const getMarketingStudioHomeConfig = (router: any): Omit<SuiteHomeLayoutP
     {
       id: 'qa1',
       label: 'New Brand',
-      description: 'Define identity rules',
-      icon: 'add_business',
+      description: 'Setup identity',
+      icon: 'verified_user',
       onClick: () => router.push('/marketing-studio/brands/new')
     },
     {
       id: 'qa2',
       label: 'Generate Post',
-      description: 'AI-powered content',
+      description: 'AI Content',
       icon: 'auto_awesome',
       onClick: () => router.push('/marketing-studio/content/new')
     },
     {
       id: 'qa3',
       label: 'Upload Assets',
-      description: 'DAM Centralized',
+      description: 'Feed system',
       icon: 'cloud_upload',
       onClick: () => router.push('/marketing-studio/assets/upload')
     }
@@ -48,8 +70,10 @@ export const getMarketingStudioHomeConfig = (router: any): Omit<SuiteHomeLayoutP
     { id: 'm1', label: 'Brands Managed', value: 12, tone: 'success' },
     { id: 'm2', label: 'Assets Stored', value: '1.2k', trend: 'up', tone: 'neutral' },
     { id: 'm3', label: 'Active Campaigns', value: 3, trend: 'down', tone: 'warning' },
-    { id: 'm4', label: 'AI Credits', value: '84%', tone: 'warning' }
+    { id: 'm4', label: 'AI Health', value: '98%', tone: 'success' }
   ],
+
+  insightsTitle: 'Key Metrics',
 
   modules: [
     {

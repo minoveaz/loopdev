@@ -7,7 +7,8 @@ import { TechnicalIsotypeProps } from './types';
 
 /**
  * @component TechnicalIsotype
- * @description Ancla visual de identidad con animación técnica de alta visibilidad.
+ * @description Ancla visual de identidad v3.9 (Latent Life).
+ * Exterior estático para estabilidad, interior con pulso lento para vida.
  */
 export const TechnicalIsotype: React.FC<TechnicalIsotypeProps> = ({
   icon,
@@ -21,38 +22,34 @@ export const TechnicalIsotype: React.FC<TechnicalIsotypeProps> = ({
     lg: 'w-20 h-20'
   };
 
-  // Colores de borde más intensos para modo claro
   const toneClasses = {
-    primary: 'border-primary/60 dark:border-primary/30',
-    energy: 'border-energy-yellow/80 dark:border-energy-yellow/30',
-    innovation: 'border-innovation-purple/80 dark:border-innovation-purple/30',
-    neutral: 'border-slate-400 dark:border-border-technical'
+    primary: 'text-primary border-primary/20',
+    energy: 'text-energy-yellow border-energy-yellow/20',
+    innovation: 'text-innovation-purple border-innovation-purple/20',
+    neutral: 'text-text-muted border-border-technical'
   };
 
   return (
     <div className={cn("relative flex items-center justify-center shrink-0", sizeClasses[size], className)}>
       
-      {/* 1. ANILLO EXTERIOR (Dashed + Rotación) */}
-      {/* Aumentamos grosor a border-2 y velocidad a 10s para que el movimiento sea obvio */}
+      {/* 1. ANILLO EXTERIOR (Estabilidad: Borde 0.5px estático) */}
       <div className={cn(
-        "absolute inset-0 rounded-full border-dashed border-2 animate-[spin_10s_linear_infinite]",
+        "absolute inset-0 rounded-full border-[0.5px] opacity-40",
         toneClasses[tone]
       )} />
       
-      {/* 2. ANILLO INTERIOR (Guía fija de contraste) */}
-      <div className="absolute inset-[4px] rounded-full border border-border-technical opacity-30 dark:opacity-20" />
+      {/* 2. ANILLO INTERIOR (Vida Latente: Pulso lento 5s) */}
+      <div className={cn(
+        "absolute inset-[4px] rounded-full border border-border-technical bg-shell-canvas/30 dark:bg-white/5",
+        "animate-[pulse_5s_ease-in-out_infinite] opacity-60"
+      )} />
 
-      {/* 3. ICONO CENTRAL */}
-      <div className="relative z-10 flex items-center justify-center">
+      {/* 3. ICONO CENTRAL (Foco de precisión) */}
+      <div className="relative z-10 flex items-center justify-center transition-transform duration-700 hover:scale-110">
         <Icon 
           name={icon} 
           size={size === 'lg' ? 'xl' : size === 'md' ? 'lg' : 'md'} 
-          className={cn(
-            "block",
-            tone === 'primary' ? 'text-primary' : 
-            tone === 'energy' ? 'text-energy-yellow' : 
-            tone === 'innovation' ? 'text-innovation-purple' : 'text-text-muted'
-          )}
+          className={cn("block drop-shadow-sm", toneClasses[tone])}
         />
       </div>
     </div>

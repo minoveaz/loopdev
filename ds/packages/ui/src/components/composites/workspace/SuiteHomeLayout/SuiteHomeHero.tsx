@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, Badge, TechnicalIsotype } from '../../../atoms';
+import { LpdText, TechnicalStatusBadge, TechnicalIsotype } from '../../../atoms';
 
 export interface SuiteHomeHeroProps {
   title: string;
@@ -9,50 +9,70 @@ export interface SuiteHomeHeroProps {
   contextLine?: string;
   icon?: string;
   tone?: 'primary' | 'energy' | 'innovation' | 'neutral';
+  status?: string;
 }
 
 /**
  * @component SuiteHomeHero
- * @description Cabecera de identidad de alta fidelidad para Suites.
- * Implementa el "Command Lockup" con Isotipo Técnico y tipografía industrial.
+ * @description Cabecera de identidad v3.9 (Master Standard).
+ * Implementa el flujo: Orientación -> Estabilidad -> Latent Life.
  */
 export const SuiteHomeHero: React.FC<SuiteHomeHeroProps> = ({ 
   title, 
   subtitle, 
   contextLine, 
   icon = 'hub',
-  tone = 'primary'
+  tone = 'primary',
+  status = 'SUITE_ACTIVE'
 }) => {
   return (
-    <div className="relative w-full h-[140px] flex flex-col justify-center px-8 overflow-hidden bg-transparent border-b border-border-technical">
-      {/* 1. Efecto Spotlight Local (Fuerza visual sobre la grilla global) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_50%,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none opacity-50 dark:opacity-100" />
+    <div className="relative w-full h-[120px] flex flex-col justify-center px-10 overflow-hidden bg-transparent">
+      
+      {/* 1. ATMÓSFERA (Doble Spotlight sutil) */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_50%,_rgba(19,91,236,0.08)_0%,_transparent_60%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_50%,_rgba(19,91,236,0.03)_0%,_transparent_30%)] pointer-events-none blur-2xl" />
+      
+      {/* 2. MÁSCARA VERTICAL (Disuelve el Hero hacia el contenido) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-shell-canvas/20 pointer-events-none" />
 
-      <div className="relative z-10 flex items-center gap-6">
+      {/* 3. MICRO-TELEMETRÍA (Línea de Ticks Inferior) */}
+      <div className="absolute bottom-0 left-10 right-10 h-[1px] bg-border-technical opacity-20 flex justify-between items-end">
+        {[...Array(20)].map((_, i) => (
+          <div key={i} className="w-[1px] h-[3px] bg-border-technical" />
+        ))}
+      </div>
+
+      <div className="relative z-10 flex items-center gap-8">
         
-        {/* A. ANCLA DE IDENTIDAD (Technical Isotype) */}
-        <TechnicalIsotype icon={icon} tone={tone} size="md" />
+        {/* A. IDENTIDAD (Isotype Baseline Aligned) */}
+        <TechnicalIsotype icon={icon} tone={tone} size="md" className="translate-y-1" />
 
-        {/* B. BLOQUE DE TEXTO (Identidad Industrial) */}
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-3">
-            <LpdText size="xl" weight="semibold" className="text-text-main tracking-tight uppercase">
+        {/* B. COMMAND CONTENT */}
+        <div className="flex flex-col gap-0.5">
+          {/* Status Badge (Sensitivo) */}
+          <div className="mb-1">
+            <TechnicalStatusBadge 
+              label={status} 
+              severity={tone === 'primary' ? 'info' : tone as any} 
+              variant="ghost"
+              className="p-0 border-none"
+            />
+          </div>
+
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-medium text-text-main tracking-[-0.015em] leading-none">
               {title}
-            </LpdText>
-            <Badge variant="glass" className="bg-background-subtle border-border-technical text-[10px] font-bold tracking-widest text-text-muted uppercase">
-              {`{ SUITE_ACTIVE }`}
-            </Badge>
+            </h1>
           </div>
           
-          <LpdText size="sm" className="text-text-muted max-w-2xl leading-snug">
+          <LpdText size="sm" className="text-text-muted max-w-2xl leading-[1.5] mt-1 opacity-80">
             {subtitle}
           </LpdText>
           
           {contextLine && (
-            <div className="flex items-center gap-2 mt-1">
-              <span className="w-1 h-1 rounded-full bg-primary animate-pulse" />
-              <LpdText size="nano" className="text-primary font-mono opacity-80 dark:opacity-100">
-                {`// ${contextLine}`}
+            <div className="flex items-center gap-2 mt-2">
+              <LpdText size="nano" className="text-primary font-mono font-bold opacity-90 dark:opacity-100">
+                {`// ${contextLine.toLowerCase()}`}
               </LpdText>
             </div>
           )}

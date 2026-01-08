@@ -4,7 +4,7 @@ import React from 'react';
 import { LpdText, BlueprintBackground, TechnicalCard } from '../../../atoms';
 import { SuiteHomeLayoutProps } from './types';
 import { SuiteHomeHero } from './SuiteHomeHero';
-import { SuiteHomeNotices } from './SuiteHomeNotices';
+import { SystemNoticeRail } from '../../utilities/SystemNoticeRail';
 import { SuiteHomeQuickStart } from './SuiteHomeQuickStart';
 import { SuiteHomeInsights } from './SuiteHomeInsights';
 import { SuiteHomeModules } from './SuiteHomeModules';
@@ -15,13 +15,14 @@ import { ActivityFeed } from '../../utilities/ActivityFeed';
  * @description Chasis Maestro de Suite (v3.9).
  * Impone un orden industrial basado en un grid de 12 columnas con cabeceras unificadas.
  */
-export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
+export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string }> = (props) => {
   const { 
     title, 
     subtitle, 
     contextLine,
     icon,
     tone,
+    status,
     notices = [],
     quickActions = [],
     metrics = [],
@@ -30,6 +31,7 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
     userState = 'active',
     onViewActivityAll,
     modulesTitle = 'Suite Modules',
+    insightsTitle = 'Key Metrics',
     className = ''
   } = props;
 
@@ -52,7 +54,7 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
     );
     const insights = (
       <div className="flex flex-col">
-        <SectionHeader title="Executive Glance" />
+        <SectionHeader title={insightsTitle} />
         <SuiteHomeInsights metrics={metrics} />
       </div>
     );
@@ -81,7 +83,6 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
       <TechnicalCard variant="interactive" className="p-6 shadow-sm">
         <ActivityFeed 
           items={activity as any} 
-          title="Project History" // El título interno del componente es secundario
           onViewAll={onViewActivityAll}
         />
       </TechnicalCard>
@@ -101,8 +102,14 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps> = (props) => {
           contextLine={contextLine}
           icon={icon}
           tone={tone}
+          status={status}
         />
-        <SuiteHomeNotices notices={notices} />
+        
+        {/* GOBERNANZA OPERATIVA (New SystemNoticeRail) */}
+        <SystemNoticeRail 
+          notices={notices} 
+          className="mt-2"
+        />
 
         {/* 2. CENTRO DE COMANDO (Área Principal) */}
         <main className="flex-1 px-8 py-10">

@@ -6,17 +6,17 @@
 - [~] Task: Conductor - User Manual Verification 'Card Standard Validated'
 
 ## Phase 2: The Identity (SuiteHomeHero)
-- [~] Task: Refactor `SuiteHomeHero` with the new command-lockup style and TechnicalIsotype.
-- [ ] Task: Add suite isotype support (Icon in technical circle).
-- [ ] Task: Conductor - User Manual Verification 'Hero High-Fidelity'
+- [x] Task: Refactor `SuiteHomeHero` with the new command-lockup style and TechnicalIsotype. 38a2622
+- [x] Task: Add suite isotype support (Icon in technical circle) and depth atmosphere. 38a2622
+- [x] Task: Conductor - User Manual Verification 'Hero High-Fidelity'
 
 ## Phase 3: The Operation (Launcher & Telemetry)
-- [ ] Task: Refactor `SuiteHomeQuickStart` using compact cards.
-- [ ] Task: Refactor `SuiteHomeInsights` with telemetry labels.
-- [ ] Task: Verify adaptive priority swapping with new components.
-- [ ] Task: Conductor - User Manual Verification 'Operation Blocks Validated'
+- [x] Task: Refactor `SuiteHomeQuickStart` using compact cards. 38a2622
+- [x] Task: Refactor `SuiteHomeInsights` with telemetry labels. 38a2622
+- [x] Task: Verify adaptive priority swapping with new components.
+- [x] Task: Conductor - User Manual Verification 'Operation Blocks Validated'
 
 ## Phase 4: Validation & DoD
-- [ ] Task: Run full Typecheck and Storybook Audit.
-- [ ] Task: Update `COMPONENT_REGISTRY.json` and `ENGINEERING_LOG.md`.
-- [ ] Task: Conductor - User Manual Verification 'Refactor Done'
+- [x] Task: Run full Typecheck and Storybook Audit.
+- [x] Task: Update `COMPONENT_REGISTRY.json` and `ENGINEERING_LOG.md`.
+- [x] Task: Conductor - User Manual Verification 'Refactor Done'
