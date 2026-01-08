@@ -25,6 +25,7 @@ export * from './inputs/ThemeToggle';
 
 // surfaces
 export * from './surfaces/TechnicalSurface';
+export * from './surfaces/TechnicalCard';
 export * from './surfaces/Divider';
 export * from './surfaces/ScrollArea';
 export * from './surfaces/TechnicalTooltip';

@@ -7,8 +7,10 @@ export type StatusPulseVariant = 'success' | 'energy' | 'danger' | 'primary' | '
 export type StatusPulseSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export interface StatusPulseProps {
-  /** Variante semántica de color */
+  /** Variante semántica de color (alias de status) */
   variant?: StatusPulseVariant;
+  /** Alias para variant */
+  status?: StatusPulseVariant;
   /** Tamaño industrial del punto */
   size?: StatusPulseSize;
   /** Habilitar/Deshabilitar la animación de pulso */

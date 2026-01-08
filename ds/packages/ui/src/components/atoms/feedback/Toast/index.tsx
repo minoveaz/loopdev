@@ -83,7 +83,7 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
         </div>
         
         {description && (
-          <LpdText size="xs" variant="muted" className={`leading-relaxed line-clamp-2 ${isWarning ? 'text-slate-800' : 'dark:text-slate-400'}`}>
+          <LpdText size="sm" variant="muted" className={`leading-relaxed line-clamp-2 ${isWarning ? 'text-slate-800' : 'dark:text-slate-400'}`}>
             {description}
           </LpdText>
         )}

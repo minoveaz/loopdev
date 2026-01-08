@@ -22,7 +22,7 @@ export const ModuleSidebar: React.FC<ModuleSidebarProps> = (props) => {
       {(title || search || topSlot) && (
         <div className="flex flex-col gap-4 p-4 pb-2 border-b border-border-technical">
           {title && (
-            <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest px-1">
+            <LpdText size="sm" weight="bold" className="text-text-muted uppercase tracking-widest px-1">
               {title}
             </LpdText>
           )}

@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_forward,close,progress_activity,dark_mode,light_mode,hub,groups,payments,logout,dashboard,auto_awesome_motion,edit_note,inventory_2,insights,arrow_back,lock,palette,history,error,all_inclusive" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
       <body className={`${inter.variable} antialiased font-sans`}>
         <QueryProvider>

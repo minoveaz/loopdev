@@ -55,7 +55,7 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
       <div className="flex flex-col w-[240px] bg-white dark:bg-surface-elevated">
         {/* Identidad Estructural */}
         <div className="px-4 py-4 border-b border-border-technical bg-white dark:bg-surface-elevated">
-          <LpdText size="xs" weight="bold" className="text-text-main dark:text-white">
+          <LpdText size="sm" weight="bold" className="text-text-main dark:text-white">
             {userName.split('@')[0]}
           </LpdText>
           

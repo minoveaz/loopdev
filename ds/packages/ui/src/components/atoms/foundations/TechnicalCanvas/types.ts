@@ -3,14 +3,9 @@ import { HTMLAttributes } from 'react';
 export type CanvasVariant = 'blueprint' | 'neural' | 'clean';
 export type CanvasIntensity = 'low' | 'medium' | 'high';
 
-export interface TechnicalCanvasProps extends HTMLAttributes<HTMLDivElement> {
-  /** 
-   * Tipo de fondo técnico:
-   * 'blueprint': Grilla de líneas (Ingeniería/Estructura)
-   * 'neural': Grilla de puntos (IA/Datos)
-   * 'clean': Fondo sólido sin textura
-   */
-  variant?: CanvasVariant;
+export interface TechnicalCanvasProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Estilo de la rejilla */
+  variant?: 'blueprint' | 'neural' | 'clean' | 'monochrome';
   
   /** Intensidad visual de la grilla */
   intensity?: CanvasIntensity;

@@ -38,7 +38,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
   return (
     <div 
       style={styleTokens as React.CSSProperties}
-      className={`flex h-screen w-full bg-white dark:bg-laboratory text-slate-900 dark:text-white overflow-hidden font-sans @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
+      className={`flex h-screen w-full bg-shell-canvas text-slate-900 dark:text-white overflow-hidden font-sans @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
     >
       {/* Accesibilidad: Primer elemento del DOM para navegación por teclado */}
       <a 
@@ -97,7 +97,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           {headerSlot}
         </header>
 
-        <div className="flex flex-1 min-h-0 overflow-hidden relative bg-white dark:bg-background-dark">
+        <div className="flex flex-1 min-h-0 overflow-hidden relative bg-shell-canvas">
           <main 
             id="main-content"
             role="main" 

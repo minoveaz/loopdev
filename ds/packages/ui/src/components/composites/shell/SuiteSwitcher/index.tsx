@@ -53,7 +53,7 @@ export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
             <SuiteIllustration suiteId={currentSuite.suiteId} className="w-full h-full text-primary" />
           </div>
           <div className="flex items-center gap-2">
-            <LpdText size="xs" weight="bold" className="tracking-tight text-text-main dark:text-white">
+            <LpdText size="sm" weight="bold" className="tracking-tight text-text-main dark:text-white">
               {currentSuite.suiteName}
             </LpdText>
             <LucideIcons.ChevronDown size={12} className="text-text-muted opacity-40" />

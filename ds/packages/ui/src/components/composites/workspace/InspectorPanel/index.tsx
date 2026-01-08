@@ -22,7 +22,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = (props) => {
       <div className="flex flex-col flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-3 h-[48px]">
           <div className="flex flex-col min-w-0">
-            <LpdText size="xs" weight="bold" className="text-text-main truncate uppercase tracking-tight">
+            <LpdText size="sm" weight="bold" className="text-text-main truncate uppercase tracking-tight">
               {title || 'Propiedades'}
             </LpdText>
             {subtitle && (
@@ -36,7 +36,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = (props) => {
             {headerSlot}
             <IconButton 
               icon="close" 
-              size="xs" 
+              size="sm" 
               variant="ghost" 
               onClick={onClose} 
               aria-label="Cerrar panel" 

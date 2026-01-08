@@ -52,7 +52,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
         <div className={`absolute ${statusPos} translate-x-1/4 translate-y-1/4 z-10 border-2 border-white dark:border-background-dark rounded-full`}>
           <StatusPulse 
             variant={status === 'online' ? 'success' : status === 'busy' ? 'danger' : 'energy'} 
-            size="xs" 
+            size="sm" 
           />
         </div>
       )}

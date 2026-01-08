@@ -104,7 +104,7 @@ export const NotificationCard: React.FC<{
         {/* Icono circular minimalista */}
         <div className="mt-0.5 shrink-0">
           <div className="w-8 h-8 rounded-full bg-background-subtle dark:bg-white/5 flex items-center justify-center border border-border-technical">
-            <StatusPulse variant={pulseVariant} size="xs" />
+            <StatusPulse variant={pulseVariant} size="sm" />
           </div>
         </div>
 

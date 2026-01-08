@@ -14,34 +14,39 @@ export const TechnicalCanvas: React.FC<TechnicalCanvasProps> = ({
 }) => {
   
   const backgroundStyle = useMemo(() => {
-    // Definición de opacidades industriales mejoradas para visibilidad
     const opacities = {
-      low: 0.05,
-      medium: 0.15,
-      high: 0.25
+      low: 0.04, // Sincronizado con mockv2
+      medium: 0.1,
+      high: 0.2
     };
     
     const alpha = opacities[intensity];
-    const color = `rgba(19, 91, 236, ${alpha})`; // Primary Blue
+    
+    // Color dinámico: Azul industrial o Monocromo técnico (vía CSS var)
+    const color = variant === 'monochrome' 
+      ? `var(--grid-line-color)` 
+      : `rgba(19, 91, 236, ${alpha})`;
     
     if (variant === 'clean') return {};
 
     if (variant === 'neural') {
       return {
-        backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`,
-        backgroundSize: `24px 24px`
+        backgroundImage: `radial-gradient(${color} 1.5px, transparent 1px)`, // Puntos ligeramente más definidos
+        backgroundSize: `40px 40px`
       };
     }
 
-    // Blueprint Grid (Líneas)
+    // Blueprint Grid (Líneas) - 40px exactos como en el Lab
+    const gridSize = variant === 'monochrome' ? 40 : size;
+    // Usamos 0.5px de grosor para que sea ultra-fina pero visible
     const mainGrid = `linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px)`;
-    const subGrid = showSubgrid 
-      ? `, linear-gradient(to right, ${color.replace(String(alpha), String(alpha * 0.4))} 1px, transparent 1px), linear-gradient(to bottom, ${color.replace(String(alpha), String(alpha * 0.4))} 1px, transparent 1px)`
+    const subGrid = (showSubgrid && variant !== 'monochrome') // En monocromo el Lab usa grilla simple, sin subgrilla
+      ? `, linear-gradient(to right, ${color.replace(String(alpha), String(alpha * 0.3))} 1px, transparent 1px), linear-gradient(to bottom, ${color.replace(String(alpha), String(alpha * 0.3))} 1px, transparent 1px)`
       : '';
 
     return {
       backgroundImage: mainGrid + subGrid,
-      backgroundSize: `${size}px ${size}px, ${size / 5}px ${size / 5}px`
+      backgroundSize: `${gridSize}px ${gridSize}px`
     };
   }, [variant, intensity, size, showSubgrid]);
 

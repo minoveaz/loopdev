@@ -8,10 +8,13 @@ import { StatusPulseProps, StatusPulseVariant, StatusPulseSize } from './types';
 export const useStatusPulse = (props: StatusPulseProps) => {
   const { 
     variant = 'success', 
+    status, // Alias para variant
     size = 'sm', 
     isAnimated = true,
     className = '' 
   } = props;
+
+  const activeVariant = status || variant;
 
   // 1. Mapeo de Variantes a Tokens de Color y Sombras (Glow)
   const variantMap: Record<StatusPulseVariant, string> = {
@@ -35,7 +38,7 @@ export const useStatusPulse = (props: StatusPulseProps) => {
   // 3. Composición de Clases
   const pulseClasses = `
     rounded-full transition-all duration-500 shrink-0
-    ${variantMap[variant]}
+    ${variantMap[activeVariant as StatusPulseVariant] || variantMap.success}
     ${sizeMap[size]}
     ${isAnimated ? 'animate-pulse' : ''}
     ${className}

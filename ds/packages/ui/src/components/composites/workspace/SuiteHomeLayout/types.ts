@@ -72,6 +72,9 @@ export interface SuiteHomeLayoutProps {
   /** Feed de actividad reciente */
   activity: SuiteHomeActivityItem[];
 
+  /** Callback para ver toda la actividad */
+  onViewActivityAll?: () => void;
+
   /** Clase CSS adicional */
   className?: string;
 }

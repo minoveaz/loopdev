@@ -17,4 +17,9 @@
 ---
 
 ## [ ] Track: Suite Home System (Home Landing Template)
-*Link: [./conductor/tracks/suite-dashboard_20260107/](./conductor/tracks/suite-dashboard_20260107/)*
+*Link: [./conductor/tracks/suite-home_20260107/](./conductor/tracks/suite-home_20260107/)*
+
+---
+
+## [ ] Track: Suite Home Hardening (Refactor v3.9)
+*Link: [./conductor/tracks/suite-home-hardening_20260107/](./conductor/tracks/suite-home-hardening_20260107/)*

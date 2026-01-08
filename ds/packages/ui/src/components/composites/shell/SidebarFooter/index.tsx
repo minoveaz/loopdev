@@ -31,7 +31,7 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = (props) => {
         
         {!isRail && (
           <div className="flex-1 min-w-0 flex flex-col">
-            <TechnicalLabel variant="white" size="xs" isWide={false} className="truncate">
+            <TechnicalLabel variant="white" size="sm" isWide={false} className="truncate">
               {userName.split('@')[0]}
             </TechnicalLabel>
             <TechnicalLabel variant="muted" size="nano" className="truncate mt-0.5">

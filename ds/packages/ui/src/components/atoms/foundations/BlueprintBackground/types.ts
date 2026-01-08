@@ -4,7 +4,7 @@
  */
 
 export type BackgroundIntensity = 'low' | 'medium' | 'high';
-export type BackgroundVariant = 'blueprint' | 'neural';
+export type BackgroundVariant = 'blueprint' | 'neural' | 'monochrome';
 
 export interface BlueprintBackgroundProps {
   /** Intensidad de la rejilla y efectos */

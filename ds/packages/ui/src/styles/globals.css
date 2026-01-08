@@ -1,6 +1,7 @@
 /* === LOOPDEV UI: Import Official Tokens === */
 @import '../../../tokens/src/foundations/index.css';
 @import '../../../tokens/src/css/base.css';
+@import './fonts.css';
 
 @tailwind base;
 @tailwind components;
@@ -8,13 +9,14 @@
 
 @layer base {
   :root {
-    --grid-line-color: rgba(15, 23, 42, 0.04);
-    --dot-color: rgba(15, 23, 42, 0.1);
+    --grid-line-color: rgba(51, 65, 85, 0.08);
+    --dot-color: rgba(51, 65, 85, 0.15);
     --lpd-color-border-technical: rgba(0, 0, 0, 0.05);
     
-    /* Semantic Shell Colors (Light Mode) */
-    --lpd-shell-canvas: #ffffff;
-    --lpd-shell-surface: #f8fafc;
+    /* Semantic Shell Colors (Light Mode - Industrial Upgrade) */
+    --lpd-shell-canvas: #f1f5f9; /* Slate 100 para profundidad */
+    --lpd-shell-surface: #ffffff; /* Blanco puro para tarjetas */
+    --lpd-color-bg-surface-elevated: #ffffff; 
     /* Typography: Now inherited from @loopdev/tokens */
   }
 
@@ -24,8 +26,9 @@
     --lpd-color-border-technical: rgba(255, 255, 255, 0.05);
     
     /* Semantic Shell Colors (Dark Mode - Lab Standard) */
-    --lpd-shell-canvas: #0d121b;
+    --lpd-shell-canvas: #0f1115;
     --lpd-shell-surface: #181b21;
+    --lpd-color-bg-surface-elevated: #181b21; /* Gris carbón para tarjetas */
     
     color: var(--lpd-color-text-base);
   }
@@ -41,6 +44,19 @@
   }
 
   .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
 

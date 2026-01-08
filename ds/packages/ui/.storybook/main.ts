@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 const config: StorybookConfig = {
   stories: [
     "../src/components/atoms/**/*.stories.tsx",
-    "../src/components/layout/**/*.stories.tsx",
+    "../src/components/composites/**/*.stories.tsx",
     "../src/components/providers/**/*.stories.tsx",
   ],
   addons: [
@@ -18,7 +18,9 @@ const config: StorybookConfig = {
     options: {},
   },
   viteFinal: async (config) => {
-    config.plugins?.push(tsconfigPaths());
+    if (config.plugins) {
+      config.plugins.push(tsconfigPaths());
+    }
     return config;
   },
 };
