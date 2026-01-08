@@ -2,7 +2,7 @@
 
 ## Phase 1: Preparation & Infrastructure
 - [x] Task: Create subdirectory structure in `ds/packages/ui/src/components/atoms/` and `composites/`. 324f5f4
-- [~] Task: Identify obsolete components and move them to `.legacy/` folders.
+- [x] Task: Identify obsolete components and move them to `.legacy/` folders. 2ef0014
 - [ ] Task: Conductor - User Manual Verification 'Taxonomy Confirmed' (Protocol in workflow.md)
 
 ## Phase 2: Surgical Movement
