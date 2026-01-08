@@ -1,115 +1,78 @@
 {
   "project": "LoopDev SaaS",
-  "registry_version": "1.3",
-  "last_updated": "2026-01-08T11:00:00Z",
+  "registry_version": "1.4",
+  "last_updated": "2026-01-08T12:00:00Z",
   "components": [
-    {
-      "id": "typography-v1",
-      "name": "Typography",
-      "status": "stable",
-      "type": "atom",
-      "category": "foundations",
-      "phase": 1,
-      "certification": { "front": "certified" }
-    },
-    {
-      "id": "technical-card-v1",
-      "name": "TechnicalCard",
-      "status": "stable",
-      "type": "atom",
-      "category": "surfaces",
-      "phase": 2,
-      "certification": { "front": "certified" },
-      "capabilities": {
-        "technical_borders_05px": true,
-        "blue_glow_interaction": true,
-        "multitheme_reactivity": true
-      }
-    },
-    {
-      "id": "technical-isotype-v1",
-      "name": "TechnicalIsotype",
-      "status": "stable",
-      "type": "atom",
-      "category": "indicators",
-      "phase": 2,
-      "certification": { "front": "certified" },
-      "capabilities": {
-        "dual_ring_design": true,
-        "latent_life_pulse": true,
-        "multitheme_transparency": true
-      }
-    },
-    {
-      "id": "technical-status-badge-v1",
-      "name": "TechnicalStatusBadge",
-      "status": "stable",
-      "type": "atom",
-      "category": "indicators",
-      "phase": 2,
-      "certification": { "front": "certified" },
-      "capabilities": {
-        "bracket_syntax_automation": true,
-        "shimmer_active_state": true,
-        "status_pulse_integration": true,
-        "semantic_severity_mapping": true
-      }
-    },
-    {
-      "id": "activity-feed-v1",
-      "name": "ActivityFeed",
-      "status": "stable",
-      "type": "composite",
-      "category": "utilities",
-      "phase": 2,
-      "certification": { "front": "certified" },
-      "capabilities": {
-        "continuous_timeline_hitch": true,
-        "floating_status_nodes": true,
-        "asset_preview_support": true
-      }
-    },
-    {
-      "id": "system-notice-rail-v1",
-      "name": "SystemNoticeRail",
-      "status": "stable",
-      "type": "composite",
-      "category": "utilities",
-      "phase": 2,
-      "certification": { "front": "certified" },
-      "capabilities": {
-        "operational_governance": true,
-        "severity_priority_engine": true,
-        "high_contrast_light_mode": true
-      }
-    },
-    {
-      "id": "module-card-v1",
-      "name": "ModuleCard",
-      "status": "stable",
-      "type": "composite",
-      "category": "workspace",
-      "phase": 2,
-      "certification": { "front": "certified" },
-      "capabilities": {
-        "five_layer_design": true,
-        "dynamic_title_gradient": true,
-        "ambient_light_spotlight": true
-      }
-    },
-    {
-      "id": "suite-home-layout-v1",
-      "name": "SuiteHomeLayout",
-      "status": "stable",
-      "type": "composite",
-      "category": "workspace",
-      "phase": 2,
-      "certification": { "front": "certified" },
-      "capabilities": {
-        "activation_priority_engine": true,
-        "responsive_grid_8_4": true,
-        "suite_agnostic_config": true
-      }
-    }
+    { "id": "typography-v1", "name": "Typography", "status": "stable", "type": "atom", "category": "foundations", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "blueprint-background-v1", "name": "BlueprintBackground", "status": "stable", "type": "atom", "category": "foundations", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "technical-canvas-v1", "name": "TechnicalCanvas", "status": "stable", "type": "atom", "category": "foundations", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "motion-v1", "name": "Motion", "status": "stable", "type": "atom", "category": "foundations", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "z-index-v1", "name": "ZIndex", "status": "stable", "type": "atom", "category": "foundations", "phase": 1, "certification": { "front": "certified" } },
+
+    { "id": "badge-v1", "name": "Badge", "status": "stable", "type": "atom", "category": "indicators", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "status-pulse-v1", "name": "StatusPulse", "status": "stable", "type": "atom", "category": "indicators", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "spinner-v1", "name": "Spinner", "status": "stable", "type": "atom", "category": "indicators", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "logo-spinner-v1", "name": "LogoSpinner", "status": "stable", "type": "atom", "category": "indicators", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "ai-loader-v1", "name": "AILoader", "status": "stable", "type": "atom", "category": "indicators", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "certification-stamp-v1", "name": "CertificationStamp", "status": "stable", "type": "atom", "category": "indicators", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "quality-shield-v1", "name": "QualityShield", "status": "stable", "type": "atom", "category": "indicators", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "engineering-seal-v1", "name": "EngineeringSeal", "status": "stable", "type": "atom", "category": "indicators", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "infra-stamp-v1", "name": "InfraStamp", "status": "stable", "type": "atom", "category": "indicators", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "system-status-v1", "name": "SystemStatus", "status": "stable", "type": "atom", "category": "indicators", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "technical-isotype-v1", "name": "TechnicalIsotype", "status": "stable", "type": "atom", "category": "indicators", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "technical-status-badge-v1", "name": "TechnicalStatusBadge", "status": "stable", "type": "atom", "category": "indicators", "phase": 2, "certification": { "front": "certified" } },
+
+    { "id": "button-v2", "name": "Button", "status": "stable", "type": "atom", "category": "inputs", "phase": 2, "certification": { "front": "certified", "infra": "certified" } },
+    { "id": "icon-button-v1", "name": "IconButton", "status": "stable", "type": "atom", "category": "inputs", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "input-v1", "name": "Input", "status": "stable", "type": "atom", "category": "inputs", "phase": 3, "certification": { "front": "certified", "infra": "certified" } },
+    { "id": "theme-toggle-v1", "name": "ThemeToggle", "status": "stable", "type": "atom", "category": "inputs", "phase": 1, "certification": { "front": "certified" } },
+
+    { "id": "technical-surface-v1", "name": "TechnicalSurface", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "divider-v1", "name": "Divider", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "scroll-area-v1", "name": "ScrollArea", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "technical-tooltip-v1", "name": "TechnicalTooltip", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "technical-label-v1", "name": "TechnicalLabel", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "brand-logo-v1", "name": "BrandLogo", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "technical-dropdown-v1", "name": "TechnicalDropdown", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "technical-menu-item-v1", "name": "TechnicalMenuItem", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "command-bar-trigger-v1", "name": "CommandBarTrigger", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "label-v1", "name": "Label", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "icon-v1", "name": "Icon", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "user-avatar-v1", "name": "UserAvatar", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "illustrations-v1", "name": "Illustrations", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "identity-bar-v1", "name": "IdentityBar", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "exit-hatch-v1", "name": "ExitHatch", "status": "stable", "type": "atom", "category": "surfaces", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "technical-card-v1", "name": "TechnicalCard", "status": "stable", "type": "atom", "category": "surfaces", "phase": 2, "certification": { "front": "certified" } },
+
+    { "id": "nav-group-v1", "name": "NavGroup", "status": "stable", "type": "atom", "category": "navigation", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "nav-sidebar-item-v1", "name": "NavSidebarItem", "status": "stable", "type": "atom", "category": "navigation", "phase": 1, "certification": { "front": "certified" } },
+
+    { "id": "skeleton-v1", "name": "Skeleton", "status": "stable", "type": "atom", "category": "feedback", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "empty-state-v1", "name": "EmptyState", "status": "stable", "type": "atom", "category": "feedback", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "toast-v2", "name": "Toast", "status": "stable", "type": "atom", "category": "feedback", "phase": 2, "certification": { "front": "certified", "infra": "certified" } },
+
+    { "id": "app-shell-v1.1", "name": "AppShell", "status": "stable", "type": "composite", "category": "shell", "phase": 4, "certification": { "front": "certified" } },
+    { "id": "suite-sidebar-v1", "name": "SuiteSidebar", "status": "stable", "type": "composite", "category": "shell", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "suite-header-v1", "name": "SuiteHeader", "status": "stable", "type": "composite", "category": "shell", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "suite-switcher-v1", "name": "SuiteSwitcher", "status": "stable", "type": "composite", "category": "shell", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "sidebar-footer-v1", "name": "SidebarFooter", "status": "stable", "type": "composite", "category": "shell", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "sidebar-identity-v1", "name": "SidebarIdentity", "status": "stable", "type": "composite", "category": "shell", "phase": 1, "certification": { "front": "certified" } },
+
+    { "id": "module-workspace-v1.4", "name": "ModuleWorkspace", "status": "stable", "type": "composite", "category": "workspace", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "module-header-v1", "name": "ModuleHeader", "status": "stable", "type": "composite", "category": "workspace", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "module-toolbar-v1", "name": "ModuleToolbar", "status": "stable", "type": "composite", "category": "workspace", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "module-sidebar-v1", "name": "ModuleSidebar", "status": "stable", "type": "composite", "category": "workspace", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "inspector-panel-v1", "name": "InspectorPanel", "status": "stable", "type": "composite", "category": "workspace", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "suite-home-layout-v1", "name": "SuiteHomeLayout", "status": "stable", "type": "composite", "category": "workspace", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "module-card-v1", "name": "ModuleCard", "status": "stable", "type": "composite", "category": "workspace", "phase": 2, "certification": { "front": "certified" } },
+
+    { "id": "context-path-v1", "name": "ContextPath", "status": "stable", "type": "composite", "category": "navigation", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "user-menu-v1", "name": "UserMenu", "status": "stable", "type": "composite", "category": "navigation", "phase": 1, "certification": { "front": "certified" } },
+
+    { "id": "notification-center-v1", "name": "NotificationCenter", "status": "stable", "type": "composite", "category": "utilities", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "quick-action-menu-v1", "name": "QuickActionMenu", "status": "stable", "type": "composite", "category": "utilities", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "suite-card-v1", "name": "SuiteCard", "status": "stable", "type": "composite", "category": "utilities", "phase": 1, "certification": { "front": "certified" } },
+    { "id": "activity-feed-v1", "name": "ActivityFeed", "status": "stable", "type": "composite", "category": "utilities", "phase": 2, "certification": { "front": "certified" } },
+    { "id": "system-notice-rail-v1", "name": "SystemNoticeRail", "status": "stable", "type": "composite", "category": "utilities", "phase": 2, "certification": { "front": "certified" } }
   ]
 }
