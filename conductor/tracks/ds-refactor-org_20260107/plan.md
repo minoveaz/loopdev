@@ -1,8 +1,8 @@
 # Plan: Design System Reorganization
 
 ## Phase 1: Preparation & Infrastructure
-- [~] Task: Create subdirectory structure in `ds/packages/ui/src/components/atoms/` and `composites/`.
-- [ ] Task: Identify obsolete components and move them to `.legacy/` folders.
+- [x] Task: Create subdirectory structure in `ds/packages/ui/src/components/atoms/` and `composites/`. 324f5f4
+- [~] Task: Identify obsolete components and move them to `.legacy/` folders.
 - [ ] Task: Conductor - User Manual Verification 'Taxonomy Confirmed' (Protocol in workflow.md)
 
 ## Phase 2: Surgical Movement
