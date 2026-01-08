@@ -1,28 +1,24 @@
 import React from 'react';
+import { BadgeSeverity } from '../../../atoms/indicators/TechnicalStatusBadge/types';
 
-export interface BreadcrumbItem {
+export interface BreadcrumbSegment {
+  id: string;
   label: string;
   href?: string;
-}
-
-export interface DomainStatus {
-  label: 'Draft' | 'Live' | 'Locked' | string;
-  tone?: 'neutral' | 'success' | 'warning' | 'danger';
+  icon?: string;
+  isActive?: boolean;
 }
 
 export interface ModuleHeaderProps {
-  /** Título principal del módulo */
-  title: string;
+  /** Ruta de breadcrumbs jerárquicos { SUITE / MODULE / VIEW } */
+  segments: BreadcrumbSegment[];
   
-  /** Subtítulo o ID técnico */
-  subtitle?: string;
+  /** Texto del estado (ej: 'Live') */
+  statusLabel?: string;
   
-  /** Ruta de breadcrumbs jerárquicos */
-  breadcrumbs?: BreadcrumbItem[];
-  
-  /** Mostrar botón de retorno */
-  showBack?: boolean;
-  
+  /** Severidad del estado */
+  statusSeverity?: BadgeSeverity;
+
   /** Callback al pulsar retorno */
   onBack?: () => void;
 
@@ -32,9 +28,6 @@ export interface ModuleHeaderProps {
     onToggle: () => void;
     ariaLabel?: string;
   };
-
-  /** Estado del dominio (Pill visual) */
-  status?: DomainStatus;
 
   /** Slot para acciones a la derecha */
   rightSlot?: React.ReactNode;

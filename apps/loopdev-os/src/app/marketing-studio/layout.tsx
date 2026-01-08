@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { 
   AppShell, 
@@ -21,7 +21,9 @@ import {
   NOTIFICATION_CENTER_FIXTURES,
   Divider,
   QuickActionMenu,
-  QUICK_ACTION_FIXTURES
+  QUICK_ACTION_FIXTURES,
+  LayoutProvider,
+  TenantProvider
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -44,10 +46,19 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   const [context, setContext] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
+  // 1. Focus Enforcement: Colapsar sidebar si estamos en un módulo operativo
+  useEffect(() => {
+    if (pathname.includes('/brand-hub')) {
+      setNavMode('rail');
+    } else {
+      setNavMode('expanded');
+    }
+  }, [pathname]);
+
   const currentSuite = MARKETING_STUDIO_SCHEMA.suite;
 
   const getActiveModule = () => {
-    if (pathname.startsWith('/marketing-studio/brands')) return 'brand-hub';
+    if (pathname.includes('/brand-hub')) return 'brand-hub';
     if (pathname.startsWith('/marketing-studio/content')) return 'content-engine';
     if (pathname.startsWith('/marketing-studio/dam')) return 'dam';
     return 'overview';
@@ -153,7 +164,11 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         />
       }
     >
-      {children}
+      <TenantProvider tenant="loopdev">
+        <LayoutProvider>
+          {children}
+        </LayoutProvider>
+      </TenantProvider>
     </AppShell>
   );
 }

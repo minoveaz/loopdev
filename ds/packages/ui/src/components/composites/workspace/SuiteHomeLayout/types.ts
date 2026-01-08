@@ -1,4 +1,7 @@
 import React from 'react';
+import { BadgeSeverity } from '../../../atoms/indicators/TechnicalStatusBadge/types';
+
+export type { BadgeSeverity };
 
 export interface SuiteHomeAction {
   id: string;

@@ -9,16 +9,17 @@ const config: Config = {
   darkMode: 'class', // Forzamos el modo clase para Storybook y SaaS
   theme: {
     extend: {
-      colors: {
-        primary: {
-          DEFAULT: 'var(--lpd-color-brand-primary, #135bec)',
-          dark: '#0b46be',
-          light: '#4f85f0',
-        },
-        accent: {
-          DEFAULT: 'var(--lpd-color-brand-energy, #FFD025)', 
-          hover: '#eac026',
-        },
+            colors: {
+                      primary: {
+                        DEFAULT: 'rgb(var(--lpd-color-brand-primary-rgb, 19 91 236) / <alpha-value>)',
+                        subtle: 'var(--lpd-color-bg-primary-subtle)',
+                        dark: '#0b46be',
+                        light: '#4f85f0',
+                      },              accent: {
+                DEFAULT: 'rgb(var(--lpd-color-brand-secondary-rgb, 255 208 37) / <alpha-value>)',
+                hover: '#eac026',
+              },
+      
         energy: {
           DEFAULT: '#fbbf24', 
           vivid: 'var(--lpd-color-brand-energy, #FFD025)',   

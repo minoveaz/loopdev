@@ -47,6 +47,7 @@ export * from './surfaces/ExitHatch';
 // navigation
 export * from './navigation/NavGroup';
 export * from './navigation/NavSidebarItem';
+export * from './navigation/IndustrialBreadcrumbs';
 
 // feedback
 export * from './feedback/Skeleton';

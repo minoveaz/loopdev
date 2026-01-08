@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { SystemNoticeRailProps } from './index';
-import { SuiteNotice } from '../../workspace/SuiteHomeLayout/types';
+import { SuiteNotice, BadgeSeverity } from '../../workspace/SuiteHomeLayout/types';
 
 /**
  * @hook useSystemNoticeRail
@@ -16,11 +16,11 @@ export const useSystemNoticeRail = (props: SystemNoticeRailProps) => {
 
   // 2. Filtrado y Ordenamiento por Severidad (danger > warning > info > success)
   const activeNotices = useMemo(() => {
-    const priority = { danger: 0, warning: 1, info: 2, success: 3 };
+    const priority: Record<string, number> = { danger: 0, warning: 1, info: 2, success: 3 };
     
     return notices
       .filter(n => !dismissedIds.includes(n.id))
-      .sort((a, b) => priority[a.severity] - priority[b.severity]);
+      .sort((a, b) => (priority[a.severity] ?? 99) - (priority[b.severity] ?? 99));
   }, [notices, dismissedIds]);
 
   // 3. Manejador de cierre

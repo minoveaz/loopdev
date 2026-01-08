@@ -9,6 +9,7 @@
 
 @layer base {
   :root {
+    --lpd-color-brand-primary-rgb: 19 91 236;
     --grid-line-color: rgba(51, 65, 85, 0.08);
     --dot-color: rgba(51, 65, 85, 0.15);
     --lpd-color-border-technical: rgba(0, 0, 0, 0.05);
@@ -17,10 +18,12 @@
     --lpd-shell-canvas: #f1f5f9; /* Slate 100 para profundidad */
     --lpd-shell-surface: #ffffff; /* Blanco puro para tarjetas */
     --lpd-color-bg-surface-elevated: #ffffff; 
+    --lpd-color-bg-primary-subtle: #e0eaff; /* Azul tenue sólido para Light Mode */
     /* Typography: Now inherited from @loopdev/tokens */
   }
 
   .dark {
+    --lpd-color-brand-primary-rgb: 19 91 236;
     --grid-line-color: rgba(255, 255, 255, 0.04);
     --dot-color: rgba(255, 255, 255, 0.1);
     --lpd-color-border-technical: rgba(255, 255, 255, 0.05);
@@ -29,6 +32,7 @@
     --lpd-shell-canvas: #0f1115;
     --lpd-shell-surface: #181b21;
     --lpd-color-bg-surface-elevated: #181b21; /* Gris carbón para tarjetas */
+    --lpd-color-bg-primary-subtle: rgba(19, 91, 236, 0.15); /* Azul profundo tenue para Dark Mode */
     
     color: var(--lpd-color-text-base);
   }

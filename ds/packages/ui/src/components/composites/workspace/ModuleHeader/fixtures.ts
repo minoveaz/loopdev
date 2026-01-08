@@ -1,26 +1,29 @@
 import { ModuleHeaderProps } from './types';
 
 export const MODULE_HEADER_FIXTURES: Record<string, ModuleHeaderProps> = {
-  default: {
-    title: 'Brand Hub',
-    breadcrumbs: [
-      { label: 'Marketing' },
-      { label: 'Identidad Visual' }
+  moduleMode: {
+    segments: [
+      { id: 'suite', label: 'Marketing Studio', href: '/marketing-studio' },
+      { id: 'module', label: 'Brand Hub', isActive: true },
     ],
-    status: { label: 'LIVE', tone: 'success' },
+    statusLabel: 'SYSTEM_ACTIVE',
+    statusSeverity: 'success',
     sidebarToggle: {
       isOpen: true,
-      onToggle: () => console.log('Toggle sidebar'),
-    }
+      onToggle: () => console.log('Toggle Sidebar'),
+    },
   },
-  draft: {
-    title: 'Summer Campaign',
-    breadcrumbs: [
-      { label: 'Campaigns' },
-      { label: '2026' }
+  brandMode: {
+    segments: [
+      { id: 'suite', label: 'Marketing', href: '/marketing-studio' },
+      { id: 'module', label: 'Brand Hub', href: '/marketing-studio/brand-hub' },
+      { id: 'entity', label: 'Acme Corp', isActive: true },
     ],
-    status: { label: 'DRAFT', tone: 'warning' },
-    showBack: true,
-    onBack: () => console.log('Back clicked')
+    statusLabel: 'DRAFT_VERSION',
+    statusSeverity: 'warning',
+    sidebarToggle: {
+      isOpen: true,
+      onToggle: () => console.log('Toggle Sidebar'),
+    },
   }
 };

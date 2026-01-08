@@ -23,6 +23,17 @@ interface DynamicThemeContextProps {
 const DynamicThemeContext = createContext<DynamicThemeContextProps | undefined>(undefined);
 
 /**
+ * Utilidad técnica para convertir HEX a Canales RGB (Formato Espaciado para Tailwind)
+ */
+const hexToRgbChannels = (hex: string): string | undefined => {
+  if (!hex) return undefined;
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result 
+    ? `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`
+    : undefined;
+};
+
+/**
  * @provider DynamicThemeProvider
  * @description Orquestador global de personalización.
  * Inyecta tokens de base de datos en todas las capas del Design System.
@@ -36,15 +47,14 @@ export const DynamicThemeProvider: React.FC<{ config: ThemeConfig; children: Rea
     const cssMap: Record<string, string | undefined> = {
       // 1. PRIMARY CHAIN (Azul Corporativo)
       '--lpd-color-brand-primary': config.colors?.primary,
+      '--lpd-color-brand-primary-rgb': config.colors?.primary ? hexToRgbChannels(config.colors.primary) : undefined,
+      '--lpd-color-bg-primary-subtle': config.colors?.primary ? `${config.colors.primary}42` : undefined, // 26% opacity hex
       '--lpd-color-status-info': config.colors?.primary,
-      '--comp-primary': config.colors?.primary,
-      '--comp-primary-dark': config.colors?.primary, 
-      '--comp-primary-soft': config.colors?.primary ? `${config.colors.primary}1A` : undefined,
-
+      
       // 2. ENERGY CHAIN (Amarillo IA)
       '--lpd-color-brand-energy': config.colors?.energy,
+      '--lpd-color-brand-secondary-rgb': config.colors?.energy ? hexToRgbChannels(config.colors.energy) : undefined,
       '--lpd-color-status-warning': config.colors?.energy,
-      '--comp-energy': config.colors?.energy,
 
       // 3. SUCCESS CHAIN
       '--lpd-color-status-success': config.colors?.success,

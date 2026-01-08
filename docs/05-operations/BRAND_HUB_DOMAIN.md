@@ -1,6 +1,6 @@
-# BRAND HUB — Domain Definition
+# BRAND HUB — Domain Definition (v1.0)
 
-> **Status:** Draft v0.1
+> **Status:** Active / Production Ready
 > **Scope:** Marketing Studio · Brand Hub
 > **Audience:** CEO · Product · Design · Engineering
 > **Purpose:** Single source of truth for what a “Brand” means inside loop.dev
@@ -9,165 +9,110 @@
 
 ## 1. Purpose of This Document
 
-This document defines the Brand domain inside loop.dev.
-
-It exists to:
-1.  **Create a shared mental model** across business, product, and engineering.
-2.  **Prevent ambiguity** before any UI, API, or database design.
-3.  **Act as the authoritative reference** for all Brand Hub–related decisions.
+This document defines the Brand domain inside loop.dev. It exists to create a shared mental model, prevent ambiguity in architecture, and act as the authoritative reference for all Brand Hub–related decisions.
 
 > ❗ **Rule:** If something is unclear here, it must not be coded.
 
 ---
 
-## 2. Market Benchmark (Reality Check)
+## 2. Product Definition: The Brand Oracle
 
-Before defining our own model, it is important to acknowledge how Brand management is typically handled in existing tools.
+**What is Brand Hub?**
+Brand Hub is the authoritative domain service responsible for **defining, versioning, and governing Brand semantics** inside loop.dev.
 
-### Common market patterns
-*(Adobe, Figma, Frontify, Bynder, Canva for Teams)*
-
-Most platforms today:
-*   Treat a Brand as a **static container of assets**.
-*   Focus on: Logos, Colors, Typography, Basic guidelines (PDF).
-*   Offer limited or no: Versioning, Cross-module governance, Context-aware enforcement.
-
-### Observed limitations
-*   Brands are often **documents**, not systems.
-*   Changes propagate manually or inconsistently.
-*   Little connection between Brand definition and Campaign execution.
-
-### loop.dev opportunity
-loop.dev positions Brand not as a document, but as a **living, governed system** that:
-*   **Evolves over time.**
-*   **Is enforceable** across modules.
-*   **Is observable**, versioned, and auditable.
+It does **not** store production assets, generate content, or execute campaigns. It defines the **truth**: the rules, identity, and constraints that every other module must obey.
 
 ---
 
-## 3. Core Definition
+## 3. Core Brand Object
 
-### What is a Brand in loop.dev?
-A Brand in loop.dev is:
-> A **governed, versioned representation** of a company’s identity, rules, and constraints, designed to be **consumed consistently** by multiple modules across the platform.
-
-A Brand is:
-*   **Context-aware** (light/dark, channel, market).
-*   **Versioned** (changes are explicit, traceable, and reversible).
-*   **Governed** (roles, approvals, and permissions apply).
-*   **Consumable** (other modules depend on it as a source of truth).
-
-### What a Brand is NOT
-*   ❌ A Brand is not a campaign.
-*   ❌ A Brand is not a single logo.
-*   ❌ A Brand is not a static style guide document.
-*   ❌ A Brand is not owned by a single module.
+A Brand is a governed, versioned representation of an identity. Every Brand object must contain:
+- `id`: UUID.
+- `tenantId`: Ownership link.
+- `name` & `description`.
+- `status`: `{ DRAFT | PUBLISHED | ARCHIVED }`.
+- `version`: Semantic versioning (immutable).
+- `inheritsFrom`: `BrandId | null` (Support for hierarchy).
+- `governanceConfigId`: Rules for approval and modification.
 
 ---
 
-## 4. Brand Ownership & Multi‑Tenancy
+## 4. Brand Architecture & Inheritance
 
-*   Every Brand must belong to **exactly one Tenant**.
-*   A Tenant may have:
-    *   One Brand (simple use cases).
-    *   Multiple Brands (multi-brand organizations).
-*   A Brand cannot exist outside a Tenant.
-
----
-
-## 5. Brand Components (Domain Breakdown)
-
-A Brand is composed of multiple domain components.
-
-### 5.1 Identity Assets
-*   **Logos:** Multiple variants allowed (Horizontal/Vertical, Color/Mono, Light/Dark).
-*   **Management:** Stored in **Asset Manager**, referenced by Brand Hub.
-
-### 5.2 Color System
-Colors in loop.dev are defined as **semantic tokens**, not raw values.
-*   Example: `brand.primary`, `brand.surface`, `brand.accent`.
-*   Each token resolves to HEX/RGB/HSL depending on context (Dark Mode).
-*   **Rule:** Raw color values must not be consumed directly by other modules.
-
-### 5.3 Typography
-*   Defined as: Font families + Font roles (heading, body, UI).
-*   Follows the same token-based approach as colors.
-
-### 5.4 Brand Rules & Constraints (Differentiator) 🌟
-This is a key differentiation point for loop.dev. A Brand may define **machine-readable rules**:
-*   Minimum logo size.
-*   Forbidden color combinations.
-*   Allowed tone of voice levels (e.g., "Professional", "Witty").
-*   Channel-specific constraints.
-
-These rules are:
-*   **Declarative.**
-*   **Enforceable** by other modules (Content Engine, Canvas).
-*   **Versioned** together with the Brand.
+Brand Hub supports complex enterprise hierarchies:
+- **Parent Brand:** Defines global foundations (e.g., Global Logo, Core Blue).
+- **Sub-brand:** Inherits tokens and rules from Parent.
+- **Rules of Inheritance:**
+    - Inheritance is **Explicit** and **Versioned**.
+    - **Override-aware:** Sub-brands can only override domains allowed by the Parent's governance.
 
 ---
 
-## 6. Versioning & Lifecycle
+## 5. Domain Components
 
-### 6.1 Brand States
-A Brand can be in one of the following states:
-1.  **Draft:** Work in progress, invisible to consumers.
-2.  **Published:** The active "Source of Truth".
-3.  **Archived:** Read-only, preserved for history.
+### 5.1 Identity References
+Brand Hub does **not** own binaries. It declares **Semantic Roles**:
+- `logo.primary`, `logo.inverted`, `icon.favicon`.
+- These are pointers to assets stored in the **Asset Manager**.
 
-### 6.2 Version Model
-*   Every change creates a new **immutable version**.
-*   Published versions are read-only.
-*   Rollback to a previous version is supported.
+### 5.2 Token System (The DNA)
+All brand values are **Semantic Tokens**:
+- **Rule:** Raw values (HEX/RGB) are prohibited in consumption.
+- Tokens are **Context-Aware**: Support for `Dark/Light`, `Print/Web`, and `Market` overrides.
 
-### 6.3 Consumption Rules
-*   Campaigns and content reference a specific Brand version (Snapshot) OR verify against Latest.
-*   New work defaults to the latest published version.
-
----
-
-## 7. Governance & Permissions
-
-Brand governance is role-based (RBAC):
-*   **Brand Admin:** Full control (Delete, Publish).
-*   **Brand Editor:** Can edit Drafts.
-*   **Brand Viewer:** Can consume assets.
-
-Approval workflows are configurable per Tenant.
+### 5.3 Brand Rules Engine (The Crown Jewel) 🌟
+Machine-readable, declarative rules:
+- **Visual:** Min sizes, contrast ratios, safe areas.
+- **Verbal:** Tone of voice, forbidden words, regulated claims.
+- **Structural:** Naming conventions, layout constraints.
+- **Property:** Rules are **Explainable** (designed for AI consumption).
 
 ---
 
-## 8. Relationships with Other Modules
+## 6. Lifecycle & Dependency Graph
 
-*   **Asset Manager:** Owns binary assets; Brand Hub references them by ID.
-*   **Campaign Orchestrator:** Consumes Brand versions; cannot mutate Brand data.
-*   **Content Engine:** Uses Brand Rules to guide generation; validates output against constraints.
+### 6.1 Version Model
+- Changes create new **immutable versions**.
+- Published versions are read-only.
 
----
-
-## 9. Domain Invariants (Non‑Negotiable Rules)
-
-1.  A Brand always belongs to a Tenant.
-2.  A published Brand version is immutable.
-3.  A Brand with active dependencies cannot be deleted.
-4.  All consuming modules must reference a Brand version.
+### 6.2 Dependency Awareness (Critical)
+Brand Hub tracks **who depends on what**:
+- Knows which Campaigns, Contents, or Flows are tied to which Brand version.
+- **Impact Analysis:** Shows consequences before publishing a new version.
+- **Deletion Protection:** Blocks deletion if active dependencies exist.
 
 ---
 
-## 10. Strategic Differentiation Summary
+## 7. Governance & Enforcement
 
-loop.dev Brand Hub differentiates by:
-1.  Treating Brand as a **system**, not a document.
-2.  **Enforcing** Brand rules automatically.
-3.  **Versioning** Brand identity like code.
-4.  Making Brand a **first-class dependency** across the platform.
+- **Definition:** Governance is defined in Brand Hub (who can change what, approval flows).
+- **Enforcement:** Executed by other modules (e.g., Content Engine validates against Brand Rules).
 
 ---
 
-## 11. Open Questions (To Be Closed)
+## 8. Access Architecture (Navigation Schema)
 
-*   [ ] Do we allow cross-Brand inheritance? (e.g., "Sub-brand" inherits "Parent Brand")
-*   [ ] Do Brands support regional overrides?
-*   [ ] How strict is rule enforcement (warn vs block)?
+Brand Hub follows a strict triple-level hierarchy: `{ SUITE / MODULE / VIEW }`.
 
-These questions must be resolved before implementation.
+### 8.1 Module Mode (Discovery)
+- **Scope:** No specific brand selected.
+- **Focus:** Overview of the entire brand ecosystem, global glossary, and module-wide settings.
+
+### 8.2 Brand Mode (Deep Governance)
+- **Scope:** Specific brand (`:brandId`) selected.
+- **Focus:** Atomic definition of truth (Identity, Visuals, Rules) and audit of consequences (Impact, Dependencies).
+
+## 9. Explicit Non-Responsibilities
+
+Brand Hub **DOES NOT**:
+- ❌ Store or version binary files (Asset Manager job).
+- ❌ Render or edit creative pieces.
+- ❌ Generate content.
+- ❌ Execute campaigns.
+- ❌ Validate final production outputs.
+
+---
+
+## 9. Conclusion
+
+> **Brand Hub is not where brand assets live. It is where brand truth lives.**

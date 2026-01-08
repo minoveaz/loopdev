@@ -4,6 +4,7 @@ import React from 'react';
 import { cn } from '../../../../helpers/cn';
 import { LpdText, StatusPulse, TechnicalCard } from '../../../atoms';
 import { SuiteHomeMetric } from './types';
+import { BadgeSeverity } from '../../../atoms/indicators/TechnicalStatusBadge/types';
 
 interface TelemetryCardProps {
   metric: SuiteHomeMetric;
@@ -34,7 +35,7 @@ export const TelemetryCard: React.FC<TelemetryCardProps> = ({ metric }) => {
         <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest opacity-80">
           {metric.label}
         </LpdText>
-        <StatusPulse status={metric.tone || 'neutral'} size="sm" isAnimated />
+        <StatusPulse status={(metric.tone === 'neutral' ? 'neutral' : metric.tone) as any} size="sm" isAnimated />
       </div>
 
       {/* Body: Clean Metric */}

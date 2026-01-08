@@ -1,46 +1,68 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ModuleHeader } from './index';
-import { MODULE_HEADER_FIXTURES } from './fixtures';
-import { CertificationStamp } from '../../../../atoms/CertificationStamp';
+import { CertificationStamp } from '../../../atoms/indicators/CertificationStamp';
 
 const meta: Meta<typeof ModuleHeader> = {
-  title: 'Composites/Layout/ModuleHeader',
+  title: 'Composites/Workspace/ModuleHeader',
   component: ModuleHeader,
   decorators: [
     (Story) => (
-      <div className="relative bg-shell-canvas border border-border-technical rounded-xl overflow-hidden h-32">
-        <CertificationStamp status="certified" version="v1.0.0" phase={2} className="absolute top-2 right-2" />
+      <div className="relative min-h-[100px] bg-shell-canvas overflow-hidden border border-border-technical">
+        <CertificationStamp status="certified" version="v3.9.0" phase={2} className="fixed top-4 right-4 z-50" />
         <Story />
       </div>
     ),
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
   tags: ['autodocs'],
 };
 
 export default meta;
 type Story = StoryObj<typeof ModuleHeader>;
 
-export const Default: Story = {
+export const ModuleMode: Story = {
   args: {
-    ...MODULE_HEADER_FIXTURES.default,
-  },
-};
-
-export const DraftWithBack: Story = {
-  args: {
-    ...MODULE_HEADER_FIXTURES.draft,
-  },
-};
-
-export const ComplexPath: Story = {
-  args: {
-    title: 'Summer Collection 2026',
-    breadcrumbs: [
-      { label: 'Marketing' },
-      { label: 'Identidad Visual' },
-      { label: 'Campaigns' },
-      { label: 'Summer' }
+    segments: [
+      { id: 'suite', label: 'Marketing Studio', href: '#' },
+      { id: 'module', label: 'Brand Hub', isActive: true },
     ],
-    status: { label: 'REVIEW', tone: 'danger' },
+    statusLabel: 'SYSTEM_ACTIVE',
+    statusSeverity: 'success',
+    sidebarToggle: {
+      isOpen: true,
+      onToggle: () => console.log('Toggle Sidebar'),
+    },
+  },
+};
+
+export const BrandMode: Story = {
+  args: {
+    segments: [
+      { id: 'suite', label: 'Marketing', href: '#' },
+      { id: 'module', label: 'Brand Hub', href: '#' },
+      { id: 'entity', label: 'Acme Corp', isActive: true },
+    ],
+    statusLabel: 'DRAFT_VERSION',
+    statusSeverity: 'warning',
+    sidebarToggle: {
+      isOpen: true,
+      onToggle: () => console.log('Toggle Sidebar'),
+    },
+  },
+};
+
+export const DeepPath: Story = {
+  args: {
+    segments: [
+      { id: 'suite', label: 'Marketing', href: '#' },
+      { id: 'module', label: 'Brand Hub', href: '#' },
+      { id: 'entity', label: 'Acme Corp', href: '#' },
+      { id: 'view', label: 'Visual System', href: '#' },
+      { id: 'subview', label: 'Color Palette', isActive: true },
+    ],
+    statusLabel: 'PUBLISHED',
+    statusSeverity: 'success',
   },
 };

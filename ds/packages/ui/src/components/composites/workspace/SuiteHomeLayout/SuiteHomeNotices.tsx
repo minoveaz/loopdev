@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { LpdText, IconButton, Icon } from '../../../atoms';
-import { SuiteHomeNotice } from './types';
+import { LpdText, Icon } from '../../../atoms';
+import { SuiteNotice } from './types';
 
 export interface SuiteHomeNoticesProps {
-  notices: SuiteHomeNotice[];
+  notices: SuiteNotice[];
 }
 
 export const SuiteHomeNotices: React.FC<SuiteHomeNoticesProps> = ({ notices }) => {
@@ -18,32 +18,32 @@ export const SuiteHomeNotices: React.FC<SuiteHomeNoticesProps> = ({ notices }) =
           key={notice.id}
           className={`
             flex items-center justify-between px-8 py-2 border-b border-border-technical
-            ${notice.tone === 'warning' ? 'bg-energy-yellow/5' : ''}
-            ${notice.tone === 'danger' ? 'bg-danger/5' : ''}
-            ${notice.tone === 'info' ? 'bg-primary/5' : ''}
+            ${notice.severity === 'warning' ? 'bg-energy-yellow/5' : ''}
+            ${notice.severity === 'danger' ? 'bg-danger/5' : ''}
+            ${notice.severity === 'info' ? 'bg-primary/5' : ''}
           `}
         >
           <div className="flex items-center gap-3">
             <Icon 
-              name={notice.tone === 'warning' ? 'warning' : 'info'} 
+              name={notice.severity === 'warning' ? 'warning' : 'info'} 
               size="sm" 
               className={`
-                ${notice.tone === 'warning' ? 'text-energy-yellow' : ''}
-                ${notice.tone === 'danger' ? 'text-danger' : ''}
-                ${notice.tone === 'info' ? 'text-primary' : ''}
+                ${notice.severity === 'warning' ? 'text-energy-yellow' : ''}
+                ${notice.severity === 'danger' ? 'text-danger' : ''}
+                ${notice.severity === 'info' ? 'text-primary' : ''}
               `}
             />
-            <LpdText size="sm" weight="medium" className="text-text-main">
-              {notice.message}
+            <LpdText size="xs" weight="medium" className="text-text-main">
+              {notice.title}
             </LpdText>
           </div>
 
-          {notice.action && (
+          {notice.primaryAction && (
             <button 
-              onClick={notice.action.onClick}
+              onClick={notice.primaryAction.onClick}
               className="text-micro font-bold uppercase tracking-widest text-primary hover:underline"
             >
-              {notice.action.label}
+              {notice.primaryAction.label}
             </button>
           )}
         </div>

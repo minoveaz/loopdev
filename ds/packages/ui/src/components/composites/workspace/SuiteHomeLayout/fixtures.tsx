@@ -1,3 +1,4 @@
+import React from 'react';
 import { SuiteHomeLayoutProps } from './types';
 
 export const SUITE_HOME_MOCK_PROPS: SuiteHomeLayoutProps = {
@@ -8,45 +9,40 @@ export const SUITE_HOME_MOCK_PROPS: SuiteHomeLayoutProps = {
   notices: [
     {
       id: 'n1',
-      message: 'You have 8 unclassified assets in the Brand Hub.',
-      tone: 'info',
-      action: { label: 'Classify Now', onClick: () => console.log('Classify') }
+      severity: 'info',
+      title: 'Unclassified Assets',
+      description: 'You have 8 new files in the Brand Hub.',
+      primaryAction: { label: 'Classify Now', onClick: () => console.log('Classify') }
     },
     {
       id: 'n2',
-      message: 'AI Credits are running low (15% remaining).',
-      tone: 'warning',
-      action: { label: 'Top Up', onClick: () => console.log('Top up') }
+      severity: 'warning',
+      title: 'AI Credits Low',
+      description: 'System-wide credits are at 15%.',
+      primaryAction: { label: 'Top Up', onClick: () => console.log('Top up') }
     }
   ],
   quickActions: [
     {
       id: 'qa1',
       label: 'New Brand',
-      description: 'Define identity rules',
-      icon: 'add_business',
+      description: 'Setup identity',
+      icon: 'verified_user',
       onClick: () => console.log('New Brand')
     },
     {
       id: 'qa2',
       label: 'Generate Post',
-      description: 'AI-powered content',
+      description: 'AI Content',
       icon: 'auto_awesome',
       onClick: () => console.log('Generate Post')
     },
     {
       id: 'qa3',
       label: 'Upload Assets',
-      description: 'DAM Centralized',
+      description: 'Feed system',
       icon: 'cloud_upload',
       onClick: () => console.log('Upload')
-    },
-    {
-      id: 'qa4',
-      label: 'Campaign',
-      description: 'Orchestrate launch',
-      icon: 'rocket_launch',
-      onClick: () => console.log('Campaign')
     }
   ],
   metrics: [
@@ -84,10 +80,8 @@ export const SUITE_HOME_MOCK_PROPS: SuiteHomeLayoutProps = {
     }
   ],
   activity: [
-    { id: 'a1', action: 'Edited Brand Guidelines', module: 'Brand Hub', timestamp: '3h ago', href: '#' },
-    { id: 'a2', action: 'Generated 3 Social Posts', module: 'Content Engine', timestamp: 'Yesterday', href: '#' },
-    { id: 'a3', action: 'Uploaded 12 assets', module: 'Asset Manager', timestamp: '2d ago', href: '#' },
-    { id: 'a4', action: 'Created Summer Campaign', module: 'Orchestrator', timestamp: '5d ago', href: '#' },
-    { id: 'a5', action: 'Archived legacy logo', module: 'Brand Hub', timestamp: '1w ago', href: '#' }
+    { id: 'a1', action: 'Edited Brand Guidelines', module: 'Brand Hub', timestamp: '3h ago', href: '#', icon: 'edit_document', tone: 'neutral' },
+    { id: 'a2', action: 'Generated 3 Social Posts', module: 'Content Engine', timestamp: 'Yesterday', href: '#', icon: 'auto_awesome', tone: 'primary' },
+    { id: 'a3', action: 'Uploaded 12 assets', module: 'Asset Manager', timestamp: '2d ago', href: '#', icon: 'cloud_upload', tone: 'success' }
   ]
 };
