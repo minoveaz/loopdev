@@ -1,8 +1,8 @@
 # Plan: Suite Home Hardening
 
 ## Phase 1: The Standard (TechnicalCard)
-- [~] Task: Create `atoms/surfaces/TechnicalCard` with support for `flat` and `interactive` modes.
-- [ ] Task: Integrate `TechnicalCard` into `ActivityFeed` and `SuiteHomeModules`.
+- [x] Task: Create `atoms/surfaces/TechnicalCard` with support for `flat` and `interactive` modes. cd74b7a
+- [~] Task: Integrate `TechnicalCard` into `ActivityFeed` and `SuiteHomeModules`.
 - [ ] Task: Conductor - User Manual Verification 'Card Standard Validated'
 
 ## Phase 2: The Identity (SuiteHomeHero)
