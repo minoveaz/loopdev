@@ -18,6 +18,7 @@ export * from './workspace/ModuleCard';
 // navigation
 export * from './navigation/ContextPath';
 export * from './navigation/UserMenu';
+export * from './navigation/SidebarFlyout';
 
 // utilities
 

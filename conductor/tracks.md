@@ -36,5 +36,5 @@
 
 ---
 
-## [ ] Track: Brand Hub Operation (Level 2 Station)
+## [x] Track: Brand Hub Operation (Level 2 Station)
 *Link: [./conductor/tracks/brand-hub-operation_20260108/](./conductor/brand-hub-operation_20260108/)*

@@ -9,15 +9,16 @@ import { ScrollArea } from '../../../atoms';
 /**
  * @component ModuleWorkspace
  * @description Chasis de Nivel 2 para la ejecución de módulos industriales.
- * Implementa el patrón de 3 paneles (Push/Overlay) y jerarquía de foco.
+ * Implementa el patrón de 3+1 paneles (Sidebar, Flyout, Canvas, Inspector).
  * @category Layouts
- * @phase 2
+ * @phase 3.9
  */
 export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
   const {
     moduleId,
     headerSlot,
     sidebarSlot,
+    flyoutSlot,
     toolbarSlot,
     inspectorSlot,
     children,
@@ -28,12 +29,14 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
 
   const {
     isSidebarOpen,
+    isFlyoutOpen,
     isInspectorOpen,
     isOverlayMode,
     activeOverlayPanel,
     styleTokens,
     scrollbarClass,
     hasSidebar,
+    hasFlyout,
     hasInspector,
     hasToolbar,
     hasHeader,
@@ -46,6 +49,7 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
   const { 
     moduleLabel = `Module ${moduleId}`,
     sidebarLabel = 'Module Navigation',
+    flyoutLabel = 'Section Context',
     inspectorLabel = 'Item Properties',
     sidebarDialogLabel = 'Module Navigation',
     inspectorDialogLabel = 'Item Properties'
@@ -56,10 +60,11 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
   // --- RENDERING: Paneles en modo PUSH (Desktop) ---
   const renderPushPanels = () => (
     <>
+      {/* 1. SIDEBAR (Estructura) */}
       {hasSidebar && (
         <nav 
           aria-label={sidebarLabel} 
-          className={`flex-shrink-0 border-r border-border-technical bg-shell-canvas transition-all duration-300 h-full overflow-hidden relative z-[1] ${!isSidebarOpen ? 'w-0' : 'w-[var(--lpd-workspace-sidebar-w)]'}`}
+          className={`flex-shrink-0 border-r border-border-technical bg-shell-canvas transition-all duration-300 h-full overflow-hidden relative z-[2] ${!isSidebarOpen ? 'w-0' : 'w-[var(--lpd-workspace-sidebar-w)]'}`}
         >
           <ScrollArea visibility="auto" className="h-full">
             {sidebarSlot}
@@ -67,6 +72,19 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
         </nav>
       )}
 
+      {/* 2. FLYOUT (Significado) */}
+      {hasFlyout && (
+        <aside 
+          aria-label={flyoutLabel} 
+          className={`flex-shrink-0 border-r border-border-technical bg-shell-canvas transition-all duration-300 h-full overflow-hidden relative z-[1] ${!isFlyoutOpen ? 'w-0 opacity-0' : 'w-[var(--lpd-workspace-flyout-w)] opacity-100'}`}
+        >
+          <ScrollArea visibility="auto" className="h-full">
+            {flyoutSlot}
+          </ScrollArea>
+        </aside>
+      )}
+
+      {/* 3. CANVAS (Definición) */}
       <div className="flex-1 flex flex-col min-w-0 relative z-0">
         {hasToolbar && !isImmersive && (
           <div 
@@ -78,7 +96,12 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
           </div>
         )}
         
-        <main id="workspace-canvas" role="main" className="flex-1 relative overflow-hidden bg-shell-canvas">
+        <main 
+          id="workspace-canvas" 
+          role="main" 
+          className="flex-1 relative overflow-hidden bg-shell-canvas flex flex-col"
+          onClick={() => isFlyoutOpen && requestClosePanel('flyout', 'programmatic')}
+        >
           <ScrollArea visibility="auto" className="h-full">
             <div style={{ padding: 'var(--lpd-workspace-main-padding)' }}>
               {children}
@@ -87,6 +110,7 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
         </main>
       </div>
 
+      {/* 4. INSPECTOR (Consecuencia) */}
       {hasInspector && (
         <aside 
           aria-label={inspectorLabel} 
@@ -107,45 +131,50 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
       className={`flex flex-col h-full w-full bg-shell-canvas relative animate-in fade-in duration-500 overflow-hidden ${isImmersive ? 'fixed inset-0 z-[100]' : ''} ${className}`}
       aria-label={moduleLabel}
     >
-      {/* 1. Header del Módulo */}
+      {/* Header del Módulo */}
       {hasHeader && !isImmersive && (
         <header 
-          className="flex-shrink-0 border-b border-border-technical z-[2] bg-shell-canvas/80 backdrop-blur-md" 
+          className="flex-shrink-0 border-b border-border-technical z-[10] bg-shell-canvas/80 backdrop-blur-md" 
           style={{ height: 'var(--lpd-workspace-header-h)' }}
         >
           {headerSlot}
         </header>
       )}
 
-      {/* 2. Área de Contenido Principal */}
-      <div className="flex flex-1 h-full min-h-0 relative">
+      {/* Área de Contenido Principal */}
+      <div className="flex flex-1 h-full min-h-0 relative overflow-hidden">
         {isOverlayMode ? (
           <>
-            {/* Sidebar as Dialog (Mobile) */}
+            {/* Overlay Panels (Sidebar / Flyout / Inspector) */}
             <Dialog.Root 
-              open={activeOverlayPanel === 'sidebar'} 
+              open={activeOverlayPanel !== null} 
               onOpenChange={(open) => {
-                if (open) requestOpenPanel('sidebar');
-                else requestClosePanel('sidebar', 'backdrop');
+                if (!open && activeOverlayPanel) requestClosePanel(activeOverlayPanel, 'backdrop');
               }}
             >
               <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[var(--lpd-workspace-z-backdrop)] animate-in fade-in" />
                 <Dialog.Content 
-                  className="fixed left-0 inset-y-0 bg-shell-canvas z-[var(--lpd-workspace-z-panel)] w-[var(--lpd-workspace-sidebar-overlay-w)] animate-in slide-in-from-left-full duration-300 border-r border-border-technical shadow-2xl outline-none"
+                  className={`fixed inset-y-0 bg-shell-canvas z-[var(--lpd-workspace-z-panel-top)] animate-in duration-300 outline-none shadow-2xl ${
+                    activeOverlayPanel === 'inspector' 
+                      ? 'right-0 border-l border-border-technical slide-in-from-right-full w-[var(--lpd-workspace-inspector-overlay-w)]' 
+                      : 'left-0 border-r border-border-technical slide-in-from-left-full w-[var(--lpd-workspace-sidebar-overlay-w)]'
+                  }`}
                   onEscapeKeyDown={(e) => {
                     if (!closeOnEscape) e.preventDefault();
-                    else requestClosePanel('sidebar', 'escape');
+                    else if (activeOverlayPanel) requestClosePanel(activeOverlayPanel, 'escape');
                   }}
                   onPointerDownOutside={(e) => {
                     if (!closeOnBackdrop) e.preventDefault();
-                    else requestClosePanel('sidebar', 'backdrop');
+                    else if (activeOverlayPanel) requestClosePanel(activeOverlayPanel, 'backdrop');
                   }}
                 >
                   <ScrollArea visibility="auto" className="h-full">
-                    {sidebarSlot}
+                    {activeOverlayPanel === 'sidebar' ? sidebarSlot : 
+                     activeOverlayPanel === 'flyout' ? flyoutSlot : 
+                     inspectorSlot}
                   </ScrollArea>
-                  <Dialog.Title className="sr-only">{sidebarDialogLabel}</Dialog.Title>
+                  <Dialog.Title className="sr-only">Panel Context</Dialog.Title>
                 </Dialog.Content>
               </Dialog.Portal>
             </Dialog.Root>
@@ -169,35 +198,6 @@ export const ModuleWorkspace: React.FC<ModuleWorkspaceProps> = (props) => {
                 </ScrollArea>
               </main>
             </div>
-            
-            {/* Inspector as Dialog (Mobile) */}
-            <Dialog.Root 
-              open={activeOverlayPanel === 'inspector'} 
-              onOpenChange={(open) => {
-                if (open) requestOpenPanel('inspector');
-                else requestClosePanel('inspector', 'backdrop');
-              }}
-            >
-              <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[var(--lpd-workspace-z-backdrop)] animate-in fade-in" />
-                <Dialog.Content 
-                  className="fixed right-0 inset-y-0 bg-shell-canvas z-[var(--lpd-workspace-z-panel-top)] w-[var(--lpd-workspace-inspector-overlay-w)] animate-in slide-in-from-right-full duration-300 border-l border-border-technical shadow-2xl outline-none"
-                  onEscapeKeyDown={(e) => {
-                    if (!closeOnEscape) e.preventDefault();
-                    else requestClosePanel('inspector', 'escape');
-                  }}
-                  onPointerDownOutside={(e) => {
-                    if (!closeOnBackdrop) e.preventDefault();
-                    else requestClosePanel('inspector', 'backdrop');
-                  }}
-                >
-                  <ScrollArea visibility="auto" className="h-full">
-                    {inspectorSlot}
-                  </ScrollArea>
-                  <Dialog.Title className="sr-only">{inspectorDialogLabel}</Dialog.Title>
-                </Dialog.Content>
-              </Dialog.Portal>
-            </Dialog.Root>
           </>
         ) : renderPushPanels()}
       </div>

@@ -90,11 +90,11 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
   );
 
   return (
-    <div className={`relative flex flex-col w-full min-h-screen bg-shell-canvas ${className}`}>
+    <div className={`relative flex flex-col w-full h-full bg-shell-canvas ${className}`}>
       {/* 0. ATMÓSFERA: Grilla Técnica de 40px */}
       <BlueprintBackground variant="monochrome" className="fixed inset-0" intensity="high" />
       
-      <div className="relative z-10 flex flex-col flex-1">
+      <div className="relative z-10 flex flex-col flex-1 min-h-0">
         {/* 1. ORIENTACIÓN: Hero & Gobernanza */}
         <SuiteHomeHero 
           title={title} 
@@ -112,7 +112,7 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
         />
 
         {/* 2. CENTRO DE COMANDO (Área Principal) */}
-        <main className="flex-1 px-8 py-10">
+        <main className="flex-1 px-8 py-10 overflow-y-auto custom-scrollbar">
           <div className="max-w-[1600px] mx-auto flex flex-col gap-16">
             
             {/* SECCIÓN A: ACTIVACIÓN (Métricas y Acciones) */}

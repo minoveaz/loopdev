@@ -11,7 +11,7 @@ export type WorkspaceMode = 'normal' | 'focus' | 'immersive';
 /**
  * Paneles laterales gestionables.
  */
-export type Panel = 'sidebar' | 'inspector';
+export type Panel = 'sidebar' | 'inspector' | 'flyout';
 
 /**
  * Razón del cierre de un panel (útil para analytics).
@@ -32,6 +32,9 @@ export interface ModuleWorkspaceProps {
   
   /** Navegación interna del módulo (Izquierda) */
   sidebarSlot?: React.ReactNode;
+
+  /** Panel de contexto semántico (Entre Sidebar y Canvas) */
+  flyoutSlot?: React.ReactNode;
   
   /** Panel de propiedades o asistente (Derecha) */
   inspectorSlot?: React.ReactNode;
@@ -43,12 +46,18 @@ export interface ModuleWorkspaceProps {
 
   /** Estado de visibilidad del Sidebar */
   sidebarOpen?: boolean;
+
+  /** Estado de visibilidad del Flyout */
+  flyoutOpen?: boolean;
   
   /** Estado de visibilidad del Inspector */
   inspectorOpen?: boolean;
   
   /** Callback al cambiar visibilidad del Sidebar */
   onSidebarChange?: (open: boolean) => void;
+
+  /** Callback al cambiar visibilidad del Flyout */
+  onFlyoutChange?: (open: boolean) => void;
   
   /** Callback al cambiar visibilidad del Inspector */
   onInspectorChange?: (open: boolean) => void;
@@ -71,6 +80,7 @@ export interface ModuleWorkspaceProps {
   a11y?: {
     moduleLabel?: string;
     sidebarLabel?: string;
+    flyoutLabel?: string;
     inspectorLabel?: string;
     sidebarDialogLabel?: string;
     inspectorDialogLabel?: string;
@@ -79,6 +89,7 @@ export interface ModuleWorkspaceProps {
   /** Configuración visual y de comportamiento */
   config?: {
     sidebarWidth?: string;
+    flyoutWidth?: string;
     inspectorWidth?: string;
     sidebarOverlayWidth?: string;
     inspectorOverlayWidth?: string;

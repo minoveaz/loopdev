@@ -30,20 +30,25 @@ Implementar la navegación y el layout definitivo del Brand Hub siguiendo el con
 
 ## 3. Mapping de Paneles (Regla de Oro)
 
-### 3.1 Sidebar & Flyout (Estructura y Significado)
-- **Sidebar Modes:** `module` | `brand` (basado en la presencia de `:brandId`).
-- **Flyout Modes:**
-    - **Learn Mode (Default):** Qué es esta sección, reglas, ejemplos.
-    - **Navigate Mode:** Sub-rutas + anchors internos.
-    - **Quick Actions:** Atajos seguros (ej: "Ver glosario").
-- **Regla:** El Flyout NO muestra gobernanza ni impacto crítico.
+### 3.1 ModuleSidebar (La Espina Dorsal)
+Este componente debe mutar completamente según el modo:
 
-### 3.2 Inspector (Consecuencia)
-- **Tabs Mínimas:**
-    - `Context`: Metadata del objeto seleccionado.
-    - `Impact`: Dependencias y superficies afectadas.
-    - `Diff`: Cambios vs versión publicada.
-    - `Governance`: Aprobaciones, locks y justificaciones.
+**A. Module Mode (Directorio):**
+- **Header:** Título "Brands" + Input de búsqueda técnica (`Input size="sm"`).
+- **Body:** Lista virtualizada de marcas.
+    - Cada item muestra: Nombre + `TechnicalStatusBadge` ({ DRAFT }).
+    - Hover: Reveal de botón "Edit".
+- **Footer:** Botón `BlockButton` "New Brand".
+
+**B. Brand Mode (Ontología):**
+- **Header:** Botón "Back to Directory" (`arrow_back`) + Nombre de la Marca.
+- **Body:** Árbol de navegación (`NavGroup` + `NavSidebarItem`).
+    - Grupos: Identity, Visual System, Rules, Architecture, Governance.
+- **Footer:** Versión actual (`v1.0.2`) en monoespaciado.
+
+### 3.2 Sidebar Flyout & Inspector
+- **Flyout:** Significado y sub-secciones (Guía Semántica).
+- **Inspector:** Consecuencia y Gobernanza (Impacto/Diff).
 
 ## 4. Reglas Técnicas de Estado (Zero Bugs)
 1. **URL-First State:** El `brandId` y la `view` se derivan siempre de la ruta. La UI no inventa contexto.

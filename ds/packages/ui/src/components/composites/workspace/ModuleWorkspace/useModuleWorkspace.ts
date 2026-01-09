@@ -17,14 +17,17 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
     config = {},
     overlay = {},
     sidebarOpen: controlledSidebarOpen,
+    flyoutOpen: controlledFlyoutOpen,
     inspectorOpen: controlledInspectorOpen,
     onSidebarChange,
+    onFlyoutChange,
     onInspectorChange,
     onRequestClose,
     isMobile: manualIsMobile,
     headerSlot,
     toolbarSlot,
     sidebarSlot,
+    flyoutSlot,
     inspectorSlot
   } = props;
 
@@ -33,6 +36,7 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
   // 1. Configuración de Dimensiones Industriales (v3.9)
   const {
     sidebarWidth = '280px',
+    flyoutWidth = '320px',
     inspectorWidth = '320px',
     sidebarOverlayWidth = 'min(300px, 85vw)',
     inspectorOverlayWidth = 'min(320px, 85vw)',
@@ -68,30 +72,32 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
 
   // 3. Gestión de Estados (Controlado vs No Controlado)
   const [internalSidebarOpen, setInternalSidebarOpen] = useState(true);
+  const [internalFlyoutOpen, setInternalFlyoutOpen] = useState(false);
   const [internalInspectorOpen, setInternalInspectorOpen] = useState(false);
 
   const isSidebarOpen = controlledSidebarOpen !== undefined ? controlledSidebarOpen : internalSidebarOpen;
+  const isFlyoutOpen = controlledFlyoutOpen !== undefined ? controlledFlyoutOpen : internalFlyoutOpen;
   const isInspectorOpen = controlledInspectorOpen !== undefined ? controlledInspectorOpen : internalInspectorOpen;
 
   // 4. Sincronización de Modos (Focus/Immersive -> Close Panels)
   useEffect(() => {
-    // Si entramos en modo focus o immersive, debemos cerrar los paneles si no son controlados
-    // Si son controlados, el consumidor es responsable, pero podemos emitir el evento de cierre.
     if (mode === 'focus' || mode === 'immersive') {
       if (controlledSidebarOpen === undefined) setInternalSidebarOpen(false);
       onSidebarChange?.(false);
 
+      if (controlledFlyoutOpen === undefined) setInternalFlyoutOpen(false);
+      onFlyoutChange?.(false);
+
       if (controlledInspectorOpen === undefined) setInternalInspectorOpen(false);
       onInspectorChange?.(false);
     }
-  }, [mode, controlledSidebarOpen, controlledInspectorOpen, onSidebarChange, onInspectorChange]);
+  }, [mode, controlledSidebarOpen, controlledFlyoutOpen, controlledInspectorOpen, onSidebarChange, onFlyoutChange, onInspectorChange]);
 
   // Lógica de Modos de Visualización (Focus Hierarchy) - Global Shell
   useEffect(() => {
     if (mode === 'normal' || mode === 'focus') {
       setSidebarVariant('collapsed');
     }
-    // El modo inmersivo se encarga de ocultar todo (implementado en el Body)
   }, [mode, setSidebarVariant]);
 
   // Handler de cierre unificado
@@ -101,72 +107,78 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
     if (panel === 'sidebar') {
       if (controlledSidebarOpen === undefined) setInternalSidebarOpen(false);
       onSidebarChange?.(false);
+    } else if (panel === 'flyout') {
+      if (controlledFlyoutOpen === undefined) setInternalFlyoutOpen(false);
+      onFlyoutChange?.(false);
     } else {
       if (controlledInspectorOpen === undefined) setInternalInspectorOpen(false);
       onInspectorChange?.(false);
     }
-  }, [onRequestClose, onSidebarChange, onInspectorChange, controlledSidebarOpen, controlledInspectorOpen]);
+  }, [onRequestClose, onSidebarChange, onFlyoutChange, onInspectorChange, controlledSidebarOpen, controlledFlyoutOpen, controlledInspectorOpen]);
 
   // Handler de apertura unificado (para overlays)
   const requestOpenPanel = useCallback((panel: Panel) => {
     if (panel === 'sidebar') {
       if (controlledSidebarOpen === undefined) setInternalSidebarOpen(true);
       onSidebarChange?.(true);
+    } else if (panel === 'flyout') {
+      if (controlledFlyoutOpen === undefined) setInternalFlyoutOpen(true);
+      onFlyoutChange?.(true);
     } else {
       if (controlledInspectorOpen === undefined) setInternalInspectorOpen(true);
       onInspectorChange?.(true);
     }
-  }, [onSidebarChange, onInspectorChange, controlledSidebarOpen, controlledInspectorOpen]);
+  }, [onSidebarChange, onFlyoutChange, onInspectorChange, controlledSidebarOpen, controlledFlyoutOpen, controlledInspectorOpen]);
 
   // Centralización de Prioridad (Topmost Logic)
   const activeOverlayPanel = useMemo((): Panel | null => {
     if (!isOverlayMode) return null;
-    // Prioridad industrial: Inspector > Sidebar
+    // Prioridad industrial: Inspector > Flyout > Sidebar
     if (inspectorSlot && isInspectorOpen) return 'inspector';
+    if (flyoutSlot && isFlyoutOpen) return 'flyout';
     if (sidebarSlot && isSidebarOpen) return 'sidebar';
     return null;
-  }, [isOverlayMode, isInspectorOpen, isSidebarOpen, inspectorSlot, sidebarSlot]);
+  }, [isOverlayMode, isInspectorOpen, isFlyoutOpen, isSidebarOpen, inspectorSlot, flyoutSlot, sidebarSlot]);
 
   // 5. Generación de CSS Tokens (Zero Hardcoding)
   const styleTokens = useMemo(() => {
-    const isCompact = density === 'compact';
     const isImmersive = mode === 'immersive';
-    // Nota: Ya no forzamos 'false' aquí visualmente porque hemos sincronizado el estado lógico arriba.
     
     return {
       '--lpd-workspace-sidebar-w': isSidebarOpen ? sidebarWidth : '0px',
+      '--lpd-workspace-flyout-w': isFlyoutOpen ? flyoutWidth : '0px',
       '--lpd-workspace-sidebar-overlay-w': sidebarOverlayWidth,
       '--lpd-workspace-inspector-w': isInspectorOpen ? inspectorWidth : '0px',
       '--lpd-workspace-inspector-overlay-w': inspectorOverlayWidth,
       '--lpd-workspace-header-h': props.headerSlot && !isImmersive ? headerHeight : '0px',
       '--lpd-workspace-toolbar-h': props.toolbarSlot && !isImmersive ? toolbarHeight : '0px',
-      '--lpd-workspace-main-padding': isCompact ? 'var(--lpd-space-4)' : 'var(--lpd-space-8)',
+      '--lpd-workspace-main-padding': density === 'compact' ? 'var(--lpd-space-4)' : 'var(--lpd-space-8)',
       '--lpd-workspace-z-backdrop': String(zBackdrop),
       '--lpd-workspace-z-panel': String(zPanel),
       '--lpd-workspace-z-panel-top': String(zPanelTop),
     } as React.CSSProperties;
   }, [
-    isSidebarOpen, isInspectorOpen, headerSlot, toolbarSlot, 
-    mode, sidebarWidth, sidebarOverlayWidth, 
+    isSidebarOpen, isFlyoutOpen, isInspectorOpen, props.headerSlot, props.toolbarSlot, 
+    mode, sidebarWidth, flyoutWidth, sidebarOverlayWidth, 
     inspectorWidth, inspectorOverlayWidth, headerHeight, toolbarHeight, 
     density, zBackdrop, zPanel, zPanelTop
   ]);
 
   return {
     isSidebarOpen,
+    isFlyoutOpen,
     isInspectorOpen,
     isOverlayMode,
     activeOverlayPanel,
     styleTokens,
     scrollbarClass: scrollbars === 'hidden' ? 'scrollbar-hide' : 'custom-scrollbar',
     hasSidebar: !!sidebarSlot,
+    hasFlyout: !!flyoutSlot,
     hasInspector: !!inspectorSlot,
     hasHeader: !!headerSlot,
     hasToolbar: !!toolbarSlot,
     requestClosePanel,
     requestOpenPanel,
-    setInternalSidebarOpen,
-    setInternalInspectorOpen,
     closeOnBackdrop,
     closeOnEscape
   };

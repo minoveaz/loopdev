@@ -101,11 +101,9 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           <main 
             id="main-content"
             role="main" 
-            className={`flex-1 overflow-y-auto ${scrollbarClass} relative z-10 ${(isNavOpen || isContextOpen) ? '@max-lg:pointer-events-none @max-lg:overflow-hidden' : ''}`}
+            className={`flex-1 overflow-hidden relative z-10 flex flex-col ${(isNavOpen || isContextOpen) ? '@max-lg:pointer-events-none @max-lg:overflow-hidden' : ''}`}
           >
-            <div style={{ padding: 'var(--app-shell-main-padding)' }}>
-              {children}
-            </div>
+            {children}
           </main>
 
           {/* CONTEXT PANEL */}
