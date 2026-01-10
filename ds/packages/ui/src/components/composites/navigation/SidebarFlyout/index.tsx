@@ -25,6 +25,9 @@ export const SidebarFlyout: React.FC<SidebarFlyoutProps> = (props) => {
     <div className={cn("flex flex-col h-full bg-shell-canvas", className)}>
       {/* Header: Title & Close */}
       <div className="flex flex-col gap-2 p-6 border-b border-border-technical">
+        <LpdText size="nano" weight="bold" className="text-primary uppercase tracking-widest opacity-40">
+          {`// Context Panel`}
+        </LpdText>
         <div className="flex items-center justify-between">
           <LpdText size="sm" weight="bold" className="text-text-main uppercase tracking-tight">
             {title}

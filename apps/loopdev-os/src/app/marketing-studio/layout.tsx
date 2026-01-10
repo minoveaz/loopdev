@@ -116,14 +116,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <Divider orientation="vertical" thickness="technical" className="h-4" />
               <ContextPath 
                 segments={[
-                  { id: 'suite', label: 'Marketing', href: '/marketing-studio' },
-                  { 
-                    id: 'module', 
-                    label: activeModuleId === 'brand-hub' ? 'Brand Hub' : 
-                           activeModuleId === 'content-engine' ? 'Content Engine' :
-                           activeModuleId === 'dam' ? 'Digital Assets' : 'Dashboard',
-                    isActive: true 
-                  }
+                  { id: 'suite', label: 'Marketing Studio', href: '/marketing-studio', isActive: true }
                 ]} 
               />
             </div>

@@ -11,6 +11,7 @@ import {
   Button,
   LpdText,
   Skeleton,
+  TechnicalStatusBadge,
 } from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
@@ -20,7 +21,7 @@ import { BrandHubProvider, useBrandHub } from '@/suites/marketing-studio/brand-h
 
 /**
  * @layout BrandHubLayoutInner
- * @description Implementación interna del layout con estados de carga.
+ * @description Implementación interna del layout con estados de carga y gobernanza unificada.
  */
 function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -28,12 +29,11 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const { selectedEntity, isInspectorOpen, setInspectorOpen, setActiveBrand, activeBrand } = useBrandHub();
   
-  // 1. Datos Reales (Supabase)
+  // 1. Datos Reales
   const { data: brands = [], isLoading: isBrandsLoading } = useBrands();
   const brandId = params?.brandId as string;
   const { data: currentBrand, isLoading: isBrandLoading } = useActiveBrand(brandId);
 
-  // Sincronizar marca activa con el contexto
   useEffect(() => {
     if (currentBrand) setActiveBrand(currentBrand);
   }, [currentBrand, setActiveBrand]);
@@ -96,10 +96,9 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // 5. Determinar contenido del Flyout (Mapping inteligente)
+  // 4. Determinar contenido del Flyout
   const flyoutProps = useMemo(() => {
-    // Si hay data específica para el item, úsala. Si no, busca la sección padre.
-    const sectionKey = activeSectionId.split('.')[0]; // visual.colors -> visual
+    const sectionKey = activeSectionId.split('.')[0];
     return BRAND_HUB_FLYOUT_DATA[activeSectionId] || BRAND_HUB_FLYOUT_DATA[sectionKey] || BRAND_HUB_FLYOUT_DATA['overview'];
   }, [activeSectionId]);
 
@@ -141,22 +140,52 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
       headerSlot={
         <ModuleHeader 
           segments={segments}
-          statusLabel={isBrandMode ? activeBrand?.status?.toUpperCase() || 'LOADING...' : (isBrandsLoading ? 'SYNCING...' : 'SYSTEM_ACTIVE')}
-          statusSeverity={isBrandMode ? (activeBrand?.status === 'published' ? 'success' : 'warning') : 'success'}
           sidebarToggle={{
             isOpen: sidebarOpen,
             onToggle: () => setSidebarOpen(!sidebarOpen)
           }}
+          // BRAND STATUS CLUSTER
           rightSlot={
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" startIcon="share">Share</Button>
-              <Button 
-                variant={isReadOnly ? "secondary" : "primary"} 
-                size="sm" 
-                startIcon={isReadOnly ? "history" : "publish"}
-              >
-                {isReadOnly ? 'Create Draft' : 'Publish'}
-              </Button>
+            <div className="flex items-center gap-4">
+              <div className="hidden lg:flex items-center gap-2">
+                {isBrandMode && (
+                  <>
+                    <TechnicalStatusBadge 
+                      label={activeBrand?.status?.toUpperCase() || 'LOADING'} 
+                      severity={activeBrand?.status === 'published' ? 'success' : 'warning'} 
+                      variant="glass"
+                    />
+                    {isReadOnly && (
+                      <TechnicalStatusBadge 
+                        label="READ ONLY" 
+                        severity="neutral" 
+                        variant="ghost"
+                      />
+                    )}
+                  </>
+                )}
+                {!isBrandMode && (
+                  <TechnicalStatusBadge 
+                    label={isBrandsLoading ? 'SYNCING' : 'SYSTEM ACTIVE'} 
+                    severity="success" 
+                    variant="glass" 
+                    withPulse
+                  />
+                )}
+              </div>
+              
+              <div className="h-4 w-px bg-border-technical opacity-20" />
+
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" startIcon="share">Share</Button>
+                <Button 
+                  variant={isReadOnly ? "secondary" : "primary"} 
+                  size="sm" 
+                  startIcon={isReadOnly ? "history" : "publish"}
+                >
+                  {isReadOnly ? 'Create Draft' : 'Publish'}
+                </Button>
+              </div>
             </div>
           }
         />
@@ -164,13 +193,8 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
       
       toolbarSlot={
         <div className="flex items-center px-4 h-full border-b border-border-technical">
-          {isReadOnly && (
-            <div className="flex items-center gap-2 px-3 py-1 rounded bg-slate-500/5 border border-slate-500/10">
-              <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest">
-                {`{ Mode: Read Only }`}
-              </LpdText>
-            </div>
-          )}
+          {/* Toolbar simplificada - Controles de vista irían aquí */}
+          <div className="flex-1" />
         </div>
       }
       
