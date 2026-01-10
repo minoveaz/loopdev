@@ -22,13 +22,19 @@
 ### 4. [APRENDIZAJE] El Sidebar Flyout
 - **HU:** Como usuario novel, al hacer clic en "Visual System" en el Sidebar, quiero que el Flyout se abra para explicarme qué es un Token Semántico y mostrarme los accesos directos a Colores y Tipografía.
 
-### 5. [RESILIENCIA] Estado "Sin acceso"
+### 5. [INTENCIÓN] Toolbar Contextual (Nuevo)
+- **HU:** Como usuario en una marca publicada, quiero ver claramente que la única acción primaria es "Create Draft", para entender que no puedo editar directamente.
+- **HU:** Como editor en un borrador activo, quiero tener botones rápidos para "Save" y "Request Approval" siempre visibles en la barra superior.
+- **HU:** Como aprobador en modo revisión, quiero ver las opciones de "Approve" y "Reject" en el Toolbar, pero que al pulsarlas se abra el Inspector para confirmar mi decisión formalmente.
+
+### 6. [RESILIENCIA] Estado "Sin acceso"
 - **HU:** Como usuario sin permisos sobre una marca, si navego a su ruta, quiero ver un estado claro (403) en el Canvas, pero manteniendo el Header y Sidebar para no perder mi navegación.
 
-### 6. [ESTADO] Persistencia URL-First
+### 7. [ESTADO] Persistencia URL-First
 - **HU:** Como usuario, si refresco el navegador (F5) estando en una vista profunda de marca, quiero volver exactamente al mismo punto, confirmando que la ruta es la fuente única de verdad.
 
 ## 📐 Criterios de Aceptación Técnicos
 - [ ] Implementar `ModuleSidebar` con soporte condicional para `mode="module"` y `mode="brand"`.
+- [ ] Implementar `BrandToolbar` orquestador con los 4 estados definidos.
 - [ ] Usar `Input` (v3.9) para el buscador.
 - [ ] Usar `TechnicalStatusBadge` para los estados en la lista.

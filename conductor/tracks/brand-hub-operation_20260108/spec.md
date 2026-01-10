@@ -50,6 +50,38 @@ Este componente debe mutar completamente según el modo:
 - **Flyout:** Significado y sub-secciones (Guía Semántica).
 - **Inspector:** Consecuencia y Gobernanza (Impacto/Diff).
 
+### 3.3 ModuleToolbar (Plano de Intención)
+El Toolbar es el puente entre intención y decisión. Responde a "¿Qué puedo hacer ahora mismo?".
+
+**Reglas Duras:**
+- No navega, no guarda estado, no decide consecuencias.
+- Altura fija industrial.
+- Las acciones destructivas o complejas solo se invocan aquí, pero se deciden en el Inspector.
+
+**Modos de Operación (State Machine):**
+
+1.  **Module Mode (Directory):**
+    - `Primary`: Create Brand.
+    - `Secondary`: View Options (Grid/List), Filters.
+
+2.  **Brand Mode (Published/Read-Only):**
+    - `Primary`: Create Draft.
+    - `Secondary`: Compare Versions, View Dependencies.
+    - *Nota:* Edición directa bloqueada.
+
+3.  **Brand Mode (Draft/Active):**
+    - `Primary`: Request Approval.
+    - `Secondary`: Save Draft, Discard, Compare with Published.
+
+4.  **Governance Context:**
+    - `Actions`: Approve, Reject, Add Comment, Escalate.
+    - *Nota:* Todas requieren confirmación en Inspector.
+
+**Contrato Action -> Inspector:**
+- `Create Draft` -> Inicializa draft + muestra diff summary.
+- `Request Approval` -> Abre checklist de gobernanza.
+- `Approve/Reject` -> Requiere firma y comentario.
+
 ## 4. Reglas Técnicas de Estado (Zero Bugs)
 1. **URL-First State:** El `brandId` y la `view` se derivan siempre de la ruta. La UI no inventa contexto.
 2. **State Machine de Paneles:** Definición estricta de estados para Sidebar, Flyout e Inspector.

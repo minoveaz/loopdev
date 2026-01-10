@@ -18,6 +18,7 @@ import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { MOCK_NAV_GROUPS } from '@/data/mock-brands';
 import { BRAND_HUB_FLYOUT_DATA } from '@/suites/marketing-studio/brand-hub/fixtures/flyout-data';
 import { BrandHubProvider, useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
+import { BrandToolbar } from '@/suites/marketing-studio/brand-hub/components/BrandToolbar';
 
 /**
  * @layout BrandHubLayoutInner
@@ -42,6 +43,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [flyoutOpen, setFlyoutOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState('overview');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Cleanup al salir del módulo o cambiar de marca
   useEffect(() => {
@@ -178,13 +180,6 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
 
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" startIcon="share">Share</Button>
-                <Button 
-                  variant={isReadOnly ? "secondary" : "primary"} 
-                  size="sm" 
-                  startIcon={isReadOnly ? "history" : "publish"}
-                >
-                  {isReadOnly ? 'Create Draft' : 'Publish'}
-                </Button>
               </div>
             </div>
           }
@@ -192,10 +187,20 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
       }
       
       toolbarSlot={
-        <div className="flex items-center px-4 h-full border-b border-border-technical">
-          {/* Toolbar simplificada - Controles de vista irían aquí */}
-          <div className="flex-1" />
-        </div>
+        <BrandToolbar 
+          mode={isBrandMode ? 'brand' : 'module'}
+          brandStatus={activeBrand?.status}
+          isReadOnly={isReadOnly}
+          viewMode={viewMode} // Pass viewMode state
+          onViewModeChange={setViewMode} // Pass state setter
+          onAction={(action) => {
+            if (action === 'dependencies') {
+              setInspectorOpen(true);
+              // TODO: Set inspector tab to 'impact' via context or prop if supported
+            }
+            console.log('Toolbar Action:', action);
+          }}
+        />
       }
       
       inspectorSlot={

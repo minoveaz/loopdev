@@ -12,7 +12,7 @@ export const MOCK_NAV_GROUPS = [
     label: 'Brand Identity',
     items: [
       { id: 'identity.overview', label: 'Overview', icon: 'Home' },
-      { id: 'identity.narrative', label: 'Narrative', icon: 'Book' },
+      { id: 'identity.narrative', label: 'Identity', icon: 'Book' },
     ]
   },
   {

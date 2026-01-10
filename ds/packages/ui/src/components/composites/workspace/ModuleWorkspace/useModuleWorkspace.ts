@@ -40,7 +40,7 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
     inspectorWidth = '320px',
     sidebarOverlayWidth = 'min(300px, 85vw)',
     inspectorOverlayWidth = 'min(320px, 85vw)',
-    headerHeight = '48px',
+    headerHeight = '56px',
     toolbarHeight = '44px',
     zBackdrop = 40,
     zPanel = 50,
