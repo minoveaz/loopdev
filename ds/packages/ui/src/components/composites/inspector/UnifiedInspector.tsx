@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { InspectorPanel } from '../workspace/InspectorPanel';
-import { LpdText } from '@/components/atoms/foundations/Typography';
-import { TechnicalStatusBadge } from '@/components/atoms/indicators/TechnicalStatusBadge';
-import { Button } from '@/components/atoms/inputs/Button';
-import { Divider } from '@/components/atoms/surfaces/Divider';
-import { InspectorContext, InspectorTabId } from '@/types/inspector';
-import { cn } from '@/helpers/cn';
+import { LpdText } from '../../atoms/foundations/Typography';
+import { TechnicalStatusBadge } from '../../atoms/indicators/TechnicalStatusBadge';
+import { Button } from '../../atoms/inputs/Button';
+import { Divider } from '../../atoms/surfaces/Divider';
+import { InspectorContext, InspectorTabId } from '../../../types/inspector';
+import { cn } from '../../../helpers/cn';
 
 interface UnifiedInspectorProps {
   context: InspectorContext;

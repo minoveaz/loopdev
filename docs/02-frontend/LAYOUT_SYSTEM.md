@@ -17,7 +17,8 @@
 
 ## 1️⃣ Layouts oficiales (v1)
 - **App Shell (Certified v1.1):** Contenedor raíz del SaaS. Implementa comportamiento híbrido (Push en Desktop / Overlay en Mobile), gestión de estados determinista (`navMode`, `contextMode`), soporte de densidad y accesibilidad avanzada (Topmost Escape, Mobile Scroll Lock). Para la guía de implementación, ver **[SHELL_ARCHITECTURE.md](./SHELL_ARCHITECTURE.md)**.
-- **Module Workspace:** Base para vistas internas de un módulo.
+- **Module Workspace (Certified v1.0):** Chasis operativo de 4 paneles para módulos profundos. Ver **[MODULE_WORKSPACE.md](./MODULE_WORKSPACE.md)**.
+- **Unified Inspector:** Sistema de paneles de consecuencia y gobernanza. Ver **[INSPECTOR_SYSTEM.md](./INSPECTOR_SYSTEM.md)**.
 - **Page:** Plantilla de página estándar (Formularios, Dashboards).
 - **Split View:** Trabajo dual (Lista ↔ Inspector).
 - **Settings:** Configuración y preferencias.

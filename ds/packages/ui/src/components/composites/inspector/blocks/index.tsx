@@ -1,8 +1,8 @@
 import React from 'react';
-import { LpdText } from '@/components/atoms/foundations/Typography';
-import { Button } from '@/components/atoms/inputs/Button';
-import { TechnicalStatusBadge } from '@/components/atoms/indicators/TechnicalStatusBadge';
-import { cn } from '@/helpers/cn';
+import { LpdText } from '../../../atoms/foundations/Typography';
+import { Button } from '../../../atoms/inputs/Button';
+import { TechnicalStatusBadge } from '../../../atoms/indicators/TechnicalStatusBadge';
+import { cn } from '../../../../helpers/cn';
 
 // --- CONTEXT BLOCK ---
 interface ContextBlockProps {
