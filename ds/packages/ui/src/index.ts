@@ -12,4 +12,5 @@ export * from './components/composites/utilities/QuickActionMenu/fixtures';
 export * from './components/composites/workspace/ModuleWorkspace/fixtures';
 export * from './components/composites/workspace/ModuleHeader/fixtures';
 export * from './components/composites/workspace/ModuleToolbar/fixtures';
-export * from './components/composites/workspace/ModuleSidebar/fixtures';
+export * from './components/composites/workspace/ModuleSidebar/fixtures';export * from './components/composites/inspector/blocks';
+export * from './types/inspector';

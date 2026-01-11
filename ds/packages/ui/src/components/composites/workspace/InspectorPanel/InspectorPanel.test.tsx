@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { InspectorPanel } from './index';
-import { INSPECTOR_PANEL_FIXTURES } from '../../ModuleSidebar/fixtures';
+import { INSPECTOR_PANEL_FIXTURES } from '../ModuleSidebar/fixtures.tsx';
 
 describe('InspectorPanel Composite', () => {
   it('renders title and subtitle', () => {

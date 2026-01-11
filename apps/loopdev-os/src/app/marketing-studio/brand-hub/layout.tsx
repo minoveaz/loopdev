@@ -12,6 +12,8 @@ import {
   LpdText,
   Skeleton,
   TechnicalStatusBadge,
+  UnifiedInspector,
+  InspectorContext
 } from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
@@ -19,6 +21,7 @@ import { MOCK_NAV_GROUPS } from '@/data/mock-brands';
 import { BRAND_HUB_FLYOUT_DATA } from '@/suites/marketing-studio/brand-hub/fixtures/flyout-data';
 import { BrandHubProvider, useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { BrandToolbar } from '@/suites/marketing-studio/brand-hub/components/BrandToolbar';
+import { BrandInspector } from '@/suites/marketing-studio/brand-hub/components/BrandInspector';
 
 /**
  * @layout BrandHubLayoutInner
@@ -104,6 +107,32 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
     return BRAND_HUB_FLYOUT_DATA[activeSectionId] || BRAND_HUB_FLYOUT_DATA[sectionKey] || BRAND_HUB_FLYOUT_DATA['overview'];
   }, [activeSectionId]);
 
+  // 5. Construir Contexto del Inspector
+  const inspectorContext: InspectorContext = useMemo(() => ({
+    scope: isBrandMode ? 'entity' : 'module',
+    mode: isReadOnly ? 'read' : activeBrand?.status === 'draft' ? 'draft' : 'read',
+    intent: 'inspect', // Default intent, could be dynamic based on toolbar actions
+    entity: selectedEntity ? {
+        moduleId: 'brand-hub',
+        type: selectedEntity.type,
+        id: selectedEntity.id,
+        name: selectedEntity.name || activeBrand?.name || 'Unknown Entity'
+    } : activeBrand ? {
+        moduleId: 'brand-hub',
+        type: 'brand.identity',
+        id: activeBrand.id,
+        name: activeBrand.name
+    } : undefined,
+    permissions: {
+        canEdit: !isReadOnly,
+        canApprove: false,
+        canPublish: false,
+        canOverride: false
+    }
+  }), [isBrandMode, isReadOnly, activeBrand, selectedEntity]);
+
+  const [activeInspectorTab, setActiveInspectorTab] = useState<any>('context');
+
   return (
     <ModuleWorkspace
       moduleId="brand-hub"
@@ -116,7 +145,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
       config={{
         sidebarWidth: '280px',
         flyoutWidth: '320px',
-        inspectorWidth: '320px'
+        inspectorWidth: '420px' // Updated to match UnifiedInspector default
       }}
       
       sidebarSlot={
@@ -180,6 +209,14 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
 
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" startIcon="share">Share</Button>
+                <div className="h-4 w-px bg-border-technical opacity-20" />
+                <Button 
+                  variant={isInspectorOpen ? 'secondary' : 'ghost'} 
+                  size="sm" 
+                  startIcon="info" 
+                  onClick={() => setInspectorOpen(!isInspectorOpen)}
+                  aria-label="Toggle Inspector"
+                />
               </div>
             </div>
           }
@@ -196,7 +233,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
           onAction={(action) => {
             if (action === 'dependencies') {
               setInspectorOpen(true);
-              // TODO: Set inspector tab to 'impact' via context or prop if supported
+              setActiveInspectorTab('impact');
             }
             console.log('Toolbar Action:', action);
           }}
@@ -204,39 +241,19 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
       }
       
       inspectorSlot={
-        <InspectorPanel 
-          title={selectedEntity ? `Inspecting_${selectedEntity.type.toUpperCase()}` : "Module_Auditor"}
-          onClose={() => setInspectorOpen(false)}
-          tabs={[
-            { 
-              id: 'context', 
-              label: 'Context', 
-              content: (
-                <div className="p-6 flex flex-col gap-4">
-                  {isBrandLoading ? <div className="space-y-4"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-3/4" /></div> : selectedEntity ? (
-                    <>
-                      <div className="flex flex-col gap-1">
-                        <LpdText size="nano" className="text-primary font-mono font-bold uppercase tracking-widest">Selected ID</LpdText>
-                        <LpdText size="xs" weight="bold" className="text-text-main font-mono">{selectedEntity.id}</LpdText>
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <LpdText size="nano" className="text-primary font-mono font-bold uppercase tracking-widest">Type</LpdText>
-                        <LpdText size="xs" weight="bold" className="text-text-main">{selectedEntity.type}</LpdText>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="py-12 text-center opacity-20 font-mono text-[10px] uppercase tracking-widest">
-                      // no_entity_selected
-                    </div>
-                  )}
-                </div>
-              )
-            },
-            { id: 'impact', label: 'Impact', content: <div className="p-6 font-mono text-[10px] opacity-40">// impact_analysis_pending</div> },
-            { id: 'diff', label: 'Diff', content: <div className="p-6 font-mono text-[10px] opacity-40">// version_diff_pending</div> },
-            { id: 'governance', label: 'Governance', content: <div className="p-6 font-mono text-[10px] opacity-40">// approvals_pending</div> }
-          ]}
-        />
+        <UnifiedInspector
+            isOpen={isInspectorOpen}
+            onClose={() => setInspectorOpen(false)}
+            context={inspectorContext}
+            activeTab={activeInspectorTab}
+            onTabChange={setActiveInspectorTab}
+        >
+            <BrandInspector 
+                tab={activeInspectorTab} 
+                context={inspectorContext}
+                isLoading={isBrandLoading} 
+            />
+        </UnifiedInspector>
       }
     >
       {children}

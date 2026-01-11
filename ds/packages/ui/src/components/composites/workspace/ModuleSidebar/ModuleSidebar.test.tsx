@@ -5,25 +5,45 @@ import { ModuleSidebar } from './index';
 import { MODULE_SIDEBAR_FIXTURES } from './fixtures';
 
 describe('ModuleSidebar Composite', () => {
-  it('renders title and children', () => {
-    render(<ModuleSidebar {...MODULE_SIDEBAR_FIXTURES.default} />);
+  it('renders brand list in module mode', () => {
+    render(<ModuleSidebar {...MODULE_SIDEBAR_FIXTURES.moduleMode} />);
     
-    expect(screen.getByText('Navegación')).toBeInTheDocument();
-    expect(screen.getByRole('complementary')).toBeInTheDocument();
+    expect(screen.getByText(/Acme Corp/i)).toBeInTheDocument();
+    expect(screen.getByText(/Loop Labs/i)).toBeInTheDocument();
   });
 
   it('handles search input', () => {
-    const onChange = vi.fn();
+    const onSearchChange = vi.fn();
     const props = {
-      ...MODULE_SIDEBAR_FIXTURES.default,
-      search: { value: '', onChange }
+      ...MODULE_SIDEBAR_FIXTURES.moduleMode,
+      onSearchChange
     };
-    
     render(<ModuleSidebar {...props} />);
     
-    const input = screen.getByPlaceholderText(/buscar/i);
+    const input = screen.getByPlaceholderText(/filter/i);
     fireEvent.change(input, { target: { value: 'test' } });
     
-    expect(onChange).toHaveBeenCalledWith('test');
+    expect(onSearchChange).toHaveBeenCalledWith('test');
+  });
+
+  it('renders navigation tree in brand mode', () => {
+    render(<ModuleSidebar {...MODULE_SIDEBAR_FIXTURES.brandMode} />);
+    
+    expect(screen.getByText(/Brand Identity/i)).toBeInTheDocument();
+    expect(screen.getByText(/Visual System/i)).toBeInTheDocument();
+  });
+
+  it('triggers back to directory', () => {
+    const onBack = vi.fn();
+    const props = {
+      ...MODULE_SIDEBAR_FIXTURES.brandMode,
+      onBackToDirectory: onBack
+    };
+    render(<ModuleSidebar {...props} />);
+    
+    const backBtn = screen.getByRole('button', { name: /back to directory/i });
+    fireEvent.click(backBtn);
+    
+    expect(onBack).toHaveBeenCalled();
   });
 });

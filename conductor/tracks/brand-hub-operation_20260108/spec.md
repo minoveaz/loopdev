@@ -1,94 +1,64 @@
-# Especificación: Brand Hub Operativo (v1.6)
+# Especificación: Brand Hub Operativo (v2.0)
 
 ## 1. Propósito
-Implementar la navegación y el layout definitivo del Brand Hub siguiendo el contrato de rutas v1.0. El sistema debe gestionar dos modos operativos: **Module Mode** (Contexto Global) e **Identity Mode** (Contexto de Marca), garantizando un foco operativo absoluto mediante una máquina de estados sincronizada con la URL.
+Implementar la navegación y el layout definitivo del Brand Hub siguiendo el contrato de rutas v1.0. El sistema gestiona dos modos operativos: **Module Mode** (Contexto Global) e **Identity Mode** (Contexto de Marca), orquestados por un `ModuleWorkspace` que integra navegación, intención y consecuencia.
 
 ## 2. Estructura de Rutas y Mapping
-
-### [A] Chasis Compartido: ModuleWorkspace
 - **Global Anchor:** `/marketing-studio/brand-hub/overview`.
 - **Foco:** `SuiteSidebar` colapsa automáticamente a modo **Rail** en cualquier ruta bajo `/brand-hub`.
 
-### [B] Rutas de Módulo (Module Mode)
-1. `/marketing-studio/brand-hub/overview`: Dashboard operativo global.
-2. `/marketing-studio/brand-hub/brands`: Directorio maestro de marcas.
-3. `/marketing-studio/brand-hub/glossary`: Definiciones técnicas.
+## 3. Arquitectura de Paneles (The 4-Pane System)
 
-### [C] Rutas de Marca (Brand Mode)
-> Prefijo: `/marketing-studio/brand-hub/brands/:brandId`
-- `/overview`: Estatus del oráculo y alertas.
-- `/identity`: Narrativa y tono de voz.
-- `/visual/colors`: Definición de tokens cromáticos.
-- `/visual/typography`: Roles tipográficos.
-- `/visual/logos`: Referencias de activos de identidad.
-- `/rules`: Motor de restricciones (Visual/Verbal/Contextual/Structural).
-- `/versions`: Historial inmutable.
-- `/versions/compare`: Comparativa entre snapshots.
-- `/dependencies`: Grafo de impacto real (Consumers).
-- `/governance/audit`: Registro histórico de decisiones.
-- `/publish`: Preflight de gobernanza y publicación.
+### 3.1 ModuleSidebar (Navegación & Ontología)
+Este componente muta según el modo:
+- **Module Mode:** Lista virtualizada de marcas con búsqueda y badging de estado (`{ DRAFT }`).
+- **Brand Mode:** Árbol de navegación semántico (Identity, Visual, Rules, Governance).
 
-## 3. Mapping de Paneles (Regla de Oro)
+### 3.2 SidebarFlyout (Significado)
+- **Rol:** Panel explicativo "Learn & Navigate".
+- **Contenido:** Guías semánticas que explican *qué* es la sección actual antes de entrar en detalle.
 
-### 3.1 ModuleSidebar (La Espina Dorsal)
-Este componente debe mutar completamente según el modo:
+### 3.3 ModuleToolbar (Intención)
+El puente entre intención y decisión. Altura fija industrial (44px).
 
-**A. Module Mode (Directorio):**
-- **Header:** Título "Brands" + Input de búsqueda técnica (`Input size="sm"`).
-- **Body:** Lista virtualizada de marcas.
-    - Cada item muestra: Nombre + `TechnicalStatusBadge` ({ DRAFT }).
-    - Hover: Reveal de botón "Edit".
-- **Footer:** Botón `BlockButton` "New Brand".
+**Máquina de Estados:**
+1.  **Directory Mode:** Filtros globales + "Create Brand".
+2.  **Read-Only Mode:** Acciones de análisis ("Compare", "Impact") + "Create Draft".
+3.  **Draft Mode:** Acciones de trabajo ("Save", "Discard") + "Request Approval".
+4.  **Governance:** Acciones de decisión ("Approve", "Reject") -> Disparan Inspector.
 
-**B. Brand Mode (Ontología):**
-- **Header:** Botón "Back to Directory" (`arrow_back`) + Nombre de la Marca.
-- **Body:** Árbol de navegación (`NavGroup` + `NavSidebarItem`).
-    - Grupos: Identity, Visual System, Rules, Architecture, Governance.
-- **Footer:** Versión actual (`v1.0.2`) en monoespaciado.
+### 3.4 ModuleInspector (Consecuencia - NUEVO)
+El cerebro de consecuencias. Responde a "¿Qué implica esto?".
 
-### 3.2 Sidebar Flyout & Inspector
-- **Flyout:** Significado y sub-secciones (Guía Semántica).
-- **Inspector:** Consecuencia y Gobernanza (Impacto/Diff).
+**Arquitectura:**
+- **Shell:** `UnifiedInspector` (gestiona Tabs, Header, Close).
+- **Renderer:** `BrandInspector` (inyecta contenido específico del módulo).
+- **Blocks (DS):** Componentes UI estandarizados en `@loopdev/ui`:
+    - `ContextBlock`: Metadatos clave-valor.
+    - `ImpactBlock`: Alerta visual de radio de explosión (Blast Radius).
+    - `DiffBlock`: Visualización simplificada de cambios (+/-).
+    - `GovernanceBlock`: Cadena de custodia y aprobación.
 
-### 3.3 ModuleToolbar (Plano de Intención)
-El Toolbar es el puente entre intención y decisión. Responde a "¿Qué puedo hacer ahora mismo?".
-
-**Reglas Duras:**
-- No navega, no guarda estado, no decide consecuencias.
-- Altura fija industrial.
-- Las acciones destructivas o complejas solo se invocan aquí, pero se deciden en el Inspector.
-
-**Modos de Operación (State Machine):**
-
-1.  **Module Mode (Directory):**
-    - `Primary`: Create Brand.
-    - `Secondary`: View Options (Grid/List), Filters.
-
-2.  **Brand Mode (Published/Read-Only):**
-    - `Primary`: Create Draft.
-    - `Secondary`: Compare Versions, View Dependencies.
-    - *Nota:* Edición directa bloqueada.
-
-3.  **Brand Mode (Draft/Active):**
-    - `Primary`: Request Approval.
-    - `Secondary`: Save Draft, Discard, Compare with Published.
-
-4.  **Governance Context:**
-    - `Actions`: Approve, Reject, Add Comment, Escalate.
-    - *Nota:* Todas requieren confirmación en Inspector.
-
-**Contrato Action -> Inspector:**
-- `Create Draft` -> Inicializa draft + muestra diff summary.
-- `Request Approval` -> Abre checklist de gobernanza.
-- `Approve/Reject` -> Requiere firma y comentario.
+**Contrato de Datos:**
+Todo el inspector se hidrata desde un objeto `InspectorContext`:
+```ts
+{
+  intent: 'inspect' | 'impact' | 'compare';
+  mode: 'read' | 'draft' | 'locked';
+  entity: { type: string; id: string; ... };
+  permissions: { canEdit: boolean; ... };
+}
+```
 
 ## 4. Reglas Técnicas de Estado (Zero Bugs)
-1. **URL-First State:** El `brandId` y la `view` se derivan siempre de la ruta. La UI no inventa contexto.
+1. **URL-First State:** El `brandId` y la `view` se derivan siempre de la ruta.
 2. **State Machine de Paneles:** Definición estricta de estados para Sidebar, Flyout e Inspector.
-3. **No Orphan Panels:** Al cambiar de marca, se resetea el `entityRef` del Inspector y se recalcula el Flyout.
+3. **Selection Sync:** Si se selecciona un item en el Canvas (o Toolbar), el Inspector se abre automáticamente en la tab relevante.
+4. **No Orphan Panels:** Al cambiar de marca, se resetea el `entityRef` del Inspector.
 
-## 5. Criterios de Aceptación
-- [ ] Implementar la transición suave entre Module Mode y Brand Mode.
-- [ ] La selección en el Canvas (Token/Rule) debe reflejar el contexto en el Inspector automáticamente.
-- [ ] Las versiones publicadas (Published) deben activar un modo `read-only` en el Canvas.
-- [ ] 100% ADN v3.9 (Bordes 0.5px, Grilla 40px).
+## 5. Criterios de Aceptación (Checklist de Ingeniería)
+- [x] Transición suave Module Mode <-> Brand Mode.
+- [x] Toolbar muestra acciones contextuales correctas (Draft vs Published).
+- [x] Inspector utiliza bloques reutilizables del Design System.
+- [x] Alturas sincronizadas (Header 56px, Toolbar 44px).
+- [x] 100% Compliance con ADN v3.9 (Bordes, Sombras, Tipografía).
