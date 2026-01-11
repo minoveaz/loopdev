@@ -43,6 +43,7 @@ export const ActionLauncher: React.FC<ActionLauncherProps> = ({
               title="View Impact"
               description="Analyze system dependencies"
               icon="hub"
+              intent="secondary"
               onClick={() => onAction?.('dependencies')}
             />
           </>
@@ -61,6 +62,7 @@ export const ActionLauncher: React.FC<ActionLauncherProps> = ({
               title="Publish Preflight"
               description="Run governance and policy checks"
               icon="publish"
+              intent="secondary"
               onClick={() => onAction?.('preflight')}
             />
           </>
@@ -70,6 +72,7 @@ export const ActionLauncher: React.FC<ActionLauncherProps> = ({
           title="Compare Versions"
           description="Review changes against baseline"
           icon="compare_arrows"
+          intent="neutral"
           onClick={() => onAction?.('compare')}
         />
       </div>

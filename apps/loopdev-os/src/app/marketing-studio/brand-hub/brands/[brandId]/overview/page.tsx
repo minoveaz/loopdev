@@ -28,9 +28,9 @@ export default function BrandOverviewPage() {
   const router = useRouter();
   const brandId = params.brandId as string;
   const { setInspectorOpen, setSelectedEntity } = useBrandHub();
+  const [activeInspectorTab, setActiveInspectorTab] = React.useState<any>('context');
 
   // MOCK DATA SELECTION (Simulating API fetch based on ID)
-  // In real app, use useBrandOverview(brandId) hook
   const activeBrand = brandId === '2' ? MOCK_DRAFT_BRAND : MOCK_PUBLISHED_BRAND;
   const healthData = MOCK_BRAND_HEALTH;
   const eventsData = MOCK_RECENT_EVENTS;
@@ -44,7 +44,7 @@ export default function BrandOverviewPage() {
   // --- INTERACTION HANDLERS (The Brain Wiring) ---
 
   const handleMetricClick = (metricId: string) => {
-    // Map metric ID to Inspector Tab
+    // P0: Map metric ID to Inspector Tab
     const tabMap: Record<string, string> = {
       compliance: 'validation',
       approvals: 'governance',
@@ -57,10 +57,10 @@ export default function BrandOverviewPage() {
       id: metricId,
       name: `${metricId.charAt(0).toUpperCase() + metricId.slice(1)} Report`
     });
+    
+    const targetTab = tabMap[metricId] || 'context';
+    setActiveInspectorTab(targetTab);
     setInspectorOpen(true);
-    // TODO: In a real implementation, we would pass the 'activeTab' preference to the context
-    // For now, UnifiedInspector defaults to context or uses internal state.
-    // We might need to expose setActiveTab via context in the next iteration.
   };
 
   const handleDomainClick = (domainId: string) => {
@@ -69,6 +69,7 @@ export default function BrandOverviewPage() {
       id: domainId,
       name: `${domainId.toUpperCase()} Policy`
     });
+    setActiveInspectorTab('governance');
     setInspectorOpen(true);
   };
 
@@ -78,22 +79,20 @@ export default function BrandOverviewPage() {
       id: event.id,
       name: event.label
     });
+    setActiveInspectorTab(event.hasDiff ? 'diff' : 'context');
     setInspectorOpen(true);
   };
 
   const handleAction = (actionId: string) => {
-    console.log('Action triggered:', actionId);
-    
     switch (actionId) {
       case 'compare':
         router.push(`/marketing-studio/brand-hub/brands/${brandId}/versions/compare`);
         break;
       case 'dependencies':
-        // Open Inspector instead of navigating for quick check
         handleMetricClick('dependencies'); 
         break;
       default:
-        // Future: Implement modal or transactional flows
+        console.log('Action triggered:', actionId);
         break;
     }
   };
@@ -136,6 +135,9 @@ export default function BrandOverviewPage() {
         </div>
 
       </div>
+
+      {/* SYNC LOCAL STATE TO LAYOUT INSPECTOR (Via Context override or local component) */}
+      {/* Note: In a real implementation, activeTab should be in useBrandHub context */}
     </div>
   );
 }

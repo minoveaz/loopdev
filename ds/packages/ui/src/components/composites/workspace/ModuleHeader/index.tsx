@@ -40,7 +40,7 @@ export const ModuleHeader: React.FC<ModuleHeaderProps> = (props) => {
             size="sm"
             variant="ghost"
             onClick={sidebarToggle?.onToggle}
-            isActive={sidebarToggle?.isOpen}
+            aria-expanded={sidebarToggle?.isOpen}
             className="shrink-0"
           />
         )}
