@@ -14,18 +14,16 @@ export const useBrands = () => {
   return useQuery({
     queryKey: ['brands'],
     queryFn: async () => {
-      // SIMULACIÓN DE RED CERO: Retorno inmediato para fluidez de UI
-      // Descomentar el bloque de abajo cuando Supabase esté 100% configurado
-      return MOCK_BRANDS;
-
-      /*
       try {
         const { data, error } = await supabase
           .from('brands')
           .select('*')
           .order('updated_at', { ascending: false });
 
-        if (error || !data) throw error;
+        if (error) throw error;
+        
+        // Fallback a mocks solo si la DB está vacía por ahora
+        if (!data || data.length === 0) return MOCK_BRANDS;
 
         return data.map(b => ({
           id: b.id,
@@ -34,9 +32,9 @@ export const useBrands = () => {
           updatedAt: new Date(b.updated_at).toLocaleDateString()
         })) as BrandItem[];
       } catch (e) {
-        return MOCK_BRANDS;
+        console.error('Supabase fetch error:', e);
+        return MOCK_BRANDS; // Fallback de seguridad en caso de error de red/auth
       }
-      */
     },
     staleTime: Infinity // Evita refetching innecesario
   });

@@ -15,23 +15,23 @@ export const useActiveBrand = (brandId: string | null) => {
     queryFn: async () => {
       if (!brandId) return null;
 
-      // SIMULACIÓN DE RED CERO
-      const mockBrand = MOCK_BRANDS.find(b => b.id === brandId);
-      if (mockBrand) return mockBrand;
+      try {
+        const { data, error } = await supabase
+          .from('brands')
+          .select('*')
+          .eq('id', brandId)
+          .single();
 
-      /*
-      const { data, error } = await supabase
-        .from('brands')
-        .select('*')
-        .eq('id', brandId)
-        .single();
-
-      if (error) throw error;
-      return data;
-      */
-     return null;
+        if (error) throw error;
+        return data;
+      } catch (e) {
+        // Fallback a mocks si falla la red o no existe en DB
+        const mockBrand = MOCK_BRANDS.find(b => b.id === brandId);
+        return mockBrand || null;
+      }
     },
     enabled: !!brandId,
-    initialData: MOCK_BRANDS.find(b => b.id === brandId) // Carga instantánea
+    // Eliminamos initialData estático para permitir que el loading state sea real si se desea, 
+    // o lo mantenemos si queremos optimismo extremo. Lo quitaré para verificar la carga real.
   });
 };

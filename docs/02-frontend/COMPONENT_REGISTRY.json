@@ -1,0 +1,52 @@
+{
+  "certified_components": [
+    {
+      "name": "StructuredTextField",
+      "category": "molecule",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    },
+    {
+      "name": "ToneProfileCard",
+      "category": "molecule",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    },
+    {
+      "name": "ClaimList",
+      "category": "molecule",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    },
+    {
+      "name": "NarrativeBlock",
+      "category": "composite",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    },
+    {
+      "name": "VoiceToneBlock",
+      "category": "composite",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    },
+    {
+      "name": "ClaimsGovernanceBlock",
+      "category": "composite",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    }
+  ]
+}

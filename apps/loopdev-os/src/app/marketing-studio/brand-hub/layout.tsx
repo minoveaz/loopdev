@@ -92,7 +92,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
     { id: 'module', label: 'Brand Hub', href: '/marketing-studio/brand-hub' }
   ];
 
-  if (pathname.endsWith('/brand-hub/overview')) {
+  if (pathname === '/marketing-studio/brand-hub') {
     segments.push({ id: 'view', label: 'Overview', isActive: true });
   } else if (brandId) {
     segments.push({ id: 'view', label: 'Brands', href: '/marketing-studio/brand-hub/brands' });
