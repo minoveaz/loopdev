@@ -60,7 +60,7 @@ export const NarrativeBlock: React.FC<NarrativeBlockProps> = ({
           
           <div className="flex flex-col gap-3">
             <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
-              Core Values
+              Operating Principles
             </LpdText>
             <div className="grid grid-cols-1 gap-3">
               {data.values.map((val, i) => (

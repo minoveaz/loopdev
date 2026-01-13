@@ -93,7 +93,7 @@ export default function BrandIdentityPage() {
           Brand Identity _ORACLE
         </LpdText>
         <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-          The semantic source of truth for all communication. These definitions govern AI generation and campaign compliance across the organization.
+          The semantic source of truth for all communication. These definitions are directly consumed by automated systems and AI agents to enforce consistency, compliance, and decision-making across LoopDev.
         </LpdText>
       </header>
 

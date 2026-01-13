@@ -10,7 +10,7 @@ ADD COLUMN IF NOT EXISTS identity jsonb DEFAULT '{}'::jsonb;
 UPDATE public.brands
 SET identity = '{
   "narrative": {
-    "mission": "Build the operational system that turns brand truth into enforceable workflows.",
+    "mission": "Build the operational system that turns intent and truth into enforceable workflows.",
     "vision": "A world where every team ships on-brand by default, with governance built into creation.",
     "values": [
       { "title": "Precision", "description": "Systems over opinions." },
@@ -18,14 +18,14 @@ SET identity = '{
       { "title": "Velocity", "description": "Fast iteration without breaking truth." },
       { "title": "Craft", "description": "Industrial design quality in every interaction." }
     ],
-    "promise": "On-brand by default."
+    "promise": "On-brand by default. On-system by design."
   },
   "voice": {
     "profiles": [
       {
         "id": "professional",
         "name": "Professional",
-        "description": "Clear, confident, operational.",
+        "description": "Clear, precise, system-oriented.",
         "examples": {
           "do": ["Here is the impact of this change.", "This rule is blocked by policy."],
           "dont": ["Don''t worry about it.", "We are the best in the world."]
