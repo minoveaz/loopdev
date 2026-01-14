@@ -47,6 +47,30 @@
       "status": "stable",
       "certified_version": "1.0.0",
       "blocks_0_compliance": true
+    },
+    {
+      "name": "ColorTokenCard",
+      "category": "molecule",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    },
+    {
+      "name": "TokenGroupSection",
+      "category": "composite",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
+    },
+    {
+      "name": "ColorContextBar",
+      "category": "composite",
+      "suite": "brand-hub",
+      "status": "stable",
+      "certified_version": "1.0.0",
+      "blocks_0_compliance": true
     }
   ]
 }

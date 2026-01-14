@@ -4,6 +4,23 @@ export type BrandStatus = 'published' | 'draft' | 'archived';
 export type OperatingMode = 'read-only' | 'draft-mode' | 'review-mode';
 export type HealthStatus = 'ok' | 'warn' | 'block';
 
+// --- VISUAL SYSTEM ---
+export interface ColorToken {
+  id: string;
+  name: string;
+  description?: string;
+  group: 'core' | 'semantic' | 'surface' | 'neutral';
+  role?: string;
+  resolvesTo: {
+    light: string;
+    dark: string;
+  };
+}
+
+export interface BrandPalette {
+  tokens: ColorToken[];
+}
+
 // --- CORE BRAND ---
 export interface BrandSummary {
   id: string;
@@ -21,8 +38,8 @@ export interface BrandSummary {
     parentVersion: string;
   };
   overridesCount: number;
-  // New Identity Field (JSONB)
   identity?: BrandIdentity;
+  palette?: BrandPalette; // New Palette Field
 }
 
 // --- IDENTITY DOMAIN ---
