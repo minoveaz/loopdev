@@ -1,7 +1,18 @@
 'use client';
 
 import React from 'react';
-import { LpdText, Skeleton, ContextBlock, ImpactBlock, DiffBlock, GovernanceBlock, InspectorTabId, InspectorContext } from '@loopdev/ui';
+import { 
+  LpdText, 
+  Skeleton, 
+  ContextBlock, 
+  ImpactBlock, 
+  DiffBlock, 
+  GovernanceBlock, 
+  InspectorTabId, 
+  InspectorContext 
+} from '@loopdev/ui';
+import { ColorTokenInspector } from './inspectors/ColorTokenInspector';
+import { useBrandHub } from '../context';
 
 interface BrandInspectorProps {
   tab: InspectorTabId;
@@ -12,10 +23,11 @@ interface BrandInspectorProps {
 /**
  * @component BrandInspector
  * @description The specific renderer for Marketing Studio > Brand Hub.
- * Decides what content to show for 'brand.identity', 'brand.token', etc.
+ * Decides what content to show for 'brand.identity', 'color.token', etc.
  */
 export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, isLoading }) => {
   const { entity } = context;
+  const { activeBrand, previewTheme } = useBrandHub();
 
   if (isLoading) {
     return (
@@ -40,7 +52,25 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
     );
   }
 
-  // --- RENDERERS BY TAB ---
+  // --- SPECIALIZED RENDERERS ---
+
+  // 1. Color Tokens
+  if (entity.type === 'color.token') {
+    const token = activeBrand?.palette?.tokens.find((t: any) => t.id === entity.id);
+    if (token) {
+      return (
+        <div className="p-6 h-full overflow-y-auto">
+          <ColorTokenInspector 
+            token={token} 
+            theme={previewTheme} 
+            activeTab={tab} 
+          />
+        </div>
+      );
+    }
+  }
+
+  // --- GENERIC RENDERERS BY TAB ---
 
   if (tab === 'context') {
     return (
@@ -113,6 +143,9 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
       )
   }
 
-  return <div>Tab content not implemented</div>;
+  return (
+    <div className="p-12 text-center opacity-40 italic">
+      <LpdText size="xs">Content for "{tab}" tab not implemented yet for this entity.</LpdText>
+    </div>
+  );
 };
-

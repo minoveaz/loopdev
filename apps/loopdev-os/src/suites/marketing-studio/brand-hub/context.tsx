@@ -2,21 +2,42 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
-export type EntityType = 'brand' | 'token' | 'rule' | 'version' | 'dependency';
+// Unified Entity Types for the entire suite
+export type EntityType = 
+  | 'brand' 
+  | 'token' 
+  | 'rule' 
+  | 'version' 
+  | 'dependency' 
+  | 'color.token' 
+  | 'identity.mission' 
+  | 'identity.vision' 
+  | 'identity.tone' 
+  | 'identity.claim';
 
 export interface SelectedEntity {
-  type: EntityType;
+  type: string; // Use string to allow dots (e.g. color.token)
   id: string;
-  data: any;
+  name?: string;
+  data?: any;
 }
 
 interface BrandHubContextType {
+  // Selection & Inspector
   selectedEntity: SelectedEntity | null;
   setSelectedEntity: (entity: SelectedEntity | null) => void;
   isInspectorOpen: boolean;
   setInspectorOpen: (open: boolean) => void;
+  
+  // Brand State
   activeBrand: any | null;
   setActiveBrand: (brand: any | null) => void;
+
+  // Visual System Preview State (Global so Inspector can see it)
+  previewTheme: 'light' | 'dark';
+  setPreviewTheme: (theme: 'light' | 'dark') => void;
+  viewMode: 'grid' | 'table';
+  setViewMode: (mode: 'grid' | 'table') => void;
 }
 
 const BrandHubContext = createContext<BrandHubContextType | undefined>(undefined);
@@ -25,6 +46,9 @@ export const BrandHubProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [selectedEntity, setSelectedEntity] = useState<SelectedEntity | null>(null);
   const [isInspectorOpen, setInspectorOpen] = useState(false);
   const [activeBrand, setActiveBrand] = useState<any | null>(null);
+  
+  const [previewTheme, setPreviewTheme] = useState<'light' | 'dark'>('light');
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
 
   const handleSelect = (entity: SelectedEntity | null) => {
     setSelectedEntity(entity);
@@ -38,7 +62,11 @@ export const BrandHubProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       isInspectorOpen,
       setInspectorOpen,
       activeBrand,
-      setActiveBrand
+      setActiveBrand,
+      previewTheme,
+      setPreviewTheme,
+      viewMode,
+      setViewMode
     }}>
       {children}
     </BrandHubContext.Provider>

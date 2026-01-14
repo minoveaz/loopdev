@@ -21,12 +21,12 @@
    - **HU:** As an Admin, I want core token changes to require approval when policy demands.
 
 ### [C] Inspector & Context
-7. **[DIFF] Visual Comparison**
-   - **HU:** As a Reviewer, I want side-by-side swatch comparison in the Inspector before approving a change.
-8. **[IMPACT] Usage Awareness**
-   - **HU:** If I change a token, I want to know which modules/components will be affected.
+... (Same as v1.5) ...
 9. **[EXPLAIN] Why & Next Step**
    - **HU:** When a token status is BLOCK/WARN, I want an explanation and recommended remediation in the Inspector.
+10. **[ORACLE] Contextual Usage Guidelines**
+   - **HU:** As a Junior Designer, I want to see semantic Do/Don't examples in the Inspector's Explain tab so I can learn how to apply the brand colors correctly without polluting the main technical grid.
+
 
 ## 📐 Criterios de Aceptación Técnicos
 - [ ] Implementar `ColorTokenCard` con badge WCAG dinámico.

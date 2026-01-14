@@ -23,6 +23,8 @@ const TABS: Array<{ id: InspectorTabId; label: string }> = [
   { id: 'impact', label: 'Impact' },
   { id: 'diff', label: 'Diff' },
   { id: 'governance', label: 'Gov' },
+  { id: 'validation', label: 'Valid' },
+  { id: 'explain', label: 'Explain' },
 ];
 
 /**

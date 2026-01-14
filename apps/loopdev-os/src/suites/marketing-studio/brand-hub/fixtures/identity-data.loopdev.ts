@@ -1,4 +1,4 @@
-import { BrandIdentity } from '../../types';
+import { BrandIdentity } from "../types";
 
 export const LOOPDEV_IDENTITY_MOCK: BrandIdentity = {
   narrative: {
@@ -13,7 +13,6 @@ export const LOOPDEV_IDENTITY_MOCK: BrandIdentity = {
     promise: "On-brand by default. On-system by design."
   },
   voice: {
-    // ... same as before
     profiles: [
       {
         id: "professional",
@@ -41,44 +40,52 @@ export const LOOPDEV_IDENTITY_MOCK: BrandIdentity = {
   palette: {
     tokens: [
       {
-        id: "t1",
+        id: "brand-primary",
         name: "brand.primary",
-        description: "Main brand color used for primary actions and structure.",
+        description: "LoopDev Designer Primary Blue.",
         group: "core",
         role: "bg",
-        resolvesTo: { light: "#135bec", dark: "#135bec" }
+        resolvesTo: { light: "#135BEC", dark: "#135BEC" }
       },
       {
-        id: "t2",
-        name: "brand.accent",
-        description: "High-energy color for AI features and highlights.",
+        id: "brand-energy",
+        name: "brand.secondary",
+        description: "LoopDev Designer Energy Yellow.",
         group: "core",
         role: "bg",
-        resolvesTo: { light: "#ffcc00", dark: "#ffcc00" }
+        resolvesTo: { light: "#FFD025", dark: "#FFD025" }
       },
       {
-        id: "t3",
+        id: "brand-innovation",
+        name: "brand.innovation",
+        description: "LoopDev Innovation & AI Purple.",
+        group: "core",
+        role: "bg",
+        resolvesTo: { light: "#9333EA", dark: "#a855f7" }
+      },
+      {
+        id: "status-success",
         name: "status.success",
-        description: "Positive validation and success states.",
+        description: "Positive validation state.",
         group: "semantic",
         role: "status",
-        resolvesTo: { light: "#10b981", dark: "#059669" }
+        resolvesTo: { light: "#22c55e", dark: "#22c55e" }
       },
       {
-        id: "t4",
+        id: "status-error",
         name: "status.error",
-        description: "Critical errors and blocking states.",
+        description: "Critical error state.",
         group: "semantic",
         role: "status",
-        resolvesTo: { light: "#ef4444", dark: "#dc2626" }
+        resolvesTo: { light: "#ef4444", dark: "#ef4444" }
       },
       {
-        id: "t5",
+        id: "surface-canvas",
         name: "surface.canvas",
-        description: "Main page background color.",
+        description: "Main environment background (Space).",
         group: "neutral",
         role: "bg",
-        resolvesTo: { light: "#f8fafc", dark: "#0d121b" }
+        resolvesTo: { light: "#f8fafc", dark: "#0F1115" }
       }
     ]
   }

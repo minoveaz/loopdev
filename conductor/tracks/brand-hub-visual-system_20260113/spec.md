@@ -1,89 +1,41 @@
-# BrandHub — Visual System · Colors (SaaS-Level) · Spec (v1.5)
+# BrandHub — Visual System · Colors (SaaS-Level) · Spec (v1.6)
 
 > **View:** Visual System → Colors (Brand Mode)
 > **Route:** `/marketing-studio/brand-hub/brands/:brandId/visual/colors`
-> **Purpose:** Provide an enterprise-grade environment to define **brand color truth** as **semantic tokens** (context-aware, versioned, auditable).
+> **Purpose:** Provide an enterprise-grade environment to define **brand color truth** as **semantic tokens**. Examples and usage guidelines are delivered contextually via the Inspector.
 
 ---
 
 ## 0) Core Philosophy (SaaS-grade)
 1.  **Colors are Contracts:** A hex is implementation; a token is meaning.
-2.  **Two-Layer Model:**
-    *   **Raw Palette:** Base swatches (hex/hsl). Not consumed directly.
-    *   **Semantic Tokens:** Context-aware aliases (`brand.primary`) resolving to raw values.
-3.  **Immutable Versioning:** Published versions are read-only. Changes require a Draft.
+2.  **Two-Layer Model:** Raw Palette vs. Semantic Tokens.
+3.  **Just-in-Time Education:** "How-to-use" is explained in the Inspector when risk is detected, keeping the main Canvas clean and technical.
 
 ---
 
 ## 1) Information Architecture (Page Layout)
-
-The page is composed of 4 zones inside the ModuleCanvas:
-
-### Zone A — Context Bar (In-Canvas)
-*   **Context Selector:** Theme (Light/Dark), Medium, Market.
-*   **View Toggle:** Grid vs Table.
-*   **Filter/Search:** Category and text search.
-*   **Rule:** Selectors affect *preview* and *validation*, not navigation.
-
-### Zone B — Token Groups (Rail)
-*   Navigation rail for: Core Brand, Semantic, Neutrals.
-*   Metrics: Token count, warning count.
-
-### Zone C — Main Palette Surface
-*   **Grid Mode:** Responsive grid of `ColorTokenCard`.
-*   **Table Mode:** Dense data view with resolved values and usage stats.
-
-### Zone D — Quick Actions (Optional)
-*   Export (JSON), Copy All, View Guidelines.
+... (Same as v1.5) ...
 
 ---
 
 ## 2) Component System
-
-### 2.1 ColorTokenCard (Molecule)
-*   **Visuals:** Swatch preview, Token Name, Resolved Value (Hex), Contrast Badge.
-*   **Behavior:** 
-    *   Click Card → Open Inspector (Context/Diff).
-    *   Click Hex → Copy to clipboard.
-    *   Click Badge → Open Inspector (Validation).
-
-### 2.2 ContrastBadge (Atom)
-*   **Visuals:** Ratio (e.g., 4.5:1) + Status Icon (Check/Warning).
-*   **Context:** Updates based on selected theme (Light/Dark).
+... (Same as v1.5) ...
 
 ---
 
-## 3) Data Model (Types)
-
-```ts
-type SemanticColorToken = {
-  id: string;
-  name: string; // e.g., 'brand.primary'
-  description?: string;
-  category: 'core' | 'semantic' | 'neutral';
-  role?: 'bg' | 'text' | 'border' | 'status';
-  resolvesTo: {
-    light: string; // Hex or Raw ID
-    dark: string;
-  };
-  contrast?: {
-    onBg: string; // Token ID to check contrast against
-  };
-};
-
-type BrandPalette = {
-  tokens: SemanticColorToken[];
-};
-```
-
----
-
-## 4) Inspector Mapping (Consequence Wiring)
+## 3) Inspector Mapping (Consequence Wiring)
 
 | Selection | Inspector Tab | Content |
 | :--- | :--- | :--- |
-| **Token (Stable)** | `Context` | Metadata, resolved values, owner. |
-| **Token (Draft Change)** | `Diff` | Before/After swatch comparison. |
-| **Contrast Badge** | `Validation` | WCAG checks, ratio, remediation. |
-| **Usage Badge** | `Impact` | List of consuming modules/campaigns. |
-| **Policy Lock** | `Governance` | Approvers required for change. |
+| **Color Token** | `Context` | Metadata, owner, version. |
+| **Color Token** | `Validation` | WCAG checks, ratio, remediation. |
+| **Color Token** | `Explain` | **Usage Oracle (Do/Don't):** <br> - ✅ **OK:** Semantic usage examples (e.g., "Button background"). <br> - ❌ **NOT OK:** Misuse warnings (e.g., "Body text on white"). |
+| **Color Token** | `Impact` | List of consuming modules/campaigns. |
+
+---
+
+## 4) Explain Tab Design Rules
+*   **No Heavy Graphics:** Use mini-chips, typography previews, and text-based logic.
+*   **Role-Driven:** Examples must be tied to the token's `role` (background, text, etc.).
+*   **Actionable:** Every "Don't" should suggest an "OK" alternative.
+

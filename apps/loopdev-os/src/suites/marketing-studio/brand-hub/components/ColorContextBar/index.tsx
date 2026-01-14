@@ -54,7 +54,7 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="SEARCH TOKENS..."
+            placeholder="SEARCH TOKENS (e.g. brand.primary)..."
             className="w-full bg-transparent border-none text-[11px] font-mono text-text-main placeholder:text-text-muted/40 focus:ring-0"
           />
           <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2 pr-2 opacity-20 pointer-events-none">
@@ -67,7 +67,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
       <div className="flex items-center gap-4">
         {/* THEME TOGGLE */}
         <div className="flex items-center gap-2 px-3 py-1.5 border-r border-border-technical/50 pr-4">
-          <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40 pr-2">Context</LpdText>
+          <div className="flex flex-col items-end pr-2">
+            <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40">Context</LpdText>
+            <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40">Theme</LpdText>
+          </div>
           <div className="flex bg-background-subtle rounded-lg p-0.5 border border-border-technical/30">
             <button 
               onClick={() => onThemeChange('light')}

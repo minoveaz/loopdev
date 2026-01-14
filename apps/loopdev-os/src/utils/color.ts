@@ -39,11 +39,16 @@ export const getContrastRatio = (hex1: string, hex2: string): number => {
 };
 
 /**
- * Returns WCAG 2.1 compliance level for normal text.
+ * Returns WCAG 2.1 compliance level.
+ * AAA: 7.0+ (Universal accessibility)
+ * AA: 4.5+ (Paragraphs/Small text)
+ * AA_LARGE: 3.0+ (Headlines/Large text only)
+ * FAIL: < 3.0 (Decorative/Low visibility)
  */
-export const getWCAGStatus = (ratio: number): 'AAA' | 'AA' | 'FAIL' => {
+export const getWCAGStatus = (ratio: number): 'AAA' | 'AA' | 'AA_LARGE' | 'FAIL' => {
   if (ratio >= 7) return 'AAA';
   if (ratio >= 4.5) return 'AA';
+  if (ratio >= 3) return 'AA_LARGE';
   return 'FAIL';
 };
 
