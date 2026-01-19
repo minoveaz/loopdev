@@ -23,7 +23,7 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
     - **Contraste Extremo (NUEVO):** Validación de legibilidad sobre el fondo más oscuro y más claro permitido.
   - **Multitenancy:** Adaptabilidad a 100+ clientes (Tokens dinámicos).
 
-- **Blueprint Validated:** Diseño aprobado visualmente en `mockv2`.
+- **Blueprint Validated:** Diseño aprobado visualmente en `labdev`.
 - **Session Entry:** Registro de inicio de tarea en `ENGINEERING_LOG.md`.
 
 ---

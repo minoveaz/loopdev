@@ -98,7 +98,7 @@ src/components/[atoms|composites]/[category]/<ComponentName>/
 └── userHistories.md    (Historias de usuario y Bloque 0)
 ```
 
-**Nota:** El archivo `Example.tsx` solo es obligatorio durante la fase de Laboratorio (`mockv2`). En producción, la validación se realiza mediante Historias de Storybook.
+**Nota:** El archivo `Example.tsx` solo es obligatorio durante la fase de Laboratorio (`labdev`). En producción, la validación se realiza mediante Historias de Storybook.
 
 ---
 

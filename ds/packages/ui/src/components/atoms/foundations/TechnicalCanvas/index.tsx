@@ -15,7 +15,7 @@ export const TechnicalCanvas: React.FC<TechnicalCanvasProps> = ({
   
   const backgroundStyle = useMemo(() => {
     const opacities = {
-      low: 0.04, // Sincronizado con mockv2
+      low: 0.04, // Sincronizado con labdev
       medium: 0.1,
       high: 0.2
     };

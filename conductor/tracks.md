@@ -1,4 +1,3 @@
-
 ---
 
 ## [x] Track: Implement ModuleWorkspace (Layout Phase 2) for internal module layouts.
@@ -38,3 +37,8 @@
 
 ## [x] Track: Brand Hub Operation (Level 2 Station)
 *Link: [./conductor/tracks/brand-hub-operation_20260108/](./conductor/brand-hub-operation_20260108/)*
+
+---
+
+## [ ] Track: Brand Hub Typography (System v1.0)
+*Link: [./conductor/tracks/brand-hub-typography_20260119/](./conductor/tracks/brand-hub-typography_20260119/)*

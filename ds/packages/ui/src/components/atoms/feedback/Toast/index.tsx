@@ -20,7 +20,7 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
   const isWarning = variant === 'warning';
   const isAI = variant === 'loading';
 
-  // Sincronización de clases con el laboratorio (mockv2)
+  // Sincronización de clases con el laboratorio (labdev)
   const iconBgClasses = isWarning ? 'bg-slate-950/10' : (visualConfig.iconBg || '');
   const titleColorClass = visualConfig.titleColor || '';
   const accentColorClass = visualConfig.accentColor || '';

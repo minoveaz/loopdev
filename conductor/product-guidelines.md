@@ -12,7 +12,7 @@
 - **Industrial Density:** Design for data-rich environments using precision typography (10px technical labels) and 0.5px technical borders to maximize information density without clutter.
 
 ## Development & Promotion Workflow
-- **Lab-First Innovation:** All new UI/UX concepts must be prototyped and iterated in the `mockv2` ("Lab") environment first.
+- **Lab-First Innovation:** All new UI/UX concepts must be prototyped and iterated in the `labdev` ("Lab") environment first.
 - **Evidence-Based Promotion:** Only components that demonstrate usability and visual excellence in the Lab are eligible for promotion to the production design system (`@loopdev/ui`).
 - **Contract-First Engineering:** Promotion requires a finalized `userHistories.md` (DoR) and `types.ts` contract. No coding begins without a clear definition of what is being built.
 - **Quality Shield:** Production deployment is gated by dual certification (Frontend + Infrastructure) and automated checks (Vitest, Axe-core, Chromatic).

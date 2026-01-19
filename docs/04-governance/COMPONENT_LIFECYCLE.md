@@ -13,7 +13,7 @@
 3. **El Contrato:** Creación de `types.ts` (Interfaces de Props y Estados).
 4. **Validación:** Aprobación del Root Admin sobre el alcance definido.
 
-### 🧪 FASE 2: Prototipado en Laboratorio (mockv2)
+### 🧪 FASE 2: Prototipado en Laboratorio (labdev)
 1. **Implementación Raw:** Maquetación rápida para validar el Look & Feel.
 2. **Story Sandbox:** Creación de `Example.tsx` para visualización dinámica.
 3. **Refinamiento:** Ajustes estéticos basados en la maqueta de referencia.

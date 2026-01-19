@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
+import { LpdText } from '@loopdev/ui';
 import { 
   MOCK_PUBLISHED_BRAND, 
   MOCK_DRAFT_BRAND, 
@@ -100,6 +101,16 @@ export default function BrandOverviewPage() {
   return (
     <div className="flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
       
+      {/* HEADER SECTION */}
+      <header className="flex flex-col gap-2">
+        <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+          Brand Overview _OPS
+        </LpdText>
+        <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
+          Operational command center for monitoring brand health, governance status, and recent activity.
+        </LpdText>
+      </header>
+
       {/* ROW 1: Status Anchor */}
       <section>
         <BrandStatusSnapshot brand={activeBrand} />

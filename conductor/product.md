@@ -24,8 +24,8 @@ loop.dev is a next-generation web and application development platform powered b
 - **Multi-Tenant Infrastructure:** Advanced RBAC and tenant isolation protocols for enterprise scalability.
 - **Cross-Platform Consistency:** A design system that ensures identical branding and interaction patterns across every suite and process.
 
-## The "Lab" (mockv2)
-- **Purpose:** A dedicated staging environment (`mockv2`) for UI/UX experimentation.
+## The "Lab" (labdev)
+- **Purpose:** A dedicated staging environment (`labdev`) for UI/UX experimentation.
 - **Workflow:** Designs provided by the UI/UX team are implemented and iterated here first.
 - **Promotion:** Only validated components and patterns are promoted from the Lab to the production codebase (`loopdev-os` and `@loopdev/ui`).
 

@@ -148,7 +148,7 @@ El módulo Brand Hub se considera terminado cuando:
 **Objetivo:** Crear herramientas internas que aceleren el ciclo de diseño a producción.
 
 > ⚠️ **ESTADO: DEUDA TÉCNICA**
-> La implementación del HTML Ingestor y la unificación del laboratorio (`mockv2` -> `loopdev/apps/lab`) se posponen para priorizar la infraestructura de Layouts v1.
+> La implementación del HTML Ingestor y la unificación del laboratorio (`labdev` -> `loopdev/apps/lab`) se posponen para priorizar la infraestructura de Layouts v1.
 
 ### 6.1 HTML Ingestor
 - [ ] **Scoping:** Definir la arquitectura del módulo `mod-html-ingestor`.

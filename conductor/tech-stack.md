@@ -23,4 +23,4 @@
 
 ## Development Environments
 - **The OS (loopdev-os):** The main production-ready SaaS environment.
-- **The Lab (mockv2):** A dedicated [Vite](https://vitejs.dev/) environment for rapid UI/UX prototyping and iteration.
+- **The Lab (labdev):** A dedicated [Vite](https://vitejs.dev/) environment for rapid UI/UX prototyping and iteration.

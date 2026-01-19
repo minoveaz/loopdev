@@ -86,7 +86,7 @@ components/
 ```
 
 ### Reglas de Archivos (Lab vs Prod):
-- **Laboratorio (mockv2):** Es obligatorio crear `Example.tsx` para validación rápida.
+- **Laboratorio (labdev):** Es obligatorio crear `Example.tsx` para validación rápida.
 - **Producción (loopdev/ds):** **PROHIBIDO** incluir `Example.tsx`. La validación visual es exclusiva de **Stories de Storybook**.
 
 ---
