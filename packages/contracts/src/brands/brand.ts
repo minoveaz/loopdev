@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TypographySystemSchema } from './typography.schema';
 
 export const BrandStatusSchema = z.enum(['draft', 'published', 'archived']);
 
@@ -9,6 +10,7 @@ export const BrandSchema = z.object({
   description: z.string().max(500).optional(),
   status: BrandStatusSchema.default('draft'),
   logoUrl: z.string().url().optional().nullable(),
+  typography: TypographySystemSchema.optional(), // <-- New Typography Field
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });

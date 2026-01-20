@@ -40,5 +40,5 @@
 
 ---
 
-## [ ] Track: Brand Hub Typography (System v1.0)
+## [x] Track: Brand Hub Typography (System v1.0)
 *Link: [./conductor/tracks/brand-hub-typography_20260119/](./conductor/tracks/brand-hub-typography_20260119/)*

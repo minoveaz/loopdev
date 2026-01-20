@@ -5,6 +5,13 @@ export default defineWorkspace([
   'ds/packages/ui/vitest.config.ts',
   {
     test: {
+      name: 'contracts',
+      root: path.resolve(__dirname, './packages/contracts'),
+      include: ['src/**/*.{test,spec}.ts'],
+    }
+  },
+  {
+    test: {
       name: 'apps',
       root: path.resolve(__dirname, './apps/loopdev-os'),
       environment: 'jsdom',

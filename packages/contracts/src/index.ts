@@ -1,5 +1,6 @@
 // Export Brands Module
 export * from './brands/brand';
+export * from './brands/typography.schema';
 
 // Export Platform Navigation Contracts
 export * from './platform/navigation';
