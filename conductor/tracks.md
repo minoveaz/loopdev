@@ -1,4 +1,3 @@
-
 ---
 
 ## [x] Track: Implement ModuleWorkspace (Layout Phase 2) for internal module layouts.
@@ -48,3 +47,8 @@
 
 ## [x] Track: Brand Hub Logo System (Assets v1.0)
 *Link: [./conductor/tracks/brand-hub-logo-system_20260119/](./conductor/tracks/brand-hub-logo-system_20260119/)*
+
+---
+
+## [x] Track: Brand Hub Rules Engine (Governance v1.0)
+*Link: [./conductor/tracks/brand-hub-rules-engine_20260119/](./conductor/tracks/brand-hub-rules-engine_20260119/)*
