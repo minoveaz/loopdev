@@ -12,6 +12,7 @@ import { clsx } from 'clsx';
  */
 export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
   logo,
+  logoNode,
   label,
   description,
   theme = 'dark'
@@ -35,7 +36,9 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
 
         {/* The Logo */}
         <div className="relative z-10 p-8 max-w-full max-h-full transition-transform duration-500 group-hover:scale-110">
-          {logo.rawSvg ? (
+          {logoNode ? (
+            <div className="scale-[1.5]">{logoNode}</div>
+          ) : logo?.rawSvg ? (
             <div 
               className={clsx(
                 "w-auto h-auto max-h-32",
@@ -43,13 +46,13 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
               )}
               dangerouslySetInnerHTML={{ __html: logo.rawSvg }} 
             />
-          ) : (
+          ) : logo ? (
             <img 
               src={logo.url} 
               alt={logo.alt || label} 
               className="max-h-32 object-contain"
             />
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -72,7 +75,7 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
             <button 
               className="text-[10px] font-bold text-primary hover:text-white uppercase tracking-wide px-2 py-1 rounded border border-primary/20 hover:bg-primary transition-colors"
               onClick={() => {
-                if (logo.rawSvg) {
+                if (logo?.rawSvg) {
                   navigator.clipboard.writeText(logo.rawSvg);
                   // Trigger toast notification in a real scenario
                 }

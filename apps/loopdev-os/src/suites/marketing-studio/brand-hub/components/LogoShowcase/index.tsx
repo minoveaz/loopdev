@@ -12,6 +12,7 @@ import { clsx } from 'clsx';
  */
 export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
   logo,
+  logoNode,
   title = "The Isotype",
   description,
   showGrid = true
@@ -43,9 +44,11 @@ export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
 
           {/* The Logo */}
           <div className="relative z-10 p-12 transition-transform duration-500 group-hover:scale-105">
-            {logo.rawSvg ? (
+            {logoNode ? (
+              <div className="scale-[2.5]">{logoNode}</div>
+            ) : logo.rawSvg ? (
               <div 
-                className="w-48 h-48 text-text-main fill-current"
+                className="w-48 h-48 text-primary fill-current"
                 dangerouslySetInnerHTML={{ __html: logo.rawSvg }} 
               />
             ) : (

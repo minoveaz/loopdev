@@ -14,17 +14,16 @@
 
 ## Phase 2: Core Components (The Atoms)
 - [x] Task: Create `LogoShowcase` component (The Hero Grid from Lab).
-    - Support "Safety Zone" visualization (grid background).
-    - Support Dark/Light context toggle.
 - [x] Task: Create `LogoVariantCard` component.
-    - Displays a specific variant (Horizontal, Vertical, Isotype).
-    - Includes "Download" and "Copy SVG" actions.
-- [x] Task: Create `LogoScaleTest` component (Micro-interactions check).
+- [x] Task: Create `LogoScaleTest` component.
+- [x] Task: Create `BracketsShowcase` component (Supporting elements).
 
-## Phase 3: Page Assembly
+## Phase 3: Page Assembly & Navigation
 - [x] Task: Create page route `.../visual/logos/page.tsx`.
-- [x] Task: Implement the Layout (Header, Sections for Isotype, Lockups, Variants).
+- [x] Task: Implement the Layout (Header, Sections for Isotype, Lockups, Variants, Brackets).
 - [x] Task: Connect to `useActiveBrand` hook (handling loading states).
+- [x] Task: Map navigation in `layout.tsx` and `mock-brands.ts`.
+- [x] Task: Implement Certified Identity logic (LoopDev atom injection).
 
 ## Phase 4: Infrastructure & Persistence
 - [x] Task: Create SQL Migration to add `logos` JSONB column to `brands`.
@@ -33,3 +32,4 @@
 ## Phase 5: Verification
 - [x] Task: Unit Tests for Schema and Logic.
 - [x] Task: Conductor verification: `Logo Page Operational`.
+- [x] Task: Visual QA: Dark Mode & Identity text contrast FIXED ✅.

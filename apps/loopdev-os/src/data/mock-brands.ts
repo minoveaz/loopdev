@@ -21,6 +21,7 @@ export const MOCK_NAV_GROUPS = [
     items: [
       { id: 'visual.colors', label: 'Colors', icon: 'Palette' },
       { id: 'visual.typography', label: 'Typography', icon: 'Type' },
+      { id: 'visual.logos', label: 'Logos', icon: 'Image' },
     ]
   },
   {

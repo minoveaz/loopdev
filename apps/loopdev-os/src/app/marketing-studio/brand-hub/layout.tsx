@@ -74,6 +74,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
       'identity.narrative': 'identity',
       'visual.colors': 'visual/colors',
       'visual.typography': 'visual/typography',
+      'visual.logos': 'visual/logos',
       'gov.rules': 'rules'
     };
 
