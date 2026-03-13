@@ -72,6 +72,8 @@ export interface SuiteIdentity {
   accentColor?: string;
   /** Variante de superficie oficial */
   surfaceVariant: 'canvas';
+  /** Ruta raíz de la suite */
+  route?: NavRouteRef;
 }
 
 export interface NavigationSchema {

@@ -64,7 +64,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
           name={suite.suiteName}
           accentColor={suite.accentColor}
           isRail={isRail}
-          onClick={() => onNavigate({ routeId: '/marketing-studio' })}
+          onClick={() => onNavigate(suite.route || { routeId: '/' })}
         />
 
         {/* Separador Técnico 0.5px */}

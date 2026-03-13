@@ -78,6 +78,13 @@ export default function LaunchpadPage() {
               version="0.5.0"
               isLocked
             />
+            <SuiteCard 
+              title="Quant Ops"
+              description="Algorithmic trading engine and high-frequency execution command center."
+              illustration={<Icon name="trending_up" size="md" />}
+              href="/quant-ops"
+              version="0.0.1"
+            />
           </div>
         </div>
       </main>

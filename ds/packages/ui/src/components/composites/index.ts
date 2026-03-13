@@ -34,3 +34,9 @@ export * from './utilities/SystemNoticeRail';
 
 
 export * from './inspector/UnifiedInspector';
+
+// visualizations
+export * from './visualizations';
+
+// trading
+export * from './trading';

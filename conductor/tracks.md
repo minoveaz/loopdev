@@ -45,6 +45,12 @@
 
 ---
 
+## [ ] Track: Quant Ops Suite: Industrial Trading Engine (v1.0)
+*Link: [./conductor/tracks/quant-ops-suite_20260120/](./conductor/tracks/quant-ops-suite_20260120/)*
+
+
+---
+
 ## [x] Track: Brand Hub Logo System (Assets v1.0)
 *Link: [./conductor/tracks/brand-hub-logo-system_20260119/](./conductor/tracks/brand-hub-logo-system_20260119/)*
 
