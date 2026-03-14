@@ -35,15 +35,9 @@ Crear un workspace interno para compartir tipos entre Front y Back.
 **Objetivo:** Persistencia segura y API CRUD básica. Sin UI todavía.
 
 ### 1.1 Base de Datos (Supabase)
-- [ ] **Migration 001:** Crear tabla `brands`.
-    - PK: `id` (uuid, default gen_random_uuid)
-    - FK: `tenant_id` (not null)
-    - Audit: `created_at`, `updated_at`, `created_by`.
-- [ ] **RLS Policies (Seguridad):**
-    - `Enable RLS on brands`.
-    - Policy: "Users can view brands of their own tenant".
-    - Policy: "Admins can create/edit brands of their own tenant".
-- [ ] **Seeding:** Script SQL para poblar 3 marcas de prueba en el tenant `demo`.
+- [x] **Migration 001:** Crear tabla `brands`. (✅ Completado)
+- [x] **RLS Policies (Seguridad):** (✅ Completado)
+- [x] **Seeding:** Script SQL para poblar 3 marcas de prueba. (✅ Completado)
 
 ### 1.2 Next.js Architecture (The App Shell)
 **Objetivo:** Configurar el entorno Next.js para soportar Auth y Multi-tenancy.
@@ -63,7 +57,7 @@ Crear un workspace interno para compartir tipos entre Front y Back.
 
 ### 2.1 Authentication Gate
 - [x] **DS Dependency:** Certificar componente `Input` en `@loopdev/ui`. ✅
-- [ ] **Login Page:** Implementar `/src/app/login/page.tsx` usando `Button` y `Input`.
+- [x] **Login Page:** Implementar `/src/app/login/page.tsx`. (✅ Completado)
 - [ ] **Auth Callback:** Configurar `/src/app/auth/callback/route.ts` para manejo de sesiones.
 
 ### 2.2 Service Layer (Frontend)
@@ -147,3 +141,17 @@ El módulo Brand Hub se considera terminado cuando:
 3. Se pueden subir assets y se ven en la galería.
 4. No hay errores de consola ni de tipos.
 5. El código pasa el linter y build.
+
+---
+
+## 🔵 FASE 6: Automatización de Tooling (The Catalyst)
+**Objetivo:** Crear herramientas internas que aceleren el ciclo de diseño a producción.
+
+> ⚠️ **ESTADO: DEUDA TÉCNICA**
+> La implementación del HTML Ingestor y la unificación del laboratorio (`labdev` -> `loopdev/apps/lab`) se posponen para priorizar la infraestructura de Layouts v1.
+
+### 6.1 HTML Ingestor
+- [ ] **Scoping:** Definir la arquitectura del módulo `mod-html-ingestor`.
+- [ ] **Core Logic:** Implementar el parser de HTML a React con `cheerio`.
+- [ ] **UI:** Crear la interfaz en Marketing Studio para la subida de archivos.
+- [ ] **CI/CD:** Generar PRs automáticos con los componentes convertidos.

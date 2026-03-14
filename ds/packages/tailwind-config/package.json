@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "dependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
+    "tailwind-scrollbar-hide": "^2.0.0"
+  },
   "scripts": {
     "dev": "echo 'No dev server'",
     "lint": "eslint . || echo 'No lint config'",

@@ -9,10 +9,12 @@
     "typecheck": "turbo typecheck",
     "clean": "turbo clean && rimraf node_modules .turbo ds/node_modules apps/**/node_modules modules/**/node_modules",
     "ds:dev": "pnpm --filter @loopdev/ui dev",
-    "ds:build": "pnpm --filter @loopdev/ui build"
+    "ds:build": "pnpm --filter @loopdev/ui build",
+    "validate:tokens": "node scripts/validate-tokens-sync.js"
   },
   "devDependencies": {
     "@types/node": "^25.0.3",
+    "chalk": "4",
     "rimraf": "^6.0.0",
     "turbo": "^2.0.0",
     "typescript": "^5.5.0"

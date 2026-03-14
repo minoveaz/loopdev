@@ -1,4 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+'use client';
+
+'use client';
+
+import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
 import { useTenant } from './tenant-provider';
 import { TENANT_DATA } from '../data/tenants';
 

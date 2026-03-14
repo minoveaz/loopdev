@@ -1,5 +1,5 @@
 import React from 'react';
-import { IllustrationBase, strokeWidth, strokeLinecap, strokeLinejoin } from '../Base';
+import { IllustrationBase, strokeWidth, strokeLinecap, strokeLinejoin } from '../../../atoms';
 
 export const VaultIllustration: React.FC = () => (
   <IllustrationBase>

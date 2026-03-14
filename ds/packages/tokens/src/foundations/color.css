@@ -1,23 +1,15 @@
 :root {
   /* --- Primitivos: Blue (Primary: #135BEC) --- */
-  --lpd-color-blue-50: #eff6ff;
-  --lpd-color-blue-100: #dbeafe;
-  --lpd-color-blue-200: #bfdbfe;
-  --lpd-color-blue-300: #93c5fd;
-  --lpd-color-blue-400: #60a5fa;
-  --lpd-color-blue-500: #3b82f6;
   --lpd-color-blue-600: #135BEC; /* Designer Primary */
+  --lpd-color-blue-600-rgb: 19 91 236;
   --lpd-color-blue-700: #0e4ac4;
   --lpd-color-blue-800: #0b46be;
   --lpd-color-blue-900: #1e3a8a;
   --lpd-color-blue-950: #172554;
 
   /* --- Primitivos: Energy (Yellow: #FFD025) --- */
-  --lpd-color-yellow-50: #fffbeb;
-  --lpd-color-yellow-100: #fef3c7;
-  --lpd-color-yellow-200: #fde68a;
-  --lpd-color-yellow-300: #fcd34d;
   --lpd-color-yellow-400: #FFD025; /* Designer Energy */
+  --lpd-color-yellow-400-rgb: 255 208 37;
   --lpd-color-yellow-500: #f59e0b;
   --lpd-color-yellow-600: #d97706;
   --lpd-color-yellow-700: #b45309;
@@ -43,7 +35,9 @@
   
   /* Brand */
   --lpd-color-brand-primary: var(--lpd-color-blue-600);
+  --lpd-color-brand-primary-rgb: var(--lpd-color-blue-600-rgb);
   --lpd-color-brand-secondary: var(--lpd-color-yellow-400);
+  --lpd-color-brand-secondary-rgb: var(--lpd-color-yellow-400-rgb);
 
   /* Surface */
   --lpd-color-bg-base: var(--lpd-color-white);

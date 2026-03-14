@@ -1,16 +1,39 @@
+/* === LOOPDEV UI: Import Official Tokens === */
+@import '../../../tokens/src/foundations/index.css';
+@import '../../../tokens/src/css/base.css';
+@import './fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --grid-line-color: rgba(15, 23, 42, 0.04);
-    --dot-color: rgba(15, 23, 42, 0.1);
+    --lpd-color-brand-primary-rgb: 19 91 236;
+    --grid-line-color: rgba(51, 65, 85, 0.08);
+    --dot-color: rgba(51, 65, 85, 0.15);
+    --lpd-color-border-technical: rgba(0, 0, 0, 0.05);
+    
+    /* Semantic Shell Colors (Light Mode - Industrial Upgrade) */
+    --lpd-shell-canvas: #f1f5f9; /* Slate 100 para profundidad */
+    --lpd-shell-surface: #ffffff; /* Blanco puro para tarjetas */
+    --lpd-color-bg-surface-elevated: #ffffff; 
+    --lpd-color-bg-primary-subtle: #e0eaff; /* Azul tenue sólido para Light Mode */
+    /* Typography: Now inherited from @loopdev/tokens */
   }
 
   .dark {
+    --lpd-color-brand-primary-rgb: 19 91 236;
     --grid-line-color: rgba(255, 255, 255, 0.04);
     --dot-color: rgba(255, 255, 255, 0.1);
+    --lpd-color-border-technical: rgba(255, 255, 255, 0.05);
+    
+    /* Semantic Shell Colors (Dark Mode - Lab Standard) */
+    --lpd-shell-canvas: #0f1115;
+    --lpd-shell-surface: #181b21;
+    --lpd-color-bg-surface-elevated: #181b21; /* Gris carbón para tarjetas */
+    --lpd-color-bg-primary-subtle: rgba(19, 91, 236, 0.15); /* Azul profundo tenue para Dark Mode */
+    
     color: var(--lpd-color-text-base);
   }
 
@@ -25,11 +48,29 @@
   }
 
   .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
 
   .bg-grid-40 { 
     background-size: 40px 40px; 
+    background-image: linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px); 
+  }
+
+  .bg-grid-20 { 
+    background-size: 20px 20px; 
     background-image: linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px); 
   }
 
@@ -46,11 +87,67 @@
     50% { opacity: 0.4; }
   }
 
+  @keyframes badge-pulse-industrial {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(0.9); }
+  }
+
   .animate-shimmer {
     animation: shimmer 2s infinite linear;
   }
 
   .animate-pulse-soft {
     animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-badge-pulse {
+    animation: badge-pulse-industrial 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* === Technical Grids & Patterns === */
+  .bg-dot-grid {
+    background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .bg-blueprint-grid {
+    background-size: 20px 20px;
+    background-image: linear-gradient(to right, rgba(19, 91, 236, 0.1) 1px, transparent 1px), 
+                      linear-gradient(to bottom, rgba(19, 91, 236, 0.1) 1px, transparent 1px);
+  }
+
+  .glass-panel-industrial {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--lpd-color-border-subtle);
+  }
+
+  /* === Technical Scrollbar Standard === */
+  .custom-scrollbar {
+    --scrollbar-bg: rgba(19, 91, 236, 0.05);
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-bg) transparent;
+  }
+
+  .custom-scrollbar:hover {
+    --scrollbar-bg: rgba(19, 91, 236, 0.3);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-bg);
+    border-radius: 20px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--lpd-color-brand-primary) !important;
   }
 }

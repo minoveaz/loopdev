@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import QueryProvider from "@/providers/QueryProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { DynamicThemeProvider } from "@loopdev/ui";
 
 // Importamos los estilos globales de nuestro Design System
 import "@loopdev/ui/styles/globals.css";
@@ -23,10 +25,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+      </head>
       <body className={`${inter.variable} antialiased font-sans`}>
         <QueryProvider>
-          {children}
+          <AuthProvider>
+                      <DynamicThemeProvider config={{
+                        fontFamily: 'var(--font-inter)',
+                        colors: {
+                          primary: '#135bec',
+                          energy: '#FFD025',
+                        }
+                      }}>              {children}
+            </DynamicThemeProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

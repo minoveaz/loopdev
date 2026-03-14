@@ -29,13 +29,19 @@ Debes auditar basándote exclusivamente en:
 - [ ] **Resiliencia:** ¿El componente sobrevive a los tests de estrés (textos masivos, contenedores micro)?
 
 ### 3. Storybook & Certificación
+- [ ] **The QA Matrix:** ¿Es visible el componente `QualityShield` en las historias? ¿Muestra todos los gates en verde (`Unit`, `A11y`, `Visual`)?
 - [ ] **Regla de Espejo:** ¿Cada caso de estrés técnico tiene su historia visual `Stress` en Storybook?
-- [ ] **Validación de Contraste (CRÍTICO):** ¿El texto es legible en el modo más oscuro? 
-    - *Prohibición:* No usar grises intermedios (slate-200 a 500) para textos sobre fondos de superficie oscuros.
-    - *Obligación:* Usar exclusivamente tokens de alto brillo (`slate-50`, `white` o `text-text-main`).
+- [ ] **Validación de Contraste (CRÍTICO):** ¿El reporte de Axe-core en Storybook muestra 0 violaciones? 
+- [ ] **Visual Registry:** ¿Se ha revisado y aceptado el baseline en **Chromatic**?
+- [ ] **Flow Shield:** ¿El componente ha superado el smoke test de **Playwright** en su aplicación de destino?
 - [ ] **Sello de Calidad:** ¿Aparece el `CertificationStamp` arriba a la izquierda con el estado real de madurez?
-    - *Nota:* La IA solo puede proponer estatus `beta`. El estatus `certified` solo es válido tras la aprobación humana explícita.
 - [ ] **Modos de Color:** ¿Es 100% funcional y legible en Light y Dark Mode?
+
+### 4. Layouts & Chasis (v1.1)
+- [ ] **Topmost Priority:** ¿La tecla Escape y el Backdrop cierran solo el panel superior activo (Inspector > Nav)?
+- [ ] **Scroll Lock:** ¿Se bloquea el scroll del contenido principal cuando hay un panel abierto en modo overlay?
+- [ ] **Determinismo:** ¿Los anchos y visibilidad dependen de estados derivados claros (`navMode`) y no de flags crudos?
+- [ ] **Interacción de Capas:** ¿El `overlaySlot` permite interactuar con su contenido sin bloqueos del wrapper?
 
 ---
 

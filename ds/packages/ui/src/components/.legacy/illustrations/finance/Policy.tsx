@@ -1,5 +1,5 @@
 import React from 'react';
-import { IllustrationBase, strokeWidth } from '../Base';
+import { IllustrationBase, strokeWidth } from '../../../atoms';
 
 export const PolicyIllustration: React.FC = () => (
   <IllustrationBase>

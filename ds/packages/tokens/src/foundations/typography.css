@@ -4,6 +4,7 @@
   --lpd-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Font Sizes */
+  --lpd-font-size-nano: 0.5625rem; /* 9px - Industrial density */
   --lpd-font-size-xs: 0.75rem;     /* 12px */
   --lpd-font-size-sm: 0.875rem;    /* 14px */
   --lpd-font-size-base: 1rem;      /* 16px */

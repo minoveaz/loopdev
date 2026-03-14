@@ -23,7 +23,7 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
     - **Contraste Extremo (NUEVO):** Validación de legibilidad sobre el fondo más oscuro y más claro permitido.
   - **Multitenancy:** Adaptabilidad a 100+ clientes (Tokens dinámicos).
 
-- **Blueprint Validated:** Diseño aprobado visualmente en `mockv2`.
+- **Blueprint Validated:** Diseño aprobado visualmente en `labdev`.
 - **Session Entry:** Registro de inicio de tarea en `ENGINEERING_LOG.md`.
 
 ---
@@ -44,6 +44,9 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
 ---
 
 ## 🗄️ Fase 4: Persistencia & Certificación (DoD)
+
+> ⚠️ **REGLA DE ORO:** El sello `LOOPDEV.LAB` (`CertificationStamp`) y el `InfraStamp` solo pueden ser inyectados en el código de producción **tras el cierre exitoso de la Fase 3 (Auditoría)** y la corrección de todos sus hallazgos. Cualquier componente con sellos pero sin auditoría registrada será rechazado automáticamente.
+
 - [ ] **Registry Sync:** Registro en `COMPONENT_REGISTRY.json`.
 - [ ] **Seal Applied:** Sello `Loopdev.lab` en Storybook arriba a la izquierda.
 - [ ] **Audit Log Updated:** Registro del hito en `ENGINEERING_LOG.md`.

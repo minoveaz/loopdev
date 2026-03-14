@@ -1,5 +1,5 @@
 import React from 'react';
-import { IllustrationBase } from '../Base';
+import { IllustrationBase } from '../../../atoms';
 
 export const BoardingPassIllustration: React.FC = () => (
   <IllustrationBase>

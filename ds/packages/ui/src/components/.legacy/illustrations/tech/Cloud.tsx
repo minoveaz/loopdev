@@ -1,5 +1,5 @@
 import React from 'react';
-import { IllustrationBase, strokeWidth, strokeLinejoin } from '../Base';
+import { IllustrationBase, strokeWidth, strokeLinejoin } from '../../../atoms';
 
 export const CloudIllustration: React.FC = () => (
   <IllustrationBase>
