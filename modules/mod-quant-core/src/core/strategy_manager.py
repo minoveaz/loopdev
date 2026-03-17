@@ -3,6 +3,8 @@ from loguru import logger
 from typing import Dict, List
 from supabase import create_client, Client
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 from .exchange_connector import AsyncExchangeConnector
 from ..strategies.filters import MarketRegimeFilter
 
@@ -12,8 +14,20 @@ class StrategyManager:
     Responsible for syncing bots from DB and managing execution loops.
     """
     def __init__(self):
+        # Load .env from the module root directory
+        env_path = Path(__file__).parent.parent.parent / ".env"
+        load_dotenv(dotenv_path=env_path)
+        
         self.supabase_url = os.getenv("SUPABASE_URL")
         self.supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+        
+        logger.debug(f"SUPABASE_URL: {self.supabase_url}")
+        logger.debug(f"SUPABASE_SERVICE_ROLE_KEY: {self.supabase_key[:50] if self.supabase_key else 'Not found'}...")
+        
+        if not self.supabase_url or not self.supabase_key:
+            logger.error("Missing Supabase credentials! Check your .env file.")
+            raise ValueError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required")
+            
         self.db: Client = create_client(self.supabase_url, self.supabase_key)
         self.active_bots: Dict[str, asyncio.Task] = {}
         self.is_running = False

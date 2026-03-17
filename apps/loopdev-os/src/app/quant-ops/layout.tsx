@@ -19,7 +19,8 @@ import {
   Divider,
   LayoutProvider,
   TenantProvider,
-  BlueprintBackground
+  BlueprintBackground,
+  ToastViewport
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -64,7 +65,7 @@ export default function QuantOpsLayout({ children }: { children: React.ReactNode
   const accessMap: Record<string, 'enabled' | 'disabled' | 'coming-soon'> = {
     'overview': 'enabled',
     'bot-fleet': 'enabled',
-    'strategies': 'coming-soon',
+    'strategies': 'enabled',
     'terminal': 'enabled',
     'history': 'coming-soon',
     'risk-control': 'enabled',
@@ -152,6 +153,7 @@ export default function QuantOpsLayout({ children }: { children: React.ReactNode
       <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
       <TenantProvider tenant="loopdev">
         <LayoutProvider>
+          <ToastViewport activeTenantId="loopdev" />
           {children}
         </LayoutProvider>
       </TenantProvider>

@@ -32,6 +32,8 @@ export * from './utilities/ActivityFeed';
 
 export * from './utilities/SystemNoticeRail';
 
+export * from './utilities/TechnicalDialog';
+
 
 export * from './inspector/UnifiedInspector';
 

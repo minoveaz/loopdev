@@ -117,3 +117,6 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
     </div>
   );
 };
+
+export { toast } from './toastStore';
+export * from './components';

@@ -48,7 +48,7 @@ class AsyncExchangeConnector:
             return await self.exchange.fetch_balance()
         except Exception as e:
             logger.error(f"Error fetching balance: {e}")
-            return {}
+            return {"error": str(e)}
 
     async def create_order(self, symbol: str, type: str, side: str, amount: float, price: float = None) -> Dict[str, Any]:
         """Execute an order on the exchange."""

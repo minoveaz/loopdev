@@ -49,6 +49,9 @@ export * from './navigation/NavGroup';
 export * from './navigation/NavSidebarItem';
 export * from './navigation/IndustrialBreadcrumbs';
 
+// trading
+export * from './trading';
+
 // feedback
 export * from './feedback/Skeleton';
 export * from './feedback/EmptyState';
