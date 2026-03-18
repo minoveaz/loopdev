@@ -52,3 +52,25 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - **MAJOR (X.0.0)**: Breaking changes en API o arquitectura
 - **MINOR (0.X.0)**: Nuevas features sin breaking changes
 - **PATCH (0.0.X)**: Bug fixes
+
+## [1.1.0] - 2026-03-18
+
+### Added
+- **RSI Mean Reversion Pro (rsi-mean-rev-v1)** - New scalping strategy
+  - 70-75% expected win rate
+  - Mean reversion entry logic (RSI < 30 / > 70)
+  - SMA50 trend confirmation
+  - ATR-based dynamic risk management
+  - Supports both LONG and SHORT positions
+  - Timeframe: 5m, 15m (intraday scalping)
+- Backtest validation script for strategy testing
+- Quick start guide for RSI Mean Reversion setup
+
+### Improved
+- Strategy architecture now supports multiple concurrent strategies
+- Enhanced test coverage with standalone backtest engine
+- Better documentation for strategy development
+
+### Fixed
+- [No new fixes in this release]
+
