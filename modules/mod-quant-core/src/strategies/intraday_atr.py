@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from typing import Dict, Any, Optional
 from .base import BaseStrategy
 
@@ -6,49 +7,84 @@ class IntradayATRStrategy(BaseStrategy):
     """
     Port of the Legacy 2025 Bot Logic.
     Type: Mean Reversion / Breakout
-    Indicators: SMA(20), BB(20, 2.0), ATR(14)
+    Indicators: sma20, bb_upper, bb_lower, atr
     Exit: Dynamic TP based on 1.5x ATR
+    
+    FIXED (2026-03-18):
+    - ATR now uses Wilder's True Range (includes close-to-close gaps)
+    - ATR uses EMA instead of SMA for faster reaction to volatility changes
     """
 
     def analyze(self, df: pd.DataFrame) -> pd.DataFrame:
-        # 1. Indicators Calculation
-        df['SMA20'] = df['close'].rolling(window=20).mean()
+        # 1. Indicators Calculation (Lowercase convention)
+        df['sma20'] = df['close'].rolling(window=20).mean()
         df['std'] = df['close'].rolling(window=20).std()
-        df['BB_upper'] = df['SMA20'] + 2 * df['std']
-        df['BB_lower'] = df['SMA20'] - 2 * df['std']
+        df['bb_upper'] = df['sma20'] + 2 * df['std']
+        df['bb_lower'] = df['sma20'] - 2 * df['std']
         
-        # ATR Calculation (Manual implementation matching legacy code)
-        df['tr'] = df['high'] - df['low']
-        # Legacy code calculated ATR as simple rolling mean of High-Low range
-        # df['ATR'] = df['high'] - df['low'] -> df['ATR'].rolling(14).mean()
-        # We stick to the legacy logic strictly for V1
-        df['ATR'] = df['tr'].rolling(window=14).mean()
+        # ATR Calculation (Wilder's True Range - FIXED)
+        # TR = MAX(High-Low, ABS(High-PrevClose), ABS(Low-PrevClose))
+        df['tr'] = np.maximum(
+            df['high'] - df['low'],
+            np.maximum(
+                np.abs(df['high'] - df['close'].shift()),
+                np.abs(df['low'] - df['close'].shift())
+            )
+        )
+        # Use EMA instead of SMA for faster volatility reaction
+        df['atr'] = df['tr'].ewm(span=14, adjust=False).mean()
         
         return df
 
     def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
-        """
-        Entry Logic:
-        - LONG if Price crosses ABOVE SMA20
-        - SHORT if Price crosses BELOW SMA20
-        """
         # Ensure we have enough data
-        if pd.isna(row['SMA20']) or pd.isna(previous_row['SMA20']):
+        if pd.isna(row.get('sma20')) or pd.isna(previous_row.get('sma20')):
             return None
-
-        price = row['close']
-        prev_price = previous_row['close']
-        sma = row['SMA20']
-        prev_sma = previous_row['SMA20']
+        
+        # FIXED (2026-03-18): Validate all inputs for NaN/Inf
+        price = float(row['close'])
+        if pd.isna(price) or np.isinf(price) or price <= 0:
+            return None
+        
+        prev_price = float(previous_row['close'])
+        if pd.isna(prev_price) or np.isinf(prev_price) or prev_price <= 0:
+            return None
+        
+        sma = float(row['sma20'])
+        prev_sma = float(previous_row['sma20'])
+        if pd.isna(sma) or pd.isna(prev_sma):
+            return None
+        
+        atr = float(row.get('atr', 0))
+        if pd.isna(atr) or atr <= 0:
+            return None  # ATR not ready yet
 
         # Crossover Logic
         cross_above = prev_price < prev_sma and price > sma
         cross_below = prev_price > prev_sma and price < sma
 
         if cross_above:
+            # FIXED (2026-03-18): Add volatility filters to avoid false signals
+            # Filter 1: Crossover must be significant (>0.5x ATR)
+            crossover_magnitude = abs(price - sma) / atr if atr > 0 else 0
+            if crossover_magnitude < 0.5:
+                return None  # Crossover too small, likely noise
+            
+            # Filter 2: Volatility must be reasonable (ATR > 0.5% of price)
+            if atr < price * 0.005:
+                return None  # Market too quiet, ignore signal
+            
             return {"side": "buy", "reason": "SMA20_CROSS_UP"}
         
         if cross_below:
+            # Same filters for short signals
+            crossover_magnitude = abs(price - sma) / atr if atr > 0 else 0
+            if crossover_magnitude < 0.5:
+                return None
+            
+            if atr < price * 0.005:
+                return None
+            
             return {"side": "sell", "reason": "SMA20_CROSS_DOWN"}
 
         return None
@@ -57,11 +93,34 @@ class IntradayATRStrategy(BaseStrategy):
         """
         Legacy Exit Logic:
         TP = Entry + (1.5 * ATR) for Buy
-        TP = Entry - (1.5 * ATR) for Sell
+        SL = Entry - (1 * ATR) for Buy
+        
+        FIXED (2026-03-18): Validate that exit prices are realistic
         """
         multiplier = 1.5
         
-        if side == 'buy':
-            return entry_price + (multiplier * atr)
+        # Validate inputs
+        if entry_price <= 0 or pd.isna(entry_price):
+            return 0.0
+        
+        # Use ATR if valid, otherwise fallback to percentage
+        if not pd.isna(atr) and atr > 0:
+            if side == 'buy':
+                tp = entry_price + (multiplier * atr)
+                # Sanity check: TP must be > entry price
+                if tp <= entry_price:
+                    tp = entry_price * 1.02  # Fallback: minimum 2%
+                return tp
+            else:
+                tp = entry_price - (multiplier * atr)
+                # Sanity check: TP must be < entry price
+                if tp >= entry_price:
+                    tp = entry_price * 0.98  # Fallback: minimum 2% down
+                return tp
         else:
-            return entry_price - (multiplier * atr)
+            # Fallback: use fixed percentage if ATR unavailable
+            if side == 'buy':
+                return entry_price * 1.025  # 2.5% TP
+            else:
+                return entry_price * 0.975  # 2.5% down
+
