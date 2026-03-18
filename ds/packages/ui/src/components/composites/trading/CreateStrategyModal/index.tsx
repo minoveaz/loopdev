@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CreateStrategyModalProps, StrategyConfig } from './types';
+import { CreateStrategyModalProps, StrategyConfig, StrategyDefinition } from './types';
 import { 
   TechnicalSurface, 
   LpdText, 
@@ -10,14 +10,14 @@ import {
   Button, 
   IconButton, 
   Divider,
-  Icon
+  Icon,
+  Badge
 } from '../../../atoms';
 import { cn } from '../../../../helpers/cn';
 
 /**
  * @component CreateStrategyModal
- * @description Industrial-grade multi-step workflow for creating trading strategies.
- * Promoted from application local component to Design System.
+ * @description Dynamic Strategy Factory. Generates configuration forms based on the selected core registry.
  */
 export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
   isOpen,
@@ -25,38 +25,35 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
   onCreate,
   exchanges,
   availableAssets,
+  availableCores = [],
   isLoading = false
 }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<StrategyConfig>({
     name: '',
+    coreId: availableCores[0]?.id || 'atr-breakout-v1',
     description: '',
     exchangeId: exchanges[0]?.id || '',
     mode: 'paper',
     status: 'draft',
     pairs: [],
-    riskProfile: {
-      sizePerTrade: 100,
-      maxPositions: 5,
-      maxExposure: 1000,
-      stopLoss: 2.0,
-      takeProfit: 5.0,
-      trailingStop: 0.0,
-      cooldownMinutes: 60,
-      dailyLossLimit: 5.0
-    }
+    parameters: {},
+    stopLoss: 2.0,
+    takeProfit: 5.0
   });
 
-  // Reset form when opening/closing
+  const selectedCore = availableCores.find(c => c.id === formData.coreId);
+
+  // Initialize parameters when core changes
   useEffect(() => {
-    if (isOpen) {
-      setStep(1);
-      setFormData(prev => ({
-        ...prev,
-        exchangeId: exchanges[0]?.id || ''
-      }));
+    if (selectedCore) {
+      const initialParams: Record<string, any> = {};
+      selectedCore.parameters.forEach(p => {
+        initialParams[p.id] = p.default;
+      });
+      setFormData(prev => ({ ...prev, parameters: initialParams }));
     }
-  }, [isOpen, exchanges]);
+  }, [formData.coreId]);
 
   if (!isOpen) return null;
 
@@ -72,22 +69,13 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
     }));
   };
 
-  const stepTitles = [
-    'Strategy_Identity',
-    'Asset_Selection',
-    'Risk_Parameters',
-    'Final_Audit'
-  ];
+  const stepTitles = ['Protocol_Selection', 'Asset_Targeting', 'Logic_Tuning', 'Final_Validation'];
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
       
-      <TechnicalSurface 
-        variant="surface" 
-        depth="overlay" 
-        className="relative z-10 w-full max-w-2xl h-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-300"
-      >
+      <TechnicalSurface variant="surface" depth="overlay" className="relative z-10 w-full max-w-2xl h-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-300">
         <div className="flex flex-col h-full w-full">
           {/* HEADER */}
           <header className="p-6 border-b border-border-technical/30 flex items-center justify-between bg-background-subtle/30 shrink-0">
@@ -97,18 +85,14 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
               </div>
               <div>
                 <Heading size="xs" weight="bold" className="uppercase tracking-tight italic">{stepTitles[step-1]}</Heading>
-                <LpdText size="nano" className="text-text-muted uppercase tracking-widest font-mono opacity-60">Step_0{step} // Protocol_Builder</LpdText>
+                <LpdText size="nano" className="text-text-muted uppercase tracking-widest font-mono opacity-60">Quant_OS // Strategy_Factory</LpdText>
               </div>
             </div>
             <IconButton icon="close" size="sm" onClick={onClose} />
           </header>
 
-          {/* PROGRESS BAR */}
           <div className="w-full h-1 bg-background-subtle">
-            <div 
-              className="h-full bg-primary transition-all duration-500 ease-out" 
-              style={{ width: `${(step / 4) * 100}%` }}
-            />
+            <div className="h-full bg-primary transition-all duration-500" style={{ width: `${(step / 4) * 100}%` }} />
           </div>
 
           {/* CONTENT */}
@@ -116,70 +100,46 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
             
             {step === 1 && (
               <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <Input 
-                  label="Strategy Name" 
-                  placeholder="e.g. BTC_Volatility_Seeker" 
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  required
-                />
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">Exchange_Nexus</label>
-                  <select 
-                    className="w-full h-10 px-3 rounded-lg bg-white dark:bg-[#161E33] border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all"
-                    value={formData.exchangeId}
-                    onChange={(e) => setFormData({...formData, exchangeId: e.target.value})}
-                  >
-                    {exchanges.map(ex => (
-                      <option key={ex.id} value={ex.id}>{ex.name} ({ex.provider})</option>
-                    ))}
-                  </select>
-                </div>
+                <Input label="Strategy Friendly Name" placeholder="e.g. My_Alpha_Protocol" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+                
                 <div className="flex flex-col gap-3">
-                   <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">Operational_Mode</label>
-                   <div className="grid grid-cols-2 gap-3">
-                      <button 
-                        onClick={() => setFormData({...formData, mode: 'paper'})}
+                  <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">Logic_Engine_Core</label>
+                  <div className="grid grid-cols-1 gap-3">
+                    {availableCores.map(core => (
+                      <button
+                        key={core.id}
+                        onClick={() => setFormData({...formData, coreId: core.id})}
                         className={cn(
-                          "p-4 rounded-xl border flex flex-col items-center gap-1 transition-all",
-                          formData.mode === 'paper' ? "bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10" : "border-border-technical/30 text-text-muted hover:border-border-technical"
+                          "p-4 rounded-xl border flex flex-col items-start gap-2 transition-all text-left",
+                          formData.coreId === core.id ? "bg-primary/5 border-primary shadow-lg" : "border-border-technical/30 hover:border-border-technical"
                         )}
                       >
-                        <span className="material-symbols-outlined font-bold">science</span>
-                        <span className="text-[10px] font-black uppercase tracking-widest">Paper_Trading</span>
+                        <div className="flex items-center justify-between w-full">
+                          <Heading size="xs" weight="bold" className={formData.coreId === core.id ? "text-primary" : "text-text-main"}>{core.name}</Heading>
+                          <Badge variant="outline" size="sm">{core.category}</Badge>
+                        </div>
+                        <LpdText size="xs" className="text-text-muted line-clamp-2">{core.description}</LpdText>
                       </button>
-                      <button 
-                        onClick={() => setFormData({...formData, mode: 'live'})}
-                        className={cn(
-                          "p-4 rounded-xl border flex flex-col items-center gap-1 transition-all",
-                          formData.mode === 'live' ? "bg-amber-500/5 border-amber-500 text-amber-500 shadow-lg shadow-amber-500/10" : "border-border-technical/30 text-text-muted hover:border-border-technical"
-                        )}
-                      >
-                        <span className="material-symbols-outlined font-bold">bolt</span>
-                        <span className="text-[10px] font-black uppercase tracking-widest">Live_Trading</span>
-                      </button>
-                   </div>
+                    ))}
+                  </div>
                 </div>
+
+                {selectedCore && (
+                  <div className="bg-background-subtle rounded-xl p-4 border border-border-technical/20">
+                    <LpdText size="nano" weight="black" className="uppercase tracking-widest text-primary mb-2 block">Technical_Summary</LpdText>
+                    <LpdText size="xs" className="text-text-main italic leading-relaxed">{selectedCore.technical_summary}</LpdText>
+                  </div>
+                )}
               </div>
             )}
 
             {step === 2 && (
               <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <LpdText size="xs" className="text-text-muted italic px-1">// Select certified assets for automated monitoring.</LpdText>
                 <div className="grid grid-cols-2 gap-3">
                   {availableAssets.map(asset => (
-                    <button
-                      key={asset.symbol}
-                      onClick={() => togglePair(asset.symbol)}
-                      className={cn(
-                        "p-3 rounded-xl border flex items-center justify-between transition-all",
-                        formData.pairs.includes(asset.symbol) ? "bg-primary/10 border-primary text-primary" : "border-border-technical/30 text-text-muted hover:border-border-technical"
-                      )}
-                    >
+                    <button key={asset.symbol} onClick={() => togglePair(asset.symbol)} className={cn("p-3 rounded-xl border flex items-center justify-between transition-all", formData.pairs.includes(asset.symbol) ? "bg-primary/10 border-primary text-primary" : "border-border-technical/30 text-text-muted")}>
                       <span className="text-xs font-bold font-mono">{asset.symbol}</span>
-                      <span className="material-symbols-outlined text-sm">
-                        {formData.pairs.includes(asset.symbol) ? 'check_circle' : 'add_circle'}
-                      </span>
+                      <span className="material-symbols-outlined text-sm">{formData.pairs.includes(asset.symbol) ? 'check_circle' : 'add_circle'}</span>
                     </button>
                   ))}
                 </div>
@@ -188,40 +148,28 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
 
             {step === 3 && (
               <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <div className="grid grid-cols-2 gap-6">
-                  <Input 
-                    label="Size per Trade ($)" 
-                    type="number"
-                    value={formData.riskProfile.sizePerTrade}
-                    onChange={(e) => setFormData({...formData, riskProfile: {...formData.riskProfile, sizePerTrade: Number(e.target.value)}})}
-                  />
-                  <Input 
-                    label="Max Positions" 
-                    type="number"
-                    value={formData.riskProfile.maxPositions}
-                    onChange={(e) => setFormData({...formData, riskProfile: {...formData.riskProfile, maxPositions: Number(e.target.value)}})}
-                  />
-                  <Input 
-                    label="Stop Loss (%)" 
-                    type="number"
-                    step="0.1"
-                    value={formData.riskProfile.stopLoss}
-                    onChange={(e) => setFormData({...formData, riskProfile: {...formData.riskProfile, stopLoss: Number(e.target.value)}})}
-                  />
-                  <Input 
-                    label="Take Profit (%)" 
-                    type="number"
-                    step="0.1"
-                    value={formData.riskProfile.takeProfit}
-                    onChange={(e) => setFormData({...formData, riskProfile: {...formData.riskProfile, takeProfit: Number(e.target.value)}})}
-                  />
+                <Heading size="xs" weight="bold" className="uppercase px-1">Engine_Parameters</Heading>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {selectedCore?.parameters.map(param => (
+                    <div key={param.id} className="flex flex-col gap-1.5">
+                      <Input 
+                        label={param.label} 
+                        type="number" 
+                        value={formData.parameters[param.id]} 
+                        onChange={(e) => setFormData({
+                          ...formData, 
+                          parameters: { ...formData.parameters, [param.id]: Number(e.target.value) }
+                        })}
+                        helperText={param.description}
+                      />
+                    </div>
+                  ))}
                 </div>
-                <Divider thickness="technical" className="opacity-50" />
-                <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 flex gap-3">
-                  <span className="material-symbols-outlined text-amber-500 text-sm">info</span>
-                  <LpdText size="xs" className="text-amber-600/80 leading-relaxed font-medium">
-                    Parameters will be applied to every entry signal. Manual overrides are available in the Risk Control module.
-                  </LpdText>
+                <Divider />
+                <Heading size="xs" weight="bold" className="uppercase px-1">Global_Risk_Guard</Heading>
+                <div className="grid grid-cols-2 gap-6">
+                  <Input label="Hard Stop Loss (%)" type="number" step="0.1" value={formData.stopLoss} onChange={(e) => setFormData({...formData, stopLoss: Number(e.target.value)})} />
+                  <Input label="Take Profit Threshold (%)" type="number" step="0.1" value={formData.takeProfit} onChange={(e) => setFormData({...formData, takeProfit: Number(e.target.value)})} />
                 </div>
               </div>
             )}
@@ -229,57 +177,25 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
             {step === 4 && (
               <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="bg-background-subtle rounded-2xl p-6 border border-border-technical/30 flex flex-col gap-4">
-                  <div className="flex justify-between items-center">
-                    <LpdText size="xs" weight="bold" className="uppercase tracking-widest text-text-muted">Protocol_Name</LpdText>
-                    <LpdText size="xs" weight="black" className="text-text-main uppercase">{formData.name}</LpdText>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <LpdText size="xs" weight="bold" className="uppercase tracking-widest text-text-muted">Active_Assets</LpdText>
-                    <LpdText size="xs" weight="black" className="text-primary font-mono">{formData.pairs.join(', ') || 'NONE'}</LpdText>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <LpdText size="xs" weight="bold" className="uppercase tracking-widest text-text-muted">Exposure_Limit</LpdText>
-                    <LpdText size="xs" weight="black" className="text-text-main">${formData.riskProfile.maxExposure}</LpdText>
-                  </div>
+                  <div className="flex justify-between items-center"><LpdText size="xs" weight="bold">Blueprint_Name</LpdText><LpdText size="xs" weight="black">{formData.name}</LpdText></div>
+                  <div className="flex justify-between items-center"><LpdText size="xs" weight="bold">Core_Engine</LpdText><LpdText size="xs" weight="black" className="text-primary">{selectedCore?.name}</LpdText></div>
+                  <div className="flex justify-between items-center"><LpdText size="xs" weight="bold">Target_Assets</LpdText><LpdText size="xs" weight="black" className="font-mono">{formData.pairs.join(', ')}</LpdText></div>
                 </div>
                 <div className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-3">
                   <span className="material-symbols-outlined text-emerald-500">verified_user</span>
-                  <LpdText size="xs" className="text-emerald-600 font-bold uppercase tracking-tight">Strategy_Verified_Ready_for_Deployment</LpdText>
+                  <LpdText size="xs" className="text-emerald-600 font-bold uppercase">Ready_for_Industrial_Deployment</LpdText>
                 </div>
               </div>
             )}
 
           </div>
 
-          {/* FOOTER */}
           <footer className="p-6 border-t border-border-technical/30 flex items-center justify-between bg-background-subtle/10 shrink-0">
-            <Button 
-              variant="outline" 
-              onClick={handleBack} 
-              disabled={step === 1}
-              startIcon="chevron_left"
-            >
-              Back
-            </Button>
-            
+            <Button variant="outline" onClick={handleBack} disabled={step === 1} startIcon="chevron_left">Back</Button>
             {step < 4 ? (
-              <Button 
-                variant="primary" 
-                onClick={handleNext}
-                disabled={step === 1 && !formData.name || step === 2 && formData.pairs.length === 0}
-                endIcon="chevron_right"
-              >
-                Next_Phase
-              </Button>
+              <Button variant="primary" onClick={handleNext} disabled={step === 1 && !formData.name || step === 2 && formData.pairs.length === 0} endIcon="chevron_right">Next_Phase</Button>
             ) : (
-              <Button 
-                variant="energy" 
-                onClick={() => onCreate(formData)}
-                isLoading={isLoading}
-                className="px-12"
-              >
-                Commit_Strategy
-              </Button>
+              <Button variant="energy" onClick={() => onCreate(formData)} isLoading={isLoading} className="px-12">Commit_Strategy</Button>
             )}
           </footer>
         </div>

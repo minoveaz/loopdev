@@ -35,6 +35,7 @@ export default function StrategiesPage() {
   
   const {
     strategies,
+    strategyRegistry,
     isLoading,
     createStrategy,
     updateStrategy,
@@ -52,19 +53,23 @@ export default function StrategiesPage() {
   };
 
   const handleSaveStrategy = async (config: StrategyConfig) => {
+    // Industrial Mapping: Adapt modal payload to DB schema
     const params = {
       name: config.name,
-      exchangeId: config.exchangeId,
+      exchangeId: config.exchangeId && config.exchangeId !== '' ? config.exchangeId : null,
       mode: config.mode,
       pairs: config.pairs,
-      sizePerTrade: config.riskProfile.sizePerTrade,
-      maxPositions: config.riskProfile.maxPositions,
-      maxExposure: config.riskProfile.maxExposure,
-      stopLoss: config.riskProfile.stopLoss,
-      takeProfit: config.riskProfile.takeProfit,
-      trailingStop: config.riskProfile.trailingStop,
-      cooldownMinutes: config.riskProfile.cooldownMinutes,
-      dailyLossLimit: config.riskProfile.dailyLossLimit,
+      core_id: config.coreId,
+      parameters: config.parameters || {},
+      // Standard Risk Guard (inherited from form or defaults)
+      sizePerTrade: config.parameters?.sizePerTrade || 100,
+      maxPositions: config.parameters?.maxPositions || 5,
+      maxExposure: config.parameters?.maxExposure || 1000,
+      stopLoss: config.stopLoss || 2.0,
+      takeProfit: config.takeProfit || 5.0,
+      trailingStop: config.parameters?.trailingStop || 0.0,
+      cooldownMinutes: config.parameters?.cooldownMinutes || 60,
+      dailyLossLimit: config.parameters?.dailyLossLimit || 5.0,
       description: config.description
     };
 
@@ -327,6 +332,7 @@ export default function StrategiesPage() {
         onCreate={handleSaveStrategy}
         exchanges={accounts.map(acc => ({ id: acc.id, name: acc.name, provider: acc.provider }))}
         availableAssets={assets}
+        availableCores={strategyRegistry}
         isLoading={isCreating}
       />
 

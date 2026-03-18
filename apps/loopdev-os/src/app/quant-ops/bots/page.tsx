@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LpdText, Heading, TechnicalSurface, Icon, BotCard, BotConfig, Skeleton, BotStatus, Button } from '@loopdev/ui';
+import { LpdText, Heading, TechnicalSurface, Icon, BotCard, BotConfig, Skeleton, BotStatus, Button, TechnicalDialog, toast } from '@loopdev/ui';
 import { DeployBotModal } from '../components/DeployBotModal';
 import { useBotFleet } from '@/hooks/trading/useBotFleet';
 
@@ -12,16 +12,51 @@ import { useBotFleet } from '@/hooks/trading/useBotFleet';
  */
 export default function BotFleetPage() {
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
-  const { bots, isLoading, deployBot, toggleStatus } = useBotFleet();
+  const [editingBot, setEditingBot] = useState<any>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; botId: string | null }>({ isOpen: false, botId: null });
+
+  const { bots, isLoading, deployBot, toggleStatus, updateBot, deleteBot } = useBotFleet();
 
   const handleToggleStatus = (id: string, current: BotStatus) => {
     const nextStatus: BotStatus = current === 'active' ? 'paused' : 'active';
     toggleStatus({ id, status: nextStatus });
   };
 
-  const handleDeploy = (newBotData: any) => {
+  const handleOpenDeploy = () => {
+    setEditingBot(null);
+    setIsDeployModalOpen(true);
+  };
+
+  const handleEdit = (id: string) => {
+    const bot = bots.find(b => b.id === id);
+    setEditingBot(bot);
+    setIsDeployModalOpen(true);
+  };
+
+  const handleDelete = (id: string) => {
+    setDeleteConfirmation({ isOpen: true, botId: id });
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteConfirmation.botId) {
+      deleteBot(deleteConfirmation.botId, {
+        onSuccess: () => {
+          setDeleteConfirmation({ isOpen: false, botId: null });
+          toast.show({
+            tenantId: 'loopdev',
+            title: 'Bot_Terminated',
+            description: 'The bot instance has been removed from the fleet.',
+            variant: 'info'
+          });
+        }
+      });
+    }
+  };
+
+  const handleSaveBot = (newBotData: any) => {
     const botPayload = {
       name: newBotData.name,
+      exchangeId: newBotData.exchangeId,
       pair: newBotData.pair,
       strategyId: newBotData.strategyId,
       baseInvestmentUsdt: newBotData.baseInvestmentUsdt,
@@ -35,7 +70,14 @@ export default function BotFleetPage() {
       useMarketRegimeFilter: newBotData.useMarketRegimeFilter
     };
     
-    deployBot(botPayload as any);
+    if (editingBot) {
+      updateBot({ id: editingBot.id, params: botPayload as any });
+    } else {
+      deployBot(botPayload as any);
+    }
+    
+    setIsDeployModalOpen(false);
+    setEditingBot(null);
   };
 
   if (isLoading) {
@@ -56,8 +98,9 @@ export default function BotFleetPage() {
       
       <DeployBotModal 
         isOpen={isDeployModalOpen}
-        onClose={() => setIsDeployModalOpen(false)}
-        onDeploy={handleDeploy}
+        onClose={() => { setIsDeployModalOpen(false); setEditingBot(null); }}
+        onDeploy={handleSaveBot}
+        initialData={editingBot}
       />
 
       {/* 1. STANDARDIZED HEADER */}
@@ -77,7 +120,7 @@ export default function BotFleetPage() {
 
         <Button 
           variant="energy" 
-          onClick={() => setIsDeployModalOpen(true)}
+          onClick={handleOpenDeploy}
           startIcon="add"
           className="px-8 shadow-xl shadow-amber-500/20"
         >
@@ -88,20 +131,33 @@ export default function BotFleetPage() {
       {/* 2. FLEET GRID */}
       {bots.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {bots.map((bot) => (
-            <BotCard 
-              key={bot.id} 
-              bot={bot} 
-              stats={{
-                totalProfitPct: 0,
-                totalProfitUsdt: 0,
-                winRate: 0,
-                uptime: '0h 0m'
-              }}
-              onToggleStatus={() => handleToggleStatus(bot.id, bot.status)}
-              onEdit={(id) => console.log('Edit bot', id)}
-            />
-          ))}
+          {bots.map((bot: any) => {
+            const isInPosition = bot.currentAction?.includes('In Position');
+
+            return (
+              <BotCard 
+                key={bot.id} 
+                bot={bot} 
+                liveState={{
+                  currentAction: bot.currentAction,
+                  logicSnapshot: bot.logicSnapshot,
+                  openPosition: isInPosition ? {
+                    entryPrice: bot.currentEntryPrice, 
+                    investedUsdt: bot.baseInvestmentUsdt,
+                    openedAt: bot.openedAt,
+                    quantity: 0,
+                    pnlPct: bot.currentPnlPct,
+                    pnlUsdt: bot.currentPnlUsdt,
+                    exitTargets: bot.exitTargets
+                  } : undefined
+                }}
+                stats={undefined} // Hide redundant PNL_TOTAL for now
+                onToggleStatus={() => handleToggleStatus(bot.id, bot.status)}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            );
+          })}
         </section>
       ) : (
         <section className="flex flex-col items-center justify-center p-24 border border-dashed border-border-technical/50 rounded-[2.5rem] bg-background-surface/50 backdrop-blur-sm">
@@ -112,14 +168,35 @@ export default function BotFleetPage() {
           <LpdText size="sm" className="text-text-muted text-center max-w-sm mb-8">
             Your fleet is currently offline. Start by deploying your first trading agent using a certified strategy logic.
           </LpdText>
-          <button 
-            onClick={() => setIsDeployModalOpen(true)}
-            className="bg-amber-500 text-white px-8 py-3 rounded-2xl font-bold uppercase text-[10px] tracking-widest hover:scale-105 transition-transform shadow-lg shadow-amber-500/20"
-          >
-            Deploy_Your_First_Bot
-          </button>
+          <Button variant="primary" className="px-12" onClick={handleOpenDeploy}>Deploy_Your_First_Bot</Button>
         </section>
       )}
+
+      {/* 5. DELETE CONFIRMATION DIALOG */}
+      <TechnicalDialog
+        isOpen={deleteConfirmation.isOpen}
+        onClose={() => setDeleteConfirmation({ isOpen: false, botId: null })}
+        title="Terminate_Bot_Instance"
+        description="Warning: Termination is permanent. This bot will stop all market monitoring and close its execution loop in the core engine."
+        variant="danger"
+        actions={
+          <>
+            <Button variant="ghost" onClick={() => setDeleteConfirmation({ isOpen: false, botId: null })}>
+              Cancel_Action
+            </Button>
+            <Button variant="danger" onClick={handleConfirmDelete}>
+              Terminate_Bot
+            </Button>
+          </>
+        }
+      >
+        <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3">
+          <span className="material-symbols-outlined text-rose-500">warning</span>
+          <LpdText size="xs" className="text-rose-600/80 leading-relaxed font-medium">
+            Confirming this action will purge the bot's configuration from the active fleet. Open positions linked to this bot might need manual intervention.
+          </LpdText>
+        </div>
+      </TechnicalDialog>
 
     </main>
   );

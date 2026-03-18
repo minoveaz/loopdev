@@ -7,15 +7,23 @@ import { Asset } from '@loopdev/ui';
 /**
  * @hook useAssets
  * @description Industrial hook for fetching certified trading assets from Supabase.
+ * Supports filtering by exchange provider.
  */
-export const useAssets = () => {
+export const useAssets = (provider?: string) => {
   return useQuery({
-    queryKey: ['trading', 'assets'],
+    queryKey: ['trading', 'assets', provider],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('quant_assets')
         .select('*')
-        .eq('is_active', true)
+        .eq('is_active', true);
+
+      if (provider) {
+        // Filter assets that support the selected provider
+        query = query.contains('providers', [provider.toLowerCase()]);
+      }
+
+      const { data, error } = await query
         .order('category', { ascending: true })
         .order('symbol', { ascending: true });
 
@@ -26,7 +34,6 @@ export const useAssets = () => {
       
       return data as Asset[];
     },
-    // Assets are stable, so we can keep them in cache for a long time
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: 1000 * 60 * 10, // 10 minutes
   });
 };

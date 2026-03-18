@@ -14,6 +14,7 @@ load_dotenv(dotenv_path=env_path)
 from .core.strategy_manager import StrategyManager
 from .core.exchange_connector import AsyncExchangeConnector
 from .core.backtest_engine import BacktestEngine
+from .core.strategy_registry import get_full_registry
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -72,6 +73,13 @@ async def health_check():
         "version": "0.0.1",
         "engine": "active"
     }
+
+@app.get("/strategies/registry")
+async def get_strategy_registry():
+    """
+    Returns the official catalog of trading protocols and their parameters.
+    """
+    return {"success": True, "registry": get_full_registry()}
 
 @app.post("/exchanges/test")
 async def test_exchange_connection(req: ExchangeTestRequest):

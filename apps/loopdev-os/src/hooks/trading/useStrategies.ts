@@ -116,7 +116,22 @@ export const useStrategies = () => {
     }
   });
 
-  // 2. Create Strategy Mutation
+  // 2. Fetch Strategy Registry (Cores) from Python Engine
+  const { data: registry = [] } = useQuery({
+    queryKey: ['trading', 'strategy-registry'],
+    queryFn: async () => {
+      try {
+        const response = await fetch('http://localhost:8000/strategies/registry');
+        const data = await response.json();
+        return data.success ? data.registry : [];
+      } catch (err) {
+        console.warn('Quant Core Engine not reachable for registry. Using fallback.');
+        return [];
+      }
+    }
+  });
+
+  // 3. Create Strategy Mutation
   const createStrategy = useMutation({
     mutationFn: async (params: StrategyParams) => {
       console.debug('[createStrategy] Creating strategy:', params.name);
@@ -287,6 +302,7 @@ export const useStrategies = () => {
 
   return {
     strategies,
+    strategyRegistry: registry,
     isLoading,
     error,
     createStrategy: createStrategy.mutate,
