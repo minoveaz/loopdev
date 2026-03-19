@@ -40,15 +40,19 @@ export const useBotFleet = () => {
           baseInvestmentUsdt: Number(raw.base_investment_usdt),
           status: raw.status,
           currentAction: raw.current_action,
+          currentAction: raw.current_action,
           currentPnlPct: Number(raw.current_pnl_pct || 0),
           currentPnlUsdt: Number(raw.current_pnl_usdt || 0),
           currentEntryPrice: Number(raw.current_entry_price || 0),
+          currentQuantity: Number(raw.current_quantity || 0),
+          macroSentiment: raw.macro_sentiment || 'neutral',
+          priceHistory: raw.price_history_1h || [],
           openedAt: raw.current_position_opened_at,
           logicSnapshot: raw.last_logic_snapshot,
-          // Map Exit Targets for the UI
-          exitTargets: (exitTargets && Object.keys(exitTargets).length > 0) ? {
-            slPrice: exitTargets.sl_price,
-            tpPrice: exitTargets.tp_price
+          exitTargets: raw.last_exit_targets ? {
+            slPrice: Number(raw.last_exit_targets.sl_price),
+            tpPrice: Number(raw.last_exit_targets.tp_price),
+            bePrice: Number(raw.last_exit_targets.be_price || 0)
           } : undefined,
           riskProfile: raw.risk_profile,
           useInitialRangeFilter: raw.use_initial_range_filter,

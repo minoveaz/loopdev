@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LpdText, Heading, TechnicalSurface, Icon, BotCard, BotConfig, Skeleton, BotStatus, Button, TechnicalDialog, toast } from '@loopdev/ui';
+import { LpdText, Heading, TechnicalSurface, Icon, BotCardIndustrial as BotCard, BotConfig, Skeleton, BotStatus, Button, TechnicalDialog, toast } from '@loopdev/ui';
 import { DeployBotModal } from '../components/DeployBotModal';
 import { useBotFleet } from '@/hooks/trading/useBotFleet';
 
@@ -137,17 +137,22 @@ export default function BotFleetPage() {
             return (
               <BotCard 
                 key={bot.id} 
-                bot={bot} 
+                bot={{
+                  ...bot,
+                  macroSentiment: bot.macroSentiment,
+                  priceHistory: bot.priceHistory
+                }} 
                 liveState={{
                   currentAction: bot.currentAction,
                   logicSnapshot: bot.logicSnapshot,
                   openPosition: isInPosition ? {
-                    entryPrice: bot.currentEntryPrice, 
-                    investedUsdt: bot.baseInvestmentUsdt,
+                    entryPrice: bot.currentEntryPrice || 0,
+                    investedUsdt: bot.baseInvestmentUsdt || 0,
+                    inventory: bot.currentQuantity || 0,
                     openedAt: bot.openedAt,
-                    quantity: 0,
-                    pnlPct: bot.currentPnlPct,
-                    pnlUsdt: bot.currentPnlUsdt,
+                    quantity: bot.currentQuantity || 0,
+                    pnlPct: bot.currentPnlPct || 0,
+                    pnlUsdt: bot.currentPnlUsdt || 0,
                     exitTargets: bot.exitTargets
                   } : undefined
                 }}

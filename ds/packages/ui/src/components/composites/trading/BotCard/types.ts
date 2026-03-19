@@ -2,11 +2,14 @@ import { BotConfig, BotStatus } from '@loopdev/contracts';
 
 /**
  * @interface BotCardProps
- * @description Contract for the industrial bot management card.
+ * @description Contract for the industrial bot management card with Institutional Analytics.
  */
 export interface BotCardProps {
   /** The bot configuration data */
-  bot: BotConfig;
+  bot: BotConfig & {
+    macroSentiment?: 'bullish' | 'bearish' | 'neutral';
+    priceHistory?: number[];
+  };
   /** Performance metrics (Profit, Win Rate, etc.) */
   stats?: {
     totalProfitPct: number;
@@ -16,10 +19,11 @@ export interface BotCardProps {
   };
   /** Live state from the engine */
   liveState?: {
-    currentAction: string; // e.g. "Scanning EMA20", "Awaiting Signal"
+    currentAction: string;
     openPosition?: {
       entryPrice: number;
       investedUsdt: number;
+      inventory: number; // Quantitative Units
       openedAt?: string;
       quantity: number;
       pnlPct: number;
@@ -27,6 +31,7 @@ export interface BotCardProps {
       exitTargets?: {
         slPrice: number;
         tpPrice: number;
+        bePrice?: number; // Break-even target
       };
     };
     logicSnapshot?: Record<string, any>;

@@ -15,6 +15,7 @@ from .core.strategy_manager import StrategyManager
 from .core.exchange_connector import AsyncExchangeConnector
 from .core.backtest_engine import BacktestEngine
 from .core.strategy_registry import get_full_registry
+from .api.metrics_routes import router as metrics_router, set_strategy_manager
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -27,6 +28,9 @@ app = FastAPI(
 # Global manager instance
 strategy_manager = StrategyManager()
 
+# Inject strategy manager into metrics routes
+set_strategy_manager(strategy_manager)
+
 # CORS setup
 app.add_middleware(
     CORSMiddleware,
@@ -35,6 +39,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register metrics routes
+app.include_router(metrics_router)
 
 @app.on_event("startup")
 async def startup_event():

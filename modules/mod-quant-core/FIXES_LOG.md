@@ -5,6 +5,279 @@ Registro detallado de issues críticos encontrados y corregidos.
 
 ---
 
+## [SHUTDOWN-001] - MEDIUM - 2026-03-19 - FIXED
+
+**Título**: Missing StrategyManager.stop() Method Causes Shutdown Error
+
+**Problema**:
+```
+AttributeError: 'StrategyManager' object has no attribute 'stop'
+```
+
+**Síntomas**:
+- Servidor intenta llamar a `strategy_manager.stop()` en shutdown
+- Method no existe en la clase StrategyManager
+- Shutdown falla con AttributeError
+- No hay limpieza correcta de bots al parar servidor
+
+**Causas Raíz**:
+1. **Falta de implementación**: Método `stop()` no fue implementado
+2. **Contrato incompleto**: main.py llamaba a método que no existía
+3. **Sin cleanup**: No hay cancelación de tasks al parar
+
+**Impacto en Trading**:
+- ⚠️ Shutdown no limpio
+- ⚠️ Tasks de bots pueden quedar colgadas
+- ⚠️ Recursos no liberados correctamente
+
+**Fix Implementado**:
+- Agregado método `stop()` a StrategyManager (líneas 384-395):
+```python
+def stop(self):
+    """Gracefully stop all bot execution loops."""
+    self.is_running = False
+    logger.info("Stopping Quant Core Orchestrator...")
+    
+    # Cancel all active bot tasks
+    for bot_id, task in list(self.active_bots.items()):
+        if not task.done():
+            task.cancel()
+            logger.info(f"Cancelled bot execution loop for {bot_id}")
+    
+    self.active_bots.clear()
+    logger.success("All bot execution loops stopped")
+```
+
+**Características**:
+- ✓ Detiene flag `is_running` (para shutdown graceful del loop)
+- ✓ Cancela todas las tasks de bots activos
+- ✓ Logging de cada cancelación
+- ✓ Limpia el diccionario de bots activos
+- ✓ Sincrónico (puede ser llamado desde async context)
+
+**Validación**:
+- ✓ Python syntax validated
+- ✓ Server starts and runs correctly
+- ✓ Shutdown completa sin AttributeError
+- ✓ Logging muestra cleanup correcto
+
+---
+
+## [SCHEMA-001] - HIGH - 2026-03-19 - FIXED
+
+**Título**: Missing Database Columns Cause Update Errors (PGRST204)
+
+**Problema**:
+```
+PGRST204: Could not find the 'macro_sentiment' column of 'quant_bots' in the schema cache
+PGRST204: Could not find the 'current_quantity' column of 'quant_bots' in the schema cache
+PGRST204: Could not find the 'price_history_1h' column of 'quant_bots' in the schema cache
+```
+
+**Síntomas**:
+- Servidor intenta actualizar campos que no existen en BD
+- Errores PGRST204 en logs cada ciclo de bot
+- Updates fallan silenciosamente (con retry)
+- Estado del bot no persiste correctamente
+
+**Causas Raíz**:
+1. **Mismatch entre código y schema**: Código asume columnas que no existen
+2. **Código hardcodeado para schema específico**: Schema cambió pero código no se actualizó
+3. **Sin validación de schema**: No se valida qué columnas existen antes de UPDATE
+
+**Impacto en Trading**:
+- ⚠️ Estado del bot no persiste (aunque bots siguen ejecutándose localmente)
+- ⚠️ Pérdida de datos históricos
+- ⚠️ No hay tracking de sentiment/history en BD
+- ⚠️ Logs llenos de errores PGRST204
+
+**Fix Implementado**:
+- Método `update_bot_state()` mejorado (líneas 99-142):
+  - **Whitelist approach**: Solo actualiza campos confirmados
+  - **Dynamic filtering**: Filtra automáticamente campos desconocidos
+  - **Debug logging**: Registra qué campos fueron descartados
+  - **Graceful degradation**: Ignora campos faltantes sin crash
+  - **Resilient**: No hay reintentos para errores de schema
+
+**Campos Confirmados (whitelist)**:
+```python
+allowed_fields = {
+    'id', 'tenant_id', 'name', 'pair', 'status', 'created_at', 'updated_at',
+    'base_investment_usdt',
+    'current_action', 'current_entry_price', 'current_pnl_pct', 'current_pnl_usdt',
+    'current_position_opened_at', 'last_exit_targets', 'last_logic_snapshot',
+    'last_signal', 'signal_strength'
+}
+```
+
+**Campos Filtrados (no existen actualmente)**:
+```
+- macro_sentiment
+- current_quantity  
+- price_history_1h
+- price_history_1h
+- volatility_index
+```
+
+**Validación**:
+- ✓ Python syntax validated
+- ✓ Server starts without PGRST204 errors
+- ✓ Updates succeed for valid fields
+- ✓ Invalid fields logged at DEBUG level
+- ✓ Zero impact on bot execution
+
+**Futuros Pasos**:
+Si se necesitan estos campos en analytics:
+1. Crear columnas en quant_bots tabla en Supabase
+2. Agregar a `allowed_fields` whitelist
+3. Sin cambios en código de lógica
+
+---
+
+## [API-001] - CRITICAL - 2026-03-19 - FIXED
+
+**Título**: FastAPI Response Model Validation Error + Missing Module Init Files
+
+**Problema**:
+```
+fastapi.exceptions.FastAPIError: Invalid args for response field! 
+Hint: check that typing.Optional[src.core.strategy_manager.StrategyManager] is a valid Pydantic field type.
+```
+
+**Síntomas**:
+- Servidor falla al iniciar con `startquant`
+- FastAPI intenta validar `Optional[StrategyManager]` como campo Pydantic
+- `ModuleNotFoundError: No module named 'src'` cuando se intenta ejecutar como módulo
+- Missing `__init__.py` en directorios de paquete Python
+
+**Causas Raíz**:
+1. **Invalid parameter type**: `strategy_manager: Optional[StrategyManager] = None` en endpoint GET
+   - FastAPI intenta interpretar como parámetro query/form (no válido para objetos complejos)
+   - StrategyManager no es un modelo Pydantic válido
+   
+2. **Missing module init files**: Python necesita `__init__.py` para reconocer directorios como paquetes
+   - Sin esto, `python -m src.main` no funciona
+   - Imports relativos fallan sin estructura de módulo
+
+**Impacto en Trading**:
+- ❌ Servidor no arranca
+- ❌ Bots no se sincronizan
+- ❌ API no disponible
+- ❌ Metrics endpoint inaccesible
+
+**Fix Implementado**:
+
+1. **Remover parámetro inválido** (línea 71-73):
+```python
+# ❌ ANTES:
+async def get_bot_metrics(
+    bot_id: str,
+    strategy_manager: Optional[StrategyManager] = None
+) -> Dict[str, Any]:
+
+# ✅ DESPUÉS:
+async def get_bot_metrics(bot_id: str) -> Dict[str, Any]:
+```
+
+2. **Crear StrategyManager dentro de función** (línea 95-96):
+```python
+# Instanciar dinámicamente sin parámetro
+from ..core.strategy_manager import StrategyManager as SM
+strategy_manager = SM()
+```
+
+3. **Agregar `__init__.py` en todos los directorios** (línea creada):
+```
+src/__init__.py
+src/core/__init__.py
+src/api/__init__.py
+src/strategies/__init__.py
+```
+
+**Archivos Modificados**:
+- `src/api/metrics_routes.py` (líneas 71-99)
+- `src/__init__.py` (nuevo)
+- `src/core/__init__.py` (nuevo)
+- `src/api/__init__.py` (nuevo)
+- `src/strategies/__init__.py` (nuevo)
+
+**Validación**:
+- ✓ Python syntax validation passed
+- ✓ Server starts successfully: `INFO: Uvicorn running on http://0.0.0.0:8000`
+- ✓ Bots initialize and sync: `Starting bot 74d39e1f... ATR Test Bitcoin`
+- ✓ Module imports work correctly
+
+**Resultado**:
+```
+✅ Server starts successfully
+✅ Bots sync from database
+✅ API endpoints accessible
+✅ Metrics endpoint ready for WebSocket connections
+```
+
+---
+
+## [NET-001] - CRITICAL - 2026-03-19 - FIXED
+
+**Título**: Database Sync Intermittent Failures (DNS & Timeouts)
+
+**Problema**:
+```
+2026-03-18 23:52:39.208 | ERROR | Sync error: [Errno 8] nodename nor servname provided, or not known
+2026-03-18 23:56:57.927 | ERROR | Sync error: The read operation timed out
+```
+
+**Síntomas**:
+- Errores aleatorios en `sync_bots_from_db()` sin patrón predecible
+- Bots siguen ejecutándose a pesar de errores de sincronización
+- Queries a Supabase fallan ocasionalmente
+- No hay mecanismo de reintento
+
+**Causas Raíz**:
+1. **DNS failures**: Resolución de hostname de Supabase falla esporádicamente
+2. **Network timeouts**: Conexión lenta o timeout sin reintentos
+3. **No exponential backoff**: Fallos inmediatos sin retry logic
+4. **Unhandled exceptions**: Excepciones genéricas silenciadas con `pass`
+
+**Impacto en Trading**:
+- Bots pueden quedar stale (sin sincronizar estado real)
+- Órdenes virtuales pueden fallar silenciosamente
+- Posiciones no se actualizan correctamente
+- Risk settings no se cargan (kill switch no funciona)
+
+**Fix Implementado**:
+- Agregado método `_retry_with_backoff()` con:
+  - **Exponential backoff**: base 1.0s, multiplier 2.0x, max delay 10s
+  - **Max retries**: 3 intentos por operación
+  - **Error detection**: Detecta específicamente socket.gaierror, TimeoutError, ConnectionError
+  - **Graceful degradation**: Retorna None si fallan todos los intentos
+  - **Better logging**: Diferencia entre retries y fallos finales
+
+- Métodos actualizados:
+  - `fetch_risk_settings()` - line 91
+  - `update_bot_state()` - line 99
+  - `create_virtual_order()` - line 117
+  - `manage_position()` - line 149
+  - `sync_bots_from_db()` - line 219
+
+**Configuración Tunable** (línea 47-52):
+```python
+self.db_retry_config = {
+    'max_retries': 3,
+    'base_delay': 1.0,
+    'max_delay': 10.0,
+    'backoff_multiplier': 2.0
+}
+```
+
+**Validación**:
+- ✓ Python syntax validation passed
+- ✓ Backward compatible (no breaking changes)
+- ✓ Industrial-grade error handling
+- ✓ Follows LoopDev standards
+
+---
+
 ## [ATR-001] - CRITICAL - 2026-03-18 - FIXED
 
 **Título**: ATR True Range Calculation Incomplete
