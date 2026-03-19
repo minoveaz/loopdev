@@ -11,6 +11,7 @@ import uuid
 import socket
 
 from .exchange_connector import AsyncExchangeConnector
+from .mock_data import MockDataGenerator
 from .strategy_registry import STRATEGY_REGISTRY
 from ..strategies.intraday_atr import IntradayATRStrategy
 from ..strategies.hybrid_core import HybridCoreStrategy
@@ -317,21 +318,61 @@ class StrategyManager:
         core_id = strategy_info.get('core_id', 'atr-breakout-v1') if strategy_info else 'atr-breakout-v1'
         strategy = self.strategies.get(core_id, self.strategies['atr-breakout-v1'])
         
-        connector = AsyncExchangeConnector('binance', 'PAPER_KEY', 'PAPER_SECRET', True)
+        # Get exchange credentials: from bot_data → env vars → use demo (ZERO HARDCODING)
+        exchange_id = bot_data.get('exchange_id', 'binance')
+        api_key = (
+            bot_data.get('exchange_api_key') or 
+            bot_data.get('api_key') or 
+            os.getenv('BINANCE_API_KEY', '')
+        )
+        api_secret = (
+            bot_data.get('exchange_api_secret') or 
+            bot_data.get('api_secret') or 
+            os.getenv('BINANCE_API_SECRET', '')
+        )
+        
+        # Check if we have valid credentials
+        if not api_key or not api_secret or api_key == 'PAPER_KEY' or api_secret == 'PAPER_SECRET':
+            logger.warning(f"[{bot_name}] No valid exchange credentials found. Using Binance testnet with demo keys.")
+            api_key = os.getenv('BINANCE_TESTNET_KEY', '')
+            api_secret = os.getenv('BINANCE_TESTNET_SECRET', '')
+            
+            if not api_key or not api_secret:
+                logger.warning(f"[{bot_name}] No testnet credentials. Running in MOCK mode for testing.")
+                use_mock_data = True
+            else:
+                use_mock_data = False
+        else:
+            use_mock_data = False
+        
+        if not use_mock_data:
+            connector = AsyncExchangeConnector(exchange_id, api_key, api_secret, True)
+        else:
+            connector = None  # Will use mock data instead
         
         try:
-            await connector.connect()
-            logger.info(f"[{bot_name}] Core online. Watching {pair}")
+            if connector:
+                await connector.connect()
+            logger.info(f"[{bot_name}] Core online. Watching {pair}" + (" (MOCK MODE)" if use_mock_data else ""))
+
+            # Mock data generator for testing
+            mock_gen = MockDataGenerator() if use_mock_data else None
 
             while True:
                 # 1. Fetch Data
-                ohlcv = await connector.exchange.fetch_ohlcv(pair, timeframe='1m', limit=60)
+                logger.debug(f"[{bot_name}] Starting loop iteration...")
+                if use_mock_data:
+                    # Generate realistic mock OHLCV data
+                    ohlcv = mock_gen.generate_ohlcv(60, base_price=71000, volatility=0.002)
+                else:
+                    ohlcv = await connector.exchange.fetch_ohlcv(pair, timeframe='1m', limit=60)
+                
                 df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
                 current_price = float(df.iloc[-1]['close'])
                 price_history = df['close'].tolist()
                 
                 # 2. Advanced Analytics: Macro Sentiment
-                sentiment = await self.get_macro_sentiment(connector, pair)
+                sentiment = await self.get_macro_sentiment(connector, pair) if not use_mock_data else 'neutral'
                 
                 # 3. Strategy Analyze
                 df = strategy.analyze(df)
@@ -344,12 +385,13 @@ class StrategyManager:
                 self.active_bot_data[bot_id].update({
                     "current_price": current_price,
                     "_current_rsi": float(last_row.get('rsi', 0)) if 'rsi' in last_row and not pd.isna(last_row['rsi']) else 0,
-                    "_current_sma": float(last_row.get('sma50', last_row.get('sma20', 0))) if 'sma50' in last_row and not pd.isna(last_row['sma50']) else 0,
+                    "_current_sma": float(last_row.get('sma50', last_row.get('sma20', 0))) if ('sma50' in last_row and not pd.isna(last_row['sma50'])) or ('sma20' in last_row and not pd.isna(last_row['sma20'])) else 0,
                     "_current_atr": float(last_row.get('atr', 0)) if 'atr' in last_row and not pd.isna(last_row['atr']) else 0,
                     "_atr_history": df['atr'].dropna().tail(20).tolist() if 'atr' in df else [],
                     "_metrics_snapshot": snapshot,
                     "core_id": core_id
                 })
+                logger.debug(f"[{bot_name}] Metrics updated - Price: ${current_price}, SMA: ${self.active_bot_data[bot_id]['_current_sma']}, ATR: {self.active_bot_data[bot_id]['_current_atr']}")
 
                 # 4. Manage Position (Calculates PnL, Entry, BE, Qty)
                 position, qty = await self.manage_position(bot_data, current_price, snapshot)
@@ -387,7 +429,9 @@ class StrategyManager:
                 await asyncio.sleep(60)
         except asyncio.CancelledError: logger.info(f"Loop stopped for {bot_name}")
         except Exception as e: logger.error(f"Critical error in {bot_name}: {e}")
-        finally: await connector.close()
+        finally: 
+            if connector:
+                await connector.close()
 
     async def start(self):
         self.is_running = True

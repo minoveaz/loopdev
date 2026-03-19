@@ -136,19 +136,14 @@ async def get_bot_metrics(bot_id: str) -> Dict[str, Any]:
         if "atr_sl_multiplier" not in params:
             params["atr_sl_multiplier"] = 1.5
         
-        # Get current market data
-        # In production, this would come from the live data feed in strategy_manager
-        current_snapshot = bot_data.get("_metrics_snapshot", {})
-        
-        if not current_snapshot:
-            # Build from strategy state if available
-            current_snapshot = {
-                "current_price": bot_data.get("current_price", 0),
-                "rsi_value": bot_data.get("_current_rsi", 0),
-                "sma_value": bot_data.get("_current_sma", 0),
-                "atr": bot_data.get("_current_atr", 0),
-                "atr_history": bot_data.get("_atr_history", [])
-            }
+        # Get current market data from bot_data state (updated every 60s by bot loop)
+        current_snapshot = {
+            "current_price": bot_data.get("current_price", 0),
+            "rsi_value": bot_data.get("_current_rsi", 0),
+            "sma_value": bot_data.get("_current_sma", 0),
+            "atr": bot_data.get("_current_atr", 0),
+            "atr_history": bot_data.get("_atr_history", [])
+        }
         
         # Calculate metrics
         metrics = StrategyMetricsCalculator.build_metrics_snapshot(
