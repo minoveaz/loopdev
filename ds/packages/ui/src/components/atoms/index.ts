@@ -18,6 +18,11 @@ export * from './indicators/InfraStamp';
 export * from './indicators/SystemStatus';
 export * from './indicators/TechnicalIsotype';
 export * from './indicators/TechnicalStatusBadge';
+export * from './indicators/IndustrialMetric';
+export * from './indicators/PositionProgressBar';
+export * from './indicators/ProximityIndicator';
+export * from './indicators/PositionQuickActions';
+export * from './indicators/PulseSparkline';
 
 // inputs
 export * from './inputs/Button';

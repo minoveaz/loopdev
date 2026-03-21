@@ -20,16 +20,22 @@ import {
   LayoutProvider,
   TenantProvider,
   BlueprintBackground,
-  ToastViewport
+  ToastViewport,
+  ModuleWorkspace,
+  ScrollArea
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext } from '@loopdev/contracts';
+import { QuantOpsProvider, useQuantOps } from './context';
+import { BotInspectorIndustrial } from './components/BotInspector';
 
-export default function QuantOpsLayout({ children }: { children: React.ReactNode }) {
+function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
+  const { isInspectorOpen, closeInspector } = useQuantOps();
+  
   const { 
     notifications, 
     unreadCount, 
@@ -43,9 +49,7 @@ export default function QuantOpsLayout({ children }: { children: React.ReactNode
   const [context, setContext] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
-  // Focus Enforcement: Quant Ops is a high-density suite, usually compact or rail mode
   useEffect(() => {
-    // Automically collapse if we are in a deep module
     if (pathname.split('/').length > 2) {
       setNavMode('rail');
     }
@@ -61,13 +65,12 @@ export default function QuantOpsLayout({ children }: { children: React.ReactNode
 
   const activeModuleId = getActiveModule();
 
-  // Initial access map for MVP
   const accessMap: Record<string, 'enabled' | 'disabled' | 'coming-soon'> = {
     'overview': 'enabled',
     'bot-fleet': 'enabled',
     'strategies': 'enabled',
     'terminal': 'enabled',
-    'history': 'coming-soon',
+    'history': 'enabled',
     'risk-control': 'enabled',
     'exchanges': 'enabled'
   };
@@ -76,6 +79,7 @@ export default function QuantOpsLayout({ children }: { children: React.ReactNode
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
+        isRightSidebarOpen: false, 
         navBehavior: 'auto',
         context: context,
         activeOverlay: activeOverlay,
@@ -154,9 +158,32 @@ export default function QuantOpsLayout({ children }: { children: React.ReactNode
       <TenantProvider tenant="loopdev">
         <LayoutProvider>
           <ToastViewport activeTenantId="loopdev" />
-          {children}
+          
+          <ModuleWorkspace
+            moduleId="quant-ops"
+            inspectorOpen={isInspectorOpen}
+            onInspectorChange={(open) => !open && closeInspector()}
+            config={{
+              inspectorWidth: '360px'
+            }}
+            overlay={{
+              force: true,
+              closeOnBackdrop: true
+            }}
+            inspectorSlot={<BotInspectorIndustrial />}
+          >
+            {children}
+          </ModuleWorkspace>
         </LayoutProvider>
       </TenantProvider>
     </AppShell>
+  );
+}
+
+export default function QuantOpsLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <QuantOpsProvider>
+      <QuantOpsLayoutInner>{children}</QuantOpsLayoutInner>
+    </QuantOpsProvider>
   );
 }

@@ -1,145 +1,116 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { BotCardProps } from './types';
-import { 
-  TechnicalSurface, 
-  LpdText, 
-  Heading, 
-  Skeleton, 
-  Icon, 
-  LivePriceLabel, 
-  StatusPulse, 
-  Divider,
-  TechnicalDropdown,
-  TechnicalMenuItem,
-  IconButton
-} from '../../../atoms';
+import { TechnicalSurface } from '../../../atoms/surfaces/TechnicalSurface';
+import { BotCardHeader } from './BotCardHeader';
+import { BotCardPrice } from './BotCardPrice';
+import { BotCardState } from './BotCardState';
+import { BotCardMetrics } from './BotCardMetrics';
+import { BotCardControls } from './BotCardControls';
 import { cn } from '../../../../helpers/cn';
 
 /**
- * @component BotCard
- * @description Industrial-grade control card for trading bot instances with Institutional Analytics.
+ * @component BotCardIndustrial
+ * @description Master management card. Binary coloring (Green/Red) with trend persistence.
  */
 export const BotCardIndustrial: React.FC<BotCardProps> = ({
   bot,
-  stats,
-  liveState,
+  onOpenDetails,
   onToggleStatus,
-  onEdit,
   onDelete,
-  isLoading = false,
+  onMarketExit,
+  onSetToBE,
+  onExecuteTP,
   className
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isActive = bot.status === 'active' || bot.status === 'paper_trading';
+  const isInPosition = bot.currentEntryPrice > 0;
   
-  if (isLoading) {
-    return (
-      <TechnicalSurface variant="surface" depth="flat" className={cn("p-8 h-[340px]", className)}>
-        <div className="flex flex-col gap-6">
-          <Skeleton className="h-12 w-12 rounded-2xl" />
-          <Skeleton className="h-16 w-full rounded-xl" />
-          <Skeleton className="h-12 w-full rounded-xl" />
-        </div>
-      </TechnicalSurface>
-    );
-  }
+  // --- LÓGICA DE TENDENCIA BINARIA ---
+  const lastPrice = Number(bot.currentPrice || 0);
+  let prevPrice = lastPrice;
 
-  const isActive = bot.status === 'active';
+  // Buscamos hacia atrás en el historial el primer precio que sea diferente al actual
+  if (bot.priceHistory?.length) {
+    for (let i = bot.priceHistory.length - 1; i >= 0; i--) {
+      const histPrice = Number(bot.priceHistory[i]);
+      if (histPrice !== lastPrice) {
+        prevPrice = histPrice;
+        break;
+      }
+    }
+  }
+  
+  // Determinamos dirección (Si son iguales por falta de historial, usamos el sentimiento como base)
+  let priceDir: 'up' | 'down' = lastPrice >= prevPrice ? 'up' : 'down';
+  if (lastPrice === prevPrice && bot.macroSentiment === 'bearish') priceDir = 'down';
+
+  // Color Final: Siempre Esmeralda o Rose. Nunca blanco/gris.
+  const finalColor = isInPosition 
+    ? (bot.currentPnlPct >= 0 ? "text-emerald-500" : "text-rose-500")
+    : (priceDir === 'up' ? "text-emerald-500" : "text-rose-500");
+
+  const glowColor = isInPosition
+    ? (bot.currentPnlPct >= 0 ? "bg-emerald-500" : "bg-rose-500")
+    : (isActive ? "bg-primary" : "bg-amber-500");
 
   return (
     <TechnicalSurface 
       variant="surface" 
-      depth="flat" 
-      className={cn("p-8 flex flex-col justify-between h-full border-border-technical/30 group hover:border-amber-500/30 transition-all relative overflow-hidden", className)}
+      depth="raised" 
+      className={cn(
+        "p-10 flex flex-col gap-14 rounded-[40px] transition-all duration-700 hover:shadow-[0_0_60px_rgba(0,0,0,0.5)] border relative overflow-hidden group select-none",
+        isInPosition ? (bot.currentPnlPct >= 0 ? "border-emerald-500/20" : "border-rose-500/20") : "border-white/5",
+        isActive ? "bg-slate-900" : "bg-slate-950 opacity-80",
+        className
+      )}
     >
-      <div className="relative z-10 flex flex-col gap-6">
-        
-        {/* HEADER: Identity, Status & Sentiment */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4">
-            <div className={cn("w-12 h-12 rounded-2xl border flex items-center justify-center transition-colors shadow-sm", isActive ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600" : "bg-background-subtle border-border-technical text-text-muted")}>
-               <span className="material-symbols-outlined text-2xl font-bold">smart_toy</span>
-            </div>
-            <div className="flex flex-col">
-              <Heading size="xs" weight="bold" className="text-text-main">{bot.name}</Heading>
-              <div className="flex items-center gap-2 mt-1">
-                <LpdText size="nano" className="font-mono text-text-muted uppercase tracking-widest">{bot.pair}</LpdText>
-                <span className={cn(
-                  "px-2 py-0.5 rounded-full text-[8px] font-black uppercase border",
-                  bot.macroSentiment === 'bullish' ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : 
-                  bot.macroSentiment === 'bearish' ? "bg-rose-500/10 text-rose-500 border-rose-500/20" : 
-                  "bg-slate-500/10 text-slate-400 border-slate-500/20"
-                )}>
-                  {bot.macroSentiment || 'neutral'}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className={cn(
+        "absolute -right-24 -top-24 w-64 h-64 rounded-full blur-[140px] opacity-10 transition-all duration-1000",
+        glowColor
+      )} />
 
-        {/* SPARKLINE */}
-        {bot.priceHistory && bot.priceHistory.length > 5 && (
-          <div className="h-12 w-full opacity-40">
-            <svg viewBox={`0 0 ${bot.priceHistory.length - 1} 100`} className="w-full h-full" preserveAspectRatio="none">
-              <path
-                d={`M ${bot.priceHistory.map((p: number, i: number) => `${i},${100 - ((p - Math.min(...bot.priceHistory)) / (Math.max(...bot.priceHistory) - Math.min(...bot.priceHistory)) * 80 + 10)}`).join(' L ')}`}
-                fill="none"
-                stroke={bot.priceHistory[bot.priceHistory.length-1] >= bot.priceHistory[0] ? "#10b981" : "#f43f5e"}
-                strokeWidth="2"
-              />
-            </svg>
-          </div>
-        )}
+      <BotCardHeader 
+        name={bot.name} 
+        pair={bot.pair} 
+        sentiment={bot.macroSentiment} 
+        onInspect={() => onOpenDetails?.(bot.id)}
+        onDelete={() => onDelete?.(bot.id)}
+      />
 
-        {/* PRICE */}
-        <div className="flex flex-col">
-          <LpdText size="nano" className="uppercase tracking-[0.2em] text-text-muted opacity-40">Live_Market_Price</LpdText>
-          <div className="flex items-baseline gap-2">
-            <LivePriceLabel pair={bot.pair} size="lg" className="font-black" />
-            <LpdText size="nano" className="text-text-muted opacity-30 font-mono">USDT</LpdText>
-          </div>
-        </div>
+      <div className="flex flex-col gap-12">
+        <BotCardPrice 
+          price={bot.currentPrice} 
+          direction={priceDir}
+          persistedColor={finalColor}
+          isPaperTrading={bot.status === 'paper_trading' || bot.status === 'active'}
+        />
 
-        {/* OPERATIONAL STATE */}
-        <div className="bg-background-subtle/50 rounded-xl p-4 border border-border-technical/30 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-xs text-primary">radar</span>
-            <LpdText size="xs" weight="bold" className="uppercase">{liveState?.currentAction || 'Awaiting Signal'}</LpdText>
-          </div>
-          
-          {liveState?.openPosition && (
-            <>
-              <Divider className="opacity-20" />
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col"><LpdText size="nano" className="text-text-muted uppercase font-bold">Entry_Price</LpdText><LpdText size="xs" weight="black">${liveState.openPosition.entryPrice.toLocaleString()}</LpdText></div>
-                <div className="flex flex-col items-end"><LpdText size="nano" className="text-text-muted uppercase font-bold">Capital</LpdText><LpdText size="xs" weight="black">${liveState.openPosition.investedUsdt.toLocaleString()}</LpdText></div>
-                <div className="flex flex-col"><LpdText size="nano" className="text-text-muted uppercase font-bold">Unrealized_PnL</LpdText><LpdText size="xs" weight="black" className={liveState.openPosition.pnlPct >= 0 ? "text-emerald-500" : "text-rose-500"}>${liveState.openPosition.pnlUsdt.toLocaleString()}</LpdText></div>
-                <div className="flex flex-col items-end"><LpdText size="nano" className="text-text-muted uppercase font-bold">Performance</LpdText><LpdText size="xs" weight="black" className={liveState.openPosition.pnlPct >= 0 ? "text-emerald-500" : "text-rose-500"}>{liveState.openPosition.pnlPct.toFixed(2)}%</LpdText></div>
-              </div>
-              <div className="flex justify-between mt-2">
-                <LpdText size="nano" className="text-text-muted italic">Duration: {(() => {
-                  if (!liveState.openPosition.openedAt) return '0m';
-                  const diff = Math.floor((new Date().getTime() - new Date(liveState.openPosition.openedAt).getTime()) / 60000);
-                  const h = Math.floor(diff / 60);
-                  const m = diff % 60;
-                  return h > 0 ? `${h}h ${m}m` : `${m}m`;
-                })()}</LpdText>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* HEARTBEAT */}
-        {liveState?.logicSnapshot && (
-          <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border-technical/10 opacity-50">
-             {Object.entries(liveState.logicSnapshot).slice(0,3).map(([k,v]) => (
-               <div key={k} className="flex flex-col"><LpdText size="nano" className="uppercase text-[7px]">{k}</LpdText><LpdText size="nano" weight="black" className="font-mono">{v}</LpdText></div>
-             ))}
-          </div>
-        )}
-
+        <BotCardState 
+          currentAction={bot.currentAction} 
+          isActive={isActive}
+          bot={bot}
+          onMarketExit={onMarketExit ? () => onMarketExit(bot.id) : undefined}
+          onSetToBE={onSetToBE ? () => onSetToBE(bot.id) : undefined}
+          onExecuteTP={onExecuteTP ? () => onExecuteTP(bot.id) : undefined}
+        />
       </div>
+
+      <div className="mt-auto pt-8 flex flex-col gap-12">
+        <BotCardMetrics 
+          sma={bot.logicSnapshot?.sma_20}
+          atr={bot.logicSnapshot?.atr_volatility}
+          persistedSmaColor="text-primary"
+          persistedAtrColor="text-emerald-500"
+        />
+
+        <BotCardControls 
+          status={bot.status}
+          onToggle={() => onToggleStatus?.(bot.id, isActive ? 'paused' : 'active')}
+        />
+      </div>
+
     </TechnicalSurface>
   );
 };

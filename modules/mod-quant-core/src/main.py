@@ -16,6 +16,7 @@ from .core.exchange_connector import AsyncExchangeConnector
 from .core.backtest_engine import BacktestEngine
 from .core.strategy_registry import get_full_registry
 from .api.metrics_routes import router as metrics_router, set_strategy_manager
+from .api.orders_routes import router as orders_router, set_strategy_manager as set_orders_sm
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -28,8 +29,9 @@ app = FastAPI(
 # Global manager instance
 strategy_manager = StrategyManager()
 
-# Inject strategy manager into metrics routes
+# Inject strategy manager into routes
 set_strategy_manager(strategy_manager)
+set_orders_sm(strategy_manager)
 
 # CORS setup
 app.add_middleware(
@@ -40,8 +42,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register metrics routes
+# Register routes
 app.include_router(metrics_router)
+app.include_router(orders_router)
 
 @app.on_event("startup")
 async def startup_event():
@@ -183,4 +186,31 @@ async def run_strategy_backtest(req: BacktestRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import socket
+    
+    # Find an available port starting from 8000
+    port = 8000
+    max_attempts = 10
+    for attempt in range(max_attempts):
+        try:
+            # Try to bind to the port
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            result = sock.connect_ex(('127.0.0.1', port))
+            sock.close()
+            
+            if result != 0:  # Port is available
+                break
+            port += 1
+        except Exception:
+            break
+    
+    try:
+        logger.info(f"🚀 Starting Quant Core Engine on port {port}...")
+        uvicorn.run(app, host="0.0.0.0", port=port)
+    except Exception as e:
+        if "Address already in use" in str(e):
+            logger.error(f"❌ Port {port} is in use. Please kill the previous process:")
+            logger.error(f"   lsof -i :{port} | grep LISTEN | awk '{{print $2}}' | xargs kill -9")
+        else:
+            logger.error(f"❌ Failed to start server: {e}")
+        raise

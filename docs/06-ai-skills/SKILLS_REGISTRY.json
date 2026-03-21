@@ -1,0 +1,338 @@
+{
+  "framework": "LoopDev AI Skills Framework",
+  "version": "1.0.0",
+  "last_updated": "2026-03-21",
+  "total_skills": 11,
+  "status": "production",
+  
+  "description": "Complete skill registry for AI agents (Copilot, Gemini, Claude). Use this to discover available skills and route conversations.",
+  
+  "tiers": {
+    "tier_1": {
+      "name": "Foundation",
+      "description": "Required for all feature development",
+      "skills": ["skill-discovery", "skill-contract", "skill-frontend", "skill-infra"]
+    },
+    "tier_2": {
+      "name": "Domain-Specific",
+      "description": "Specialized by domain (trading, testing, certification)",
+      "skills": ["skill-quant-strategy", "skill-qa-testing", "skill-backtest-module"]
+    },
+    "tier_3": {
+      "name": "Governance",
+      "description": "Required before production release",
+      "skills": ["skill-architecture-review", "skill-security-audit", "skill-performance-optimization", "skill-release-readiness"]
+    }
+  },
+  
+  "skills": [
+    {
+      "id": "skill-discovery",
+      "name": "Discovery Analysis Skill",
+      "tier": 1,
+      "category": "foundation",
+      "path": "tier-1-foundation/DISCOVERY_ANALYSIS_SKILL.md",
+      "short_description": "Analyze feature impact without writing code",
+      "when_to_use": "At the start of any new feature, before deciding what to build",
+      "typical_duration_hours": 2,
+      "output_types": ["impact_analysis", "scope_definition", "requirements_breakdown"],
+      "keywords": ["discovery", "analysis", "requirements", "design", "planning", "scope"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": [],
+      "typically_followed_by": ["skill-contract"],
+      "checklist_items_count": 25,
+      "authority": "Product Owner, Tech Lead"
+    },
+    
+    {
+      "id": "skill-contract",
+      "name": "Contract Definition Skill",
+      "tier": 1,
+      "category": "foundation",
+      "path": "tier-1-foundation/CONTRACT_DEFINITION_SKILL.md",
+      "short_description": "Define Zod schemas and TypeScript types",
+      "when_to_use": "After requirements are clear, before implementation starts",
+      "typical_duration_hours": 1,
+      "output_types": ["zod_schema", "typescript_types", "validation_examples"],
+      "keywords": ["contract", "schema", "zod", "typescript", "types", "validation", "multi-tenant"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-discovery"],
+      "typically_followed_by": ["skill-frontend", "skill-infra", "skill-quant-strategy"],
+      "checklist_items_count": 20,
+      "authority": "Tech Lead, Architect"
+    },
+    
+    {
+      "id": "skill-frontend",
+      "name": "Frontend Implementation Skill",
+      "tier": 1,
+      "category": "foundation",
+      "path": "tier-1-foundation/FRONTEND_IMPLEMENTATION_SKILL.md",
+      "short_description": "Build UI components using Brain/Body pattern",
+      "when_to_use": "When building user interfaces in the design system or apps",
+      "typical_duration_hours": 4,
+      "output_types": ["react_component", "component_tests", "storybook_stories"],
+      "keywords": ["frontend", "ui", "react", "component", "brain-body", "design-system"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-contract"],
+      "typically_followed_by": ["skill-qa-testing"],
+      "checklist_items_count": 18,
+      "authority": "Frontend Lead, Design System Owner"
+    },
+    
+    {
+      "id": "skill-infra",
+      "name": "Infra Implementation Skill",
+      "tier": 1,
+      "category": "foundation",
+      "path": "tier-1-foundation/INFRA_IMPLEMENTATION_SKILL.md",
+      "short_description": "Build APIs and database layer",
+      "when_to_use": "When building backend APIs and database changes",
+      "typical_duration_hours": 6,
+      "output_types": ["api_endpoint", "database_migration", "service_layer"],
+      "keywords": ["infra", "api", "backend", "database", "rest", "graphql", "prisma"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-contract"],
+      "typically_followed_by": ["skill-qa-testing"],
+      "checklist_items_count": 22,
+      "authority": "Backend Lead, DevOps"
+    },
+    
+    {
+      "id": "skill-quant-strategy",
+      "name": "Quant Strategy Skill",
+      "tier": 2,
+      "category": "domain-trading",
+      "path": "tier-2-domain/QUANT_STRATEGY_SKILL.md",
+      "short_description": "Build trading strategies with entry/exit logic",
+      "when_to_use": "When implementing trading algorithms and strategies",
+      "typical_duration_hours": 6,
+      "output_types": ["strategy_class", "signal_generator", "backtest_compatible"],
+      "keywords": ["strategy", "trading", "algorithm", "entry", "exit", "signal", "rsi", "macd", "atr"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-contract"],
+      "typically_followed_by": ["skill-qa-testing", "skill-backtest-module"],
+      "checklist_items_count": 28,
+      "authority": "Quant Lead, Strategy Owner"
+    },
+    
+    {
+      "id": "skill-qa-testing",
+      "name": "QA Testing Skill",
+      "tier": 2,
+      "category": "domain-quality",
+      "path": "tier-2-domain/QA_TESTING_SKILL.md",
+      "short_description": "Design and implement test suites",
+      "when_to_use": "After feature code is written, before it's integrated",
+      "typical_duration_hours": 2,
+      "output_types": ["unit_tests", "integration_tests", "e2e_tests"],
+      "keywords": ["testing", "qa", "vitest", "playwright", "coverage", "quality", "assert"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-frontend", "skill-infra", "skill-quant-strategy"],
+      "typically_followed_by": ["skill-backtest-module", "skill-architecture-review"],
+      "checklist_items_count": 15,
+      "authority": "QA Lead, Test Engineer"
+    },
+    
+    {
+      "id": "skill-backtest-module",
+      "name": "Backtest Module Skill",
+      "tier": 2,
+      "category": "domain-trading",
+      "path": "tier-2-domain/BACKTEST_MODULE_SKILL.md",
+      "short_description": "Certify trading modules through 5 phases",
+      "when_to_use": "When finalizing a trading strategy module",
+      "typical_duration_hours": 1,
+      "output_types": ["module_certification", "phase_gates", "release_approval"],
+      "keywords": ["backtest", "certification", "module", "phase", "gates", "strategy", "validation"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-qa-testing"],
+      "typically_followed_by": ["skill-architecture-review"],
+      "checklist_items_count": 12,
+      "authority": "Module Owner, Release Manager"
+    },
+    
+    {
+      "id": "skill-architecture-review",
+      "name": "Architecture Review Skill",
+      "tier": 3,
+      "category": "governance",
+      "path": "tier-3-governance/ARCHITECTURE_REVIEW_SKILL.md",
+      "short_description": "Validate ADRs, DAG, type safety, patterns",
+      "when_to_use": "After code is written, before integration testing",
+      "typical_duration_hours": 2,
+      "output_types": ["architecture_report", "violation_list", "recommendations"],
+      "keywords": ["architecture", "adr", "dag", "design", "patterns", "validation", "compliance"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-qa-testing", "skill-backtest-module"],
+      "typically_followed_by": ["skill-security-audit"],
+      "checklist_items_count": 30,
+      "authority": "Tech Lead, CTO"
+    },
+    
+    {
+      "id": "skill-security-audit",
+      "name": "Security Audit Skill",
+      "tier": 3,
+      "category": "governance",
+      "path": "tier-3-governance/SECURITY_AUDIT_SKILL.md",
+      "short_description": "OWASP compliance, RLS, secrets scanning",
+      "when_to_use": "After feature complete, before QA sign-off",
+      "typical_duration_hours": 2,
+      "output_types": ["security_report", "vulnerability_patches", "remediation_plan"],
+      "keywords": ["security", "owasp", "rls", "secrets", "vulnerability", "audit", "compliance", "injection"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-architecture-review"],
+      "typically_followed_by": ["skill-performance-optimization"],
+      "checklist_items_count": 50,
+      "authority": "Security Lead, VP Engineering"
+    },
+    
+    {
+      "id": "skill-performance-optimization",
+      "name": "Performance Optimization Skill",
+      "tier": 3,
+      "category": "governance",
+      "path": "tier-3-governance/PERFORMANCE_OPTIMIZATION_SKILL.md",
+      "short_description": "Bundle size, queries, caching, Lighthouse",
+      "when_to_use": "After testing complete, before release prep",
+      "typical_duration_hours": 2,
+      "output_types": ["performance_report", "optimization_suggestions", "metrics"],
+      "keywords": ["performance", "optimization", "bundle", "query", "cache", "lighthouse", "speed"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-security-audit"],
+      "typically_followed_by": ["skill-release-readiness"],
+      "checklist_items_count": 40,
+      "authority": "Performance Engineer, DevOps"
+    },
+    
+    {
+      "id": "skill-release-readiness",
+      "name": "Release Readiness Skill",
+      "tier": 3,
+      "category": "governance",
+      "path": "tier-3-governance/RELEASE_READINESS_SKILL.md",
+      "short_description": "Monitoring, runbooks, backup, team coordination",
+      "when_to_use": "Final gate, 24 hours before production deployment",
+      "typical_duration_hours": 2,
+      "output_types": ["release_checklist", "deployment_plan", "rollback_procedure"],
+      "keywords": ["release", "deployment", "monitoring", "runbook", "backup", "rollback", "production"],
+      "for_agents": ["copilot-cli", "copilot-ide", "gemini", "claude"],
+      "prerequisites": ["skill-performance-optimization"],
+      "typically_followed_by": [],
+      "checklist_items_count": 60,
+      "authority": "Release Manager, DevOps"
+    }
+  ],
+  
+  "workflows": {
+    "build_trading_strategy": {
+      "name": "Build a Trading Strategy",
+      "description": "Complete workflow for building a new trading strategy",
+      "phase_1_discovery": ["skill-discovery"],
+      "phase_2_contracts": ["skill-contract"],
+      "phase_3_implementation": ["skill-quant-strategy"],
+      "phase_4_testing": ["skill-qa-testing", "skill-backtest-module"],
+      "phase_5_governance": ["skill-architecture-review", "skill-security-audit", "skill-performance-optimization", "skill-release-readiness"],
+      "total_duration_hours": 16,
+      "total_skills": 9
+    },
+    
+    "build_ui_component": {
+      "name": "Build a UI Component",
+      "description": "Complete workflow for building a new UI component",
+      "phase_1_discovery": ["skill-discovery"],
+      "phase_2_contracts": ["skill-contract"],
+      "phase_3_implementation": ["skill-frontend"],
+      "phase_4_testing": ["skill-qa-testing"],
+      "phase_5_governance": ["skill-architecture-review", "skill-security-audit", "skill-performance-optimization", "skill-release-readiness"],
+      "total_duration_hours": 11,
+      "total_skills": 8
+    },
+    
+    "build_api_endpoint": {
+      "name": "Build an API Endpoint",
+      "description": "Complete workflow for building a new API endpoint",
+      "phase_1_discovery": ["skill-discovery"],
+      "phase_2_contracts": ["skill-contract"],
+      "phase_3_implementation": ["skill-infra"],
+      "phase_4_testing": ["skill-qa-testing"],
+      "phase_5_governance": ["skill-architecture-review", "skill-security-audit", "skill-performance-optimization", "skill-release-readiness"],
+      "total_duration_hours": 13,
+      "total_skills": 8
+    },
+    
+    "quick_review": {
+      "name": "Quick Code Review",
+      "description": "Review existing code without full workflow",
+      "skills": ["skill-architecture-review", "skill-security-audit", "skill-performance-optimization"],
+      "total_duration_hours": 6,
+      "total_skills": 3
+    },
+    
+    "prepare_release": {
+      "name": "Prepare for Release",
+      "description": "Final preparation before going to production",
+      "skills": ["skill-release-readiness"],
+      "total_duration_hours": 2,
+      "total_skills": 1
+    }
+  },
+  
+  "skill_dependencies": {
+    "skill-discovery": [],
+    "skill-contract": ["skill-discovery"],
+    "skill-frontend": ["skill-contract"],
+    "skill-infra": ["skill-contract"],
+    "skill-quant-strategy": ["skill-contract"],
+    "skill-qa-testing": ["skill-frontend", "skill-infra", "skill-quant-strategy"],
+    "skill-backtest-module": ["skill-qa-testing"],
+    "skill-architecture-review": ["skill-qa-testing"],
+    "skill-security-audit": ["skill-architecture-review"],
+    "skill-performance-optimization": ["skill-security-audit"],
+    "skill-release-readiness": ["skill-performance-optimization"]
+  },
+  
+  "quick_lookup": {
+    "by_duration": {
+      "1_hour": ["skill-contract"],
+      "2_hours": ["skill-discovery", "skill-architecture-review", "skill-security-audit", "skill-performance-optimization", "skill-release-readiness"],
+      "3_4_hours": ["skill-frontend"],
+      "5_6_hours": ["skill-infra", "skill-quant-strategy"],
+      "1_2_hours": ["skill-qa-testing", "skill-backtest-module"]
+    },
+    
+    "by_keyword": {
+      "trading": ["skill-quant-strategy", "skill-backtest-module"],
+      "ui": ["skill-frontend"],
+      "api": ["skill-infra"],
+      "testing": ["skill-qa-testing"],
+      "security": ["skill-security-audit"],
+      "performance": ["skill-performance-optimization"],
+      "deployment": ["skill-release-readiness"],
+      "design": ["skill-discovery", "skill-contract", "skill-architecture-review"]
+    },
+    
+    "by_phase": {
+      "design": ["skill-discovery"],
+      "contract": ["skill-contract"],
+      "implementation": ["skill-frontend", "skill-infra", "skill-quant-strategy"],
+      "testing": ["skill-qa-testing", "skill-backtest-module"],
+      "governance": ["skill-architecture-review", "skill-security-audit", "skill-performance-optimization", "skill-release-readiness"]
+    }
+  },
+  
+  "agent_usage": {
+    "how_to_use": "Agents should use SKILL_ROUTING_GUIDE.md to determine which skill to recommend. Load this registry to get metadata about each skill.",
+    "example_agent_flow": {
+      "step_1": "User says: 'Build a trading strategy'",
+      "step_2": "Agent loads SKILLS_REGISTRY.json",
+      "step_3": "Agent consults SKILL_ROUTING_GUIDE.md for workflow",
+      "step_4": "Agent recommends: skill-discovery first",
+      "step_5": "Agent shows skill path, duration, output",
+      "step_6": "Agent walks through skill checklist",
+      "step_7": "Agent proposes next skill from dependencies",
+      "step_8": "Repeat until all skills complete"
+    }
+  }
+}

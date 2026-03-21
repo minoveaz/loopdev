@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LpdText, Heading, TechnicalSurface, Icon, BotCardIndustrial as BotCard, BotConfig, Skeleton, BotStatus, Button, TechnicalDialog, toast } from '@loopdev/ui';
+import { LpdText, Heading, TechnicalSurface, Icon, BotConfig, Skeleton, BotStatus, Button, TechnicalDialog, toast } from '@loopdev/ui';
 import { DeployBotModal } from '../components/DeployBotModal';
+import { BotCardItem } from './components/BotCardItem';
 import { useBotFleet } from '@/hooks/trading/useBotFleet';
 
 /**
@@ -131,38 +132,15 @@ export default function BotFleetPage() {
       {/* 2. FLEET GRID */}
       {bots.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {bots.map((bot: any) => {
-            const isInPosition = bot.currentAction?.includes('In Position');
-
-            return (
-              <BotCard 
-                key={bot.id} 
-                bot={{
-                  ...bot,
-                  macroSentiment: bot.macroSentiment,
-                  priceHistory: bot.priceHistory
-                }} 
-                liveState={{
-                  currentAction: bot.currentAction,
-                  logicSnapshot: bot.logicSnapshot,
-                  openPosition: isInPosition ? {
-                    entryPrice: bot.currentEntryPrice || 0,
-                    investedUsdt: bot.baseInvestmentUsdt || 0,
-                    inventory: bot.currentQuantity || 0,
-                    openedAt: bot.openedAt,
-                    quantity: bot.currentQuantity || 0,
-                    pnlPct: bot.currentPnlPct || 0,
-                    pnlUsdt: bot.currentPnlUsdt || 0,
-                    exitTargets: bot.exitTargets
-                  } : undefined
-                }}
-                stats={undefined} // Hide redundant PNL_TOTAL for now
-                onToggleStatus={() => handleToggleStatus(bot.id, bot.status)}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            );
-          })}
+          {bots.map((bot: any) => (
+            <BotCardItem
+              key={bot.id}
+              bot={bot}
+              onToggleStatus={handleToggleStatus}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))}
         </section>
       ) : (
         <section className="flex flex-col items-center justify-center p-24 border border-dashed border-border-technical/50 rounded-[2.5rem] bg-background-surface/50 backdrop-blur-sm">

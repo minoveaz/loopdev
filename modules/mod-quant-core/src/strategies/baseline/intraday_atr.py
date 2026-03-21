@@ -59,33 +59,23 @@ class IntradayATRStrategy(BaseStrategy):
         if pd.isna(atr) or atr <= 0:
             return None  # ATR not ready yet
 
-        # Crossover Logic
+        # Crossover Logic - IMPROVED (v2)
         cross_above = prev_price < prev_sma and price > sma
-        cross_below = prev_price > prev_sma and price < sma
-
-        if cross_above:
-            # FIXED (2026-03-18): Add volatility filters to avoid false signals
-            # Filter 1: Crossover must be significant (>0.5x ATR)
-            crossover_magnitude = abs(price - sma) / atr if atr > 0 else 0
-            if crossover_magnitude < 0.5:
-                return None  # Crossover too small, likely noise
-            
-            # Filter 2: Volatility must be reasonable (ATR > 0.5% of price)
-            if atr < price * 0.005:
-                return None  # Market too quiet, ignore signal
-            
-            return {"side": "buy", "reason": "SMA20_CROSS_UP"}
+        cross_above_gentle = prev_price <= sma and price > sma and abs(price - prev_sma) < atr  # Gentle cross (no filter)
         
-        if cross_below:
-            # Same filters for short signals
-            crossover_magnitude = abs(price - sma) / atr if atr > 0 else 0
-            if crossover_magnitude < 0.5:
-                return None
-            
-            if atr < price * 0.005:
-                return None
-            
-            return {"side": "sell", "reason": "SMA20_CROSS_DOWN"}
+        cross_below = prev_price > prev_sma and price < sma
+        cross_below_gentle = prev_price >= sma and price < sma and abs(price - prev_sma) < atr  # Gentle cross (no filter)
+
+        if cross_above or cross_above_gentle:
+            # IMPROVED (v2): Reduce volatility filter for more frequent signals
+            # Only require ATR > 0.2% of price (down from 0.5%)
+            if atr >= price * 0.002:  # Changed from 0.005
+                return {"side": "buy", "reason": "SMA20_CROSS_UP"}
+        
+        if cross_below or cross_below_gentle:
+            # Same improvement for short signals
+            if atr >= price * 0.002:  # Changed from 0.005
+                return {"side": "sell", "reason": "SMA20_CROSS_DOWN"}
 
         return None
 

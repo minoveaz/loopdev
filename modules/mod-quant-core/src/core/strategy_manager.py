@@ -1,456 +1,151 @@
 import asyncio
-from loguru import logger
-from typing import Dict, List, Optional, TypeVar, Callable, Any
-from supabase import create_client, Client
-import os
-from pathlib import Path
-from dotenv import load_dotenv
+import logging
 import pandas as pd
 from datetime import datetime, timezone
-import uuid
-import socket
+from typing import Dict, Optional
+from supabase import Client
+import ccxt.pro as ccxtpro
 
-from .exchange_connector import AsyncExchangeConnector
-from .mock_data import MockDataGenerator
-from .strategy_registry import STRATEGY_REGISTRY
-from ..strategies.intraday_atr import IntradayATRStrategy
-from ..strategies.hybrid_core import HybridCoreStrategy
-
-T = TypeVar('T')
+# Configuración Industrial
+logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | [%(name)s] %(message)s')
+logger = logging.getLogger("QUANT_CORE")
 
 class StrategyManager:
-    """
-    Industrial Orchestrator for Live Paper Trading.
-    Syncs bots from Supabase and executes strategy loops with Institutional Analytics.
-    """
-    
-    def __init__(self):
-        env_path = Path(__file__).parent.parent.parent / ".env"
-        load_dotenv(dotenv_path=env_path)
-        
-        self.url = os.getenv("SUPABASE_URL")
-        self.key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-        self.supabase: Client = create_client(self.url, self.key)
-        
-        self.active_bots = {}  # bot_id -> asyncio.Task
-        self.active_bot_data = {}  # bot_id -> bot_data (for metrics API access)
-        self.is_running = False
-        self.risk_settings = None
-        
-        self.strategies = {
-            "atr-breakout-v1": IntradayATRStrategy(),
-            "hybrid-core-v1": HybridCoreStrategy()
+    def __init__(self, supabase_client: Client):
+        self.supabase = supabase_client
+        self.active_bots = {}
+        self.connectors = {
+            'testnet': ccxtpro.binance({'options': {'defaultType': 'spot'}}),
+            'production': ccxtpro.binance({'options': {'defaultType': 'spot'}})
         }
-        
-        self.db_retry_config = {
-            'max_retries': 3,
-            'base_delay': 1.0,
-            'max_delay': 10.0,
-            'backoff_multiplier': 2.0
-        }
-
-    async def _retry_with_backoff(
-        self, 
-        func: Callable[..., Any], 
-        *args,
-        operation_name: str = "DB operation",
-        **kwargs
-    ) -> Optional[Any]:
-        """Execute function with exponential backoff retry logic for network issues."""
-        config = self.db_retry_config
-        retry_count = 0
-        last_error = None
-        
-        while retry_count <= config['max_retries']:
-            try:
-                return await func(*args, **kwargs) if asyncio.iscoroutinefunction(func) else func(*args, **kwargs)
-            except (socket.gaierror, TimeoutError, ConnectionError, OSError) as e:
-                last_error = e
-                retry_count += 1
-                
-                if retry_count > config['max_retries']:
-                    logger.error(
-                        f"{operation_name} failed after {config['max_retries']} retries: {e}. "
-                        f"Error type: {type(e).__name__}"
-                    )
-                    return None
-                
-                delay = min(
-                    config['base_delay'] * (config['backoff_multiplier'] ** (retry_count - 1)),
-                    config['max_delay']
-                )
-                logger.warning(
-                    f"{operation_name} failed (attempt {retry_count}/{config['max_retries']}): {e}. "
-                    f"Retrying in {delay:.1f}s..."
-                )
-                await asyncio.sleep(delay)
-            except Exception as e:
-                logger.error(f"{operation_name} failed with unexpected error: {e}")
-                return None
-        
-        return None
-
-    async def fetch_risk_settings(self):
-        """Fetch global risk governance from Supabase with retry logic."""
-        async def _fetch():
-            res = self.supabase.table("quant_risk_settings").select("*").eq("tenant_id", "00000000-0000-0000-0000-000000000000").single().execute()
-            self.risk_settings = res.data
-        
-        await self._retry_with_backoff(_fetch, operation_name="fetch_risk_settings")
-
-    async def update_bot_state(self, bot_id: str, payload: dict):
-        """Persists the complete bot state to the database with retry logic.
-        
-        Only updates fields that are known to exist in the quant_bots table.
-        Silently filters unknown fields to maintain resilience.
-        """
-        # Conservative list of fields confirmed to exist in quant_bots
-        # Based on: Supabase schema inspection
-        allowed_fields = {
-            # Core fields
-            'id', 'tenant_id', 'name', 'pair', 'status', 'created_at', 'updated_at',
-            
-            # Investment configuration
-            'base_investment_usdt',
-            
-            # Strategy & execution state  
-            'current_action', 'current_entry_price', 'current_pnl_pct', 'current_pnl_usdt',
-            'current_position_opened_at', 'last_exit_targets', 'last_logic_snapshot',
-            
-            # Optional monitoring fields (may or may not exist)
-            'last_signal', 'signal_strength',
-        }
-        
-        # Filter payload to only include allowed fields
-        filtered_payload = {k: v for k, v in payload.items() if k in allowed_fields}
-        
-        # Log fields that were filtered out (DEBUG level)
-        filtered_out = set(payload.keys()) - set(filtered_payload.keys())
-        if filtered_out:
-            logger.debug(f"Filtered out unknown fields for bot {bot_id}: {filtered_out}")
-        
-        if not filtered_payload:
-            logger.debug(f"No valid fields to update for bot {bot_id} from payload: {list(payload.keys())}")
-            return
-        
-        async def _update():
-            self.supabase.table("quant_bots").update(filtered_payload).eq("id", bot_id).execute()
-        
-        await self._retry_with_backoff(_update, operation_name=f"update bot state for {bot_id}")
-
-    async def get_macro_sentiment(self, connector, pair: str):
-        """Analyzes the 4h trend to determine macro sentiment."""
-        try:
-            ohlcv = await connector.exchange.fetch_ohlcv(pair, timeframe='4h', limit=20)
-            df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
-            sma = df['close'].rolling(20).mean().iloc[-1]
-            price = df['close'].iloc[-1]
-            if pd.isna(sma): return 'neutral'
-            return 'bullish' if price > sma else 'bearish'
-        except Exception: return 'neutral'
-
-    async def create_virtual_order(self, bot_data: dict, side: str, price: float, quantity: float, reason: str):
-        """Creates a virtual order in the 'quant_orders' table with retry logic."""
-        order_id = str(uuid.uuid4())
-        payload = {
-            "id": order_id,
-            "tenant_id": bot_data['tenant_id'],
-            "bot_id": bot_data['id'],
-            "side": side,
-            "type": "market",
-            "status": "filled",
-            "quantity": quantity,
-            "price": price,
-            "filled_quantity": quantity,
-            "average_fill_price": price,
-            "signal_source": reason,
-            "exchange_order_id": f"VIRTUAL_{order_id[:8]}"
-        }
-        
-        async def _insert():
-            self.supabase.table("quant_orders").insert(payload).execute()
-        
-        result = await self._retry_with_backoff(_insert, operation_name=f"create virtual order for {bot_data['name']}")
-        
-        if result is not None:
-            logger.success(f"[{bot_data['name']}] VIRTUAL ORDER: {side.upper()} {quantity:.6f} @ ${price:.2f}")
-            return order_id
-        else:
-            logger.error(f"Failed to create virtual order for {bot_data['name']}")
-            return None
-
-    async def manage_position(self, bot_data: dict, current_price: float, snapshot: dict):
-        """Checks if there's an open position and manages exits (TP/SL) with retry logic."""
-        bot_id = bot_data['id']
-        bot_name = bot_data['name']
-        
-        async def _fetch_position():
-            res = self.supabase.table("quant_positions").select("*").eq("bot_id", bot_id).execute()
-            return res.data[0] if res.data else None
-        
-        try:
-            position = await self._retry_with_backoff(
-                _fetch_position, 
-                operation_name=f"fetch position for {bot_name}"
-            )
-            
-            if position is None:
-                return None, 0.0
-            
-            entry_price = float(position['entry_price'])
-            qty = float(position['total_quantity'])
-            
-            pnl_pct = ((current_price - entry_price) / entry_price) * 100
-            pnl_usdt = (current_price - entry_price) * qty
-            
-            # Risk Logic
-            risk = bot_data.get('risk_profile', {})
-            sl_pct = float(risk.get('globalStopLossPct', 5.0))
-            tp_pct = 3.0 
-            
-            sl_price = entry_price * (1 - (sl_pct / 100))
-            tp_price = entry_price * (1 + (tp_pct / 100))
-            
-            # Break-even Point (Entry + 0.2% to cover buy/sell fees)
-            be_price = entry_price * 1.002
-            
-            exit_targets = {
-                "sl_price": round(sl_price, 2), 
-                "tp_price": round(tp_price, 2),
-                "be_price": round(be_price, 2)
-            }
-            
-            if current_price <= sl_price:
-                await self.update_bot_state(bot_id, {
-                    "current_action": "EXITING: STOP_LOSS",
-                    "current_entry_price": 0,
-                    "current_quantity": 0,
-                    "last_exit_targets": {}
-                })
-                await self.create_virtual_order(bot_data, 'sell', current_price, qty, "STOP_LOSS")
-                
-                async def _delete_sl():
-                    self.supabase.table("quant_positions").delete().eq("id", position['id']).execute()
-                
-                await self._retry_with_backoff(_delete_sl, operation_name=f"delete position for {bot_name}")
-                return None, 0.0
-            elif current_price >= tp_price:
-                await self.update_bot_state(bot_id, {
-                    "current_action": "EXITING: TAKE_PROFIT",
-                    "current_entry_price": 0,
-                    "current_quantity": 0,
-                    "last_exit_targets": {}
-                })
-                await self.create_virtual_order(bot_data, 'sell', current_price, qty, "TAKE_PROFIT")
-                
-                async def _delete_tp():
-                    self.supabase.table("quant_positions").delete().eq("id", position['id']).execute()
-                
-                await self._retry_with_backoff(_delete_tp, operation_name=f"delete position for {bot_name}")
-                return None, 0.0
-            
-            # Update position in bot table
-            await self.update_bot_state(bot_id, {
-                "current_action": f"In Position | PnL: {pnl_pct:+.2f}%",
-                "current_pnl_pct": round(pnl_pct, 2),
-                "current_pnl_usdt": round(pnl_usdt, 2),
-                "current_entry_price": entry_price,
-                "current_quantity": qty,
-                "current_position_opened_at": position.get('created_at'),
-                "last_exit_targets": exit_targets,
-                "last_logic_snapshot": snapshot
-            })
-            
-            return position, qty
-            
-        except Exception as e:
-            logger.error(f"Position management error: {e}", exc_info=True)
-            return None, 0.0
-
-    async def sync_bots_from_db(self):
-        """Fetch active bots and start/stop their loops with retry logic."""
-        async def _fetch_bots():
-            response = self.supabase.table("quant_bots").select("*, quant_strategies(core_id)").in_("status", ["active", "paper_trading"]).execute()
-            return {bot["id"]: bot for bot in response.data}
-        
-        try:
-            await self.fetch_risk_settings()
-            if self.risk_settings and self.risk_settings.get('kill_switch_active'):
-                logger.warning("Kill switch activated, stopping all bots")
-                for tid in list(self.active_bots.keys()):
-                    self.active_bots[tid].cancel()
-                    del self.active_bots[tid]
-                    self.active_bot_data.pop(tid, None)  # Cleanup data too
-                return
-            
-            active_db_bots = await self._retry_with_backoff(
-                _fetch_bots, 
-                operation_name="fetch active bots from DB"
-            )
-            
-            if active_db_bots is None:
-                logger.error("Could not fetch bots from database after retries")
-                return
-            
-            for bot_id in list(self.active_bots.keys()):
-                if bot_id not in active_db_bots:
-                    logger.info(f"Stopping bot {bot_id} (no longer in DB)")
-                    self.active_bots[bot_id].cancel()
-                    del self.active_bots[bot_id]
-                    self.active_bot_data.pop(bot_id, None)  # Cleanup data too
-            
-            for bot_id, bot_data in active_db_bots.items():
-                if bot_id not in self.active_bots:
-                    logger.info(f"Starting bot {bot_id}: {bot_data.get('name')}")
-                    task = asyncio.create_task(self.bot_execution_loop(bot_data))
-                    self.active_bots[bot_id] = task
-                    self.active_bot_data[bot_id] = bot_data  # Store for metrics API
-        except Exception as e:
-            logger.error(f"Sync error (non-network related): {e}", exc_info=True)
-
-    async def bot_execution_loop(self, bot_data):
-        """Continuous execution loop with Advanced Analytics."""
-        bot_id = bot_data['id']
-        bot_name = bot_data['name']
-        pair = bot_data['pair']
-        
-        strategy_info = bot_data.get('quant_strategies')
-        core_id = strategy_info.get('core_id', 'atr-breakout-v1') if strategy_info else 'atr-breakout-v1'
-        strategy = self.strategies.get(core_id, self.strategies['atr-breakout-v1'])
-        
-        # Get exchange credentials: from bot_data → env vars → use demo (ZERO HARDCODING)
-        exchange_id = bot_data.get('exchange_id', 'binance')
-        api_key = (
-            bot_data.get('exchange_api_key') or 
-            bot_data.get('api_key') or 
-            os.getenv('BINANCE_API_KEY', '')
-        )
-        api_secret = (
-            bot_data.get('exchange_api_secret') or 
-            bot_data.get('api_secret') or 
-            os.getenv('BINANCE_API_SECRET', '')
-        )
-        
-        # Check if we have valid credentials
-        if not api_key or not api_secret or api_key == 'PAPER_KEY' or api_secret == 'PAPER_SECRET':
-            logger.warning(f"[{bot_name}] No valid exchange credentials found. Using Binance testnet with demo keys.")
-            api_key = os.getenv('BINANCE_TESTNET_KEY', '')
-            api_secret = os.getenv('BINANCE_TESTNET_SECRET', '')
-            
-            if not api_key or not api_secret:
-                logger.warning(f"[{bot_name}] No testnet credentials. Running in MOCK mode for testing.")
-                use_mock_data = True
-            else:
-                use_mock_data = False
-        else:
-            use_mock_data = False
-        
-        if not use_mock_data:
-            connector = AsyncExchangeConnector(exchange_id, api_key, api_secret, True)
-        else:
-            connector = None  # Will use mock data instead
-        
-        try:
-            if connector:
-                await connector.connect()
-            logger.info(f"[{bot_name}] Core online. Watching {pair}" + (" (MOCK MODE)" if use_mock_data else ""))
-
-            # Mock data generator for testing
-            mock_gen = MockDataGenerator() if use_mock_data else None
-
-            while True:
-                # 1. Fetch Data
-                logger.debug(f"[{bot_name}] Starting loop iteration...")
-                if use_mock_data:
-                    # Generate realistic mock OHLCV data
-                    ohlcv = mock_gen.generate_ohlcv(60, base_price=71000, volatility=0.002)
-                else:
-                    ohlcv = await connector.exchange.fetch_ohlcv(pair, timeframe='1m', limit=60)
-                
-                df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
-                current_price = float(df.iloc[-1]['close'])
-                price_history = df['close'].tolist()
-                
-                # 2. Advanced Analytics: Macro Sentiment
-                sentiment = await self.get_macro_sentiment(connector, pair) if not use_mock_data else 'neutral'
-                
-                # 3. Strategy Analyze
-                df = strategy.analyze(df)
-                last_row = df.iloc[-1]
-                snapshot = { "price": round(current_price, 2) }
-                if 'sma20' in last_row and not pd.isna(last_row['sma20']): snapshot["sma20"] = round(float(last_row['sma20']), 2)
-                if 'atr' in last_row and not pd.isna(last_row['atr']): snapshot["atr"] = round(float(last_row['atr']), 4)
-                
-                # Store metrics in active_bot_data for API access
-                self.active_bot_data[bot_id].update({
-                    "current_price": current_price,
-                    "_current_rsi": float(last_row.get('rsi', 0)) if 'rsi' in last_row and not pd.isna(last_row['rsi']) else 0,
-                    "_current_sma": float(last_row.get('sma50', last_row.get('sma20', 0))) if ('sma50' in last_row and not pd.isna(last_row['sma50'])) or ('sma20' in last_row and not pd.isna(last_row['sma20'])) else 0,
-                    "_current_atr": float(last_row.get('atr', 0)) if 'atr' in last_row and not pd.isna(last_row['atr']) else 0,
-                    "_atr_history": df['atr'].dropna().tail(20).tolist() if 'atr' in df else [],
-                    "_metrics_snapshot": snapshot,
-                    "core_id": core_id
-                })
-                logger.debug(f"[{bot_name}] Metrics updated - Price: ${current_price}, SMA: ${self.active_bot_data[bot_id]['_current_sma']}, ATR: {self.active_bot_data[bot_id]['_current_atr']}")
-
-                # 4. Manage Position (Calculates PnL, Entry, BE, Qty)
-                position, qty = await self.manage_position(bot_data, current_price, snapshot)
-                
-                # 5. Global Updates (History + Sentiment)
-                await self.update_bot_state(bot_id, {
-                    "price_history_1h": price_history,
-                    "macro_sentiment": sentiment
-                })
-
-                if not position:
-                    signal = strategy.check_signal(last_row, df.iloc[-2])
-                    if signal and signal['side'] == 'buy':
-                        now_str = datetime.now(timezone.utc).isoformat()
-                        qty = float(bot_data['base_investment_usdt']) / current_price
-                        await self.create_virtual_order(bot_data, 'buy', current_price, qty, signal['reason'])
-                        self.supabase.table("quant_positions").insert({
-                            "tenant_id": bot_data['tenant_id'], "bot_id": bot_id, "pair": pair, "entry_price": current_price,
-                            "average_price": current_price, "total_quantity": qty, "total_invested_usdt": bot_data['base_investment_usdt'],
-                            "created_at": now_str
-                        }).execute()
-                        await self.update_bot_state(bot_id, {
-                            "current_action": "EXECUTING VIRTUAL BUY...",
-                            "current_entry_price": current_price,
-                            "current_quantity": qty,
-                            "current_position_opened_at": now_str
-                        })
-                    else:
-                        await self.update_bot_state(bot_id, {
-                            "current_action": f"Awaiting Signal ({pair} @ ${current_price})",
-                            "current_pnl_pct": 0, "current_pnl_usdt": 0,
-                            "current_entry_price": 0, "current_quantity": 0
-                        })
-                
-                await asyncio.sleep(60)
-        except asyncio.CancelledError: logger.info(f"Loop stopped for {bot_name}")
-        except Exception as e: logger.error(f"Critical error in {bot_name}: {e}")
-        finally: 
-            if connector:
-                await connector.close()
-
-    async def start(self):
+        self.connectors['testnet'].set_sandbox_mode(True)
         self.is_running = True
-        logger.info("Quant Core Orchestrator Online.")
+
+    # --- UTILIDADES DE PRECISIÓN ---
+    def from_cents(self, cents: int) -> float:
+        return float(cents) / 100.0
+
+    def to_cents(self, price: float) -> int:
+        return int(round(price * 100))
+
+    # --- TIER B: SIGNAL ENGINE (Lógica) ---
+    async def run_signal_engine(self):
+        """Monitoriza mercados locales y genera señales en quant_signals."""
+        logger.info("Signal Engine (Tier B) started.")
         while self.is_running:
-            await self.sync_bots_from_db()
-            await asyncio.sleep(10)
-    
-    def stop(self):
-        """Gracefully stop all bot execution loops."""
-        self.is_running = False
-        logger.info("Stopping Quant Core Orchestrator...")
+            try:
+                # 1. Obtener bots activos
+                res = self.supabase.table("quant_bots").select("*, quant_strategies(*)").in_("status", ["active", "paper_trading"]).execute()
+                bots = res.data
+
+                for bot in bots:
+                    await self.process_bot_logic(bot)
+                
+                await asyncio.sleep(30) # Ciclo de escaneo de señales
+            except Exception as e:
+                logger.error(f"Signal Engine Error: {e}")
+                await asyncio.sleep(10)
+
+    async def process_bot_logic(self, bot: dict):
+        """Calcula indicadores usando la DB local y genera señales si aplica."""
+        pair = bot['pair']
+        env = 'testnet' if bot['status'] == 'paper_trading' or bot['status'] == 'active' else 'production'
         
-        # Cancel all active bot tasks
-        for bot_id, task in list(self.active_bots.items()):
-            if not task.done():
-                task.cancel()
-                logger.info(f"Cancelled bot execution loop for {bot_id}")
+        # 1. Traer historial local (Tier A -> Tier B)
+        res = self.supabase.table("quant_market_history") \
+            .select("*") \
+            .eq("pair", pair) \
+            .eq("environment", env) \
+            .order("timestamp", desc=True) \
+            .limit(100).execute()
         
-        self.active_bots.clear()
-        self.active_bot_data.clear()  # Cleanup bot data too
-        logger.success("All bot execution loops stopped")
+        if len(res.data) < 20: return # Necesitamos datos mínimos
+
+        # 2. Convertir a DataFrame y revertir Cents a Float para cálculos
+        df = pd.DataFrame(res.data).sort_values('timestamp')
+        for col in ['open', 'high', 'low', 'close']:
+            df[col] = df[col].apply(self.from_cents)
+
+        # 3. Calcular Indicadores (Ejemplo simplificado, aquí iría tu lógica de estrategia)
+        df['sma20'] = df['close'].rolling(20).mean()
+        last_price = df['close'].iloc[-1]
+        last_sma = df['sma20'].iloc[-1]
+        
+        # 4. Lógica de Disparo (Solo si no hay posición abierta)
+        if bot['current_entry_price'] == 0:
+            if last_price > last_sma: # Ejemplo: Cruce alcista
+                await self.generate_signal(bot, 'BUY', last_price, {"reason": "SMA_CROSS_UP", "sma": last_sma})
+        else:
+            # Lógica de salida (TP/SL)
+            # Tier B detecta la intención de salida, Tier C la ejecuta
+            if last_price >= bot['last_exit_targets'].get('tp_price', 999999):
+                await self.generate_signal(bot, 'EXIT', last_price, {"reason": "TARGET_TP_REACHED"})
+
+    async def generate_signal(self, bot: dict, side: str, price: float, metadata: dict):
+        """Inserta señal en la tabla desacoplada."""
+        payload = {
+            "tenant_id": bot['tenant_id'],
+            "bot_id": bot['id'],
+            "pair": bot['pair'],
+            "side": side,
+            "price": self.to_cents(price),
+            "environment": 'testnet' if bot['status'] == 'paper_trading' or bot['status'] == 'active' else 'production',
+            "status": "PENDING",
+            "metadata": metadata
+        }
+        self.supabase.table("quant_signals").insert(payload).execute()
+        logger.info(f"SIGNAL GENERATED | {bot['pair']} | {side} @ ${price}")
+
+    # --- TIER C: EXECUTION MANAGER (Acción) ---
+    async def run_execution_manager(self):
+        """Escucha señales PENDING y las ejecuta en el exchange."""
+        logger.info("Execution Manager (Tier C) started.")
+        while self.is_running:
+            try:
+                # 1. Buscar señales pendientes
+                res = self.supabase.table("quant_signals").select("*").eq("status", "PENDING").execute()
+                signals = res.data
+
+                for sig in signals:
+                    await self.execute_trade(sig)
+                
+                await asyncio.sleep(5) # Alta frecuencia de ejecución
+            except Exception as e:
+                logger.error(f"Execution Manager Error: {e}")
+                await asyncio.sleep(5)
+
+    async def execute_trade(self, signal: dict):
+        """Habla con Binance y actualiza el estado del bot."""
+        bot_id = signal['bot_id']
+        pair = signal['pair']
+        side = signal['side']
+        price = self.from_cents(signal['price'])
+        
+        logger.info(f"EXECUTING ORDER | {pair} | {side} @ ${price}")
+        
+        try:
+            # Aquí iría la llamada real: await self.connectors['testnet'].create_order(...)
+            # Por ahora simulamos éxito inmediato
+            
+            # 1. Marcar señal como ejecutada
+            self.supabase.table("quant_signals").update({"status": "EXECUTED"}).eq("id", signal['id']).execute()
+            
+            # 2. Actualizar Bot (Entrada o Salida)
+            update_payload = {
+                "current_entry_price": signal['price'] if side == 'BUY' else 0,
+                "current_action": f"In Position ({pair})" if side == 'BUY' else "Scanning Market",
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            self.supabase.table("quant_bots").update(update_payload).eq("id", bot_id).execute()
+            
+            logger.info(f"ORDER SUCCESS | Bot {bot_id} updated.")
+        except Exception as e:
+            logger.error(f"Execution Failed for signal {signal['id']}: {e}")
+            self.supabase.table("quant_signals").update({"status": "REJECTED"}).eq("id", signal['id']).execute()
+
+    async def run(self):
+        """Lanza ambos motores en paralelo."""
+        await asyncio.gather(
+            self.run_signal_engine(),
+            self.run_execution_manager()
+        )

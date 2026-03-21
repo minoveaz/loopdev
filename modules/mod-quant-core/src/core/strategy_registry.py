@@ -61,6 +61,21 @@ STRATEGY_REGISTRY: Dict[str, StrategyDefinition] = {
             StrategyParameter(id="atr_tp_multiplier", label="ATR TP Multiplier", default=1.5, type="number", description="Multiple of ATR for take profit distance.", min=1.0, max=3.0),
             StrategyParameter(id="atr_sl_multiplier", label="ATR SL Multiplier", default=1.5, type="number", description="Multiple of ATR for stop loss distance.", min=1.0, max=3.0)
         ]
+    ),
+    "aggressive-rsi-v1": StrategyDefinition(
+        id="aggressive-rsi-v1",
+        name="Aggressive RSI Scalper",
+        category="Momentum",
+        description="Aggressive momentum strategy designed for high-frequency scalping. Generates frequent signals with trend confirmation.",
+        technical_summary="Detects RSI momentum (< 45 for long, > 55 for short) and confirms with price position relative to SMA20. Lower thresholds mean more signals. Uses ATR for dynamic risk management.",
+        recommended_timeframe="1m, 5m",
+        parameters=[
+            StrategyParameter(id="rsi_period", label="RSI Period", default=14, type="number", description="Window for RSI calculation.", min=7, max=21),
+            StrategyParameter(id="rsi_lower", label="RSI Buy Threshold", default=45, type="number", description="RSI below this triggers buy signal.", min=30, max=50),
+            StrategyParameter(id="rsi_upper", label="RSI Sell Threshold", default=55, type="number", description="RSI above this triggers sell signal.", min=50, max=70),
+            StrategyParameter(id="sma_period", label="SMA Confirmation Period", default=20, type="number", description="Moving average for trend confirmation.", min=10, max=50),
+            StrategyParameter(id="atr_tp_multiplier", label="ATR TP Multiplier", default=1.0, type="number", description="Multiple of ATR for take profit distance.", min=0.5, max=2.0)
+        ]
     )
 }
 
