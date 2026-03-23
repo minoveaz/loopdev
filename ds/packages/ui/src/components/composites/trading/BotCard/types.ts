@@ -49,6 +49,7 @@ export interface BotCardProps {
   onMarketExit?: (id: string) => Promise<void>;
   onSetToBE?: (id: string) => Promise<void>;
   onExecuteTP?: (id: string) => Promise<void>;
+  onUpdateTrail?: (id: string, distance: number) => Promise<void>;
   /** Callback to open the management drawer/panel */
   onOpenDetails?: (id: string) => void;
   /** Callback to open settings/edit */

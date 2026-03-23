@@ -12,6 +12,7 @@ interface InPositionStateProps {
   onMarketExit?: () => Promise<void>;
   onSetToBE?: () => Promise<void>;
   onExecuteTP?: () => Promise<void>;
+  onUpdateTrail?: (distance: number) => Promise<void>;
 }
 
 /**
@@ -23,7 +24,8 @@ export const InPositionState = ({
   bot,
   onMarketExit,
   onSetToBE,
-  onExecuteTP
+  onExecuteTP,
+  onUpdateTrail
 }: InPositionStateProps) => {
   const [elapsedTime, setElapsedTime] = useState('');
 
@@ -50,6 +52,7 @@ export const InPositionState = ({
   const slPrice = bot.exitTargets?.slPrice || 0;
   const tpPrice = bot.exitTargets?.tpPrice || 0;
   const bePrice = bot.exitTargets?.bePrice || bot.currentEntryPrice * 1.002;
+  const trailingDistance = bot.trailingStopDistance || 1.0;
   
   // Logic: Can only move to BE if price is above BE AND SL is still below BE (not protected yet)
   const isAlreadyProtected = slPrice >= bePrice;
@@ -138,7 +141,9 @@ export const InPositionState = ({
         onMarketExit={onMarketExit}
         onSetToBE={onSetToBE}
         onExecuteTP={onExecuteTP}
+        onUpdateTrail={onUpdateTrail}
         canMoveToBE={canMoveToBE}
+        trailingDistance={trailingDistance}
       />
 
       {/* 5. Grid de Precios de Seguridad (REESTRUCTURADO) */}
@@ -156,9 +161,29 @@ export const InPositionState = ({
         </div>
 
         <div className="flex flex-col gap-2">
-          <LpdText size="nano" weight="black" className="uppercase text-rose-500/50 tracking-widest">Stop_Loss</LpdText>
-          <LpdText size="md" weight="black" className="font-mono text-rose-500 opacity-90">${formatPrice(slPrice)}</LpdText>
-          <LpdText size="xs" weight="black" className="text-rose-500 opacity-80 font-mono">{getRelPct(slPrice)}% / {getRelUsd(slPrice)}</LpdText>
+          <div className="flex items-center gap-2">
+            <LpdText 
+              size="nano" 
+              weight="black" 
+              className={cn("uppercase tracking-widest", slPrice > bot.currentEntryPrice ? "text-emerald-500/50" : "text-rose-500/50")}
+            >
+              Stop_Loss
+            </LpdText>
+            <LpdText 
+              size="xs" 
+              weight="black" 
+              className={cn("font-mono opacity-80", slPrice > bot.currentEntryPrice ? "text-emerald-500" : "text-rose-500")}
+            >
+              {getRelPct(slPrice)}% / {getRelUsd(slPrice)}
+            </LpdText>
+          </div>
+          <LpdText 
+            size="md" 
+            weight="black" 
+            className={cn("font-mono opacity-90", slPrice > bot.currentEntryPrice ? "text-emerald-500" : "text-rose-500")}
+          >
+            ${formatPrice(slPrice)}
+          </LpdText>
         </div>
 
         <div className="flex flex-col gap-2 text-right">

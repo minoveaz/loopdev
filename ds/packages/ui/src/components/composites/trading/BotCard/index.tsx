@@ -22,6 +22,7 @@ export const BotCardIndustrial: React.FC<BotCardProps> = ({
   onMarketExit,
   onSetToBE,
   onExecuteTP,
+  onUpdateTrail,
   className
 }) => {
   const isActive = bot.status === 'active' || bot.status === 'paper_trading';
@@ -112,6 +113,7 @@ export const BotCardIndustrial: React.FC<BotCardProps> = ({
           onMarketExit={onMarketExit ? () => onMarketExit(bot.id) : undefined}
           onSetToBE={onSetToBE ? () => onSetToBE(bot.id) : undefined}
           onExecuteTP={onExecuteTP ? () => onExecuteTP(bot.id) : undefined}
+          onUpdateTrail={onUpdateTrail ? (dist) => onUpdateTrail(bot.id, dist) : undefined}
         />
       </div>
 

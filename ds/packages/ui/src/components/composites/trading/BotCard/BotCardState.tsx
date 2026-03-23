@@ -12,6 +12,7 @@ interface BotCardStateProps {
   onMarketExit?: () => Promise<void>;
   onSetToBE?: () => Promise<void>;
   onExecuteTP?: () => Promise<void>;
+  onUpdateTrail?: (distance: number) => Promise<void>;
 }
 
 /**
@@ -25,7 +26,8 @@ export const BotCardState = ({
   bot,
   onMarketExit,
   onSetToBE,
-  onExecuteTP
+  onExecuteTP,
+  onUpdateTrail
 }: BotCardStateProps) => {
   const isInPosition = bot.currentEntryPrice > 0;
   const isWaiting = (bot.proximityPct > 70) || currentAction?.toUpperCase().includes('WAITING');
@@ -40,6 +42,7 @@ export const BotCardState = ({
         onMarketExit={onMarketExit}
         onSetToBE={onSetToBE}
         onExecuteTP={onExecuteTP}
+        onUpdateTrail={onUpdateTrail}
       />
     );
   }

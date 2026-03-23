@@ -51,8 +51,15 @@ Unify all existing frontend hooks, UI components, and Python strategies with the
 - **Focus:** 
     - [ ] **OperationalDock (UI Molecule):** Create the tabbed bottom panel (Positions | Activity | History).
     - [ ] **Unified Activity Stream:** Map `quant_signals` and manual commands into a single industrial feed.
-    - [ ] **PulseSparkline Link:** Connect charts to real `quant_market_history` DB candles.
+    - [x] **PulseSparkline Link:** Connect charts to real `quant_market_history` DB candles ✅.
     - [ ] **BotInspector Mapping:** Connect the side panel to the full `last_logic_snapshot`.
+
+### PHASE 6: ADVANCED RISK MANAGEMENT (Trailing Stop) ⏳
+- **Focus:** 
+    - [ ] **DB Migration:** Add `current_position_max_price` to track trade peaks.
+    - [ ] **Backend Logic:** Implement automatic SL trailing based on price peaks.
+    - [ ] **Manual Override:** Add "Activate Trailing" command to the UI buttons.
+    - [ ] **Visual Sync:** Show the Stop Loss moving up in real-time on the card.
 
 
 ### PHASE 5: UNIFIED EVENT STREAM (Signals & Orders)

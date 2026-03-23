@@ -40,6 +40,7 @@ export const useBotFleet = () => {
           coreId: strategyInfo?.core_id || 'default',
           status: raw.status,
           updatedAt: raw.updated_at,
+          trailingStopDistance: Number(raw.trailing_stop_distance || 1.0),
           currentAction: raw.current_action || 'Initializing...',
           
           // Precios Convertidos

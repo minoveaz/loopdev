@@ -27,9 +27,11 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
   onDelete,
   onMarketExit,
   onSetToBE,
-  onExecuteTP
+  onExecuteTP,
+  onUpdateTrail
 }) => {
   const prevBotRef = useRef<any>(null);
+
   const [priceDirection, setPriceDirection] = useState<'up' | 'down' | null>(null);
   const [smaDirection, setSmaDirection] = useState<'up' | 'down' | null>(null);
   const [atrDirection, setAtrDirection] = useState<'up' | 'down' | null>(null);
@@ -41,7 +43,8 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
     priceHistory: bot.priceHistory,
     strategyName: bot.strategyName,
     coreId: bot.coreId,
-    updatedAt: bot.updatedAt
+    updatedAt: bot.updatedAt,
+    trailingStopDistance: bot.trailingStopDistance
   }), [
     bot.id,
     bot.name,
@@ -50,6 +53,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
     bot.strategyName,
     bot.coreId,
     bot.updatedAt,
+    bot.trailingStopDistance,
     bot.currentPrice,
     bot.currentSma,
     bot.currentAtr,
@@ -148,6 +152,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
         onMarketExit={onMarketExit}
         onSetToBE={onSetToBE}
         onExecuteTP={onExecuteTP}
+        onUpdateTrail={onUpdateTrail}
       />
       
       {/* Execution Metrics - Shown when waiting for signal */}

@@ -138,28 +138,61 @@ class StrategyManager:
 
 
         # 5. Actualizar Telemetría del Bot en la DB (Usando CENTS)
+        # Extraer historial de precios para el Sparkline (últimos 30)
+        price_history = df['close'].tail(30).tolist()
+
         update_payload = {
             "last_price": self.to_cents(current_price),
             "last_sentiment": sentiment,
             "signal_strength": proximity_score,
             "last_logic_snapshot": snapshot,
+            "price_history_1h": price_history,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
 
-        # --- REAL-TIME PnL CALCULATION (Audit Fix) ---
+        # --- REAL-TIME PnL & TRAILING STOP CALCULATION (Audit Fix) ---
         entry_price_raw = bot.get('current_entry_price')
         if entry_price_raw and entry_price_raw > 0:
             entry_price = self.from_cents(entry_price_raw)
             pnl_pct = ((current_price / entry_price) - 1) * 100
-            # Usar la inversión base para calcular el profit absoluto (Harden against None)
             investment = float(bot.get('base_investment_usdt') or 100)
             pnl_usdt = (pnl_pct / 100) * investment
             
             update_payload["current_pnl_pct"] = round(pnl_pct, 2)
             update_payload["current_pnl_usdt"] = self.to_cents(pnl_usdt)
+
+            # --- TRAILING STOP LOGIC ---
+            current_max = self.from_cents(bot.get('current_position_max_price') or 0)
+            # 1. Actualizar el pico máximo si el precio actual es mayor
+            if current_price > current_max:
+                current_max = current_price
+                update_payload["current_position_max_price"] = self.to_cents(current_max)
+                logger.info(f"NEW PEAK REACHED | Bot: {bot['id'][:8]} | Max: ${current_max:.2f}")
+
+            # 2. Lógica de Trailing Stop
+            # Leer distancia configurada (Default 1.0%)
+            dist_pct = float(bot.get('trailing_stop_distance') or 1.0)
+            
+            # Umbral de Activación: 2% si es automático, o inmediato si es una distancia pequeña (Manual)
+            # Si el usuario puso 0.2% o 0.5%, asumimos que quiere activación inmediata.
+            activation_threshold = 2.0 if dist_pct >= 1.0 else 0.1 
+
+            if pnl_pct > activation_threshold:
+                # El SL se sitúa a la distancia configurada del máximo
+                trailing_sl = current_max * (1 - (dist_pct / 100))
+                old_sl = self.from_cents(bot['last_exit_targets'].get('sl_price', 0))
+                
+                # Solo subir el SL, nunca bajarlo
+                if trailing_sl > old_sl:
+                    new_targets = bot.get('last_exit_targets', {})
+                    new_targets['sl_price'] = self.to_cents(trailing_sl)
+                    update_payload["last_exit_targets"] = new_targets
+                    update_payload["current_action"] = f"Trailing Active ({dist_pct}%)"
+                    logger.success(f"TRAILING SL UPDATED | Bot: {bot['id'][:8]} | New SL: ${trailing_sl:.2f} | Dist: {dist_pct}%")
         else:
             update_payload["current_pnl_pct"] = 0
             update_payload["current_pnl_usdt"] = 0
+            update_payload["current_position_max_price"] = 0
 
         self.supabase.table("quant_bots").update(update_payload).eq("id", bot['id']).execute()
 
@@ -223,6 +256,7 @@ class StrategyManager:
                 "current_entry_price": signal['price'] if side == 'BUY' else 0,
                 "current_action": f"In Position ({pair})" if side == 'BUY' else "Scanning Market",
                 "current_position_opened_at": datetime.now(timezone.utc).isoformat() if side == 'BUY' else None,
+                "current_position_max_price": signal['price'] if side == 'BUY' else 0,
                 "updated_at": datetime.now(timezone.utc).isoformat()
             }
 
@@ -330,6 +364,22 @@ class StrategyManager:
                             "current_action": "SL Adjusted to Break-Even"
                         }).eq("id", bot_id).execute()
                         logger.success(f"BREAK-EVEN SET | Bot: {masked_id} @ ${be_price:.2f}")
+
+                    # Caso C: Ajustar Distancia de Trailing (Manual)
+                    elif cmd and cmd.startswith('TRAIL_DISTANCE:'):
+                        try:
+                            new_dist = float(cmd.split(':')[1])
+                            logger.info(f"EXECUTING COMMAND | Bot: {masked_id} | New Trail Dist: {new_dist}%")
+                            
+                            self.supabase.table("quant_bots").update({
+                                "trailing_stop_distance": new_dist,
+                                "pending_command": None,
+                                "current_action": f"Trail Adjusted to {new_dist}%"
+                            }).eq("id", bot_id).execute()
+                            logger.success(f"TRAILING DISTANCE UPDATED | Bot: {masked_id} | Value: {new_dist}%")
+                        except Exception as e:
+                            logger.error(f"Failed to parse trail distance: {e}")
+                            self.supabase.table("quant_bots").update({"pending_command": None}).eq("id", bot_id).execute()
 
                 await asyncio.sleep(2) # Alta frecuencia: cada 2 segundos
             except Exception as e:

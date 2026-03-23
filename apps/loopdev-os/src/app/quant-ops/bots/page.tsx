@@ -53,6 +53,16 @@ export default function BotFleetPage() {
     });
   };
 
+  const handleUpdateTrail = (id: string, distance: number) => {
+    executeCommand({ id, command: `TRAIL_DISTANCE:${distance}` });
+    toast.show({
+      tenantId: 'loopdev',
+      title: 'Trailing_Agressiveness_Updated',
+      description: `Targeting a ${distance}% callback distance from peak.`,
+      variant: 'success'
+    });
+  };
+
   const handleOpenDeploy = () => {
     setEditingBot(null);
     setIsDeployModalOpen(true);
@@ -190,6 +200,7 @@ export default function BotFleetPage() {
               onMarketExit={handleMarketExit}
               onSetToBE={handleSetToBE}
               onExecuteTP={handleExecuteTP}
+              onUpdateTrail={handleUpdateTrail}
             />
           ))}
         </section>

@@ -37,6 +37,7 @@ export * from './surfaces/TechnicalCard';
 export * from './surfaces/Divider';
 export * from './surfaces/ScrollArea';
 export * from './surfaces/TechnicalTooltip';
+export * from './surfaces/TrailingControl';
 export * from './surfaces/TechnicalLabel';
 export * from './surfaces/BrandLogo';
 export * from './surfaces/TechnicalDropdown';

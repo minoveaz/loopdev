@@ -4,22 +4,34 @@ import React, { useState } from 'react';
 import { Icon } from '../../surfaces/Icon';
 import { LpdText } from '../../foundations/Typography';
 import { cn } from '../../../../helpers/cn';
+import { TrailingControl } from '../../surfaces/TrailingControl';
 
-interface QuickActionProps {
-  label: string;
-  icon: string;
-  onClick?: () => Promise<void>;
-  variant?: 'danger' | 'warning' | 'success';
-  disabled?: boolean;
-}
-
-export const PositionQuickActions: React.FC<{
+interface PositionQuickActionsProps {
   onMarketExit?: () => Promise<void>;
   onSetToBE?: () => Promise<void>;
   onExecuteTP?: () => Promise<void>;
+  onUpdateTrail?: (distance: number) => Promise<void>;
   canMoveToBE?: boolean;
-}> = ({ onMarketExit, onSetToBE, onExecuteTP, canMoveToBE = true }) => {
+  trailingDistance?: number;
+}
+
+export const PositionQuickActions: React.FC<PositionQuickActionsProps> = ({ 
+  onMarketExit, 
+  onSetToBE, 
+  onExecuteTP, 
+  onUpdateTrail,
+  canMoveToBE = true,
+  trailingDistance = 0
+}) => {
   
+  interface QuickActionProps {
+    label: string;
+    icon: string;
+    onClick?: () => Promise<void>;
+    variant?: 'danger' | 'warning' | 'success';
+    disabled?: boolean;
+  }
+
   const ActionButton = ({ label, icon, onClick, variant, disabled }: QuickActionProps) => {
     const [loading, setLoading] = useState(false);
 
@@ -70,6 +82,13 @@ export const PositionQuickActions: React.FC<{
         disabled={!canMoveToBE}
         onClick={onSetToBE} 
       />
+      
+      {/* 4º BOTÓN TÁCTICO: TRAILING CONTROL */}
+      <TrailingControl 
+        currentDistance={trailingDistance}
+        onUpdateDistance={onUpdateTrail || (async () => {})}
+      />
+
       <ActionButton 
         label="TP Now" 
         icon="target" 
