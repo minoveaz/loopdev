@@ -31,6 +31,47 @@ class BaseStrategy(ABC):
         """
         pass
     
+    def get_sentiment(self, row: pd.Series) -> str:
+        """
+        Calculates the current market sentiment (bullish/bearish/neutral).
+        Default implementation uses price position relative to a median (if available).
+        """
+        return "neutral"
+    
+    def get_proximity(self, row: pd.Series) -> Dict[str, Any]:
+        """
+        Calculates how close we are to a signal (0 to 100) and returns
+        the breakdown of specific confluence checks.
+        
+        Returns:
+            Dict: {
+                "score": int (0-100),
+                "checks": Dict[str, bool] (e.g., {"rsi": True, "trend": False})
+            }
+        """
+        return {
+            "score": 0,
+            "checks": {}
+        }
+    
+    def get_trigger_price(self, row: pd.Series) -> float:
+        """
+        Estimates the price at which a signal would be triggered.
+        Used for the 'Distance to Trigger' UI element.
+        """
+        return 0.0
+    
+    def get_snapshot(self, last_row: pd.Series, df: pd.DataFrame) -> Dict[str, Any]:
+        """
+        Generates a dictionary of technical metrics for the bot telemetry.
+        Default implementation returns price-based info.
+        """
+        return {
+            "price": float(last_row.get('close', 0)),
+            "volume": float(last_row.get('volume', 0)),
+            "timestamp": str(last_row.get('timestamp', ''))
+        }
+    
     def calculate_trailing_stop(self, current_price: float, max_price: float, callback_pct: float = 0.3) -> bool:
         """
         Determines if a trailing stop should be triggered.

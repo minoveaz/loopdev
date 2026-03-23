@@ -9,6 +9,9 @@ export interface BotCardProps {
   bot: BotConfig & {
     macroSentiment?: 'bullish' | 'bearish' | 'neutral';
     priceHistory?: number[];
+    strategyName?: string;
+    coreId?: string;
+    updatedAt?: string;
   };
   /** Performance metrics (Profit, Win Rate, etc.) */
   stats?: {

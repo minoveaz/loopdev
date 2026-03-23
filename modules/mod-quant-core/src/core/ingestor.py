@@ -134,6 +134,7 @@ class MarketIngestor:
         
         while self.is_running:
             try:
+                start_time = datetime.now(timezone.utc)
                 if mode == 'websocket':
                     candles = await connector.watch_ohlcv(pair, timeframe='1m')
                     last_candle = candles[-1]
@@ -141,17 +142,21 @@ class MarketIngestor:
                     await asyncio.sleep(20)
                     candles = await connector.fetch_ohlcv(pair, timeframe='1m', limit=2)
                     last_candle = candles[-1]
+                
+                end_time = datetime.now(timezone.utc)
+                latency_ms = int((end_time - start_time).total_seconds() * 1000)
 
                 payload = {
                     "pair": pair, "environment": environment, "timeframe": '1m',
                     "open": self.to_cents(last_candle[1]), "high": self.to_cents(last_candle[2]),
                     "low": self.to_cents(last_candle[3]), "close": self.to_cents(last_candle[4]),
                     "volume": float(last_candle[5]),
-                    "timestamp": datetime.fromtimestamp(last_candle[0] / 1000, tz=timezone.utc).isoformat()
+                    "timestamp": datetime.fromtimestamp(last_candle[0] / 1000, tz=timezone.utc).isoformat(),
+                    "latency_ms": latency_ms
                 }
                 
                 async with self.buffer_lock: self.buffer.append(payload)
-                logger.info(f"TICK | {pair} | {payload['close']}c")
+                logger.info(f"TICK | {pair} | {payload['close']}c | {latency_ms}ms")
                 
             except Exception as e:
                 if mode == 'websocket':
@@ -162,9 +167,24 @@ class MarketIngestor:
     async def run(self):
         logger.info(f"{CLR_BOLD}{CLR_MAGENTA}Initializing Data Sentinel Service...{CLR_RESET}")
         await self.fetch_config()
-        for entry in self.active_pairs:
-            await self.perform_backfill(entry['pair'], 'testnet')
-        tasks = [self.stream_pair(entry['pair'], 'testnet') for entry in self.active_pairs]
+        
+        # 1. Extraer pares de la config
+        config_pairs = [entry['pair'] for entry in self.active_pairs]
+        
+        # 2. Extraer pares usados por bots actuales (Escalabilidad dinámica)
+        try:
+            bot_res = self.supabase.table("quant_bots").select("pair").in_("status", ["active", "paper_trading"]).execute()
+            bot_pairs = list(set([b['pair'] for b in bot_res.data]))
+        except Exception:
+            bot_pairs = []
+            
+        all_pairs = list(set(config_pairs + bot_pairs))
+        logger.info(f"SENTINEL | Monitoring {len(all_pairs)} pairs: {all_pairs}")
+
+        for pair in all_pairs:
+            await self.perform_backfill(pair, 'testnet')
+            
+        tasks = [self.stream_pair(pair, 'testnet') for pair in all_pairs]
         tasks.append(self.flush_buffer())
         await asyncio.gather(*tasks)
 

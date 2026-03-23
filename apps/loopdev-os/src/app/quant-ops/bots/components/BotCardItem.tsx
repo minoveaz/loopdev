@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useEffect, useRef, useState } from 'react';
-import { BotCardIndustrial as BotCard, BotStatus } from '@loopdev/ui';
+import { BotCardIndustrial as BotCard, BotStatus, LpdText } from '@loopdev/ui';
 import { BotExecutionMetrics } from '../../components/BotExecutionMetrics';
 import { useQuantOps } from '../../context';
 
@@ -10,6 +10,9 @@ interface BotCardItemProps {
   onToggleStatus: (id: string, status: BotStatus) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onMarketExit?: (id: string) => void;
+  onSetToBE?: (id: string) => void;
+  onExecuteTP?: (id: string) => void;
 }
 
 /**
@@ -22,6 +25,9 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
   onToggleStatus,
   onEdit,
   onDelete,
+  onMarketExit,
+  onSetToBE,
+  onExecuteTP
 }) => {
   const prevBotRef = useRef<any>(null);
   const [priceDirection, setPriceDirection] = useState<'up' | 'down' | null>(null);
@@ -32,12 +38,18 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
   const memoizedBot = useMemo(() => ({
     ...bot,
     macroSentiment: bot.macroSentiment,
-    priceHistory: bot.priceHistory
+    priceHistory: bot.priceHistory,
+    strategyName: bot.strategyName,
+    coreId: bot.coreId,
+    updatedAt: bot.updatedAt
   }), [
     bot.id,
     bot.name,
     bot.pair,
     bot.status,
+    bot.strategyName,
+    bot.coreId,
+    bot.updatedAt,
     bot.currentPrice,
     bot.currentSma,
     bot.currentAtr,
@@ -133,6 +145,9 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
         onOpenDetails={openBotInspector}
         onEdit={onEdit}
         onDelete={onDelete}
+        onMarketExit={onMarketExit}
+        onSetToBE={onSetToBE}
+        onExecuteTP={onExecuteTP}
       />
       
       {/* Execution Metrics - Shown when waiting for signal */}

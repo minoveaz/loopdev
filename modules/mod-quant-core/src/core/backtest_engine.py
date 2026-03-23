@@ -4,8 +4,8 @@ import numpy as np
 from datetime import datetime, timedelta
 from loguru import logger
 from .exchange_connector import AsyncExchangeConnector
-from ..strategies.intraday_atr import IntradayATRStrategy
-from ..strategies.hybrid_core import HybridCoreStrategy
+from ..strategies.baseline.intraday_atr import IntradayATRStrategy
+from ..strategies.baseline.hybrid_core import HybridCoreStrategy
 
 class BacktestResult:
     def __init__(self):

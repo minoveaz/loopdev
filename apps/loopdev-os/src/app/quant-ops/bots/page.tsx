@@ -16,11 +16,41 @@ export default function BotFleetPage() {
   const [editingBot, setEditingBot] = useState<any>(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; botId: string | null }>({ isOpen: false, botId: null });
 
-  const { bots, isLoading, deployBot, toggleStatus, updateBot, deleteBot } = useBotFleet();
+  const { bots, isLoading, deployBot, toggleStatus, updateBot, deleteBot, executeCommand } = useBotFleet();
 
   const handleToggleStatus = (id: string, current: BotStatus) => {
     const nextStatus: BotStatus = current === 'active' ? 'paused' : 'active';
     toggleStatus({ id, status: nextStatus });
+  };
+
+  const handleMarketExit = (id: string) => {
+    executeCommand({ id, command: 'MARKET_EXIT' });
+    toast.show({
+      tenantId: 'loopdev',
+      title: 'Manual_Exit_Triggered',
+      description: 'The engine is processing an immediate market liquidation.',
+      variant: 'info'
+    });
+  };
+
+  const handleSetToBE = (id: string) => {
+    executeCommand({ id, command: 'MOVE_TO_BE' });
+    toast.show({
+      tenantId: 'loopdev',
+      title: 'Stop_Loss_Adjusted',
+      description: 'The stop loss has been synchronized with the break-even level.',
+      variant: 'success'
+    });
+  };
+
+  const handleExecuteTP = (id: string) => {
+    executeCommand({ id, command: 'TP_NOW' });
+    toast.show({
+      tenantId: 'loopdev',
+      title: 'TP_Exit_Triggered',
+      description: 'The agent is closing the position at the current market price.',
+      variant: 'info'
+    });
   };
 
   const handleOpenDeploy = () => {
@@ -72,9 +102,27 @@ export default function BotFleetPage() {
     };
     
     if (editingBot) {
-      updateBot({ id: editingBot.id, params: botPayload as any });
+      updateBot({ id: editingBot.id, params: botPayload as any }, {
+        onSuccess: () => {
+          toast.show({
+            tenantId: 'loopdev',
+            title: 'Bot_Updated',
+            description: 'The bot configuration has been successfully synchronized.',
+            variant: 'success'
+          });
+        }
+      });
     } else {
-      deployBot(botPayload as any);
+      deployBot(botPayload as any, {
+        onSuccess: () => {
+          toast.show({
+            tenantId: 'loopdev',
+            title: 'Bot_Deployed',
+            description: 'A new trading agent has been added to your fleet.',
+            variant: 'success'
+          });
+        }
+      });
     }
     
     setIsDeployModalOpen(false);
@@ -139,6 +187,9 @@ export default function BotFleetPage() {
               onToggleStatus={handleToggleStatus}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              onMarketExit={handleMarketExit}
+              onSetToBE={handleSetToBE}
+              onExecuteTP={handleExecuteTP}
             />
           ))}
         </section>

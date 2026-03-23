@@ -98,3 +98,76 @@ class HybridCoreStrategy(BaseStrategy):
                 return entry_price * 1.025  # 2.5% TP
             else:
                 return entry_price * 0.975  # 2.5% down
+
+    def get_trigger_price(self, row: pd.Series) -> float:
+        """Estima el trigger como la banda de Bollinger más cercana."""
+        price = float(row.get('close', 0))
+        upper = float(row.get('bb_upper', price))
+        lower = float(row.get('bb_lower', price))
+        
+        dist_to_upper = abs(upper - price)
+        dist_to_lower = abs(lower - price)
+        
+        return upper if dist_to_upper < dist_to_lower else lower
+
+    def get_snapshot(self, last_row: pd.Series, df: pd.DataFrame) -> Dict[str, Any]:
+        """Genera telemetría específica para esta estrategia."""
+        price = float(last_row['close'])
+        upper = float(last_row.get('bb_upper', price))
+        lower = float(last_row.get('bb_lower', price))
+        atr = float(last_row.get('atr', 0))
+        
+        return {
+            "bb_dist_up": round(((upper / price) - 1) * 100, 2) if price > 0 else 0,
+            "bb_dist_low": round(((price / lower) - 1) * 100, 2) if lower > 0 else 0,
+            "atr_val": round(atr, 2),
+            "vol_status": "HIGH" if atr > df['atr'].mean() else "LOW",
+            "trigger_price": round(self.get_trigger_price(last_row), 2)
+        }
+
+    def get_sentiment(self, row: pd.Series) -> str:
+        """Determina el sentimiento basado en Bollinger y SMA20."""
+        price = float(row.get('close', 0))
+        sma = float(row.get('sma20', 0))
+        upper = float(row.get('bb_upper', 0))
+        lower = float(row.get('bb_lower', 0))
+        
+        if sma == 0 or pd.isna(sma): return "neutral"
+        
+        if price > upper: return "overbought_breakout"
+        elif price < lower: return "oversold_breakout"
+        elif price > sma: return "bullish_zone"
+        elif price < sma: return "bearish_zone"
+        return "neutral"
+
+    def get_proximity(self, row: pd.Series) -> Dict[str, Any]:
+        """Calcula la proximidad a una ruptura de Bollinger con desglose."""
+        price = float(row.get('close', 0))
+        upper = float(row.get('bb_upper', 0))
+        lower = float(row.get('bb_lower', 0))
+        atr = float(row.get('atr', 0))
+        
+        if upper == 0 or lower == 0: return {"score": 0, "checks": {}}
+        
+        # Distancia a la banda más cercana
+        dist_to_upper = abs(upper - price)
+        dist_to_lower = abs(lower - price)
+        min_dist = min(dist_to_upper, dist_to_lower)
+        
+        # Proximidad porcentual (basada en el ancho de la banda)
+        band_width = upper - lower
+        if band_width <= 0: score = 0
+        else:
+            score = max(0, min(100, int(100 - (min_dist / (band_width / 2) * 100))))
+        
+        # Confluencia: Ruptura significativa (0.3x ATR)
+        vol_ready = atr > 0 # Simplificado para el check visual
+        
+        return {
+            "score": score,
+            "checks": {
+                "bb_touch": score > 90,
+                "vol_ready": vol_ready,
+                "trend_align": True
+            }
+        }

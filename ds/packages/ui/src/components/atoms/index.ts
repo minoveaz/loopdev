@@ -23,6 +23,7 @@ export * from './indicators/PositionProgressBar';
 export * from './indicators/ProximityIndicator';
 export * from './indicators/PositionQuickActions';
 export * from './indicators/PulseSparkline';
+export * from './indicators/NextEvalTimer';
 
 // inputs
 export * from './inputs/Button';

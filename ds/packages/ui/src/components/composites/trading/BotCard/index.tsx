@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { BotCardProps } from './types';
 import { TechnicalSurface } from '../../../atoms/surfaces/TechnicalSurface';
 import { BotCardHeader } from './BotCardHeader';
@@ -12,7 +12,7 @@ import { cn } from '../../../../helpers/cn';
 
 /**
  * @component BotCardIndustrial
- * @description Master management card. Binary coloring (Green/Red) with trend persistence.
+ * @description Master management card. Strictly reactive price telemetry.
  */
 export const BotCardIndustrial: React.FC<BotCardProps> = ({
   bot,
@@ -27,40 +27,55 @@ export const BotCardIndustrial: React.FC<BotCardProps> = ({
   const isActive = bot.status === 'active' || bot.status === 'paper_trading';
   const isInPosition = bot.currentEntryPrice > 0;
   
-  // --- LÓGICA DE TENDENCIA BINARIA ---
+  /**
+   * --- STANDARDIZED REACTIVE PRICE TELEMETRY (INDUSTRIAL STANDARD) ---
+   * @logic_lock DO NOT REVERT TO DB-BASED HISTORY COMPARISON.
+   * @reason DB history is often batched or delayed. For real-time UI feedback (Green/Red), 
+   * we MUST compare against the previous render's state in memory (useRef) to ensure 
+   * 100% reactivity to the ticker, even if the DB hasn't persisted the 'prev' tick yet.
+   */
   const lastPrice = Number(bot.currentPrice || 0);
-  let prevPrice = lastPrice;
+  const prevPriceRef = useRef(lastPrice);
+  const [priceDir, setPriceDir] = useState<'up' | 'down'>('up');
 
-  // Buscamos hacia atrás en el historial el primer precio que sea diferente al actual
-  if (bot.priceHistory?.length) {
-    for (let i = bot.priceHistory.length - 1; i >= 0; i--) {
-      const histPrice = Number(bot.priceHistory[i]);
-      if (histPrice !== lastPrice) {
-        prevPrice = histPrice;
-        break;
+  useEffect(() => {
+    // CRITICAL: Strict Price Movement Logic (Market Truth Only)
+    if (lastPrice !== prevPriceRef.current && lastPrice > 0) {
+      const newDir = lastPrice > prevPriceRef.current ? 'up' : 'down';
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[BotCard:${bot.pair}] TELEMETRY_TICK: ${prevPriceRef.current} -> ${lastPrice} | DIR: ${newDir}`);
       }
+      
+      setPriceDir(newDir);
+      prevPriceRef.current = lastPrice;
     }
-  }
+  }, [lastPrice]);
+
+  // COLOR_TRUTH: Strictly reactive to movement, ignored by sentiment/PnL for price text.
+  const priceMovementColor = priceDir === 'up' ? "text-emerald-500" : "text-rose-500";
+
+  // Resolución de sentimiento Unificada (Prioridad: Sesgo de Estrategia > Macro)
+  const strategyBias = bot.logicSnapshot?.bias?.toLowerCase();
+  const macroSentiment = bot.macroSentiment?.toLowerCase();
   
-  // Determinamos dirección (Si son iguales por falta de historial, usamos el sentimiento como base)
-  let priceDir: 'up' | 'down' = lastPrice >= prevPrice ? 'up' : 'down';
-  if (lastPrice === prevPrice && bot.macroSentiment === 'bearish') priceDir = 'down';
+  const resolvedSentiment = (strategyBias && strategyBias !== 'neutral' && strategyBias !== 'stable') 
+    ? strategyBias 
+    : (macroSentiment || 'neutral');
 
-  // Color Final: Siempre Esmeralda o Rose. Nunca blanco/gris.
-  const finalColor = isInPosition 
-    ? (bot.currentPnlPct >= 0 ? "text-emerald-500" : "text-rose-500")
-    : (priceDir === 'up' ? "text-emerald-500" : "text-rose-500");
+  // Color de Estado (Bordes/Glow)
+  const stateColorClass = isInPosition 
+    ? (bot.currentPnlPct >= 0 ? "emerald" : "rose")
+    : (priceDir === 'up' ? "emerald" : "rose");
 
-  const glowColor = isInPosition
-    ? (bot.currentPnlPct >= 0 ? "bg-emerald-500" : "bg-rose-500")
-    : (isActive ? "bg-primary" : "bg-amber-500");
+  const glowColor = isActive ? (stateColorClass === "emerald" ? "bg-emerald-500" : "bg-rose-500") : "bg-amber-500";
 
   return (
     <TechnicalSurface 
       variant="surface" 
       depth="raised" 
       className={cn(
-        "p-10 flex flex-col gap-14 rounded-[40px] transition-all duration-700 hover:shadow-[0_0_60px_rgba(0,0,0,0.5)] border relative overflow-hidden group select-none",
+        "p-10 flex flex-col gap-16 rounded-[40px] transition-all duration-700 hover:shadow-[0_0_60px_rgba(0,0,0,0.5)] border relative overflow-hidden group select-none",
         isInPosition ? (bot.currentPnlPct >= 0 ? "border-emerald-500/20" : "border-rose-500/20") : "border-white/5",
         isActive ? "bg-slate-900" : "bg-slate-950 opacity-80",
         className
@@ -74,16 +89,19 @@ export const BotCardIndustrial: React.FC<BotCardProps> = ({
       <BotCardHeader 
         name={bot.name} 
         pair={bot.pair} 
-        sentiment={bot.macroSentiment} 
+        sentiment={resolvedSentiment} 
+        strategyName={bot.strategyName}
+        coreId={bot.coreId}
+        logicSnapshot={bot.logicSnapshot}
         onInspect={() => onOpenDetails?.(bot.id)}
         onDelete={() => onDelete?.(bot.id)}
       />
 
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-12 mt-4">
         <BotCardPrice 
           price={bot.currentPrice} 
           direction={priceDir}
-          persistedColor={finalColor}
+          persistedColor={priceMovementColor}
           isPaperTrading={bot.status === 'paper_trading' || bot.status === 'active'}
         />
 
@@ -98,13 +116,6 @@ export const BotCardIndustrial: React.FC<BotCardProps> = ({
       </div>
 
       <div className="mt-auto pt-8 flex flex-col gap-12">
-        <BotCardMetrics 
-          sma={bot.logicSnapshot?.sma_20}
-          atr={bot.logicSnapshot?.atr_volatility}
-          persistedSmaColor="text-primary"
-          persistedAtrColor="text-emerald-500"
-        />
-
         <BotCardControls 
           status={bot.status}
           onToggle={() => onToggleStatus?.(bot.id, isActive ? 'paused' : 'active')}

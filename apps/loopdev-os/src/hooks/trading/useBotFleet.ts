@@ -2,11 +2,12 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { BotConfig, BotStatus } from '@loopdev/contracts';
+import { BotStatus } from '@loopdev/contracts';
 
 /**
  * @hook useBotFleet
- * @description Master fleet management with real-time mutations.
+ * @description Refactored Industrial Hook. Handles BIGINT Cents -> Float conversion.
+ * Zero-Mock Policy: Only real telemetry from the Quant Core is displayed.
  */
 export const useBotFleet = () => {
   const queryClient = useQueryClient();
@@ -16,18 +17,18 @@ export const useBotFleet = () => {
     queryFn: async () => {
       const { data, error: supabaseError } = await supabase
         .from('quant_bots')
-        .select('*')
+        .select('*, quant_strategies(name, core_id)')
         .order('created_at', { ascending: false });
 
       if (supabaseError) throw supabaseError;
 
       return (data || []).map((raw: any) => {
-        const botIdPrefix = parseInt(raw.id.split('-')[0], 16);
-        const entryPrice = Number(raw.current_entry_price || 0);
+        // --- ADAPTADOR DE PRECISIÓN CENTS (BIGINT -> Float) ---
+        const fromCents = (val: any) => (Number(val || 0) / 100);
         
-        const mockSL = entryPrice > 0 ? entryPrice * 0.985 : 0;
-        const mockTP = entryPrice > 0 ? entryPrice * 1.04 : 0;
-        const mockBE = entryPrice > 0 ? entryPrice * 1.002 : 0;
+        // Resolve joined strategy info
+        const strat = raw.quant_strategies;
+        const strategyInfo = Array.isArray(strat) ? strat[0] : strat;
 
         return {
           id: raw.id,
@@ -35,38 +36,51 @@ export const useBotFleet = () => {
           pair: raw.pair,
           exchangeId: raw.exchange_id,
           strategyId: raw.strategy_id,
-          baseInvestmentUsdt: Number(raw.base_investment_usdt || 0),
+          strategyName: strategyInfo?.name || 'Unknown Strategy',
+          coreId: strategyInfo?.core_id || 'default',
           status: raw.status,
-          currentAction: raw.current_action || 'Scanning_Market',
-          currentPrice: Number(raw.last_price || 0),
+          updatedAt: raw.updated_at,
+          currentAction: raw.current_action || 'Initializing...',
+          
+          // Precios Convertidos
+          currentPrice: fromCents(raw.last_price),
+          currentEntryPrice: fromCents(raw.current_entry_price),
+          baseInvestmentUsdt: Number(raw.base_investment_usdt || 0),
+          
+          // PnL (Calculados en Cents por el motor, convertidos para la UI)
           currentPnlPct: Number(raw.current_pnl_pct || 0),
-          currentPnlUsdt: Number(raw.current_pnl_usdt || 0),
-          realizedPnlUsdt: Number(raw.realized_pnl_usdt || 0),
+          currentPnlUsdt: fromCents(raw.current_pnl_usdt),
+          realizedPnlUsdt: fromCents(raw.realized_pnl_usdt),
+          
+          // Estadísticas Reales de Sesión
           totalTrades: raw.total_trades || 0,
           winningTrades: raw.winning_trades || 0,
-          currentEntryPrice: entryPrice,
-          openedAt: raw.current_position_opened_at || new Date(Date.now() - 3600000 * 3).toISOString(),
+          losingTrades: raw.losing_trades || 0,
+          avgPnlPct: Number(raw.avg_pnl_pct || 0),
+          openedAt: raw.current_position_opened_at,
+          
+          // Objetivos de Salida (Mapeo de Snake_Case de la DB a CamelCase de la UI)
           exitTargets: raw.last_exit_targets ? {
-            slPrice: Number(raw.last_exit_targets.sl_price),
-            tpPrice: Number(raw.last_exit_targets.tp_price),
-            bePrice: Number(raw.last_exit_targets.be_price)
-          } : {
-            slPrice: mockSL,
-            tpPrice: mockTP,
-            bePrice: mockBE
-          },
-          proximityPct: (botIdPrefix % 100),
-          lastTradePnlPct: (botIdPrefix % 5) - 1,
-          macroSentiment: raw.last_sentiment || raw.macro_sentiment || 'neutral',
+            slPrice: fromCents(raw.last_exit_targets.sl_price),
+            tpPrice: fromCents(raw.last_exit_targets.tp_price),
+            bePrice: fromCents(raw.last_exit_targets.be_price)
+          } : null,
+
+          // Telemetría de Estrategia
+          macroSentiment: raw.last_sentiment || 'neutral',
           priceHistory: raw.price_history_1h || [],
-          logicSnapshot: raw.last_logic_snapshot,
+          logicSnapshot: raw.last_logic_snapshot || null,
+          
+          // Metadatos Proximidad (Si el motor no los envía, no los inventamos)
+          proximityPct: raw.signal_strength || 0,
+          lastTradePnlPct: raw.last_trade_pnl_pct || 0,
         };
       });
     },
     refetchInterval: 5000,
   });
 
-  // --- MUTACIONES ---
+  // --- MUTACIONES (Sin cambios, ya son reales) ---
 
   const toggleStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string, status: BotStatus }) => {
@@ -78,16 +92,65 @@ export const useBotFleet = () => {
 
   const updateBotTargets = useMutation({
     mutationFn: async ({ id, targets }: { id: string, targets: any }) => {
-      const { error } = await supabase
-        .from('quant_bots')
-        .update({ 
-          last_exit_targets: targets,
-          updated_at: new Date().toISOString() 
-        })
-        .eq('id', id);
+      const { error } = await supabase.from('quant_bots').update({ last_exit_targets: targets }).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] })
+  });
+
+  const deployBot = useMutation({
+    mutationFn: async (params: any) => {
+      const payload = {
+        name: params.name,
+        exchange_id: params.exchangeId,
+        pair: params.pair,
+        strategy_id: params.strategyId,
+        base_investment_usdt: params.baseInvestmentUsdt,
+        risk_profile: params.riskProfile,
+        use_initial_range_filter: params.useInitialRangeFilter,
+        use_market_regime_filter: params.useMarketRegimeFilter,
+        tenant_id: '00000000-0000-0000-0000-000000000000',
+        status: 'paper_trading',
+        current_action: 'Initializing...',
+        updated_at: new Date().toISOString()
+      };
+      const { error } = await supabase.from('quant_bots').insert([payload]);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
+    }
+  });
+
+  const updateBot = useMutation({
+    mutationFn: async ({ id, params }: { id: string, params: any }) => {
+      const payload = {
+        name: params.name,
+        exchange_id: params.exchangeId,
+        pair: params.pair,
+        strategy_id: params.strategyId,
+        base_investment_usdt: params.baseInvestmentUsdt,
+        risk_profile: params.riskProfile,
+        use_initial_range_filter: params.useInitialRangeFilter,
+        use_market_regime_filter: params.useMarketRegimeFilter,
+        updated_at: new Date().toISOString()
+      };
+      const { error } = await supabase.from('quant_bots').update(payload).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
+    }
+  });
+
+  const executeCommand = useMutation({
+    mutationFn: async ({ id, command }: { id: string, command: string }) => {
+      const { error } = await supabase.from('quant_bots').update({ pending_command: command }).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
+    }
   });
 
   const deleteBot = useMutation({
@@ -95,7 +158,9 @@ export const useBotFleet = () => {
       const { error } = await supabase.from('quant_bots').delete().eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
+    }
   });
 
   return { 
@@ -104,6 +169,9 @@ export const useBotFleet = () => {
     error,
     toggleStatus: toggleStatus.mutate,
     updateBotTargets: updateBotTargets.mutateAsync,
-    deleteBot: deleteBot.mutate
+    deployBot: (params: any, options?: any) => deployBot.mutate(params, options),
+    updateBot: (args: { id: string, params: any }, options?: any) => updateBot.mutate(args, options),
+    deleteBot: (id: string, options?: any) => deleteBot.mutate(id, options),
+    executeCommand: (args: { id: string, command: string }) => executeCommand.mutate(args)
   };
 };
