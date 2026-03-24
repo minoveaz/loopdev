@@ -44,16 +44,27 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
 
   const selectedCore = availableCores.find(c => c.id === formData.coreId);
 
-  // Initialize parameters when core changes
+  // Initialize parameters and risk guards when core changes
   useEffect(() => {
     if (selectedCore) {
       const initialParams: Record<string, any> = {};
       selectedCore.parameters.forEach(p => {
         initialParams[p.id] = p.default;
       });
-      setFormData(prev => ({ ...prev, parameters: initialParams }));
+
+      // Dinamically find TP/SL defaults from registry parameters if they exist
+      const registryTP = selectedCore.parameters.find(p => p.id === 'tp_pct' || p.id === 'atr_tp_multiplier')?.default;
+      const registrySL = selectedCore.parameters.find(p => p.id === 'sl_pct' || p.id === 'atr_sl_multiplier')?.default;
+
+      setFormData(prev => ({ 
+        ...prev, 
+        parameters: initialParams,
+        // Si la estrategia es de Scalping, bajamos los guards automáticamente
+        takeProfit: registryTP || (selectedCore.trading_style === 'SCALPING' ? 1.5 : 5.0),
+        stopLoss: registrySL || (selectedCore.trading_style === 'SCALPING' ? 1.0 : 2.0)
+      }));
     }
-  }, [formData.coreId]);
+  }, [formData.coreId, selectedCore]);
 
   if (!isOpen) return null;
 

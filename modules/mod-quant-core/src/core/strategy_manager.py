@@ -11,6 +11,7 @@ from src.strategies.baseline.rsi_mean_reversion import RSIMeanReversionStrategy
 from src.strategies.baseline.intraday_atr import IntradayATRStrategy
 from src.strategies.baseline.hybrid_core import HybridCoreStrategy
 from src.strategies.baseline.aggressive_rsi import AggressiveRSIStrategy
+from src.strategies.baseline.hf_scalper import HighFrequencyScalperStrategy
 
 class StrategyManager:
     def __init__(self, supabase_client: Client):
@@ -29,6 +30,7 @@ class StrategyManager:
             "atr-breakout-v1": IntradayATRStrategy(),
             "hybrid-core-v1": HybridCoreStrategy(),
             "aggressive-rsi-v1": AggressiveRSIStrategy(),
+            "hf-scalper-v1": HighFrequencyScalperStrategy(),
             # Fallback
             "default": RSIMeanReversionStrategy()
         }
@@ -173,9 +175,9 @@ class StrategyManager:
             # Leer distancia configurada (Default 1.0%)
             dist_pct = float(bot.get('trailing_stop_distance') or 1.0)
             
-            # Umbral de Activación: 2% si es automático, o inmediato si es una distancia pequeña (Manual)
-            # Si el usuario puso 0.2% o 0.5%, asumimos que quiere activación inmediata.
-            activation_threshold = 2.0 if dist_pct >= 1.0 else 0.1 
+            # Umbral de Activación: 0.8% si es automático, o inmediato si es una distancia pequeña (Manual)
+            # Para Scalping (1m), 0.8% es un profit sólido para empezar a trailear.
+            activation_threshold = 0.8 if dist_pct >= 1.0 else 0.1 
 
             if pnl_pct > activation_threshold:
                 # El SL se sitúa a la distancia configurada del máximo

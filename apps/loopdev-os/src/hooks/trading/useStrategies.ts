@@ -10,6 +10,7 @@ export interface Strategy {
   exchange: string;
   mode: 'paper' | 'live';
   status: 'draft' | 'active' | 'paused' | 'archived';
+  tradingStyle?: 'SCALPING' | 'DAY_TRADING' | 'SWING';
   pairs: string[];
   capitalAllocated: number;
   openPositions: number;
@@ -97,12 +98,13 @@ export const useStrategies = () => {
       if (error) throw error;
 
       // Map raw data to Strategy interface
-      return (data || []).map((raw: RawStrategy) => ({
+      return (data || []).map((raw: any) => ({
         id: raw.id,
         name: raw.name,
         exchange: raw.exchange_provider || 'unknown',
         mode: raw.mode,
         status: raw.status,
+        tradingStyle: raw.trading_style || 'DAY_TRADING',
         pairs: raw.pairs || [],
         capitalAllocated: 0, // TODO: Calculate from positions
         openPositions: 0, // TODO: Count from positions table

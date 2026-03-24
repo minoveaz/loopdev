@@ -122,9 +122,9 @@ class RSIMeanReversionStrategy(BaseStrategy):
         }
 
     def get_exit_price(self, entry_price: float, atr: float, side: str) -> float:
-        """Standard exit calculation for RSI strategy."""
+        """Standard exit calculation for RSI strategy (Scalping optimized)."""
         if side == 'buy':
-            return entry_price * 1.05 # 5% TP
+            return entry_price * 1.015 # 1.5% TP
         else:
-            return entry_price * 0.95 # 5% SL
+            return entry_price * 0.985 # 1.5% SL (Sell side fallback)
 
