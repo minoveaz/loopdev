@@ -134,6 +134,7 @@ export const InPositionState = ({
         slPrice={slPrice} 
         tpPrice={tpPrice} 
         bePrice={bePrice} 
+        isShort={bot.currentPositionSide === 'SHORT'}
       />
 
       {/* 4. Comandos de Acción Táctica */}

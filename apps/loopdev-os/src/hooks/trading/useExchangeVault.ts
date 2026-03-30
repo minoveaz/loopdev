@@ -266,6 +266,15 @@ export const useExchangeVault = () => {
     });
   };
 
+  // 4. Fetch Balance Mutation
+  const fetchBalance = useMutation({
+    mutationFn: async (accountId: string) => {
+      const response = await fetch(`http://localhost:8000/exchanges/${accountId}/balance`);
+      if (!response.ok) throw new Error('Failed to fetch balance');
+      return response.json();
+    }
+  });
+
   return {
     accounts,
     isLoading,
@@ -274,6 +283,8 @@ export const useExchangeVault = () => {
     isConnecting: connectExchange.isPending,
     testConnection: handleTestConnection,
     isTesting: testConnection.isPending,
-    testResult: testConnection.data
+    testResult: testConnection.data,
+    fetchBalance: fetchBalance.mutateAsync,
+    isFetchingBalance: fetchBalance.isPending
   };
 };

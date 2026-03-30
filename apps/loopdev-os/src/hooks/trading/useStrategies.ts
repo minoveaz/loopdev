@@ -123,11 +123,11 @@ export const useStrategies = () => {
     queryKey: ['trading', 'strategy-registry'],
     queryFn: async () => {
       try {
-        const response = await fetch('http://localhost:8000/strategies/registry');
+        const response = await fetch('http://127.0.0.1:8000/strategies/registry');
         const data = await response.json();
         return data.success ? data.registry : [];
       } catch (err) {
-        console.warn('Quant Core Engine not reachable for registry. Using fallback.');
+        console.warn('Quant Core Engine not reachable at 127.0.0.1:8000. Using fallback.');
         return [];
       }
     }
@@ -177,7 +177,7 @@ export const useStrategies = () => {
     mutationFn: async (params: BacktestParams) => {
       console.debug('[runBacktest] Starting backtest:', params.strategyName);
 
-      const response = await fetch('http://localhost:8000/strategies/backtest', {
+      const response = await fetch('http://127.0.0.1:8000/strategies/backtest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

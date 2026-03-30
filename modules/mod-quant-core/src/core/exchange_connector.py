@@ -43,12 +43,27 @@ class AsyncExchangeConnector:
             return []
 
     async def fetch_balance(self) -> Dict[str, Any]:
-        """Fetch account balances."""
+        """
+        Fetch account balances and format them professionally.
+        Returns a clean list of assets with positive balances.
+        """
         try:
-            return await self.exchange.fetch_balance()
+            raw_balance = await self.exchange.fetch_balance()
+            # Filtramos solo activos que tengan saldo real (para no enviar basura al front)
+            formatted = []
+            for asset, data in raw_balance.get('total', {}).items():
+                total = float(data)
+                if total > 0:
+                    formatted.append({
+                        "asset": asset,
+                        "free": float(raw_balance.get(asset, {}).get('free', 0)),
+                        "used": float(raw_balance.get(asset, {}).get('used', 0)),
+                        "total": total
+                    })
+            return {"success": True, "assets": formatted}
         except Exception as e:
-            logger.error(f"Error fetching balance: {e}")
-            return {"error": str(e)}
+            logger.error(f"Connector: Failed to fetch balance for {self.exchange_id}: {e}")
+            return {"success": False, "error": str(e)}
 
     async def create_order(self, symbol: str, type: str, side: str, amount: float, price: float = None) -> Dict[str, Any]:
         """Execute an order on the exchange."""

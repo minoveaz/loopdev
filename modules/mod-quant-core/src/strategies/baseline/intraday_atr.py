@@ -1,133 +1,139 @@
+
 import pandas as pd
 import numpy as np
 from typing import Dict, Any, Optional
 from .base import BaseStrategy
 
+# Importamos utilidades industriales de alta precisión
+from src.core.utils.indicators import calculate_rsi, calculate_sma, calculate_atr, calculate_sma_distance
+
 class IntradayATRStrategy(BaseStrategy):
     """
-    Port of the Legacy 2025 Bot Logic (Pure Pandas Implementation).
-    Type: Mean Reversion / Breakout
-    VERSION: 1.1.0 (2026-03-22) - ATR Filter Sensitivity Update
+    Intraday ATR Breakout Strategy v2 (Industrial Audit 2026-03-27)
+    Type: Trend Follower / Breakout
+    
+    Mejoras V2:
+    - ATR Wilder para dimensionar rupturas con precisión industrial.
+    - Filtro de Tendencia Mayor (SMA200) para evitar "fakeouts" contra tendencia.
+    - Lógica de proximidad refinada para el dashboard.
     """
     
     def __init__(self, atr_threshold=0.0005):
-        self.version = "1.1.0"
+        self.version = "2.0.0"
         self.atr_threshold = atr_threshold
 
     def analyze(self, df: pd.DataFrame) -> pd.DataFrame:
-        # Indicators Calculation (Pure Pandas)
-        df['sma20'] = df['close'].rolling(window=20).mean()
-        df['std'] = df['close'].rolling(window=20).std()
-        df['bb_upper'] = df['sma20'] + 2 * df['std']
-        df['bb_lower'] = df['sma20'] - 2 * df['std']
+        """Cálculo de indicadores con precisión profesional."""
+        # 1. SMA20 (Corto plazo) y SMA200 (Tendencia Mayor)
+        df['sma20'] = calculate_sma(df['close'], period=20)
+        df['sma200'] = calculate_sma(df['close'], period=200)
         
-        # ATR Calculation (Wilder's True Range)
-        high_low = df['high'] - df['low']
-        high_cp = np.abs(df['high'] - df['close'].shift())
-        low_cp = np.abs(df['low'] - df['close'].shift())
-        df['tr'] = np.maximum(high_low, np.maximum(high_cp, low_cp))
+        # 2. Bandas de Bollinger para visualización de volatilidad
+        std = df['close'].rolling(window=20).std()
+        df['bb_upper'] = df['sma20'] + 2 * std
+        df['bb_lower'] = df['sma20'] - 2 * std
         
-        # Use EMA for ATR
-        df['atr'] = df['tr'].ewm(span=14, adjust=False).mean()
+        # 3. ATR Wilder para validación de ruptura
+        df['atr'] = calculate_atr(df, period=14)
         
         return df
 
-    def get_snapshot(self, last_row, df):
-        """Genera telemetría específica para esta estrategia."""
-        atr = float(last_row.get('atr', 0))
-        price = float(last_row['close'])
-        sma = float(last_row.get('sma20', price))
-        sentiment = self.get_sentiment(last_row)
-        
-        return {
-            "atr_vol": round(atr, 2),
-            "sma_dist": round(((price / sma) - 1) * 100, 2) if sma > 0 else 0,
-            "vol_status": "HIGH" if atr > df['atr'].mean() else "LOW",
-            "bias": sentiment.upper(),
-            "market_regime": "VOLATILE" if atr > df['atr'].mean() * 1.2 else "STABLE",
-            "trigger_price": round(float(last_row.get('sma20', 0)), 2),
-            "logic_ver": self.version
-        }
-
     def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
-        # Ensure we have enough data
+        """
+        Lógica de ruptura de SMA20 con confirmación:
+        - BUY: Precio cruza SMA20 hacia arriba Y Precio > SMA200 (Tendencia alcista).
+        - SELL: Precio cruza SMA20 hacia abajo Y Precio < SMA200 (Tendencia bajista).
+        """
         if pd.isna(row.get('sma20')) or pd.isna(previous_row.get('sma20')):
             return None
         
         price = float(row['close'])
         prev_price = float(previous_row['close'])
-        sma = float(row['sma20'])
-        prev_sma = float(previous_row['sma20'])
+        sma20 = float(row['sma20'])
+        prev_sma20 = float(previous_row['sma20'])
+        sma200 = float(row.get('sma200', price))
         atr = float(row.get('atr', 0))
         
-        if pd.isna(price) or pd.isna(prev_price) or pd.isna(sma) or pd.isna(prev_sma) or pd.isna(atr) or atr <= 0:
-            return None
+        # Filtro de Volatilidad Mínima para evitar señales falsas en mercado plano
+        vol_ready = atr >= (price * self.atr_threshold)
 
-        # Crossover Logic
-        if prev_price < prev_sma and price > sma:
-            # SENSITIVITY CHECK: Changed from 0.002 to 0.0005 for 1m stability
-            if atr >= price * self.atr_threshold:
-                return {"side": "buy", "reason": f"SMA20_CROSS_UP (ATR_OK: {atr:.2f})"}
+        # 1. Ruptura Alcista (LONG)
+        if prev_price < prev_sma20 and price > sma20:
+            if price > sma200 and vol_ready:
+                return {
+                    "side": "buy", 
+                    "reason": f"V2_Trend_Breakout_UP (ATR_OK)"
+                }
         
-        if prev_price > prev_sma and price < sma:
-            if atr >= price * self.atr_threshold:
-                return {"side": "sell", "reason": f"SMA20_CROSS_DOWN (ATR_OK: {atr:.2f})"}
+        # 2. Ruptura Bajista (SHORT)
+        if prev_price > prev_sma20 and price < sma20:
+            if price < sma200 and vol_ready:
+                return {
+                    "side": "short", 
+                    "reason": f"V2_Trend_Breakout_DOWN (ATR_OK)"
+                }
 
         return None
 
-    def get_exit_price(self, entry_price: float, atr: float, side: str) -> float:
-        multiplier = 1.5
-        if entry_price <= 0 or pd.isna(entry_price):
-            return 0.0
+    def get_snapshot(self, last_row: pd.Series, df: pd.DataFrame) -> Dict[str, Any]:
+        """Telemetría específica para el dashboard de rupturas."""
+        atr = float(last_row.get('atr', 0))
+        price = float(last_row['close'])
+        sma20 = float(last_row.get('sma20', price))
+        sma200 = float(last_row.get('sma200', price))
         
-        if not pd.isna(atr) and atr > 0:
-            if side == 'buy':
-                return entry_price + (multiplier * atr)
-            else:
-                return entry_price - (multiplier * atr)
+        return {
+            "atr_vol": round(atr, 2),
+            "sma_dist": round(calculate_sma_distance(price, sma20), 2),
+            "vol_status": "HIGH" if atr > df['atr'].mean() else "LOW",
+            "trend_status": "BULLISH" if price > sma200 else "BEARISH",
+            "trigger_price": round(sma20, 2),
+            "logic_ver": self.version
+        }
+
+    def get_exit_price(self, entry_price: float, atr: float, side: str) -> float:
+        """Salidas optimizadas para seguimiento de tendencia."""
+        multiplier = 2.0 # Buscamos recorridos más largos en breakouts
+        if atr <= 0: return entry_price * (1.025 if side == 'buy' else 0.975)
+        
+        if side == 'buy':
+            return entry_price + (multiplier * atr)
         else:
-            return entry_price * (1.025 if side == 'buy' else 0.975)
+            return entry_price - (multiplier * atr)
 
     def get_sentiment(self, row: pd.Series) -> str:
-        """Determina el sesgo del mercado basado en la SMA20."""
-        price = float(row.get('close', 0))
-        sma = float(row.get('sma20', 0))
+        """Determina el sesgo basado en la relación con SMA20 y SMA200."""
+        price = float(row['close'])
+        sma20 = float(row.get('sma20', price))
+        sma200 = float(row.get('sma200', price))
         
-        if sma == 0 or pd.isna(sma):
-            return "neutral"
-            
-        if price > sma:
-            return "bullish"
-        elif price < sma:
-            return "bearish"
-        
+        if price > sma200 and price > sma20: return "strong_bullish"
+        if price < sma200 and price < sma20: return "strong_bearish"
         return "neutral"
 
     def get_trigger_price(self, row: pd.Series) -> float:
-        """En esta estrategia, el trigger es el cruce con la SMA20."""
+        """El trigger es el valor actual de la SMA20."""
         return float(row.get('sma20', 0))
 
     def get_proximity(self, row: pd.Series) -> Dict[str, Any]:
-        """Calcula la proximidad a un cruce de SMA con filtro de volatilidad."""
-        price = float(row.get('close', 0))
-        sma = float(row.get('sma20', 0))
+        """Calcula proximidad para la UI."""
+        price = float(row['close'])
+        sma20 = float(row.get('sma20', price))
+        sma200 = float(row.get('sma200', price))
         atr = float(row.get('atr', 0))
         
-        if sma == 0 or pd.isna(sma):
-            return {"score": 0, "checks": {}}
-            
-        # 1. Check de Cruce (Proximidad al precio)
-        dist_pct = abs((price / sma) - 1) * 100
-        score = max(0, min(100, int(100 - (dist_pct * 50))))
+        # 1. Distancia al cruce
+        dist_pct = abs(calculate_sma_distance(price, sma20))
+        score = max(0, min(100, int(100 - (dist_pct * 40))))
         
-        # 2. Check de Volatilidad (Filtro v1.1.0)
-        vol_ready = atr >= price * self.atr_threshold
+        # 2. Alineación con tendencia mayor
+        side = "LONG" if price > sma200 else "SHORT"
         
         return {
-            "score": score if vol_ready else min(score, 99), # Cap at 99 if vol is missing
+            "score": score,
+            "side": side,
             "checks": {
-                "price_cross": score > 90,
-                "vol_ready": vol_ready,
-                "trend_align": True # Siempre activo para esta lógica base
+                "trend_align": (side == "LONG" and price > sma200) or (side == "SHORT" and price < sma200),
+                "vol_ready": atr >= (price * self.atr_threshold)
             }
         }

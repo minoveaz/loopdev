@@ -43,8 +43,12 @@ export const useBotFleet = () => {
           trailingStopDistance: Number(raw.trailing_stop_distance || 1.0),
           currentAction: raw.current_action || 'Initializing...',
           
-          // Precios Convertidos
+          // Precios Reales (Desde la migración 20260320)
           currentPrice: fromCents(raw.last_price),
+          currentSma: fromCents(raw.last_sma),
+          currentAtr: fromCents(raw.last_atr),
+          
+          // Precios de Posición (Cents -> Float)
           currentEntryPrice: fromCents(raw.current_entry_price),
           baseInvestmentUsdt: Number(raw.base_investment_usdt || 0),
           
@@ -72,6 +76,10 @@ export const useBotFleet = () => {
           priceHistory: raw.price_history_1h || [],
           logicSnapshot: raw.last_logic_snapshot || null,
           
+          // Mapeos de Ejecución (Para la Barra de Progreso)
+          priceTarget: fromCents(raw.last_sma || (raw.last_logic_snapshot?.trigger_price || 0)),
+          atrValue: fromCents(raw.last_atr || (raw.last_logic_snapshot?.atr_vol || 0)),
+
           // Metadatos Proximidad (Si el motor no los envía, no los inventamos)
           proximityPct: raw.signal_strength || 0,
           lastTradePnlPct: raw.last_trade_pnl_pct || 0,

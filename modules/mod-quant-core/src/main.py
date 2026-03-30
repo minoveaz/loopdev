@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 import os
@@ -9,7 +9,6 @@ from supabase import create_client, Client
 
 # --- CONFIGURACIÓN DE RUTAS ---
 current_dir = Path(__file__).resolve().parent
-# El archivo reside en el módulo o en la app
 env_path = current_dir.parent / ".env"
 if env_path.exists():
     load_dotenv(dotenv_path=env_path)
@@ -24,7 +23,6 @@ SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY
 
 if not SUPABASE_URL or not SUPABASE_KEY:
     logger.error(f"❌ FATAL: Credenciales de Supabase no encontradas.")
-    # No salimos aquí para permitir que FastAPI muestre el error si es necesario
 else:
     logger.info(f"✅ Supabase credentials loaded from {env_path}")
 
@@ -40,6 +38,9 @@ from .api.metrics_routes import router as metrics_router, set_strategy_manager
 from .api.orders_routes import router as orders_router, set_strategy_manager as set_orders_sm
 from pydantic import BaseModel
 from typing import Optional, List
+
+# Importamos modelos industriales
+from .core.models.trading import ExchangeTestRequest, BacktestRequest, BalanceResponse, AssetBalance
 
 app = FastAPI(
     title="LoopDev Quant Core",
@@ -70,7 +71,6 @@ app.include_router(orders_router)
 @app.on_event("startup")
 async def startup_event():
     logger.info("Initializing Quant Core Engine (Tiers B & C)...")
-    # Start the strategy manager background task (renamed from start to run)
     asyncio.create_task(strategy_manager.run())
     logger.success("Quant Core Engine Operational & Syncing with DB")
 
@@ -80,22 +80,58 @@ async def shutdown_event():
     strategy_manager.stop()
     logger.success("Quant Core Engine Stopped Safely")
 
-# --- MODELS ---
-class ExchangeTestRequest(BaseModel):
-    exchangeId: str
-    apiKey: str
-    apiSecret: str
-    isPaper: bool = True
+@app.get("/exchanges/{account_id}/balance", response_model=BalanceResponse)
+async def get_exchange_balance(account_id: str):
+    """
+    Recupera el balance real del exchange y calcula el capital disponible neto.
+    Lógica Industrial: Total Exchange - Capital Comprometido en Bots = Disponible.
+    """
+    logger.info(f"Vault: Fetching real-time balance for account {account_id}...")
+    
+    creds = await strategy_manager.vault.get_exchange_credentials(account_id)
+    if not creds:
+        raise HTTPException(status_code=404, detail="Exchange account not found or vault decryption failed.")
+    
+    connector = AsyncExchangeConnector(
+        creds['exchange_id'],
+        creds['api_key'],
+        creds['api_secret'],
+        creds['is_paper']
+    )
+    
+    try:
+        await connector.connect()
+        balance_data = await connector.fetch_balance()
+        
+        if not balance_data["success"]:
+            return {"success": False, "exchange_id": creds['exchange_id'], "balances": [], "total_usdt_equiv": 0, "available_trading_usdt": 0}
 
-class BacktestRequest(BaseModel):
-    strategyName: str
-    pairs: List[str]
-    sizePerTrade: float = 100.0
-    maxPositions: int = 5
-    stopLoss: float = 2.0  # % below entry
-    takeProfit: float = 5.0  # % above entry
-    days: int = 30
-    initialCapital: float = 10000.0
+        bots_res = supabase.table("quant_bots")\
+            .select("base_investment_usdt")\
+            .eq("exchange_id", account_id)\
+            .neq("status", "paused")\
+            .execute()
+        
+        committed_capital = sum([float(b['base_investment_usdt'] or 0) for b in bots_res.data])
+        
+        asset_balances = [AssetBalance(**a) for a in balance_data["assets"]]
+        usdt_balance = next((a.free for a in asset_balances if a.asset == 'USDT'), 0.0)
+        
+        available = max(0, usdt_balance - committed_capital)
+        
+        return {
+            "success": True,
+            "exchange_id": creds['exchange_id'],
+            "balances": asset_balances,
+            "total_usdt_equiv": usdt_balance,
+            "available_trading_usdt": available
+        }
+        
+    except Exception as e:
+        logger.error(f"Balance API Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        await connector.close()
 
 @app.get("/health")
 async def health_check():
@@ -114,41 +150,34 @@ async def get_strategy_registry():
 
 @app.post("/exchanges/test")
 async def test_exchange_connection(req: ExchangeTestRequest):
-    logger.info(f"Testing connection for {req.exchangeId} (Paper: {req.isPaper})...")
+    logger.info(f"Vault: Testing secure connection for account {req.exchangeAccountId}...")
     
-    # Pass arguments POSITIONALLY: exchange_id, api_key, api_secret, paper_mode
+    creds = await strategy_manager.vault.get_exchange_credentials(req.exchangeAccountId)
+    
+    if not creds:
+        return {"success": False, "error": "Could not retrieve or decrypt credentials from Vault."}
+    
     connector = AsyncExchangeConnector(
-        req.exchangeId,
-        req.apiKey,
-        req.apiSecret,
-        req.isPaper
+        creds['exchange_id'],
+        creds['api_key'],
+        creds['api_secret'],
+        creds['is_paper']
     )
     
     try:
         await connector.connect()
-        logger.info(f"Connected to {req.exchangeId}, now fetching balance...")
-        
         balance = await connector.fetch_balance()
         
-        if isinstance(balance, dict) and "error" in balance:
-            error_msg = balance["error"]
-            logger.error(f"Balance fetch failed: {error_msg}")
-            return {"success": False, "error": error_msg}
-        
-        if not balance:
-            logger.error("Failed to fetch balance - credentials may be invalid")
-            return {"success": False, "error": "Invalid API credentials or insufficient permissions"}
+        if isinstance(balance, dict) and not balance.get("success", True):
+            return {"success": False, "error": balance.get("error", "Unknown error")}
             
-        logger.success(f"Successfully authenticated and fetched balance for {req.exchangeId}")
         return {
             "success": True, 
-            "message": "Connection verified successfully.",
+            "message": "Vault connection verified successfully.",
             "account_info": "Authorized"
         }
     except Exception as e:
-        error_msg = str(e)
-        logger.error(f"Test connection failed: {error_msg}")
-        return {"success": False, "error": error_msg}
+        return {"success": False, "error": str(e)}
     finally:
         await connector.close()
 
@@ -159,7 +188,6 @@ async def run_strategy_backtest(req: BacktestRequest):
     Returns historical P&L, win rate, drawdown, and other metrics.
     """
     logger.info(f"Starting backtest for strategy: {req.strategyName}")
-    logger.info(f"Parameters: pairs={req.pairs}, size={req.sizePerTrade}, days={req.days}")
     
     try:
         engine = BacktestEngine(

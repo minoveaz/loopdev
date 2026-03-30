@@ -35,7 +35,7 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
   onDeploy,
   initialData
 }) => {
-  const { accounts } = useExchangeVault();
+  const { accounts, fetchBalance } = useExchangeVault();
   const [availableBalance, setAvailableBalance] = useState<number | null>(null);
   const [isFetchingBalance, setIsFetchingBalance] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
@@ -65,19 +65,24 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
   useEffect(() => {
     if (!formData.exchangeId || initialData || !isOpen) return;
     
-    const fetchBalance = async () => {
+    const getBalance = async () => {
       setIsFetchingBalance(true);
       try {
-        // En un escenario real, llamaríamos a un hook de balance del vault.
-        // Simulamos la respuesta basada en el exchange seleccionado.
-        await new Promise(r => setTimeout(r, 1000));
-        setAvailableBalance(formData.exchangeId.toLowerCase().includes('binance') ? 1240.50 : 450.25);
+        const result = await fetchBalance(formData.exchangeId);
+        if (result.success) {
+          setAvailableBalance(result.available_trading_usdt);
+        } else {
+          setAvailableBalance(0);
+        }
+      } catch (err) {
+        console.error('Failed to fetch real balance:', err);
+        setAvailableBalance(0);
       } finally {
         setIsFetchingBalance(false);
       }
     };
-    fetchBalance();
-  }, [formData.exchangeId, initialData, isOpen]);
+    getBalance();
+  }, [formData.exchangeId, initialData, isOpen, fetchBalance]);
 
   // 1. AUTO-FILL LOGIC: Adjust risk parameters based on trading style
   useEffect(() => {

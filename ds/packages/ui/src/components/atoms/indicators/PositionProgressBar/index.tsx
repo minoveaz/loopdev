@@ -9,6 +9,7 @@ interface PositionProgressBarProps {
   slPrice: number;
   tpPrice: number;
   bePrice?: number;
+  isShort?: boolean;
   className?: string;
 }
 
@@ -16,6 +17,7 @@ interface PositionProgressBarProps {
  * @component PositionProgressBar
  * @description Refined Trade Range Bar. 
  * Shows SL, TP, BE and Current Price as a glowing indicator.
+ * Supports both LONG and SHORT polarities.
  */
 export const PositionProgressBar: React.FC<PositionProgressBarProps> = ({
   currentPrice,
@@ -23,15 +25,20 @@ export const PositionProgressBar: React.FC<PositionProgressBarProps> = ({
   slPrice,
   tpPrice,
   bePrice,
+  isShort = false,
   className
 }) => {
   if (!slPrice || !tpPrice) return null;
 
-  const totalRange = tpPrice - slPrice;
+  // En un corto, el rango es de arriba (SL) a abajo (TP)
+  const minRange = Math.min(slPrice, tpPrice);
+  const maxRange = Math.max(slPrice, tpPrice);
+  const totalRange = maxRange - minRange;
+  
   if (totalRange <= 0) return null;
 
   const getPos = (price: number) => {
-    const pos = ((price - slPrice) / totalRange) * 100;
+    const pos = ((price - minRange) / totalRange) * 100;
     return Math.max(0, Math.min(100, pos));
   };
 
@@ -39,7 +46,8 @@ export const PositionProgressBar: React.FC<PositionProgressBarProps> = ({
   const entryPos = getPos(entryPrice);
   const bePos = bePrice ? getPos(bePrice) : entryPos;
   
-  const isInProfit = currentPrice >= entryPrice;
+  // Invertimos la lógica de ganador según el modo
+  const isInProfit = isShort ? currentPrice <= entryPrice : currentPrice >= entryPrice;
 
   return (
     <div className={cn("w-full flex flex-col gap-2", className)}>
@@ -83,10 +91,14 @@ export const PositionProgressBar: React.FC<PositionProgressBarProps> = ({
 
       </div>
 
-      {/* Etiquetas de los extremos */}
+      {/* Etiquetas de los extremos: Invierten posición si es SHORT */}
       <div className="flex justify-between">
-        <span className="text-[7px] font-black text-rose-500/60 uppercase tracking-tighter">STOP_LOSS</span>
-        <span className="text-[7px] font-black text-emerald-500/60 uppercase tracking-tighter">TAKE_PROFIT</span>
+        <span className="text-[7px] font-black text-rose-500/60 uppercase tracking-tighter">
+          {isShort ? 'TAKE_PROFIT' : 'STOP_LOSS'}
+        </span>
+        <span className="text-[7px] font-black text-emerald-500/60 uppercase tracking-tighter">
+          {isShort ? 'STOP_LOSS' : 'TAKE_PROFIT'}
+        </span>
       </div>
     </div>
   );

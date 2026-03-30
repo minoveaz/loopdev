@@ -1,6 +1,11 @@
-# Quant Strategy Audit Trail & Change Management
+---
 
-This log tracks all architectural and parameter adjustments made to standardized trading protocols.
+## [1.2.5] - 2026-03-23
+### Strategy: Operational Safety Update
+- **Feature**: Implemented `BE_SHIELD` (Auto Break-Even).
+- **Logic**: Automatic migration of Stop Loss to Break-Even price once PnL hits `+0.25%`.
+- **Reason**: Protect capital from round-trip fees and sudden market reversals during high-frequency trades. This ensures that any trade that starts well becomes "risk-free" as soon as possible.
+- **Status**: DEPLOYED
 
 ---
 
