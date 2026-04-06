@@ -38,12 +38,8 @@ class IntradayATRStrategy(BaseStrategy):
         
         return df
 
-    def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
-        """
-        Lógica de ruptura de SMA20 con confirmación:
-        - BUY: Precio cruza SMA20 hacia arriba Y Precio > SMA200 (Tendencia alcista).
-        - SELL: Precio cruza SMA20 hacia abajo Y Precio < SMA200 (Tendencia bajista).
-        """
+    def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
+        """Lógica de ruptura con Confluencia Macro (V3)."""
         if pd.isna(row.get('sma20')) or pd.isna(previous_row.get('sma20')):
             return None
         
@@ -51,26 +47,35 @@ class IntradayATRStrategy(BaseStrategy):
         prev_price = float(previous_row['close'])
         sma20 = float(row['sma20'])
         prev_sma20 = float(previous_row['sma20'])
-        sma200 = float(row.get('sma200', price))
         atr = float(row.get('atr', 0))
         
-        # Filtro de Volatilidad Mínima para evitar señales falsas en mercado plano
+        # --- CONFLUENCIA MACRO (V3) ---
+        macro_bias = "NEUTRAL"
+        if tf_data and '15m' in tf_data:
+            df_15 = tf_data['15m']
+            ma15 = df_15['close'].rolling(20).mean().iloc[-1]
+            price15 = df_15['close'].iloc[-1]
+            macro_bias = "BULLISH" if price15 > ma15 else "BEARISH"
+
+        # Filtro de Volatilidad Mínima (Profitability Guard)
         vol_ready = atr >= (price * self.atr_threshold)
 
         # 1. Ruptura Alcista (LONG)
+        # Requiere: Cruce 1m + Macro Tendencia 15m Alcista
         if prev_price < prev_sma20 and price > sma20:
-            if price > sma200 and vol_ready:
+            if macro_bias == "BULLISH" and vol_ready:
                 return {
                     "side": "buy", 
-                    "reason": f"V2_Trend_Breakout_UP (ATR_OK)"
+                    "reason": f"V3_ATR_Breakout_LONG (15m_UP)"
                 }
         
         # 2. Ruptura Bajista (SHORT)
+        # Requiere: Cruce 1m + Macro Tendencia 15m Bajista
         if prev_price > prev_sma20 and price < sma20:
-            if price < sma200 and vol_ready:
+            if macro_bias == "BEARISH" and vol_ready:
                 return {
                     "side": "short", 
-                    "reason": f"V2_Trend_Breakout_DOWN (ATR_OK)"
+                    "reason": f"V3_ATR_Breakout_SHORT (15m_DOWN)"
                 }
 
         return None

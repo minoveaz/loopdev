@@ -51,22 +51,23 @@ class RiskManager:
         
         # Lógica de TP basada en ATR (Personalizable por estrategia en el futuro)
         # --- INDUSTRIAL PROFIT FLOOR: 0.60% ---
-        # Aseguramos un margen seguro sobre el 0.20% de comisiones.
         min_tp_dist = entry_price * 0.006 # 0.6% fijo
+        
+        # --- OPTIMIZACIÓN V3: RATIO RISK/REWARD 1:2 ---
+        # Definimos primero la distancia de riesgo (SL) basada en ATR.
+        # Luego proyectamos el TP al doble de esa distancia.
+        sl_dist = max(atr, entry_price * 0.003) # SL mínimo de 0.3%
+        tp_dist = max(sl_dist * 2.0, min_tp_dist) # TP = 2x SL (mínimo 0.6%)
 
         if side_norm == PositionSide.LONG:
-            # Calculamos TP por ATR pero respetamos el suelo mínimo
-            tp_price = entry_price + max(tp_multiplier * atr, min_tp_dist)
-            
-            # SL simétrico (Risk/Reward 1:1 inicial)
-            sl_price = entry_price - (tp_price - entry_price)
+            tp_price = entry_price + tp_dist
+            sl_price = entry_price - sl_dist
             # Break Even (Entry + 0.2% para cubrir comisiones)
             be_price = entry_price * 1.002
         else:
             # SHORT: TP hacia ABAJO, SL hacia ARRIBA
-            tp_price = entry_price - max(tp_multiplier * atr, min_tp_dist)
-            
-            sl_price = entry_price + (entry_price - tp_price)
+            tp_price = entry_price - tp_dist
+            sl_price = entry_price + sl_dist
             # Break Even (Entry - 0.2% para cubrir comisiones)
             be_price = entry_price * 0.998
             

@@ -38,38 +38,43 @@ class RSIMeanReversionStrategy(BaseStrategy):
         
         return df
 
-    def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
-        """
-        Lógica de reversión a la media:
-        - LONG: RSI cruza hacia arriba desde < 30 Y el precio está cerca de la SMA200 (Soporte).
-        - SHORT: RSI cruza hacia abajo desde > 70 Y el precio está bajo la SMA200 (Debilidad).
-        """
+    def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
+        """Lógica de reversión con Confluencia Macro (V3)."""
         if pd.isna(row.get('rsi')) or pd.isna(previous_row.get('rsi')):
             return None
 
         rsi = float(row['rsi'])
         prev_rsi = float(previous_row['rsi'])
         price = float(row['close'])
-        sma200 = float(row.get('sma200', price))
-        
-        # 1. Señal LONG (Cruce Alcista desde Sobreventa)
-        # Filtro: No compramos si el precio está colapsando muy por debajo de la SMA200.
+
+        # --- CONFLUENCIA MACRO (V3) ---
+        macro_bias = "NEUTRAL"
+        rsi_15m = 50.0
+        if tf_data and '15m' in tf_data:
+            df_15 = tf_data['15m']
+            ma15 = df_15['close'].rolling(20).mean().iloc[-1]
+            price15 = df_15['close'].iloc[-1]
+            rsi_15m = df_15['close'].diff().pipe(lambda d: (d.where(d>0,0)).ewm(alpha=1/14, adjust=False).mean() / ((-d.where(d<0,0)).ewm(alpha=1/14, adjust=False).mean()).pipe(lambda rs: 100 - (100/(1+rs)))).iloc[-1]
+            macro_bias = "BULLISH" if price15 > ma15 else "BEARISH"
+
+        # 1. Señal LONG (Cruce Alcista + Macro Bullish + No Agotado)
         if prev_rsi < self.oversold and rsi >= self.oversold:
-            if price > (sma200 * 0.98): # No más de un 2% bajo la tendencia mayor
+            if macro_bias == "BULLISH" and rsi_15m < 70:
                 return {
                     'side': 'buy', 
-                    'reason': f"V2_RSI_Oversold_Reversal ({rsi:.1f})"
+                    'reason': f"V3_RSI_Reversal_LONG (15m_UP)"
                 }
 
-        # 2. Señal SHORT (Cruce Bajista desde Sobrecompra)
+        # 2. Señal SHORT (Cruce Bajista + Macro Bearish + No Agotado)
         if prev_rsi > self.overbought and rsi <= self.overbought:
-            if price < (sma200 * 1.02): # No más de un 2% sobre la tendencia mayor
+            if macro_bias == "BEARISH" and rsi_15m > 30:
                 return {
-                    'side': 'sell', 
-                    'reason': f"V2_RSI_Overbought_Reversal ({rsi:.1f})"
+                    'side': 'short', 
+                    'reason': f"V3_RSI_Reversal_SHORT (15m_DOWN)"
                 }
 
         return None
+
 
     def get_snapshot(self, last_row: pd.Series, df: pd.DataFrame) -> Dict[str, Any]:
         """Telemetría específica para el dashboard de reversión."""

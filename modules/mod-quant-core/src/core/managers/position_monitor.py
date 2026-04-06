@@ -123,10 +123,14 @@ class PositionMonitor:
                             if risk_updates or (datetime.now(timezone.utc).second % 15 == 0):
                                 update_payload = {
                                     **pnl_data, **risk_updates, 
-                                    "last_price": self.risk.to_cents(current_price), 
-                                    "updated_at": datetime.now(timezone.utc).isoformat()
+                                    "last_price": self.risk.to_cents(current_price)
                                 }
+                                # Solo marcamos como actualización de estado si hubo cambios de riesgo
+                                if risk_updates:
+                                    update_payload["updated_at"] = datetime.now(timezone.utc).isoformat()
+
                                 await self._safe_db_query(self.supabase.table("quant_bots").update(update_payload).eq, "id", bot.id)
+
                     except Exception as bot_err:
                         logger.error(f"Error processing Bot {raw_bot.get('id')[:8]}: {bot_err}")
                         continue

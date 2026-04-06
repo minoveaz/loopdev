@@ -35,38 +35,41 @@ class HybridCoreStrategy(BaseStrategy):
         
         return df
 
-    def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
-        """
-        Lógica de ruptura de volatilidad confirmada por tendencia.
-        - BUY: Precio > BB_Upper + ATR_Confirmation Y Precio > SMA200.
-        - SELL: Precio < BB_Lower - ATR_Confirmation Y Precio < SMA200.
-        """
+    def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
+        """Lógica de ruptura de volatilidad con Confluencia Macro (V3)."""
         if pd.isna(row.get('bb_upper')) or pd.isna(row.get('atr')): 
             return None
         
         price = float(row['close'])
         upper = float(row['bb_upper'])
         lower = float(row['bb_lower'])
-        sma200 = float(row.get('sma200', price))
         atr = float(row['atr'])
         
+        # --- CONFLUENCIA MACRO (V3) ---
+        macro_bias = "NEUTRAL"
+        if tf_data and '15m' in tf_data:
+            df_15 = tf_data['15m']
+            ma15 = df_15['close'].rolling(20).mean().iloc[-1]
+            price15 = df_15['close'].iloc[-1]
+            macro_bias = "BULLISH" if price15 > ma15 else "BEARISH"
+
         # El breakout debe ser significativo (al menos 0.3x ATR por encima de la banda)
         breakout_threshold = 0.3 * atr
 
         # 1. Ruptura Alcista (LONG)
         if price > (upper + breakout_threshold):
-            if price > sma200: # Confirmación de tendencia mayor
+            if macro_bias == "BULLISH": # Confirmación de tendencia mayor
                 return {
                     "side": "buy", 
-                    "reason": f"V2_BB_BREAKOUT_UP (Trend_Confirmed)"
+                    "reason": f"V3_BB_BREAKOUT_UP (15m_UP)"
                 }
         
         # 2. Ruptura Bajista (SHORT)
         if price < (lower - breakout_threshold):
-            if price < sma200: # Confirmación de tendencia mayor
+            if macro_bias == "BEARISH": # Confirmación de tendencia mayor
                 return {
                     "side": "short", 
-                    "reason": f"V2_BB_BREAKOUT_DOWN (Trend_Confirmed)"
+                    "reason": f"V3_BB_BREAKOUT_DOWN (15m_DOWN)"
                 }
             
         return None

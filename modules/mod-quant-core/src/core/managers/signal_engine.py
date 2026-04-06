@@ -9,6 +9,7 @@ class SignalEngine:
     """
     Tier B: Motor de Generación de Señales.
     Analiza el mercado y decide las entradas basándose en las estrategias.
+    Resiliente a cortes de conexión HTTP/2 y soporte Multi-Timeframe.
     """
     def __init__(self, supabase: Client, risk_manager, logic_engines):
         self.supabase = supabase
@@ -16,11 +17,25 @@ class SignalEngine:
         self.logic_engines = logic_engines
         self.is_running = True
 
+    async def _safe_db_query(self, func, *args, **kwargs):
+        """Ejecutor seguro de queries con reintento para fallos de red/conexión."""
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                return func(*args, **kwargs).execute()
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    wait_time = (attempt + 1) * 2
+                    logger.warning(f"SIGNAL_DB_RETRY | Attempt {attempt+1}: {e}. Retrying in {wait_time}s...")
+                    await asyncio.sleep(wait_time)
+                else: raise e
+
     async def process_bot_logic(self, bot: Dict[str, Any]):
-        """Evaluación profunda de entrada para un bot."""
+        """Evaluación profunda de entrada para un bot con soporte Multi-Timeframe."""
         start_time = datetime.now(timezone.utc)
         pair = bot['pair']
-        env = 'testnet' if bot['status'] in ['paper_trading', 'active'] else 'production'
+        env = 'production'
+        timeframes = ['1m', '5m', '15m']
         
         try:
             # 1. Resolver motor de estrategia
@@ -28,68 +43,95 @@ class SignalEngine:
             if isinstance(strat_info, list): strat_info = strat_info[0]
             engine = self.logic_engines.get(strat_info.get('core_id', 'default'))
 
-            # 2. Obtener historial de mercado (Aumentado a 250 para estabilidad SMA200/Wilder)
-            res = self.supabase.table("quant_market_history").select("*").eq("pair", pair).eq("environment", env).order("timestamp", desc=True).limit(250).execute()
-            if len(res.data) < 50: return
+            # 2. Obtener historial de mercado Multi-Timeframe en paralelo
+            tf_data = {}
+            for tf in timeframes:
+                res = await self._safe_db_query(
+                    self.supabase.table("quant_market_history").select("*")
+                    .eq("pair", pair).eq("environment", env).eq("timeframe", tf)
+                    .order("timestamp", desc=True).limit, 250
+                )
+                if len(res.data) < 50: 
+                    logger.warning(f"Insufficent data for {pair} in {tf}")
+                    return
 
-            df = pd.DataFrame(res.data).sort_values('timestamp')
-            for col in ['open', 'high', 'low', 'close']:
-                df[col] = df[col].apply(self.risk.from_cents)
+                df = pd.DataFrame(res.data).sort_values('timestamp')
+                for col in ['open', 'high', 'low', 'close']:
+                    df[col] = df[col].apply(self.risk.from_cents)
+                tf_data[tf] = df
+
+            # 3. Análisis de Indicadores
+            df_main = tf_data['1m']
+            df_main = engine.analyze(df_main)
             
-            df = engine.analyze(df)
-            last_row, prev_row = df.iloc[-1], df.iloc[-2]
+            last_row, prev_row = df_main.iloc[-1], df_main.iloc[-2]
             current_price = last_row['close']
 
-            # 3. Telemetría y Proximidad
-            snapshot = engine.get_snapshot(last_row, df)
+            # 4. Telemetría y Proximidad
+            snapshot = engine.get_snapshot(last_row, df_main)
             sentiment = engine.get_sentiment(last_row)
             proximity = engine.get_proximity(last_row)
             
-            # 4. Payload de Telemetría (Real-time precision)
+            # Inyectar indicadores de tendencia mayor en el snapshot para la UI
+            snapshot["multi_tf"] = {
+                "tf_5m_bias": "BULLISH" if tf_data['5m']['close'].iloc[-1] > tf_data['5m']['close'].rolling(20).mean().iloc[-1] else "BEARISH",
+                "tf_15m_bias": "BULLISH" if tf_data['15m']['close'].iloc[-1] > tf_data['15m']['close'].rolling(20).mean().iloc[-1] else "BEARISH"
+            }
+            
+            # 4. Payload de Telemetría
             update_payload = {
                 "last_price": self.risk.to_cents(current_price),
                 "last_sma": self.risk.to_cents(last_row.get('sma20', 0)),
                 "last_atr": self.risk.to_cents(last_row.get('atr', 0)),
                 "last_sentiment": sentiment,
                 "signal_strength": proximity.get('score', 0),
-                "price_history_1h": df['close'].tail(30).tolist(),
-                "last_metrics_update": datetime.now(timezone.utc).isoformat(),
-                "updated_at": datetime.now(timezone.utc).isoformat()
+                "price_history_1h": df_main['close'].tail(30).tolist(),
+                "last_metrics_update": datetime.now(timezone.utc).isoformat()
             }
 
-            # Inyectar snapshot y latencia
             snapshot.update({
                 "confluence": proximity.get('checks', {}), 
                 "node_latency": int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
             })
             update_payload["last_logic_snapshot"] = snapshot
 
-            # 5. Persistir telemetría en DB
-            self.supabase.table("quant_bots").update(update_payload).eq("id", bot['id']).execute()
+            # 5. Persistir telemetría
+            await self._safe_db_query(self.supabase.table("quant_bots").update(update_payload).eq, "id", bot['id'])
 
-            # --- LOG DE TELEMETRÍA (El Pulso) ---
+            # --- LOG DE TELEMETRÍA ---
             rsi = snapshot.get('rsi', 0)
             vol_status = snapshot.get('vol_status') or snapshot.get('volume_status', 'N/A')
             bias = snapshot.get('bias') or snapshot.get('market_bias') or snapshot.get('trend_bias', 'N/A')
             prox_side = proximity.get('side', 'N/A')
             logger.info(f"EVALUATING | Bot: {bot['id'][:8]} | {pair} @ ${current_price:.2f} | Prox: {proximity['score']}% ({prox_side}) | rsi: {rsi:.2f} | vol: {vol_status} | bias: {bias}")
 
-            # 6. Disparo de Señal de Entrada (Solo si no hay posición)
+            # 6. Disparo de Señal de Entrada
             if bot.get('current_entry_price', 0) == 0:
-                # --- PROTECCIÓN ANTI-CHURN: 5m COOLDOWN ---
-                updated_at_str = bot.get('updated_at')
-                if updated_at_str:
-                    # Usamos pandas.to_datetime por su alta flexibilidad con formatos ISO en Python < 3.11
-                    last_update = pd.to_datetime(updated_at_str).tz_convert('UTC')
-                    diff_seconds = (datetime.now(timezone.utc) - last_update).total_seconds()
-                    # Si el bot acaba de cerrar (hace menos de 300s / 5m), esperamos.
+                # --- PROTECCIÓN ANTI-CHURN (COOLDOWN) ---
+                last_lifecycle_event = bot.get('current_position_opened_at')
+                if last_lifecycle_event:
+                    last_event_time = pd.to_datetime(last_lifecycle_event).tz_convert('UTC')
+                    diff_seconds = (datetime.now(timezone.utc) - last_event_time).total_seconds()
                     if diff_seconds < 300:
-                        logger.info(f"COOLDOWN | Bot: {bot['id'][:8]} | Waiting {int(300 - diff_seconds)}s before next evaluation.")
+                        logger.info(f"COOLDOWN | Bot: {bot['id'][:8]} | Resting after EXIT ({int(300 - diff_seconds)}s remaining)")
                         return
 
-                signal_data = engine.check_signal(last_row, prev_row)
+                # Pasamos tf_data (Multi-Timeframe Context) a la estrategia
+                signal_data = engine.check_signal(last_row, prev_row, tf_data=tf_data)
+                
                 if signal_data:
+                    # --- INDUSTRIAL SIGNAL AUDIT (The Profitability Guard) ---
+                    atr = float(last_row.get('atr', 0))
+                    atr_pct = (atr / current_price) * 100 if current_price > 0 else 0
+                    min_volatility_req = engine.get_min_volatility()
+                    
+                    if atr_pct < min_volatility_req:
+                        logger.warning(f"SIGNAL SUPPRESSED | Bot: {bot['id'][:8]} | Reason: Low Volatility (ATR {atr_pct:.2f}% < {min_volatility_req}% req.)")
+                        return
+
                     await self.generate_signal(bot, signal_data['side'].upper(), current_price, {"reason": signal_data['reason'], "snapshot": snapshot})
+                else:
+                    logger.info(f"NO_SIGNAL | Bot: {bot['id'][:8]} | Strategy: {strat_info.get('core_id')} | Technical criteria not met.")
 
         except Exception as e:
             logger.error(f"SignalEngine Error for bot {bot['id'][:8]}: {e}")

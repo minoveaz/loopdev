@@ -17,10 +17,10 @@ class BaseStrategy(ABC):
         pass
 
     @abstractmethod
-    def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
+    def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
         """
         Evaluates a single candle (and its predecessor) for entry signals.
-        Returns a dictionary with 'side', 'type', etc. if a signal exists, else None.
+        May use tf_data for multi-timeframe confluence checks.
         """
         pass
     
@@ -38,6 +38,13 @@ class BaseStrategy(ABC):
         """
         return "neutral"
     
+    def get_min_volatility(self) -> float:
+        """
+        Define el umbral mínimo de ATR porcentual para que un trade sea rentable.
+        Default: 0.20% (para cubrir comisiones estándar).
+        """
+        return 0.20
+
     def get_proximity(self, row: pd.Series) -> Dict[str, Any]:
         """
         Calculates how close we are to a signal (0 to 100) and returns

@@ -40,7 +40,17 @@ from pydantic import BaseModel
 from typing import Optional, List
 
 # Importamos modelos industriales
-from .core.models.trading import ExchangeTestRequest, BacktestRequest, BalanceResponse, AssetBalance
+from .core.models.trading import (
+    ExchangeTestRequest, 
+    BacktestRequest, 
+    BalanceResponse, 
+    AssetBalance, 
+    AuditSessionResponse, 
+    AuditEvent, 
+    CandleData
+)
+
+import pandas as pd
 
 app = FastAPI(
     title="LoopDev Quant Core",
@@ -132,6 +142,101 @@ async def get_exchange_balance(account_id: str):
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         await connector.close()
+
+@app.get("/bots/{bot_id}/audit-session", response_model=AuditSessionResponse)
+async def get_bot_audit_session(bot_id: str):
+    """
+    Agregador Industrial de Sesión de Trade.
+    Une velas de mercado con hitos de decisión para reconstrucción visual.
+    """
+    try:
+        # 1. Recuperar info básica del bot
+        bot_res = supabase.table("quant_bots").select("*").eq("id", bot_id).execute()
+        if not bot_res.data:
+            raise HTTPException(status_code=404, detail="Bot not found")
+        bot_data = bot_res.data[0]
+        pair = bot_data['pair']
+
+        # 2. Localizar eventos recientes
+        audit_res = supabase.table("quant_audit_logs")\
+            .select("*")\
+            .eq("bot_id", bot_id)\
+            .order("created_at", desc=True)\
+            .limit(100)\
+            .execute()
+        
+        events = audit_res.data
+        if not events:
+            return {
+                "success": True, "bot_id": bot_id, "pair": pair, "side": None, 
+                "entry_price": 0, "entry_time": None, "exit_time": None, 
+                "candles": [], "events": [], "performance": {}
+            }
+
+        # Encontrar el ENTRY (hito de inicio de la sesión actual)
+        entry_event = next((e for e in reversed(events) if e['event_type'] == 'ENTRY'), events[-1])
+        entry_time = pd.to_datetime(entry_event['created_at']).tz_convert('UTC')
+        
+        # Margen visual de 15 minutos antes para ver el contexto
+        start_fetch = (entry_time - pd.Timedelta(minutes=15)).isoformat()
+        
+        # 3. Recuperar Velas del periodo
+        # Siempre usamos 'production' para el visualizador para coincidir con el SignalEngine
+        env = 'production'
+        market_res = supabase.table("quant_market_history")\
+            .select("*")\
+            .eq("pair", pair)\
+            .eq("environment", env)\
+            .gte("timestamp", start_fetch)\
+            .order("timestamp", asc=True)\
+            .execute()
+        
+        candles = [
+            CandleData(
+                t=c['timestamp'],
+                o=strategy_manager.risk.from_cents(c['open']),
+                h=strategy_manager.risk.from_cents(c['high']),
+                l=strategy_manager.risk.from_cents(c['low']),
+                c=strategy_manager.risk.from_cents(c['close']),
+                v=float(c['volume'] or 0)
+            ) for c in market_res.data
+        ]
+
+        # 4. Mapear Eventos tipados
+        mapped_events = [
+            AuditEvent(
+                id=str(e['id']),
+                event_type=e['event_type'],
+                side=e['side'],
+                price=strategy_manager.risk.from_cents(e['price']),
+                pnl_pct=float(e['pnl_pct'] or 0),
+                logic_snapshot=e['logic_snapshot'] or {},
+                created_at=e['created_at']
+            ) for e in events
+        ]
+
+        # 5. Cálculo de Performance
+        perf = {
+            "is_active": bot_data['current_entry_price'] > 0,
+            "event_count": len(events)
+        }
+
+        return {
+            "success": True,
+            "bot_id": bot_id,
+            "pair": pair,
+            "side": bot_data.get('current_position_side'),
+            "entry_price": strategy_manager.risk.from_cents(bot_data.get('current_entry_price', 0)),
+            "entry_time": entry_event['created_at'],
+            "exit_time": events[0]['created_at'] if events[0]['event_type'] == 'EXIT' else None,
+            "candles": candles,
+            "events": mapped_events,
+            "performance": perf
+        }
+
+    except Exception as e:
+        logger.error(f"Audit Session Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/health")
 async def health_check():

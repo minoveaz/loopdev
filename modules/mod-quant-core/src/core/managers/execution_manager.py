@@ -59,7 +59,9 @@ class ExecutionManager:
                 "current_entry_price": signal['price'] if is_entry else 0,
                 "current_position_side": pos_side if is_entry else None,
                 "current_action": f"In Position ({pair})" if is_entry else "Scanning Market",
-                "current_position_opened_at": datetime.now(timezone.utc).isoformat() if is_entry else None,
+                # IMPORTANTE: Grabamos el timestamp tanto en entrada como en salida
+                # Esto nos sirve de referencia inmutable para el Cooldown (Anti-Churn)
+                "current_position_opened_at": datetime.now(timezone.utc).isoformat(),
                 "current_position_max_price": signal['price'] if is_entry else 0,
                 "current_position_min_price": signal['price'] if is_entry else 0,
                 "updated_at": datetime.now(timezone.utc).isoformat()

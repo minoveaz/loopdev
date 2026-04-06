@@ -33,7 +33,7 @@ class AggressiveRSIStrategy(BaseStrategy):
         
         return df
 
-    def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
+    def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
         """
         Evaluación de señales con filtros de momentum y tendencia.
         

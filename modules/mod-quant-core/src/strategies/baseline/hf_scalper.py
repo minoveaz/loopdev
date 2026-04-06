@@ -11,11 +11,6 @@ class HighFrequencyScalperStrategy(BaseStrategy):
     """
     HF_SCALPER_SNIPER v2 (Industrial Audit 2026-03-28)
     Type: High-Frequency Momentum / Scalping
-    
-    Mejoras V2:
-    - RSI-7 con suavizado Wilder para filtrar micro-ruido.
-    - ATR-14 Wilder para asegurar volatilidad mínima (Scalping Guard).
-    - Lógica de entrada refinada con EMA9/21 y momentum filtrado.
     """
     
     def __init__(self):
@@ -28,10 +23,10 @@ class HighFrequencyScalperStrategy(BaseStrategy):
         df['ema9'] = df['close'].ewm(span=9, adjust=False).mean()
         df['ema21'] = df['close'].ewm(span=21, adjust=False).mean()
         
-        # 2. RSI-7 Wilder (Más estable para scalping que el RSI simple)
+        # 2. RSI-7 Wilder
         df['rsi'] = calculate_rsi(df['close'], period=7)
         
-        # 3. ATR-14 Wilder para medir el 'pulso' del mercado
+        # 3. ATR-14 Wilder
         df['atr'] = calculate_atr(df, period=14)
         
         # 4. Volumen promedio (últimos 5 minutos)
@@ -39,10 +34,12 @@ class HighFrequencyScalperStrategy(BaseStrategy):
         
         return df
 
-    def check_signal(self, row: pd.Series, previous_row: pd.Series) -> Optional[Dict[str, Any]]:
-        """
-        Lógica de Sniper: Buscamos impulsos fuertes alineados con la micro-tendencia.
-        """
+    def get_min_volatility(self) -> float:
+        """HF Scalper requiere menos volatilidad para operar (0.15%)."""
+        return 0.15
+
+    def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
+        """Lógica de Sniper con Confluencia Multi-Timeframe (V3)."""
         if pd.isna(row.get('rsi')) or pd.isna(row.get('ema9')):
             return None
 
@@ -50,34 +47,45 @@ class HighFrequencyScalperStrategy(BaseStrategy):
         ema9 = float(row['ema9'])
         ema21 = float(row['ema21'])
         rsi = float(row['rsi'])
-        atr = float(row.get('atr', 0))
         vol = float(row.get('volume', 0))
         vol_avg = float(row.get('vol_sma', 0))
         
-        # Filtros de Seguridad Scalping
-        # 1. Volatilidad mínima: El ATR debe ser superior al costo de comisiones (0.20%)
-        # Exigimos un 0.25% para asegurar que después de fees quede ganancia neta.
-        vol_ready = vol > (vol_avg * self.vol_multiplier)
-        atr_ready = atr > (price * 0.0025) 
-        
-        if not (vol_ready and atr_ready):
+        # 1. Filtro de Volumen (Específico de Scalping)
+        if vol <= (vol_avg * self.vol_multiplier):
             return None
 
-        # 2. Señal LONG (Compra)
-        # Tendencia alcista (EMA9 > EMA21) + RSI ganando fuerza ( > 55)
+        # 2. CONFLUENCIA MACRO (V3)
+        # Solo operamos a favor de la tendencia de 15 minutos
+        macro_bias = "NEUTRAL"
+        if tf_data and '15m' in tf_data:
+            df_15 = tf_data['15m']
+            # Usamos una SMA simple de 20 en 15m para definir tendencia mayor
+            ma15 = df_15['close'].rolling(20).mean().iloc[-1]
+            price15 = df_15['close'].iloc[-1]
+            macro_bias = "BULLISH" if price15 > ma15 else "BEARISH"
+
+        # 3. Señal LONG (Compra)
+        # Requiere: Micro-tendencia alcista (1m) + Macro-tendencia alcista (15m)
         if ema9 > ema21 and rsi > 55 and price > ema9:
-            return {
-                "side": "buy",
-                "reason": f"V2_HF_LONG (RSI:{rsi:.1f})"
-            }
+            if macro_bias == "BULLISH":
+                return {
+                    "side": "buy",
+                    "reason": f"V3_HF_LONG (Confluence_15m_UP)"
+                }
+            else:
+                # Log opcional aquí si quisiéramos saber que se bloqueó por confluencia
+                return None
                 
-        # 3. Señal SHORT (Venta)
-        # Tendencia bajista (EMA9 < EMA21) + RSI perdiendo fuerza ( < 45)
+        # 4. Señal SHORT (Venta)
+        # Requiere: Micro-tendencia bajista (1m) + Macro-tendencia bajista (15m)
         if ema9 < ema21 and rsi < 45 and price < ema9:
-            return {
-                "side": "short",
-                "reason": f"V2_HF_SHORT (RSI:{rsi:.1f})"
-            }
+            if macro_bias == "BEARISH":
+                return {
+                    "side": "short",
+                    "reason": f"V3_HF_SHORT (Confluence_15m_DOWN)"
+                }
+            else:
+                return None
 
         return None
 
@@ -118,44 +126,32 @@ class HighFrequencyScalperStrategy(BaseStrategy):
 
         if ema9 == 0 or ema21 == 0: return {"score": 0, "side": "NEUTRAL", "checks": {}}
 
-        # 1. Filtros de Seguridad (Misma lógica que check_signal)
+        # Filtros de Seguridad sincronizados
         vol_ready = vol > (vol_avg * self.vol_multiplier)
-        atr_ready = atr > (price * 0.0002)
+        atr_ready = (atr / price) * 100 >= self.get_min_volatility() if price > 0 else False
         
         score = 0
         side = "WAITING"
-        
-        if ema9 > ema21: # Tendencia Alcista
+        if ema9 > ema21:
             side = "LONG"
-            # Score base por RSI (buscamos momentum > 55)
             score = max(0, min(100, int((rsi - 30) * 2)))
-        elif ema9 < ema21: # Tendencia Bajista
+        elif ema9 < ema21:
             side = "SHORT"
-            # Score base por RSI (buscamos momentum < 45)
             score = max(0, min(100, int((70 - rsi) * 2)))
             
-        # 2. Penalización por falta de confluencia técnica
-        # Si los filtros de seguridad no pasan, limitamos el score al 70%
         if not (vol_ready and atr_ready):
             score = min(score, 70)
             
         return {
-            "score": score,
-            "side": side,
-            "checks": {
-                "trend_align": True,
-                "vol_ready": bool(vol_ready),
-                "atr_signal": bool(atr_ready)
-            }
+            "score": score, "side": side,
+            "checks": {"trend_align": True, "vol_ready": bool(vol_ready), "atr_signal": bool(atr_ready)}
         }
 
     def get_exit_price(self, entry_price: float, atr: float, side: str) -> float:
         """Salidas quirúrgicas para HF Scalping."""
-        # En HF, usamos 1.0x ATR para un TP rápido y seguro.
         multiplier = 1.0
         if atr <= 0: return entry_price * (1.005 if side == 'buy' else 0.995)
-        
         if side == 'buy':
-            return entry_price + (multiplier * atr)
+            return entry_price + (multiplier * max(atr, entry_price * 0.006))
         else:
-            return entry_price - (multiplier * atr)
+            return entry_price - (multiplier * max(atr, entry_price * 0.006))

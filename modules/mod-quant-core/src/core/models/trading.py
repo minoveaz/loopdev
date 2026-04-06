@@ -23,6 +23,38 @@ class AssetBalance(BaseModel):
     used: float
     total: float
 
+class AuditEvent(BaseModel):
+    """Evento cronológico tipado para el frontend."""
+    id: str
+    event_type: str
+    side: Optional[str]
+    price: float
+    pnl_pct: float
+    logic_snapshot: Dict[str, Any]
+    created_at: str
+
+class CandleData(BaseModel):
+    """Vela de precio optimizada para gráficos."""
+    t: str
+    o: float
+    h: float
+    l: float
+    c: float
+    v: float
+
+class AuditSessionResponse(BaseModel):
+    """Payload completo para reconstruir un trade en el gráfico."""
+    success: bool
+    bot_id: str
+    pair: str
+    side: Optional[str]
+    entry_price: float
+    entry_time: Optional[str]
+    exit_time: Optional[str]
+    candles: List[CandleData]
+    events: List[AuditEvent]
+    performance: Dict[str, Any]
+
 class BalanceResponse(BaseModel):
     """Respuesta industrial de balance de cuenta."""
     success: bool
