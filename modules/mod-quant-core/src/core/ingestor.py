@@ -176,29 +176,38 @@ class MarketIngestor:
         retry_delay = 5 # Inicial: 5s
         max_retry_delay = 300 # Máximo: 5m
         last_ws_attempt = datetime.now(timezone.utc)
+        last_success_ts = datetime.now(timezone.utc)
         
         while self.is_running:
             connector = self.connectors[environment]
             try:
-                start_time = datetime.now(timezone.utc)
+                now = datetime.now(timezone.utc)
                 
-                # AUTO-HEAL: Si llevamos más de 5 min en polling, intentamos volver a WS
-                if mode == 'polling' and (datetime.now(timezone.utc) - last_ws_attempt).total_seconds() > 300:
+                # --- AUTO-BACKFILL TRAS CAÍDA DE RED (V3.2.2) ---
+                # Si hemos estado desconectados > 2 min, recuperamos velas perdidas
+                gap_seconds = (now - last_success_ts).total_seconds()
+                if gap_seconds > 120:
+                    logger.warning(f"RECOVERY | Gap detected ({int(gap_seconds)}s). Fetching missing candles for {pair}...")
+                    if self.audit: self.audit.log_system_event("INGESTOR_GAP_RECOVERY", f"Gap of {int(gap_seconds)}s detected. Starting backfill.", pair=pair)
+                    await self.perform_backfill(pair, environment, timeframe)
+                
+                # AUTO-HEAL WS
+                if mode == 'polling' and (now - last_ws_attempt).total_seconds() > 300:
                     logger.info(f"AUTO-HEAL | Attempting to restore WebSocket for {pair} ({timeframe})")
                     mode = 'websocket'
-                    last_ws_attempt = datetime.now(timezone.utc)
+                    last_ws_attempt = now
 
                 if mode == 'websocket':
                     candles = await connector.watch_ohlcv(pair, timeframe=timeframe)
                     last_candle = candles[-1]
                 else:
-                    # MODO POLLING: Intervalo ajustado por timeframe
                     wait_time = 10 if timeframe == '1m' else 30
                     await asyncio.sleep(wait_time)
                     candles = await connector.fetch_ohlcv(pair, timeframe=timeframe, limit=2)
                     last_candle = candles[-1]
                 
-                # Reset delay on success
+                # Actualizamos marca de éxito
+                last_success_ts = datetime.now(timezone.utc)
                 retry_delay = 5
                 
                 end_time = datetime.now(timezone.utc)
@@ -221,9 +230,12 @@ class MarketIngestor:
             except Exception as e:
                 error_str = str(e).lower()
                 
+                # Gestión de errores internos de aiohttp/websocket (corrupción de objeto)
+                force_refresh = "parse_frame" in error_str or "parse_control_frame" in error_str
+                
                 if self.audit:
                     # Log critical system event for disconnections
-                    if "502" in error_str or "bad gateway" in error_str or "timeout" in error_str:
+                    if "502" in error_str or "bad gateway" in error_str or "timeout" in error_str or force_refresh:
                         self.audit.log_system_event(
                             "INGESTOR_DISCONNECTED", 
                             f"Disconnection for {pair} ({timeframe}). Error: {str(e)[:100]}", 
@@ -231,12 +243,12 @@ class MarketIngestor:
                         )
 
                 if mode == 'websocket':
-                    reason = "Connection Refused/502" if "502" in error_str else e
+                    reason = "Internal WS Error (Corrupted)" if force_refresh else e
                     logger.warning(f"WS Failed for {pair} ({timeframe}). Switching to POLLING. Reason: {reason}")
                     mode = 'polling'
                 
-                # Gestión de errores críticos (502 / Bad Gateway)
-                if "502" in error_str or "bad gateway" in error_str:
+                # Gestión de errores críticos (502 / Bad Gateway) o Corrupción Interna
+                if "502" in error_str or "bad gateway" in error_str or force_refresh:
                     async with self.refresh_lock:
                         # Verificamos si otro proceso ya refrescó el conector mientras esperábamos
                         if self.connectors[environment] == connector:
@@ -272,7 +284,10 @@ class MarketIngestor:
             bot_res = self.supabase.table("quant_bots").select("pair").in_("status", ["active", "paper_trading"]).execute()
             bot_pairs = list(set([b['pair'] for b in bot_res.data]))
         except Exception: bot_pairs = []
+        
+        # Filtramos 'SYSTEM' y cualquier otro par no válido
         all_pairs = list(set(config_pairs + bot_pairs))
+        all_pairs = [p for p in all_pairs if p and p != 'SYSTEM']
         
         # 2. Definir Temporalidades Industriales
         timeframes = ['1m', '5m', '15m', '1h']
