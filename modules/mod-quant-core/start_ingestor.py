@@ -6,6 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from src.core.ingestor import MarketIngestor
+from src.core.managers.audit_manager import AuditManager
 
 # --- CONFIGURACIÓN DE RUTAS ---
 current_dir = Path(__file__).resolve().parent
@@ -41,7 +42,8 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 async def main():
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    sentinel = MarketIngestor(supabase)
+    audit = AuditManager(supabase)
+    sentinel = MarketIngestor(supabase, audit)
     
     loop = asyncio.get_running_loop()
     def shutdown():

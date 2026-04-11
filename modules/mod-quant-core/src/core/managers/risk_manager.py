@@ -32,43 +32,32 @@ class RiskManager:
         except (TypeError, ValueError):
             return 0
 
-    def get_initial_exit_targets(self, entry_price: float, side: str, atr: float) -> Dict[str, int]:
+    def get_initial_exit_targets(self, entry_price: float, side: str, atr: float, aggression_multiplier: float = 1.0) -> Dict[str, int]:
         """
-        ÚNICA FUENTE DE VERDAD para objetivos de salida iniciales.
-        Calcula TP, SL y BE basándose en el precio de entrada y la volatilidad (ATR).
-        
-        Args:
-            entry_price: Precio al que se ejecutó la entrada.
-            side: "BUY" (Long) o "SELL" (Short).
-            atr: Volatilidad media actual para dimensionar el riesgo.
-            
-        Returns:
-            Estructura con tp_price, sl_price y be_price en centavos.
+        ÚNICA FUENTE DE VERDAD para objetivos de salida.
+        Ahora con Multiplicador de Agresividad para capturar movimientos > 1%.
         """
-        # Multiplicador estándar del 1.5% TP si no hay ATR (protección) o TP = 1.0x ATR.
-        tp_multiplier = 1.0 
         side_norm = PositionSide.LONG if side.upper() in ["BUY", "LONG"] else PositionSide.SHORT
         
-        # Lógica de TP basada en ATR (Personalizable por estrategia en el futuro)
         # --- INDUSTRIAL PROFIT FLOOR: 0.60% ---
-        min_tp_dist = entry_price * 0.006 # 0.6% fijo
+        min_tp_dist = entry_price * 0.006
         
-        # --- OPTIMIZACIÓN V3: RATIO RISK/REWARD 1:2 ---
-        # Definimos primero la distancia de riesgo (SL) basada en ATR.
-        # Luego proyectamos el TP al doble de esa distancia.
-        sl_dist = max(atr, entry_price * 0.003) # SL mínimo de 0.3%
-        tp_dist = max(sl_dist * 2.0, min_tp_dist) # TP = 2x SL (mínimo 0.6%)
+        # --- OPTIMIZACIÓN V3.1: DINAMISMO DE RATIO ---
+        # El riesgo (SL) es constante según ATR.
+        # El beneficio (TP) escala con la agresividad (Trend Strength).
+        sl_dist = max(atr, entry_price * 0.003) 
+        
+        # Multiplicador base 2.0x (Ratio 1:2). 
+        # Si aggression_multiplier es 2.0 (Super-Trend), el ratio sube a 1:4.
+        tp_dist = max(sl_dist * 2.0 * aggression_multiplier, min_tp_dist)
 
         if side_norm == PositionSide.LONG:
             tp_price = entry_price + tp_dist
             sl_price = entry_price - sl_dist
-            # Break Even (Entry + 0.2% para cubrir comisiones)
             be_price = entry_price * 1.002
         else:
-            # SHORT: TP hacia ABAJO, SL hacia ARRIBA
             tp_price = entry_price - tp_dist
             sl_price = entry_price + sl_dist
-            # Break Even (Entry - 0.2% para cubrir comisiones)
             be_price = entry_price * 0.998
             
         return {
@@ -108,25 +97,32 @@ class RiskManager:
         be_price_raw = last_targets.get('be_price', 0)
         current_sl_raw = last_targets.get('sl_price', 0)
         
-        # --- 1. AUTO BREAK-EVEN SHIELD ---
-        # Si pnl_pct > 0.25%, protegemos la entrada.
-        if pnl_pct >= 0.25:
+        # --- 1. AUTO BREAK-EVEN SHIELD (V3.2 Optimizado) ---
+        # Si pnl_pct > 0.50%, protegemos la entrada con un pequeño margen.
+        # Subimos de 0.25% -> 0.50% para dar aire a la operación.
+        if pnl_pct >= 0.50:
+            # El BE price ahora es más ajustado (0.05% en lugar de 0.2%)
+            # be_price original era entry * 1.002 (0.2%). Lo bajamos a 1.0005 (0.05%)
+            tight_be_price = self.from_cents(bot.current_entry_price) * (1.0005 if side == PositionSide.LONG else 0.9995)
+            tight_be_raw = self.to_cents(tight_be_price)
+
             is_sl_unprotected = False
             if side == PositionSide.LONG:
-                is_sl_unprotected = current_sl_raw < be_price_raw
+                is_sl_unprotected = current_sl_raw < tight_be_raw
             else:
-                is_sl_unprotected = current_sl_raw > be_price_raw or current_sl_raw == 0
+                is_sl_unprotected = current_sl_raw > tight_be_raw or current_sl_raw == 0
 
             if is_sl_unprotected:
                 new_targets = last_targets.copy()
-                new_targets['sl_price'] = be_price_raw
+                new_targets['sl_price'] = tight_be_raw
                 update_data["last_exit_targets"] = new_targets
                 update_data["current_action"] = "BE_SHIELD Active"
-                logger.info(f"PROTECTION | Bot {bot.id[:8]} -> SL to Break-Even.")
+                logger.info(f"PROTECTION | Bot {bot.id[:8]} -> SL to Tight Break-Even (0.05%).")
 
         # --- 2. TRAILING STOP LOGIC ---
         dist_pct = bot.trailing_stop_distance
-        activation_threshold = 0.8 if dist_pct >= 1.0 else 0.1 
+        # Activación dinámica: Si el target es > 1%, esperamos a tener al menos 0.4% de profit
+        activation_threshold = 0.4 
         
         if pnl_pct > activation_threshold:
             if side == PositionSide.LONG:

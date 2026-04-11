@@ -38,6 +38,10 @@ class RSIMeanReversionStrategy(BaseStrategy):
         
         return df
 
+    def get_min_volatility(self) -> float:
+        """RSI Mean Rev requiere volatilidad mínima de 0.10% para cubrir comisiones."""
+        return 0.10
+
     def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
         """Lógica de reversión con Confluencia Macro (V3)."""
         if pd.isna(row.get('rsi')) or pd.isna(previous_row.get('rsi')):
@@ -52,10 +56,10 @@ class RSIMeanReversionStrategy(BaseStrategy):
         rsi_15m = 50.0
         if tf_data and '15m' in tf_data:
             df_15 = tf_data['15m']
-            ma15 = df_15['close'].rolling(20).mean().iloc[-1]
+            ma200_15 = df_15['close'].rolling(200).mean().iloc[-1]
             price15 = df_15['close'].iloc[-1]
             rsi_15m = df_15['close'].diff().pipe(lambda d: (d.where(d>0,0)).ewm(alpha=1/14, adjust=False).mean() / ((-d.where(d<0,0)).ewm(alpha=1/14, adjust=False).mean()).pipe(lambda rs: 100 - (100/(1+rs)))).iloc[-1]
-            macro_bias = "BULLISH" if price15 > ma15 else "BEARISH"
+            macro_bias = "BULLISH" if price15 > ma200_15 else "BEARISH"
 
         # 1. Señal LONG (Cruce Alcista + Macro Bullish + No Agotado)
         if prev_rsi < self.oversold and rsi >= self.oversold:

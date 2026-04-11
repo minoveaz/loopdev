@@ -11,10 +11,11 @@ class SignalEngine:
     Analiza el mercado y decide las entradas basándose en las estrategias.
     Resiliente a cortes de conexión HTTP/2 y soporte Multi-Timeframe.
     """
-    def __init__(self, supabase: Client, risk_manager, logic_engines):
+    def __init__(self, supabase: Client, risk_manager, logic_engines, audit_manager):
         self.supabase = supabase
         self.risk = risk_manager
         self.logic_engines = logic_engines
+        self.audit = audit_manager
         self.is_running = True
 
     async def _safe_db_query(self, func, *args, **kwargs):
@@ -32,17 +33,21 @@ class SignalEngine:
 
     async def process_bot_logic(self, bot: Dict[str, Any]):
         """Evaluación profunda de entrada para un bot con soporte Multi-Timeframe."""
+        # --- FILTRO DE SEGURIDAD (V3.2) ---
+        # No procesamos el bot de sistema ni pares que no sean activos de trading.
+        if bot.get('pair') == 'SYSTEM' or bot.get('id') == '00000000-0000-0000-0000-000000000000':
+            return
+
         start_time = datetime.now(timezone.utc)
         pair = bot['pair']
         env = 'production'
-        timeframes = ['1m', '5m', '15m']
+        timeframes = ['1m', '5m', '15m', '1h']
         
         try:
             # 1. Resolver motor de estrategia
             strat_info = bot.get('quant_strategies', {})
             if isinstance(strat_info, list): strat_info = strat_info[0]
             engine = self.logic_engines.get(strat_info.get('core_id', 'default'))
-
             # 2. Obtener historial de mercado Multi-Timeframe en paralelo
             tf_data = {}
             for tf in timeframes:
@@ -51,11 +56,17 @@ class SignalEngine:
                     .eq("pair", pair).eq("environment", env).eq("timeframe", tf)
                     .order("timestamp", desc=True).limit, 250
                 )
-                if len(res.data) < 50: 
-                    logger.warning(f"Insufficent data for {pair} in {tf}")
+
+                # Umbral dinámico: 1m necesita más datos para indicadores reactivos.
+                # 1h/15m solo necesitan suficiente para una media móvil simple.
+                min_required = 50 if tf == '1m' else 20
+
+                if len(res.data) < min_required: 
+                    logger.warning(f"Insufficent data for {pair} in {tf} ({len(res.data)}/{min_required} candles). Skipping.")
                     return
 
                 df = pd.DataFrame(res.data).sort_values('timestamp')
+
                 for col in ['open', 'high', 'low', 'close']:
                     df[col] = df[col].apply(self.risk.from_cents)
                 tf_data[tf] = df
@@ -73,9 +84,15 @@ class SignalEngine:
             proximity = engine.get_proximity(last_row)
             
             # Inyectar indicadores de tendencia mayor en el snapshot para la UI
+            # --- V3 UPGRADE: SMA200 en 15m como Tendencia Institucional ---
+            df_15 = tf_data['15m']
+            ma200_15 = df_15['close'].rolling(200).mean().iloc[-1]
+            price_15 = df_15['close'].iloc[-1]
+            
             snapshot["multi_tf"] = {
                 "tf_5m_bias": "BULLISH" if tf_data['5m']['close'].iloc[-1] > tf_data['5m']['close'].rolling(20).mean().iloc[-1] else "BEARISH",
-                "tf_15m_bias": "BULLISH" if tf_data['15m']['close'].iloc[-1] > tf_data['15m']['close'].rolling(20).mean().iloc[-1] else "BEARISH"
+                "tf_15m_trend": "BULLISH" if price_15 > ma200_15 else "BEARISH",
+                "tf_1h_bias": "BULLISH" if tf_data['1h']['close'].iloc[-1] > tf_data['1h']['close'].rolling(20).mean().iloc[-1] else "BEARISH"
             }
             
             # 4. Payload de Telemetría
@@ -126,10 +143,44 @@ class SignalEngine:
                     min_volatility_req = engine.get_min_volatility()
                     
                     if atr_pct < min_volatility_req:
-                        logger.warning(f"SIGNAL SUPPRESSED | Bot: {bot['id'][:8]} | Reason: Low Volatility (ATR {atr_pct:.2f}% < {min_volatility_req}% req.)")
+                        reason_msg = f"Low Volatility (ATR {atr_pct:.2f}% < {min_volatility_req}% req.)"
+                        logger.warning(f"SIGNAL SUPPRESSED | Bot: {bot['id'][:8]} | Reason: {reason_msg}")
+                        
+                        # --- AUDITORÍA DE SEÑAL SUPRIMIDA (V3.2) ---
+                        # Registramos el evento para análisis de "missed opportunities"
+                        asyncio.create_task(self.audit.log_event(
+                            bot_id=bot['id'],
+                            event_type="SIGNAL_SUPPRESSED",
+                            pair=pair,
+                            price_cents=self.risk.to_cents(current_price),
+                            side=signal_data['side'].upper(),
+                            snapshot={**snapshot, "suppression_reason": reason_msg}
+                        ))
                         return
 
-                    await self.generate_signal(bot, signal_data['side'].upper(), current_price, {"reason": signal_data['reason'], "snapshot": snapshot})
+                    # --- V3.1 PROFIT BOOST CALCULATION ---
+                    # Calculamos confluencia total para decidir agresividad
+                    confluence_score = 1.0
+                    bias_15m = snapshot.get("multi_tf", {}).get("tf_15m_trend")
+                    bias_1h = snapshot.get("multi_tf", {}).get("tf_1h_bias")
+                    
+                    # Si el sesgo de 15m y 1h coincide con el trade, aumentamos agresividad
+                    side_upper = signal_data['side'].upper()
+                    is_bullish_trade = side_upper in ["BUY", "LONG"]
+                    
+                    matches = 0
+                    if is_bullish_trade:
+                        if bias_15m == "BULLISH": matches += 1
+                        if bias_1h == "BULLISH": matches += 1
+                    else:
+                        if bias_15m == "BEARISH": matches += 1
+                        if bias_1h == "BEARISH": matches += 1
+                    
+                    # Multiplicador: 1.0 (Normal), 1.5 (Fuerte), 2.0 (Super-Tendencia)
+                    confluence_score = 1.0 + (matches * 0.5)
+                    snapshot["trend_strength"] = confluence_score
+
+                    await self.generate_signal(bot, side_upper, current_price, {"reason": signal_data['reason'], "snapshot": snapshot, "profit_boost": confluence_score})
                 else:
                     logger.info(f"NO_SIGNAL | Bot: {bot['id'][:8]} | Strategy: {strat_info.get('core_id')} | Technical criteria not met.")
 

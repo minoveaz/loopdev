@@ -101,9 +101,17 @@ class ExecutionManager:
 
             # 4. Cálculo de TP/SL
             if is_entry:
+                # Recuperar multiplicador de agresividad de la señal
+                meta = signal.get('metadata') or {}
+                if isinstance(meta, str): meta = json.loads(meta)
+                boost = float(meta.get('profit_boost', 1.0))
+                
                 last_atr = self.risk.from_cents(bot_data.get('last_atr')) or (price * 0.02)
-                exit_targets = self.risk.get_initial_exit_targets(price, side, last_atr)
+                exit_targets = self.risk.get_initial_exit_targets(price, side, last_atr, aggression_multiplier=boost)
                 update_payload["last_exit_targets"] = exit_targets
+                
+                if boost > 1.0:
+                    logger.success(f"PROFIT BOOST | Level: {boost}x | Bot {masked_bot_id} aiming for high-yield trade.")
 
             # 5. Registro de Orden
             investment = float(bot.base_investment_usdt or 100)

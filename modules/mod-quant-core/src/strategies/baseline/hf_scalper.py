@@ -35,8 +35,8 @@ class HighFrequencyScalperStrategy(BaseStrategy):
         return df
 
     def get_min_volatility(self) -> float:
-        """HF Scalper requiere menos volatilidad para operar (0.15%)."""
-        return 0.15
+        """HF Scalper requiere menos volatilidad para operar (0.10%)."""
+        return 0.10
 
     def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
         """Lógica de Sniper con Confluencia Multi-Timeframe (V3)."""
@@ -54,15 +54,15 @@ class HighFrequencyScalperStrategy(BaseStrategy):
         if vol <= (vol_avg * self.vol_multiplier):
             return None
 
-        # 2. CONFLUENCIA MACRO (V3)
-        # Solo operamos a favor de la tendencia de 15 minutos
+        # 2. CONFLUENCIA MACRO (V3 UPGRADE)
+        # Solo operamos a favor de la tendencia institucional de 15 minutos (SMA200)
         macro_bias = "NEUTRAL"
         if tf_data and '15m' in tf_data:
             df_15 = tf_data['15m']
-            # Usamos una SMA simple de 20 en 15m para definir tendencia mayor
-            ma15 = df_15['close'].rolling(20).mean().iloc[-1]
+            # SMA200 en 15m es el 'muro' institucional
+            ma200_15 = df_15['close'].rolling(200).mean().iloc[-1]
             price15 = df_15['close'].iloc[-1]
-            macro_bias = "BULLISH" if price15 > ma15 else "BEARISH"
+            macro_bias = "BULLISH" if price15 > ma200_15 else "BEARISH"
 
         # 3. Señal LONG (Compra)
         # Requiere: Micro-tendencia alcista (1m) + Macro-tendencia alcista (15m)

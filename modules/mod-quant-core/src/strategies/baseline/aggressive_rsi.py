@@ -33,42 +33,40 @@ class AggressiveRSIStrategy(BaseStrategy):
         
         return df
 
+    def get_min_volatility(self) -> float:
+        """Aggressive RSI requiere volatilidad mínima de 0.10% para operar."""
+        return 0.10
+
     def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
-        """
-        Evaluación de señales con filtros de momentum y tendencia.
-        
-        Lógica de Protección:
-        - LONG: RSI < 45 (está barato o recuperando) Y Precio > SMA20 (tendencia alcista).
-        - SHORT: RSI > 55 (está caro o agotándose) Y Precio < SMA20 (tendencia bajista).
-        """
-        # Validamos integridad de datos
-        if pd.isna(row.get('rsi')) or pd.isna(row.get('sma20')) or pd.isna(row.get('atr')):
+        """Lógica de señal agresiva con Confluencia Macro (V3)."""
+        if pd.isna(row.get('rsi')) or pd.isna(row.get('sma20')):
             return None
         
         price = float(row['close'])
         rsi = float(row['rsi'])
         sma20 = float(row['sma20'])
         
-        # Filtros de Tendencia
-        is_uptrend = price > sma20
-        is_downtrend = price < sma20
-        
-        # 1. Señal LONG (Compra)
-        # Buscamos momentum recuperándose bajo la SMA o soporte dinámico.
-        if rsi < 45 and is_uptrend:
+        # --- CONFLUENCIA MACRO (V3) ---
+        macro_bias = "NEUTRAL"
+        if tf_data and '15m' in tf_data:
+            df_15 = tf_data['15m']
+            ma200_15 = df_15['close'].rolling(200).mean().iloc[-1]
+            price15 = df_15['close'].iloc[-1]
+            macro_bias = "BULLISH" if price15 > ma200_15 else "BEARISH"
+
+        # 1. Señal LONG
+        if rsi < 45 and price > sma20 and macro_bias == "BULLISH":
             return {
                 "side": "buy",
-                "reason": f"V2_Momentum_LONG (RSI:{rsi:.1f})"
+                "reason": f"V3_Momentum_LONG (15m_UP)"
             }
         
-        # 2. Señal SHORT (Venta)
-        # CORRECCIÓN: Entramos si el precio está bajo la SMA y el RSI está alto pero EMPEZANDO a bajar.
-        # Esto evita entrar en corto mientras el precio sigue disparándose.
+        # 2. Señal SHORT
         rsi_was_higher = rsi < float(previous_row.get('rsi', 100))
-        if rsi > 55 and is_downtrend and rsi_was_higher:
+        if rsi > 55 and price < sma20 and rsi_was_higher and macro_bias == "BEARISH":
             return {
                 "side": "short",
-                "reason": f"V2_Momentum_SHORT (RSI:{rsi:.1f} ↓)"
+                "reason": f"V3_Momentum_SHORT (15m_DOWN)"
             }
         
         return None

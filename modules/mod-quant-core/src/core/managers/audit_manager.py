@@ -87,3 +87,19 @@ class AuditManager:
             pnl_pct=pnl_pct,
             snapshot=snapshot
         ))
+
+    def log_system_event(self, event_type: str, message: str, pair: str = "GLOBAL", snapshot: Dict[str, Any] = {}):
+        """
+        Registra eventos de infraestructura (Ingestor, Conectividad, etc.) en la línea de tiempo unificada.
+        Usa un UUID nulo para indicar que es un evento de sistema.
+        """
+        # Aseguramos el prefijo SYSTEM_ si no lo tiene
+        full_event_type = f"SYSTEM_{event_type}" if not event_type.startswith("SYSTEM_") else event_type
+        
+        asyncio.create_task(self.log_event(
+            bot_id="00000000-0000-0000-0000-000000000000",
+            event_type=full_event_type,
+            pair=pair,
+            price_cents=0,
+            snapshot={**snapshot, "system_message": message}
+        ))

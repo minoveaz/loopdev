@@ -56,7 +56,7 @@ class StrategyManager:
         
         # Brazo Ejecutor (Tier C) - Inyectamos Audit
         self.execution = ExecutionManager(self.supabase, self.risk, self.logic_engines, self.audit)
-        self.signal_engine = SignalEngine(self.supabase, self.risk, self.logic_engines)
+        self.signal_engine = SignalEngine(self.supabase, self.risk, self.logic_engines, self.audit)
         
         # Vigilante de Posiciones (Tier B+) - Inyectamos flujo de precios y Audit
         self.position_monitor = PositionMonitor(self.supabase, self.risk, self.signal_engine.generate_signal, self.price_stream, self.audit)

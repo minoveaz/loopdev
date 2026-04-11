@@ -35,6 +35,10 @@ class HybridCoreStrategy(BaseStrategy):
         
         return df
 
+    def get_min_volatility(self) -> float:
+        """Hybrid Core requiere volatilidad mínima de 0.10% para operar."""
+        return 0.10
+
     def check_signal(self, row: pd.Series, previous_row: pd.Series, tf_data: Optional[Dict[str, pd.DataFrame]] = None) -> Optional[Dict[str, Any]]:
         """Lógica de ruptura de volatilidad con Confluencia Macro (V3)."""
         if pd.isna(row.get('bb_upper')) or pd.isna(row.get('atr')): 
@@ -49,9 +53,9 @@ class HybridCoreStrategy(BaseStrategy):
         macro_bias = "NEUTRAL"
         if tf_data and '15m' in tf_data:
             df_15 = tf_data['15m']
-            ma15 = df_15['close'].rolling(20).mean().iloc[-1]
+            ma200_15 = df_15['close'].rolling(200).mean().iloc[-1]
             price15 = df_15['close'].iloc[-1]
-            macro_bias = "BULLISH" if price15 > ma15 else "BEARISH"
+            macro_bias = "BULLISH" if price15 > ma200_15 else "BEARISH"
 
         # El breakout debe ser significativo (al menos 0.3x ATR por encima de la banda)
         breakout_threshold = 0.3 * atr
