@@ -77,3 +77,24 @@ def calculate_sma_distance(price: float, sma: float) -> float:
     """
     if sma <= 0: return 0.0
     return ((price / sma) - 1) * 100
+
+def calculate_order_imbalance(bids: list, asks: list) -> float:
+    """
+    Calcula el desequilibrio de órdenes (Order Imbalance).
+    Basado en el volumen acumulado en el Top 20 de niveles.
+    Retorna un valor entre -1.0 (Presión Vendedora) y 1.0 (Presión Compradora).
+    """
+    buy_vol = sum([float(b[1]) for b in bids])
+    sell_vol = sum([float(a[1]) for a in asks])
+    total = buy_vol + sell_vol
+    
+    if total == 0: return 0.0
+    return (buy_vol - sell_vol) / total
+
+def calculate_mid_price(bids: list, asks: list) -> float:
+    """
+    Calcula el Mid-Price (precio medio entre el mejor Bid y el mejor Ask).
+    Es el precio más justo y rápido del mercado.
+    """
+    if not bids or not asks: return 0.0
+    return (float(bids[0][0]) + float(asks[0][0])) / 2.0

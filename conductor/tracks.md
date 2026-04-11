@@ -56,6 +56,11 @@
 
 ---
 
+## [ ] Track: Order Flow & L2 Microstructure Integration
+*Link: [./conductor/tracks/order-flow-integration_20260411/](./conductor/tracks/order-flow-integration_20260411/)*
+
+---
+
 ## [x] Track: Brand Hub Logo System (Assets v1.0)
 *Link: [./conductor/tracks/brand-hub-logo-system_20260119/](./conductor/tracks/brand-hub-logo-system_20260119/)*
 
