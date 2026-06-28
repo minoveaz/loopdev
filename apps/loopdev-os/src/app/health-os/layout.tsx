@@ -50,24 +50,28 @@ const HEALTH_OS_SCHEMA = {
       collapsible: true,
       items: [
         {
+          id: 'overview',
           label: 'Overview',
           icon: 'LayoutDashboard',
           moduleId: 'overview',
           route: { routeId: '/health-os' },
         },
         {
+          id: 'agenda',
           label: 'Agenda',
           icon: 'Calendar',
           moduleId: 'agenda',
           route: { routeId: '/health-os/agenda' },
         },
         {
+          id: 'triage',
           label: 'Triage',
           icon: 'Activity',
           moduleId: 'triage',
           route: { routeId: '/health-os/triage' },
         },
         {
+          id: 'consultations',
           label: 'Consultations',
           icon: 'UserCheck',
           moduleId: 'consultations',
@@ -82,12 +86,14 @@ const HEALTH_OS_SCHEMA = {
       collapsible: true,
       items: [
         {
+          id: 'contracts',
           label: 'Contracts',
           icon: 'FileText',
           moduleId: 'contracts',
           route: { routeId: '/health-os/contracts' },
         },
         {
+          id: 'billing',
           label: 'RIPS & Billing',
           icon: 'CreditCard',
           moduleId: 'billing',
