@@ -74,8 +74,9 @@ class MarketIngestor:
         self.connectors['testnet'].set_sandbox_mode(True)
         self.is_running = True
 
-    def to_cents(self, price: float) -> int:
-        return int(round(price * 100))
+    def to_units(self, price: float) -> int:
+        """Convert price to cents (BIGINT) for financial precision."""
+        return int(float(price) * 100)
 
     async def fetch_config(self):
         try:
@@ -107,8 +108,8 @@ class MarketIngestor:
             if ohlcv:
                 payload = [{
                     "pair": pair, "environment": environment, "timeframe": timeframe,
-                    "open": self.to_cents(c[1]), "high": self.to_cents(c[2]), 
-                    "low": self.to_cents(c[3]), "close": self.to_cents(c[4]),
+                    "open": self.to_units(c[1]), "high": self.to_units(c[2]), 
+                    "low": self.to_units(c[3]), "close": self.to_units(c[4]),
                     "volume": float(c[5]),
                     "timestamp": datetime.fromtimestamp(c[0] / 1000, tz=timezone.utc).isoformat()
                 } for c in ohlcv]
@@ -130,21 +131,22 @@ class MarketIngestor:
                 seen = set()
                 payload_to_send = []
                 for tick in reversed(self.buffer):
-                    key = (tick['pair'], tick['timestamp'], tick['environment'])
+                    key = (tick['pair'], tick['timestamp'], tick['environment'], tick['timeframe'])
                     if key not in seen:
                         payload_to_send.append(tick)
                         seen.add(key)
                 self.buffer = []
             
             try:
-                self.supabase.table("quant_market_history").upsert(
-                    payload_to_send, 
-                    on_conflict="pair,environment,timeframe,timestamp"
-                ).execute()
-                logger.info(f"BUFFER_FLUSH | {len(payload_to_send)} unique ticks persisted.")
+                if payload_to_send:
+                    self.supabase.table("quant_market_history").upsert(
+                        payload_to_send, 
+                        on_conflict="pair,environment,timeframe,timestamp"
+                    ).execute()
+                    logger.info(f"BUFFER_FLUSH | {len(payload_to_send)} unique ticks persisted.")
             except Exception as e:
                 logger.error(f"Flush Error: {e}")
-                if "duplicate key" not in str(e):
+                if "duplicate key" not in str(e).lower():
                     async with self.buffer_lock: self.buffer.extend(payload_to_send)
 
     async def update_heartbeat(self):
@@ -158,7 +160,7 @@ class MarketIngestor:
                     "metadata": {
                         "active_pairs": [p['pair'] for p in self.active_pairs],
                         "buffer_size": len(self.buffer),
-                        "version": "3.2.1-Hardened"
+                        "version": "3.2.2-Hardened"
                     }
                 }
                 self.supabase.table("quant_system_health").upsert(payload).execute()
@@ -170,25 +172,23 @@ class MarketIngestor:
 
     async def stream_pair(self, pair: str, environment: str, timeframe: str = '1m'):
         mode = 'websocket'
-        logger.info(f"Stream Start | {pair} | {timeframe} [{environment}]")
+        logger.info(f"Stream Start | {pair} | {timeframe} [{environment.upper()}]")
         
-        polling_count = 0
-        retry_delay = 5 # Inicial: 5s
-        max_retry_delay = 300 # Máximo: 5m
+        retry_delay = 5 
+        max_retry_delay = 300 
         last_ws_attempt = datetime.now(timezone.utc)
         last_success_ts = datetime.now(timezone.utc)
         
         while self.is_running:
             connector = self.connectors[environment]
+            start_time = datetime.now(timezone.utc) # Fix: defined at the very start of the loop
             try:
-                now = datetime.now(timezone.utc)
+                now = start_time
                 
-                # --- AUTO-BACKFILL TRAS CAÍDA DE RED (V3.2.2) ---
-                # Si hemos estado desconectados > 2 min, recuperamos velas perdidas
+                # --- AUTO-BACKFILL TRAS CAÍDA DE RED ---
                 gap_seconds = (now - last_success_ts).total_seconds()
-                if gap_seconds > 120:
+                if gap_seconds > 180: # Aumentado a 3 min para dar margen
                     logger.warning(f"RECOVERY | Gap detected ({int(gap_seconds)}s). Fetching missing candles for {pair}...")
-                    if self.audit: self.audit.log_system_event("INGESTOR_GAP_RECOVERY", f"Gap of {int(gap_seconds)}s detected. Starting backfill.", pair=pair)
                     await self.perform_backfill(pair, environment, timeframe)
                 
                 # AUTO-HEAL WS
@@ -201,7 +201,7 @@ class MarketIngestor:
                     candles = await connector.watch_ohlcv(pair, timeframe=timeframe)
                     last_candle = candles[-1]
                 else:
-                    wait_time = 10 if timeframe == '1m' else 30
+                    wait_time = 15 if timeframe == '1m' else 45
                     await asyncio.sleep(wait_time)
                     candles = await connector.fetch_ohlcv(pair, timeframe=timeframe, limit=2)
                     last_candle = candles[-1]
@@ -215,46 +215,34 @@ class MarketIngestor:
 
                 payload = {
                     "pair": pair, "environment": environment, "timeframe": timeframe,
-                    "open": self.to_cents(last_candle[1]), "high": self.to_cents(last_candle[2]),
-                    "low": self.to_cents(last_candle[3]), "close": self.to_cents(last_candle[4]),
+                    "open": self.to_units(last_candle[1]), "high": self.to_units(last_candle[2]),
+                    "low": self.to_units(last_candle[3]), "close": self.to_units(last_candle[4]),
                     "volume": float(last_candle[5]),
                     "timestamp": datetime.fromtimestamp(last_candle[0] / 1000, tz=timezone.utc).isoformat(),
                     "latency_ms": latency_ms
                 }
                 
-                async with self.buffer_lock: self.buffer.append(payload)
-                # Log selectivo para no saturar
+                async with self.buffer_lock:
+                    self.buffer.append(payload)
+                
+                # Log selectivo
                 if timeframe == '1m' or datetime.now().second < 10:
-                    logger.info(f"TICK | {pair} | {timeframe} | {payload['close']}c")
+                    logger.info(f"TICK | {pair} | {timeframe} | {payload['close']}")
                 
             except Exception as e:
                 error_str = str(e).lower()
+                force_refresh = "parse_frame" in error_str or "parse_control_frame" in error_str or "502" in error_str
                 
-                # Gestión de errores internos de aiohttp/websocket (corrupción de objeto)
-                force_refresh = "parse_frame" in error_str or "parse_control_frame" in error_str
-                
-                if self.audit:
-                    # Log critical system event for disconnections
-                    if "502" in error_str or "bad gateway" in error_str or "timeout" in error_str or force_refresh:
-                        self.audit.log_system_event(
-                            "INGESTOR_DISCONNECTED", 
-                            f"Disconnection for {pair} ({timeframe}). Error: {str(e)[:100]}", 
-                            pair=pair
-                        )
-
                 if mode == 'websocket':
-                    reason = "Internal WS Error (Corrupted)" if force_refresh else e
-                    logger.warning(f"WS Failed for {pair} ({timeframe}). Switching to POLLING. Reason: {reason}")
+                    logger.warning(f"WS Failed for {pair} ({timeframe}). Switching to POLLING. Reason: {e}")
                     mode = 'polling'
                 
-                # Gestión de errores críticos (502 / Bad Gateway) o Corrupción Interna
-                if "502" in error_str or "bad gateway" in error_str or force_refresh:
+                if force_refresh:
                     async with self.refresh_lock:
-                        # Verificamos si otro proceso ya refrescó el conector mientras esperábamos
                         if self.connectors[environment] == connector:
-                            logger.error(f"Binance Testnet is DOWN (502). Refreshing global session in {retry_delay}s...")
+                            logger.error(f"Exchange {environment.upper()} is DOWN/Unstable. Refreshing session in {retry_delay}s...")
                             try:
-                                await connector.close()
+                                await connector.close() # Important: explicit close
                             except: pass
                             
                             await asyncio.sleep(retry_delay) 
@@ -263,14 +251,9 @@ class MarketIngestor:
                                 new_connector = ccxtpro.binance({'options': {'defaultType': 'spot'}})
                                 if environment == 'testnet': new_connector.set_sandbox_mode(True)
                                 self.connectors[environment] = new_connector
-                                logger.info(f"Global session refreshed for {environment}. Ready to retry.")
-                                if self.audit: self.audit.log_system_event("INGESTOR_RESTARTED", f"Global session refreshed for {environment}", pair=pair)
+                                logger.info(f"Global session refreshed for {environment.upper()}.")
                             except: pass
-                            
-                            # Exponential Backoff
                             retry_delay = min(retry_delay * 2, max_retry_delay)
-                        else:
-                            await asyncio.sleep(10)
                 else:
                     await asyncio.sleep(10)
 

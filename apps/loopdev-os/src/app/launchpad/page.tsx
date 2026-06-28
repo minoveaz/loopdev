@@ -85,6 +85,13 @@ export default function LaunchpadPage() {
               href="/quant-ops"
               version="0.0.1"
             />
+            <SuiteCard 
+              title="Health OS"
+              description="Industrial-grade clinical care, electronic health records (HCE), and medical agenda for IPS providers."
+              illustration={<Icon name="medical_services" size="md" />}
+              href="/health-os"
+              version="0.1.0"
+            />
           </div>
         </div>
       </main>
