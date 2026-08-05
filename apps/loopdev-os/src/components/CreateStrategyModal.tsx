@@ -47,6 +47,8 @@ const COMMON_PAIRS = [
   'MATIC/USD'
 ];
 
+type NumericStrategyField = 'sizePerTrade' | 'maxPositions' | 'stopLoss' | 'takeProfit' | 'trailingStop' | 'cooldownMinutes';
+
 export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
   isOpen,
   exchanges,
@@ -78,6 +80,10 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
 
   const handleBack = () => {
     if (step > 1) setStep(step - 1);
+  };
+
+  const updateNumericField = (key: NumericStrategyField, value: number) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
   };
 
   const handleCreate = () => {
@@ -305,11 +311,8 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
                     <Input
                       type={field.type}
                       step={field.step}
-                      value={(formData as any)[field.key]}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        [field.key]: field.type === 'number' ? parseFloat(e.target.value) : e.target.value
-                      })}
+                      value={formData[field.key as NumericStrategyField]}
+                      onChange={(e) => updateNumericField(field.key as NumericStrategyField, parseFloat(e.target.value))}
                       variant="outline"
                       size="md"
                     />

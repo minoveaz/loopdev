@@ -11,7 +11,7 @@ export interface BotMetricsDashboardProps {
   /** Show or hide extended metrics */
   showExtended?: boolean;
   /** Callback when metrics are updated */
-  onMetricsUpdate?: (metrics: any) => void;
+  onMetricsUpdate?: (metrics: Record<string, number>) => void;
   /** Additional CSS class */
   className?: string;
 }

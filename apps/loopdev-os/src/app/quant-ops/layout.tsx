@@ -22,7 +22,6 @@ import {
   BlueprintBackground,
   ToastViewport,
   ModuleWorkspace,
-  ScrollArea
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -46,12 +45,12 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   } = useNotifications([]);
   
   const [navMode, setNavMode] = useState<NavMode>('expanded');
-  const [context, setContext] = useState<LayoutContext>('normal');
+  const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
     if (pathname.split('/').length > 2) {
-      setNavMode('rail');
+      queueMicrotask(() => setNavMode('rail'));
     }
   }, [pathname]);
 
@@ -111,7 +110,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
           leftSlot={
             <div className="flex items-center gap-4">
               <SuiteSwitcher 
-                currentSuite={currentSuite as any}
+                currentSuite={currentSuite}
                 availableSuites={AVAILABLE_SUITES_FIXTURES}
                 onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
                 onSuiteChange={(id) => id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)}

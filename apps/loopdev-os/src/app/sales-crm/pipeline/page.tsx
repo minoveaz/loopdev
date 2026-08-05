@@ -5,9 +5,7 @@ import {
   LpdText, 
   Heading, 
   TechnicalSurface, 
-  Icon, 
   Button,
-  StatusPulse,
   KanbanBoard,
   cn
 } from '@loopdev/ui';
@@ -189,7 +187,7 @@ export default function PipelineKanban() {
               getColumnId={(l) => l.stage}
               getItemId={(l) => l.id}
               onCardDrop={async (itemId, targetColumnId) => {
-                updateLeadStage(itemId, targetColumnId as any);
+                updateLeadStage(itemId, targetColumnId as Lead['stage']);
               }}
               getColumnMetrics={(columnId, items) => {
                 const filtered = items.filter((l) => l.stage === columnId);

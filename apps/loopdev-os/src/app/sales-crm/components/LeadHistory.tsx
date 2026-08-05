@@ -6,7 +6,6 @@ import {
   LpdText, 
   Icon, 
   Button, 
-  cn, 
   Input, 
   Select,
   TechnicalStatusBadge,
@@ -106,7 +105,7 @@ export const LeadHistory: React.FC<LeadHistoryProps> = ({ leads, onViewDetails }
         <Select 
           value={stageFilter} 
           onChange={e => {
-            setStageFilter(e.target.value as any);
+            setStageFilter(e.target.value as Lead['stage'] | 'all');
             setCurrentPage(1);
           }} 
           size="sm"
