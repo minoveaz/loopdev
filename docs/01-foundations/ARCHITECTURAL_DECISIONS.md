@@ -105,7 +105,6 @@ Antes de escribir cualquier lógica de UI o Endpoint:
 - `mod-marketing-studio/`: Gestión de marca y activos.
 - `mod-crm/`: Gestión de leads y pólizas.
 - `modp-core/`: El motor común (Auth, SDK, i18n).
-- `mod-auditor/`: Herramienta de DesignOps.
 
 ### 3. Shared Logic (`/packages`)
 - `packages/contracts/`: Esquemas Zod y Tipos compartidos.
