@@ -3,6 +3,7 @@
 import React from 'react';
 import { LpdText, cn, TechnicalStatusBadge } from '@loopdev/ui';
 import { ClaimListProps } from './types';
+import type { RegulatedClaim } from '../../types';
 
 /**
  * @component ClaimList
@@ -35,7 +36,7 @@ export const ClaimList: React.FC<ClaimListProps> = ({
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {(items as any[]).map((claim) => (
+          {(items as RegulatedClaim[]).map((claim) => (
             <button
               key={claim.id}
               onClick={() => onItemClick?.(claim.id)}

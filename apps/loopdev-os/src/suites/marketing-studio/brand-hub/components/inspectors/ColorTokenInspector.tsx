@@ -12,6 +12,12 @@ interface ColorTokenInspectorProps {
   activeTab: string;
 }
 
+interface GuidanceItem {
+  type: 'do' | 'dont';
+  label: string;
+  description: string;
+}
+
 export const ColorTokenInspector: React.FC<ColorTokenInspectorProps> = ({ 
   token, 
   theme, 
@@ -21,7 +27,7 @@ export const ColorTokenInspector: React.FC<ColorTokenInspectorProps> = ({
   
   // Tab: EXPLAIN (The Oracle)
   if (activeTab === 'explain') {
-    const guidances: any = {
+    const guidances: Record<string, GuidanceItem[]> = {
       'brand.primary': [
         { type: 'do', label: 'Actions', description: 'Use for primary buttons, active links and structural brand markers.' },
         { type: 'dont', label: 'Passive Text', description: 'Avoid using for long paragraphs on dark backgrounds.' }
