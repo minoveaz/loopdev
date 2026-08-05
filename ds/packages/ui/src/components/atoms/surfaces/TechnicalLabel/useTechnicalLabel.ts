@@ -1,4 +1,4 @@
-import { TechnicalLabelProps, TechnicalLabelVariant, TechnicalLabelSize } from './types';
+import { TechnicalLabelProps, TechnicalLabelVariant, TechnicalLabelSize, TechnicalLabelWeight } from './types';
 
 /**
  * @hook useTechnicalLabel

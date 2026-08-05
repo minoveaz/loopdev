@@ -33,7 +33,7 @@ const BrandCard = ({ brand }: { brand: any }) => (
       </div>
     </div>
     
-    <Heading size="md" className="text-white mb-1 group-hover:text-primary transition-colors">{brand.name}</Heading>
+    <Heading size="sm" className="text-white mb-1 group-hover:text-primary transition-colors">{brand.name}</Heading>
     <LpdText size="sm" className="text-text-muted mb-4 truncate">
       {brand.description}
     </LpdText>

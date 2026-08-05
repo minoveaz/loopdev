@@ -21,6 +21,8 @@ export interface UserMenuProps {
   onLogout: () => void;
   /** Callback para ir a los ajustes de perfil */
   onProfileClick?: () => void;
+  /** Callback para abrir los ajustes de cuenta */
+  onSettingsClick?: () => void;
   /** Callback para ir a facturación */
   onBillingClick?: () => void;
   /** Callback al cambiar el estado de apertura */

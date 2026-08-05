@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { SuiteHomeLayout } from '@loopdev/ui';
+import type { SuiteHomeLayoutProps } from '@loopdev/ui';
 import { getMarketingStudioHomeConfig } from '@/suites/marketing-studio/home.config';
 
 /**
@@ -13,11 +14,10 @@ import { getMarketingStudioHomeConfig } from '@/suites/marketing-studio/home.con
 export default function MarketingStudioPage() {
   const router = useRouter();
   const config = getMarketingStudioHomeConfig(router);
+  const homeProps: SuiteHomeLayoutProps = {
+    ...config,
+    userState: 'active'
+  };
 
-  return (
-    <SuiteHomeLayout
-      {...config}
-      userState="active" // En el futuro vendrá de un hook useUserSession
-    />
-  );
+  return <SuiteHomeLayout {...homeProps} />;
 }

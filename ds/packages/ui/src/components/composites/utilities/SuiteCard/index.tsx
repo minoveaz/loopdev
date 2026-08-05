@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Heading, LpdText } from '../../../atoms';
 import { EngineeringSeal } from '../../../atoms';
@@ -76,8 +75,8 @@ export const SuiteCard: React.FC<SuiteCardProps> = (props) => {
   if (isLocked) return CardContent;
 
   return (
-    <Link href={href} className="block h-full no-underline">
+    <a href={href} className="block h-full no-underline">
       {CardContent}
-    </Link>
+    </a>
   );
 };

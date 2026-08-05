@@ -1,107 +1,123 @@
+
 import asyncio
-from loguru import logger
 from typing import Dict, List
-from supabase import create_client, Client
-import os
-from .exchange_connector import AsyncExchangeConnector
-from ..strategies.filters import MarketRegimeFilter
+from supabase import Client
+import ccxt.pro as ccxtpro
+from loguru import logger
+
+# --- Motores Especializados ---
+from .managers.risk_manager import RiskManager
+from .managers.execution_manager import ExecutionManager
+from .managers.command_listener import CommandListener
+from .managers.signal_engine import SignalEngine
+from .managers.position_monitor import PositionMonitor
+from .managers.price_stream_manager import PriceStreamManager
+from .managers.credential_vault import CredentialVault
+from .managers.audit_manager import AuditManager
+
+# --- Estrategias ---
+from src.strategies.baseline.rsi_mean_reversion import RSIMeanReversionStrategy
+from src.strategies.baseline.intraday_atr import IntradayATRStrategy
+from src.strategies.baseline.hybrid_core import HybridCoreStrategy
+from src.strategies.baseline.aggressive_rsi import AggressiveRSIStrategy
+from src.strategies.baseline.hf_scalper import HighFrequencyScalperStrategy
 
 class StrategyManager:
     """
-    The orchestrator of the Quant Core.
-    Responsible for syncing bots from DB and managing execution loops.
+    Orquestador Central (Tier A).
+    Refactorizado para Alta Disponibilidad y Concurrencia Protegida.
     """
-    def __init__(self):
-        self.supabase_url = os.getenv("SUPABASE_URL")
-        self.supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-        self.db: Client = create_client(self.supabase_url, self.supabase_key)
-        self.active_bots: Dict[str, asyncio.Task] = {}
-        self.is_running = False
-
-    async def sync_bots_from_db(self):
-        """Fetch active bots from Supabase and start their loops."""
-        try:
-            response = self.db.table("quant_bots").select("*").eq("status", "active").execute()
-            bots = response.data
-            
-            logger.info(f"Syncing {len(bots)} active bots from database...")
-            
-            # Start new bots
-            for bot_config in bots:
-                bot_id = bot_config['id']
-                if bot_id not in self.active_bots:
-                    task = asyncio.create_task(self.bot_execution_loop(bot_config))
-                    self.active_bots[bot_id] = task
-                    logger.success(f"Started loop for bot: {bot_config['name']} ({bot_id})")
-            
-            # Stop bots that are no longer active in DB
-            active_ids = [b['id'] for b in bots]
-            for bot_id in list(self.active_bots.keys()):
-                if bot_id not in active_ids:
-                    self.active_bots[bot_id].cancel()
-                    del self.active_bots[bot_id]
-                    logger.warning(f"Stopped loop for bot: {bot_id} (inactive in DB)")
-
-        except Exception as e:
-            logger.error(f"Error syncing bots: {e}")
-
-    async def bot_execution_loop(self, config: Dict):
-        """The main lifecycle of a single trading bot instance."""
-        bot_name = config['name']
-        symbol = config['pair']
-        
-        # 1. Initialize Connector
-        # Note: In production, we'd decrypt api_key/secret here via quant_security
-        connector = AsyncExchangeConnector(
-            exchange_id='binance', 
-            api_key='MOCK_KEY', 
-            api_secret='MOCK_SECRET',
-            paper_mode=True
-        )
-        
-        try:
-            await connector.connect()
-            
-            while True:
-                logger.debug(f"[{bot_name}] Heartbeat - Scanning {symbol}...")
-                
-                # 2. Fetch Market Data
-                ohlcv = await connector.fetch_ohlcv(symbol, timeframe='1m', limit=60)
-                if not ohlcv:
-                    await asyncio.sleep(10)
-                    continue
-                
-                import pandas as pd
-                df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
-                
-                # 3. Apply Rescued Intelligence Filters
-                regime = MarketRegimeFilter.calculate_regime(df)
-                logger.info(f"[{bot_name}] Current Regime: {regime.upper()}")
-                
-                if regime == 'bearish' and config.get('use_market_regime_filter'):
-                    logger.warning(f"[{bot_name}] Strategy paused: Market is bearish.")
-                else:
-                    # Strategy Logic would go here
-                    pass
-
-                # 4. Wait for next iteration (e.g. 30 seconds)
-                await asyncio.sleep(30)
-
-        except asyncio.CancelledError:
-            logger.info(f"Bot execution loop cancelled for {bot_name}")
-        except Exception as e:
-            logger.error(f"Critical error in bot {bot_name}: {e}")
-        finally:
-            await connector.close()
-
-    async def start(self):
-        """Starts the background sync process."""
+    def __init__(self, supabase_client: Client):
+        self.supabase = supabase_client
         self.is_running = True
+        self.tasks: List[asyncio.Task] = []
+        
+        # 0. Motor de Precios Real-time (WebSocket)
+        self.price_stream = PriceStreamManager()
+        
+        # 0.1 Bóveda de Seguridad (Vault)
+        self.vault = CredentialVault(self.supabase)
+        
+        # 0.2 Registrador de Vuelo (Audit Trail)
+        self.audit = AuditManager(self.supabase)
+
+        # 1. Registro de Estrategias
+        self.logic_engines = {
+            "rsi-mean-rev-v1": RSIMeanReversionStrategy(),
+            "atr-breakout-v1": IntradayATRStrategy(),
+            "hybrid-core-v1": HybridCoreStrategy(),
+            "aggressive-rsi-v1": AggressiveRSIStrategy(),
+            "hf-scalper-v1": HighFrequencyScalperStrategy(),
+            "default": RSIMeanReversionStrategy()
+        }
+
+        # 2. Inicialización de Capas
+        self.risk = RiskManager()
+        
+        # Brazo Ejecutor (Tier C) - Inyectamos Audit
+        self.execution = ExecutionManager(self.supabase, self.risk, self.logic_engines, self.audit)
+        self.signal_engine = SignalEngine(self.supabase, self.risk, self.logic_engines, self.audit)
+        
+        # Vigilante de Posiciones (Tier B+) - Inyectamos flujo de precios y Audit
+        self.position_monitor = PositionMonitor(self.supabase, self.risk, self.signal_engine.generate_signal, self.price_stream, self.audit)
+        
+        # Oído de Comandos UI (Tier D)
+        self.commands = CommandListener(self.supabase, self.risk, self.execution)
+
+    async def run(self):
+        """
+        Lanza y Supervisa todos los motores.
+        Implementa un patrón de 'Supervisor' para evitar caídas totales.
+        """
+        logger.success("LoopDev Orchestrator V2 Online - High Availability Mode")
+        
+        # Sincronizamos pares activos inicialmente
+        try:
+            res = self.supabase.table("quant_bots").select("pair").eq("status", "active").execute()
+            active_pairs = [b['pair'] for b in res.data]
+            self.price_stream.update_pairs(active_pairs)
+        except Exception as e:
+            logger.error(f"Initial pair sync failed: {e}")
+
+        # Definimos los servicios críticos
+        services = [
+            ("PriceStream", self.price_stream.run),
+            ("SignalEngine", self.signal_engine.run),
+            ("Execution", self.execution.run),
+            ("Monitor", self.position_monitor.run),
+            ("Commands", self.commands.run)
+        ]
+
         while self.is_running:
-            await self.sync_bots_from_db()
-            await asyncio.sleep(60) # Sync every minute
+            try:
+                # Creamos las tareas para cada servicio
+                self.tasks = [asyncio.create_task(s[1](), name=s[0]) for s in services]
+                
+                # Esperamos a que alguna tarea termine (o falle)
+                done, pending = await asyncio.wait(
+                    self.tasks, 
+                    return_when=asyncio.FIRST_EXCEPTION
+                )
+
+                for task in done:
+                    name = task.get_name()
+                    if task.exception():
+                        logger.error(f"CRITICAL: Service '{name}' failed with error: {task.exception()}")
+                    else:
+                        logger.warning(f"Service '{name}' stopped unexpectedly.")
+
+                # Si el orquestador sigue vivo, intentamos reiniciar tras un cooldown
+                if self.is_running:
+                    logger.info("Initiating service recovery in 5 seconds...")
+                    for p in pending: p.cancel()
+                    await asyncio.sleep(5)
+
+            except Exception as e:
+                logger.fatal(f"Orchestrator Global Error: {e}")
+                await asyncio.sleep(10)
 
     def stop(self):
+        """Parada controlada."""
         self.is_running = False
-        for task in self.active_bots.values():
-            task.cancel()
+        for t in self.tasks: t.cancel()
+        logger.warning("Graceful Shutdown Initiated.")

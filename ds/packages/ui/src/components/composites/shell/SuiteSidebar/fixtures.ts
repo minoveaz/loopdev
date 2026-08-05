@@ -156,7 +156,7 @@ export const MARKETING_STUDIO_SCHEMA: NavigationSchema = {
 };
 
 export const QUANT_OPS_SCHEMA: NavigationSchema = {
-  version: '0.0.1',
+  version: '1.0',
   suite: {
     suiteId: 'quant-ops',
     suiteName: 'Quant Ops',

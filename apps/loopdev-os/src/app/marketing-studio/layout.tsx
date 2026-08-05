@@ -27,7 +27,7 @@ import {
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
-import { NavMode, LayoutContext } from '@loopdev/contracts';
+import { NavMode, LayoutContext, ModuleAccessState } from '@loopdev/contracts';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -66,7 +66,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 
   const activeModuleId = getActiveModule();
 
-  const accessMap = {
+  const accessMap: Record<string, ModuleAccessState> = {
     'overview': 'enabled',
     'brand-hub': 'enabled',
     'content-engine': 'disabled',

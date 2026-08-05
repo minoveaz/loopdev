@@ -18,12 +18,22 @@ export * from './indicators/InfraStamp';
 export * from './indicators/SystemStatus';
 export * from './indicators/TechnicalIsotype';
 export * from './indicators/TechnicalStatusBadge';
+export * from './indicators/TechnicalIndicator';
+export * from './indicators/IndustrialMetric';
+export * from './indicators/PositionProgressBar';
+export * from './indicators/ProximityIndicator';
+export * from './indicators/PositionQuickActions';
+export * from './indicators/PulseSparkline';
+export * from './indicators/NextEvalTimer';
 
 // inputs
 export * from './inputs/Button';
 export * from './inputs/IconButton';
 export * from './inputs/Input';
 export * from './inputs/ThemeToggle';
+export * from './inputs/Select';
+export * from './inputs/Select/types';
+export * from './inputs/FilterDropdown';
 
 // surfaces
 export * from './surfaces/TechnicalSurface';
@@ -31,6 +41,7 @@ export * from './surfaces/TechnicalCard';
 export * from './surfaces/Divider';
 export * from './surfaces/ScrollArea';
 export * from './surfaces/TechnicalTooltip';
+export * from './surfaces/TrailingControl';
 export * from './surfaces/TechnicalLabel';
 export * from './surfaces/BrandLogo';
 export * from './surfaces/TechnicalDropdown';
@@ -48,6 +59,9 @@ export * from './surfaces/ExitHatch';
 export * from './navigation/NavGroup';
 export * from './navigation/NavSidebarItem';
 export * from './navigation/IndustrialBreadcrumbs';
+
+// trading
+export * from './trading';
 
 // feedback
 export * from './feedback/Skeleton';

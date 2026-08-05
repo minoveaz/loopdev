@@ -26,7 +26,7 @@ export const Label: React.FC<LabelProps> = (props) => {
   return (
     <LpdText {...textComponentProps}>
       {children}
-      {required && <RequiredIndicator />}
+      {required && <span aria-hidden="true" className="text-danger"> *</span>}
     </LpdText>
   );
 };

@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { BrandItem } from '@loopdev/ui/src/components/composites/workspace/ModuleSidebar/types';
+import type { BrandItem } from '@loopdev/ui';
 import { MOCK_BRANDS } from '@/data/mock-brands';
 
 /**

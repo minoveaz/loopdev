@@ -36,6 +36,7 @@ export type LogoLockup = z.infer<typeof LogoLockupSchema>;
 export const LogoSpecsSchema = z.object({
   aspectRatio: z.string().default('Variable'), // e.g. "1:1"
   gridType: z.string().default('Pixel Perfect'), // e.g. "8px Grid"
+  strokeWeight: z.string().optional(),
   clearSpace: z.string().default('1x Height'), // e.g. "50%"
   minSize: z.number().default(16), // in px
 });

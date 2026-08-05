@@ -9,6 +9,7 @@ import { LpdText, Skeleton } from '@loopdev/ui';
 // Components
 import { ColorContextBar } from '@/suites/marketing-studio/brand-hub/components/ColorContextBar';
 import { TokenGroupSection } from '@/suites/marketing-studio/brand-hub/components/TokenGroupSection';
+import type { ColorToken } from '@/suites/marketing-studio/brand-hub/types';
 
 /**
  * @page BrandColorsPage
@@ -36,10 +37,10 @@ export default function BrandColorsPage() {
   // Sync brand data to context if needed (handled by layout mostly)
   
   // FILTERING LOGIC
-  const filteredTokens = useMemo(() => {
+  const filteredTokens = useMemo<ColorToken[]>(() => {
     if (!brand?.palette?.tokens) return [];
     
-    return brand.palette.tokens.filter(token => {
+    return brand.palette.tokens.filter((token: ColorToken) => {
       const matchesSearch = token.name.toLowerCase().includes(search.toLowerCase()) || 
                            token.group.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === 'all' || token.group === activeCategory;

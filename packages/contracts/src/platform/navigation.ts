@@ -7,7 +7,7 @@
 export type NavMode = 'expanded' | 'rail' | 'hidden';
 export type LayoutContext = 'normal' | 'focus' | 'inmersive';
 
-export type ModuleAccessState = 'enabled' | 'disabled' | 'hidden';
+export type ModuleAccessState = 'enabled' | 'disabled' | 'hidden' | 'coming-soon';
 
 export type NavItemKind = 'module' | 'link' | 'action';
 

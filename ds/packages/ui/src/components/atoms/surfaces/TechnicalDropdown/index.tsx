@@ -10,7 +10,7 @@ import { useTechnicalDropdown } from './useTechnicalDropdown';
  * @description Átomo oficial que envuelve Radix Dropdown con la estética LoopDev OS.
  */
 export const TechnicalDropdown: React.FC<TechnicalDropdownProps> = (props) => {
-  const { trigger, children, align = 'start', side = 'bottom', sideOffset = 8, open, onOpenChange, className } = props;
+  const { trigger, children, align = 'start', side = 'bottom', sideOffset = 8, avoidCollisions = true, open, onOpenChange, className } = props;
   const { getContentClasses } = useTechnicalDropdown();
 
   return (
@@ -24,6 +24,7 @@ export const TechnicalDropdown: React.FC<TechnicalDropdownProps> = (props) => {
           align={align} 
           side={side} 
           sideOffset={sideOffset} 
+          avoidCollisions={avoidCollisions}
           className={getContentClasses(className)}
         >
           {children}

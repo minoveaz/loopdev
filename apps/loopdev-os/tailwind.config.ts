@@ -41,7 +41,12 @@ const config: Config = {
           soft: 'rgba(239, 68, 68, 0.1)',
           vivid: '#f43f5e',
         },
+        accent: {
+          DEFAULT: '#F59E0B', // Amber 500
+          hover: '#D97706', // Amber 600
+        },
         energy: {
+          DEFAULT: '#F59E0B', // Amber 500
           yellow: 'var(--lpd-color-brand-energy, #FFD025)',
         },
         'innovation-purple': {

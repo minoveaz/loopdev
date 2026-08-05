@@ -46,7 +46,7 @@ export const ColorTokenCard: React.FC<ColorTokenCardProps> = ({
       note: 'Use only for large elements.' 
     },
     FAIL: { 
-      label: isBackground ? 'BG_DANGEROUS' : 'DECORATIVE', 
+      label: isBackground ? 'BG_DANGEROUS' : 'FAIL',
       class: 'bg-red-500/10 text-red-600 border-red-500/20', 
       note: 'Fails contrast standards.' 
     }

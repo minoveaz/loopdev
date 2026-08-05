@@ -25,7 +25,7 @@ export const SystemStatus: React.FC<SystemStatusProps> = (props) => {
   return (
     <div className={containerClasses} role="status">
       {/* Indicador de Salud con Telemetría Enterprise */}
-      <TechnicalTooltip content={telemetryInfo} side="top" sideOffset={12}>
+      <TechnicalTooltip content={telemetryInfo} side="top">
         <div className="flex items-center gap-2 cursor-help">
           <StatusPulse variant={pulseVariant} size="sm" />
           <span className={`uppercase font-bold tracking-tight ${currentConfig.text}`}>

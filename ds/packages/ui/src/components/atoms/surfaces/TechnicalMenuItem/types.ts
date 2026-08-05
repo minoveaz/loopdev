@@ -8,6 +8,7 @@ import { ReactNode } from 'react';
 export type MenuItemVariant = 'default' | 'danger';
 
 export interface TechnicalMenuItemProps {
+  children?: ReactNode;
   /** Nombre del icono de Lucide */
   icon?: string;
   /** Texto de la opción */

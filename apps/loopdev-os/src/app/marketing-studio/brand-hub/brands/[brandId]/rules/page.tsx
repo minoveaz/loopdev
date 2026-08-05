@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { LpdText, Skeleton, Button, Input } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
-import { RuleDomain } from '@loopdev/contracts';
+import { RuleDomain, RulesEngine } from '@loopdev/contracts';
 
 // Industrial Components
 import { RuleDomainRail } from '@/suites/marketing-studio/brand-hub/components/rules/RuleDomainRail';
@@ -30,7 +30,7 @@ export default function BrandRulesPage() {
   
   // Support both snake_case (DB) and camelCase (Contract) + Fallback to Fixture for LoopDev brand
   const dbRules = brand?.rules_engine || brand?.rulesEngine;
-  const rulesEngine = (dbRules?.rules && dbRules.rules.length > 0) 
+  const rulesEngine: RulesEngine | undefined = (dbRules?.rules && dbRules.rules.length > 0) 
     ? dbRules 
     : (brand?.name === 'LoopDev' ? LOOPDEV_RULES_ENGINE : dbRules);
 
@@ -153,7 +153,7 @@ export default function BrandRulesPage() {
                 className="w-full pl-10 pr-4 py-2 bg-transparent text-sm text-text-main placeholder:text-text-muted/50 outline-none"
               />
             </div>
-            <Button variant="ghost" size="xs" startIcon="filter_list">Filter</Button>
+            <Button variant="ghost" size="sm" startIcon="filter_list">Filter</Button>
           </div>
 
           <div className="flex flex-col gap-3">

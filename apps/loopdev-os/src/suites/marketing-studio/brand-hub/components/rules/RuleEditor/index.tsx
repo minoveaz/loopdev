@@ -179,7 +179,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
             <span className="material-symbols-outlined">lock</span>
             <LpdText size="xs" weight="bold">Rule is currently PUBLISHED and read-only.</LpdText>
           </div>
-          <Button variant="ghost" size="xs" className="text-primary font-bold">CREATE DRAFT TO EDIT</Button>
+          <Button variant="ghost" size="sm" className="text-primary font-bold">CREATE DRAFT TO EDIT</Button>
         </div>
       )}
 

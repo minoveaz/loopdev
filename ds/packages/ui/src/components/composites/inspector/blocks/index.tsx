@@ -49,7 +49,7 @@ export const ImpactBlock: React.FC<ImpactBlockProps> = ({ severity, title = 'Imp
         <LpdText size="xs" weight="bold" className="uppercase tracking-widest inherit-color">
             {title}
         </LpdText>
-        <TechnicalStatusBadge label={severity.toUpperCase()} severity={severity === 'critical' ? 'critical' : severity === 'high' ? 'warning' : 'neutral'} variant="glass" />
+        <TechnicalStatusBadge label={severity.toUpperCase()} severity={severity === 'critical' ? 'danger' : severity === 'high' ? 'warning' : 'neutral'} variant="glass" />
       </div>
       <LpdText size="sm" className="text-text-main leading-relaxed">
         {description}

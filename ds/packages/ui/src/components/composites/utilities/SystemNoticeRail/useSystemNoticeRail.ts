@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { SystemNoticeRailProps } from './index';
-import { SuiteNotice, BadgeSeverity } from '../../workspace/SuiteHomeLayout/types';
+import { SystemNoticeRailProps } from './types';
 
 /**
  * @hook useSystemNoticeRail

@@ -10,6 +10,8 @@ import { SuiteHomeInsights } from './SuiteHomeInsights';
 import { SuiteHomeModules } from './SuiteHomeModules';
 import { ActivityFeed } from '../../utilities/ActivityFeed';
 
+export type { SuiteHomeLayoutProps } from './types';
+
 /**
  * @component SuiteHomeLayout
  * @description Chasis Maestro de Suite (v3.9).

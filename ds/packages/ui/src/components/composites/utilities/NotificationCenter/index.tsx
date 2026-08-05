@@ -15,6 +15,8 @@ import {
   EmptyView 
 } from './components';
 
+export type { NotificationItem, NotificationCenterProps } from './types';
+
 /**
  * @component NotificationCenter
  * @description Centro de alertas y eventos del sistema. 

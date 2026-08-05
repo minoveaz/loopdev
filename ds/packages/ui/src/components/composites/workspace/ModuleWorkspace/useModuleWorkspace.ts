@@ -42,9 +42,9 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
     inspectorOverlayWidth = 'min(320px, 85vw)',
     headerHeight = '56px',
     toolbarHeight = '44px',
-    zBackdrop = 40,
-    zPanel = 50,
-    zPanelTop = 60,
+    zBackdrop = 8000,
+    zPanel = 8100,
+    zPanelTop = 8200,
     scrollbars = 'auto'
   } = config;
 
@@ -57,10 +57,13 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
 
   // 2. Detección Responsiva Determinista
   const [isOverlayModeInternal, setIsOverlayModeInternal] = useState(false);
-  const isOverlayMode = force || manualIsMobile === true || isOverlayModeInternal;
+  const isOverlayMode = useMemo(() => force === true || manualIsMobile === true || isOverlayModeInternal, [force, manualIsMobile, isOverlayModeInternal]);
 
   useEffect(() => {
-    if (force || manualIsMobile !== undefined) return;
+    if (force === true || manualIsMobile !== undefined) {
+      if (force === true) setIsOverlayModeInternal(true);
+      return;
+    }
     
     const mql = window.matchMedia(`(max-width: ${breakpoint})`);
     const onChange = (e: MediaQueryListEvent) => setIsOverlayModeInternal(e.matches);
@@ -171,6 +174,11 @@ export const useModuleWorkspace = (props: ModuleWorkspaceProps) => {
     isOverlayMode,
     activeOverlayPanel,
     styleTokens,
+    zIndices: {
+      backdrop: zBackdrop,
+      panel: zPanel,
+      panelTop: zPanelTop
+    },
     scrollbarClass: scrollbars === 'hidden' ? 'scrollbar-hide' : 'custom-scrollbar',
     hasSidebar: !!sidebarSlot,
     hasFlyout: !!flyoutSlot,
