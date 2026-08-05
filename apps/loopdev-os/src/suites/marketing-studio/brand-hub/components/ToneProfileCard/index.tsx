@@ -40,7 +40,7 @@ export const ToneProfileCard: React.FC<ToneProfileCardProps> = ({
           <div className="flex flex-col gap-2">
             {profile.examples.do.map((ex, i) => (
               <LpdText key={i} size="xs" className="text-text-main font-mono p-2 bg-emerald-500/5 rounded border border-emerald-500/10">
-                "{ex}"
+                &quot;{ex}&quot;
               </LpdText>
             ))}
           </div>
@@ -50,12 +50,12 @@ export const ToneProfileCard: React.FC<ToneProfileCardProps> = ({
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[14px] text-red-500">cancel</span>
-            <LpdText size="nano" weight="bold" className="text-red-500 uppercase tracking-widest">Don't</LpdText>
+            <LpdText size="nano" weight="bold" className="text-red-500 uppercase tracking-widest">Don&apos;t</LpdText>
           </div>
           <div className="flex flex-col gap-2">
             {profile.examples.dont.map((ex, i) => (
               <LpdText key={i} size="xs" className="text-text-muted font-mono p-2 bg-red-500/5 rounded border border-red-500/10 opacity-60">
-                "{ex}"
+                &quot;{ex}&quot;
               </LpdText>
             ))}
           </div>
