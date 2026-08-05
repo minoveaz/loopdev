@@ -24,11 +24,11 @@ import {
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
-import { NavMode, LayoutContext } from '@loopdev/contracts';
+import { NavMode, LayoutContext, type NavigationSchema } from '@loopdev/contracts';
 
 // Local Navigation Schema for Health OS
-const HEALTH_OS_SCHEMA = {
-  version: '0.1.0',
+const HEALTH_OS_SCHEMA: NavigationSchema = {
+  version: '1.0',
   suite: {
     suiteId: 'health-os',
     suiteName: 'Health OS',
@@ -51,28 +51,36 @@ const HEALTH_OS_SCHEMA = {
       items: [
         {
           id: 'overview',
+          kind: 'module',
           label: 'Overview',
+          priority: 10,
           icon: 'LayoutDashboard',
           moduleId: 'overview',
           route: { routeId: '/health-os' },
         },
         {
           id: 'agenda',
+          kind: 'module',
           label: 'Agenda',
+          priority: 20,
           icon: 'Calendar',
           moduleId: 'agenda',
           route: { routeId: '/health-os/agenda' },
         },
         {
           id: 'triage',
+          kind: 'module',
           label: 'Triage',
+          priority: 30,
           icon: 'Activity',
           moduleId: 'triage',
           route: { routeId: '/health-os/triage' },
         },
         {
           id: 'consultations',
+          kind: 'module',
           label: 'Consultations',
+          priority: 40,
           icon: 'UserCheck',
           moduleId: 'consultations',
           route: { routeId: '/health-os/consultations' },
@@ -87,14 +95,18 @@ const HEALTH_OS_SCHEMA = {
       items: [
         {
           id: 'contracts',
+          kind: 'module',
           label: 'Contracts',
+          priority: 10,
           icon: 'FileText',
           moduleId: 'contracts',
           route: { routeId: '/health-os/contracts' },
         },
         {
           id: 'billing',
+          kind: 'module',
           label: 'RIPS & Billing',
+          priority: 20,
           icon: 'CreditCard',
           moduleId: 'billing',
           route: { routeId: '/health-os/billing' },
@@ -154,7 +166,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     if (pathname.split('/').length > 2) {
-      setNavMode('rail');
+      queueMicrotask(() => setNavMode('rail'));
     }
   }, [pathname]);
 
@@ -189,7 +201,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
       onToggleLeftSidebar={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
       navSlot={
         <SuiteSidebar 
-          schema={HEALTH_OS_SCHEMA as any}
+          schema={HEALTH_OS_SCHEMA}
           navMode={navMode}
           context={context}
           activeModuleId={activeModuleId}
@@ -213,7 +225,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
           leftSlot={
             <div className="flex items-center gap-4">
               <SuiteSwitcher 
-                currentSuite={currentSuite as any}
+                currentSuite={currentSuite}
                 availableSuites={AVAILABLE_SUITES_FIXTURES}
                 onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
                 onSuiteChange={(id) => id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)}
