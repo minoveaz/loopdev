@@ -18,6 +18,7 @@ export * from './indicators/InfraStamp';
 export * from './indicators/SystemStatus';
 export * from './indicators/TechnicalIsotype';
 export * from './indicators/TechnicalStatusBadge';
+export * from './indicators/TechnicalIndicator';
 export * from './indicators/IndustrialMetric';
 export * from './indicators/PositionProgressBar';
 export * from './indicators/ProximityIndicator';
@@ -30,6 +31,9 @@ export * from './inputs/Button';
 export * from './inputs/IconButton';
 export * from './inputs/Input';
 export * from './inputs/ThemeToggle';
+export * from './inputs/Select';
+export * from './inputs/Select/types';
+export * from './inputs/FilterDropdown';
 
 // surfaces
 export * from './surfaces/TechnicalSurface';
