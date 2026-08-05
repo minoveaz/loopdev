@@ -1,13 +1,40 @@
 'use client';
 
 import React, { useMemo, useEffect, useRef, useState } from 'react';
-import { BotCardIndustrial as BotCard, LpdText } from '@loopdev/ui';
+import { BotCardIndustrial as BotCard } from '@loopdev/ui';
 import type { BotStatus } from '@loopdev/contracts';
 import { BotExecutionMetrics } from '../../components/BotExecutionMetrics';
 import { useQuantOps } from '../../context';
 
+interface BotCardData {
+  id: string;
+  name: string;
+  pair: string;
+  status: BotStatus;
+  currentPrice?: number;
+  currentSma?: number;
+  currentAtr?: number;
+  priceTarget?: number;
+  atrValue?: number;
+  currentAction?: string;
+  currentEntryPrice?: number;
+  baseInvestmentUsdt?: number;
+  currentQuantity?: number;
+  openedAt?: string;
+  currentPnlPct?: number;
+  currentPnlUsdt?: number;
+  macroSentiment?: string;
+  priceHistory?: number[];
+  strategyName?: string;
+  coreId?: string;
+  updatedAt?: string;
+  trailingStopDistance?: number;
+  exitTargets?: { tpPrice?: number; slPrice?: number; bePrice?: number };
+  logicSnapshot?: Record<string, unknown>;
+}
+
 interface BotCardItemProps {
-  bot: any;
+  bot: BotCardData;
   onToggleStatus: (id: string, status: BotStatus) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -32,14 +59,14 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
   onExecuteTP,
   onUpdateTrail
 }) => {
-  const prevBotRef = useRef<any>(null);
+  const prevBotRef = useRef<BotCardData | null>(null);
 
   const [priceDirection, setPriceDirection] = useState<'up' | 'down' | null>(null);
   const [smaDirection, setSmaDirection] = useState<'up' | 'down' | null>(null);
   const [atrDirection, setAtrDirection] = useState<'up' | 'down' | null>(null);
 
   // Memoize bot object to prevent re-renders when data is the same
-  const memoizedBot = useMemo(() => ({
+  const memoizedBot = {
     ...bot,
     macroSentiment: bot.macroSentiment,
     priceHistory: bot.priceHistory,
@@ -47,30 +74,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
     coreId: bot.coreId,
     updatedAt: bot.updatedAt,
     trailingStopDistance: bot.trailingStopDistance
-  }), [
-    bot.id,
-    bot.name,
-    bot.pair,
-    bot.status,
-    bot.strategyName,
-    bot.coreId,
-    bot.updatedAt,
-    bot.trailingStopDistance,
-    bot.currentPrice,
-    bot.currentSma,
-    bot.currentAtr,
-    bot.macroSentiment,
-    bot.priceHistory,
-    bot.currentAction,
-    bot.currentEntryPrice,
-    bot.baseInvestmentUsdt,
-    bot.currentQuantity,
-    bot.openedAt,
-    bot.currentPnlPct,
-    bot.currentPnlUsdt,
-    bot.exitTargets,
-    bot.logicSnapshot,
-  ]);
+  };
 
   // Memoize liveState to prevent unnecessary re-renders
   const isInPosition = bot.currentAction?.includes('In Position');
@@ -105,26 +109,26 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
     if (prevBotRef.current) {
       // Compare and set direction
       if (bot.currentPrice > (prevBotRef.current.currentPrice || 0)) {
-        setPriceDirection('up');
+        queueMicrotask(() => setPriceDirection('up'));
         setTimeout(() => setPriceDirection(null), 2000);
       } else if (bot.currentPrice < (prevBotRef.current.currentPrice || 0)) {
-        setPriceDirection('down');
+        queueMicrotask(() => setPriceDirection('down'));
         setTimeout(() => setPriceDirection(null), 2000);
       }
 
       if (bot.currentSma > (prevBotRef.current.currentSma || 0)) {
-        setSmaDirection('up');
+        queueMicrotask(() => setSmaDirection('up'));
         setTimeout(() => setSmaDirection(null), 2000);
       } else if (bot.currentSma < (prevBotRef.current.currentSma || 0)) {
-        setSmaDirection('down');
+        queueMicrotask(() => setSmaDirection('down'));
         setTimeout(() => setSmaDirection(null), 2000);
       }
 
       if (bot.currentAtr > (prevBotRef.current.currentAtr || 0)) {
-        setAtrDirection('up');
+        queueMicrotask(() => setAtrDirection('up'));
         setTimeout(() => setAtrDirection(null), 2000);
       } else if (bot.currentAtr < (prevBotRef.current.currentAtr || 0)) {
-        setAtrDirection('down');
+        queueMicrotask(() => setAtrDirection('down'));
         setTimeout(() => setAtrDirection(null), 2000);
       }
     }
