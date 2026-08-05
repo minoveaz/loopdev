@@ -8,8 +8,6 @@ import {
   MARKETING_STUDIO_SCHEMA,
   ThemeToggle,
   SystemStatus,
-  LpdText,
-  Icon,
   UserAvatar,
   SuiteHeader,
   CommandBarTrigger,
@@ -43,15 +41,15 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   } = useNotifications(NOTIFICATION_CENTER_FIXTURES.recent);
   
   const [navMode, setNavMode] = useState<NavMode>('expanded');
-  const [context, setContext] = useState<LayoutContext>('normal');
+  const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   // 1. Focus Enforcement: Colapsar sidebar si estamos en un módulo operativo
   useEffect(() => {
     if (pathname.includes('/brand-hub')) {
-      setNavMode('rail');
+      queueMicrotask(() => setNavMode('rail'));
     } else {
-      setNavMode('expanded');
+      queueMicrotask(() => setNavMode('expanded'));
     }
   }, [pathname]);
 
@@ -108,7 +106,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           leftSlot={
             <div className="flex items-center gap-4">
               <SuiteSwitcher 
-                currentSuite={currentSuite as any}
+                currentSuite={currentSuite}
                 availableSuites={AVAILABLE_SUITES_FIXTURES}
                 onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
                 onSuiteChange={(id) => id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)}

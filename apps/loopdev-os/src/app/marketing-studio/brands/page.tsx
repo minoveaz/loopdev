@@ -3,14 +3,23 @@
 import { Heading, LpdText, Button, Icon } from '@loopdev/ui';
 
 // Datos de ejemplo (placeholder)
-const mockBrands = [
+interface MockBrand {
+  id: string;
+  name: string;
+  description: string;
+  status: 'published' | 'draft';
+  logoUrl: string | null;
+  updatedAt: Date;
+}
+
+const mockBrands: MockBrand[] = [
   { id: '1', name: 'Acme Corp', description: 'Corporate brand', status: 'published' as const, logoUrl: null, updatedAt: new Date() },
   { id: '2', name: 'Loop Labs', description: 'Innovation hub', status: 'draft' as const, logoUrl: null, updatedAt: new Date() },
   { id: '3', name: 'Neon Future', description: 'Tech brand', status: 'published' as const, logoUrl: null, updatedAt: new Date() },
 ];
 
 // Componente para visualizar una tarjeta de marca
-const BrandCard = ({ brand }: { brand: any }) => (
+const BrandCard = ({ brand }: { brand: MockBrand }) => (
   <div className="glass-panel p-6 rounded-xl border border-white/5 hover:border-primary/50 transition-all duration-300 group cursor-pointer bg-surface-dark/40">
     <div className="flex justify-between items-start mb-6">
       <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-white/5 to-white/0 border border-white/10 flex items-center justify-center overflow-hidden">
@@ -114,7 +123,7 @@ export default function BrandHubPage() {
              </div>
              <Heading size="sm" className="text-white mb-2">No brands found</Heading>
              <LpdText size="sm" className="text-text-muted mb-6 max-w-xs">
-               You haven't created any brands yet. Start by creating your first brand identity.
+               You haven&apos;t created any brands yet. Start by creating your first brand identity.
              </LpdText>
              <Button variant="primary" startIcon="add">Create First Brand</Button>
           </div>

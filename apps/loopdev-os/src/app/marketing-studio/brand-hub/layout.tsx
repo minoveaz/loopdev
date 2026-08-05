@@ -2,15 +2,13 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { usePathname, useRouter, useParams } from 'next/navigation';
+import type { NavGroup } from '@loopdev/contracts';
 import { 
   ModuleWorkspace, 
-  InspectorPanel, 
   ModuleHeader, 
   ModuleSidebar,
   SidebarFlyout,
   Button,
-  LpdText,
-  Skeleton,
   TechnicalStatusBadge,
   UnifiedInspector,
   InspectorContext
@@ -39,7 +37,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   const { data: currentBrand, isLoading: isBrandLoading } = useActiveBrand(brandId);
 
   useEffect(() => {
-    if (currentBrand) setActiveBrand(currentBrand);
+    if (currentBrand) queueMicrotask(() => setActiveBrand(currentBrand));
   }, [currentBrand, setActiveBrand]);
 
   // 2. Estado de la Máquina de Paneles
@@ -51,8 +49,10 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   // Cleanup al salir del módulo o cambiar de marca
   useEffect(() => {
     if (!brandId) {
-      setFlyoutOpen(false);
-      setActiveSectionId('overview');
+      queueMicrotask(() => {
+        setFlyoutOpen(false);
+        setActiveSectionId('overview');
+      });
     }
   }, [brandId]);
 
@@ -132,7 +132,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
     }
   }), [isBrandMode, isReadOnly, activeBrand, selectedEntity]);
 
-  const [activeInspectorTab, setActiveInspectorTab] = useState<any>('context');
+  const [activeInspectorTab, setActiveInspectorTab] = useState<string>('context');
 
   return (
     <ModuleWorkspace
@@ -153,7 +153,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
         <ModuleSidebar 
           mode={isBrandMode ? 'brand' : 'module'}
           brands={brands}
-          navGroups={MOCK_NAV_GROUPS as any}
+          navGroups={MOCK_NAV_GROUPS as NavGroup[]}
           isLoading={isBrandsLoading || (isBrandMode && isBrandLoading)}
           onSelectBrand={(id) => router.push(`/marketing-studio/brand-hub/brands/${id}/overview`)}
           onBackToDirectory={() => router.push('/marketing-studio/brand-hub/brands')}
