@@ -66,9 +66,8 @@ export default function LaunchpadPage() {
               title="Sales & CRM"
               description="Pipeline intelligence and relationship management powered by predictive neural models."
               illustration={<Icon name="groups" size="md" />}
-              href="#"
+              href="/sales-crm"
               version="0.8.2"
-              isLocked
             />
             <SuiteCard 
               title="Financial Ops"
