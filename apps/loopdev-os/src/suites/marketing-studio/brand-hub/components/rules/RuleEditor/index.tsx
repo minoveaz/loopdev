@@ -2,10 +2,15 @@
 
 import React, { useState } from 'react';
 import { RuleEditorProps } from './types';
-import { LpdText, Button, Input, TechnicalStatusBadge } from '@loopdev/ui';
+import { LpdText, Button, Input } from '@loopdev/ui';
 import { DomainBadge } from '../DomainBadge';
-import { SeverityBadge } from '../SeverityBadge';
 import { clsx } from 'clsx';
+
+const FieldLabel = ({ children }: { children: React.ReactNode }) => (
+  <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest mb-2 block">
+    {children}
+  </LpdText>
+);
 
 /**
  * @composite RuleEditor
@@ -17,14 +22,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
   isEditable = false,
   onSave
 }) => {
-  const [localRule, setLocalRule] = useState(rule);
-
-  // Helper for input labels
-  const FieldLabel = ({ children }: { children: React.ReactNode }) => (
-    <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest mb-2 block">
-      {children}
-    </LpdText>
-  );
+  const [localRule] = useState(rule);
 
   return (
     <div className="flex flex-col gap-10 p-8 bg-background-surface rounded-3xl border border-border-technical shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
@@ -37,7 +35,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
             <DomainBadge domain={localRule.domain} size="sm" />
           </div>
           <LpdText size="xs" className="text-text-muted font-mono uppercase opacity-60">
-            ID: {localRule.id} // Updated by {localRule.updatedBy || 'System'}
+            ID: {localRule.id}{' // Updated by '}{localRule.updatedBy || 'System'}
           </LpdText>
         </div>
 
@@ -130,7 +128,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-1 flex flex-col gap-4">
             <div>
-              <FieldLabel>The "Why" (Reasoning)</FieldLabel>
+              <FieldLabel>The &quot;Why&quot; (Reasoning)</FieldLabel>
               <textarea 
                 readOnly={!isEditable}
                 value={localRule.explain.why}
