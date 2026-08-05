@@ -5,7 +5,6 @@ import {
   LpdText, 
   Heading, 
   TechnicalSurface, 
-  Icon, 
   Button, 
   Skeleton,
   toast
@@ -14,6 +13,19 @@ import { ExchangeAccountCard, type ExchangeAccount } from '@/components/Exchange
 import { ConnectExchangeModal } from '../components/ConnectExchangeModal';
 import { useExchangeVault } from '@/hooks/trading/useExchangeVault';
 
+interface ConnectExchangePayload {
+  name: string;
+  provider: string;
+  apiKey: string;
+  apiSecret: string;
+}
+
+interface ConnectionTestResult {
+  success: boolean;
+  error?: string | null;
+  message?: string;
+}
+
 /**
  * @page ExchangeVaultPage
  * @description Secure management of exchange credentials and connectivity.
@@ -21,8 +33,8 @@ import { useExchangeVault } from '@/hooks/trading/useExchangeVault';
  */
 export default function ExchangeVaultPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingAccount, setEditingAccount] = useState<any>(null);
-  const { accounts, isLoading, connectExchange, testConnection, isTesting, testResult } = useExchangeVault();
+  const [editingAccount, setEditingAccount] = useState<ExchangeAccount | null>(null);
+  const { accounts, isLoading, connectExchange, testConnection, isTesting } = useExchangeVault();
 
   const handleTest = (id: string) => {
     console.log('[handleTest] Called with id:', id);
@@ -37,7 +49,7 @@ export default function ExchangeVaultPage() {
     console.log('[handleTest] About to call testConnection with callbacks');
     
     testConnection(id, {
-      onSuccess: (data: any) => {
+      onSuccess: (data: ConnectionTestResult) => {
         console.log('[handleTest] onSuccess called with:', data);
         if (data.success) {
           toast.show({
@@ -55,7 +67,7 @@ export default function ExchangeVaultPage() {
           });
         }
       },
-      onError: (error: any) => {
+      onError: (error: Error) => {
         console.error('[handleTest] onError called with:', error);
         toast.show({
           tenantId: 'loopdev',
@@ -67,7 +79,7 @@ export default function ExchangeVaultPage() {
     });
   };
 
-  const handleConnect = (data: any) => {
+  const handleConnect = (data: ConnectExchangePayload) => {
     connectExchange(data);
     setIsModalOpen(false);
     setEditingAccount(null);
@@ -137,7 +149,7 @@ export default function ExchangeVaultPage() {
          <div className="flex flex-col gap-1">
             <LpdText size="xs" weight="bold" className="text-blue-600 uppercase tracking-widest">Security_Protocol_Notice</LpdText>
             <LpdText size="xs" className="text-blue-700/70 leading-relaxed">
-               Always use API keys with restricted permissions. Ensure 'Withdrawal' permissions are **disabled** for all keys linked to LoopDev Quant Core.
+               Always use API keys with restricted permissions. Ensure Withdrawal permissions are disabled for all keys linked to LoopDev Quant Core.
             </LpdText>
          </div>
       </TechnicalSurface>
