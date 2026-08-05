@@ -11,6 +11,13 @@ export interface RiskSettings {
   maxConcurrentBots: number;
 }
 
+interface RiskSettingsPayload {
+  kill_switch_active?: boolean;
+  max_daily_loss_usdt?: number;
+  max_total_exposure_usdt?: number;
+  max_concurrent_bots?: number;
+}
+
 /**
  * @hook useRiskSettings
  * @description Governance hook for global safety parameters.
@@ -41,7 +48,7 @@ export const useRiskSettings = () => {
   // 2. Update Settings Mutation
   const updateSettings = useMutation({
     mutationFn: async (params: Partial<RiskSettings>) => {
-      const payload: any = {};
+      const payload: RiskSettingsPayload = {};
       if (params.killSwitchActive !== undefined) payload.kill_switch_active = params.killSwitchActive;
       if (params.maxDailyLossUsdt !== undefined) payload.max_daily_loss_usdt = params.maxDailyLossUsdt;
       if (params.maxTotalExposureUsdt !== undefined) payload.max_total_exposure_usdt = params.maxTotalExposureUsdt;

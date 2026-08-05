@@ -1,6 +1,17 @@
 import { createClient } from './supabase/client';
 import { Brand, CreateBrandInput } from '@loopdev/contracts';
 
+interface RawBrand {
+  id: string;
+  tenant_id: string;
+  name: string;
+  description?: string;
+  status: Brand['status'];
+  logo_url?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 /**
  * Brand Hub API Service
  * Encapsula todas las llamadas a Supabase para el módulo de marcas.
@@ -56,7 +67,7 @@ export const brandsApi = {
   /**
    * Mapper interno para asegurar que el Frontend recibe camelCase
    */
-  mapBrand(raw: any): Brand {
+  mapBrand(raw: RawBrand): Brand {
     return {
       id: raw.id,
       tenantId: raw.tenant_id,

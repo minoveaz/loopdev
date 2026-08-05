@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type { BrandItem } from '@loopdev/ui';
+import type { BrandStatus } from '@loopdev/contracts';
 import { MOCK_BRANDS } from '@/data/mock-brands';
 
 /**
@@ -28,7 +29,7 @@ export const useBrands = () => {
         return data.map(b => ({
           id: b.id,
           name: b.name,
-          status: b.status as any,
+          status: b.status as BrandStatus,
           updatedAt: new Date(b.updated_at).toLocaleDateString()
         })) as BrandItem[];
       } catch (e) {
