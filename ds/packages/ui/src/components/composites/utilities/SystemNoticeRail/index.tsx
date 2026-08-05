@@ -3,7 +3,7 @@
 import React from 'react';
 import { cn } from '../../../../helpers/cn';
 import { LpdText } from '../../../atoms/foundations/Typography';
-import { SystemNoticeRailProps } from './index';
+import { SystemNoticeRailProps } from './types';
 import { useSystemNoticeRail } from './useSystemNoticeRail';
 
 /**

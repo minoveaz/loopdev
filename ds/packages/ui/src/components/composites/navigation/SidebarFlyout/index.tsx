@@ -5,6 +5,8 @@ import { cn } from '../../../../helpers/cn';
 import { LpdText, IconButton, Icon, Divider } from '../../../atoms';
 import { SidebarFlyoutProps } from './types';
 
+export type { SidebarFlyoutProps } from './types';
+
 /**
  * @component SidebarFlyout
  * @description Panel de significado y contexto semántico.

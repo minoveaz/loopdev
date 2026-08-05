@@ -4,6 +4,8 @@ import React from 'react';
 import { IconButton, Input, LpdText, TechnicalStatusBadge, NavGroup, ScrollArea, Button, Skeleton } from '../../../atoms';
 import { ModuleSidebarProps, BrandItem } from './types';
 
+export type { BrandItem, ModuleSidebarProps } from './types';
+
 /**
  * @component ModuleSidebar
  * @description Espina dorsal de navegación del módulo.

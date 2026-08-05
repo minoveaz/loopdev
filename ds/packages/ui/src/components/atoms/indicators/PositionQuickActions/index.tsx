@@ -58,7 +58,7 @@ export const PositionQuickActions: React.FC<PositionQuickActionsProps> = ({
         )}
       >
         <div className={cn("relative", loading && "animate-spin")}>
-          <Icon name={loading ? "sync" : icon} size="xs" />
+          <Icon name={loading ? "sync" : icon} size="sm" />
         </div>
         <LpdText size="nano" weight="black" className="uppercase tracking-widest text-[7px]">
           {label}

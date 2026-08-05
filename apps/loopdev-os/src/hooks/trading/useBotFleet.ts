@@ -36,12 +36,23 @@ export const useBotFleet = () => {
           pair: raw.pair,
           exchangeId: raw.exchange_id,
           strategyId: raw.strategy_id,
+          createdAt: raw.created_at,
           strategyName: strategyInfo?.name || 'Unknown Strategy',
           coreId: strategyInfo?.core_id || 'default',
           status: raw.status,
           updatedAt: raw.updated_at,
+          riskProfile: {
+            maxDailyLossPct: Number(raw.risk_profile?.maxDailyLossPct ?? raw.risk_profile?.max_daily_loss_pct ?? 2),
+            globalStopLossPct: Number(raw.risk_profile?.globalStopLossPct ?? raw.risk_profile?.global_stop_loss_pct ?? 5),
+            maxRebuys: Number(raw.risk_profile?.maxRebuys ?? raw.risk_profile?.max_rebuys ?? 3),
+            maxExposureUsdt: Number(raw.risk_profile?.maxExposureUsdt ?? raw.risk_profile?.max_exposure_usdt ?? raw.base_investment_usdt ?? 0),
+            cooldownPeriodMinutes: Number(raw.risk_profile?.cooldownPeriodMinutes ?? raw.risk_profile?.cooldown_period_minutes ?? 60),
+          },
+          useInitialRangeFilter: raw.use_initial_range_filter ?? true,
+          useMarketRegimeFilter: raw.use_market_regime_filter ?? true,
           trailingStopDistance: Number(raw.trailing_stop_distance || 1.0),
           currentAction: raw.current_action || 'Initializing...',
+          currentPositionSide: raw.current_position_side,
           
           // Precios Reales (Desde la migración 20260320)
           currentPrice: fromCents(raw.last_price),
@@ -74,7 +85,7 @@ export const useBotFleet = () => {
           // Telemetría de Estrategia
           macroSentiment: raw.last_sentiment || 'neutral',
           priceHistory: raw.price_history_1h || [],
-          logicSnapshot: raw.last_logic_snapshot || null,
+          logicSnapshot: raw.last_logic_snapshot || undefined,
           
           // Mapeos de Ejecución (Para la Barra de Progreso)
           priceTarget: fromCents(raw.last_sma || (raw.last_logic_snapshot?.trigger_price || 0)),

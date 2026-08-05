@@ -11,5 +11,8 @@
     "dev": "echo 'No dev server'",
     "lint": "eslint . || echo 'No lint config'",
     "typecheck": "tsc --noEmit || echo 'No tsconfig'"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
   }
 }

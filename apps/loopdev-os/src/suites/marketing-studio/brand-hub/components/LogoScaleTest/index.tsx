@@ -33,7 +33,7 @@ export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo, logoNode }) 
                 logoNode || (
                 <div 
                   className="w-full h-full p-[15%] text-black fill-black"
-                  dangerouslySetInnerHTML={{ __html: logo.rawSvg }} 
+                  dangerouslySetInnerHTML={{ __html: logo.rawSvg ?? '' }}
                 />
                 )
               ) : (

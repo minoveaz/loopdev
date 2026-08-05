@@ -121,7 +121,7 @@ export const InPositionState = ({
         <div className="flex flex-col items-end gap-1">
           <LpdText size="nano" weight="black" className="uppercase text-text-muted opacity-40">Time_In_Trade</LpdText>
           <div className="flex items-center gap-2 bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
-            <Icon name="schedule" size="nano" className="text-primary opacity-80" />
+            <Icon name="schedule" size="sm" className="text-primary opacity-80" />
             <LpdText size="xs" weight="black" className="font-mono text-primary animate-pulse tracking-tighter">{elapsedTime}</LpdText>
           </div>
         </div>
@@ -151,13 +151,13 @@ export const InPositionState = ({
       <div className="grid grid-cols-2 gap-x-10 gap-y-8 pt-6 border-t border-white/5">
         <div className="flex flex-col gap-2">
           <LpdText size="nano" weight="black" className="uppercase text-text-muted opacity-40 tracking-widest">Entry_Price</LpdText>
-          <LpdText size="md" weight="black" className="font-mono text-text-main opacity-90">${formatPrice(bot.currentEntryPrice)}</LpdText>
+          <LpdText size="base" weight="black" className="font-mono text-text-main opacity-90">${formatPrice(bot.currentEntryPrice)}</LpdText>
           <LpdText size="nano" className="text-text-muted font-mono opacity-30 italic uppercase">Tick_Verified</LpdText>
         </div>
 
         <div className="flex flex-col gap-2 text-right">
           <LpdText size="nano" weight="black" className="uppercase text-text-muted opacity-40 tracking-widest">Break_Even</LpdText>
-          <LpdText size="md" weight="black" className="font-mono text-primary opacity-90">${formatPrice(bePrice)}</LpdText>
+          <LpdText size="base" weight="black" className="font-mono text-primary opacity-90">${formatPrice(bePrice)}</LpdText>
           <LpdText size="xs" weight="black" className="text-primary opacity-80 font-mono">{getRelPct(bePrice)}% / {getRelUsd(bePrice)}</LpdText>
         </div>
 
@@ -179,7 +179,7 @@ export const InPositionState = ({
             </LpdText>
           </div>
           <LpdText 
-            size="md" 
+            size="base"
             weight="black" 
             className={cn("font-mono opacity-90", slPrice > bot.currentEntryPrice ? "text-emerald-500" : "text-rose-500")}
           >
@@ -189,7 +189,7 @@ export const InPositionState = ({
 
         <div className="flex flex-col gap-2 text-right">
           <LpdText size="nano" weight="black" className="uppercase text-emerald-500/50 tracking-widest">Target_TP</LpdText>
-          <LpdText size="md" weight="black" className="font-mono text-emerald-500 opacity-90">${formatPrice(tpPrice)}</LpdText>
+          <LpdText size="base" weight="black" className="font-mono text-emerald-500 opacity-90">${formatPrice(tpPrice)}</LpdText>
           <LpdText size="xs" weight="black" className="text-emerald-500 opacity-80 font-mono">{getRelPct(tpPrice)}% / {getRelUsd(tpPrice)}</LpdText>
         </div>
       </div>

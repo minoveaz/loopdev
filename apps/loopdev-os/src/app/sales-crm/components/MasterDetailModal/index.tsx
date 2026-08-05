@@ -268,7 +268,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
             onClick={handleMoveToOnboarding}
             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black flex items-center justify-center gap-2 border-none py-3"
           >
-            <Icon name={ICON_REGISTRY.actions.rocket} size="sm" /> Iniciar Proceso de Contratación
+            <Icon name="rocket" size="sm" /> Iniciar Proceso de Contratación
           </Button>
         );
       default:

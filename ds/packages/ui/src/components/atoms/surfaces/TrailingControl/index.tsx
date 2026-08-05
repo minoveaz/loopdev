@@ -39,7 +39,7 @@ export const TrailingControl: React.FC<TrailingControlProps> = ({
               : "bg-white/5 border-white/10 text-text-muted opacity-60 hover:bg-white/10"
           )}
         >
-          <Icon name="track_changes" size="xs" className={cn(currentDistance > 0 && "animate-pulse")} />
+          <Icon name="track_changes" size="sm" className={cn(currentDistance > 0 && "animate-pulse")} />
           <LpdText size="nano" weight="black" className="uppercase tracking-widest text-[7px]">
             {currentDistance > 0 ? `Trail: ${currentDistance}%` : 'Activate Trail'}
           </LpdText>
@@ -73,7 +73,7 @@ export const TrailingControl: React.FC<TrailingControlProps> = ({
                 >
                   <div className="flex items-center gap-2">
                     <div className={cn("w-6 h-6 rounded flex items-center justify-center", p.bg, p.color)}>
-                      <Icon name={p.icon} size="nano" />
+                      <Icon name={p.icon} size="sm" />
                     </div>
                     <LpdText size="nano" weight="bold" className="text-text-main">{p.label}</LpdText>
                   </div>

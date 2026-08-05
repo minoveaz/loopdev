@@ -56,7 +56,7 @@ export default function StrategiesPage() {
     // Industrial Mapping: Adapt modal payload to DB schema
     const params = {
       name: config.name,
-      exchangeId: config.exchangeId && config.exchangeId !== '' ? config.exchangeId : null,
+      exchangeId: config.exchangeId && config.exchangeId !== '' ? config.exchangeId : undefined,
       mode: config.mode,
       pairs: config.pairs,
       core_id: config.coreId,
@@ -171,6 +171,7 @@ export default function StrategiesPage() {
       strategyName: strategy.name,
       pairs: strategy.pairs,
       sizePerTrade: 100, // Default for backtest
+      maxPositions: 5,
       stopLoss: 2.0,
       takeProfit: 5.0,
       days: 30
@@ -301,8 +302,8 @@ export default function StrategiesPage() {
                         <LpdText size="nano" className="text-text-muted font-mono">{new Date(trade.entry_time).toLocaleDateString()}</LpdText>
                       </div>
                       <div className="text-right">
-                        <LpdText size="xs" weight="black" className={trade.pnl >= 0 ? "text-emerald-500" : "text-rose-500"}>
-                          {trade.pnl >= 0 ? '+' : ''}{trade.pnl_pct}%
+                        <LpdText size="xs" weight="black" className={(trade.pnl ?? 0) >= 0 ? "text-emerald-500" : "text-rose-500"}>
+                          {(trade.pnl ?? 0) >= 0 ? '+' : ''}{trade.pnl_pct}%
                         </LpdText>
                         <LpdText size="nano" className="text-text-muted opacity-40 uppercase font-bold">{trade.reason}</LpdText>
                       </div>

@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import type { ActivityEvent } from '@loopdev/ui';
 
 /**
  * @hook useActivityStream
@@ -19,10 +20,10 @@ export const useActivityStream = () => {
 
       if (error) throw error;
 
-      return data.map((order: any) => ({
+      return data.map((order: any): ActivityEvent => ({
         id: order.id,
         time: new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-        type: order.side.toUpperCase(),
+        type: order.side?.toUpperCase() === 'SELL' ? 'SELL' : 'BUY',
         pair: order.pair || '---',
         qty: order.filled_quantity?.toString() || '0',
         price: order.average_fill_price?.toLocaleString() || '0',

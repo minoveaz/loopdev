@@ -44,6 +44,7 @@ export const useSystemStatus = (props: SystemStatusProps) => {
   const formattedId = id ? (id.length > 12 ? `${id.substring(0, 8)}...` : id) : null;
 
   return {
+    state,
     currentConfig,
     containerClasses,
     formattedId,

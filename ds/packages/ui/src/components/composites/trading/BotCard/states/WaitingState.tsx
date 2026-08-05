@@ -141,7 +141,6 @@ export const WaitingState = ({ bot }: WaitingStateProps) => {
       {/* SPARKLINE: Confluencia caliente */}
       <PulseSparkline 
         data={bot.priceHistory} 
-        logicSnapshot={bot.logicSnapshot} 
       />
 
       <div className="flex flex-col gap-4">

@@ -4,6 +4,8 @@ import React from 'react';
 import { EngineeringSealProps } from './types';
 import { useEngineeringSeal } from './useEngineeringSeal';
 
+export type { EngineeringSealStatus } from './types';
+
 /**
  * @component EngineeringSeal
  * @description Átomo oficial que certifica la autoridad técnica y versión de un módulo.

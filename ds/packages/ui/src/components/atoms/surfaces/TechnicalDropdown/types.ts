@@ -16,6 +16,8 @@ export interface TechnicalDropdownProps {
   side?: 'top' | 'right' | 'bottom' | 'left';
   /** Espaciado respecto al trigger */
   sideOffset?: number;
+  /** Evita que el menú desborde los límites de la ventana */
+  avoidCollisions?: boolean;
   /** Indica si el menú está abierto (Controlado) */
   open?: boolean;
   /** Callback de cambio de estado */

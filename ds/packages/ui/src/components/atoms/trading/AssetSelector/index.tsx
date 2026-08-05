@@ -41,7 +41,7 @@ export const AssetSelector: React.FC<AssetSelectorProps> = ({
   return (
     <div className={cn("flex flex-col gap-1", className)}>
       {label && (
-        <Label size="sm" weight="black" className="uppercase tracking-widest text-text-muted mb-1">
+        <Label className="text-sm font-black uppercase tracking-widest text-text-muted mb-1">
           {label}
         </Label>
       )}

@@ -18,7 +18,7 @@ export const usePortfolioStats = () => {
   const deployedCapital = bots.reduce((acc, b) => acc + (b.baseInvestmentUsdt || 0), 0);
   
   const unrealizedPnlUsdt = bots.reduce((acc, b) => acc + (b.currentPnlUsdt || 0), 0);
-  const realizedPnlUsdt = bots.reduce((acc, b) => acc + (b.realized_pnl_usdt || 0), 0); // Asumiendo que useBotFleet mapea este campo
+  const realizedPnlUsdt = bots.reduce((acc, b) => acc + (b.realizedPnlUsdt || 0), 0);
   
   // Equity = Capital Base + PnL Realizado + PnL No Realizado
   const totalEquity = deployedCapital + unrealizedPnlUsdt;

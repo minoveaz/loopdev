@@ -51,7 +51,7 @@ export function ActivityPanel() {
         }}
         className="flex items-center gap-1.5 text-xs text-primary hover:underline font-bold transition-all"
       >
-        <Icon name={ICON_REGISTRY.actions.arrow_back} size="sm" />
+        <Icon name="arrow_back" size="sm" />
         <span>Volver a Bitácora y Archivos</span>
       </button>
       <LpdText size="nano" weight="black" variant="mono" className="text-text-muted dark:text-slate-400 uppercase tracking-widest">
@@ -524,7 +524,7 @@ export function ActivityPanel() {
               : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
-          <Icon name={ICON_REGISTRY.actions.feed} size="sm" />
+          <Icon name="feed" size="sm" />
           <span>⚡ Bitácora de Actividad</span>
         </button>
         <button
@@ -535,7 +535,7 @@ export function ActivityPanel() {
               : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
-          <Icon name={ICON_REGISTRY.actions.upload} size="sm" />
+          <Icon name="upload" size="sm" />
           <span>📁 Documentos e Historial ({lead.documents?.length || 0})</span>
         </button>
       </div>
@@ -551,30 +551,30 @@ export function ActivityPanel() {
                 let colorClasses = 'bg-slate-100 text-slate-500 border-slate-200';
                 
                 if (entry.type === 'CALL') {
-                  iconName = ICON_REGISTRY.actions.phone;
+                  iconName = 'phone';
                   colorClasses = 'bg-blue-500/10 text-blue-500 border-blue-500/20';
                 } else if (entry.type === 'NOTE') {
-                  iconName = ICON_REGISTRY.actions.feed;
+                  iconName = 'feed';
                   colorClasses = 'bg-amber-500/10 text-amber-500 border-amber-500/20';
                 } else if (entry.type === 'TASK_CREATED' || entry.type === 'TASK_COMPLETED') {
-                  iconName = ICON_REGISTRY.actions.task;
+                  iconName = 'task';
                   colorClasses = 'bg-violet-500/10 text-violet-500 border-violet-500/20';
                 } else if (entry.type === 'DOCUMENT') {
-                  iconName = ICON_REGISTRY.actions.upload;
+                  iconName = 'upload';
                   colorClasses = 'bg-teal-500/10 text-teal-500 border-teal-500/20';
                 } else if (entry.type === 'GENERIC') {
                   if (entry.action.toLowerCase().includes('whatsapp')) {
-                    iconName = ICON_REGISTRY.actions.chat;
+                    iconName = 'chat';
                     colorClasses = 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
                   } else if (entry.action.toLowerCase().includes('correo') || entry.action.toLowerCase().includes('email')) {
-                    iconName = ICON_REGISTRY.actions.mail;
+                    iconName = 'mail';
                     colorClasses = 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20';
                   } else {
                     iconName = ICON_REGISTRY.status.info;
                     colorClasses = 'bg-slate-100 text-slate-500 border-slate-200';
                   }
                 } else if (entry.type === 'STATUS_CHANGE') {
-                  iconName = ICON_REGISTRY.actions.rocket;
+                  iconName = 'rocket';
                   colorClasses = 'bg-rose-500/10 text-rose-500 border-rose-500/20';
                 }
 
@@ -645,7 +645,7 @@ export function ActivityPanel() {
 
               <div className="w-full sm:w-auto">
                 <label className="flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-primary hover:bg-primary/90 rounded-xl cursor-pointer shadow-md shadow-blue-500/10 active:scale-[0.98] transition-all">
-                  <Icon name={ICON_REGISTRY.actions.upload} size="sm" />
+                  <Icon name="upload" size="sm" />
                   <span>Subir Documento</span>
                   <input 
                     type="file" 
@@ -670,7 +670,7 @@ export function ActivityPanel() {
                   <TechnicalCard key={doc.id} variant="flat" className="p-3.5 flex items-center justify-between font-sans">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center text-primary border border-primary/10 select-none">
-                        <Icon name={ICON_REGISTRY.actions.feed} size="sm" />
+                        <Icon name="feed" size="sm" />
                       </div>
                       <div className="flex flex-col gap-0.5">
                         <LpdText size="xs" weight="bold" className="text-text-main dark:text-white truncate max-w-[220px]">

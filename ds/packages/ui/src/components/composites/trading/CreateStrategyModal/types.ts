@@ -1,4 +1,4 @@
-import { Asset } from '../../../../atoms/trading/AssetSelector/types';
+import { Asset } from '../../../atoms/trading/AssetSelector/types';
 
 export type StrategyMode = 'paper' | 'live';
 export type StrategyStatus = 'draft' | 'active' | 'paused' | 'archived';

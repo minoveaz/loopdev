@@ -57,6 +57,7 @@ export interface BrandIdentity {
     forbidden: string[];
     regulated: RegulatedClaim[];
   };
+  palette?: BrandPalette;
 }
 
 export interface ToneProfile {

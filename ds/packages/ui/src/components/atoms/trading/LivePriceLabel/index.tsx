@@ -42,10 +42,12 @@ export const LivePriceLabel: React.FC<LivePriceLabelProps> = ({
     return () => ws.close();
   }, [pair]);
 
+  const typographySize = size === 'md' ? 'base' : size;
+
   return (
     <div className={cn("flex items-center gap-2 font-mono", className)}>
       <LpdText 
-        size={size} 
+        size={typographySize}
         weight="bold"
         className={cn(
           "transition-colors duration-300 tracking-tighter",

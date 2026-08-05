@@ -76,7 +76,7 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
       <div className="relative z-10 max-w-sm space-y-3">
         <Heading 
           as="h3" 
-          size={props.size === 'sm' ? 'xs' : 'md'}
+          size={props.size === 'sm' ? 'xs' : 'base'}
           className={isAI ? 'text-innovation-purple' : ''}
         >
           {title}
@@ -89,8 +89,7 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
         ) : (
                     <LpdText 
                       size="sm" 
-                      variant="muted" 
-                      className="max-w-xs mx-auto mb-10 leading-relaxed text-center"
+                      className="max-w-xs mx-auto mb-10 leading-relaxed text-center text-slate-400"
                     >
                       {description}
                     </LpdText>        )}

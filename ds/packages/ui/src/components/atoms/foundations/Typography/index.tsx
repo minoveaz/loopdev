@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTypography } from './useTypography';
-import type { TypographyProps, HeadingProps } from './types';
+import type { TypographyProps, HeadingProps, TypographyVariant } from './types';
 
 /**
  * @component LpdText
@@ -37,7 +37,7 @@ export const Heading: React.FC<HeadingProps & React.HTMLAttributes<HTMLHeadingEl
  * @category Foundations
  * @status stable
  */
-export const Code = ({ variant = 'mono', className = '', ...props }) => (
+export const Code = ({ variant = 'mono' as TypographyVariant, className = '', ...props }) => (
   <LpdText 
     variant={variant} 
     className={`bg-surface-glass px-1.5 py-0.5 rounded border border-border-subtle text-text-muted ${className}`} 

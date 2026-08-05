@@ -29,7 +29,7 @@ export const IndustrialMetric: React.FC<IndustrialMetricProps> = ({
 }) => {
   return (
     <TechnicalSurface 
-      variant="subtle" 
+      variant="surface"
       className={cn(
         "p-5 flex flex-col justify-between gap-4 rounded-2xl border border-border-technical/30 bg-white/[0.03] shadow-inner transition-all hover:bg-white/[0.06] group",
         className

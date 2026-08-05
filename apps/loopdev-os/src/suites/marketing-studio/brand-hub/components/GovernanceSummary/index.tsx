@@ -20,7 +20,7 @@ export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
   const accessMapping = {
     'allowed': { label: 'ALLOWED', severity: 'success' },
     'approval-required': { label: 'APPROVAL REQ', severity: 'warning' },
-    'restricted': { label: 'RESTRICTED', severity: 'critical' },
+    'restricted': { label: 'RESTRICTED', severity: 'danger' },
   } as const;
 
   return (

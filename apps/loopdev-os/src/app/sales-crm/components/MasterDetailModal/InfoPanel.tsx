@@ -209,7 +209,7 @@ export function InfoPanel() {
           <LpdText size="nano" weight="black" variant="mono" className="text-text-muted dark:text-slate-400 uppercase tracking-widest">
             PRONÓSTICO Y NEGOCIO
           </LpdText>
-          <Icon name={ICON_REGISTRY.actions.payments} size="sm" className="text-text-muted" />
+          <Icon name="payments" size="sm" className="text-text-muted" />
         </div>
         <Divider />
 
@@ -307,7 +307,7 @@ export function InfoPanel() {
           <LpdText size="nano" weight="black" variant="mono" className="text-text-muted dark:text-slate-400 uppercase tracking-widest">
             CANAL DE ORIGEN (B2C)
           </LpdText>
-          <Icon name={ICON_REGISTRY.actions.campaign} size="sm" className="text-text-muted" />
+          <Icon name="campaign" size="sm" className="text-text-muted" />
         </div>
         <Divider />
 
@@ -443,7 +443,7 @@ export function InfoPanel() {
           <LpdText size="nano" weight="black" variant="mono" className="text-text-muted dark:text-slate-400 uppercase tracking-widest">
             SALUD DEL TRATO (SLA)
           </LpdText>
-          <Icon name={ICON_REGISTRY.status.health} size="sm" className="text-text-muted" />
+          <Icon name="health_and_safety" size="sm" className="text-text-muted" />
         </div>
         <Divider />
 
@@ -487,7 +487,7 @@ export function InfoPanel() {
           <LpdText size="nano" weight="black" variant="mono" className="text-text-muted dark:text-slate-400 uppercase tracking-widest">
             PLAN DE INTERÉS Y NOTAS
           </LpdText>
-          <Icon name={ICON_REGISTRY.status.verified} size="sm" className="text-text-muted" />
+          <Icon name="verified" size="sm" className="text-text-muted" />
         </div>
         <Divider />
 
@@ -545,7 +545,7 @@ export function InfoPanel() {
           <LpdText size="nano" weight="black" variant="mono" className="text-text-muted dark:text-slate-400 uppercase tracking-widest">
             INSIGHTS INTELIGENTES DE IA
           </LpdText>
-          <Icon name={ICON_REGISTRY.status.psychology} size="sm" className="text-primary" />
+          <Icon name="psychology" size="sm" className="text-primary" />
         </div>
         <Divider />
 
@@ -603,7 +603,7 @@ export function InfoPanel() {
           <LpdText size="nano" weight="black" variant="mono" className="text-text-muted dark:text-slate-400 uppercase tracking-widest">
             SIMULACIÓN DE COTIZACIONES
           </LpdText>
-          <Icon name={ICON_REGISTRY.actions.feed} size="sm" className="text-text-muted" />
+          <Icon name="feed" size="sm" className="text-text-muted" />
         </div>
         <Divider />
 

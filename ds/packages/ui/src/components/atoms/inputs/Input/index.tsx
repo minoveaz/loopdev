@@ -49,9 +49,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         <Label 
           as="label"
           htmlFor={inputId} 
-          size="sm"
-          weight="black"
-          className={cn("uppercase tracking-widest mb-1", error ? 'text-danger' : 'text-text-muted')}
+          className={cn("text-sm font-black uppercase tracking-widest mb-1", error ? 'text-danger' : 'text-text-muted')}
         >
           {label}
         </Label>

@@ -15,7 +15,7 @@ import { useTechnicalMenuItem } from './useTechnicalMenuItem';
  * @phase 1
  */
 export const TechnicalMenuItem: React.FC<TechnicalMenuItemProps> = (props) => {
-  const { icon, label, shortcut, isActive, isDisabled, onClick } = props;
+  const { children, icon, label, shortcut, isActive, isDisabled, onClick } = props;
   const { containerClasses, shortcutClasses, iconSize } = useTechnicalMenuItem(props);
 
   // Resolver icono de Lucide
@@ -33,9 +33,7 @@ export const TechnicalMenuItem: React.FC<TechnicalMenuItemProps> = (props) => {
       )}
 
       {/* 2. Etiqueta Principal */}
-      <span className="flex-1 truncate">
-        {label}
-      </span>
+      {children ?? <span className="flex-1 truncate">{label}</span>}
 
       {/* 3. Atajo de Teclado (Si existe) */}
       {shortcut && (

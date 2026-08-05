@@ -88,7 +88,7 @@ export const StrategyCard: React.FC<StrategyCardProps> = ({
               Mode // {strategy.mode}
             </LpdText>
           </div>
-          <Badge variant={isActive ? 'success' : isDraft ? 'warning' : 'outline'} size="sm" className="uppercase font-black text-[8px]">
+          <Badge variant={isActive ? 'solid' : isDraft ? 'glass' : 'outline'} status={isActive ? 'success' : isDraft ? 'energy' : 'neutral'} className="uppercase font-black text-[8px]">
             {strategy.status}
           </Badge>
         </div>
@@ -172,7 +172,7 @@ export const StrategyCard: React.FC<StrategyCardProps> = ({
               <TechnicalMenuItem 
                 label="Delete Protocol" 
                 icon="delete" 
-                isDanger
+                variant="danger"
                 onClick={() => onDelete?.(strategy.id!)} 
               />
             </div>

@@ -142,7 +142,6 @@ export const ScanningState = ({ bot, isActive }: ScanningStateProps) => {
       {/* SPARKLINE: Corazón de la estrategia */}
       <PulseSparkline 
         data={bot.priceHistory} 
-        logicSnapshot={bot.logicSnapshot} 
       />
 
       <div className="flex flex-col gap-4">

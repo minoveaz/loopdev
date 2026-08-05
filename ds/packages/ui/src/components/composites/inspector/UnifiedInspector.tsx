@@ -60,7 +60,7 @@ export const UnifiedInspector: React.FC<UnifiedInspectorProps> = ({
       case 'draft':
         return <TechnicalStatusBadge label="DRAFT" severity="warning" variant="glass" />;
       case 'review':
-        return <TechnicalStatusBadge label="REVIEW" severity="critical" variant="solid" />;
+        return <TechnicalStatusBadge label="REVIEW" severity="danger" variant="glass" />;
       default:
         return null;
     }
@@ -68,10 +68,11 @@ export const UnifiedInspector: React.FC<UnifiedInspectorProps> = ({
 
   const title = entity?.name || entity?.type || 'Module Inspector';
 
+  if (!isOpen) return null;
+
   return (
     <InspectorPanel
       title={title}
-      isOpen={isOpen}
       onClose={onClose}
       headerSlot={renderStatusBadge()}
     >

@@ -60,8 +60,8 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
         ...prev, 
         parameters: initialParams,
         // Si la estrategia es de Scalping, bajamos los guards automáticamente
-        takeProfit: registryTP || (selectedCore.trading_style === 'SCALPING' ? 1.5 : 5.0),
-        stopLoss: registrySL || (selectedCore.trading_style === 'SCALPING' ? 1.0 : 2.0)
+        takeProfit: registryTP || (selectedCore.category.toUpperCase() === 'SCALPING' ? 1.5 : 5.0),
+        stopLoss: registrySL || (selectedCore.category.toUpperCase() === 'SCALPING' ? 1.0 : 2.0)
       }));
     }
   }, [formData.coreId, selectedCore]);
@@ -127,7 +127,7 @@ export const CreateStrategyModal: React.FC<CreateStrategyModalProps> = ({
                       >
                         <div className="flex items-center justify-between w-full">
                           <Heading size="xs" weight="bold" className={formData.coreId === core.id ? "text-primary" : "text-text-main"}>{core.name}</Heading>
-                          <Badge variant="outline" size="sm">{core.category}</Badge>
+                          <Badge variant="outline">{core.category}</Badge>
                         </div>
                         <LpdText size="xs" className="text-text-muted line-clamp-2">{core.description}</LpdText>
                       </button>

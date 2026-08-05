@@ -55,7 +55,7 @@ export const ClaimList: React.FC<ClaimListProps> = ({
                 </LpdText>
                 <TechnicalStatusBadge 
                   label={claim.severity.toUpperCase()}
-                  severity={claim.severity === 'block' ? 'critical' : 'warning'}
+                  severity={claim.severity === 'block' ? 'danger' : 'warning'}
                   variant="glass"
                   className="scale-75 origin-right"
                 />

@@ -66,7 +66,7 @@ export const BotCardHeader = ({
           )}>
             <Icon 
               name={isBullish ? "trending_up" : isBearish ? "trending_down" : "drag_handle"} 
-              size="xs" 
+              size="sm"
               className="scale-90"
             />
             <span className="tracking-widest uppercase">

@@ -17,7 +17,7 @@ const StatItem = ({ label, value, color }: { label: string, value: string, color
 );
 
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const { handleLogout } = useAuth();
+  const { signOut } = useAuth();
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-surface-dark text-white">
@@ -40,10 +40,10 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           <div className="h-6 w-px bg-white/10 mx-2"></div>
           
           <Button 
-            onClick={handleLogout}
+            onClick={signOut}
             variant="secondary"
             size="sm"
-            startIcon={<Icon name="logout" size="sm" />}
+            startIcon="logout"
           >
             Logout
           </Button>

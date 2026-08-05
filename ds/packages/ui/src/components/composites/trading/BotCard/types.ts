@@ -7,6 +7,21 @@ import { BotConfig, BotStatus } from '@loopdev/contracts';
 export interface BotCardProps {
   /** The bot configuration data */
   bot: BotConfig & {
+    currentAction: string;
+    currentPrice: number;
+    currentEntryPrice: number;
+    currentPositionSide?: 'LONG' | 'SHORT';
+    currentPnlPct: number;
+    currentPnlUsdt: number;
+    openedAt?: string | null;
+    trailingStopDistance?: number;
+    proximityPct?: number;
+    exitTargets?: {
+      slPrice: number;
+      tpPrice: number;
+      bePrice?: number;
+    } | null;
+    logicSnapshot?: Record<string, any>;
     macroSentiment?: 'bullish' | 'bearish' | 'neutral';
     priceHistory?: number[];
     strategyName?: string;

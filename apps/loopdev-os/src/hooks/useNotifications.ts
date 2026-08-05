@@ -3,6 +3,8 @@
 import { useState, useMemo } from 'react';
 import { NotificationItem } from '@loopdev/ui';
 
+export type { NotificationItem } from '@loopdev/ui';
+
 /**
  * @hook useNotifications
  * @description Gestión de estado y lógica de negocio para las alertas del sistema.

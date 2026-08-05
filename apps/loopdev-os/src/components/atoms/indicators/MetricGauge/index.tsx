@@ -120,7 +120,7 @@ export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
             style={{
               transform: 'rotate(-135deg)',
               transformOrigin: '60px 60px',
-              textFillColor: 'transparent',
+              fill: 'transparent',
             }}
           />
 
