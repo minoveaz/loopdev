@@ -94,11 +94,11 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   ];
 
   if (pathname === '/marketing-studio/brand-hub') {
-    segments.push({ id: 'view', label: 'Overview', isActive: true });
+    segments.push({ id: 'view', label: 'Overview', href: '/marketing-studio/brand-hub' });
   } else if (brandId) {
     segments.push({ id: 'view', label: 'Brands', href: '/marketing-studio/brand-hub/brands' });
     if (activeBrand) {
-      segments.push({ id: 'brand', label: activeBrand.name, isActive: pathname.includes(brandId) });
+      segments.push({ id: 'brand', label: activeBrand.name, href: `/marketing-studio/brand-hub/brands/${brandId}` });
     }
   }
 

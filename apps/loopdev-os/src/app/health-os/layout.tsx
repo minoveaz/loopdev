@@ -257,7 +257,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
       }
     >
       <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
-      <TenantProvider tenant="zonamedica">
+      <TenantProvider tenant="estar-protegidos">
         <LayoutProvider>
           <ToastViewport activeTenantId="zonamedica" />
           

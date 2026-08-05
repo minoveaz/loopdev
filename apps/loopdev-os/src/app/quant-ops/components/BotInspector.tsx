@@ -26,7 +26,7 @@ export const BotInspectorIndustrial: React.FC = () => {
   if (!selectedBotId || !bot) return null;
 
   const isInPosition = bot.currentAction?.includes('In Position');
-  const confluence = bot.macroSentiment === 'bullish' ? 66 : 0;
+  const confluence: number = bot.macroSentiment === 'bullish' ? 66 : 0;
 
   return (
     <InspectorPanel

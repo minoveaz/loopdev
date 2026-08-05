@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LpdText, Heading, TechnicalSurface, Icon, BotConfig, Skeleton, BotStatus, Button, TechnicalDialog, toast } from '@loopdev/ui';
+import { LpdText, Heading, TechnicalSurface, Icon, Skeleton, Button, TechnicalDialog, toast } from '@loopdev/ui';
+import type { BotConfig, BotStatus } from '@loopdev/contracts';
 import { DeployBotModal } from '../components/DeployBotModal';
 import { BotCardItem } from './components/BotCardItem';
 import { useBotFleet } from '@/hooks/trading/useBotFleet';
@@ -23,7 +24,7 @@ export default function BotFleetPage() {
     toggleStatus({ id, status: nextStatus });
   };
 
-  const handleMarketExit = (id: string) => {
+  const handleMarketExit = async (id: string) => {
     executeCommand({ id, command: 'MARKET_EXIT' });
     toast.show({
       tenantId: 'loopdev',
@@ -33,7 +34,7 @@ export default function BotFleetPage() {
     });
   };
 
-  const handleSetToBE = (id: string) => {
+  const handleSetToBE = async (id: string) => {
     executeCommand({ id, command: 'MOVE_TO_BE' });
     toast.show({
       tenantId: 'loopdev',
@@ -43,7 +44,7 @@ export default function BotFleetPage() {
     });
   };
 
-  const handleExecuteTP = (id: string) => {
+  const handleExecuteTP = async (id: string) => {
     executeCommand({ id, command: 'TP_NOW' });
     toast.show({
       tenantId: 'loopdev',
@@ -53,7 +54,7 @@ export default function BotFleetPage() {
     });
   };
 
-  const handleUpdateTrail = (id: string, distance: number) => {
+  const handleUpdateTrail = async (id: string, distance: number) => {
     executeCommand({ id, command: `TRAIL_DISTANCE:${distance}` });
     toast.show({
       tenantId: 'loopdev',

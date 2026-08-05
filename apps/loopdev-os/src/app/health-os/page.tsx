@@ -165,7 +165,7 @@ export default function HealthOsDashboard() {
               <div className="flex justify-between items-center text-xs p-3 bg-slate-50 rounded-xl">
                 <span className="text-slate-600 font-semibold">RIPS Status (JSON 2275):</span>
                 <span className="font-semibold text-emerald-600 flex items-center gap-1">
-                  <Icon name="check_circle" size="xs" /> Validado
+                  <Icon name="check_circle" size="sm" /> Validado
                 </span>
               </div>
             </div>

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useMemo, useEffect, useRef, useState } from 'react';
-import { BotCardIndustrial as BotCard, BotStatus, LpdText } from '@loopdev/ui';
+import { BotCardIndustrial as BotCard, LpdText } from '@loopdev/ui';
+import type { BotStatus } from '@loopdev/contracts';
 import { BotExecutionMetrics } from '../../components/BotExecutionMetrics';
 import { useQuantOps } from '../../context';
 
@@ -10,9 +11,10 @@ interface BotCardItemProps {
   onToggleStatus: (id: string, status: BotStatus) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
-  onMarketExit?: (id: string) => void;
-  onSetToBE?: (id: string) => void;
-  onExecuteTP?: (id: string) => void;
+  onMarketExit?: (id: string) => Promise<void>;
+  onSetToBE?: (id: string) => Promise<void>;
+  onExecuteTP?: (id: string) => Promise<void>;
+  onUpdateTrail?: (id: string, distance: number) => Promise<void>;
 }
 
 /**

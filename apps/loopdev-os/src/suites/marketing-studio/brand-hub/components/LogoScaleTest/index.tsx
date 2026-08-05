@@ -6,13 +6,14 @@ import { LpdText } from '@loopdev/ui';
 
 interface LogoScaleTestProps {
   logo: LogoAsset;
+  logoNode?: React.ReactNode;
 }
 
 /**
  * @component LogoScaleTest
  * @description Accessibility tool to verify logo legibility at small sizes.
  */
-export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo }) => {
+export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo, logoNode }) => {
   const scales = [
     { size: 64, label: '64px' },
     { size: 32, label: '32px' },
@@ -28,11 +29,13 @@ export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo }) => {
               className="bg-white rounded-lg border border-border-technical flex items-center justify-center overflow-hidden"
               style={{ width: `${scale.size}px`, height: `${scale.size}px` }}
             >
-              {logo.rawSvg ? (
+              {logoNode || logo.rawSvg ? (
+                logoNode || (
                 <div 
                   className="w-full h-full p-[15%] text-black fill-black"
                   dangerouslySetInnerHTML={{ __html: logo.rawSvg }} 
                 />
+                )
               ) : (
                 <img 
                   src={logo.url} 
