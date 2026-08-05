@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, Heading, TechnicalSurface } from '@loopdev/ui';
+import { LpdText } from '@loopdev/ui';
 
 export default function LiveTerminalPage() {
   return (
@@ -17,8 +17,8 @@ export default function LiveTerminalPage() {
 
       <section className="flex-1 bg-slate-950 text-emerald-500 p-6 rounded-2xl border border-white/10 shadow-2xl min-h-[500px]">
         <div className="flex flex-col gap-1 text-[10px]">
-          <p className="opacity-40">// Quant_Core_Terminal v0.0.1</p>
-          <p className="opacity-40">// Connection: websocket_established</p>
+          <p className="opacity-40">Quant_Core_Terminal v0.0.1</p>
+          <p className="opacity-40">Connection: websocket_established</p>
           <p className="mt-4 text-white font-bold tracking-widest">[SYSTEM] Awaiting live stream data...</p>
         </div>
       </section>

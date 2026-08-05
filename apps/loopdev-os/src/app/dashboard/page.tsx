@@ -31,7 +31,7 @@ export default function DashboardPage() {
             <span className="text-xs font-bold text-energy-yellow uppercase tracking-widest">Generative Intelligence</span>
           </div>
           <p className="text-2xl lg:text-3xl font-bold leading-tight">
-            "Initializing Loop Intelligence..."
+            &quot;Initializing Loop Intelligence...&quot;
           </p>
         </div>
         <div className="absolute top-1/2 -right-10 transform -translate-y-1/2 opacity-10 group-hover:opacity-20 transition-opacity">
