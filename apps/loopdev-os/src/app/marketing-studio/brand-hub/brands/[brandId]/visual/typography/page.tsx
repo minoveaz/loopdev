@@ -54,7 +54,7 @@ export default function BrandTypographyPage() {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
         <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          // typography_system_not_initialized
+          {'// typography_system_not_initialized'}
         </LpdText>
       </div>
     );

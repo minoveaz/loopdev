@@ -177,7 +177,7 @@ export default function RiskControlPage() {
 
             <div className="p-4 bg-background-subtle rounded-xl border border-border-technical/20">
               <LpdText size="nano" className="text-text-muted italic leading-relaxed">
-                // System_Note: All changes are applied in real-time to the orquestrator heartbeat.
+                {'// System_Note: All changes are applied in real-time to the orquestrator heartbeat.'}
               </LpdText>
             </div>
           </TechnicalSurface>

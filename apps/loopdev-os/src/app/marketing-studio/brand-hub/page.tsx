@@ -79,7 +79,7 @@ export default function BrandHubOverview() {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
           <div key={i} className="h-32 border border-dashed border-border-technical rounded-2xl flex items-center justify-center opacity-20 font-mono text-micro uppercase tracking-widest">
-            // telemetry_block_0{i}
+            {`// telemetry_block_0${i}`}
           </div>
         ))}
       </section>

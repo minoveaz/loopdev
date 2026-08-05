@@ -58,7 +58,7 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
                 ? "bg-primary/5 border-primary/10 text-primary" 
                 : "bg-yellow-500/10 border-yellow-500/20 text-yellow-500 font-mono"
             )}>
-              {font.type} // {font.source}
+              {font.type} {'//'} {font.source}
             </div>
             {font.license && (
               <LpdText size="nano" className={clsx("font-mono italic", isBrand ? "text-text-muted/50" : "text-slate-500")}>

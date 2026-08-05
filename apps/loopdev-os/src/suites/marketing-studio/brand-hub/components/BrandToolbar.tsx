@@ -129,7 +129,7 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
       left={
         <div className="flex items-center gap-2">
           <LpdText size="nano" className="text-primary font-mono font-bold uppercase tracking-widest">
-            // EDITING DRAFT
+            {'// EDITING DRAFT'}
           </LpdText>
         </div>
       }

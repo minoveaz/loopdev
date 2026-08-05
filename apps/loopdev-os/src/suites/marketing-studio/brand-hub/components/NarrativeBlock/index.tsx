@@ -23,7 +23,7 @@ export const NarrativeBlock: React.FC<NarrativeBlockProps> = ({
         </LpdText>
         {isEditable && (
           <LpdText size="nano" className="text-yellow-500 font-bold uppercase animate-pulse">
-            // DRAFT_MODE_ACTIVE
+          {'// DRAFT_MODE_ACTIVE'}
           </LpdText>
         )}
       </div>

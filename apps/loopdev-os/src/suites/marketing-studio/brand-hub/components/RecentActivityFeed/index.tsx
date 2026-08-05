@@ -43,7 +43,7 @@ export const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
         ) : (
           <div className="py-12 text-center border border-dashed border-border-technical rounded-xl opacity-40">
             <LpdText size="xs" className="font-mono uppercase tracking-widest">
-              // No activity recorded
+              {'// No activity recorded'}
             </LpdText>
           </div>
         )}

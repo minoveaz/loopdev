@@ -15,7 +15,7 @@ export default function Page() {
         </LpdText>
       </header>
       <div className="h-64 border border-dashed border-border-technical rounded-2xl flex items-center justify-center opacity-20 font-mono text-micro uppercase tracking-widest">
-        // versions_pending
+        {'// versions_pending'}
       </div>
     </div>
   );

@@ -55,7 +55,7 @@ export default function BrandLogoPage() {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
         <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          // logo_system_not_initialized
+          {'// logo_system_not_initialized'}
         </LpdText>
       </div>
     );

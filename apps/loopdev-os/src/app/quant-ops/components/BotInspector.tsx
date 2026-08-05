@@ -47,7 +47,7 @@ export const BotInspectorIndustrial: React.FC = () => {
             </Button>
           </div>
           <LpdText size="nano" className="text-center text-text-muted opacity-40 font-mono tracking-tighter italic">
-            // authenticated_session_node: 0x{bot.id.substring(0,8)}
+            {`// authenticated_session_node: 0x${bot.id.substring(0, 8)}`}
           </LpdText>
         </div>
       }
