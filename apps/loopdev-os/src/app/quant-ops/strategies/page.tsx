@@ -26,7 +26,7 @@ import { useAssets } from '@/hooks/trading/useAssets';
  */
 export default function StrategiesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingStrategy, setEditingStrategy] = useState<any>(null);
+  const [editingStrategy, setEditingStrategy] = useState<{ id: string } | null>(null);
   const [selectedStrategyForBacktest, setSelectedStrategyForBacktest] = useState<string | null>(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; strategyId: string | null }>({ isOpen: false, strategyId: null });
 
@@ -87,7 +87,7 @@ export default function StrategiesPage() {
         }
       });
     } else {
-      createStrategy(params as any, {
+      createStrategy(params, {
         onSuccess: () => {
           setIsModalOpen(false);
           toast.show({
@@ -107,29 +107,7 @@ export default function StrategiesPage() {
     
     // Map strategy to config format for the modal
     // Note: In a real app we might need to fetch the full details if the list view is lightweight
-    const matchedAccount = accounts.find(a => a.name === strategy.exchange || a.id === strategy.exchange);
-
-    setEditingStrategy({
-      id: strategy.id,
-      name: strategy.name,
-      exchangeId: matchedAccount?.id || '', 
-      mode: strategy.mode,
-      status: strategy.status,
-      pairs: strategy.pairs,
-      // Default risk values if not present in the list view model (assuming they are)
-      // The useStrategies hook should return these fields mapped from DB
-      riskProfile: {
-        sizePerTrade: (strategy as any).sizePerTrade || 100, 
-        maxPositions: (strategy as any).maxPositions || 5,
-        maxExposure: (strategy as any).maxExposure || 1000,
-        stopLoss: (strategy as any).stopLoss || 2.0,
-        takeProfit: (strategy as any).takeProfit || 5.0,
-        trailingStop: (strategy as any).trailingStop || 0.0,
-        cooldownMinutes: (strategy as any).cooldownMinutes || 60,
-        dailyLossLimit: (strategy as any).dailyLossLimit || 5.0
-      },
-      description: (strategy as any).description
-    });
+    setEditingStrategy({ id: strategy.id });
     setIsModalOpen(true);
   };
 
@@ -229,9 +207,20 @@ export default function StrategiesPage() {
       {strategies.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {strategies.map((strategy) => (
-            <StrategyCard 
+            <StrategyCard
               key={strategy.id} 
-              strategy={strategy as any}
+              strategy={{
+                id: strategy.id,
+                name: strategy.name,
+                coreId: '',
+                exchangeId: accounts.find((account) => account.name === strategy.exchange)?.id || '',
+                mode: strategy.mode,
+                status: strategy.status,
+                pairs: strategy.pairs,
+                parameters: {},
+                stopLoss: 0,
+                takeProfit: 0,
+              }}
               isLoading={isBacktesting && selectedStrategyForBacktest === strategy.id}
               onActivate={handleActivateStrategy}
               onPause={handlePauseStrategy}
@@ -298,7 +287,7 @@ export default function StrategiesPage() {
                   {backtestResult.trades.slice(0, 5).map((trade, i) => (
                     <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-white/5 border border-border-technical/20">
                       <div className="flex flex-col">
-                        <LpdText size="xs" weight="bold" className="uppercase">{trade.pair} // {trade.side}</LpdText>
+                        <LpdText size="xs" weight="bold" className="uppercase">{trade.pair}{' // '}{trade.side}</LpdText>
                         <LpdText size="nano" className="text-text-muted font-mono">{new Date(trade.entry_time).toLocaleDateString()}</LpdText>
                       </div>
                       <div className="text-right">
