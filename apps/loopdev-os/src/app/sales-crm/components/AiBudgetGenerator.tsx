@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useSalesCrm } from '../context';
+import { useSalesCrm, type Lead } from '../context';
 import { 
   TechnicalSurface, 
   LpdText, 
@@ -70,7 +70,7 @@ export function AiBudgetGenerator() {
 
 // 1. AI TERMINAL OVERLAY
 interface TerminalOverlayProps {
-  lead: any;
+  lead: Lead;
   onFinished: () => void;
   onCancel: () => void;
 }
@@ -184,7 +184,7 @@ function AiTerminalOverlay({ lead, onFinished, onCancel }: TerminalOverlayProps)
 
 // 2. PDF PREVIEWER
 interface PdfPreviewerProps {
-  lead: any;
+  lead: Lead;
   onConfirm: () => void;
   onCancel: () => void;
 }
