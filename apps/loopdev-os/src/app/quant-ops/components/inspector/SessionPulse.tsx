@@ -4,7 +4,7 @@ import React from 'react';
 import { LpdText, IndustrialMetric } from '@loopdev/ui';
 
 interface SessionPulseProps {
-  bot: any;
+  bot: { realizedPnlUsdt?: number; currentPnlUsdt?: number; baseInvestmentUsdt: number; totalTrades: number; winningTrades: number };
 }
 
 export const SessionPulse: React.FC<SessionPulseProps> = ({ bot }) => {

@@ -9,6 +9,14 @@ interface ActivityStreamProps {
   pair: string;
 }
 
+interface OrderRow {
+  id: string;
+  side: string;
+  created_at: string;
+  price: number;
+  quantity: number;
+}
+
 export const ActivityStream: React.FC<ActivityStreamProps> = ({ botId, pair }) => {
   const { data: recentOrders = [] } = useBotOrders(botId);
 
@@ -17,7 +25,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({ botId, pair }) =
       <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em] text-text-muted opacity-40 px-1">Live_Execution_Stream</LpdText>
       <div className="flex flex-col gap-2">
         {recentOrders.length > 0 ? (
-          recentOrders.map((order: any) => (
+          recentOrders.map((order: OrderRow) => (
             <div key={order.id} className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/5 rounded-xl">
               <div className="flex flex-col">
                 <LpdText size="nano" weight="black" className={cn("uppercase", order.side === 'buy' ? 'text-emerald-500' : 'text-rose-500')}>{order.side}_ORDER</LpdText>

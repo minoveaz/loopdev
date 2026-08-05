@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { LpdText, TechnicalSurface, cn } from '@loopdev/ui';
 
 interface SignalWatchProps {
-  bot: any;
+  bot: { macroSentiment?: string };
   confluence: number;
 }
 

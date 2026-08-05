@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { LpdText, cn } from '@loopdev/ui';
+import { LpdText } from '@loopdev/ui';
 
 interface EngineLogsProps {
-  bot: any;
+  bot: { macroSentiment?: string; currentPrice: number };
 }
 
 export const EngineLogs: React.FC<EngineLogsProps> = ({ bot }) => {
