@@ -3,9 +3,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { ToneProfileCard } from './index';
+import type { ToneProfile } from '../../types';
 
 describe('ToneProfileCard Molecule', () => {
-  const mockProfile: any = {
+  const mockProfile: ToneProfile = {
     id: 'p1',
     name: 'Professional',
     description: 'Technical and clear',

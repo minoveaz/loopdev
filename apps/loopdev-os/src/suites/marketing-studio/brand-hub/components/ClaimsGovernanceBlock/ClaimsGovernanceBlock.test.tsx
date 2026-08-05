@@ -3,10 +3,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { ClaimsGovernanceBlock } from './index';
+import type { RegulatedClaim } from '../../types';
 
 describe('ClaimsGovernanceBlock Composite', () => {
   const mockForbidden = ['forbidden1'];
-  const mockRegulated: any = [
+  const mockRegulated: RegulatedClaim[] = [
     { id: 'c1', text: 'Regulated 1', reason: 'R1', jurisdiction: 'EU', severity: 'block' }
   ];
 

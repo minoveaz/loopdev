@@ -3,9 +3,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { VoiceToneBlock } from './index';
+import type { ToneProfile } from '../../types';
 
 describe('VoiceToneBlock Composite', () => {
-  const mockProfiles: any = [
+  const mockProfiles: ToneProfile[] = [
     { id: '1', name: 'Professional', description: 'D1', examples: { do: [], dont: [] } },
     { id: '2', name: 'Witty', description: 'D2', examples: { do: [], dont: [] } }
   ];

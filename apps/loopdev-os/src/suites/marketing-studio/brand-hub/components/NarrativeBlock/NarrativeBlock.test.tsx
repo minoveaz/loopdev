@@ -3,9 +3,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { NarrativeBlock } from './index';
+import type { BrandIdentity } from '../../types';
 
 describe('NarrativeBlock Composite', () => {
-  const mockData: any = {
+  const mockData: BrandIdentity['narrative'] = {
     mission: 'Test mission',
     vision: 'Test vision',
     promise: 'Test promise',

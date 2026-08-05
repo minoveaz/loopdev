@@ -4,7 +4,11 @@ import { SuiteHomeLayoutProps } from '@loopdev/ui';
  * @config MarketingStudioHomeConfig
  * @description Definición de acciones, métricas y módulos para el Home de Marketing.
  */
-export const getMarketingStudioHomeConfig = (router: any): Omit<SuiteHomeLayoutProps, 'userState'> => ({
+interface MarketingRouter {
+  push: (href: string) => void;
+}
+
+export const getMarketingStudioHomeConfig = (router: MarketingRouter): Omit<SuiteHomeLayoutProps, 'userState'> => ({
   title: 'Marketing Studio',
   subtitle: 'The control center for your brand identity and intelligent content generation.',
   contextLine: 'Working on brand: Loop Health · Last activity: 2h',

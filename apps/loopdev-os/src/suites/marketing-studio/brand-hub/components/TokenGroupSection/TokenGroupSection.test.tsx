@@ -1,11 +1,12 @@
 /** @vitest-environment jsdom */
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { TokenGroupSection } from './index';
+import type { ColorToken } from '../../types';
 
 describe('TokenGroupSection Composite', () => {
-  const mockTokens: any = [
+  const mockTokens: ColorToken[] = [
     { id: 't1', name: 't1', group: 'core', resolvesTo: { light: '#fff', dark: '#000' } },
     { id: 't2', name: 't2', group: 'core', resolvesTo: { light: '#fff', dark: '#000' } }
   ];
