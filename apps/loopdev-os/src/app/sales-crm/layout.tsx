@@ -23,15 +23,14 @@ import {
   ModuleWorkspace,
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useNotifications, NotificationItem } from '@/hooks/useNotifications';
-import { NavMode, LayoutContext } from '@loopdev/contracts';
+import { NotificationItem } from '@/hooks/useNotifications';
+import { AccessMap, LayoutContext, NavigationSchema, NavMode, SuiteIdentity } from '@loopdev/contracts';
 import { SalesCrmProvider, useSalesCrm } from './context';
-import { LeadInspector } from './components/LeadInspector';
 import { AiBudgetGenerator } from './components/AiBudgetGenerator';
 import { MasterDetailModal } from './components/MasterDetailModal';
 
-const SALES_CRM_SCHEMA = {
-  version: '0.8.2',
+const SALES_CRM_SCHEMA: NavigationSchema = {
+  version: '1.0',
   suite: {
     suiteId: 'salesCRM',
     suiteName: 'Sales & CRM',
@@ -54,21 +53,27 @@ const SALES_CRM_SCHEMA = {
       items: [
         {
           id: 'overview',
+          kind: 'module',
           label: 'Dashboard CRM',
+          priority: 10,
           icon: 'LayoutDashboard',
           moduleId: 'overview',
           route: { routeId: '/sales-crm' },
         },
         {
           id: 'pipeline',
+          kind: 'module',
           label: 'Deals & Pipeline',
+          priority: 20,
           icon: 'TrendingUp',
           moduleId: 'pipeline',
           route: { routeId: '/sales-crm/pipeline' },
         },
         {
           id: 'customers',
+          kind: 'module',
           label: 'Directorio Clientes',
+          priority: 30,
           icon: 'Users',
           moduleId: 'customers',
           route: { routeId: '/sales-crm/customers' },
@@ -83,6 +88,8 @@ const SALES_CRM_SCHEMA = {
       items: [
         {
           id: 'ai-insights',
+          kind: 'module',
+          priority: 40,
           label: 'Modelos de Puntuación',
           icon: 'Sparkles',
           moduleId: 'ai-insights',
@@ -121,7 +128,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
       };
     });
 
-    setSyncedNotifications(staleAlerts);
+    queueMicrotask(() => setSyncedNotifications(staleAlerts));
   }, [leads]);
 
   const handleMarkAsRead = (id: string) => {
@@ -177,13 +184,13 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (pathname.split('/').length > 2) {
-      setNavMode('rail');
+      queueMicrotask(() => setNavMode('rail'));
     } else {
-      setNavMode('expanded');
+      queueMicrotask(() => setNavMode('expanded'));
     }
   }, [pathname]);
 
-  const currentSuite = SALES_CRM_SCHEMA.suite;
+  const currentSuite: SuiteIdentity = SALES_CRM_SCHEMA.suite;
 
   const getActiveModule = () => {
     const parts = pathname.split('/');
@@ -193,7 +200,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
 
   const activeModuleId = getActiveModule();
 
-  const accessMap: Record<string, 'enabled' | 'disabled' | 'coming-soon'> = {
+  const accessMap: AccessMap = {
     'overview': 'enabled',
     'pipeline': 'enabled',
     'customers': 'enabled',
@@ -212,11 +219,11 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
       onToggleLeftSidebar={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
       navSlot={
         <SuiteSidebar 
-          schema={SALES_CRM_SCHEMA as any}
+          schema={SALES_CRM_SCHEMA}
           navMode={navMode}
           context={context}
           activeModuleId={activeModuleId}
-          accessMap={accessMap as any}
+          accessMap={accessMap}
           onExitToOS={() => router.push('/launchpad')}
           onNavigate={(route) => router.push(route.routeId)}
           onToggleNavMode={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
@@ -236,7 +243,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
           leftSlot={
             <div className="flex items-center gap-4">
               <SuiteSwitcher 
-                currentSuite={currentSuite as any}
+                currentSuite={currentSuite}
                 availableSuites={AVAILABLE_SUITES_FIXTURES}
                 onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
                 onSuiteChange={(id) => id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)}
