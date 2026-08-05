@@ -10,5 +10,6 @@
     },
     "outDir": "./dist"
   },
-  "include": ["src", "vitest.shims.d.ts", "vitest.setup.ts"]
+  "include": ["src"],
+  "exclude": ["src/**/*.stories.tsx", "src/**/*.test.ts", "src/**/*.test.tsx"]
 }

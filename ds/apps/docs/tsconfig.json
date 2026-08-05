@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "module": "ESNext",
@@ -13,5 +13,6 @@
       "@loopdev/ui/*": ["../../packages/ui/src/*"]
     }
   },
-  "include": ["src", "stories", ".storybook"]
+  "include": ["src"],
+  "exclude": ["stories", ".storybook"]
 }

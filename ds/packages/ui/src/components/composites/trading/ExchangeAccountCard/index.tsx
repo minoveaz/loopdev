@@ -90,7 +90,7 @@ export const ExchangeAccountCard: React.FC<ExchangeAccountCardProps> = ({
             account.status === 'warning' ? "bg-amber-500/5 border-amber-500/20 text-amber-600" :
             "bg-rose-500/5 border-rose-500/20 text-rose-600"
           )}>
-            <StatusPulse variant={account.status === 'healthy' ? 'online' : 'error'} size="xs" />
+            <StatusPulse variant={account.status === 'healthy' ? 'success' : 'danger'} size="xs" />
             {account.status}
           </div>
         </div>
