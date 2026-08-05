@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { ClaimList } from './index';
+import type { RegulatedClaim } from '../../types';
 
 describe('ClaimList Molecule', () => {
   it('renders forbidden terms as buttons/tags', () => {
@@ -13,7 +14,7 @@ describe('ClaimList Molecule', () => {
   });
 
   it('renders regulated claims with jurisdiction and severity', () => {
-    const items: any = [
+    const items: RegulatedClaim[] = [
       { id: 'c1', text: 'Claim 1', reason: 'Test reason', jurisdiction: 'EU', severity: 'block' }
     ];
     render(<ClaimList title="Regulated" items={items} type="regulated" />);
@@ -31,7 +32,7 @@ describe('ClaimList Molecule', () => {
 
   it('calls onItemClick when a regulated claim is clicked', () => {
     const onItemClick = vi.fn();
-    const items: any = [{ id: 'id123', text: 'Regulated 1', reason: 'R', jurisdiction: 'J', severity: 'block' }];
+    const items: RegulatedClaim[] = [{ id: 'id123', text: 'Regulated 1', reason: 'R', jurisdiction: 'J', severity: 'block' }];
     render(<ClaimList title="Regulated" items={items} type="regulated" onItemClick={onItemClick} />);
     fireEvent.click(screen.getByText('Regulated 1').closest('button')!);
     expect(onItemClick).toHaveBeenCalledWith('id123');

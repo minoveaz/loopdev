@@ -3,9 +3,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { ColorTokenCard } from './index';
+import type { ColorToken } from '../../types';
 
 describe('ColorTokenCard Molecule', () => {
-  const mockToken: any = {
+  const mockToken: ColorToken = {
     id: 't1',
     name: 'brand.primary',
     group: 'core',
@@ -26,7 +27,7 @@ describe('ColorTokenCard Molecule', () => {
   });
 
   it('resolves color based on theme', () => {
-    const themedToken: any = {
+    const themedToken: ColorToken = {
       ...mockToken,
       resolvesTo: { light: '#ffffff', dark: '#000000' }
     };
@@ -45,7 +46,7 @@ describe('ColorTokenCard Molecule', () => {
   });
 
   it('shows FAIL badge for low contrast', () => {
-    const lowContrastToken: any = {
+    const lowContrastToken: ColorToken = {
       ...mockToken,
       resolvesTo: { light: '#eeeeee', dark: '#eeeeee' } // Light gray on white
     };
