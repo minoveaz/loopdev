@@ -9,15 +9,28 @@ import {
   Button, 
   IconButton,
   Divider,
-  Icon,
   cn
 } from '@loopdev/ui';
+
+interface ExchangeFormData {
+  name: string;
+  provider: 'binance' | 'kraken' | 'ibkr';
+  apiKey: string;
+  apiSecret: string;
+  isPaper: boolean;
+}
+
+interface InitialExchangeData {
+  name?: string;
+  provider?: ExchangeFormData['provider'];
+  isPaper?: boolean;
+}
 
 interface ConnectExchangeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConnect: (data: any) => void;
-  initialData?: any;
+  onConnect: (data: ExchangeFormData) => void;
+  initialData?: InitialExchangeData;
 }
 
 /**
@@ -41,22 +54,22 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
   // Sync initialData when editing
   useEffect(() => {
     if (initialData) {
-      setFormData({
+      queueMicrotask(() => setFormData({
         name: initialData.name || '',
         provider: initialData.provider || 'binance',
         apiKey: '••••••••••••••••', // Masked indicator
         apiSecret: '••••••••••••••••',
         isPaper: initialData.isPaper ?? true
-      });
+      }));
     } else {
       // Reset to default for new connections
-      setFormData({
+      queueMicrotask(() => setFormData({
         name: '',
         provider: 'binance',
         apiKey: '',
         apiSecret: '',
         isPaper: true
-      });
+      }));
     }
   }, [initialData, isOpen]);
 
