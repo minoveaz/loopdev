@@ -24,7 +24,7 @@ describe('SuiteHomeLayout Chassis', () => {
   it('renders Notices when provided', () => {
     const propsWithNotice = {
       ...MOCK_PROPS,
-      notices: [{ id: '1', message: 'Alert: low credits', tone: 'warning' }]
+      notices: [{ id: '1', title: 'Alert: low credits', severity: 'warning' }]
     };
     render(<SuiteHomeLayout {...propsWithNotice} />);
     expect(screen.getByText(/Alert: low credits/i)).toBeInTheDocument();

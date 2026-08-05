@@ -39,7 +39,7 @@ export interface SuiteNotice {
   scope?: 'system' | 'suite' | 'module' | 'integration';
   title: string;
   description?: string;
-  primaryAction: {
+  primaryAction?: {
     label: string;
     onClick: () => void;
   };

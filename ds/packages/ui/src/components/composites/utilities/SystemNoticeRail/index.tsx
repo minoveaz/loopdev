@@ -70,7 +70,7 @@ export const SystemNoticeRail: React.FC<SystemNoticeRailProps> = (props) => {
           )}
 
           {/* Acción Principal */}
-          <button 
+          {topNotice.primaryAction && <button 
             onClick={topNotice.primaryAction.onClick}
             className={cn(
               "h-7 px-3 rounded-lg border text-[9px] font-black uppercase tracking-widest transition-all",
@@ -82,7 +82,7 @@ export const SystemNoticeRail: React.FC<SystemNoticeRailProps> = (props) => {
             )}
           >
             {topNotice.primaryAction.label}
-          </button>
+          </button>}
 
           {(hasMultiple || topNotice.dismissible) && <div className="h-4 w-px bg-slate-300 dark:bg-white/10 mx-1" />}
 
