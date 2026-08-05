@@ -13,16 +13,32 @@ import {
   Badge,
   cn
 } from '@loopdev/ui';
-import { BotConfig } from '@loopdev/contracts';
+import { BotConfig, RiskProfile } from '@loopdev/contracts';
 import { useAssets } from '@/hooks/trading/useAssets';
 import { useStrategies } from '@/hooks/trading/useStrategies';
 import { useExchangeVault } from '@/hooks/trading/useExchangeVault';
+
+interface DeployFormData {
+  name: string;
+  exchangeId: string;
+  pair: string;
+  strategyId: string;
+  baseInvestmentUsdt: number;
+  maxDailyLossPct: number;
+  globalStopLossPct: number;
+  maxRebuys: number;
+  maxExposureUsdt: number;
+  useInitialRangeFilter: boolean;
+  useMarketRegimeFilter: boolean;
+}
+
+type InitialBotData = Partial<DeployFormData> & { riskProfile?: Partial<RiskProfile> };
 
 interface DeployBotModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDeploy: (bot: Partial<BotConfig>) => void;
-  initialData?: any;
+  initialData?: InitialBotData;
 }
 
 /**
@@ -87,9 +103,9 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
   // 1. AUTO-FILL LOGIC: Adjust risk parameters based on trading style
   useEffect(() => {
     // Only auto-fill for new bots, not when editing
-    if (initialData || !formData.strategyId || (strategies as any[]).length === 0) return;
+    if (initialData || !formData.strategyId || strategies.length === 0) return;
 
-    const selectedStrat = (strategies as any[]).find(s => s.id === formData.strategyId);
+    const selectedStrat = strategies.find(s => s.id === formData.strategyId);
     if (!selectedStrat) return;
 
     if (selectedStrat.tradingStyle === 'SCALPING') {
@@ -168,7 +184,22 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
     // Simulate industrial initialization lag for positive friction
     await new Promise(r => setTimeout(r, 1200));
     
-    onDeploy(formData as any);
+    onDeploy({
+      name: formData.name,
+      exchangeId: formData.exchangeId,
+      pair: formData.pair,
+      strategyId: formData.strategyId,
+      baseInvestmentUsdt: formData.baseInvestmentUsdt,
+      riskProfile: {
+        maxDailyLossPct: formData.maxDailyLossPct,
+        globalStopLossPct: formData.globalStopLossPct,
+        maxRebuys: formData.maxRebuys,
+        maxExposureUsdt: formData.maxExposureUsdt,
+        cooldownPeriodMinutes: 60,
+      },
+      useInitialRangeFilter: formData.useInitialRangeFilter,
+      useMarketRegimeFilter: formData.useMarketRegimeFilter,
+    });
     setIsDeploying(false);
     onClose();
   };
@@ -238,12 +269,12 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
                 <LpdText size="nano" weight="black" className="text-primary uppercase tracking-[0.2em] opacity-60">02. Strategy_Blueprint</LpdText>
                 
                 {/* TRADING STYLE BADGE */}
-                {formData.strategyId && (strategies as any[]).find(s => s.id === formData.strategyId)?.tradingStyle && (
+                {formData.strategyId && strategies.find(s => s.id === formData.strategyId)?.tradingStyle && (
                   <Badge variant="outline" className={cn(
                     "border-primary/20 text-[8px] font-black tracking-[0.2em]",
-                    (strategies as any[]).find(s => s.id === formData.strategyId)?.tradingStyle === 'SCALPING' ? "text-amber-500 border-amber-500/20" : "text-primary"
+                    strategies.find(s => s.id === formData.strategyId)?.tradingStyle === 'SCALPING' ? "text-amber-500 border-amber-500/20" : "text-primary"
                   )}>
-                    {(strategies as any[]).find(s => s.id === formData.strategyId)?.tradingStyle}_MODE
+                    {strategies.find(s => s.id === formData.strategyId)?.tradingStyle}_MODE
                   </Badge>
                 )}
               </div>
