@@ -19,7 +19,14 @@ export interface SelectedEntity {
   type: string; // Use string to allow dots (e.g. color.token)
   id: string;
   name?: string;
-  data?: any;
+  data?: Record<string, unknown>;
+}
+
+export interface BrandRecord {
+  id: string;
+  status?: string;
+  palette?: { tokens: Array<{ id: string; [key: string]: unknown }> };
+  [key: string]: unknown;
 }
 
 interface BrandHubContextType {
@@ -30,8 +37,8 @@ interface BrandHubContextType {
   setInspectorOpen: (open: boolean) => void;
   
   // Brand State
-  activeBrand: any | null;
-  setActiveBrand: (brand: any | null) => void;
+  activeBrand: BrandRecord | null;
+  setActiveBrand: (brand: BrandRecord | null) => void;
 
   // Visual System Preview State (Global so Inspector can see it)
   previewTheme: 'light' | 'dark';
@@ -45,7 +52,7 @@ const BrandHubContext = createContext<BrandHubContextType | undefined>(undefined
 export const BrandHubProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedEntity, setSelectedEntity] = useState<SelectedEntity | null>(null);
   const [isInspectorOpen, setInspectorOpen] = useState(false);
-  const [activeBrand, setActiveBrand] = useState<any | null>(null);
+  const [activeBrand, setActiveBrand] = useState<BrandRecord | null>(null);
   
   const [previewTheme, setPreviewTheme] = useState<'light' | 'dark'>('light');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
