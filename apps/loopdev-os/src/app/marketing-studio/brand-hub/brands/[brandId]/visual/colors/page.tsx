@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
@@ -53,7 +53,7 @@ export default function BrandColorsPage() {
   const neutralTokens = filteredTokens.filter(t => t.group === 'neutral' || t.group === 'surface');
 
   // HANDLERS
-  const handleTokenClick = (token: any) => {
+  const handleTokenClick = (token: ColorToken) => {
     setSelectedEntity({
       type: 'color.token',
       id: token.id,
@@ -75,7 +75,7 @@ export default function BrandColorsPage() {
   if (!brand?.palette) {
     return (
       <div className="p-12 text-center border border-dashed border-border-technical rounded-3xl m-8 opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest">// color_palette_not_initialized</LpdText>
+        <LpdText size="sm" className="font-mono uppercase tracking-widest">color_palette_not_initialized</LpdText>
       </div>
     );
   }
@@ -172,14 +172,14 @@ export default function BrandColorsPage() {
           </>
         ) : (
           <div className="p-12 text-center border border-border-technical rounded-3xl opacity-40 bg-background-surface">
-            <LpdText size="sm" className="font-mono uppercase tracking-widest">// table_view_mode_under_construction</LpdText>
+            <LpdText size="sm" className="font-mono uppercase tracking-widest">table_view_mode_under_construction</LpdText>
           </div>
         )}
 
         {filteredTokens.length === 0 && search && (
           <div className="p-20 text-center flex flex-col items-center gap-4 bg-background-surface/30 rounded-3xl border border-dashed border-border-technical">
             <span className="material-symbols-outlined text-4xl text-text-muted/20">search_off</span>
-            <LpdText size="sm" className="text-text-muted italic">No tokens found matching "{search}"</LpdText>
+            <LpdText size="sm" className="text-text-muted italic">No tokens found matching &quot;{search}&quot;</LpdText>
           </div>
         )}
       </main>
