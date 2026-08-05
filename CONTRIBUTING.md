@@ -4,6 +4,40 @@
 
 Cada cambio debe realizarse en una rama propia y abrir un Pull Request hacia `develop`. No se deben hacer pushes directos a `develop` ni `main`.
 
+## Flujo de trabajo y trazabilidad
+
+El flujo oficial mantiene la relación:
+
+```text
+Issue -> Branch -> Commits -> Pull Request -> Checks -> Deploy -> Release
+```
+
+1. **Issue:** todo trabajo comienza en una Issue o en GitHub Projects, con objetivo, criterios de aceptación, alcance y riesgos.
+2. **Rama:** crea la rama desde `develop` con una convención descriptiva:
+   ```text
+   feature/CRM-123-pipeline
+   fix/CRM-145-auth-error
+   chore/CI-20-eslint
+   ```
+3. **Commits:** usa Conventional Commits (`feat`, `fix`, `chore`, `test`, `docs`, `refactor`) y referencia la Issue cuando sea útil.
+4. **Pull Request:** abre la PR hacia `develop`, enlaza la Issue (`Closes #123`) y documenta cambios de contratos, migraciones, RLS, secretos o integraciones externas.
+5. **Checks:** la PR no se integra hasta que CI esté verde y exista la revisión requerida.
+6. **Merge:** usa squash merge para mantener un historial legible. `develop` recibe la integración de trabajo validado.
+7. **Release:** el paso de `develop` a `main` se realiza mediante una PR de release con validación adicional y aprobación explícita.
+
+No se deben hacer pushes directos a `develop` ni `main`. Las reglas de protección de ambas ramas deben exigir PR, checks obligatorios y revisión.
+
+### Entornos y secretos
+
+- `.env.local`: configuración local del desarrollador; nunca se commitea.
+- GitHub Environment `development`: secretos utilizados por CI/CD de desarrollo.
+- GitHub Environment `production`: secretos separados para producción.
+- Render: variables de entorno del servicio desplegado; no se deben copiar al repositorio.
+
+Las claves `service_role` son exclusivamente de servidor y nunca deben exponerse como variables `NEXT_PUBLIC_*`.
+
+El despliegue previsto es: merge en `develop` -> despliegue dev en Render -> smoke tests; PR de release a `main` -> aprobación -> despliegue productivo.
+
 Antes de abrir o actualizar el Pull Request, ejecuta desde la raíz del repositorio:
 
 ```powershell
