@@ -12,7 +12,16 @@ storybook-static/
 
 # Logs
 *.log
+*.log.*
 pnpm-debug.log*
+
+# Python local environments and caches
+**/venv/
+**/.pytest_cache/
+**/__pycache__/
+
+# Local quant module secrets
+modules/mod-quant-core/keys.txt
 
 # Environment files
 .env
