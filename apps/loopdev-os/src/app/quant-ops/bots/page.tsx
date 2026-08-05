@@ -1,11 +1,25 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LpdText, Heading, TechnicalSurface, Icon, Skeleton, Button, TechnicalDialog, toast } from '@loopdev/ui';
-import type { BotConfig, BotStatus } from '@loopdev/contracts';
+import { LpdText, Heading, Icon, Skeleton, Button, TechnicalDialog, toast } from '@loopdev/ui';
+import type { BotStatus } from '@loopdev/contracts';
 import { DeployBotModal } from '../components/DeployBotModal';
 import { BotCardItem } from './components/BotCardItem';
 import { useBotFleet } from '@/hooks/trading/useBotFleet';
+
+interface BotFormData {
+  name: string;
+  exchangeId: string;
+  pair: string;
+  strategyId: string;
+  baseInvestmentUsdt: number;
+  maxDailyLossPct: number;
+  globalStopLossPct: number;
+  maxRebuys: number;
+  maxExposureUsdt: number;
+  useInitialRangeFilter: boolean;
+  useMarketRegimeFilter: boolean;
+}
 
 /**
  * @page BotFleetPage
@@ -14,7 +28,7 @@ import { useBotFleet } from '@/hooks/trading/useBotFleet';
  */
 export default function BotFleetPage() {
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
-  const [editingBot, setEditingBot] = useState<any>(null);
+  const [editingBot, setEditingBot] = useState<ReturnType<typeof useBotFleet>['bots'][number] | null>(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; botId: string | null }>({ isOpen: false, botId: null });
 
   const { bots, isLoading, deployBot, toggleStatus, updateBot, deleteBot, executeCommand } = useBotFleet();
@@ -95,7 +109,7 @@ export default function BotFleetPage() {
     }
   };
 
-  const handleSaveBot = (newBotData: any) => {
+  const handleSaveBot = (newBotData: BotFormData) => {
     const botPayload = {
       name: newBotData.name,
       exchangeId: newBotData.exchangeId,
@@ -113,7 +127,7 @@ export default function BotFleetPage() {
     };
     
     if (editingBot) {
-      updateBot({ id: editingBot.id, params: botPayload as any }, {
+      updateBot({ id: editingBot.id, params: botPayload }, {
         onSuccess: () => {
           toast.show({
             tenantId: 'loopdev',
@@ -124,7 +138,7 @@ export default function BotFleetPage() {
         }
       });
     } else {
-      deployBot(botPayload as any, {
+      deployBot(botPayload, {
         onSuccess: () => {
           toast.show({
             tenantId: 'loopdev',
@@ -191,7 +205,7 @@ export default function BotFleetPage() {
       {/* 2. FLEET GRID */}
       {bots.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {bots.map((bot: any) => (
+          {bots.map((bot) => (
             <BotCardItem
               key={bot.id}
               bot={bot}
@@ -239,7 +253,7 @@ export default function BotFleetPage() {
         <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3">
           <span className="material-symbols-outlined text-rose-500">warning</span>
           <LpdText size="xs" className="text-rose-600/80 leading-relaxed font-medium">
-            Confirming this action will purge the bot's configuration from the active fleet. Open positions linked to this bot might need manual intervention.
+            Confirming this action will purge the bot&apos;s configuration from the active fleet. Open positions linked to this bot might need manual intervention.
           </LpdText>
         </div>
       </TechnicalDialog>
