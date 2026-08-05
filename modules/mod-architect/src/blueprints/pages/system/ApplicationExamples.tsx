@@ -1,6 +1,6 @@
 import React from 'react';
 import { SectionHeader, Card, Button, Badge, GridPattern } from '@blueprints/components/ui/DesignSystem';
-import { Infinity, LayoutDashboard, Mail, FileText, ArrowRight } from 'lucide-react';
+import { Infinity as InfinityIcon, LayoutDashboard, Mail, FileText, ArrowRight } from 'lucide-react';
 
 export const ApplicationExamples: React.FC = () => {
   return (
@@ -100,7 +100,7 @@ export const ApplicationExamples: React.FC = () => {
                   <div className="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded px-4 py-3 shadow-sm flex items-center justify-between">
                      <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 font-bold text-sm">
-                           <Infinity size={18} className="text-primary" />
+                           <InfinityIcon size={18} className="text-primary" />
                            Dashboard
                         </div>
                         <div className="h-4 w-px bg-gray-200 dark:bg-gray-700" />
@@ -134,7 +134,7 @@ export const ApplicationExamples: React.FC = () => {
                   <div className="w-full max-w-sm bg-white dark:bg-surface-dark rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                      <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
                         <div className="flex items-center gap-2 font-bold text-sm">
-                           <Infinity size={16} className="text-primary" /> loop.dev
+                           <InfinityIcon size={16} className="text-primary" /> loop.dev
                         </div>
                         <span className="text-[10px] font-mono text-text-muted">ID: 9942</span>
                      </div>

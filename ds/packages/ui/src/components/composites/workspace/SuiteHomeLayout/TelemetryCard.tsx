@@ -20,7 +20,7 @@ export const TelemetryCard: React.FC<TelemetryCardProps> = ({ metric }) => {
   const valueString = metric.value.toString();
   const hasUnit = valueString.includes('%') || valueString.includes('k');
   const mainValue = hasUnit ? valueString.replace(/[%k]/g, '') : valueString;
-  const unit = hasUnit ? valueString.replace(/[\d\.]/g, '') : null;
+  const unit = hasUnit ? valueString.replace(/[\d.]/g, '') : null;
 
   return (
     <TechnicalCard 

@@ -20,7 +20,8 @@ export default defineConfig({
       'next/navigation': path.resolve(__dirname, 'src/test-mocks/next.tsx'),
     },
     include: [
-      'apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/**/*.{test,spec}.{ts,tsx}'
+      'ds/packages/ui/src/**/*.{test,spec}.{ts,tsx}',
+      'apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/**/*.{test,spec}.{ts,tsx}',
     ],
   },
 });

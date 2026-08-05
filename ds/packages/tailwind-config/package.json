@@ -9,8 +9,8 @@
   },
   "scripts": {
     "dev": "echo 'No dev server'",
-    "lint": "eslint . || echo 'No lint config'",
-    "typecheck": "tsc --noEmit || echo 'No tsconfig'"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "tailwindcss": "3.4.17"

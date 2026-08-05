@@ -32,7 +32,7 @@ describe('AILoader Primitive', () => {
 
   it('applies the innovation purple color to brackets', () => {
     render(<AILoader />);
-    const brackets = screen.getAllByText(/[\{\}]/);
+    const brackets = screen.getAllByText(/[{}]/);
     brackets.forEach(bracket => {
       expect(bracket.className).toContain('text-innovation-purple');
     });

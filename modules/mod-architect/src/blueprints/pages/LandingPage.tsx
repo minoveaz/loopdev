@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Infinity, 
+  Infinity as InfinityIcon,
   Compass, 
   Zap, 
   Map, 
@@ -41,7 +41,7 @@ export const LandingPage: React.FC = () => {
       <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border-light bg-white/90 backdrop-blur-md px-6 py-4 dark:border-border-dark dark:bg-background-dark/90 lg:px-12">
         <div className="flex items-center gap-3 text-text-main dark:text-white">
           <div className="flex size-8 items-center justify-center rounded bg-primary text-white">
-            <Infinity size={20} />
+            <InfinityIcon size={20} />
           </div>
           <h2 className="text-xl font-bold leading-tight tracking-tight">loop.dev</h2>
         </div>
@@ -215,7 +215,7 @@ export const LandingPage: React.FC = () => {
                 <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-lg border border-border-light bg-background-subtle p-8 dark:border-gray-700 dark:bg-gray-800">
                   <div className="flex items-center gap-3 text-text-main dark:text-white">
                     <div className="flex size-10 items-center justify-center rounded bg-primary text-white shadow-lg shadow-blue-500/30">
-                      <Infinity size={24} />
+                      <InfinityIcon size={24} />
                     </div>
                     <span className="text-2xl font-bold">loop.dev</span>
                   </div>
@@ -231,7 +231,7 @@ export const LandingPage: React.FC = () => {
                     <div className="w-full h-px bg-primary absolute"></div>
                   </div>
                   <div className="relative flex size-16 items-center justify-center rounded bg-primary text-white">
-                    <Infinity size={40} />
+                    <InfinityIcon size={40} />
                   </div>
                   <span className="mt-8 font-mono text-xs text-text-muted">Safe Space & Geometry</span>
                 </div>
@@ -239,7 +239,7 @@ export const LandingPage: React.FC = () => {
                 <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-lg border border-border-light bg-text-main p-8 dark:border-gray-700 dark:bg-black">
                   <div className="flex items-center gap-3 text-white">
                     <div className="flex size-10 items-center justify-center rounded bg-white text-black">
-                      <Infinity size={24} />
+                      <InfinityIcon size={24} />
                     </div>
                     <span className="text-2xl font-bold">loop.dev</span>
                   </div>
@@ -397,7 +397,7 @@ export const LandingPage: React.FC = () => {
           <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
             <div className="flex items-center gap-2">
               <div className="flex size-6 items-center justify-center rounded bg-primary text-white">
-                <Infinity size={14} />
+                <InfinityIcon size={14} />
               </div>
               <span className="font-bold text-text-main dark:text-white">loop.dev</span>
             </div>

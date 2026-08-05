@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import QueryProvider from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { DynamicThemeProvider } from "@loopdev/ui";
@@ -8,11 +7,6 @@ import { DynamicThemeProvider } from "@loopdev/ui";
 import "@loopdev/ui/styles/globals.css";
 // Los estilos locales de la app (Tailwind)
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "LoopDev OS | Marketing Studio",
@@ -29,11 +23,11 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
-      <body className={`${inter.variable} antialiased font-sans`}>
+      <body className="antialiased font-sans">
         <QueryProvider>
           <AuthProvider>
                       <DynamicThemeProvider config={{
-                        fontFamily: 'var(--font-inter)',
+                        fontFamily: 'var(--lpd-font-sans)',
                         colors: {
                           primary: '#135bec',
                           energy: '#FFD025',

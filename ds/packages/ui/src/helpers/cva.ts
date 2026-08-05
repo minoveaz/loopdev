@@ -10,7 +10,7 @@ export function cva(
   options: CVAOptions = {}
 ) {
   return (props: Record<string, string | boolean | undefined> = {}) => {
-    let classes = [base];
+    const classes = [base];
     if (options.variants) {
       for (const variant in options.variants) {
         const value = props[variant] ?? options.defaultVariants?.[variant];
