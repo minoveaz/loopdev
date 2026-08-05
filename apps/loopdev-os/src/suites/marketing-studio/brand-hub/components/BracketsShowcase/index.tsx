@@ -61,7 +61,7 @@ export const BracketsShowcase: React.FC<BracketsShowcaseProps> = () => {
               </li>
               <li className="flex items-start gap-3 text-text-muted">
                 <span className="material-symbols-outlined text-danger text-[18px]">cancel</span>
-                <LpdText size="sm"><strong>Don't:</strong> Use as a standalone logo or purely for decoration.</LpdText>
+                <LpdText size="sm"><strong>Don&apos;t:</strong> Use as a standalone logo or purely for decoration.</LpdText>
               </li>
             </ul>
           </div>

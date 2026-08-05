@@ -4,7 +4,12 @@ import React from 'react';
 import { LpdText, TechnicalStatusBadge } from '@loopdev/ui';
 
 interface InspectorHeaderProps {
-  bot: any;
+  bot: {
+    id: string;
+    pair: string;
+    strategyId: string;
+    status: string;
+  };
 }
 
 export const InspectorHeader: React.FC<InspectorHeaderProps> = ({ bot }) => {
@@ -16,7 +21,7 @@ export const InspectorHeader: React.FC<InspectorHeaderProps> = ({ bot }) => {
             {bot.pair}
           </LpdText>
           <LpdText size="xs" weight="black" className="text-primary mt-1 uppercase italic tracking-widest opacity-80">
-            {bot.id.substring(0,8)} // {bot.strategyId}
+            {bot.id.substring(0,8)}{' // '}{bot.strategyId}
           </LpdText>
         </div>
         <div className="flex flex-col items-end gap-2">
