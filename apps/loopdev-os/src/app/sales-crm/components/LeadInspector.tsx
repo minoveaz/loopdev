@@ -16,7 +16,7 @@ import {
 import { useSalesCrm } from '../context';
 
 export function LeadInspector() {
-  const { selectedLead, isInspectorOpen, closeInspector, updateLeadStage, triggerAiBudget } = useSalesCrm();
+  const { selectedLead, isInspectorOpen, closeInspector, updateLeadStage, updateLead, triggerAiBudget } = useSalesCrm();
   const [activeTab, setActiveTab] = useState<'details' | 'ai' | 'history'>('details');
   const [newNote, setNewNote] = useState('');
 
@@ -46,12 +46,16 @@ export function LeadInspector() {
 
   const handleAddNote = () => {
     if (!newNote.trim()) return;
-    selectedLead.notes = `${newNote}\n\n${selectedLead.notes}`;
-    selectedLead.history.push({
+    const updatedLead = {
+      ...selectedLead,
+      notes: `${newNote}\n\n${selectedLead.notes}`,
+      history: [...selectedLead.history, {
       date: new Date().toISOString().split('T')[0],
       action: 'Nota agregada: ' + newNote,
       actor: 'Elena Gómez (Sales)'
-    });
+      }]
+    };
+    updateLead(updatedLead);
     setNewNote('');
   };
 
@@ -263,7 +267,7 @@ export function LeadInspector() {
               <div className="flex flex-col gap-3">
                 <Heading size="xs" weight="bold" className="text-slate-400 uppercase tracking-wider">Insights del Negocio</Heading>
                 <div className="bg-slate-950/40 p-4 rounded-2xl border border-white/5 text-xs leading-relaxed text-slate-300 italic font-sans">
-                  "{selectedLead.aiInsights}"
+                  &quot;{selectedLead.aiInsights}&quot;
                 </div>
               </div>
 

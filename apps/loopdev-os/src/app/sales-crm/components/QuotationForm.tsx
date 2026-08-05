@@ -67,6 +67,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
     const emailLower = email.toLowerCase();
     const companyLower = company.toLowerCase();
 
+    queueMicrotask(() => {
     if (emailLower.includes('sanitas') || companyLower.includes('sanitas')) {
       if (activeSmartDefault !== 'sanitas') {
         setActiveSmartDefault('sanitas');
@@ -93,6 +94,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
         setNotes('');
       }
     }
+    });
   }, [email, company, activeSmartDefault]);
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -78,6 +78,7 @@ export const LeadDetailProvider: React.FC<LeadDetailProviderProps> = ({ children
 
   // Sync state if initialLead changes
   useEffect(() => {
+    queueMicrotask(() => {
     setEditedLead(initialLead);
     setIsEditing(false);
     setActiveCreator(null);
@@ -88,6 +89,7 @@ export const LeadDetailProvider: React.FC<LeadDetailProviderProps> = ({ children
     setNewCall({ outcome: 'Conectado', summary: '', date: new Date().toISOString().slice(0, 16) });
     setNewTask({ title: '', description: '', dueDate: new Date().toISOString().slice(0, 16), priority: 'medium' });
     setNewWhatsAppChat('');
+    });
   }, [initialLead]);
 
   const isReadOnly = ['won', 'lost', 'rejected', 'discarded'].includes(initialLead.stage);

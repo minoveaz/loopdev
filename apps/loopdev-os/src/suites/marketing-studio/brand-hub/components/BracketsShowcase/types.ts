@@ -1,3 +1,1 @@
-export interface BracketsShowcaseProps {
-  // For now, static content, but ready for props
-}
+export type BracketsShowcaseProps = Record<string, never>;
