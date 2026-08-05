@@ -6,8 +6,7 @@ import {
   Heading, 
   TechnicalSurface, 
   Icon, 
-  Button,
-  StatusPulse
+  Button
 } from '@loopdev/ui';
 import { useSalesCrm } from '../context';
 
@@ -87,7 +86,7 @@ export default function AiInsights() {
 
               {/* Signals and insights */}
               <div className="flex-1 max-w-xl text-xs text-slate-300 italic md:border-l border-white/5 md:pl-6">
-                "{lead.aiInsights}"
+                &quot;{lead.aiInsights}&quot;
               </div>
 
               {/* Status and Action */}

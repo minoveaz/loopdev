@@ -56,7 +56,7 @@ export const BRAND_HUB_FLYOUT_DATA: Record<string, SidebarFlyoutProps> = {
         <div className="p-3 rounded-lg bg-energy-yellow/10 border border-energy-yellow/20">
           <p className="text-[10px] text-yellow-600 dark:text-yellow-500 font-bold uppercase tracking-wider mb-1">Governance Tip</p>
           <p className="text-xs text-slate-600 dark:text-slate-400">
-            Define "Explainable Rules" to help our AI Content Engine understand the tone and visual limits of your brand.
+            Define &quot;Explainable Rules&quot; to help our AI Content Engine understand the tone and visual limits of your brand.
           </p>
         </div>
       </div>
