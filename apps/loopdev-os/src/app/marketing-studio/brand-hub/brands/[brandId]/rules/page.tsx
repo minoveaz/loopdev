@@ -2,10 +2,10 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { LpdText, Skeleton, Button, Input } from '@loopdev/ui';
+import { LpdText, Skeleton, Button } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
-import { RuleDomain, RulesEngine } from '@loopdev/contracts';
+import { RuleDomain, RulesEngine, type RuleDefinition } from '@loopdev/contracts';
 
 // Industrial Components
 import { RuleDomainRail } from '@/suites/marketing-studio/brand-hub/components/rules/RuleDomainRail';
@@ -23,7 +23,7 @@ import { LOOPDEV_RULES_ENGINE } from '@/suites/marketing-studio/brand-hub/fixtur
 export default function BrandRulesPage() {
   const params = useParams();
   const brandId = params.brandId as string;
-  const { setSelectedEntity, setInspectorOpen } = useBrandHub();
+  const { setSelectedEntity } = useBrandHub();
   
   // Data Acquisition
   const { data: brand, isLoading } = useActiveBrand(brandId);
@@ -78,7 +78,7 @@ export default function BrandRulesPage() {
     [rulesEngine, selectedRuleId]
   );
 
-  const handleSelectRule = (rule: any) => {
+  const handleSelectRule = (rule: RuleDefinition) => {
     setSelectedRuleId(rule.id);
     setSelectedEntity({
       type: 'brand.rule',
@@ -105,7 +105,7 @@ export default function BrandRulesPage() {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
         <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          // rules_engine_not_initialized
+          {'// rules_engine_not_initialized'}
         </LpdText>
       </div>
     );
@@ -137,7 +137,7 @@ export default function BrandRulesPage() {
         <RuleDomainRail 
           activeDomain={activeDomain}
           onDomainChange={setActiveDomain}
-          stats={stats as any}
+          stats={stats}
         />
 
         {/* BLOCK B: Rule List */}

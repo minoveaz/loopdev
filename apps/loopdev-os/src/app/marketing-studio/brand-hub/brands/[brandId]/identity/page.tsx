@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { LpdText, Skeleton } from '@loopdev/ui';
+import type { ToneProfile, RegulatedClaim } from '@/suites/marketing-studio/brand-hub/types';
 
 // Components (Certified Blocks)
 import { NarrativeBlock } from '@/suites/marketing-studio/brand-hub/components/NarrativeBlock';
@@ -22,7 +23,6 @@ export default function BrandIdentityPage() {
   const { setInspectorOpen, setSelectedEntity } = useBrandHub();
   
   // Local state for active tab in inspector (simulated for now)
-  const [activeInspectorTab, setActiveInspectorTab] = useState<any>('context');
 
   if (isLoading) {
     return (
@@ -49,7 +49,7 @@ export default function BrandIdentityPage() {
     setInspectorOpen(true);
   };
 
-  const handleToneClick = (profile: any) => {
+  const handleToneClick = (profile: ToneProfile) => {
     setSelectedEntity({
       type: 'identity.tone',
       id: profile.id,
@@ -58,7 +58,7 @@ export default function BrandIdentityPage() {
     setInspectorOpen(true);
   };
 
-  const handleClaimClick = (claim: any) => {
+  const handleClaimClick = (claim: RegulatedClaim) => {
     setSelectedEntity({
       type: 'identity.claim',
       id: claim.id,
@@ -79,7 +79,7 @@ export default function BrandIdentityPage() {
   if (!identity) {
     return (
       <div className="p-12 text-center border border-dashed border-border-technical rounded-3xl m-8 opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest">// brand_identity_not_initialized</LpdText>
+        <LpdText size="sm" className="font-mono uppercase tracking-widest">{'// brand_identity_not_initialized'}</LpdText>
       </div>
     );
   }

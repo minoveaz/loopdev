@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { LpdText } from '@loopdev/ui';
@@ -10,7 +10,7 @@ import {
   MOCK_BRAND_HEALTH, 
   MOCK_RECENT_EVENTS 
 } from '@/suites/marketing-studio/brand-hub/fixtures/overview-data';
-import { GovernanceDomain } from '@/suites/marketing-studio/brand-hub/types';
+import type { GovernanceDomain, BrandEvent } from '@/suites/marketing-studio/brand-hub/types';
 
 // Components
 import { BrandStatusSnapshot } from '@/suites/marketing-studio/brand-hub/components/BrandStatusSnapshot';
@@ -29,7 +29,6 @@ export default function BrandOverviewPage() {
   const router = useRouter();
   const brandId = params.brandId as string;
   const { setInspectorOpen, setSelectedEntity } = useBrandHub();
-  const [activeInspectorTab, setActiveInspectorTab] = React.useState<any>('context');
 
   // MOCK DATA SELECTION (Simulating API fetch based on ID)
   const activeBrand = brandId === '2' ? MOCK_DRAFT_BRAND : MOCK_PUBLISHED_BRAND;
@@ -45,22 +44,12 @@ export default function BrandOverviewPage() {
   // --- INTERACTION HANDLERS (The Brain Wiring) ---
 
   const handleMetricClick = (metricId: string) => {
-    // P0: Map metric ID to Inspector Tab
-    const tabMap: Record<string, string> = {
-      compliance: 'validation',
-      approvals: 'governance',
-      overrides: 'impact',
-      dependencies: 'impact'
-    };
-
     setSelectedEntity({
       type: 'brand.metric',
       id: metricId,
       name: `${metricId.charAt(0).toUpperCase() + metricId.slice(1)} Report`
     });
     
-    const targetTab = tabMap[metricId] || 'context';
-    setActiveInspectorTab(targetTab);
     setInspectorOpen(true);
   };
 
@@ -70,11 +59,10 @@ export default function BrandOverviewPage() {
       id: domainId,
       name: `${domainId.toUpperCase()} Policy`
     });
-    setActiveInspectorTab('governance');
     setInspectorOpen(true);
   };
 
-  const handleEventClick = (event: any) => {
+  const handleEventClick = (event: BrandEvent) => {
     setSelectedEntity({
       type: 'audit.event',
       id: event.id,
