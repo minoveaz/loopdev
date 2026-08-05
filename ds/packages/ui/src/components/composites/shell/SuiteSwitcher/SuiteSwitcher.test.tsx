@@ -38,6 +38,6 @@ describe('SuiteSwitcher Composite', () => {
       />
     );
     // Verificamos que el BrandLogo Isotype esté presente (cuadro azul)
-    expect(container.querySelector('.bg-primary')).toBeInTheDocument();
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 });

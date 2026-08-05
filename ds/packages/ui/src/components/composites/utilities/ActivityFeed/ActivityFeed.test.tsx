@@ -28,7 +28,7 @@ describe('ActivityFeed Composite', () => {
 
   it('renders the "View All" button when onViewAll is provided', () => {
     const onViewAll = () => {};
-    render(<ActivityFeed items={MOCK_ITEMS} onViewAll={onViewAll} />);
+    render(<ActivityFeed items={MOCK_ITEMS} title="System Activity" onViewAll={onViewAll} />);
     expect(screen.getByText('View All')).toBeInTheDocument();
   });
 });

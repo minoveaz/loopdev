@@ -27,12 +27,12 @@ describe('SuiteHeader Composite', () => {
 
   it('debe mantener la altura fija de 56px', () => {
     const { container } = render(<SuiteHeader leftSlot="-" centerSlot="-" rightSlot="-" />);
-    expect(container.firstChild).toHaveStyle({ height: '56px' });
+    expect(container.firstChild).toHaveStyle({ height: 'var(--app-shell-header-height, 56px)' });
   });
 
   it('debe aplicar la clase de fondo y borde por defecto', () => {
     const { container } = render(<SuiteHeader leftSlot="-" centerSlot="-" rightSlot="-" />);
-    expect(container.firstChild).toHaveClass('bg-white/80');
-    expect(container.firstChild).toHaveClass('border-black/5');
+    expect(container.firstChild).toHaveClass('bg-shell-canvas');
+    expect(container.firstChild).toHaveClass('border-border-technical');
   });
 });

@@ -51,10 +51,10 @@ describe('Input Industrial Certification (Front_Certified 🔵)', () => {
   it('US-04: applies correct classes for each variant', () => {
     const { container, rerender } = render(<Input variant="filled" />);
     // Buscamos el wrapper del input (el que tiene la clase de fondo)
-    expect(container.querySelector('.bg-slate-100')).toBeInTheDocument();
+    expect(container.querySelector('.bg-background-subtle')).toBeInTheDocument();
 
     rerender(<Input variant="outline" />);
-    expect(container.querySelector('.bg-white')).toBeInTheDocument();
+    expect(container.querySelector('.bg-surface-light')).toBeInTheDocument();
   });
 
   // US-05: Multi-tenant Branding (Focus)
@@ -65,7 +65,7 @@ describe('Input Industrial Certification (Front_Certified 🔵)', () => {
     
     // Verificamos que el contenedor del input (el wrapper) tiene la clase de anillo
     const wrapper = input.parentElement;
-    expect(wrapper?.className).toContain('ring-blue-500');
+    expect(wrapper?.className).toContain('ring-primary/20');
   });
 
 });

@@ -64,9 +64,9 @@ export const useAppShell = (props: AppShellProps) => {
     return {
       '--app-shell-nav-width': navMode === 'open' ? expandedNavWidth : (navMode === 'rail' ? railWidth : '0px'),
       '--app-shell-context-width': contextMode === 'open' ? expandedContextWidth : '0px',
-      '--app-shell-header-height': '56px',
+      '--app-shell-header-height': isCompact ? 'var(--lpd-space-12)' : '56px',
       '--app-shell-footer-height': isCompact ? 'var(--lpd-space-8)' : 'var(--lpd-space-10)',
-      '--app-shell-main-padding': '0px', // Eliminamos el marco para permitir layouts industriales infinitos
+      '--app-shell-main-padding': isCompact ? 'var(--lpd-space-4)' : '0px',
       // Z-Indexes Diferenciados (Industrial Scale)
       '--app-shell-z-backdrop': '4000',
       '--app-shell-z-nav': '4100',
