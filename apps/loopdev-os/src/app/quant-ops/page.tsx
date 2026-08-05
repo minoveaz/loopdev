@@ -7,7 +7,6 @@ import {
   Heading, 
   TechnicalSurface, 
   StatusPulse, 
-  Icon, 
   MetricCard,
   PositionsDataTable,
   ActivityStream,
@@ -22,6 +21,7 @@ import { usePortfolioStats } from '@/hooks/trading/usePortfolioStats';
 import { useBotFleet } from '@/hooks/trading/useBotFleet';
 import { useActivityStream } from '@/hooks/trading/useActivityStream';
 import { useQuantOps } from './context';
+import type { BotStatus } from '@loopdev/contracts';
 
 export default function QuantOpsOverview() {
   const [isKillSwitchConfirmOpen, setIsKillSwitchConfirmOpen] = useState(false);
@@ -41,7 +41,7 @@ export default function QuantOpsOverview() {
   const { bots, toggleStatus, updateBotTargets, isLoading } = useBotFleet();
   const { data: activity = [], isLoading: isActivityLoading } = useActivityStream();
 
-  const handleToggle = async (id: string, status: any) => {
+  const handleToggle = async (id: string, status: BotStatus) => {
     await toggleStatus({ id, status });
     queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
   };
@@ -143,7 +143,7 @@ export default function QuantOpsOverview() {
       {/* 4. POSITION LEDGER */}
       <section className="flex flex-col gap-4 mt-8">
         <Heading size="sm" weight="bold" className="uppercase italic tracking-tighter opacity-60">Live_Position_Ledger</Heading>
-        <PositionsDataTable data={activePositions as any} onViewDetail={(id) => openBotInspector(id)} />
+        <PositionsDataTable data={activePositions} onViewDetail={(id) => openBotInspector(id)} />
       </section>
 
       {/* 5. ACTIVITY LOG */}
