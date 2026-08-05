@@ -68,7 +68,7 @@ export const isValidMetricsSnapshot = (data: unknown): data is StrategyMetricsSn
 export const validateMetricValue = (
   value: unknown,
   type: 'number' | 'string' | 'boolean',
-  defaultValue: any = null
+  defaultValue: unknown = null
 ) => {
   if (value === null || value === undefined) {
     return defaultValue;
@@ -104,16 +104,17 @@ export const validateMetricValue = (
 export const safeGetMetricValue = (
   snapshot: StrategyMetricsSnapshot | null,
   path: string,
-  defaultValue: any = null
+  defaultValue: unknown = null
 ) => {
   if (!snapshot) return defaultValue;
 
   const keys = path.split('.');
-  let current: any = snapshot;
+  let current: unknown = snapshot;
 
   for (const key of keys) {
     if (current == null) return defaultValue;
-    current = current[key];
+    if (typeof current !== 'object') return defaultValue;
+    current = (current as Record<string, unknown>)[key];
   }
 
   return current ?? defaultValue;

@@ -59,6 +59,7 @@ interface RawStrategy {
   pairs: string[];
   version: number;
   created_at: string;
+  trading_style?: Strategy['tradingStyle'];
 }
 
 interface BacktestResult {
@@ -98,7 +99,7 @@ export const useStrategies = () => {
       if (error) throw error;
 
       // Map raw data to Strategy interface
-      return (data || []).map((raw: any) => ({
+      return (data || []).map((raw: RawStrategy) => ({
         id: raw.id,
         name: raw.name,
         exchange: raw.exchange_provider || 'unknown',
@@ -126,7 +127,7 @@ export const useStrategies = () => {
         const response = await fetch('http://127.0.0.1:8000/strategies/registry');
         const data = await response.json();
         return data.success ? data.registry : [];
-      } catch (err) {
+      } catch {
         console.warn('Quant Core Engine not reachable at 127.0.0.1:8000. Using fallback.');
         return [];
       }
@@ -256,7 +257,7 @@ export const useStrategies = () => {
     mutationFn: async ({ id, params }: { id: string; params: Partial<StrategyParams> }) => {
       console.debug('[updateStrategy] Updating:', id);
 
-      const updatePayload: any = {
+      const updatePayload: Record<string, unknown> = {
         updated_at: new Date().toISOString()
       };
 
