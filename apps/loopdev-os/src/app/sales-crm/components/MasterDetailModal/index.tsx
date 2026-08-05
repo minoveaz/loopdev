@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   TechnicalSurface, 
-  LpdText, 
   Icon, 
   Button,
   Input,
@@ -27,7 +26,7 @@ export function MasterDetailModal({ isOpen, lead, onClose }: MasterDetailModalPr
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    queueMicrotask(() => setMounted(true));
   }, []);
 
   if (!isOpen || !lead) return null;
@@ -118,13 +117,15 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (activeCreator === 'call') {
-      setIsTimerRunning(true);
-      setCallTimer(0);
+      queueMicrotask(() => {
+        setIsTimerRunning(true);
+        setCallTimer(0);
+      });
       interval = setInterval(() => {
         setCallTimer(prev => prev + 1);
       }, 1000);
     } else {
-      setIsTimerRunning(false);
+      queueMicrotask(() => setIsTimerRunning(false));
     }
     return () => clearInterval(interval);
   }, [activeCreator]);
@@ -419,7 +420,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           <button
                             key={pill.id}
                             type="button"
-                            onClick={() => setNoteCategory(pill.id as any)}
+                            onClick={() => setNoteCategory(pill.id)}
                             className={`px-3 py-1 rounded-xl border text-[11px] font-semibold transition-all ${
                               isSelected 
                                 ? `${pill.colorClass} border-2 shadow-sm font-bold scale-[1.03]` 
@@ -678,7 +679,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         <button
                           key={pill.id}
                           type="button"
-                          onClick={() => setNewTask(prev => ({ ...prev, priority: pill.id as any }))}
+                          onClick={() => setNewTask(prev => ({ ...prev, priority: pill.id }))}
                           className={`px-3 py-1 rounded-xl border text-[11px] font-semibold transition-all ${
                             isSelected 
                               ? `${pill.colorClass} border-2 shadow-sm font-bold scale-[1.03]` 

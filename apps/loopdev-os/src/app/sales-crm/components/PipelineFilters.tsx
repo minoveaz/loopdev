@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { TechnicalSurface, Icon, Button, Input, Select, FilterDropdown } from '@loopdev/ui';
 import { AVAILABLE_ASSIGNEES, AVAILABLE_LABELS, type LeadLabel } from '../context';
 
@@ -19,6 +19,15 @@ interface PipelineFiltersProps {
   onLabelFilterChange: (labels: LeadLabel[]) => void;
   onClearFilters: () => void;
 }
+
+type CompanyFilter = PipelineFiltersProps['companyFilter'];
+type TimeFilter = PipelineFiltersProps['timeFilter'];
+
+const isCompanyFilter = (value: string): value is CompanyFilter =>
+  value === 'all' || value === 'Sanitas' || value === 'Adeslas';
+
+const isTimeFilter = (value: string): value is TimeFilter =>
+  value === 'all' || value === '7d' || value === '14d' || value === '30d';
 
 export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
   searchTerm,
@@ -78,7 +87,9 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
           <Select 
             id="companyFilter" 
             value={companyFilter} 
-            onChange={(e) => onCompanyFilterChange(e.target.value as any)} 
+            onChange={(e) => {
+              if (isCompanyFilter(e.target.value)) onCompanyFilterChange(e.target.value);
+            }} 
             size="sm"
           >
             <option value="all" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Compañía</option>
@@ -111,7 +122,9 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
           <Select 
             id="timeFilter" 
             value={timeFilter} 
-            onChange={(e) => onTimeFilterChange(e.target.value as any)} 
+            onChange={(e) => {
+              if (isTimeFilter(e.target.value)) onTimeFilterChange(e.target.value);
+            }} 
             size="sm"
           >
             <option value="all" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Todos</option>
