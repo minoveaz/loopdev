@@ -12,8 +12,6 @@ class ToastStore {
   private subscribers: Subscriber[] = [];
   
   // Lógica de Throttle para estabilidad (Minor Fix)
-  private lastToastTime = 0;
-  private readonly THROTTLE_MS = 200; // Máximo 5 toasts por segundo
 
   subscribe(subscriber: Subscriber) {
     this.subscribers.push(subscriber);
@@ -27,15 +25,9 @@ class ToastStore {
   }
 
   add = (toastData: Omit<Toast, 'id'>): string => {
-    const now = Date.now();
     const { dedupeKey, tenantId, ...rest } = toastData;
 
     // 1. STABILITY GATE: Throttle (Evita que bucles infinitos bloqueen la UI)
-    if (now - this.lastToastTime < this.THROTTLE_MS && !dedupeKey) {
-      console.warn(`[TOAST_THROTTLE] Ignoring toast burst for stability.`);
-      return 'throttled';
-    }
-    this.lastToastTime = now;
 
     // 2. TELEMETRY: Reporte automático de errores
     if (toastData.variant === 'error') {
