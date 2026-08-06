@@ -443,6 +443,17 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 
 **Salida:** mapa de capacidades, alcance aprobado, responsables y lista de riesgos.
 
+#### Inventario inicial de capacidades VitaBlue → LoopDev
+
+| Capacidad | Decisión actual | Responsable / siguiente paso |
+|---|---|---|
+| CRM | LoopDev será la fuente de verdad. La implementación de CRM de VitaBlue se desechará cuando el otro equipo complete la versión de LoopDev. | Otro equipo; validar contrato y modelo final en Fase 4/6. |
+| Marketing Studio | Se trasladará la implementación más avanzada de VitaBlue a LoopDev, conservando LoopDev como plataforma SaaS. | Otro equipo; comparar módulos y migrar por contrato. |
+| Operaciones | Pendiente de inventario. Incluye normalmente onboarding, verificación, emisión, renovaciones, tareas y estados postventa. | Inventariar VitaBlue antes de diseñar el módulo. |
+| Cotizaciones | Pendiente de inventario. Incluye solicitudes, cálculo/comparación de aseguradoras, versiones y estado de la oportunidad. | Inventariar wizard y lógica existente de VitaBlue. |
+| WhatsApp/comunicaciones | Se integrará posteriormente mediante la base que desarrolla el otro equipo. LoopDev deberá consumir contratos/eventos estables, no acoplarse a su implementación interna. | Otro equipo; definir contrato de integración en Fase 4/8. |
+| Documentos y seguimiento | Pendiente de inventario. Incluye archivos del cliente, OCR/verificación, timeline, notas, tareas y recordatorios. | Inventariar componentes y flujos existentes antes de construirlo. |
+
 ### Fase 1 — Auditoría y saneamiento del repositorio
 
 - [x] Revisar encoding UTF-8 de código y documentación; la deuda de mojibake heredada queda identificada.
