@@ -50,6 +50,7 @@ const asNumberArray = (value: unknown): number[] =>
  */
 export const useBotFleet = () => {
   const queryClient = useQueryClient();
+  const invalidateFleet = () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
 
   const {
     data: bots = [],
@@ -180,7 +181,7 @@ export const useBotFleet = () => {
         .eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] }),
+    onSuccess: invalidateFleet,
   });
 
   const updateBotTargets = useMutation({
@@ -191,7 +192,7 @@ export const useBotFleet = () => {
         .eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] }),
+    onSuccess: invalidateFleet,
   });
 
   const deployBot = useMutation({
@@ -213,9 +214,7 @@ export const useBotFleet = () => {
       const { error } = await supabase.from('quant_bots').insert([payload]);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
-    },
+    onSuccess: invalidateFleet,
   });
 
   const updateBot = useMutation({
@@ -234,9 +233,7 @@ export const useBotFleet = () => {
       const { error } = await supabase.from('quant_bots').update(payload).eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
-    },
+    onSuccess: invalidateFleet,
   });
 
   const executeCommand = useMutation({
@@ -247,9 +244,7 @@ export const useBotFleet = () => {
         .eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
-    },
+    onSuccess: invalidateFleet,
   });
 
   const deleteBot = useMutation({
@@ -257,9 +252,7 @@ export const useBotFleet = () => {
       const { error } = await supabase.from('quant_bots').delete().eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
-    },
+    onSuccess: invalidateFleet,
   });
 
   return {
