@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import QueryProvider from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { OrganizationProvider } from "@/providers/OrganizationProvider";
+import { OrganizationRouteGuard } from "@/components/layout/OrganizationRouteGuard";
 import { DynamicThemeProvider } from "@loopdev/ui";
 
 // Importamos los estilos globales de nuestro Design System
@@ -28,6 +29,7 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             <OrganizationProvider>
+            <OrganizationRouteGuard>
                       <DynamicThemeProvider config={{
                         fontFamily: 'var(--lpd-font-sans)',
                         colors: {
@@ -36,6 +38,7 @@ export default function RootLayout({
                         }
                       }}>              {children}
             </DynamicThemeProvider>
+            </OrganizationRouteGuard>
             </OrganizationProvider>
           </AuthProvider>
         </QueryProvider>
