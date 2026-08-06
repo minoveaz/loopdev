@@ -30,6 +30,7 @@ import {
 import { SalesCrmProvider, useSalesCrm } from './context';
 import { AiBudgetGenerator } from './components/AiBudgetGenerator';
 import { MasterDetailModal } from './components/MasterDetailModal';
+import { daysSinceContact, isLeadStale } from './utils/leadActivity';
 
 const SALES_CRM_SCHEMA: NavigationSchema = {
   version: '1.0',
@@ -112,30 +113,17 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Generate stale lead alerts notifications in real-time
-    const staleAlerts = leads
-      .filter((lead) => {
-        if (lead.stage !== 'contacted') return false;
-        const lastActivityDate = new Date(lead.lastContactDate);
-        const now = new Date();
-        const diffDays = Math.ceil(
-          Math.abs(now.getTime() - lastActivityDate.getTime()) / (1000 * 60 * 60 * 24),
-        );
-        return diffDays > 5;
-      })
-      .map((lead) => {
-        const diffDays = Math.ceil(
-          Math.abs(new Date().getTime() - new Date(lead.lastContactDate).getTime()) /
-            (1000 * 60 * 60 * 24),
-        );
-        return {
-          id: `stale-${lead.id}`,
-          title: `Lead Estancado: ${lead.name}`,
-          description: `El lead de ${lead.company} lleva ${diffDays} días sin contacto.`,
-          timestamp: `${diffDays}d ago`,
-          type: 'warning' as const,
-          read: false,
-        };
-      });
+    const staleAlerts = leads.filter(isLeadStale).map((lead) => {
+      const diffDays = daysSinceContact(lead.lastContactDate);
+      return {
+        id: `stale-${lead.id}`,
+        title: `Lead Estancado: ${lead.name}`,
+        description: `El lead de ${lead.company} lleva ${diffDays} días sin contacto.`,
+        timestamp: `${diffDays}d ago`,
+        type: 'warning' as const,
+        read: false,
+      };
+    });
 
     queueMicrotask(() => setSyncedNotifications(staleAlerts));
   }, [leads]);
