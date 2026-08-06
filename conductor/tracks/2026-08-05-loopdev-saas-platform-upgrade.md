@@ -526,7 +526,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - Estado actual: Supabase CLI `2.111.0` está instalado. La migración fundacional `20260806000000_platform_core_foundation.sql` está preparada como cambio aditivo y se validará exclusivamente en el workflow de GitHub Actions.
 
 - [x] Crear migraciones para `organizations` y `organization_memberships`.
-- [ ] Añadir `roles`, `permissions`, `role_permissions` y scopes.
+- [x] Añadir `roles`, `permissions`, `role_permissions` y scopes como catálogo/matriz aditiva; la asignación continúa viviendo en `organization_memberships.role`.
 - [ ] Evolucionar `brands` para que dependa formalmente de `organization_id`.
 - [ ] Crear `workspaces` y configuración de suites habilitadas.
 - [x] Crear funciones SQL de membresía y autorización.

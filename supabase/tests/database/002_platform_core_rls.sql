@@ -1,6 +1,6 @@
 begin;
 
-select plan(18);
+select plan(24);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -108,6 +108,38 @@ select ok(
 select ok(
   not public.is_organization_member('00000000-0000-4000-9000-000000000001'),
   'an authenticated user without membership is denied by the helper'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
+select ok(
+  public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'crm.manage'),
+  'owner receives the CRM management permission'
+);
+select ok(
+  exists (select 1 from public.permissions where key = 'communications.send'),
+  'the permission catalog contains communication capabilities'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000002', true);
+select ok(
+  public.has_organization_permission('00000000-0000-4000-9000-000000000002', 'crm.read'),
+  'viewer receives read-only CRM access'
+);
+select ok(
+  not public.has_organization_permission('00000000-0000-4000-9000-000000000002', 'crm.manage'),
+  'viewer is denied CRM management access'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000003', true);
+select ok(
+  public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'members.manage'),
+  'admin receives membership management access'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000004', true);
+select ok(
+  not public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'members.manage'),
+  'agent is denied membership management access'
 );
 
 select * from finish();
