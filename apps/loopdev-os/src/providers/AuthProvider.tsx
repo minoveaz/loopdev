@@ -4,10 +4,12 @@ import { createContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { useRouter, usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { OrganizationMembershipSchema, type OrganizationMembership } from '@loopdev/contracts';
 
 export type AuthContextType = {
   user: User | null;
   session: Session | null;
+  memberships: OrganizationMembership[];
   isLoading: boolean;
   signOut: () => Promise<void>;
 };
@@ -26,11 +28,45 @@ const getSupabaseInstance = () => {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [memberships, setMemberships] = useState<OrganizationMembership[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
   const router = useRouter();
   const pathname = usePathname();
   const supabase = getSupabaseInstance();
+
+  const loadMemberships = async (userId: string | undefined) => {
+    if (!userId) {
+      setMemberships([]);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('organization_memberships')
+      .select('organization_id, user_id, role, created_at')
+      .eq('user_id', userId);
+
+    if (error) {
+      // The Platform Core migration is deployed through CI first. Until it is
+      // applied to the remote project, authentication must remain usable.
+      console.warn('Memberships are not available yet:', error.message);
+      setMemberships([]);
+      return;
+    }
+
+    const parsedMemberships = (data ?? [])
+      .map((row) =>
+        OrganizationMembershipSchema.safeParse({
+          organizationId: row.organization_id,
+          userId: row.user_id,
+          role: row.role,
+          createdAt: row.created_at,
+        }),
+      )
+      .flatMap((result) => (result.success ? [result.data] : []));
+
+    setMemberships(parsedMemberships);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -43,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isMounted) {
           setSession(initialSession);
           setUser(initialSession?.user ?? null);
+          void loadMemberships(initialSession?.user.id);
           setIsLoading(false);
         }
 
@@ -52,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (isMounted) {
               setSession(session);
               setUser(session?.user ?? null);
+              void loadMemberships(session?.user.id);
 
               // Protección de Rutas (Middleware Client-Side Backup)
               if (event === 'SIGNED_OUT') {
@@ -90,6 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = {
     user,
     session,
+    memberships,
     isLoading,
     signOut,
   };

@@ -546,7 +546,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - Aplicar reglas más estrictas de `dependency-cruiser`.
 - Incorporar Playwright para login, navegación, permisos y estados de acceso multiempresa.
 
-- [ ] Refactorizar `AuthProvider` para cargar membresías.
+- [x] Refactorizar `AuthProvider` para cargar membresías tipadas; mantiene fallback vacío hasta desplegar Platform Core en Supabase remoto.
 - [ ] Crear `OrganizationProvider`.
 - [ ] Crear `BrandProvider` y selector de marca cuando aplique.
 - [ ] Crear `WorkspaceProvider`.
