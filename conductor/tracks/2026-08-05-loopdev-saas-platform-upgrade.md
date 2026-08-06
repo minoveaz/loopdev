@@ -435,11 +435,11 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 - [x] Confirmar que LoopDev es el repositorio base del SaaS.
 - [x] Confirmar que VitaBlue y Protege tu Salud son marcas de Estar Protegidos.
 - [x] Confirmar que Zona Médica usará únicamente Health OS en la primera etapa.
-- [ ] Inventariar rutas, módulos, tablas, funciones y secretos existentes en LoopDev.
-- [ ] Inventariar las capacidades que deben migrarse desde VitaBlue.
-- [ ] Identificar datos demo, tablas Quant Ops y migraciones experimentales.
+- [x] Inventariar rutas, módulos, tablas, funciones y secretos existentes en LoopDev; ver `conductor/inventory-loopdev.md`.
+- [x] Inventariar las capacidades que deben migrarse desde VitaBlue; las capacidades conocidas y los módulos aún desconocidos están clasificados en la matriz de capacidades.
+- [x] Identificar datos demo, tablas Quant Ops y migraciones experimentales; los límites y riesgos quedan documentados en `conductor/inventory-loopdev.md`.
 - [x] Definir qué partes de VitaBlue seguirán siendo web pública: landing, SEO, blog, formularios/wizard y captación permanecen en VitaBlue; el backoffice se traslada a LoopDev.
-- [ ] Crear un registro de decisiones arquitectónicas y riesgos.
+- [x] Crear un registro de decisiones arquitectónicas y riesgos en este track y en `conductor/inventory-loopdev.md`.
 
 **Salida:** mapa de capacidades, alcance aprobado, responsables y lista de riesgos.
 
