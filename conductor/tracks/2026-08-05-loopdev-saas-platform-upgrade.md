@@ -1101,6 +1101,23 @@ pnpm start:loopdev:ui
 
 El arranque estándar levanta LoopDev OS usando el proyecto remoto Supabase de desarrollo configurado en `.env.local`; no requiere Docker. `start:loopdev:local` permite activar el stack Supabase local cuando Docker esté disponible. El script es multiplataforma, muestra las URLs locales y detiene los procesos al recibir `Ctrl+C`. Cualquier nuevo servicio local debe añadirse a este script y documentarse en `CONTRIBUTING.md`.
 
+### Fase 1D — Eliminacion total de deuda estatica
+
+Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la deuda detectada por Knip, jscpd y los chequeos de dependencias quede a cero o tenga una justificacion tecnica explicita aprobada.
+
+- [ ] Ejecutar Knip por workspace y clasificar cada archivo no usado.
+- [ ] Eliminar archivos confirmados como muertos y registrar excepciones justificadas.
+- [ ] Resolver los imports no encontrados y dependencias no listadas.
+- [ ] Eliminar dependencias y devDependencies sin uso confirmado.
+- [ ] Revisar exports y tipos exportados no consumidos; conservar solo APIs publicas documentadas.
+- [ ] Resolver exports duplicados y entradas duplicadas de barril.
+- [ ] Revisar los clones de jscpd por porcentaje y tamano, extrayendo solo semantica realmente compartida.
+- [ ] Repetir la auditoria hasta obtener Knip limpio y jscpd dentro del umbral acordado.
+- [ ] Actualizar `quality:static`, CI y el track con baseline cero.
+- [ ] Ejecutar typecheck, lint, tests, build y quality gates completos.
+
+**Criterio de salida:** Knip no reporta archivos, dependencias, imports ni exports no justificados; jscpd no reporta duplicacion evitable; todos los quality gates pasan y la deuda restante, si existe, esta documentada como API publica o excepcion tecnica.
+
 ## Decisiones pendientes
 
 - Confirmar el nombre definitivo del tenant de Estar Protegidos.
