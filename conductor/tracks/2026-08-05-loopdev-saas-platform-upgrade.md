@@ -525,14 +525,14 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - El workflow `.github/workflows/supabase.yml` levanta Supabase temporalmente solo ante cambios en `supabase/**`, en pushes de `develop`/`main` y en la ejecución nocturna; el CI general no se ralentiza en cada push de código.
 - Estado actual: Supabase CLI `2.111.0` está instalado. La migración fundacional `20260806000000_platform_core_foundation.sql` está preparada como cambio aditivo y se validará exclusivamente en el workflow de GitHub Actions.
 
-- [ ] Crear migraciones para `organizations` y `organization_memberships`.
+- [x] Crear migraciones para `organizations` y `organization_memberships`.
 - [ ] Añadir `roles`, `permissions`, `role_permissions` y scopes.
 - [ ] Evolucionar `brands` para que dependa formalmente de `organization_id`.
 - [ ] Crear `workspaces` y configuración de suites habilitadas.
-- [ ] Crear funciones SQL de membresía y autorización.
+- [x] Crear funciones SQL de membresía y autorización.
 - [ ] Añadir índices y constraints de organización y marca.
-- [ ] Activar RLS con políticas verificables.
-- [ ] Crear pruebas de matriz RLS: propietario, admin, agente, viewer, usuario externo.
+- [x] Activar RLS con políticas verificables.
+- [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner y viewer; ampliar a admin, agent y usuario externo al cerrar el modelo de permisos.
 - [ ] Eliminar políticas públicas heredadas.
 
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
