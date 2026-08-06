@@ -19,6 +19,7 @@ import {
 } from '@loopdev/ui';
 import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { SuiteHeaderLeft } from '@/components/layout/SuiteHeaderLeft';
+import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, type NavigationSchema } from '@loopdev/contracts';
@@ -227,30 +228,22 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
           }
           centerSlot={<CommandBarTrigger onOpen={() => {}} />}
           rightSlot={
-            <div className="flex items-center gap-4">
-              <SystemStatus state="operational" id={user?.id} label="IPS" />
-              <Divider orientation="vertical" thickness="technical" className="h-4" />
-
-              <NotificationCenter
-                notifications={notifications}
-                unreadCount={unreadCount}
-                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-                onMarkAsRead={markAsRead}
-                onMarkAllRead={markAllAsRead}
-                onRemove={removeNotification}
-                onClear={clearAll}
-                onViewAll={() => console.log('Open Notifications')}
-              />
-
-              <ThemeToggle variant="technical" size="md" />
-              <UserMenu
-                userName={user?.email || 'Medical User'}
-                userEmail={user?.email}
-                userRole="IPS_Clinician"
-                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-                onLogout={() => signOut()}
-              />
-            </div>
+            <SuiteHeaderRight
+              userName={user?.email || 'Medical User'}
+              userEmail={user?.email}
+              userRole="IPS_Clinician"
+              systemLabel="IPS"
+              userId={user?.id}
+              notifications={notifications}
+              unreadCount={unreadCount}
+              onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
+              onMarkAsRead={markAsRead}
+              onMarkAllAsRead={markAllAsRead}
+              onRemove={removeNotification}
+              onClear={clearAll}
+              onLogout={() => signOut()}
+              onViewAll={() => console.log('Open Notifications')}
+            />
           }
         />
       }
