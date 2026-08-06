@@ -6,7 +6,7 @@ import { Icon } from '../../../../atoms/surfaces/Icon';
 import { PulseSparkline } from '../../../../atoms/indicators/PulseSparkline';
 import { NextEvalTimer } from '../../../../atoms/indicators/NextEvalTimer';
 import { cn } from '../../../../../helpers/cn';
-import { TacticalMetricCell } from './TacticalMetricCell';
+import { BotTacticalIndicators } from './BotTacticalIndicators';
 import { BotPnlBadge } from './BotPnlBadge';
 import { BotTriggerDistance } from './BotTriggerDistance';
 import { BotConfluence } from './BotConfluence';
@@ -99,56 +99,13 @@ export const WaitingState = ({ bot }: WaitingStateProps) => {
       {/* TACTICAL INDICATORS SNAPSHOT (ADAPTATIVO) */}
       <div className="grid grid-cols-4 gap-2">
         {/* Indicador 1: Principal (RSI o ATR) */}
-        <TacticalMetricCell
-          alert
-          label={bot.logicSnapshot?.rsi !== undefined ? 'RSI_14' : 'ATR_VOL'}
-          value={
-            bot.logicSnapshot?.rsi !== undefined
-              ? bot.logicSnapshot.rsi.toFixed(1)
-              : bot.logicSnapshot?.atr_vol || bot.logicSnapshot?.atr || '--'
-          }
-        />
+        <BotTacticalIndicators bot={bot} alert />
 
         {/* Indicador 2: Distancia (SMA_DIST o BB_DIST) */}
-        <TacticalMetricCell
-          alert
-          label={bot.logicSnapshot?.bb_dist_up !== undefined ? 'BB_UP' : 'SMA_DIST'}
-          value={
-            bot.logicSnapshot?.bb_dist_up !== undefined
-              ? `${bot.logicSnapshot.bb_dist_up}%`
-              : bot.logicSnapshot?.sma_dist !== undefined
-                ? `${bot.logicSnapshot.sma_dist}%`
-                : '--'
-          }
-        />
 
         {/* Indicador 3: Estado de Mercado (VOL o BB_LOW) */}
-        <TacticalMetricCell
-          alert
-          label={bot.logicSnapshot?.bb_dist_low !== undefined ? 'BB_LOW' : 'VOL_STAT'}
-          value={
-            bot.logicSnapshot?.bb_dist_low !== undefined
-              ? `${bot.logicSnapshot.bb_dist_low}%`
-              : bot.logicSnapshot?.vol_status || 'LOW'
-          }
-          valueClassName={
-            bot.logicSnapshot?.vol_status === 'HIGH' ? 'text-emerald-500' : 'text-text-muted'
-          }
-        />
 
         {/* Indicador 4: Sesión/Bias */}
-        <TacticalMetricCell
-          alert
-          label="BIAS"
-          value={bot.logicSnapshot?.bias || 'STABLE'}
-          valueClassName={
-            bot.logicSnapshot?.bias === 'BULLISH'
-              ? 'text-emerald-500'
-              : bot.logicSnapshot?.bias === 'BEARISH'
-                ? 'text-rose-500'
-                : 'text-amber-500'
-          }
-        />
       </div>
 
       {/* SPARKLINE: Confluencia caliente */}
