@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { Heading, LpdText, Icon, TechnicalCanvas, BrandLogo, UIKitIllustration, EngineeringSeal, SuiteCard, ThemeToggle, SystemStatus, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
 import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
+import { OrganizationSwitcher } from '@/components/layout/OrganizationSwitcher';
 
 export default function LaunchpadPage() {
   const { user } = useAuth();
@@ -37,6 +38,7 @@ export default function LaunchpadPage() {
 
           {/* System Status & Theme Toggle */}
           <div className="flex items-center gap-4">
+            <OrganizationSwitcher />
             <SystemStatus state="operational" id={user?.id} label="ID" />
             
             <ThemeToggle variant="technical" size="md" />
