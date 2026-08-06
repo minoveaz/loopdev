@@ -1081,6 +1081,14 @@ Antes de activar los gates obligatorios se ha instalado el monorepo con Node 20 
 - El build de `loopdev-os` todavía requiere sanear contratos de Quant Ops (`useBotFleet`, `BotCardItem`, inspectores y formularios) antes de poder exigir el build productivo como gate.
 - El workflow CI ya está creado para ejecutar instalación congelada, lint, typecheck, tests con cobertura y build en Pull Requests y en `develop`/`main`. No se debe activar la protección definitiva de ramas hasta cerrar este baseline.
 
+### Cierre de Fase 1C — baseline de deuda heredada (2026-08-06)
+
+Storybook queda fuera del producto, del arranque local y de CI. La revision de los componentes `.legacy` identifico 164 archivos versionados sin consumidores activos; se conservan como archivo historico y no se incluyen en nuevas superficies de producto.
+
+El baseline de Knip queda registrado con 329 archivos no usados, 2 dependencias, 1 devDependency, 14 dependencias no listadas, 2 imports no resueltos, 8 exports, 36 tipos exportados y 4 exports duplicados. El baseline de jscpd queda en 115 clones, 1.595 lineas duplicadas (1,83%) y 9.819 tokens duplicados (1,99%). Son deuda preexistente clasificada; no se realizan eliminaciones o extracciones mecanicas sin validacion semantica.
+
+Con esta clasificacion, la Fase 1C queda cerrada y la siguiente fase es Platform Core y tenancy real.
+
 ## Arranque local reproducible
 
 Los aliases personales de cada ordenador no son la fuente de verdad. El repositorio incluye `scripts/dev/start-loopdev.mjs` y comandos pnpm compartidos:
