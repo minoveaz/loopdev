@@ -305,26 +305,7 @@ class Backtester:
         """Calculate backtest metrics"""
         
         if len(trades) == 0:
-            return BacktestResults(
-                total_trades=0,
-                winning_trades=0,
-                losing_trades=0,
-                win_rate_pct=0,
-                profit_factor=0,
-                avg_win_pct=0,
-                avg_loss_pct=0,
-                total_profit_pct=0,
-                sharpe_ratio=0,
-                max_drawdown_pct=0,
-                avg_trade_duration_hours=0,
-                trades=[],
-                strategy_name=self.strategy.__class__.__name__,
-                pair=self.pair,
-                timeframe=self.timeframe,
-                start_date=start_date,
-                end_date=end_date,
-                total_days=(end_date - start_date).days,
-            )
+            return self._create_empty_results(start_date, end_date)
         
         # Trade metrics
         total_trades = len(trades)
@@ -417,8 +398,8 @@ class Backtester:
     
     def _create_empty_results(
         self,
-        start_date: str,
-        end_date: str
+        start_date: str | datetime,
+        end_date: str | datetime
     ) -> BacktestResults:
         """Create empty results when no trades generated"""
         return BacktestResults(
@@ -437,9 +418,9 @@ class Backtester:
             strategy_name=self.strategy.__class__.__name__,
             pair=self.pair,
             timeframe=self.timeframe,
-            start_date=datetime.fromisoformat(start_date),
-            end_date=datetime.fromisoformat(end_date),
-            total_days=0,
+            start_date=start_date if isinstance(start_date, datetime) else datetime.fromisoformat(start_date),
+            end_date=end_date if isinstance(end_date, datetime) else datetime.fromisoformat(end_date),
+            total_days=((end_date if isinstance(end_date, datetime) else datetime.fromisoformat(end_date)) - (start_date if isinstance(start_date, datetime) else datetime.fromisoformat(start_date))).days,
         )
     
     async def save_results(self, results: BacktestResults, filepath: Optional[str] = None):
