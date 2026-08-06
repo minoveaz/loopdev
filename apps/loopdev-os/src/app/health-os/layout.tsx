@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { 
-  AppShell, 
-  SuiteSidebar, 
+import {
+  AppShell,
+  SuiteSidebar,
   ThemeToggle,
   SystemStatus,
   UserAvatar,
@@ -16,12 +16,8 @@ import {
   UserMenu,
   NotificationCenter,
   Divider,
-  LayoutProvider,
-  TenantProvider,
-  BlueprintBackground,
-  ToastViewport,
-  ModuleWorkspace,
 } from '@loopdev/ui';
+import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, type NavigationSchema } from '@loopdev/contracts';
@@ -120,16 +116,10 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
-  
-  const { 
-    notifications, 
-    unreadCount, 
-    markAsRead, 
-    markAllAsRead, 
-    removeNotification,
-    clearAll 
-  } = useNotifications([]);
-  
+
+  const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } =
+    useNotifications([]);
+
   const [navMode, setNavMode] = useState<NavMode>('expanded');
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
@@ -137,12 +127,12 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   // --- FORCE LIGHT MODE & EMERALD GREEN THEME ---
   useEffect(() => {
     const root = document.documentElement;
-    
+
     // 1. Guardar estado del tema oscuro actual y forzar Tema Claro
     const hadDark = root.classList.contains('dark');
     root.classList.remove('dark');
     root.classList.add('light');
-    
+
     // 2. Sobrescribir variables CSS con el Verde Esmeralda asistencial
     root.style.setProperty('--lpd-color-brand-primary', '#10B981');
     root.style.setProperty('--lpd-color-brand-primary-rgb', '16 185 129');
@@ -155,7 +145,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
       if (hadDark) {
         root.classList.add('dark');
       }
-      
+
       // Restaurar el color azul corporativo predeterminado
       root.style.setProperty('--lpd-color-brand-primary', '#135bec');
       root.style.setProperty('--lpd-color-brand-primary-rgb', '19 91 236');
@@ -181,26 +171,26 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   const activeModuleId = getActiveModule();
 
   const accessMap: Record<string, 'enabled' | 'disabled' | 'coming-soon'> = {
-    'overview': 'enabled',
-    'agenda': 'enabled',
-    'triage': 'enabled',
-    'consultations': 'enabled',
-    'contracts': 'enabled',
-    'billing': 'enabled'
+    overview: 'enabled',
+    agenda: 'enabled',
+    triage: 'enabled',
+    consultations: 'enabled',
+    contracts: 'enabled',
+    billing: 'enabled',
   };
 
   return (
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
-        isRightSidebarOpen: false, 
+        isRightSidebarOpen: false,
         navBehavior: 'auto',
         context: context,
         activeOverlay: activeOverlay,
       }}
-      onToggleLeftSidebar={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
+      onToggleLeftSidebar={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
       navSlot={
-        <SuiteSidebar 
+        <SuiteSidebar
           schema={HEALTH_OS_SCHEMA}
           navMode={navMode}
           context={context}
@@ -208,33 +198,33 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
           accessMap={accessMap}
           onExitToOS={() => router.push('/launchpad')}
           onNavigate={(route) => router.push(route.routeId)}
-          onToggleNavMode={() => setNavMode(prev => prev === 'expanded' ? 'rail' : 'expanded')}
+          onToggleNavMode={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
           profileSlot={
-            <UserAvatar 
-              name={user?.email || 'Medical User'} 
+            <UserAvatar
+              name={user?.email || 'Medical User'}
               size={navMode === 'rail' ? 'md' : 'sm'}
-              withStatus 
-              status="online" 
+              withStatus
+              status="online"
             />
           }
         />
       }
       headerSlot={
-        <SuiteHeader 
+        <SuiteHeader
           isInert={activeOverlay !== null}
           leftSlot={
             <div className="flex items-center gap-4">
-              <SuiteSwitcher 
+              <SuiteSwitcher
                 currentSuite={currentSuite}
                 availableSuites={AVAILABLE_SUITES_FIXTURES}
                 onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
-                onSuiteChange={(id) => id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)}
+                onSuiteChange={(id) =>
+                  id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
+                }
               />
               <Divider orientation="vertical" thickness="technical" className="h-4" />
-              <ContextPath 
-                segments={[
-                  { id: 'suite', label: 'Health OS', href: '/health-os', isActive: true }
-                ]} 
+              <ContextPath
+                segments={[{ id: 'suite', label: 'Health OS', href: '/health-os', isActive: true }]}
               />
             </div>
           }
@@ -243,8 +233,8 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
             <div className="flex items-center gap-4">
               <SystemStatus state="operational" id={user?.id} label="IPS" />
               <Divider orientation="vertical" thickness="technical" className="h-4" />
-              
-              <NotificationCenter 
+
+              <NotificationCenter
                 notifications={notifications}
                 unreadCount={unreadCount}
                 onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
@@ -256,7 +246,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
               />
 
               <ThemeToggle variant="technical" size="md" />
-              <UserMenu 
+              <UserMenu
                 userName={user?.email || 'Medical User'}
                 userEmail={user?.email}
                 userRole="IPS_Clinician"
@@ -268,28 +258,9 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
         />
       }
     >
-      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
-      <TenantProvider tenant="estar-protegidos">
-        <LayoutProvider>
-          <ToastViewport activeTenantId="zonamedica" />
-          
-          <ModuleWorkspace
-            moduleId="health-os"
-            inspectorOpen={false}
-            onInspectorChange={() => {}}
-            config={{
-              inspectorWidth: '360px'
-            }}
-            overlay={{
-              force: true,
-              closeOnBackdrop: true
-            }}
-            inspectorSlot={null}
-          >
-            {children}
-          </ModuleWorkspace>
-        </LayoutProvider>
-      </TenantProvider>
+      <SuiteContentFrame moduleId="health-os" tenant="estar-protegidos" activeTenantId="zonamedica">
+        {children}
+      </SuiteContentFrame>
     </AppShell>
   );
 }
