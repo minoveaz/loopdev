@@ -1,0 +1,50 @@
+name: Supabase database validation
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/**'
+      - '.github/workflows/supabase.yml'
+      - 'scripts/**supabase**'
+  push:
+    branches: [develop, main]
+    paths:
+      - 'supabase/**'
+      - '.github/workflows/supabase.yml'
+      - 'scripts/**supabase**'
+  schedule:
+    - cron: '41 3 * * 2'
+
+concurrency:
+  group: supabase-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  local-validation:
+    name: Migrations and local RLS baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: 2.111.0
+
+      - name: Start local Supabase
+        run: supabase start
+
+      - name: Reset database from migrations and seed
+        run: supabase db reset
+
+      - name: Lint database schema
+        run: supabase db lint --local
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop
