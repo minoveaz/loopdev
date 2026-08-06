@@ -12,6 +12,9 @@ export default function LaunchpadPage() {
   const { hasPermission, isLoading: isLoadingPermissions } = useOrganizationPermissions([
     'marketing.read',
     'crm.read',
+    'health.read',
+    'quant.read',
+    'finance.read',
   ]);
 
   const toggleTheme = () => {
@@ -92,6 +95,7 @@ export default function LaunchpadPage() {
               illustration={<Icon name="trending_up" size="md" />}
               href="/quant-ops"
               version="0.0.1"
+              isLocked={isLoadingPermissions || !hasPermission('quant.read')}
             />
             <SuiteCard 
               title="Health OS"
@@ -99,6 +103,7 @@ export default function LaunchpadPage() {
               illustration={<Icon name="medical_services" size="md" />}
               href="/health-os"
               version="0.1.0"
+              isLocked={isLoadingPermissions || !hasPermission('health.read')}
             />
           </div>
         </div>
