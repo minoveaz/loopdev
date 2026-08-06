@@ -8,6 +8,7 @@ import { ProximityIndicator } from '../../../../atoms/indicators/ProximityIndica
 import { NextEvalTimer } from '../../../../atoms/indicators/NextEvalTimer';
 import { cn } from '../../../../../helpers/cn';
 import { TacticalMetricCell } from './TacticalMetricCell';
+import { BotPnlBadge } from './BotPnlBadge';
 
 interface ScanningStateProps {
   bot: any;
@@ -77,22 +78,7 @@ export const ScanningState = ({ bot, isActive }: ScanningStateProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col items-end gap-1">
-          <LpdText size="nano" className="text-text-muted opacity-40 uppercase font-bold">
-            Avg_PnL
-          </LpdText>
-          <div
-            className={cn(
-              'px-2 py-0.5 rounded-md border text-[10px] font-black font-mono',
-              (bot.avgPnlPct || 0) >= 0
-                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
-                : 'bg-rose-500/10 border-rose-500/30 text-rose-500',
-            )}
-          >
-            {(bot.avgPnlPct || 0) >= 0 ? '+' : ''}
-            {(bot.avgPnlPct || 0).toFixed(2)}%
-          </div>
-        </div>
+        <BotPnlBadge value={bot.avgPnlPct} />
       </div>
 
       {/* 2. MARKET CONTEXT (POINT 3) */}
