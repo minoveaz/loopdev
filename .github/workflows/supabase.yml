@@ -45,6 +45,9 @@ jobs:
       - name: Lint database schema
         run: supabase db lint --local
 
+      - name: Run database contract tests
+        run: supabase test db --local supabase/tests/database
+
       - name: Stop local Supabase
         if: always()
         run: supabase stop
