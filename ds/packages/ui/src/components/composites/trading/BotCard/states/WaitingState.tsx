@@ -8,6 +8,7 @@ import { NextEvalTimer } from '../../../../atoms/indicators/NextEvalTimer';
 import { cn } from '../../../../../helpers/cn';
 import { TacticalMetricCell } from './TacticalMetricCell';
 import { BotPnlBadge } from './BotPnlBadge';
+import { BotTriggerDistance } from './BotTriggerDistance';
 import { BotConfluence } from './BotConfluence';
 
 interface WaitingStateProps {
@@ -93,48 +94,7 @@ export const WaitingState = ({ bot }: WaitingStateProps) => {
       </div>
 
       {/* MARKET CONTEXT (POINT 3) */}
-      {bot.logicSnapshot?.trigger_price && (
-        <div className="flex flex-col gap-2 p-4 bg-amber-500/5 rounded-2xl border border-amber-500/10">
-          <div className="flex items-center justify-between">
-            <LpdText
-              size="nano"
-              weight="black"
-              className="text-amber-500 opacity-40 uppercase tracking-widest"
-            >
-              Target_Nexus
-            </LpdText>
-            <LpdText size="nano" className="text-amber-500 animate-pulse font-mono font-bold">
-              CRITICAL_GAP
-            </LpdText>
-          </div>
-
-          <div className="flex items-baseline justify-between">
-            <div className="flex items-baseline gap-2">
-              <LpdText size="lg" weight="black" className="font-mono text-text-main">
-                ${Math.abs(bot.currentPrice - bot.logicSnapshot.trigger_price).toFixed(2)}
-              </LpdText>
-              <LpdText size="xs" weight="bold" className="text-amber-500 font-mono">
-                (
-                {(Math.abs(bot.currentPrice / bot.logicSnapshot.trigger_price - 1) * 100).toFixed(
-                  2,
-                )}
-                %)
-              </LpdText>
-            </div>
-            <div className="flex flex-col items-end">
-              <LpdText size="nano" className="text-amber-500 opacity-40 uppercase font-bold">
-                Target_Price
-              </LpdText>
-              <LpdText size="xs" weight="black" className="font-mono text-text-main opacity-80">
-                $
-                {Number(bot.logicSnapshot.trigger_price).toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                })}
-              </LpdText>
-            </div>
-          </div>
-        </div>
-      )}
+      {bot.logicSnapshot?.trigger_price && <BotTriggerDistance bot={bot} alert />}
 
       {/* TACTICAL INDICATORS SNAPSHOT (ADAPTATIVO) */}
       <div className="grid grid-cols-4 gap-2">
