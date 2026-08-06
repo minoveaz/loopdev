@@ -3,6 +3,7 @@
 import React from 'react';
 import { LpdText } from '@loopdev/ui';
 import type { OrdersResponse, Order } from '@/types/orders';
+import { TablePagination } from './TablePagination';
 
 interface OrdersTableProps {
   data: OrdersResponse | undefined;
@@ -54,32 +55,18 @@ export function OrdersTable({
   return (
     <div className="space-y-4">
       <div className="bg-background-surface rounded-lg border border-border-technical/30 overflow-hidden">
-        {/* Table Header */}
         <div className="grid grid-cols-7 gap-4 p-4 bg-background-elevated border-b border-border-technical/30">
-          <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-wide">
-            Date
-          </LpdText>
-          <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-wide">
-            Bot
-          </LpdText>
-          <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-wide">
-            Side
-          </LpdText>
-          <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-wide">
-            Price
-          </LpdText>
-          <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-wide">
-            Qty
-          </LpdText>
-          <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-wide">
-            Signal
-          </LpdText>
-          <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-wide">
-            Status
-          </LpdText>
+          {['Date', 'Bot', 'Side', 'Price', 'Qty', 'Signal', 'Status'].map((label) => (
+            <LpdText
+              key={label}
+              size="xs"
+              weight="bold"
+              className="text-text-muted uppercase tracking-wide"
+            >
+              {label}
+            </LpdText>
+          ))}
         </div>
-
-        {/* Table Rows */}
         {data.data.map((order: Order) => (
           <div
             key={order.id}
@@ -113,32 +100,13 @@ export function OrdersTable({
           </div>
         ))}
       </div>
-
-      {/* Pagination */}
-      {data.pages > 1 && (
-        <div className="flex items-center justify-between">
-          <LpdText size="xs" className="text-text-muted">
-            Page {Math.floor(currentOffset / (data.limit || 50)) + 1} of {data.pages}
-            {' '} ({data.total} total)
-          </LpdText>
-          <div className="flex gap-2">
-            <button
-              onClick={() => onPageChange?.(Math.max(0, currentOffset - (data.limit || 50)))}
-              disabled={currentOffset === 0}
-              className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              ← Previous
-            </button>
-            <button
-              onClick={() => onPageChange?.((currentOffset || 0) + (data.limit || 50))}
-              disabled={currentOffset + (data.limit || 50) >= data.total}
-              className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Next →
-            </button>
-          </div>
-        </div>
-      )}
+      <TablePagination
+        pages={data.pages}
+        total={data.total}
+        limit={data.limit}
+        currentOffset={currentOffset}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 }
