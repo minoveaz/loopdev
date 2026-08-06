@@ -1134,6 +1134,7 @@ La Fase 1D no se marca como cerrada hasta revisar esos 50 clones y dejar cada un
 - **Probablemente intencionales:** `CertificationStamp`/`InfraStamp`, estrategias `aggressive_rsi`/`hybrid_core`, `UserMenu`/`QuickActionMenu` y bloques de contexto de CRM con responsabilidades distintas.
 - **Duplicacion interna a revisar:** bloques repetidos dentro de `BotMetricsDashboard`, `useBotFleet` y `LeadDetailContext`; requieren extraer helpers locales o dividir responsabilidades.
 - **Criterio:** solo se marca como resuelto un clone cuando existe una abstraccion compartida con nombres y props claros; no se sube el umbral de jscpd ni se ignoran archivos para maquillar el resultado.
+- **Excepciones revisadas:** `UserMenu` y `QuickActionMenu` son superficies de interacción distintas; `CertificationStamp` e `InfraStamp` representan estados de marca distintos; `aggressive_rsi` e `hybrid_core` son estrategias independientes; los dos ingestors tienen ciclos operativos distintos; las tarjetas LONG/SHORT y los layouts de suite conservan diferencias de dominio.
 
 ## Decisiones pendientes
 
