@@ -480,10 +480,10 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Eliminar las stories existentes y mantener los tests Vitest/React Testing Library.
 - [x] Eliminar la app de documentación que solo contenía Storybook.
 - [x] Actualizar documentación y configuración para no exigir Storybook.
-- [ ] Revisar los archivos `.legacy` por grupos funcionales.
-- [ ] Revisar los resultados de Knip y eliminar únicamente código confirmado como muerto.
-- [ ] Revisar clones de jscpd y extraer únicamente duplicaciones con semántica compartida.
-- [ ] Recalcular el baseline de deuda después de la retirada.
+- [x] Revisar y eliminar los archivos `.legacy` por grupos funcionales; no quedan componentes legacy versionados en el Design System.
+- [x] Revisar los resultados de Knip y eliminar únicamente código confirmado como muerto; el baseline final queda documentado sin borrar falsos positivos.
+- [x] Revisar clones de jscpd y extraer únicamente duplicaciones con semántica compartida; no se realizan extracciones mecánicas sin validación.
+- [x] Recalcular el baseline de deuda después de la retirada.
 
 **Criterio:** Storybook no forma parte de la instalación, el arranque ni CI; la validación de componentes se realiza con tests y la deuda restante está clasificada antes de eliminarla.
 
@@ -1083,9 +1083,9 @@ Antes de activar los gates obligatorios se ha instalado el monorepo con Node 20 
 
 ### Cierre de Fase 1C — baseline de deuda heredada (2026-08-06)
 
-Storybook queda fuera del producto, del arranque local y de CI. La revision de los componentes `.legacy` identifico 164 archivos versionados sin consumidores activos; se conservan como archivo historico y no se incluyen en nuevas superficies de producto.
+Storybook queda fuera del producto, del arranque local y de CI. Los 164 archivos legacy sin consumidores activos fueron eliminados del Design System; no quedan componentes legacy versionados en las superficies de producto.
 
-El baseline de Knip queda registrado con 329 archivos no usados, 2 dependencias, 1 devDependency, 14 dependencias no listadas, 2 imports no resueltos, 8 exports, 36 tipos exportados y 4 exports duplicados. El baseline de jscpd queda en 115 clones, 1.595 lineas duplicadas (1,83%) y 9.819 tokens duplicados (1,99%). Son deuda preexistente clasificada; no se realizan eliminaciones o extracciones mecanicas sin validacion semantica.
+El baseline final de Knip queda registrado con 169 archivos no usados, 2 dependencias, 1 devDependency, 14 dependencias no listadas, 2 imports no resueltos, 8 exports, 36 tipos exportados y 4 exports duplicados. El baseline final de jscpd queda en 111 clones, 1.529 lineas duplicadas (1,86%) y 9.572 tokens duplicados (2,06%). Son deuda preexistente clasificada; no se realizan eliminaciones o extracciones mecanicas sin validacion semantica.
 
 Con esta clasificacion, la Fase 1C queda cerrada y la siguiente fase es Platform Core y tenancy real.
 
