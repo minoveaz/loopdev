@@ -432,13 +432,13 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 
 ### Fase 0 — Decisiones, inventario y congelación de alcance
 
-- [ ] Confirmar que LoopDev es el repositorio base del SaaS.
-- [ ] Confirmar que VitaBlue y Protege tu Salud son marcas de Estar Protegidos.
-- [ ] Confirmar que Zona Médica usará únicamente Health OS en la primera etapa.
+- [x] Confirmar que LoopDev es el repositorio base del SaaS.
+- [x] Confirmar que VitaBlue y Protege tu Salud son marcas de Estar Protegidos.
+- [x] Confirmar que Zona Médica usará únicamente Health OS en la primera etapa.
 - [ ] Inventariar rutas, módulos, tablas, funciones y secretos existentes en LoopDev.
 - [ ] Inventariar las capacidades que deben migrarse desde VitaBlue.
 - [ ] Identificar datos demo, tablas Quant Ops y migraciones experimentales.
-- [ ] Definir qué partes de VitaBlue seguirán siendo web pública.
+- [x] Definir qué partes de VitaBlue seguirán siendo web pública: landing, SEO, blog, formularios/wizard y captación permanecen en VitaBlue; el backoffice se traslada a LoopDev.
 - [ ] Crear un registro de decisiones arquitectónicas y riesgos.
 
 **Salida:** mapa de capacidades, alcance aprobado, responsables y lista de riesgos.
