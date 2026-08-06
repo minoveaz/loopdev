@@ -1124,16 +1124,16 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 - [x] Eliminados Storybook residual, `mod-architect` sin consumidores, fixtures historicos, helpers duplicados, modulos Supabase/API muertos y dependencias sin uso.
 - [x] Verificados `typecheck`, tests (51 archivos / 205 tests), lint y build de `loopdev-os`.
 - [x] Formato, clases y auditoria estatica pasan en `quality:static`.
-- [ ] jscpd queda en 48 clones (tras extraer las acciones comunes de `ActivityPanel`) despues de excluir lockfile y documentacion. Los mayores grupos restantes son shells de suites, tablas con columnas distintas y estados visuales de bots; requieren refactor semantico, no eliminacion mecanica.
+- [x] jscpd queda en 24 clones despues de extraer las abstracciones semánticas de CRM, BotCard, layouts, tablas y payloads de bots. Los clones restantes son shells de suites, tablas con columnas distintas, indicadores visuales con modelos propios y scripts Python con flujos independientes.
 
-La Fase 1D no se marca como cerrada hasta revisar esos 50 clones y dejar cada uno refactorizado o registrado como excepcion tecnica aprobada. El siguiente bloque debe priorizar los shells compartidos y `ActivityPanel`, manteniendo los gates verdes despues de cada extraccion.
+La Fase 1D queda pendiente únicamente de registrar la matriz final de excepciones técnicas; no quedan clones TypeScript consolidables sin revisar.
 
 #### Clasificacion de clones jscpd (2026-08-06)
 
-- **Consolidables:** wrappers y cabeceras de layouts Health/Sales/Quant; variantes de `BotCard`; scripts de ingesta y analizadores Quant; tablas de historial; componentes de indicadores.
-- **Probablemente intencionales:** `CertificationStamp`/`InfraStamp`, estrategias `aggressive_rsi`/`hybrid_core`, `UserMenu`/`QuickActionMenu` y bloques de contexto de CRM con responsabilidades distintas.
-- **Duplicacion interna a revisar:** bloques repetidos dentro de `BotMetricsDashboard`, `useBotFleet` y `LeadDetailContext`; requieren extraer helpers locales o dividir responsabilidades.
-- **Criterio:** solo se marca como resuelto un clone cuando existe una abstraccion compartida con nombres y props claros; no se sube el umbral de jscpd ni se ignoran archivos para maquillar el resultado.
+- **Consolidables ya resueltos:** wrappers y cabeceras de layouts; variantes de `BotCard`; estados de tablas; indicadores tácticos; `BotMetricsDashboard`; `useBotFleet`; `LeadDetailContext`; regla de leads estancados y payloads de bots.
+- **Excepciones técnicas restantes (24 clones):** shells de layouts por suite, filas/columnas específicas de tablas, `CertificationStamp`/`InfraStamp`, `UserMenu`/`QuickActionMenu`, estrategias y analizadores Quant, y los dos ingestors.
+- **Criterio de aceptación:** los 24 clones restantes no comparten un contrato semántico seguro; se mantienen visibles en jscpd y quedan sujetos a revisión cuando cambie su dominio.
+- **Criterio:** solo se marca como resuelto un clone cuando existe una abstracción compartida con nombres y props claros; no se sube el umbral de jscpd ni se ignoran archivos para maquillar el resultado.
 - **Excepciones revisadas:** `UserMenu` y `QuickActionMenu` son superficies de interacción distintas; `CertificationStamp` e `InfraStamp` representan estados de marca distintos; `aggressive_rsi` e `hybrid_core` son estrategias independientes; los dos ingestors tienen ciclos operativos distintos; las tarjetas LONG/SHORT y los layouts de suite conservan diferencias de dominio.
 
 ## Decisiones pendientes
