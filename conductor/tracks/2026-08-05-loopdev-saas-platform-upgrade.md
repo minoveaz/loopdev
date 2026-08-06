@@ -1128,6 +1128,13 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 
 La Fase 1D no se marca como cerrada hasta revisar esos 50 clones y dejar cada uno refactorizado o registrado como excepcion tecnica aprobada. El siguiente bloque debe priorizar los shells compartidos y `ActivityPanel`, manteniendo los gates verdes despues de cada extraccion.
 
+#### Clasificacion de clones jscpd (2026-08-06)
+
+- **Consolidables:** wrappers y cabeceras de layouts Health/Sales/Quant; variantes de `BotCard`; scripts de ingesta y analizadores Quant; tablas de historial; componentes de indicadores.
+- **Probablemente intencionales:** `CertificationStamp`/`InfraStamp`, estrategias `aggressive_rsi`/`hybrid_core`, `UserMenu`/`QuickActionMenu` y bloques de contexto de CRM con responsabilidades distintas.
+- **Duplicacion interna a revisar:** bloques repetidos dentro de `BotMetricsDashboard`, `useBotFleet` y `LeadDetailContext`; requieren extraer helpers locales o dividir responsabilidades.
+- **Criterio:** solo se marca como resuelto un clone cuando existe una abstraccion compartida con nombres y props claros; no se sube el umbral de jscpd ni se ignoran archivos para maquillar el resultado.
+
 ## Decisiones pendientes
 
 - Confirmar el nombre definitivo del tenant de Estar Protegidos.
