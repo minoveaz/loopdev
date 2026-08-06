@@ -32,6 +32,18 @@ interface BotMutationParams {
   useMarketRegimeFilter: boolean;
 }
 
+const buildBotPayload = (params: BotMutationParams, overrides: JsonObject = {}): JsonObject => ({
+  name: params.name,
+  exchange_id: params.exchangeId,
+  pair: params.pair,
+  strategy_id: params.strategyId,
+  base_investment_usdt: params.baseInvestmentUsdt,
+  risk_profile: params.riskProfile,
+  use_initial_range_filter: params.useInitialRangeFilter,
+  use_market_regime_filter: params.useMarketRegimeFilter,
+  ...overrides,
+});
+
 const asObject = (value: unknown): JsonObject =>
   value && typeof value === 'object' ? (value as JsonObject) : {};
 const asString = (value: unknown, fallback = ''): string =>
@@ -197,20 +209,12 @@ export const useBotFleet = () => {
 
   const deployBot = useMutation({
     mutationFn: async (params: BotMutationParams) => {
-      const payload = {
-        name: params.name,
-        exchange_id: params.exchangeId,
-        pair: params.pair,
-        strategy_id: params.strategyId,
-        base_investment_usdt: params.baseInvestmentUsdt,
-        risk_profile: params.riskProfile,
-        use_initial_range_filter: params.useInitialRangeFilter,
-        use_market_regime_filter: params.useMarketRegimeFilter,
+      const payload = buildBotPayload(params, {
         tenant_id: '00000000-0000-0000-0000-000000000000',
         status: 'paper_trading',
         current_action: 'Initializing...',
         updated_at: new Date().toISOString(),
-      };
+      });
       const { error } = await supabase.from('quant_bots').insert([payload]);
       if (error) throw error;
     },
@@ -219,17 +223,9 @@ export const useBotFleet = () => {
 
   const updateBot = useMutation({
     mutationFn: async ({ id, params }: { id: string; params: BotMutationParams }) => {
-      const payload = {
-        name: params.name,
-        exchange_id: params.exchangeId,
-        pair: params.pair,
-        strategy_id: params.strategyId,
-        base_investment_usdt: params.baseInvestmentUsdt,
-        risk_profile: params.riskProfile,
-        use_initial_range_filter: params.useInitialRangeFilter,
-        use_market_regime_filter: params.useMarketRegimeFilter,
+      const payload = buildBotPayload(params, {
         updated_at: new Date().toISOString(),
-      };
+      });
       const { error } = await supabase.from('quant_bots').update(payload).eq('id', id);
       if (error) throw error;
     },
