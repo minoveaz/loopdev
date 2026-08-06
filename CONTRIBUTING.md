@@ -66,26 +66,22 @@ pnpm start:loopdev
 # LoopDev OS + Supabase local (requiere Docker)
 pnpm start:loopdev:local
 
-# LoopDev OS + Storybook (solo si trabajas en el Design System)
-pnpm start:loopdev:ui
 ```
 
 También se pueden activar servicios individualmente:
 
 ```powershell
 pnpm start:loopdev -- --with-supabase
-pnpm start:loopdev -- --with-storybook
 ```
 
 URLs locales:
 
 - LoopDev OS: `http://localhost:3000`
-- Storybook: `http://localhost:6006`
 - Supabase local: `http://127.0.0.1:54323`
 
 El script es multiplataforma y gestiona la terminación de los procesos al pulsar `Ctrl+C`.
 
-El arranque estándar usa el proyecto remoto Supabase de desarrollo mediante las variables de `.env.local`; no requiere Docker. `start:loopdev:local` activa el stack Supabase local y requiere Docker. Storybook queda como herramienta opcional y fuera del flujo principal del SaaS; solo se levanta con `start:loopdev:ui`.
+El arranque estándar usa el proyecto remoto Supabase de desarrollo mediante las variables de `.env.local`; no requiere Docker. `start:loopdev:local` activa el stack Supabase local y requiere Docker. La validación visual y de estados de componentes se realiza mediante Vitest y React Testing Library.
 
 Para configurar el entorno por primera vez:
 

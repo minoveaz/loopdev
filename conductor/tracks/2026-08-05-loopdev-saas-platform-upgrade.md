@@ -472,6 +472,21 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 **Criterio:** una contribución nueva no puede introducir formato inconsistente, clases Tailwind contradictorias o repetidas, duplicación por encima del umbral ni dependencias sin uso.
 
+### Fase 1C — Retirada de Storybook y limpieza de deuda heredada
+
+- [x] Retirar Storybook del arranque local y del flujo principal del SaaS.
+- [x] Eliminar el workflow de despliegue de Storybook.
+- [x] Quitar dependencias y scripts de Storybook de los workspaces.
+- [x] Eliminar las stories existentes y mantener los tests Vitest/React Testing Library.
+- [x] Eliminar la app de documentación que solo contenía Storybook.
+- [x] Actualizar documentación y configuración para no exigir Storybook.
+- [ ] Revisar los archivos `.legacy` por grupos funcionales.
+- [ ] Revisar los resultados de Knip y eliminar únicamente código confirmado como muerto.
+- [ ] Revisar clones de jscpd y extraer únicamente duplicaciones con semántica compartida.
+- [ ] Recalcular el baseline de deuda después de la retirada.
+
+**Criterio:** Storybook no forma parte de la instalación, el arranque ni CI; la validación de componentes se realiza con tests y la deuda restante está clasificada antes de eliminarla.
+
 ### Fase 2 — Platform Core y tenancy real
 
 - [ ] Crear migraciones para `organizations` y `organization_memberships`.
@@ -758,7 +773,7 @@ Los tests E2E nunca deben usar producción ni números reales de WhatsApp. Deben
 
 ## GitHub Actions y automatización CI/CD
 
-Actualmente existe un workflow de Storybook, pero falta un pipeline de calidad y despliegue del SaaS. Se deben crear workflows pequeños y auditables, evitando un único workflow monolítico.
+El repositorio usa workflows pequeños y auditables para calidad y despliegue del SaaS, evitando un único workflow monolítico.
 
 ### `.github/workflows/ci.yml`
 
@@ -1075,7 +1090,7 @@ pnpm start:loopdev:full
 pnpm start:loopdev:ui
 ```
 
-El arranque estándar levanta LoopDev OS usando el proyecto remoto Supabase de desarrollo configurado en `.env.local`; no requiere Docker. `start:loopdev:local` permite activar el stack Supabase local cuando Docker esté disponible. `start:loopdev:ui` añade Storybook para trabajo específico del Design System. Storybook queda fuera del flujo principal del SaaS y no es un requisito para CRM, Marketing Studio, Operations ni Health OS. El script es multiplataforma, muestra las URLs locales y detiene los procesos al recibir `Ctrl+C`. Cualquier nuevo servicio local debe añadirse a este script y documentarse en `CONTRIBUTING.md`.
+El arranque estándar levanta LoopDev OS usando el proyecto remoto Supabase de desarrollo configurado en `.env.local`; no requiere Docker. `start:loopdev:local` permite activar el stack Supabase local cuando Docker esté disponible. El script es multiplataforma, muestra las URLs locales y detiene los procesos al recibir `Ctrl+C`. Cualquier nuevo servicio local debe añadirse a este script y documentarse en `CONTRIBUTING.md`.
 
 ## Decisiones pendientes
 

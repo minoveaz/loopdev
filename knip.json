@@ -1,5 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": ["**/*.stories.{ts,tsx,js,jsx}", "**/storybook/**", "scripts_local/**", "supabase/**"],
-  "ignoreDependencies": ["@storybook/*", "tailwindcss"]
+  "ignore": ["scripts_local/**", "supabase/**"],
+  "ignoreDependencies": ["tailwindcss"]
 }
