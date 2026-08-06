@@ -16,6 +16,7 @@ import React from 'react';
 import { useBotMetricsDashboard } from './useBotMetricsDashboard';
 import { MetricGauge } from '@/components/atoms/indicators/MetricGauge';
 import { MetricCard } from '@/components/atoms/surfaces/MetricCard';
+import { SignalCard } from './SignalCard';
 import { BotMetricsDashboardProps } from './types';
 import {
   formatPrice,
@@ -176,94 +177,18 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
         <h3 className="text-technical font-medium text-primary">Entry Signals</h3>
 
         <div className="grid grid-cols-2 gap-4">
-          {/* Long Entry Signal */}
-          <div className="space-y-2">
-            <p className="text-micro text-primary-light">LONG Entry</p>
-            <div className="bg-surface-elevated rounded p-2 space-y-1">
-              <div className="flex justify-between text-nano">
-                <span className="text-primary-light">Trigger RSI:</span>
-                <span className="font-mono text-primary">
-                  {metrics.signals.long_entry.required_level}
-                </span>
-              </div>
-              <div className="flex justify-between text-nano">
-                <span className="text-primary-light">Current RSI:</span>
-                <span className="font-mono text-primary">
-                  {metrics.signals.long_entry.current_value.toFixed(1)}
-                </span>
-              </div>
-              <div className="flex justify-between text-nano">
-                <span className="text-primary-light">Gap:</span>
-                <span
-                  className={`font-mono ${metrics.signals.long_entry.ready ? 'text-green-500' : 'text-yellow-500'}`}
-                >
-                  {formatPercentage(metrics.signals.long_entry.gap_pct)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex-1 bg-surface-dark rounded h-1.5 overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${
-                      metrics.signals.long_entry.ready
-                        ? 'from-green-500 to-green-600'
-                        : 'from-yellow-500 to-orange-500'
-                    }`}
-                    style={{
-                      width: `${Math.min(100, Math.max(0, 100 - metrics.signals.long_entry.gap_pct))}%`,
-                    }}
-                  />
-                </div>
-                <span className="text-nano font-mono text-primary-light">
-                  {Math.min(100, Math.max(0, 100 - metrics.signals.long_entry.gap_pct)).toFixed(0)}%
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Short Entry Signal */}
-          <div className="space-y-2">
-            <p className="text-micro text-primary-light">SHORT Entry</p>
-            <div className="bg-surface-elevated rounded p-2 space-y-1">
-              <div className="flex justify-between text-nano">
-                <span className="text-primary-light">Trigger RSI:</span>
-                <span className="font-mono text-primary">
-                  {metrics.signals.short_entry.required_level}
-                </span>
-              </div>
-              <div className="flex justify-between text-nano">
-                <span className="text-primary-light">Current RSI:</span>
-                <span className="font-mono text-primary">
-                  {metrics.signals.short_entry.current_value.toFixed(1)}
-                </span>
-              </div>
-              <div className="flex justify-between text-nano">
-                <span className="text-primary-light">Gap:</span>
-                <span
-                  className={`font-mono ${metrics.signals.short_entry.ready ? 'text-purple-500' : 'text-yellow-500'}`}
-                >
-                  {formatPercentage(metrics.signals.short_entry.gap_pct)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex-1 bg-surface-dark rounded h-1.5 overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${
-                      metrics.signals.short_entry.ready
-                        ? 'from-purple-500 to-purple-600'
-                        : 'from-yellow-500 to-orange-500'
-                    }`}
-                    style={{
-                      width: `${Math.min(100, Math.max(0, 100 - metrics.signals.short_entry.gap_pct))}%`,
-                    }}
-                  />
-                </div>
-                <span className="text-nano font-mono text-primary-light">
-                  {Math.min(100, Math.max(0, 100 - metrics.signals.short_entry.gap_pct)).toFixed(0)}
-                  %
-                </span>
-              </div>
-            </div>
-          </div>
+          <SignalCard
+            label="LONG"
+            signal={metrics.signals.long_entry}
+            readyColor="text-green-500"
+            gradient="from-green-500 to-green-600"
+          />
+          <SignalCard
+            label="SHORT"
+            signal={metrics.signals.short_entry}
+            readyColor="text-purple-500"
+            gradient="from-purple-500 to-purple-600"
+          />
         </div>
       </div>
 
