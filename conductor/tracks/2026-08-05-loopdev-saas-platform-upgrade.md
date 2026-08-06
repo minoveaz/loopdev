@@ -522,6 +522,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - Usar Zod para contratos de entrada/salida y validación de servicios.
 - Ejecutar CodeQL dentro de GitHub Actions.
 - Priorizar Supabase efímero/RLS en CI antes de activar datos multiempresa reales.
+- Estado actual: Supabase CLI `2.111.0` está instalado; Docker no está disponible en el entorno local. La migración fundacional `20260806000000_platform_core_foundation.sql` está preparada como cambio aditivo, pero no se marcará como aplicada hasta validarla con Docker/Supabase local.
 
 - [ ] Crear migraciones para `organizations` y `organization_memberships`.
 - [ ] Añadir `roles`, `permissions`, `role_permissions` y scopes.
