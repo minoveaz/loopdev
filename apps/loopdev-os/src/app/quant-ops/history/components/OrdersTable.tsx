@@ -4,6 +4,7 @@ import React from 'react';
 import { LpdText } from '@loopdev/ui';
 import type { OrdersResponse, Order } from '@/types/orders';
 import { TablePagination } from './TablePagination';
+import { HistoryTableState } from './HistoryTableState';
 
 interface OrdersTableProps {
   data: OrdersResponse | undefined;
@@ -21,35 +22,15 @@ export function OrdersTable({
   currentOffset = 0,
 }: OrdersTableProps) {
   if (isLoading) {
-    return (
-      <div className="bg-background-surface rounded-lg border border-border-technical/30 p-8">
-        <div className="space-y-3">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-12 bg-background-elevated rounded animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
+    return <HistoryTableState kind="loading" />;
   }
 
   if (error || !data) {
-    return (
-      <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-        <LpdText size="sm" className="text-red-500">
-          Failed to load orders
-        </LpdText>
-      </div>
-    );
+    return <HistoryTableState kind="error" message="orders" />;
   }
 
   if (data.data.length === 0) {
-    return (
-      <div className="bg-background-surface rounded-lg border border-border-technical/30 p-12 text-center">
-        <LpdText size="sm" className="text-text-muted">
-          No orders found
-        </LpdText>
-      </div>
-    );
+    return <HistoryTableState kind="empty" message="orders" />;
   }
 
   return (
