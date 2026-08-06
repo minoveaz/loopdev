@@ -1124,7 +1124,7 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 - [x] Eliminados Storybook residual, `mod-architect` sin consumidores, fixtures historicos, helpers duplicados, modulos Supabase/API muertos y dependencias sin uso.
 - [x] Verificados `typecheck`, tests (51 archivos / 205 tests), lint y build de `loopdev-os`.
 - [x] Formato, clases y auditoria estatica pasan en `quality:static`.
-- [ ] jscpd queda en 50 clones (1,65% de lineas y 1,88% de tokens) tras excluir lockfile y documentacion. Los mayores grupos son shells de suites, tablas con columnas distintas, estados visuales de bots y bloques repetidos dentro de `ActivityPanel`; requieren refactor semantico, no eliminacion mecanica.
+- [ ] jscpd queda en 48 clones (tras extraer las acciones comunes de `ActivityPanel`) despues de excluir lockfile y documentacion. Los mayores grupos restantes son shells de suites, tablas con columnas distintas y estados visuales de bots; requieren refactor semantico, no eliminacion mecanica.
 
 La Fase 1D no se marca como cerrada hasta revisar esos 50 clones y dejar cada uno refactorizado o registrado como excepcion tecnica aprobada. El siguiente bloque debe priorizar los shells compartidos y `ActivityPanel`, manteniendo los gates verdes despues de cada extraccion.
 
