@@ -20,11 +20,13 @@ export const ButtonContent: React.FC<ButtonContentProps> = ({
   return (
     <>
       {isLoading && (
-        <Icon 
-          name="progress_activity" 
-          size="md" 
-          className="animate-spin mr-2 shrink-0"
-        />
+        <div role="status" aria-label="Cargando" className="flex items-center justify-center">
+          <Icon 
+            name="progress_activity" 
+            size="md" 
+            className="animate-spin mr-2 shrink-0"
+          />
+        </div>
       )}
       
       {showStartIcon && (

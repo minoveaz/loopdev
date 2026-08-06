@@ -28,18 +28,16 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
 
 ---
 
-## 🛠️ Fase 2: Desarrollo & Hardening
-1. **Sprint 1 (Brain/Body):** Implementación del componente.
-2. **Sprint 2 (Testing):** Creación de tests en Vitest que validen **cada historia** (incluyendo estrés).
-3. **Sprint 3 (Docs):** Historias de Storybook que demuestren visualmente el cumplimiento.
-   - **Regla de Espejo:** Toda historia de estrés debe tener su correspondiente historia `Stress` en Storybook.
+### 🟢 Fase 2: Blindaje y Calidad (The Shield)
+1. **Unit Testing:** Cobertura de todos los estados en Vitest.
+2. **A11y Audit:** Pasar Axe-core en Storybook (0 violaciones).
+3. **Visual Review:** Publicar historias en Chromatic y aceptar baseline.
+4. **Integration Test:** Smoke test del componente en su app real mediante Playwright.
 
----
-
-## 🔍 Fase 3: Auditoría Externa
-- **Action:** El Auditor independiente valida el código contra el `userHistories.md`.
-- **Tools:** Uso de `AUDIT_UI_PROMPT.md` para frontend o `AUDIT_INFRA_PROMPT.md` para plataforma.
-- **Checkpoint Visual:** ¿El componente respeta los 4 pilares del Bloque 0?
+### 🔵 Fase 3: Promoción y Registro
+1. **Pull Request:** Debe incluir el reporte de QA automático en verde.
+2. **Changeset:** Crear el archivo de changeset para el versionado.
+3. **Registry:** Actualizar `COMPONENT_REGISTRY.json` con el sello de certificación.
 
 ---
 
