@@ -455,6 +455,23 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 
 **Criterio:** el repositorio tiene una línea base reproducible y las áreas problemáticas están enumeradas.
 
+### Fase 1B — Calidad estática y buenas prácticas de codificación
+
+Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las comprobaciones deben ejecutarse igual en local y en GitHub Actions.
+
+- [x] Configurar Prettier y comprobar formato sin modificar archivos en CI.
+- [x] Activar reglas ESLint para imports, variables, hooks y accesibilidad.
+- [x] Activar reglas Tailwind para orden y clases contradictorias.
+- [x] Detectar clases Tailwind repetidas dentro de un mismo `className` estático.
+- [x] Medir duplicación de código con `jscpd` y fijar un umbral explícito.
+- [x] Detectar exports, ficheros y dependencias no utilizados con `knip`.
+- [x] Definir excepciones documentadas para Storybook, fixtures y código experimental.
+- [x] Añadir un comando único `pnpm quality:static` para todas las comprobaciones.
+- [x] Ejecutar `quality:static` en cada Pull Request y en `develop`/`main`.
+- [x] Registrar la deuda existente sin ocultar nuevos errores.
+
+**Criterio:** una contribución nueva no puede introducir formato inconsistente, clases Tailwind contradictorias o repetidas, duplicación por encima del umbral ni dependencias sin uso.
+
 ### Fase 2 — Platform Core y tenancy real
 
 - [ ] Crear migraciones para `organizations` y `organization_memberships`.

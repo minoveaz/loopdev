@@ -108,6 +108,8 @@ El Pull Request debe enlazar una Issue (`Closes #123`) y describir si afecta a c
 
 ## CI en GitHub
 
+La calidad estÃ¡tica se valida con `pnpm quality:static`. El comando comprueba el formato de los archivos modificados, clases estÃ¡ticas repetidas, clases Tailwind contradictorias, duplicaciÃ³n y dependencias sin uso. La deuda histÃ³rica de duplicaciÃ³n y Knip se reporta inicialmente sin bloquear; cualquier contribuciÃ³n nueva debe mantener el formato y no aÃ±adir nuevas incidencias.
+
 `.github/workflows/ci.yml` se ejecuta en cada Pull Request y en cada push a `develop` o `main`. Usa Node 20, pnpm 9, lockfile congelado y permisos mínimos. Un cambio no está listo para integrar hasta que el workflow sea verde.
 
 Los tests E2E de Playwright, la validación de Supabase/RLS, seguridad y despliegues de Render se añadirán como workflows independientes cuando sus entornos estén configurados; no deben ejecutarse contra producción.

@@ -1,0 +1,9 @@
+node_modules
+.next
+.turbo
+coverage
+dist
+build
+storybook-static
+supabase/.temp
+pnpm-lock.yaml

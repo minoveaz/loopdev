@@ -43,6 +43,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Static quality checks
+        run: pnpm quality:static
+
       - name: Typecheck
         run: pnpm typecheck
 
