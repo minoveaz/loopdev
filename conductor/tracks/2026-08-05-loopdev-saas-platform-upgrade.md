@@ -517,13 +517,13 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 #### Herramientas y controles
 
 - Incorporar Supabase CLI para migraciones reproducibles y validación de esquema.
-- Usar Docker para Supabase local o bases efímeras en CI.
+- Usar Docker únicamente en los runners de GitHub Actions para bases efímeras de CI; no se requiere Docker ni Supabase local para el desarrollo diario.
 - Añadir tests RLS para organizaciones, memberships, roles y aislamiento entre tenants.
 - Usar Zod para contratos de entrada/salida y validación de servicios.
 - Ejecutar CodeQL dentro de GitHub Actions.
 - Priorizar Supabase efímero/RLS en CI antes de activar datos multiempresa reales.
 - El workflow `.github/workflows/supabase.yml` levanta Supabase temporalmente solo ante cambios en `supabase/**`, en pushes de `develop`/`main` y en la ejecución nocturna; el CI general no se ralentiza en cada push de código.
-- Estado actual: Supabase CLI `2.111.0` está instalado; Docker no está disponible en el entorno local. La migración fundacional `20260806000000_platform_core_foundation.sql` está preparada como cambio aditivo, pero no se marcará como aplicada hasta validarla con Docker/Supabase local.
+- Estado actual: Supabase CLI `2.111.0` está instalado. La migración fundacional `20260806000000_platform_core_foundation.sql` está preparada como cambio aditivo y se validará exclusivamente en el workflow de GitHub Actions.
 
 - [ ] Crear migraciones para `organizations` y `organization_memberships`.
 - [ ] Añadir `roles`, `permissions`, `role_permissions` y scopes.
@@ -821,7 +821,7 @@ Cada tabla multi-tenant debe tener pruebas negativas y positivas:
 - [ ] documentos y mensajes no son accesibles por URL pública;
 - [ ] logs y errores no contienen secretos ni datos sensibles.
 
-La matriz RLS debe ejecutarse contra una base Supabase local o de integración con usuarios y organizaciones ficticias. Los tests deben verificar tanto llamadas directas a PostgREST como llamadas desde la aplicación.
+La matriz RLS debe ejecutarse contra una base Supabase efímera de integración en GitHub Actions con usuarios y organizaciones ficticias. Los tests deben verificar tanto llamadas directas a PostgREST como llamadas desde la aplicación.
 
 #### End-to-end
 
@@ -864,7 +864,7 @@ Los tests E2E nunca deben usar producción ni números reales de WhatsApp. Deben
 
 #### Migraciones y recuperación
 
-- [ ] `supabase db reset` sobre una base limpia.
+- [ ] `supabase db reset` sobre una base limpia en el runner de CI.
 - [ ] Aplicación completa de migraciones en staging.
 - [ ] `supabase db push --dry-run` antes de cada despliegue.
 - [ ] Verificación de que no existen cambios manuales sin migración.
@@ -909,8 +909,8 @@ Ejecutar en pull requests que modifiquen `supabase/**`, contratos o servicios de
 - [ ] instalar versión fijada de Supabase CLI;
 - [ ] validar `supabase/config.toml`;
 - [ ] comprobar nombres y orden de migraciones;
-- [ ] iniciar Supabase local cuando el runner lo permita;
-- [ ] ejecutar `supabase db reset`;
+- [ ] iniciar Supabase efímero en GitHub Actions;
+- [ ] ejecutar `supabase db reset` en CI;
 - [ ] ejecutar tests de RLS y funciones;
 - [ ] generar tipos y comprobar que no hay diff inesperado;
 - [ ] verificar `supabase db push --dry-run`;
@@ -1208,7 +1208,7 @@ pnpm start:loopdev:full
 pnpm start:loopdev:ui
 ```
 
-El arranque estándar levanta LoopDev OS usando el proyecto remoto Supabase de desarrollo configurado en `.env.local`; no requiere Docker. `start:loopdev:local` permite activar el stack Supabase local cuando Docker esté disponible. El script es multiplataforma, muestra las URLs locales y detiene los procesos al recibir `Ctrl+C`. Cualquier nuevo servicio local debe añadirse a este script y documentarse en `CONTRIBUTING.md`.
+El arranque estándar levanta LoopDev OS usando el proyecto remoto Supabase de desarrollo configurado en `.env.local`; no requiere Docker. La validación de migraciones y RLS se ejecuta exclusivamente en GitHub Actions mediante el workflow de Supabase. Cualquier nuevo servicio local debe documentarse en `CONTRIBUTING.md`.
 
 ### Fase 1D — Eliminacion total de deuda estatica
 

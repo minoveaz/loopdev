@@ -23,8 +23,8 @@ permissions:
   contents: read
 
 jobs:
-  local-validation:
-    name: Migrations and local RLS baseline
+  ci-validation:
+    name: Migrations and CI RLS baseline
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
