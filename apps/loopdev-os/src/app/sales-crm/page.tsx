@@ -35,7 +35,7 @@ export default function SalesCrmDashboard() {
   const avgAiScore = Math.round(leads.reduce((acc, l) => acc + l.aiScore, 0) / leads.length);
 
   // Calculate Revenue in Risk (stale leads: stage contacted & no contact for > 5 days)
-  const staleLeads = leads.filter(isLeadStale);
+  const staleLeads = leads.filter((lead) => isLeadStale(lead));
   const revenueInRisk = staleLeads.reduce((acc, l) => acc + l.dealValue, 0);
 
   // Filter high win probability deals

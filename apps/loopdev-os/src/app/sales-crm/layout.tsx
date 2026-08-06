@@ -113,7 +113,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Generate stale lead alerts notifications in real-time
-    const staleAlerts = leads.filter(isLeadStale).map((lead) => {
+    const staleAlerts = leads.filter((lead) => isLeadStale(lead)).map((lead) => {
       const diffDays = daysSinceContact(lead.lastContactDate);
       return {
         id: `stale-${lead.id}`,
