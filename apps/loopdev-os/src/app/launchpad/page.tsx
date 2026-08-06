@@ -5,9 +5,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { Heading, LpdText, Icon, TechnicalCanvas, BrandLogo, UIKitIllustration, EngineeringSeal, SuiteCard, ThemeToggle, SystemStatus, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
 import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
 import { OrganizationSwitcher } from '@/components/layout/OrganizationSwitcher';
+import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 
 export default function LaunchpadPage() {
   const { user } = useAuth();
+  const { hasPermission, isLoading: isLoadingPermissions } = useOrganizationPermissions([
+    'marketing.read',
+    'crm.read',
+  ]);
 
   const toggleTheme = () => {
     document.documentElement.classList.toggle('dark');
@@ -63,6 +68,7 @@ export default function LaunchpadPage() {
               illustration={<UIKitIllustration />}
               href="/marketing-studio"
               version="1.0.4"
+              isLocked={isLoadingPermissions || !hasPermission('marketing.read')}
             />
             <SuiteCard 
               title="Sales & CRM"
@@ -70,6 +76,7 @@ export default function LaunchpadPage() {
               illustration={<Icon name="groups" size="md" />}
               href="/sales-crm"
               version="0.8.2"
+              isLocked={isLoadingPermissions || !hasPermission('crm.read')}
             />
             <SuiteCard 
               title="Financial Ops"
