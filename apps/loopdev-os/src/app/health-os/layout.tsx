@@ -18,6 +18,7 @@ import {
   Divider,
 } from '@loopdev/ui';
 import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
+import { SuiteHeaderLeft } from '@/components/layout/SuiteHeaderLeft';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, type NavigationSchema } from '@loopdev/contracts';
@@ -213,20 +214,16 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
         <SuiteHeader
           isInert={activeOverlay !== null}
           leftSlot={
-            <div className="flex items-center gap-4">
-              <SuiteSwitcher
-                currentSuite={currentSuite}
-                availableSuites={AVAILABLE_SUITES_FIXTURES}
-                onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
-                onSuiteChange={(id) =>
-                  id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
-                }
-              />
-              <Divider orientation="vertical" thickness="technical" className="h-4" />
-              <ContextPath
-                segments={[{ id: 'suite', label: 'Health OS', href: '/health-os', isActive: true }]}
-              />
-            </div>
+            <SuiteHeaderLeft
+              currentSuite={currentSuite}
+              availableSuites={AVAILABLE_SUITES_FIXTURES}
+              label="Health OS"
+              href="/health-os"
+              onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
+              onSuiteChange={(id) =>
+                id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
+              }
+            />
           }
           centerSlot={<CommandBarTrigger onOpen={() => {}} />}
           rightSlot={
