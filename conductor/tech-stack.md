@@ -24,3 +24,9 @@
 ## Development Environments
 - **The OS (loopdev-os):** The main production-ready SaaS environment.
 - **The Lab (labdev):** A dedicated [Vite](https://vitejs.dev/) environment for rapid UI/UX prototyping and iteration.
+
+## Repository boundaries and conventions
+- **Suite isolation:** Health OS, Sales CRM, Quant Ops and Marketing Studio own their routes, layouts and domain modules. Cross-suite reuse must go through `components/layout`, `@loopdev/contracts` or `@loopdev/ui`.
+- **Mock data policy:** fixtures and demo data live under `src/data`, `fixtures` or explicitly named demo contexts. They are never treated as authoritative persistence.
+- **Quant Ops boundary:** frontend code lives under `src/app/quant-ops`; Python execution code lives under `modules/mod-quant-core` and integrates through explicit contracts.
+- **Quality baseline:** run `pnpm format:check`, `pnpm classes:check`, `pnpm duplication:check`, `pnpm knip --no-exit-code --reporter compact`, `pnpm typecheck` and the Vitest suite before merging.

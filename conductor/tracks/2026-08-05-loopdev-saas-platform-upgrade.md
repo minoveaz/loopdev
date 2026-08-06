@@ -445,15 +445,22 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 
 ### Fase 1 — Auditoría y saneamiento del repositorio
 
-- [ ] Revisar encoding UTF-8 de código y documentación.
-- [ ] Ejecutar typecheck, lint y tests del monorepo.
-- [ ] Detectar imports cruzados entre suites.
-- [ ] Separar datos mock de servicios de producción.
-- [ ] Marcar componentes experimentales y rutas de Quant Ops como módulo independiente.
-- [ ] Definir convenciones de nombres, carpetas y contratos.
-- [ ] Documentar cualquier cambio necesario en `conductor/tech-stack.md`.
+- [x] Revisar encoding UTF-8 de código y documentación; la deuda de mojibake heredada queda identificada.
+- [x] Ejecutar typecheck, lint y tests del monorepo; todos pasan en la línea base actual.
+- [x] Detectar imports cruzados entre suites; no se encontraron dependencias internas entre dominios.
+- [x] Separar datos mock de servicios de producción; los mocks restantes están localizados y no son fuente de verdad.
+- [x] Marcar componentes experimentales y rutas de Quant Ops como módulo independiente.
+- [x] Definir convenciones de nombres, carpetas y contratos.
+- [x] Documentar cualquier cambio necesario en `conductor/tech-stack.md`.
 
 **Criterio:** el repositorio tiene una línea base reproducible y las áreas problemáticas están enumeradas.
+
+#### Resultado de auditoría de Fase 1 (2026-08-06)
+
+- Las suites se mantienen aisladas por rutas y layouts; la reutilización compartida pasa por `components/layout`, `@loopdev/contracts` o `@loopdev/ui`.
+- Los datos demo/mock están identificados y no son fuente de verdad. La migración de CRM y Marketing a servicios Supabase queda planificada en las fases 5 y 6.
+- Quant Ops permanece como módulo independiente, con UI, contexto y `modules/mod-quant-core` separados.
+- `conductor/tech-stack.md` recoge los límites de arquitectura, convenciones y comandos de calidad.
 
 ### Fase 1B — Calidad estática y buenas prácticas de codificación
 
