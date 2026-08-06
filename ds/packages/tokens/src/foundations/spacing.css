@@ -14,4 +14,9 @@
   --lpd-space-20: 5rem;   /* 80px */
   --lpd-space-24: 6rem;   /* 96px */
   --lpd-space-32: 8rem;   /* 128px */
+  --lpd-space-40: 10rem;  /* 160px */
+  --lpd-space-48: 12rem;  /* 192px */
+  --lpd-space-56: 14rem;  /* 224px */
+  --lpd-space-64: 16rem;  /* 256px */
+  --lpd-space-80: 20rem;  /* 320px */
 }

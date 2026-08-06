@@ -16,19 +16,20 @@ Esta checklist define los criterios de certificación para cualquier componente,
 
 ---
 
-## ✅ Checklist de Certificación (Front_Certified)
-Un componente SOLO puede certificarse si cumple TODOS los puntos siguientes:
+## ✅ Criterios de Certificación (Front_Certified)
 
-### 1️⃣ ADN Visual (Bloque 0 - Bloqueante)
-- [ ] **Trinidad Cromática:** Uso semántico de Azul (Estructura), Amarillo (Acción) y Morado (IA).
-- [ ] **Sintaxis Técnica:** Presencia de llaves `{ }` en metadatos y grillas técnicas en superficies.
-- [ ] **Surface Soul:** Implementación de Glassmorphism (Backdrop blur) y bordes de autoridad.
-- [ ] **Zero Hardcoding:** Prohibición total de HEX o valores `px` arbitrarios. Solo tokens.
+### 1️⃣ The Quality Shield (Automatización Obligatoria)
+- [ ] **Axe Pass:** El reporte de accesibilidad en Storybook tiene 0 violaciones.
+- [ ] **Chromatic Sync:** El baseline visual ha sido aceptado y no hay regresiones de píxeles.
+- [ ] **Playwright Flow:** El componente ha superado el Smoke Test funcional en la app.
+- [ ] **QA Matrix:** El componente `QualityShield` es visible y está en verde en Storybook.
+- [ ] **Changeset:** Se ha creado el archivo de versión para el monorepo.
 
-### 2️⃣ Arquitectura Brain/Body (Bloqueante)
-- [ ] **Separación MVVM:** Lógica aislada en `useX.ts` y renderizado puro en `index.tsx`.
-- [ ] **Pureza de Vista:** El archivo `index.tsx` no contiene lógica de negocio ni cálculos complejos.
-- [ ] **Atomic Flow:** Respeta la arquitectura de 3 capas: UI → Modules → Apps.
+### 2️⃣ Arquitectura & ADN Visual
+- [ ] **Brain/Body Split:** Lógica aislada en hooks, vista pura en el componente.
+- [ ] **Zero Hardcoding:** No hay valores HEX ni escalas arbitrarias.
+- [ ] **Dynamic Theming:** Reacciona correctamente al `DynamicThemeProvider`.
+- [ ] **Modo Oscuro:** 100% legible y funcional.
 
 ### 3️⃣ Resiliencia & Estrés (Storybook)
 - [ ] **Extreme Content:** Probado con textos masivos y traducciones largas sin romper el layout.

@@ -61,5 +61,17 @@ const renderWithProviders = (ui: React.ReactElement) => {
 - **No detectan:** Desbordamientos (overflow), colisiones flexbox, fallos de `z-index` visual o problemas de `aspect-ratio`.
 - **Mitigación:** Estos casos deben validarse mediante **Historias de Estrés** en Storybook y, en el futuro, con **Visual Regression Testing** (Playwright/Chromatic).
 
+### 5. Integridad de Marca (Chromatic Visual QA)
+Uso de Chromatic para detectar regresiones visuales de píxeles antes de cualquier merge.
+
+---
+
+## 🧱 Infraestructura de Layouts
+Los layouts tienen un protocolo de prueba extendido debido a su rol estructural. Consultar **`02-frontend/LAYOUT_SYSTEM.md`** para detalles sobre los 4 Jueces Especializados:
+1. **Composición de Slots** (Vitest).
+2. **Resiliencia de Contenedor** (Chromatic).
+3. **Adaptabilidad Responsive** (Playwright).
+4. **Integridad de Superficie** (Axe-core).
+
 ---
 *Protocolo de Ingeniería de Calidad - LoopDev*

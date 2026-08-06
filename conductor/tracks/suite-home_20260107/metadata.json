@@ -1,0 +1,8 @@
+{
+  "track_id": "suite-home_20260107",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-07T19:30:00Z",
+  "updated_at": "2026-01-07T19:30:00Z",
+  "description": "Implement the agnostic SuiteHomeLayout template and the Marketing Studio Home configuration."
+}

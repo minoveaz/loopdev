@@ -86,7 +86,7 @@ components/
 ```
 
 ### Reglas de Archivos (Lab vs Prod):
-- **Laboratorio (mockv2):** Es obligatorio crear `Example.tsx` para validación rápida.
+- **Laboratorio (labdev):** Es obligatorio crear `Example.tsx` para validación rápida.
 - **Producción (loopdev/ds):** **PROHIBIDO** incluir `Example.tsx`. La validación visual es exclusiva de **Stories de Storybook**.
 
 ---
@@ -95,29 +95,18 @@ components/
 Para **cada componente**:
 1. Carpeta autocontenida (Brain, Body, Types, Fixtures, README, Test, userHistories).
 2. **Zero Hardcoding:** Prohibido el uso de HEX o valores fijos. Solo tokens o clases de escala estándar.
-3. **Mirror Stories:** Toda historia de estrés en `userHistories.md` debe tener su par `Stress` en Storybook.
-4. **Registry-ready:** Registro obligatorio en `05-operations/COMPONENT_REGISTRY.json`.
+3. **Quality Matrix:** Inclusión obligatoria del componente `QualityShield` en las historias de Storybook para visualizar métricas de QA.
+4. **Mirror Stories:** Toda historia de estrés en `userHistories.md` debe tener su par `Stress` en Storybook.
+5. **Registry-ready:** Registro obligatorio en `05-operations/COMPONENT_REGISTRY.json`.
 
 ---
 
-## 🧪 Sidebar del Laboratorio (OBLIGATORIO)
-- Componentes agrupados por Fase.
-- Grupos colapsables.
-- Estado visible (`experimental`, `beta`, `stable`).
-- Enlace directo a `Example.tsx`.
-
----
-
-## 🔍 Gestión de incertidumbre y Dependencias
-- Si surge una decisión no cubierta: **Detén el desarrollo**, explica el problema y propón opciones sin implementar.
-- **Phase Dependency Rule:** Un componente solo puede consumir dependencias de fases anteriores. Prohibido duplicar fundamentos o crear variantes paralelas.
-
----
-
-## 🌑 Compatibilidad Dark / Light (OBLIGATORIO)
-- El sistema es **dark-first**, pero el **Light Mode es obligatorio**.
-- No puedes asumir un único color de fondo.
-- Uso exclusivo de tokens semánticos del sistema.
+## 🛡️ The Quality Shield (Automatización de QA)
+Para alcanzar el estatus de producción, cada entrega debe pasar los 4 Jueces Automáticos:
+1. **Axe-core (A11y):** Auditoría local en Storybook con 0 violaciones graves (WCAG AA compliance).
+2. **Chromatic (Visual):** Publicación de historias y aceptación de baseline visual para prevenir regresiones.
+3. **Playwright (Flow):** Los smoke tests funcionales del componente en su contexto de app deben estar en verde.
+4. **Changesets (Release):** Creación obligatoria de un acta de cambio (.changeset) para el versionado semántico.
 
 ---
 
@@ -125,7 +114,8 @@ Para **cada componente**:
 El trabajo es exitoso solo si:
 - `tsc --noEmit` y `vitest` están en 100% verde.
 - El componente es plenamente reactivo al `DynamicThemeProvider`.
-- El sello `Loopdev.lab` está correctamente configurado y visible en Storybook.
+- El `QualityShield` (Matrix of Truth) es visible y está en verde en Storybook.
+- Se han superado satisfactoriamente los 4 Jueces del Quality Shield.
 
 ---
-*Protocolo de Ingeniería Frontend - LoopDev Engineering Board v1.3*
+*Protocolo de Ingeniería Frontend - LoopDev Engineering Board v1.4*

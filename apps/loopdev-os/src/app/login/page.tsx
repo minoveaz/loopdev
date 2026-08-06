@@ -1,108 +1,104 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Icon, toast, ToastViewport } from '@loopdev/ui';
-import { useAuth } from '../../hooks/useAuth';
+import { Button, Input, LpdText, Heading, TechnicalCanvas } from '@loopdev/ui';
+import { Mail, Lock, AlertCircle } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { 
-    email, 
-    setEmail, 
-    password, 
-    setPassword, 
-    isLoading, 
-    error, 
-    handleLogin 
-  } = useAuth();
+  const supabase = createClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await handleLogin();
-    if (success) {
-      router.push('/dashboard');
+    setIsLoading(true);
+    setError(null);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+      setIsLoading(false);
+    } else {
+      // Redirigir al Launchpad (Selector de Suites)
+      router.push('/launchpad');
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      toast.show({
-        variant: 'error',
-        title: 'Authentication Failed',
-        description: error,
-      });
-    }
-  }, [error]);
-
   return (
-    <>
-      <ToastViewport position="bottom-center" />
-      <div className="bg-surface-dark font-sans h-screen w-full overflow-hidden relative text-white selection:bg-energy-yellow selection:text-black">
-        {/* ... (código del fondo y branding se mantiene igual) ... */}
-        {/* ... */}
-        
-        <main className="relative z-10 w-full h-full flex flex-col md:flex-row">
-          {/* ... (panel izquierdo de branding se mantiene igual) ... */}
-          {/* ... */}
+    <div className="min-h-screen w-full bg-background-dark relative overflow-hidden flex items-center justify-center font-sans selection:bg-primary/30">
+      
+      <TechnicalCanvas variant="blueprint" intensity="medium" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+
+      <main className="relative z-10 w-full max-w-[420px] px-6">
+        <div className="bg-surface-dark/40 backdrop-blur-xl border border-border-subtle rounded-lpd-lg p-8 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
           
-          {/* Panel derecho con el formulario CONECTADO */}
-          <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 relative">
-            <div className="w-full max-w-md glass-panel rounded-2xl p-8 md:p-10 shadow-2xl relative overflow-hidden group border border-white/10">
-              {/* ... (Header y logo del panel) ... */}
-
-              <form className="space-y-6" onSubmit={handleSubmit}>
-                <Input 
-                  label="Email Address"
-                  id="email" 
-                  type="email"
-                  placeholder="name@loop.dev" 
-                  startIcon={<Icon name="mail" size="sm" />}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  fullWidth
-                  disabled={isLoading}
-                  error={error ? { message: ' ' } : undefined}
-                />
-
-                <div className="space-y-1 relative">
-                  <div className="absolute right-1 top-0 z-10">
-                    <a className="text-[10px] font-bold uppercase tracking-tighter text-accent-purple hover:text-white transition-colors" href="#">Forgot password?</a>
-                  </div>
-                  <Input 
-                    label="Password"
-                    id="password" 
-                    type="password"
-                    placeholder="••••••••" 
-                    startIcon={<Icon name="lock" size="sm" />}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    fullWidth
-                    disabled={isLoading}
-                    error={error ? { message: ' ' } : undefined}
-                  />
-                </div>
-
-                <div className="pt-4">
-                  <Button 
-                    variant="primary"
-                    fullWidth
-                    size="lg"
-                    isLoading={isLoading}
-                    className="shadow-[0_0_20px_-5px_rgba(19,91,236,0.5)] hover:shadow-[0_0_25px_-5px_rgba(255,215,0,0.3)]"
-                  >
-                    Secure Login
-                  </Button>
-                </div>
-              </form>
-
-              {/* ... (Footer del panel) ... */}
+          <div className="mb-10 text-center space-y-4">
+            <div className="inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <LpdText size="nano" weight="black" className="text-primary tracking-widest uppercase">Node_Primary_Active</LpdText>
+            </div>
+            <div className="space-y-1">
+              <Heading size="2xl" weight="bold" className="text-white tracking-tighter flex items-center justify-center gap-1">
+                <span className="text-primary font-light">{"{"}</span>
+                <span>loop.dev</span>
+                <span className="text-primary font-light">{"}"}</span>
+              </Heading>
+              <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest">Infrastructure_Gateway</LpdText>
             </div>
           </div>
-        </main>
-      </div>
-    </>
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <Input 
+              id="email"
+              type="email"
+              label="Usuario"
+              placeholder="nombre@loop.dev"
+              variant="outline"
+              startIcon={<Mail size={18} />}
+              fullWidth
+              disabled={isLoading}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <div className="relative">
+              <Input 
+                id="password"
+                type="password"
+                label="Contraseña"
+                placeholder="••••••••"
+                variant="outline"
+                startIcon={<Lock size={18} />}
+                fullWidth
+                disabled={isLoading}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+                              <LpdText as="button" type="button" size="nano" weight="black" className="absolute top-0 right-0 text-primary/60 hover:text-primary uppercase tracking-widest h-6 flex items-center pr-1 z-20 cursor-pointer transition-colors">Recuperar</LpdText>            </div>
+
+            {error && (
+              <div className="bg-red-500/15 border border-red-500/30 text-red-200 p-3 rounded-lg flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-1">
+                <AlertCircle size={16} className="text-red-400 shrink-0" />
+                <span className="leading-relaxed font-medium">{error}</span>
+              </div>
+            )}
+
+            <div className="pt-4">
+              <Button variant="primary" fullWidth size="lg" isLoading={isLoading} endIcon="arrow_forward">Login</Button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 }

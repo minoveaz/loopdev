@@ -1,0 +1,18 @@
+{
+  "threshold": 5,
+  "minLines": 8,
+  "minTokens": 50,
+  "reporters": ["console"],
+  "path": ["apps", "ds", "modules", "packages"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/coverage/**",
+    "**/storybook-static/**",
+    "pnpm-lock.yaml",
+    "**/*.md",
+    "**/*.stories.*",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ]
+}

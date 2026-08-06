@@ -1,4 +1,9 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+'use client';
+
+'use client';
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 
 // Tipos basados en SECURITY_AND_TENANT_MODEL.md
 export type Role = 'owner' | 'admin' | 'member' | 'viewer';

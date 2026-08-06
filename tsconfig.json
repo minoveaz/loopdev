@@ -15,12 +15,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "verbatimModuleSyntax": true,
+    "ignoreDeprecations": "5.0",
     "baseUrl": ".",
     "paths": {
       "@loopdev/ui": ["ds/packages/ui/src/index.ts"],
       "@loopdev/ui/*": ["ds/packages/ui/src/*"],
-      "@loopdev/mod-architect": ["modules/mod-architect/src/index.ts"],
-      "@loopdev/mod-architect/*": ["modules/mod-architect/src/*"]
+      "@loopdev/tailwind-config": ["ds/packages/tailwind-config/index.js"]
     }
   }
 }

@@ -6,68 +6,47 @@
 **LoopDev** es una plataforma SaaS multitenant para la gestión de productos digitales.
 - **Arquitectura:** Monorepo (Turbo + PNPM).
 - **Frontend:** React, Vite, Tailwind, Shadcn/ui.
-- **Backend:** Node.js, Firebase (Functions/Firestore).
-- **Estado:** En transición de MVP a SaaS Enterprise.
+- **Backend:** Node.js + Python (Quant Core).
+- **Database:** Supabase (PostgreSQL) + Cents Precision.
 
-## 🗺️ Mapa Mental del Código (Three-Layer Architecture)
+## 🏗️ Arquitectura de Grado Industrial (Quant Ops)
+El motor de trading ha sido desacoplado en una arquitectura de 3 capas:
+1.  **Tier A (Data Sentinel)**: Ingestor autónomo en Python. Actualiza `quant_market_history` 24/7.
+2.  **Tier B (Signal Engine)**: Lógica de trading. Consume datos de la DB LOCAL (Cents).
+3.  **Tier C (Execution Manager)**: Acción y Riesgo. Ejecuta órdenes en Binance y actualiza el bot.
+
+### 🔐 Estándares de Datos
+- **Precisión Financiera**: Todos los precios en DB son **BIGINT (Cents)**. (Precio Real * 100).
+- **Contratos**: Definidos en `packages/contracts/src/quant/`. Espejados en Python en `models.py`.
+
+## Map Mental del Código (Three-Layer Architecture)
 
 Respetamos estrictamente estas fronteras. **No alucines importaciones cruzadas.**
 
 ### 1. `/ds` (Design System)
 *La base visual. "Tonto" y puro.*
-- `packages/ui`: Componentes React (Buttons, Inputs).
-- `packages/tokens`: Colores, tipografía, espaciado.
+- `packages/ui`: Componentes React (BotCards, Buttons, Inputs).
 - **Regla:** Nunca importa lógica de negocio.
 
 ### 2. `/modules` (Functional Core)
-*Bloques de Lego con lógica de negocio.*
-- `mod-core-shared`: Autenticación, SDKs, i18n.
-- `mod-auditor`: Herramienta de DesignOps.
-- `mod-crm`: Gestión de clientes.
+- `mod-quant-core`: Motor de trading (Python). Tier A, B y C.
 - **Regla:** Importa de `/ds`. No sabe nada de `/apps`.
 
 ### 3. `/apps` (Orquestadores)
-*El producto final que ve el usuario.*
-- `loopdev-os`: El portal principal (Sistema Operativo).
-- **Regla:** Conecta `/modules` con el Router y Auth Provider.
-
----
-
-## 🏗️ Patrones de Diseño Obligatorios
-
-### 1. The Workbench Pattern (Tool Modules)
-Para herramientas internas (Architect, etc.):
-- **Shell Layer:** Fondo técnico y carga.
-- **Coordinator Layer:** Lógica y orquestación.
-- **Domain Layer:** Componentes puros de UI.
-
-### 2. Cerebro vs Músculo (MVVM)
-- Lógica en Custom Hooks (`Brain`).
-- UI en componentes puros (`Body`).
+- `loopdev-os`: El portal principal. Contiene el Dashboard de Quant Ops.
 
 ---
 
 ## 🛠️ Comandos Esenciales (Desde la raíz `loopdev/`)
 
 - **Instalar:** `pnpm install`
-- **Dev:** `pnpm dev` (Levanta todo en paralelo)
-- **Build:** `pnpm build` (Verifica compilación TS)
-- **Lint:** `pnpm lint`
-- **Test:** `pnpm test`
+- **Dev UI:** `pnpm dev`
+- **Iniciar Ingestor (Sentinel):** `startingestor` (Utility command)
+- **Iniciar Motor Quant:** `startquant` (Utility command)
 
 ---
 
-## ⚠️ Protocolos de Seguridad para IA
-
-1.  **No borres sin confirmar:** Especialmente en `/ds` o `/modules`.
-2.  **Verifica rutas:** Antes de editar, confirma dónde estás con `pwd` o `ls`.
-3.  **Mantén la coherencia:** Si editas un componente en `/ui`, verifica si rompe `/apps`.
-4.  **Dry Run:** Si vas a ejecutar un script destructivo, explica qué hará primero.
-
----
-
-## 📅 Estado Actual (Contexto Dinámico)
-*A fecha: Diciembre 2025*
-- Estamos implementando el **Auditor Module**.
-- Estamos creando el scaffolding de **LoopDev OS**.
-- Prioridad: Establecer el flujo de migración de diseños (Mock -> Code).
+## 📅 Estado Actual (Marzo 2021)
+- **Arquitectura 3-Tier Certificada**: Ingesta, Lógica y Ejecución desacopladas.
+- **Cents Precision**: Implementado en todo el flujo de datos.
+- **Data Sentinel**: Operativo 24/7 con buffer de memoria y backfill.

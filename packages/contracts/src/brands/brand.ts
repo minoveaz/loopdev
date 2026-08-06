@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { TypographySystemSchema } from './typography.schema';
+import { LogoSystemSchema } from './logo.schema';
+import { RulesEngineSchema } from './rules.schema';
 
 export const BrandStatusSchema = z.enum(['draft', 'published', 'archived']);
 
@@ -8,7 +11,10 @@ export const BrandSchema = z.object({
   name: z.string().min(2, "Brand name must be at least 2 characters").max(50),
   description: z.string().max(500).optional(),
   status: BrandStatusSchema.default('draft'),
-  logoUrl: z.string().url().optional().nullable(),
+  logoUrl: z.string().url().optional().nullable(), // @deprecated: Use 'logos.primary.isotype.url' instead
+  logos: LogoSystemSchema.optional(), 
+  typography: TypographySystemSchema.optional(), 
+  rulesEngine: RulesEngineSchema.optional(), // <-- New Rules Engine Field
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });

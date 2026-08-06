@@ -1,0 +1,8 @@
+{
+  "track_id": "module-essentials_20260107",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-07T15:00:00Z",
+  "updated_at": "2026-01-07T15:00:00Z",
+  "description": "Implement standard furniture for ModuleWorkspace: ModuleHeader, ModuleToolbar, ModuleSidebar, and InspectorPanel."
+}

@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "concurrency": "15",
   "tasks": {
     "dev": {
       "cache": false,
@@ -8,12 +9,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "storybook-static/**",
-        "build/**"
-      ]
+      "outputs": ["dist/**", ".next/**", "build/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]

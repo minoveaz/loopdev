@@ -1,5 +1,6 @@
 export type TenantId = 'loopdev' | 'estar-protegidos' | 'client-b';
-export type SubbrandId = 'protege-salud' | 'protege-viaje' | 'protege-hogar' | 'protege-finanzas' | 'none';
+export type SubbrandId =
+  'protege-salud' | 'protege-viaje' | 'protege-hogar' | 'protege-finanzas' | 'none';
 
 export interface BrandStrategy {
   purpose: string;
@@ -12,14 +13,14 @@ export interface BrandStrategy {
   territory: string[];
 }
 
-export interface SubbrandConfig {
+interface SubbrandConfig {
   id: SubbrandId;
   name: string;
   description: string;
   // Ya no hay strategy aquí, se hereda del Tenant
 }
 
-export interface LayoutSettings {
+interface LayoutSettings {
   sidebarDefaultVariant: 'expanded' | 'collapsed';
   /** Visual style for the sidebars: 'base' (white/subtle) or 'brand' (using tenant primary/secondary colors) */
   sidebarStyle: 'base' | 'brand';
@@ -29,7 +30,7 @@ export interface LayoutSettings {
   primaryHeaderHeight: number;
 }
 
-export interface TenantConfig {
+interface TenantConfig {
   id: TenantId;
   name: string;
   description?: string;

@@ -1,5 +1,14 @@
 // Export Brands Module
 export * from './brands/brand';
+export * from './brands/typography.schema';
+export * from './brands/logo.schema';
+export * from './brands/rules.schema';
+
+// Export Platform Navigation Contracts
+export * from './platform/navigation';
+
+// Export Trading/Quant Contracts
+export * from './trading/trading.schema';
 
 // Common API Schemas (Basados en API_STANDARDS.md)
 import { z } from 'zod';

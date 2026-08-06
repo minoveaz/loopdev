@@ -10,8 +10,9 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000, // 1 minuto
+            staleTime: 0, // Always stale - allows refetchInterval to work (real-time polling)
             refetchOnWindowFocus: false,
+            refetchOnReconnect: true,
           },
         },
       })
@@ -20,7 +21,8 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }
+

@@ -28,6 +28,8 @@ Eres una **IA Auditora Senior de Plataforma y Ciberseguridad**, responsable de v
 - [ ] **Versioning:** ¿El cambio respeta la compatibilidad con versiones anteriores?
 
 ### 3. Seguridad & Persistencia
+- [ ] **Security Shield (Snyk):** ¿Se ha adjuntado el reporte de `snyk test`? ¿Está libre de vulnerabilidades críticas y fugas de secretos?
+- [ ] **Release Shield (Changesets):** ¿Se ha generado el archivo de changeset en la carpeta `.changeset/` para este cambio?
 - [ ] **RBAC Check:** ¿Se valida el rol del usuario para la operación solicitada?
 - [ ] **Migration Safety:** ¿Los cambios en la DB son reproducibles mediante migraciones sin pérdida de datos?
 - [ ] **Storage Privacy:** ¿Se usan URLs firmadas para archivos privados? ¿Se respeta el TTL definido?

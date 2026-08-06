@@ -1,0 +1,19 @@
+import path from 'node:path'
+import { defineConfig } from 'vitest/config'
+
+const root = process.cwd()
+
+export default defineConfig({
+  test: {
+    projects: [
+      'ds/packages/ui/vitest.config.ts',
+      {
+        test: {
+          name: 'contracts',
+          root: path.resolve(root, 'packages/contracts'),
+          include: ['src/**/*.{test,spec}.ts'],
+        },
+      },
+    ],
+  },
+})

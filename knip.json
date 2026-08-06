@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": [
+    "scripts_local/**",
+    "supabase/**",
+    "ds/packages/tailwind-config/postcss.config.cjs",
+    "ds/packages/tailwind-config/tailwind.preset.ts",
+    "ds/packages/ui/src/test-mocks/next.tsx"
+  ],
+  "ignoreDependencies": ["tailwindcss"]
+}
