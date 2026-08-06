@@ -532,7 +532,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Crear funciones SQL de membresía y autorización.
 - [ ] Añadir índices y constraints de organización y marca.
 - [x] Activar RLS con políticas verificables.
-- [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner y viewer; ampliar a admin, agent y usuario externo al cerrar el modelo de permisos.
+- [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner, admin, agent, viewer y usuario externo.
 - [ ] Eliminar políticas públicas heredadas.
 
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.

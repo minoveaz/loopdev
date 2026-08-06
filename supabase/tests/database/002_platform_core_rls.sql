@@ -1,6 +1,6 @@
 begin;
 
-select plan(12);
+select plan(18);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -8,7 +8,10 @@ select plan(12);
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
   ('00000000-0000-4000-8000-000000000001', 'authenticated', 'authenticated', 'platform-core-a@example.test', '', now()),
-  ('00000000-0000-4000-8000-000000000002', 'authenticated', 'authenticated', 'platform-core-b@example.test', '', now());
+  ('00000000-0000-4000-8000-000000000002', 'authenticated', 'authenticated', 'platform-core-b@example.test', '', now()),
+  ('00000000-0000-4000-8000-000000000003', 'authenticated', 'authenticated', 'platform-core-admin@example.test', '', now()),
+  ('00000000-0000-4000-8000-000000000004', 'authenticated', 'authenticated', 'platform-core-agent@example.test', '', now()),
+  ('00000000-0000-4000-8000-000000000005', 'authenticated', 'authenticated', 'platform-core-external@example.test', '', now());
 
 insert into public.organizations (id, name, slug)
 values
@@ -18,7 +21,9 @@ values
 insert into public.organization_memberships (organization_id, user_id, role)
 values
   ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000001', 'owner'),
-  ('00000000-0000-4000-9000-000000000002', '00000000-0000-4000-8000-000000000002', 'viewer');
+  ('00000000-0000-4000-9000-000000000002', '00000000-0000-4000-8000-000000000002', 'viewer'),
+  ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000003', 'admin'),
+  ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000004', 'agent');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
 set local role authenticated;
@@ -73,6 +78,36 @@ select ok(
 select ok(
   not public.has_organization_role('00000000-0000-4000-9000-000000000002', array['admin', 'owner']),
   'viewer cannot exercise admin or owner permissions'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000003', true);
+select ok(
+  public.has_organization_role('00000000-0000-4000-9000-000000000001', array['admin']),
+  'admin membership is recognized by the role helper'
+);
+select ok(
+  not public.has_organization_role('00000000-0000-4000-9000-000000000001', array['owner']),
+  'admin cannot exercise owner-only permissions'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000004', true);
+select ok(
+  public.has_organization_role('00000000-0000-4000-9000-000000000001', array['agent']),
+  'agent membership is recognized by the role helper'
+);
+select ok(
+  not public.has_organization_role('00000000-0000-4000-9000-000000000001', array['admin', 'owner']),
+  'agent cannot exercise admin or owner permissions'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000005', true);
+select ok(
+  not exists (select 1 from public.organizations),
+  'an authenticated user without membership cannot see organizations'
+);
+select ok(
+  not public.is_organization_member('00000000-0000-4000-9000-000000000001'),
+  'an authenticated user without membership is denied by the helper'
 );
 
 select * from finish();
