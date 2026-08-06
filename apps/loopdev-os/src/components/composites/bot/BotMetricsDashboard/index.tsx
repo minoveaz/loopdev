@@ -13,6 +13,38 @@
 'use client';
 
 import React from 'react';
+
+function PositionPreview({
+  side,
+  entry,
+  takeProfit,
+  stopLoss,
+}: {
+  side: 'LONG' | 'SHORT';
+  entry: number;
+  takeProfit: number;
+  stopLoss: number;
+}) {
+  return (
+    <div className="space-y-2">
+      <p className="text-micro text-primary-light">{side} Position</p>
+      <div className="bg-surface-elevated rounded p-2 space-y-1 text-nano">
+        <div className="flex justify-between">
+          <span className="text-primary-light">Entry:</span>
+          <span className="font-mono text-primary">${entry.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-green-500">
+          <span>Take Profit:</span>
+          <span className="font-mono">${takeProfit.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-red-500">
+          <span>Stop Loss:</span>
+          <span className="font-mono">${stopLoss.toFixed(2)}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 import { useBotMetricsDashboard } from './useBotMetricsDashboard';
 import { MetricGauge } from '@/components/atoms/indicators/MetricGauge';
 import { MetricCard } from '@/components/atoms/surfaces/MetricCard';
@@ -198,47 +230,18 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
           <h3 className="text-technical font-medium text-primary">Position Preview</h3>
 
           <div className="grid grid-cols-2 gap-4">
-            {/* LONG Position */}
-            <div className="space-y-2">
-              <p className="text-micro text-primary-light">LONG Position</p>
-              <div className="bg-surface-elevated rounded p-2 space-y-1 text-nano">
-                <div className="flex justify-between">
-                  <span className="text-primary-light">Entry:</span>
-                  <span className="font-mono text-primary">
-                    ${metrics.preview.entry_price.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-green-500">
-                  <span>Take Profit:</span>
-                  <span className="font-mono">${metrics.preview.long_tp.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-red-500">
-                  <span>Stop Loss:</span>
-                  <span className="font-mono">${metrics.preview.long_sl.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* SHORT Position */}
-            <div className="space-y-2">
-              <p className="text-micro text-primary-light">SHORT Position</p>
-              <div className="bg-surface-elevated rounded p-2 space-y-1 text-nano">
-                <div className="flex justify-between">
-                  <span className="text-primary-light">Entry:</span>
-                  <span className="font-mono text-primary">
-                    ${metrics.preview.entry_price.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-green-500">
-                  <span>Take Profit:</span>
-                  <span className="font-mono">${metrics.preview.short_tp.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-red-500">
-                  <span>Stop Loss:</span>
-                  <span className="font-mono">${metrics.preview.short_sl.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
+            <PositionPreview
+              side="LONG"
+              entry={metrics.preview.entry_price}
+              takeProfit={metrics.preview.long_tp}
+              stopLoss={metrics.preview.long_sl}
+            />
+            <PositionPreview
+              side="SHORT"
+              entry={metrics.preview.entry_price}
+              takeProfit={metrics.preview.short_tp}
+              stopLoss={metrics.preview.short_sl}
+            />
           </div>
         </div>
       )}
