@@ -1078,6 +1078,7 @@ Antes de activar los gates obligatorios se ha instalado el monorepo con Node 20 
 - ESLint 9 tiene configuración flat compartida en la raíz y los scripts ya no silencian errores con `|| echo`; quedan errores heredados en `loopdev-os` que deben resolverse antes de exigir CI verde.
 - TypeScript detecta dependencias y tipos heredados pendientes en Design System y workspaces auxiliares.
 - El build de Next.js compila cuando se habilitan los certificados TLS del sistema; cada app usa un único router (App Router) y los workspaces de aplicación deben tener una implementación real.
+- El build de `loopdev-os` todavía requiere sanear contratos de Quant Ops (`useBotFleet`, `BotCardItem`, inspectores y formularios) antes de poder exigir el build productivo como gate.
 - El workflow CI ya está creado para ejecutar instalación congelada, lint, typecheck, tests con cobertura y build en Pull Requests y en `develop`/`main`. No se debe activar la protección definitiva de ramas hasta cerrar este baseline.
 
 ## Arranque local reproducible
