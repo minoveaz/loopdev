@@ -492,8 +492,8 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 #### Herramientas de cierre de Fase 1 e inicio de Fase 2
 
-- Adoptar `dependency-cruiser` como primera herramienta de límites arquitectónicos; no añadir todavía `eslint-plugin-boundaries` para evitar reglas duplicadas.
-- Añadir CodeQL y secret scanning en GitHub Actions antes de incorporar múltiples scanners locales.
+- Adoptar `dependency-cruiser` como primera herramienta de límites arquitectónicos cuando CI migre a Node 22+; con Node 20 queda diferido para no romper el entorno actual. No añadir `eslint-plugin-boundaries` en paralelo.
+- Añadir CodeQL y secret scanning en GitHub Actions antes de incorporar múltiples scanners locales. CodeQL queda configurado en `.github/workflows/codeql.yml` y Dependabot en `.github/dependabot.yml`.
 - Documentar contratos y límites de suites en `conductor/tech-stack.md` y `@loopdev/contracts`.
 - Mantener Storybook y Chromatic fuera del proyecto.
 
