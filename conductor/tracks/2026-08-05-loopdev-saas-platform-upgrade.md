@@ -490,6 +490,13 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 **Criterio:** una contribución nueva no puede introducir formato inconsistente, clases Tailwind contradictorias o repetidas, duplicación por encima del umbral ni dependencias sin uso.
 
+#### Herramientas de cierre de Fase 1 e inicio de Fase 2
+
+- Adoptar `dependency-cruiser` como primera herramienta de límites arquitectónicos; no añadir todavía `eslint-plugin-boundaries` para evitar reglas duplicadas.
+- Añadir CodeQL y secret scanning en GitHub Actions antes de incorporar múltiples scanners locales.
+- Documentar contratos y límites de suites en `conductor/tech-stack.md` y `@loopdev/contracts`.
+- Mantener Storybook y Chromatic fuera del proyecto.
+
 ### Fase 1C — Retirada de Storybook y limpieza de deuda heredada
 
 - [x] Retirar Storybook del arranque local y del flujo principal del SaaS.
@@ -507,6 +514,15 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 ### Fase 2 — Platform Core y tenancy real
 
+#### Herramientas y controles
+
+- Incorporar Supabase CLI para migraciones reproducibles y validación de esquema.
+- Usar Docker para Supabase local o bases efímeras en CI.
+- Añadir tests RLS para organizaciones, memberships, roles y aislamiento entre tenants.
+- Usar Zod para contratos de entrada/salida y validación de servicios.
+- Ejecutar CodeQL dentro de GitHub Actions.
+- Priorizar Supabase efímero/RLS en CI antes de activar datos multiempresa reales.
+
 - [ ] Crear migraciones para `organizations` y `organization_memberships`.
 - [ ] Añadir `roles`, `permissions`, `role_permissions` y scopes.
 - [ ] Evolucionar `brands` para que dependa formalmente de `organization_id`.
@@ -521,6 +537,13 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 ### Fase 3 — Auth, contexto y shell multiempresa
 
+#### Herramientas y controles
+
+- Mantener Zod y `@loopdev/contracts` como fuente de contratos de auth, organización, marca y workspace.
+- Añadir tests de autorización y routing por rol y suite.
+- Aplicar reglas más estrictas de `dependency-cruiser`.
+- Incorporar Playwright para login, navegación, permisos y estados de acceso multiempresa.
+
 - [ ] Refactorizar `AuthProvider` para cargar membresías.
 - [ ] Crear `OrganizationProvider`.
 - [ ] Crear `BrandProvider` y selector de marca cuando aplique.
@@ -534,6 +557,13 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 **Criterio:** una misma cuenta puede pertenecer a varias organizaciones y ver solo los módulos y datos autorizados.
 
 ### Fase 4 — Contracts y capa de servicios
+
+#### Herramientas y controles
+
+- Consolidar contratos Zod en `@loopdev/contracts`.
+- Validar servicios server-side con tests de integración.
+- Generar y revisar tipos Supabase antes de exponerlos a las suites.
+- Mantener `dependency-cruiser` como gate arquitectónico.
 
 - [ ] Ampliar `@loopdev/contracts` con Zod y tipos de Platform Core.
 - [ ] Definir contratos de CRM y actividades.
@@ -550,6 +580,14 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 ### Fase 5 — Migración de Marketing Studio
 
+#### Herramientas y controles
+
+- Contratos Zod y tipos compartidos para marcas, campañas, assets y plataformas.
+- Migraciones Supabase con `organization_id`, `brand_id` y `workspace_id`.
+- RLS y tests de aislamiento entre VitaBlue y Protege tu Salud.
+- Tests de servicios OAuth server-side.
+- Playwright para crear, editar, publicar y proteger campañas.
+
 - [ ] Elegir la implementación de LoopDev como fuente de verdad.
 - [ ] Migrar Brand Hub de VitaBlue al contrato genérico de marca.
 - [ ] Migrar campañas, assets, copias y plataformas.
@@ -563,6 +601,14 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 **Criterio:** dos marcas de una misma organización pueden trabajar en Marketing Studio sin mezclar datos, perfiles ni campañas.
 
 ### Fase 6 — CRM persistente
+
+#### Herramientas y controles
+
+- Supabase CLI para tablas, índices, constraints y migraciones CRM.
+- Zod y `@loopdev/contracts` para contactos, leads, oportunidades, actividades y tareas.
+- Tests de integración, concurrencia y RLS por organización/workspace.
+- Vitest para reglas de pipeline y deduplicación de contactos.
+- Playwright para el flujo del agente y la actualización de etapas.
 
 - [ ] Convertir el contexto mock de Sales CRM en servicios Supabase.
 - [ ] Crear tablas de contactos, leads, oportunidades, actividades y tareas.
@@ -579,6 +625,14 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 ### Fase 7 — Vertical de seguros y Operations
 
+#### Herramientas y controles
+
+- Contratos Zod para productos, coberturas, cotizaciones y pólizas.
+- Servicios server-side testeables para ranking, elegibilidad y versionado de cotizaciones.
+- Migraciones Supabase para operaciones, documentos, verificaciones y tareas.
+- Tests de dominio independientes de componentes visuales.
+- Playwright para onboarding, carga documental y seguimiento operativo.
+
 - [ ] Migrar catálogo de VitaBlue a contratos de dominio.
 - [ ] Separar productos, aseguradoras, coberturas y reglas de elegibilidad.
 - [ ] Migrar ranking y recomendación a servicios testeables.
@@ -592,6 +646,14 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 **Criterio:** un lead puede pasar de captación a cotización y onboarding con historial completo.
 
 ### Fase 8 — WhatsApp Business inbound-first
+
+#### Herramientas y controles
+
+- Tests unitarios e integración de webhooks.
+- Idempotencia por identificador del proveedor.
+- Reintentos controlados y estados de entrega.
+- Validación Zod de payloads externos.
+- Playwright únicamente para la bandeja CRM y los flujos del agente.
 
 - [ ] Crear cuenta WhatsApp por organización y marca.
 - [ ] Crear Edge Function de verificación y webhook.
@@ -622,6 +684,33 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 **Criterio:** una organización puede contratar una sola suite sin recibir acceso a módulos o datos ajenos.
 
 ### Fase 10 — Entornos, CI/CD y Render staging
+
+#### Herramientas y controles
+
+- Render Staging conectado a `develop`.
+- Render Production conectado a `main`.
+- Migraciones Supabase controladas y revisables.
+- Health checks y smoke checks post-deploy.
+- Rollback de aplicación y migraciones compatibles.
+- Variables de entorno y secretos separados por entorno.
+
+#### Flujo de calidad objetivo
+
+```text
+Editor
+  ↓ Prettier + ESLint + typecheck
+Vitest + jscpd + Knip
+  ↓
+GitHub Actions
+  ↓ CodeQL + Dependabot + build
+Supabase efímero + RLS
+  ↓
+Playwright
+  ↓
+Render Staging
+  ↓
+Producción
+```
 
 - [ ] Crear proyecto Render `loopdev-saas`.
 - [ ] Crear entornos `Staging` y `Production`.
