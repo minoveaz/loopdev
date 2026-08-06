@@ -3,16 +3,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { usePathname, useRouter, useParams } from 'next/navigation';
 import type { NavGroup } from '@loopdev/contracts';
-import { 
-  ModuleWorkspace, 
-  ModuleHeader, 
+import {
+  ModuleWorkspace,
+  ModuleHeader,
   ModuleSidebar,
   SidebarFlyout,
   Button,
   TechnicalStatusBadge,
   UnifiedInspector,
-  InspectorContext
+  InspectorContext,
 } from '@loopdev/ui';
+import type { InspectorTabId } from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { MOCK_NAV_GROUPS } from '@/data/mock-brands';
@@ -29,8 +30,9 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const params = useParams();
-  const { selectedEntity, isInspectorOpen, setInspectorOpen, setActiveBrand, activeBrand } = useBrandHub();
-  
+  const { selectedEntity, isInspectorOpen, setInspectorOpen, setActiveBrand, activeBrand } =
+    useBrandHub();
+
   // 1. Datos Reales
   const { data: brands = [], isLoading: isBrandsLoading } = useBrands();
   const brandId = params?.brandId as string;
@@ -68,14 +70,14 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   // Lógica de navegación
   const handleBrandNavigation = (itemId: string) => {
     if (!brandId) return;
-    
+
     const routeMap: Record<string, string> = {
       'identity.overview': 'overview',
       'identity.narrative': 'identity',
       'visual.colors': 'visual/colors',
       'visual.typography': 'visual/typography',
       'visual.logos': 'visual/logos',
-      'gov.rules': 'rules'
+      'gov.rules': 'rules',
     };
 
     setActiveSectionId(itemId);
@@ -90,7 +92,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   // 3. Lógica de Breadcrumbs dinámicos
   const segments = [
     { id: 'suite', label: 'Marketing', href: '/marketing-studio' },
-    { id: 'module', label: 'Brand Hub', href: '/marketing-studio/brand-hub' }
+    { id: 'module', label: 'Brand Hub', href: '/marketing-studio/brand-hub' },
   ];
 
   if (pathname === '/marketing-studio/brand-hub') {
@@ -98,41 +100,59 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   } else if (brandId) {
     segments.push({ id: 'view', label: 'Brands', href: '/marketing-studio/brand-hub/brands' });
     if (activeBrand) {
-      segments.push({ id: 'brand', label: activeBrand.name, href: `/marketing-studio/brand-hub/brands/${brandId}` });
+      const brandName = typeof activeBrand.name === 'string' ? activeBrand.name : 'Brand';
+      segments.push({
+        id: 'brand',
+        label: brandName,
+        href: `/marketing-studio/brand-hub/brands/${brandId}`,
+      });
     }
   }
 
   // 4. Determinar contenido del Flyout
   const flyoutProps = useMemo(() => {
     const sectionKey = activeSectionId.split('.')[0];
-    return BRAND_HUB_FLYOUT_DATA[activeSectionId] || BRAND_HUB_FLYOUT_DATA[sectionKey] || BRAND_HUB_FLYOUT_DATA['overview'];
+    return (
+      BRAND_HUB_FLYOUT_DATA[activeSectionId] ||
+      BRAND_HUB_FLYOUT_DATA[sectionKey] ||
+      BRAND_HUB_FLYOUT_DATA['overview']
+    );
   }, [activeSectionId]);
 
   // 5. Construir Contexto del Inspector
-  const inspectorContext: InspectorContext = useMemo(() => ({
-    scope: isBrandMode ? 'entity' : 'module',
-    mode: isReadOnly ? 'read' : activeBrand?.status === 'draft' ? 'draft' : 'read',
-    intent: 'inspect', // Default intent, could be dynamic based on toolbar actions
-    entity: selectedEntity ? {
-        moduleId: 'brand-hub',
-        type: selectedEntity.type,
-        id: selectedEntity.id,
-        name: selectedEntity.name || activeBrand?.name || 'Unknown Entity'
-    } : activeBrand ? {
-        moduleId: 'brand-hub',
-        type: 'brand.identity',
-        id: activeBrand.id,
-        name: activeBrand.name
-    } : undefined,
-    permissions: {
+  const inspectorContext: InspectorContext = useMemo(
+    () => ({
+      scope: isBrandMode ? 'entity' : 'module',
+      mode: isReadOnly ? 'read' : activeBrand?.status === 'draft' ? 'draft' : 'read',
+      intent: 'inspect', // Default intent, could be dynamic based on toolbar actions
+      entity: selectedEntity
+        ? {
+            moduleId: 'brand-hub',
+            type: selectedEntity.type,
+            id: selectedEntity.id,
+            name:
+              selectedEntity.name ||
+              (typeof activeBrand?.name === 'string' ? activeBrand.name : 'Unknown Entity'),
+          }
+        : activeBrand
+          ? {
+              moduleId: 'brand-hub',
+              type: 'brand.identity',
+              id: activeBrand.id,
+              name: typeof activeBrand.name === 'string' ? activeBrand.name : 'Brand',
+            }
+          : undefined,
+      permissions: {
         canEdit: !isReadOnly,
         canApprove: false,
         canPublish: false,
-        canOverride: false
-    }
-  }), [isBrandMode, isReadOnly, activeBrand, selectedEntity]);
+        canOverride: false,
+      },
+    }),
+    [isBrandMode, isReadOnly, activeBrand, selectedEntity],
+  );
 
-  const [activeInspectorTab, setActiveInspectorTab] = useState<string>('context');
+  const [activeInspectorTab, setActiveInspectorTab] = useState<InspectorTabId>('context');
 
   return (
     <ModuleWorkspace
@@ -146,11 +166,11 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
       config={{
         sidebarWidth: '280px',
         flyoutWidth: '320px',
-        inspectorWidth: '420px' // Updated to match UnifiedInspector default
+        inspectorWidth: '420px', // Updated to match UnifiedInspector default
       }}
-      
+
       sidebarSlot={
-        <ModuleSidebar 
+        <ModuleSidebar
           mode={isBrandMode ? 'brand' : 'module'}
           brands={brands}
           navGroups={MOCK_NAV_GROUPS as NavGroup[]}
@@ -160,21 +180,16 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
           onNavigate={handleBrandNavigation}
           activeRouteId={activeSectionId}
         />
-      }      
-      
-      flyoutSlot={
-        <SidebarFlyout 
-          {...flyoutProps} 
-          onClose={() => setFlyoutOpen(false)} 
-        />
       }
 
+      flyoutSlot={<SidebarFlyout {...flyoutProps} onClose={() => setFlyoutOpen(false)} />}
+
       headerSlot={
-        <ModuleHeader 
+        <ModuleHeader
           segments={segments}
           sidebarToggle={{
             isOpen: sidebarOpen,
-            onToggle: () => setSidebarOpen(!sidebarOpen)
+            onToggle: () => setSidebarOpen(!sidebarOpen),
           }}
           // BRAND STATUS CLUSTER
           rightSlot={
@@ -182,39 +197,37 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
               <div className="hidden lg:flex items-center gap-2">
                 {isBrandMode && (
                   <>
-                    <TechnicalStatusBadge 
-                      label={activeBrand?.status?.toUpperCase() || 'LOADING'} 
-                      severity={activeBrand?.status === 'published' ? 'success' : 'warning'} 
+                    <TechnicalStatusBadge
+                      label={activeBrand?.status?.toUpperCase() || 'LOADING'}
+                      severity={activeBrand?.status === 'published' ? 'success' : 'warning'}
                       variant="glass"
                     />
                     {isReadOnly && (
-                      <TechnicalStatusBadge 
-                        label="READ ONLY" 
-                        severity="neutral" 
-                        variant="ghost"
-                      />
+                      <TechnicalStatusBadge label="READ ONLY" severity="neutral" variant="ghost" />
                     )}
                   </>
                 )}
                 {!isBrandMode && (
-                  <TechnicalStatusBadge 
-                    label={isBrandsLoading ? 'SYNCING' : 'SYSTEM ACTIVE'} 
-                    severity="success" 
-                    variant="glass" 
+                  <TechnicalStatusBadge
+                    label={isBrandsLoading ? 'SYNCING' : 'SYSTEM ACTIVE'}
+                    severity="success"
+                    variant="glass"
                     withPulse
                   />
                 )}
               </div>
-              
+
               <div className="h-4 w-px bg-border-technical opacity-20" />
 
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" startIcon="share">Share</Button>
+                <Button variant="ghost" size="sm" startIcon="share">
+                  Share
+                </Button>
                 <div className="h-4 w-px bg-border-technical opacity-20" />
-                <Button 
-                  variant={isInspectorOpen ? 'secondary' : 'ghost'} 
-                  size="sm" 
-                  startIcon="info" 
+                <Button
+                  variant={isInspectorOpen ? 'secondary' : 'ghost'}
+                  size="sm"
+                  startIcon="info"
                   onClick={() => setInspectorOpen(!isInspectorOpen)}
                   aria-label="Toggle Inspector"
                 />
@@ -223,9 +236,9 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
           }
         />
       }
-      
+
       toolbarSlot={
-        <BrandToolbar 
+        <BrandToolbar
           mode={isBrandMode ? 'brand' : 'module'}
           brandStatus={activeBrand?.status}
           isReadOnly={isReadOnly}
@@ -240,20 +253,20 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
           }}
         />
       }
-      
+
       inspectorSlot={
         <UnifiedInspector
-            isOpen={isInspectorOpen}
-            onClose={() => setInspectorOpen(false)}
-            context={inspectorContext}
-            activeTab={activeInspectorTab}
-            onTabChange={setActiveInspectorTab}
+          isOpen={isInspectorOpen}
+          onClose={() => setInspectorOpen(false)}
+          context={inspectorContext}
+          activeTab={activeInspectorTab}
+          onTabChange={setActiveInspectorTab}
         >
-            <BrandInspector 
-                tab={activeInspectorTab} 
-                context={inspectorContext}
-                isLoading={isBrandLoading} 
-            />
+          <BrandInspector
+            tab={activeInspectorTab}
+            context={inspectorContext}
+            isLoading={isBrandLoading}
+          />
         </UnifiedInspector>
       }
     >

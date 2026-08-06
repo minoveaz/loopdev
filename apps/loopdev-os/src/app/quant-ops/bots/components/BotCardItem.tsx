@@ -57,7 +57,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
   onMarketExit,
   onSetToBE,
   onExecuteTP,
-  onUpdateTrail
+  onUpdateTrail,
 }) => {
   const prevBotRef = useRef<BotCardData | null>(null);
 
@@ -73,61 +73,66 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
     strategyName: bot.strategyName,
     coreId: bot.coreId,
     updatedAt: bot.updatedAt,
-    trailingStopDistance: bot.trailingStopDistance
+    trailingStopDistance: bot.trailingStopDistance,
   };
 
   // Memoize liveState to prevent unnecessary re-renders
   const isInPosition = bot.currentAction?.includes('In Position');
-  const memoizedLiveState = useMemo(() => ({
-    currentAction: bot.currentAction,
-    logicSnapshot: bot.logicSnapshot,
-    openPosition: isInPosition ? {
-      entryPrice: bot.currentEntryPrice || 0,
-      investedUsdt: bot.baseInvestmentUsdt || 0,
-      inventory: bot.currentQuantity || 0,
-      openedAt: bot.openedAt,
-      quantity: bot.currentQuantity || 0,
-      pnlPct: bot.currentPnlPct || 0,
-      pnlUsdt: bot.currentPnlUsdt || 0,
-      exitTargets: bot.exitTargets
-    } : undefined
-  }), [
-    bot.currentAction,
-    bot.logicSnapshot,
-    isInPosition,
-    bot.currentEntryPrice,
-    bot.baseInvestmentUsdt,
-    bot.currentQuantity,
-    bot.openedAt,
-    bot.currentPnlPct,
-    bot.currentPnlUsdt,
-    bot.exitTargets
-  ]);
+  const memoizedLiveState = useMemo(
+    () => ({
+      currentAction: bot.currentAction,
+      logicSnapshot: bot.logicSnapshot,
+      openPosition: isInPosition
+        ? {
+            entryPrice: bot.currentEntryPrice || 0,
+            investedUsdt: bot.baseInvestmentUsdt || 0,
+            inventory: bot.currentQuantity || 0,
+            openedAt: bot.openedAt,
+            quantity: bot.currentQuantity || 0,
+            pnlPct: bot.currentPnlPct || 0,
+            pnlUsdt: bot.currentPnlUsdt || 0,
+            exitTargets: bot.exitTargets,
+          }
+        : undefined,
+    }),
+    [
+      bot.currentAction,
+      bot.logicSnapshot,
+      isInPosition,
+      bot.currentEntryPrice,
+      bot.baseInvestmentUsdt,
+      bot.currentQuantity,
+      bot.openedAt,
+      bot.currentPnlPct,
+      bot.currentPnlUsdt,
+      bot.exitTargets,
+    ],
+  );
 
   // Track price changes and show direction indicators
   useEffect(() => {
     if (prevBotRef.current) {
       // Compare and set direction
-      if (bot.currentPrice > (prevBotRef.current.currentPrice || 0)) {
+      if ((bot.currentPrice || 0) > (prevBotRef.current.currentPrice || 0)) {
         queueMicrotask(() => setPriceDirection('up'));
         setTimeout(() => setPriceDirection(null), 2000);
-      } else if (bot.currentPrice < (prevBotRef.current.currentPrice || 0)) {
+      } else if ((bot.currentPrice || 0) < (prevBotRef.current.currentPrice || 0)) {
         queueMicrotask(() => setPriceDirection('down'));
         setTimeout(() => setPriceDirection(null), 2000);
       }
 
-      if (bot.currentSma > (prevBotRef.current.currentSma || 0)) {
+      if ((bot.currentSma || 0) > (prevBotRef.current.currentSma || 0)) {
         queueMicrotask(() => setSmaDirection('up'));
         setTimeout(() => setSmaDirection(null), 2000);
-      } else if (bot.currentSma < (prevBotRef.current.currentSma || 0)) {
+      } else if ((bot.currentSma || 0) < (prevBotRef.current.currentSma || 0)) {
         queueMicrotask(() => setSmaDirection('down'));
         setTimeout(() => setSmaDirection(null), 2000);
       }
 
-      if (bot.currentAtr > (prevBotRef.current.currentAtr || 0)) {
+      if ((bot.currentAtr || 0) > (prevBotRef.current.currentAtr || 0)) {
         queueMicrotask(() => setAtrDirection('up'));
         setTimeout(() => setAtrDirection(null), 2000);
-      } else if (bot.currentAtr < (prevBotRef.current.currentAtr || 0)) {
+      } else if ((bot.currentAtr || 0) < (prevBotRef.current.currentAtr || 0)) {
         queueMicrotask(() => setAtrDirection('down'));
         setTimeout(() => setAtrDirection(null), 2000);
       }
@@ -144,7 +149,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <BotCard 
+      <BotCard
         bot={memoizedBot}
         liveState={memoizedLiveState}
         stats={undefined}
@@ -160,7 +165,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
         onExecuteTP={onExecuteTP}
         onUpdateTrail={onUpdateTrail}
       />
-      
+
       {/* Execution Metrics - Shown when waiting for signal */}
       {showExecutionMetrics && (
         <BotExecutionMetrics

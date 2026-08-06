@@ -4,11 +4,11 @@ import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { LpdText } from '@loopdev/ui';
-import { 
-  MOCK_PUBLISHED_BRAND, 
-  MOCK_DRAFT_BRAND, 
-  MOCK_BRAND_HEALTH, 
-  MOCK_RECENT_EVENTS 
+import {
+  MOCK_PUBLISHED_BRAND,
+  MOCK_DRAFT_BRAND,
+  MOCK_BRAND_HEALTH,
+  MOCK_RECENT_EVENTS,
 } from '@/suites/marketing-studio/brand-hub/fixtures/overview-data';
 import type { GovernanceDomain, BrandEvent } from '@/suites/marketing-studio/brand-hub/types';
 
@@ -34,7 +34,7 @@ export default function BrandOverviewPage() {
   const activeBrand = brandId === '2' ? MOCK_DRAFT_BRAND : MOCK_PUBLISHED_BRAND;
   const healthData = MOCK_BRAND_HEALTH;
   const eventsData = MOCK_RECENT_EVENTS;
-  
+
   const governanceDomains: GovernanceDomain[] = [
     { id: 'identity', label: 'Identity', access: 'allowed' },
     { id: 'tokens', label: 'Visual Tokens', access: 'approval-required' },
@@ -47,9 +47,9 @@ export default function BrandOverviewPage() {
     setSelectedEntity({
       type: 'brand.metric',
       id: metricId,
-      name: `${metricId.charAt(0).toUpperCase() + metricId.slice(1)} Report`
+      name: `${metricId.charAt(0).toUpperCase() + metricId.slice(1)} Report`,
     });
-    
+
     setInspectorOpen(true);
   };
 
@@ -57,7 +57,7 @@ export default function BrandOverviewPage() {
     setSelectedEntity({
       type: 'brand.domain',
       id: domainId,
-      name: `${domainId.toUpperCase()} Policy`
+      name: `${domainId.toUpperCase()} Policy`,
     });
     setInspectorOpen(true);
   };
@@ -66,9 +66,8 @@ export default function BrandOverviewPage() {
     setSelectedEntity({
       type: 'audit.event',
       id: event.id,
-      name: event.label
+      name: event.label,
     });
-    setActiveInspectorTab(event.hasDiff ? 'diff' : 'context');
     setInspectorOpen(true);
   };
 
@@ -78,7 +77,7 @@ export default function BrandOverviewPage() {
         router.push(`/marketing-studio/brand-hub/brands/${brandId}/versions/compare`);
         break;
       case 'dependencies':
-        handleMetricClick('dependencies'); 
+        handleMetricClick('dependencies');
         break;
       default:
         console.log('Action triggered:', actionId);
@@ -88,14 +87,14 @@ export default function BrandOverviewPage() {
 
   return (
     <div className="flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
-      
       {/* HEADER SECTION */}
       <header className="flex flex-col gap-2">
         <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
           Brand Overview _OPS
         </LpdText>
         <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-          Operational command center for monitoring brand health, governance status, and recent activity.
+          Operational command center for monitoring brand health, governance status, and recent
+          activity.
         </LpdText>
       </header>
 
@@ -105,34 +104,23 @@ export default function BrandOverviewPage() {
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
         {/* ROW 2: Health & Governance */}
         <div className="lg:col-span-8 flex flex-col gap-8">
-          <BrandHealthPanel 
-            health={healthData} 
-            onMetricClick={handleMetricClick}
-          />
-          
-          <RecentActivityFeed 
-            events={eventsData} 
-            onEventClick={handleEventClick}
-          />
+          <BrandHealthPanel health={healthData} onMetricClick={handleMetricClick} />
+
+          <RecentActivityFeed events={eventsData} onEventClick={handleEventClick} />
         </div>
 
         {/* RIGHT COLUMN: Sidebar-like widgets */}
         <div className="lg:col-span-4 flex flex-col gap-8">
-          <GovernanceSummary 
-            domains={governanceDomains}
-            onDomainClick={handleDomainClick}
-          />
-          
-          <ActionLauncher 
+          <GovernanceSummary domains={governanceDomains} onDomainClick={handleDomainClick} />
+
+          <ActionLauncher
             brandStatus={activeBrand.status}
             mode={activeBrand.mode}
             onAction={handleAction}
           />
         </div>
-
       </div>
 
       {/* SYNC LOCAL STATE TO LAYOUT INSPECTOR (Via Context override or local component) */}

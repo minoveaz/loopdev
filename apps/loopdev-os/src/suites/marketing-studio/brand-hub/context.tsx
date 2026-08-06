@@ -3,16 +3,16 @@
 import React, { createContext, useContext, useState } from 'react';
 
 // Unified Entity Types for the entire suite
-export type EntityType = 
-  | 'brand' 
-  | 'token' 
-  | 'rule' 
-  | 'version' 
-  | 'dependency' 
-  | 'color.token' 
-  | 'identity.mission' 
-  | 'identity.vision' 
-  | 'identity.tone' 
+export type EntityType =
+  | 'brand'
+  | 'token'
+  | 'rule'
+  | 'version'
+  | 'dependency'
+  | 'color.token'
+  | 'identity.mission'
+  | 'identity.vision'
+  | 'identity.tone'
   | 'identity.claim';
 
 export interface SelectedEntity {
@@ -24,7 +24,7 @@ export interface SelectedEntity {
 
 export interface BrandRecord {
   id: string;
-  status?: string;
+  status?: 'draft' | 'published' | 'archived';
   palette?: { tokens: Array<{ id: string; [key: string]: unknown }> };
   [key: string]: unknown;
 }
@@ -35,7 +35,7 @@ interface BrandHubContextType {
   setSelectedEntity: (entity: SelectedEntity | null) => void;
   isInspectorOpen: boolean;
   setInspectorOpen: (open: boolean) => void;
-  
+
   // Brand State
   activeBrand: BrandRecord | null;
   setActiveBrand: (brand: BrandRecord | null) => void;
@@ -53,7 +53,7 @@ export const BrandHubProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [selectedEntity, setSelectedEntity] = useState<SelectedEntity | null>(null);
   const [isInspectorOpen, setInspectorOpen] = useState(false);
   const [activeBrand, setActiveBrand] = useState<BrandRecord | null>(null);
-  
+
   const [previewTheme, setPreviewTheme] = useState<'light' | 'dark'>('light');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
 
@@ -63,18 +63,20 @@ export const BrandHubProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <BrandHubContext.Provider value={{ 
-      selectedEntity, 
-      setSelectedEntity: handleSelect,
-      isInspectorOpen,
-      setInspectorOpen,
-      activeBrand,
-      setActiveBrand,
-      previewTheme,
-      setPreviewTheme,
-      viewMode,
-      setViewMode
-    }}>
+    <BrandHubContext.Provider
+      value={{
+        selectedEntity,
+        setSelectedEntity: handleSelect,
+        isInspectorOpen,
+        setInspectorOpen,
+        activeBrand,
+        setActiveBrand,
+        previewTheme,
+        setPreviewTheme,
+        viewMode,
+        setViewMode,
+      }}
+    >
       {children}
     </BrandHubContext.Provider>
   );
