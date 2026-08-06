@@ -13,7 +13,7 @@ import {
   CreateStrategyModal,
   StrategyConfig,
   IconButton,
-  TechnicalDialog
+  TechnicalDialog,
 } from '@loopdev/ui';
 import { useStrategies } from '@/hooks/trading/useStrategies';
 import { useExchangeVault } from '@/hooks/trading/useExchangeVault';
@@ -27,12 +27,17 @@ import { useAssets } from '@/hooks/trading/useAssets';
 export default function StrategiesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStrategy, setEditingStrategy] = useState<{ id: string } | null>(null);
-  const [selectedStrategyForBacktest, setSelectedStrategyForBacktest] = useState<string | null>(null);
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; strategyId: string | null }>({ isOpen: false, strategyId: null });
+  const [selectedStrategyForBacktest, setSelectedStrategyForBacktest] = useState<string | null>(
+    null,
+  );
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{
+    isOpen: boolean;
+    strategyId: string | null;
+  }>({ isOpen: false, strategyId: null });
 
   const { accounts } = useExchangeVault();
   const { data: assets = [] } = useAssets();
-  
+
   const {
     strategies,
     strategyRegistry,
@@ -44,7 +49,7 @@ export default function StrategiesPage() {
     updateStrategyStatus,
     runBacktest,
     isBacktesting,
-    backtestResult
+    backtestResult,
   } = useStrategies();
 
   const handleOpenCreate = () => {
@@ -56,7 +61,7 @@ export default function StrategiesPage() {
     // Industrial Mapping: Adapt modal payload to DB schema
     const params = {
       name: config.name,
-      exchangeId: config.exchangeId && config.exchangeId !== '' ? config.exchangeId : undefined,
+      exchangeId: config.exchangeId ?? '',
       mode: config.mode,
       pairs: config.pairs,
       core_id: config.coreId,
@@ -70,22 +75,25 @@ export default function StrategiesPage() {
       trailingStop: config.parameters?.trailingStop || 0.0,
       cooldownMinutes: config.parameters?.cooldownMinutes || 60,
       dailyLossLimit: config.parameters?.dailyLossLimit || 5.0,
-      description: config.description
+      description: config.description,
     };
 
     if (editingStrategy) {
-      updateStrategy({ id: editingStrategy.id, params }, {
-        onSuccess: () => {
-          setIsModalOpen(false);
-          setEditingStrategy(null);
-          toast.show({
-            tenantId: 'loopdev',
-            title: 'Strategy_Updated',
-            description: 'Protocol configuration updated successfully.',
-            variant: 'success'
-          });
-        }
-      });
+      updateStrategy(
+        { id: editingStrategy.id, params },
+        {
+          onSuccess: () => {
+            setIsModalOpen(false);
+            setEditingStrategy(null);
+            toast.show({
+              tenantId: 'loopdev',
+              title: 'Strategy_Updated',
+              description: 'Protocol configuration updated successfully.',
+              variant: 'success',
+            });
+          },
+        },
+      );
     } else {
       createStrategy(params, {
         onSuccess: () => {
@@ -94,17 +102,17 @@ export default function StrategiesPage() {
             tenantId: 'loopdev',
             title: 'Strategy_Created',
             description: 'New protocol initialized in Draft mode.',
-            variant: 'success'
+            variant: 'success',
           });
-        }
+        },
       });
     }
   };
 
   const handleEdit = (id: string) => {
-    const strategy = strategies.find(s => s.id === id);
+    const strategy = strategies.find((s) => s.id === id);
     if (!strategy) return;
-    
+
     // Map strategy to config format for the modal
     // Note: In a real app we might need to fetch the full details if the list view is lightweight
     setEditingStrategy({ id: strategy.id });
@@ -123,25 +131,25 @@ export default function StrategiesPage() {
             tenantId: 'loopdev',
             title: 'Strategy_Deleted',
             description: 'Protocol removed from vault.',
-            variant: 'info'
+            variant: 'info',
           });
           setDeleteConfirmation({ isOpen: false, strategyId: null });
-        }
+        },
       });
     }
   };
 
   const handleBacktest = (id: string) => {
-    const strategy = strategies.find(s => s.id === id);
+    const strategy = strategies.find((s) => s.id === id);
     if (!strategy) return;
 
     setSelectedStrategyForBacktest(id);
-    
+
     toast.show({
       tenantId: 'loopdev',
       title: 'Backtest_Started',
       description: `Simulating ${strategy.name} logic...`,
-      variant: 'info'
+      variant: 'info',
     });
 
     runBacktest({
@@ -152,7 +160,7 @@ export default function StrategiesPage() {
       maxPositions: 5,
       stopLoss: 2.0,
       takeProfit: 5.0,
-      days: 30
+      days: 30,
     });
   };
 
@@ -176,24 +184,30 @@ export default function StrategiesPage() {
 
   return (
     <main className="h-full overflow-y-auto flex flex-col gap-12 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
-      
       {/* 1. STANDARDIZED HEADER */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3 text-primary">
             <span className="material-symbols-outlined text-sm font-bold">psychology</span>
-            <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">Algorithmic_Protocol_Vault</LpdText>
+            <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">
+              Algorithmic_Protocol_Vault
+            </LpdText>
           </div>
-          <Heading size="2xl" weight="bold" className="text-text-main tracking-tight uppercase italic">
+          <Heading
+            size="2xl"
+            weight="bold"
+            className="text-text-main tracking-tight uppercase italic"
+          >
             Strategies_Lab<span className="text-primary">.</span>
           </Heading>
           <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-            Design and backtest your proprietary trading logic. Deploy verified blueprints to the fleet for execution.
+            Design and backtest your proprietary trading logic. Deploy verified blueprints to the
+            fleet for execution.
           </LpdText>
         </div>
 
-        <Button 
-          variant="energy" 
+        <Button
+          variant="energy"
           startIcon="add"
           onClick={handleOpenCreate}
           disabled={accounts.length === 0}
@@ -208,12 +222,13 @@ export default function StrategiesPage() {
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {strategies.map((strategy) => (
             <StrategyCard
-              key={strategy.id} 
+              key={strategy.id}
               strategy={{
                 id: strategy.id,
                 name: strategy.name,
                 coreId: '',
-                exchangeId: accounts.find((account) => account.name === strategy.exchange)?.id || '',
+                exchangeId:
+                  accounts.find((account) => account.name === strategy.exchange)?.id || '',
                 mode: strategy.mode,
                 status: strategy.status,
                 pairs: strategy.pairs,
@@ -235,28 +250,46 @@ export default function StrategiesPage() {
           <div className="w-16 h-16 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary/40 mb-6">
             <span className="material-symbols-outlined text-3xl font-bold">biotech</span>
           </div>
-          <Heading size="lg" weight="bold" className="text-text-main mb-2">No Protocols Defined</Heading>
+          <Heading size="lg" weight="bold" className="text-text-main mb-2">
+            No Protocols Defined
+          </Heading>
           <LpdText size="sm" className="text-text-muted text-center max-w-sm mb-8">
-            Your laboratory is empty. Start by creating a strategy blueprint based on mathematical signals or price action.
+            Your laboratory is empty. Start by creating a strategy blueprint based on mathematical
+            signals or price action.
           </LpdText>
-          <Button variant="primary" className="px-12" onClick={handleOpenCreate}>Initialize_First_Blueprint</Button>
+          <Button variant="primary" className="px-12" onClick={handleOpenCreate}>
+            Initialize_First_Blueprint
+          </Button>
         </section>
       )}
 
       {/* 3. BACKTEST RESULTS MODAL */}
       {backtestResult && selectedStrategyForBacktest && (
         <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 md:p-8">
-          <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setSelectedStrategyForBacktest(null)} />
-          
-          <TechnicalSurface variant="surface" depth="overlay" className="relative z-10 w-full max-w-2xl h-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden rounded-3xl border-primary/20">
+          <div
+            className="absolute inset-0 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300"
+            onClick={() => setSelectedStrategyForBacktest(null)}
+          />
+
+          <TechnicalSurface
+            variant="surface"
+            depth="overlay"
+            className="relative z-10 w-full max-w-2xl h-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden rounded-3xl border-primary/20"
+          >
             <header className="p-6 border-b border-border-technical/30 flex items-center justify-between bg-background-subtle/30">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
                   <span className="material-symbols-outlined text-xl font-bold">query_stats</span>
                 </div>
-                <Heading size="xs" weight="bold" className="uppercase tracking-tight italic">Simulation_Audit_Report</Heading>
+                <Heading size="xs" weight="bold" className="uppercase tracking-tight italic">
+                  Simulation_Audit_Report
+                </Heading>
               </div>
-              <IconButton icon="close" size="sm" onClick={() => setSelectedStrategyForBacktest(null)} />
+              <IconButton
+                icon="close"
+                size="sm"
+                onClick={() => setSelectedStrategyForBacktest(null)}
+              />
             </header>
 
             <div className="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-8">
@@ -264,17 +297,46 @@ export default function StrategiesPage() {
                 {[
                   { label: 'Total_Trades', value: backtestResult.totalTrades, icon: 'analytics' },
                   { label: 'Win_Rate', value: `${backtestResult.winRate}%`, icon: 'check_circle' },
-                  { label: 'Net_Return', value: `${backtestResult.totalReturn}%`, icon: 'trending_up', color: 'text-emerald-500' },
-                  { label: 'Max_Drawdown', value: `${backtestResult.maxDrawdown}%`, icon: 'trending_down', color: 'text-rose-500' },
-                  { label: 'Profit_Factor', value: backtestResult.profitFactor, icon: 'settings_input_component' },
-                  { label: 'Sharpe_Ratio', value: backtestResult.sharpeRatio, icon: 'architecture' }
+                  {
+                    label: 'Net_Return',
+                    value: `${backtestResult.totalReturn}%`,
+                    icon: 'trending_up',
+                    color: 'text-emerald-500',
+                  },
+                  {
+                    label: 'Max_Drawdown',
+                    value: `${backtestResult.maxDrawdown}%`,
+                    icon: 'trending_down',
+                    color: 'text-rose-500',
+                  },
+                  {
+                    label: 'Profit_Factor',
+                    value: backtestResult.profitFactor,
+                    icon: 'settings_input_component',
+                  },
+                  {
+                    label: 'Sharpe_Ratio',
+                    value: backtestResult.sharpeRatio,
+                    icon: 'architecture',
+                  },
                 ].map((stat, i) => (
-                  <div key={i} className="p-4 rounded-2xl bg-background-subtle/50 border border-border-technical/30">
+                  <div
+                    key={i}
+                    className="p-4 rounded-2xl bg-background-subtle/50 border border-border-technical/30"
+                  >
                     <div className="flex items-center gap-2 mb-2 opacity-40">
                       <span className="material-symbols-outlined text-xs">{stat.icon}</span>
-                      <LpdText size="nano" weight="bold" className="uppercase tracking-widest">{stat.label}</LpdText>
+                      <LpdText size="nano" weight="bold" className="uppercase tracking-widest">
+                        {stat.label}
+                      </LpdText>
                     </div>
-                    <LpdText size="lg" weight="black" className={cn("font-mono", stat.color || "text-text-main")}>{stat.value}</LpdText>
+                    <LpdText
+                      size="lg"
+                      weight="black"
+                      className={cn('font-mono', stat.color || 'text-text-main')}
+                    >
+                      {stat.value}
+                    </LpdText>
                   </div>
                 ))}
               </div>
@@ -282,19 +344,44 @@ export default function StrategiesPage() {
               <Divider thickness="technical" className="opacity-30" />
 
               <div className="space-y-4">
-                <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em] opacity-40 px-1">Detailed_Trade_Log</LpdText>
+                <LpdText
+                  size="nano"
+                  weight="black"
+                  className="uppercase tracking-[0.2em] opacity-40 px-1"
+                >
+                  Detailed_Trade_Log
+                </LpdText>
                 <div className="space-y-2">
                   {backtestResult.trades.slice(0, 5).map((trade, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-white/5 border border-border-technical/20">
+                    <div
+                      key={i}
+                      className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-white/5 border border-border-technical/20"
+                    >
                       <div className="flex flex-col">
-                        <LpdText size="xs" weight="bold" className="uppercase">{trade.pair}{' // '}{trade.side}</LpdText>
-                        <LpdText size="nano" className="text-text-muted font-mono">{new Date(trade.entry_time).toLocaleDateString()}</LpdText>
+                        <LpdText size="xs" weight="bold" className="uppercase">
+                          {trade.pair}
+                          {' // '}
+                          {trade.side}
+                        </LpdText>
+                        <LpdText size="nano" className="text-text-muted font-mono">
+                          {new Date(trade.entry_time).toLocaleDateString()}
+                        </LpdText>
                       </div>
                       <div className="text-right">
-                        <LpdText size="xs" weight="black" className={(trade.pnl ?? 0) >= 0 ? "text-emerald-500" : "text-rose-500"}>
-                          {(trade.pnl ?? 0) >= 0 ? '+' : ''}{trade.pnl_pct}%
+                        <LpdText
+                          size="xs"
+                          weight="black"
+                          className={(trade.pnl ?? 0) >= 0 ? 'text-emerald-500' : 'text-rose-500'}
+                        >
+                          {(trade.pnl ?? 0) >= 0 ? '+' : ''}
+                          {trade.pnl_pct}%
                         </LpdText>
-                        <LpdText size="nano" className="text-text-muted opacity-40 uppercase font-bold">{trade.reason}</LpdText>
+                        <LpdText
+                          size="nano"
+                          className="text-text-muted opacity-40 uppercase font-bold"
+                        >
+                          {trade.reason}
+                        </LpdText>
                       </div>
                     </div>
                   ))}
@@ -308,19 +395,23 @@ export default function StrategiesPage() {
             </div>
 
             <footer className="p-6 border-t border-border-technical/30 flex items-center justify-end gap-4 bg-background-subtle/10">
-              <Button variant="outline" onClick={() => setSelectedStrategyForBacktest(null)}>Dismiss_Report</Button>
-              <Button variant="primary" className="px-8 shadow-xl shadow-primary/20">Download_CSV</Button>
+              <Button variant="outline" onClick={() => setSelectedStrategyForBacktest(null)}>
+                Dismiss_Report
+              </Button>
+              <Button variant="primary" className="px-8 shadow-xl shadow-primary/20">
+                Download_CSV
+              </Button>
             </footer>
           </TechnicalSurface>
         </div>
       )}
 
       {/* 4. INDUSTRIAL MODAL */}
-      <CreateStrategyModal 
+      <CreateStrategyModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreate={handleSaveStrategy}
-        exchanges={accounts.map(acc => ({ id: acc.id, name: acc.name, provider: acc.provider }))}
+        exchanges={accounts.map((acc) => ({ id: acc.id, name: acc.name, provider: acc.provider }))}
         availableAssets={assets}
         availableCores={strategyRegistry}
         isLoading={isCreating}
@@ -335,7 +426,10 @@ export default function StrategiesPage() {
         variant="danger"
         actions={
           <>
-            <Button variant="ghost" onClick={() => setDeleteConfirmation({ isOpen: false, strategyId: null })}>
+            <Button
+              variant="ghost"
+              onClick={() => setDeleteConfirmation({ isOpen: false, strategyId: null })}
+            >
               Cancel_Action
             </Button>
             <Button variant="danger" onClick={handleConfirmDelete}>
@@ -347,11 +441,11 @@ export default function StrategiesPage() {
         <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3">
           <span className="material-symbols-outlined text-rose-500">warning</span>
           <LpdText size="xs" className="text-rose-600/80 leading-relaxed font-medium">
-            Warning: If this strategy is currently active on any bot, those bots will be stopped immediately to prevent undefined behavior.
+            Warning: If this strategy is currently active on any bot, those bots will be stopped
+            immediately to prevent undefined behavior.
           </LpdText>
         </div>
       </TechnicalDialog>
-
     </main>
   );
 }

@@ -2,24 +2,10 @@
 
 import React, { useState } from 'react';
 import { LpdText, Heading, Icon, Skeleton, Button, TechnicalDialog, toast } from '@loopdev/ui';
-import type { BotStatus } from '@loopdev/contracts';
+import type { BotConfig, BotStatus } from '@loopdev/contracts';
 import { DeployBotModal } from '../components/DeployBotModal';
 import { BotCardItem } from './components/BotCardItem';
 import { useBotFleet } from '@/hooks/trading/useBotFleet';
-
-interface BotFormData {
-  name: string;
-  exchangeId: string;
-  pair: string;
-  strategyId: string;
-  baseInvestmentUsdt: number;
-  maxDailyLossPct: number;
-  globalStopLossPct: number;
-  maxRebuys: number;
-  maxExposureUsdt: number;
-  useInitialRangeFilter: boolean;
-  useMarketRegimeFilter: boolean;
-}
 
 /**
  * @page BotFleetPage
@@ -28,10 +14,16 @@ interface BotFormData {
  */
 export default function BotFleetPage() {
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
-  const [editingBot, setEditingBot] = useState<ReturnType<typeof useBotFleet>['bots'][number] | null>(null);
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; botId: string | null }>({ isOpen: false, botId: null });
+  const [editingBot, setEditingBot] = useState<
+    ReturnType<typeof useBotFleet>['bots'][number] | null
+  >(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{
+    isOpen: boolean;
+    botId: string | null;
+  }>({ isOpen: false, botId: null });
 
-  const { bots, isLoading, deployBot, toggleStatus, updateBot, deleteBot, executeCommand } = useBotFleet();
+  const { bots, isLoading, deployBot, toggleStatus, updateBot, deleteBot, executeCommand } =
+    useBotFleet();
 
   const handleToggleStatus = (id: string, current: BotStatus) => {
     const nextStatus: BotStatus = current === 'active' ? 'paused' : 'active';
@@ -44,7 +36,7 @@ export default function BotFleetPage() {
       tenantId: 'loopdev',
       title: 'Manual_Exit_Triggered',
       description: 'The engine is processing an immediate market liquidation.',
-      variant: 'info'
+      variant: 'info',
     });
   };
 
@@ -54,7 +46,7 @@ export default function BotFleetPage() {
       tenantId: 'loopdev',
       title: 'Stop_Loss_Adjusted',
       description: 'The stop loss has been synchronized with the break-even level.',
-      variant: 'success'
+      variant: 'success',
     });
   };
 
@@ -64,7 +56,7 @@ export default function BotFleetPage() {
       tenantId: 'loopdev',
       title: 'TP_Exit_Triggered',
       description: 'The agent is closing the position at the current market price.',
-      variant: 'info'
+      variant: 'info',
     });
   };
 
@@ -74,7 +66,7 @@ export default function BotFleetPage() {
       tenantId: 'loopdev',
       title: 'Trailing_Agressiveness_Updated',
       description: `Targeting a ${distance}% callback distance from peak.`,
-      variant: 'success'
+      variant: 'success',
     });
   };
 
@@ -84,7 +76,8 @@ export default function BotFleetPage() {
   };
 
   const handleEdit = (id: string) => {
-    const bot = bots.find(b => b.id === id);
+    const bot = bots.find((b) => b.id === id);
+    if (!bot) return;
     setEditingBot(bot);
     setIsDeployModalOpen(true);
   };
@@ -102,41 +95,45 @@ export default function BotFleetPage() {
             tenantId: 'loopdev',
             title: 'Bot_Terminated',
             description: 'The bot instance has been removed from the fleet.',
-            variant: 'info'
+            variant: 'info',
           });
-        }
+        },
       });
     }
   };
 
-  const handleSaveBot = (newBotData: BotFormData) => {
+  const handleSaveBot = (newBotData: Partial<BotConfig>) => {
+    const riskProfile = (newBotData.riskProfile ?? {}) as Partial<BotConfig['riskProfile']>;
     const botPayload = {
-      name: newBotData.name,
-      exchangeId: newBotData.exchangeId,
-      pair: newBotData.pair,
-      strategyId: newBotData.strategyId,
-      baseInvestmentUsdt: newBotData.baseInvestmentUsdt,
+      name: newBotData.name ?? '',
+      exchangeId: newBotData.exchangeId ?? '',
+      pair: newBotData.pair ?? '',
+      strategyId: newBotData.strategyId ?? '',
+      baseInvestmentUsdt: newBotData.baseInvestmentUsdt ?? 1000,
       riskProfile: {
-        maxDailyLossPct: newBotData.maxDailyLossPct,
-        globalStopLossPct: newBotData.globalStopLossPct,
-        maxRebuys: newBotData.maxRebuys,
-        maxExposureUsdt: newBotData.maxExposureUsdt,
+        maxDailyLossPct: riskProfile.maxDailyLossPct ?? 2,
+        globalStopLossPct: riskProfile.globalStopLossPct ?? 5,
+        maxRebuys: riskProfile.maxRebuys ?? 3,
+        maxExposureUsdt: riskProfile.maxExposureUsdt ?? 5000,
       },
-      useInitialRangeFilter: newBotData.useInitialRangeFilter,
-      useMarketRegimeFilter: newBotData.useMarketRegimeFilter
+      useInitialRangeFilter: newBotData.useInitialRangeFilter ?? true,
+      useMarketRegimeFilter: newBotData.useMarketRegimeFilter ?? true,
     };
-    
+
     if (editingBot) {
-      updateBot({ id: editingBot.id, params: botPayload }, {
-        onSuccess: () => {
-          toast.show({
-            tenantId: 'loopdev',
-            title: 'Bot_Updated',
-            description: 'The bot configuration has been successfully synchronized.',
-            variant: 'success'
-          });
-        }
-      });
+      updateBot(
+        { id: editingBot.id, params: botPayload },
+        {
+          onSuccess: () => {
+            toast.show({
+              tenantId: 'loopdev',
+              title: 'Bot_Updated',
+              description: 'The bot configuration has been successfully synchronized.',
+              variant: 'success',
+            });
+          },
+        },
+      );
     } else {
       deployBot(botPayload, {
         onSuccess: () => {
@@ -144,12 +141,12 @@ export default function BotFleetPage() {
             tenantId: 'loopdev',
             title: 'Bot_Deployed',
             description: 'A new trading agent has been added to your fleet.',
-            variant: 'success'
+            variant: 'success',
           });
-        }
+        },
       });
     }
-    
+
     setIsDeployModalOpen(false);
     setEditingBot(null);
   };
@@ -169,12 +166,14 @@ export default function BotFleetPage() {
 
   return (
     <main className="h-full overflow-y-auto flex flex-col gap-12 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
-      
-      <DeployBotModal 
+      <DeployBotModal
         isOpen={isDeployModalOpen}
-        onClose={() => { setIsDeployModalOpen(false); setEditingBot(null); }}
+        onClose={() => {
+          setIsDeployModalOpen(false);
+          setEditingBot(null);
+        }}
         onDeploy={handleSaveBot}
-        initialData={editingBot}
+        initialData={editingBot ?? undefined}
       />
 
       {/* 1. STANDARDIZED HEADER */}
@@ -182,18 +181,25 @@ export default function BotFleetPage() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3 text-amber-500">
             <span className="material-symbols-outlined text-sm font-bold">hub</span>
-            <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">Operational_Fleet_Manager</LpdText>
+            <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">
+              Operational_Fleet_Manager
+            </LpdText>
           </div>
-          <Heading size="2xl" weight="bold" className="text-text-main tracking-tight uppercase italic">
+          <Heading
+            size="2xl"
+            weight="bold"
+            className="text-text-main tracking-tight uppercase italic"
+          >
             Bot_Fleet_Control<span className="text-amber-500">.</span>
           </Heading>
           <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-            Monitor, deploy, and scale your algorithmic agents. All instances are synchronized with the Quant Core Engine.
+            Monitor, deploy, and scale your algorithmic agents. All instances are synchronized with
+            the Quant Core Engine.
           </LpdText>
         </div>
 
-        <Button 
-          variant="energy" 
+        <Button
+          variant="energy"
           onClick={handleOpenDeploy}
           startIcon="add"
           className="px-8 shadow-xl shadow-amber-500/20"
@@ -224,11 +230,16 @@ export default function BotFleetPage() {
           <div className="w-16 h-16 rounded-2xl bg-amber-500/5 border border-amber-500/10 flex items-center justify-center text-amber-500/40 mb-6">
             <Icon name="Bot" size="lg" />
           </div>
-          <Heading size="lg" weight="bold" className="text-text-main mb-2">No Bots Deployed</Heading>
+          <Heading size="lg" weight="bold" className="text-text-main mb-2">
+            No Bots Deployed
+          </Heading>
           <LpdText size="sm" className="text-text-muted text-center max-w-sm mb-8">
-            Your fleet is currently offline. Start by deploying your first trading agent using a certified strategy logic.
+            Your fleet is currently offline. Start by deploying your first trading agent using a
+            certified strategy logic.
           </LpdText>
-          <Button variant="primary" className="px-12" onClick={handleOpenDeploy}>Deploy_Your_First_Bot</Button>
+          <Button variant="primary" className="px-12" onClick={handleOpenDeploy}>
+            Deploy_Your_First_Bot
+          </Button>
         </section>
       )}
 
@@ -241,7 +252,10 @@ export default function BotFleetPage() {
         variant="danger"
         actions={
           <>
-            <Button variant="ghost" onClick={() => setDeleteConfirmation({ isOpen: false, botId: null })}>
+            <Button
+              variant="ghost"
+              onClick={() => setDeleteConfirmation({ isOpen: false, botId: null })}
+            >
               Cancel_Action
             </Button>
             <Button variant="danger" onClick={handleConfirmDelete}>
@@ -253,11 +267,11 @@ export default function BotFleetPage() {
         <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3">
           <span className="material-symbols-outlined text-rose-500">warning</span>
           <LpdText size="xs" className="text-rose-600/80 leading-relaxed font-medium">
-            Confirming this action will purge the bot&apos;s configuration from the active fleet. Open positions linked to this bot might need manual intervention.
+            Confirming this action will purge the bot&apos;s configuration from the active fleet.
+            Open positions linked to this bot might need manual intervention.
           </LpdText>
         </div>
       </TechnicalDialog>
-
     </main>
   );
 }

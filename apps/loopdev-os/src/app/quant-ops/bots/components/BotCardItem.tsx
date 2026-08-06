@@ -2,36 +2,33 @@
 
 import React, { useMemo, useEffect, useRef, useState } from 'react';
 import { BotCardIndustrial as BotCard } from '@loopdev/ui';
-import type { BotStatus } from '@loopdev/contracts';
+import type { BotConfig, BotStatus } from '@loopdev/contracts';
 import { BotExecutionMetrics } from '../../components/BotExecutionMetrics';
 import { useQuantOps } from '../../context';
 
-interface BotCardData {
-  id: string;
-  name: string;
-  pair: string;
-  status: BotStatus;
-  currentPrice?: number;
+type BotCardData = BotConfig & {
+  currentPrice: number;
   currentSma?: number;
   currentAtr?: number;
   priceTarget?: number;
   atrValue?: number;
-  currentAction?: string;
-  currentEntryPrice?: number;
+  currentAction: string;
+  currentEntryPrice: number;
+  currentPositionSide?: 'LONG' | 'SHORT';
   baseInvestmentUsdt?: number;
   currentQuantity?: number;
   openedAt?: string;
-  currentPnlPct?: number;
-  currentPnlUsdt?: number;
-  macroSentiment?: string;
+  currentPnlPct: number;
+  currentPnlUsdt: number;
+  macroSentiment?: 'bullish' | 'bearish' | 'neutral';
   priceHistory?: number[];
   strategyName?: string;
   coreId?: string;
   updatedAt?: string;
   trailingStopDistance?: number;
-  exitTargets?: { tpPrice?: number; slPrice?: number; bePrice?: number };
+  exitTargets?: { tpPrice: number; slPrice: number; bePrice?: number } | null;
   logicSnapshot?: Record<string, unknown>;
-}
+};
 
 interface BotCardItemProps {
   bot: BotCardData;
@@ -80,7 +77,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
   const isInPosition = bot.currentAction?.includes('In Position');
   const memoizedLiveState = useMemo(
     () => ({
-      currentAction: bot.currentAction,
+      currentAction: bot.currentAction || 'Initializing...',
       logicSnapshot: bot.logicSnapshot,
       openPosition: isInPosition
         ? {
@@ -91,7 +88,7 @@ export const BotCardItem: React.FC<BotCardItemProps> = ({
             quantity: bot.currentQuantity || 0,
             pnlPct: bot.currentPnlPct || 0,
             pnlUsdt: bot.currentPnlUsdt || 0,
-            exitTargets: bot.exitTargets,
+            exitTargets: bot.exitTargets ?? undefined,
           }
         : undefined,
     }),
