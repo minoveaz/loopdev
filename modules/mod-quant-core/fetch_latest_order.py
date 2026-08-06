@@ -29,9 +29,7 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def from_cents(cents):
-    if cents is None: return 0.0
-    return float(cents) / 100.0
+from quant_helpers import from_cents
 
 async def get_latest_order():
     # 1. Verificar posiciones activas en quant_bots
