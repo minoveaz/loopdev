@@ -1,4 +1,4 @@
-export type BrandLogoVariant = 'full' | 'isotype' | 'logotype';
+type BrandLogoVariant = 'full' | 'isotype' | 'logotype';
 export type BrandLogoSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export interface BrandLogoProps {

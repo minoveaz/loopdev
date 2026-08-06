@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
  * @description Contratos de tipado para el menú de acciones rápidas QuickActionMenu.
  */
 
-export interface QuickActionItem {
+interface QuickActionItem {
   /** ID único de la acción */
   id: string;
   /** Etiqueta de la acción (ej: Nueva Campaña) */

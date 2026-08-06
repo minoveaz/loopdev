@@ -3,8 +3,8 @@
  * @description Contratos para la infraestructura de Skeletons.
  */
 
-export type SkeletonVariant = 'rect' | 'circle' | 'text' | 'button';
-export type SkeletonAnimation = 'shimmer' | 'pulse' | 'none';
+type SkeletonVariant = 'rect' | 'circle' | 'text' | 'button';
+type SkeletonAnimation = 'shimmer' | 'pulse' | 'none';
 
 export interface SkeletonProps {
   /** Forma geométrica base */

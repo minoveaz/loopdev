@@ -1,7 +1,7 @@
 /**
  * @file index.tsx
  * @description Body: BotMetricsDashboard composite component
- * 
+ *
  * Page-level component that displays:
  * - RSI gauge (MetricGauge)
  * - SMA50, ATR, Current Price metrics (MetricCard)
@@ -14,8 +14,8 @@
 
 import React from 'react';
 import { useBotMetricsDashboard } from './useBotMetricsDashboard';
-import MetricGauge from '@/components/atoms/indicators/MetricGauge';
-import MetricCard from '@/components/atoms/surfaces/MetricCard';
+import { MetricGauge } from '@/components/atoms/indicators/MetricGauge';
+import { MetricCard } from '@/components/atoms/surfaces/MetricCard';
 import { BotMetricsDashboardProps } from './types';
 import {
   formatPrice,
@@ -25,12 +25,7 @@ import {
 } from '@/lib/metrics/metricsFormatter';
 
 export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) => {
-  const {
-    botId,
-    botName = 'Trading Bot',
-    showExtended = false,
-    className = '',
-  } = props;
+  const { botId, botName = 'Trading Bot', showExtended = false, className = '' } = props;
 
   const { metrics, loading, error, isConnected, refresh, health } = useBotMetricsDashboard(props);
 
@@ -51,7 +46,9 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
   // Error state
   if (error && !metrics) {
     return (
-      <div className={`border border-red-500 border-opacity-50 bg-red-500 bg-opacity-5 rounded-lg p-4 ${className}`}>
+      <div
+        className={`border border-red-500 border-opacity-50 bg-red-500 bg-opacity-5 rounded-lg p-4 ${className}`}
+      >
         <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
         <button
           onClick={refresh}
@@ -90,9 +87,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
               isConnected ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'
             }`}
           />
-          <span className="text-nano text-primary-light">
-            {isConnected ? 'Live' : 'Polling'}
-          </span>
+          <span className="text-nano text-primary-light">{isConnected ? 'Live' : 'Polling'}</span>
         </div>
       </div>
 
@@ -156,8 +151,8 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
                 metrics.volatility.status === 'low'
                   ? 'warning'
                   : metrics.volatility.status === 'high'
-                  ? 'alert'
-                  : 'normal'
+                    ? 'alert'
+                    : 'normal'
               }
             />
 
@@ -168,8 +163,8 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
                 metrics.volatility.status === 'low'
                   ? 'warning'
                   : metrics.volatility.status === 'high'
-                  ? 'alert'
-                  : 'success'
+                    ? 'alert'
+                    : 'success'
               }
             />
           </div>
@@ -187,15 +182,21 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
             <div className="bg-surface-elevated rounded p-2 space-y-1">
               <div className="flex justify-between text-nano">
                 <span className="text-primary-light">Trigger RSI:</span>
-                <span className="font-mono text-primary">{metrics.signals.long_entry.required_level}</span>
+                <span className="font-mono text-primary">
+                  {metrics.signals.long_entry.required_level}
+                </span>
               </div>
               <div className="flex justify-between text-nano">
                 <span className="text-primary-light">Current RSI:</span>
-                <span className="font-mono text-primary">{metrics.signals.long_entry.current_value.toFixed(1)}</span>
+                <span className="font-mono text-primary">
+                  {metrics.signals.long_entry.current_value.toFixed(1)}
+                </span>
               </div>
               <div className="flex justify-between text-nano">
                 <span className="text-primary-light">Gap:</span>
-                <span className={`font-mono ${metrics.signals.long_entry.ready ? 'text-green-500' : 'text-yellow-500'}`}>
+                <span
+                  className={`font-mono ${metrics.signals.long_entry.ready ? 'text-green-500' : 'text-yellow-500'}`}
+                >
                   {formatPercentage(metrics.signals.long_entry.gap_pct)}
                 </span>
               </div>
@@ -225,15 +226,21 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
             <div className="bg-surface-elevated rounded p-2 space-y-1">
               <div className="flex justify-between text-nano">
                 <span className="text-primary-light">Trigger RSI:</span>
-                <span className="font-mono text-primary">{metrics.signals.short_entry.required_level}</span>
+                <span className="font-mono text-primary">
+                  {metrics.signals.short_entry.required_level}
+                </span>
               </div>
               <div className="flex justify-between text-nano">
                 <span className="text-primary-light">Current RSI:</span>
-                <span className="font-mono text-primary">{metrics.signals.short_entry.current_value.toFixed(1)}</span>
+                <span className="font-mono text-primary">
+                  {metrics.signals.short_entry.current_value.toFixed(1)}
+                </span>
               </div>
               <div className="flex justify-between text-nano">
                 <span className="text-primary-light">Gap:</span>
-                <span className={`font-mono ${metrics.signals.short_entry.ready ? 'text-purple-500' : 'text-yellow-500'}`}>
+                <span
+                  className={`font-mono ${metrics.signals.short_entry.ready ? 'text-purple-500' : 'text-yellow-500'}`}
+                >
                   {formatPercentage(metrics.signals.short_entry.gap_pct)}
                 </span>
               </div>
@@ -251,7 +258,8 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
                   />
                 </div>
                 <span className="text-nano font-mono text-primary-light">
-                  {Math.min(100, Math.max(0, 100 - metrics.signals.short_entry.gap_pct)).toFixed(0)}%
+                  {Math.min(100, Math.max(0, 100 - metrics.signals.short_entry.gap_pct)).toFixed(0)}
+                  %
                 </span>
               </div>
             </div>
@@ -271,7 +279,9 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
               <div className="bg-surface-elevated rounded p-2 space-y-1 text-nano">
                 <div className="flex justify-between">
                   <span className="text-primary-light">Entry:</span>
-                  <span className="font-mono text-primary">${metrics.preview.entry_price.toFixed(2)}</span>
+                  <span className="font-mono text-primary">
+                    ${metrics.preview.entry_price.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-green-500">
                   <span>Take Profit:</span>
@@ -290,7 +300,9 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
               <div className="bg-surface-elevated rounded p-2 space-y-1 text-nano">
                 <div className="flex justify-between">
                   <span className="text-primary-light">Entry:</span>
-                  <span className="font-mono text-primary">${metrics.preview.entry_price.toFixed(2)}</span>
+                  <span className="font-mono text-primary">
+                    ${metrics.preview.entry_price.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-green-500">
                   <span>Take Profit:</span>
@@ -316,5 +328,3 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
     </div>
   );
 };
-
-export default BotMetricsDashboard;

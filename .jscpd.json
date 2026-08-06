@@ -9,6 +9,8 @@
     "**/.next/**",
     "**/coverage/**",
     "**/storybook-static/**",
+    "pnpm-lock.yaml",
+    "**/*.md",
     "**/*.stories.*",
     "**/*.test.*",
     "**/*.spec.*"

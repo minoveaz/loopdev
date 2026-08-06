@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type DialogVariant = 'default' | 'info' | 'warning' | 'danger' | 'success';
+type DialogVariant = 'default' | 'info' | 'warning' | 'danger' | 'success';
 
 /**
  * @interface TechnicalDialogProps

@@ -1,5 +1,5 @@
-export type SpinnerSize = 'sm' | 'md' | 'lg' | 'xl';
-export type SpinnerColor = 'primary' | 'current' | 'energy' | 'white';
+type SpinnerSize = 'sm' | 'md' | 'lg' | 'xl';
+type SpinnerColor = 'primary' | 'current' | 'energy' | 'white';
 
 export interface SpinnerProps {
   size?: SpinnerSize;

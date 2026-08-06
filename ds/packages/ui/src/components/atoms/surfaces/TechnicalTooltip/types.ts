@@ -5,8 +5,8 @@ import { ReactNode } from 'react';
  * @description Contratos de tipado para el átomo de información técnica Tooltip.
  */
 
-export type TooltipSide = 'top' | 'right' | 'bottom' | 'left';
-export type TooltipAlign = 'start' | 'center' | 'end';
+type TooltipSide = 'top' | 'right' | 'bottom' | 'left';
+type TooltipAlign = 'start' | 'center' | 'end';
 
 export interface TechnicalTooltipProps {
   /** Elemento que dispara el tooltip al hacer hover/focus */

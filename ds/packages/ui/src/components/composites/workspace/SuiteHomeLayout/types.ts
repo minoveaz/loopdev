@@ -1,8 +1,6 @@
 import React from 'react';
 import { BadgeSeverity } from '../../../atoms/indicators/TechnicalStatusBadge/types';
 
-export type { BadgeSeverity };
-
 export interface SuiteHomeAction {
   id: string;
   label: string;
@@ -51,7 +49,7 @@ export interface SuiteNotice {
   icon?: string;
 }
 
-export interface SuiteHomeActivityItem {
+interface SuiteHomeActivityItem {
   id: string;
   action: string;
   module: string;
@@ -65,10 +63,10 @@ export interface SuiteHomeActivityItem {
 export interface SuiteHomeLayoutProps {
   /** Título de la Suite (ej: 'Marketing Studio') */
   title: string;
-  
+
   /** Subtítulo descriptivo */
   subtitle: string;
-  
+
   /** Información dinámica de contexto (ej: 'Marca activa: X') */
   contextLine?: string;
 

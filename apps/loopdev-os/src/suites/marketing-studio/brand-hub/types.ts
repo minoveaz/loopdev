@@ -17,7 +17,7 @@ export interface ColorToken {
   };
 }
 
-export interface BrandPalette {
+interface BrandPalette {
   tokens: ColorToken[];
 }
 

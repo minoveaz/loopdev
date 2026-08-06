@@ -5,7 +5,7 @@ import React from 'react';
  * @description Contratos para el componente EmptyState.
  */
 
-export type EmptyStateSize = 'sm' | 'md' | 'lg';
+type EmptyStateSize = 'sm' | 'md' | 'lg';
 
 export interface EmptyStateProps {
   /** Nombre del icono de Material Symbols */

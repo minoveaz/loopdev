@@ -1,4 +1,4 @@
-export type ActivityTone = 'primary' | 'warning' | 'neutral' | 'success';
+type ActivityTone = 'primary' | 'warning' | 'neutral' | 'success';
 
 export interface ActivityItemProps {
   id: string;

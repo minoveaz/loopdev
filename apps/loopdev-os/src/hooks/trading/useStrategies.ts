@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 
 // Types
-export interface Strategy {
+interface Strategy {
   id: string;
   name: string;
   exchange: string;
@@ -77,7 +77,18 @@ interface BacktestResult {
   sharpeRatio: number;
   initialCapital: number;
   finalCapital: number;
-  trades: Array<{ entry_time: string; exit_time?: string; entry_price: number; exit_price?: number; quantity: number; pair: string; side: string; pnl?: number; pnl_pct?: number; reason?: string }>;
+  trades: Array<{
+    entry_time: string;
+    exit_time?: string;
+    entry_price: number;
+    exit_price?: number;
+    quantity: number;
+    pair: string;
+    side: string;
+    pnl?: number;
+    pnl_pct?: number;
+    reason?: string;
+  }>;
 }
 
 /**
@@ -88,7 +99,11 @@ export const useStrategies = () => {
   const queryClient = useQueryClient();
 
   // 1. Fetch all strategies
-  const { data: strategies = [], isLoading, error } = useQuery({
+  const {
+    data: strategies = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['trading', 'strategies'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -114,9 +129,9 @@ export const useStrategies = () => {
         drawdown: 0, // TODO: Get from backtest results
         riskScore: 0, // TODO: Calculate from parameters
         version: raw.version,
-        createdAt: new Date(raw.created_at).toLocaleString()
+        createdAt: new Date(raw.created_at).toLocaleString(),
       })) as Strategy[];
-    }
+    },
   });
 
   // 2. Fetch Strategy Registry (Cores) from Python Engine
@@ -131,7 +146,7 @@ export const useStrategies = () => {
         console.warn('Quant Core Engine not reachable at 127.0.0.1:8000. Using fallback.');
         return [];
       }
-    }
+    },
   });
 
   // 3. Create Strategy Mutation
@@ -141,23 +156,25 @@ export const useStrategies = () => {
 
       const { data, error } = await supabase
         .from('quant_strategies')
-        .insert([{
-          tenant_id: '00000000-0000-0000-0000-000000000000', // Demo
-          name: params.name,
-          exchange_id: params.exchangeId,
-          mode: params.mode,
-          status: 'draft',
-          pairs: params.pairs,
-          size_per_trade: params.sizePerTrade,
-          max_positions: params.maxPositions,
-          max_exposure: params.maxExposure,
-          stop_loss: params.stopLoss,
-          take_profit: params.takeProfit,
-          trailing_stop: params.trailingStop,
-          cooldown_minutes: params.cooldownMinutes,
-          daily_loss_limit: params.dailyLossLimit,
-          description: params.description || null
-        }])
+        .insert([
+          {
+            tenant_id: '00000000-0000-0000-0000-000000000000', // Demo
+            name: params.name,
+            exchange_id: params.exchangeId,
+            mode: params.mode,
+            status: 'draft',
+            pairs: params.pairs,
+            size_per_trade: params.sizePerTrade,
+            max_positions: params.maxPositions,
+            max_exposure: params.maxExposure,
+            stop_loss: params.stopLoss,
+            take_profit: params.takeProfit,
+            trailing_stop: params.trailingStop,
+            cooldown_minutes: params.cooldownMinutes,
+            daily_loss_limit: params.dailyLossLimit,
+            description: params.description || null,
+          },
+        ])
         .select();
 
       if (error) {
@@ -170,7 +187,7 @@ export const useStrategies = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
-    }
+    },
   });
 
   // 3. Run Backtest Mutation
@@ -189,8 +206,8 @@ export const useStrategies = () => {
           stopLoss: params.stopLoss,
           takeProfit: params.takeProfit,
           days: params.days || 30,
-          initialCapital: params.initialCapital || 10000.0
-        })
+          initialCapital: params.initialCapital || 10000.0,
+        }),
       });
 
       const result = await response.json();
@@ -203,9 +220,8 @@ export const useStrategies = () => {
       // If we have a strategyId, save backtest results
       if (params.strategyId && result.result) {
         console.debug('[runBacktest] Saving backtest results to Supabase');
-        const { error: saveError } = await supabase
-          .from('strategy_backtest_results')
-          .insert([{
+        const { error: saveError } = await supabase.from('strategy_backtest_results').insert([
+          {
             strategy_id: params.strategyId,
             start_date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             end_date: new Date().toISOString().split('T')[0],
@@ -222,8 +238,9 @@ export const useStrategies = () => {
             max_drawdown: result.result.maxDrawdown,
             sharpe_ratio: result.result.sharpeRatio,
             trades: result.result.trades,
-            status: 'completed'
-          }]);
+            status: 'completed',
+          },
+        ]);
 
         if (saveError) {
           console.error('[runBacktest] Error saving results:', saveError);
@@ -231,12 +248,18 @@ export const useStrategies = () => {
       }
 
       return result.result as BacktestResult;
-    }
+    },
   });
 
   // 4. Update Strategy Status Mutation
   const updateStrategyStatus = useMutation({
-    mutationFn: async ({ strategyId, status }: { strategyId: string; status: 'draft' | 'active' | 'paused' | 'archived' }) => {
+    mutationFn: async ({
+      strategyId,
+      status,
+    }: {
+      strategyId: string;
+      status: 'draft' | 'active' | 'paused' | 'archived';
+    }) => {
       console.debug('[updateStrategyStatus] Updating:', strategyId, status);
 
       const { error } = await supabase
@@ -249,7 +272,7 @@ export const useStrategies = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
-    }
+    },
   });
 
   // 5. Update Strategy Mutation
@@ -258,7 +281,7 @@ export const useStrategies = () => {
       console.debug('[updateStrategy] Updating:', id);
 
       const updatePayload: Record<string, unknown> = {
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (params.name) updatePayload.name = params.name;
@@ -275,32 +298,26 @@ export const useStrategies = () => {
       if (params.dailyLossLimit) updatePayload.daily_loss_limit = params.dailyLossLimit;
       if (params.description !== undefined) updatePayload.description = params.description;
 
-      const { error } = await supabase
-        .from('quant_strategies')
-        .update(updatePayload)
-        .eq('id', id);
+      const { error } = await supabase.from('quant_strategies').update(updatePayload).eq('id', id);
 
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
-    }
+    },
   });
 
   // 6. Delete Strategy Mutation
   const deleteStrategy = useMutation({
     mutationFn: async (id: string) => {
       console.debug('[deleteStrategy] Deleting:', id);
-      const { error } = await supabase
-        .from('quant_strategies')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('quant_strategies').delete().eq('id', id);
 
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
-    }
+    },
   });
 
   return {
@@ -316,6 +333,6 @@ export const useStrategies = () => {
     updateStrategyStatus: updateStrategyStatus.mutate,
     isUpdating: updateStrategyStatus.isPending,
     updateStrategy: updateStrategy.mutate,
-    deleteStrategy: deleteStrategy.mutate
+    deleteStrategy: deleteStrategy.mutate,
   };
 };

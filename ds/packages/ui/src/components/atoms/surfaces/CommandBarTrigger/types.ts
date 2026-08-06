@@ -3,7 +3,7 @@
  * @description Contratos de tipado para el disparador de la paleta de comandos.
  */
 
-export type CommandBarTriggerMode = 'full' | 'icon';
+type CommandBarTriggerMode = 'full' | 'icon';
 
 export interface CommandBarTriggerProps {
   /** Texto del placeholder (ej: Search or type a command...) */

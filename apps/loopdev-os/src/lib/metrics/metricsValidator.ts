@@ -1,14 +1,14 @@
 /**
  * @file metricsValidator.ts
  * @description Validate and sanitize metrics data from API
- * 
+ *
  * Ensures data integrity without throwing errors
  * (graceful degradation via null coalescing)
  */
 
 import { StrategyMetricsSnapshot } from '@/hooks/trading/useStrategyMetrics';
 
-export const isValidMetricsSnapshot = (data: unknown): data is StrategyMetricsSnapshot => {
+const isValidMetricsSnapshot = (data: unknown): data is StrategyMetricsSnapshot => {
   if (!data || typeof data !== 'object') return false;
 
   const snapshot = data as StrategyMetricsSnapshot;
@@ -65,10 +65,10 @@ export const isValidMetricsSnapshot = (data: unknown): data is StrategyMetricsSn
 /**
  * Validate individual fields and return sanitized versions
  */
-export const validateMetricValue = (
+const validateMetricValue = (
   value: unknown,
   type: 'number' | 'string' | 'boolean',
-  defaultValue: unknown = null
+  defaultValue: unknown = null,
 ) => {
   if (value === null || value === undefined) {
     return defaultValue;
@@ -101,10 +101,10 @@ export const validateMetricValue = (
 /**
  * Safe accessor for nested metrics
  */
-export const safeGetMetricValue = (
+const safeGetMetricValue = (
   snapshot: StrategyMetricsSnapshot | null,
   path: string,
-  defaultValue: unknown = null
+  defaultValue: unknown = null,
 ) => {
   if (!snapshot) return defaultValue;
 
@@ -121,7 +121,7 @@ export const safeGetMetricValue = (
 };
 
 export const getMetricHealth = (
-  snapshot: StrategyMetricsSnapshot | null
+  snapshot: StrategyMetricsSnapshot | null,
 ): {
   isHealthy: boolean;
   warnings: string[];

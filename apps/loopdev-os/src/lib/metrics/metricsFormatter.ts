@@ -1,7 +1,7 @@
 /**
  * @file metricsFormatter.ts
  * @description Industrial-grade formatting for metrics display
- * 
+ *
  * Follows LoopDev standards:
  * - No hardcoded decimals (uses context-aware precision)
  * - Multi-tenant support
@@ -11,7 +11,7 @@
 export const formatPrice = (
   value: number,
   currency: string = 'USD',
-  precision?: number
+  precision?: number,
 ): string => {
   if (!isFinite(value)) return '—';
 
@@ -33,10 +33,10 @@ export const formatPercentage = (value: number, precision: number = 2): string =
   return `${sign}${value.toFixed(precision)}%`;
 };
 
-export const formatDistance = (
+const formatDistance = (
   value: number,
   type: 'price' | 'percentage',
-  precision?: number
+  precision?: number,
 ): string => {
   if (!isFinite(value)) return '—';
 
@@ -49,7 +49,7 @@ export const formatDistance = (
   return `${value >= 0 ? '+' : ''}$${Math.abs(value).toFixed(decimals)}`;
 };
 
-export const formatRSI = (value: number): string => {
+const formatRSI = (value: number): string => {
   if (!isFinite(value)) return '—';
   return value.toFixed(1);
 };
@@ -86,10 +86,10 @@ export const formatTimeAgo = (isoDateString: string): string => {
   }
 };
 
-export const getRelativeValue = (
+const getRelativeValue = (
   current: number,
   threshold: number,
-  type: 'gap' | 'distance'
+  type: 'gap' | 'distance',
 ): { value: number; direction: 'up' | 'down' | 'neutral' } => {
   const diff = current - threshold;
 
@@ -107,9 +107,9 @@ export const getRelativeValue = (
  * Format signal readiness as a percentage (0-100%)
  * Shows how close the signal is to triggering
  */
-export const formatSignalReadiness = (gap: number, threshold: number): number => {
+const formatSignalReadiness = (gap: number, threshold: number): number => {
   if (Math.abs(threshold) < 0.01) return 0;
-  
+
   const readiness = Math.max(0, Math.min(100, 100 - (Math.abs(gap) / Math.abs(threshold)) * 100));
   return Math.round(readiness);
 };

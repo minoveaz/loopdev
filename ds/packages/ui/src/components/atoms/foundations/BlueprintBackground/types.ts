@@ -3,8 +3,8 @@
  * @description Contratos de tipado para el fondo técnico oficial.
  */
 
-export type BackgroundIntensity = 'low' | 'medium' | 'high';
-export type BackgroundVariant = 'blueprint' | 'neural' | 'monochrome';
+type BackgroundIntensity = 'low' | 'medium' | 'high';
+type BackgroundVariant = 'blueprint' | 'neural' | 'monochrome';
 
 export interface BlueprintBackgroundProps {
   /** Intensidad de la rejilla y efectos */

@@ -23,7 +23,7 @@ export interface OrdersResponse {
   pages: number;
 }
 
-export interface TradeMetrics {
+interface TradeMetrics {
   pnl: number;
   pnl_pct: number;
   entry_price: number;

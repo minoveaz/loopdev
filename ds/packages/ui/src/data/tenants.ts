@@ -16,12 +16,12 @@ export interface TenantData {
       rightSidebarHasRail: boolean;
       /** Default height for the primary header */
       primaryHeaderHeight: number;
-    }
+    };
   };
 }
 
 export const TENANT_DATA: Record<TenantId, TenantData> = {
-  'loopdev': {
+  loopdev: {
     name: 'loop.dev',
     settings: {
       layout: {
@@ -30,7 +30,7 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
         headerStyle: 'base',
         rightSidebarHasRail: false,
         primaryHeaderHeight: 64,
-      }
+      },
     },
     strategy: {
       purpose: 'Powering modern brand systems with design engineering excellence.',
@@ -38,10 +38,10 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
       personality: ['Technical', 'Precise', 'Modular', 'Innovative'],
       voice: {
         base: 'Calculated and professional yet accessible.',
-        traits: ['Clear', 'Structural', 'Generative']
+        traits: ['Clear', 'Structural', 'Generative'],
       },
-      territory: ['Design Systems', 'Frontend Engineering', 'AI Orchestration']
-    }
+      territory: ['Design Systems', 'Frontend Engineering', 'AI Orchestration'],
+    },
   },
   'estar-protegidos': {
     name: 'Estar Protegidos',
@@ -52,7 +52,7 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
         headerStyle: 'brand',
         rightSidebarHasRail: true,
         primaryHeaderHeight: 64,
-      }
+      },
     },
     strategy: {
       purpose: 'Hacer que protegerse deje de ser confuso, estresante y opaco.',
@@ -60,10 +60,10 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
       personality: ['Cercana', 'Experta', 'Tranquila', 'Honesta', 'Resolutiva'],
       voice: {
         base: 'Sabemos de seguros, pero hablamos como personas normales.',
-        traits: ['Clara', 'Didáctica', 'Directa', 'Empática', 'Sin dramatismo']
+        traits: ['Clara', 'Didáctica', 'Directa', 'Empática', 'Sin dramatismo'],
       },
-      territory: ['Claridad', 'Tranquilidad', 'Acompañamiento', 'Control', 'Protección integral']
-    }
+      territory: ['Claridad', 'Tranquilidad', 'Acompañamiento', 'Control', 'Protección integral'],
+    },
   },
   'client-b': {
     name: 'Client B',
@@ -74,7 +74,7 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
         headerStyle: 'base',
         rightSidebarHasRail: false,
         primaryHeaderHeight: 64,
-      }
+      },
     },
     strategy: {
       purpose: 'Standardizing corporate identity for enterprise scale.',
@@ -82,16 +82,16 @@ export const TENANT_DATA: Record<TenantId, TenantData> = {
       personality: ['Corporate', 'Reliable', 'Efficient'],
       voice: {
         base: 'Formal and direct.',
-        traits: ['Brief', 'Professional', 'Structured']
+        traits: ['Brief', 'Professional', 'Structured'],
       },
-      territory: ['Enterprise Solutions', 'Process Optimization']
-    }
-  }
+      territory: ['Enterprise Solutions', 'Process Optimization'],
+    },
+  },
 };
 
 // Retro-compatibility for previous implementation
-export const TENANT_STRATEGIES: Record<TenantId, BrandStrategy> = {
-  'loopdev': TENANT_DATA['loopdev'].strategy,
+const TENANT_STRATEGIES: Record<TenantId, BrandStrategy> = {
+  loopdev: TENANT_DATA['loopdev'].strategy,
   'estar-protegidos': TENANT_DATA['estar-protegidos'].strategy,
   'client-b': TENANT_DATA['client-b'].strategy,
 };

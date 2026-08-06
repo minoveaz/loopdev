@@ -4,7 +4,7 @@
  */
 
 export type UserAvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-export type UserAvatarStatus = 'online' | 'offline' | 'busy' | 'away';
+type UserAvatarStatus = 'online' | 'offline' | 'busy' | 'away';
 
 export interface UserAvatarProps {
   /** URL de la imagen de perfil */

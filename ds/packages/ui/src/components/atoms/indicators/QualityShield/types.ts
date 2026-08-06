@@ -5,7 +5,7 @@
 
 export type QualityGateStatus = 'pass' | 'fail' | 'warn';
 
-export interface QualityMetric {
+interface QualityMetric {
   label: string;
   status: QualityGateStatus;
   value: string;

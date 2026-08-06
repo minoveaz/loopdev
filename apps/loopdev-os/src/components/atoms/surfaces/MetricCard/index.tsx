@@ -1,7 +1,7 @@
 /**
  * @file index.tsx
  * @description Body: MetricCard visual component
- * 
+ *
  * Technical surface container for displaying metrics with:
  * - Status-aware colors and borders
  * - Direction indicators
@@ -16,20 +16,9 @@ import { useMetricCard } from './useMetricCard';
 import { MetricCardProps } from './types';
 
 export const MetricCard: React.FC<MetricCardProps> = (props) => {
-  const {
-    label,
-    value,
-    unit = '',
-    secondaryValue,
-    description,
-    isLoading = false,
-  } = props;
+  const { label, value, unit = '', secondaryValue, description, isLoading = false } = props;
 
-  const {
-    statusColor,
-    directionIcon,
-    sizeClasses,
-  } = useMetricCard(props);
+  const { statusColor, directionIcon, sizeClasses } = useMetricCard(props);
 
   if (isLoading) {
     return (
@@ -59,7 +48,9 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
     >
       {/* Header: Label + Direction */}
       <div className="flex items-center justify-between mb-1">
-        <p className={`${sizeClasses.textLabel} font-mono uppercase tracking-wider text-primary-light opacity-70`}>
+        <p
+          className={`${sizeClasses.textLabel} font-mono uppercase tracking-wider text-primary-light opacity-70`}
+        >
           {label}
         </p>
         {props.direction && props.direction !== 'neutral' && (
@@ -68,8 +59,8 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
               props.direction === 'up'
                 ? 'text-green-500'
                 : props.direction === 'down'
-                ? 'text-red-500'
-                : 'text-primary-light'
+                  ? 'text-red-500'
+                  : 'text-primary-light'
             }`}
           >
             {directionIcon}
@@ -82,30 +73,18 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
         <p className={`${sizeClasses.textValue} font-mono font-bold text-primary`}>
           {typeof value === 'number' ? value.toFixed(2) : value}
         </p>
-        {unit && (
-          <span className="text-nano text-primary-light opacity-70">
-            {unit}
-          </span>
-        )}
+        {unit && <span className="text-nano text-primary-light opacity-70">{unit}</span>}
       </div>
 
       {/* Secondary value (if provided) */}
       {secondaryValue && (
         <p className={`${sizeClasses.textLabel} text-primary-light opacity-60 mt-1`}>
-          {typeof secondaryValue === 'number'
-            ? secondaryValue.toFixed(2)
-            : secondaryValue}
+          {typeof secondaryValue === 'number' ? secondaryValue.toFixed(2) : secondaryValue}
         </p>
       )}
 
       {/* Description */}
-      {description && (
-        <p className="text-nano text-primary-light opacity-50 mt-2">
-          {description}
-        </p>
-      )}
+      {description && <p className="text-nano text-primary-light opacity-50 mt-2">{description}</p>}
     </div>
   );
 };
-
-export default MetricCard;

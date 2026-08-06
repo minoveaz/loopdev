@@ -21,27 +21,27 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
   targetPrice,
   atr,
   recentVolatility = 0.002, // Default 0.2% volatility per period
-  botName
+  botName,
 }) => {
   // Calculate distance metrics
   const distance = Math.abs(targetPrice - currentPrice);
   const distancePercentage = (distance / currentPrice) * 100;
   const direction = targetPrice > currentPrice ? 'UP ↑' : 'DOWN ↓';
-  
+
   // Calculate progress (0-100%)
   // Assume ATR as reference for "normal" move
   const progressPercentage = Math.min((atr / distance) * 100, 100);
-  
+
   // Estimate time to execution based on volatility
   // Using recent volatility rate, estimate candles/hours needed
   const estimatedCandles = Math.ceil(distance / (currentPrice * recentVolatility));
   const estimatedHours = Math.max(1, Math.floor(estimatedCandles / 12)); // Assuming 5min candles = ~12/hour
   const estimatedMinutes = Math.ceil((estimatedCandles % 12) * 5);
-  
+
   // Color coding based on distance
   let distanceColor = 'text-emerald-500'; // Close
   let progressColor = 'bg-emerald-500';
-  
+
   if (distancePercentage > 2) {
     distanceColor = 'text-amber-500'; // Medium
     progressColor = 'bg-amber-500';
@@ -52,7 +52,11 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
   }
 
   return (
-    <TechnicalSurface variant="surface" depth="flat" className="p-4 gap-3 flex flex-col bg-background-subtle/40">
+    <TechnicalSurface
+      variant="surface"
+      depth="flat"
+      className="p-4 gap-3 flex flex-col bg-background-subtle/40"
+    >
       {/* Header */}
       <div className="flex items-center justify-between">
         <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest">
@@ -66,7 +70,9 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
       {/* Distance Display */}
       <div className="flex items-baseline justify-between">
         <div className="flex flex-col gap-1">
-          <LpdText size="xs" className="text-text-muted">Distance to Target</LpdText>
+          <LpdText size="xs" className="text-text-muted">
+            Distance to Target
+          </LpdText>
           <div className="flex items-baseline gap-2">
             <LpdText size="lg" weight="bold" className={distanceColor}>
               ${distance.toFixed(2)}
@@ -77,7 +83,9 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
           </div>
         </div>
         <div className="flex flex-col items-end gap-1">
-          <LpdText size="xs" className="text-text-muted">Current ATR</LpdText>
+          <LpdText size="xs" className="text-text-muted">
+            Current ATR
+          </LpdText>
           <LpdText size="lg" weight="bold" className="text-text-main">
             ${atr.toFixed(2)}
           </LpdText>
@@ -87,13 +95,15 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
       {/* Progress Bar */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <LpdText size="nano" className="text-text-muted">Progress</LpdText>
+          <LpdText size="nano" className="text-text-muted">
+            Progress
+          </LpdText>
           <LpdText size="nano" weight="bold" className="text-text-main">
             {progressPercentage.toFixed(1)}%
           </LpdText>
         </div>
         <div className="w-full h-1.5 bg-background-stronger rounded-full overflow-hidden">
-          <div 
+          <div
             className={`h-full ${progressColor} transition-all duration-500 rounded-full`}
             style={{ width: `${Math.min(progressPercentage, 100)}%` }}
           />
@@ -102,7 +112,9 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
 
       {/* Time Estimate */}
       <div className="flex items-center justify-between p-2 bg-background-strongest/30 rounded-lg border border-border-technical/20">
-        <LpdText size="nano" className="text-text-muted">Est. Execution Time</LpdText>
+        <LpdText size="nano" className="text-text-muted">
+          Est. Execution Time
+        </LpdText>
         <div className="flex items-center gap-3">
           {estimatedHours > 0 && (
             <LpdText size="sm" weight="bold" className="font-mono text-text-main">
@@ -121,13 +133,17 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
       {/* Price Range Info */}
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="flex flex-col gap-1 p-2 bg-background-strongest/20 rounded">
-          <LpdText size="nano" className="text-text-muted">Current</LpdText>
+          <LpdText size="nano" className="text-text-muted">
+            Current
+          </LpdText>
           <LpdText size="sm" weight="bold" className="text-text-main">
             ${currentPrice.toFixed(2)}
           </LpdText>
         </div>
         <div className="flex flex-col gap-1 p-2 bg-background-strongest/20 rounded">
-          <LpdText size="nano" className="text-text-muted">Target</LpdText>
+          <LpdText size="nano" className="text-text-muted">
+            Target
+          </LpdText>
           <LpdText size="sm" weight="bold" className={distanceColor}>
             ${targetPrice.toFixed(2)}
           </LpdText>
@@ -136,5 +152,3 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
     </TechnicalSurface>
   );
 };
-
-export default BotExecutionMetrics;

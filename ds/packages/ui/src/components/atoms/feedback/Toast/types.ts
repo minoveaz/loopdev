@@ -5,7 +5,7 @@
 
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info' | 'loading';
 
-export interface ToastAction {
+interface ToastAction {
   label: string;
   onClick: () => void;
 }

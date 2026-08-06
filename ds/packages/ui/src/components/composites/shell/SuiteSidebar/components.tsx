@@ -4,11 +4,19 @@ import React from 'react';
 
 import { NavGroup, NavItem, AccessMap, TelemetryMap, NavRouteRef } from '@loopdev/contracts';
 
-import { Icon, LpdText, Badge, StatusPulse, IdentityBar, NavSidebarItem, ExitHatch, TechnicalLabel, NavGroup as NavGroupAtom } from '../../../atoms';
+import {
+  Icon,
+  LpdText,
+  Badge,
+  StatusPulse,
+  IdentityBar,
+  NavSidebarItem,
+  ExitHatch,
+  TechnicalLabel,
+  NavGroup as NavGroupAtom,
+} from '../../../atoms';
 
 import * as LucideIcons from 'lucide-react';
-
-
 
 /**
 
@@ -18,22 +26,15 @@ import * as LucideIcons from 'lucide-react';
 
  */
 
-export const MomentumDot: React.FC = () => (
-
+const MomentumDot: React.FC = () => (
   <div className="flex items-center justify-center shrink-0 w-4 h-4">
-
     <StatusPulse variant="energy" size="sm" />
-
   </div>
-
 );
-
-
 
 // 2. Componente: SidebarGroup (Contenedor de Módulos)
 
 export const NavSidebarGroup: React.FC<{
-
   group: NavGroup;
 
   isRail: boolean;
@@ -47,18 +48,12 @@ export const NavSidebarGroup: React.FC<{
   onNavigate: (route: NavRouteRef) => void;
 
   accentColor?: string;
-
 }> = ({ group, isRail, activeModuleId, accessMap, telemetry, onNavigate, accentColor }) => (
-
   <NavGroupAtom label={group.label} isRail={isRail}>
-
     <div className="space-y-0.5">
-
       {group.items.map((item) => (
-
-        <NavSidebarItem 
-
-          key={item.id} 
+        <NavSidebarItem
+          key={item.id}
 
           icon={item.icon}
 
@@ -68,7 +63,9 @@ export const NavSidebarGroup: React.FC<{
 
           isRail={isRail}
 
-          status={item.kind === 'module' ? (accessMap[item.moduleId] as any || 'enabled') : 'enabled'}
+          status={
+            item.kind === 'module' ? (accessMap[item.moduleId] as any) || 'enabled' : 'enabled'
+          }
 
           telemetry={telemetry[item.id]}
 
@@ -79,13 +76,8 @@ export const NavSidebarGroup: React.FC<{
           actionId={(item as any).actionId}
 
           accentColor={accentColor}
-
         />
-
       ))}
-
     </div>
-
   </NavGroupAtom>
-
 );

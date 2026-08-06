@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface BreadcrumbSegment {
+interface BreadcrumbSegment {
   id: string;
   label: string;
   href?: string;

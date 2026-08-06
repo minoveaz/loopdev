@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-export type LayoutContext = 'normal' | 'focus' | 'inmersive';
-export type LayoutDensity = 'comfortable' | 'compact';
+type LayoutContext = 'normal' | 'focus' | 'inmersive';
+type LayoutDensity = 'comfortable' | 'compact';
 
 export interface AppShellProps {
   /** Slot para el Sidebar Izquierdo (Global Nav) - Altura completa */

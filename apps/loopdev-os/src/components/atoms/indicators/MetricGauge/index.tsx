@@ -1,7 +1,7 @@
 /**
  * @file index.tsx
  * @description Body: MetricGauge visual component (SVG gauge for RSI)
- * 
+ *
  * Displays a circular gauge with:
  * - Background zones (oversold/neutral/overbought)
  * - Animated needle
@@ -16,23 +16,10 @@ import { useMetricGauge } from './useMetricGauge';
 import { MetricGaugeProps } from './types';
 
 export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
-  const {
-    value,
-    label = 'RSI',
-    unit = '',
-    lowThreshold = 30,
-    highThreshold = 70,
-  } = props;
+  const { value, label = 'RSI', unit = '', lowThreshold = 30, highThreshold = 70 } = props;
 
-  const {
-    normalizedValue,
-    percentage,
-    rotation,
-    color,
-    sizes,
-    isStatic,
-    className,
-  } = useMetricGauge(props);
+  const { normalizedValue, percentage, rotation, color, sizes, isStatic, className } =
+    useMetricGauge(props);
 
   // SVG circle properties
   const radius = 45;
@@ -138,13 +125,7 @@ export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
             />
 
             {/* Needle circle */}
-            <circle
-              cx="60"
-              cy="60"
-              r="4"
-              fill="currentColor"
-              className="text-primary"
-            />
+            <circle cx="60" cy="60" r="4" fill="currentColor" className="text-primary" />
           </g>
 
           {/* Center value display */}
@@ -188,17 +169,16 @@ export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
         <div
           className="w-2 h-2 rounded-full animate-pulse"
           style={{
-            backgroundColor: props.status === 'oversold' ? '#ef4444' : 
-                            props.status === 'overbought' ? '#a855f7' : 
-                            '#10b981'
+            backgroundColor:
+              props.status === 'oversold'
+                ? '#ef4444'
+                : props.status === 'overbought'
+                  ? '#a855f7'
+                  : '#10b981',
           }}
         />
-        <span className="text-nano text-primary-light capitalize">
-          {props.status || 'neutral'}
-        </span>
+        <span className="text-nano text-primary-light capitalize">{props.status || 'neutral'}</span>
       </div>
     </div>
   );
 };
-
-export default MetricGauge;

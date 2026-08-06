@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
  * @description Contratos de tipado para la utilidad de scroll técnico.
  */
 
-export type ScrollbarVisibility = 'auto' | 'always' | 'hidden';
+type ScrollbarVisibility = 'auto' | 'always' | 'hidden';
 
 export interface ScrollAreaProps {
   /** Contenido que necesita scroll */

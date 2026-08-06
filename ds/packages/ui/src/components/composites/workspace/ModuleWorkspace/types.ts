@@ -6,7 +6,7 @@ import React from 'react';
  * - focus: Paneles laterales colapsados.
  * - immersive: Todo el chrome oculto (Zen mode).
  */
-export type WorkspaceMode = 'normal' | 'focus' | 'immersive';
+type WorkspaceMode = 'normal' | 'focus' | 'immersive';
 
 /**
  * Paneles laterales gestionables.
@@ -23,22 +23,22 @@ export interface ModuleWorkspaceProps {
   moduleId: string;
 
   // --- SLOTS (Contenido) ---
-  
+
   /** Cabecera específica del módulo (Breadcrumbs, Título, Acciones primarias) */
   headerSlot?: React.ReactNode;
-  
+
   /** Barra de herramientas operativa del Canvas (Filtros, Vistas) */
   toolbarSlot?: React.ReactNode;
-  
+
   /** Navegación interna del módulo (Izquierda) */
   sidebarSlot?: React.ReactNode;
 
   /** Panel de contexto semántico (Entre Sidebar y Canvas) */
   flyoutSlot?: React.ReactNode;
-  
+
   /** Panel de propiedades o asistente (Derecha) */
   inspectorSlot?: React.ReactNode;
-  
+
   /** Área de trabajo principal (Canvas) */
   children: React.ReactNode;
 
@@ -49,19 +49,19 @@ export interface ModuleWorkspaceProps {
 
   /** Estado de visibilidad del Flyout */
   flyoutOpen?: boolean;
-  
+
   /** Estado de visibilidad del Inspector */
   inspectorOpen?: boolean;
-  
+
   /** Callback al cambiar visibilidad del Sidebar */
   onSidebarChange?: (open: boolean) => void;
 
   /** Callback al cambiar visibilidad del Flyout */
   onFlyoutChange?: (open: boolean) => void;
-  
+
   /** Callback al cambiar visibilidad del Inspector */
   onInspectorChange?: (open: boolean) => void;
-  
+
   /** Callback general de solicitud de cierre (para overlays) */
   onRequestClose?: (panel: Panel, reason: CloseReason) => void;
 
@@ -69,7 +69,7 @@ export interface ModuleWorkspaceProps {
 
   /** Modo de foco activo */
   mode?: WorkspaceMode;
-  
+
   /** Densidad del layout */
   density?: 'compact' | 'comfortable';
 
@@ -85,7 +85,7 @@ export interface ModuleWorkspaceProps {
     sidebarDialogLabel?: string;
     inspectorDialogLabel?: string;
   };
-  
+
   /** Configuración visual y de comportamiento */
   config?: {
     sidebarWidth?: string;
@@ -100,7 +100,7 @@ export interface ModuleWorkspaceProps {
     zPanel?: number;
     zPanelTop?: number;
   };
-  
+
   /** Configuración de overlays */
   overlay?: {
     breakpoint?: string;
@@ -108,6 +108,6 @@ export interface ModuleWorkspaceProps {
     closeOnEscape?: boolean;
     force?: boolean;
   };
-  
+
   className?: string;
 }

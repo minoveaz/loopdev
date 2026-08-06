@@ -1,7 +1,7 @@
 /**
  * @hook useStrategyMetrics
  * @description Real-time metrics fetching for trading bots
- * 
+ *
  * Features:
  * - REST API initial fetch (better caching)
  * - WebSocket for real-time updates (< 1s latency)
@@ -14,7 +14,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-export interface RSIMetrics {
+interface RSIMetrics {
   value: number;
   period: number;
   oversold_threshold: number;
@@ -22,7 +22,7 @@ export interface RSIMetrics {
   status: 'oversold' | 'neutral' | 'overbought';
 }
 
-export interface SMA50Metrics {
+interface SMA50Metrics {
   value: number;
   price: number;
   distance: number;
@@ -30,7 +30,7 @@ export interface SMA50Metrics {
   position: 'above' | 'below';
 }
 
-export interface SignalMetrics {
+interface SignalMetrics {
   required_level: number;
   current_value: number;
   gap: number;
@@ -38,7 +38,7 @@ export interface SignalMetrics {
   ready: boolean;
 }
 
-export interface PositionPreview {
+interface PositionPreview {
   entry_price: number;
   long_tp: number;
   long_sl: number;
@@ -46,7 +46,7 @@ export interface PositionPreview {
   short_sl: number;
 }
 
-export interface VolatilityMetrics {
+interface VolatilityMetrics {
   atr: number;
   atr_pct: number;
   status: 'low' | 'normal' | 'high';
@@ -167,13 +167,17 @@ export const useStrategyMetrics = (botId: string): UseStrategyMetricsReturn => {
         if (reconnectCountRef.current < MAX_RECONNECT_ATTEMPTS) {
           const delay = RECONNECT_DELAY_MS * Math.pow(2, reconnectCountRef.current);
           reconnectCountRef.current++;
-          
+
           reconnectTimeoutRef.current = setTimeout(() => {
-            console.log(`[useStrategyMetrics] Reconnecting (attempt ${reconnectCountRef.current})...`);
+            console.log(
+              `[useStrategyMetrics] Reconnecting (attempt ${reconnectCountRef.current})...`,
+            );
             connectWebSocket();
           }, delay);
         } else {
-          console.warn('[useStrategyMetrics] Max reconnection attempts reached. Falling back to polling.');
+          console.warn(
+            '[useStrategyMetrics] Max reconnection attempts reached. Falling back to polling.',
+          );
           setError('WebSocket disconnected. Switching to polling mode.');
           startPolling();
         }
@@ -194,7 +198,7 @@ export const useStrategyMetrics = (botId: string): UseStrategyMetricsReturn => {
     if (pollingIntervalRef.current) return; // Already polling
 
     console.log('[useStrategyMetrics] Starting REST polling mode');
-    
+
     pollingIntervalRef.current = setInterval(() => {
       fetchMetrics();
     }, POLLING_INTERVAL_MS);

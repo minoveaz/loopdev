@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, ReactNode } from 'react';
 
-export type InputVariant = 'outline' | 'filled' | 'ghost';
+type InputVariant = 'outline' | 'filled' | 'ghost';
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Label descriptiva del campo */

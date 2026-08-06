@@ -1,5 +1,5 @@
 export type IndicatorVariant = 'ai' | 'pdf' | 'stale' | 'info' | 'success' | 'counter';
-export type IndicatorBrandMode = 'sanitas' | 'adeslas' | 'neutral';
+type IndicatorBrandMode = 'sanitas' | 'adeslas' | 'neutral';
 
 export interface TechnicalIndicatorProps {
   /** Variante del indicador que define el icono y el esquema de color base */

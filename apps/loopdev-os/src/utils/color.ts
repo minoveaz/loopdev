@@ -7,10 +7,10 @@
  * Calculates the relative luminance of a HEX color.
  * Based on WCAG 2.0 formula.
  */
-export const getLuminance = (hex: string): number => {
+const getLuminance = (hex: string): number => {
   // Support hex with alpha by stripping it for luminance calculation
   const cleanHex = hex.replace('#', '').substring(0, 6);
-  
+
   if (cleanHex.length !== 6) return 0;
 
   const r = parseInt(cleanHex.substring(0, 2), 16) / 255;
@@ -31,10 +31,10 @@ export const getLuminance = (hex: string): number => {
 export const getContrastRatio = (hex1: string, hex2: string): number => {
   const l1 = getLuminance(hex1);
   const l2 = getLuminance(hex2);
-  
+
   const brightest = Math.max(l1, l2);
   const darkest = Math.min(l1, l2);
-  
+
   return (brightest + 0.05) / (darkest + 0.05);
 };
 
@@ -55,7 +55,7 @@ export const getWCAGStatus = (ratio: number): 'AAA' | 'AA' | 'AA_LARGE' | 'FAIL'
 /**
  * Recommends a text color (White or Black) based on background luminance.
  */
-export const getContrastColor = (hex: string): 'white' | 'black' => {
+const getContrastColor = (hex: string): 'white' | 'black' => {
   const luminance = getLuminance(hex);
   return luminance > 0.179 ? 'black' : 'white';
 };
@@ -63,6 +63,6 @@ export const getContrastColor = (hex: string): 'white' | 'black' => {
 /**
  * Simple HEX validation.
  */
-export const isValidHex = (hex: string): boolean => {
+const isValidHex = (hex: string): boolean => {
   return /^#([A-Fa-f0-9]{3}){1,2}([A-Fa-f0-9]{2})?$/.test(hex);
 };

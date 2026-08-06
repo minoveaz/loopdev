@@ -1,8 +1,8 @@
 import React from 'react';
 import { ModuleSidebarProps } from './types';
-import { InspectorPanelProps } from '../../InspectorPanel/types';
+import { InspectorPanelProps } from '../InspectorPanel/types';
 
-export const MODULE_SIDEBAR_FIXTURES: Record<string, ModuleSidebarProps> = {
+const MODULE_SIDEBAR_FIXTURES: Record<string, ModuleSidebarProps> = {
   default: {
     title: 'Navegación',
     search: {
@@ -15,8 +15,8 @@ export const MODULE_SIDEBAR_FIXTURES: Record<string, ModuleSidebarProps> = {
         <div className="h-8 bg-background-subtle rounded" />
         <div className="h-8 bg-background-subtle rounded" />
       </div>
-    )
-  }
+    ),
+  },
 };
 
 export const INSPECTOR_PANEL_FIXTURES: Record<string, InspectorPanelProps> = {
@@ -35,6 +35,6 @@ export const INSPECTOR_PANEL_FIXTURES: Record<string, InspectorPanelProps> = {
           <div className="h-20 bg-background-subtle rounded border border-border-technical" />
         </div>
       </div>
-    )
-  }
+    ),
+  },
 };

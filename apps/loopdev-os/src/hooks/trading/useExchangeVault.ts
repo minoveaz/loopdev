@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 
-export interface ExchangeAccount {
+interface ExchangeAccount {
   id: string;
   name: string;
   provider: string;
@@ -72,7 +72,11 @@ export const useExchangeVault = () => {
   const queryClient = useQueryClient();
 
   // 1. Fetch Connected Accounts
-  const { data: accounts = [], isLoading, error } = useQuery({
+  const {
+    data: accounts = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['trading', 'exchanges'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -81,17 +85,17 @@ export const useExchangeVault = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      
+
       // Industrial Mapping
       return data.map((raw: RawExchange) => {
         // Determine status based on both is_active and error state
         let status: 'healthy' | 'error' | 'disconnected' | 'unknown' = 'unknown';
-        
+
         // Debug log
         console.debug(`[Exchange ${raw.name}]`, {
           is_active: raw.is_active,
           last_verified_at: raw.last_verified_at,
-          last_error_message: raw.last_error_message
+          last_error_message: raw.last_error_message,
         });
 
         // Priority: Error > Healthy > Disconnected > Unknown
@@ -110,16 +114,16 @@ export const useExchangeVault = () => {
           provider: raw.exchange_provider,
           status,
           isPaper: true,
-          lastSync: raw.last_verified_at 
+          lastSync: raw.last_verified_at
             ? new Date(raw.last_verified_at).toLocaleString()
             : 'Never verified',
           lastError: raw.last_error_message || null,
-          apiKeyMasked: `${raw.api_key.substring(0, 4)}...${raw.api_key.substring(raw.api_key.length - 4)}`
+          apiKeyMasked: `${raw.api_key.substring(0, 4)}...${raw.api_key.substring(raw.api_key.length - 4)}`,
         };
 
         return mapped;
       }) as ExchangeAccount[];
-    }
+    },
   });
 
   // 2. Connect Exchange Mutation
@@ -127,14 +131,16 @@ export const useExchangeVault = () => {
     mutationFn: async (payload: ConnectPayload) => {
       const { data, error } = await supabase
         .from('quant_exchanges')
-        .insert([{
-          tenant_id: '00000000-0000-0000-0000-000000000000', // Demo
-          name: payload.name,
-          exchange_provider: payload.provider,
-          api_key: payload.apiKey,
-          api_secret: payload.apiSecret,
-          is_active: true
-        }])
+        .insert([
+          {
+            tenant_id: '00000000-0000-0000-0000-000000000000', // Demo
+            name: payload.name,
+            exchange_provider: payload.provider,
+            api_key: payload.apiKey,
+            api_secret: payload.apiSecret,
+            is_active: true,
+          },
+        ])
         .select();
 
       if (error) throw error;
@@ -142,7 +148,7 @@ export const useExchangeVault = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trading', 'exchanges'] });
-    }
+    },
   });
 
   // 3. Test Connection Mutation
@@ -166,26 +172,29 @@ export const useExchangeVault = () => {
           exchangeId: data.exchange_provider,
           apiKey: data.api_key,
           apiSecret: data.api_secret,
-          isPaper: true // MVP default
+          isPaper: true, // MVP default
         };
-        
+
         console.debug('[testConnection] Sending request to Python Core:', requestPayload);
-        
+
         const response = await fetch('http://localhost:8000/exchanges/test', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestPayload)
+          body: JSON.stringify(requestPayload),
         });
 
         console.debug('[testConnection] Response HTTP status:', response.status);
         testResult = await response.json();
-        console.debug('[testConnection] Full response from Python Core:', JSON.stringify(testResult, null, 2));
+        console.debug(
+          '[testConnection] Full response from Python Core:',
+          JSON.stringify(testResult, null, 2),
+        );
 
         // Python Core returns { success: boolean, error?: string }
         // Check the success field, not HTTP status
         if (testResult?.success === false) {
           const rawError = testResult?.error || 'Connection test failed';
-          
+
           // Try to parse CCXT error format: 'binance {"code":-2015,"msg":"..."}'
           const jsonMatch = rawError.match(/\{.*\}/);
           if (jsonMatch) {
@@ -198,7 +207,7 @@ export const useExchangeVault = () => {
           } else {
             errorMessage = rawError;
           }
-          
+
           console.warn('[testConnection] Python Core returned error:', errorMessage);
         }
       } catch (err: unknown) {
@@ -210,7 +219,7 @@ export const useExchangeVault = () => {
       // Update Supabase with test result
       const updatePayload: UpdatePayload = {
         last_verified_at: new Date().toISOString(),
-        is_active: !errorMessage // Mark as active only if no errors
+        is_active: !errorMessage, // Mark as active only if no errors
       };
 
       if (errorMessage) {
@@ -223,7 +232,7 @@ export const useExchangeVault = () => {
       console.debug('[testConnection] Updating exchange with:', {
         exchangeId: id,
         updatePayload,
-        errorMessage
+        errorMessage,
       });
 
       const { error: updateError } = await supabase
@@ -238,7 +247,7 @@ export const useExchangeVault = () => {
 
       console.debug('[testConnection] Successfully updated. Returning result:', {
         success: !errorMessage,
-        error: errorMessage
+        error: errorMessage,
       });
 
       return {
@@ -246,12 +255,12 @@ export const useExchangeVault = () => {
         message: errorMessage || 'Connection successful',
         error: errorMessage,
         testResult,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trading', 'exchanges'] });
-    }
+    },
   });
 
   // Wrapper function to handle testConnection with callbacks
@@ -262,7 +271,7 @@ export const useExchangeVault = () => {
       },
       onError: (error: Error) => {
         callbacks?.onError?.(error);
-      }
+      },
     });
   };
 
@@ -272,7 +281,7 @@ export const useExchangeVault = () => {
       const response = await fetch(`http://localhost:8000/exchanges/${accountId}/balance`);
       if (!response.ok) throw new Error('Failed to fetch balance');
       return response.json();
-    }
+    },
   });
 
   return {
@@ -285,6 +294,6 @@ export const useExchangeVault = () => {
     isTesting: testConnection.isPending,
     testResult: testConnection.data,
     fetchBalance: fetchBalance.mutateAsync,
-    isFetchingBalance: fetchBalance.isPending
+    isFetchingBalance: fetchBalance.isPending,
   };
 };

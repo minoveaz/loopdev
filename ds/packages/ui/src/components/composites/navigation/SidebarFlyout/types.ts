@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface SidebarFlyoutLink {
+interface SidebarFlyoutLink {
   id: string;
   label: string;
   href: string;

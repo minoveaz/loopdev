@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 // Unified Entity Types for the entire suite
-export type EntityType =
+type EntityType =
   | 'brand'
   | 'token'
   | 'rule'
@@ -15,14 +15,14 @@ export type EntityType =
   | 'identity.tone'
   | 'identity.claim';
 
-export interface SelectedEntity {
+interface SelectedEntity {
   type: string; // Use string to allow dots (e.g. color.token)
   id: string;
   name?: string;
   data?: Record<string, unknown>;
 }
 
-export interface BrandRecord {
+interface BrandRecord {
   id: string;
   status?: 'draft' | 'published' | 'archived';
   palette?: { tokens: Array<{ id: string; [key: string]: unknown }> };

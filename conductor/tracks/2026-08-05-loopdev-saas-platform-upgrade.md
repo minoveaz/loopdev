@@ -1105,18 +1105,28 @@ El arranque estándar levanta LoopDev OS usando el proyecto remoto Supabase de d
 
 Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la deuda detectada por Knip, jscpd y los chequeos de dependencias quede a cero o tenga una justificacion tecnica explicita aprobada.
 
-- [ ] Ejecutar Knip por workspace y clasificar cada archivo no usado.
-- [ ] Eliminar archivos confirmados como muertos y registrar excepciones justificadas.
-- [ ] Resolver los imports no encontrados y dependencias no listadas.
-- [ ] Eliminar dependencias y devDependencies sin uso confirmado.
-- [ ] Revisar exports y tipos exportados no consumidos; conservar solo APIs publicas documentadas.
-- [ ] Resolver exports duplicados y entradas duplicadas de barril.
+- [x] Ejecutar Knip por workspace y clasificar cada archivo no usado.
+- [x] Eliminar archivos confirmados como muertos y registrar excepciones justificadas.
+- [x] Resolver los imports no encontrados y dependencias no listadas.
+- [x] Eliminar dependencias y devDependencies sin uso confirmado.
+- [x] Revisar exports y tipos exportados no consumidos; conservar solo APIs publicas documentadas.
+- [x] Resolver exports duplicados y entradas duplicadas de barril.
 - [ ] Revisar los clones de jscpd por porcentaje y tamano, extrayendo solo semantica realmente compartida.
 - [ ] Repetir la auditoria hasta obtener Knip limpio y jscpd dentro del umbral acordado.
-- [ ] Actualizar `quality:static`, CI y el track con baseline cero.
-- [ ] Ejecutar typecheck, lint, tests, build y quality gates completos.
+- [x] Actualizar `quality:static`, CI y el track con baseline cero.
+- [x] Ejecutar typecheck, lint, tests, build y quality gates completos.
 
 **Criterio de salida:** Knip no reporta archivos, dependencias, imports ni exports no justificados; jscpd no reporta duplicacion evitable; todos los quality gates pasan y la deuda restante, si existe, esta documentada como API publica o excepcion tecnica.
+
+#### Estado de ejecucion (2026-08-06)
+
+- [x] Knip ejecutado sobre el monorepo: 0 archivos no usados, 0 dependencias no usadas, 0 imports no resueltos, 0 exports/tipos sin consumidor y 0 duplicados reportados.
+- [x] Eliminados Storybook residual, `mod-architect` sin consumidores, fixtures historicos, helpers duplicados, modulos Supabase/API muertos y dependencias sin uso.
+- [x] Verificados `typecheck`, tests (51 archivos / 205 tests), lint y build de `loopdev-os`.
+- [x] Formato, clases y auditoria estatica pasan en `quality:static`.
+- [ ] jscpd queda en 50 clones (1,65% de lineas y 1,88% de tokens) tras excluir lockfile y documentacion. Los mayores grupos son shells de suites, tablas con columnas distintas, estados visuales de bots y bloques repetidos dentro de `ActivityPanel`; requieren refactor semantico, no eliminacion mecanica.
+
+La Fase 1D no se marca como cerrada hasta revisar esos 50 clones y dejar cada uno refactorizado o registrado como excepcion tecnica aprobada. El siguiente bloque debe priorizar los shells compartidos y `ActivityPanel`, manteniendo los gates verdes despues de cada extraccion.
 
 ## Decisiones pendientes
 

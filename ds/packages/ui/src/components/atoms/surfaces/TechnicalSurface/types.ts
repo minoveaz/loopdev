@@ -5,8 +5,8 @@ import { ReactNode } from 'react';
  * @description Contratos de tipado para el átomo de superficie técnica.
  */
 
-export type SurfaceVariant = 'surface' | 'glass' | 'canvas';
-export type SurfaceDepth = 'flat' | 'raised' | 'overlay';
+type SurfaceVariant = 'surface' | 'glass' | 'canvas';
+type SurfaceDepth = 'flat' | 'raised' | 'overlay';
 
 export interface TechnicalSurfaceProps {
   /** Variación estética del fondo */

@@ -3,7 +3,7 @@
  * @description Contratos de tipado para el LogoSpinner.
  */
 
-export type LogoSpinnerSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | number;
+type LogoSpinnerSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | number;
 
 export interface LogoSpinnerProps {
   /** Tamaño semántico o numérico en px */
