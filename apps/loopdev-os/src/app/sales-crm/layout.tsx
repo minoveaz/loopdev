@@ -31,6 +31,7 @@ import { SalesCrmProvider, useSalesCrm } from './context';
 import { AiBudgetGenerator } from './components/AiBudgetGenerator';
 import { MasterDetailModal } from './components/MasterDetailModal';
 import { daysSinceContact, isLeadStale } from './utils/leadActivity';
+import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
 
 const SALES_CRM_SCHEMA: NavigationSchema = {
   version: '1.0',
@@ -205,6 +206,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   };
 
   return (
+    <SuitePermissionGuard permission="crm.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -297,6 +299,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
         {children}
       </SuiteContentFrame>
     </AppShell>
+    </SuitePermissionGuard>
   );
 }
 

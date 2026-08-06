@@ -26,6 +26,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, ModuleAccessState } from '@loopdev/contracts';
+import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -72,6 +73,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   };
 
   return (
+    <SuitePermissionGuard permission="marketing.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -161,5 +163,6 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         </LayoutProvider>
       </TenantProvider>
     </AppShell>
+    </SuitePermissionGuard>
   );
 }
