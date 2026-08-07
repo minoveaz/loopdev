@@ -46,6 +46,9 @@ jobs:
       - name: Static quality checks
         run: pnpm quality:static
 
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
+
       - name: Typecheck
         run: pnpm typecheck
 
