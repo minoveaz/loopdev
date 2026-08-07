@@ -1,6 +1,6 @@
 begin;
 
-select plan(43);
+select plan(42);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
