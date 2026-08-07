@@ -38,7 +38,8 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
 
       setIsLoading(true);
       const supabase = createClient();
-      const organizationIds = memberships.map((membership) => membership.organizationId);
+      const activeMemberships = memberships.filter((membership) => membership.status === 'active');
+      const organizationIds = activeMemberships.map((membership) => membership.organizationId);
       let query = supabase
         .from('organizations')
         .select('id, name, slug, legacy_tenant_id, is_active, created_at, updated_at')
@@ -114,7 +115,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
     [resolvedActiveOrganizationId, organizations],
   );
   const activeMembership = useMemo(
-    () => memberships.find(({ organizationId }) => organizationId === resolvedActiveOrganizationId) ?? null,
+    () => memberships.find(({ organizationId, status }) => organizationId === resolvedActiveOrganizationId && status === 'active') ?? null,
     [resolvedActiveOrganizationId, memberships],
   );
 

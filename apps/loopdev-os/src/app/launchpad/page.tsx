@@ -7,9 +7,13 @@ import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
 import { OrganizationSwitcher } from '@/components/layout/OrganizationSwitcher';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { useWorkspace } from '@/hooks/useWorkspace';
+import { useOrganization } from '@/hooks/useOrganization';
+import { resolveAccessState } from '@/core/access/accessState';
+import { AccessStatePanel } from '@/components/layout/AccessStatePanel';
 
 export default function LaunchpadPage() {
-  const { user } = useAuth();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
+  const { organizations, isLoading: isOrganizationLoading } = useOrganization();
   const { hasPermission, isLoading: isLoadingPermissions } = useOrganizationPermissions([
     'marketing.read',
     'crm.read',
@@ -24,6 +28,21 @@ export default function LaunchpadPage() {
   const toggleTheme = () => {
     document.documentElement.classList.toggle('dark');
   };
+
+  const accessState = resolveAccessState({
+    isAuthLoading,
+    hasSession: Boolean(user),
+    isPlatformAdministrator,
+    membershipStatuses: memberships.map((membership) => membership.status),
+  });
+
+  if (accessState !== 'loading' && accessState !== 'authorized') {
+    return <AccessStatePanel state={accessState} />;
+  }
+
+  if (accessState === 'authorized' && !isOrganizationLoading && organizations.length === 0) {
+    return <AccessStatePanel state="no-organization-access" />;
+  }
 
   return (
     <div className="min-h-screen bg-shell-canvas transition-colors duration-300 flex flex-col font-sans selection:bg-primary/30 relative overflow-hidden">

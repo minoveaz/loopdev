@@ -8,6 +8,15 @@ export * from './brands/rules.schema';
 export * from './platform/navigation';
 export * from './platform/tenancy';
 
+// Export CRM contracts
+export * from './crm/crm';
+
+// Export Marketing contracts
+export * from './marketing/marketing';
+
+// Export insurance and operations contracts
+export * from './insurance/insurance';
+
 // Export Trading/Quant Contracts
 export * from './trading/trading.schema';
 

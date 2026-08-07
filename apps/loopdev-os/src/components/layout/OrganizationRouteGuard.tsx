@@ -3,25 +3,44 @@
 import { useEffect, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useOrganization } from '@/hooks/useOrganization';
+import { useAuth } from '@/hooks/useAuth';
+import { canAccessOrganizationRoute, resolveAccessState } from '@/core/access/accessState';
+import { AccessStatePanel } from './AccessStatePanel';
 
 export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { memberships, activeOrganizationId, isLoading } = useOrganization();
+  const { activeOrganizationId, isLoading: isOrganizationLoading } = useOrganization();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
 
-  const requiresOrganization = pathname !== '/login' && pathname !== '/launchpad';
-  const isBlocked = requiresOrganization && !isLoading && memberships.length > 0 && !activeOrganizationId;
+  const requiresOrganization = pathname !== '/login' && pathname !== '/launchpad' && !pathname.startsWith('/auth/');
+  const accessState = resolveAccessState({
+    isAuthLoading,
+    hasSession: Boolean(user),
+    isPlatformAdministrator,
+    membershipStatuses: memberships.map((membership) => membership.status),
+  });
+  const hasActiveOrganization = Boolean(activeOrganizationId);
+  const isBlocked = requiresOrganization && !isAuthLoading && (
+    !canAccessOrganizationRoute(accessState) || (!isOrganizationLoading && !hasActiveOrganization)
+  );
 
   useEffect(() => {
-    if (isBlocked) router.replace('/launchpad');
-  }, [isBlocked, router]);
+    if (isBlocked && accessState !== 'session-expired') router.replace('/launchpad');
+  }, [accessState, isBlocked, router]);
 
-  if (isBlocked) {
+  if (requiresOrganization && accessState === 'loading') {
     return (
       <main className="bg-shell-canvas flex min-h-screen items-center justify-center p-6 text-sm text-slate-500">
-        Select an organization to continue.
+        Checking your secure workspace access…
       </main>
     );
+  }
+
+  if (isBlocked) {
+    if (accessState === 'session-expired') return <AccessStatePanel state={accessState} />;
+    if (accessState === 'authorized') return <AccessStatePanel state="no-organization-access" />;
+    return <AccessStatePanel state={accessState === 'loading' ? 'no-organization-access' : accessState} />;
   }
 
   return children;

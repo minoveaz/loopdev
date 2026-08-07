@@ -3,6 +3,9 @@ import { z } from 'zod';
 export const OrganizationRoleSchema = z.enum(['owner', 'admin', 'agent', 'viewer']);
 export type OrganizationRole = z.infer<typeof OrganizationRoleSchema>;
 
+export const OrganizationMembershipStatusSchema = z.enum(['pending', 'active', 'suspended', 'revoked']);
+export type OrganizationMembershipStatus = z.infer<typeof OrganizationMembershipStatusSchema>;
+
 export const PlatformAdministratorRoleSchema = z.enum(['owner', 'admin']);
 export type PlatformAdministratorRole = z.infer<typeof PlatformAdministratorRoleSchema>;
 
@@ -62,6 +65,7 @@ export const OrganizationMembershipSchema = z.object({
   organizationId: z.string().uuid(),
   userId: z.string().uuid(),
   role: OrganizationRoleSchema,
+  status: OrganizationMembershipStatusSchema.default('active'),
   createdAt: z.string().datetime(),
 });
 

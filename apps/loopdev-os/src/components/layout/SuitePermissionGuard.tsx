@@ -4,6 +4,8 @@ import { useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { useWorkspace } from '@/hooks/useWorkspace';
+import { useAuth } from '@/hooks/useAuth';
+import { canAccessSuiteRoute, resolveAccessState } from '@/core/access/accessState';
 import type { SuiteKey } from '@loopdev/contracts';
 
 const suiteByPermission: Record<string, SuiteKey> = {
@@ -16,8 +18,19 @@ export function SuitePermissionGuard({ permission, children }: { permission: str
   const router = useRouter();
   const { hasPermission, isLoading } = useOrganizationPermissions([permission]);
   const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
   const suiteKey = suiteByPermission[permission];
-  const isDenied = !isLoading && !isLoadingWorkspaces && (!hasPermission(permission) || !suiteKey || !isSuiteEnabled(suiteKey));
+  const accessState = resolveAccessState({
+    isAuthLoading,
+    hasSession: Boolean(user),
+    isPlatformAdministrator,
+    membershipStatuses: memberships.map((membership) => membership.status),
+  });
+  const isDenied = !isLoading && !isLoadingWorkspaces && !isAuthLoading && !canAccessSuiteRoute({
+    accessState,
+    hasPermission: hasPermission(permission),
+    isSuiteEnabled: suiteKey ? isSuiteEnabled(suiteKey) : false,
+  });
 
   useEffect(() => {
     if (isDenied) router.replace('/launchpad');

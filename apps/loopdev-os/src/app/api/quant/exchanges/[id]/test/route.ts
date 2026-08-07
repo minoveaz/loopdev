@@ -1,13 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createAdminSupabaseClient } from '@/lib/supabase/admin';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { authorizeQuantManagement } from '@/services/quant/authorization';
 
 export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const session = await createServerSupabaseClient();
-  const { data: { user } } = await session.auth.getUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
   const admin = createAdminSupabaseClient();
   const { data: exchange } = await admin
     .from('quant_exchanges')
@@ -16,13 +12,8 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     .single();
   if (!exchange) return NextResponse.json({ error: 'Exchange not found' }, { status: 404 });
 
-  const { data: canManage, error: permissionError } = await session.rpc('has_organization_permission', {
-    target_organization_id: exchange.organization_id,
-    required_permission: 'quant.manage',
-  });
-  if (permissionError || canManage !== true) {
-    return NextResponse.json({ error: 'Quant management permission is required' }, { status: 403 });
-  }
+  const access = await authorizeQuantManagement(exchange.organization_id);
+  if (!access.allowed) return NextResponse.json({ error: access.status === 401 ? 'Unauthorized' : 'Quant management permission is required' }, { status: access.status });
 
   const quantCoreUrl = process.env.QUANT_CORE_URL;
   if (!quantCoreUrl) return NextResponse.json({ error: 'Quant Core is not configured' }, { status: 503 });
