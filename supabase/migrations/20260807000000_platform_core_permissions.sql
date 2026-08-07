@@ -3,7 +3,7 @@
 -- introduces an explicit permission matrix without changing existing policies.
 
 create table if not exists public.permissions (
-  key text primary key check (key ~ '^[a-z][a-z0-9-]*\\.[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)*$'),
+  key text primary key check (key ~ '^[a-z][a-z0-9-]*\.[a-z][a-z0-9-]*(\.[a-z][a-z0-9-]*)*$'),
   description text not null,
   scope text not null default 'organization'
     check (scope in ('organization', 'workspace', 'brand', 'record')),
