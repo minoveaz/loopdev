@@ -21,6 +21,7 @@ import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { SuiteHeaderLeft } from '@/components/layout/SuiteHeaderLeft';
 import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
 import { useAuth } from '@/hooks/useAuth';
+import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, type NavigationSchema } from '@loopdev/contracts';
 
@@ -182,6 +183,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   };
 
   return (
+    <SuitePermissionGuard permission="health.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -252,5 +254,6 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
         {children}
       </SuiteContentFrame>
     </AppShell>
+    </SuitePermissionGuard>
   );
 }

@@ -21,6 +21,7 @@ import {
 import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
 import { useAuth } from '@/hooks/useAuth';
+import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext } from '@loopdev/contracts';
 import { QuantOpsProvider, useQuantOps } from './context';
@@ -66,6 +67,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   };
 
   return (
+    <SuitePermissionGuard permission="quant.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -147,6 +149,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
         {children}
       </SuiteContentFrame>
     </AppShell>
+    </SuitePermissionGuard>
   );
 }
 

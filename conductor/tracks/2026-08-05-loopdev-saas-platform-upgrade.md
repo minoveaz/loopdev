@@ -551,7 +551,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [ ] Crear `BrandProvider` y selector de marca cuando aplique.
 - [ ] Crear `WorkspaceProvider`.
 - [ ] Crear `PermissionProvider` y helpers server/client.
-- [ ] Aplicar permisos al Launchpad y navegación.
+- [x] Aplicar permisos al Launchpad y navegación de las suites existentes (CRM, Marketing Studio, Health OS y Quant Ops); Financial Ops queda pendiente de ruta real.
 - [ ] Bloquear rutas de suites no habilitadas para la organización.
 - [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
 - [ ] Añadir pruebas de routing y autorización.
