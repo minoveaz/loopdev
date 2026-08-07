@@ -9,7 +9,9 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { memberships, activeOrganizationId, isLoading } = useOrganization();
 
-  const requiresOrganization = pathname !== '/login' && pathname !== '/launchpad';
+  const isFrontendPreview = pathname.startsWith('/frontend-preview');
+  const requiresOrganization =
+    pathname !== '/login' && pathname !== '/launchpad' && !isFrontendPreview;
   const isBlocked = requiresOrganization && !isLoading && memberships.length > 0 && !activeOrganizationId;
 
   useEffect(() => {

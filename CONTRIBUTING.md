@@ -4,13 +4,13 @@
 
 Cada cambio debe realizarse en una rama propia y abrir un Pull Request hacia `develop`. No se deben hacer pushes directos a `develop` ni `main`.
 
-## Flujo de trabajo y trazabilidad
-
-El flujo oficial mantiene la relación:
+La relación obligatoria de trabajo es:
 
 ```text
 Issue -> Branch -> Commits -> Pull Request -> Checks -> Deploy -> Release
 ```
+
+Una rama debe tener una sola intención principal. No se deben mezclar en la misma rama cambios de producto, migraciones, tooling y documentación no relacionados.
 
 1. **Issue:** todo trabajo comienza en una Issue o en GitHub Projects, con objetivo, criterios de aceptación, alcance y riesgos.
 2. **Rama:** crea la rama desde `develop` con una convención descriptiva:
@@ -19,13 +19,105 @@ Issue -> Branch -> Commits -> Pull Request -> Checks -> Deploy -> Release
    fix/CRM-145-auth-error
    chore/CI-20-eslint
    ```
-3. **Commits:** usa Conventional Commits (`feat`, `fix`, `chore`, `test`, `docs`, `refactor`) y referencia la Issue cuando sea útil.
+3. **Commits:** usa Conventional Commits (`feat`, `fix`, `chore`, `test`, `docs`, `refactor`, `perf`) y referencia la Issue cuando sea útil.
 4. **Pull Request:** abre la PR hacia `develop`, enlaza la Issue (`Closes #123`) y documenta cambios de contratos, migraciones, RLS, secretos o integraciones externas.
 5. **Checks:** la PR no se integra hasta que CI esté verde y exista la revisión requerida.
 6. **Merge:** usa squash merge para mantener un historial legible. `develop` recibe la integración de trabajo validado.
 7. **Release:** el paso de `develop` a `main` se realiza mediante una PR de release con validación adicional y aprobación explícita.
 
 No se deben hacer pushes directos a `develop` ni `main`. Las reglas de protección de ambas ramas deben exigir PR, checks obligatorios y revisión.
+
+### Convención de ramas
+
+La convención oficial es:
+
+```text
+feature/<area>-<tema>
+fix/<area>-<tema>
+chore/<area>-<tema>
+docs/<area>-<tema>
+test/<area>-<tema>
+```
+
+Ejemplos:
+
+```text
+feature/loopdev-frontend-standardization
+feature/CRM-123-pipeline
+fix/auth-callback
+chore/ci-quality-gates
+docs/git-workflow
+```
+
+`feat/` puede aparecer en commits, pero no es la convención preferida para nombres de ramas. Las ramas de estándares, workflows o Design System deben mantenerse separadas y ser revisables por sí mismas.
+
+### Reglas de commits
+
+Un commit debe representar una unidad coherente, revisable y potencialmente reversible. No se debe esperar al final de toda una feature para crear un único commit ni crear commits por cada cambio mínimo de estilo.
+
+Formato:
+
+```text
+type(scope): descripción breve en imperativo
+```
+
+Ejemplos:
+
+```text
+feat(preview): add mock shell navigation
+feat(communications): add conversation list fixtures
+test(communications): cover empty and loading states
+fix(ui): correct responsive sidebar behavior
+docs(frontend): define preview isolation rules
+```
+
+Haz un commit cuando:
+
+- una unidad funcional, visual o documental esté completa;
+- el slice trabajado pase su validación focalizada;
+- el commit no incluya cambios ajenos;
+- pueda describirse claramente qué cambia y por qué.
+
+No mezcles en un commit cambios generados por herramientas, migraciones, secretos o modificaciones locales no relacionadas. Revisa siempre `git status`, `git diff --stat` y `git diff --cached --check` antes de confirmar.
+
+### Validación antes de commit y Pull Request
+
+Para cambios pequeños y localizados:
+
+```bash
+pnpm exec prettier --check <archivos-modificados>
+pnpm exec eslint <archivos-modificados>
+```
+
+Para componentes o features:
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+```
+
+Antes de abrir o actualizar el Pull Request ejecuta la validación completa:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm quality:static
+pnpm typecheck
+pnpm test:coverage
+pnpm build
+```
+
+El atajo `pnpm validate` cubre lint, typecheck, tests y build, pero no sustituye `quality:static` ni `test:coverage` cuando el flujo de CI los exige.
+
+Antes de hacer push revisa:
+
+```bash
+git status
+git diff --stat
+git diff --cached --check
+git log --oneline -5
+```
 
 ### Entornos y secretos
 
@@ -94,6 +186,27 @@ Copy-Item apps/loopdev-os/.env.example apps/loopdev-os/.env.local
 Después completa `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` con los valores del proyecto remoto de desarrollo. `.env.local` está excluido del repositorio y nunca debe commitearse.
 
 El Pull Request debe enlazar una Issue (`Closes #123`) y describir si afecta a contratos, migraciones Supabase, RLS, secretos o integraciones externas.
+
+### Cambios solo de frontend
+
+Las ramas de estandarización visual pueden modificar componentes, layouts, estilos, estados, fixtures, adaptadores mock y tests. No pueden modificar migraciones, tablas, buckets, índices, RLS, autenticación, organizaciones, permisos reales, API routes de negocio, secretos ni persistencia.
+
+El preview visual debe reutilizar `@loopdev/ui` y `@loopdev/contracts`. Los datos mock deben entrar mediante fixtures o repositorios/adaptadores sustituibles, sin consultas directas a Supabase. Las rutas reales deben conservar sus providers y guards.
+
+Cada PR frontend debe declarar:
+
+```text
+Supabase changed: no
+Migrations changed: no
+RLS changed: no
+API changed: no
+Business logic changed: no
+Real persistence added: no
+Mock preview added: yes/no
+Shared design system changed: yes/no
+```
+
+Los cambios locales previos o generados por builds no se incluyen automáticamente en commits de la rama. Deben revisarse y separarse explícitamente.
 
 ## Qué valida cada comando
 
