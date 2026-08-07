@@ -557,6 +557,8 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 - [x] Mover la gestión de `quant_exchanges` a rutas server-side protegidas: el navegador ya no consulta ni escribe la tabla y solo recibe metadatos saneados; `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` permanecen exclusivamente en servidor.
 - [ ] Configurar `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` en el entorno de desarrollo/Render antes de activar el vault en usuarios reales.
 
+Runbook preparado en `docs/quant-vault-environment.md`; el pendiente se cierra únicamente después de cargar y verificar los secretos en los entornos correspondientes.
+
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 
 ### Fase 3 — Auth, contexto y shell multiempresa
