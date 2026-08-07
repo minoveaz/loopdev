@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createAdminSupabaseClient } from '@/lib/supabase/admin';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { authorizeQuantManagement } from '@/services/quant/authorization';
 
 const unauthorized = () => NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 const forbidden = () => NextResponse.json({ error: 'Quant management permission is required' }, { status: 403 });
@@ -9,23 +9,11 @@ type ExchangeWithSecret = {
   last_verified_at: string | null; last_error_message: string | null; created_at: string; api_key: string;
 };
 
-async function canManageOrganization(organizationId: string) {
-  const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { allowed: false, status: 401 as const };
-
-  const { data, error } = await supabase.rpc('has_organization_permission', {
-    target_organization_id: organizationId,
-    required_permission: 'quant.manage',
-  });
-  return { allowed: !error && data === true, status: 403 as const };
-}
-
 export async function GET(request: Request) {
   const organizationId = new URL(request.url).searchParams.get('organizationId');
   if (!organizationId) return NextResponse.json({ error: 'organizationId is required' }, { status: 400 });
 
-  const access = await canManageOrganization(organizationId);
+  const access = await authorizeQuantManagement(organizationId);
   if (!access.allowed) return access.status === 401 ? unauthorized() : forbidden();
 
   const admin = createAdminSupabaseClient();
@@ -55,7 +43,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'organizationId, name, provider, apiKey and apiSecret are required' }, { status: 400 });
   }
 
-  const access = await canManageOrganization(organizationId);
+  const access = await authorizeQuantManagement(organizationId);
   if (!access.allowed) return access.status === 401 ? unauthorized() : forbidden();
 
   const admin = createAdminSupabaseClient();
