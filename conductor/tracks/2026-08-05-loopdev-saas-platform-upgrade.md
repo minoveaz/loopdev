@@ -530,6 +530,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Evolucionar `brands` para que dependa formalmente de `organization_id`; conserva `tenant_id` solo como enlace heredado durante la transición, con backfill determinista y RLS por permiso de Marketing.
 - [ ] Crear `workspaces` y configuración de suites habilitadas.
 - [x] Crear funciones SQL de membresía y autorización.
+- [x] Añadir administradores globales de LoopDev separados de las membresías de organización; `platform owner` puede administrar el core y su acceso queda cubierto por RLS y pruebas.
 - [x] Añadir índices y constraints de organización y marca para Brand Hub (`brands.organization_id` con FK e índice).
 - [x] Activar RLS con políticas verificables.
 - [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner, admin, agent, viewer y usuario externo.

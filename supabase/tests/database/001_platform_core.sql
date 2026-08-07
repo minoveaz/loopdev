@@ -1,6 +1,6 @@
 begin;
 
-select plan(14);
+select plan(18);
 
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organizations'), 'organizations table exists');
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organization_memberships'), 'organization_memberships table exists');
@@ -11,6 +11,10 @@ select ok((select relrowsecurity from pg_class where oid = 'public.organizations
 select ok((select relrowsecurity from pg_class where oid = 'public.organization_memberships'::regclass), 'organization memberships have RLS enabled');
 select ok(exists (select 1 from pg_proc where oid = 'public.is_organization_member(uuid)'::regprocedure), 'membership helper function exists');
 select ok(exists (select 1 from pg_proc where oid = 'public.has_organization_role(uuid,text[])'::regprocedure), 'role helper function exists');
+select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'platform_administrators'), 'platform administrators table exists');
+select ok((select relrowsecurity from pg_class where oid = 'public.platform_administrators'::regclass), 'platform administrators have RLS enabled');
+select ok(exists (select 1 from pg_proc where oid = 'public.is_platform_administrator()'::regprocedure), 'platform administrator helper function exists');
+select ok(exists (select 1 from pg_proc where oid = 'public.has_platform_role(text)'::regprocedure), 'platform role helper function exists');
 select ok(exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'brands' and column_name = 'organization_id' and is_nullable = 'NO'), 'brands require an organization');
 select ok(exists (select 1 from pg_constraint where conrelid = 'public.brands'::regclass and conname = 'brands_organization_id_fkey'), 'brands reference organizations');
 select ok(exists (select 1 from pg_indexes where schemaname = 'public' and tablename = 'brands' and indexname = 'idx_brands_organization'), 'brands have an organization index');

@@ -3,6 +3,18 @@ import { z } from 'zod';
 export const OrganizationRoleSchema = z.enum(['owner', 'admin', 'agent', 'viewer']);
 export type OrganizationRole = z.infer<typeof OrganizationRoleSchema>;
 
+export const PlatformAdministratorRoleSchema = z.enum(['owner', 'admin']);
+export type PlatformAdministratorRole = z.infer<typeof PlatformAdministratorRoleSchema>;
+
+export const PlatformAdministratorSchema = z.object({
+  userId: z.string().uuid(),
+  role: PlatformAdministratorRoleSchema,
+  createdAt: z.string().datetime(),
+  createdBy: z.string().uuid().nullable().optional(),
+});
+
+export type PlatformAdministrator = z.infer<typeof PlatformAdministratorSchema>;
+
 export const PermissionScopeSchema = z.enum(['organization', 'workspace', 'brand', 'record']);
 export type PermissionScope = z.infer<typeof PermissionScopeSchema>;
 

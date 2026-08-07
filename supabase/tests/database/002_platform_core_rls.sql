@@ -1,6 +1,6 @@
 begin;
 
-select plan(31);
+select plan(36);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -11,7 +11,11 @@ values
   ('00000000-0000-4000-8000-000000000002', 'authenticated', 'authenticated', 'platform-core-b@example.test', '', now()),
   ('00000000-0000-4000-8000-000000000003', 'authenticated', 'authenticated', 'platform-core-admin@example.test', '', now()),
   ('00000000-0000-4000-8000-000000000004', 'authenticated', 'authenticated', 'platform-core-agent@example.test', '', now()),
-  ('00000000-0000-4000-8000-000000000005', 'authenticated', 'authenticated', 'platform-core-external@example.test', '', now());
+  ('00000000-0000-4000-8000-000000000005', 'authenticated', 'authenticated', 'platform-core-external@example.test', '', now()),
+  ('00000000-0000-4000-8000-000000000006', 'authenticated', 'authenticated', 'platform-core-platform-owner@example.test', '', now());
+
+insert into public.platform_administrators (user_id, role)
+values ('00000000-0000-4000-8000-000000000006', 'owner');
 
 insert into public.organizations (id, name, slug)
 values
@@ -180,6 +184,28 @@ select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000005
 select ok(
   not exists (select 1 from public.brands),
   'a user without membership cannot view brands'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000006', true);
+select ok(
+  public.is_platform_administrator(),
+  'a LoopDev platform owner is recognized outside organization memberships'
+);
+select ok(
+  exists (select 1 from public.organizations where id = '00000000-0000-4000-9000-000000000002'),
+  'a platform owner can view every organization'
+);
+select ok(
+  exists (select 1 from public.organization_memberships where organization_id = '00000000-0000-4000-9000-000000000002'),
+  'a platform owner can view memberships in every organization'
+);
+select ok(
+  exists (select 1 from public.brands where id = '00000000-0000-4000-9000-000000000012'),
+  'a platform owner can view brands in every organization'
+);
+select lives_ok(
+  $$ update public.brands set name = 'Brand B platform updated' where id = '00000000-0000-4000-9000-000000000012' $$,
+  'a platform owner can manage a brand in any organization'
 );
 
 select * from finish();
