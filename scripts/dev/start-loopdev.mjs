@@ -31,6 +31,10 @@ function start(label, command, commandArgs) {
   children.push(child);
 }
 
+// Next resolves workspace packages through their compiled entry points. Keep
+// contracts rebuilt during development so newly added exports are immediately
+// available to LoopDev OS instead of serving a stale dist bundle.
+start('LoopDev contracts', packageManager, ['--filter', '@loopdev/contracts', 'dev']);
 start('LoopDev OS', packageManager, ['--filter', 'loopdev-os', 'dev']);
 
 if (withSupabase) {

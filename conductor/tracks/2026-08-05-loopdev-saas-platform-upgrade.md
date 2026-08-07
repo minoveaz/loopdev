@@ -527,13 +527,15 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 - [x] Crear migraciones para `organizations` y `organization_memberships`.
 - [x] Añadir `roles`, `permissions`, `role_permissions` y scopes como catálogo/matriz aditiva; la asignación continúa viviendo en `organization_memberships.role`.
-- [ ] Evolucionar `brands` para que dependa formalmente de `organization_id`.
-- [ ] Crear `workspaces` y configuración de suites habilitadas.
+- [x] Evolucionar `brands` para que dependa formalmente de `organization_id`; conserva `tenant_id` solo como enlace heredado durante la transición, con backfill determinista y RLS por permiso de Marketing.
+- [x] Crear `workspaces` y configuración de suites habilitadas; `workspace_brands` permite alcance de organización completa o de varias marcas sin convertir submarcas en tenants.
 - [x] Crear funciones SQL de membresía y autorización.
-- [ ] Añadir índices y constraints de organización y marca.
+- [x] Añadir administradores globales de LoopDev separados de las membresías de organización; `platform owner` puede administrar el core y su acceso queda cubierto por RLS y pruebas.
+- [x] Añadir índices y constraints de organización y marca para Brand Hub (`brands.organization_id` con FK e índice).
 - [x] Activar RLS con políticas verificables.
+- [x] Conceder privilegios SQL explícitos a `authenticated` para las tablas Platform Core; la autorización efectiva sigue siendo exclusivamente RLS.
 - [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner, admin, agent, viewer y usuario externo.
-- [ ] Eliminar políticas públicas heredadas.
+- [x] Eliminar políticas públicas heredadas de `brands` y sustituirlas por políticas de lectura/gestión basadas en permisos de la organización.
 
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 
@@ -548,11 +550,11 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 - [x] Refactorizar `AuthProvider` para cargar membresías tipadas; mantiene fallback vacío hasta desplegar Platform Core en Supabase remoto.
 - [x] Crear `OrganizationProvider` con organización activa persistida y selección limitada a memberships autorizadas.
-- [ ] Crear `BrandProvider` y selector de marca cuando aplique.
-- [ ] Crear `WorkspaceProvider`.
+- [x] Crear `BrandProvider`; resuelve automáticamente 0/1 marca y exige selección solo con varias marcas, siempre dentro de la organización activa.
+- [x] Crear `WorkspaceProvider`; carga únicamente suites activas autorizadas de la organización, mantiene la selección válida por organización y expone si una suite está habilitada.
 - [ ] Crear `PermissionProvider` y helpers server/client.
 - [x] Aplicar permisos al Launchpad y navegación de las suites existentes (CRM, Marketing Studio, Health OS y Quant Ops); Financial Ops queda pendiente de ruta real.
-- [ ] Bloquear rutas de suites no habilitadas para la organización.
+- [x] Bloquear rutas y Launchpad de suites no habilitadas para la organización; el acceso exige permiso y workspace activo para la suite.
 - [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
 - [ ] Añadir pruebas de routing y autorización.
 

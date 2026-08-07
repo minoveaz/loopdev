@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import QueryProvider from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { OrganizationProvider } from "@/providers/OrganizationProvider";
+import { BrandProvider } from "@/providers/BrandProvider";
+import { WorkspaceProvider } from "@/providers/WorkspaceProvider";
 import { OrganizationRouteGuard } from "@/components/layout/OrganizationRouteGuard";
 import { DynamicThemeProvider } from "@loopdev/ui";
 
@@ -29,6 +31,8 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             <OrganizationProvider>
+            <BrandProvider>
+            <WorkspaceProvider>
             <OrganizationRouteGuard>
                       <DynamicThemeProvider config={{
                         fontFamily: 'var(--lpd-font-sans)',
@@ -39,6 +43,8 @@ export default function RootLayout({
                       }}>              {children}
             </DynamicThemeProvider>
             </OrganizationRouteGuard>
+            </WorkspaceProvider>
+            </BrandProvider>
             </OrganizationProvider>
           </AuthProvider>
         </QueryProvider>

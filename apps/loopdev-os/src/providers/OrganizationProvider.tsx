@@ -29,7 +29,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
     let isMounted = true;
 
     const loadOrganizations = async () => {
-      if (!user || memberships.length === 0) {
+      if (!user) {
         setOrganizations([]);
         setActiveOrganizationIdState(null);
         setIsLoading(false);
@@ -39,11 +39,12 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       const supabase = createClient();
       const organizationIds = memberships.map((membership) => membership.organizationId);
-      const { data, error } = await supabase
+      let query = supabase
         .from('organizations')
         .select('id, name, slug, legacy_tenant_id, is_active, created_at, updated_at')
-        .in('id', organizationIds)
         .eq('is_active', true);
+      if (organizationIds.length > 0) query = query.in('id', organizationIds);
+      const { data, error } = await query;
 
       if (!isMounted) return;
 
