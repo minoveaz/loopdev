@@ -555,7 +555,7 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 - [x] Adaptar las escrituras directas de bots, estrategias, riesgo y exchanges al contexto activo de organización; las cachés de React Query ya incluyen `organization_id`.
 - [x] Validar la migración y la matriz RLS en la base efímera de CI antes de aplicarla a Dev (PR #9: `Migrations and CI RLS baseline` en verde tras reintento del runner).
 - [x] Mover la gestión de `quant_exchanges` a rutas server-side protegidas: el navegador ya no consulta ni escribe la tabla y solo recibe metadatos saneados; `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` permanecen exclusivamente en servidor.
-- [ ] Configurar `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` en el entorno de desarrollo/Render antes de activar el vault en usuarios reales.
+- [ ] Configurar `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` en staging/Render antes de activar el vault en usuarios reales (Fase 10).
 
 Runbook preparado en `docs/quant-vault-environment.md`; el pendiente se cierra únicamente después de cargar y verificar los secretos en los entornos correspondientes.
 
@@ -607,7 +607,7 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 - Mantener `dependency-cruiser` como gate arquitectónico.
 
 - [x] Ampliar `@loopdev/contracts` con Zod y tipos de Platform Core (organizaciones, memberships, roles y permisos).
-- [ ] Definir contratos de CRM y actividades.
+- [x] Definir contratos de CRM y actividades.
 - [ ] Definir contratos de Marketing Studio.
 - [ ] Definir contratos de seguros, cotizaciones y operaciones.
 - [ ] Definir contratos de WhatsApp.
