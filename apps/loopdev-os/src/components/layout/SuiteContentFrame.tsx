@@ -6,11 +6,12 @@ import {
   TenantProvider,
   ToastViewport,
 } from '@loopdev/ui';
+import type { Tenant } from '@loopdev/ui';
 
 interface SuiteContentFrameProps {
   children: ReactNode;
   moduleId: string;
-  tenant: string;
+  tenant: Tenant;
   activeTenantId: string;
   inspectorOpen?: boolean;
   onInspectorChange?: (open: boolean) => void;
