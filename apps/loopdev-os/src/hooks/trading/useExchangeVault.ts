@@ -80,7 +80,7 @@ export const useExchangeVault = () => {
     connectExchange: connectExchange.mutate, isConnecting: connectExchange.isPending,
     testConnection: (id: string, callbacks?: TestConnectionCallbacks) => testConnection.mutate(id, callbacks),
     isTesting: testConnection.isPending, testResult: testConnection.data,
-    fetchBalance: async () => { throw new Error('Exchange balances must be requested through a server-side Quant Core route'); },
+    fetchBalance: async (_accountId: string) => { throw new Error('Exchange balances must be requested through a server-side Quant Core route'); },
     isFetchingBalance: false,
   };
 };
