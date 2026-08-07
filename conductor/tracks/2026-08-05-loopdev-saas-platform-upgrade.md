@@ -580,6 +580,15 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 
 **Criterio:** una misma cuenta puede pertenecer a varias organizaciones y ver solo los módulos y datos autorizados.
 
+#### Estado tras PR #11 (2026-08-07)
+
+- [x] Fusionar `PermissionProvider` y los helpers de permisos en `develop` (PR #11, merge commit `79a83ad`).
+- [x] Mantener una única fuente de verdad de permisos para Launchpad, navegación y guards de suites.
+- [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
+- [ ] Añadir pruebas de routing y autorización, incluyendo cambio de organización y suite no habilitada.
+
+El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pruebas de routing. La integración de Communications/WhatsApp queda fuera de este bloque y se retomará posteriormente mediante contratos y endpoints server-side estables.
+
 ### Fase 4 — Contracts y capa de servicios
 
 #### Herramientas y controles
@@ -692,6 +701,8 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 - [ ] Respetar ventana de atención y plantillas autorizadas.
 - [ ] Añadir estados `sent`, `delivered`, `read` y `failed`.
 - [ ] Probar mensajes de texto, imagen, documento, audio y ubicación.
+
+La POC `crm-communications-poc` permanece temporalmente desacoplada. No se incorporan todavía sus migraciones ni su esquema CRM a LoopDev; la integración se retomará como una fase posterior mediante contratos y endpoints server-side.
 
 **Criterio:** un mensaje duplicado no duplica entidades y un agente autorizado puede responder sin exponer credenciales.
 
