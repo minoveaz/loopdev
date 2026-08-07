@@ -553,7 +553,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Crear `WorkspaceProvider`; carga únicamente suites activas autorizadas de la organización, mantiene la selección válida por organización y expone si una suite está habilitada.
 - [ ] Crear `PermissionProvider` y helpers server/client.
 - [x] Aplicar permisos al Launchpad y navegación de las suites existentes (CRM, Marketing Studio, Health OS y Quant Ops); Financial Ops queda pendiente de ruta real.
-- [ ] Bloquear rutas de suites no habilitadas para la organización.
+- [x] Bloquear rutas y Launchpad de suites no habilitadas para la organización; el acceso exige permiso y workspace activo para la suite.
 - [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
 - [ ] Añadir pruebas de routing y autorización.
 

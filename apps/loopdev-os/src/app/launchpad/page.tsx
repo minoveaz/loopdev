@@ -6,6 +6,7 @@ import { Heading, LpdText, Icon, TechnicalCanvas, BrandLogo, UIKitIllustration, 
 import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
 import { OrganizationSwitcher } from '@/components/layout/OrganizationSwitcher';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
+import { useWorkspace } from '@/hooks/useWorkspace';
 
 export default function LaunchpadPage() {
   const { user } = useAuth();
@@ -16,6 +17,9 @@ export default function LaunchpadPage() {
     'quant.read',
     'finance.read',
   ]);
+  const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
+  const isLocked = (permission: string, suite: 'marketing' | 'crm' | 'health' | 'quant') =>
+    isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite);
 
   const toggleTheme = () => {
     document.documentElement.classList.toggle('dark');
@@ -71,7 +75,7 @@ export default function LaunchpadPage() {
               illustration={<UIKitIllustration />}
               href="/marketing-studio"
               version="1.0.4"
-              isLocked={isLoadingPermissions || !hasPermission('marketing.read')}
+              isLocked={isLocked('marketing.read', 'marketing')}
             />
             <SuiteCard 
               title="Sales & CRM"
@@ -79,7 +83,7 @@ export default function LaunchpadPage() {
               illustration={<Icon name="groups" size="md" />}
               href="/sales-crm"
               version="0.8.2"
-              isLocked={isLoadingPermissions || !hasPermission('crm.read')}
+              isLocked={isLocked('crm.read', 'crm')}
             />
             <SuiteCard 
               title="Financial Ops"
@@ -95,7 +99,7 @@ export default function LaunchpadPage() {
               illustration={<Icon name="trending_up" size="md" />}
               href="/quant-ops"
               version="0.0.1"
-              isLocked={isLoadingPermissions || !hasPermission('quant.read')}
+              isLocked={isLocked('quant.read', 'quant')}
             />
             <SuiteCard 
               title="Health OS"
@@ -103,7 +107,7 @@ export default function LaunchpadPage() {
               illustration={<Icon name="medical_services" size="md" />}
               href="/health-os"
               version="0.1.0"
-              isLocked={isLoadingPermissions || !hasPermission('health.read')}
+              isLocked={isLocked('health.read', 'health')}
             />
           </div>
         </div>
