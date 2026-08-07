@@ -83,6 +83,8 @@ El script es multiplataforma y gestiona la terminación de los procesos al pulsa
 
 El arranque estándar usa el proyecto remoto Supabase de desarrollo mediante las variables de `.env.local`; no requiere Docker. `start:loopdev:local` activa el stack Supabase local y requiere Docker. La validación visual y de estados de componentes se realiza mediante Vitest y React Testing Library.
 
+`start:loopdev` también inicia el watcher de `@loopdev/contracts`, ya que LoopDev OS consume su bundle compilado. Así los exports nuevos de contratos se actualizan durante el desarrollo.
+
 Para configurar el entorno por primera vez:
 
 ```powershell
