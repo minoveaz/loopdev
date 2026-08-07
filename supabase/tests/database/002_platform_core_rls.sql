@@ -1,6 +1,6 @@
 begin;
 
-select plan(42);
+select plan(50);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -43,6 +43,27 @@ insert into public.workspace_brands (workspace_id, organization_id, brand_id)
 values
   ('00000000-0000-4000-9000-000000000021', '00000000-0000-4000-9000-000000000001', '00000000-0000-4000-9000-000000000011'),
   ('00000000-0000-4000-9000-000000000022', '00000000-0000-4000-9000-000000000002', '00000000-0000-4000-9000-000000000012');
+
+insert into public.tenants (id, name, slug)
+values ('00000000-0000-4000-9000-000000000031', 'Platform Core Tenant A', 'platform-core-tenant-a');
+
+update public.organizations
+set legacy_tenant_id = '00000000-0000-4000-9000-000000000031'
+where id = '00000000-0000-4000-9000-000000000001';
+
+insert into public.quant_assets (symbol, name, category)
+values ('PCORE/USDT', 'Platform Core Quant Asset', 'crypto');
+
+insert into public.quant_market_config (id, pair)
+values ('00000000-0000-4000-9000-000000000032', 'PCOREUSDT');
+
+insert into public.quant_market_history (
+  id, pair, environment, timeframe, open, high, low, close, volume, "timestamp"
+)
+values (
+  '00000000-0000-4000-9000-000000000033', 'PCOREUSDT', 'testnet', '1m',
+  100, 110, 90, 105, 10, '2026-08-01T00:00:00Z'
+);
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
 set local role authenticated;
@@ -196,6 +217,16 @@ select ok(
   'a user without membership cannot view brands'
 );
 select ok(not exists (select 1 from public.workspaces), 'a user without membership cannot view workspaces');
+select ok(not exists (select 1 from public.tenants where id = '00000000-0000-4000-9000-000000000031'), 'a user without membership cannot view tenants');
+select ok(not exists (select 1 from public.quant_assets where symbol = 'PCORE/USDT'), 'a user without Quant access cannot view Quant assets');
+select ok(not exists (select 1 from public.quant_market_config where id = '00000000-0000-4000-9000-000000000032'), 'a user without Quant access cannot view market configuration');
+select ok(not exists (select 1 from public.quant_market_history where id = '00000000-0000-4000-9000-000000000033'), 'a user without Quant access cannot view market history');
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
+select ok(exists (select 1 from public.tenants where id = '00000000-0000-4000-9000-000000000031'), 'an organization member can view their legacy tenant');
+select ok(exists (select 1 from public.quant_assets where symbol = 'PCORE/USDT'), 'a Quant user can view Quant assets');
+select ok(exists (select 1 from public.quant_market_config where id = '00000000-0000-4000-9000-000000000032'), 'a Quant user can view market configuration');
+select ok(exists (select 1 from public.quant_market_history where id = '00000000-0000-4000-9000-000000000033'), 'a Quant user can view market history');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000006', true);
 select ok(

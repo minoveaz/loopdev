@@ -1,6 +1,6 @@
 begin;
 
-select plan(22);
+select plan(24);
 
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organizations'), 'organizations table exists');
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organization_memberships'), 'organization_memberships table exists');
@@ -43,6 +43,22 @@ select ok(
 		)
 	),
 	'legacy tenants are represented as organizations'
+);
+select ok(exists (select 1 from pg_proc where oid = 'public.has_any_organization_permission(text)'::regprocedure), 'cross-organization permission helper exists');
+select ok(
+  not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and policyname in (
+        'Anyone can view active tenants',
+        'Certified assets are viewable by all users',
+        'Allow read access to market config',
+        'Allow public read access to market history',
+        'Public read access for market data'
+      )
+  ),
+  'legacy public tenant and Quant policies are removed'
 );
 
 select * from finish();
