@@ -550,7 +550,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Refactorizar `AuthProvider` para cargar membresías tipadas; mantiene fallback vacío hasta desplegar Platform Core en Supabase remoto.
 - [x] Crear `OrganizationProvider` con organización activa persistida y selección limitada a memberships autorizadas.
 - [x] Crear `BrandProvider`; resuelve automáticamente 0/1 marca y exige selección solo con varias marcas, siempre dentro de la organización activa.
-- [ ] Crear `WorkspaceProvider`.
+- [x] Crear `WorkspaceProvider`; carga únicamente suites activas autorizadas de la organización, mantiene la selección válida por organización y expone si una suite está habilitada.
 - [ ] Crear `PermissionProvider` y helpers server/client.
 - [x] Aplicar permisos al Launchpad y navegación de las suites existentes (CRM, Marketing Studio, Health OS y Quant Ops); Financial Ops queda pendiente de ruta real.
 - [ ] Bloquear rutas de suites no habilitadas para la organización.
