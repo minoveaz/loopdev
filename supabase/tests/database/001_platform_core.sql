@@ -1,6 +1,6 @@
 begin;
 
-select plan(18);
+select plan(22);
 
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organizations'), 'organizations table exists');
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organization_memberships'), 'organization_memberships table exists');
@@ -15,6 +15,10 @@ select ok(exists (select 1 from information_schema.tables where table_schema = '
 select ok((select relrowsecurity from pg_class where oid = 'public.platform_administrators'::regclass), 'platform administrators have RLS enabled');
 select ok(exists (select 1 from pg_proc where oid = 'public.is_platform_administrator()'::regprocedure), 'platform administrator helper function exists');
 select ok(exists (select 1 from pg_proc where oid = 'public.has_platform_role(text)'::regprocedure), 'platform role helper function exists');
+select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'workspaces'), 'workspaces table exists');
+select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'workspace_brands'), 'workspace brand scopes table exists');
+select ok((select relrowsecurity from pg_class where oid = 'public.workspaces'::regclass), 'workspaces have RLS enabled');
+select ok(exists (select 1 from pg_proc where oid = 'public.can_access_workspace(uuid)'::regprocedure), 'workspace access helper exists');
 select ok(exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'brands' and column_name = 'organization_id' and is_nullable = 'NO'), 'brands require an organization');
 select ok(exists (select 1 from pg_constraint where conrelid = 'public.brands'::regclass and conname = 'brands_organization_id_fkey'), 'brands reference organizations');
 select ok(exists (select 1 from pg_indexes where schemaname = 'public' and tablename = 'brands' and indexname = 'idx_brands_organization'), 'brands have an organization index');

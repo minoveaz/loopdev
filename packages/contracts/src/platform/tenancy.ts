@@ -15,6 +15,24 @@ export const PlatformAdministratorSchema = z.object({
 
 export type PlatformAdministrator = z.infer<typeof PlatformAdministratorSchema>;
 
+export const SuiteKeySchema = z.enum(['marketing', 'crm', 'operations', 'communications', 'health', 'quant', 'finance']);
+export type SuiteKey = z.infer<typeof SuiteKeySchema>;
+export const WorkspaceStatusSchema = z.enum(['active', 'disabled', 'archived']);
+export type WorkspaceStatus = z.infer<typeof WorkspaceStatusSchema>;
+
+export const WorkspaceSchema = z.object({
+  id: z.string().uuid(), organizationId: z.string().uuid(), suiteKey: SuiteKeySchema,
+  name: z.string().trim().min(2).max(120), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  status: WorkspaceStatusSchema.default('active'), configuration: z.record(z.string(), z.unknown()).default({}),
+  createdAt: z.string().datetime(), updatedAt: z.string().datetime(),
+});
+export type Workspace = z.infer<typeof WorkspaceSchema>;
+
+export const WorkspaceBrandSchema = z.object({
+  workspaceId: z.string().uuid(), organizationId: z.string().uuid(), brandId: z.string().uuid(), createdAt: z.string().datetime(),
+});
+export type WorkspaceBrand = z.infer<typeof WorkspaceBrandSchema>;
+
 export const PermissionScopeSchema = z.enum(['organization', 'workspace', 'brand', 'record']);
 export type PermissionScope = z.infer<typeof PermissionScopeSchema>;
 

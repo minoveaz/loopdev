@@ -1,6 +1,6 @@
 begin;
 
-select plan(36);
+select plan(43);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -33,6 +33,16 @@ insert into public.brands (id, tenant_id, organization_id, name)
 values
   ('00000000-0000-4000-9000-000000000011', '00000000-0000-4000-9000-000000000001', '00000000-0000-4000-9000-000000000001', 'Brand A'),
   ('00000000-0000-4000-9000-000000000012', '00000000-0000-4000-9000-000000000002', '00000000-0000-4000-9000-000000000002', 'Brand B');
+
+insert into public.workspaces (id, organization_id, suite_key, name, slug)
+values
+  ('00000000-0000-4000-9000-000000000021', '00000000-0000-4000-9000-000000000001', 'marketing', 'Brand Hub A', 'brand-hub-a'),
+  ('00000000-0000-4000-9000-000000000022', '00000000-0000-4000-9000-000000000002', 'health', 'Health OS B', 'health-os-b');
+
+insert into public.workspace_brands (workspace_id, organization_id, brand_id)
+values
+  ('00000000-0000-4000-9000-000000000021', '00000000-0000-4000-9000-000000000001', '00000000-0000-4000-9000-000000000011'),
+  ('00000000-0000-4000-9000-000000000022', '00000000-0000-4000-9000-000000000002', '00000000-0000-4000-9000-000000000012');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
 set local role authenticated;
@@ -185,6 +195,7 @@ select ok(
   not exists (select 1 from public.brands),
   'a user without membership cannot view brands'
 );
+select ok(not exists (select 1 from public.workspaces), 'a user without membership cannot view workspaces');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000006', true);
 select ok(
@@ -207,6 +218,15 @@ select lives_ok(
   $$ update public.brands set name = 'Brand B platform updated' where id = '00000000-0000-4000-9000-000000000012' $$,
   'a platform owner can manage a brand in any organization'
 );
+select ok(exists (select 1 from public.workspaces where id = '00000000-0000-4000-9000-000000000021') and exists (select 1 from public.workspaces where id = '00000000-0000-4000-9000-000000000022'), 'a platform owner can view every workspace');
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
+select ok(exists (select 1 from public.workspaces where id = '00000000-0000-4000-9000-000000000021'), 'an owner can view their suite workspace');
+select ok(not exists (select 1 from public.workspaces where id = '00000000-0000-4000-9000-000000000022'), 'an owner cannot view another organization workspace');
+select lives_ok($$ update public.workspaces set name = 'Brand Hub A updated' where id = '00000000-0000-4000-9000-000000000021' $$, 'an organization owner can manage a workspace');
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000002', true);
+select ok(exists (select 1 from public.workspaces where id = '00000000-0000-4000-9000-000000000022'), 'a viewer can view an enabled suite workspace');
 
 select * from finish();
 rollback;

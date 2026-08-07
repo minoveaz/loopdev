@@ -528,7 +528,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Crear migraciones para `organizations` y `organization_memberships`.
 - [x] Añadir `roles`, `permissions`, `role_permissions` y scopes como catálogo/matriz aditiva; la asignación continúa viviendo en `organization_memberships.role`.
 - [x] Evolucionar `brands` para que dependa formalmente de `organization_id`; conserva `tenant_id` solo como enlace heredado durante la transición, con backfill determinista y RLS por permiso de Marketing.
-- [ ] Crear `workspaces` y configuración de suites habilitadas.
+- [x] Crear `workspaces` y configuración de suites habilitadas; `workspace_brands` permite alcance de organización completa o de varias marcas sin convertir submarcas en tenants.
 - [x] Crear funciones SQL de membresía y autorización.
 - [x] Añadir administradores globales de LoopDev separados de las membresías de organización; `platform owner` puede administrar el core y su acceso queda cubierto por RLS y pruebas.
 - [x] Añadir índices y constraints de organización y marca para Brand Hub (`brands.organization_id` con FK e índice).
