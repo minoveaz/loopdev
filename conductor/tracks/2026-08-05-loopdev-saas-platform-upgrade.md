@@ -543,7 +543,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Restringir `tenants` a la membresía de la organización vinculada por `legacy_tenant_id`; un administrador global de LoopDev conserva el acceso operativo.
 - [x] Restringir los datos internos de referencia Quant a usuarios con `quant.read` en al menos una organización, o a administradores globales de LoopDev.
 - [x] Añadir pruebas negativas para un usuario autenticado sin membresía y pruebas positivas para un miembro autorizado.
-- [ ] Validar la migración y la matriz RLS en la base efímera del workflow Supabase antes de aplicarla a Dev.
+- [x] Validar la migración y la matriz RLS en la base efímera del workflow Supabase antes de aplicarla a Dev (PR #8: `Migrations and CI RLS baseline` en verde).
 
 Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa evolución estructural a `organization_id` requiere inventario, backfill y una migración de dominio independiente.
 
