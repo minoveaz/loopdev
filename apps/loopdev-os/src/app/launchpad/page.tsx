@@ -23,7 +23,7 @@ export default function LaunchpadPage() {
   ]);
   const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
   const isLocked = (permission: string, suite: 'marketing' | 'crm' | 'health' | 'quant') =>
-    isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite);
+    !isPlatformAdministrator && (isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite));
 
   const toggleTheme = () => {
     document.documentElement.classList.toggle('dark');
@@ -40,7 +40,7 @@ export default function LaunchpadPage() {
     return <AccessStatePanel state={accessState} />;
   }
 
-  if (accessState === 'authorized' && !isOrganizationLoading && organizations.length === 0) {
+  if (accessState === 'authorized' && !isPlatformAdministrator && !isOrganizationLoading && organizations.length === 0) {
     return <AccessStatePanel state="no-organization-access" />;
   }
 

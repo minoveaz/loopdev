@@ -26,7 +26,7 @@ export function SuitePermissionGuard({ permission, children }: { permission: str
     isPlatformAdministrator,
     membershipStatuses: memberships.map((membership) => membership.status),
   });
-  const isDenied = !isLoading && !isLoadingWorkspaces && !isAuthLoading && !canAccessSuiteRoute({
+  const isDenied = !isPlatformAdministrator && !isLoading && !isLoadingWorkspaces && !isAuthLoading && !canAccessSuiteRoute({
     accessState,
     hasPermission: hasPermission(permission),
     isSuiteEnabled: suiteKey ? isSuiteEnabled(suiteKey) : false,

@@ -22,7 +22,8 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
   });
   const hasActiveOrganization = Boolean(activeOrganizationId);
   const isBlocked = requiresOrganization && !isAuthLoading && (
-    !canAccessOrganizationRoute(accessState) || (!isOrganizationLoading && !hasActiveOrganization)
+    !canAccessOrganizationRoute(accessState) ||
+    (!isPlatformAdministrator && !isOrganizationLoading && !hasActiveOrganization)
   );
 
   useEffect(() => {

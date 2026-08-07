@@ -1,6 +1,7 @@
 'use client';
 
 import { useOrganization } from '@/hooks/useOrganization';
+import { useAuth } from '@/hooks/useAuth';
 
 export function OrganizationSwitcher() {
   const {
@@ -10,6 +11,7 @@ export function OrganizationSwitcher() {
     setActiveOrganizationId,
     isLoading,
   } = useOrganization();
+  const { isLoading: isAuthLoading } = useAuth();
 
   if (isLoading || organizations.length === 0) {
     return (
@@ -21,10 +23,25 @@ export function OrganizationSwitcher() {
     );
   }
 
+  const role = activeMembership?.role ?? (isAuthLoading ? 'loading' : 'no membership');
+
+  if (organizations.length === 1) {
+    return (
+      <div className="flex min-w-48 flex-col gap-1 rounded-lg border border-black/10 bg-black/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
+        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+          Active organization · {role}
+        </span>
+        <span className="text-sm font-semibold text-slate-900 dark:text-white">
+          {organizations[0].name}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <label className="flex min-w-48 flex-col gap-1 rounded-lg border border-black/10 bg-black/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
       <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-        Active organization · {activeMembership?.role ?? 'member'}
+        Active organization · {role}
       </span>
       <select
         aria-label="Active organization"

@@ -20,7 +20,7 @@ export type OrganizationContextType = {
 export const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
 
 export function OrganizationProvider({ children }: { children: ReactNode }) {
-  const { user, memberships } = useAuth();
+  const { user, memberships, isPlatformAdministrator } = useAuth();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [activeOrganizationId, setActiveOrganizationIdState] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
         .from('organizations')
         .select('id, name, slug, legacy_tenant_id, is_active, created_at, updated_at')
         .eq('is_active', true);
-      if (organizationIds.length > 0) query = query.in('id', organizationIds);
+      if (!isPlatformAdministrator && organizationIds.length > 0) query = query.in('id', organizationIds);
       const { data, error } = await query;
 
       if (!isMounted) return;
@@ -58,8 +58,8 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
       }
 
       const parsedOrganizations = (data ?? [])
-        .map((row) =>
-          OrganizationSchema.safeParse({
+        .map((row) => {
+          const organization = {
             id: row.id,
             name: row.name,
             slug: row.slug,
@@ -67,11 +67,22 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
             isActive: row.is_active,
             createdAt: row.created_at,
             updatedAt: row.updated_at,
-          }),
-        )
-        .flatMap((result) => (result.success ? [result.data] : []));
+          };
+          const result = OrganizationSchema.safeParse(organization);
+          if (result.success) return result.data;
+          console.warn('Organization schema mismatch:', result.error.flatten().fieldErrors);
+          return organization as Organization;
+        });
 
-      setOrganizations(parsedOrganizations);
+      const preferredOrganization = parsedOrganizations.find(({ slug }) => slug === 'loopdev');
+      const visibleOrganizations = isPlatformAdministrator && preferredOrganization
+        ? [preferredOrganization]
+        : parsedOrganizations;
+      setOrganizations(visibleOrganizations);
+      if (preferredOrganization && !window.localStorage.getItem(ACTIVE_ORGANIZATION_STORAGE_KEY)) {
+        setActiveOrganizationIdState(preferredOrganization.id);
+        window.localStorage.setItem(ACTIVE_ORGANIZATION_STORAGE_KEY, preferredOrganization.id);
+      }
       setIsLoading(false);
     };
 
@@ -79,7 +90,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
     return () => {
       isMounted = false;
     };
-  }, [memberships, user]);
+  }, [isPlatformAdministrator, memberships, user]);
 
   useEffect(() => {
     if (activeOrganizationId) {
