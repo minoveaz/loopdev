@@ -608,7 +608,7 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 
 - [x] Ampliar `@loopdev/contracts` con Zod y tipos de Platform Core (organizaciones, memberships, roles y permisos).
 - [x] Definir contratos de CRM y actividades.
-- [ ] Definir contratos de Marketing Studio.
+- [x] Definir contratos de Marketing Studio.
 - [ ] Definir contratos de seguros, cotizaciones y operaciones.
 - [ ] Definir contratos de WhatsApp.
 - [ ] Definir contratos de Health OS.
