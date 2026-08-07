@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { useOrganization } from '@/hooks/useOrganization';
 
 // Types
 interface Strategy {
@@ -97,6 +98,7 @@ interface BacktestResult {
  */
 export const useStrategies = () => {
   const queryClient = useQueryClient();
+  const { activeOrganization } = useOrganization();
 
   // 1. Fetch all strategies
   const {
@@ -104,7 +106,7 @@ export const useStrategies = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['trading', 'strategies'],
+    queryKey: ['trading', 'strategies', activeOrganization?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('quant_strategies')
@@ -152,13 +154,15 @@ export const useStrategies = () => {
   // 3. Create Strategy Mutation
   const createStrategy = useMutation({
     mutationFn: async (params: StrategyParams) => {
+      if (!activeOrganization?.legacyTenantId) throw new Error('Select an organization before creating a strategy');
       console.debug('[createStrategy] Creating strategy:', params.name);
 
       const { data, error } = await supabase
         .from('quant_strategies')
         .insert([
           {
-            tenant_id: '00000000-0000-0000-0000-000000000000', // Demo
+            tenant_id: activeOrganization.legacyTenantId,
+            organization_id: activeOrganization.id,
             name: params.name,
             exchange_id: params.exchangeId,
             mode: params.mode,
@@ -186,7 +190,7 @@ export const useStrategies = () => {
       return data?.[0];
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
+      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
     },
   });
 
@@ -219,10 +223,12 @@ export const useStrategies = () => {
 
       // If we have a strategyId, save backtest results
       if (params.strategyId && result.result) {
+        if (!activeOrganization) throw new Error('Select an organization before saving a backtest');
         console.debug('[runBacktest] Saving backtest results to Supabase');
         const { error: saveError } = await supabase.from('strategy_backtest_results').insert([
           {
             strategy_id: params.strategyId,
+            organization_id: activeOrganization.id,
             start_date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             end_date: new Date().toISOString().split('T')[0],
             initial_capital: result.result.initialCapital,
@@ -271,7 +277,7 @@ export const useStrategies = () => {
       console.debug('[updateStrategyStatus] Successfully updated');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
+      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
     },
   });
 
@@ -303,7 +309,7 @@ export const useStrategies = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
+      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
     },
   });
 
@@ -316,7 +322,7 @@ export const useStrategies = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies'] });
+      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
     },
   });
 

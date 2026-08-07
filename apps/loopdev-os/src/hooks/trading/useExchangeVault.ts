@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { useOrganization } from '@/hooks/useOrganization';
 
 interface ExchangeAccount {
   id: string;
@@ -70,6 +71,7 @@ interface TestConnectionResponse {
  */
 export const useExchangeVault = () => {
   const queryClient = useQueryClient();
+  const { activeOrganization } = useOrganization();
 
   // 1. Fetch Connected Accounts
   const {
@@ -77,7 +79,7 @@ export const useExchangeVault = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['trading', 'exchanges'],
+    queryKey: ['trading', 'exchanges', activeOrganization?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('quant_exchanges')
@@ -129,11 +131,13 @@ export const useExchangeVault = () => {
   // 2. Connect Exchange Mutation
   const connectExchange = useMutation({
     mutationFn: async (payload: ConnectPayload) => {
+      if (!activeOrganization?.legacyTenantId) throw new Error('Select an organization before connecting an exchange');
       const { data, error } = await supabase
         .from('quant_exchanges')
         .insert([
           {
-            tenant_id: '00000000-0000-0000-0000-000000000000', // Demo
+            tenant_id: activeOrganization.legacyTenantId,
+            organization_id: activeOrganization.id,
             name: payload.name,
             exchange_provider: payload.provider,
             api_key: payload.apiKey,
@@ -147,7 +151,7 @@ export const useExchangeVault = () => {
       return data[0];
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'exchanges'] });
+      queryClient.invalidateQueries({ queryKey: ['trading', 'exchanges', activeOrganization?.id] });
     },
   });
 
@@ -259,7 +263,7 @@ export const useExchangeVault = () => {
       };
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'exchanges'] });
+      queryClient.invalidateQueries({ queryKey: ['trading', 'exchanges', activeOrganization?.id] });
     },
   });
 
