@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useOrganization } from '@/hooks/useOrganization';
 
 type PermissionState = Record<string, boolean>;
+type PermissionResult = readonly [string, boolean];
 
 export function useOrganizationPermissions(requiredPermissions: string[]) {
   const { activeOrganizationId, memberships } = useOrganization();
@@ -17,8 +18,6 @@ export function useOrganizationPermissions(requiredPermissions: string[]) {
     let isMounted = true;
 
     if (!enforcePermissions || !activeOrganizationId || requiredPermissions.length === 0) {
-      setPermissions({});
-      setIsLoading(false);
       return () => {
         isMounted = false;
       };
@@ -28,7 +27,7 @@ export function useOrganizationPermissions(requiredPermissions: string[]) {
       setIsLoading(true);
       const supabase = createClient();
       const results = await Promise.all(
-        requiredPermissions.map(async (permission) => {
+        requiredPermissions.map(async (permission): Promise<PermissionResult> => {
           const { data, error } = await supabase.rpc('has_organization_permission', {
             target_organization_id: activeOrganizationId,
             required_permission: permission,
