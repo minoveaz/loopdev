@@ -554,7 +554,8 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 - [x] Sustituir las políticas legacy basadas en `tenant_id = auth.uid()` por RLS de `quant.read` y `quant.manage` por organización, incluido el aislamiento de auditoría y backtests.
 - [x] Adaptar las escrituras directas de bots, estrategias, riesgo y exchanges al contexto activo de organización; las cachés de React Query ya incluyen `organization_id`.
 - [x] Validar la migración y la matriz RLS en la base efímera de CI antes de aplicarla a Dev (PR #9: `Migrations and CI RLS baseline` en verde tras reintento del runner).
-- [ ] Mover la gestión de credenciales de `quant_exchanges` a servicios server-side: el frontend legacy aún lee/envía claves API y no debe ser la solución final.
+- [x] Mover la gestión de `quant_exchanges` a rutas server-side protegidas: el navegador ya no consulta ni escribe la tabla y solo recibe metadatos saneados; `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` permanecen exclusivamente en servidor.
+- [ ] Configurar `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` en el entorno de desarrollo/Render antes de activar el vault en usuarios reales.
 
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 

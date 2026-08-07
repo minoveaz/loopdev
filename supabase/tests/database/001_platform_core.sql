@@ -1,6 +1,6 @@
 begin;
 
-select plan(26);
+select plan(28);
 
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organizations'), 'organizations table exists');
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organization_memberships'), 'organization_memberships table exists');
@@ -72,6 +72,8 @@ select ok(
   ),
   'legacy tenant-based Quant policies are removed'
 );
+select ok(not has_table_privilege('authenticated', 'public.quant_exchanges', 'select'), 'authenticated clients cannot read exchange credentials directly');
+select ok(not has_table_privilege('authenticated', 'public.quant_exchanges', 'insert'), 'authenticated clients cannot write exchange credentials directly');
 
 select * from finish();
 rollback;
