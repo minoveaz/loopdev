@@ -533,6 +533,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Añadir administradores globales de LoopDev separados de las membresías de organización; `platform owner` puede administrar el core y su acceso queda cubierto por RLS y pruebas.
 - [x] Añadir índices y constraints de organización y marca para Brand Hub (`brands.organization_id` con FK e índice).
 - [x] Activar RLS con políticas verificables.
+- [x] Conceder privilegios SQL explícitos a `authenticated` para las tablas Platform Core; la autorización efectiva sigue siendo exclusivamente RLS.
 - [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner, admin, agent, viewer y usuario externo.
 - [x] Eliminar políticas públicas heredadas de `brands` y sustituirlas por políticas de lectura/gestión basadas en permisos de la organización.
 
