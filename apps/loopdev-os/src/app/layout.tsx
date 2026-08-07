@@ -4,6 +4,7 @@ import { AuthProvider } from "@/providers/AuthProvider";
 import { OrganizationProvider } from "@/providers/OrganizationProvider";
 import { BrandProvider } from "@/providers/BrandProvider";
 import { WorkspaceProvider } from "@/providers/WorkspaceProvider";
+import { PermissionProvider } from "@/providers/PermissionProvider";
 import { OrganizationRouteGuard } from "@/components/layout/OrganizationRouteGuard";
 import { DynamicThemeProvider } from "@loopdev/ui";
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             <OrganizationProvider>
+            <PermissionProvider>
             <BrandProvider>
             <WorkspaceProvider>
             <OrganizationRouteGuard>
@@ -45,6 +47,7 @@ export default function RootLayout({
             </OrganizationRouteGuard>
             </WorkspaceProvider>
             </BrandProvider>
+            </PermissionProvider>
             </OrganizationProvider>
           </AuthProvider>
         </QueryProvider>

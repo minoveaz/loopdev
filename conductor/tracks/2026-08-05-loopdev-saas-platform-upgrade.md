@@ -572,7 +572,7 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 - [x] Crear `OrganizationProvider` con organización activa persistida y selección limitada a memberships autorizadas.
 - [x] Crear `BrandProvider`; resuelve automáticamente 0/1 marca y exige selección solo con varias marcas, siempre dentro de la organización activa.
 - [x] Crear `WorkspaceProvider`; carga únicamente suites activas autorizadas de la organización, mantiene la selección válida por organización y expone si una suite está habilitada.
-- [ ] Crear `PermissionProvider` y helpers server/client.
+- [x] Crear `PermissionProvider` y helpers client: resuelve el catálogo de permisos una vez por organización y los guards/Launchpad consumen una única fuente de verdad.
 - [x] Aplicar permisos al Launchpad y navegación de las suites existentes (CRM, Marketing Studio, Health OS y Quant Ops); Financial Ops queda pendiente de ruta real.
 - [x] Bloquear rutas y Launchpad de suites no habilitadas para la organización; el acceso exige permiso y workspace activo para la suite.
 - [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
