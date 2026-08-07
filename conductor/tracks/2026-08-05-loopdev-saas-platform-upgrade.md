@@ -537,6 +537,16 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner, admin, agent, viewer y usuario externo.
 - [x] Eliminar políticas públicas heredadas de `brands` y sustituirlas por políticas de lectura/gestión basadas en permisos de la organización.
 
+#### Cierre inmediato de exposición pública heredada (2026-08-07)
+
+- [x] Preparar `20260813000000_platform_core_internal_quant_access.sql` para retirar las lecturas públicas de `tenants`, `quant_assets`, `quant_market_config` y `quant_market_history`.
+- [x] Restringir `tenants` a la membresía de la organización vinculada por `legacy_tenant_id`; un administrador global de LoopDev conserva el acceso operativo.
+- [x] Restringir los datos internos de referencia Quant a usuarios con `quant.read` en al menos una organización, o a administradores globales de LoopDev.
+- [x] Añadir pruebas negativas para un usuario autenticado sin membresía y pruebas positivas para un miembro autorizado.
+- [ ] Validar la migración y la matriz RLS en la base efímera del workflow Supabase antes de aplicarla a Dev.
+
+Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa evolución estructural a `organization_id` requiere inventario, backfill y una migración de dominio independiente.
+
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 
 ### Fase 3 — Auth, contexto y shell multiempresa
