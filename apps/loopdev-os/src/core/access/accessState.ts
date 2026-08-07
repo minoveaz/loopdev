@@ -5,14 +5,17 @@ export type AccessState = 'loading' | 'session-expired' | 'no-organization-acces
 export function resolveAccessState({
   isAuthLoading,
   hasSession,
+  isPlatformAdministrator = false,
   membershipStatuses,
 }: {
   isAuthLoading: boolean;
   hasSession: boolean;
+  isPlatformAdministrator?: boolean;
   membershipStatuses: readonly OrganizationMembershipStatus[];
 }): AccessState {
   if (isAuthLoading) return 'loading';
   if (!hasSession) return 'session-expired';
+  if (isPlatformAdministrator) return 'authorized';
   if (membershipStatuses.includes('active')) return 'authorized';
   if (membershipStatuses.includes('pending')) return 'membership-pending';
   return 'no-organization-access';

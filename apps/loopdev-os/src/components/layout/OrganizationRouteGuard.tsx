@@ -11,12 +11,13 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { activeOrganizationId, isLoading: isOrganizationLoading } = useOrganization();
-  const { user, memberships, isLoading: isAuthLoading } = useAuth();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
 
   const requiresOrganization = pathname !== '/login' && pathname !== '/launchpad' && !pathname.startsWith('/auth/');
   const accessState = resolveAccessState({
     isAuthLoading,
     hasSession: Boolean(user),
+    isPlatformAdministrator,
     membershipStatuses: memberships.map((membership) => membership.status),
   });
   const hasActiveOrganization = Boolean(activeOrganizationId);

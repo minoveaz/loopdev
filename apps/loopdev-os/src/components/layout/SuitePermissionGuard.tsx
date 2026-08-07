@@ -18,11 +18,12 @@ export function SuitePermissionGuard({ permission, children }: { permission: str
   const router = useRouter();
   const { hasPermission, isLoading } = useOrganizationPermissions([permission]);
   const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
-  const { user, memberships, isLoading: isAuthLoading } = useAuth();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
   const suiteKey = suiteByPermission[permission];
   const accessState = resolveAccessState({
     isAuthLoading,
     hasSession: Boolean(user),
+    isPlatformAdministrator,
     membershipStatuses: memberships.map((membership) => membership.status),
   });
   const isDenied = !isLoading && !isLoadingWorkspaces && !isAuthLoading && !canAccessSuiteRoute({

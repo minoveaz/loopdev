@@ -3,6 +3,7 @@
 import { createContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useOrganization } from '@/hooks/useOrganization';
+import { useAuth } from '@/hooks/useAuth';
 
 type PermissionContextType = {
   isLoading: boolean;
@@ -13,9 +14,10 @@ export const PermissionContext = createContext<PermissionContextType | undefined
 
 export function PermissionProvider({ children }: { children: ReactNode }) {
   const { activeOrganizationId, memberships } = useOrganization();
+  const { isPlatformAdministrator } = useAuth();
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
   const [loadedOrganizationId, setLoadedOrganizationId] = useState<string | null>(null);
-  const enforcePermissions = memberships.length > 0;
+  const enforcePermissions = memberships.length > 0 && !isPlatformAdministrator;
 
   useEffect(() => {
     let isMounted = true;

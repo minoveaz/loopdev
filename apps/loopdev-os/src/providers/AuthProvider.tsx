@@ -10,6 +10,7 @@ export type AuthContextType = {
   user: User | null;
   session: Session | null;
   memberships: OrganizationMembership[];
+  isPlatformAdministrator: boolean;
   isLoading: boolean;
   signOut: () => Promise<void>;
 };
@@ -29,6 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [memberships, setMemberships] = useState<OrganizationMembership[]>([]);
+  const [isPlatformAdministrator, setIsPlatformAdministrator] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
   const router = useRouter();
@@ -69,6 +71,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setMemberships(parsedMemberships);
   };
 
+  const loadPlatformAdministrator = async (userId: string | undefined) => {
+    if (!userId) { setIsPlatformAdministrator(false); return; }
+    const { data, error } = await supabase
+      .from('platform_administrators')
+      .select('role')
+      .eq('user_id', userId)
+      .maybeSingle();
+    setIsPlatformAdministrator(!error && Boolean(data));
+  };
+
   useEffect(() => {
     let isMounted = true;
     
@@ -81,6 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSession(initialSession);
           setUser(initialSession?.user ?? null);
           await loadMemberships(initialSession?.user.id);
+          await loadPlatformAdministrator(initialSession?.user.id);
           setIsLoading(false);
         }
 
@@ -92,6 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               setSession(session);
               setUser(session?.user ?? null);
               await loadMemberships(session?.user.id);
+              await loadPlatformAdministrator(session?.user.id);
               if (!isMounted) return;
               setIsLoading(false);
 
@@ -133,6 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     session,
     memberships,
+    isPlatformAdministrator,
     isLoading,
     signOut,
   };

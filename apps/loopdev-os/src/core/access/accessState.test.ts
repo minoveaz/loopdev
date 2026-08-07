@@ -8,6 +8,7 @@ describe('organization access routing', () => {
     [{ isAuthLoading: false, hasSession: true, membershipStatuses: [] }, 'no-organization-access'],
     [{ isAuthLoading: false, hasSession: true, membershipStatuses: ['pending'] }, 'membership-pending'],
     [{ isAuthLoading: false, hasSession: true, membershipStatuses: ['pending', 'active'] }, 'authorized'],
+    [{ isAuthLoading: false, hasSession: true, isPlatformAdministrator: true, membershipStatuses: [] }, 'authorized'],
     [{ isAuthLoading: false, hasSession: true, membershipStatuses: ['suspended', 'revoked'] }, 'no-organization-access'],
   ] as const)('resolves %o as %s', (input, expected) => {
     expect(resolveAccessState(input)).toBe(expected);

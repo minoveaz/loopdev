@@ -12,7 +12,7 @@ import { resolveAccessState } from '@/core/access/accessState';
 import { AccessStatePanel } from '@/components/layout/AccessStatePanel';
 
 export default function LaunchpadPage() {
-  const { user, memberships, isLoading: isAuthLoading } = useAuth();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
   const { organizations, isLoading: isOrganizationLoading } = useOrganization();
   const { hasPermission, isLoading: isLoadingPermissions } = useOrganizationPermissions([
     'marketing.read',
@@ -32,6 +32,7 @@ export default function LaunchpadPage() {
   const accessState = resolveAccessState({
     isAuthLoading,
     hasSession: Boolean(user),
+    isPlatformAdministrator,
     membershipStatuses: memberships.map((membership) => membership.status),
   });
 
