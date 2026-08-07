@@ -20,6 +20,8 @@ create table if not exists public.role_permissions (
 create index if not exists idx_role_permissions_permission
   on public.role_permissions(permission_key);
 
+grant select on public.permissions, public.role_permissions to authenticated;
+
 insert into public.permissions (key, description, scope)
 values
   ('organization.read', 'View organization context and configuration', 'organization'),
