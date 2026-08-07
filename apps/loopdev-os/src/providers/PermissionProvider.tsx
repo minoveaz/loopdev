@@ -14,23 +14,20 @@ export const PermissionContext = createContext<PermissionContextType | undefined
 export function PermissionProvider({ children }: { children: ReactNode }) {
   const { activeOrganizationId, memberships } = useOrganization();
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadedOrganizationId, setLoadedOrganizationId] = useState<string | null>(null);
   const enforcePermissions = memberships.length > 0;
 
   useEffect(() => {
     let isMounted = true;
     if (!enforcePermissions || !activeOrganizationId) {
-      setPermissions({});
-      setIsLoading(false);
       return () => { isMounted = false; };
     }
 
     const loadPermissions = async () => {
-      setIsLoading(true);
       const supabase = createClient();
       const { data: catalog, error: catalogError } = await supabase.from('permissions').select('key');
       if (catalogError) {
-        if (isMounted) { setPermissions({}); setIsLoading(false); }
+        if (isMounted) { setPermissions({}); setLoadedOrganizationId(activeOrganizationId); }
         return;
       }
 
@@ -43,7 +40,7 @@ export function PermissionProvider({ children }: { children: ReactNode }) {
           return [key, !error && data === true] as const;
         }),
       );
-      if (isMounted) { setPermissions(Object.fromEntries(results)); setIsLoading(false); }
+      if (isMounted) { setPermissions(Object.fromEntries(results)); setLoadedOrganizationId(activeOrganizationId); }
     };
 
     void loadPermissions();
@@ -51,9 +48,9 @@ export function PermissionProvider({ children }: { children: ReactNode }) {
   }, [activeOrganizationId, enforcePermissions]);
 
   const value = useMemo(() => ({
-    isLoading,
-    hasPermission: (permission: string) => !enforcePermissions || permissions[permission] === true,
-  }), [enforcePermissions, isLoading, permissions]);
+    isLoading: enforcePermissions && Boolean(activeOrganizationId) && loadedOrganizationId !== activeOrganizationId,
+    hasPermission: (permission: string) => !enforcePermissions || (loadedOrganizationId === activeOrganizationId && permissions[permission] === true),
+  }), [activeOrganizationId, enforcePermissions, loadedOrganizationId, permissions]);
 
   return <PermissionContext.Provider value={value}>{children}</PermissionContext.Provider>;
 }
