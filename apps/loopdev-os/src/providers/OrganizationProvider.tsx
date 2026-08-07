@@ -80,18 +80,24 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
   }, [memberships, user]);
 
   useEffect(() => {
-    if (organizations.length === 0) {
-      setActiveOrganizationIdState(null);
-      return;
+    if (activeOrganizationId) {
+      window.localStorage.setItem(ACTIVE_ORGANIZATION_STORAGE_KEY, activeOrganizationId);
+    }
+  }, [activeOrganizationId]);
+
+  const resolvedActiveOrganizationId = useMemo(() => {
+    if (organizations.length === 0) return null;
+    if (activeOrganizationId && organizations.some(({ id }) => id === activeOrganizationId)) {
+      return activeOrganizationId;
     }
 
     const storedOrganizationId = window.localStorage.getItem(ACTIVE_ORGANIZATION_STORAGE_KEY);
-    const storedIsValid = storedOrganizationId && organizations.some(({ id }) => id === storedOrganizationId);
-    const nextOrganizationId = storedIsValid ? storedOrganizationId : organizations[0].id;
+    if (storedOrganizationId && organizations.some(({ id }) => id === storedOrganizationId)) {
+      return storedOrganizationId;
+    }
 
-    setActiveOrganizationIdState(nextOrganizationId);
-    window.localStorage.setItem(ACTIVE_ORGANIZATION_STORAGE_KEY, nextOrganizationId);
-  }, [organizations]);
+    return organizations[0].id;
+  }, [activeOrganizationId, organizations]);
 
   const setActiveOrganizationId = useCallback(
     (organizationId: string) => {
@@ -103,12 +109,12 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
   );
 
   const activeOrganization = useMemo(
-    () => organizations.find(({ id }) => id === activeOrganizationId) ?? null,
-    [activeOrganizationId, organizations],
+    () => organizations.find(({ id }) => id === resolvedActiveOrganizationId) ?? null,
+    [resolvedActiveOrganizationId, organizations],
   );
   const activeMembership = useMemo(
-    () => memberships.find(({ organizationId }) => organizationId === activeOrganizationId) ?? null,
-    [activeOrganizationId, memberships],
+    () => memberships.find(({ organizationId }) => organizationId === resolvedActiveOrganizationId) ?? null,
+    [resolvedActiveOrganizationId, memberships],
   );
 
   return (
@@ -118,7 +124,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
         memberships,
         activeOrganization,
         activeMembership,
-        activeOrganizationId,
+        activeOrganizationId: resolvedActiveOrganizationId,
         setActiveOrganizationId,
         isLoading,
       }}

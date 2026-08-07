@@ -11,7 +11,18 @@ select ok((select relrowsecurity from pg_class where oid = 'public.organizations
 select ok((select relrowsecurity from pg_class where oid = 'public.organization_memberships'::regclass), 'organization memberships have RLS enabled');
 select ok(exists (select 1 from pg_proc where oid = 'public.is_organization_member(uuid)'::regprocedure), 'membership helper function exists');
 select ok(exists (select 1 from pg_proc where oid = 'public.has_organization_role(uuid,text[])'::regprocedure), 'role helper function exists');
-select ok(exists (select 1 from public.organizations where legacy_tenant_id is not null), 'legacy tenants are represented as organizations');
+select ok(
+	not exists (
+		select 1
+		from public.tenants tenant
+		where not exists (
+			select 1
+			from public.organizations organization_record
+			where organization_record.legacy_tenant_id = tenant.id
+		)
+	),
+	'legacy tenants are represented as organizations'
+);
 
 select * from finish();
 rollback;

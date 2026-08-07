@@ -22,8 +22,6 @@ create table if not exists public.organization_memberships (
 create index if not exists idx_org_memberships_user on public.organization_memberships(user_id);
 create index if not exists idx_org_memberships_org on public.organization_memberships(organization_id);
 
-grant select on public.organizations, public.organization_memberships to authenticated;
-
 insert into public.organizations (name, slug, legacy_tenant_id)
 select name, slug, id
 from public.tenants
