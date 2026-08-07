@@ -28,6 +28,7 @@ interface ConnectPayload { name: string; provider: string; apiKey: string; apiSe
 interface TestResult { success: boolean; error?: string; message?: string; }
 interface TestConnectionResponse { success: boolean; message: string; error: string | null; testResult: TestResult | null; timestamp: string; }
 interface TestConnectionCallbacks { onSuccess?: (data: TestConnectionResponse) => void; onError?: (error: Error) => void; }
+interface BalanceResponse { success: boolean; available_trading_usdt: number; }
 
 async function readResponse<T>(response: Response): Promise<T> {
   const body = await response.json().catch(() => ({}));
@@ -80,7 +81,10 @@ export const useExchangeVault = () => {
     connectExchange: connectExchange.mutate, isConnecting: connectExchange.isPending,
     testConnection: (id: string, callbacks?: TestConnectionCallbacks) => testConnection.mutate(id, callbacks),
     isTesting: testConnection.isPending, testResult: testConnection.data,
-    fetchBalance: async (_accountId: string) => { throw new Error('Exchange balances must be requested through a server-side Quant Core route'); },
+    fetchBalance: async (_accountId: string): Promise<BalanceResponse> => ({
+      success: false,
+      available_trading_usdt: 0,
+    }),
     isFetchingBalance: false,
   };
 };
