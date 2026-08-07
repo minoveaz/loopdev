@@ -1,6 +1,6 @@
 begin;
 
-select plan(24);
+select plan(31);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -24,6 +24,11 @@ values
   ('00000000-0000-4000-9000-000000000002', '00000000-0000-4000-8000-000000000002', 'viewer'),
   ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000003', 'admin'),
   ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000004', 'agent');
+
+insert into public.brands (id, tenant_id, organization_id, name)
+values
+  ('00000000-0000-4000-9000-000000000011', '00000000-0000-4000-9000-000000000001', '00000000-0000-4000-9000-000000000001', 'Brand A'),
+  ('00000000-0000-4000-9000-000000000012', '00000000-0000-4000-9000-000000000002', '00000000-0000-4000-9000-000000000002', 'Brand B');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
 set local role authenticated;
@@ -140,6 +145,41 @@ select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000004
 select ok(
   not public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'members.manage'),
   'agent is denied membership management access'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
+select ok(
+  exists (select 1 from public.brands where id = '00000000-0000-4000-9000-000000000011'),
+  'an owner can view a brand in their organization'
+);
+select ok(
+  not exists (select 1 from public.brands where id = '00000000-0000-4000-9000-000000000012'),
+  'an owner cannot view a brand in another organization'
+);
+select lives_ok(
+  $$ update public.brands set name = 'Brand A updated' where id = '00000000-0000-4000-9000-000000000011' $$,
+  'an owner can update a brand in their organization'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000002', true);
+select ok(
+  exists (select 1 from public.brands where id = '00000000-0000-4000-9000-000000000012'),
+  'a viewer can view a brand in their organization'
+);
+select lives_ok(
+  $$ update public.brands set name = 'Viewer must not update' where id = '00000000-0000-4000-9000-000000000012' $$,
+  'a viewer cannot update a brand'
+);
+select is(
+  (select name from public.brands where id = '00000000-0000-4000-9000-000000000012'),
+  'Brand B',
+  'a viewer update is filtered by RLS'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000005', true);
+select ok(
+  not exists (select 1 from public.brands),
+  'a user without membership cannot view brands'
 );
 
 select * from finish();

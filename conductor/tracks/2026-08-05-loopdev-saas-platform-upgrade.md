@@ -527,13 +527,13 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 - [x] Crear migraciones para `organizations` y `organization_memberships`.
 - [x] Añadir `roles`, `permissions`, `role_permissions` y scopes como catálogo/matriz aditiva; la asignación continúa viviendo en `organization_memberships.role`.
-- [ ] Evolucionar `brands` para que dependa formalmente de `organization_id`.
+- [x] Evolucionar `brands` para que dependa formalmente de `organization_id`; conserva `tenant_id` solo como enlace heredado durante la transición, con backfill determinista y RLS por permiso de Marketing.
 - [ ] Crear `workspaces` y configuración de suites habilitadas.
 - [x] Crear funciones SQL de membresía y autorización.
-- [ ] Añadir índices y constraints de organización y marca.
+- [x] Añadir índices y constraints de organización y marca para Brand Hub (`brands.organization_id` con FK e índice).
 - [x] Activar RLS con políticas verificables.
 - [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner, admin, agent, viewer y usuario externo.
-- [ ] Eliminar políticas públicas heredadas.
+- [x] Eliminar políticas públicas heredadas de `brands` y sustituirlas por políticas de lectura/gestión basadas en permisos de la organización.
 
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 
