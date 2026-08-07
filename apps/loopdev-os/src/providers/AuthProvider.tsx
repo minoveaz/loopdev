@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const { data, error } = await supabase
       .from('organization_memberships')
-      .select('organization_id, user_id, role, created_at')
+      .select('organization_id, user_id, role, status, created_at')
       .eq('user_id', userId);
 
     if (error) {
@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           organizationId: row.organization_id,
           userId: row.user_id,
           role: row.role,
+          status: row.status,
           createdAt: row.created_at,
         }),
       )
@@ -79,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isMounted) {
           setSession(initialSession);
           setUser(initialSession?.user ?? null);
-          void loadMemberships(initialSession?.user.id);
+          await loadMemberships(initialSession?.user.id);
           setIsLoading(false);
         }
 
@@ -87,9 +88,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
           async (event, session) => {
             if (isMounted) {
+              setIsLoading(true);
               setSession(session);
               setUser(session?.user ?? null);
-              void loadMemberships(session?.user.id);
+              await loadMemberships(session?.user.id);
+              if (!isMounted) return;
+              setIsLoading(false);
 
               // Protección de Rutas (Middleware Client-Side Backup)
               if (event === 'SIGNED_OUT') {

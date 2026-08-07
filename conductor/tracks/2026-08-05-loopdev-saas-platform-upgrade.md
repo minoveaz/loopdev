@@ -575,8 +575,8 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 - [x] Crear `PermissionProvider` y helpers client: resuelve el catálogo de permisos una vez por organización y los guards/Launchpad consumen una única fuente de verdad.
 - [x] Aplicar permisos al Launchpad y navegación de las suites existentes (CRM, Marketing Studio, Health OS y Quant Ops); Financial Ops queda pendiente de ruta real.
 - [x] Bloquear rutas y Launchpad de suites no habilitadas para la organización; el acceso exige permiso y workspace activo para la suite.
-- [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
-- [ ] Añadir pruebas de routing y autorización.
+- [x] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
+- [x] Añadir pruebas de routing y autorización.
 
 **Criterio:** una misma cuenta puede pertenecer a varias organizaciones y ver solo los módulos y datos autorizados.
 
@@ -584,8 +584,14 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 
 - [x] Fusionar `PermissionProvider` y los helpers de permisos en `develop` (PR #11, merge commit `79a83ad`).
 - [x] Mantener una única fuente de verdad de permisos para Launchpad, navegación y guards de suites.
-- [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
-- [ ] Añadir pruebas de routing y autorización, incluyendo cambio de organización y suite no habilitada.
+- [x] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
+- [x] Añadir pruebas de routing y autorización, incluyendo cambio de organización y suite no habilitada.
+
+#### Cierre de estados de acceso (2026-08-07)
+
+- [x] Las membresías ahora tienen ciclo de vida explícito (`pending`, `active`, `suspended`, `revoked`) y solo `active` autoriza funciones SQL, RLS, organizaciones, permisos y workspaces.
+- [x] El shell muestra estados dedicados para sesión expirada, membresía pendiente y ausencia de acceso organizacional; las rutas de suite redirigen de forma segura al Launchpad cuando corresponde.
+- [x] Las pruebas unitarias cubren el decisor de routing para carga, sesión expirada, sin acceso, membresía pendiente, activa, suspendida y revocada; el test de base comprueba la columna y el requisito de estado activo en el helper de permisos.
 
 El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pruebas de routing. La integración de Communications/WhatsApp queda fuera de este bloque y se retomará posteriormente mediante contratos y endpoints server-side estables.
 
@@ -1253,8 +1259,8 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 - [x] Eliminar dependencias y devDependencies sin uso confirmado.
 - [x] Revisar exports y tipos exportados no consumidos; conservar solo APIs publicas documentadas.
 - [x] Resolver exports duplicados y entradas duplicadas de barril.
-- [ ] Revisar los clones de jscpd por porcentaje y tamano, extrayendo solo semantica realmente compartida.
-- [ ] Repetir la auditoria hasta obtener Knip limpio y jscpd dentro del umbral acordado.
+- [x] Revisar los clones de jscpd por porcentaje y tamano, extrayendo solo semantica realmente compartida.
+- [x] Repetir la auditoria hasta obtener Knip limpio y jscpd dentro del umbral acordado.
 - [x] Actualizar `quality:static`, CI y el track con baseline cero.
 - [x] Ejecutar typecheck, lint, tests, build y quality gates completos.
 
@@ -1268,7 +1274,7 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 - [x] Formato, clases y auditoria estatica pasan en `quality:static`.
 - [x] jscpd queda en 24 clones despues de extraer las abstracciones semánticas de CRM, BotCard, layouts, tablas y payloads de bots. Los clones restantes son shells de suites, tablas con columnas distintas, indicadores visuales con modelos propios y scripts Python con flujos independientes.
 
-La Fase 1D queda pendiente únicamente de registrar la matriz final de excepciones técnicas; no quedan clones TypeScript consolidables sin revisar.
+La Fase 1D queda cerrada: la matriz final de 24 excepciones técnicas está registrada en `conductor/jscpd-exceptions.md`; no quedan clones TypeScript consolidables sin revisar.
 
 #### Clasificacion de clones jscpd (2026-08-06)
 

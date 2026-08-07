@@ -14,6 +14,13 @@ export default defineConfig({
           include: ['src/**/*.{test,spec}.ts'],
         },
       },
+      {
+        test: {
+          name: 'loopdev-os',
+          root: path.resolve(root, 'apps/loopdev-os'),
+          include: ['src/core/**/*.test.ts'],
+        },
+      },
     ],
   },
 })
