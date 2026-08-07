@@ -1,6 +1,6 @@
 begin;
 
-select plan(50);
+select plan(56);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -63,6 +63,35 @@ insert into public.quant_market_history (
 values (
   '00000000-0000-4000-9000-000000000033', 'PCOREUSDT', 'testnet', '1m',
   100, 110, 90, 105, 10, '2026-08-01T00:00:00Z'
+);
+
+insert into public.quant_strategies (
+  id, tenant_id, organization_id, name, mode, size_per_trade, max_positions, max_exposure, stop_loss, take_profit
+)
+values (
+  '00000000-0000-4000-9000-000000000034', '00000000-0000-4000-9000-000000000031', '00000000-0000-4000-9000-000000000001',
+  'Platform Core Strategy A', 'paper', 100, 2, 200, 2, 4
+);
+
+insert into public.quant_bots (id, tenant_id, organization_id, name, pair, strategy_id, base_investment_usdt)
+values (
+  '00000000-0000-4000-9000-000000000035', '00000000-0000-4000-9000-000000000031', '00000000-0000-4000-9000-000000000001',
+  'Platform Core Bot A', 'PCORE/USDT', '00000000-0000-4000-9000-000000000034', 100
+);
+
+insert into public.quant_audit_logs (id, bot_id, tenant_id, organization_id, pair, event_type, price)
+values (
+  '00000000-0000-4000-9000-000000000036', '00000000-0000-4000-9000-000000000035', '00000000-0000-4000-9000-000000000031',
+  '00000000-0000-4000-9000-000000000001', 'PCORE/USDT', 'strategy_evaluated', 100
+);
+
+insert into public.strategy_backtest_results (
+  id, strategy_id, organization_id, start_date, end_date, initial_capital, final_capital, total_return, total_trades,
+  winning_trades, losing_trades, win_rate, max_drawdown, profit_factor
+)
+values (
+  '00000000-0000-4000-9000-000000000037', '00000000-0000-4000-9000-000000000034', '00000000-0000-4000-9000-000000000001',
+  '2026-07-01', '2026-08-01', 1000, 1100, 10, 10, 6, 4, 60, 5, 1.5
 );
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
@@ -169,6 +198,10 @@ select ok(
   not public.has_organization_permission('00000000-0000-4000-9000-000000000002', 'crm.manage'),
   'viewer is denied CRM management access'
 );
+select ok(
+  not exists (select 1 from public.quant_strategies where id = '00000000-0000-4000-9000-000000000034'),
+  'a Quant reader cannot view another organization strategy'
+);
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000003', true);
 select ok(
@@ -221,12 +254,17 @@ select ok(not exists (select 1 from public.tenants where id = '00000000-0000-400
 select ok(not exists (select 1 from public.quant_assets where symbol = 'PCORE/USDT'), 'a user without Quant access cannot view Quant assets');
 select ok(not exists (select 1 from public.quant_market_config where id = '00000000-0000-4000-9000-000000000032'), 'a user without Quant access cannot view market configuration');
 select ok(not exists (select 1 from public.quant_market_history where id = '00000000-0000-4000-9000-000000000033'), 'a user without Quant access cannot view market history');
+select ok(not exists (select 1 from public.quant_strategies where id = '00000000-0000-4000-9000-000000000034'), 'a user without membership cannot view organization Quant strategies');
+select ok(not exists (select 1 from public.quant_audit_logs where id = '00000000-0000-4000-9000-000000000036'), 'a user without membership cannot view organization Quant audit logs');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
 select ok(exists (select 1 from public.tenants where id = '00000000-0000-4000-9000-000000000031'), 'an organization member can view their legacy tenant');
 select ok(exists (select 1 from public.quant_assets where symbol = 'PCORE/USDT'), 'a Quant user can view Quant assets');
 select ok(exists (select 1 from public.quant_market_config where id = '00000000-0000-4000-9000-000000000032'), 'a Quant user can view market configuration');
 select ok(exists (select 1 from public.quant_market_history where id = '00000000-0000-4000-9000-000000000033'), 'a Quant user can view market history');
+select ok(exists (select 1 from public.quant_strategies where id = '00000000-0000-4000-9000-000000000034'), 'a Quant user can view organization strategies');
+select lives_ok($$ update public.quant_strategies set status = 'active' where id = '00000000-0000-4000-9000-000000000034' $$, 'a Quant manager can manage organization strategies');
+select ok(exists (select 1 from public.strategy_backtest_results where id = '00000000-0000-4000-9000-000000000037'), 'a Quant user can view organization backtest results');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000006', true);
 select ok(

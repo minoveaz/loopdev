@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { toast } from '@loopdev/ui';
+import { useOrganization } from '@/hooks/useOrganization';
 
 export interface RiskSettings {
   killSwitchActive: boolean;
@@ -24,14 +25,16 @@ interface RiskSettingsPayload {
  */
 export const useRiskSettings = () => {
   const queryClient = useQueryClient();
+  const { activeOrganizationId } = useOrganization();
 
   // 1. Fetch Global Settings
   const { data: settings, isLoading } = useQuery({
-    queryKey: ['trading', 'risk-settings'],
+    queryKey: ['trading', 'risk-settings', activeOrganizationId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('quant_risk_settings')
         .select('*')
+        .eq('organization_id', activeOrganizationId ?? '')
         .single();
 
       if (error) throw error;
@@ -48,6 +51,7 @@ export const useRiskSettings = () => {
   // 2. Update Settings Mutation
   const updateSettings = useMutation({
     mutationFn: async (params: Partial<RiskSettings>) => {
+      if (!activeOrganizationId) throw new Error('Select an organization before updating risk settings');
       const payload: RiskSettingsPayload = {};
       if (params.killSwitchActive !== undefined) payload.kill_switch_active = params.killSwitchActive;
       if (params.maxDailyLossUsdt !== undefined) payload.max_daily_loss_usdt = params.maxDailyLossUsdt;
@@ -57,7 +61,7 @@ export const useRiskSettings = () => {
       const { error } = await supabase
         .from('quant_risk_settings')
         .update({ ...payload, updated_at: new Date().toISOString() })
-        .eq('tenant_id', '00000000-0000-0000-0000-000000000000'); // Demo
+        .eq('organization_id', activeOrganizationId);
 
       if (error) throw error;
     },

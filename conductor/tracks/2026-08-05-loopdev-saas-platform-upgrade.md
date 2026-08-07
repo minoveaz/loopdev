@@ -547,6 +547,15 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa evolución estructural a `organization_id` requiere inventario, backfill y una migración de dominio independiente.
 
+#### Transición estructural de Quant a organizaciones (en curso)
+
+- [x] Inventariar los registros Quant ligados a `tenant_id`, incluidos bots, exchanges, estrategias, órdenes, posiciones, señales, riesgo, auditoría y resultados de backtest.
+- [x] Preparar la migración aditiva `20260814000000_quant_organization_tenancy.sql`: añade `organization_id`, realiza el backfill desde `legacy_tenant_id`, falla explícitamente ante registros sin correspondencia y conserva `tenant_id` de forma temporal.
+- [x] Sustituir las políticas legacy basadas en `tenant_id = auth.uid()` por RLS de `quant.read` y `quant.manage` por organización, incluido el aislamiento de auditoría y backtests.
+- [x] Adaptar las escrituras directas de bots, estrategias, riesgo y exchanges al contexto activo de organización; las cachés de React Query ya incluyen `organization_id`.
+- [x] Validar la migración y la matriz RLS en la base efímera de CI antes de aplicarla a Dev (PR #9: `Migrations and CI RLS baseline` en verde tras reintento del runner).
+- [ ] Mover la gestión de credenciales de `quant_exchanges` a servicios server-side: el frontend legacy aún lee/envía claves API y no debe ser la solución final.
+
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 
 ### Fase 3 — Auth, contexto y shell multiempresa

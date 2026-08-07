@@ -1,6 +1,6 @@
 begin;
 
-select plan(24);
+select plan(26);
 
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organizations'), 'organizations table exists');
 select ok(exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'organization_memberships'), 'organization_memberships table exists');
@@ -59,6 +59,18 @@ select ok(
       )
   ),
   'legacy public tenant and Quant policies are removed'
+);
+select ok(
+  (select count(*) from information_schema.columns where table_schema = 'public' and column_name = 'organization_id' and table_name in ('quant_audit_logs', 'quant_bots', 'quant_exchanges', 'quant_orders', 'quant_positions', 'quant_risk_settings', 'quant_signals', 'quant_strategies', 'strategy_backtest_results')) = 9,
+  'organization-owned Quant tables expose organization_id'
+);
+select ok(
+  not exists (
+    select 1 from pg_policies
+    where schemaname = 'public'
+      and policyname in ('Users can manage their own risk settings', 'Users can only see signals from their bots', 'Users can only view results of their strategies', 'Users can only view their tenant''s bots', 'Users can only view their tenant''s exchanges', 'Users can only view their tenant''s orders', 'Users can only view their tenant''s positions', 'Users can only view their tenant''s strategies')
+  ),
+  'legacy tenant-based Quant policies are removed'
 );
 
 select * from finish();
