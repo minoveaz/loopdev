@@ -613,7 +613,7 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 - [ ] Definir contratos de WhatsApp.
 - [ ] Definir contratos de Health OS.
 - [ ] Crear servicios server-side para operaciones sensibles.
-- [ ] Centralizar mapeos snake_case/camelCase.
+- [x] Centralizar mapeos snake_case/camelCase para CRM; los siguientes servicios reutilizarán este límite validado.
 - [ ] Generar tipos de base de datos desde Supabase.
 - [ ] Prohibir tipos locales duplicados en módulos nuevos.
 
