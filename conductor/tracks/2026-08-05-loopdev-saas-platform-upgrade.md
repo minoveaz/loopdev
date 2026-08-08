@@ -1,7 +1,7 @@
 # Track: Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad
 
 **Fecha:** 2026-08-05  
-**Estado:** En curso — cierre de Fase 5D
+**Estado:** Fase 5E pausada — prioridad actual: Fase 6 CRM + POC de comunicaciones para Estar Protegidos
 **Objetivo:** convertir `loopdev-os` en la plataforma SaaS multi-tenant del grupo LoopDev y de sus clientes, trasladando el backoffice de VitaBlue a LoopDev, reutilizando sus capacidades de marketing, CRM, operaciones y WhatsApp, y manteniendo las webs públicas de cada marca desacopladas.
 
 ## Contexto y decisión principal
@@ -56,9 +56,25 @@ La rama actual `feature/loopdev-saas-platform-fase-5d` parte de `develop` actual
 
 La Fase 5D queda implementada en la rama `feature/loopdev-saas-platform-fase-5d`; falta publicar la rama, abrir el PR y validar CI antes de marcarla integrada en `develop`.
 
+### Decisión de priorización — 2026-08-08
+
+Se pausa temporalmente la Fase 5E. El objetivo inmediato es disponer en Dev de un CRM funcional para Estar Protegidos y de una POC inbound de comunicaciones, empezando por WhatsApp Business.
+
+El orden operativo pasa a ser:
+
+1. **Fase 6A — CRM persistente mínimo:** contactos, leads, pipeline, asignación, actividades, tareas, notas internas, búsqueda y RLS.
+2. **Fase 6B — Integración de captación:** marca, workspace, campaña, UTM y entrada de leads del wizard sin duplicados.
+3. **Fase 8A — POC WhatsApp inbound:** cuenta por organización/marca, webhook verificado, normalización E.164, idempotencia, contacto/conversación/mensaje y bandeja CRM.
+4. **Fase 8B — Respuesta controlada:** envío server-side, ventana de atención, plantillas autorizadas y estados de entrega.
+
+La POC no incluirá todavía todos los proveedores ni automatizaciones. Las credenciales permanecerán en servidor/Vault y ninguna acción de envío se ejecutará desde el navegador.
+
 ### Pendiente inmediato
 
-- Cerrar administrativamente Fase 5C y 5D mediante PR, CI y validación remota.
+- Crear la rama de trabajo para Fase 6A desde `develop` actualizado.
+- Inventariar el contexto CRM actual y separar fixtures de datos persistentes.
+- Diseñar migraciones aditivas para CRM y contratos de comandos/lecturas.
+- Definir el límite exacto de la POC WhatsApp antes de incorporar migraciones de comunicaciones.
 - Eliminar `localStorage` como fuente autoritativa y conservarlo, si se necesita, únicamente como caché.
 - Completar pruebas de servicio, OAuth, publicación y aislamiento entre VitaBlue y Protege tu Salud.
 - Crear el PR de la rama 5C y validar CI/Supabase en GitHub.
