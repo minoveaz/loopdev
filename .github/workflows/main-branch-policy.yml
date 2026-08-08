@@ -1,0 +1,30 @@
+name: Branch policy
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  source-branch:
+    name: Main PR must come from develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate pull request source branch
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ "$BASE_BRANCH" = "main" ] && { [ "$HEAD_BRANCH" != "develop" ] || [ "$HEAD_REPOSITORY" != "$BASE_REPOSITORY" ]; }; then
+            echo "Pull requests to main must come from the develop branch in the same repository."
+            echo "Received: $HEAD_REPOSITORY:$HEAD_BRANCH -> $BASE_REPOSITORY:$BASE_BRANCH"
+            exit 1
+          fi
+
+          echo "Branch policy passed: $HEAD_REPOSITORY:$HEAD_BRANCH -> $BASE_REPOSITORY:$BASE_BRANCH"
