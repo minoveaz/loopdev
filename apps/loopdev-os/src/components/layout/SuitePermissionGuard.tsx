@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { useWorkspace } from '@/hooks/useWorkspace';
+import { useOrganization } from '@/hooks/useOrganization';
 import { useAuth } from '@/hooks/useAuth';
 import { canAccessSuiteRoute, resolveAccessState } from '@/core/access/accessState';
 import type { SuiteKey } from '@loopdev/contracts';
@@ -18,6 +19,7 @@ export function SuitePermissionGuard({ permission, children }: { permission: str
   const router = useRouter();
   const { hasPermission, isLoading } = useOrganizationPermissions([permission]);
   const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
+  const { activeOrganization } = useOrganization();
   const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
   const suiteKey = suiteByPermission[permission];
   const accessState = resolveAccessState({
@@ -26,7 +28,8 @@ export function SuitePermissionGuard({ permission, children }: { permission: str
     isPlatformAdministrator,
     membershipStatuses: memberships.map((membership) => membership.status),
   });
-  const isDenied = !isPlatformAdministrator && !isLoading && !isLoadingWorkspaces && !isAuthLoading && !canAccessSuiteRoute({
+  const isPlatformScope = isPlatformAdministrator && activeOrganization?.slug === 'loopdev';
+  const isDenied = !isPlatformScope && !isLoading && !isLoadingWorkspaces && !isAuthLoading && !canAccessSuiteRoute({
     accessState,
     hasPermission: hasPermission(permission),
     isSuiteEnabled: suiteKey ? isSuiteEnabled(suiteKey) : false,

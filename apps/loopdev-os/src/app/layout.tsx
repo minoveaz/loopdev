@@ -7,6 +7,7 @@ import { WorkspaceProvider } from "@/providers/WorkspaceProvider";
 import { PermissionProvider } from "@/providers/PermissionProvider";
 import { OrganizationRouteGuard } from "@/components/layout/OrganizationRouteGuard";
 import { DynamicThemeProvider } from "@loopdev/ui";
+import { TransitionOverlay } from "@/components/layout/TransitionOverlay";
 
 // Importamos los estilos globales de nuestro Design System
 import "@loopdev/ui/styles/globals.css";
@@ -29,6 +30,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
       <body className="font-sans antialiased">
+        <TransitionOverlay />
         <QueryProvider>
           <AuthProvider>
             <OrganizationProvider>
