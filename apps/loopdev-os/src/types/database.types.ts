@@ -856,48 +856,60 @@ export type Database = {
       marketing_campaign_publications: {
         Row: {
           account_handle: string | null
+          brand_id: string
           campaign_id: string
+          canonical_campaign_id: string | null
           content_id: string | null
           created_at: string
           external_post_id: string | null
           id: string
           link_id: string | null
           notes: string | null
+          organization_id: string
           platform: string
           publication_url: string
           published_at: string | null
           status: string
           updated_at: string
+          workspace_id: string
         }
         Insert: {
           account_handle?: string | null
+          brand_id: string
           campaign_id: string
+          canonical_campaign_id?: string | null
           content_id?: string | null
           created_at?: string
           external_post_id?: string | null
           id?: string
           link_id?: string | null
           notes?: string | null
+          organization_id: string
           platform: string
           publication_url: string
           published_at?: string | null
           status?: string
           updated_at?: string
+          workspace_id: string
         }
         Update: {
           account_handle?: string | null
+          brand_id?: string
           campaign_id?: string
+          canonical_campaign_id?: string | null
           content_id?: string | null
           created_at?: string
           external_post_id?: string | null
           id?: string
           link_id?: string | null
           notes?: string | null
+          organization_id?: string
           platform?: string
           publication_url?: string
           published_at?: string | null
           status?: string
           updated_at?: string
+          workspace_id?: string
         }
         Relationships: [
           {
@@ -920,6 +932,34 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "marketing_links"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_publications_brand_organization_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_publications_canonical_campaign_fkey"
+            columns: ["canonical_campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaign_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_publications_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_publications_workspace_organization_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
           },
         ]
       }
@@ -1092,6 +1132,7 @@ export type Database = {
       }
       marketing_link_clicks: {
         Row: {
+          brand_id: string
           browser: string | null
           clicked_at: string
           country_code: string | null
@@ -1101,6 +1142,7 @@ export type Database = {
           language: string | null
           link_id: string
           operating_system: string | null
+          organization_id: string
           redirect_status: string
           referrer: string | null
           user_agent: string | null
@@ -1108,8 +1150,10 @@ export type Database = {
           utm_content: string | null
           utm_medium: string | null
           utm_source: string | null
+          workspace_id: string
         }
         Insert: {
+          brand_id: string
           browser?: string | null
           clicked_at?: string
           country_code?: string | null
@@ -1119,6 +1163,7 @@ export type Database = {
           language?: string | null
           link_id: string
           operating_system?: string | null
+          organization_id: string
           redirect_status?: string
           referrer?: string | null
           user_agent?: string | null
@@ -1126,8 +1171,10 @@ export type Database = {
           utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          workspace_id: string
         }
         Update: {
+          brand_id?: string
           browser?: string | null
           clicked_at?: string
           country_code?: string | null
@@ -1137,6 +1184,7 @@ export type Database = {
           language?: string | null
           link_id?: string
           operating_system?: string | null
+          organization_id?: string
           redirect_status?: string
           referrer?: string | null
           user_agent?: string | null
@@ -1144,8 +1192,16 @@ export type Database = {
           utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          workspace_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "marketing_link_clicks_brand_organization_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
           {
             foreignKeyName: "marketing_link_clicks_link_id_fkey"
             columns: ["link_id"]
@@ -1160,58 +1216,112 @@ export type Database = {
             referencedRelation: "marketing_links"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "marketing_link_clicks_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_link_clicks_workspace_organization_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
         ]
       }
       marketing_links: {
         Row: {
           active: boolean
+          brand_id: string
           campaign_id: string | null
+          canonical_campaign_id: string | null
           channel: string
           content_id: string | null
           created_at: string
           id: string
           message: string
           name: string
+          organization_id: string
           phone: string
           placement: string | null
           slug: string
           updated_at: string
+          workspace_id: string
         }
         Insert: {
           active?: boolean
+          brand_id: string
           campaign_id?: string | null
+          canonical_campaign_id?: string | null
           channel?: string
           content_id?: string | null
           created_at?: string
           id: string
           message: string
           name: string
+          organization_id: string
           phone: string
           placement?: string | null
           slug: string
           updated_at?: string
+          workspace_id: string
         }
         Update: {
           active?: boolean
+          brand_id?: string
           campaign_id?: string | null
+          canonical_campaign_id?: string | null
           channel?: string
           content_id?: string | null
           created_at?: string
           id?: string
           message?: string
           name?: string
+          organization_id?: string
           phone?: string
           placement?: string | null
           slug?: string
           updated_at?: string
+          workspace_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "marketing_links_brand_organization_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
           {
             foreignKeyName: "marketing_links_campaign_id_fkey"
             columns: ["campaign_id"]
             isOneToOne: false
             referencedRelation: "marketing_campaigns"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_links_canonical_campaign_fkey"
+            columns: ["canonical_campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaign_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_links_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_links_workspace_organization_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
           },
         ]
       }
