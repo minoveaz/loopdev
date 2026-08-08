@@ -1,15 +1,23 @@
-import {
-  CreateMarketingCampaignSchema,
-  MarketingCampaignSchema,
-  type CreateMarketingCampaignInput,
-  type MarketingCampaign,
-} from '@loopdev/contracts';
+import { CreateMarketingCampaignSchema, MarketingCampaignSchema } from '@loopdev/contracts';
+import type { CreateMarketingCampaignInput, MarketingCampaign } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 const campaignColumns = [
-  'id', 'organization_id', 'brand_id', 'workspace_id', 'name', 'objective',
-  'status', 'starts_at', 'ends_at', 'budget', 'currency', 'created_by',
-  'updated_by', 'created_at', 'updated_at',
+  'id',
+  'organization_id',
+  'brand_id',
+  'workspace_id',
+  'name',
+  'objective',
+  'status',
+  'starts_at',
+  'ends_at',
+  'budget',
+  'currency',
+  'created_by',
+  'updated_by',
+  'created_at',
+  'updated_at',
 ].join(', ');
 
 type CampaignRow = {
@@ -63,10 +71,7 @@ export async function listMarketingCampaigns(organizationId: string, workspaceId
   return ((data ?? []) as unknown as CampaignRow[]).map(mapCampaign);
 }
 
-export async function createMarketingCampaign(
-  input: CreateMarketingCampaignInput,
-  userId: string,
-) {
+export async function createMarketingCampaign(input: CreateMarketingCampaignInput, userId: string) {
   const parsed = CreateMarketingCampaignSchema.parse(input);
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
