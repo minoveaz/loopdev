@@ -641,6 +641,98 @@ Esta fase se ejecutará desde una máquina con acceso autenticado al proyecto Su
 - Tests de servicios OAuth server-side.
 - Playwright para crear, editar, publicar y proteger campañas.
 
+#### Alcance de producto y fuente de migración (2026-08-08)
+
+Marketing Studio no se limita a campañas. El sidebar de LoopDev define once módulos: Suite Dashboard, Brand Hub, Asset Manager, Content Engine, Campaign Orchestrator, Insights & Intel, Growth Ops, Advisor System, Compliance, Integrations y Suite Settings.
+
+VitaBlue aporta una implementación funcional de campañas, perfiles sociales, copies, assets, OAuth y Vault. Es la fuente de requisitos y comportamiento para la migración, pero sus tablas y código no se copian directamente: son mono-marca, usan roles aislados y mantienen `localStorage` como fallback autoritativo.
+
+| Módulo | Alcance de dominio | Estado de origen |
+|---|---|---|
+| Brand Hub | identidad, logos, color, tipografía, voz, reglas, claims, versiones y publicación | UI parcial en LoopDev; persistencia por consolidar |
+| Asset Manager | activos en Storage, metadatos, tags, colecciones, variantes, derechos y enlaces reutilizables | pendiente; VitaBlue conserva assets JSON dentro de campañas |
+| Content Engine | briefs, piezas, versiones, plantillas, generación IA, revisión y aprobación | generador social funcional en VitaBlue; pendiente de servicios SaaS |
+| Campaign Orchestrator | campañas, canales, contenidos, activos, calendario, presupuesto, UTM y entregas | gestor funcional en VitaBlue; pendiente de modelo multi-tenant |
+| Integrations | conexiones sociales, cuentas externas, OAuth, Vault, sincronizaciones y webhooks | Meta OAuth y Vault funcionales en VitaBlue; el resto de proveedores no tiene intercambio server-side completo |
+| Insights & Intel | snapshots de métricas, atribución, embudos e insights | pendiente |
+| Growth Ops | hipótesis, experimentos, variantes, métricas, iniciativas y tareas | pendiente |
+| Advisor System | recomendaciones con evidencia, feedback y aprobación humana | pendiente; no ejecuta acciones autónomas |
+| Compliance | políticas, reglas, checks, hallazgos, revisiones y aprobaciones | reglas de Brand Hub existentes; persistencia de workflow pendiente |
+| Suite Settings y Dashboard | configuración de workspace, locales, proveedores, límites, notificaciones y agregados operativos | pendiente; el dashboard actual usa fixtures |
+
+#### Modelo multi-tenant obligatorio
+
+Todas las entidades de negocio nuevas incluyen `organization_id`, `created_at`, `updated_at`, `created_by` y `updated_by`. Las entidades de marca incluyen `brand_id`; los flujos operativos de la suite incluyen `workspace_id`. RLS se resuelve por organización y permisos atómicos, no por la tabla mono-marca `user_roles` de VitaBlue.
+
+El modelo se organizará en estos agregados, normalizando los JSONB de VitaBlue cuando haga falta versionado, búsqueda, aprobación o reutilización:
+
+```text
+Brand Hub: brands, brand_identity_versions, brand_logo_variants,
+           brand_color_tokens, brand_typography_tokens, brand_voice_profiles,
+           brand_claim_rules, brand_publish_releases, brand_audit_events
+
+Assets:    marketing_assets, marketing_asset_variants, marketing_asset_metadata,
+           marketing_tags, marketing_asset_tags, marketing_asset_collections,
+           marketing_asset_links
+
+Content:   content_briefs, content_items, content_versions, content_templates,
+           content_generation_jobs, content_generation_outputs,
+           content_review_requests, content_approvals
+
+Campaigns: marketing_campaigns, campaign_channels, campaign_content_items,
+           campaign_assets, campaign_schedules, campaign_budgets,
+           campaign_delivery_jobs, campaign_delivery_events, campaign_utm_links
+
+Integrations: social_connections, social_connection_accounts,
+              oauth_authorization_states, integration_credentials_refs,
+              integration_sync_runs, integration_webhook_deliveries
+
+Insights:  marketing_metric_snapshots, campaign_metric_snapshots,
+           channel_metric_snapshots, attribution_events, attribution_touchpoints,
+           marketing_insights
+
+Growth:    growth_hypotheses, growth_experiments, growth_experiment_variants,
+           growth_experiment_metrics, growth_initiatives, growth_tasks
+
+Advisor:   advisor_runs, advisor_recommendations, advisor_evidence,
+           advisor_feedback, advisor_actions
+
+Compliance: compliance_policies, compliance_rules, compliance_checks,
+            compliance_findings, compliance_review_requests, compliance_approvals
+
+Settings:  marketing_workspace_settings, marketing_locales,
+           marketing_provider_settings, marketing_notification_preferences,
+           marketing_dashboard_preferences
+```
+
+Los secretos y tokens permanecen fuera de estas tablas: `integration_credentials_refs` solo guarda una referencia a Vault, y OAuth, publicación, sincronización y webhooks se ejecutan exclusivamente en servicios server-side.
+
+#### Contratos, permisos y entregas
+
+`packages/contracts/src/marketing/marketing.ts` es la primera base para campañas, assets, copies y conexiones. Evolucionará a contratos por agregado (`scope`, `campaign`, `asset`, `content`, `integrations`, `analytics`, `growth`, `advisor`, `compliance` y `settings`) con entidades de lectura, comandos validados y eventos. No se expondrán referencias a secretos, payloads crudos de proveedor ni rutas de Storage sin autorización.
+
+Los permisos se desglosarán progresivamente en `marketing.brands.*`, `marketing.assets.*`, `marketing.content.*`, `marketing.campaigns.*`, `marketing.integrations.*`, `marketing.analytics.read/export`, `marketing.growth.*`, `marketing.advisor.*`, `marketing.compliance.*` y `marketing.settings.manage`.
+
+La entrega se divide para no bloquear al equipo visual:
+
+1. **5A — Contratos y mapa de migración:** modelar los agregados y documentar VitaBlue → LoopDev, sin modificar componentes visuales. **Completada el 2026-08-08:** los contratos Zod se separan por alcance, campañas, assets, contenido, integraciones, inteligencia, governance y ajustes; sus invariantes se cubren con tests.
+2. **5B — Persistencia y RLS:** migraciones, índices, políticas y servicios para Brand Hub, Assets, Campaigns e Integrations; la validación remota se ejecuta en CI o en un entorno Supabase autenticado.
+3. **5C — Migración funcional:** adaptar campañas, copies, assets y Meta OAuth de VitaBlue a los servicios de LoopDev; eliminar `localStorage` como fuente de verdad.
+4. **5D — Integración de interfaz:** frontend consume los servicios nuevos preservando la arquitectura `AppShell` + `ModuleWorkspace` existente.
+5. **5E — Capacidades avanzadas:** Content Engine, Insights, Growth, Advisor y Compliance se entregan por incrementos, siempre con aprobación humana para acciones de impacto.
+
+#### Handoff operativo — equipo con Mac y acceso a Supabase Dev
+
+El equipo del Mac ejecutará 4B, 5B y 5C en este orden, partiendo de la rama que contiene 5A. No debe modificar layouts, componentes visuales ni tokens del frontend; esos cambios permanecen en el flujo del equipo frontend.
+
+1. **Preparar acceso y comprobar el estado remoto.** Ejecutar `supabase login`, enlazar únicamente el proyecto Dev y comprobar `supabase migration list`. Ejecutar `pnpm supabase:migrations:check` antes de cualquier operación de Supabase. No enlazar producción, no usar secretos de producción y no aplicar cambios automáticos.
+2. **Completar Fase 4B.** Generar los tipos TypeScript desde Dev (`supabase gen types typescript --linked`), versionarlos en la capa de datos acordada, comparar el diff con las migraciones revisadas y ejecutar typecheck. Si aparecen diferencias remotas no representadas en Git, detenerse y documentarlas antes de modificar código o base de datos.
+3. **Auditar el legado de Marketing antes de migrar.** Inventariar estructura, constraints, políticas RLS, índices y conteos no sensibles de `marketing_campaigns`, `social_profiles`, `oauth_connections` y `oauth_states`. Confirmar los mapeos de organización, marca y workspace para cada fila. Las tablas heredadas de VitaBlue son mono-marca: `marketing_campaigns.id` es texto, `social_profiles.platform` y la combinación OAuth son globales; no asumir compatibilidad ni eliminar datos.
+4. **Implementar Fase 5B con migraciones aditivas y revisables.** Crear el modelo multi-tenant para Brand Hub, Assets, Campaigns e Integrations. Añadir `organization_id`, `brand_id` y `workspace_id` solo después de un backfill determinista; mantener las columnas legacy y los JSONB como compatibilidad temporal. Añadir foreign keys, constraints, índices y RLS por organización, con excepción explícita para `platform_administrators`. No ejecutar `DROP`, `TRUNCATE`, borrados masivos ni cambios de tipo irreversibles.
+5. **Validar 5B antes de aplicar.** Ejecutar `supabase db push --dry-run`, `supabase db reset` y los tests RLS en el entorno autorizado/CI. Probar como mínimo: platform administrator, usuario de VitaBlue, usuario de Protege tu Salud, usuario sin membresía y membresía pendiente/revocada. Verificar que un workspace de Marketing solo consulta marcas, campañas, assets y conexiones de su organización.
+6. **Implementar 5C después de 5B verde.** Adaptar los servicios de VitaBlue a los contratos de LoopDev: campañas, copies, assets, canales y Meta OAuth. El navegador solo recibe metadatos autorizados; los tokens se quedan en Vault y los callbacks, refresh, publicación, sincronización y desconexión se ejecutan server-side. Sustituir `localStorage` por servicios persistentes; solo podrá quedar como caché no autoritativa. LinkedIn, YouTube, X y TikTok permanecen sin activar hasta tener intercambio OAuth server-side completo y probado.
+7. **Entregar evidencia.** Incluir en el PR el listado de migraciones, resultado de dry-run/reset/RLS, tipos generados, tests de servicios y los pasos de rollback compatibles. No fusionar si hay diferencias no explicadas entre Dev y Git o si una prueba de aislamiento falla.
+
 - [ ] Elegir la implementación de LoopDev como fuente de verdad.
 - [ ] Migrar Brand Hub de VitaBlue al contrato genérico de marca.
 - [ ] Migrar campañas, assets, copias y plataformas.
