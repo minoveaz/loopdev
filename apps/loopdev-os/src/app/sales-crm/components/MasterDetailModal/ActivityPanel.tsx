@@ -470,7 +470,7 @@ export function ActivityPanel() {
             </Select>
             <Input
               name="preExistingConditions"
-                  variant="outline"
+              variant="outline"
               value={editedLead.preExistingConditions || ''}
               onChange={handleEditChange}
               placeholder="Ej. Hipertensión, Diabetes tipo 2"
@@ -480,11 +480,11 @@ export function ActivityPanel() {
               <Input
                 name="medicalNotes"
                 label="Observaciones Médicas / Tratamientos Activos"
+                variant="ghost"
                 value={editedLead.medicalNotes || ''}
                 onChange={handleEditChange}
                 size="sm"
               />
-                  variant="ghost"
             </div>
           </div>
 
