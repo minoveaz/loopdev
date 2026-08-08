@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { Input } from './index';
+import { axe } from 'vitest-axe';
 
 describe('Input Industrial Certification (Front_Certified 🔵)', () => {
   
@@ -66,6 +67,14 @@ describe('Input Industrial Certification (Front_Certified 🔵)', () => {
     // Verificamos que el contenedor del input (el wrapper) tiene la clase de anillo
     const wrapper = input.parentElement;
     expect(wrapper?.className).toContain('ring-primary/20');
+  });
+
+  it('has no accessibility violations with label and helper text', async () => {
+    const { container } = render(
+      <Input label="Brand name" helperText="Use the public brand name." />,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 
 });

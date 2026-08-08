@@ -1,11 +1,15 @@
 import '@testing-library/jest-dom/vitest';
+import * as axeMatchers from 'vitest-axe/matchers';
 import { vi } from 'vitest';
+import { expect } from 'vitest';
 import React from 'react';
+
+expect.extend(axeMatchers);
 
 // Polyfill para window.matchMedia (JSDOM no lo implementa)
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,

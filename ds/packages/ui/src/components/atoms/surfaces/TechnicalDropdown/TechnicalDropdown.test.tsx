@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TechnicalDropdown, TechnicalDropdownItem } from './index';
 import React from 'react';
+import { axe } from 'vitest-axe';
 
 describe('TechnicalDropdown Atom', () => {
   it('debe renderizar el disparador correctamente', () => {
@@ -37,5 +38,15 @@ describe('TechnicalDropdown Atom', () => {
     const item = screen.getByText('Locked').closest('div');
     expect(item).toHaveClass('opacity-40');
     expect(item).toHaveClass('cursor-not-allowed');
+  });
+
+  it('has no accessibility violations with an open action menu', async () => {
+    const { container } = render(
+      <TechnicalDropdown trigger={<button type="button">Open actions</button>} open={true}>
+        <TechnicalDropdownItem>Archive</TechnicalDropdownItem>
+      </TechnicalDropdown>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

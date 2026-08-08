@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { EmptyState } from './index';
+import { axe } from 'vitest-axe';
 
 describe('EmptyState Primitive', () => {
-  
   it('Story 1: renders title and description correctly', () => {
     render(<EmptyState title="System Empty" description="No data found" />);
     expect(screen.getByText('System Empty')).toBeInTheDocument();
@@ -13,21 +13,21 @@ describe('EmptyState Primitive', () => {
 
   it('Story 5: activates AI Mode and renders AILoader when isLoading is true', () => {
     render(
-      <EmptyState 
-        title="Thinking" 
-        description="Static text" 
-        isLoading={true} 
+      <EmptyState
+        title="Thinking"
+        description="Static text"
+        isLoading={true}
         loadingMessages={['AI is thinking...']}
-      />
+      />,
     );
-    
+
     // Check if title has innovation purple color
     const title = screen.getByText('Thinking');
     expect(title.className).toContain('text-innovation-purple');
-    
+
     // Should NOT show static description, but the loader components
     expect(screen.queryByText('Static text')).not.toBeInTheDocument();
-    
+
     // Check for multiple brackets (one set for AI visual, one set for terminal loader)
     const brackets = screen.getAllByText('{');
     expect(brackets.length).toBeGreaterThanOrEqual(2);
@@ -41,12 +41,12 @@ describe('EmptyState Primitive', () => {
 
   it('Story 2: renders action and badge correctly', () => {
     render(
-      <EmptyState 
-        title="Action" 
-        description="Desc" 
+      <EmptyState
+        title="Action"
+        description="Desc"
         iconBadge="+"
-        action={<button>Create</button>} 
-      />
+        action={<button>Create</button>}
+      />,
     );
     expect(screen.getByText('+')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /create/i })).toBeInTheDocument();
@@ -65,4 +65,11 @@ describe('EmptyState Primitive', () => {
     expect(wrapper.className).not.toContain('bg-white');
   });
 
+  it('has no accessibility violations in the empty data state', async () => {
+    const { container } = render(
+      <EmptyState title="No brands" description="Create a brand to get started." />,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
+  });
 });

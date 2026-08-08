@@ -50,7 +50,7 @@ export const NavSidebarGroup: React.FC<{
   accentColor?: string;
 }> = ({ group, isRail, activeModuleId, accessMap, telemetry, onNavigate, accentColor }) => (
   <NavGroupAtom label={group.label} isRail={isRail}>
-    <div className="space-y-0.5">
+    <div className="space-y-0.5" role="menu" aria-label={group.label}>
       {group.items.map((item) => (
         <NavSidebarItem
           key={item.id}

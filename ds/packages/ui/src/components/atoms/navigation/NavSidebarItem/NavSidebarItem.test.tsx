@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { NavSidebarItem } from './index';
 import React from 'react';
+import { axe } from 'vitest-axe';
 
 describe('NavSidebarItem Atom', () => {
   it('debe renderizar la etiqueta del módulo correctamente', () => {
@@ -34,5 +35,15 @@ describe('NavSidebarItem Atom', () => {
   it('debe mostrar el rol ARIA activo correctamente', () => {
     render(<NavSidebarItem label="Active" icon="LibraryBig" isActive={true} />);
     expect(screen.getByRole('menuitem')).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('has no accessibility violations in the active navigation state', async () => {
+    const { container } = render(
+      <div role="menu">
+        <NavSidebarItem label="Brand Hub" icon="LibraryBig" isActive={true} />
+      </div>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 });
