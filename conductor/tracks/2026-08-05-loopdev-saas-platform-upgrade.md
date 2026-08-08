@@ -721,6 +721,18 @@ La entrega se divide para no bloquear al equipo visual:
 4. **5D — Integración de interfaz:** frontend consume los servicios nuevos preservando la arquitectura `AppShell` + `ModuleWorkspace` existente.
 5. **5E — Capacidades avanzadas:** Content Engine, Insights, Growth, Advisor y Compliance se entregan por incrementos, siempre con aprobación humana para acciones de impacto.
 
+#### Handoff operativo — equipo con Mac y acceso a Supabase Dev
+
+El equipo del Mac ejecutará 4B, 5B y 5C en este orden, partiendo de la rama que contiene 5A. No debe modificar layouts, componentes visuales ni tokens del frontend; esos cambios permanecen en el flujo del equipo frontend.
+
+1. **Preparar acceso y comprobar el estado remoto.** Ejecutar `supabase login`, enlazar únicamente el proyecto Dev y comprobar `supabase migration list`. Ejecutar `pnpm supabase:migrations:check` antes de cualquier operación de Supabase. No enlazar producción, no usar secretos de producción y no aplicar cambios automáticos.
+2. **Completar Fase 4B.** Generar los tipos TypeScript desde Dev (`supabase gen types typescript --linked`), versionarlos en la capa de datos acordada, comparar el diff con las migraciones revisadas y ejecutar typecheck. Si aparecen diferencias remotas no representadas en Git, detenerse y documentarlas antes de modificar código o base de datos.
+3. **Auditar el legado de Marketing antes de migrar.** Inventariar estructura, constraints, políticas RLS, índices y conteos no sensibles de `marketing_campaigns`, `social_profiles`, `oauth_connections` y `oauth_states`. Confirmar los mapeos de organización, marca y workspace para cada fila. Las tablas heredadas de VitaBlue son mono-marca: `marketing_campaigns.id` es texto, `social_profiles.platform` y la combinación OAuth son globales; no asumir compatibilidad ni eliminar datos.
+4. **Implementar Fase 5B con migraciones aditivas y revisables.** Crear el modelo multi-tenant para Brand Hub, Assets, Campaigns e Integrations. Añadir `organization_id`, `brand_id` y `workspace_id` solo después de un backfill determinista; mantener las columnas legacy y los JSONB como compatibilidad temporal. Añadir foreign keys, constraints, índices y RLS por organización, con excepción explícita para `platform_administrators`. No ejecutar `DROP`, `TRUNCATE`, borrados masivos ni cambios de tipo irreversibles.
+5. **Validar 5B antes de aplicar.** Ejecutar `supabase db push --dry-run`, `supabase db reset` y los tests RLS en el entorno autorizado/CI. Probar como mínimo: platform administrator, usuario de VitaBlue, usuario de Protege tu Salud, usuario sin membresía y membresía pendiente/revocada. Verificar que un workspace de Marketing solo consulta marcas, campañas, assets y conexiones de su organización.
+6. **Implementar 5C después de 5B verde.** Adaptar los servicios de VitaBlue a los contratos de LoopDev: campañas, copies, assets, canales y Meta OAuth. El navegador solo recibe metadatos autorizados; los tokens se quedan en Vault y los callbacks, refresh, publicación, sincronización y desconexión se ejecutan server-side. Sustituir `localStorage` por servicios persistentes; solo podrá quedar como caché no autoritativa. LinkedIn, YouTube, X y TikTok permanecen sin activar hasta tener intercambio OAuth server-side completo y probado.
+7. **Entregar evidencia.** Incluir en el PR el listado de migraciones, resultado de dry-run/reset/RLS, tipos generados, tests de servicios y los pasos de rollback compatibles. No fusionar si hay diferencias no explicadas entre Dev y Git o si una prueba de aislamiento falla.
+
 - [ ] Elegir la implementación de LoopDev como fuente de verdad.
 - [ ] Migrar Brand Hub de VitaBlue al contrato genérico de marca.
 - [ ] Migrar campañas, assets, copias y plataformas.
