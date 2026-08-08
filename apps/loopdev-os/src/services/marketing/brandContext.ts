@@ -1,5 +1,7 @@
 import { BrandContextSnapshotSchema } from '@loopdev/contracts';
 import type { BrandContextSnapshot } from '@loopdev/contracts';
+import { BrandContextVersionSchema } from '@loopdev/contracts';
+import type { BrandContextVersion } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 const brandContextColumns = [
@@ -99,6 +101,74 @@ export async function getBrandContextSnapshot(
   });
 
   return snapshot;
+}
+
+export async function publishBrandContextVersion(
+  organizationId: string,
+  brandId: string,
+  userId: string,
+): Promise<BrandContextVersion> {
+  const supabase = await createServerSupabaseClient();
+  const current = await getBrandContextSnapshot(organizationId, brandId);
+  if (!current) throw new Error('Brand not found');
+
+  const { data: latest, error: latestError } = await supabase
+    .from('brand_context_versions')
+    .select('version_number')
+    .eq('organization_id', organizationId)
+    .eq('brand_id', brandId)
+    .order('version_number', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (latestError) throw new Error('Unable to determine brand version');
+
+  const versionNumber = (latest?.version_number ?? 0) + 1;
+  const publishedAt = new Date().toISOString();
+  const snapshot = {
+    ...current,
+    version: {
+      id: null,
+      number: versionNumber,
+      status: 'published' as const,
+      publishedAt,
+    },
+    generatedAt: publishedAt,
+  };
+
+  const { error: demoteError } = await supabase
+    .from('brand_context_versions')
+    .update({ status: 'approved' })
+    .eq('organization_id', organizationId)
+    .eq('brand_id', brandId)
+    .eq('status', 'published');
+  if (demoteError) throw new Error('Unable to close previous brand version');
+
+  const { data, error } = await supabase
+    .from('brand_context_versions')
+    .insert({
+      organization_id: organizationId,
+      brand_id: brandId,
+      version_number: versionNumber,
+      status: 'published',
+      snapshot,
+      published_at: publishedAt,
+      created_by: userId,
+    })
+    .select('id, organization_id, brand_id, version_number, status, snapshot, published_at, created_by, created_at')
+    .single();
+  if (error) throw new Error('Unable to publish brand context');
+
+  return BrandContextVersionSchema.parse({
+    id: data.id,
+    organizationId: data.organization_id,
+    brandId: data.brand_id,
+    versionNumber: data.version_number,
+    status: data.status,
+    snapshot: data.snapshot,
+    publishedAt: data.published_at,
+    createdBy: data.created_by,
+    createdAt: data.created_at,
+  });
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
