@@ -19,19 +19,34 @@ export default function Page() {
 
   const publish = async () => {
     if (!activeOrganizationId || !user || isPublishing) return;
-    setIsPublishing(true); setMessage(null);
-    const response = await fetch(`/api/marketing/brands/${brandId}/publish?organizationId=${activeOrganizationId}`, { method: 'POST' });
-    setMessage(response.ok ? 'Brand context published successfully.' : 'Unable to publish brand context.');
+    setIsPublishing(true);
+    setMessage(null);
+    const response = await fetch(
+      `/api/marketing/brands/${brandId}/publish?organizationId=${activeOrganizationId}`,
+      { method: 'POST' },
+    );
+    setMessage(
+      response.ok ? 'Brand context published successfully.' : 'Unable to publish brand context.',
+    );
     if (response.ok) {
-      await queryClient.invalidateQueries({ queryKey: ['brand-context-snapshot', activeOrganizationId, brandId] });
-      await queryClient.invalidateQueries({ queryKey: ['brand-context-versions', activeOrganizationId, brandId] });
+      await queryClient.invalidateQueries({
+        queryKey: ['brand-context-snapshot', activeOrganizationId, brandId],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['brand-context-versions', activeOrganizationId, brandId],
+      });
     }
     setIsPublishing(false);
   };
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-2">
-        <Heading as="h2" size="2xl" weight="bold" className="text-text-main uppercase tracking-tight">
+        <Heading
+          as="h2"
+          size="2xl"
+          weight="bold"
+          className="text-text-main uppercase tracking-tight"
+        >
           publish
         </Heading>
         <LpdText size="sm" className="text-text-muted max-w-xl">
@@ -39,9 +54,22 @@ export default function Page() {
         </LpdText>
       </header>
       <div className="flex flex-col gap-4 rounded-2xl border border-border-technical p-6">
-        <LpdText size="sm" className="text-text-muted">Current context: {isLoading ? 'loading…' : context?.version.number ? `version ${context.version.number}` : 'draft'}</LpdText>
-        <Button onClick={publish} disabled={isPublishing || !context}>{isPublishing ? 'Publishing…' : 'Publish brand context'}</Button>
-        {message && <LpdText size="sm" className="text-text-muted">{message}</LpdText>}
+        <LpdText size="sm" className="text-text-muted">
+          Current context:{' '}
+          {isLoading
+            ? 'loading…'
+            : context?.version.number
+              ? `version ${context.version.number}`
+              : 'draft'}
+        </LpdText>
+        <Button variant="primary" onClick={publish} disabled={isPublishing || !context}>
+          {isPublishing ? 'Publishing…' : 'Publish brand context'}
+        </Button>
+        {message && (
+          <LpdText size="sm" className="text-text-muted">
+            {message}
+          </LpdText>
+        )}
       </div>
     </div>
   );
