@@ -77,13 +77,24 @@ export async function listMarketingCampaigns(organizationId: string, workspaceId
 export async function createMarketingCampaign(input: CreateMarketingCampaignInput, userId: string) {
   const parsed = CreateMarketingCampaignSchema.parse(input);
   const supabase = await createServerSupabaseClient();
+  const { data: publishedVersion, error: versionError } = await supabase
+    .from('brand_context_versions')
+    .select('id')
+    .eq('organization_id', parsed.organizationId)
+    .eq('brand_id', parsed.brandId)
+    .eq('status', 'published')
+    .order('version_number', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (versionError) throw new Error('Unable to resolve published brand version');
+
   const { data, error } = await supabase
     .from('marketing_campaign_records')
     .insert({
       organization_id: parsed.organizationId,
       brand_id: parsed.brandId,
       workspace_id: parsed.workspaceId,
-      brand_version_id: parsed.brandVersionId ?? null,
+      brand_version_id: parsed.brandVersionId ?? publishedVersion?.id ?? null,
       name: parsed.name,
       objective: parsed.objective,
       status: parsed.status,
