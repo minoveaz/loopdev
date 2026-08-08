@@ -21,6 +21,7 @@ import { LOOPDEV_RULES_ENGINE } from '@/suites/marketing-studio/brand-hub/fixtur
  * Manages declarative rules for Identity, Visual, and Typography.
  */
 export default function BrandRulesPage() {
+  const params = useParams();
   const brandId = params.brandId as string;
   const { setSelectedEntity } = useBrandHub();
 
