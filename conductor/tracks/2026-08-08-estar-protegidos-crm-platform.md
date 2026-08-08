@@ -370,6 +370,98 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 - [ ] Exigir consentimiento y permisos antes de iniciar una comunicación.
 - [ ] Añadir pruebas de aislamiento y privacidad por agente y organización.
 
+## Capacidades de IA para CRM
+
+La IA será una capa de asistencia sobre datos estructurados y auditables. No será la fuente de verdad del CRM ni sustituirá la autorización del agente o las reglas de negocio.
+
+### Asistencia en captación
+
+- [ ] Clasificar automáticamente nuevos leads.
+- [ ] Detectar intención, producto de interés, idioma y urgencia.
+- [ ] Sugerir marca, workspace, equipo o agente responsable.
+- [ ] Detectar posibles duplicados.
+- [ ] Extraer datos relevantes de formularios, mensajes y campañas.
+
+### Asistencia en conversaciones
+
+- [ ] Resumir conversaciones largas.
+- [ ] Extraer hechos, necesidades y compromisos.
+- [ ] Proponer la siguiente acción.
+- [ ] Sugerir respuestas según contexto y tono.
+- [ ] Traducir mensajes cuando proceda.
+- [ ] Detectar preguntas sin respuesta, frustración o urgencia.
+- [ ] Crear tareas de seguimiento con confirmación del agente.
+
+### Asistencia en pipeline
+
+- [ ] Sugerir etapa y prioridad.
+- [ ] Detectar leads estancados o sin actividad.
+- [ ] Priorizar oportunidades.
+- [ ] Estimar probabilidad de conversión como recomendación no vinculante.
+- [ ] Resumir oportunidades y proponer próximos pasos.
+- [ ] Detectar información comercial faltante.
+
+### Customer 360 asistido
+
+- [ ] Generar resumen ejecutivo del cliente.
+- [ ] Relacionar conversaciones, campañas, leads y oportunidades.
+- [ ] Mostrar cambios relevantes del historial.
+- [ ] Preparar briefing antes de contactar.
+- [ ] Restringir la información mostrada según permisos y consentimiento.
+
+### IA para documentos
+
+- [ ] Clasificar documentos.
+- [ ] Extraer nombres, fechas, importes y referencias.
+- [ ] Detectar documentos incompletos.
+- [ ] Comparar datos entre documentos.
+- [ ] Señalar inconsistencias.
+- [ ] Preparar campos para cotizaciones.
+- [ ] Solicitar revisión humana cuando la confianza sea baja.
+
+### IA para Insurance Pack
+
+- [ ] Detectar necesidades declaradas por el cliente.
+- [ ] Recomendar productos compatibles según reglas explícitas.
+- [ ] Explicar coberturas y exclusiones en lenguaje sencillo.
+- [ ] Comparar opciones sin modificar reglas de elegibilidad.
+- [ ] Preparar borradores de cotización.
+- [ ] Detectar datos faltantes.
+- [ ] Resumir condiciones para revisión del agente.
+
+## Guardrails obligatorios de IA
+
+- [ ] La IA no puede contactar automáticamente sin consentimiento y aprobación.
+- [ ] La IA no puede enviar mensajes sensibles sin confirmación humana.
+- [ ] La IA no decide elegibilidad final de seguros.
+- [ ] La IA no aprueba documentos de alto riesgo por sí sola.
+- [ ] La IA no cambia etapas críticas sin trazabilidad y permiso.
+- [ ] La IA no inventa datos; toda extracción debe conservar origen y confianza.
+- [ ] La IA no accede a personas relacionadas sin autorización.
+- [ ] La IA no toma decisiones clínicas, legales o financieras definitivas.
+- [ ] Toda recomendación conserva modelo, versión, contexto, usuario y resultado.
+- [ ] Los prompts, respuestas y datos sensibles se procesan server-side.
+
+## Arquitectura de capacidades
+
+```text
+CRM Core
+  → datos y procesos persistentes
+
+Communications Core
+  → canales y mensajes
+
+Document Intelligence Core
+  → documentos, OCR y extracción
+
+AI Assistant Layer
+  → clasificación, resúmenes, sugerencias y automatizaciones aprobables
+```
+
+La primera entrega de IA priorizará resúmenes de conversaciones, clasificación de leads, extracción de mensajes y documentos, sugerencias de respuesta, creación de tareas, detección de leads estancados y resúmenes de cliente u oportunidad.
+
+Las integraciones con proveedores LLM, workers, jobs idempotentes, control de costes, límites, reintentos, timeouts y selección de modelos se implementarán como una fase técnica posterior y por módulo, manteniendo las claves exclusivamente en servidor.
+
 ### Fase 8A — WhatsApp inbound POC
 
 - [ ] Contratos de payload externo normalizado.
