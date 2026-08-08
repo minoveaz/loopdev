@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading, LpdText, TechnicalText, Button, Icon } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, EmptyState, Button, Icon } from '@loopdev/ui';
 
 // Datos de ejemplo (placeholder)
 interface MockBrand {
@@ -116,16 +116,14 @@ export default function BrandHubPage() {
             <BrandCard key={brand.id} brand={brand} />
           ))
         ) : (
-          // Empty State
-          <div className="col-span-full border border-dashed border-white/10 rounded-2xl p-12 flex flex-col items-center justify-center text-center bg-white/2">
-             <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                <Icon name="auto_awesome_motion" className="text-text-muted" size="md" />
-             </div>
-             <Heading size="sm" className="text-white mb-2">No brands found</Heading>
-             <LpdText size="sm" className="text-text-muted mb-6 max-w-xs">
-               You haven&apos;t created any brands yet. Start by creating your first brand identity.
-             </LpdText>
-             <Button variant="primary" startIcon="add">Create First Brand</Button>
+          <div className="col-span-full">
+            <EmptyState
+              icon="auto_awesome_motion"
+              title="No brands found"
+              description="You have not created any brands yet. Start by creating your first brand identity."
+              variant="ghost"
+              action={<Button variant="primary" startIcon="add">Create First Brand</Button>}
+            />
           </div>
         )}
         
