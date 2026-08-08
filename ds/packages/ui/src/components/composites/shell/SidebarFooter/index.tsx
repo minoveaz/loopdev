@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Settings, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import { UserAvatar, TechnicalLabel } from '../../../atoms';
 import { SidebarFooterProps } from './types';
 import { useSidebarFooter } from './useSidebarFooter';
 
@@ -14,31 +13,11 @@ import { useSidebarFooter } from './useSidebarFooter';
  * @phase 1
  */
 export const SidebarFooter: React.FC<SidebarFooterProps> = (props) => {
-  const { userName, userRole, userSrc, onToggleRail, onSettingsClick, extraActionsSlot } = props;
+  const { onToggleRail, onSettingsClick, extraActionsSlot } = props;
   const { isRail, containerClasses, consoleClasses, technicalButtonClasses } = useSidebarFooter(props);
 
   return (
     <footer className={containerClasses}>
-      <div className={`flex items-center ${isRail ? 'justify-center' : 'gap-3 px-1'}`}>
-        <UserAvatar
-          name={userName}
-          src={userSrc}
-          size={isRail ? 'md' : 'sm'}
-          withStatus
-          status="online"
-        />
-        {!isRail && (
-          <div className="flex min-w-0 flex-1 flex-col">
-            <TechnicalLabel variant="white" size="xs" isWide={false} className="truncate">
-              {userName?.split('@')[0] || 'User'}
-            </TechnicalLabel>
-            <TechnicalLabel variant="muted" size="nano" className="mt-0.5 truncate">
-              {userRole || 'Tenant_User'}
-            </TechnicalLabel>
-          </div>
-        )}
-      </div>
-
       {/* Acciones adicionales del contexto, si existen */}
       {extraActionsSlot && (
         <div className={`flex ${isRail ? 'flex-col items-center' : 'px-1'} gap-2`}>
