@@ -28,6 +28,10 @@ export const ContentItemSchema = MarketingScopedRecordSchema.extend({
   status: z.enum(['draft', 'in_review', 'approved', 'published', 'archived']).default('draft'),
   currentVersion: z.number().int().positive().default(1),
 });
+export const CreateContentItemSchema = ContentItemSchema.omit({
+  id: true, createdAt: true, updatedAt: true, createdBy: true, updatedBy: true,
+});
+export type CreateContentItemInput = z.infer<typeof CreateContentItemSchema>;
 
 export const ContentVersionSchema = MarketingScopedRecordSchema.extend({
   contentItemId: MarketingIdSchema,
@@ -35,6 +39,10 @@ export const ContentVersionSchema = MarketingScopedRecordSchema.extend({
   body: z.string().trim().min(1).max(50_000),
   changeSummary: z.string().trim().max(1_000).nullable().optional(),
 });
+export const CreateContentVersionSchema = ContentVersionSchema.omit({
+  id: true, createdAt: true, updatedAt: true, createdBy: true, updatedBy: true,
+});
+export type CreateContentVersionInput = z.infer<typeof CreateContentVersionSchema>;
 
 export const ContentGenerationJobSchema = MarketingScopedRecordSchema.extend({
   brandVersionId: MarketingIdSchema.nullable().optional(),
