@@ -34,3 +34,33 @@ export async function createExchangeConnection(input: CreateExchangeInput) {
   if (error) throw new Error('Unable to save the exchange connection');
   return { ...data, apiKeyMasked: maskApiKey(input.apiKey) };
 }
+
+export async function testExchangeConnection(exchangeId: string) {
+  const admin = createAdminSupabaseClient();
+  const { data: exchange } = await admin
+    .from('quant_exchanges')
+    .select('id, organization_id, exchange_provider, api_key, api_secret')
+    .eq('id', exchangeId)
+    .single();
+  if (!exchange) return { kind: 'not_found' as const };
+
+  const quantCoreUrl = process.env.QUANT_CORE_URL;
+  if (!quantCoreUrl) return { kind: 'not_configured' as const, organizationId: exchange.organization_id };
+
+  let errorMessage: string | null = null;
+  let testResult: { success?: boolean; error?: string; message?: string } | null = null;
+  try {
+    const response = await fetch(`${quantCoreUrl.replace(/\/$/, '')}/exchanges/test`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ exchangeId: exchange.exchange_provider, apiKey: exchange.api_key, apiSecret: exchange.api_secret, isPaper: true }),
+    });
+    testResult = await response.json().catch(() => null);
+    if (!response.ok || testResult?.success === false) errorMessage = testResult?.error ?? 'Connection test failed';
+  } catch { errorMessage = 'Failed to reach Quant Core'; }
+
+  const { error: updateError } = await admin.from('quant_exchanges')
+    .update({ last_verified_at: new Date().toISOString(), is_active: !errorMessage, last_error_message: errorMessage })
+    .eq('id', exchangeId);
+  if (updateError) return { kind: 'persistence_error' as const, organizationId: exchange.organization_id };
+  return { kind: 'complete' as const, organizationId: exchange.organization_id, success: !errorMessage, message: errorMessage ?? 'Connection successful', error: errorMessage, testResult, timestamp: new Date().toISOString() };
+}
