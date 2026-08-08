@@ -8,7 +8,7 @@ import {
   ModuleHeader,
   ModuleSidebar,
   SidebarFlyout,
-  Button,
+  IconButton,
   UnifiedInspector,
   InspectorContext,
 } from '@loopdev/ui';
@@ -194,12 +194,12 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
           rightSlot={
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Button
-                  variant={isInspectorOpen ? 'secondary' : 'ghost'}
+                <IconButton
+                  variant={isInspectorOpen ? 'primary' : 'ghost'}
                   size="sm"
-                  startIcon="info"
+                  icon="info"
+                  tooltip={isInspectorOpen ? 'Close inspector' : 'Open inspector'}
                   onClick={() => setInspectorOpen(!isInspectorOpen)}
-                  aria-label="Toggle Inspector"
                 />
               </div>
             </div>

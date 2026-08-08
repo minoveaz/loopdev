@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -52,11 +52,12 @@ export default function BrandTypographyPage() {
 
   if (!system) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          {'// typography_system_not_initialized'}
-        </LpdText>
-      </div>
+      <EmptyState
+        title="Typography system unavailable"
+        description="Approved font families and scales will appear after the brand system is configured."
+        icon="text_fields"
+        variant="ghost"
+      />
     );
   }
 
@@ -72,7 +73,7 @@ export default function BrandTypographyPage() {
             </Heading>
             {system.aiOptimized && (
               <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[12px]">auto_awesome</span>
+                <Icon name="auto_awesome" size="sm" />
                 AI Optimized
               </div>
             )}
@@ -120,7 +121,7 @@ export default function BrandTypographyPage() {
       {/* SECTION 2: Hierarchy (The Math) */}
       <section className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
-          <LpdText size="lg" weight="bold" className="text-text-main tracking-tight">Typographic Hierarchy</LpdText>
+          <Heading as="h2" size="lg" weight="bold" className="text-text-main tracking-tight">Typographic Hierarchy</Heading>
           <LpdText size="sm" className="text-text-muted">
             Calculated dynamically based on base size ({system.baseSize}px) and scale ratio.
           </LpdText>

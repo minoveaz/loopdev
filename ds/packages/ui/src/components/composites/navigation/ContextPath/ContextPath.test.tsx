@@ -1,4 +1,35 @@
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { axe } from 'vitest-axe';
+import { ContextPath } from './index';
+
+describe('ContextPath', () => {
+  it('renders the current path and navigates through an earlier segment', () => {
+    const onNavigate = vi.fn();
+    render(
+      <ContextPath
+        segments={[
+          { id: 'home', label: 'Home', href: '/home' },
+          { id: 'brand', label: 'Brand Hub', isActive: true },
+        ]}
+        onNavigate={onNavigate}
+      />,
+    );
+
+    expect(screen.getByRole('navigation', { name: 'Breadcrumb Técnico' })).toBeInTheDocument();
+    expect(screen.getByText('Brand Hub')).toBeInTheDocument();
+    screen.getByText('Home').click();
+    expect(onNavigate).toHaveBeenCalledWith('/home');
+  });
+
+  it('has no accessibility violations', async () => {
+    const { container } = render(
+      <ContextPath segments={[{ id: 'brand', label: 'Brand Hub', isActive: true }]} />,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
+  });
+});import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ContextPath } from './index';
 import { CONTEXT_PATH_FIXTURES } from './fixtures';

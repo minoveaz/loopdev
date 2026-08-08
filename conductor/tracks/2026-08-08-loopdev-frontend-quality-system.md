@@ -20,17 +20,40 @@
 - Eliminación de `SuiteContentFrame` como wrapper visual alternativo.
 - Consolidación normativa en `docs/02-frontend/SHELL_ARCHITECTURE.md` y aclaración del workspace compartido.
 - Validaciones realizadas: auditor completo en cero, `git diff --check` y build de `loopdev-os` correcto.
+- Trabajo de Fase 1 ejecutado en la rama `feature/frontend-work3`: `TechnicalText`, `SectionHeader`, normalización de estados vacíos, iconografía aprobada, headings semánticos, `IconButton` y protección de overflow en `ModuleToolbar`.
+- Tests focalizados de primitives compartidos y typecheck de `loopdev-os` validados.
+- Fase 1 cerrada: añadidos `PageHeader`, `ContextBar`, `ResponsiveTable` y `LoadingState`, con contratos tipados, exports públicos, documentación breve y tests de semántica, slots, estados vacíos y responsive.
+- Fase 2 iniciada: creado `pnpm front:check` como gate compuesto estricto y conectado al workflow de CI; `front:audit --fail-on-findings` queda validado con 0 hallazgos.
+- Baseline de Fase 2 versionado en `config/frontend-audit-baseline.json`; `front:check` diferencia deuda aceptada de regresiones nuevas mediante `--fail-on-new-findings`.
+- Matriz de certificación versionada en `docs/04-governance/FRONTEND_CERTIFICATION_MATRIX_2026-08-08.md` con el resultado de `front:check` por suite y las dimensiones aún pendientes.
+- Fase 2 cerrada: constitución visual corta creada, `shellArchitecture` endurecida contra layouts operativos sin `ModuleWorkspace` y wrappers de shell no registrados, y `pnpm front:check` validado con 0 hallazgos nuevos.
 
 ### Pendiente
 
-- Crear la constitución visual corta de consulta diaria.
-- Añadir matriz versionada de certificación por suite.
-- Añadir pruebas Playwright de shell, responsive, temas y overflow.
+- Mantener la constitución visual corta de consulta diaria en `docs/02-frontend/LOOPDEV_FRONTEND_CONSTITUTION.md`.
+- Mantener la matriz versionada de certificación por suite y actualizarla con evidencia de Fase 3 y posteriores.
+- Añadir pruebas Playwright de shell, responsive, temas y overflow; esta tarea pertenece a la Fase 4, no a la Fase 1.
 - Revisar visualmente las cuatro suites en desktop, mobile, light y dark.
 - Implementar el flujo de certificación frontend por capas: `front:audit` → Vitest + Testing Library → Playwright → Axe integrado en Playwright → snapshots visuales.
-- Endurecer `shellArchitecture` con excepciones explícitas y detección de wrappers no registrados.
-- Crear `pnpm front:check` y conectar el modo estricto a CI.
+- Mantener `shellArchitecture` con excepciones explícitas y detección de wrappers no registrados.
+- Revisar periódicamente las excepciones del baseline y actualizar la matriz con evidencia de las fases posteriores.
+- Completar la cobertura de componentes y Axe para primitives compartidos; esto corresponde a la Fase 3.
+- Ejecutar Playwright, Axe y snapshots en GitHub Actions con reportes y checks de PR; esto corresponde a la Fase 4.1.
 - Registrar las excepciones y la deuda residual por suite.
+
+### Estado actual
+
+- **Fase 0 — Inventario y línea base:** completada.
+- **Fase 1 — Primitives y contratos visuales:** completada en esta iteración.
+- **Fase 2 — Quality Gate automático:** completada en esta iteración.
+- **Fase 3 — Pruebas de componentes:** completada; cobertura de componentes compartidos, navegación, indicators, surfaces e composites complejos validada con Vitest/Testing Library y Axe donde el montaje es estable.
+- **Fase 4 — Pruebas reales de aplicación:** pendiente; todavía no existe infraestructura Playwright.
+- **Fase 4.1 — Flujo de certificación frontend:** pendiente; incluye la ejecución estable en GitHub Actions.
+- **Fase 5 — Migración por suite:** pendiente.
+
+La ejecución de checks en GitHub Actions no constituye una fase independiente. Los checks estáticos y `front:check` se incorporan en la Fase 2; Playwright, Axe, snapshots y los checks requeridos de Pull Request se incorporan en la Fase 4.1.
+
+La siguiente acción recomendada es avanzar a la Fase 4 con pruebas Playwright sobre la aplicación real. GitHub Actions E2E, Axe de navegador y snapshots siguen reservados para la Fase 4.1.
 
 ## 1. Contexto
 
@@ -94,10 +117,10 @@ Crear `docs/02-frontend/LOOPDEV_FRONTEND_CONSTITUTION.md` como documento corto d
 
 Definir tres niveles semánticos:
 
-| Componente | Fuente | Uso permitido |
-|---|---|---|
-| `Heading` | sans/display | títulos de página, secciones y entidades |
-| `Text` | sans/body | párrafos, ayudas, descripciones y contenido |
+| Componente      | Fuente          | Uso permitido                                                |
+| --------------- | --------------- | ------------------------------------------------------------ |
+| `Heading`       | sans/display    | títulos de página, secciones y entidades                     |
+| `Text`          | sans/body       | párrafos, ayudas, descripciones y contenido                  |
 | `TechnicalText` | mono/telemetría | IDs, timestamps, estados, labels técnicos y datos operativos |
 
 Reglas:
@@ -300,9 +323,9 @@ Cada suite debe probar:
 Checks estructurales mínimos:
 
 ```ts
-expect(await page.locator('body').evaluate(
-  (element) => element.scrollWidth <= element.clientWidth,
-)).toBe(true);
+expect(
+  await page.locator('body').evaluate((element) => element.scrollWidth <= element.clientWidth),
+).toBe(true);
 ```
 
 Los screenshots serán evidencia de regresión, no el único criterio de aprobación.
@@ -384,13 +407,13 @@ Marketing Studio será la suite piloto porque contiene Brand Hub, tipografía, i
 
 Crear una matriz versionada por suite:
 
-| Suite | Light | Dark | Mobile | Tokens | A11y | Typography | Icons | Tests | Estado |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| Launchpad | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
-| Marketing Studio | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
-| Sales CRM | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
-| Health OS | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
-| Quant Ops | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
+| Suite            |     Light |      Dark |    Mobile |    Tokens |      A11y | Typography |     Icons |     Tests | Estado      |
+| ---------------- | --------: | --------: | --------: | --------: | --------: | ---------: | --------: | --------: | ----------- |
+| Launchpad        | pendiente | pendiente | pendiente | pendiente | pendiente |  pendiente | pendiente | pendiente | Front_Audit |
+| Marketing Studio | pendiente | pendiente | pendiente | pendiente | pendiente |  pendiente | pendiente | pendiente | Front_Audit |
+| Sales CRM        | pendiente | pendiente | pendiente | pendiente | pendiente |  pendiente | pendiente | pendiente | Front_Audit |
+| Health OS        | pendiente | pendiente | pendiente | pendiente | pendiente |  pendiente | pendiente | pendiente | Front_Audit |
+| Quant Ops        | pendiente | pendiente | pendiente | pendiente | pendiente |  pendiente | pendiente | pendiente | Front_Audit |
 
 Estados:
 

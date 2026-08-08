@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { Button } from './index';
+import { axe } from 'vitest-axe';
 
 describe('Button Primitive', () => {
   
@@ -61,6 +62,12 @@ describe('Button Primitive', () => {
     const button = screen.getByRole('button');
     expect(button.className).toContain('text-danger');
     expect(button.className).toContain('border-danger');
+  });
+
+  it('has no accessibility violations in the default action state', async () => {
+    const { container } = render(<Button>Save changes</Button>);
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 
 });

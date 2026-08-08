@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { LpdText, Icon, ModuleCard, Skeleton, Button } from '@loopdev/ui';
+import { LpdText, TechnicalText, Icon, ModuleCard, Skeleton, Button } from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 
 /**
@@ -36,7 +36,7 @@ export default function BrandsDirectoryPage() {
             statusTone={brand.status === 'published' ? 'success' : (brand.status === 'draft' ? 'warning' : 'neutral')}
             footerContent={
               <div className="flex flex-col">
-                <LpdText size="nano" className="text-text-muted opacity-60 font-mono uppercase">Last Update</LpdText>
+                <TechnicalText size="nano" className="text-text-muted opacity-60 uppercase">Last Update</TechnicalText>
                 <LpdText size="xs" className="text-text-main font-medium">{brand.updatedAt}</LpdText>
               </div>
             }
