@@ -6,7 +6,9 @@
     "paths": {
       "@/*": ["src/*"],
       "@loopdev/tokens": ["../tokens"],
-      "@loopdev/tokens/*": ["../tokens/src/*"]
+      "@loopdev/tokens/*": ["../tokens/src/*"],
+      "@loopdev/contracts": ["../../../packages/contracts/src"],
+      "@loopdev/contracts/*": ["../../../packages/contracts/src/*"]
     },
     "outDir": "./dist"
   },
