@@ -128,6 +128,40 @@ Se distinguirán tres tipos de comunicación:
 
 Las suites no implementarán directamente proveedores ni guardarán tokens. Solicitarán operaciones al servicio server-side común, que registrará el mensaje, resolverá el proveedor autorizado y devolverá estados normalizados.
 
+### Decisión transversal: Document Intelligence Core
+
+El escaneo, clasificación, extracción y validación de documentos tampoco pertenecerán a una suite concreta. LoopDev tendrá un módulo transversal `Document Intelligence Core` consumible por CRM, Insurance Pack, Finance, Health OS y futuras suites.
+
+```text
+Document Intelligence Core
+  ├── Ingesta segura de archivos
+  ├── Antivirus y validación de tipo/tamaño
+  ├── OCR y extracción de texto
+  ├── Clasificación documental
+  ├── Extracción estructurada por esquema
+  ├── Validaciones de formato y consistencia
+  ├── Revisión humana
+  ├── Versiones y trazabilidad
+  ├── Referencias a Storage y proveedores
+  └── Retención, permisos y auditoría
+```
+
+Las suites aportarán esquemas y reglas de dominio, pero no duplicarán el pipeline técnico:
+
+- **CRM:** documentos de clientes, identificaciones y anexos relacionados con leads.
+- **Insurance Pack:** documentos de identidad, pólizas, coberturas y soportes de cotización.
+- **Finance:** facturas, recibos, comprobantes y datos fiscales.
+- **Health OS:** documentos clínicos u ocupacionales con permisos y retención reforzados.
+
+El núcleo debe separar claramente:
+
+1. **Documento original:** archivo inmutable en Storage protegido.
+2. **Resultado de procesamiento:** texto, clasificación y campos extraídos.
+3. **Validación:** reglas automáticas, confianza y discrepancias.
+4. **Revisión humana:** decisión, comentarios y responsable.
+
+No se considerará válido un dato sensible únicamente porque haya sido extraído por OCR o un modelo. Los campos deberán conservar confianza, origen, versión del procesador y estado de revisión. Los datos clínicos y otros datos sensibles tendrán políticas específicas y no se mezclarán con el CRM comercial.
+
 ### 1. Suite Dashboard
 
 - Resumen de leads nuevos, activos, estancados y ganados.
@@ -326,6 +360,17 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 - [ ] Centralizar webhooks, idempotencia, reintentos y estados de entrega.
 - [ ] Exponer adaptadores consumibles por CRM, Marketing Studio e Insurance Pack.
 - [ ] Añadir auditoría y observabilidad sin exponer secretos.
+
+### Fase transversal — Document Intelligence Core
+
+- [ ] Definir contratos comunes de documentos, archivos, clasificaciones, campos y validaciones.
+- [ ] Crear ingesta segura y referencias protegidas a Storage.
+- [ ] Crear pipeline asíncrono de OCR/procesamiento sin acoplar proveedores.
+- [ ] Implementar extracción estructurada mediante esquemas por dominio.
+- [ ] Registrar confianza, versión del procesador y estado de revisión.
+- [ ] Añadir revisión humana y auditoría.
+- [ ] Crear adaptadores CRM e Insurance Pack como primeros consumidores.
+- [ ] Mantener Finance y Health OS como consumidores posteriores con permisos específicos.
 
 ### Fase 8B — Respuesta controlada
 
