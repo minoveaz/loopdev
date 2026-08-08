@@ -462,6 +462,108 @@ La primera entrega de IA priorizará resúmenes de conversaciones, clasificació
 
 Las integraciones con proveedores LLM, workers, jobs idempotentes, control de costes, límites, reintentos, timeouts y selección de modelos se implementarán como una fase técnica posterior y por módulo, manteniendo las claves exclusivamente en servidor.
 
+## Riesgos críticos y mitigaciones
+
+### WhatsApp: ventana de atención y plantillas
+
+Meta limita las respuestas conversacionales fuera de la ventana de atención de 24 horas. La regla se calculará desde el último mensaje entrante válido del cliente, no desde una actividad interna del agente.
+
+El modelo de conversación deberá conservar:
+
+- `last_inbound_at`;
+- `conversation_window_expires_at`;
+- `channel_account_id`;
+- `template_id` cuando se utilice una plantilla;
+- estado de entrega y error normalizado.
+
+Reglas obligatorias:
+
+- [ ] Si la ventana está abierta, permitir respuesta conversacional según permisos.
+- [ ] Si la ventana está cerrada, exigir una plantilla aprobada para la cuenta e idioma.
+- [ ] Validar parámetros y consentimiento en servidor antes del envío.
+- [ ] No permitir que una actividad interna reinicie la ventana.
+- [ ] Registrar el motivo de aceptación o rechazo del mensaje.
+- [ ] Auditar fallos por ventana, plantilla, permisos o proveedor.
+
+El frontend solo podrá mostrar el estado y las opciones permitidas; el servicio server-side será la autoridad final.
+
+### Document Intelligence: OCR y extracción de baja confianza
+
+Los documentos escaneados pueden producir errores en DNI, permisos, pólizas antiguas y campos manuscritos. Un umbral global de `0.85` será un punto de partida, pero no la única regla.
+
+Cada extracción deberá conservar:
+
+- `confidence_score` global;
+- confianza por campo (`field_confidence`);
+- tipo documental;
+- versión del procesador;
+- fecha de extracción;
+- `requires_human_review`;
+- estado de validación;
+- revisor y fecha de revisión.
+
+Reglas iniciales:
+
+```text
+confidence >= 0.95
+  → extracción sugerida como fiable
+
+0.85 <= confidence < 0.95
+  → revisión normal antes de confirmar
+
+confidence < 0.85
+  → bloquear uso automático y exigir revisión humana
+```
+
+Los campos críticos, como número de identificación, fecha de nacimiento, número de póliza e importes, podrán exigir un umbral superior al global. Un documento borroso, incompleto, caducado o inconsistente exigirá revisión aunque el promedio sea alto.
+
+El OCR nunca poblará directamente una cotización definitiva:
+
+```text
+documento → extracción provisional → validación → revisión humana → dato confirmado
+```
+
+### Aislamiento multi-brand
+
+El aislamiento no se resolverá únicamente con `organization_id`. La autorización deberá conservar y comprobar toda la cadena:
+
+```text
+organization_id
+  → workspace_id
+    → brand_id
+      → channel_account_id
+        → conversation_id
+```
+
+Requisitos:
+
+- [ ] Verificar membresía y permiso sobre la organización.
+- [ ] Verificar acceso al workspace.
+- [ ] Verificar que la marca pertenece a la organización.
+- [ ] Verificar que cada cuenta de canal pertenece a la marca autorizada.
+- [ ] Mantener `brand_id` en leads, campañas, conversaciones y mensajes.
+- [ ] No aceptar un `brand_id` arbitrario enviado por el navegador.
+- [ ] Resolver la marca desde el canal, campaña o workspace autorizado.
+- [ ] Impedir cambiar de marca una conversación ya creada salvo operación administrativa auditada.
+- [ ] Aplicar filtros y checks en RLS, servicios server-side y APIs.
+
+Una conversación no podrá mezclarse entre Vitablue y Protege tu Salud aunque ambas marcas pertenezcan a la misma organización.
+
+### Consentimiento y personas relacionadas
+
+Una persona asegurada, familiar o beneficiaria no es automáticamente un contacto comunicable. La aparición en una póliza o expediente no autoriza el envío de mensajes.
+
+Requisitos:
+
+- [ ] Guardar consentimiento por canal y propósito.
+- [ ] Registrar origen, fecha, alcance y versión del consentimiento.
+- [ ] Comprobar consentimiento antes de enviar email, WhatsApp o redes.
+- [ ] Permitir revocación, bloqueo y preferencias de comunicación.
+- [ ] Mantener separadas personas relacionadas y contactos comunicables.
+- [ ] Auditar cualquier promoción de persona relacionada a contacto.
+
+Estos riesgos se validarán mediante contratos, constraints, tests de servicios, pruebas RLS, eventos duplicados, documentos de baja confianza y escenarios multi-brand.
+
 ### Fase 8A — WhatsApp inbound POC
 
 - [ ] Contratos de payload externo normalizado.
