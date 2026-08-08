@@ -21,7 +21,6 @@ import { LOOPDEV_RULES_ENGINE } from '@/suites/marketing-studio/brand-hub/fixtur
  * Manages declarative rules for Identity, Visual, and Typography.
  */
 export default function BrandRulesPage() {
-  const dbRules = brand?.rules_engine;
   const brandId = params.brandId as string;
   const { setSelectedEntity } = useBrandHub();
 
@@ -29,7 +28,7 @@ export default function BrandRulesPage() {
   const { data: brand, isLoading } = useActiveBrand(brandId);
 
   // Support both snake_case (DB) and camelCase (Contract) + Fallback to Fixture for LoopDev brand
-  const dbRules = brand?.rules_engine || brand?.rulesEngine;
+  const dbRules = brand?.rules_engine;
   const rulesEngine: RulesEngine | undefined =
     dbRules?.rules && dbRules.rules.length > 0
       ? dbRules

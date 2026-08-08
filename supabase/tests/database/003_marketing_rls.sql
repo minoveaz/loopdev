@@ -56,15 +56,24 @@ select is((select count(*)::integer from public.marketing_links), 1, 'owner can 
 select is((select count(*)::integer from public.marketing_link_clicks), 1, 'owner can read clicks in own organization');
 select is((select count(*)::integer from public.marketing_campaign_publications), 1, 'owner can read publications in own organization');
 select lives_ok($$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by) values ('00000000-0000-4000-9100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Created by owner', 'RLS fixture', '00000000-0000-4000-8100-000000000001', '00000000-0000-4000-8100-000000000001') $$, 'owner can create campaign in own organization');
-select throws_ok($$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by) values ('00000000-0000-4000-8100-000000000002', '00000000-0000-4000-9200-000000000002', '00000000-0000-4000-9300-000000000002', 'Cross tenant', 'RLS fixture', '00000000-0000-4000-8100-000000000001', '00000000-0000-4000-8100-000000000001') $$, '42501', 'owner cannot create campaign in another organization');
+ select throws_ok(
+   $$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by)
+      values ('00000000-0000-4000-9100-000000000002', '00000000-0000-4000-9200-000000000002', '00000000-0000-4000-9300-000000000002', 'Cross tenant', 'RLS fixture', '00000000-0000-4000-8100-000000000001', '00000000-0000-4000-8100-000000000001') $$,
+   '42501: new row violates row-level security policy for table "marketing_campaign_records"',
+   'owner cannot create campaign in another organization'
+ );
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8100-000000000002', true);
 select is((select count(*)::integer from public.marketing_campaign_records), 0, 'viewer cannot read another organization campaigns');
 select is((select count(*)::integer from public.marketing_links), 0, 'viewer cannot read another organization links');
 select is((select count(*)::integer from public.marketing_link_clicks), 0, 'viewer cannot read another organization clicks');
 select is((select count(*)::integer from public.marketing_campaign_publications), 0, 'viewer cannot read another organization publications');
-select throws_ok($$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by) values ('00000000-0000-4000-9100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Viewer cross tenant', 'RLS fixture', '00000000-0000-4000-8100-000000000002', '00000000-0000-4000-8100-000000000002') $$, 'viewer cannot create campaign');
-select throws_ok($$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by) values ('00000000-0000-4000-8100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Viewer cross tenant', 'RLS fixture', '00000000-0000-4000-8100-000000000002', '00000000-0000-4000-8100-000000000002') $$, '42501', 'viewer cannot create campaign');
+ select throws_ok(
+   $$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by)
+      values ('00000000-0000-4000-8100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Viewer cross tenant', 'RLS fixture', '00000000-0000-4000-8100-000000000002', '00000000-0000-4000-8100-000000000002') $$,
+   '42501: new row violates row-level security policy for table "marketing_campaign_records"',
+   'viewer cannot create campaign'
+ );
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8100-000000000003', true);
 select is((select count(*)::integer from public.marketing_campaign_records), 0, 'user without membership cannot read campaigns');
