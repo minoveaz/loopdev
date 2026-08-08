@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { LpdText, TechnicalText, Skeleton, EmptyState } from '@loopdev/ui';
+import { LpdText, TechnicalText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 
 // Components
 import { ColorContextBar } from '@/suites/marketing-studio/brand-hub/components/ColorContextBar';
@@ -185,7 +185,7 @@ export default function BrandColorsPage() {
 
         {filteredTokens.length === 0 && search && (
           <div className="p-20 text-center flex flex-col items-center gap-4 bg-background-surface/30 rounded-3xl border border-dashed border-border-technical">
-            <span className="material-symbols-outlined text-4xl text-text-muted/20">search_off</span>
+            <Icon name="search_off" size="xl" className="text-4xl text-text-muted/20" />
             <LpdText size="sm" className="text-text-muted italic">No tokens found matching &quot;{search}&quot;</LpdText>
           </div>
         )}

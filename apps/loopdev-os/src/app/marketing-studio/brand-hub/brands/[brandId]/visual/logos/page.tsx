@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { LpdText, TechnicalText, Skeleton, EmptyState, BrandLogo } from '@loopdev/ui';
+import { LpdText, TechnicalText, Skeleton, EmptyState, BrandLogo, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -75,7 +75,7 @@ export default function BrandLogoPage() {
               Visual System _LOGOS
             </LpdText>
             <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-[12px]">verified</span>
+              <Icon name="verified" size="sm" />
               {isLoopDev ? 'Certified Identity' : 'Official Assets'}
             </div>
           </div>
