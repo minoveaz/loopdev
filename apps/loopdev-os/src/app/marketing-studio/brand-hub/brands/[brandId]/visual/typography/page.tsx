@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { Heading, LpdText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 
 // Industrial Components
 import { TypographySystemSchema } from '@loopdev/contracts';
@@ -14,7 +14,7 @@ import { TypeScaleTable } from '@/suites/marketing-studio/brand-hub/components/T
 /**
  * @page BrandTypographyPage
  * @description The operational console for managing the brand's typographic system.
- * Fetches real-time configuration from Supabase via useActiveBrand hook.
+ * Fetches the published brand context consumed by downstream marketing modules.
  */
 export default function BrandTypographyPage() {
   const params = useParams();
@@ -22,8 +22,8 @@ export default function BrandTypographyPage() {
   const { setSelectedEntity, setInspectorOpen } = useBrandHub();
 
   // Data Acquisition (The Spine connection)
-  const { data: brand, isLoading } = useActiveBrand(brandId);
-  const parsedTypography = TypographySystemSchema.safeParse(brand?.typography);
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
+  const parsedTypography = TypographySystemSchema.safeParse(brandContext?.brand.typography);
   const system = parsedTypography.success ? parsedTypography.data : undefined;
 
   const handleFontClick = (type: 'primary' | 'secondary') => {
