@@ -8,6 +8,14 @@ export const CrmLeadStatusSchema = z.enum(['active', 'inactive', 'stalled']);
 export const CrmActivityTypeSchema = z.enum(['note', 'call', 'status_change', 'task_created', 'task_completed', 'document', 'email', 'whatsapp']);
 export const CrmTaskStatusSchema = z.enum(['pending', 'completed', 'cancelled']);
 export const CrmTaskPrioritySchema = z.enum(['low', 'medium', 'high']);
+export const CrmCompanyTypeSchema = z.enum(['person', 'organization']);
+export const CrmRelatedPersonRoleSchema = z.enum(['family_member', 'household_member', 'beneficiary', 'insured', 'other']);
+export const CrmConsentChannelSchema = z.enum(['email', 'whatsapp', 'instagram', 'facebook_messenger', 'sms', 'phone']);
+export const CrmConsentStatusSchema = z.enum(['granted', 'withdrawn', 'not_requested']);
+export const CrmLeadSourceSchema = z.enum(['manual', 'website', 'facebook', 'instagram', 'whatsapp', 'email', 'referral', 'campaign', 'other']);
+
+const NullableEmailSchema = z.string().email().nullable().optional();
+const NullablePhoneSchema = z.string().trim().min(3).max(32).nullable().optional();
 
 export const CrmContactSchema = z.object({
   id: IdSchema,
@@ -22,6 +30,49 @@ export const CrmContactSchema = z.object({
 });
 export type CrmContact = z.infer<typeof CrmContactSchema>;
 
+export const CrmCompanySchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  type: CrmCompanyTypeSchema.default('organization'),
+  name: z.string().trim().min(1).max(200),
+  legalName: z.string().trim().max(240).nullable().optional(),
+  taxId: z.string().trim().max(80).nullable().optional(),
+  email: NullableEmailSchema,
+  phone: NullablePhoneSchema,
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type CrmCompany = z.infer<typeof CrmCompanySchema>;
+
+export const CrmRelatedPersonSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  contactId: IdSchema,
+  firstName: z.string().trim().min(1).max(120),
+  lastName: z.string().trim().max(120).nullable().optional(),
+  role: CrmRelatedPersonRoleSchema,
+  dateOfBirth: z.string().date().nullable().optional(),
+  isContactable: z.literal(false).default(false),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type CrmRelatedPerson = z.infer<typeof CrmRelatedPersonSchema>;
+
+export const CrmContactConsentSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  contactId: IdSchema,
+  channel: CrmConsentChannelSchema,
+  purpose: z.string().trim().min(1).max(160),
+  status: CrmConsentStatusSchema,
+  source: z.string().trim().min(1).max(160).nullable().optional(),
+  grantedAt: TimestampSchema.nullable().optional(),
+  withdrawnAt: TimestampSchema.nullable().optional(),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type CrmContactConsent = z.infer<typeof CrmContactConsentSchema>;
+
 export const CrmLeadSchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
@@ -30,13 +81,38 @@ export const CrmLeadSchema = z.object({
   workspaceId: IdSchema.nullable().optional(),
   stage: CrmLeadStageSchema.default('lead'),
   status: CrmLeadStatusSchema.default('active'),
-  source: z.string().trim().max(120).nullable().optional(),
+  source: CrmLeadSourceSchema.default('manual'),
   campaign: z.string().trim().max(160).nullable().optional(),
   assignedToUserId: IdSchema.nullable().optional(),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
 });
 export type CrmLead = z.infer<typeof CrmLeadSchema>;
+
+export const CrmCreateLeadCommandSchema = z.object({
+  organizationId: IdSchema,
+  contactId: IdSchema,
+  brandId: IdSchema.nullable().optional(),
+  workspaceId: IdSchema.nullable().optional(),
+  source: CrmLeadSourceSchema.default('manual'),
+  campaign: z.string().trim().max(160).nullable().optional(),
+  utm: z.record(z.string(), z.string().max(500)).default({}),
+  interest: z.string().trim().max(240).nullable().optional(),
+});
+export type CrmCreateLeadCommand = z.infer<typeof CrmCreateLeadCommandSchema>;
+
+export const CrmPipelineStageSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  workspaceId: IdSchema.nullable().optional(),
+  key: CrmLeadStageSchema,
+  label: z.string().trim().min(1).max(80),
+  position: z.number().int().nonnegative(),
+  isTerminal: z.boolean().default(false),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type CrmPipelineStage = z.infer<typeof CrmPipelineStageSchema>;
 
 export const CrmOpportunitySchema = z.object({
   id: IdSchema,

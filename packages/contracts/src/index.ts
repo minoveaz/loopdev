@@ -12,6 +12,7 @@ export * from './platform/tenancy';
 
 // Export CRM contracts
 export * from './crm/crm';
+export * from './communications/communications';
 
 // Export Marketing contracts
 export * from './marketing/marketing';

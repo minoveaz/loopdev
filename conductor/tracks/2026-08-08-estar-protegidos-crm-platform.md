@@ -321,14 +321,14 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 ### Fase B0 — Contratos y decisiones de dominio
 
-- [ ] Consolidar contratos de contactos, empresas, personas relacionadas, leads y oportunidades.
-- [ ] Definir comandos, lecturas, estados y eventos de dominio.
-- [ ] Definir normalización E.164, email, deduplicación y consentimiento.
-- [ ] Definir ownership por organización, workspace, marca y canal.
-- [ ] Separar CRM Core, Communications Core, Document Intelligence e Insurance Pack.
-- [ ] Cubrir invariantes con tests de contratos.
+- [x] Consolidar contratos de contactos, empresas, personas relacionadas, leads y oportunidades.
+- [x] Definir comandos, lecturas, estados y eventos de dominio.
+- [x] Definir normalización E.164, email, deduplicación y consentimiento.
+- [x] Definir ownership por organización, workspace, marca y canal.
+- [x] Separar CRM Core, Communications Core, Document Intelligence e Insurance Pack.
+- [x] Cubrir invariantes con tests de contratos.
 
-**Salida:** contratos versionados y reglas de dominio aprobadas, sin depender de componentes visuales.
+**Salida:** contratos versionados y reglas de dominio aprobadas, sin depender de componentes visuales. Validado con typecheck y 8 tests de contratos/mappers.
 
 ### Fase B1 — CRM Core persistente y RLS
 
@@ -758,4 +758,4 @@ La emisión, renovaciones y operaciones completas pertenecen a una fase posterio
 
 ## Siguiente acción
 
-Comenzar la Fase B0 y cerrar contratos de dominio antes de crear migraciones. Después implementar B1 con `crm_contacts`, `crm_companies`, `crm_related_people`, `crm_leads`, `crm_activities` y `crm_tasks`, incluyendo RLS y pruebas de aislamiento.
+Comenzar la Fase B1 con migraciones aditivas para `crm_contacts`, `crm_companies`, `crm_related_people`, `crm_leads`, `crm_activities` y `crm_tasks`, incluyendo RLS y pruebas de aislamiento.
