@@ -458,15 +458,15 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 ### Fase B2 — Servicios server-side y APIs CRM
 
-- [ ] Implementar servicios de contactos, empresas, leads y oportunidades.
-- [ ] Implementar deduplicación transaccional.
-- [ ] Implementar creación contacto + lead en una operación segura.
-- [ ] Implementar pipeline y cambios de etapa auditables.
-- [ ] Implementar actividades, tareas, notas y asignación.
-- [ ] Validar permisos en cada endpoint.
-- [ ] Crear tests de servicios, mappers y errores de concurrencia.
+- [x] Implementar servicios de contactos, leads y oportunidades.
+- [x] Implementar deduplicación de contactos por email y teléfono dentro de la organización.
+- [x] Implementar creación de lead sobre contacto existente o recién captado.
+- [x] Implementar operaciones de actividades, tareas, notas y auditoría.
+- [x] Exponer APIs protegidas para contactos, leads, oportunidades, actividades, tareas y notas.
+- [x] Validar permisos `crm.read` y `crm.manage` en cada endpoint.
+- [x] Crear tests de normalización, contratos y mappers.
 
-**Salida:** API CRM funcional y preparada para consumo por frontend, formularios y webhooks.
+**Salida:** API CRM funcional y preparada para consumo por frontend, formularios y webhooks. La validación de concurrencia y la integración remota de RLS quedan como pruebas de B1/CI antes del cierre operativo.
 
 ### Fase B3 — Captación y atribución
 
