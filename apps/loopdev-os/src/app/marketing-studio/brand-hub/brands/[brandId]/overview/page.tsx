@@ -4,9 +4,6 @@ import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { Heading, LpdText } from '@loopdev/ui';
-import {
-  MOCK_BRAND_HEALTH,
-} from '@/suites/marketing-studio/brand-hub/fixtures/overview-data';
 import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import type { GovernanceDomain, BrandEvent } from '@/suites/marketing-studio/brand-hub/types';
 
@@ -41,7 +38,37 @@ export default function BrandOverviewPage() {
         overridesCount: 0,
       }
     : null;
-  const healthData = MOCK_BRAND_HEALTH;
+  const ruleCount = brandContext?.rules.engine?.rules.length ?? 0;
+  const healthData = {
+    compliance: {
+      id: 'compliance' as const,
+      label: 'Compliance',
+      value: ruleCount,
+      status: 'ok' as const,
+      meta: `${ruleCount} persisted rules`,
+    },
+    approvals: {
+      id: 'approvals' as const,
+      label: 'Approvals',
+      value: brandContext?.version.status === 'published' ? 'Stable' : 'Pending',
+      status: brandContext?.version.status === 'published' ? ('ok' as const) : ('warn' as const),
+      meta: brandContext?.version.status ?? 'unpublished',
+    },
+    overrides: {
+      id: 'overrides' as const,
+      label: 'Overrides',
+      value: '—',
+      status: 'ok' as const,
+      meta: 'Not persisted yet',
+    },
+    dependencies: {
+      id: 'dependencies' as const,
+      label: 'Dependencies',
+      value: brandContext?.assets.length ?? 0,
+      status: 'ok' as const,
+      meta: `${brandContext?.assets.length ?? 0} approved assets`,
+    },
+  };
   const eventsData: BrandEvent[] = [];
 
   const governanceDomains: GovernanceDomain[] = [
