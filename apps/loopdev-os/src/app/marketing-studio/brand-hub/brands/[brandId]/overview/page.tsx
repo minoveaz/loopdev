@@ -5,11 +5,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { Heading, LpdText } from '@loopdev/ui';
 import {
-  MOCK_PUBLISHED_BRAND,
-  MOCK_DRAFT_BRAND,
   MOCK_BRAND_HEALTH,
-  MOCK_RECENT_EVENTS,
 } from '@/suites/marketing-studio/brand-hub/fixtures/overview-data';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import type { GovernanceDomain, BrandEvent } from '@/suites/marketing-studio/brand-hub/types';
 
 // Components
@@ -29,11 +27,22 @@ export default function BrandOverviewPage() {
   const router = useRouter();
   const brandId = params.brandId as string;
   const { setInspectorOpen, setSelectedEntity } = useBrandHub();
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
 
-  // MOCK DATA SELECTION (Simulating API fetch based on ID)
-  const activeBrand = brandId === '2' ? MOCK_DRAFT_BRAND : MOCK_PUBLISHED_BRAND;
+  const activeBrand = brandContext
+    ? {
+        id: brandContext.brand.id,
+        name: brandContext.brand.name,
+        status: brandContext.brand.status,
+        mode: brandContext.version.status === 'published' ? ('read-only' as const) : ('draft-mode' as const),
+        activeVersion: brandContext.version.number ? `v${brandContext.version.number}` : 'UNPUBLISHED',
+        lastUpdated: brandContext.brand.updatedAt,
+        lastActor: brandContext.brand.createdBy ?? 'System',
+        overridesCount: 0,
+      }
+    : null;
   const healthData = MOCK_BRAND_HEALTH;
-  const eventsData = MOCK_RECENT_EVENTS;
+  const eventsData: BrandEvent[] = [];
 
   const governanceDomains: GovernanceDomain[] = [
     { id: 'identity', label: 'Identity', access: 'allowed' },
@@ -84,6 +93,10 @@ export default function BrandOverviewPage() {
         break;
     }
   };
+
+  if (isLoading || !activeBrand) {
+    return <BrandStatusSnapshot brand={activeBrand ?? { id: brandId, name: 'Loading brand', status: 'draft', mode: 'draft-mode', activeVersion: 'LOADING', lastUpdated: '', lastActor: '', overridesCount: 0 }} isLoading />;
+  }
 
   return (
     <div className="flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
