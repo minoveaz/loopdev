@@ -40,6 +40,43 @@ El núcleo no conocerá pólizas, aseguradoras ni conceptos exclusivos de seguro
 - Campañas, UTM y atribución básica.
 - Auditoría y preferencias de comunicación.
 
+### Distinción de dominio: contacto, empresa, lead y oportunidad
+
+Estas entidades no se combinan ni se duplican:
+
+- **Contacto:** persona persistente que conocemos. Puede existir sin una oportunidad activa.
+- **Empresa:** cuenta o entidad jurídica relacionada con uno o varios contactos. En B2C el contacto puede funcionar sin empresa.
+- **Lead:** intención comercial concreta, originada por una fuente, campaña, producto o conversación. Siempre referencia a un contacto y puede asociarse a una marca y workspace.
+- **Oportunidad:** proceso comercial cualificado derivado de un lead, con etapa, importe, probabilidad y fecha prevista de cierre.
+
+El flujo canónico es:
+
+```text
+Contacto/Empresa → Lead → Oportunidad → Cliente/operación
+```
+
+Un nuevo contacto procedente de una campaña de Facebook crea un contacto y un lead asociado. Si la misma persona vuelve por WhatsApp para otro producto, se reutiliza el contacto y se crea un nuevo lead cuando representa una intención distinta:
+
+```text
+Ana García
+  ├── Lead: seguro de salud — Facebook — ganado
+  └── Lead: seguro de vida — WhatsApp — nuevo
+```
+
+El CRM no creará un contacto duplicado por cada campaña o conversación. La deduplicación buscará primero teléfono normalizado en formato E.164 y después email normalizado, siempre dentro de la misma organización.
+
+Modelo relacional inicial:
+
+```text
+crm_contacts
+crm_companies
+crm_contact_companies
+crm_leads
+crm_opportunities
+```
+
+Un contacto podrá tener muchos leads; un lead podrá tener cero o varias oportunidades según el proceso comercial. Las conversaciones y actividades se vincularán al contacto y, cuando exista contexto comercial, también al lead u oportunidad.
+
 ### Insurance Pack — extensión vertical inicial
 
 El paquete de seguros se construirá encima del CRM Core y tendrá sus propios contratos, tablas y permisos:
@@ -200,6 +237,7 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 ### Fase 6A — CRM persistente mínimo
 
 - [ ] Migración aditiva de contactos, leads, oportunidades, actividades y tareas.
+- [ ] Añadir empresas y relación contacto-empresa sin forzar el modelo B2C.
 - [ ] Contratos Zod de entidades, lecturas y comandos.
 - [ ] Servicios server-side y APIs protegidas.
 - [ ] RLS y permisos por organización/workspace.
@@ -220,6 +258,9 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 
 - [ ] Configuración de etapas por workspace.
 - [ ] Deduplicación de contactos y leads.
+- [ ] Crear contacto + lead en la primera captación de Facebook, WhatsApp, web o campaña.
+- [ ] Reutilizar contactos existentes y crear nuevos leads para intenciones distintas.
+- [ ] Mantener la atribución de cada lead sin sobrescribir campañas anteriores.
 - [ ] Integración con marcas, campañas, UTM y wizard.
 - [ ] Auditoría de cambios de etapa y asignación.
 - [ ] Búsqueda e índices.
