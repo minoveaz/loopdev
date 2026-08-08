@@ -3,7 +3,7 @@
 import React from 'react';
 import { useParams } from 'next/navigation';
 import { Heading, LpdText, Skeleton, EmptyState, BrandLogo, Icon } from '@loopdev/ui';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 
 // Industrial Components
 import { LogoSystemSchema } from '@loopdev/contracts';
@@ -21,8 +21,8 @@ export default function BrandLogoPage() {
   const params = useParams();
   const brandId = params.brandId as string;
   // Data Acquisition
-  const { data: brand, isLoading } = useActiveBrand(brandId);
-  const parsedLogoSystem = LogoSystemSchema.safeParse(brand?.logos);
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
+  const parsedLogoSystem = LogoSystemSchema.safeParse(brandContext?.brand.logos);
   const logoSystem = parsedLogoSystem.success ? parsedLogoSystem.data : undefined;
 
   // LOOPDEV CERTIFICATION CHECK

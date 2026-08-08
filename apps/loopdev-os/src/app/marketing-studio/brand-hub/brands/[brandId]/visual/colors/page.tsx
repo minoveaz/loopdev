@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { Heading, LpdText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 
@@ -18,7 +18,8 @@ import type { ColorToken } from '@/suites/marketing-studio/brand-hub/types';
 export default function BrandColorsPage() {
   const params = useParams();
   const brandId = params.brandId as string;
-  const { data: brand, isLoading } = useActiveBrand(brandId);
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
+  const brand = brandContext?.brand;
 
   // Use Global Context for Operational State
   const {

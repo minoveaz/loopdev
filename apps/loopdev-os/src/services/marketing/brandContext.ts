@@ -173,6 +173,32 @@ export async function publishBrandContextVersion(
   });
 }
 
+export async function listBrandContextVersions(
+  organizationId: string,
+  brandId: string,
+): Promise<BrandContextVersion[]> {
+  const supabase = await createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from('brand_context_versions')
+    .select('id, organization_id, brand_id, version_number, status, snapshot, published_at, created_by, created_at')
+    .eq('organization_id', organizationId)
+    .eq('brand_id', brandId)
+    .order('version_number', { ascending: false });
+  if (error) throw new Error('Unable to load brand context versions');
+
+  return (data ?? []).map((row) => BrandContextVersionSchema.parse({
+    id: row.id,
+    organizationId: row.organization_id,
+    brandId: row.brand_id,
+    versionNumber: row.version_number,
+    status: row.status,
+    snapshot: row.snapshot,
+    publishedAt: row.published_at,
+    createdBy: row.created_by,
+    createdAt: row.created_at,
+  }));
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

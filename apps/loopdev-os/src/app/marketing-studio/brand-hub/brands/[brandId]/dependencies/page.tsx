@@ -2,8 +2,12 @@
 
 import React from 'react';
 import { Heading, LpdText } from '@loopdev/ui';
+import { useParams } from 'next/navigation';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 
 export default function Page() {
+  const brandId = useParams().brandId as string;
+  const { data: context, isLoading } = useBrandContextSnapshot(brandId);
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-2">
@@ -14,8 +18,10 @@ export default function Page() {
           This is the dependencies view for the active brand.
         </LpdText>
       </header>
-      <div className="h-64 border border-dashed border-border-technical rounded-2xl flex items-center justify-center opacity-20 font-mono text-micro uppercase tracking-widest">
-        {'// dependencies_pending'}
+      <div className="rounded-2xl border border-border-technical p-6">
+        <LpdText size="sm" className="text-text-muted">
+          {isLoading ? 'Loading dependencies…' : `${context?.assets.length ?? 0} approved assets and ${context?.approvedClaims.length ?? 0} approved claims available to downstream modules.`}
+        </LpdText>
       </div>
     </div>
   );
