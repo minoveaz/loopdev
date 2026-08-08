@@ -25,7 +25,7 @@ export const ModuleToolbar: React.FC<ModuleToolbarProps> = (props) => {
   if (!shouldRender) return null;
 
   return (
-    <div className={containerClasses} style={style} role="toolbar">
+    <div className={`${containerClasses} overflow-x-auto`} style={style} role="toolbar">
       
       {/* 1. Cubo Izquierdo: Operaciones Primarias / Selección */}
       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -55,7 +55,7 @@ export const ModuleToolbar: React.FC<ModuleToolbarProps> = (props) => {
       </div>
 
       {/* 3. Cubo Derecho: Acciones Secundarias / Paneles */}
-      <div className="flex items-center gap-2 flex-1 justify-end">
+      <div className="flex items-center gap-2 flex-1 justify-end min-w-max">
         {right}
       </div>
     </div>
