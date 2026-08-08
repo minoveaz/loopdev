@@ -9,6 +9,7 @@ export const MarketingCopyChannelSchema = z.enum(['social', 'email', 'landing_pa
 export const MarketingCampaignSchema = MarketingScopedRecordSchema.extend({
   brandId: MarketingIdSchema,
   workspaceId: MarketingIdSchema,
+  brandVersionId: MarketingIdSchema.nullable().optional(),
   name: z.string().trim().min(1).max(160),
   objective: z.string().trim().min(1).max(240),
   status: MarketingCampaignStatusSchema.default('draft'),
@@ -65,6 +66,7 @@ export const UpdateMarketingCampaignSchema = z.object({
   workspaceId: MarketingIdSchema,
   campaignId: MarketingIdSchema,
   brandId: MarketingIdSchema.optional(),
+  brandVersionId: MarketingIdSchema.nullable().optional(),
   name: MarketingCampaignSchema.shape.name.optional(),
   objective: MarketingCampaignSchema.shape.objective.optional(),
   status: MarketingCampaignStatusSchema.optional(),

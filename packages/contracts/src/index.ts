@@ -4,6 +4,7 @@ export * from './brands/typography.schema';
 export * from './brands/logo.schema';
 export * from './brands/rules.schema';
 export * from './brands/context';
+export * from './brands/version';
 
 // Export Platform Navigation Contracts
 export * from './platform/navigation';

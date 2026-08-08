@@ -7,6 +7,7 @@ const campaignColumns = [
   'organization_id',
   'brand_id',
   'workspace_id',
+  'brand_version_id',
   'name',
   'objective',
   'status',
@@ -25,6 +26,7 @@ type CampaignRow = {
   organization_id: string;
   brand_id: string;
   workspace_id: string;
+  brand_version_id: string | null;
   name: string;
   objective: string;
   status: string;
@@ -44,6 +46,7 @@ function mapCampaign(row: CampaignRow): MarketingCampaign {
     organizationId: row.organization_id,
     brandId: row.brand_id,
     workspaceId: row.workspace_id,
+    brandVersionId: row.brand_version_id,
     name: row.name,
     objective: row.objective,
     status: row.status,
@@ -80,6 +83,7 @@ export async function createMarketingCampaign(input: CreateMarketingCampaignInpu
       organization_id: parsed.organizationId,
       brand_id: parsed.brandId,
       workspace_id: parsed.workspaceId,
+      brand_version_id: parsed.brandVersionId ?? null,
       name: parsed.name,
       objective: parsed.objective,
       status: parsed.status,
@@ -102,6 +106,7 @@ export async function updateMarketingCampaign(input: UpdateMarketingCampaignInpu
   const { organizationId, workspaceId, campaignId, ...updates } = parsed;
   const databaseUpdates = {
     ...(updates.brandId !== undefined ? { brand_id: updates.brandId } : {}),
+    ...(updates.brandVersionId !== undefined ? { brand_version_id: updates.brandVersionId } : {}),
     ...(updates.name !== undefined ? { name: updates.name } : {}),
     ...(updates.objective !== undefined ? { objective: updates.objective } : {}),
     ...(updates.status !== undefined ? { status: updates.status } : {}),
