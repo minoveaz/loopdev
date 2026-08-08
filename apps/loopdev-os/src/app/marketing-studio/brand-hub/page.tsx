@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Heading, LpdText, TechnicalText, SectionHeader, ModuleCard, Skeleton, Button, Icon } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, SectionHeader, ModuleCard, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 
 /**
@@ -76,10 +76,15 @@ export default function BrandHubOverview() {
 
       {/* Telemetry Placeholders (Future) */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[1, 2, 3].map((i) => (
-          <TechnicalText as="div" key={i} size="xs" className="h-32 border border-dashed border-border-technical rounded-2xl flex items-center justify-center opacity-20 uppercase tracking-widest">
-            {`// telemetry_block_0${i}`}
-          </TechnicalText>
+        {['Health signals', 'Governance activity', 'Content telemetry'].map((title) => (
+          <EmptyState
+            key={title}
+            title={title}
+            description="Telemetry will appear when this workspace has activity."
+            icon="monitoring"
+            size="sm"
+            variant="ghost"
+          />
         ))}
       </section>
     </div>
