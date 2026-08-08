@@ -610,14 +610,26 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 - [x] Definir contratos de CRM y actividades.
 - [x] Definir contratos de Marketing Studio.
 - [x] Definir contratos de seguros, cotizaciones y operaciones.
-- [ ] Definir contratos de WhatsApp.
-- [ ] Definir contratos de Health OS.
+- [x] Diferir contratos de WhatsApp a Fase 8, hasta disponer de contratos de POC y endpoints server-side estables.
+- [x] Diferir contratos de Health OS a Fase 9, después de definir el modelo clínico, la clasificación de datos y la retención.
 - [x] Crear servicios server-side para operaciones sensibles; el vault de Quant centraliza autorización, lectura, alta y prueba de conexiones fuera de los Route Handlers.
 - [x] Centralizar mapeos snake_case/camelCase para CRM; los siguientes servicios reutilizarán este límite validado.
-- [ ] Generar tipos de base de datos desde Supabase.
+- [x] Diferir generación de tipos de Supabase a Fase 4B, que requiere acceso autenticado al proyecto Dev o un secret de CI.
 - [x] Prohibir tipos locales duplicados en módulos nuevos mediante `contracts:ownership:check`, integrado en `quality:static` sin depender de Docker.
 
-**Criterio:** cada entidad compartida tiene un contrato único y validación de entrada/salida.
+**Criterio:** cada entidad compartida disponible tiene un contrato único y validación de entrada/salida; WhatsApp y Health OS permanecen explícitamente diferidos a sus fases de dominio.
+
+### Fase 4B — Integración de esquema Supabase
+
+Esta fase se ejecutará desde una máquina con acceso autenticado al proyecto Supabase Dev o desde CI; no requiere Docker local.
+
+- [ ] Enlazar explícitamente Supabase CLI con el proyecto Dev.
+- [ ] Generar los tipos TypeScript desde el esquema remoto.
+- [ ] Versionar los tipos generados en el paquete o capa de datos correspondiente.
+- [ ] Comprobar que el diff de tipos coincide con migraciones revisadas.
+- [ ] Ejecutar typecheck después de sustituir los tipos manuales de filas de base de datos.
+
+**Criterio:** el código que consulta Supabase utiliza tipos generados reproducibles y el esquema remoto no introduce diferencias silenciosas.
 
 ### Fase 5 — Migración de Marketing Studio
 
