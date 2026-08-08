@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { usePathname, useRouter, useParams } from 'next/navigation';
-import type { NavGroup } from '@loopdev/contracts';
+import { BrandStatusSchema, type NavGroup } from '@loopdev/contracts';
 import {
   ModuleWorkspace,
   ModuleHeader,
@@ -38,7 +38,12 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   const { data: currentBrand, isLoading: isBrandLoading } = useActiveBrand(brandId);
 
   useEffect(() => {
-    if (currentBrand) queueMicrotask(() => setActiveBrand(currentBrand));
+    if (currentBrand) {
+      const parsedStatus = BrandStatusSchema.safeParse(currentBrand.status);
+      if (parsedStatus.success) {
+        queueMicrotask(() => setActiveBrand({ ...currentBrand, status: parsedStatus.data }));
+      }
+    }
   }, [currentBrand, setActiveBrand]);
 
   // 2. Estado de la Máquina de Paneles
