@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
+import { Heading, LpdText, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import {
@@ -32,7 +32,7 @@ export default function BrandRulesPage() {
   const brand = brandContext?.brand;
 
   // Rules are read from the active brand record; no fixture is authoritative.
-  const parsedRules = RulesEngineSchema.safeParse(brand?.rules_engine);
+  const parsedRules = RulesEngineSchema.safeParse(brand?.rulesEngine);
   const dbRules = parsedRules.success ? parsedRules.data : undefined;
   const rulesEngine: RulesEngine | undefined = dbRules;
 

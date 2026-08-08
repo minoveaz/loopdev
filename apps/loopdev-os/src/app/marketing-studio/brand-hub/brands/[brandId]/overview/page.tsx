@@ -31,10 +31,15 @@ export default function BrandOverviewPage() {
         id: brandContext.brand.id,
         name: brandContext.brand.name,
         status: brandContext.brand.status,
-        mode: brandContext.version.status === 'published' ? ('read-only' as const) : ('draft-mode' as const),
-        activeVersion: brandContext.version.number ? `v${brandContext.version.number}` : 'UNPUBLISHED',
+        mode:
+          brandContext.version.status === 'published'
+            ? ('read-only' as const)
+            : ('draft-mode' as const),
+        activeVersion: brandContext.version.number
+          ? `v${brandContext.version.number}`
+          : 'UNPUBLISHED',
         lastUpdated: brandContext.brand.updatedAt,
-        lastActor: brandContext.brand.createdBy ?? 'System',
+        lastActor: 'System',
         overridesCount: 0,
       }
     : null;
@@ -122,14 +127,35 @@ export default function BrandOverviewPage() {
   };
 
   if (isLoading || !activeBrand) {
-    return <BrandStatusSnapshot brand={activeBrand ?? { id: brandId, name: 'Loading brand', status: 'draft', mode: 'draft-mode', activeVersion: 'LOADING', lastUpdated: '', lastActor: '', overridesCount: 0 }} isLoading />;
+    return (
+      <BrandStatusSnapshot
+        brand={
+          activeBrand ?? {
+            id: brandId,
+            name: 'Loading brand',
+            status: 'draft',
+            mode: 'draft-mode',
+            activeVersion: 'LOADING',
+            lastUpdated: '',
+            lastActor: '',
+            overridesCount: 0,
+          }
+        }
+        isLoading
+      />
+    );
   }
 
   return (
     <div className="flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
       {/* HEADER SECTION */}
       <header className="flex flex-col gap-2">
-        <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+        <Heading
+          as="h1"
+          size="2xl"
+          weight="bold"
+          className="text-text-main tracking-tight uppercase"
+        >
           Brand Overview _OPS
         </Heading>
         <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
