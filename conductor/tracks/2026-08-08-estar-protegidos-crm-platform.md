@@ -782,7 +782,11 @@ documento → extracción provisional → validación → revisión humana → d
 
 ### Aislamiento multi-brand
 
-El aislamiento no se resolverá únicamente con `organization_id`. La autorización deberá conservar y comprobar toda la cadena:
+En CRM no se aplicará aislamiento estricto por marca por defecto. Contactos, empresas, familias y conversaciones pertenecen a la organización y deben ofrecer una visión unificada del cliente. `brand_id` conservará el contexto de origen, atribución y marketing del lead o conversación.
+
+La frontera de seguridad principal será organización/workspace. Marketing Studio sí podrá aplicar aislamiento operativo por marca para campañas, contenidos y activos. Un aislamiento adicional por marca en CRM solo se activará si existe una necesidad contractual, legal o de negocio explícita.
+
+Cuando una entidad CRM tenga contexto de marca, se conservará y validará la cadena:
 
 ```text
 organization_id
@@ -796,15 +800,16 @@ Requisitos:
 
 - [ ] Verificar membresía y permiso sobre la organización.
 - [ ] Verificar acceso al workspace.
-- [ ] Verificar que la marca pertenece a la organización.
-- [ ] Verificar que cada cuenta de canal pertenece a la marca autorizada.
+- [ ] Verificar que cualquier marca referenciada pertenece a la organización.
+- [ ] Verificar que una cuenta de canal pertenece a la organización y conservar su marca de origen.
 - [ ] Mantener `brand_id` en leads, campañas, conversaciones y mensajes.
-- [ ] No aceptar un `brand_id` arbitrario enviado por el navegador.
-- [ ] Resolver la marca desde el canal, campaña o workspace autorizado.
-- [ ] Impedir cambiar de marca una conversación ya creada salvo operación administrativa auditada.
+- [ ] No aceptar un `brand_id` arbitrario enviado por el navegador sin validar su pertenencia.
+- [ ] Resolver la marca desde el canal, campaña o workspace cuando sea posible.
+- [ ] Permitir que un contacto tenga leads asociados a varias marcas.
+- [ ] Mantener la atribución original sin duplicar el contacto.
 - [ ] Aplicar filtros y checks en RLS, servicios server-side y APIs.
 
-Una conversación no podrá mezclarse entre Vitablue y Protege tu Salud aunque ambas marcas pertenezcan a la misma organización.
+Una conversación podrá formar parte del historial unificado del contacto, pero nunca perderá su marca y canal de origen. Las campañas y activos de Vitablue y Protege tu Salud seguirán aislados en Marketing Studio.
 
 ### Consentimiento y personas relacionadas
 
