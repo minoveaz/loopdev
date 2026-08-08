@@ -82,7 +82,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           className={`
             flex-shrink-0 border-r border-black/5 dark:border-white/5 bg-white dark:bg-background-dark transition-all duration-300 
             overflow-hidden 
-            absolute inset-y-0 left-0 shadow-2xl z-[var(--app-shell-z-nav)]
+            absolute inset-y-0 left-0 shadow-2xl z-[100]
             ${isMobileNavVisible ? 'translate-x-0' : '-translate-x-full'}
             @lg:relative @lg:translate-x-0 @lg:shadow-none @lg:z-10
             ${navMode === 'rail' ? 'select-none' : ''}
