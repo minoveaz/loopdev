@@ -54,6 +54,24 @@ La rama actual `feature/loopdev-saas-platform-fase-5c` parte de `develop` actual
 
 Las capacidades avanzadas de Marketing Studio (Content Engine, Insights, Growth, Advisor y Compliance) permanecen en Fase 5E y no deben considerarse parte del cierre de 5C.
 
+### Dependencia de Brand Hub para generación y campañas
+
+Brand Hub es la fuente de verdad de marca para el resto de Marketing Studio, no únicamente una superficie de configuración:
+
+- **Content Engine** consumirá identidad, logos, colores, tipografías, voz, tono, claims y reglas para elaborar piezas visuales y textos.
+- **Campaign Orchestrator** consumirá la configuración activa de marca, restricciones, canales y assets autorizados para crear y validar campañas.
+
+Por ello, antes de exponer Brand Hub a estos módulos se debe garantizar:
+
+- contratos de lectura estables y versionados para el contexto de marca;
+- resolución explícita de la versión publicada, no una lectura ambigua del JSON actual;
+- assets con metadatos, permisos y referencias de Storage;
+- reglas y claims distinguibles entre borrador, aprobados y publicados;
+- auditoría de cambios y trazabilidad de qué versión utilizó cada pieza o campaña;
+- separación entre configuración editable y snapshot inmutable consumido por una generación o campaña.
+
+La primera implementación puede conservar `identity`, `palette`, `typography`, `logos` y `rules_engine` como JSONB en `brands`, pero debe exponer un contrato de lectura único. No se deben crear integraciones directas de Content Engine o Campaign Orchestrator contra columnas JSONB dispersas. La normalización a tablas de versiones, assets, claims y reglas se hará cuando el flujo de aprobación y publicación lo requiera.
+
 ## Arquitectura objetivo
 
 ```text
