@@ -109,6 +109,21 @@ El paquete de seguros se construirá encima del CRM Core y tendrá sus propios c
 
 El `Insurance Pack` no debe introducir campos de seguros en `crm_contacts`, `crm_leads` o `crm_conversations`. Se relacionará mediante `lead_id`, `contact_id`, `opportunity_id` y referencias de contexto.
 
+### Product Catalog Core — módulo transversal
+
+El catálogo de productos no pertenece al CRM ni al Insurance Pack. Es un módulo transversal que define qué ofrece una organización y cómo se puede vender:
+
+- productos, servicios, planes, suscripciones y bundles;
+- proveedores y categorías;
+- catálogos de precios;
+- entradas de precio por moneda, segmento y periodo;
+- disponibilidad y estado de publicación;
+- versiones y metadata de dominio.
+
+CRM lo consumirá para asociar productos a oportunidades y cotizaciones. Insurance Pack añadirá coberturas, elegibilidad y roles de póliza sobre esos productos. Finance podrá consumirlo para facturación y Health OS para servicios clínicos.
+
+La interfaz podrá aparecer inicialmente dentro de la configuración comercial del CRM, pero los contratos, tablas, permisos y APIs serán independientes.
+
 ### Canales de adquisición y conversación
 
 WhatsApp, Instagram, Facebook Messenger y email se implementarán como adaptadores de comunicación. La bandeja trabajará con conversaciones y mensajes genéricos; cada proveedor aportará únicamente normalización, webhooks, credenciales y estados de entrega.
@@ -313,6 +328,105 @@ communications_webhook_events
 communications_delivery_events
 ```
 
+## Inventario de entidades y límites de B1
+
+La primera migración no intentará crear todo el producto futuro. Se implementará el siguiente mínimo persistente:
+
+### CRM Core
+
+```text
+crm_contacts
+crm_companies
+crm_contact_companies
+crm_related_people
+crm_leads
+crm_opportunities
+crm_pipeline_stages
+crm_activities
+crm_tasks
+crm_notes
+crm_contact_consents
+crm_audit_events
+crm_lead_attributions
+```
+
+`crm_contacts` representa personas comunicables. `crm_related_people` representa familiares o personas vinculadas que no son contactables por defecto. `crm_lead_attributions` conserva múltiples fuentes, campañas y UTMs sin sobrescribir el origen histórico del lead.
+
+### Product Catalog Core
+
+```text
+catalog_products
+catalog_product_categories
+catalog_product_providers
+catalog_price_books
+catalog_price_entries
+catalog_product_components
+catalog_product_versions
+crm_opportunity_products
+```
+
+El catálogo define qué se ofrece y sus precios. CRM solo relaciona productos con oportunidades; Insurance Pack añade las reglas específicas de seguros.
+
+### Communications Core
+
+```text
+communications_accounts
+communications_channels
+communications_conversations
+communications_messages
+communications_message_attachments
+communications_templates
+communications_webhook_events
+communications_delivery_events
+communications_conversation_assignments
+```
+
+Las cuentas y canales pertenecen a una organización y, cuando proceda, a una marca. Los mensajes externos se deduplican por identificador del proveedor dentro de la cuenta.
+
+### Insurance Pack
+
+```text
+insurance_providers
+insurance_coverages
+insurance_product_coverages
+insurance_eligibility_rules
+insurance_quotes
+insurance_quote_versions
+insurance_parties
+insurance_policies
+insurance_policy_coverages
+```
+
+Los productos de seguros reutilizan `catalog_products`. `insurance_parties` permite distinguir tomador, asegurado y beneficiario sin convertirlos automáticamente en contactos CRM.
+
+### Document Intelligence Core
+
+```text
+documents
+document_versions
+document_classifications
+document_extractions
+document_extraction_fields
+document_reviews
+document_links
+```
+
+`document_links` relaciona documentos con contactos, leads, oportunidades, cotizaciones, pólizas o conversaciones. Los resultados de extracción permanecen provisionales hasta su validación.
+
+### Entidades posteriores
+
+Se reservan para fases posteriores, no para la primera migración B1:
+
+- suscripciones, descuentos y bundles avanzados;
+- automatizaciones y secuencias comerciales;
+- scoring avanzado;
+- pedidos y facturación;
+- renovaciones y operaciones de póliza;
+- sincronizaciones externas;
+- `ai_runs`, recomendaciones, evidencias, aprobaciones, feedback y consumo por proveedor.
+
+El criterio es crear una tabla cuando exista un flujo persistente, una relación consultable, una política RLS o una necesidad de auditoría. Las configuraciones menores pueden permanecer versionadas como JSONB hasta que requieran búsqueda, aprobación o reutilización.
+
 Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y actor cuando aplique. Las entidades CRM tendrán `brand_id` y `workspace_id` cuando el dominio lo necesite. Los identificadores externos de proveedores tendrán constraints de unicidad dentro de su cuenta y organización.
 
 ## Roadmap de desarrollo backend-first
@@ -390,7 +504,19 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 **Salida:** un mensaje entrante crea el contexto CRM correcto y aparece en una conversación persistente.
 
-### Fase B6 — Insurance Pack backend
+### Fase B6 — Product Catalog Core
+
+- [ ] Crear productos, servicios, planes, suscripciones y bundles.
+- [ ] Crear proveedores, categorías y estados de publicación.
+- [ ] Crear price books y price entries.
+- [ ] Versionar precios y periodos de validez.
+- [ ] Asociar productos a oportunidades y cotizaciones sin duplicar el catálogo.
+- [ ] Aplicar ownership por organización y marca.
+- [ ] Crear contratos, constraints, RLS y tests de aislamiento.
+
+**Salida:** catálogo reutilizable por CRM, Insurance Pack, Finance, Marketing Studio y Health OS.
+
+### Fase B7 — Insurance Pack backend
 
 - [ ] Crear productos, planes, aseguradoras y coberturas.
 - [ ] Crear reglas de elegibilidad testeables.
@@ -401,7 +527,7 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 **Salida:** flujo comercial de seguros sobre el CRM Core, sin contaminar sus entidades genéricas.
 
-### Fase B7 — Document Intelligence Core
+### Fase B8 — Document Intelligence Core
 
 - [ ] Crear documentos, archivos, clasificaciones y extracciones.
 - [ ] Proteger archivos con Storage y referencias autorizadas.
@@ -413,7 +539,7 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 **Salida:** documentos procesables, trazables y nunca convertidos automáticamente en datos definitivos sin validación.
 
-### Fase B8 — IA asistida y segura
+### Fase B9 — IA asistida y segura
 
 - [ ] Crear contratos para resumen, clasificación, extracción y recomendaciones.
 - [ ] Crear gateway server-side de proveedores.
@@ -425,7 +551,7 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 **Salida:** IA asistiva auditable, sin decisiones autónomas de alto impacto.
 
-### Fase B9 — Customer Workspace backend
+### Fase B10 — Customer Workspace backend
 
 - [ ] Crear endpoint agregado de Customer 360.
 - [ ] Resolver perfil, relaciones, leads, oportunidades, conversaciones, documentos y cotizaciones según permisos.
@@ -435,7 +561,7 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 **Salida:** contrato estable para la vista Customer Workspace.
 
-### Fase B10 — Frontend, E2E y operación
+### Fase B11 — Frontend, E2E y operación
 
 - [ ] Conectar dashboard, contactos, pipeline, Customer Workspace e inbox.
 - [ ] Conectar formularios y flujos de WhatsApp.
