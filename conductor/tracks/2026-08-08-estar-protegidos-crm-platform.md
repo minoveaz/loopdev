@@ -96,6 +96,38 @@ El `Insurance Pack` no debe introducir campos de seguros en `crm_contacts`, `crm
 
 WhatsApp, Instagram, Facebook Messenger y email se implementarán como adaptadores de comunicación. La bandeja trabajará con conversaciones y mensajes genéricos; cada proveedor aportará únicamente normalización, webhooks, credenciales y estados de entrega.
 
+### Decisión transversal: Communications Core
+
+El envío de correo y mensajería no será una funcionalidad exclusiva del CRM. LoopDev tendrá un módulo transversal `Communications Core` reutilizable por todas las suites.
+
+```text
+Communications Core
+  ├── Email
+  ├── WhatsApp
+  ├── Instagram / Facebook Messenger
+  ├── Proveedores y credenciales seguras
+  ├── Webhooks y estados de entrega
+  ├── Reintentos e idempotencia
+  ├── Plantillas
+  ├── Consentimiento y preferencias
+  └── Auditoría
+```
+
+Las superficies de producto consumirán este núcleo según su caso de uso:
+
+- **CRM Inbox:** conversaciones individuales, seguimiento y respuestas de agentes.
+- **Marketing Studio:** campañas segmentadas, plantillas y métricas de envío.
+- **Insurance Pack:** emails transaccionales de cotizaciones y documentos.
+- **Health OS:** comunicaciones operativas con permisos específicos.
+
+Se distinguirán tres tipos de comunicación:
+
+1. **Conversacional:** respuesta de un agente dentro de una conversación.
+2. **Marketing:** envío segmentado a múltiples destinatarios con consentimiento y métricas.
+3. **Transaccional:** mensajes operativos vinculados a un proceso de negocio.
+
+Las suites no implementarán directamente proveedores ni guardarán tokens. Solicitarán operaciones al servicio server-side común, que registrará el mensaje, resolverá el proveedor autorizado y devolverá estados normalizados.
+
 ### 1. Suite Dashboard
 
 - Resumen de leads nuevos, activos, estancados y ganados.
@@ -284,6 +316,16 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 - [ ] Contacto, conversación y mensaje persistentes.
 - [ ] Bandeja CRM con asignación y estado.
 - [ ] Tests de eventos duplicados y aislamiento.
+
+### Fase transversal — Communications Core
+
+- [ ] Definir contratos comunes de canales, mensajes, plantillas, consentimientos y estados.
+- [ ] Separar mensajes conversacionales, marketing y transaccionales.
+- [ ] Crear referencias seguras a credenciales por organización, marca y proveedor.
+- [ ] Crear servicio server-side de envío y recepción normalizados.
+- [ ] Centralizar webhooks, idempotencia, reintentos y estados de entrega.
+- [ ] Exponer adaptadores consumibles por CRM, Marketing Studio e Insurance Pack.
+- [ ] Añadir auditoría y observabilidad sin exponer secretos.
 
 ### Fase 8B — Respuesta controlada
 
