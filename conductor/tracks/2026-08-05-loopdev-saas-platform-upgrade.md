@@ -623,11 +623,15 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 
 Esta fase se ejecutará desde una máquina con acceso autenticado al proyecto Supabase Dev o desde CI; no requiere Docker local.
 
-- [ ] Enlazar explícitamente Supabase CLI con el proyecto Dev.
-- [ ] Generar los tipos TypeScript desde el esquema remoto.
-- [ ] Versionar los tipos generados en el paquete o capa de datos correspondiente.
-- [ ] Comprobar que el diff de tipos coincide con migraciones revisadas.
-- [ ] Ejecutar typecheck después de sustituir los tipos manuales de filas de base de datos.
+- [x] Enlazar explícitamente Supabase CLI con el proyecto Dev.
+- [x] Generar los tipos TypeScript desde el esquema remoto.
+- [x] Versionar los tipos generados en el paquete o capa de datos correspondiente.
+- [x] Comprobar que el diff de tipos coincide con migraciones revisadas.
+- [x] Ejecutar typecheck después de sustituir los tipos manuales de filas de base de datos.
+
+#### Cierre de Fase 4B (2026-08-08)
+
+La integración se completó contra el proyecto Supabase Dev enlazado. Los tipos generados viven en `apps/loopdev-os/src/types/database.types.ts`, los clientes Supabase usan `Database` como tipo raíz y se sustituyeron los tipos manuales de filas. La comprobación remota se realizó con `supabase db push --linked --dry-run` y `supabase db push --linked`; no se requirió Docker local. `pnpm typecheck` pasa correctamente.
 
 **Criterio:** el código que consulta Supabase utiliza tipos generados reproducibles y el esquema remoto no introduce diferencias silenciosas.
 
