@@ -22,6 +22,11 @@ interface PipelineFiltersProps {
 
 type CompanyFilter = PipelineFiltersProps['companyFilter'];
 type TimeFilter = PipelineFiltersProps['timeFilter'];
+const timeFilterValues: Record<string, TimeFilter> = {
+  'Últimos 7 días': '7d',
+  'Últimos 14 días': '14d',
+  'Último mes': '30d',
+};
 
 const isCompanyFilter = (value: string): value is CompanyFilter =>
   value === 'all' || value === 'Sanitas' || value === 'Adeslas';
@@ -115,7 +120,7 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
             options={['Todos', 'Últimos 7 días', 'Últimos 14 días', 'Último mes']}
             selected={timeFilter === 'all' ? [] : [{ '7d': 'Últimos 7 días', '14d': 'Últimos 14 días', '30d': 'Último mes' }[timeFilter] ?? '']}
             onToggle={(value) => {
-              const timeValue = { 'Últimos 7 días': '7d', 'Últimos 14 días': '14d', 'Último mes': '30d' }[value];
+              const timeValue = timeFilterValues[value];
               if (value === 'Todos') onTimeFilterChange('all');
               else if (timeValue) onTimeFilterChange(timeValue);
             }}

@@ -262,7 +262,7 @@ const INITIAL_LEADS: Lead[] = [
     stage: 'contacted',
     status: 'stalled',
     assignee: 'María López',
-    labels: ['⏰ Urgente'],
+    labels: ['Urgente'],
     aiScore: 45,
     aiInsights: 'Bajo engagement en correos informativos. Tomador de decisión principal ausente en las reuniones.',
     lastContactDate: '2026-07-02',

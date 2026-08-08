@@ -14,7 +14,6 @@ import {
   Skeleton,
   TechnicalDialog,
   Button,
-  Button,
   BotCardIndustrial,
   toast,
 } from '@loopdev/ui';

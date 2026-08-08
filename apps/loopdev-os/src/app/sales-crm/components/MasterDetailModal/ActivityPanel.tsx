@@ -389,10 +389,10 @@ export function ActivityPanel() {
       const heightInMeters = h / 100;
       const bmi = w / (heightInMeters * heightInMeters);
       let classification = '';
-      if (bmi < 18.5) classification = 'Peso Bajo 🔵';
-      else if (bmi < 25) classification = 'Peso Normal ✅';
-      else if (bmi < 30) classification = 'Sobrepeso ⚠️';
-      else classification = 'Obesidad 🚨';
+      if (bmi < 18.5) classification = 'Peso Bajo';
+      else if (bmi < 25) classification = 'Peso Normal';
+      else if (bmi < 30) classification = 'Sobrepeso';
+      else classification = 'Obesidad';
 
       return { val: bmi.toFixed(1), class: classification };
     };
@@ -505,28 +505,32 @@ export function ActivityPanel() {
   return (
     <div className="flex flex-col gap-4 w-full h-full">
       {/* Dynamic Tab Bar */}
-      <div className="flex border-b border-slate-200 dark:border-white/5 pb-0.5 mb-2 select-none">
+      <div className="flex items-center gap-1 p-1 mb-2 rounded-lg border border-slate-200 bg-slate-100 dark:border-white/10 dark:bg-slate-950/60 select-none">
         <Button
+          type="button"
+          variant="ghost"
           onClick={() => setActiveTab('timeline')}
-          className={`flex items-center gap-1.5 px-4 py-2 border-b-2 text-xs font-bold transition-all ${
+          className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold transition-all ${
             activeTab === 'timeline'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+              ? 'bg-white text-primary shadow-sm dark:bg-slate-800 dark:text-white'
+              : 'text-slate-500 hover:bg-white/70 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800/70 dark:hover:text-slate-200'
           }`}
         >
           <Icon name="feed" size="sm" />
-          <span>⚡ Bitácora de Actividad</span>
+          <span className="truncate">Bitácora de Actividad</span>
         </Button>
         <Button
+          type="button"
+          variant="ghost"
           onClick={() => setActiveTab('documents')}
-          className={`flex items-center gap-1.5 px-4 py-2 border-b-2 text-xs font-bold transition-all ${
+          className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold transition-all ${
             activeTab === 'documents'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+              ? 'bg-white text-primary shadow-sm dark:bg-slate-800 dark:text-white'
+              : 'text-slate-500 hover:bg-white/70 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800/70 dark:hover:text-slate-200'
           }`}
         >
           <Icon name="upload" size="sm" />
-                  <span>Documentos e Historial ({lead.documents?.length || 0})</span>
+          <span className="truncate">Documentos e Historial ({lead.documents?.length || 0})</span>
         </Button>
       </div>
 
@@ -534,41 +538,30 @@ export function ActivityPanel() {
       {activeTab === 'timeline' && (
         <div className="flex flex-col gap-3 max-h-[500px] overflow-y-auto custom-scrollbar pr-1 animate-in fade-in duration-200">
           {lead.activityLog && lead.activityLog.length > 0 ? (
-            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-white/5 flex flex-col gap-5 py-2 select-none">
+            <div className="relative ml-3 pl-8 border-l border-slate-300 dark:border-white/10 flex flex-col gap-4 py-1 select-none">
               {lead.activityLog.map((entry, idx) => {
                 // Determine icon mapping based on activity type
                 let iconName: string = ICON_REGISTRY.status.info;
-                let colorClasses = 'bg-slate-100 text-slate-500 border-slate-200';
 
                 if (entry.type === 'CALL') {
                   iconName = 'phone';
-                  colorClasses = 'bg-blue-500/10 text-blue-500 border-blue-500/20';
                 } else if (entry.type === 'NOTE') {
                   iconName = 'feed';
-                  colorClasses = 'bg-amber-500/10 text-amber-500 border-amber-500/20';
                 } else if (entry.type === 'TASK_CREATED' || entry.type === 'TASK_COMPLETED') {
                   iconName = 'task';
-                  colorClasses = 'bg-violet-500/10 text-violet-500 border-violet-500/20';
                 } else if (entry.type === 'DOCUMENT') {
                   iconName = 'upload';
-                  colorClasses = 'bg-teal-500/10 text-teal-500 border-teal-500/20';
                 } else if (entry.type === 'GENERIC') {
                   if (entry.action.toLowerCase().includes('whatsapp')) {
                     iconName = 'chat';
-                    colorClasses = 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
                   } else if (
                     entry.action.toLowerCase().includes('correo') ||
                     entry.action.toLowerCase().includes('email')
                   ) {
                     iconName = 'mail';
-                    colorClasses = 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20';
-                  } else {
-                    iconName = ICON_REGISTRY.status.info;
-                    colorClasses = 'bg-slate-100 text-slate-500 border-slate-200';
                   }
                 } else if (entry.type === 'STATUS_CHANGE') {
                   iconName = 'rocket';
-                  colorClasses = 'bg-rose-500/10 text-rose-500 border-rose-500/20';
                 }
 
                 return (
@@ -576,15 +569,14 @@ export function ActivityPanel() {
                     key={idx}
                     className="relative flex flex-col gap-1.5 animate-in fade-in duration-300"
                   >
-                    {/* Circle icon marker on the timeline line */}
                     <div
-                      className={`absolute -left-[37px] top-0.5 w-6 h-6 rounded-full border flex items-center justify-center ${colorClasses} text-[10px]`}
+                      className="absolute -left-[15px] top-1 w-7 h-7 rounded-md border border-border-technical bg-surface-elevated text-text-muted flex items-center justify-center text-[10px] ring-4 ring-slate-50 dark:ring-lpd-bg-dark"
                     >
                       <Icon name={iconName} size="sm" />
                     </div>
 
-                    <div className="flex items-center justify-between text-[10px]">
-                      <div className="flex items-center gap-1">
+                    <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-1 text-[10px]">
+                      <div className="flex min-w-0 items-center gap-2">
                         <LpdText
                           size="nano"
                           weight="bold"
@@ -593,17 +585,17 @@ export function ActivityPanel() {
                           {entry.actor}
                         </LpdText>
                         {entry.category && (
-                          <span className="text-[8px] font-bold uppercase tracking-wide bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/5 px-1.5 py-0.5 rounded-full select-none">
+                            <span className="text-[8px] font-bold uppercase tracking-wide text-text-muted dark:text-slate-400 border-l border-slate-300 dark:border-white/15 pl-2 select-none">
                             {entry.category}
                           </span>
                         )}
                       </div>
-                      <LpdText size="nano" variant="mono" className="text-text-muted">
+                      <LpdText size="nano" variant="mono" className="shrink-0 text-text-muted dark:text-slate-500">
                         {new Date(entry.timestamp).toLocaleString()}
                       </LpdText>
                     </div>
 
-                    <TechnicalCard variant="flat" className="p-3">
+                    <TechnicalCard variant="flat" className="border border-slate-200/80 bg-white p-3 dark:border-white/10 dark:bg-slate-900/45">
                       <LpdText
                         size="xs"
                         className="text-slate-800 dark:text-slate-200 leading-relaxed font-sans font-medium"
@@ -613,7 +605,7 @@ export function ActivityPanel() {
                       {entry.details && (
                         <LpdText
                           size="xs"
-                          className="text-slate-500 dark:text-slate-400 mt-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg border border-slate-200/50 dark:border-white/5 font-sans leading-relaxed whitespace-pre-wrap"
+                          className="mt-2 border-l-2 border-slate-200 bg-slate-50 px-2.5 py-2 text-slate-500 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-400 font-sans leading-relaxed whitespace-pre-wrap"
                         >
                           {entry.details}
                         </LpdText>
@@ -722,10 +714,10 @@ export function ActivityPanel() {
                         }`}
                       >
                         {doc.status === 'verified'
-                          ? 'Validado ✅'
+                          ? 'Validado'
                           : doc.status === 'error'
-                            ? 'Rechazado 🚨'
-                            : 'Pendiente ⏳'}
+                            ? 'Rechazado'
+                            : 'Pendiente'}
                       </span>
 
                       <Button

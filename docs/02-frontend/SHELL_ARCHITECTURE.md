@@ -82,6 +82,9 @@ export default function SuiteLayout({ children }) {
 2.  **Identidad Consistente:** `SuiteHeader` y `SuiteSidebar` deben consumir la misma `SuiteIdentity` del schema y el mismo fondo sólido.
 3.  **Navegación Desacoplada:** Toda la estructura de navegación debe vivir en un `schema.ts` y no estar hardcodeada.
 4.  **Skip-Link de Accesibilidad:** El primer elemento del DOM en el `AppShell` debe ser el link oculto "Skip to content" apuntando al ID `#main-content`.
+5.  **Política de Sidebar:** La raíz de cada suite debe usar `expanded`; los módulos operativos profundos pueden usar `rail`; al salir de esos prefijos se debe restaurar `expanded`.
+6.  **Fuente única de transición:** Los layouts deben usar `getSuiteNavMode` desde `components/layout/suiteNavMode.ts` y declarar sus prefijos operativos explícitamente. No se permite inferir `rail` solo por profundidad de URL.
+7.  **Responsive:** En desktop `expanded` y `rail` son estados persistentes de navegación; en tablet/mobile el `AppShell` los presenta como overlay temporal y el cierre no debe cambiar la política de ruta.
 
 ---
 *Arquitectura de Shell - LoopDev Engineering Board*

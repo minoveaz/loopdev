@@ -27,6 +27,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, ModuleAccessState } from '@loopdev/contracts';
 import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
+import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -45,13 +46,8 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
-  // 1. Focus Enforcement: Colapsar sidebar si estamos en un módulo operativo
   useEffect(() => {
-    if (pathname.includes('/brand-hub')) {
-      queueMicrotask(() => setNavMode('rail'));
-    } else {
-      queueMicrotask(() => setNavMode('expanded'));
-    }
+    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/marketing-studio/brand-hub'] })));
   }, [pathname]);
 
   const currentSuite = MARKETING_STUDIO_SCHEMA.suite;

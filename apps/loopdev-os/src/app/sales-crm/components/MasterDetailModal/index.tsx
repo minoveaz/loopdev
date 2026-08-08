@@ -299,7 +299,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
       <TechnicalSurface
         variant="surface"
         depth="overlay"
-        className="w-full h-full rounded-3xl overflow-hidden shadow-2xl border-slate-200 dark:border-white/10"
+        className="w-full h-full rounded-xl overflow-hidden shadow-2xl border border-slate-300 dark:border-white/10"
       >
         <div className="flex flex-col h-full w-full bg-white dark:bg-lpd-bg-dark text-slate-900 dark:text-slate-100 font-sans overflow-hidden">
           {/* 1. Header component */}
@@ -448,23 +448,23 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           {[
                             {
                               id: 'general',
-                              label: 'General 📄',
+                              label: 'General',
                               colorClass:
                                 'border-slate-400 text-slate-700 bg-slate-500/5 dark:text-slate-350',
                             },
                             {
                               id: 'requirement',
-                              label: 'Requerimiento 🛠️',
+                              label: 'Requerimiento',
                               colorClass: 'border-blue-500 text-blue-600 bg-blue-500/5',
                             },
                             {
                               id: 'pain_point',
-                              label: 'Dolor ⚠️',
+                              label: 'Dolor',
                               colorClass: 'border-amber-500 text-amber-600 bg-amber-500/5',
                             },
                             {
                               id: 'budget',
-                              label: 'Presupuesto 💰',
+                              label: 'Presupuesto',
                               colorClass: 'border-emerald-500 text-emerald-600 bg-emerald-500/5',
                             },
                           ].map((pill) => {
@@ -504,7 +504,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           htmlFor="pin-note-checkbox"
                           className="text-slate-700 dark:text-slate-300 font-bold select-none cursor-pointer"
                         >
-                          📌 Fijar en el perfil
+                          Fijar en el perfil
                         </label>
                       </div>
                     </div>
@@ -698,11 +698,11 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         {/* Predefined Title Options */}
                         <div className="flex flex-wrap gap-1 mt-1.5 select-none">
                           {[
-                            { label: '📞 Llamar', title: 'Llamar para seguimiento' },
-                            { label: '📧 Enviar propuesta', title: 'Enviar propuesta comercial' },
-                            { label: '📅 Reunión / Demo', title: 'Agendar Demo del producto' },
+                            { label: 'Llamar', title: 'Llamar para seguimiento' },
+                            { label: 'Enviar propuesta', title: 'Enviar propuesta comercial' },
+                            { label: 'Reunión / Demo', title: 'Agendar Demo del producto' },
                             {
-                              label: '📋 Solicitar docs',
+                              label: 'Solicitar docs',
                               title: 'Solicitar documentos pendientes',
                             },
                           ].map((pill) => (
@@ -795,17 +795,17 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         {[
                           {
                             id: 'high',
-                            label: 'Alta 🔴',
+                            label: 'Alta',
                             colorClass: 'border-rose-500 text-rose-600 bg-rose-500/5',
                           },
                           {
                             id: 'medium',
-                            label: 'Media 🟡',
+                            label: 'Media',
                             colorClass: 'border-amber-500 text-amber-600 bg-amber-500/5',
                           },
                           {
                             id: 'low',
-                            label: 'Baja 🔵',
+                            label: 'Baja',
                             colorClass: 'border-blue-500 text-blue-600 bg-blue-500/5',
                           },
                         ].map((pill) => {
@@ -879,6 +879,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                       >
                         <span className="flex items-center gap-1.5 justify-center">
                           <svg
+                            aria-hidden="true"
                             className="w-3.5 h-3.5 fill-current"
                             viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg"
@@ -972,7 +973,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
               {lead.activityLog?.some((entry) => entry.type === 'NOTE' && entry.pinned) && (
                 <div className="flex flex-col gap-3 mt-2 animate-in fade-in duration-200">
                   <span className="font-mono text-[9px] text-slate-455 dark:text-slate-500 font-bold uppercase tracking-widest select-none">
-                    📌 NOTAS CLAVE ANCLADAS
+                    NOTAS CLAVE ANCLADAS
                   </span>
                   <div className="flex flex-col gap-2">
                     {lead.activityLog
@@ -1029,14 +1030,14 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Right Columns: Activity Timeline & Details */}
-            <div className="lg:col-span-2 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-white/50 dark:bg-lpd-bg-dark/30">
+            <div className="lg:col-span-2 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-slate-50 dark:bg-lpd-bg-dark">
               <ActivityPanel />
             </div>
           </div>
 
           {/* 6. Footer Actions Panel */}
           {!isReadOnly && (
-            <div className="p-5 bg-white/70 dark:bg-lpd-bg-dark/70 backdrop-blur-md border-t border-slate-200/60 dark:border-white/5 flex justify-end gap-3 flex-shrink-0 select-none">
+            <div className="p-4 bg-white dark:bg-lpd-bg-dark border-t border-slate-200 dark:border-white/10 flex justify-end gap-3 flex-shrink-0 select-none">
               {renderFooterActions()}
             </div>
           )}

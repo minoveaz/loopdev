@@ -24,6 +24,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, type NavigationSchema } from '@loopdev/contracts';
+import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 // Local Navigation Schema for Health OS
 const HEALTH_OS_SCHEMA: NavigationSchema = {
@@ -128,9 +129,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    if (pathname.split('/').length > 2) {
-      queueMicrotask(() => setNavMode('rail'));
-    }
+    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/health-os/agenda', '/health-os/triage', '/health-os/consultations', '/health-os/contracts', '/health-os/billing'] })));
   }, [pathname]);
 
   const currentSuite = HEALTH_OS_SCHEMA.suite;

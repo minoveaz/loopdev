@@ -46,7 +46,7 @@ export function InfoPanel() {
     );
     if (!lastWhatsAppLog) {
       return { 
-        status: 'Desatendido 🚨', 
+        status: 'Desatendido',
         color: 'text-rose-500 border-rose-500/20 bg-rose-500/5', 
         desc: 'No se registran interacciones previas.' 
       };
@@ -56,19 +56,19 @@ export function InfoPanel() {
     
     if (diffDays <= 1) {
       return { 
-        status: 'Al Día ✅', 
+        status: 'Al Día',
         color: 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5', 
         desc: 'Contacto registrado en las últimas 24 horas.' 
       };
     } else if (diffDays <= 3) {
       return { 
-        status: 'En Riesgo ⚠️', 
+        status: 'En Riesgo',
         color: 'text-amber-500 border-amber-500/20 bg-amber-500/5', 
         desc: `Último contacto hace ${diffDays} días.` 
       };
     } else {
       return { 
-        status: 'Desatendido 🚨', 
+        status: 'Desatendido',
         color: 'text-rose-500 border-rose-500/20 bg-rose-500/5 animate-pulse', 
         desc: `Inactividad crítica por más de ${diffDays} días.` 
       };
@@ -391,13 +391,13 @@ export function InfoPanel() {
             <div className="flex justify-between items-center">
               <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Fuente Principal</Label>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-900 text-slate-750 dark:text-slate-350 border border-slate-200 dark:border-white/5">
-                {lead.leadSourceType === 'facebook_ads' && 'Facebook Ads 🔵'}
-                {lead.leadSourceType === 'google_ads' && 'Google Ads 🟡'}
-                {lead.leadSourceType === 'landing_page' && 'Landing Page Directa 📄'}
-                {lead.leadSourceType === 'partner_referral' && 'Referido por Partner 🤝'}
-                {lead.leadSourceType === 'client_referral' && 'Referido por Cliente 👤'}
-                {lead.leadSourceType === 'organic' && 'Búsqueda Orgánica 🌐'}
-                {!lead.leadSourceType && 'Inbound Desconocido 🌐'}
+                {lead.leadSourceType === 'facebook_ads' && 'Facebook Ads'}
+                {lead.leadSourceType === 'google_ads' && 'Google Ads'}
+                {lead.leadSourceType === 'landing_page' && 'Landing Page Directa'}
+                {lead.leadSourceType === 'partner_referral' && 'Referido por Partner'}
+                {lead.leadSourceType === 'client_referral' && 'Referido por Cliente'}
+                {lead.leadSourceType === 'organic' && 'Búsqueda Orgánica'}
+                {!lead.leadSourceType && 'Inbound Desconocido'}
               </span>
             </div>
 

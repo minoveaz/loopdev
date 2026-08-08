@@ -26,6 +26,7 @@ import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext } from '@loopdev/contracts';
 import { QuantOpsProvider, useQuantOps } from './context';
 import { BotInspectorIndustrial } from './components/BotInspector';
+import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -41,9 +42,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    if (pathname.split('/').length > 2) {
-      queueMicrotask(() => setNavMode('rail'));
-    }
+    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/quant-ops/bot-fleet', '/quant-ops/strategies', '/quant-ops/terminal', '/quant-ops/history', '/quant-ops/risk-control', '/quant-ops/exchanges'] })));
   }, [pathname]);
 
   const currentSuite = QUANT_OPS_SCHEMA.suite;

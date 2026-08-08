@@ -32,6 +32,7 @@ import { AiBudgetGenerator } from './components/AiBudgetGenerator';
 import { MasterDetailModal } from './components/MasterDetailModal';
 import { daysSinceContact, isLeadStale } from './utils/leadActivity';
 import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
+import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 const SALES_CRM_SCHEMA: NavigationSchema = {
   version: '1.0',
@@ -154,11 +155,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    if (pathname.split('/').length > 2) {
-      queueMicrotask(() => setNavMode('rail'));
-    } else {
-      queueMicrotask(() => setNavMode('expanded'));
-    }
+    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/sales-crm/pipeline', '/sales-crm/customers', '/sales-crm/ai-insights'] })));
   }, [pathname]);
 
   const currentSuite: SuiteIdentity = SALES_CRM_SCHEMA.suite;

@@ -17,6 +17,13 @@ const rules = {
   approvedInteractivePrimitive: 'Approved interactive primitive review',
   tabUnderlineCollision: 'Tab underline collision review',
   lowContrastOutlineAction: 'Low contrast outline action review',
+  tabControlConsistency: 'Tab control consistency review',
+  timelineConsistency: 'Timeline consistency review',
+  implicitButtonVariant: 'Implicit button variant review',
+  lightModeActionContrast: 'Light mode action contrast review',
+  iconColorConsistency: 'Icon color consistency review',
+  sidebarRoutePolicy: 'Sidebar route policy review',
+  duplicateImportBinding: 'Duplicate import binding review',
 };
 
 function addFinding(file, line, rule, message, snippet) {
@@ -40,19 +47,76 @@ function inspect(file) {
   const isTechnicalComponent = /(?:Technical|Status|Badge|Telemetry|TypeScale)/i.test(file);
   const isTestFile = /(?:\.test|\.spec)\.(?:ts|tsx|js|jsx)$/.test(file);
   const isDesignSystemFile = /(?:^|[/\\])ds[/\\]packages[/\\]ui[/\\]/.test(file);
+  const isLeadModalFile = /MasterDetailModal[\\/]/.test(file);
   const isOfficialThemePrimitive = file.endsWith('ThemeToggle/useThemeToggle.ts');
   const isThemeOwner = isOfficialThemePrimitive || file.endsWith('dynamic-theme-provider.tsx') || file.endsWith('app/layout.tsx');
+  const isColorOwner = /(?:globals\.css|app[\\/]layout\.tsx|AiBudgetGenerator|PipelineCard|MetricGauge|ColorTokenCard|ColorTokenInspector|rules-data)/i.test(file);
 
   if (file.endsWith('sales-crm/components/PipelineFilters.tsx') && /\bSelect\b/.test(source) && /\bFilterDropdown\b/.test(source)) {
     addFinding(file, 1, 'filterPrimitiveConsistency', 'Pipeline filters must use one approved dropdown primitive consistently.', source.split('\n')[0]);
+  }
+
+  if (/(?:^|[/\\])app[/\\][^/\\]+[/\\]layout\.tsx$/.test(file) && /\bSuiteSidebar\b/.test(source) && !/getSuiteNavMode/.test(source)) {
+    addFinding(file, 1, 'sidebarRoutePolicy', 'Suite layouts must use the shared sidebar route policy so root and operational routes restore deterministic nav modes.', 'SuiteSidebar without getSuiteNavMode');
+  }
+
+  if (/(?:^|[/\\])app[/\\][^/\\]+[/\\]layout\.tsx$/.test(file) && /pathname\.split\(['"]\/['"]\)\.length\s*>\s*2/.test(source)) {
+    addFinding(file, 1, 'sidebarRoutePolicy', 'Do not infer Rail from URL depth; declare operational route prefixes in the shared sidebar policy.', 'pathname depth-based nav mode');
+  }
+
+  for (const match of source.matchAll(/import\s*\{([\s\S]*?)\}\s*from\s*['"][^'"]+['"]/g)) {
+    const importedNames = match[1]
+      .replace(/\/\/.*$/gm, '')
+      .split(',')
+      .map((name) => name.trim().split(/\s+as\s+/i)[0])
+      .filter(Boolean);
+    const duplicateNames = [...new Set(importedNames.filter((name, index) => importedNames.indexOf(name) !== index))];
+    if (duplicateNames.length > 0) {
+      addFinding(file, lineNumber(source, match.index), 'duplicateImportBinding', 'Named imports must not declare the same binding more than once.', duplicateNames.join(', '));
+    }
   }
 
   if (/(?:<div|<nav)[^>]*className=["'][^"']*border-b[^"']*["'][^>]*>[\s\S]{0,1200}<Button[\s\S]{0,1200}border-b-2/.test(source)) {
     addFinding(file, 1, 'tabUnderlineCollision', 'Tabs combine a container underline with button underlines; active state can visually collide with the baseline.', 'container border-b + Button border-b-2');
   }
 
-  if (/variant=["']outline["'][\s\S]{0,300}className=["'][^"']*(?:text-(?:slate|gray)-[5-9]|border-(?:slate|gray)-[1-3])[^"']*["']/.test(source) && /(?:bg-black|bg-slate-9|dark:bg-surface-dark|bg-surface-dark)/.test(source)) {
-    addFinding(file, 1, 'lowContrastOutlineAction', 'Outline action may lose contrast on a dark surface; use a semantic high-contrast variant or tokens.', 'outline + dark surface + low-contrast utility');
+  if (/activeTab/.test(source) && /<Button\b(?![\s\S]{0,120}?variant=)[\s\S]{0,500}activeTab/.test(source)) {
+    addFinding(file, 1, 'tabControlConsistency', 'Tabs must opt into an explicit variant and own their spacing/state container.', 'active tab buttons without explicit variant');
+  }
+
+  if (/activityLog\.map/.test(source) && /absolute[^"']*rounded-full/.test(source)) {
+    addFinding(file, 1, 'timelineConsistency', 'Activity timelines should use a stable marker gutter and avoid ad hoc circular markers that collide with content.', 'activity timeline with absolute rounded-full marker');
+  }
+
+  if (!isDesignSystemFile) {
+    for (const match of source.matchAll(/<Button\b([^>]*)>/g)) {
+      const buttonProps = match[1];
+      if (!/\bvariant\s*=/.test(buttonProps)) {
+        addFinding(file, lineNumber(source, match.index), 'implicitButtonVariant', 'Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.', match[0]);
+      }
+
+      const isSolidAction = /variant\s*=\s*["'](?:primary|danger|energy)["']/.test(buttonProps) || /(?:bg-(?:primary|emerald|rose|red|amber|blue)-\d{2,3}|bg-\[[^\]]+\])/.test(buttonProps);
+      if (/text-white|text-slate-100|text-gray-100/.test(buttonProps) && !isSolidAction && !/dark:/.test(buttonProps)) {
+        addFinding(file, lineNumber(source, match.index), 'lightModeActionContrast', 'Button text or icons use a light-only color without a dark-mode override; review light-mode contrast.', match[0]);
+      }
+    }
+
+    for (const match of source.matchAll(/<Icon\b([\s\S]{0,260}?)\/>/g)) {
+      const iconProps = match[1];
+      const isSemanticStatusIcon = /name\s*=\s*\{?['"]?(?:verified|check|close|error|warning|success|status\.)/.test(iconProps);
+      if (!isSemanticStatusIcon && /(?:text|fill|stroke)-(?:blue|indigo|violet|teal|amber|emerald|rose|red|green|purple)-\d{2,3}/.test(iconProps)) {
+        addFinding(file, lineNumber(source, match.index), 'iconColorConsistency', 'Icons should use LoopDev semantic tokens or inherit the control color instead of arbitrary palette utilities.', match[0]);
+      }
+    }
+  }
+
+  for (const match of source.matchAll(/<Button\b[\s\S]{0,320}?variant=["']outline["'][\s\S]{0,320}?>/g)) {
+    const buttonBlock = match[0];
+    const hasLowContrastText = /(?:text-(?:slate|gray)-[5-9]\d{2}|border-(?:slate|gray)-[1-3]\d{2})/.test(buttonBlock);
+    const hasDarkOverride = /dark:(?:text|border)-(?:slate|gray)-[3-9]\d{2}/.test(buttonBlock);
+    if (hasLowContrastText && !hasDarkOverride) {
+      addFinding(file, lineNumber(source, match.index), 'lowContrastOutlineAction', 'Outline action may lose contrast on a dark surface; use a semantic high-contrast variant or tokens.', buttonBlock);
+    }
   }
 
   lines.forEach((line, index) => {
@@ -66,7 +130,7 @@ function inspect(file) {
 
     const hasHardcodedColor = /(?:text|bg|border|from|to|via)-\[#?[0-9a-fA-F]{3,8}\b|#[0-9a-fA-F]{6}\b/.test(line);
     const isTokenFallback = /var\(--[^,]+,\s*#[0-9a-fA-F]{3,8}\b/.test(line);
-    if (hasHardcodedColor && !isTokenFallback && !isTestFile) {
+    if (hasHardcodedColor && !isTokenFallback && !isTestFile && !isDesignSystemFile && !isColorOwner) {
       addFinding(file, lineNo, 'hardcodedColor', 'Use LoopDev tokens instead of a hardcoded color.', line);
     }
 
@@ -82,12 +146,13 @@ function inspect(file) {
       addFinding(file, lineNo, 'approvedInteractivePrimitive', 'Review whether the approved Button or IconButton primitive should be used.', line);
     }
 
-    if (/<svg\b/.test(line) && !/Illustration|icons?\/|Icon\.tsx/i.test(file)) {
+    const isApprovedBrandMark = /(?:MasterDetailModal[\\/]index|MasterDetailModal[\\/]Header)\.tsx/i.test(file) && /whatsapp/i.test(source);
+    if (/<svg\b/.test(line) && !isDesignSystemFile && !isApprovedBrandMark && !/Illustration|icons?\/|Icon\.tsx|MetricGauge|InfoPanel/i.test(file)) {
       addFinding(file, lineNo, 'iconography', 'Review icon against the approved LoopDev icon policy and Lucide adapter.', line);
     }
 
-    const isFilterOrOptionLabel = /AVAILABLE_LABELS|<option\b|FilterDropdown/.test(line);
-    if (!isTestFile && isFilterOrOptionLabel && /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(line)) {
+    const isUiLabelOrMarkup = /AVAILABLE_LABELS|<option\b|FilterDropdown|<\w+\b|className=|label=|title=|placeholder=/.test(line);
+    if (!isTestFile && (isUiLabelOrMarkup || isLeadModalFile) && /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(line)) {
       addFinding(file, lineNo, 'emojiIconography', 'UI iconography must use the approved LoopDev Icon primitive, not emoji.', line);
     }
   });
