@@ -928,48 +928,79 @@ export type Database = {
           assets: Json | null
           automatic_platforms: string[] | null
           automatic_platforms_configured: boolean | null
+          brand_id: string
           content_types: string[] | null
           copies: Json | null
           created_at: string | null
           id: string
           name: string
           objective: string | null
+          organization_id: string
           platforms: string[] | null
           start_date: string | null
           status: string | null
           updated_at: string | null
+          workspace_id: string
         }
         Insert: {
           assets?: Json | null
           automatic_platforms?: string[] | null
           automatic_platforms_configured?: boolean | null
+          brand_id: string
           content_types?: string[] | null
           copies?: Json | null
           created_at?: string | null
           id: string
           name: string
           objective?: string | null
+          organization_id: string
           platforms?: string[] | null
           start_date?: string | null
           status?: string | null
           updated_at?: string | null
+          workspace_id: string
         }
         Update: {
           assets?: Json | null
           automatic_platforms?: string[] | null
           automatic_platforms_configured?: boolean | null
+          brand_id?: string
           content_types?: string[] | null
           copies?: Json | null
           created_at?: string | null
           id?: string
           name?: string
           objective?: string | null
+          organization_id?: string
           platforms?: string[] | null
           start_date?: string | null
           status?: string | null
           updated_at?: string | null
+          workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "marketing_campaigns_brand_organization_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_campaigns_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_campaigns_workspace_organization_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
       }
       marketing_link_clicks: {
         Row: {
@@ -1098,6 +1129,7 @@ export type Database = {
       }
       oauth_connections: {
         Row: {
+          brand_id: string
           created_at: string
           created_by: string
           credential_ref: string
@@ -1105,11 +1137,14 @@ export type Database = {
           expires_at: string | null
           external_account_id: string
           id: string
+          organization_id: string
           provider: string
           scopes: string[]
           updated_at: string
+          workspace_id: string
         }
         Insert: {
+          brand_id: string
           created_at?: string
           created_by: string
           credential_ref: string
@@ -1117,11 +1152,14 @@ export type Database = {
           expires_at?: string | null
           external_account_id: string
           id?: string
+          organization_id: string
           provider: string
           scopes?: string[]
           updated_at?: string
+          workspace_id: string
         }
         Update: {
+          brand_id?: string
           created_at?: string
           created_by?: string
           credential_ref?: string
@@ -1129,35 +1167,90 @@ export type Database = {
           expires_at?: string | null
           external_account_id?: string
           id?: string
+          organization_id?: string
           provider?: string
           scopes?: string[]
           updated_at?: string
+          workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "oauth_connections_brand_organization_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "oauth_connections_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_connections_workspace_organization_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
       }
       oauth_states: {
         Row: {
+          brand_id: string
           created_at: string
           expires_at: string
+          organization_id: string
           provider: string
           state_hash: string
           user_id: string
+          workspace_id: string
         }
         Insert: {
+          brand_id: string
           created_at?: string
           expires_at?: string
+          organization_id: string
           provider: string
           state_hash: string
           user_id: string
+          workspace_id: string
         }
         Update: {
+          brand_id?: string
           created_at?: string
           expires_at?: string
+          organization_id?: string
           provider?: string
           state_hash?: string
           user_id?: string
+          workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "oauth_states_brand_organization_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "oauth_states_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oauth_states_workspace_organization_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
       }
       organization_memberships: {
         Row: {
@@ -2109,24 +2202,58 @@ export type Database = {
       }
       social_profiles: {
         Row: {
+          brand_id: string
+          id: string
+          organization_id: string
           platform: string
           updated_at: string | null
           url: string
           username: string | null
+          workspace_id: string
         }
         Insert: {
+          brand_id: string
+          id?: string
+          organization_id: string
           platform: string
           updated_at?: string | null
           url: string
           username?: string | null
+          workspace_id: string
         }
         Update: {
+          brand_id?: string
+          id?: string
+          organization_id?: string
           platform?: string
           updated_at?: string | null
           url?: string
           username?: string | null
+          workspace_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "social_profiles_brand_organization_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "social_profiles_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "social_profiles_workspace_organization_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
       }
       strategy_backtest_results: {
         Row: {
