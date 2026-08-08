@@ -1,14 +1,14 @@
 # Track: CRM multi-tenant y comunicaciones de Estar Protegidos
 
 **Fecha:** 2026-08-08  
-**Estado:** Planificación — Fase 6A  
+**Estado:** Planificación aprobada — CRM Core + Insurance Pack  
 **Prioridad:** Alta para entorno Dev  
 **Organización objetivo:** Estar Protegidos  
 **Marcas iniciales:** Vitablue y Protege tu Salud
 
 ## Objetivo
 
-Convertir Sales CRM en un módulo persistente, multi-tenant y operativo para Estar Protegidos, preparado para recibir leads desde webs, campañas y WhatsApp sin mezclar organizaciones, marcas, workspaces ni conversaciones.
+Convertir Sales CRM en un módulo persistente, multi-tenant y operativo para pequeñas y medianas empresas, empezando por Estar Protegidos. El primer producto combinará un CRM Core agnóstico al sector con un `Insurance Pack` desacoplado, preparado para recibir leads desde webs, campañas, WhatsApp y redes sociales sin mezclar organizaciones, marcas, workspaces ni conversaciones.
 
 La interfaz actual sirve como referencia funcional, pero los datos demo y el contexto local no serán fuente de verdad. La fuente autoritativa será Supabase mediante servicios server-side, contratos compartidos y RLS.
 
@@ -24,6 +24,40 @@ La interfaz actual sirve como referencia funcional, pero los datos demo y el con
 - La POC de WhatsApp será inbound-first; no se activarán envíos masivos ni automatizaciones autónomas.
 
 ## Módulos funcionales del CRM
+
+## Alcance de producto aprobado
+
+### CRM Core — prioritario y agnóstico
+
+El núcleo no conocerá pólizas, aseguradoras ni conceptos exclusivos de seguros. Sus entidades serán reutilizables por cualquier negocio:
+
+- Contactos y empresas.
+- Leads y fuentes de captación.
+- Conversaciones omnicanal.
+- Pipeline y oportunidades.
+- Actividades, tareas y timeline.
+- Equipos, asignación y permisos.
+- Campañas, UTM y atribución básica.
+- Auditoría y preferencias de comunicación.
+
+### Insurance Pack — extensión vertical inicial
+
+El paquete de seguros se construirá encima del CRM Core y tendrá sus propios contratos, tablas y permisos:
+
+- Productos y planes.
+- Aseguradoras.
+- Coberturas y exclusiones.
+- Reglas de elegibilidad.
+- Cotizaciones versionadas.
+- Relación entre lead, producto y cotización.
+- Estado de cotización y siguiente acción.
+- Onboarding posterior, inicialmente como fase separada.
+
+El `Insurance Pack` no debe introducir campos de seguros en `crm_contacts`, `crm_leads` o `crm_conversations`. Se relacionará mediante `lead_id`, `contact_id`, `opportunity_id` y referencias de contexto.
+
+### Canales de adquisición y conversación
+
+WhatsApp, Instagram, Facebook Messenger y email se implementarán como adaptadores de comunicación. La bandeja trabajará con conversaciones y mensajes genéricos; cada proveedor aportará únicamente normalización, webhooks, credenciales y estados de entrega.
 
 ### 1. Suite Dashboard
 
@@ -174,6 +208,14 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 - [ ] Implementar asignación, timeline, notas y tareas.
 - [ ] Tests de contratos, mappers, servicios y aislamiento.
 
+### Fase 6A.1 — CRM Core de producto
+
+- [ ] Consolidar entidades agnósticas y evitar dependencias del dominio de seguros.
+- [ ] Implementar bandeja de conversaciones genérica.
+- [ ] Preparar adaptador de WhatsApp inbound.
+- [ ] Preparar contratos de canales sociales sin activar proveedores incompletos.
+- [ ] Integrar campañas y atribución básica.
+
 ### Fase 6B — Captación y pipeline operativo
 
 - [ ] Configuración de etapas por workspace.
@@ -182,6 +224,15 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 - [ ] Auditoría de cambios de etapa y asignación.
 - [ ] Búsqueda e índices.
 - [ ] Playwright para crear lead, mover etapa y completar tarea.
+
+### Fase 6C — Insurance Pack
+
+- [ ] Crear contratos y migraciones de productos, aseguradoras y coberturas.
+- [ ] Crear reglas de elegibilidad como servicio testeable.
+- [ ] Crear cotizaciones versionadas relacionadas con oportunidades.
+- [ ] Conectar el resumen de cotización al detalle del lead.
+- [ ] Añadir permisos específicos del paquete.
+- [ ] Preparar el handoff hacia Operations sin mezclar datos con el CRM Core.
 
 ### Fase 8A — WhatsApp inbound POC
 
@@ -209,6 +260,8 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 - Integración completa con todos los proveedores sociales.
 - Operaciones de pólizas, renovaciones y emisión.
 - Datos clínicos o sanitarios.
+
+La emisión, renovaciones y operaciones completas pertenecen a una fase posterior. El primer `Insurance Pack` se limita a captación, elegibilidad, cotización y seguimiento comercial.
 
 ## Criterios de aceptación
 
