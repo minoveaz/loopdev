@@ -1,9 +1,8 @@
 import { CommandBarTrigger, ContextPath, Divider, SuiteSwitcher } from '@loopdev/ui';
-import type { SuiteIdentity } from '@loopdev/contracts';
 
 interface SuiteHeaderLeftProps {
-  currentSuite: SuiteIdentity;
-  availableSuites: SuiteIdentity[];
+  currentSuite: any;
+  availableSuites: any;
   label: string;
   href: string;
   onOpenChange: (open: boolean) => void;

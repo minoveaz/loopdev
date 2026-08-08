@@ -4,10 +4,6 @@
 > **Propósito:** Instrucciones detalladas para la replicación del sistema de chasis dual (AppShell + ModuleWorkspace).
 > **Audiencia:** Desarrolladores e Inteligencia Artificial de implementación.
 
-> **Nota normativa:** La fuente de verdad es `docs/02-frontend/SHELL_ARCHITECTURE.md`. Este blueprint
-> es una guía de diseño y ejemplos; no obliga a crear un `layout.tsx` por cada módulo. El
-> `ModuleWorkspace` puede compartirse desde el layout de suite cuando la composición sea común.
-
 ---
 
 ## 1. Visión General: Arquitectura de Chasis Dual
@@ -120,8 +116,7 @@ Para que los paneles sean reactivos, la IA debe implementar este flujo de comuni
 
 ## 8. Arquitectura de Archivos Next.js (El Mapa)
 
-Cuando un módulo necesita una composición propia, puede seguir este esquema de anidamiento de
-`layout.tsx`. Es una opción de composición, no un requisito para todas las suites:
+La replicación debe seguir este esquema de anidamiento de `layout.tsx` para garantizar que el chasis sea inmutable:
 
 ```text
 /app
@@ -132,9 +127,6 @@ Cuando un módulo necesita una composición propia, puede seguir este esquema de
   │           ├── layout.tsx  <-- Aquí vive el ModuleWorkspace (L2)
   │           └── page.tsx    <-- El Canvas del módulo
 ```
-
-Si los módulos comparten el mismo chrome operativo, el layout de la suite puede montar directamente
-un único `ModuleWorkspace` alrededor de sus páginas hijas.
 
 ## 9. Reglas de Oro para la IA de Implementación
 

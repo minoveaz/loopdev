@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { TypefaceCardProps } from './types';
-import { Heading, LpdText } from '@loopdev/ui';
+import { LpdText } from '@loopdev/ui';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -24,7 +24,7 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
     'relative overflow-hidden rounded-3xl border transition-all duration-300 cursor-pointer group',
     isBrand 
       ? 'bg-background-surface border-border-technical/50 hover:border-primary/30' 
-      : 'bg-lpd-bg-dark border-border-technical hover:border-yellow-500/30',
+      : 'bg-[#0F1115] border-border-technical hover:border-yellow-500/30', // Technical uses a specific dark terminal shade
     isSelected && (isBrand ? 'border-primary ring-1 ring-primary/20' : 'border-yellow-500 ring-1 ring-yellow-500/20')
   );
 
@@ -67,9 +67,7 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
             )}
           </div>
           
-          <Heading
-            as="h3"
-            size="2xl"
+          <h3 
             className={clsx(
               "text-5xl md:text-6xl font-bold tracking-tight",
               isBrand ? "text-text-main" : "text-white font-mono"
@@ -77,7 +75,7 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
             style={{ fontFamily: font.family }}
           >
             {font.family}
-          </Heading>
+          </h3>
           
           <LpdText size="sm" className={clsx(
             "max-w-[240px] leading-relaxed",

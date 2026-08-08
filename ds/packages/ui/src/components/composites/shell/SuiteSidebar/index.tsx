@@ -46,6 +46,9 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
     activeModuleId
   } = useSuiteSidebar(props);
 
+  // Extraer datos del perfil para el footer oficial
+  const user = (profileSlot as any)?.props?.user || { email: 'User' };
+
   return (
     <TechnicalSurface
       variant="canvas"
@@ -101,6 +104,8 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
         {/* E. Sidebar Footer (Fijo - Consola de Control) */}
         <SidebarFooter
           isRail={isRail}
+          userName={user.email}
+          userRole="Tenant_Admin"
           onToggleRail={onToggleNavMode}
           onSettingsClick={() => onAction?.('openSettings')}
         />

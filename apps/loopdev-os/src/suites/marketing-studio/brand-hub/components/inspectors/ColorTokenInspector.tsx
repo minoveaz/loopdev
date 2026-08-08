@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Heading, LpdText, cn } from '@loopdev/ui';
+import { LpdText, cn } from '@loopdev/ui';
 import { ColorToken } from '../../types';
 import { InspectionDoDont } from './shared/InspectionDoDont';
 import { getContrastRatio, getWCAGStatus } from '@/utils/color';
@@ -76,7 +76,7 @@ export const ColorTokenInspector: React.FC<ColorTokenInspectorProps> = ({
         </div>
 
         <div className="flex flex-col gap-3">
-          <Heading as="h2" size="sm" weight="bold" className="text-text-main uppercase">Simulated Usage</Heading>
+          <LpdText size="xs" weight="bold" className="text-text-main uppercase">Simulated Usage</LpdText>
           <div className="p-4 rounded-xl border border-border-technical flex flex-col gap-4" style={{ backgroundColor: baseline }}>
              <div style={{ color: resolvedHex }}>
                 <LpdText size="lg" weight="bold">Headline Preview</LpdText>

@@ -4,11 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
-  BlueprintBackground,
-  Button,
-  LayoutProvider,
-  ModuleHeader,
-  ModuleWorkspace,
   SuiteSidebar,
   ThemeToggle,
   SystemStatus,
@@ -21,11 +16,9 @@ import {
   UserMenu,
   NotificationCenter,
   Divider,
-  TenantProvider,
-  ToastViewport,
 } from '@loopdev/ui';
+import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { useAuth } from '@/hooks/useAuth';
-import { useOrganization } from '@/hooks/useOrganization';
 import { NotificationItem } from '@/hooks/useNotifications';
 import {
   AccessMap,
@@ -38,8 +31,6 @@ import { SalesCrmProvider, useSalesCrm } from './context';
 import { AiBudgetGenerator } from './components/AiBudgetGenerator';
 import { MasterDetailModal } from './components/MasterDetailModal';
 import { daysSinceContact, isLeadStale } from './utils/leadActivity';
-import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
-import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 const SALES_CRM_SCHEMA: NavigationSchema = {
   version: '1.0',
@@ -47,7 +38,7 @@ const SALES_CRM_SCHEMA: NavigationSchema = {
     suiteId: 'salesCRM',
     suiteName: 'Sales & CRM',
     suiteIcon: 'Users',
-    accentColor: 'var(--lpd-color-brand-primary)',
+    accentColor: '#3B82F6', // Royal Blue
     surfaceVariant: 'canvas' as const,
     route: { routeId: '/sales-crm' },
   },
@@ -116,14 +107,13 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
-  const { activeOrganization } = useOrganization();
   const { leads, openLeadInspector, isInspectorOpen, closeInspector, selectedLead } = useSalesCrm();
 
   const [syncedNotifications, setSyncedNotifications] = useState<NotificationItem[]>([]);
 
   useEffect(() => {
     // Generate stale lead alerts notifications in real-time
-    const staleAlerts = leads.filter((lead) => isLeadStale(lead)).map((lead) => {
+    const staleAlerts = leads.filter(isLeadStale).map((lead) => {
       const diffDays = daysSinceContact(lead.lastContactDate);
       return {
         id: `stale-${lead.id}`,
@@ -162,8 +152,39 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
+  // --- FORCE PREMIUM DARK MODE & BLUE ACCENTS ---
   useEffect(() => {
-    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/sales-crm/pipeline', '/sales-crm/customers', '/sales-crm/ai-insights'] })));
+    const root = document.documentElement;
+    const hadLight = root.classList.contains('light');
+    root.classList.remove('light');
+    root.classList.add('dark');
+
+    root.style.setProperty('--lpd-color-brand-primary', '#3B82F6');
+    root.style.setProperty('--lpd-color-brand-primary-rgb', '59 130 246');
+    root.style.setProperty('--lpd-color-bg-primary-subtle', '#3B82F626');
+    root.style.setProperty('--lpd-color-status-info', '#3B82F6');
+
+    return () => {
+      root.classList.remove('dark');
+      if (hadLight) {
+        root.classList.add('light');
+      } else {
+        root.classList.add('dark');
+      }
+
+      root.style.setProperty('--lpd-color-brand-primary', '#135bec');
+      root.style.setProperty('--lpd-color-brand-primary-rgb', '19 91 236');
+      root.style.setProperty('--lpd-color-bg-primary-subtle', '#135bec26');
+      root.style.setProperty('--lpd-color-status-info', '#135bec');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (pathname.split('/').length > 2) {
+      queueMicrotask(() => setNavMode('rail'));
+    } else {
+      queueMicrotask(() => setNavMode('expanded'));
+    }
   }, [pathname]);
 
   const currentSuite: SuiteIdentity = SALES_CRM_SCHEMA.suite;
@@ -184,7 +205,6 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <SuitePermissionGuard permission="crm.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -230,7 +250,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
               <Divider orientation="vertical" thickness="technical" className="h-4" />
               <ContextPath
                 segments={[
-                  { id: 'workspace', label: activeOrganization?.name ?? 'Workspace', isActive: true },
+                  { id: 'suite', label: 'Sales & CRM', href: '/sales-crm', isActive: true },
                 ]}
               />
             </div>
@@ -238,6 +258,9 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
           centerSlot={<CommandBarTrigger onOpen={() => {}} />}
           rightSlot={
             <div className="flex items-center gap-4">
+              <SystemStatus state="operational" id={user?.id} label="CRM" />
+              <Divider orientation="vertical" thickness="technical" className="h-4" />
+
               <NotificationCenter
                 notifications={syncedNotifications}
                 unreadCount={syncedNotifications.filter((n) => !n.read).length}
@@ -262,28 +285,18 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
         />
       }
     >
-      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
-      <TenantProvider tenant="loopdev">
-        <LayoutProvider>
-          <ToastViewport activeTenantId="loopdev" />
-          <ModuleWorkspace
-            moduleId="sales-crm"
-            config={{ inspectorWidth: '0px' }}
-            overlay={{ force: false, closeOnBackdrop: false }}
-            headerSlot={
-              <ModuleHeader
-                segments={[{ id: 'suite', label: 'Sales & CRM', href: '/sales-crm', isActive: true }]}
-              />
-            }
-          >
-            <AiBudgetGenerator />
-            <MasterDetailModal isOpen={isInspectorOpen} lead={selectedLead} onClose={closeInspector} />
-            {children}
-          </ModuleWorkspace>
-        </LayoutProvider>
-      </TenantProvider>
+      <SuiteContentFrame
+        moduleId="sales-crm"
+        tenant="loopdev"
+        activeTenantId="loopdev"
+        inspectorWidth="0px"
+        forceOverlay={false}
+      >
+        <AiBudgetGenerator />
+        <MasterDetailModal isOpen={isInspectorOpen} lead={selectedLead} onClose={closeInspector} />
+        {children}
+      </SuiteContentFrame>
     </AppShell>
-    </SuitePermissionGuard>
   );
 }
 

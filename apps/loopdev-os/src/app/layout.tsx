@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import QueryProvider from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
-import { OrganizationProvider } from "@/providers/OrganizationProvider";
-import { BrandProvider } from "@/providers/BrandProvider";
-import { WorkspaceProvider } from "@/providers/WorkspaceProvider";
-import { PermissionProvider } from "@/providers/PermissionProvider";
-import { OrganizationRouteGuard } from "@/components/layout/OrganizationRouteGuard";
 import { DynamicThemeProvider } from "@loopdev/ui";
 
 // Importamos los estilos globales de nuestro Design System
@@ -28,14 +23,9 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
-      <body className="font-sans antialiased">
+      <body className="antialiased font-sans">
         <QueryProvider>
           <AuthProvider>
-            <OrganizationProvider>
-            <PermissionProvider>
-            <BrandProvider>
-            <WorkspaceProvider>
-            <OrganizationRouteGuard>
                       <DynamicThemeProvider config={{
                         fontFamily: 'var(--lpd-font-sans)',
                         colors: {
@@ -44,11 +34,6 @@ export default function RootLayout({
                         }
                       }}>              {children}
             </DynamicThemeProvider>
-            </OrganizationRouteGuard>
-            </WorkspaceProvider>
-            </BrandProvider>
-            </PermissionProvider>
-            </OrganizationProvider>
           </AuthProvider>
         </QueryProvider>
       </body>

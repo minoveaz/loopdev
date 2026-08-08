@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { RuleDomain } from '@loopdev/contracts';
-import { Heading, LpdText, Button } from '@loopdev/ui';
+import { LpdText } from '@loopdev/ui';
 import { clsx } from 'clsx';
 
 interface DomainStats {
@@ -39,18 +39,17 @@ export const RuleDomainRail: React.FC<RuleDomainRailProps> = ({
 }) => {
   return (
     <div className="w-64 flex flex-col gap-2 border-r border-border-technical/50 pr-6">
-      <Heading as="h2" size="sm" weight="bold" className="text-text-muted uppercase tracking-widest mb-4 px-4">
+      <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest mb-4 px-4">
         Rule Domains
-      </Heading>
+      </LpdText>
 
       {DOMAINS.map((domain) => {
         const isActive = activeDomain === domain.id;
         const domainStats = stats[domain.id];
 
         return (
-          <Button
+          <button
             key={domain.id}
-            variant="ghost"
             onClick={() => onDomainChange(domain.id)}
             className={clsx(
               "group flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 text-left",
@@ -85,13 +84,13 @@ export const RuleDomainRail: React.FC<RuleDomainRailProps> = ({
                 {domainStats.count}
               </span>
             </div>
-          </Button>
+          </button>
         );
       })}
 
       <div className="mt-8 pt-8 border-t border-border-technical/30 px-4">
         <div className="flex flex-col gap-4 p-4 rounded-2xl bg-background-subtle/50 border border-border-technical border-dashed">
-          <Heading as="h3" size="sm" weight="bold" className="text-text-muted uppercase">Health Summary</Heading>
+          <LpdText size="nano" weight="bold" className="text-text-muted uppercase">Health Summary</LpdText>
           <div className="flex items-center justify-between">
             <LpdText size="xs" className="text-text-muted">Blocking</LpdText>
             <span className="text-xs font-bold text-red-500">{stats.all.blockers}</span>

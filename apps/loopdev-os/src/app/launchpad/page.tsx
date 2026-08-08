@@ -4,41 +4,13 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { Heading, LpdText, Icon, TechnicalCanvas, BrandLogo, UIKitIllustration, EngineeringSeal, SuiteCard, ThemeToggle, SystemStatus, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
 import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
-import { OrganizationSwitcher } from '@/components/layout/OrganizationSwitcher';
-import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
-import { useWorkspace } from '@/hooks/useWorkspace';
-import { useOrganization } from '@/hooks/useOrganization';
-import { resolveAccessState } from '@/core/access/accessState';
-import { AccessStatePanel } from '@/components/layout/AccessStatePanel';
 
 export default function LaunchpadPage() {
-  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
-  const { organizations, isLoading: isOrganizationLoading } = useOrganization();
-  const { hasPermission, isLoading: isLoadingPermissions } = useOrganizationPermissions([
-    'marketing.read',
-    'crm.read',
-    'health.read',
-    'quant.read',
-    'finance.read',
-  ]);
-  const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
-  const isLocked = (permission: string, suite: 'marketing' | 'crm' | 'health' | 'quant') =>
-    !isPlatformAdministrator && (isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite));
+  const { user } = useAuth();
 
-  const accessState = resolveAccessState({
-    isAuthLoading,
-    hasSession: Boolean(user),
-    isPlatformAdministrator,
-    membershipStatuses: memberships.map((membership) => membership.status),
-  });
-
-  if (accessState !== 'loading' && accessState !== 'authorized') {
-    return <AccessStatePanel state={accessState} />;
-  }
-
-  if (accessState === 'authorized' && !isPlatformAdministrator && !isOrganizationLoading && organizations.length === 0) {
-    return <AccessStatePanel state="no-organization-access" />;
-  }
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+  };
 
   return (
     <div className="min-h-screen bg-shell-canvas transition-colors duration-300 flex flex-col font-sans selection:bg-primary/30 relative overflow-hidden">
@@ -65,7 +37,6 @@ export default function LaunchpadPage() {
 
           {/* System Status & Theme Toggle */}
           <div className="flex items-center gap-4">
-            <OrganizationSwitcher />
             <SystemStatus state="operational" id={user?.id} label="ID" />
             
             <ThemeToggle variant="technical" size="md" />
@@ -78,7 +49,7 @@ export default function LaunchpadPage() {
         <div className="w-full max-w-6xl">
           <div className="mb-16">
             <LpdText size="nano" weight="black" className="text-primary tracking-[0.5em] uppercase mb-4">Core_Suites_Available</LpdText>
-            <Heading size="3xl" weight="bold" className="text-text-main tracking-tight max-w-2xl">
+            <Heading size="3xl" weight="bold" className="dark:text-white text-slate-900 tracking-tight max-w-2xl">
               Initialize your <span className="text-primary font-black">Work Context</span> to start building.
             </Heading>
           </div>
@@ -90,7 +61,6 @@ export default function LaunchpadPage() {
               illustration={<UIKitIllustration />}
               href="/marketing-studio"
               version="1.0.4"
-              isLocked={isLocked('marketing.read', 'marketing')}
             />
             <SuiteCard 
               title="Sales & CRM"
@@ -98,7 +68,6 @@ export default function LaunchpadPage() {
               illustration={<Icon name="groups" size="md" />}
               href="/sales-crm"
               version="0.8.2"
-              isLocked={isLocked('crm.read', 'crm')}
             />
             <SuiteCard 
               title="Financial Ops"
@@ -114,7 +83,6 @@ export default function LaunchpadPage() {
               illustration={<Icon name="trending_up" size="md" />}
               href="/quant-ops"
               version="0.0.1"
-              isLocked={isLocked('quant.read', 'quant')}
             />
             <SuiteCard 
               title="Health OS"
@@ -122,7 +90,6 @@ export default function LaunchpadPage() {
               illustration={<Icon name="medical_services" size="md" />}
               href="/health-os"
               version="0.1.0"
-              isLocked={isLocked('health.read', 'health')}
             />
           </div>
         </div>

@@ -49,7 +49,7 @@ export const IndustrialBreadcrumbs: React.FC<IndustrialBreadcrumbsProps> = ({
           </div>
           
           {idx < segments.length - 1 && (
-            <span className="relative z-10 text-[10px] font-sans text-primary opacity-40 px-0.5 select-none">
+            <span className="relative z-10 text-[10px] font-mono text-primary opacity-40 px-0.5 select-none">
               /
             </span>
           )}

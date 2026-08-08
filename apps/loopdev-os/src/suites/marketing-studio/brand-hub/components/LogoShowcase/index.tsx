@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { LogoShowcaseProps } from './types';
-import { Heading, LpdText, IconButton } from '@loopdev/ui';
+import { LpdText } from '@loopdev/ui';
 import { clsx } from 'clsx';
 
 /**
@@ -24,9 +24,9 @@ export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
         <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">
           01
         </span>
-        <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">
+        <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">
           {title}
-        </Heading>
+        </LpdText>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -36,7 +36,7 @@ export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
           
           {/* Grid Background */}
           {showGrid && (
-            <div className="absolute inset-0 opacity-30 pointer-events-none bg-background-subtle/30 bg-[size:40px_40px]"></div>
+            <div className="absolute inset-0 opacity-30 pointer-events-none bg-[linear-gradient(rgba(120,120,120,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
           )}
           
           {/* Glow Effect */}
@@ -68,7 +68,9 @@ export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
               </LpdText>
             </div>
             
-            <IconButton icon="download" size="sm" aria-label="Descargar logo" className="p-2.5 rounded-xl bg-background-surface hover:bg-primary/10 text-text-muted hover:text-primary border border-border-technical transition-colors shadow-sm" />
+            <button className="p-2.5 rounded-xl bg-background-surface hover:bg-primary/10 text-text-muted hover:text-primary border border-border-technical transition-colors shadow-sm">
+              <span className="material-symbols-outlined text-[20px]">download</span>
+            </button>
           </div>
         </div>
 
@@ -81,7 +83,7 @@ export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
                <span className="material-symbols-outlined">all_inclusive</span>
             </div>
             <div>
-              <Heading as="h3" size="lg" weight="bold" className="text-text-main mb-2">Symbol Logic</Heading>
+              <LpdText size="lg" weight="bold" className="text-text-main mb-2">Symbol Logic</LpdText>
               <LpdText size="sm" className="text-text-muted leading-relaxed">
                 {description || "The core identifier of the brand. Designed for scalability and instant recognition across all mediums, from favicons to billboards."}
               </LpdText>
@@ -91,7 +93,7 @@ export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
           {/* Specs Card */}
           <div className="p-8 rounded-3xl bg-background-surface border border-border-technical flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center mb-6">
-              <Heading as="h3" size="sm" weight="bold" className="text-text-muted uppercase tracking-widest">Technical Specs</Heading>
+              <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest">Technical Specs</LpdText>
             </div>
             <div className="grid grid-cols-2 gap-y-6 gap-x-4">
               <div>

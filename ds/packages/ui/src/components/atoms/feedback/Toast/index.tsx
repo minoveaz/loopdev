@@ -31,7 +31,7 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
       role={variant === 'error' || variant === 'warning' ? 'alert' : 'status'}
       className={`
         relative overflow-hidden w-full max-w-[420px] pointer-events-auto
-        ${isWarning ? 'bg-accent' : 'bg-white/95 dark:bg-lpd-bg-dark/90 backdrop-blur-xl'}
+        ${isWarning ? 'bg-accent' : 'bg-white/95 dark:bg-[#161e2e]/90 backdrop-blur-xl'}
         border-l-4 ${visualConfig.borderColor} 
         border-y border-r ${isWarning ? 'border-y-slate-900/10 border-r-slate-900/10' : 'border-y-slate-200/50 border-r-slate-200/50 dark:border-y-white/10 dark:border-r-white/10'}
         rounded-xl shadow-2xl flex gap-4 p-4 group animate-in slide-in-from-right-full duration-300

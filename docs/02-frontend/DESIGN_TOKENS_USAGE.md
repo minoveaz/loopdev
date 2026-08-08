@@ -61,9 +61,8 @@ Cualquier funcionalidad potenciada por Inteligencia Artificial debe usar la fami
 
 1.  **Nunca usar Hexadecimales:** Si un color no está en un token, solicítalo al equipo de arquitectura.
 2.  **Bordes de 0.5px:** Usa siempre `border-border-technical` para separadores internos.
-3.  **Fuentes de interfaz:** Usa `font-sans` (Inter) por defecto en headers, sidebars, breadcrumbs, menús, botones, labels y cualquier texto que ayude al usuario a orientarse o tomar decisiones.
-4.  **Fuentes Mono:** Usa `font-mono` (JetBrains) solo para datos técnicos (IDs, fechas, comandos, logs, shortcuts, precios y payloads). No usarlo como estilo predeterminado de navegación.
-5.  **Inert Mode:** Los componentes del header deben responder a la prop `isInert` reduciendo su feedback visual.
+3.  **Fuentes Mono:** Usa `font-mono` (JetBrains) solo para datos técnicos (IDs, Fechas, Comandos).
+4.  **Inert Mode:** Los componentes del header deben responder a la prop `isInert` reduciendo su feedback visual.
 
 ---
 *Gobernanza de Frontend - LoopDev Engineering Board*

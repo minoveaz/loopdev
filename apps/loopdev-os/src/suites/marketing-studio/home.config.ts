@@ -14,26 +14,6 @@ export const getMarketingStudioHomeConfig = (router: MarketingRouter): Omit<Suit
   contextLine: 'Working on brand: Loop Health · Last activity: 2h',
   icon: 'auto_awesome_motion',
   tone: 'primary',
-
-  suiteLaunchpad: {
-    title: 'What do you want to create today?',
-    description: 'Manage your brand identity, content and assets from one place.',
-    searchPlaceholder: 'Search brands, assets or modules...',
-    showLegacySections: false,
-    primaryAction: {
-      id: 'create-brand',
-      label: 'Create Brand',
-      description: 'Start a brand identity',
-      icon: 'verified_user',
-      onClick: () => router.push('/marketing-studio/brands/new')
-    },
-    quickActions: [
-      { id: 'brand-hub', label: 'Brand Hub', description: 'Brand guidelines', icon: 'Palette', onClick: () => router.push('/marketing-studio/brand-hub') },
-      { id: 'asset-manager', label: 'Asset Manager', description: 'Browse assets', icon: 'FolderKanban', onClick: () => router.push('/marketing-studio/dam') },
-      { id: 'content-engine', label: 'Content Engine', description: 'AI content generation', icon: 'Sparkles', onClick: () => router.push('/marketing-studio/content') },
-      { id: 'campaign-orchestrator', label: 'Campaign Orchestrator', description: 'Campaign workflows', icon: 'Workflow', onClick: () => router.push('/marketing-studio/campaigns') }
-    ]
-  },
   
   notices: [
     {

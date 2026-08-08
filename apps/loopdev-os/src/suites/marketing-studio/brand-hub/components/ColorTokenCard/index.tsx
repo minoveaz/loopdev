@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Heading, LpdText, cn, TechnicalTooltip } from '@loopdev/ui';
+import { LpdText, cn, TechnicalTooltip } from '@loopdev/ui';
 import { ColorTokenCardProps } from './types';
 import { getContrastRatio, getWCAGStatus } from '@/utils/color';
 
@@ -112,9 +112,9 @@ export const ColorTokenCard: React.FC<ColorTokenCardProps> = ({
       <div className="p-4 flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between gap-2">
-            <Heading as="h3" size="sm" weight="bold" className="text-text-main truncate">
+            <LpdText size="xs" weight="bold" className="text-text-main truncate">
               {token.name}
-            </Heading>
+            </LpdText>
             {/* CATEGORY BADGE */}
             <div className={cn(
               "px-1.5 py-0.5 rounded-[4px] text-[8px] font-black uppercase tracking-widest border",

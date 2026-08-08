@@ -8,7 +8,6 @@ import {
   Heading, 
   Icon, 
   Button, 
-  IconButton,
   StatusPulse,
   toast
 } from '@loopdev/ui';
@@ -131,7 +130,9 @@ function AiTerminalOverlay({ lead, onFinished, onCancel }: TerminalOverlayProps)
             <div className="w-3 h-3 rounded-full bg-emerald-500" />
             <span className="text-[10px] text-slate-400 font-bold ml-2">LOOPDEV OS // AI_BUDGET_GENERATOR</span>
           </div>
-          <IconButton icon="close" size="sm" onClick={onCancel} aria-label="Cerrar generador de presupuesto" className="text-slate-500 hover:text-slate-200 transition-colors" />
+          <button onClick={onCancel} className="text-slate-500 hover:text-slate-200 transition-colors">
+            <Icon name="close" size="sm" />
+          </button>
         </div>
 
         {/* Terminal Screen */}
@@ -201,19 +202,21 @@ function PdfPreviewer({ lead, onConfirm, onCancel }: PdfPreviewerProps) {
 
   return (
     <div className="fixed inset-0 z-[1000] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto custom-scrollbar">
-      <div className="w-full max-w-3xl bg-lpd-bg-dark border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col my-8 animate-in zoom-in-95 duration-300">
+      <div className="w-full max-w-3xl bg-[#0b0f19] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col my-8 animate-in zoom-in-95 duration-300">
         
         {/* Modal Header */}
         <div className="flex justify-between items-center px-6 py-4 bg-slate-900 border-b border-white/5">
           <div className="flex flex-col">
-            <Heading as="h3" size="sm" weight="bold" className="text-slate-100 uppercase tracking-wider">Vista Previa del Presupuesto IA</Heading>
+            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Vista Previa del Presupuesto IA</h3>
             <span className="text-[10px] text-slate-400 font-mono">DOCUMENT_DRAFT_GEN: QT-2026-{lead.id}</span>
           </div>
-          <IconButton icon="close" size="sm" onClick={onCancel} aria-label="Cerrar vista previa del presupuesto" className="text-slate-400 hover:text-slate-200 transition-colors" />
+          <button onClick={onCancel} className="text-slate-400 hover:text-slate-200 transition-colors">
+            <Icon name="close" size="sm" />
+          </button>
         </div>
 
         {/* PDF Scroll Area */}
-        <div className="p-8 bg-lpd-bg-dark flex justify-center border-b border-white/5 overflow-y-auto max-h-[500px] custom-scrollbar">
+        <div className="p-8 bg-[#111622] flex justify-center border-b border-white/5 overflow-y-auto max-h-[500px] custom-scrollbar">
           {/* Simulated PDF Page */}
           <div className="w-full max-w-2xl bg-white text-slate-900 p-8 shadow-2xl rounded-lg font-sans flex flex-col gap-6 text-left relative min-h-[700px]">
             {/* Diagonal Gridlines Watermark */}

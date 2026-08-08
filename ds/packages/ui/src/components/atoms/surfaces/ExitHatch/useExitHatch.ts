@@ -24,7 +24,7 @@ export const useExitHatch = (props: ExitHatchProps) => {
 
   // 3. Clases para el Texto
   const textClasses = `
-    font-sans text-xs font-medium tracking-normal
+    uppercase tracking-widest text-[9px] font-black
   `;
 
   return {

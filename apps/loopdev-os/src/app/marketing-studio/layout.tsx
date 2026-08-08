@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { 
   AppShell, 
-  Button,
   SuiteSidebar, 
   MARKETING_STUDIO_SCHEMA,
   ThemeToggle,
@@ -19,21 +18,19 @@ import {
   NotificationCenter,
   NOTIFICATION_CENTER_FIXTURES,
   Divider,
+  QuickActionMenu,
+  QUICK_ACTION_FIXTURES,
   LayoutProvider,
   TenantProvider
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useOrganization } from '@/hooks/useOrganization';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, ModuleAccessState } from '@loopdev/contracts';
-import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
-import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
-  const { activeOrganization } = useOrganization();
   const { 
     notifications, 
     unreadCount, 
@@ -47,8 +44,13 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
+  // 1. Focus Enforcement: Colapsar sidebar si estamos en un módulo operativo
   useEffect(() => {
-    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/marketing-studio/brand-hub'] })));
+    if (pathname.includes('/brand-hub')) {
+      queueMicrotask(() => setNavMode('rail'));
+    } else {
+      queueMicrotask(() => setNavMode('expanded'));
+    }
   }, [pathname]);
 
   const currentSuite = MARKETING_STUDIO_SCHEMA.suite;
@@ -70,7 +72,6 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    <SuitePermissionGuard permission="marketing.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -113,7 +114,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <Divider orientation="vertical" thickness="technical" className="h-4" />
               <ContextPath 
                 segments={[
-                  { id: 'workspace', label: activeOrganization?.name ?? 'Workspace', isActive: true },
+                  { id: 'suite', label: 'Marketing Studio', href: '/marketing-studio', isActive: true }
                 ]} 
               />
             </div>
@@ -121,6 +122,15 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           centerSlot={<CommandBarTrigger onOpen={() => {}} />}
           rightSlot={
             <div className="flex items-center gap-4">
+              <QuickActionMenu 
+                groups={QUICK_ACTION_FIXTURES.marketing} 
+                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
+              />
+              <Divider orientation="vertical" thickness="technical" className="h-4" />
+
+              <SystemStatus state="operational" id={user?.id} label="TID" />
+              <Divider orientation="vertical" thickness="technical" className="h-4" />
+              
               <NotificationCenter 
                 notifications={notifications}
                 unreadCount={unreadCount}
@@ -151,6 +161,5 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         </LayoutProvider>
       </TenantProvider>
     </AppShell>
-    </SuitePermissionGuard>
   );
 }

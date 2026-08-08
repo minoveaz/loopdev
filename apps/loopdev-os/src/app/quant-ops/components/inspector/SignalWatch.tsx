@@ -57,7 +57,7 @@ export const SignalWatch: React.FC<SignalWatchProps> = ({ bot, confluence }) => 
             {!isBullish && <LpdText size="nano" className="text-rose-500 font-black uppercase italic tracking-widest">[ABORT_LONG]</LpdText>}
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-status-success shadow-md" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-md" />
             <LpdText size="xs" weight="bold" className="text-text-main">Spread_Health: <span className="uppercase text-emerald-500">0.02%_LOW</span></LpdText>
           </div>
         </div>

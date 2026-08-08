@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { RuleEditorProps } from './types';
-import { Heading, LpdText, Button, Input } from '@loopdev/ui';
+import { LpdText, Button, Input } from '@loopdev/ui';
 import { DomainBadge } from '../DomainBadge';
 import { clsx } from 'clsx';
 
@@ -31,7 +31,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
       <header className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <Heading as="h2" size="2xl" weight="bold" className="text-text-main tracking-tight">{localRule.name}</Heading>
+            <h2 className="text-2xl font-bold text-text-main tracking-tight">{localRule.name}</h2>
             <DomainBadge domain={localRule.domain} size="sm" />
           </div>
           <LpdText size="xs" className="text-text-muted font-mono uppercase opacity-60">
@@ -56,7 +56,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
       {/* 2. LOGIC CONSTRUCTION (The "Brain") */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border-technical/30">
         <div className="flex flex-col gap-6">
-          <Heading as="h2" size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">01. Logic Definition</Heading>
+          <LpdText size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">01. Logic Definition</LpdText>
           
           <div>
             <FieldLabel>Applies To (Target)</FieldLabel>
@@ -86,15 +86,14 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
         </div>
 
         <div className="flex flex-col gap-6">
-          <Heading as="h2" size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">02. Enforcement & Severity</Heading>
+          <LpdText size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">02. Enforcement & Severity</LpdText>
           
           <div>
             <FieldLabel>Outcome Severity</FieldLabel>
             <div className="flex gap-3">
               {['WARN', 'BLOCK'].map((s) => (
-                <Button
+                <button
                   key={s}
-                  variant="ghost"
                   disabled={!isEditable}
                   className={clsx(
                     "flex-1 py-2 rounded-xl border font-bold text-xs transition-all",
@@ -104,7 +103,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
                   )}
                 >
                   {s}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
@@ -124,7 +123,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
 
       {/* 3. EXPLAINABILITY (The "Meaning") */}
       <section className="flex flex-col gap-6 pt-8 border-t border-border-technical/30">
-        <Heading as="h2" size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">03. Explainability Templates</Heading>
+        <LpdText size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">03. Explainability Templates</LpdText>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-1 flex flex-col gap-4">

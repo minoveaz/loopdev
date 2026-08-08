@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { TechnicalSurface, Heading, Icon, Button, IconButton, Input, Select, ICON_REGISTRY } from '@loopdev/ui';
+import { TechnicalSurface, Icon, Button, Input, Select, ICON_REGISTRY } from '@loopdev/ui';
 import { LeadDetailProvider, useLeadDetail } from '../../context/LeadDetailContext';
 import { Header } from './Header';
 import { EmailComposer } from './EmailComposer';
@@ -27,7 +27,7 @@ export function MasterDetailModal({ isOpen, lead, onClose }: MasterDetailModalPr
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] bg-background-canvas/40 dark:bg-background-canvas/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-6"
+      className="fixed inset-0 z-[9999] bg-slate-950/40 dark:bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-6"
       onClick={onClose}
     >
       <LeadDetailProvider initialLead={lead} onClose={onClose}>
@@ -212,7 +212,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
           setClosureReason('Cliente no responde');
           setShowClosureForm('discarded');
         }}
-        className="border-status-error/20 text-status-error hover:bg-status-error/10 font-bold"
+        className="border-rose-500/20 text-rose-400 hover:bg-rose-500/10 font-bold"
       >
         <span className="flex items-center gap-1.5">
           <Icon name={ICON_REGISTRY.actions.close} size="sm" /> Descartar
@@ -257,7 +257,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
               variant="primary"
               size="sm"
               onClick={() => handleStatusChange('won')}
-              className="bg-status-success hover:bg-status-success/90 text-white font-bold border-none"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold border-none"
             >
               Aceptar Presupuesto
             </Button>
@@ -268,7 +268,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                 setClosureReason('Precio muy alto');
                 setShowClosureForm('rejected');
               }}
-              className="border-status-error/30 text-status-error hover:bg-status-error/10 font-bold"
+              className="border-rose-500/30 text-rose-400 hover:bg-rose-500/10 font-bold"
             >
               Rechazar Presupuesto
             </Button>
@@ -281,7 +281,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
             variant="primary"
             size="md"
             onClick={handleMoveToOnboarding}
-            className="w-full bg-status-success hover:bg-status-success/90 text-white font-black flex items-center justify-center gap-2 border-none py-3"
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black flex items-center justify-center gap-2 border-none py-3"
           >
             <Icon name="rocket" size="sm" /> Iniciar Proceso de Contratación
           </Button>
@@ -299,30 +299,30 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
       <TechnicalSurface
         variant="surface"
         depth="overlay"
-        className="w-full h-full rounded-xl overflow-hidden shadow-2xl border border-slate-300 dark:border-white/10"
+        className="w-full h-full rounded-3xl overflow-hidden shadow-2xl border-slate-200 dark:border-white/10"
       >
-        <div className="flex flex-col h-full w-full bg-shell-surface text-text-main font-sans overflow-hidden">
+        <div className="flex flex-col h-full w-full bg-white dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 font-sans overflow-hidden">
           {/* 1. Header component */}
           <Header onClose={onClose} />
 
           {/* 2. Closure reasons popup overlay */}
           {showClosureForm && (
-            <div className="absolute inset-0 bg-background-canvas/40 dark:bg-background-canvas/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-slate-950/40 dark:bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <TechnicalSurface
                 variant="surface"
                 className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl max-w-md w-full flex flex-col gap-4 text-xs font-sans"
               >
                 <div className="flex flex-col gap-1 border-b border-slate-200 dark:border-white/5 pb-2">
-                  <Heading as="h3" size="sm" weight="bold" className="text-slate-900 dark:text-white uppercase tracking-wider">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                     {showClosureForm === 'rejected' ? 'Rechazar Presupuesto' : 'Descartar Lead'}
-                  </Heading>
-                  <p className="text-[10px] text-text-muted">
+                  </h3>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">
                     Por favor, registra el motivo de la baja del trato.
                   </p>
                 </div>
                 <form onSubmit={handleConfirmClosure} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
-                    <label className="text-text-muted font-bold font-mono text-[10px]">
+                    <label className="text-slate-500 dark:text-slate-400 font-bold font-mono text-[10px]">
                       MOTIVO DE CIERRE
                     </label>
                     <select
@@ -352,7 +352,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                     </select>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-text-muted font-bold font-mono text-[10px]">
+                    <label className="text-slate-500 dark:text-slate-400 font-bold font-mono text-[10px]">
                       DETALLES DE LA BITÁCORA
                     </label>
                     <textarea
@@ -395,16 +395,15 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                 className="p-4 bg-white dark:bg-slate-950/40 border border-slate-200 dark:border-white/5 rounded-xl text-xs flex flex-col gap-3 font-sans"
               >
                 <div className="flex justify-between items-center select-none">
-                  <span className="font-mono text-[9px] text-text-muted font-bold uppercase tracking-widest">
+                  <span className="font-mono text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">
                     [ TTY_CREATOR: {activeCreator.toUpperCase()} ]
                   </span>
-                  <IconButton
-                    icon="close"
-                    size="sm"
+                  <button
                     onClick={() => setActiveCreator(null)}
-                    className="text-text-muted hover:text-text-main"
-                    aria-label="Cerrar creador"
-                  />
+                    className="text-slate-400 hover:text-slate-650 dark:hover:text-slate-200"
+                  >
+                    <Icon name={ICON_REGISTRY.actions.close} size="sm" />
+                  </button>
                 </div>
 
                 {activeCreator === 'note' && (
@@ -416,17 +415,16 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         { label: '+ Presupuesto', text: '• Presupuesto: ' },
                         { label: '+ Siguiente Contacto', text: '• Próximo paso: ' },
                       ].map((pill) => (
-                        <Button
+                        <button
                           key={pill.label}
                           type="button"
-                          variant="ghost"
                           onClick={() => {
                             setNewNote(newNote ? `${newNote}\n${pill.text}` : pill.text);
                           }}
                           className="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/40 dark:hover:bg-slate-900 text-[10px] text-slate-650 dark:text-slate-400 border border-slate-200 dark:border-white/5 transition-all"
                         >
                           {pill.label}
-                        </Button>
+                        </button>
                       ))}
                     </div>
 
@@ -442,39 +440,38 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                     <div className="flex flex-col md:flex-row gap-3 justify-between items-start md:items-center select-none py-1.5 border-t border-slate-200 dark:border-white/5 mt-1">
                       {/* Category Pills */}
                       <div className="flex flex-col gap-1 w-full md:w-auto">
-                        <label className="text-[10px] text-text-muted font-bold font-mono uppercase">
+                        <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono uppercase">
                           Categoría de la Nota
                         </label>
                         <div className="flex gap-1.5">
                           {[
                             {
                               id: 'general',
-                              label: 'General',
+                              label: 'General 📄',
                               colorClass:
                                 'border-slate-400 text-slate-700 bg-slate-500/5 dark:text-slate-350',
                             },
                             {
                               id: 'requirement',
-                              label: 'Requerimiento',
+                              label: 'Requerimiento 🛠️',
                               colorClass: 'border-blue-500 text-blue-600 bg-blue-500/5',
                             },
                             {
                               id: 'pain_point',
-                              label: 'Dolor',
+                              label: 'Dolor ⚠️',
                               colorClass: 'border-amber-500 text-amber-600 bg-amber-500/5',
                             },
                             {
                               id: 'budget',
-                              label: 'Presupuesto',
+                              label: 'Presupuesto 💰',
                               colorClass: 'border-emerald-500 text-emerald-600 bg-emerald-500/5',
                             },
                           ].map((pill) => {
                             const isSelected = noteCategory === pill.id;
                             return (
-                              <Button
+                              <button
                                 key={pill.id}
                                 type="button"
-                                variant="ghost"
                                 onClick={() =>
                                   setNoteCategory(
                                     pill.id as 'general' | 'requirement' | 'pain_point' | 'budget',
@@ -487,7 +484,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                                 }`}
                               >
                                 {pill.label}
-                              </Button>
+                              </button>
                             );
                           })}
                         </div>
@@ -504,9 +501,9 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         />
                         <label
                           htmlFor="pin-note-checkbox"
-                          className="text-text-main font-bold select-none cursor-pointer"
+                          className="text-slate-700 dark:text-slate-300 font-bold select-none cursor-pointer"
                         >
-                          Fijar en el perfil
+                          📌 Fijar en el perfil
                         </label>
                       </div>
                     </div>
@@ -526,22 +523,22 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                 {activeCreator === 'call' && (
                   <div className="flex flex-col gap-3 font-sans">
                     {/* Timer block & controls */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-status-error/5 p-3 rounded-xl border border-status-error/20 select-none">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-red-500/5 dark:bg-red-500/10 p-3 rounded-xl border border-red-500/20 dark:border-red-500/10 select-none">
                       <div className="flex items-center gap-2">
                         <span
-                          className={`w-2.5 h-2.5 rounded-full bg-status-error ${isTimerRunning ? 'animate-pulse' : ''}`}
+                          className={`w-2.5 h-2.5 rounded-full bg-red-500 ${isTimerRunning ? 'animate-pulse' : ''}`}
                         />
                         <div className="flex flex-col gap-0.5">
-                          <Heading as="h4" size="xs" weight="bold" className="text-status-error">
+                          <h4 className="text-xs font-bold text-red-800 dark:text-red-300">
                             Simulación de Llamada VoIP
-                          </Heading>
-                          <p className="text-[10px] text-text-muted">
+                          </h4>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400">
                             {isTimerRunning ? 'Llamada en progreso...' : 'Grabación finalizada'}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 self-end md:self-center">
-                        <span className="font-mono text-sm font-bold text-text-main">
+                        <span className="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">
                           {formatTime(callTimer)}
                         </span>
                         {isTimerRunning ? (
@@ -549,12 +546,12 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                             variant="danger"
                             size="sm"
                             onClick={handleStopTimer}
-                            className="bg-status-error hover:bg-status-error/90 text-white font-bold"
+                            className="bg-rose-600 hover:bg-rose-700 text-white font-bold"
                           >
                             Finalizar y Registrar Tiempo
                           </Button>
                         ) : (
-                          <span className="text-[10px] font-mono text-text-muted uppercase font-bold">
+                          <span className="text-[10px] font-mono text-slate-450 dark:text-slate-500 uppercase font-bold">
                             Tiempo Registrado
                           </span>
                         )}
@@ -564,7 +561,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                     {/* Outcome quick-pills & templates */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-end border-t border-slate-200 dark:border-white/5 pt-3 select-none">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] text-text-muted font-bold font-mono uppercase">
+                        <label className="text-[10px] text-slate-400 dark:text-slate-500 font-bold font-mono uppercase">
                           Resultado de la Llamada
                         </label>
                         <div className="flex flex-wrap gap-1.5">
@@ -592,10 +589,9 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           ].map((pill) => {
                             const isSelected = newCall.outcome === pill.id;
                             return (
-                              <Button
+                              <button
                                 key={pill.id}
                                 type="button"
-                                variant="ghost"
                                 onClick={() =>
                                   setNewCall((prev) => ({ ...prev, outcome: pill.id }))
                                 }
@@ -606,7 +602,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                                 }`}
                               >
                                 {pill.label}
-                              </Button>
+                              </button>
                             );
                           })}
                         </div>
@@ -614,7 +610,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
 
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] text-text-muted font-bold font-mono uppercase">
+                          <label className="text-[10px] text-slate-450 dark:text-slate-500 font-bold font-mono uppercase">
                             Plantilla de Minuta
                           </label>
                           <Select
@@ -637,7 +633,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         </div>
 
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] text-text-muted font-bold font-mono uppercase">
+                          <label className="text-[10px] text-slate-450 dark:text-slate-500 font-bold font-mono uppercase">
                             Fecha y Hora
                           </label>
                           <Input
@@ -654,7 +650,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                     </div>
 
                     <div className="flex flex-col gap-1 mt-1">
-                        <label className="text-[10px] text-text-muted font-bold font-mono uppercase">
+                      <label className="text-[10px] text-slate-455 dark:text-slate-500 font-bold font-mono uppercase">
                         Resumen de la Llamada
                       </label>
                       <textarea
@@ -684,7 +680,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                   <div className="flex flex-col gap-3 font-sans">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
-                        <label className="text-[10px] text-text-muted font-bold font-mono">
+                        <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono">
                           TÍTULO DE LA TAREA
                         </label>
                         <Input
@@ -701,29 +697,28 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         {/* Predefined Title Options */}
                         <div className="flex flex-wrap gap-1 mt-1.5 select-none">
                           {[
-                            { label: 'Llamar', title: 'Llamar para seguimiento' },
-                            { label: 'Enviar propuesta', title: 'Enviar propuesta comercial' },
-                            { label: 'Reunión / Demo', title: 'Agendar Demo del producto' },
+                            { label: '📞 Llamar', title: 'Llamar para seguimiento' },
+                            { label: '📧 Enviar propuesta', title: 'Enviar propuesta comercial' },
+                            { label: '📅 Reunión / Demo', title: 'Agendar Demo del producto' },
                             {
-                              label: 'Solicitar docs',
+                              label: '📋 Solicitar docs',
                               title: 'Solicitar documentos pendientes',
                             },
                           ].map((pill) => (
-                            <Button
+                            <button
                               key={pill.label}
                               type="button"
-                              variant="ghost"
                               onClick={() => setNewTask((prev) => ({ ...prev, title: pill.title }))}
-                              className="px-2.5 py-1 rounded-xl bg-background-subtle hover:bg-shell-surface text-[10px] text-text-muted border border-border-technical transition-all"
+                              className="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/40 dark:hover:bg-slate-900 text-[10px] text-slate-650 dark:text-slate-400 border border-slate-200 dark:border-white/5 transition-all"
                             >
                               {pill.label}
-                            </Button>
+                            </button>
                           ))}
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
-                        <label className="text-[10px] text-text-muted font-bold font-mono">
+                        <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono">
                           FECHA LÍMITE (VENCIMIENTO)
                         </label>
                         <Input
@@ -775,17 +770,16 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                               },
                             },
                           ].map((pill) => (
-                            <Button
+                            <button
                               key={pill.label}
                               type="button"
-                              variant="ghost"
                               onClick={() =>
                                 setNewTask((prev) => ({ ...prev, dueDate: pill.getVal() }))
                               }
-                              className="px-2.5 py-1 rounded-xl bg-background-subtle hover:bg-shell-surface text-[10px] text-text-muted border border-border-technical transition-all"
+                              className="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/40 dark:hover:bg-slate-900 text-[10px] text-slate-650 dark:text-slate-400 border border-slate-200 dark:border-white/5 transition-all"
                             >
                               {pill.label}
-                            </Button>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -793,33 +787,32 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
 
                     {/* Priority Selection */}
                     <div className="flex flex-col gap-1.5 mt-1 select-none">
-                      <label className="text-[10px] text-text-muted font-bold font-mono">
+                      <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono">
                         PRIORIDAD DE LA TAREA
                       </label>
                       <div className="flex gap-2">
                         {[
                           {
                             id: 'high',
-                            label: 'Alta',
-                            colorClass: 'border-status-error text-status-error bg-status-error/5',
+                            label: 'Alta 🔴',
+                            colorClass: 'border-rose-500 text-rose-600 bg-rose-500/5',
                           },
                           {
                             id: 'medium',
-                            label: 'Media',
-                            colorClass: 'border-status-warning text-status-warning bg-status-warning/5',
+                            label: 'Media 🟡',
+                            colorClass: 'border-amber-500 text-amber-600 bg-amber-500/5',
                           },
                           {
                             id: 'low',
-                            label: 'Baja',
-                            colorClass: 'border-status-info text-status-info bg-status-info/5',
+                            label: 'Baja 🔵',
+                            colorClass: 'border-blue-500 text-blue-600 bg-blue-500/5',
                           },
                         ].map((pill) => {
                           const isSelected = newTask.priority === pill.id;
                           return (
-                            <Button
+                            <button
                               key={pill.id}
                               type="button"
-                              variant="ghost"
                               onClick={() =>
                                 setNewTask((prev) => ({
                                   ...prev,
@@ -829,18 +822,18 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                               className={`px-3 py-1 rounded-xl border text-[11px] font-semibold transition-all ${
                                 isSelected
                                   ? `${pill.colorClass} border-2 shadow-sm font-bold scale-[1.03]`
-                                  : 'border-border-technical text-text-muted hover:bg-background-subtle'
+                                  : 'border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900/30'
                               }`}
                             >
                               {pill.label}
-                            </Button>
+                            </button>
                           );
                         })}
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-1 mt-1">
-                      <label className="text-[10px] text-text-muted font-bold font-mono">
+                      <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono">
                         DETALLES ADICIONALES (OPCIONAL)
                       </label>
                       <textarea
@@ -868,12 +861,12 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
 
                 {activeCreator === 'whatsapp' && (
                   <div className="flex flex-col gap-3 font-sans">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-status-success/5 p-3.5 rounded-xl border border-status-success/20">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-emerald-500/5 dark:bg-emerald-500/10 p-3.5 rounded-xl border border-emerald-500/20 dark:border-emerald-500/10">
                       <div className="flex flex-col gap-0.5">
-                        <Heading as="h4" size="xs" weight="bold" className="text-emerald-800 dark:text-emerald-300">
+                        <h4 className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
                           Enlace de Comunicación Directa
-                        </Heading>
-                        <p className="text-[10px] text-text-muted">
+                        </h4>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
                           Continúa la conversación abriendo el chat oficial con el número del lead.
                         </p>
                       </div>
@@ -881,11 +874,10 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         variant="primary"
                         size="sm"
                         onClick={whatsAppClick}
-                        className="bg-status-success hover:bg-status-success/90 border-none text-white whitespace-nowrap flex-shrink-0"
+                        className="bg-emerald-600 hover:bg-emerald-700 border-none text-white whitespace-nowrap flex-shrink-0"
                       >
                         <span className="flex items-center gap-1.5 justify-center">
                           <svg
-                            aria-hidden="true"
                             className="w-3.5 h-3.5 fill-current"
                             viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg"
@@ -900,7 +892,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                     {/* Template Selector & Latency Info */}
                     <div className="flex flex-col md:flex-row gap-3 items-start md:items-center justify-between border-t border-slate-200 dark:border-white/5 pt-3 select-none">
                       <div className="flex flex-col gap-1 w-full md:w-auto">
-                        <label className="text-[10px] text-text-muted font-bold font-mono uppercase">
+                        <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono uppercase">
                           Plantillas de Mensaje
                         </label>
                         <Select
@@ -925,7 +917,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                       </div>
 
                       <div className="flex flex-col gap-1 items-start md:items-end font-mono text-[9px]">
-                        <span className="text-text-muted uppercase font-bold">
+                        <span className="text-slate-450 dark:text-slate-500 uppercase font-bold">
                           LATENCIA DE CONTACTO
                         </span>
                         <span className={latency.colorClass}>{latency.text}</span>
@@ -933,7 +925,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-[10px] text-text-muted font-bold font-mono uppercase">
+                      <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono uppercase">
                         Pegar Registro de Conversación
                       </label>
                       <textarea
@@ -962,24 +954,24 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
           )}
 
           {/* 5. Main Double Column Scrollable Layout */}
-          <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-border-technical bg-background-subtle/50">
+          <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-white/5 bg-slate-50/50 dark:bg-slate-950/20">
             {/* Left Column: Lead Info placeholder */}
-            <div className="lg:col-span-1 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-background-subtle/10">
+            <div className="lg:col-span-1 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-slate-100/10 dark:bg-slate-950/10">
               <div className="flex flex-col gap-1.5 border-b border-slate-200 dark:border-white/5 pb-3">
-                <span className="font-mono text-[9px] text-text-muted font-bold uppercase tracking-widest select-none">
+                <span className="font-mono text-[9px] text-slate-450 dark:text-slate-500 font-bold uppercase tracking-widest select-none">
                   SEC_LEFT: OPPORTUNITY_PROFILE
                 </span>
-                <Heading as="h3" size="xs" weight="bold" className="text-slate-800 dark:text-white uppercase tracking-wider select-none">
+                <h3 className="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider select-none">
                   Perfil de Datos
-                </Heading>
+                </h3>
               </div>
               <InfoPanel />
 
               {/* Pinned Notes Section */}
               {lead.activityLog?.some((entry) => entry.type === 'NOTE' && entry.pinned) && (
                 <div className="flex flex-col gap-3 mt-2 animate-in fade-in duration-200">
-                  <span className="font-mono text-[9px] text-text-muted font-bold uppercase tracking-widest select-none">
-                    NOTAS CLAVE ANCLADAS
+                  <span className="font-mono text-[9px] text-slate-455 dark:text-slate-500 font-bold uppercase tracking-widest select-none">
+                    📌 NOTAS CLAVE ANCLADAS
                   </span>
                   <div className="flex flex-col gap-2">
                     {lead.activityLog
@@ -1004,7 +996,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         return (
                           <div
                             key={entry.timestamp}
-                            className={`p-3 rounded-xl border flex flex-col gap-1.5 bg-shell-surface ${
+                            className={`p-3 rounded-xl border flex flex-col gap-1.5 bg-white dark:bg-slate-900 ${
                               entry.category === 'requirement'
                                 ? 'border-blue-500/20 dark:border-blue-500/10'
                                 : entry.category === 'pain_point'
@@ -1020,11 +1012,11 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                               >
                                 {categoryLabel[entry.category || 'general']}
                               </span>
-                              <span className="text-text-muted font-mono text-[9px]">
+                              <span className="text-slate-455 dark:text-slate-550 font-mono text-[9px]">
                                 {new Date(entry.timestamp).toLocaleDateString()}
                               </span>
                             </div>
-                            <p className="text-text-main text-[11px] leading-relaxed whitespace-pre-wrap font-sans">
+                            <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed whitespace-pre-wrap font-sans">
                               {entry.details}
                             </p>
                           </div>
@@ -1036,14 +1028,14 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Right Columns: Activity Timeline & Details */}
-            <div className="lg:col-span-2 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-background-subtle">
+            <div className="lg:col-span-2 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-white/50 dark:bg-[#0b0f19]/30">
               <ActivityPanel />
             </div>
           </div>
 
           {/* 6. Footer Actions Panel */}
           {!isReadOnly && (
-            <div className="p-4 bg-white dark:bg-lpd-bg-dark border-t border-slate-200 dark:border-white/10 flex justify-end gap-3 flex-shrink-0 select-none">
+            <div className="p-5 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-md border-t border-slate-200/60 dark:border-white/5 flex justify-end gap-3 flex-shrink-0 select-none">
               {renderFooterActions()}
             </div>
           )}

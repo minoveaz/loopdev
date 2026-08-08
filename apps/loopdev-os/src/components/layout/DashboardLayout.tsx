@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react';
-import { Heading, Icon, Button } from '@loopdev/ui';
+import { Icon, Button } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 
 const StatItem = ({ label, value, color }: { label: string, value: string, color: string }) => (
@@ -55,7 +55,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
         {/* Sidebar / Status */}
         <aside className="w-full md:w-64 flex flex-col gap-6">
           <div className="glass-panel rounded-xl p-6 border border-white/5">
-            <Heading as="h3" size="xs" weight="bold" className="text-slate-500 uppercase tracking-widest mb-4">Core Stats</Heading>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Core Stats</h3>
             <div className="space-y-4">
               <StatItem label="System Health" value="99.9%" color="bg-primary-blue" />
               <StatItem label="Innovation" value="84/100" color="bg-accent-purple" />
@@ -64,11 +64,11 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           </div>
           
           <div className="glass-panel rounded-xl p-6 border border-white/5 flex-1">
-            <Heading as="h3" size="xs" weight="bold" className="text-slate-500 uppercase tracking-widest mb-4">Live Activity</Heading>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Live Activity</h3>
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="flex gap-3 text-xs">
-                  <div className="w-2 h-2 rounded-full bg-text-muted mt-1"></div>
+                  <div className="w-2 h-2 rounded-full bg-slate-700 mt-1"></div>
                   <div>
                     <p className="text-slate-300 font-medium">Infinite loop module {i} deployed.</p>
                     <p className="text-slate-500">2m ago</p>

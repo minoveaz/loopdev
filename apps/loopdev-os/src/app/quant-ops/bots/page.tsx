@@ -227,7 +227,7 @@ export default function BotFleetPage() {
         </section>
       ) : (
         <section className="flex flex-col items-center justify-center p-24 border border-dashed border-border-technical/50 rounded-[2.5rem] bg-background-surface/50 backdrop-blur-sm">
-          <div className="w-16 h-16 rounded-2xl bg-energy-yellow/5 border border-energy-yellow/10 flex items-center justify-center text-energy-yellow/40 mb-6">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/5 border border-amber-500/10 flex items-center justify-center text-amber-500/40 mb-6">
             <Icon name="Bot" size="lg" />
           </div>
           <Heading size="lg" weight="bold" className="text-text-main mb-2">
@@ -264,9 +264,9 @@ export default function BotFleetPage() {
           </>
         }
       >
-        <div className="p-4 bg-status-error/5 border border-status-error/10 rounded-xl flex gap-3">
-          <span className="material-symbols-outlined text-status-error">warning</span>
-          <LpdText size="xs" className="text-status-error/80 leading-relaxed font-medium">
+        <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3">
+          <span className="material-symbols-outlined text-rose-500">warning</span>
+          <LpdText size="xs" className="text-rose-600/80 leading-relaxed font-medium">
             Confirming this action will purge the bot&apos;s configuration from the active fleet.
             Open positions linked to this bot might need manual intervention.
           </LpdText>

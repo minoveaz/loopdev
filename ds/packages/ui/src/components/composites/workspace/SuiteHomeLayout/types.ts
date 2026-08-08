@@ -1,6 +1,5 @@
 import React from 'react';
 import { BadgeSeverity } from '../../../atoms/indicators/TechnicalStatusBadge/types';
-import type { SuiteLaunchpadProps } from '../SuiteLaunchpad';
 
 export interface SuiteHomeAction {
   id: string;
@@ -106,7 +105,4 @@ export interface SuiteHomeLayoutProps {
 
   /** Clase CSS adicional */
   className?: string;
-
-  /** Launchpad opcional para la entrada de la suite. */
-  suiteLaunchpad?: SuiteLaunchpadProps;
 }

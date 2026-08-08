@@ -7,7 +7,6 @@ import {
   Heading, 
   Icon, 
   Button, 
-  IconButton,
   StatusPulse,
   Input
 } from '@loopdev/ui';
@@ -137,19 +136,21 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] bg-background-canvas/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[1000] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
       <TechnicalSurface 
         variant="surface" 
         depth="overlay"
-        className="p-6 bg-shell-surface border border-border-technical rounded-3xl shadow-2xl flex flex-col gap-5 max-w-xl w-full text-text-main font-sans animate-in zoom-in-95 duration-200"
+        className="p-6 bg-slate-900 border border-white/10 rounded-3xl shadow-2xl flex flex-col gap-5 max-w-xl w-full text-slate-100 font-sans animate-in zoom-in-95 duration-200"
       >
         {/* Header */}
-        <div className="flex justify-between items-center border-b border-border-technical pb-3 select-none">
+        <div className="flex justify-between items-center border-b border-white/5 pb-3 select-none">
           <div className="flex flex-col gap-0.5">
-            <Heading as="h3" size="sm" weight="bold" className="text-text-main uppercase tracking-wider">Registrar Nuevo Trato</Heading>
-            <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">TECHNICAL_DRAFT_ENTRY</span>
+            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Registrar Nuevo Trato</h3>
+            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">TECHNICAL_DRAFT_ENTRY</span>
           </div>
-          <IconButton icon="close" size="sm" onClick={onClose} aria-label="Cerrar formulario de presupuesto" className="text-text-muted hover:text-text-main transition-colors" />
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-200 transition-colors">
+            <Icon name="close" size="sm" />
+          </button>
         </div>
 
         {/* Smart Default Status Badge */}
@@ -158,7 +159,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
             <StatusPulse variant="primary" size="sm" isAnimated />
             <div className="flex-1">
               <span className="font-mono text-primary font-bold">SMART_DEFAULT_TRIGGERED:</span>
-                <span className="text-text-muted ml-1.5 font-semibold">
+              <span className="text-slate-300 ml-1.5 font-semibold">
                 Aplicando precios y cobertura por defecto para {activeSmartDefault === 'sanitas' ? 'Sanitas' : 'Adeslas'}.
               </span>
             </div>
@@ -171,7 +172,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
           {/* Field: Name */}
           <div className="flex flex-col gap-1.5 relative group">
             <div className="flex justify-between items-center text-[10px] uppercase font-mono tracking-wider font-bold">
-              <label className="text-text-muted">Nombre del Contacto</label>
+              <label className="text-slate-400">Nombre del Contacto</label>
               <ValidationBadge state={validationStates.name} />
             </div>
             <input 
@@ -183,7 +184,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
               }} 
               required 
               placeholder="Ej. Carlos Mendoza"
-              className={`bg-background-canvas p-2.5 rounded-xl border focus:outline-none text-text-main transition-all font-sans ${
+              className={`bg-slate-950/60 p-2.5 rounded-xl border focus:outline-none text-slate-200 transition-all font-sans ${
                 validationStates.name === 'valid' ? 'border-emerald-500/50 focus:border-emerald-500' :
                 validationStates.name === 'invalid' ? 'border-rose-500/50 focus:border-rose-500' :
                 'border-white/5 focus:border-primary/50'
@@ -194,7 +195,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
           {/* Field: Company */}
           <div className="flex flex-col gap-1.5 relative">
             <div className="flex justify-between items-center text-[10px] uppercase font-mono tracking-wider font-bold">
-              <label className="text-text-muted">Compañía / Empresa</label>
+              <label className="text-slate-400">Compañía / Empresa</label>
               <ValidationBadge state={validationStates.company} />
             </div>
             <input 
@@ -206,7 +207,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
               }} 
               required 
               placeholder="Ej. Sanitas"
-              className={`bg-background-canvas p-2.5 rounded-xl border focus:outline-none text-text-main transition-all font-sans ${
+              className={`bg-slate-950/60 p-2.5 rounded-xl border focus:outline-none text-slate-200 transition-all font-sans ${
                 validationStates.company === 'valid' ? 'border-emerald-500/50 focus:border-emerald-500' :
                 validationStates.company === 'invalid' ? 'border-rose-500/50 focus:border-rose-500' :
                 'border-white/5 focus:border-primary/50'
@@ -217,7 +218,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
           {/* Field: Email */}
           <div className="flex flex-col gap-1.5 relative col-span-2 md:col-span-1">
             <div className="flex justify-between items-center text-[10px] uppercase font-mono tracking-wider font-bold">
-              <label className="text-text-muted">Email Corporativo</label>
+              <label className="text-slate-400">Email Corporativo</label>
               <ValidationBadge state={validationStates.email} />
             </div>
             <input 
@@ -229,7 +230,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
               }} 
               required 
               placeholder="Ej. c.mendoza@empresa.com"
-              className={`bg-background-canvas p-2.5 rounded-xl border focus:outline-none text-text-main transition-all font-sans ${
+              className={`bg-slate-950/60 p-2.5 rounded-xl border focus:outline-none text-slate-200 transition-all font-sans ${
                 validationStates.email === 'valid' ? 'border-emerald-500/50 focus:border-emerald-500' :
                 validationStates.email === 'invalid' ? 'border-rose-500/50 focus:border-rose-500' :
                 'border-white/5 focus:border-primary/50'
@@ -240,7 +241,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
           {/* Field: Phone */}
           <div className="flex flex-col gap-1.5 relative col-span-2 md:col-span-1">
             <div className="flex justify-between items-center text-[10px] uppercase font-mono tracking-wider font-bold">
-              <label className="text-text-muted">Teléfono Movil</label>
+              <label className="text-slate-400">Teléfono Movil</label>
               <ValidationBadge state={validationStates.phone} />
             </div>
             <input 
@@ -251,7 +252,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
                 triggerScan('phone', e.target.value, validatePhone);
               }} 
               placeholder="Ej. +57 312 456 7890"
-              className={`bg-background-canvas p-2.5 rounded-xl border focus:outline-none text-text-main transition-all font-sans ${
+              className={`bg-slate-950/60 p-2.5 rounded-xl border focus:outline-none text-slate-200 transition-all font-sans ${
                 validationStates.phone === 'valid' ? 'border-emerald-500/50 focus:border-emerald-500' :
                 validationStates.phone === 'invalid' ? 'border-rose-500/50 focus:border-rose-500' :
                 'border-white/5 focus:border-primary/50'
@@ -262,7 +263,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
           {/* Field: Deal Value */}
           <div className="flex flex-col gap-1.5 col-span-2">
             <div className="flex justify-between items-center text-[10px] uppercase font-mono tracking-wider font-bold">
-              <label className="text-text-muted">Valor Estimado del Trato (COP)</label>
+              <label className="text-slate-400">Valor Estimado del Trato (COP)</label>
               <ValidationBadge state={validationStates.dealValue} />
             </div>
             <input 
@@ -273,7 +274,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
                 setDealValue(val);
                 triggerScan('dealValue', val.toString(), () => validateDealValue(val));
               }} 
-              className={`bg-background-canvas p-2.5 rounded-xl border focus:outline-none text-text-main transition-all font-mono ${
+              className={`bg-slate-950/60 p-2.5 rounded-xl border focus:outline-none text-slate-200 transition-all font-mono ${
                 validationStates.dealValue === 'valid' ? 'border-emerald-500/50 focus:border-emerald-500' :
                 validationStates.dealValue === 'invalid' ? 'border-rose-500/50 focus:border-rose-500' :
                 'border-white/5 focus:border-primary/50'
@@ -283,7 +284,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
 
           {/* Field: Notes */}
           <div className="flex flex-col gap-1.5 col-span-2">
-            <label className="text-text-muted text-[10px] uppercase font-mono tracking-wider font-bold">Notas Iniciales (Borrador)</label>
+            <label className="text-slate-400 text-[10px] uppercase font-mono tracking-wider font-bold">Notas Iniciales (Borrador)</label>
             <textarea 
               value={notes} 
               onChange={e => setNotes(e.target.value)} 
@@ -300,7 +301,7 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
               size="sm" 
               type="button" 
               onClick={onClose} 
-              className="border-border-technical hover:bg-background-subtle text-text-muted font-bold"
+              className="border-white/10 hover:bg-slate-800 text-slate-300 font-bold"
             >
               Cancelar
             </Button>
@@ -332,8 +333,8 @@ function ValidationBadge({ state }: { state: 'idle' | 'scanning' | 'valid' | 'in
 
   if (state === 'scanning') {
     return (
-      <span className="text-[8px] font-bold text-text-muted flex items-center gap-1 animate-pulse">
-        <span className="w-1.5 h-1.5 rounded-full bg-text-muted animate-ping" />
+      <span className="text-[8px] font-bold text-slate-500 flex items-center gap-1 animate-pulse">
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-500 animate-ping" />
         VALIDANDO...
       </span>
     );
@@ -341,16 +342,16 @@ function ValidationBadge({ state }: { state: 'idle' | 'scanning' | 'valid' | 'in
 
   if (state === 'valid') {
     return (
-      <span className="text-[8px] font-bold text-status-success flex items-center gap-1">
-        <Icon name="check" size="sm" className="scale-75 text-status-success font-bold" />
+      <span className="text-[8px] font-bold text-emerald-400 flex items-center gap-1">
+        <Icon name="check" size="sm" className="scale-75 text-emerald-400 font-bold" />
         VAL_OK
       </span>
     );
   }
 
   return (
-    <span className="text-[8px] font-bold text-status-error flex items-center gap-1">
-      <Icon name="close" size="sm" className="scale-75 text-status-error font-bold" />
+    <span className="text-[8px] font-bold text-rose-400 flex items-center gap-1">
+      <Icon name="close" size="sm" className="scale-75 text-rose-400 font-bold" />
       FORMAT_ERR
     </span>
   );

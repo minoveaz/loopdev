@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Heading, LpdText, Skeleton, TechnicalStatusBadge, cn } from '@loopdev/ui';
+import { LpdText, Skeleton, TechnicalStatusBadge, cn } from '@loopdev/ui';
 import { BrandStatusSnapshotProps } from './types';
 
 /**
@@ -28,9 +28,9 @@ export const BrandStatusSnapshot: React.FC<BrandStatusSnapshotProps> = ({
     <div className="flex flex-col gap-4 py-8 border-b border-border-technical">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="flex flex-col gap-3">
-          <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight leading-none">
+          <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight leading-none">
             {brand.name}
-          </Heading>
+          </LpdText>
           
           {/* BRAND STATUS CLUSTER */}
           <div className="flex items-center flex-wrap gap-2">

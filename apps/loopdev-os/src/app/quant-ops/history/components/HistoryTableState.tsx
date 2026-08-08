@@ -28,7 +28,7 @@ export function HistoryTableState({
 
   if (kind === 'error') {
     return (
-      <div className="bg-status-error/10 border border-status-error/30 rounded-lg p-4">
+      <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
         <LpdText size="sm" className="text-red-500">
           Failed to load {message}
         </LpdText>

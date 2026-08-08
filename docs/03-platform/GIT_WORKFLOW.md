@@ -6,64 +6,29 @@ Este documento define el flujo de trabajo Git de LoopDev para garantizar:
 - Cambios trazables por intención.
 - Revisión consistente (PR checklist).
 - Compatibilidad con la gobernanza de componentes (Phase Dependency Rule).
-- Integración controlada en `develop` antes de publicar en `main`.
 
 ---
 
 ## 🌿 Ramas
 
-### Ramas protegidas
-
-### Rama de integración
-- **develop**: rama de integración y validación de cambios aprobados.
-  - **Regla 1:** no se commitea ni se hace push directo.
-  - **Regla 2:** los cambios entran mediante Pull Request.
-  - **Regla 3:** siempre debe pasar CI y revisión requerida.
-
-### Rama estable
+### Rama Estable
 - **main**: Rama estable y siempre desplegable.
-  - **Regla 1:** no se commitea ni se hace push directo.
-  - **Regla 2:** solo recibe cambios mediante PR de release desde `develop`.
-  - **Regla 3:** siempre debe pasar CI y revisión adicional.
+  - **Regla 1:** No se commitea directo.
+  - **Regla 2:** Solo entra vía Pull Request.
+  - **Regla 3:** Siempre debe pasar CI.
 
 ### Ramas de Trabajo
 **Formato:** `tipo/<area>-<tema>`
 
 **Tipos permitidos:**
-- **feature/<area>-<tema>**: nueva funcionalidad (ej: `feature/api-contracts`, `feature/brandhub-assets`).
-- **fix/<area>-<tema>**: corrección de bug (ej: `fix/ui-toast-dedupe`).
-- **chore/<area>-<tema>**: tooling, refactors no funcionales o mantenimiento.
-- **docs/<area>-<tema>**: documentación.
-- **test/<area>-<tema>**: tests y herramientas de validación.
+- **feat/<area>-<tema>**: Nueva funcionalidad (ej: `feat/api-contracts`, `feat/brandhub-assets`).
+- **chore/<tema>**: Tooling, refactors no funcionales, documentación.
+- **fix/<tema>**: Corrección de bug (ej: `fix/toast-dedupe`).
 
 **Reglas Operativas:**
 1. **1 rama = 1 intención principal.**
-2. Las ramas se crean desde el último `develop` actualizado.
-3. Los nombres deben ser claros y legibles.
-4. Si el cambio afecta UI, debe respetar el **Phase Dependency Rule** (no introducir dependencias hacia fases futuras).
-5. Las ramas de estándares, workflows y Design System deben mantenerse separadas de cambios de producto no relacionados.
-
-## Commits
-
-Los commits son unidades coherentes, revisables y reversibles. Se utiliza Conventional Commits:
-
-```text
-type(scope): descripción breve en imperativo
-```
-
-Tipos habituales: `feat`, `fix`, `chore`, `docs`, `test`, `refactor` y `perf`.
-
-Se hace commit cuando una unidad funcional, visual o documental está completa y pasa su validación focalizada. No se agrupan todas las tareas de una rama en un único commit ni se crean commits por cada cambio mínimo de estilo.
-
-Antes de confirmar:
-
-```bash
-git status
-git diff --stat
-git diff --cached --check
-```
-
-Los cambios generados por builds, archivos locales previos, secretos y cambios de otras tareas deben revisarse y mantenerse fuera del commit salvo decisión explícita.
+2. Nombres claros y legibles.
+3. Si el cambio afecta UI, debe respetar el **Phase Dependency Rule** (no introducir dependencias hacia fases futuras).
 
 ---
 
@@ -72,10 +37,7 @@ Los cambios generados por builds, archivos locales previos, secretos y cambios d
 ### Cuándo abrir un PR
 - Cuando el cambio está completo para revisión.
 - Cuando el cambio introduce o actualiza contratos (API, tipos, schemas).
-- Cuando la unidad de trabajo tiene validación local suficiente.
-- Cuando se quiere integrar una rama en `develop`.
-
-El PR hacia `main` se reserva para releases desde `develop` y requiere validación y aprobación adicionales.
+- Cuando se quiere mergear a `main`.
 
 ### Checklist Obligatoria (DoD)
 Antes de mergear, el PR debe cumplir:
@@ -83,19 +45,12 @@ Antes de mergear, el PR debe cumplir:
 - [ ] **Docs actualizadas** si cambian contratos (@loopdev/contracts, API_STANDARDS, schemas).
 - [ ] **No rompe Phase Dependency Rule (UI)**.
 - [ ] **Audit-ready**: El cambio está listo para pasar el auditor (03-quality/AUDIT_PROMPT.md).
-- [ ] La rama tiene una única intención y usa la convención aprobada.
-- [ ] Los commits usan Conventional Commits y no mezclan cambios no relacionados.
-- [ ] Se ejecutaron las validaciones requeridas para el tipo de cambio.
-- [ ] El PR describe riesgos, contratos, migraciones, RLS, secretos e integraciones afectadas.
-- [ ] En cambios frontend se confirma que no se modifican Supabase, migraciones, RLS ni persistencia real sin autorización.
 
 ---
 
 ## 📌 Notas Finales
 - Los cambios de “estándares” (protocolos, workflow, sistema visual) deben ir en PR separado (`chore/...`) para que sean revisables y trazables de forma aislada.
 - Si se detecta una dependencia faltante (**Missing Component Rule**), se detiene el desarrollo del PR y se crea la tarea en la fase correspondiente.
-- La convención de rama preferida usa `feature/`; `feat` se mantiene como tipo de commit.
-- El flujo normal es `develop` -> PR validado -> `main` mediante release.
 
 ---
 *Gobernanza de Plataforma - LoopDev Engineering*

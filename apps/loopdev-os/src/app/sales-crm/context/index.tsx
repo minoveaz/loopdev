@@ -2,10 +2,10 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
-export type LeadLabel = 'Hot Lead' | 'VIP' | 'Follow-up' | 'Docs Pendientes' | 'Urgente' | 'Enterprise';
+export type LeadLabel = '🔥 Hot Lead' | '⭐ VIP' | '🔄 Follow-up' | '📋 Docs Pendientes' | '⏰ Urgente' | '💎 Enterprise';
 
 export const AVAILABLE_ASSIGNEES = ['Elena Gómez', 'Carlos Ruiz', 'María López', 'Andrés Torres'] as const;
-export const AVAILABLE_LABELS: LeadLabel[] = ['Hot Lead', 'VIP', 'Follow-up', 'Docs Pendientes', 'Urgente', 'Enterprise'];
+export const AVAILABLE_LABELS: LeadLabel[] = ['🔥 Hot Lead', '⭐ VIP', '🔄 Follow-up', '📋 Docs Pendientes', '⏰ Urgente', '💎 Enterprise'];
 
 export interface ActivityLogEntry {
   timestamp: string;
@@ -133,7 +133,7 @@ const INITIAL_LEADS: Lead[] = [
     stage: 'negotiation',
     status: 'active',
     assignee: 'Elena Gómez',
-    labels: ['Hot Lead', 'Enterprise'],
+    labels: ['🔥 Hot Lead', '💎 Enterprise'],
     aiScore: 92,
     aiInsights: 'El cliente muestra alta intención de compra tras recibir el demo de Brand Hub. Riesgo de competidores medio.',
     lastContactDate: '2026-07-15',
@@ -230,7 +230,7 @@ const INITIAL_LEADS: Lead[] = [
     stage: 'proposal',
     status: 'active',
     assignee: 'Carlos Ruiz',
-    labels: ['Follow-up', 'Docs Pendientes'],
+    labels: ['🔄 Follow-up', '📋 Docs Pendientes'],
     aiScore: 78,
     aiInsights: 'Foco en el módulo de Quant Ops para automatizar trading corporativo. El presupuesto está aprobado.',
     lastContactDate: '2026-07-16',
@@ -262,7 +262,7 @@ const INITIAL_LEADS: Lead[] = [
     stage: 'contacted',
     status: 'stalled',
     assignee: 'María López',
-    labels: ['Urgente'],
+    labels: ['⏰ Urgente'],
     aiScore: 45,
     aiInsights: 'Bajo engagement en correos informativos. Tomador de decisión principal ausente en las reuniones.',
     lastContactDate: '2026-07-02',
@@ -289,7 +289,7 @@ const INITIAL_LEADS: Lead[] = [
     stage: 'won',
     status: 'active',
     assignee: 'Elena Gómez',
-    labels: ['VIP', 'Enterprise'],
+    labels: ['⭐ VIP', '💎 Enterprise'],
     aiScore: 99,
     aiInsights: 'Negociación exitosa para la Suite completa de Marketing Studio. Contrato firmado digitalmente.',
     lastContactDate: '2026-07-17',
@@ -316,7 +316,7 @@ const INITIAL_LEADS: Lead[] = [
     stage: 'lead',
     status: 'active',
     assignee: 'Andrés Torres',
-    labels: ['Hot Lead'],
+    labels: ['🔥 Hot Lead'],
     aiScore: 82,
     aiInsights: 'Interés inicial alto. Solicita especificaciones sobre el almacenamiento de archivos (DAM).',
     lastContactDate: '2026-07-17',

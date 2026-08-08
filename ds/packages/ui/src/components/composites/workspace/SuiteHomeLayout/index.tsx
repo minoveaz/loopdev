@@ -9,7 +9,6 @@ import { SuiteHomeQuickStart } from './SuiteHomeQuickStart';
 import { SuiteHomeInsights } from './SuiteHomeInsights';
 import { SuiteHomeModules } from './SuiteHomeModules';
 import { ActivityFeed } from '../../utilities/ActivityFeed';
-import { SuiteLaunchpad } from '../SuiteLaunchpad';
 
 export type { SuiteHomeLayoutProps } from './types';
 
@@ -35,8 +34,7 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
     onViewActivityAll,
     modulesTitle = 'Suite Modules',
     insightsTitle = 'Key Metrics',
-    className = '',
-    suiteLaunchpad,
+    className = ''
   } = props;
 
   // Helper para Títulos de Sección (ADN Industrial)
@@ -100,50 +98,23 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
       
       <div className="relative z-10 flex flex-col flex-1 min-h-0">
         {/* 1. ORIENTACIÓN: Hero & Gobernanza */}
-        {suiteLaunchpad ? (
-          <SuiteLaunchpad {...suiteLaunchpad}>
-            {suiteLaunchpad.showLegacySections !== false && <SystemNoticeRail
-              notices={notices}
-              className="mt-2"
-            />}
-            {suiteLaunchpad.showLegacySections !== false && <main className="flex-1 overflow-y-auto px-8 py-10 custom-scrollbar">
-              <div className="mx-auto flex max-w-[1600px] flex-col gap-16">
-                <section className="grid grid-cols-12 items-start gap-8">
-                  {renderActivationLayer()}
-                </section>
-                <section className="grid grid-cols-12 items-start gap-12">
-                  <div className="col-span-12 flex flex-col gap-10 xl:col-span-8">
-                    <div className="flex flex-col">
-                      <SectionHeader title={modulesTitle} />
-                      <SuiteHomeModules modules={modules} />
-                    </div>
-                    <div className="hidden lg:block xl:hidden">{renderActivityCard("col-span-12")}</div>
-                  </div>
-                  {renderActivityCard("hidden xl:col-span-4 xl:block xl:sticky xl:top-8")}
-                  <div className="col-span-12 mt-8 lg:hidden">{renderActivityCard("col-span-12")}</div>
-                </section>
-              </div>
-            </main>}
-          </SuiteLaunchpad>
-        ) : (
-          <SuiteHomeHero
-            title={title}
-            subtitle={subtitle}
-            contextLine={contextLine}
-            icon={icon}
-            tone={tone}
-            status={status}
-          />
-        )}
+        <SuiteHomeHero 
+          title={title} 
+          subtitle={subtitle} 
+          contextLine={contextLine}
+          icon={icon}
+          tone={tone}
+          status={status}
+        />
         
         {/* GOBERNANZA OPERATIVA (New SystemNoticeRail) */}
-        {!suiteLaunchpad && <SystemNoticeRail
+        <SystemNoticeRail 
           notices={notices} 
           className="mt-2"
-        />}
+        />
 
         {/* 2. CENTRO DE COMANDO (Área Principal) */}
-        {!suiteLaunchpad && <main className="flex-1 px-8 py-10 overflow-y-auto custom-scrollbar">
+        <main className="flex-1 px-8 py-10 overflow-y-auto custom-scrollbar">
           <div className="max-w-[1600px] mx-auto flex flex-col gap-16">
             
             {/* SECCIÓN A: ACTIVACIÓN (Métricas y Acciones) */}
@@ -177,7 +148,7 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
             </section>
 
           </div>
-        </main>}
+        </main>
       </div>
     </div>
   );

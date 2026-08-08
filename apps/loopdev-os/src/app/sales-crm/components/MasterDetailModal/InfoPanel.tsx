@@ -4,8 +4,7 @@ import React, { useState } from 'react';
 import { 
   TechnicalCard, 
   LpdText, 
-  Icon,
-  IconButton,
+  Icon, 
   Button, 
   Input, 
   Select,
@@ -46,8 +45,8 @@ export function InfoPanel() {
     );
     if (!lastWhatsAppLog) {
       return { 
-        status: 'Desatendido',
-        color: 'text-status-error border-status-error/20 bg-status-error/5',
+        status: 'Desatendido 🚨', 
+        color: 'text-rose-500 border-rose-500/20 bg-rose-500/5', 
         desc: 'No se registran interacciones previas.' 
       };
     }
@@ -56,20 +55,20 @@ export function InfoPanel() {
     
     if (diffDays <= 1) {
       return { 
-        status: 'Al Día',
-        color: 'text-status-success border-status-success/20 bg-status-success/5',
+        status: 'Al Día ✅', 
+        color: 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5', 
         desc: 'Contacto registrado en las últimas 24 horas.' 
       };
     } else if (diffDays <= 3) {
       return { 
-        status: 'En Riesgo',
-        color: 'text-status-warning border-status-warning/20 bg-status-warning/5',
+        status: 'En Riesgo ⚠️', 
+        color: 'text-amber-500 border-amber-500/20 bg-amber-500/5', 
         desc: `Último contacto hace ${diffDays} días.` 
       };
     } else {
       return { 
-        status: 'Desatendido',
-        color: 'text-status-error border-status-error/20 bg-status-error/5 animate-pulse',
+        status: 'Desatendido 🚨', 
+        color: 'text-rose-500 border-rose-500/20 bg-rose-500/5 animate-pulse', 
         desc: `Inactividad crítica por más de ${diffDays} días.` 
       };
     }
@@ -146,13 +145,12 @@ export function InfoPanel() {
                 <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Nombre Completo</Label>
                 <LpdText size="xs" weight="semibold" className="text-text-main dark:text-white">{lead.name}</LpdText>
               </div>
-              <IconButton
-                icon={copiedField === 'name' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
-                size="sm"
-                aria-label="Copiar nombre"
+              <button 
                 onClick={() => copyToClipboard(lead.name, 'name')}
-                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-background-subtle"
-              />
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
+              >
+                <Icon name={copiedField === 'name' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
+              </button>
             </div>
 
             <div className="flex justify-between items-center group">
@@ -160,13 +158,12 @@ export function InfoPanel() {
                 <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Compañía / Organización</Label>
                 <LpdText size="xs" weight="semibold" className="text-text-main dark:text-white">{lead.company}</LpdText>
               </div>
-              <IconButton
-                icon={copiedField === 'company' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
-                size="sm"
-                aria-label="Copiar compañía"
+              <button 
                 onClick={() => copyToClipboard(lead.company, 'company')}
-                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-background-subtle"
-              />
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
+              >
+                <Icon name={copiedField === 'company' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
+              </button>
             </div>
 
             <div className="flex justify-between items-center group">
@@ -176,29 +173,27 @@ export function InfoPanel() {
                   <LpdText size="xs" weight="semibold" variant="mono">{lead.email}</LpdText>
                 </a>
               </div>
-              <IconButton
-                icon={copiedField === 'email' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
-                size="sm"
-                aria-label="Copiar correo"
+              <button 
                 onClick={() => copyToClipboard(lead.email, 'email')}
-                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-background-subtle"
-              />
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
+              >
+                <Icon name={copiedField === 'email' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
+              </button>
             </div>
 
             <div className="flex justify-between items-center group">
               <div className="flex flex-col gap-0.5">
                 <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Teléfono / WhatsApp</Label>
-                <a href={`tel:${lead.phone}`} className="text-text-main hover:text-primary font-semibold font-mono">
+                <a href={`tel:${lead.phone}`} className="text-slate-750 dark:text-slate-350 hover:text-primary font-semibold font-mono">
                   <LpdText size="xs" weight="semibold" variant="mono">{lead.phone}</LpdText>
                 </a>
               </div>
-              <IconButton
-                icon={copiedField === 'phone' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
-                size="sm"
-                aria-label="Copiar teléfono"
+              <button 
                 onClick={() => copyToClipboard(lead.phone, 'phone')}
-                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-background-subtle"
-              />
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
+              >
+                <Icon name={copiedField === 'phone' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
+              </button>
             </div>
           </div>
         )}
@@ -248,7 +243,7 @@ export function InfoPanel() {
                 max="100"
                 value={editedLead.winProbability || 50}
                 onChange={handleEditChange}
-                className="w-full h-1.5 bg-background-subtle rounded-lg appearance-none cursor-pointer accent-primary"
+                className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary"
               />
             </div>
             <Select 
@@ -284,7 +279,7 @@ export function InfoPanel() {
                 <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Probabilidad de Éxito</Label>
                 <LpdText size="xs" weight="bold" variant="mono" className="text-primary">{lead.winProbability || 50}%</LpdText>
               </div>
-              <div className="w-full bg-background-subtle rounded-full h-2 overflow-hidden border border-border-technical">
+              <div className="w-full bg-slate-100 dark:bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-200/40 dark:border-white/5">
                 <div 
                   className="bg-primary h-full transition-all duration-500 rounded-full" 
                   style={{ width: `${lead.winProbability || 50}%` }}
@@ -325,12 +320,12 @@ export function InfoPanel() {
               onChange={handleEditChange}
               size="sm"
             >
-              <option value="facebook_ads">Facebook Ads</option>
-              <option value="google_ads">Google Ads</option>
-              <option value="landing_page">Landing Page Directa</option>
-              <option value="partner_referral">Recomendado por Partner</option>
-              <option value="client_referral">Recomendado por Cliente</option>
-              <option value="organic">Búsqueda Orgánica / RRSS</option>
+              <option value="facebook_ads">Facebook Ads 🔵</option>
+              <option value="google_ads">Google Ads 🟡</option>
+              <option value="landing_page">Landing Page Directa 📄</option>
+              <option value="partner_referral">Recomendado por Partner 🤝</option>
+              <option value="client_referral">Recomendado por Cliente 👤</option>
+              <option value="organic">Búsqueda Orgánica / RRSS 🌐</option>
             </Select>
 
             {(editedLead.leadSourceType === 'partner_referral' || editedLead.leadSourceType === 'client_referral') ? (
@@ -355,7 +350,7 @@ export function InfoPanel() {
 
             {/* Collapsible UTM details in edit mode */}
             <details className="text-xs group border border-slate-200/60 dark:border-white/5 rounded-xl p-2 bg-slate-50/50 dark:bg-slate-900/10">
-              <summary className="font-mono font-bold text-[9px] text-text-muted cursor-pointer select-none">
+              <summary className="font-mono font-bold text-[9px] text-slate-450 dark:text-slate-500 cursor-pointer select-none">
                 VER PARÁMETROS UTM DE ATRIBUCIÓN
               </summary>
               <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-slate-200/50 dark:border-white/5">
@@ -391,13 +386,13 @@ export function InfoPanel() {
             <div className="flex justify-between items-center">
               <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Fuente Principal</Label>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-900 text-slate-750 dark:text-slate-350 border border-slate-200 dark:border-white/5">
-                {lead.leadSourceType === 'facebook_ads' && 'Facebook Ads'}
-                {lead.leadSourceType === 'google_ads' && 'Google Ads'}
-                {lead.leadSourceType === 'landing_page' && 'Landing Page Directa'}
-                {lead.leadSourceType === 'partner_referral' && 'Referido por Partner'}
-                {lead.leadSourceType === 'client_referral' && 'Referido por Cliente'}
-                {lead.leadSourceType === 'organic' && 'Búsqueda Orgánica'}
-                {!lead.leadSourceType && 'Inbound Desconocido'}
+                {lead.leadSourceType === 'facebook_ads' && 'Facebook Ads 🔵'}
+                {lead.leadSourceType === 'google_ads' && 'Google Ads 🟡'}
+                {lead.leadSourceType === 'landing_page' && 'Landing Page Directa 📄'}
+                {lead.leadSourceType === 'partner_referral' && 'Referido por Partner 🤝'}
+                {lead.leadSourceType === 'client_referral' && 'Referido por Cliente 👤'}
+                {lead.leadSourceType === 'organic' && 'Búsqueda Orgánica 🌐'}
+                {!lead.leadSourceType && 'Inbound Desconocido 🌐'}
               </span>
             </div>
 
@@ -459,7 +454,7 @@ export function InfoPanel() {
               {health.status}
             </span>
           </div>
-          <LpdText size="xs" className="text-text-muted leading-relaxed">
+          <LpdText size="xs" className="text-slate-500 dark:text-slate-400 leading-relaxed">
             {health.desc}
           </LpdText>
 
@@ -468,7 +463,7 @@ export function InfoPanel() {
           <div className="flex flex-col gap-1.5">
             <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Próxima Tarea Programada</Label>
             {nextTask ? (
-              <div className="flex items-center gap-1.5 text-text-main font-medium font-sans">
+              <div className="flex items-center gap-1.5 text-slate-750 dark:text-slate-350 font-medium font-sans">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                 <LpdText size="xs" weight="medium" className="truncate max-w-[200px]">{nextTask.title}</LpdText>
                 <LpdText size="nano" variant="mono" className="text-text-muted">
@@ -476,7 +471,7 @@ export function InfoPanel() {
                 </LpdText>
               </div>
             ) : (
-              <LpdText size="xs" className="text-text-muted italic">Sin tareas pendientes agendadas.</LpdText>
+              <LpdText size="xs" className="text-slate-400 dark:text-slate-500 italic">Sin tareas pendientes agendadas.</LpdText>
             )}
           </div>
         </div>
@@ -505,10 +500,10 @@ export function InfoPanel() {
               onChange={handleEditChange}
               size="sm"
             >
-              <option value="Plan Básico Familiar">Plan Básico Familiar</option>
-              <option value="Plan Familiar Completo">Plan Familiar Completo</option>
-              <option value="Plan Vital Senior">Plan Vital Senior</option>
-              <option value="Plan Módulo Global VIP">Plan Módulo Global VIP</option>
+              <option value="Plan Básico Familiar">Plan Básico Familiar 🏥</option>
+              <option value="Plan Familiar Completo">Plan Familiar Completo 💎</option>
+              <option value="Plan Vital Senior">Plan Vital Senior 👵</option>
+              <option value="Plan Módulo Global VIP">Plan Módulo Global VIP ✈️</option>
             </Select>
 
             <div className="flex flex-col gap-1.5 w-full">
@@ -536,7 +531,7 @@ export function InfoPanel() {
 
             <div className="flex flex-col gap-1">
               <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Notas Comerciales</Label>
-              <LpdText size="xs" className="text-text-main leading-relaxed whitespace-pre-wrap">
+              <LpdText size="xs" className="text-slate-700 dark:text-slate-350 leading-relaxed whitespace-pre-wrap">
                 {lead.notes || 'Sin anotaciones registradas.'}
               </LpdText>
             </div>
@@ -576,13 +571,13 @@ export function InfoPanel() {
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
               </svg>
-              <span className="absolute font-mono text-[10px] font-black text-text-main">
+              <span className="absolute font-mono text-[10px] font-black text-slate-800 dark:text-white">
                 {lead.aiScore || 70}%
               </span>
             </div>
             <div className="flex flex-col gap-0.5">
               <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Conversión Estimada</Label>
-              <LpdText size="xs" className="text-text-muted leading-relaxed text-[10px]">
+              <LpdText size="xs" className="text-slate-500 dark:text-slate-400 leading-relaxed text-[10px]">
                 Basado en perfil B2C, latencia y respuesta en WhatsApp.
               </LpdText>
             </div>
@@ -594,7 +589,7 @@ export function InfoPanel() {
             <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Recomendaciones de IA</Label>
             <div className="p-3 bg-primary/5 border border-primary/10 rounded-xl flex items-start gap-2">
               <Icon name={ICON_REGISTRY.status.bolt} size="sm" className="text-primary mt-0.5 shrink-0" />
-              <LpdText size="xs" className="text-text-main leading-relaxed">
+              <LpdText size="xs" className="text-slate-700 dark:text-slate-350 leading-relaxed">
                 {lead.aiInsights || 'Analizando comportamiento del lead para generar recomendaciones de cierre...'}
               </LpdText>
             </div>
@@ -621,16 +616,16 @@ export function InfoPanel() {
           </div>
 
           {lead.hasGeneratedPdf ? (
-            <div className="p-3 bg-status-success/5 border border-status-success/10 rounded-xl flex items-center justify-between select-none">
-              <div className="flex items-center gap-2 text-status-success">
-                <Icon name={ICON_REGISTRY.status.success} size="sm" className="text-status-success" />
+            <div className="p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center justify-between select-none">
+              <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
+                <Icon name={ICON_REGISTRY.status.success} size="sm" className="text-emerald-500" />
                 <LpdText size="nano" weight="bold" className="uppercase">COTIZACIÓN ACTIVA LISTA</LpdText>
               </div>
               <LpdText size="nano" variant="mono" className="text-slate-500 dark:text-slate-400">Enviado por Email</LpdText>
             </div>
           ) : (
-            <div className="p-3 bg-status-warning/5 border border-status-warning/10 rounded-xl flex items-center gap-2 select-none">
-              <Icon name={ICON_REGISTRY.status.error} size="sm" className="text-status-error" />
+            <div className="p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl flex items-center gap-2 select-none">
+              <Icon name={ICON_REGISTRY.status.error} size="sm" className="text-amber-500" />
               <LpdText size="nano" className="text-slate-700 dark:text-slate-350">No se han emitido presupuestos de seguros para este lead.</LpdText>
             </div>
           )}

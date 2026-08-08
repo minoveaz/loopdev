@@ -16,7 +16,6 @@
     "format:check": "node scripts/check-format-changed.mjs",
     "duplication:check": "jscpd --config .jscpd.json",
     "classes:check": "node scripts/check-duplicate-classes.mjs",
-    "front:audit": "node scripts/front-audit.mjs",
     "knip": "knip",
     "quality:static": "pnpm format:check && pnpm classes:check && pnpm duplication:check && pnpm knip --no-exit-code --reporter compact",
     "validate": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",

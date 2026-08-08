@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, Button, Skeleton, TechnicalStatusBadge } from '@loopdev/ui';
+import { LpdText, Skeleton, TechnicalStatusBadge } from '@loopdev/ui';
 import { GovernanceSummaryProps } from './types';
 
 /**
@@ -36,9 +36,8 @@ export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
 
       <div className="flex flex-col gap-2 mt-2">
         {domains.map((domain) => (
-          <Button
+          <button
             key={domain.id}
-            variant="ghost"
             onClick={() => onDomainClick?.(domain.id)}
             className="flex items-center justify-between py-2 border-b border-border-technical/30 last:border-0 hover:bg-background-subtle rounded px-2 -mx-2 transition-colors"
           >
@@ -51,7 +50,7 @@ export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
               variant="ghost"
               className="scale-90 origin-right"
             />
-          </Button>
+          </button>
         ))}
       </div>
     </div>

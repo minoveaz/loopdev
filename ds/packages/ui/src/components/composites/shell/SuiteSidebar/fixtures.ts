@@ -161,7 +161,7 @@ export const QUANT_OPS_SCHEMA: NavigationSchema = {
     suiteId: 'quant-ops',
     suiteName: 'Quant Ops',
     suiteIcon: 'Activity',
-    accentColor: 'var(--lpd-color-brand-energy)',
+    accentColor: '#f59e0b', // Amber 500
     surfaceVariant: 'canvas',
     route: { routeId: '/quant-ops' },
   },

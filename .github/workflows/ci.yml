@@ -21,8 +21,6 @@ jobs:
     timeout-minutes: 20
     env:
       NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS: '1'
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
     steps:
       - name: Checkout
@@ -47,9 +45,6 @@ jobs:
 
       - name: Static quality checks
         run: pnpm quality:static
-
-      - name: Build shared contracts
-        run: pnpm --filter @loopdev/contracts build
 
       - name: Typecheck
         run: pnpm typecheck

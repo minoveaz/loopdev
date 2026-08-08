@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Heading, LpdText } from '@loopdev/ui';
+import { LpdText } from '@loopdev/ui';
 import { ColorTokenCard } from '../ColorTokenCard';
 import { TokenGroupSectionProps } from './types';
 
@@ -25,9 +25,9 @@ export const TokenGroupSection: React.FC<TokenGroupSectionProps> = ({
       {/* GROUP HEADER */}
       <div className="flex flex-col gap-2 pb-4 border-b border-border-technical/30">
         <div className="flex items-center justify-between">
-          <Heading as="h2" size="lg" weight="bold" className="text-text-main uppercase tracking-tight">
+          <LpdText size="lg" weight="bold" className="text-text-main uppercase tracking-tight">
             {title}
-          </Heading>
+          </LpdText>
           <LpdText size="nano" className="text-text-muted opacity-60 font-mono">
             {`{ ${tokens.length} tokens }`}
           </LpdText>

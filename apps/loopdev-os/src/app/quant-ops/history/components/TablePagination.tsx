@@ -1,4 +1,4 @@
-import { LpdText, Button } from '@loopdev/ui';
+import { LpdText } from '@loopdev/ui';
 
 interface TablePaginationProps {
   pages: number;
@@ -23,24 +23,20 @@ export function TablePagination({
         Page {Math.floor(currentOffset / limit) + 1} of {pages} ({total} total)
       </LpdText>
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
+        <button
           onClick={() => onPageChange?.(Math.max(0, currentOffset - limit))}
           disabled={currentOffset === 0}
           className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           ← Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
+        </button>
+        <button
           onClick={() => onPageChange?.(currentOffset + limit)}
           disabled={currentOffset + limit >= total}
           className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Next →
-        </Button>
+        </button>
       </div>
     </div>
   );

@@ -3,7 +3,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { BotStatus } from '@loopdev/contracts';
-import { useOrganization } from '@/hooks/useOrganization';
 
 type JsonObject = Record<string, unknown>;
 
@@ -63,15 +62,14 @@ const asNumberArray = (value: unknown): number[] =>
  */
 export const useBotFleet = () => {
   const queryClient = useQueryClient();
-  const { activeOrganization } = useOrganization();
-  const invalidateFleet = () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet', activeOrganization?.id] });
+  const invalidateFleet = () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet'] });
 
   const {
     data: bots = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['trading', 'fleet', activeOrganization?.id],
+    queryKey: ['trading', 'fleet'],
     queryFn: async () => {
       const { data, error: supabaseError } = await supabase
         .from('quant_bots')
@@ -211,10 +209,8 @@ export const useBotFleet = () => {
 
   const deployBot = useMutation({
     mutationFn: async (params: BotMutationParams) => {
-      if (!activeOrganization?.legacyTenantId) throw new Error('Select an organization before deploying a bot');
       const payload = buildBotPayload(params, {
-        tenant_id: activeOrganization.legacyTenantId,
-        organization_id: activeOrganization.id,
+        tenant_id: '00000000-0000-0000-0000-000000000000',
         status: 'paper_trading',
         current_action: 'Initializing...',
         updated_at: new Date().toISOString(),

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, Skeleton } from '@loopdev/ui';
+import { LpdText, Skeleton } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -67,11 +67,11 @@ export default function BrandTypographyPage() {
       <header className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+            <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
               Visual System _TYPOGRAPHY
-            </Heading>
+            </LpdText>
             {system.aiOptimized && (
-              <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase flex items-center gap-1.5">
+              <div className="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-600 text-[10px] font-bold uppercase flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[12px]">auto_awesome</span>
                 AI Optimized
               </div>
@@ -86,7 +86,7 @@ export default function BrandTypographyPage() {
       {/* SECTION 1: Typeface Definition (The Cards) */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
-          <Heading as="h2" size="lg" weight="bold" className="text-text-main tracking-tight">Active Typefaces</Heading>
+          <LpdText size="lg" weight="bold" className="text-text-main tracking-tight">Active Typefaces</LpdText>
           <div className="flex gap-2">
              <span className="px-2 py-1 rounded bg-background-subtle border border-border-technical text-[10px] font-mono text-text-muted">
                Ratio: {system.scaleRatio} (Calculated)

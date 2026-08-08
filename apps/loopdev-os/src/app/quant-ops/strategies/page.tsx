@@ -267,7 +267,7 @@ export default function StrategiesPage() {
       {backtestResult && selectedStrategyForBacktest && (
         <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 md:p-8">
           <div
-            className="absolute inset-0 bg-background-canvas/80 backdrop-blur-md animate-in fade-in duration-300"
+            className="absolute inset-0 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300"
             onClick={() => setSelectedStrategyForBacktest(null)}
           />
 
@@ -278,7 +278,7 @@ export default function StrategiesPage() {
           >
             <header className="p-6 border-b border-border-technical/30 flex items-center justify-between bg-background-subtle/30">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-status-success/10 flex items-center justify-center text-status-success border border-status-success/20">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
                   <span className="material-symbols-outlined text-xl font-bold">query_stats</span>
                 </div>
                 <Heading size="xs" weight="bold" className="uppercase tracking-tight italic">
@@ -438,9 +438,9 @@ export default function StrategiesPage() {
           </>
         }
       >
-        <div className="p-4 bg-status-error/5 border border-status-error/10 rounded-xl flex gap-3">
-          <span className="material-symbols-outlined text-status-error">warning</span>
-          <LpdText size="xs" className="text-status-error/80 leading-relaxed font-medium">
+        <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-xl flex gap-3">
+          <span className="material-symbols-outlined text-rose-500">warning</span>
+          <LpdText size="xs" className="text-rose-600/80 leading-relaxed font-medium">
             Warning: If this strategy is currently active on any bot, those bots will be stopped
             immediately to prevent undefined behavior.
           </LpdText>

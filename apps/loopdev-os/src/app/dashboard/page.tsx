@@ -1,7 +1,7 @@
 'use client'
 
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
-import { Heading, Icon, IconButton } from '@loopdev/ui';
+import { Icon } from '@loopdev/ui';
 
 const Card = ({ title, icon }: { title: string, icon: string }) => (
   <div className="glass-panel rounded-xl p-6 hover:border-white/20 transition-all cursor-pointer group border border-white/5">
@@ -9,9 +9,11 @@ const Card = ({ title, icon }: { title: string, icon: string }) => (
       <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
         <Icon name={icon} className="text-primary-blue" size="md" />
       </div>
-      <IconButton icon="more_vert" size="sm" aria-label={`Más acciones para ${title}`} className="text-slate-500 hover:text-white transition-colors" />
+      <button className="text-slate-500 hover:text-white transition-colors">
+        <span className="material-symbols-outlined">more_vert</span>
+      </button>
     </div>
-    <Heading as="h4" size="sm" weight="bold" className="mb-1">{title}</Heading>
+    <h4 className="font-bold text-lg mb-1">{title}</h4>
     <p className="text-xs text-slate-400">Modified 4 hours ago</p>
   </div>
 );

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, Button, cn } from '@loopdev/ui';
+import { LpdText, cn } from '@loopdev/ui';
 import { ActionCardProps } from './types';
 
 /**
@@ -22,8 +22,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
   };
 
   return (
-    <Button
-      variant="secondary"
+    <button
       onClick={onClick}
       className={cn(
         "flex items-center gap-4 p-4 rounded-xl border transition-all text-left",
@@ -44,6 +43,6 @@ export const ActionCard: React.FC<ActionCardProps> = ({
           {description}
         </LpdText>
       </div>
-    </Button>
+    </button>
   );
 };

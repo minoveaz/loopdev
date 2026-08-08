@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, Button, cn } from '@loopdev/ui';
+import { LpdText, cn } from '@loopdev/ui';
 import { ColorContextBarProps } from './types';
 
 /**
@@ -33,10 +33,8 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
         {/* CATEGORY TABS */}
         <div className="flex bg-background-subtle rounded-lg p-1 border border-border-technical/50">
           {categories.map((cat) => (
-            <Button
-              type="button"
+            <button
               key={cat.id}
-              variant="ghost"
               onClick={() => onCategoryChange(cat.id)}
               className={cn(
                 "px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
@@ -46,7 +44,7 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               )}
             >
               {cat.label}
-            </Button>
+            </button>
           ))}
         </div>
 
@@ -74,10 +72,7 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
             <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40">Theme</LpdText>
           </div>
           <div className="flex bg-background-subtle rounded-lg p-0.5 border border-border-technical/30">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
+            <button 
               onClick={() => onThemeChange('light')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
@@ -85,11 +80,8 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               )}
             >
               <span className="material-symbols-outlined text-sm">light_mode</span>
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
+            </button>
+            <button 
               onClick={() => onThemeChange('dark')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
@@ -97,7 +89,7 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               )}
             >
               <span className="material-symbols-outlined text-sm">dark_mode</span>
-            </Button>
+            </button>
           </div>
           <LpdText size="nano" weight="bold" className="text-primary font-mono pl-1">
             {`{ ${theme.toUpperCase()} }`}
@@ -107,10 +99,7 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
         {/* VIEW MODE */}
         <div className="flex items-center gap-2">
           <div className="flex bg-background-subtle rounded-lg p-0.5 border border-border-technical/30">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
+            <button 
               onClick={() => onViewModeChange('grid')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
@@ -118,11 +107,8 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               )}
             >
               <span className="material-symbols-outlined text-sm">grid_view</span>
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
+            </button>
+            <button 
               onClick={() => onViewModeChange('table')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
@@ -130,7 +116,7 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               )}
             >
               <span className="material-symbols-outlined text-sm">table_rows</span>
-            </Button>
+            </button>
           </div>
         </div>
       </div>
