@@ -121,7 +121,7 @@ export default function BrandTypographyPage() {
       {/* SECTION 2: Hierarchy (The Math) */}
       <section className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
-          <LpdText size="lg" weight="bold" className="text-text-main tracking-tight">Typographic Hierarchy</LpdText>
+          <Heading as="h2" size="lg" weight="bold" className="text-text-main tracking-tight">Typographic Hierarchy</Heading>
           <LpdText size="sm" className="text-text-muted">
             Calculated dynamically based on base size ({system.baseSize}px) and scale ratio.
           </LpdText>

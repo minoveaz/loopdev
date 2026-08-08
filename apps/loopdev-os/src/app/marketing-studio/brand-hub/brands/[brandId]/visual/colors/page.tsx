@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { LpdText, TechnicalText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 
 // Components
 import { ColorContextBar } from '@/suites/marketing-studio/brand-hub/components/ColorContextBar';
@@ -91,9 +91,9 @@ export default function BrandColorsPage() {
       <header className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+            <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
               Visual System _COLORS
-            </LpdText>
+            </Heading>
             <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase">
               v1.5 Semantic
             </div>

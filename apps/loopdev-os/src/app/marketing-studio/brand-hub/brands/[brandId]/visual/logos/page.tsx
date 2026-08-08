@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { LpdText, TechnicalText, Skeleton, EmptyState, BrandLogo, Icon } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, BrandLogo, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -71,9 +71,9 @@ export default function BrandLogoPage() {
       <header className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+            <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
               Visual System _LOGOS
-            </LpdText>
+            </Heading>
             <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase flex items-center gap-1.5">
               <Icon name="verified" size="sm" />
               {isLoopDev ? 'Certified Identity' : 'Official Assets'}
@@ -98,7 +98,7 @@ export default function BrandLogoPage() {
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">02</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Primary Lockups</LpdText>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">Primary Lockups</Heading>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -123,7 +123,7 @@ export default function BrandLogoPage() {
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">03</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Context Variants</LpdText>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">Context Variants</Heading>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -152,7 +152,7 @@ export default function BrandLogoPage() {
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">04</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Scale Validation</LpdText>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">Scale Validation</Heading>
         </div>
         <LogoScaleTest 
           logo={primary.isotype} 
@@ -164,7 +164,7 @@ export default function BrandLogoPage() {
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">05</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Supporting Elements: Brackets</LpdText>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">Supporting Elements: Brackets</Heading>
         </div>
         <BracketsShowcase />
       </section>
