@@ -25,10 +25,6 @@ export default function LaunchpadPage() {
   const isLocked = (permission: string, suite: 'marketing' | 'crm' | 'health' | 'quant') =>
     !isPlatformAdministrator && (isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite));
 
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
-  };
-
   const accessState = resolveAccessState({
     isAuthLoading,
     hasSession: Boolean(user),
@@ -82,7 +78,7 @@ export default function LaunchpadPage() {
         <div className="w-full max-w-6xl">
           <div className="mb-16">
             <LpdText size="nano" weight="black" className="text-primary tracking-[0.5em] uppercase mb-4">Core_Suites_Available</LpdText>
-            <Heading size="3xl" weight="bold" className="dark:text-white text-slate-900 tracking-tight max-w-2xl">
+            <Heading size="3xl" weight="bold" className="text-text-main tracking-tight max-w-2xl">
               Initialize your <span className="text-primary font-black">Work Context</span> to start building.
             </Heading>
           </div>

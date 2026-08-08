@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { LpdText, Icon, ModuleCard, Skeleton } from '@loopdev/ui';
+import { LpdText, Icon, ModuleCard, Skeleton, Button } from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 
 /**
@@ -45,7 +45,10 @@ export default function BrandsDirectoryPage() {
         ))}
 
         {/* Action Card: Create New */}
-        <button 
+        <Button
+          variant="outline"
+          size="sm"
+          type="button"
           onClick={() => console.log('New Brand Flow')}
           className="flex flex-col items-center justify-center p-6 border border-dashed border-border-technical rounded-2xl bg-white/2 hover:bg-primary/5 hover:border-primary/30 transition-all group min-h-[240px]"
         >
@@ -53,7 +56,7 @@ export default function BrandsDirectoryPage() {
             <Icon name="add" className="text-text-muted group-hover:text-primary" />
           </div>
           <LpdText size="sm" weight="bold" className="text-text-muted group-hover:text-primary">Create Brand</LpdText>
-        </button>
+        </Button>
       </div>
     </div>
   );

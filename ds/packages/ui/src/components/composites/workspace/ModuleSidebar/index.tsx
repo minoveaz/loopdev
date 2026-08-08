@@ -1,10 +1,16 @@
 'use client';
 
 import React from 'react';
-import { IconButton, Input, LpdText, TechnicalStatusBadge, NavGroup, ScrollArea, Button, Skeleton } from '../../../atoms';
+import { IconButton, Input, LpdText, NavGroup, ScrollArea, Button, Skeleton } from '../../../atoms';
 import { ModuleSidebarProps, BrandItem } from './types';
 
 export type { BrandItem, ModuleSidebarProps } from './types';
+
+const brandStatusConfig = {
+  published: { label: 'Published', color: 'bg-emerald-500' },
+  draft: { label: 'Draft', color: 'bg-energy-yellow' },
+  archived: { label: 'Archived', color: 'bg-slate-400' },
+} as const;
 
 /**
  * @component ModuleSidebar
@@ -85,12 +91,10 @@ export const ModuleSidebar: React.FC<ModuleSidebarProps> = (props) => {
                         ID: {brand.id.substring(0, 8)}
                       </LpdText>
                     </div>
-                    <TechnicalStatusBadge 
-                      label={brand.status} 
-                      severity={brand.status === 'published' ? 'success' : 'warning'} 
-                      variant="ghost"
-                      className="scale-90 origin-right"
-                    />
+                    <span className="inline-flex items-center gap-1.5 shrink-0 rounded-full border border-border-technical px-2 py-1 text-[10px] font-sans font-semibold text-text-muted">
+                      <span className={`h-1.5 w-1.5 rounded-full ${brandStatusConfig[brand.status].color}`} />
+                      {brandStatusConfig[brand.status].label}
+                    </span>
                   </button>
                 ))}
               </div>

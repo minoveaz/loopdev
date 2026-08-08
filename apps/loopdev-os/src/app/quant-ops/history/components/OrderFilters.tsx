@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LpdText } from '@loopdev/ui';
+import { LpdText, Button } from '@loopdev/ui';
 import type { OrderFilters } from '@/types/orders';
 
 interface OrderFiltersProps {
@@ -36,7 +36,7 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
 
       {/* Side Filter */}
       <div className="flex gap-2">
-        <button
+        <Button variant="outline" size="sm" type="button"
           onClick={() => handleSideChange(undefined)}
           className={`px-3 py-1 text-sm rounded border transition-colors ${
             !filters.side
@@ -45,8 +45,8 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
           }`}
         >
           All
-        </button>
-        <button
+        </Button>
+        <Button variant="outline" size="sm" type="button"
           onClick={() => handleSideChange('buy')}
           className={`px-3 py-1 text-sm rounded border transition-colors ${
             filters.side === 'buy'
@@ -55,8 +55,8 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
           }`}
         >
           Buy Only
-        </button>
-        <button
+        </Button>
+        <Button variant="outline" size="sm" type="button"
           onClick={() => handleSideChange('sell')}
           className={`px-3 py-1 text-sm rounded border transition-colors ${
             filters.side === 'sell'
@@ -65,16 +65,16 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
           }`}
         >
           Sell Only
-        </button>
+        </Button>
       </div>
 
       {/* Reset Button */}
-      <button
+      <Button variant="ghost" size="sm" type="button"
         onClick={handleReset}
         className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated transition-colors ml-auto"
       >
         Reset Filters
-      </button>
+      </Button>
     </div>
   );
 }

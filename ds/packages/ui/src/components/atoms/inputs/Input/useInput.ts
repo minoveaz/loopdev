@@ -55,7 +55,7 @@ export const useInput = (props: InputProps) => {
   );
 
   const inputClasses = cn(
-    "w-full bg-transparent border-none focus:ring-0 outline-none text-text-main dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80",
+    "lpd-input w-full bg-transparent border-none focus:ring-0 outline-none text-text-main dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80",
     // Sizes
     size === 'sm' && "px-3 py-1.5 text-xs",
     size === 'md' && "px-4 py-2.5 text-sm",

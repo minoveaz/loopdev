@@ -206,13 +206,13 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8">
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
+      <div className="absolute inset-0 bg-background-canvas/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
 
       <TechnicalSurface variant="surface" depth="overlay" className="relative z-10 w-full max-w-2xl h-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-300">
         <div className="flex flex-col h-full w-full">
           <header className="p-6 border-b border-border-technical/30 flex items-center justify-between bg-background-subtle/30 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20">
+              <div className="w-10 h-10 rounded-xl bg-energy-yellow/10 flex items-center justify-center text-energy-yellow border border-energy-yellow/20">
                 <span className="material-symbols-outlined text-xl font-bold italic">add_task</span>
               </div>
               <div>
@@ -233,7 +233,7 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
               <div className="flex flex-col gap-2">
                 <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">Target_Exchange_Account</label>
                 <select 
-                  className="w-full h-10 px-3 rounded-lg bg-white dark:bg-[#161E33] border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
+                  className="w-full h-10 px-3 rounded-lg bg-white dark:bg-lpd-bg-dark border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                   value={formData.exchangeId}
                   onChange={(e) => setFormData({...formData, exchangeId: e.target.value})}
                 >
@@ -283,7 +283,7 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">Select_Blueprint</label>
                   <select 
-                    className="w-full h-10 px-3 rounded-lg bg-white dark:bg-[#161E33] border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
+                    className="w-full h-10 px-3 rounded-lg bg-white dark:bg-lpd-bg-dark border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                     value={formData.strategyId}
                     onChange={(e) => setFormData({...formData, strategyId: e.target.value})}
                     disabled={isLoadingStrategies}

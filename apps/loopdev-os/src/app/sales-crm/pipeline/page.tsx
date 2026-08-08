@@ -6,6 +6,7 @@ import {
   Heading, 
   TechnicalSurface, 
   Button,
+  Icon,
   KanbanBoard,
   cn
 } from '@loopdev/ui';
@@ -107,7 +108,7 @@ export default function PipelineKanban() {
             <Heading size="lg" weight="bold" className="text-slate-900 dark:text-white tracking-tight uppercase">
               Embudo de Ventas (Pipeline)
             </Heading>
-            <LpdText size="nano" className="text-slate-500 dark:text-slate-400 font-mono tracking-widest uppercase">
+            <LpdText size="nano" className="text-text-muted font-mono tracking-widest uppercase">
               KANBAN_DEAL_BOARD_FLOW
             </LpdText>
           </div>
@@ -118,9 +119,7 @@ export default function PipelineKanban() {
             className="whitespace-nowrap flex-shrink-0"
           >
             <span className="flex items-center gap-2 justify-center">
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14M5 12h14"/>
-              </svg>
+                <Icon name="add" size="sm" />
               <span>Nuevo Lead</span>
             </span>
           </Button>
@@ -135,8 +134,9 @@ export default function PipelineKanban() {
       />
 
       {/* Sub-navigation Tabs */}
-      <div className="flex border-b border-border-technical/60 shrink-0 gap-2">
-        <button 
+      <div className="flex shrink-0 gap-2">
+        <Button
+          variant="ghost"
           onClick={() => setActiveTab('pipeline')} 
           className={cn(
             "px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2",
@@ -146,8 +146,9 @@ export default function PipelineKanban() {
           )}
         >
           Pipeline
-        </button>
-        <button 
+        </Button>
+        <Button
+          variant="ghost"
           onClick={() => setActiveTab('history')} 
           className={cn(
             "px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2",
@@ -157,7 +158,7 @@ export default function PipelineKanban() {
           )}
         >
           Historial de Leads
-        </button>
+        </Button>
       </div>
 
       {activeTab === 'pipeline' ? (

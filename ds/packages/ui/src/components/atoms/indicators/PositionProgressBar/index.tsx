@@ -82,7 +82,9 @@ export const PositionProgressBar: React.FC<PositionProgressBarProps> = ({
         <div 
           className={cn(
             "absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full z-20 transition-all duration-1000 ease-out",
-            isInProfit ? "bg-emerald-500 shadow-[0_0_10px_#10b981]" : "bg-rose-500 shadow-[0_0_10px_#f43f5e]"
+            isInProfit
+              ? "bg-[var(--lpd-color-status-success)] shadow-[0_0_10px_var(--lpd-color-status-success)]"
+              : "bg-[var(--lpd-color-status-error)] shadow-[0_0_10px_var(--lpd-color-status-error)]"
           )}
           style={{ left: `calc(${currentPos}% - 5px)` }}
         >

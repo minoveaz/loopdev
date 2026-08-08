@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  Heading,
   LpdText,
   Skeleton,
   ContextBlock,
@@ -43,9 +44,9 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
   if (!entity) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-12 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest">
+        <Heading as="h2" size="sm" weight="bold" className="font-mono uppercase tracking-widest">
           No Entity Selected
-        </LpdText>
+        </Heading>
         <LpdText size="xs" className="mt-2">
           Select an item in the canvas to inspect details.
         </LpdText>

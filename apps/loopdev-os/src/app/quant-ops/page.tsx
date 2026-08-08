@@ -128,19 +128,21 @@ export default function QuantOpsOverview() {
           </TechnicalSurface>
         </div>
         <div className="lg:col-span-4 flex flex-col gap-8">
-          <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-6">
+          <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-8">
             <div className="flex justify-between items-center">
               <Heading size="xs" weight="bold" className="opacity-60">
                 Fleet_Governance
               </Heading>
               <StatusPulse variant="energy" size="xs" isAnimated />
             </div>
-            <button
+            <Button
+              variant="danger"
+              startIcon="warning"
               onClick={() => setIsKillSwitchConfirmOpen(true)}
-              className="w-full bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500 hover:text-white text-rose-500 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
+              className="w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
             >
               EMERGENCY_KILL_SWITCH
-            </button>
+            </Button>
           </TechnicalSurface>
           <RiskMeter
             title="Capital_Exposure"

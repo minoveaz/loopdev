@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { LpdText, Skeleton, Button } from '@loopdev/ui';
+import { Heading, LpdText, Skeleton, Button } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { RuleDomain, RulesEngine, type RuleDefinition } from '@loopdev/contracts';
@@ -117,9 +117,9 @@ export default function BrandRulesPage() {
       {/* HEADER SECTION */}
       <header className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
-          <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+          <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
             Governance _RULES_ENGINE
-          </LpdText>
+          </Heading>
           <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase">
             v1.0 Declarative
           </div>

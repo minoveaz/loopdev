@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { LpdText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, Skeleton } from '@loopdev/ui';
 import type { ToneProfile, RegulatedClaim } from '@/suites/marketing-studio/brand-hub/types';
 
 // Components (Certified Blocks)
@@ -89,9 +89,9 @@ export default function BrandIdentityPage() {
       
       {/* HEADER SECTION */}
       <header className="flex flex-col gap-2">
-        <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+        <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
           Brand Identity _ORACLE
-        </LpdText>
+        </Heading>
         <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
           The semantic source of truth for all communication. These definitions are directly consumed by automated systems and AI agents to enforce consistency, compliance, and decision-making across LoopDev.
         </LpdText>

@@ -66,6 +66,7 @@ export default function LoginPage() {
               placeholder="nombre@loop.dev"
               variant="outline"
               startIcon={<Mail size={18} />}
+              autoComplete="username"
               fullWidth
               disabled={isLoading}
               value={email}
@@ -79,6 +80,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 variant="outline"
                 startIcon={<Lock size={18} />}
+                autoComplete="current-password"
                 fullWidth
                 disabled={isLoading}
                 value={password}
@@ -87,7 +89,7 @@ export default function LoginPage() {
                               <LpdText as="button" type="button" size="nano" weight="black" className="absolute top-0 right-0 text-primary/60 hover:text-primary uppercase tracking-widest h-6 flex items-center pr-1 z-20 cursor-pointer transition-colors">Recuperar</LpdText>            </div>
 
             {error && (
-              <div className="bg-red-500/15 border border-red-500/30 text-red-200 p-3 rounded-lg flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-1">
+              <div className="bg-status-error/15 border border-status-error/30 text-status-error p-3 rounded-lg flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-1">
                 <AlertCircle size={16} className="text-red-400 shrink-0" />
                 <span className="leading-relaxed font-medium">{error}</span>
               </div>

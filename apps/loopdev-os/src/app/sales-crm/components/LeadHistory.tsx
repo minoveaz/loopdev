@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import {
   TechnicalSurface,
   LpdText,
+  Heading,
   Icon,
   Button,
   Input,
@@ -80,9 +81,9 @@ export const LeadHistory: React.FC<LeadHistoryProps> = ({ leads, onViewDetails }
       className="p-6 border border-border-technical/60 rounded-3xl shadow-sm flex flex-col gap-6"
     >
       <div className="flex flex-col gap-2 border-b border-border-technical pb-4 select-none">
-        <h2 className="text-lg font-bold text-text-main uppercase tracking-tight">
+        <Heading as="h2" size="lg" weight="bold" className="text-text-main uppercase tracking-tight">
           Historial de Leads
-        </h2>
+        </Heading>
         <LpdText size="sm" className="text-text-muted">
           Listado y auditoría completa de los tratos comerciales del CRM.
         </LpdText>
@@ -264,12 +265,13 @@ export const LeadHistory: React.FC<LeadHistoryProps> = ({ leads, onViewDetails }
                     </div>
                   </td>
                   <td className="p-4 text-right">
-                    <button
+                    <Button
+                      variant="ghost"
                       onClick={() => onViewDetails(lead.id)}
                       className="text-primary hover:text-primary/80 font-mono font-bold uppercase tracking-wider text-[10px]"
                     >
                       [ Ver Ficha ]
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               );

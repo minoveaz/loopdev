@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, cn } from '@loopdev/ui';
+import { LpdText, Button, cn } from '@loopdev/ui';
 import { AuditEventRowProps } from './types';
 
 /**
@@ -18,7 +18,8 @@ export const AuditEventRow: React.FC<AuditEventRowProps> = ({ event, onClick }) 
   };
 
   return (
-    <button
+    <Button
+      variant="ghost"
       onClick={onClick}
       className="w-full flex items-center gap-4 p-3 rounded-lg hover:bg-background-subtle transition-colors group text-left"
     >
@@ -44,12 +45,12 @@ export const AuditEventRow: React.FC<AuditEventRowProps> = ({ event, onClick }) 
       </div>
 
       {event.hasDiff && (
-        <div className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+        <div className="px-2 py-0.5 rounded bg-status-success/10 border border-status-success/20">
           <LpdText size="nano" weight="bold" className="text-emerald-500 font-mono uppercase">
             {`{ DIFF }`}
           </LpdText>
         </div>
       )}
-    </button>
+    </Button>
   );
 };

@@ -39,10 +39,11 @@ export const ContextPath: React.FC<ContextPathProps> = (props) => {
                 >
                   <TechnicalLabel 
                     variant={isLast ? 'white' : 'muted'} 
-                    size="nano"
-                    weight={isLast ? 'bold' : 'medium'}
-                    fontFamily="mono"
+                    size="xs"
+                    weight={isLast ? 'semibold' : 'medium'}
+                    fontFamily="sans"
                     isUppercase={false}
+                    isWide={false}
                     className="cursor-inherit whitespace-nowrap"
                   >
                     {segment.label}

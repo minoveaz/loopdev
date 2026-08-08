@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { LpdText, ModuleCard, Skeleton, Button, Icon } from '@loopdev/ui';
+import { Heading, LpdText, ModuleCard, Skeleton, Button, Icon } from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 
 /**
@@ -19,9 +19,9 @@ export default function BrandHubOverview() {
       <header className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-bold text-text-main uppercase tracking-tight">
+            <Heading as="h2" size="2xl" weight="bold" className="text-text-main uppercase tracking-tight">
               Module_Overview
-            </h2>
+            </Heading>
             <LpdText size="sm" className="text-text-muted max-w-xl">
               Welcome to the Brand Oracle. Monitor the health of your identities and govern compliance.
             </LpdText>
@@ -63,7 +63,8 @@ export default function BrandHubOverview() {
           )}
           
           {/* Card de "Crear Nueva" */}
-          <button 
+          <Button
+            variant="secondary"
             onClick={() => console.log('New Brand Flow')}
             className="flex flex-col items-center justify-center p-6 border border-dashed border-border-technical rounded-2xl bg-white/2 hover:bg-primary/5 hover:border-primary/30 transition-all group aspect-square"
           >
@@ -71,7 +72,7 @@ export default function BrandHubOverview() {
               <Icon name="add" className="text-text-muted group-hover:text-primary" />
             </div>
             <LpdText size="sm" weight="bold" className="text-text-muted group-hover:text-primary">Create Brand</LpdText>
-          </button>
+          </Button>
         </div>
       </section>
 
