@@ -3,6 +3,7 @@ export * from './brands/brand';
 export * from './brands/typography.schema';
 export * from './brands/logo.schema';
 export * from './brands/rules.schema';
+export * from './brands/context';
 
 // Export Platform Navigation Contracts
 export * from './platform/navigation';
