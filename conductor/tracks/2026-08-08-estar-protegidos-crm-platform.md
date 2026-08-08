@@ -71,11 +71,28 @@ Modelo relacional inicial:
 crm_contacts
 crm_companies
 crm_contact_companies
+crm_related_people
 crm_leads
 crm_opportunities
 ```
 
 Un contacto podrá tener muchos leads; un lead podrá tener cero o varias oportunidades según el proceso comercial. Las conversaciones y actividades se vincularán al contacto y, cuando exista contexto comercial, también al lead u oportunidad.
+
+### Relaciones familiares y roles aseguradores
+
+El CRM debe distinguir entre una persona relacionada con un cliente y un contacto autorizado para comunicación. No toda persona que aparece en una familia, póliza o expediente debe convertirse automáticamente en contacto.
+
+- **Contacto comunicable:** persona con datos de contacto y consentimiento o base válida para ser contactada.
+- **Persona relacionada:** miembro de la familia registrado como contexto, sin permiso de contacto.
+- **Tomador:** persona o entidad que contrata y asume las obligaciones de la póliza.
+- **Asegurado:** persona protegida por la póliza; puede ser el tomador o una persona relacionada.
+- **Beneficiario:** persona con derecho derivado de la póliza, sin que ello implique permiso de contacto.
+
+Una persona relacionada solo se promoverá a `crm_contacts` cuando exista consentimiento explícito, una solicitud directa o una base legal documentada. No se enviarán mensajes a alguien únicamente por aparecer en una póliza.
+
+### Customer Workspace / Customer 360
+
+El CRM tendrá un espacio de cliente que agregará perfil, familia y relaciones, leads, oportunidades, conversaciones, actividades, tareas, documentos, cotizaciones, campañas, consentimiento y auditoría. No convertirá automáticamente personas relacionadas en contactos ni expondrá datos sensibles sin permisos.
 
 ### Insurance Pack — extensión vertical inicial
 
@@ -304,6 +321,8 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 
 - [ ] Migración aditiva de contactos, leads, oportunidades, actividades y tareas.
 - [ ] Añadir empresas y relación contacto-empresa sin forzar el modelo B2C.
+- [ ] Modelar personas relacionadas sin convertirlas automáticamente en contactos.
+- [ ] Modelar consentimiento, preferencias y restricciones de comunicación.
 - [ ] Contratos Zod de entidades, lecturas y comandos.
 - [ ] Servicios server-side y APIs protegidas.
 - [ ] RLS y permisos por organización/workspace.
@@ -339,7 +358,17 @@ Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y ac
 - [ ] Crear cotizaciones versionadas relacionadas con oportunidades.
 - [ ] Conectar el resumen de cotización al detalle del lead.
 - [ ] Añadir permisos específicos del paquete.
+- [ ] Modelar tomadores, asegurados y beneficiarios como roles de póliza.
+- [ ] Permitir familiares o asegurados sin canal de contacto autorizado.
 - [ ] Preparar el handoff hacia Operations sin mezclar datos con el CRM Core.
+
+### Fase 6D — Customer Workspace
+
+- [ ] Crear la vista Customer 360 sobre servicios autorizados.
+- [ ] Mostrar relaciones familiares y roles de seguro sin asumir capacidad de contacto.
+- [ ] Mostrar leads, oportunidades, conversaciones, actividades, documentos y cotizaciones.
+- [ ] Exigir consentimiento y permisos antes de iniciar una comunicación.
+- [ ] Añadir pruebas de aislamiento y privacidad por agente y organización.
 
 ### Fase 8A — WhatsApp inbound POC
 
