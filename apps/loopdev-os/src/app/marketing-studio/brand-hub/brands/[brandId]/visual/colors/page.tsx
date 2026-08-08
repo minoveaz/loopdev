@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
+import { Heading, LpdText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 
 // Components
 import { ColorContextBar } from '@/suites/marketing-studio/brand-hub/components/ColorContextBar';
@@ -19,45 +19,52 @@ export default function BrandColorsPage() {
   const params = useParams();
   const brandId = params.brandId as string;
   const { data: brand, isLoading } = useActiveBrand(brandId);
-  
+
   // Use Global Context for Operational State
-  const { 
-    setInspectorOpen, 
-    selectedEntity, 
+  const {
+    setInspectorOpen,
+    selectedEntity,
     setSelectedEntity,
     previewTheme,
     setPreviewTheme,
     viewMode,
-    setViewMode
+    setViewMode,
   } = useBrandHub();
 
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
+  const palette =
+    brand?.palette && typeof brand.palette === 'object' && !Array.isArray(brand.palette)
+      ? (brand.palette as { tokens?: unknown })
+      : undefined;
   // Sync brand data to context if needed (handled by layout mostly)
-  
+
   // FILTERING LOGIC
   const filteredTokens = useMemo<ColorToken[]>(() => {
-    if (!brand?.palette?.tokens) return [];
-    
-    return brand.palette.tokens.filter((token: ColorToken) => {
-      const matchesSearch = token.name.toLowerCase().includes(search.toLowerCase()) || 
-                           token.group.toLowerCase().includes(search.toLowerCase());
+    const paletteTokens = Array.isArray(palette?.tokens) ? (palette.tokens as ColorToken[]) : [];
+
+    return paletteTokens.filter((token) => {
+      const matchesSearch =
+        token.name.toLowerCase().includes(search.toLowerCase()) ||
+        token.group.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === 'all' || token.group === activeCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [brand, search, activeCategory]);
+  }, [palette, search, activeCategory]);
 
-  const coreTokens = filteredTokens.filter(t => t.group === 'core');
-  const semanticTokens = filteredTokens.filter(t => t.group === 'semantic');
-  const neutralTokens = filteredTokens.filter(t => t.group === 'neutral' || t.group === 'surface');
+  const coreTokens = filteredTokens.filter((t) => t.group === 'core');
+  const semanticTokens = filteredTokens.filter((t) => t.group === 'semantic');
+  const neutralTokens = filteredTokens.filter(
+    (t) => t.group === 'neutral' || t.group === 'surface',
+  );
 
   // HANDLERS
   const handleTokenClick = (token: ColorToken) => {
     setSelectedEntity({
       type: 'color.token',
       id: token.id,
-      name: `Token: ${token.name}`
+      name: `Token: ${token.name}`,
     });
     setInspectorOpen(true);
   };
@@ -86,12 +93,16 @@ export default function BrandColorsPage() {
 
   return (
     <div className="flex flex-col gap-10 p-8 max-w-7xl mx-auto animate-in fade-in duration-700 pb-32">
-      
       {/* PAGE HEADER */}
       <header className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+            <Heading
+              as="h1"
+              size="2xl"
+              weight="bold"
+              className="text-text-main tracking-tight uppercase"
+            >
               Visual System _COLORS
             </Heading>
             <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase">
@@ -99,35 +110,46 @@ export default function BrandColorsPage() {
             </div>
           </div>
           <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-            Manage semantic color tokens that resolve automatically per theme and medium. 
-            Changes here propagate across all platform interfaces and generated content.
+            Manage semantic color tokens that resolve automatically per theme and medium. Changes
+            here propagate across all platform interfaces and generated content.
           </LpdText>
         </div>
 
         {/* LEGIBILITY GUIDE */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-2xl border border-border-technical/50 bg-background-subtle/20">
           <div className="flex flex-col gap-1">
-            <LpdText size="nano" weight="bold" className="text-text-main uppercase tracking-widest">Legibility Guide</LpdText>
+            <LpdText size="nano" weight="bold" className="text-text-main uppercase tracking-widest">
+              Legibility Guide
+            </LpdText>
             <LpdText size="nano" className="text-text-muted leading-tight">
-              We audit contrast using WCAG 2.1 standards. These thresholds are enforced automatically in preflight and validation to ensure brand accessibility.
+              We audit contrast using WCAG 2.1 standards. These thresholds are enforced
+              automatically in preflight and validation to ensure brand accessibility.
             </LpdText>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                <LpdText size="nano" weight="bold" className="text-text-main">BODY_TEXT (AA)</LpdText>
+                <LpdText size="nano" weight="bold" className="text-text-main">
+                  BODY_TEXT (AA)
+                </LpdText>
               </div>
-              <LpdText size="nano" className="text-text-muted">Ratio &gt; 4.5:1. Safe for small text.</LpdText>
+              <LpdText size="nano" className="text-text-muted">
+                Ratio &gt; 4.5:1. Safe for small text.
+              </LpdText>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-orange-500"></span>
-                <LpdText size="nano" weight="bold" className="text-text-main">HEADLINES (AA_LG)</LpdText>
+                <LpdText size="nano" weight="bold" className="text-text-main">
+                  HEADLINES (AA_LG)
+                </LpdText>
               </div>
-              <LpdText size="nano" className="text-text-muted">Ratio &gt; 3.0:1. Only for large titles.</LpdText>
+              <LpdText size="nano" className="text-text-muted">
+                Ratio &gt; 3.0:1. Only for large titles.
+              </LpdText>
             </div>
           </div>
         </div>
@@ -149,26 +171,26 @@ export default function BrandColorsPage() {
       <main className="flex flex-col gap-16">
         {viewMode === 'grid' ? (
           <>
-            <TokenGroupSection 
-              title="Core Brand Palette" 
+            <TokenGroupSection
+              title="Core Brand Palette"
               description="Primary identifiers and high-frequency brand colors."
-              tokens={coreTokens} 
+              tokens={coreTokens}
               theme={previewTheme}
               selectedTokenId={selectedEntity?.id}
               onTokenClick={handleTokenClick}
             />
-            <TokenGroupSection 
-              title="Semantic Tokens" 
+            <TokenGroupSection
+              title="Semantic Tokens"
               description="Context-aware colors for status, feedback, and functional roles."
-              tokens={semanticTokens} 
+              tokens={semanticTokens}
               theme={previewTheme}
               selectedTokenId={selectedEntity?.id}
               onTokenClick={handleTokenClick}
             />
-            <TokenGroupSection 
-              title="Neutrals & Surfaces" 
+            <TokenGroupSection
+              title="Neutrals & Surfaces"
               description="Scale for backgrounds, borders, and UI structural elements."
-              tokens={neutralTokens} 
+              tokens={neutralTokens}
               theme={previewTheme}
               selectedTokenId={selectedEntity?.id}
               onTokenClick={handleTokenClick}
@@ -186,11 +208,12 @@ export default function BrandColorsPage() {
         {filteredTokens.length === 0 && search && (
           <div className="p-20 text-center flex flex-col items-center gap-4 bg-background-surface/30 rounded-3xl border border-dashed border-border-technical">
             <Icon name="search_off" size="xl" className="text-4xl text-text-muted/20" />
-            <LpdText size="sm" className="text-text-muted italic">No tokens found matching &quot;{search}&quot;</LpdText>
+            <LpdText size="sm" className="text-text-muted italic">
+              No tokens found matching &quot;{search}&quot;
+            </LpdText>
           </div>
         )}
       </main>
-
     </div>
   );
 }
