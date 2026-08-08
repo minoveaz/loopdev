@@ -12,6 +12,10 @@ export const ContentBriefSchema = MarketingScopedRecordSchema.extend({
   locale: MarketingLocaleSchema.default('es-ES'),
   callToAction: z.string().trim().max(500).nullable().optional(),
 });
+export const CreateContentBriefSchema = ContentBriefSchema.omit({
+  id: true, createdAt: true, updatedAt: true, createdBy: true, updatedBy: true,
+});
+export type CreateContentBriefInput = z.infer<typeof CreateContentBriefSchema>;
 
 export const ContentItemSchema = MarketingScopedRecordSchema.extend({
   brandId: MarketingIdSchema,
