@@ -21,18 +21,21 @@ import { LOOPDEV_RULES_ENGINE } from '@/suites/marketing-studio/brand-hub/fixtur
  * Manages declarative rules for Identity, Visual, and Typography.
  */
 export default function BrandRulesPage() {
-  const params = useParams();
+  const dbRules = brand?.rules_engine;
   const brandId = params.brandId as string;
   const { setSelectedEntity } = useBrandHub();
-  
+
   // Data Acquisition
   const { data: brand, isLoading } = useActiveBrand(brandId);
-  
+
   // Support both snake_case (DB) and camelCase (Contract) + Fallback to Fixture for LoopDev brand
   const dbRules = brand?.rules_engine || brand?.rulesEngine;
-  const rulesEngine: RulesEngine | undefined = (dbRules?.rules && dbRules.rules.length > 0) 
-    ? dbRules 
-    : (brand?.name === 'LoopDev' ? LOOPDEV_RULES_ENGINE : dbRules);
+  const rulesEngine: RulesEngine | undefined =
+    dbRules?.rules && dbRules.rules.length > 0
+      ? dbRules
+      : brand?.name === 'LoopDev'
+        ? LOOPDEV_RULES_ENGINE
+        : dbRules;
 
   // Local State
   const [activeDomain, setActiveDomain] = useState<RuleDomain | 'all'>('all');
@@ -42,7 +45,7 @@ export default function BrandRulesPage() {
   // FILTERING LOGIC
   const filteredRules = useMemo(() => {
     if (!rulesEngine?.rules) return [];
-    return rulesEngine.rules.filter(rule => {
+    return rulesEngine.rules.filter((rule) => {
       const matchesDomain = activeDomain === 'all' || rule.domain === activeDomain;
       const matchesSearch = rule.name.toLowerCase().includes(search.toLowerCase());
       return matchesDomain && matchesSearch;
@@ -57,10 +60,10 @@ export default function BrandRulesPage() {
       identity: { ...base },
       visual: { ...base },
       typography: { ...base },
-      content: { ...base }
+      content: { ...base },
     };
 
-    rulesEngine?.rules?.forEach(r => {
+    rulesEngine?.rules?.forEach((r) => {
       const update = (key: string) => {
         domains[key].count++;
         if (r.enforcement.severity === 'BLOCK') domains[key].blockers++;
@@ -73,9 +76,9 @@ export default function BrandRulesPage() {
     return domains;
   }, [rulesEngine]);
 
-  const selectedRule = useMemo(() => 
-    rulesEngine?.rules.find(r => r.id === selectedRuleId),
-    [rulesEngine, selectedRuleId]
+  const selectedRule = useMemo(
+    () => rulesEngine?.rules.find((r) => r.id === selectedRuleId),
+    [rulesEngine, selectedRuleId],
   );
 
   const handleSelectRule = (rule: RuleDefinition) => {
@@ -83,7 +86,7 @@ export default function BrandRulesPage() {
     setSelectedEntity({
       type: 'brand.rule',
       id: rule.id,
-      name: rule.name
+      name: rule.name,
     });
     // In a real scenario, we might want to auto-open inspector on 'Explain' tab
   };
@@ -104,7 +107,10 @@ export default function BrandRulesPage() {
   if (!rulesEngine) {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
+        <LpdText
+          size="sm"
+          className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl"
+        >
           {'// rules_engine_not_initialized'}
         </LpdText>
       </div>
@@ -113,11 +119,15 @@ export default function BrandRulesPage() {
 
   return (
     <div className="flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32">
-      
       {/* HEADER SECTION */}
       <header className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
-          <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+          <Heading
+            as="h1"
+            size="2xl"
+            weight="bold"
+            className="text-text-main tracking-tight uppercase"
+          >
             Governance _RULES_ENGINE
           </Heading>
           <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase">
@@ -125,16 +135,15 @@ export default function BrandRulesPage() {
           </div>
         </div>
         <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-          Define the laws that govern your brand. These rules are automatically executed by the Inspector, 
-          AI Content Agents, and the Publishing Preflight system.
+          Define the laws that govern your brand. These rules are automatically executed by the
+          Inspector, AI Content Agents, and the Publishing Preflight system.
         </LpdText>
       </header>
 
       {/* MAIN CANVAS */}
       <main className="flex gap-8 items-start min-h-[700px]">
-        
         {/* BLOCK A: Rule Domain Rail */}
-        <RuleDomainRail 
+        <RuleDomainRail
           activeDomain={activeDomain}
           onDomainChange={setActiveDomain}
           stats={stats}
@@ -144,8 +153,10 @@ export default function BrandRulesPage() {
         <div className="flex-1 flex flex-col gap-6">
           <div className="flex items-center gap-4 bg-background-surface p-2 rounded-2xl border border-border-technical/50">
             <div className="relative flex-1">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm">search</span>
-              <input 
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm">
+                search
+              </span>
+              <input
                 type="text"
                 placeholder="Search rules by name..."
                 value={search}
@@ -153,13 +164,15 @@ export default function BrandRulesPage() {
                 className="w-full pl-10 pr-4 py-2 bg-transparent text-sm text-text-main placeholder:text-text-muted/50 outline-none"
               />
             </div>
-            <Button variant="ghost" size="sm" startIcon="filter_list">Filter</Button>
+            <Button variant="ghost" size="sm" startIcon="filter_list">
+              Filter
+            </Button>
           </div>
 
           <div className="flex flex-col gap-3">
             {filteredRules.length > 0 ? (
-              filteredRules.map(rule => (
-                <RuleRow 
+              filteredRules.map((rule) => (
+                <RuleRow
                   key={rule.id}
                   rule={rule}
                   isSelected={selectedRuleId === rule.id}
@@ -176,7 +189,7 @@ export default function BrandRulesPage() {
           {/* BLOCK C: Rule Editor (Shown when selected) */}
           {selectedRule && (
             <div className="mt-4 pt-8 border-t border-border-technical/30">
-              <RuleEditor 
+              <RuleEditor
                 rule={selectedRule}
                 isEditable={brand.status === 'draft'}
                 onSave={(updated) => console.log('Save rule:', updated)}
@@ -184,9 +197,7 @@ export default function BrandRulesPage() {
             </div>
           )}
         </div>
-
       </main>
-
     </div>
   );
 }
