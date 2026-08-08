@@ -41,7 +41,23 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
     if (currentBrand) {
       const parsedStatus = BrandStatusSchema.safeParse(currentBrand.status);
       if (parsedStatus.success) {
-        queueMicrotask(() => setActiveBrand({ ...currentBrand, status: parsedStatus.data }));
+        const paletteRecord =
+          currentBrand.palette &&
+          typeof currentBrand.palette === 'object' &&
+          !Array.isArray(currentBrand.palette)
+            ? (currentBrand.palette as { tokens?: unknown })
+            : undefined;
+        const palette = Array.isArray(paletteRecord?.tokens)
+          ? {
+              tokens: paletteRecord.tokens.filter(
+                (token) => typeof token === 'object' && token !== null && 'id' in token,
+              ) as Array<{ id: string; [key: string]: unknown }>,
+            }
+          : undefined;
+
+        queueMicrotask(() =>
+          setActiveBrand({ ...currentBrand, status: parsedStatus.data, palette }),
+        );
       }
     }
   }, [currentBrand, setActiveBrand]);
