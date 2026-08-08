@@ -147,6 +147,9 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           <main
             id="main-content"
             role="main"
+            style={{
+              pointerEvents: isMobileNavVisible || isContextOpen ? 'none' : undefined,
+            }}
             className={`flex-1 overflow-hidden relative z-10 flex flex-col pb-16 lg:pb-0 ${isMobileNavVisible || isContextOpen ? 'max-lg:pointer-events-none max-lg:overflow-hidden' : ''}`}
           >
             {children}

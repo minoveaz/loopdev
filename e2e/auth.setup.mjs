@@ -21,6 +21,11 @@ export default async function globalSetup() {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000',
   };
 
+  if (process.env.PLAYWRIGHT_E2E_AUTH_BYPASS === 'true') {
+    await browser.close();
+    return;
+  }
+
   if (fs.existsSync(storageStatePath)) {
     const existingContext = await browser.newContext({
       ...contextOptions,

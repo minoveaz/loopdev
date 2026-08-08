@@ -20,6 +20,11 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
+    env: {
+      ...process.env,
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true',
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true',
+    },
   },
   globalSetup: './e2e/auth.setup.mjs',
   projects: [
