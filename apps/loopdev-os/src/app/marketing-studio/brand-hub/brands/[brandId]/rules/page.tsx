@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import {
   RuleDomain,
   RulesEngineSchema,
@@ -28,7 +28,8 @@ export default function BrandRulesPage() {
   const { setSelectedEntity } = useBrandHub();
 
   // Data Acquisition
-  const { data: brand, isLoading } = useActiveBrand(brandId);
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
+  const brand = brandContext?.brand;
 
   // Rules are read from the active brand record; no fixture is authoritative.
   const parsedRules = RulesEngineSchema.safeParse(brand?.rules_engine);
