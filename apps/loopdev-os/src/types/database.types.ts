@@ -923,6 +923,94 @@ export type Database = {
           },
         ]
       }
+      marketing_campaign_records: {
+        Row: {
+          assets: Json
+          brand_id: string
+          budget: number | null
+          copies: Json
+          created_at: string
+          created_by: string | null
+          currency: string
+          ends_at: string | null
+          id: string
+          legacy_id: string | null
+          name: string
+          objective: string
+          organization_id: string
+          platforms: string[]
+          starts_at: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+          workspace_id: string
+        }
+        Insert: {
+          assets?: Json
+          brand_id: string
+          budget?: number | null
+          copies?: Json
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          ends_at?: string | null
+          id?: string
+          legacy_id?: string | null
+          name: string
+          objective?: string
+          organization_id: string
+          platforms?: string[]
+          starts_at?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id: string
+        }
+        Update: {
+          assets?: Json
+          brand_id?: string
+          budget?: number | null
+          copies?: Json
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          ends_at?: string | null
+          id?: string
+          legacy_id?: string | null
+          name?: string
+          objective?: string
+          organization_id?: string
+          platforms?: string[]
+          starts_at?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_campaign_records_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_campaign_records_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_campaign_records_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
       marketing_campaigns: {
         Row: {
           assets: Json | null
