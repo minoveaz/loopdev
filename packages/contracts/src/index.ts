@@ -15,6 +15,7 @@ export * from './crm/crm';
 
 // Export Marketing contracts
 export * from './marketing/marketing';
+export * from './marketing/content';
 
 // Export insurance and operations contracts
 export * from './insurance/insurance';
@@ -33,7 +34,7 @@ export const ApiMetaSchema = z.object({
   traceId: z.string().optional(),
 });
 
-export const createApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) => 
+export const createApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
   z.object({
     data: dataSchema,
     meta: ApiMetaSchema.optional(),

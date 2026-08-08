@@ -150,11 +150,13 @@ export async function publishBrandContextVersion(
       brand_id: brandId,
       version_number: versionNumber,
       status: 'published',
-      snapshot,
+      snapshot: toJson(snapshot),
       published_at: publishedAt,
       created_by: userId,
     })
-    .select('id, organization_id, brand_id, version_number, status, snapshot, published_at, created_by, created_at')
+    .select(
+      'id, organization_id, brand_id, version_number, status, snapshot, published_at, created_by, created_at',
+    )
     .single();
   if (error) throw new Error('Unable to publish brand context');
 
@@ -173,4 +175,8 @@ export async function publishBrandContextVersion(
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function toJson(value: unknown): import('@/types/database.types').Json {
+  return JSON.parse(JSON.stringify(value)) as import('@/types/database.types').Json;
 }
