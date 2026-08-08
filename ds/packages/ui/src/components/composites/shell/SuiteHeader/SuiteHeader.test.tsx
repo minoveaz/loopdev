@@ -2,15 +2,16 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SuiteHeader } from './index';
 import React from 'react';
+import { axe } from 'vitest-axe';
 
 describe('SuiteHeader Composite', () => {
   it('debe renderizar correctamente los tres slots', () => {
     render(
-      <SuiteHeader 
+      <SuiteHeader
         leftSlot={<div data-testid="left">Left</div>}
         centerSlot={<div data-testid="center">Center</div>}
         rightSlot={<div data-testid="right">Right</div>}
-      />
+      />,
     );
 
     expect(screen.getByTestId('left')).toBeInTheDocument();
@@ -34,5 +35,13 @@ describe('SuiteHeader Composite', () => {
     const { container } = render(<SuiteHeader leftSlot="-" centerSlot="-" rightSlot="-" />);
     expect(container.firstChild).toHaveClass('bg-shell-canvas');
     expect(container.firstChild).toHaveClass('border-border-technical');
+  });
+
+  it('has no accessibility violations with the three shell slots', async () => {
+    const { container } = render(
+      <SuiteHeader leftSlot="Suite" centerSlot="Command" rightSlot="Account" />,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

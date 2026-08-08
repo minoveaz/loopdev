@@ -45,8 +45,8 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Static quality checks
-        run: pnpm quality:static
+      - name: Frontend quality gate
+        run: pnpm front:check
 
       - name: Build shared contracts
         run: pnpm --filter @loopdev/contracts build

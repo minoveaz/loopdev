@@ -3,6 +3,7 @@ import { render, screen, act, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ToastViewport } from './components';
 import { toast, toastStore } from './toastStore';
+import { axe } from 'vitest-axe';
 
 describe('Toast System: Full Hardening (v2.1 Compliance)', () => {
   
@@ -77,6 +78,16 @@ describe('Toast System: Full Hardening (v2.1 Compliance)', () => {
     // Buscamos directamente por el rol ARIA
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByRole('status')).toBeInTheDocument();
+  });
+
+  it('has no accessibility violations for an error notification', async () => {
+    const { container } = render(<ToastViewport activeTenantId="loopdev" />);
+    await act(async () => {
+      toast.show({ tenantId: 'loopdev', variant: 'error', title: 'Action failed' });
+    });
+
+    vi.useRealTimers();
+    expect(await axe(container)).toHaveNoViolations();
   });
 
   // --- INFRASTRUCTURE & SECURITY STORIES ---

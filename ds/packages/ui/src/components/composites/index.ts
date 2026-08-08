@@ -19,6 +19,10 @@ export * from './workspace/KanbanBoard';
 
 // navigation
 export * from './navigation/ContextPath';
+export * from './content/SectionHeader';
+export * from './content/PageHeader';
+export * from './content/ContextBar';
+export * from './content/ResponsiveTable';
 export * from './navigation/UserMenu';
 export * from './navigation/SidebarFlyout';
 
@@ -35,7 +39,6 @@ export * from './utilities/ActivityFeed';
 export * from './utilities/SystemNoticeRail';
 
 export * from './utilities/TechnicalDialog';
-
 
 export * from './inspector/UnifiedInspector';
 

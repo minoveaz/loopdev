@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, Skeleton, Button } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { RuleDomain, RulesEngine, type RuleDefinition } from '@loopdev/contracts';
@@ -106,14 +106,12 @@ export default function BrandRulesPage() {
 
   if (!rulesEngine) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText
-          size="sm"
-          className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl"
-        >
-          {'// rules_engine_not_initialized'}
-        </LpdText>
-      </div>
+      <EmptyState
+        title="Rules engine unavailable"
+        description="Governance rules will appear after this brand has been configured."
+        icon="rule"
+        variant="ghost"
+      />
     );
   }
 
@@ -153,9 +151,11 @@ export default function BrandRulesPage() {
         <div className="flex-1 flex flex-col gap-6">
           <div className="flex items-center gap-4 bg-background-surface p-2 rounded-2xl border border-border-technical/50">
             <div className="relative flex-1">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm">
-                search
-              </span>
+              <Icon
+                name="search"
+                size="sm"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+              />
               <input
                 type="text"
                 placeholder="Search rules by name..."

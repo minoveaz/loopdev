@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { LpdText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 
 // Components
 import { ColorContextBar } from '@/suites/marketing-studio/brand-hub/components/ColorContextBar';
@@ -74,9 +74,13 @@ export default function BrandColorsPage() {
 
   if (!brand?.palette) {
     return (
-      <div className="p-12 text-center border border-dashed border-border-technical rounded-3xl m-8 opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest">color_palette_not_initialized</LpdText>
-      </div>
+      <EmptyState
+        title="Color palette unavailable"
+        description="Add a brand palette to review its approved colors and surfaces."
+        icon="palette"
+        variant="ghost"
+        className="m-8"
+      />
     );
   }
 
@@ -87,9 +91,9 @@ export default function BrandColorsPage() {
       <header className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+            <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
               Visual System _COLORS
-            </LpdText>
+            </Heading>
             <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase">
               v1.5 Semantic
             </div>
@@ -171,14 +175,17 @@ export default function BrandColorsPage() {
             />
           </>
         ) : (
-          <div className="p-12 text-center border border-border-technical rounded-3xl opacity-40 bg-background-surface">
-            <LpdText size="sm" className="font-mono uppercase tracking-widest">table_view_mode_under_construction</LpdText>
-          </div>
+          <EmptyState
+            title="Table view coming soon"
+            description="Token groups are currently available in preview mode."
+            icon="table_chart"
+            variant="ghost"
+          />
         )}
 
         {filteredTokens.length === 0 && search && (
           <div className="p-20 text-center flex flex-col items-center gap-4 bg-background-surface/30 rounded-3xl border border-dashed border-border-technical">
-            <span className="material-symbols-outlined text-4xl text-text-muted/20">search_off</span>
+            <Icon name="search_off" size="xl" className="text-4xl text-text-muted/20" />
             <LpdText size="sm" className="text-text-muted italic">No tokens found matching &quot;{search}&quot;</LpdText>
           </div>
         )}
