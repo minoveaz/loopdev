@@ -82,7 +82,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           className={`
             flex-shrink-0 border-r border-black/5 dark:border-white/5 bg-white dark:bg-background-dark transition-all duration-300 
             overflow-hidden 
-            absolute inset-y-0 left-0 shadow-2xl z-[100]
+            fixed inset-y-0 left-0 shadow-2xl z-[100]
             ${isMobileNavVisible ? 'translate-x-0' : '-translate-x-full'}
             @lg:relative @lg:translate-x-0 @lg:shadow-none @lg:z-10
             ${navMode === 'rail' ? 'select-none' : ''}
@@ -97,19 +97,20 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           >
             {navSlot}
           </div>
-          {isMobileViewport && isMobileNavVisible && (
-            <button
-              type="button"
-              aria-label="Close navigation"
-              onClick={() => setIsMobileNavOpen(false)}
-              className="absolute right-3 top-3 z-20 flex size-9 items-center justify-center rounded-md bg-white/90 text-slate-600 shadow-sm dark:bg-background-dark/90 dark:text-slate-300 lg:hidden"
-            >
-              <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
-                close
-              </span>
-            </button>
-          )}
         </nav>
+      )}
+
+      {isMobileViewport && isMobileNavVisible && isNavRendered && (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          onClick={() => setIsMobileNavOpen(false)}
+          className="fixed left-[calc(min(82vw,320px)-48px)] top-3 z-[200] flex size-9 items-center justify-center rounded-md bg-white/90 text-slate-600 shadow-sm dark:bg-background-dark/90 dark:text-slate-300 lg:hidden"
+        >
+          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+            close
+          </span>
+        </button>
       )}
 
       {/* 2. RIGHT SECTION */}
@@ -150,7 +151,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
             style={{
               pointerEvents: isMobileNavVisible || isContextOpen ? 'none' : undefined,
             }}
-            className={`flex-1 overflow-hidden relative z-10 flex flex-col pb-16 lg:pb-0 ${isMobileNavVisible || isContextOpen ? 'max-lg:pointer-events-none max-lg:overflow-hidden' : ''}`}
+            className={`flex-1 overflow-hidden relative ${isMobileNavVisible || isContextOpen ? 'z-0 max-lg:pointer-events-none max-lg:overflow-hidden' : 'z-10'} flex flex-col pb-16 lg:pb-0`}
           >
             {children}
           </main>

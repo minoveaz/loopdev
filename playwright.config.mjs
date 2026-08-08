@@ -16,7 +16,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'pnpm start:loopdev',
+    command: 'pnpm --filter loopdev-os start',
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
