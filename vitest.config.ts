@@ -1,7 +1,7 @@
-import path from 'node:path'
-import { defineConfig } from 'vitest/config'
+import path from 'node:path';
+import { defineConfig } from 'vitest/config';
 
-const root = process.cwd()
+const root = process.cwd();
 
 export default defineConfig({
   test: {
@@ -20,10 +20,12 @@ export default defineConfig({
         },
         test: {
           name: 'loopdev-os',
+          environment: 'jsdom',
+          setupFiles: [path.resolve(root, 'ds/packages/ui/vitest.setup.ts')],
           root: path.resolve(root, 'apps/loopdev-os'),
-          include: ['src/{app,core,lib,services}/**/*.test.ts'],
+          include: ['src/{app,components,core,lib,services}/**/*.{test,spec}.{ts,tsx}'],
         },
       },
     ],
   },
-})
+});

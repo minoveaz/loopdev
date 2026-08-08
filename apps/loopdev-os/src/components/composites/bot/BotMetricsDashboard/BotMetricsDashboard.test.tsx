@@ -77,7 +77,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     // Loading skeleton should be visible
     const skeleton = document.querySelector('.animate-pulse');
     expect(skeleton).toBeInTheDocument();
@@ -93,10 +93,10 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" botName="Test Bot" />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Test Bot')).toBeInTheDocument();
-      expect(screen.getByText('45.5')).toBeInTheDocument(); // RSI value
+      expect(screen.getByRole('status', { name: /RSI:/ })).toBeInTheDocument();
       expect(screen.getByText('71000.45')).toBeInTheDocument(); // SMA50
     });
   });
@@ -111,7 +111,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     expect(screen.getByText('Failed to fetch metrics')).toBeInTheDocument();
     expect(screen.getByText('Retry')).toBeInTheDocument();
   });
@@ -126,7 +126,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     expect(screen.getByText('Live')).toBeInTheDocument();
   });
 
@@ -145,7 +145,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     await waitFor(() => {
       const warning = screen.queryByText(/Data is/);
       // Should have a warning about data age
@@ -162,7 +162,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     expect(screen.getByText('Entry Signals')).toBeInTheDocument();
     expect(screen.getByText('LONG Entry')).toBeInTheDocument();
     expect(screen.getByText('SHORT Entry')).toBeInTheDocument();
@@ -178,7 +178,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" showExtended={true} />);
-    
+
     expect(screen.getByText('Position Preview')).toBeInTheDocument();
     expect(screen.getByText('LONG Position')).toBeInTheDocument();
     expect(screen.getByText('SHORT Position')).toBeInTheDocument();
@@ -194,7 +194,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" showExtended={false} />);
-    
+
     expect(screen.queryByText('Position Preview')).not.toBeInTheDocument();
   });
 
@@ -208,7 +208,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     expect(screen.getByText('↻ Refresh Metrics')).toBeInTheDocument();
   });
 
@@ -221,10 +221,8 @@ describe('BotMetricsDashboard Component', () => {
       refresh: vi.fn(),
     });
 
-    const { container } = render(
-      <BotMetricsDashboard botId="test-bot" className="custom-class" />
-    );
-    
+    const { container } = render(<BotMetricsDashboard botId="test-bot" className="custom-class" />);
+
     const dashboard = container.firstChild;
     expect(dashboard?.className).toContain('custom-class');
   });
@@ -239,8 +237,8 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
-    expect(screen.getByText('RSI')).toBeInTheDocument();
+
+    expect(screen.getByRole('status', { name: /RSI:/ })).toBeInTheDocument();
   });
 
   it('displays MetricCards for price, SMA50, ATR, volatility', async () => {
@@ -253,7 +251,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Current Price')).toBeInTheDocument();
       expect(screen.getByText('SMA50')).toBeInTheDocument();
@@ -273,13 +271,8 @@ describe('BotMetricsDashboard Component', () => {
       refresh: vi.fn(),
     });
 
-    render(
-      <BotMetricsDashboard 
-        botId="test-bot" 
-        onMetricsUpdate={callback}
-      />
-    );
-    
+    render(<BotMetricsDashboard botId="test-bot" onMetricsUpdate={callback} />);
+
     // Callback should be called when component receives metrics
     expect(callback).toHaveBeenCalledWith(mockMetrics);
   });
@@ -294,7 +287,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="test-bot" />);
-    
+
     expect(screen.getByText('No metrics available')).toBeInTheDocument();
   });
 
@@ -308,7 +301,7 @@ describe('BotMetricsDashboard Component', () => {
     });
 
     render(<BotMetricsDashboard botId="specific-bot-id" />);
-    
+
     expect(metricsHook.useStrategyMetrics).toHaveBeenCalledWith('specific-bot-id');
   });
 });

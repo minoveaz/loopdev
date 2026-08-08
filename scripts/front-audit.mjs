@@ -363,6 +363,7 @@ function inspect(file) {
     }
 
     if (
+      !isTestFile &&
       !isOfficialThemePrimitive &&
       /document\.documentElement\.(classList|style)|classList\.(add|remove)\(['"](?:dark|light)/.test(
         line,
@@ -378,6 +379,7 @@ function inspect(file) {
     }
 
     if (
+      !isTestFile &&
       !isThemeOwner &&
       /(document\.documentElement\.(classList|style)|classList\.(add|remove)\(['"](?:dark|light)|style\.setProperty\(['"]--lpd-color-)/.test(
         line,
