@@ -390,7 +390,18 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 **Salida:** un mensaje entrante crea el contexto CRM correcto y aparece en una conversación persistente.
 
-### Fase B6 — Document Intelligence Core
+### Fase B6 — Insurance Pack backend
+
+- [ ] Crear productos, planes, aseguradoras y coberturas.
+- [ ] Crear reglas de elegibilidad testeables.
+- [ ] Crear cotizaciones versionadas.
+- [ ] Relacionar cotización con oportunidad, lead y contacto.
+- [ ] Modelar tomador, asegurado y beneficiario sin asumir contacto comunicable.
+- [ ] Aplicar permisos específicos y auditoría.
+
+**Salida:** flujo comercial de seguros sobre el CRM Core, sin contaminar sus entidades genéricas.
+
+### Fase B7 — Document Intelligence Core
 
 - [ ] Crear documentos, archivos, clasificaciones y extracciones.
 - [ ] Proteger archivos con Storage y referencias autorizadas.
@@ -401,17 +412,6 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 - [ ] Crear adaptador inicial para CRM e Insurance Pack.
 
 **Salida:** documentos procesables, trazables y nunca convertidos automáticamente en datos definitivos sin validación.
-
-### Fase B7 — Insurance Pack backend
-
-- [ ] Crear productos, planes, aseguradoras y coberturas.
-- [ ] Crear reglas de elegibilidad testeables.
-- [ ] Crear cotizaciones versionadas.
-- [ ] Relacionar cotización con oportunidad, lead y contacto.
-- [ ] Modelar tomador, asegurado y beneficiario sin asumir contacto comunicable.
-- [ ] Aplicar permisos específicos y auditoría.
-
-**Salida:** flujo comercial de seguros sobre el CRM Core, sin contaminar sus entidades genéricas.
 
 ### Fase B8 — IA asistida y segura
 
