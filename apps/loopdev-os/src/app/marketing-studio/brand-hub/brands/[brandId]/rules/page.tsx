@@ -17,9 +17,6 @@ import { RuleDomainRail } from '@/suites/marketing-studio/brand-hub/components/r
 import { RuleRow } from '@/suites/marketing-studio/brand-hub/components/rules/RuleRow';
 import { RuleEditor } from '@/suites/marketing-studio/brand-hub/components/rules/RuleEditor';
 
-// Data Source Fallback
-import { LOOPDEV_RULES_ENGINE } from '@/suites/marketing-studio/brand-hub/fixtures/rules-data';
-
 /**
  * @page BrandRulesPage
  * @description The control center for brand governance laws.
@@ -33,15 +30,10 @@ export default function BrandRulesPage() {
   // Data Acquisition
   const { data: brand, isLoading } = useActiveBrand(brandId);
 
-  // Support both snake_case (DB) and camelCase (Contract) + Fallback to Fixture for LoopDev brand
+  // Rules are read from the active brand record; no fixture is authoritative.
   const parsedRules = RulesEngineSchema.safeParse(brand?.rules_engine);
   const dbRules = parsedRules.success ? parsedRules.data : undefined;
-  const rulesEngine: RulesEngine | undefined =
-    dbRules?.rules && dbRules.rules.length > 0
-      ? dbRules
-      : brand?.name === 'LoopDev'
-        ? LOOPDEV_RULES_ENGINE
-        : dbRules;
+  const rulesEngine: RulesEngine | undefined = dbRules;
 
   // Local State
   const [activeDomain, setActiveDomain] = useState<RuleDomain | 'all'>('all');
