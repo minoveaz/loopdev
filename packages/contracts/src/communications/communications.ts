@@ -7,6 +7,46 @@ export const CommunicationChannelSchema = z.enum(['email', 'whatsapp', 'instagra
 export const CommunicationConversationStatusSchema = z.enum(['open', 'pending', 'snoozed', 'closed']);
 export const CommunicationMessageDirectionSchema = z.enum(['inbound', 'outbound']);
 export const CommunicationMessageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
+export const CommunicationAccountStatusSchema = z.enum(['pending', 'connected', 'disconnected', 'error']);
+export const CommunicationTemplateStatusSchema = z.enum(['draft', 'approved', 'rejected', 'archived']);
+
+export const CommunicationAccountSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  brandId: IdSchema.nullable().optional(),
+  channel: CommunicationChannelSchema,
+  provider: z.string().trim().min(1).max(80),
+  externalAccountId: z.string().trim().min(1).max(240),
+  status: CommunicationAccountStatusSchema,
+  credentialsRef: z.string().trim().min(1).max(240),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type CommunicationAccount = z.infer<typeof CommunicationAccountSchema>;
+
+export const CommunicationTemplateSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  brandId: IdSchema.nullable().optional(),
+  channel: CommunicationChannelSchema,
+  externalTemplateId: z.string().trim().min(1).max(240),
+  language: z.string().trim().min(2).max(20),
+  status: CommunicationTemplateStatusSchema,
+  body: z.string().trim().min(1).max(100_000),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type CommunicationTemplate = z.infer<typeof CommunicationTemplateSchema>;
+
+export const CommunicationInboundEventSchema = z.object({
+  organizationId: IdSchema,
+  accountId: IdSchema,
+  externalEventId: z.string().trim().min(1).max(240),
+  externalMessageId: z.string().trim().max(240).nullable().optional(),
+  receivedAt: TimestampSchema,
+  payloadVersion: z.string().trim().min(1).max(40),
+});
+export type CommunicationInboundEvent = z.infer<typeof CommunicationInboundEventSchema>;
 
 export const CommunicationConversationSchema = z.object({
   id: IdSchema,

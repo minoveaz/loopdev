@@ -44,6 +44,18 @@ export const CrmCompanySchema = z.object({
 });
 export type CrmCompany = z.infer<typeof CrmCompanySchema>;
 
+export const CrmContactCompanyRoleSchema = z.enum(['primary', 'employee', 'decision_maker', 'billing', 'other']);
+export const CrmContactCompanySchema = z.object({
+  organizationId: IdSchema,
+  contactId: IdSchema,
+  companyId: IdSchema,
+  role: CrmContactCompanyRoleSchema.default('other'),
+  isPrimary: z.boolean().default(false),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type CrmContactCompany = z.infer<typeof CrmContactCompanySchema>;
+
 export const CrmRelatedPersonSchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
