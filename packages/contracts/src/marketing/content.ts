@@ -4,6 +4,7 @@ import { MarketingIdSchema, MarketingLocaleSchema, MarketingScopedRecordSchema, 
 export const ContentItemTypeSchema = z.enum(['social_post', 'email', 'landing_page', 'advertisement', 'script', 'other']);
 export const ContentBriefSchema = MarketingScopedRecordSchema.extend({
   brandId: MarketingIdSchema,
+  brandVersionId: MarketingIdSchema.nullable().optional(),
   campaignId: MarketingIdSchema.nullable().optional(),
   name: z.string().trim().min(1).max(160),
   objective: z.string().trim().min(1).max(240),
@@ -14,6 +15,7 @@ export const ContentBriefSchema = MarketingScopedRecordSchema.extend({
 
 export const ContentItemSchema = MarketingScopedRecordSchema.extend({
   brandId: MarketingIdSchema,
+  brandVersionId: MarketingIdSchema.nullable().optional(),
   campaignId: MarketingIdSchema.nullable().optional(),
   briefId: MarketingIdSchema.nullable().optional(),
   type: ContentItemTypeSchema,
@@ -31,6 +33,7 @@ export const ContentVersionSchema = MarketingScopedRecordSchema.extend({
 });
 
 export const ContentGenerationJobSchema = MarketingScopedRecordSchema.extend({
+  brandVersionId: MarketingIdSchema.nullable().optional(),
   briefId: MarketingIdSchema.nullable().optional(),
   contentItemId: MarketingIdSchema.nullable().optional(),
   provider: z.string().trim().min(1).max(100),
