@@ -1,7 +1,7 @@
 # Track: Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad
 
 **Fecha:** 2026-08-05  
-**Estado:** En curso — Fase 5C
+**Estado:** En curso — cierre de Fase 5D
 **Objetivo:** convertir `loopdev-os` en la plataforma SaaS multi-tenant del grupo LoopDev y de sus clientes, trasladando el backoffice de VitaBlue a LoopDev, reutilizando sus capacidades de marketing, CRM, operaciones y WhatsApp, y manteniendo las webs públicas de cada marca desacopladas.
 
 ## Contexto y decisión principal
@@ -32,7 +32,7 @@ Las webs públicas de VitaBlue y Protege tu Salud pueden seguir alojadas en Host
 
 ## Checkpoint de implementación — 2026-08-08
 
-La rama actual `feature/loopdev-saas-platform-fase-5c` parte de `develop` actualizado (`origin/develop`, commit `ee71133`). El trabajo de Platform Core, tenancy, contratos, tipos Supabase y la base persistente/RLS de Marketing Studio ya está integrado en `develop`. La Fase 5C aún no está cerrada: queda migrar el comportamiento funcional de VitaBlue a los servicios persistentes de LoopDev y retirar `localStorage` como fuente autoritativa.
+La rama actual `feature/loopdev-saas-platform-fase-5d` parte de `develop` actualizado. El trabajo de Platform Core, tenancy, contratos, tipos Supabase, base persistente/RLS de Marketing Studio y la migración funcional inicial ya está integrado en `develop`.
 
 ### Hecho
 
@@ -45,9 +45,20 @@ La rama actual `feature/loopdev-saas-platform-fase-5c` parte de `develop` actual
 - Calidad de frontend: el paquete de tests está integrado; la validación local actual alcanza `110` archivos de test y `389` tests exitosos.
 - CI: se corrigió el hydration mismatch de `TransitionOverlay` y se configuró la raíz de Turbopack para el monorepo.
 
+### Cierre de Fase 5D — integración de interfaz
+
+- [x] Overview, Identity, Colors, Typography, Logos y Rules consumen `BrandContextSnapshot`.
+- [x] Añadir endpoint y hook para listar versiones publicadas del contexto de marca.
+- [x] Conectar la pantalla Publish con el endpoint server-side y refrescar snapshot/versiones tras publicar.
+- [x] Conectar Governance y Dependencies al contexto compartido, sin fixtures autoritativos.
+- [x] Verificar que Campaign Orchestrator y Content Engine resuelven `brand_version_id` desde la última versión publicada.
+- [x] Ejecutar typecheck, tests de contratos y validación de formato.
+
+La Fase 5D queda implementada en la rama `feature/loopdev-saas-platform-fase-5d`; falta publicar la rama, abrir el PR y validar CI antes de marcarla integrada en `develop`.
+
 ### Pendiente inmediato
 
-- Fase 5C: migrar campañas, copias, assets y Meta OAuth al modelo persistente y a servicios server-side.
+- Cerrar administrativamente Fase 5C y 5D mediante PR, CI y validación remota.
 - Eliminar `localStorage` como fuente autoritativa y conservarlo, si se necesita, únicamente como caché.
 - Completar pruebas de servicio, OAuth, publicación y aislamiento entre VitaBlue y Protege tu Salud.
 - Crear el PR de la rama 5C y validar CI/Supabase en GitHub.
