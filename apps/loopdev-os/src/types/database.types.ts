@@ -39,6 +39,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      brand_context_versions: {
+        Row: {
+          brand_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          organization_id: string
+          published_at: string | null
+          snapshot: Json
+          status: string
+          version_number: number
+        }
+        Insert: {
+          brand_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          organization_id: string
+          published_at?: string | null
+          snapshot?: Json
+          status?: string
+          version_number: number
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          organization_id?: string
+          published_at?: string | null
+          snapshot?: Json
+          status?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brand_context_versions_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "brand_context_versions_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brands: {
         Row: {
           created_at: string
@@ -967,6 +1018,7 @@ export type Database = {
         Row: {
           assets: Json
           brand_id: string
+          brand_version_id: string | null
           budget: number | null
           copies: Json
           created_at: string
@@ -988,6 +1040,7 @@ export type Database = {
         Insert: {
           assets?: Json
           brand_id: string
+          brand_version_id?: string | null
           budget?: number | null
           copies?: Json
           created_at?: string
@@ -1009,6 +1062,7 @@ export type Database = {
         Update: {
           assets?: Json
           brand_id?: string
+          brand_version_id?: string | null
           budget?: number | null
           copies?: Json
           created_at?: string
@@ -1034,6 +1088,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "brands"
             referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_campaign_records_brand_version_fkey"
+            columns: ["brand_version_id"]
+            isOneToOne: false
+            referencedRelation: "brand_context_versions"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "marketing_campaign_records_organization_fkey"

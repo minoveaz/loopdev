@@ -51,6 +51,18 @@ export async function getBrandContextSnapshot(
   if (error) throw new Error('Unable to load brand context');
   if (!data) return null;
 
+  const { data: publishedVersion, error: versionError } = await supabase
+    .from('brand_context_versions')
+    .select('id, version_number, status, snapshot, published_at')
+    .eq('organization_id', organizationId)
+    .eq('brand_id', brandId)
+    .eq('status', 'published')
+    .order('version_number', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (versionError) throw new Error('Unable to load published brand context version');
+
   const row = data as unknown as BrandContextRow;
   const snapshot = BrandContextSnapshotSchema.parse({
     organizationId,
@@ -71,10 +83,10 @@ export async function getBrandContextSnapshot(
       createdBy: row.created_by,
     },
     version: {
-      id: null,
-      number: null,
-      status: row.status === 'published' ? 'published' : 'draft',
-      publishedAt: row.status === 'published' ? row.updated_at : null,
+      id: publishedVersion?.id ?? null,
+      number: publishedVersion?.version_number ?? null,
+      status: publishedVersion?.status ?? 'draft',
+      publishedAt: publishedVersion?.published_at ?? null,
     },
     assets: [],
     approvedClaims: [],
