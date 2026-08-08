@@ -1,21 +1,28 @@
 'use client';
 
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LogoSpinner } from '@loopdev/ui';
 
 const TRANSITION_KEY = 'loopdev.organizationTransition';
 
 export function TransitionOverlay() {
-  const [isVisible, setIsVisible] = useState(() => (
-    typeof window !== 'undefined'
-    && window.sessionStorage.getItem(TRANSITION_KEY) === 'pending'
-  ));
+  const [isVisible, setIsVisible] = useState(false);
 
-  useLayoutEffect(() => {
-    if (window.sessionStorage.getItem(TRANSITION_KEY) !== 'pending') return;
+  useEffect(() => {
+    if (window.sessionStorage.getItem(TRANSITION_KEY) !== 'pending') return undefined;
     window.sessionStorage.removeItem(TRANSITION_KEY);
-    const timeout = window.setTimeout(() => setIsVisible(false), 1500);
-    return () => window.clearTimeout(timeout);
+
+    const showTimeout = window.setTimeout(() => {
+      setIsVisible(true);
+    }, 0);
+    const hideTimeout = window.setTimeout(() => {
+      setIsVisible(false);
+    }, 1500);
+
+    return () => {
+      window.clearTimeout(showTimeout);
+      window.clearTimeout(hideTimeout);
+    };
   }, []);
 
   if (!isVisible) return null;
