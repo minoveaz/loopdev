@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { LpdText, Skeleton } from '@loopdev/ui';
+import { LpdText, TechnicalText, Skeleton } from '@loopdev/ui';
 
 // Components
 import { ColorContextBar } from '@/suites/marketing-studio/brand-hub/components/ColorContextBar';
@@ -75,7 +75,7 @@ export default function BrandColorsPage() {
   if (!brand?.palette) {
     return (
       <div className="p-12 text-center border border-dashed border-border-technical rounded-3xl m-8 opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest">color_palette_not_initialized</LpdText>
+        <TechnicalText size="sm" className="uppercase tracking-widest">color_palette_not_initialized</TechnicalText>
       </div>
     );
   }
@@ -172,7 +172,7 @@ export default function BrandColorsPage() {
           </>
         ) : (
           <div className="p-12 text-center border border-border-technical rounded-3xl opacity-40 bg-background-surface">
-            <LpdText size="sm" className="font-mono uppercase tracking-widest">table_view_mode_under_construction</LpdText>
+            <TechnicalText size="sm" className="uppercase tracking-widest">table_view_mode_under_construction</TechnicalText>
           </div>
         )}
 

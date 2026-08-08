@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, Skeleton, Button } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, Button } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { RuleDomain, RulesEngine, type RuleDefinition } from '@loopdev/contracts';
@@ -104,9 +104,9 @@ export default function BrandRulesPage() {
   if (!rulesEngine) {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
+        <TechnicalText size="sm" className="uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
           {'// rules_engine_not_initialized'}
-        </LpdText>
+        </TechnicalText>
       </div>
     );
   }

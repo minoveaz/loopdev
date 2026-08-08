@@ -19,6 +19,7 @@ export * from './workspace/KanbanBoard';
 
 // navigation
 export * from './navigation/ContextPath';
+export * from './content/SectionHeader';
 export * from './navigation/UserMenu';
 export * from './navigation/SidebarFlyout';
 

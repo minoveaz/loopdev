@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { LpdText, Skeleton, BrandLogo } from '@loopdev/ui';
+import { LpdText, TechnicalText, Skeleton, BrandLogo } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -54,9 +54,9 @@ export default function BrandLogoPage() {
   if (!logoSystem) {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
+        <TechnicalText size="sm" className="uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
           {'// logo_system_not_initialized'}
-        </LpdText>
+        </TechnicalText>
       </div>
     );
   }

@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { Heading, LpdText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton } from '@loopdev/ui';
 import type { ToneProfile, RegulatedClaim } from '@/suites/marketing-studio/brand-hub/types';
 
 // Components (Certified Blocks)
@@ -79,7 +79,7 @@ export default function BrandIdentityPage() {
   if (!identity) {
     return (
       <div className="p-12 text-center border border-dashed border-border-technical rounded-3xl m-8 opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest">{'// brand_identity_not_initialized'}</LpdText>
+        <TechnicalText size="sm" className="uppercase tracking-widest">{'// brand_identity_not_initialized'}</TechnicalText>
       </div>
     );
   }

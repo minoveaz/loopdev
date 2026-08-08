@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -53,9 +53,9 @@ export default function BrandTypographyPage() {
   if (!system) {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
+        <TechnicalText size="sm" className="uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
           {'// typography_system_not_initialized'}
-        </LpdText>
+        </TechnicalText>
       </div>
     );
   }

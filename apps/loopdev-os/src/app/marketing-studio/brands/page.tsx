@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading, LpdText, Button, Icon } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Button, Icon } from '@loopdev/ui';
 
 // Datos de ejemplo (placeholder)
 interface MockBrand {
@@ -84,7 +84,7 @@ export default function BrandHubPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div>
           <div className="flex items-center gap-2 mb-2">
-             <span className="text-primary/60 text-xs font-mono uppercase tracking-widest">Module 01</span>
+             <TechnicalText size="xs" className="text-primary/60 uppercase tracking-widest">Module 01</TechnicalText>
              <span className="h-px w-8 bg-primary/20"></span>
           </div>
           <Heading size="2xl" weight="bold" className="text-white">Brand Hub</Heading>
