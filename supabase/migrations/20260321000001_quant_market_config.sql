@@ -10,6 +10,10 @@ CREATE TABLE IF NOT EXISTS public.quant_market_config (
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- The table may already exist from the initial market data schema.
+ALTER TABLE public.quant_market_config
+ADD COLUMN IF NOT EXISTS retention_days INTEGER DEFAULT 30;
+
 -- 2. Habilitar RLS
 ALTER TABLE public.quant_market_config ENABLE ROW LEVEL SECURITY;
 
