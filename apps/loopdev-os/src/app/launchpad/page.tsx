@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
-import { Heading, LpdText, Icon, TechnicalCanvas, BrandLogo, UIKitIllustration, EngineeringSeal, SuiteCard, ThemeToggle, SystemStatus, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
+import { Heading, LpdText, Icon, BrandLogo, UIKitIllustration, SuiteCard, ThemeToggle, SystemStatus, UserMenu, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
 import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
-import { OrganizationSwitcher } from '@/components/layout/OrganizationSwitcher';
+import { ContextSwitcher } from '@/components/layout/ContextSwitcher';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { useWorkspace } from '@/hooks/useWorkspace';
 import { useOrganization } from '@/hooks/useOrganization';
@@ -12,8 +12,8 @@ import { resolveAccessState } from '@/core/access/accessState';
 import { AccessStatePanel } from '@/components/layout/AccessStatePanel';
 
 export default function LaunchpadPage() {
-  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
-  const { organizations, isLoading: isOrganizationLoading } = useOrganization();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading, signOut } = useAuth();
+  const { organizations, activeOrganization, isLoading: isOrganizationLoading } = useOrganization();
   const { hasPermission, isLoading: isLoadingPermissions } = useOrganizationPermissions([
     'marketing.read',
     'crm.read',
@@ -22,8 +22,11 @@ export default function LaunchpadPage() {
     'finance.read',
   ]);
   const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
+  const isPlatformScope = isPlatformAdministrator && activeOrganization?.slug === 'loopdev';
+  const shouldShowSuite = (suite: 'marketing' | 'crm' | 'health' | 'quant') =>
+    isPlatformScope || isSuiteEnabled(suite);
   const isLocked = (permission: string, suite: 'marketing' | 'crm' | 'health' | 'quant') =>
-    !isPlatformAdministrator && (isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite));
+    !isPlatformScope && (isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite));
 
   const accessState = resolveAccessState({
     isAuthLoading,
@@ -65,10 +68,16 @@ export default function LaunchpadPage() {
 
           {/* System Status & Theme Toggle */}
           <div className="flex items-center gap-4">
-            <OrganizationSwitcher />
+            <ContextSwitcher />
             <SystemStatus state="operational" id={user?.id} label="ID" />
             
             <ThemeToggle variant="technical" size="md" />
+            <UserMenu
+              userName={user?.email?.split('@')[0] ?? 'User'}
+              userEmail={user?.email}
+              userRole={isPlatformAdministrator ? 'Platform Owner' : 'Member'}
+              onLogout={signOut}
+            />
           </div>
         </div>
       </TechnicalSurface>
@@ -84,46 +93,25 @@ export default function LaunchpadPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <SuiteCard 
-              title="Marketing Studio"
-              description="High-performance identity governance and generative content engine for modern teams."
-              illustration={<UIKitIllustration />}
-              href="/marketing-studio"
-              version="1.0.4"
-              isLocked={isLocked('marketing.read', 'marketing')}
-            />
-            <SuiteCard 
-              title="Sales & CRM"
-              description="Pipeline intelligence and relationship management powered by predictive neural models."
-              illustration={<Icon name="groups" size="md" />}
-              href="/sales-crm"
-              version="0.8.2"
-              isLocked={isLocked('crm.read', 'crm')}
-            />
-            <SuiteCard 
-              title="Financial Ops"
-              description="Automated billing, payroll, and industrial-grade fiscal compliance orchestration."
-              illustration={<Icon name="payments" size="md" />}
-              href="#"
-              version="0.5.0"
-              isLocked
-            />
-            <SuiteCard 
-              title="Quant Ops"
-              description="Algorithmic trading engine and high-frequency execution command center."
-              illustration={<Icon name="trending_up" size="md" />}
-              href="/quant-ops"
-              version="0.0.1"
-              isLocked={isLocked('quant.read', 'quant')}
-            />
-            <SuiteCard 
-              title="Health OS"
-              description="Industrial-grade clinical care, electronic health records (HCE), and medical agenda for IPS providers."
-              illustration={<Icon name="medical_services" size="md" />}
-              href="/health-os"
-              version="0.1.0"
-              isLocked={isLocked('health.read', 'health')}
-            />
+            {shouldShowSuite('marketing') && <SuiteCard
+              title="Marketing Studio" description="High-performance identity governance and generative content engine for modern teams."
+              illustration={<UIKitIllustration />} href="/marketing-studio" version="1.0.4"
+              isLocked={isLocked('marketing.read', 'marketing')} />}
+            {shouldShowSuite('crm') && <SuiteCard
+              title="Sales & CRM" description="Pipeline intelligence and relationship management powered by predictive neural models."
+              illustration={<Icon name="groups" size="md" />} href="/sales-crm" version="0.8.2"
+              isLocked={isLocked('crm.read', 'crm')} />}
+            {isPlatformScope && <SuiteCard
+              title="Financial Ops" description="Automated billing, payroll, and industrial-grade fiscal compliance orchestration."
+              illustration={<Icon name="payments" size="md" />} href="#" version="0.5.0" isLocked />}
+            {shouldShowSuite('quant') && <SuiteCard
+              title="Quant Ops" description="Algorithmic trading engine and high-frequency execution command center."
+              illustration={<Icon name="trending_up" size="md" />} href="/quant-ops" version="0.0.1"
+              isLocked={isLocked('quant.read', 'quant')} />}
+            {shouldShowSuite('health') && <SuiteCard
+              title="Health OS" description="Industrial-grade clinical care, electronic health records (HCE), and medical agenda for IPS providers."
+              illustration={<Icon name="medical_services" size="md" />} href="/health-os" version="0.1.0"
+              isLocked={isLocked('health.read', 'health')} />}
           </div>
         </div>
       </main>

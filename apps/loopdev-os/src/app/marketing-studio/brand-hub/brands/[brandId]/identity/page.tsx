@@ -11,6 +11,7 @@ import type { ToneProfile, RegulatedClaim } from '@/suites/marketing-studio/bran
 import { NarrativeBlock } from '@/suites/marketing-studio/brand-hub/components/NarrativeBlock';
 import { VoiceToneBlock } from '@/suites/marketing-studio/brand-hub/components/VoiceToneBlock';
 import { ClaimsGovernanceBlock } from '@/suites/marketing-studio/brand-hub/components/ClaimsGovernanceBlock';
+import type { BrandIdentity } from '@/suites/marketing-studio/brand-hub/types';
 
 /**
  * @page BrandIdentityPage
@@ -34,7 +35,7 @@ export default function BrandIdentityPage() {
     );
   }
 
-  const identity = brand?.identity;
+  const identity = brand?.identity as BrandIdentity | undefined;
   const isDraft = brand?.status === 'draft';
 
   // --- CONSEQUENCE WIRING (Inspector Handlers) ---

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
 const ACTIVE_ORGANIZATION_STORAGE_KEY = 'loopdev.activeOrganizationId';
+const normalizeTimestamp = (value: unknown) => Array.isArray(value) ? String(value[0]) : String(value);
 
 export type OrganizationContextType = {
   organizations: Organization[];
@@ -65,8 +66,8 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
             slug: row.slug,
             legacyTenantId: row.legacy_tenant_id,
             isActive: row.is_active,
-            createdAt: row.created_at,
-            updatedAt: row.updated_at,
+            createdAt: normalizeTimestamp(row.created_at),
+            updatedAt: normalizeTimestamp(row.updated_at),
           };
           const result = OrganizationSchema.safeParse(organization);
           if (result.success) return result.data;
@@ -75,10 +76,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
         });
 
       const preferredOrganization = parsedOrganizations.find(({ slug }) => slug === 'loopdev');
-      const visibleOrganizations = isPlatformAdministrator && preferredOrganization
-        ? [preferredOrganization]
-        : parsedOrganizations;
-      setOrganizations(visibleOrganizations);
+      setOrganizations(parsedOrganizations);
       if (preferredOrganization && !window.localStorage.getItem(ACTIVE_ORGANIZATION_STORAGE_KEY)) {
         setActiveOrganizationIdState(preferredOrganization.id);
         window.localStorage.setItem(ACTIVE_ORGANIZATION_STORAGE_KEY, preferredOrganization.id);

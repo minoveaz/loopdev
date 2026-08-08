@@ -78,12 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadPlatformAdministrator = async (userId: string | undefined) => {
     if (!userId) { setIsPlatformAdministrator(false); return; }
-    const { data, error } = await supabase
-      .from('platform_administrators')
-      .select('role')
-      .eq('user_id', userId)
-      .maybeSingle();
-    setIsPlatformAdministrator(!error && Boolean(data));
+    const { data, error } = await supabase.rpc('is_platform_administrator');
+    setIsPlatformAdministrator(!error && data === true);
   };
 
   useEffect(() => {
