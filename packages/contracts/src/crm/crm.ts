@@ -144,6 +144,41 @@ export const CrmActivitySchema = z.object({
 });
 export type CrmActivity = z.infer<typeof CrmActivitySchema>;
 
+export const CrmNoteVisibilitySchema = z.enum(['private', 'team', 'organization']);
+
+export const CrmNoteSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  contactId: IdSchema.nullable().optional(),
+  leadId: IdSchema.nullable().optional(),
+  opportunityId: IdSchema.nullable().optional(),
+  authorUserId: IdSchema,
+  body: z.string().trim().min(1).max(20_000),
+  visibility: CrmNoteVisibilitySchema.default('team'),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+}).refine(
+  (note) => Boolean(note.contactId || note.leadId || note.opportunityId),
+  { message: 'A note must belong to a contact, lead, or opportunity' },
+);
+export type CrmNote = z.infer<typeof CrmNoteSchema>;
+
+export const CrmAuditActionSchema = z.enum(['created', 'updated', 'deleted', 'assigned', 'stage_changed', 'exported', 'consent_changed']);
+
+export const CrmAuditEventSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  actorUserId: IdSchema.nullable().optional(),
+  entityType: z.enum(['contact', 'company', 'related_person', 'lead', 'opportunity', 'activity', 'task', 'note', 'conversation', 'message']),
+  entityId: IdSchema,
+  action: CrmAuditActionSchema,
+  before: z.record(z.string(), z.unknown()).nullable().optional(),
+  after: z.record(z.string(), z.unknown()).nullable().optional(),
+  metadata: z.record(z.string(), z.unknown()).default({}),
+  createdAt: TimestampSchema,
+});
+export type CrmAuditEvent = z.infer<typeof CrmAuditEventSchema>;
+
 export const CrmTaskSchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
