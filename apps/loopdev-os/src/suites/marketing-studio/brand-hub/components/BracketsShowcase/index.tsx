@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BracketsShowcaseProps } from './types';
-import { LpdText } from '@loopdev/ui';
+import { Heading, LpdText } from '@loopdev/ui';
 
 /**
  * @component BracketsShowcase
@@ -37,7 +37,7 @@ export const BracketsShowcase: React.FC<BracketsShowcaseProps> = () => {
         {/* Text Context */}
         <div className="flex flex-col gap-4">
           <div className="p-8 rounded-3xl bg-background-surface border border-border-technical flex-1">
-            <LpdText size="lg" weight="bold" className="text-text-main mb-3">Concept & Role</LpdText>
+            <Heading as="h2" size="lg" weight="bold" className="text-text-main mb-3">Concept & Role</Heading>
             <LpdText size="sm" className="text-text-muted leading-relaxed mb-6">
               The curly brackets <span className="text-text-main font-mono bg-background-subtle px-1 rounded">{`{}`}</span> serve as a supporting brand element representing <strong>containment</strong> and <strong>modular systems</strong>. They visually frame content, signaling that the enclosed elements are part of a calculated, generative process.
             </LpdText>

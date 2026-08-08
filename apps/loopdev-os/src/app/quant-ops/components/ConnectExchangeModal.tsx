@@ -134,13 +134,15 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
                 00. Execution_Environment
               </LpdText>
               <div className="grid grid-cols-2 gap-2 p-1 bg-background-subtle dark:bg-white/5 rounded-2xl border border-border-technical/30">
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   type="button"
                   onClick={() => setFormData({ ...formData, isPaper: false })}
                   className={cn(
                     'flex flex-col items-center gap-1 py-4 rounded-xl transition-all border border-transparent',
                     !formData.isPaper
-                      ? 'bg-white dark:bg-[#161E33] shadow-xl border-amber-500/30 text-amber-500'
+                      ? 'bg-white dark:bg-lpd-bg-dark shadow-xl border-amber-500/30 text-amber-500'
                       : 'text-text-muted hover:text-text-main',
                   )}
                 >
@@ -148,14 +150,16 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
                   <span className="text-[10px] font-black uppercase tracking-widest">
                     Live_Trading_Mode
                   </span>
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
                   type="button"
                   onClick={() => setFormData({ ...formData, isPaper: true })}
                   className={cn(
                     'flex flex-col items-center gap-1 py-4 rounded-xl transition-all border border-transparent',
                     formData.isPaper
-                      ? 'bg-white dark:bg-[#161E33] shadow-xl border-blue-500/30 text-blue-500'
+                      ? 'bg-white dark:bg-lpd-bg-dark shadow-xl border-blue-500/30 text-blue-500'
                       : 'text-text-muted hover:text-text-main',
                   )}
                 >
@@ -163,7 +167,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
                   <span className="text-[10px] font-black uppercase tracking-widest">
                     Paper_Trading_Mode
                   </span>
-                </button>
+                </Button>
               </div>
               <div
                 className={cn(

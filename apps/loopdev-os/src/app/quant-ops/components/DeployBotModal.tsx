@@ -233,7 +233,7 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
               <div className="flex flex-col gap-2">
                 <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">Target_Exchange_Account</label>
                 <select 
-                  className="w-full h-10 px-3 rounded-lg bg-white dark:bg-[#161E33] border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
+                  className="w-full h-10 px-3 rounded-lg bg-white dark:bg-lpd-bg-dark border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                   value={formData.exchangeId}
                   onChange={(e) => setFormData({...formData, exchangeId: e.target.value})}
                 >
@@ -283,7 +283,7 @@ export const DeployBotModal: React.FC<DeployBotModalProps> = ({
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">Select_Blueprint</label>
                   <select 
-                    className="w-full h-10 px-3 rounded-lg bg-white dark:bg-[#161E33] border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
+                    className="w-full h-10 px-3 rounded-lg bg-white dark:bg-lpd-bg-dark border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                     value={formData.strategyId}
                     onChange={(e) => setFormData({...formData, strategyId: e.target.value})}
                     disabled={isLoadingStrategies}

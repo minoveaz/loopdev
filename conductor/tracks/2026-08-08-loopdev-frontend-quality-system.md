@@ -1,0 +1,439 @@
+# Track: LoopDev Frontend Quality System
+
+**Fecha:** 2026-08-08  
+**Estado:** Planificado  
+**Objetivo:** convertir los principios visuales de LoopDev en reglas ejecutables y pruebas repetibles para que todas las suites mantengan una identidad coherente en desktop, móvil, modo claro y modo oscuro.
+
+## 1. Contexto
+
+LoopDev ya dispone de una base sólida:
+
+- monorepo con pnpm y Turbo;
+- `loopdev-os` sobre Next.js, React y TypeScript estricto;
+- Design System compartido en `@loopdev/ui`;
+- tokens en `@loopdev/tokens`;
+- contratos en `@loopdev/contracts`;
+- documentación de composición, accesibilidad, testing y certificación;
+- Vitest, React Testing Library, ESLint y Playwright disponibles o previstos en la arquitectura.
+
+Sin embargo, las reglas actuales son principalmente documentales. El frontend permite que cada suite introduzca variaciones sin una señal automática clara:
+
+- tipografía de telemetría usada en títulos o contenido normal;
+- headings y párrafos construidos directamente con Tailwind;
+- colores, tamaños y fuentes hardcodeados;
+- layouts que fuerzan dark mode desde una suite;
+- iconos funcionales mezclados entre Lucide, Material Symbols y nombres abstractos;
+- componentes manuales duplicados fuera de `@loopdev/ui`;
+- responsive validado visualmente de forma irregular;
+- ausencia de una matriz de certificación ejecutable por suite.
+
+El problema no es la falta de documentación. Es la falta de una autoridad ejecutable que detecte las desviaciones durante el desarrollo y antes del merge.
+
+## 2. Decisiones
+
+### 2.1 No volver a Storybook como centro del proceso
+
+Storybook puede conservarse como documentación si sigue siendo útil, pero no será el mecanismo principal de calidad. La validación se apoyará en:
+
+- ESLint y reglas AST;
+- checks de tokens y composición;
+- Vitest y React Testing Library;
+- Axe en pruebas de componentes y navegador;
+- Playwright para responsive, interacción y screenshots;
+- una matriz de certificación por suite.
+
+### 2.2 `@loopdev/ui` es la API visual pública
+
+Las suites podrán usar Tailwind para layout, spacing, grid, flex, posicionamiento y responsive. La tipografía, superficies, botones, estados, iconos e interacción común deben utilizar componentes y tokens aprobados de `@loopdev/ui`.
+
+### 2.3 La base de datos no forma parte de este track
+
+Este track no modifica:
+
+- Supabase;
+- migraciones;
+- RLS;
+- autenticación;
+- secretos;
+- persistencia SaaS;
+- contratos de dominio salvo que una incompatibilidad visual lo requiera explícitamente.
+
+## 3. Constitución visual ejecutable
+
+Crear `docs/02-frontend/LOOPDEV_FRONTEND_CONSTITUTION.md` como documento corto de consulta diaria. Debe ser la referencia operativa, no otra recopilación extensa.
+
+### 3.1 Tipografía
+
+Definir tres niveles semánticos:
+
+| Componente | Fuente | Uso permitido |
+|---|---|---|
+| `Heading` | sans/display | títulos de página, secciones y entidades |
+| `Text` | sans/body | párrafos, ayudas, descripciones y contenido |
+| `TechnicalText` | mono/telemetría | IDs, timestamps, estados, labels técnicos y datos operativos |
+
+Reglas:
+
+- la fuente mono no se usa para títulos de página ni párrafos;
+- los headings deben renderizar elementos semánticos `h1`-`h6`;
+- no se usan clases tipográficas arbitrarias para sustituir la jerarquía del Design System;
+- la escala tipográfica procede de tokens;
+- las excepciones, como el editor de escalas tipográficas, deben estar documentadas.
+
+### 3.2 Color y superficie
+
+- cero colores HEX en las suites y componentes de producto;
+- colores derivados de `@loopdev/tokens` o de `DynamicThemeProvider`;
+- ningún layout de suite fuerza `dark` ni sobrescribe variables globales sin una API oficial;
+- cada componente debe probar contraste en light y dark;
+- las superficies se eligen de la taxonomía oficial: canvas, surface, glass y technical.
+
+### 3.3 Iconografía
+
+Política inicial:
+
+- Lucide es la fuente preferida para iconos funcionales;
+- se crea un adaptador oficial `@loopdev/ui` para iconos aprobados;
+- Material Symbols solo se mantiene para casos documentados y no duplicados por Lucide;
+- no se crean SVG funcionales manuales cuando existe un icono aprobado;
+- todo icono interactivo debe tener nombre accesible y tooltip cuando el significado no sea obvio;
+- ilustraciones de dominio pueden ser custom, pero no sustituyen iconos de acción.
+
+### 3.4 Responsive
+
+Todas las vistas de suite deben funcionar, como mínimo, en:
+
+- 320 x 800;
+- 390 x 844;
+- 768 x 1024;
+- 1280 x 800;
+- 1440 x 900.
+
+Criterios:
+
+- sin overflow horizontal no intencionado;
+- headers y sidebars no colisionan;
+- tablas tienen estrategia explícita de scroll o adaptación;
+- textos, botones y badges no se solapan ni desbordan;
+- el menú móvil es operable por teclado y touch;
+- los estados de carga y error también son responsive.
+
+## 4. Alcance técnico
+
+### Fase 0 — Inventario y línea base
+
+**Objetivo:** medir la deuda actual sin bloquear todavía el desarrollo.
+
+Entregables:
+
+- `pnpm front:audit`;
+- reporte por archivo y suite;
+- inventario de fuentes, colores, iconos, componentes manuales y layouts forzados;
+- matriz inicial de certificación;
+- lista de excepciones justificadas.
+
+Categorías mínimas del reporte:
+
+- tipografía incorrecta;
+- colores hardcodeados;
+- valores arbitrarios de tamaño/spacing;
+- dark mode forzado;
+- iconos no aprobados;
+- elementos interactivos manuales;
+- componentes sin test;
+- rutas sin cobertura responsive;
+- imports directos de componentes legacy.
+
+El primer reporte será informativo. No se intentará limpiar todo el repositorio en un solo cambio.
+
+### Fase 1 — Primitives y contratos visuales
+
+**Objetivo:** cerrar las APIs que las suites deben utilizar.
+
+Revisar o crear en `@loopdev/ui`:
+
+- `Heading`;
+- `Text`;
+- `TechnicalText`;
+- `PageHeader`;
+- `SectionHeader`;
+- `ContextBar`;
+- `SuiteHeader`;
+- `IconButton`;
+- `ResponsiveTable`;
+- `LoadingState`;
+- `EmptyState`;
+- adaptador de iconos aprobados.
+
+Cada primitive debe tener:
+
+- contrato de props tipado;
+- soporte light/dark;
+- estados disabled/loading/error cuando aplique;
+- semántica HTML correcta;
+- focus visible;
+- test de renderizado y variantes;
+- test de accesibilidad;
+- documentación breve de uso y no uso.
+
+No crear primitives por duplicación accidental. Antes de añadir uno, responder:
+
+1. ¿Existe ya una API equivalente?
+2. ¿Se repite en más de una suite?
+3. ¿Es visual o contiene lógica de dominio?
+4. ¿La variante pertenece al Design System o a una sola suite?
+
+### Fase 2 — Quality Gate automático
+
+**Objetivo:** convertir la constitución visual en checks.
+
+Crear reglas ESLint o checks AST para detectar:
+
+- HEX en `apps/**`, `modules/**` y componentes de producto;
+- `font-mono` aplicado a headings o bloques de contenido;
+- `fontFamily`, `fontSize` o `fontWeight` inline fuera de excepciones;
+- headings con clases de tipografía en lugar de primitives aprobados;
+- `<button>` manual fuera de componentes autorizados;
+- iconos no aprobados;
+- `dark` forzado en layouts de suite;
+- `document.documentElement.style.setProperty` desde páginas o layouts;
+- clases arbitrarias de color, tipografía o escala sin justificación.
+
+Crear comandos:
+
+```bash
+pnpm front:audit
+pnpm classes:check
+pnpm lint:ui
+pnpm front:check
+```
+
+Política de adopción:
+
+1. primera ejecución: reporte informativo;
+2. segunda etapa: warnings para archivos modificados;
+3. tercera etapa: error bloqueante para código nuevo;
+4. deuda antigua controlada mediante baseline versionado, nunca mediante silenciamiento global.
+
+Mensajes de error esperados:
+
+```text
+LOOPDEV_UI_001: Use Heading for semantic page or section titles.
+LOOPDEV_UI_002: Telemetry typography cannot be used for editorial content.
+LOOPDEV_UI_003: Hardcoded color detected. Use a LoopDev token.
+LOOPDEV_UI_004: Suite layouts cannot force a color mode.
+LOOPDEV_UI_005: Use the approved icon adapter.
+```
+
+### Fase 3 — Pruebas de componentes
+
+**Objetivo:** asegurar que los primitives no regresen.
+
+Vitest y React Testing Library deben cubrir:
+
+- renderizado básico;
+- variantes y estados;
+- semántica y roles;
+- keyboard navigation;
+- loading, empty y error;
+- tema claro y oscuro cuando el componente cambie visualmente;
+- reduced motion cuando existan animaciones.
+
+Axe debe ser bloqueante para componentes compartidos.
+
+Los tests deben vivir junto al componente. No se exigirá una historia de Storybook como condición de merge.
+
+### Fase 4 — Pruebas reales de aplicación
+
+**Objetivo:** detectar fallos que JSDOM no puede ver.
+
+Crear pruebas Playwright contra la aplicación real para:
+
+- Launchpad;
+- Marketing Studio;
+- Sales CRM;
+- Health OS;
+- Quant Ops.
+
+Cada suite debe probar:
+
+- navegación principal;
+- carga, error y empty state;
+- theme toggle;
+- viewport móvil y desktop;
+- ausencia de overflow horizontal;
+- nombre accesible de botones e iconos;
+- visibilidad de headers, sidebars y contenido principal;
+- screenshots de referencia light/dark tras revisión humana.
+
+Checks estructurales mínimos:
+
+```ts
+expect(await page.locator('body').evaluate(
+  (element) => element.scrollWidth <= element.clientWidth,
+)).toBe(true);
+```
+
+Los screenshots serán evidencia de regresión, no el único criterio de aprobación.
+
+### Fase 5 — Migración por suite
+
+Orden propuesto:
+
+1. Launchpad y shell global;
+2. Marketing Studio;
+3. Sales CRM;
+4. Health OS;
+5. Quant Ops.
+
+Para cada suite:
+
+- retirar dark mode forzado;
+- sustituir colores hardcodeados;
+- migrar headings y body text a primitives;
+- migrar botones e iconos;
+- normalizar superficies y spacing;
+- comprobar light/dark;
+- cubrir móvil;
+- añadir estados de carga, error y vacío;
+- documentar excepciones;
+- completar la matriz de certificación.
+
+Marketing Studio será la suite piloto porque contiene Brand Hub, tipografía, identidad visual y varios patrones reutilizables.
+
+## 5. Matriz de certificación
+
+Crear una matriz versionada por suite:
+
+| Suite | Light | Dark | Mobile | Tokens | A11y | Typography | Icons | Tests | Estado |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| Launchpad | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
+| Marketing Studio | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
+| Sales CRM | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
+| Health OS | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
+| Quant Ops | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente | Front_Audit |
+
+Estados:
+
+- `Front_Lab`: experimental;
+- `Front_Audit`: usable, pero con deuda conocida;
+- `Front_Certified`: cumple los gates definidos.
+
+Una suite no puede marcarse como `Front_Certified` si tiene fallos bloqueantes en accesibilidad, responsive, tokens, tema o build.
+
+## 6. Comandos de calidad objetivo
+
+El gate final del frontend será:
+
+```bash
+pnpm format:check
+pnpm classes:check
+pnpm duplication:check
+pnpm lint:ui
+pnpm typecheck
+pnpm test
+pnpm test:a11y
+pnpm test:responsive
+pnpm test:visual
+pnpm build
+```
+
+Crear un comando compuesto:
+
+```bash
+pnpm front:check
+```
+
+El comando debe:
+
+- informar qué etapa está ejecutando;
+- fallar con mensajes accionables;
+- distinguir deuda baseline de regresiones nuevas;
+- ser ejecutable localmente y en CI;
+- no requerir acceso a producción ni modificar datos reales.
+
+## 7. Definition of Ready
+
+Una tarea frontend puede comenzar cuando:
+
+- la suite y ruta afectadas están identificadas;
+- existe un objetivo visual o referencia aprobada;
+- se ha elegido el primitive de `@loopdev/ui` o se ha justificado uno nuevo;
+- están definidos estados loading, empty, error y success;
+- están definidos light/dark y mobile/desktop;
+- no requiere cambios ocultos de persistencia para validar la interfaz.
+
+## 8. Definition of Done
+
+Una tarea frontend está terminada cuando:
+
+- usa primitives y tokens oficiales o documenta una excepción;
+- no introduce HEX ni fuentes arbitrarias;
+- no fuerza un tema desde una suite;
+- usa iconos aprobados;
+- funciona en viewport móvil y desktop;
+- funciona en light y dark;
+- tiene semántica y focus accesible;
+- tiene tests adecuados a su riesgo;
+- pasa `pnpm front:check` o deja explícitamente registrada una deuda existente;
+- actualiza la matriz de certificación si afecta una suite.
+
+## 9. Riesgos y controles
+
+### Riesgo: el lint produce demasiado ruido
+
+Control: comenzar como auditoría, generar baseline y bloquear solo código nuevo.
+
+### Riesgo: crear demasiados primitives
+
+Control: exigir decisión de reutilización y prueba de repetición antes de añadir componentes.
+
+### Riesgo: snapshots frágiles
+
+Control: priorizar checks estructurales, limitar screenshots a rutas críticas y revisar cambios visuales intencionados.
+
+### Riesgo: el tema dinámico modifica variables globales de forma inesperada
+
+Control: centralizar theme ownership en providers oficiales y añadir pruebas de restauración al cambiar de suite.
+
+### Riesgo: mezclar datos reales con pruebas visuales
+
+Control: usar fixtures o datos de prueba explícitos; nunca sembrar ni borrar datos Supabase desde Playwright.
+
+## 10. Entregables del track
+
+1. Constitución visual frontend.
+2. Auditoría inicial del repositorio.
+3. Quality Gate con baseline.
+4. Primitives tipográficos y de contexto revisados.
+5. Política y adaptador de iconos.
+6. Suite piloto certificada.
+7. Tests responsive y de accesibilidad en Playwright.
+8. Matriz de certificación de todas las suites.
+9. `pnpm front:check` integrado en CI.
+10. Documentación de excepciones y deuda residual.
+
+## 11. Primeros pasos recomendados
+
+1. Crear la constitución visual corta.
+2. Implementar `front:audit` en modo informativo.
+3. Obtener el inventario real de violaciones.
+4. Revisar `@loopdev/ui` y cerrar la API de tipografía.
+5. Migrar Launchpad y Marketing Studio como referencia.
+6. Añadir Playwright para light/dark y mobile.
+7. Convertir las reglas nuevas en bloqueantes.
+8. Continuar con CRM, Health OS y Quant Ops.
+
+## 12. Criterio de éxito
+
+El track se considera completado cuando un cambio frontend nuevo puede responder automáticamente:
+
+- qué primitive visual utiliza;
+- qué token controla su apariencia;
+- qué fuente corresponde a cada texto;
+- cómo se comporta en light/dark;
+- cómo se comporta en móvil;
+- qué prueba lo protege;
+- qué suite queda certificada o qué deuda queda registrada.
+
+La meta no es que todas las pantallas sean idénticas. La meta es que todas hablen el mismo lenguaje visual y que las desviaciones sean visibles, explicables y controlables antes de llegar a producción.

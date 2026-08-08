@@ -131,12 +131,12 @@ export default function BrandHubPage() {
         
         {/* Tarjeta de "Crear Nuevo" (Solo si hay marcas) */}
         {!isLoading && brands && brands.length > 0 && (
-          <button className="border border-dashed border-white/10 rounded-xl p-6 flex flex-col items-center justify-center gap-4 text-text-muted hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 min-h-[240px]">
+          <Button className="border border-dashed border-white/10 rounded-xl p-6 flex flex-col items-center justify-center gap-4 text-text-muted hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 min-h-[240px]">
             <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
               <Icon name="add" />
             </div>
             <span className="font-medium">Create another brand</span>
-          </button>
+          </Button>
         )}
       </div>
 

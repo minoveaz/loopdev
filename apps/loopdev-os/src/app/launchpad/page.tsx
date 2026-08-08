@@ -25,10 +25,6 @@ export default function LaunchpadPage() {
   const isLocked = (permission: string, suite: 'marketing' | 'crm' | 'health' | 'quant') =>
     !isPlatformAdministrator && (isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite));
 
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
-  };
-
   const accessState = resolveAccessState({
     isAuthLoading,
     hasSession: Boolean(user),

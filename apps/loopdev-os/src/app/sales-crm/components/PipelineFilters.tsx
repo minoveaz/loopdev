@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { TechnicalSurface, Icon, Button, Input, Select, FilterDropdown } from '@loopdev/ui';
+import { TechnicalSurface, Icon, Button, IconButton, Input, FilterDropdown } from '@loopdev/ui';
 import { AVAILABLE_ASSIGNEES, AVAILABLE_LABELS, type LeadLabel } from '../context';
 
 interface PipelineFiltersProps {
@@ -84,54 +84,42 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
 
         {/* Company Dropdown */}
         <div className="flex-1 min-w-0">
-          <Select 
-            id="companyFilter" 
-            value={companyFilter} 
-            onChange={(e) => {
-              if (isCompanyFilter(e.target.value)) onCompanyFilterChange(e.target.value);
-            }} 
-            size="sm"
-          >
-            <option value="all" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Compañía</option>
-            <option value="Sanitas" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Sanitas</option>
-            <option value="Adeslas" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Adeslas</option>
-          </Select>
+          <FilterDropdown
+            icon="business"
+            label={companyFilter === 'all' ? 'Compañía' : companyFilter}
+            options={['Todas', 'Sanitas', 'Adeslas']}
+            selected={companyFilter === 'all' ? [] : [companyFilter]}
+            onToggle={(value) => {
+              if (value === 'Todas') onCompanyFilterChange('all');
+              else if (isCompanyFilter(value)) onCompanyFilterChange(value);
+            }}
+          />
         </div>
 
         {/* Source Dropdown */}
         <div className="flex-1 min-w-0">
-          <Select 
-            id="sourceFilter" 
-            value={sourceFilter} 
-            onChange={(e) => onSourceFilterChange(e.target.value)} 
-            size="sm"
-          >
-            <option value="all" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Origen</option>
-            <option value="Marketing Campaign" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Campaña Marketing</option>
-            <option value="Referral" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Referido</option>
-            <option value="Web" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Web</option>
-            <option value="Social Media" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Redes Sociales</option>
-            <option value="WhatsApp" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">WhatsApp</option>
-            <option value="CRM" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">CRM</option>
-            <option value="Other" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Otro</option>
-          </Select>
+          <FilterDropdown
+            icon="public"
+            label={sourceFilter === 'all' ? 'Origen' : sourceFilter}
+            options={['Todos', 'Marketing Campaign', 'Referral', 'Web', 'Social Media', 'WhatsApp', 'CRM', 'Other']}
+            selected={sourceFilter === 'all' ? [] : [sourceFilter]}
+            onToggle={(value) => onSourceFilterChange(value === 'Todos' ? 'all' : value)}
+          />
         </div>
 
         {/* Time Filter */}
         <div className="flex-1 min-w-0">
-          <Select 
-            id="timeFilter" 
-            value={timeFilter} 
-            onChange={(e) => {
-              if (isTimeFilter(e.target.value)) onTimeFilterChange(e.target.value);
-            }} 
-            size="sm"
-          >
-            <option value="all" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Todos</option>
-            <option value="7d" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Últimos 7 días</option>
-            <option value="14d" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Últimos 14 días</option>
-            <option value="30d" className="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white">Último mes</option>
-          </Select>
+          <FilterDropdown
+            icon="calendar_month"
+            label={timeFilter === 'all' ? 'Todos' : ({ '7d': 'Últimos 7 días', '14d': 'Últimos 14 días', '30d': 'Último mes' }[timeFilter] ?? 'Todos')}
+            options={['Todos', 'Últimos 7 días', 'Últimos 14 días', 'Último mes']}
+            selected={timeFilter === 'all' ? [] : [{ '7d': 'Últimos 7 días', '14d': 'Últimos 14 días', '30d': 'Último mes' }[timeFilter] ?? '']}
+            onToggle={(value) => {
+              const timeValue = { 'Últimos 7 días': '7d', 'Últimos 14 días': '14d', 'Último mes': '30d' }[value];
+              if (value === 'Todos') onTimeFilterChange('all');
+              else if (timeValue) onTimeFilterChange(timeValue);
+            }}
+          />
         </div>
 
         {/* Assignee Button Filter */}
@@ -178,9 +166,7 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
               className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary text-[10px] font-semibold rounded-md border border-primary/20"
             >
               {a}
-              <button onClick={() => toggleAssignee(a)} className="hover:text-primary/70 cursor-pointer">
-                <Icon name="close" size="sm" />
-              </button>
+              <IconButton icon="close" size="sm" aria-label={`Quitar asignado ${a}`} onClick={() => toggleAssignee(a)} className="hover:text-primary/70 cursor-pointer" />
             </span>
           ))}
           {labelFilter.map(l => (
@@ -189,9 +175,7 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
               className="inline-flex items-center gap-1 px-2 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-semibold rounded-md border border-amber-500/20"
             >
               {l}
-              <button onClick={() => toggleLabel(l)} className="hover:text-amber-400/70 cursor-pointer">
-                <Icon name="close" size="sm" />
-              </button>
+              <IconButton icon="close" size="sm" aria-label={`Quitar etiqueta ${l}`} onClick={() => toggleLabel(l)} className="hover:text-amber-400/70 cursor-pointer" />
             </span>
           ))}
         </div>

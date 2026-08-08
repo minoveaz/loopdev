@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { RuleRowProps } from './types';
-import { LpdText } from '@loopdev/ui';
+import { Heading, LpdText } from '@loopdev/ui';
 import { DomainBadge } from '../DomainBadge';
 import { SeverityBadge } from '../SeverityBadge';
 import { clsx } from 'clsx';
@@ -35,9 +35,9 @@ export const RuleRow: React.FC<RuleRowProps> = ({ rule, isSelected, onClick }) =
 
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <LpdText size="sm" weight="bold" className="text-text-main">
+            <Heading as="h3" size="sm" weight="bold" className="text-text-main">
               {rule.name}
-            </LpdText>
+            </Heading>
             <DomainBadge domain={rule.domain} />
           </div>
           

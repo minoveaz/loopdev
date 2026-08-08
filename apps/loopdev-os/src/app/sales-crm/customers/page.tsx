@@ -100,7 +100,7 @@ export default function CustomersDirectory() {
             >
               <div className="flex justify-between items-start">
                 <div className="flex flex-col gap-0.5">
-                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-primary transition-colors">{customer.name}</h4>
+                  <Heading as="h4" size="sm" weight="bold" className="text-slate-100 group-hover:text-primary transition-colors">{customer.name}</Heading>
                   <span className="text-xs text-slate-400 font-medium">{customer.company}</span>
                 </div>
                 <div className="p-2 bg-slate-900 text-slate-400 rounded-xl border border-white/5">

@@ -6,6 +6,7 @@ import {
   Heading, 
   TechnicalSurface, 
   Button,
+  Icon,
   KanbanBoard,
   cn
 } from '@loopdev/ui';
@@ -118,9 +119,7 @@ export default function PipelineKanban() {
             className="whitespace-nowrap flex-shrink-0"
           >
             <span className="flex items-center gap-2 justify-center">
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14M5 12h14"/>
-              </svg>
+                <Icon name="add" size="sm" />
               <span>Nuevo Lead</span>
             </span>
           </Button>
@@ -135,8 +134,8 @@ export default function PipelineKanban() {
       />
 
       {/* Sub-navigation Tabs */}
-      <div className="flex border-b border-border-technical/60 shrink-0 gap-2">
-        <button 
+      <div className="flex shrink-0 gap-2">
+        <Button
           onClick={() => setActiveTab('pipeline')} 
           className={cn(
             "px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2",
@@ -146,8 +145,8 @@ export default function PipelineKanban() {
           )}
         >
           Pipeline
-        </button>
-        <button 
+        </Button>
+        <Button
           onClick={() => setActiveTab('history')} 
           className={cn(
             "px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2",
@@ -157,7 +156,7 @@ export default function PipelineKanban() {
           )}
         >
           Historial de Leads
-        </button>
+        </Button>
       </div>
 
       {activeTab === 'pipeline' ? (

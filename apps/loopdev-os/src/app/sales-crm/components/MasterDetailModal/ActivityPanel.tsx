@@ -43,7 +43,9 @@ export function ActivityPanel() {
   // Dynamic back button header for detailed forms
   const renderDetailHeader = (title: string) => (
     <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-3 mb-4 select-none">
-      <button
+      <Button
+        variant="ghost"
+        size="sm"
         type="button"
         onClick={() => {
           cancelEdit();
@@ -53,7 +55,7 @@ export function ActivityPanel() {
       >
         <Icon name="arrow_back" size="sm" />
         <span>Volver a Bitácora y Archivos</span>
-      </button>
+      </Button>
       <LpdText
         size="nano"
         weight="black"
@@ -233,10 +235,10 @@ export function ActivityPanel() {
             onChange={handleEditChange}
             size="sm"
           >
-            <option value="Mensual">Mensual 📅</option>
-            <option value="Trimestral">Trimestral 🗓️</option>
-            <option value="Semestral">Semestral 🗓️</option>
-            <option value="Anual">Anual 📆</option>
+            <option value="Mensual">Mensual</option>
+            <option value="Trimestral">Trimestral</option>
+            <option value="Semestral">Semestral</option>
+            <option value="Anual">Anual</option>
           </Select>
           <Select
             name="contractType"
@@ -245,9 +247,9 @@ export function ActivityPanel() {
             onChange={handleEditChange}
             size="sm"
           >
-            <option value="Individual">Plan Individual 👤</option>
-            <option value="Familiar">Plan Familiar Plus 👨‍👩‍👧‍👦</option>
-            <option value="Corporativo">Plan Corporativo Colectivo 🏢</option>
+            <option value="Individual">Plan Individual</option>
+            <option value="Familiar">Plan Familiar Plus</option>
+            <option value="Corporativo">Plan Corporativo Colectivo</option>
           </Select>
         </div>
 
@@ -463,8 +465,8 @@ export function ActivityPanel() {
               onChange={handleEditChange}
               size="sm"
             >
-              <option value="No">No fuma 🚭</option>
-              <option value="Sí">Sí fuma 🚬</option>
+              <option value="No">No fuma</option>
+              <option value="Sí">Sí fuma</option>
             </Select>
             <Input
               name="preExistingConditions"
@@ -504,7 +506,7 @@ export function ActivityPanel() {
     <div className="flex flex-col gap-4 w-full h-full">
       {/* Dynamic Tab Bar */}
       <div className="flex border-b border-slate-200 dark:border-white/5 pb-0.5 mb-2 select-none">
-        <button
+        <Button
           onClick={() => setActiveTab('timeline')}
           className={`flex items-center gap-1.5 px-4 py-2 border-b-2 text-xs font-bold transition-all ${
             activeTab === 'timeline'
@@ -514,8 +516,8 @@ export function ActivityPanel() {
         >
           <Icon name="feed" size="sm" />
           <span>⚡ Bitácora de Actividad</span>
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveTab('documents')}
           className={`flex items-center gap-1.5 px-4 py-2 border-b-2 text-xs font-bold transition-all ${
             activeTab === 'documents'
@@ -524,8 +526,8 @@ export function ActivityPanel() {
           }`}
         >
           <Icon name="upload" size="sm" />
-          <span>📁 Documentos e Historial ({lead.documents?.length || 0})</span>
-        </button>
+                  <span>Documentos e Historial ({lead.documents?.length || 0})</span>
+        </Button>
       </div>
 
       {/* Tab 1: Timeline Feed */}
@@ -648,10 +650,10 @@ export function ActivityPanel() {
                   onChange={(e) => setUploadCategory(e.target.value)}
                   size="sm"
                 >
-                  <option value="Identificación">Cédula / Identidad 🪪</option>
-                  <option value="Soporte Médico">Declaración / Historial Médico 🏥</option>
-                  <option value="Financiero">Soporte de Ingresos / Bancario 💵</option>
-                  <option value="Contrato Firmado">Contrato / Póliza Firmada 📄</option>
+                  <option value="Identificación">Cédula / Identidad</option>
+                  <option value="Soporte Médico">Declaración / Historial Médico</option>
+                  <option value="Financiero">Soporte de Ingresos / Bancario</option>
+                  <option value="Contrato Firmado">Contrato / Póliza Firmada</option>
                 </Select>
               </div>
 
@@ -726,13 +728,13 @@ export function ActivityPanel() {
                             : 'Pendiente ⏳'}
                       </span>
 
-                      <button
+                      <Button
                         onClick={() => handleDocumentDelete(doc.id)}
                         className="text-text-muted hover:text-rose-500 p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
                         title="Eliminar archivo"
                       >
                         <Icon name={ICON_REGISTRY.actions.delete} size="sm" />
-                      </button>
+                      </Button>
                     </div>
                   </TechnicalCard>
                 ))}

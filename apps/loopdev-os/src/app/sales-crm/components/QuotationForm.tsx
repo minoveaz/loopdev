@@ -7,6 +7,7 @@ import {
   Heading, 
   Icon, 
   Button, 
+  IconButton,
   StatusPulse,
   Input
 } from '@loopdev/ui';
@@ -145,12 +146,10 @@ export function QuotationForm({ isOpen, onClose, onSubmit }: QuotationFormProps)
         {/* Header */}
         <div className="flex justify-between items-center border-b border-white/5 pb-3 select-none">
           <div className="flex flex-col gap-0.5">
-            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Registrar Nuevo Trato</h3>
+            <Heading as="h3" size="sm" weight="bold" className="text-slate-100 uppercase tracking-wider">Registrar Nuevo Trato</Heading>
             <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">TECHNICAL_DRAFT_ENTRY</span>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200 transition-colors">
-            <Icon name="close" size="sm" />
-          </button>
+          <IconButton icon="close" size="sm" onClick={onClose} aria-label="Cerrar formulario de presupuesto" className="text-slate-400 hover:text-slate-200 transition-colors" />
         </div>
 
         {/* Smart Default Status Badge */}

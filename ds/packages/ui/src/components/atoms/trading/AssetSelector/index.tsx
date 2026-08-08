@@ -53,7 +53,7 @@ export const AssetSelector: React.FC<AssetSelectorProps> = ({
           disabled={disabled}
           className={cn(
             "relative z-10 w-full h-10 pl-12 pr-10 rounded-lg",
-            "bg-white dark:bg-[#161E33] border border-border-technical/50",
+            "bg-white dark:bg-lpd-bg-dark border border-border-technical/50",
             "text-sm font-bold text-text-main dark:text-white",
             "focus:border-primary outline-none transition-all",
             "appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
@@ -61,7 +61,7 @@ export const AssetSelector: React.FC<AssetSelectorProps> = ({
           )}
         >
           {assets.map((asset) => (
-            <option key={asset.symbol} value={asset.symbol} className="bg-white dark:bg-[#161E33] text-text-main dark:text-white">
+            <option key={asset.symbol} value={asset.symbol} className="bg-white dark:bg-lpd-bg-dark text-text-main dark:text-white">
               {asset.symbol} - {asset.name}
             </option>
           ))}

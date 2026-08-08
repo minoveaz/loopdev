@@ -14,6 +14,7 @@ import {
   Skeleton,
   TechnicalDialog,
   Button,
+  Button,
   BotCardIndustrial,
   toast,
 } from '@loopdev/ui';
@@ -135,12 +136,13 @@ export default function QuantOpsOverview() {
               </Heading>
               <StatusPulse variant="energy" size="xs" isAnimated />
             </div>
-            <button
+            <Button
+              variant="danger"
               onClick={() => setIsKillSwitchConfirmOpen(true)}
               className="w-full bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500 hover:text-white text-rose-500 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
             >
               EMERGENCY_KILL_SWITCH
-            </button>
+            </Button>
           </TechnicalSurface>
           <RiskMeter
             title="Capital_Exposure"

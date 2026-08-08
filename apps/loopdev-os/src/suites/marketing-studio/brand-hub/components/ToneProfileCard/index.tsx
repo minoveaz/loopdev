@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, cn } from '@loopdev/ui';
+import { Heading, LpdText, cn } from '@loopdev/ui';
 import { ToneProfileCardProps } from './types';
 
 /**
@@ -22,9 +22,9 @@ export const ToneProfileCard: React.FC<ToneProfileCardProps> = ({
       )}
     >
       <div className="flex flex-col gap-1">
-        <LpdText size="sm" weight="bold" className="text-text-main group-hover:text-primary transition-colors">
+        <Heading as="h3" size="sm" weight="bold" className="text-text-main group-hover:text-primary transition-colors">
           {profile.name}
-        </LpdText>
+        </Heading>
         <LpdText size="xs" className="text-text-muted opacity-60 leading-relaxed">
           {profile.description}
         </LpdText>

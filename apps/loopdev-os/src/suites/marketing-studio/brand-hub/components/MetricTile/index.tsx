@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, Skeleton, cn } from '@loopdev/ui';
+import { LpdText, Button, Skeleton, cn } from '@loopdev/ui';
 import { MetricTileProps } from './types';
 
 /**
@@ -33,7 +33,7 @@ export const MetricTile: React.FC<MetricTileProps> = ({
   };
 
   return (
-    <button
+    <Button
       onClick={onClick}
       className={cn(
         "flex flex-col gap-3 p-5 rounded-xl border bg-background-surface transition-all text-left group",
@@ -66,6 +66,6 @@ export const MetricTile: React.FC<MetricTileProps> = ({
           </LpdText>
         )}
       </div>
-    </button>
+    </Button>
   );
 };

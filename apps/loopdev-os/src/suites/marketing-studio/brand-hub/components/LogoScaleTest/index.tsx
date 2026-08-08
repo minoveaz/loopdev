@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { LogoAsset } from '@loopdev/contracts';
-import { LpdText } from '@loopdev/ui';
+import { Heading, LpdText } from '@loopdev/ui';
 
 interface LogoScaleTestProps {
   logo: LogoAsset;
@@ -51,7 +51,7 @@ export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo, logoNode }) 
         ))}
       </div>
       <div className="text-center">
-        <LpdText size="xs" weight="bold" className="text-text-main">Scale Integrity Check</LpdText>
+        <Heading as="h3" size="sm" weight="bold" className="text-text-main">Scale Integrity Check</Heading>
         <LpdText size="nano" className="text-text-muted mt-1 italic">
           Verify symbol recognition at favicon and micro-header sizes.
         </LpdText>

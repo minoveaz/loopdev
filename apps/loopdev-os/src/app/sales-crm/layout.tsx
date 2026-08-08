@@ -39,7 +39,7 @@ const SALES_CRM_SCHEMA: NavigationSchema = {
     suiteId: 'salesCRM',
     suiteName: 'Sales & CRM',
     suiteIcon: 'Users',
-    accentColor: '#3B82F6', // Royal Blue
+    accentColor: 'var(--lpd-color-brand-primary)',
     surfaceVariant: 'canvas' as const,
     route: { routeId: '/sales-crm' },
   },
@@ -152,33 +152,6 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const [navMode, setNavMode] = useState<NavMode>('expanded');
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
-
-  // --- FORCE PREMIUM DARK MODE & BLUE ACCENTS ---
-  useEffect(() => {
-    const root = document.documentElement;
-    const hadLight = root.classList.contains('light');
-    root.classList.remove('light');
-    root.classList.add('dark');
-
-    root.style.setProperty('--lpd-color-brand-primary', '#3B82F6');
-    root.style.setProperty('--lpd-color-brand-primary-rgb', '59 130 246');
-    root.style.setProperty('--lpd-color-bg-primary-subtle', '#3B82F626');
-    root.style.setProperty('--lpd-color-status-info', '#3B82F6');
-
-    return () => {
-      root.classList.remove('dark');
-      if (hadLight) {
-        root.classList.add('light');
-      } else {
-        root.classList.add('dark');
-      }
-
-      root.style.setProperty('--lpd-color-brand-primary', '#135bec');
-      root.style.setProperty('--lpd-color-brand-primary-rgb', '19 91 236');
-      root.style.setProperty('--lpd-color-bg-primary-subtle', '#135bec26');
-      root.style.setProperty('--lpd-color-status-info', '#135bec');
-    };
-  }, []);
 
   useEffect(() => {
     if (pathname.split('/').length > 2) {

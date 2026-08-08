@@ -13,6 +13,7 @@
 'use client';
 
 import React from 'react';
+import { Button, Heading } from '@loopdev/ui';
 
 function PositionPreview({
   side,
@@ -83,12 +84,12 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
         className={`border border-red-500 border-opacity-50 bg-red-500 bg-opacity-5 rounded-lg p-4 ${className}`}
       >
         <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
-        <button
+        <Button variant="ghost" size="sm" type="button"
           onClick={refresh}
           className="mt-2 text-nano text-red-600 dark:text-red-400 underline hover:opacity-70"
         >
           Retry
-        </button>
+        </Button>
       </div>
     );
   }
@@ -106,7 +107,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-primary">{botName}</h2>
+          <Heading as="h2" size="lg" weight="bold" className="text-primary">{botName}</Heading>
           <p className="text-nano text-primary-light opacity-70">
             Updated {formatTimeAgo(metrics.last_updated)}
             {isConnected ? ' • Live' : ' • Polling'}
@@ -206,7 +207,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Signal Analysis Section */}
       <div className="border border-border-technical rounded-lg backdrop-blur-sm bg-surface-dark bg-opacity-50 p-4 space-y-3">
-        <h3 className="text-technical font-medium text-primary">Entry Signals</h3>
+        <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Entry Signals</Heading>
 
         <div className="grid grid-cols-2 gap-4">
           <SignalCard
@@ -227,7 +228,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       {/* Position Preview Section */}
       {showExtended && (
         <div className="border border-border-technical rounded-lg backdrop-blur-sm bg-surface-dark bg-opacity-50 p-4 space-y-3">
-          <h3 className="text-technical font-medium text-primary">Position Preview</h3>
+          <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Position Preview</Heading>
 
           <div className="grid grid-cols-2 gap-4">
             <PositionPreview
@@ -247,12 +248,12 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       )}
 
       {/* Refresh button */}
-      <button
+      <Button
         onClick={refresh}
         className="text-nano text-primary-light hover:text-primary opacity-70 hover:opacity-100 transition-opacity"
       >
         ↻ Refresh Metrics
-      </button>
+      </Button>
     </div>
   );
 };

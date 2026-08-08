@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { 
   TechnicalCard, 
   LpdText, 
-  Icon, 
+  Icon,
+  IconButton,
   Button, 
   Input, 
   Select,
@@ -145,12 +146,13 @@ export function InfoPanel() {
                 <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Nombre Completo</Label>
                 <LpdText size="xs" weight="semibold" className="text-text-main dark:text-white">{lead.name}</LpdText>
               </div>
-              <button 
+              <IconButton
+                icon={copiedField === 'name' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
+                size="sm"
+                aria-label="Copiar nombre"
                 onClick={() => copyToClipboard(lead.name, 'name')}
                 className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
-              >
-                <Icon name={copiedField === 'name' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
-              </button>
+              />
             </div>
 
             <div className="flex justify-between items-center group">
@@ -158,12 +160,13 @@ export function InfoPanel() {
                 <Label textSize="nano" textWeight="black" className="uppercase text-text-muted">Compañía / Organización</Label>
                 <LpdText size="xs" weight="semibold" className="text-text-main dark:text-white">{lead.company}</LpdText>
               </div>
-              <button 
+              <IconButton
+                icon={copiedField === 'company' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
+                size="sm"
+                aria-label="Copiar compañía"
                 onClick={() => copyToClipboard(lead.company, 'company')}
                 className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
-              >
-                <Icon name={copiedField === 'company' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
-              </button>
+              />
             </div>
 
             <div className="flex justify-between items-center group">
@@ -173,12 +176,13 @@ export function InfoPanel() {
                   <LpdText size="xs" weight="semibold" variant="mono">{lead.email}</LpdText>
                 </a>
               </div>
-              <button 
+              <IconButton
+                icon={copiedField === 'email' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
+                size="sm"
+                aria-label="Copiar correo"
                 onClick={() => copyToClipboard(lead.email, 'email')}
                 className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
-              >
-                <Icon name={copiedField === 'email' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
-              </button>
+              />
             </div>
 
             <div className="flex justify-between items-center group">
@@ -188,12 +192,13 @@ export function InfoPanel() {
                   <LpdText size="xs" weight="semibold" variant="mono">{lead.phone}</LpdText>
                 </a>
               </div>
-              <button 
+              <IconButton
+                icon={copiedField === 'phone' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy}
+                size="sm"
+                aria-label="Copiar teléfono"
                 onClick={() => copyToClipboard(lead.phone, 'phone')}
                 className="opacity-0 group-hover:opacity-100 transition-opacity text-text-muted hover:text-text-main p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-900"
-              >
-                <Icon name={copiedField === 'phone' ? ICON_REGISTRY.status.success : ICON_REGISTRY.actions.copy} size="sm" />
-              </button>
+              />
             </div>
           </div>
         )}
@@ -320,12 +325,12 @@ export function InfoPanel() {
               onChange={handleEditChange}
               size="sm"
             >
-              <option value="facebook_ads">Facebook Ads 🔵</option>
-              <option value="google_ads">Google Ads 🟡</option>
-              <option value="landing_page">Landing Page Directa 📄</option>
-              <option value="partner_referral">Recomendado por Partner 🤝</option>
-              <option value="client_referral">Recomendado por Cliente 👤</option>
-              <option value="organic">Búsqueda Orgánica / RRSS 🌐</option>
+              <option value="facebook_ads">Facebook Ads</option>
+              <option value="google_ads">Google Ads</option>
+              <option value="landing_page">Landing Page Directa</option>
+              <option value="partner_referral">Recomendado por Partner</option>
+              <option value="client_referral">Recomendado por Cliente</option>
+              <option value="organic">Búsqueda Orgánica / RRSS</option>
             </Select>
 
             {(editedLead.leadSourceType === 'partner_referral' || editedLead.leadSourceType === 'client_referral') ? (
@@ -500,10 +505,10 @@ export function InfoPanel() {
               onChange={handleEditChange}
               size="sm"
             >
-              <option value="Plan Básico Familiar">Plan Básico Familiar 🏥</option>
-              <option value="Plan Familiar Completo">Plan Familiar Completo 💎</option>
-              <option value="Plan Vital Senior">Plan Vital Senior 👵</option>
-              <option value="Plan Módulo Global VIP">Plan Módulo Global VIP ✈️</option>
+              <option value="Plan Básico Familiar">Plan Básico Familiar</option>
+              <option value="Plan Familiar Completo">Plan Familiar Completo</option>
+              <option value="Plan Vital Senior">Plan Vital Senior</option>
+              <option value="Plan Módulo Global VIP">Plan Módulo Global VIP</option>
             </Select>
 
             <div className="flex flex-col gap-1.5 w-full">

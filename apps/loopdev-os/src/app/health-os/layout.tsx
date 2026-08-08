@@ -32,7 +32,7 @@ const HEALTH_OS_SCHEMA: NavigationSchema = {
     suiteId: 'health-os',
     suiteName: 'Health OS',
     suiteIcon: 'Activity',
-    accentColor: '#10B981', // Emerald Green standard for Health
+    accentColor: 'var(--lpd-color-brand-primary)',
     surfaceVariant: 'canvas' as const,
     route: { routeId: '/health-os' },
   },
@@ -126,36 +126,6 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   const [navMode, setNavMode] = useState<NavMode>('expanded');
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
-
-  // --- FORCE LIGHT MODE & EMERALD GREEN THEME ---
-  useEffect(() => {
-    const root = document.documentElement;
-
-    // 1. Guardar estado del tema oscuro actual y forzar Tema Claro
-    const hadDark = root.classList.contains('dark');
-    root.classList.remove('dark');
-    root.classList.add('light');
-
-    // 2. Sobrescribir variables CSS con el Verde Esmeralda asistencial
-    root.style.setProperty('--lpd-color-brand-primary', '#10B981');
-    root.style.setProperty('--lpd-color-brand-primary-rgb', '16 185 129');
-    root.style.setProperty('--lpd-color-bg-primary-subtle', '#10B98126'); // Opaco
-    root.style.setProperty('--lpd-color-status-info', '#10B981');
-
-    return () => {
-      // Limpieza: Restaurar el tema oscuro original si existía
-      root.classList.remove('light');
-      if (hadDark) {
-        root.classList.add('dark');
-      }
-
-      // Restaurar el color azul corporativo predeterminado
-      root.style.setProperty('--lpd-color-brand-primary', '#135bec');
-      root.style.setProperty('--lpd-color-brand-primary-rgb', '19 91 236');
-      root.style.setProperty('--lpd-color-bg-primary-subtle', '#135bec26');
-      root.style.setProperty('--lpd-color-status-info', '#135bec');
-    };
-  }, []);
 
   useEffect(() => {
     if (pathname.split('/').length > 2) {

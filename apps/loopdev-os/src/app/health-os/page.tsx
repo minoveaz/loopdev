@@ -88,7 +88,7 @@ export default function HealthOsDashboard() {
                   <Icon name="calendar_month" size="sm" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-800">1. Agenda & Citas</h4>
+                  <Heading as="h4" size="sm" weight="bold" className="text-slate-800">1. Agenda & Citas</Heading>
                   <p className="text-xs text-slate-500 mt-1">Admisión y recepción de pacientes. Asignación automática de rutas según profesiograma.</p>
                 </div>
                 <Button 
@@ -106,7 +106,7 @@ export default function HealthOsDashboard() {
                   <Icon name="emergency" size="sm" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-800">2. Clasificación Triage</h4>
+                  <Heading as="h4" size="sm" weight="bold" className="text-slate-800">2. Clasificación Triage</Heading>
                   <p className="text-xs text-slate-500 mt-1">Evaluación de signos vitales y priorización asistencial según niveles obligatorios.</p>
                 </div>
                 <Button 
@@ -124,7 +124,7 @@ export default function HealthOsDashboard() {
                   <Icon name="rate_review" size="sm" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-800">3. Consultas HCE</h4>
+                  <Heading as="h4" size="sm" weight="bold" className="text-slate-800">3. Consultas HCE</Heading>
                   <p className="text-xs text-slate-500 mt-1">Diligenciamiento de SOAP, códigos CIE-10 e inyección de firma para certificados.</p>
                 </div>
                 <Button 
@@ -171,8 +171,8 @@ export default function HealthOsDashboard() {
             </div>
 
             <Button 
-              variant="outline" 
-              className="w-full border-slate-200 text-slate-700 hover:bg-slate-50 mt-auto"
+              variant="primary"
+              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white border-transparent"
               onClick={() => router.push('/health-os/contracts')}
             >
               Gestionar Cuentas (KAM)

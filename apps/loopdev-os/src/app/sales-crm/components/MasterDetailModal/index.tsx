@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { TechnicalSurface, Icon, Button, Input, Select, ICON_REGISTRY } from '@loopdev/ui';
+import { TechnicalSurface, Heading, Icon, Button, IconButton, Input, Select, ICON_REGISTRY } from '@loopdev/ui';
 import { LeadDetailProvider, useLeadDetail } from '../../context/LeadDetailContext';
 import { Header } from './Header';
 import { EmailComposer } from './EmailComposer';
@@ -301,7 +301,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
         depth="overlay"
         className="w-full h-full rounded-3xl overflow-hidden shadow-2xl border-slate-200 dark:border-white/10"
       >
-        <div className="flex flex-col h-full w-full bg-white dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 font-sans overflow-hidden">
+        <div className="flex flex-col h-full w-full bg-white dark:bg-lpd-bg-dark text-slate-900 dark:text-slate-100 font-sans overflow-hidden">
           {/* 1. Header component */}
           <Header onClose={onClose} />
 
@@ -313,9 +313,9 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                 className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl max-w-md w-full flex flex-col gap-4 text-xs font-sans"
               >
                 <div className="flex flex-col gap-1 border-b border-slate-200 dark:border-white/5 pb-2">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                  <Heading as="h3" size="sm" weight="bold" className="text-slate-900 dark:text-white uppercase tracking-wider">
                     {showClosureForm === 'rejected' ? 'Rechazar Presupuesto' : 'Descartar Lead'}
-                  </h3>
+                  </Heading>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400">
                     Por favor, registra el motivo de la baja del trato.
                   </p>
@@ -398,12 +398,13 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                   <span className="font-mono text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">
                     [ TTY_CREATOR: {activeCreator.toUpperCase()} ]
                   </span>
-                  <button
+                  <IconButton
+                    icon="close"
+                    size="sm"
                     onClick={() => setActiveCreator(null)}
                     className="text-slate-400 hover:text-slate-650 dark:hover:text-slate-200"
-                  >
-                    <Icon name={ICON_REGISTRY.actions.close} size="sm" />
-                  </button>
+                    aria-label="Cerrar creador"
+                  />
                 </div>
 
                 {activeCreator === 'note' && (
@@ -415,7 +416,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         { label: '+ Presupuesto', text: '• Presupuesto: ' },
                         { label: '+ Siguiente Contacto', text: '• Próximo paso: ' },
                       ].map((pill) => (
-                        <button
+                        <Button
                           key={pill.label}
                           type="button"
                           onClick={() => {
@@ -424,7 +425,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           className="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/40 dark:hover:bg-slate-900 text-[10px] text-slate-650 dark:text-slate-400 border border-slate-200 dark:border-white/5 transition-all"
                         >
                           {pill.label}
-                        </button>
+                        </Button>
                       ))}
                     </div>
 
@@ -469,7 +470,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           ].map((pill) => {
                             const isSelected = noteCategory === pill.id;
                             return (
-                              <button
+                              <Button
                                 key={pill.id}
                                 type="button"
                                 onClick={() =>
@@ -484,7 +485,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                                 }`}
                               >
                                 {pill.label}
-                              </button>
+                              </Button>
                             );
                           })}
                         </div>
@@ -529,9 +530,9 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           className={`w-2.5 h-2.5 rounded-full bg-red-500 ${isTimerRunning ? 'animate-pulse' : ''}`}
                         />
                         <div className="flex flex-col gap-0.5">
-                          <h4 className="text-xs font-bold text-red-800 dark:text-red-300">
+                          <Heading as="h4" size="xs" weight="bold" className="text-red-800 dark:text-red-300">
                             Simulación de Llamada VoIP
-                          </h4>
+                          </Heading>
                           <p className="text-[10px] text-slate-500 dark:text-slate-400">
                             {isTimerRunning ? 'Llamada en progreso...' : 'Grabación finalizada'}
                           </p>
@@ -589,7 +590,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                           ].map((pill) => {
                             const isSelected = newCall.outcome === pill.id;
                             return (
-                              <button
+                              <Button
                                 key={pill.id}
                                 type="button"
                                 onClick={() =>
@@ -602,7 +603,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                                 }`}
                               >
                                 {pill.label}
-                              </button>
+                              </Button>
                             );
                           })}
                         </div>
@@ -705,14 +706,14 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                               title: 'Solicitar documentos pendientes',
                             },
                           ].map((pill) => (
-                            <button
+                            <Button
                               key={pill.label}
                               type="button"
                               onClick={() => setNewTask((prev) => ({ ...prev, title: pill.title }))}
                               className="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/40 dark:hover:bg-slate-900 text-[10px] text-slate-650 dark:text-slate-400 border border-slate-200 dark:border-white/5 transition-all"
                             >
                               {pill.label}
-                            </button>
+                            </Button>
                           ))}
                         </div>
                       </div>
@@ -770,7 +771,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                               },
                             },
                           ].map((pill) => (
-                            <button
+                            <Button
                               key={pill.label}
                               type="button"
                               onClick={() =>
@@ -779,7 +780,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                               className="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/40 dark:hover:bg-slate-900 text-[10px] text-slate-650 dark:text-slate-400 border border-slate-200 dark:border-white/5 transition-all"
                             >
                               {pill.label}
-                            </button>
+                            </Button>
                           ))}
                         </div>
                       </div>
@@ -810,7 +811,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                         ].map((pill) => {
                           const isSelected = newTask.priority === pill.id;
                           return (
-                            <button
+                            <Button
                               key={pill.id}
                               type="button"
                               onClick={() =>
@@ -826,7 +827,7 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                               }`}
                             >
                               {pill.label}
-                            </button>
+                            </Button>
                           );
                         })}
                       </div>
@@ -863,9 +864,9 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                   <div className="flex flex-col gap-3 font-sans">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-emerald-500/5 dark:bg-emerald-500/10 p-3.5 rounded-xl border border-emerald-500/20 dark:border-emerald-500/10">
                       <div className="flex flex-col gap-0.5">
-                        <h4 className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+                        <Heading as="h4" size="xs" weight="bold" className="text-emerald-800 dark:text-emerald-300">
                           Enlace de Comunicación Directa
-                        </h4>
+                        </Heading>
                         <p className="text-[10px] text-slate-500 dark:text-slate-400">
                           Continúa la conversación abriendo el chat oficial con el número del lead.
                         </p>
@@ -961,9 +962,9 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
                 <span className="font-mono text-[9px] text-slate-450 dark:text-slate-500 font-bold uppercase tracking-widest select-none">
                   SEC_LEFT: OPPORTUNITY_PROFILE
                 </span>
-                <h3 className="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider select-none">
+                <Heading as="h3" size="xs" weight="bold" className="text-slate-800 dark:text-white uppercase tracking-wider select-none">
                   Perfil de Datos
-                </h3>
+                </Heading>
               </div>
               <InfoPanel />
 
@@ -1028,14 +1029,14 @@ function MasterDetailModalContent({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Right Columns: Activity Timeline & Details */}
-            <div className="lg:col-span-2 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-white/50 dark:bg-[#0b0f19]/30">
+            <div className="lg:col-span-2 p-5 overflow-y-auto custom-scrollbar flex flex-col gap-5 bg-white/50 dark:bg-lpd-bg-dark/30">
               <ActivityPanel />
             </div>
           </div>
 
           {/* 6. Footer Actions Panel */}
           {!isReadOnly && (
-            <div className="p-5 bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-md border-t border-slate-200/60 dark:border-white/5 flex justify-end gap-3 flex-shrink-0 select-none">
+            <div className="p-5 bg-white/70 dark:bg-lpd-bg-dark/70 backdrop-blur-md border-t border-slate-200/60 dark:border-white/5 flex justify-end gap-3 flex-shrink-0 select-none">
               {renderFooterActions()}
             </div>
           )}

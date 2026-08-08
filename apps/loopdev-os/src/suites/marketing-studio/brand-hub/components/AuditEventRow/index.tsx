@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, cn } from '@loopdev/ui';
+import { LpdText, Button, cn } from '@loopdev/ui';
 import { AuditEventRowProps } from './types';
 
 /**
@@ -18,7 +18,7 @@ export const AuditEventRow: React.FC<AuditEventRowProps> = ({ event, onClick }) 
   };
 
   return (
-    <button
+    <Button
       onClick={onClick}
       className="w-full flex items-center gap-4 p-3 rounded-lg hover:bg-background-subtle transition-colors group text-left"
     >
@@ -50,6 +50,6 @@ export const AuditEventRow: React.FC<AuditEventRowProps> = ({ event, onClick }) 
           </LpdText>
         </div>
       )}
-    </button>
+    </Button>
   );
 };

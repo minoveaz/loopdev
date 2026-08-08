@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@loopdev/ui';
+import { Button, Heading, IconButton } from '@loopdev/ui';
 import { AlertCircle, CheckCircle, Link as LinkIcon, Settings } from 'lucide-react';
 
 export interface ExchangeAccount {
@@ -69,16 +69,17 @@ export const ExchangeAccountCard: React.FC<ExchangeAccountCardProps> = ({
             </span>
           </div>
           <div className="flex flex-col">
-            <h3 className="font-bold text-slate-900">{account.name}</h3>
+            <Heading as="h3" size="sm" weight="bold" className="text-slate-900">{account.name}</Heading>
             <p className="text-xs text-slate-500">{account.provider}</p>
           </div>
         </div>
-        <button
+        <IconButton
+          icon="settings"
+          size="sm"
+          aria-label="Configurar cuenta de exchange"
           onClick={() => onSettings?.(account.id)}
           className="p-2 hover:bg-white/50 rounded-lg transition-colors"
-        >
-          <Settings className="w-4 h-4 text-slate-600" />
-        </button>
+        />
       </div>
 
       {/* Status Badge */}
@@ -124,13 +125,13 @@ export const ExchangeAccountCard: React.FC<ExchangeAccountCardProps> = ({
 
       {/* Actions */}
       <div className="flex gap-2">
-        <button
+        <Button variant="primary" size="sm"
           onClick={() => onTestConnection?.(account.id)}
           disabled={isLoading}
           className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-slate-300 text-white rounded-lg font-semibold text-sm transition-colors"
         >
           {isLoading ? 'Testing...' : 'Test Connection'}
-        </button>
+        </Button>
       </div>
     </div>
   );

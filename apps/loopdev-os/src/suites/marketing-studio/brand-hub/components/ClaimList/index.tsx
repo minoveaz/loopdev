@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LpdText, cn, TechnicalStatusBadge } from '@loopdev/ui';
+import { Heading, LpdText, Button, cn, TechnicalStatusBadge } from '@loopdev/ui';
 import { ClaimListProps } from './types';
 import type { RegulatedClaim } from '../../types';
 
@@ -18,26 +18,26 @@ export const ClaimList: React.FC<ClaimListProps> = ({
 }) => {
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+      <Heading as="h3" size="sm" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
         {title}
-      </LpdText>
+      </Heading>
 
       {type === 'forbidden' ? (
         <div className="flex flex-wrap gap-2">
           {(items as string[]).map((term, i) => (
-            <button
+            <Button
               key={i}
               onClick={() => onItemClick?.(term)}
               className="px-3 py-1 rounded-full bg-red-500/5 border border-red-500/20 text-red-500 text-xs font-mono hover:bg-red-500/10 transition-colors"
             >
               {term}
-            </button>
+            </Button>
           ))}
         </div>
       ) : (
         <div className="flex flex-col gap-2">
           {(items as RegulatedClaim[]).map((claim) => (
-            <button
+            <Button
               key={claim.id}
               onClick={() => onItemClick?.(claim.id)}
               className="flex items-center justify-between p-3 rounded-xl border border-border-technical bg-background-surface hover:border-primary/20 transition-all text-left group"
@@ -61,7 +61,7 @@ export const ClaimList: React.FC<ClaimListProps> = ({
                   className="scale-75 origin-right"
                 />
               </div>
-            </button>
+            </Button>
           ))}
         </div>
       )}

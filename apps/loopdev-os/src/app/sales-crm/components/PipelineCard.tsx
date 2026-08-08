@@ -41,7 +41,7 @@ export const PipelineCard: React.FC<PipelineCardProps> = ({ lead, onClick, isDra
         'p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between h-full min-h-[120px]',
         isDragging && 'opacity-50',
         isSanitas
-          ? 'bg-[#00548F] text-white'
+          ? '!bg-[#00548F] text-white'
           : 'bg-white text-slate-800 border-l-4 border-l-[#0095DA]',
       )}
     >
