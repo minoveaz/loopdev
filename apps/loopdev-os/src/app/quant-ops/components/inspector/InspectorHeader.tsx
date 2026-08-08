@@ -32,8 +32,8 @@ export const InspectorHeader: React.FC<InspectorHeaderProps> = ({ bot }) => {
             withPulse={bot.status === 'active'}
           />
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/5 border border-white/10">
-            <span className="w-1 h-1 bg-emerald-500 rounded-full" />
-            <LpdText size="nano" className="font-mono text-emerald-500 opacity-80">12ms_OK</LpdText>
+            <span className="w-1 h-1 bg-status-success rounded-full" />
+            <LpdText size="nano" className="font-mono text-status-success opacity-80">12ms_OK</LpdText>
           </div>
         </div>
       </div>

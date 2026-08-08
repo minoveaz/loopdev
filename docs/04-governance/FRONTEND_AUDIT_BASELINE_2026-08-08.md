@@ -5,6 +5,8 @@
 - **Modo:** informativo, no bloqueante.
 - **Comando:** `pnpm front:audit`.
 - **Script:** `scripts/front-audit.mjs`.
+- **Filtros:** `--file=<fragmento>` y `--rule=<regla>` para auditorías focalizadas.
+- **CI opcional:** `--fail-on-findings` establece código de salida 1 si hay hallazgos.
 - **Ramas:** `feature/loopdev-frontend-work`.
 - **Alcance:** `apps/loopdev-os/src`, `ds/packages/ui/src` y `modules`.
 - **Exclusiones:** `node_modules`, `.next`, `dist` y `coverage`.
@@ -33,6 +35,19 @@ heurísticas. No debe interpretarse como el resultado actual del auditor.
 ## Interpretación
 
 Este resultado es una línea base heurística. No significa que los 22 casos sean incumplimientos confirmados. El objetivo de esta ejecución es localizar zonas de deuda y medir el tamaño del problema antes de endurecer el gate.
+
+## Estado actual — 2026-08-08
+
+Tras la calibración de las heurísticas y la migración visual de las suites revisadas,
+la última ejecución completa reporta **0 hallazgos** en todas las reglas. La tabla
+anterior se conserva como fotografía histórica y no representa el estado actual.
+
+Validación actual:
+
+```text
+node scripts/front-audit.mjs --json
+totalFindings: 0
+```
 
 Prioridades iniciales:
 
@@ -66,6 +81,8 @@ antes de actualizar esta tabla numérica.
 | `lowContrastOutlineAction` | acciones `outline` con utilidades de texto/borde de bajo contraste; analiza cada botón y respeta overrides `dark:` | Informativa |
 | `sidebarRoutePolicy` | layouts de suite deben usar `getSuiteNavMode` y declarar prefijos operativos; se rechaza inferir `rail` solo por profundidad de URL | Informativa |
 | `duplicateImportBinding` | imports nombrados duplicados que provocan errores de parsing/build antes de llegar a TypeScript | Informativa |
+| `tokenUsage` | utilidades de paleta directa (`slate`, `emerald`, etc.) o valores de color inline fuera de tokens semánticos; excluye el design system, owners de color y tests | Informativa |
+| `shellArchitecture` | los layouts de suite deben reservar `AppShell` para el shell global y los layouts de módulo deben componer `ModuleWorkspace` directamente | Informativa |
 
 ## Uso reproducible
 
@@ -82,6 +99,20 @@ node scripts/front-audit.mjs --json > /tmp/loopdev-front-audit.json
 ```
 
 El modo JSON permite crear un baseline posterior y comparar únicamente regresiones nuevas.
+También incluye `findingsByFile`, ordenado por cantidad, y deduplica hallazgos con
+la misma combinación de archivo, línea, regla y mensaje.
+
+Auditoría focalizada:
+
+```bash
+node scripts/front-audit.mjs --rule=tokenUsage --file=PipelineFilters.tsx
+```
+
+Modo estricto para CI:
+
+```bash
+node scripts/front-audit.mjs --fail-on-findings
+```
 
 ## Siguiente paso
 

@@ -64,6 +64,7 @@ export default function BrandHubOverview() {
           
           {/* Card de "Crear Nueva" */}
           <Button
+            variant="secondary"
             onClick={() => console.log('New Brand Flow')}
             className="flex flex-col items-center justify-center p-6 border border-dashed border-border-technical rounded-2xl bg-white/2 hover:bg-primary/5 hover:border-primary/30 transition-all group aspect-square"
           >

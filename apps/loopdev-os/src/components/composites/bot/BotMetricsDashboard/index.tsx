@@ -34,11 +34,11 @@ function PositionPreview({
           <span className="text-primary-light">Entry:</span>
           <span className="font-mono text-primary">${entry.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-green-500">
+        <div className="flex justify-between text-status-success">
           <span>Take Profit:</span>
           <span className="font-mono">${takeProfit.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-red-500">
+        <div className="flex justify-between text-status-error">
           <span>Stop Loss:</span>
           <span className="font-mono">${stopLoss.toFixed(2)}</span>
         </div>
@@ -81,12 +81,12 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
   if (error && !metrics) {
     return (
       <div
-        className={`border border-red-500 border-opacity-50 bg-red-500 bg-opacity-5 rounded-lg p-4 ${className}`}
+        className={`border border-status-error/50 bg-status-error/5 rounded-lg p-4 ${className}`}
       >
-        <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+        <p className="text-status-error text-sm">{error}</p>
         <Button variant="ghost" size="sm" type="button"
           onClick={refresh}
-          className="mt-2 text-nano text-red-600 dark:text-red-400 underline hover:opacity-70"
+          className="mt-2 text-nano text-status-error underline hover:opacity-70"
         >
           Retry
         </Button>
@@ -118,7 +118,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
         <div className="flex items-center gap-2">
           <div
             className={`w-2.5 h-2.5 rounded-full ${
-              isConnected ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'
+              isConnected ? 'bg-status-success animate-pulse' : 'bg-status-warning'
             }`}
           />
           <span className="text-nano text-primary-light">{isConnected ? 'Live' : 'Polling'}</span>
@@ -127,10 +127,10 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Health warnings */}
       {health.warnings.length > 0 && (
-        <div className="bg-yellow-500 bg-opacity-5 border border-yellow-500 border-opacity-50 rounded-lg p-3">
+        <div className="bg-status-warning/5 border border-status-warning/50 rounded-lg p-3">
           <ul className="space-y-1">
             {health.warnings.map((warning, idx) => (
-              <li key={idx} className="text-nano text-yellow-600 dark:text-yellow-400">
+              <li key={idx} className="text-nano text-status-warning">
                 ⚠ {warning}
               </li>
             ))}
@@ -213,14 +213,14 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
           <SignalCard
             label="LONG"
             signal={metrics.signals.long_entry}
-            readyColor="text-green-500"
-            gradient="from-green-500 to-green-600"
+            readyColor="text-status-success"
+            gradient="from-status-success to-status-success"
           />
           <SignalCard
             label="SHORT"
             signal={metrics.signals.short_entry}
-            readyColor="text-purple-500"
-            gradient="from-purple-500 to-purple-600"
+            readyColor="text-innovation-purple"
+            gradient="from-innovation-purple to-innovation-purple"
           />
         </div>
       </div>
@@ -249,6 +249,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Refresh button */}
       <Button
+        variant="ghost"
         onClick={refresh}
         className="text-nano text-primary-light hover:text-primary opacity-70 hover:opacity-100 transition-opacity"
       >

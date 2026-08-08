@@ -4,7 +4,11 @@ import path from 'node:path';
 const sourceRoots = ['apps/loopdev-os/src', 'ds/packages/ui/src', 'modules'];
 const extensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
 const outputJson = process.argv.includes('--json');
+const failOnFindings = process.argv.includes('--fail-on-findings');
+const fileFilter = process.argv.find((argument) => argument.startsWith('--file='))?.slice('--file='.length);
+const ruleFilter = process.argv.find((argument) => argument.startsWith('--rule='))?.slice('--rule='.length);
 const findings = [];
+const findingKeys = new Set();
 
 const rules = {
   typography: 'Typography usage',
@@ -24,11 +28,21 @@ const rules = {
   iconColorConsistency: 'Icon color consistency review',
   sidebarRoutePolicy: 'Sidebar route policy review',
   duplicateImportBinding: 'Duplicate import binding review',
+  tokenUsage: 'Design token usage review',
+  shellArchitecture: 'Shell architecture review',
 };
 
 function addFinding(file, line, rule, message, snippet) {
+  const relativeFile = path.relative(process.cwd(), file);
+  if (fileFilter && !relativeFile.includes(fileFilter)) return;
+  if (ruleFilter && rule !== ruleFilter) return;
+
+  const key = `${relativeFile}:${line}:${rule}:${message}`;
+  if (findingKeys.has(key)) return;
+  findingKeys.add(key);
+
   findings.push({
-    file: path.relative(process.cwd(), file),
+    file: relativeFile,
     line,
     rule,
     message,
@@ -51,9 +65,18 @@ function inspect(file) {
   const isOfficialThemePrimitive = file.endsWith('ThemeToggle/useThemeToggle.ts');
   const isThemeOwner = isOfficialThemePrimitive || file.endsWith('dynamic-theme-provider.tsx') || file.endsWith('app/layout.tsx');
   const isColorOwner = /(?:globals\.css|app[\\/]layout\.tsx|AiBudgetGenerator|PipelineCard|MetricGauge|ColorTokenCard|ColorTokenInspector|rules-data)/i.test(file);
+  const isAppLayout = /(?:^|[/\\])apps[/\\][^/\\]+[/\\]src[/\\]app[/\\].*layout\.tsx$/.test(file);
+  const isRootAppLayout = /(?:^|[/\\])apps[/\\][^/\\]+[/\\]src[/\\]app[/\\]layout\.tsx$/.test(file);
+  const isSuiteShellLayout = /(?:^|[/\\])app[/\\](?:marketing-studio|quant-ops|sales-crm|health-os)[/\\]layout\.tsx$/.test(file);
+  const directPaletteClass = /(?:^|:|\s)(?:text|bg|border|ring|from|via|to|fill|stroke)-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}(?:\/\d{1,3})?(?=\s|$)/;
+  const hasInlineColorValue = /(?:#[0-9a-fA-F]{3,8}|rgba?\(|hsla?\()/;
 
   if (file.endsWith('sales-crm/components/PipelineFilters.tsx') && /\bSelect\b/.test(source) && /\bFilterDropdown\b/.test(source)) {
     addFinding(file, 1, 'filterPrimitiveConsistency', 'Pipeline filters must use one approved dropdown primitive consistently.', source.split('\n')[0]);
+  }
+
+  if (isAppLayout && !isRootAppLayout && !isSuiteShellLayout && /\bAppShell\b/.test(source) && !/\bModuleWorkspace\b/.test(source)) {
+    addFinding(file, 1, 'shellArchitecture', 'Module layouts must compose the canonical ModuleWorkspace directly; suite layouts own AppShell and module layouts own the second-level workspace.', 'AppShell without direct ModuleWorkspace');
   }
 
   if (/(?:^|[/\\])app[/\\][^/\\]+[/\\]layout\.tsx$/.test(file) && /\bSuiteSidebar\b/.test(source) && !/getSuiteNavMode/.test(source)) {
@@ -134,6 +157,12 @@ function inspect(file) {
       addFinding(file, lineNo, 'hardcodedColor', 'Use LoopDev tokens instead of a hardcoded color.', line);
     }
 
+    const isTokenSafeClass = /(?:text|bg|border|ring|from|via|to|fill|stroke)-(?:primary|secondary|foreground|background|surface|shell|text|border|status|innovation|accent|destructive|muted|white|black)(?:[-/]|\\b)/.test(line);
+    const hasVisualContext = /className=|style=|(?:color|background(?:Color)?|fill|stroke)\s*[:=]/.test(line);
+    if (!isTestFile && !isDesignSystemFile && !isColorOwner && hasVisualContext && (directPaletteClass.test(line) || (hasInlineColorValue.test(line) && !isTokenFallback)) && !isTokenSafeClass) {
+      addFinding(file, lineNo, 'tokenUsage', 'Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.', line);
+    }
+
     if (!isOfficialThemePrimitive && /document\.documentElement\.(classList|style)|classList\.(add|remove)\(['"](?:dark|light)/.test(line)) {
       addFinding(file, lineNo, 'forcedTheme', 'Theme ownership belongs to the official theme provider, not a suite route.', line);
     }
@@ -186,6 +215,15 @@ const report = {
   findings,
 };
 
+const findingsByFile = Object.entries(
+  findings.reduce((groups, finding) => {
+    groups[finding.file] = (groups[finding.file] ?? 0) + 1;
+    return groups;
+  }, {}),
+).sort(([, a], [, b]) => b - a);
+
+report.findingsByFile = Object.fromEntries(findingsByFile);
+
 if (outputJson) {
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 } else {
@@ -203,6 +241,13 @@ if (outputJson) {
     console.log(`  ${message}`);
     console.log(`  ${snippet}`);
   });
+  if (findingsByFile.length > 0) {
+    console.log('Findings by file:');
+    findingsByFile.forEach(([file, count]) => console.log(`  ${count} ${file}`));
+    console.log('');
+  }
   console.log('');
   console.log('This audit is informational and does not fail the command yet.');
 }
+
+if (failOnFindings && findings.length > 0) process.exitCode = 1;

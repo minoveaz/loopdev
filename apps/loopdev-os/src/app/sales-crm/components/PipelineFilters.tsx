@@ -177,10 +177,10 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
           {labelFilter.map(l => (
             <span 
               key={l} 
-              className="inline-flex items-center gap-1 px-2 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-semibold rounded-md border border-amber-500/20"
+              className="inline-flex items-center gap-1 px-2 py-1 bg-energy-yellow/10 text-energy-yellow text-[10px] font-semibold rounded-md border border-energy-yellow/20"
             >
               {l}
-              <IconButton icon="close" size="sm" aria-label={`Quitar etiqueta ${l}`} onClick={() => toggleLabel(l)} className="hover:text-amber-400/70 cursor-pointer" />
+              <IconButton icon="close" size="sm" aria-label={`Quitar etiqueta ${l}`} onClick={() => toggleLabel(l)} className="hover:text-energy-yellow/70 cursor-pointer" />
             </span>
           ))}
         </div>

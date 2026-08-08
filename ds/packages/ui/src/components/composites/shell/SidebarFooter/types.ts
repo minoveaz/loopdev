@@ -9,7 +9,7 @@ export interface SidebarFooterProps {
   /** Indica si el sidebar está en modo contraído */
   isRail?: boolean;
   /** Nombre del usuario para el avatar y texto */
-  userName: string;
+  userName?: string;
   /** Rol o subtítulo del usuario */
   userRole?: string;
   /** URL opcional de la imagen de perfil */

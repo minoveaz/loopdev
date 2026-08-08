@@ -23,6 +23,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
 
   return (
     <Button
+      variant="secondary"
       onClick={onClick}
       className={cn(
         "flex items-center gap-4 p-4 rounded-xl border transition-all text-left",

@@ -9,7 +9,6 @@ import {
   ModuleSidebar,
   SidebarFlyout,
   Button,
-  TechnicalStatusBadge,
   UnifiedInspector,
   InspectorContext,
 } from '@loopdev/ui';
@@ -194,36 +193,7 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
           // BRAND STATUS CLUSTER
           rightSlot={
             <div className="flex items-center gap-4">
-              <div className="hidden lg:flex items-center gap-2">
-                {isBrandMode && (
-                  <>
-                    <TechnicalStatusBadge
-                      label={activeBrand?.status?.toUpperCase() || 'LOADING'}
-                      severity={activeBrand?.status === 'published' ? 'success' : 'warning'}
-                      variant="glass"
-                    />
-                    {isReadOnly && (
-                      <TechnicalStatusBadge label="READ ONLY" severity="neutral" variant="ghost" />
-                    )}
-                  </>
-                )}
-                {!isBrandMode && (
-                  <TechnicalStatusBadge
-                    label={isBrandsLoading ? 'SYNCING' : 'SYSTEM ACTIVE'}
-                    severity="success"
-                    variant="glass"
-                    withPulse
-                  />
-                )}
-              </div>
-
-              <div className="h-4 w-px bg-border-technical opacity-20" />
-
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" startIcon="share">
-                  Share
-                </Button>
-                <div className="h-4 w-px bg-border-technical opacity-20" />
                 <Button
                   variant={isInspectorOpen ? 'secondary' : 'ghost'}
                   size="sm"

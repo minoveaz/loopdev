@@ -94,6 +94,7 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
               {['WARN', 'BLOCK'].map((s) => (
                 <Button
                   key={s}
+                  variant="ghost"
                   disabled={!isEditable}
                   className={clsx(
                     "flex-1 py-2 rounded-xl border font-bold text-xs transition-all",

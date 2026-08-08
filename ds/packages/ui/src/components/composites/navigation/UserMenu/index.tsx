@@ -41,7 +41,7 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
       open={isOpen}
       onOpenChange={handleOpenChange}
       trigger={
-        <button className="rounded-full hover:ring-4 hover:ring-primary/5 transition-all duration-500">
+        <button className="flex h-10 w-10 items-center justify-center rounded-full hover:ring-4 hover:ring-primary/5 transition-all duration-500" aria-label="Abrir menú de usuario">
           <UserAvatar 
             name={userName} 
             src={userSrc} 
@@ -60,7 +60,7 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
           </LpdText>
           
           <div className="flex items-center gap-1.5 mt-1">
-            <span className="text-micro font-mono text-text-muted truncate flex-1">
+            <span className="text-micro font-sans text-text-muted truncate flex-1">
               {displayEmail}
             </span>
             <span className="flex items-center text-[10px] font-bold text-primary px-1.5 py-0.5 rounded bg-primary/5 border border-primary/10">

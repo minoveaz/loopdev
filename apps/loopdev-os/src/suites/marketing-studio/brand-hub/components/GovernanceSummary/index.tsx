@@ -38,6 +38,7 @@ export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
         {domains.map((domain) => (
           <Button
             key={domain.id}
+            variant="ghost"
             onClick={() => onDomainClick?.(domain.id)}
             className="flex items-center justify-between py-2 border-b border-border-technical/30 last:border-0 hover:bg-background-subtle rounded px-2 -mx-2 transition-colors"
           >

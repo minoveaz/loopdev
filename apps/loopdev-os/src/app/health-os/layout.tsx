@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
+  BlueprintBackground,
+  LayoutProvider,
+  ModuleHeader,
+  ModuleWorkspace,
   SuiteSidebar,
   ThemeToggle,
   SystemStatus,
@@ -16,8 +20,9 @@ import {
   UserMenu,
   NotificationCenter,
   Divider,
+  TenantProvider,
+  ToastViewport,
 } from '@loopdev/ui';
-import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { SuiteHeaderLeft } from '@/components/layout/SuiteHeaderLeft';
 import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
 import { useAuth } from '@/hooks/useAuth';
@@ -203,8 +208,6 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
               userName={user?.email || 'Medical User'}
               userEmail={user?.email}
               userRole="IPS_Clinician"
-              systemLabel="IPS"
-              userId={user?.id}
               notifications={notifications}
               unreadCount={unreadCount}
               onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
@@ -219,9 +222,22 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
         />
       }
     >
-      <SuiteContentFrame moduleId="health-os" tenant="estar-protegidos" activeTenantId="zonamedica">
-        {children}
-      </SuiteContentFrame>
+      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
+      <TenantProvider tenant="estar-protegidos">
+        <LayoutProvider>
+          <ToastViewport activeTenantId="zonamedica" />
+          <ModuleWorkspace
+            moduleId="health-os"
+            headerSlot={
+              <ModuleHeader
+                segments={[{ id: 'suite', label: 'Health OS', href: '/health-os', isActive: true }]}
+              />
+            }
+          >
+            {children}
+          </ModuleWorkspace>
+        </LayoutProvider>
+      </TenantProvider>
     </AppShell>
     </SuitePermissionGuard>
   );

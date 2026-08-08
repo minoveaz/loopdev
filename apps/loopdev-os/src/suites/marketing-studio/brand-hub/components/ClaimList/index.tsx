@@ -27,8 +27,9 @@ export const ClaimList: React.FC<ClaimListProps> = ({
           {(items as string[]).map((term, i) => (
             <Button
               key={i}
+              variant="ghost"
               onClick={() => onItemClick?.(term)}
-              className="px-3 py-1 rounded-full bg-red-500/5 border border-red-500/20 text-red-500 text-xs font-mono hover:bg-red-500/10 transition-colors"
+              className="px-3 py-1 rounded-full bg-status-error/5 border border-status-error/20 text-status-error text-xs font-mono hover:bg-status-error/10 transition-colors"
             >
               {term}
             </Button>
@@ -39,6 +40,7 @@ export const ClaimList: React.FC<ClaimListProps> = ({
           {(items as RegulatedClaim[]).map((claim) => (
             <Button
               key={claim.id}
+              variant="secondary"
               onClick={() => onItemClick?.(claim.id)}
               className="flex items-center justify-between p-3 rounded-xl border border-border-technical bg-background-surface hover:border-primary/20 transition-all text-left group"
             >

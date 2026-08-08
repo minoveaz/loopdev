@@ -26,26 +26,26 @@ export default function HealthOsDashboard() {
           delta="+12%" 
           trend="up" 
           icon="group" 
-          colorClassName="text-emerald-600" 
+          colorClassName="text-status-success"
         />
         <MetricCard 
           label="Active in Triage" 
           value="5" 
           trend="neutral" 
           icon="emergency" 
-          colorClassName="text-amber-500" 
+          colorClassName="text-status-warning"
         />
         <MetricCard 
           label="In Consultations" 
           value="8" 
           icon="medical_services" 
-          colorClassName="text-blue-500" 
+          colorClassName="text-status-info"
         />
         <MetricCard 
           label="Pending Sign-off" 
           value="14" 
           icon="edit_note" 
-          colorClassName="text-purple-500" 
+          colorClassName="text-innovation-purple"
         />
         <MetricCard 
           label="SLA Compliance" 
@@ -53,13 +53,13 @@ export default function HealthOsDashboard() {
           delta="Optimal" 
           trend="up" 
           icon="schedule" 
-          colorClassName="text-emerald-600" 
+          colorClassName="text-status-success"
         />
         <MetricCard 
           label="System Status" 
           value="Online" 
           icon="cloud_done" 
-          colorClassName="text-emerald-600" 
+          colorClassName="text-status-success"
         />
       </section>
 
@@ -68,13 +68,13 @@ export default function HealthOsDashboard() {
         
         {/* Core clinical modules */}
         <div className="lg:col-span-8 flex flex-col gap-6">
-          <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-6 bg-white border border-slate-100 shadow-sm rounded-3xl">
+          <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-6 bg-shell-surface border-border-technical shadow-sm rounded-3xl">
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-1">
-                <Heading size="sm" weight="bold" className="text-slate-800 tracking-tight">
+                <Heading size="sm" weight="bold" className="text-text-main tracking-tight">
                   Clinical Workspace Stations
                 </Heading>
-                <LpdText size="nano" className="text-slate-400 font-mono">
+                <LpdText size="nano" className="text-text-muted font-mono">
                   ZONAMEDICA_CLINICAL_QUEUE
                 </LpdText>
               </div>
@@ -83,54 +83,54 @@ export default function HealthOsDashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               
-              <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-4 border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors rounded-2xl">
-                <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl w-fit">
+              <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-4 border-border-technical bg-background-subtle hover:bg-shell-surface transition-colors rounded-2xl">
+                <div className="p-3 bg-status-success/10 text-status-success rounded-xl w-fit">
                   <Icon name="calendar_month" size="sm" />
                 </div>
                 <div>
-                  <Heading as="h4" size="sm" weight="bold" className="text-slate-800">1. Agenda & Citas</Heading>
-                  <p className="text-xs text-slate-500 mt-1">Admisión y recepción de pacientes. Asignación automática de rutas según profesiograma.</p>
+                  <Heading as="h4" size="sm" weight="bold" className="text-text-main">1. Agenda & Citas</Heading>
+                  <p className="text-xs text-text-muted mt-1">Admisión y recepción de pacientes. Asignación automática de rutas según profesiograma.</p>
                 </div>
                 <Button 
                   variant="primary" 
                   size="sm" 
-                  className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="w-full mt-2"
                   onClick={() => router.push('/health-os/agenda')}
                 >
                   Abrir Agenda
                 </Button>
               </TechnicalSurface>
 
-              <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-4 border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors rounded-2xl">
-                <div className="p-3 bg-amber-50 text-amber-600 rounded-xl w-fit">
+              <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-4 border-border-technical bg-background-subtle hover:bg-shell-surface transition-colors rounded-2xl">
+                <div className="p-3 bg-status-warning/10 text-status-warning rounded-xl w-fit">
                   <Icon name="emergency" size="sm" />
                 </div>
                 <div>
-                  <Heading as="h4" size="sm" weight="bold" className="text-slate-800">2. Clasificación Triage</Heading>
-                  <p className="text-xs text-slate-500 mt-1">Evaluación de signos vitales y priorización asistencial según niveles obligatorios.</p>
+                  <Heading as="h4" size="sm" weight="bold" className="text-text-main">2. Clasificación Triage</Heading>
+                  <p className="text-xs text-text-muted mt-1">Evaluación de signos vitales y priorización asistencial según niveles obligatorios.</p>
                 </div>
                 <Button 
                   variant="primary" 
                   size="sm" 
-                  className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="w-full mt-2"
                   onClick={() => router.push('/health-os/triage')}
                 >
                   Abrir Triage
                 </Button>
               </TechnicalSurface>
 
-              <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-4 border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors rounded-2xl">
-                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl w-fit">
+              <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-4 border-border-technical bg-background-subtle hover:bg-shell-surface transition-colors rounded-2xl">
+                <div className="p-3 bg-status-info/10 text-status-info rounded-xl w-fit">
                   <Icon name="rate_review" size="sm" />
                 </div>
                 <div>
-                  <Heading as="h4" size="sm" weight="bold" className="text-slate-800">3. Consultas HCE</Heading>
-                  <p className="text-xs text-slate-500 mt-1">Diligenciamiento de SOAP, códigos CIE-10 e inyección de firma para certificados.</p>
+                  <Heading as="h4" size="sm" weight="bold" className="text-text-main">3. Consultas HCE</Heading>
+                  <p className="text-xs text-text-muted mt-1">Diligenciamiento de SOAP, códigos CIE-10 e inyección de firma para certificados.</p>
                 </div>
                 <Button 
                   variant="primary" 
                   size="sm" 
-                  className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="w-full mt-2"
                   onClick={() => router.push('/health-os/consultations')}
                 >
                   Ver Consultorio
@@ -143,28 +143,28 @@ export default function HealthOsDashboard() {
 
         {/* Commercial / administrative summary */}
         <div className="lg:col-span-4 flex flex-col gap-6">
-          <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-6 bg-white border border-slate-100 shadow-sm rounded-3xl h-full">
+          <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-6 bg-shell-surface border-border-technical shadow-sm rounded-3xl h-full">
             <div className="flex flex-col gap-1">
-              <Heading size="xs" weight="bold" className="text-slate-800 uppercase tracking-tight">
+              <Heading size="xs" weight="bold" className="text-text-main uppercase tracking-tight">
                 Billing & Contracts
               </Heading>
-              <LpdText size="nano" className="text-slate-400 font-mono">
+              <LpdText size="nano" className="text-text-muted font-mono">
                 KAM_OPERATIONS_CONTROL
               </LpdText>
             </div>
 
             <div className="flex-1 flex flex-col gap-4 mt-2">
-              <div className="flex justify-between items-center text-xs p-3 bg-slate-50 rounded-xl">
-                <span className="text-slate-600 font-semibold">Active Corporate Clients:</span>
-                <span className="font-mono text-slate-800 font-black">24 Empresas</span>
+              <div className="flex justify-between items-center text-xs p-3 bg-background-subtle rounded-xl">
+                <span className="text-text-muted font-semibold">Active Corporate Clients:</span>
+                <span className="font-mono text-text-main font-black">24 Empresas</span>
               </div>
-              <div className="flex justify-between items-center text-xs p-3 bg-slate-50 rounded-xl">
-                <span className="text-slate-600 font-semibold">Postpaid Outstanding:</span>
-                <span className="font-mono text-slate-800 font-black">$12,450,000 COP</span>
+              <div className="flex justify-between items-center text-xs p-3 bg-background-subtle rounded-xl">
+                <span className="text-text-muted font-semibold">Postpaid Outstanding:</span>
+                <span className="font-mono text-text-main font-black">$12,450,000 COP</span>
               </div>
-              <div className="flex justify-between items-center text-xs p-3 bg-slate-50 rounded-xl">
-                <span className="text-slate-600 font-semibold">RIPS Status (JSON 2275):</span>
-                <span className="font-semibold text-emerald-600 flex items-center gap-1">
+              <div className="flex justify-between items-center text-xs p-3 bg-background-subtle rounded-xl">
+                <span className="text-text-muted font-semibold">RIPS Status (JSON 2275):</span>
+                <span className="font-semibold text-status-success flex items-center gap-1">
                   <Icon name="check_circle" size="sm" /> Validado
                 </span>
               </div>
@@ -172,7 +172,7 @@ export default function HealthOsDashboard() {
 
             <Button 
               variant="primary"
-              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white border-transparent"
+              className="w-full mt-2"
               onClick={() => router.push('/health-os/contracts')}
             >
               Gestionar Cuentas (KAM)

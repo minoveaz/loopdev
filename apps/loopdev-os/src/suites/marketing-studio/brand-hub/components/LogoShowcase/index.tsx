@@ -36,7 +36,7 @@ export const LogoShowcase: React.FC<LogoShowcaseProps> = ({
           
           {/* Grid Background */}
           {showGrid && (
-            <div className="absolute inset-0 opacity-30 pointer-events-none bg-[linear-gradient(rgba(120,120,120,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+            <div className="absolute inset-0 opacity-30 pointer-events-none bg-background-subtle/30 bg-[size:40px_40px]"></div>
           )}
           
           {/* Glow Effect */}

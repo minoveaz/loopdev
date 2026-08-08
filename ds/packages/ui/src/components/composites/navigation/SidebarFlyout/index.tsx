@@ -97,7 +97,7 @@ export const SidebarFlyout: React.FC<SidebarFlyoutProps> = (props) => {
 
       {/* Footer: Meta Info sutil */}
       <div className="p-4 border-t border-border-technical opacity-20">
-        <LpdText size="nano" className="font-mono">CONTEXT_FLYOUT_V1</LpdText>
+        <LpdText size="nano" className="font-sans">Context</LpdText>
       </div>
     </div>
   );

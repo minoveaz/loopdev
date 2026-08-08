@@ -15,8 +15,8 @@ export function OrganizationSwitcher() {
 
   if (isLoading || organizations.length === 0) {
     return (
-      <div className="rounded-lg border border-black/10 bg-black/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+      <div className="rounded-lg border border-border-technical bg-background-subtle px-3 py-2">
+        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-muted">
           {isLoading ? 'Loading context' : 'No organization context'}
         </span>
       </div>
@@ -27,11 +27,11 @@ export function OrganizationSwitcher() {
 
   if (organizations.length === 1) {
     return (
-      <div className="flex min-w-48 flex-col gap-1 rounded-lg border border-black/10 bg-black/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
-        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+      <div className="flex min-w-48 flex-col gap-1 rounded-lg border border-border-technical bg-background-subtle px-3 py-2">
+        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
           Active organization · {role}
         </span>
-        <span className="text-sm font-semibold text-slate-900 dark:text-white">
+        <span className="text-sm font-semibold text-text-main">
           {organizations[0].name}
         </span>
       </div>
@@ -39,18 +39,18 @@ export function OrganizationSwitcher() {
   }
 
   return (
-    <label className="flex min-w-48 flex-col gap-1 rounded-lg border border-black/10 bg-black/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
-      <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+    <label className="flex min-w-48 flex-col gap-1 rounded-lg border border-border-technical bg-background-subtle px-3 py-2">
+      <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
         Active organization · {role}
       </span>
       <select
         aria-label="Active organization"
         value={activeOrganizationId ?? ''}
         onChange={(event) => setActiveOrganizationId(event.target.value)}
-        className="w-full cursor-pointer bg-transparent text-sm font-semibold text-slate-900 outline-none dark:text-white"
+        className="w-full cursor-pointer bg-transparent text-sm font-semibold text-text-main outline-none"
       >
         {organizations.map((organization) => (
-          <option key={organization.id} value={organization.id} className="bg-slate-900 text-white">
+          <option key={organization.id} value={organization.id} className="bg-surface-elevated text-text-main">
             {organization.name}
           </option>
         ))}

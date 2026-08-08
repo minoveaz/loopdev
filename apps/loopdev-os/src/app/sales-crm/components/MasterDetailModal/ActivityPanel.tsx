@@ -42,7 +42,7 @@ export function ActivityPanel() {
 
   // Dynamic back button header for detailed forms
   const renderDetailHeader = (title: string) => (
-    <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-3 mb-4 select-none">
+    <div className="flex items-center justify-between border-b border-border-technical pb-3 mb-4 select-none">
       <Button
         variant="ghost"
         size="sm"
@@ -60,7 +60,7 @@ export function ActivityPanel() {
         size="nano"
         weight="black"
         variant="mono"
-        className="text-text-muted dark:text-slate-400 uppercase tracking-widest"
+        className="text-text-muted uppercase tracking-widest"
       >
         {title}
       </LpdText>
@@ -68,7 +68,7 @@ export function ActivityPanel() {
   );
 
   const renderFormActions = () => (
-    <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-slate-200 dark:border-white/5 select-none">
+    <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-border-technical select-none">
       <Button
         variant="outline"
         size="sm"
@@ -102,7 +102,7 @@ export function ActivityPanel() {
         <LpdText
           size="xs"
           weight="bold"
-          className="text-text-main dark:text-white border-b border-slate-200 dark:border-white/5 pb-1 mb-1"
+          className="text-text-main border-b border-border-technical pb-1 mb-1"
         >
           Información Demográfica B2C
         </LpdText>
@@ -155,7 +155,7 @@ export function ActivityPanel() {
         <LpdText
           size="xs"
           weight="bold"
-          className="text-text-main dark:text-white border-b border-slate-200 dark:border-white/5 pb-1 mb-1"
+          className="text-text-main border-b border-border-technical pb-1 mb-1"
         >
           Dirección Residencial
         </LpdText>
@@ -258,12 +258,12 @@ export function ActivityPanel() {
         <LpdText
           size="xs"
           weight="bold"
-          className="text-text-main dark:text-white border-b border-slate-200 dark:border-white/5 pb-1 mb-1 select-none"
+          className="text-text-main border-b border-border-technical pb-1 mb-1 select-none"
         >
           Historial de Auditoría de Forecast
         </LpdText>
 
-        <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto custom-scrollbar text-[11px] text-slate-500 font-mono select-none">
+        <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto custom-scrollbar text-[11px] text-text-muted font-mono select-none">
           {lead.history?.map((h, idx) => (
             <div
               key={idx}
@@ -447,7 +447,7 @@ export function ActivityPanel() {
                     size="xs"
                     weight="bold"
                     variant="mono"
-                    className="text-slate-800 dark:text-slate-200 mt-0.5"
+                    className="text-text-main mt-0.5"
                   >
                     {bmi.val} kg/m²
                   </LpdText>
@@ -470,7 +470,7 @@ export function ActivityPanel() {
             </Select>
             <Input
               name="preExistingConditions"
-              label="Enfermedades Preexistentes"
+                  variant="outline"
               value={editedLead.preExistingConditions || ''}
               onChange={handleEditChange}
               placeholder="Ej. Hipertensión, Diabetes tipo 2"
@@ -484,6 +484,7 @@ export function ActivityPanel() {
                 onChange={handleEditChange}
                 size="sm"
               />
+                  variant="ghost"
             </div>
           </div>
 
@@ -598,7 +599,7 @@ export function ActivityPanel() {
                     <TechnicalCard variant="flat" className="border border-slate-200/80 bg-white p-3 dark:border-white/10 dark:bg-slate-900/45">
                       <LpdText
                         size="xs"
-                        className="text-slate-800 dark:text-slate-200 leading-relaxed font-sans font-medium"
+                        className="text-text-main leading-relaxed font-sans font-medium"
                       >
                         {entry.action}
                       </LpdText>
@@ -616,7 +617,7 @@ export function ActivityPanel() {
               })}
             </div>
           ) : (
-            <div className="p-8 text-center text-xs text-slate-400 dark:text-slate-500 font-sans select-none">
+            <div className="p-8 text-center text-xs text-text-muted font-sans select-none">
               No hay actividades registradas en la bitácora de este lead.
             </div>
           )}
@@ -721,6 +722,7 @@ export function ActivityPanel() {
                       </span>
 
                       <Button
+                        variant="ghost"
                         onClick={() => handleDocumentDelete(doc.id)}
                         className="text-text-muted hover:text-rose-500 p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
                         title="Eliminar archivo"

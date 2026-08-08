@@ -4,6 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
+  BlueprintBackground,
+  Button,
+  LayoutProvider,
+  ModuleHeader,
+  ModuleWorkspace,
   SuiteSidebar,
   ThemeToggle,
   SystemStatus,
@@ -16,9 +21,11 @@ import {
   UserMenu,
   NotificationCenter,
   Divider,
+  TenantProvider,
+  ToastViewport,
 } from '@loopdev/ui';
-import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { useAuth } from '@/hooks/useAuth';
+import { useOrganization } from '@/hooks/useOrganization';
 import { NotificationItem } from '@/hooks/useNotifications';
 import {
   AccessMap,
@@ -109,6 +116,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
+  const { activeOrganization } = useOrganization();
   const { leads, openLeadInspector, isInspectorOpen, closeInspector, selectedLead } = useSalesCrm();
 
   const [syncedNotifications, setSyncedNotifications] = useState<NotificationItem[]>([]);
@@ -222,7 +230,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
               <Divider orientation="vertical" thickness="technical" className="h-4" />
               <ContextPath
                 segments={[
-                  { id: 'suite', label: 'Sales & CRM', href: '/sales-crm', isActive: true },
+                  { id: 'workspace', label: activeOrganization?.name ?? 'Workspace', isActive: true },
                 ]}
               />
             </div>
@@ -230,9 +238,6 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
           centerSlot={<CommandBarTrigger onOpen={() => {}} />}
           rightSlot={
             <div className="flex items-center gap-4">
-              <SystemStatus state="operational" id={user?.id} label="CRM" />
-              <Divider orientation="vertical" thickness="technical" className="h-4" />
-
               <NotificationCenter
                 notifications={syncedNotifications}
                 unreadCount={syncedNotifications.filter((n) => !n.read).length}
@@ -257,17 +262,26 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
         />
       }
     >
-      <SuiteContentFrame
-        moduleId="sales-crm"
-        tenant="loopdev"
-        activeTenantId="loopdev"
-        inspectorWidth="0px"
-        forceOverlay={false}
-      >
-        <AiBudgetGenerator />
-        <MasterDetailModal isOpen={isInspectorOpen} lead={selectedLead} onClose={closeInspector} />
-        {children}
-      </SuiteContentFrame>
+      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
+      <TenantProvider tenant="loopdev">
+        <LayoutProvider>
+          <ToastViewport activeTenantId="loopdev" />
+          <ModuleWorkspace
+            moduleId="sales-crm"
+            config={{ inspectorWidth: '0px' }}
+            overlay={{ force: false, closeOnBackdrop: false }}
+            headerSlot={
+              <ModuleHeader
+                segments={[{ id: 'suite', label: 'Sales & CRM', href: '/sales-crm', isActive: true }]}
+              />
+            }
+          >
+            <AiBudgetGenerator />
+            <MasterDetailModal isOpen={isInspectorOpen} lead={selectedLead} onClose={closeInspector} />
+            {children}
+          </ModuleWorkspace>
+        </LayoutProvider>
+      </TenantProvider>
     </AppShell>
     </SuitePermissionGuard>
   );

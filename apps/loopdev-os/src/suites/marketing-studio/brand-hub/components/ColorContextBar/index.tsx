@@ -36,6 +36,7 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
             <Button
               type="button"
               key={cat.id}
+              variant="ghost"
               onClick={() => onCategoryChange(cat.id)}
               className={cn(
                 "px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",

@@ -5,6 +5,11 @@
 > **Alcance:** Todos los Módulos Operativos (Brand Hub, CRM, DAM...)
 > **Objetivo:** Definir el chasis de trabajo de 4 paneles que garantiza la operatividad profunda.
 
+> **Relación con el shell:** `SHELL_ARCHITECTURE.md` es el contrato normativo de niveles y routing.
+> Este documento define únicamente el primitive `ModuleWorkspace` y sus slots. El workspace puede
+> vivir en un layout hijo de módulo o compartirse desde el layout de suite cuando la composición
+> operativa sea común.
+
 ---
 
 ## 0️⃣ Concepto: The 4-Pane Operating System
@@ -39,6 +44,24 @@ El `ModuleWorkspace` gestiona la geometría de la pantalla mediante slots estric
 - **Header + Toolbar:** Ocupan siempre los primeros 100px verticales.
 - **Sidebar:** Colapsable a modo "Rail" para foco.
 - **Inspector:** Modo "Docked" (empuja el canvas) en pantallas grandes, "Overlay" en pequeñas.
+
+### Contrato de las dos filas
+
+El workspace operativo se compone de dos filas superiores con responsabilidades
+separadas. No deben mezclarse navegación y operaciones de contenido.
+
+| Fila | Primitive | Pregunta que responde | Contenido permitido |
+| :--- | :--- | :--- | :--- |
+| 1 | `ModuleHeader` | "¿Dónde estoy?" | Toggle del sidebar, breadcrumbs, contexto de entidad y apertura del inspector |
+| 2 | `ModuleToolbar` | "¿Qué puedo hacer?" | Búsqueda, filtros, tabs, vistas, selección y acciones de la vista activa |
+
+Reglas:
+
+- `ModuleHeader` no contiene filtros, búsqueda, tabs, vistas ni acciones CRUD de una colección.
+- `ModuleToolbar` no duplica breadcrumbs, títulos de navegación ni el contexto global de la suite.
+- Una acción primaria como `Create Brand` o `New Lead` pertenece a la toolbar de la vista que la ejecuta.
+- Un estado solo aparece en `ModuleHeader` si representa contexto real de la entidad o del workflow (`DRAFT`, `PUBLISHED`, `READ ONLY`); no se usan indicadores genéricos como `SYSTEM ACTIVE`.
+- Las acciones del header deben tener comportamiento real. Acciones futuras o sin callback no se renderizan.
 
 ---
 
@@ -84,10 +107,17 @@ El `ModuleWorkspace` vive **dentro** del slot `children` del `AppShell` global. 
 
 ```
 [ AppShell (Suite Context) ]
-  └── [ ModuleWorkspace (Operational Context) ]
+  └── [ ModuleWorkspace (Operational Context, compartido o específico) ]
         ├── Sidebar
         ├── Canvas
         └── Inspector
+
+      ### Cuándo compartir o separar el workspace
+
+      Usa un único `ModuleWorkspace` en el layout de suite cuando los módulos comparten header,
+      navegación interna, toolbar, overlays e inspector. Crea un layout de módulo separado únicamente
+      cuando esas piezas o su estado deban ser diferentes. En ambos casos se usa el mismo primitive;
+      no se permite duplicar su geometría en un wrapper propio.
 ```
 
 ---

@@ -71,7 +71,7 @@ export default function BrandTypographyPage() {
               Visual System _TYPOGRAPHY
             </Heading>
             {system.aiOptimized && (
-              <div className="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-600 text-[10px] font-bold uppercase flex items-center gap-1.5">
+              <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[12px]">auto_awesome</span>
                 AI Optimized
               </div>

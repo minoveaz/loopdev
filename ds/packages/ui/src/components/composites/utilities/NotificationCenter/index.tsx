@@ -54,7 +54,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = (props) => 
       onOpenChange={handleOpenChange}
       className="w-full max-w-sm p-0 overflow-hidden bg-white dark:bg-surface-elevated shadow-2xl border-none" 
       trigger={
-        <button className="relative p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all group" aria-label="Abrir centro de notificaciones">
+        <button className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-transparent transition-all group hover:border-black/5 hover:bg-black/5 dark:hover:border-white/10 dark:hover:bg-white/5" aria-label="Abrir centro de notificaciones">
           <Bell size={18} className="text-text-muted group-hover:text-primary transition-colors" />
           {unreadCount > 0 && (
             <div className={badgeClasses}>

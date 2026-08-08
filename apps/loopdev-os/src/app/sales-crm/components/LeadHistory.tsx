@@ -266,6 +266,7 @@ export const LeadHistory: React.FC<LeadHistoryProps> = ({ leads, onViewDetails }
                   </td>
                   <td className="p-4 text-right">
                     <Button
+                      variant="ghost"
                       onClick={() => onViewDetails(lead.id)}
                       className="text-primary hover:text-primary/80 font-mono font-bold uppercase tracking-wider text-[10px]"
                     >

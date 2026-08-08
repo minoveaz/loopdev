@@ -34,6 +34,7 @@ export const MetricTile: React.FC<MetricTileProps> = ({
 
   return (
     <Button
+      variant="secondary"
       onClick={onClick}
       className={cn(
         "flex flex-col gap-3 p-5 rounded-xl border bg-background-surface transition-all text-left group",

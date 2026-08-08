@@ -18,32 +18,32 @@ export function EmailComposer() {
 
   return (
     <form onSubmit={handleSend} className="flex flex-col gap-3 font-sans text-xs">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-blue-500/5 dark:bg-blue-500/10 p-3.5 rounded-xl border border-blue-500/20 dark:border-blue-500/10 select-none w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-primary/5 p-3.5 rounded-xl border border-primary/20 select-none w-full">
         <div className="flex flex-col gap-0.5">
-          <Heading as="h4" size="xs" weight="bold" className="text-blue-800 dark:text-blue-300 uppercase tracking-wider">Cliente de Correo SMTP Integrado</Heading>
-          <p className="text-[10px] text-slate-500 dark:text-slate-400">
+          <Heading as="h4" size="xs" weight="bold" className="text-primary uppercase tracking-wider">Cliente de Correo SMTP Integrado</Heading>
+          <p className="text-[10px] text-text-muted">
             Redacta y simula el envío del correo electrónico formal para este lead.
           </p>
         </div>
-        <span className="text-[9px] font-mono text-slate-450 dark:text-slate-500 font-bold uppercase self-end md:self-center">
+        <span className="text-[9px] font-mono text-text-muted font-bold uppercase self-end md:self-center">
           SMTP_CLIENT: /dev/mail/send
         </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-end select-none">
         <div className="flex flex-col gap-1 w-full">
-          <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono uppercase">Destinatario (Para)</label>
+          <label className="text-[10px] text-text-muted font-bold font-mono uppercase">Destinatario (Para)</label>
           <Input 
             type="text" 
             value={editedLead.email} 
             disabled 
             size="sm"
-            className="w-full font-mono text-slate-500 dark:text-slate-450"
+            className="w-full font-mono text-text-muted"
           />
         </div>
 
         <div className="flex flex-col gap-1 w-full">
-          <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono uppercase">Asunto del Correo</label>
+          <label className="text-[10px] text-text-muted font-bold font-mono uppercase">Asunto del Correo</label>
           <Input 
             type="text" 
             value={subject} 
@@ -56,19 +56,19 @@ export function EmailComposer() {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-[10px] text-slate-500 dark:text-slate-400 font-bold font-mono uppercase">Cuerpo del Mensaje</label>
+        <label className="text-[10px] text-text-muted font-bold font-mono uppercase">Cuerpo del Mensaje</label>
         <textarea 
           value={body}
           onChange={e => setBody(e.target.value)}
           placeholder="Escribe el cuerpo del mensaje..."
           rows={5}
-          className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-white/5 text-slate-800 dark:text-slate-200 focus:outline-none resize-none font-sans"
+          className="bg-background-canvas p-2.5 rounded-xl border border-border-technical text-text-main focus:outline-none resize-none font-sans"
         />
       </div>
 
       {/* Attachment Upload Simulator */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-t border-slate-200 dark:border-white/5 pt-3 select-none">
-        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-t border-border-technical pt-3 select-none">
+        <div className="flex items-center gap-2 text-text-muted">
           <input 
             type="file" 
             id="email-attach-file" 
@@ -82,13 +82,13 @@ export function EmailComposer() {
           />
           <label 
             htmlFor="email-attach-file" 
-            className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-white/5 text-[10px] font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer flex items-center gap-1.5 transition-all text-slate-750 dark:text-slate-350"
+            className="px-2.5 py-1.5 rounded-xl border border-border-technical text-[10px] font-semibold hover:bg-background-subtle cursor-pointer flex items-center gap-1.5 transition-all text-text-main"
           >
               <Icon name="attach_file" size="sm" />
             Adjuntar Archivo
           </label>
           {attachments.length > 0 && (
-            <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
+            <span className="text-[10px] font-mono text-text-muted">
               {attachments.length} archivo(s) seleccionado(s)
             </span>
           )}
@@ -100,7 +100,7 @@ export function EmailComposer() {
             size="sm" 
             type="button" 
             onClick={() => setActiveCreator(null)}
-            className="border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-750 dark:text-slate-300"
+            className="border-border-technical hover:bg-background-subtle text-text-main"
           >
             Cancelar
           </Button>

@@ -89,7 +89,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300"
+        className="absolute inset-0 bg-background-canvas/60 backdrop-blur-sm animate-in fade-in duration-300"
         onClick={onClose}
       ></div>
 

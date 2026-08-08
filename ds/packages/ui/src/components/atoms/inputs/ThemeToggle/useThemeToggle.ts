@@ -11,8 +11,20 @@ export const useThemeToggle = (props: ThemeToggleProps) => {
 
   // Inicialización: Detectar tema actual
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains('dark');
+    const storedTheme = localStorage.getItem('lpd-theme');
+    const isDarkMode = storedTheme ? storedTheme === 'dark' : document.documentElement.classList.contains('dark');
+    document.documentElement.classList.toggle('dark', isDarkMode);
     setIsDark(isDarkMode);
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key !== 'lpd-theme' || !event.newValue) return;
+      const nextIsDark = event.newValue === 'dark';
+      document.documentElement.classList.toggle('dark', nextIsDark);
+      setIsDark(nextIsDark);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const toggleTheme = () => {

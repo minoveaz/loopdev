@@ -1,8 +1,36 @@
 # Track: LoopDev Frontend Quality System
 
 **Fecha:** 2026-08-08  
-**Estado:** Planificado  
+**Estado:** En progreso
 **Objetivo:** convertir los principios visuales de LoopDev en reglas ejecutables y pruebas repetibles para que todas las suites mantengan una identidad coherente en desktop, móvil, modo claro y modo oscuro.
+
+## Avance registrado — 2026-08-08
+
+### Completado
+
+- Auditor frontend operativo en `scripts/front-audit.mjs`.
+- Filtros focalizados por `--file` y `--rule`.
+- Salida JSON con resumen por regla y archivo mediante `findingsByFile`.
+- Deduplicación de hallazgos.
+- Modo estricto opcional con `--fail-on-findings`.
+- Baseline documentado en `docs/04-governance/FRONTEND_AUDIT_BASELINE_2026-08-08.md`.
+- Migración visual de la deuda inicial: de 169 hallazgos a 0.
+- Regla `shellArchitecture` para proteger la separación `AppShell` / `ModuleWorkspace`.
+- `ModuleWorkspace` explícito en Marketing Studio, Sales CRM, Quant Ops y Health OS.
+- Eliminación de `SuiteContentFrame` como wrapper visual alternativo.
+- Consolidación normativa en `docs/02-frontend/SHELL_ARCHITECTURE.md` y aclaración del workspace compartido.
+- Validaciones realizadas: auditor completo en cero, `git diff --check` y build de `loopdev-os` correcto.
+
+### Pendiente
+
+- Crear la constitución visual corta de consulta diaria.
+- Añadir matriz versionada de certificación por suite.
+- Añadir pruebas Playwright de shell, responsive, temas y overflow.
+- Revisar visualmente las cuatro suites en desktop, mobile, light y dark.
+- Implementar el flujo de certificación frontend por capas: `front:audit` → Vitest + Testing Library → Playwright → Axe integrado en Playwright → snapshots visuales.
+- Endurecer `shellArchitecture` con excepciones explícitas y detección de wrappers no registrados.
+- Crear `pnpm front:check` y conectar el modo estricto a CI.
+- Registrar las excepciones y la deuda residual por suite.
 
 ## 1. Contexto
 
@@ -255,6 +283,9 @@ Crear pruebas Playwright contra la aplicación real para:
 - Health OS;
 - Quant Ops.
 
+El primer vertical slice del flujo será Marketing Studio / Brand Hub y Sales CRM /
+Pipeline, porque cubren respectivamente directorio, edición, inspector, filtros,
+vistas y Kanban.
 Cada suite debe probar:
 
 - navegación principal;
@@ -275,6 +306,54 @@ expect(await page.locator('body').evaluate(
 ```
 
 Los screenshots serán evidencia de regresión, no el único criterio de aprobación.
+
+### Fase 4.1 — Flujo de certificación frontend
+
+**Objetivo:** establecer una secuencia reproducible que combine checks estáticos,
+contratos de componentes, comportamiento real, accesibilidad y regresión visual.
+
+El orden oficial de ejecución será:
+
+```text
+front:audit
+  ↓
+Vitest + Testing Library
+  ↓
+Playwright
+  ↓
+Axe integrado en Playwright
+  ↓
+Snapshots visuales
+```
+
+Cada etapa tiene una responsabilidad distinta y no sustituye a la siguiente:
+
+1. **`front:audit`:** detecta desviaciones estáticas de arquitectura, tokens,
+   tipografía, primitives, navegación y composición `AppShell` / `ModuleWorkspace`.
+2. **Vitest + Testing Library:** verifica contratos de `ModuleHeader`,
+   `ModuleToolbar`, `ModuleWorkspace`, estados, callbacks, roles y keyboard flows.
+3. **Playwright:** valida la aplicación real en rutas representativas, navegación,
+   responsive, tema, scroll y comportamiento de sidebar/inspector.
+4. **Axe en Playwright:** ejecuta la auditoría de accesibilidad sobre las vistas
+   reales y sus estados interactivos, no solo sobre componentes aislados.
+5. **Snapshots visuales:** compara light/dark y desktop/mobile después de que las
+   capas funcionales y de accesibilidad estén verdes. Requieren revisión humana
+   inicial y actualización deliberada cuando cambia el contrato visual.
+
+Para `ModuleWorkspace`, la certificación mínima debe demostrar:
+
+- una fila `ModuleHeader` para orientación;
+- una fila `ModuleToolbar` solo cuando la vista tenga operaciones;
+- canvas debajo de ambas filas y con scroll principal estable;
+- inspector y sidebar operables en desktop y como overlay en viewport reducido;
+- acciones primarias en la toolbar, no en el header global ni en breadcrumbs;
+- ausencia de overflow horizontal en 320, 390, 768, 1280 y 1440 px;
+- contraste y foco visibles en light y dark;
+- ausencia de acciones placeholder o estados decorativos.
+
+La evidencia de cada suite se registrará en la matriz de certificación con el
+comando ejecutado, viewport, tema, ruta y resultado. Ningún snapshot verde puede
+compensar un fallo de composición, interacción o accesibilidad.
 
 ### Fase 5 — Migración por suite
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { useRouter, usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -35,7 +35,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   
   const router = useRouter();
   const pathname = usePathname();
+  const pathnameRef = useRef(pathname);
   const supabase = getSupabaseInstance();
+
+  useEffect(() => {
+    pathnameRef.current = pathname;
+  }, [pathname]);
 
   const loadMemberships = async (userId: string | undefined) => {
     if (!userId) {
@@ -97,11 +102,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setIsLoading(false);
         }
 
+        const syncSession = async () => {
+          const { data: { session: currentSession } } = await supabase.auth.getSession();
+          if (!isMounted) return;
+
+          setSession(currentSession);
+          setUser(currentSession?.user ?? null);
+          await loadMemberships(currentSession?.user.id);
+          await loadPlatformAdministrator(currentSession?.user.id);
+          if (!isMounted) return;
+
+          if (currentSession && pathnameRef.current === '/login') {
+            router.push('/launchpad');
+          }
+        };
+
         // Listener de cambios de auth
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
           async (event, session) => {
             if (isMounted) {
-              setIsLoading(true);
               setSession(session);
               setUser(session?.user ?? null);
               await loadMemberships(session?.user.id);
@@ -112,15 +131,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               // Protección de Rutas (Middleware Client-Side Backup)
               if (event === 'SIGNED_OUT') {
                 router.push('/login');
-              } else if (event === 'SIGNED_IN' && pathname === '/login') {
+              } else if (event === 'SIGNED_IN' && pathnameRef.current === '/login') {
                 router.push('/launchpad');
               }
             }
           }
         );
 
+        window.addEventListener('focus', syncSession);
+        document.addEventListener('visibilitychange', syncSession);
+
         return () => {
           subscription?.unsubscribe();
+          window.removeEventListener('focus', syncSession);
+          document.removeEventListener('visibilitychange', syncSession);
         };
       } catch (error) {
         console.error('Auth initialization error:', error);
@@ -136,7 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isMounted = false;
       cleanup?.then(unsub => unsub?.());
     };
-  }, [router, pathname, supabase]);
+  }, [router, supabase]);
 
   const signOut = async () => {
     await supabase.auth.signOut();

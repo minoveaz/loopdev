@@ -76,7 +76,7 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
               type="button"
               variant="outline"
               size="sm"
-              className="text-[10px] font-bold text-primary hover:text-white uppercase tracking-wide px-2 py-1 rounded border border-primary/20 hover:bg-primary transition-colors"
+              className="text-[10px] font-bold text-primary hover:text-primary-foreground uppercase tracking-wide px-2 py-1 rounded border border-primary/20 hover:bg-primary transition-colors"
               onClick={() => {
                 if (logo?.rawSvg) {
                   navigator.clipboard.writeText(logo.rawSvg);

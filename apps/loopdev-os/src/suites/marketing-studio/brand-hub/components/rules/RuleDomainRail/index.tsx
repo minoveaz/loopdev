@@ -50,6 +50,7 @@ export const RuleDomainRail: React.FC<RuleDomainRailProps> = ({
         return (
           <Button
             key={domain.id}
+            variant="ghost"
             onClick={() => onDomainChange(domain.id)}
             className={clsx(
               "group flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 text-left",

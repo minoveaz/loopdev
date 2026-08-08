@@ -68,7 +68,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="flex gap-3 text-xs">
-                  <div className="w-2 h-2 rounded-full bg-slate-700 mt-1"></div>
+                  <div className="w-2 h-2 rounded-full bg-text-muted mt-1"></div>
                   <div>
                     <p className="text-slate-300 font-medium">Infinite loop module {i} deployed.</p>
                     <p className="text-slate-500">2m ago</p>

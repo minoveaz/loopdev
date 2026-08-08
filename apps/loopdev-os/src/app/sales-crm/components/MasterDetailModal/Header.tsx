@@ -68,8 +68,8 @@ export const Header: React.FC<HeaderProps> = ({ onClose }) => {
                 label={stageLabels[editedLead.stage]}
                 severity={stageSeverityMap[editedLead.stage]}
               />
-              <span className="text-slate-300 dark:text-slate-600 font-mono">•</span>
-              <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate">
+              <span className="text-text-muted font-mono">•</span>
+              <p className="text-[10px] font-mono text-text-muted truncate">
                 ID: {editedLead.id} • {editedLead.company}
               </p>
             </div>
@@ -106,7 +106,7 @@ export const Header: React.FC<HeaderProps> = ({ onClose }) => {
               variant="ghost"
               onClick={onClose}
               aria-label="Cerrar Modal"
-              className="text-slate-400 hover:text-slate-700 dark:hover:text-white"
+              className="text-text-muted hover:text-text-main"
             />
           </div>
         </div>
