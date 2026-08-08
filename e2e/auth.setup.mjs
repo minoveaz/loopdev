@@ -17,9 +17,26 @@ export default async function globalSetup() {
 
   fs.mkdirSync(authDirectory, { recursive: true });
   const browser = await chromium.launch();
-  const context = await browser.newContext({
+  const contextOptions = {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000',
-  });
+  };
+
+  if (fs.existsSync(storageStatePath)) {
+    const existingContext = await browser.newContext({
+      ...contextOptions,
+      storageState: storageStatePath,
+    });
+    const existingPage = await existingContext.newPage();
+    await existingPage.goto('/launchpad');
+    if (existingPage.url().endsWith('/launchpad')) {
+      await existingContext.close();
+      await browser.close();
+      return;
+    }
+    await existingContext.close();
+  }
+
+  const context = await browser.newContext(contextOptions);
   const page = await context.newPage();
 
   try {

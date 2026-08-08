@@ -89,6 +89,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           `}
           style={{
             width: isMobileViewport ? 'min(82vw, 320px)' : 'var(--app-shell-nav-width)',
+            zIndex: isMobileViewport ? 100 : undefined,
           }}
         >
           <div
@@ -146,7 +147,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           <main
             id="main-content"
             role="main"
-            className={`flex-1 overflow-hidden relative z-10 flex flex-col pb-16 lg:pb-0 ${isMobileNavVisible || isContextOpen ? '@max-lg:pointer-events-none @max-lg:overflow-hidden' : ''}`}
+            className={`flex-1 overflow-hidden relative z-10 flex flex-col pb-16 lg:pb-0 ${isMobileNavVisible || isContextOpen ? 'max-lg:pointer-events-none max-lg:overflow-hidden' : ''}`}
           >
             {children}
           </main>
