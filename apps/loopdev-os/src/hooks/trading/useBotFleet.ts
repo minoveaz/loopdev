@@ -4,23 +4,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { BotStatus } from '@loopdev/contracts';
 import { useOrganization } from '@/hooks/useOrganization';
+import type { Database, Json } from '@/types/database.types';
 
 type JsonObject = Record<string, unknown>;
-
-interface BotQueryRow extends JsonObject {
-  id: string;
-  name: string;
-  pair: string;
-  exchange_id: string;
-  strategy_id: string;
-  created_at: string;
-  updated_at: string;
-  status: BotStatus;
-  quant_strategies?: JsonObject | JsonObject[] | null;
-  risk_profile?: JsonObject | null;
-  last_exit_targets?: JsonObject | null;
-  last_logic_snapshot?: JsonObject | null;
-}
+type BotInsert = Database['public']['Tables']['quant_bots']['Insert'];
+type BotPayload = Omit<BotInsert, 'organization_id' | 'tenant_id'> &
+  Partial<Pick<BotInsert, 'organization_id' | 'tenant_id'>>;
 
 interface BotMutationParams {
   name: string;
@@ -33,13 +22,16 @@ interface BotMutationParams {
   useMarketRegimeFilter: boolean;
 }
 
-const buildBotPayload = (params: BotMutationParams, overrides: JsonObject = {}): JsonObject => ({
+const buildBotPayload = (
+  params: BotMutationParams,
+  overrides: Partial<BotInsert> = {},
+): BotPayload => ({
   name: params.name,
   exchange_id: params.exchangeId,
   pair: params.pair,
   strategy_id: params.strategyId,
   base_investment_usdt: params.baseInvestmentUsdt,
-  risk_profile: params.riskProfile,
+  risk_profile: params.riskProfile as Json,
   use_initial_range_filter: params.useInitialRangeFilter,
   use_market_regime_filter: params.useMarketRegimeFilter,
   ...overrides,
@@ -64,7 +56,8 @@ const asNumberArray = (value: unknown): number[] =>
 export const useBotFleet = () => {
   const queryClient = useQueryClient();
   const { activeOrganization } = useOrganization();
-  const invalidateFleet = () => queryClient.invalidateQueries({ queryKey: ['trading', 'fleet', activeOrganization?.id] });
+  const invalidateFleet = () =>
+    queryClient.invalidateQueries({ queryKey: ['trading', 'fleet', activeOrganization?.id] });
 
   const {
     data: bots = [],
@@ -80,7 +73,7 @@ export const useBotFleet = () => {
 
       if (supabaseError) throw supabaseError;
 
-      return (data || []).map((raw: BotQueryRow) => {
+      return (data || []).map((raw) => {
         // --- ADAPTADOR DE PRECISIÓN CENTS (BIGINT -> Float) ---
         const fromCents = (val: unknown) => Number(val || 0) / 100;
 
@@ -98,13 +91,20 @@ export const useBotFleet = () => {
           id: raw.id,
           name: raw.name,
           pair: raw.pair,
-          exchangeId: raw.exchange_id,
-          strategyId: raw.strategy_id,
-          createdAt: raw.created_at,
+          exchangeId: raw.exchange_id ?? '',
+          strategyId: raw.strategy_id ?? '',
+          createdAt: raw.created_at ?? '',
           strategyName: asString(strategyInfo?.name, 'Unknown Strategy'),
           coreId: asString(strategyInfo?.core_id, 'default'),
-          status: raw.status,
-          updatedAt: raw.updated_at,
+          status: (
+            ['active', 'paused', 'emergency_stop', 'liquidated', 'paper_trading'] as const
+          ).includes(
+            raw.status as 'active' | 'paused' | 'emergency_stop' | 'liquidated' | 'paper_trading',
+          )
+            ? (raw.status as
+                'active' | 'paused' | 'emergency_stop' | 'liquidated' | 'paper_trading')
+            : 'paper_trading',
+          updatedAt: raw.updated_at ?? '',
           riskProfile: {
             maxDailyLossPct: Number(
               riskProfile.maxDailyLossPct ?? riskProfile.max_daily_loss_pct ?? 2,
@@ -136,13 +136,13 @@ export const useBotFleet = () => {
 
           // Precios de Posición (Cents -> Float)
           currentEntryPrice: fromCents(raw.current_entry_price),
-          currentQuantity: asNumber(raw.current_quantity),
+          currentQuantity: 0,
           baseInvestmentUsdt: Number(raw.base_investment_usdt || 0),
 
           // PnL (Calculados en Cents por el motor, convertidos para la UI)
           currentPnlPct: Number(raw.current_pnl_pct || 0),
           currentPnlUsdt: fromCents(raw.current_pnl_usdt),
-          realizedPnlUsdt: fromCents(raw.realized_pnl_usdt),
+          realizedPnlUsdt: 0,
 
           // Estadísticas Reales de Sesión
           totalTrades: asNumber(raw.total_trades),
@@ -155,11 +155,11 @@ export const useBotFleet = () => {
               : undefined,
 
           // Objetivos de Salida (Mapeo de Snake_Case de la DB a CamelCase de la UI)
-          exitTargets: raw.last_exit_targets
+          exitTargets: asObject(raw.last_exit_targets)
             ? {
-                slPrice: fromCents(raw.last_exit_targets.sl_price),
-                tpPrice: fromCents(raw.last_exit_targets.tp_price),
-                bePrice: fromCents(raw.last_exit_targets.be_price),
+                slPrice: fromCents(asObject(raw.last_exit_targets).sl_price),
+                tpPrice: fromCents(asObject(raw.last_exit_targets).tp_price),
+                bePrice: fromCents(asObject(raw.last_exit_targets).be_price),
               }
             : null,
 
@@ -178,7 +178,7 @@ export const useBotFleet = () => {
 
           // Metadatos Proximidad (Si el motor no los envía, no los inventamos)
           proximityPct: asNumber(raw.signal_strength),
-          lastTradePnlPct: asNumber(raw.last_trade_pnl_pct),
+          lastTradePnlPct: 0,
         };
       });
     },
@@ -202,7 +202,7 @@ export const useBotFleet = () => {
     mutationFn: async ({ id, targets }: { id: string; targets: JsonObject }) => {
       const { error } = await supabase
         .from('quant_bots')
-        .update({ last_exit_targets: targets })
+        .update({ last_exit_targets: targets as Json })
         .eq('id', id);
       if (error) throw error;
     },
@@ -211,7 +211,8 @@ export const useBotFleet = () => {
 
   const deployBot = useMutation({
     mutationFn: async (params: BotMutationParams) => {
-      if (!activeOrganization?.legacyTenantId) throw new Error('Select an organization before deploying a bot');
+      if (!activeOrganization?.legacyTenantId)
+        throw new Error('Select an organization before deploying a bot');
       const payload = buildBotPayload(params, {
         tenant_id: activeOrganization.legacyTenantId,
         organization_id: activeOrganization.id,
@@ -219,7 +220,11 @@ export const useBotFleet = () => {
         current_action: 'Initializing...',
         updated_at: new Date().toISOString(),
       });
-      const { error } = await supabase.from('quant_bots').insert([payload]);
+      const { error } = await supabase.from('quant_bots').insert({
+        ...payload,
+        organization_id: activeOrganization.id,
+        tenant_id: activeOrganization.legacyTenantId,
+      });
       if (error) throw error;
     },
     onSuccess: invalidateFleet,

@@ -51,18 +51,6 @@ interface BacktestParams {
   initialCapital?: number;
 }
 
-interface RawStrategy {
-  id: string;
-  name: string;
-  exchange_provider: string;
-  mode: 'paper' | 'live';
-  status: 'draft' | 'active' | 'paused' | 'archived';
-  pairs: string[];
-  version: number;
-  created_at: string;
-  trading_style?: Strategy['tradingStyle'];
-}
-
 interface BacktestResult {
   strategyName: string;
   backtestPeriodDays: number;
@@ -116,13 +104,17 @@ export const useStrategies = () => {
       if (error) throw error;
 
       // Map raw data to Strategy interface
-      return (data || []).map((raw: RawStrategy) => ({
+      return (data || []).map((raw) => ({
         id: raw.id,
         name: raw.name,
-        exchange: raw.exchange_provider || 'unknown',
-        mode: raw.mode,
-        status: raw.status,
-        tradingStyle: raw.trading_style || 'DAY_TRADING',
+        exchange: raw.exchange_id || 'unknown',
+        mode: raw.mode === 'live' ? 'live' : 'paper',
+        status: ['draft', 'active', 'paused', 'archived'].includes(raw.status)
+          ? (raw.status as Strategy['status'])
+          : 'draft',
+        tradingStyle: ['SCALPING', 'DAY_TRADING', 'SWING'].includes(raw.trading_style ?? '')
+          ? (raw.trading_style as Strategy['tradingStyle'])
+          : 'DAY_TRADING',
         pairs: raw.pairs || [],
         capitalAllocated: 0, // TODO: Calculate from positions
         openPositions: 0, // TODO: Count from positions table
@@ -131,7 +123,7 @@ export const useStrategies = () => {
         drawdown: 0, // TODO: Get from backtest results
         riskScore: 0, // TODO: Calculate from parameters
         version: raw.version,
-        createdAt: new Date(raw.created_at).toLocaleString(),
+        createdAt: raw.created_at ? new Date(raw.created_at).toLocaleString() : 'Unknown date',
       })) as Strategy[];
     },
   });
@@ -154,7 +146,8 @@ export const useStrategies = () => {
   // 3. Create Strategy Mutation
   const createStrategy = useMutation({
     mutationFn: async (params: StrategyParams) => {
-      if (!activeOrganization?.legacyTenantId) throw new Error('Select an organization before creating a strategy');
+      if (!activeOrganization?.legacyTenantId)
+        throw new Error('Select an organization before creating a strategy');
       console.debug('[createStrategy] Creating strategy:', params.name);
 
       const { data, error } = await supabase
@@ -190,7 +183,9 @@ export const useStrategies = () => {
       return data?.[0];
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ['trading', 'strategies', activeOrganization?.id],
+      });
     },
   });
 
@@ -277,7 +272,9 @@ export const useStrategies = () => {
       console.debug('[updateStrategyStatus] Successfully updated');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ['trading', 'strategies', activeOrganization?.id],
+      });
     },
   });
 
@@ -309,7 +306,9 @@ export const useStrategies = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ['trading', 'strategies', activeOrganization?.id],
+      });
     },
   });
 
@@ -322,7 +321,9 @@ export const useStrategies = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trading', 'strategies', activeOrganization?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ['trading', 'strategies', activeOrganization?.id],
+      });
     },
   });
 
