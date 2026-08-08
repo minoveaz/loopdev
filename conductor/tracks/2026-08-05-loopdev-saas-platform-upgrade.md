@@ -54,6 +54,24 @@ La rama actual `feature/loopdev-saas-platform-fase-5c` parte de `develop` actual
 
 Las capacidades avanzadas de Marketing Studio (Content Engine, Insights, Growth, Advisor y Compliance) permanecen en Fase 5E y no deben considerarse parte del cierre de 5C.
 
+### Decisión: integraciones LLM como fase futura
+
+La conexión con APIs de modelos LLM queda explícitamente fuera de Fase 5C y de la fundación actual de Content Engine. No se implementarán todavía proveedores, workers, generación automática ni selección de modelos.
+
+Queda registrada como deuda técnica futura:
+
+- diseñar un gateway server-side común para proveedores LLM;
+- implementar cada integración módulo por módulo, empezando por Content Engine;
+- mantener los secretos exclusivamente en servidor;
+- validar y versionar los prompts y contratos de entrada/salida;
+- registrar `brand_version_id` y los parámetros de contexto utilizados;
+- crear jobs idempotentes mediante `input_hash`;
+- controlar costes, límites, reintentos, timeouts y errores de proveedor;
+- exigir revisión humana antes de publicar contenido o ejecutar acciones;
+- añadir pruebas específicas por módulo y proveedor antes de activar cada conexión.
+
+La tabla `content_generation_jobs` y las conexiones de modelos no se consideran requisito de cierre de esta fase. Se retomarán en una fase futura de integraciones LLM, módulo por módulo.
+
 ### Dependencia de Brand Hub para generación y campañas
 
 Brand Hub es la fuente de verdad de marca para el resto de Marketing Studio, no únicamente una superficie de configuración:
