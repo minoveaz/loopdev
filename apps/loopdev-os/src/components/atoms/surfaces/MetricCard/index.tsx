@@ -42,6 +42,7 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
         border rounded-lg backdrop-blur-sm transition-colors duration-200
         ${statusColor.border} ${statusColor.bg}
         ${sizeClasses.padding}
+        ${props.className ?? ''}
       `}
       role="status"
       aria-label={`${label}: ${value} ${unit}`}

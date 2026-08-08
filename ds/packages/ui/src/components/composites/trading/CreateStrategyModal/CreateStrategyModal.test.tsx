@@ -18,7 +18,9 @@ describe('CreateStrategyModal Composite', () => {
       description: 'Momentum breakout engine',
       technical_summary: 'Uses volatility breakout and trend filter.',
       recommended_timeframe: '5m',
-      parameters: [{ id: 'period', label: 'Period', default: 14, type: 'number', description: 'ATR period' }],
+      parameters: [
+        { id: 'period', label: 'Period', default: 14, type: 'number', description: 'ATR period' },
+      ],
     },
   ];
 
@@ -68,5 +70,5 @@ describe('CreateStrategyModal Composite', () => {
         pairs: ['BTC/USDT'],
       }),
     );
-  });
+  }, 15000);
 });

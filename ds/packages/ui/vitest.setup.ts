@@ -1,10 +1,11 @@
 import '@testing-library/jest-dom/vitest';
+import { cleanup } from '@testing-library/react';
 import * as axeMatchers from 'vitest-axe/matchers';
-import { vi } from 'vitest';
-import { expect } from 'vitest';
+import { afterEach, expect, vi } from 'vitest';
 import React from 'react';
 
 expect.extend(axeMatchers);
+afterEach(() => cleanup());
 
 // Polyfill para window.matchMedia (JSDOM no lo implementa)
 Object.defineProperty(window, 'matchMedia', {

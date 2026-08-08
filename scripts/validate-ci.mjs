@@ -13,7 +13,10 @@ const steps = [
 
 for (const [label, args] of steps) {
   console.log(`\n==> ${label}: pnpm ${args.join(' ')}`);
-  const result = spawnSync(pnpmCommand, args, { stdio: 'inherit' });
+  const result = spawnSync(pnpmCommand, args, {
+    stdio: 'inherit',
+    shell: isWindows,
+  });
 
   if (result.error) {
     console.error(`Unable to start ${pnpmCommand}: ${result.error.message}`);

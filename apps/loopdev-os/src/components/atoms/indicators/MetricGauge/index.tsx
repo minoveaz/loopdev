@@ -33,7 +33,7 @@ export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
     <div
       className={`flex flex-col items-center justify-center gap-3 ${className}`}
       role="status"
-      aria-label={`${label}: ${normalizedValue} ${unit}`}
+      aria-label={`${label}: ${normalizedValue}${unit ? ` ${unit}` : ''}`}
     >
       {/* SVG Gauge */}
       <div style={{ width: sizes.container, height: sizes.container }}>
