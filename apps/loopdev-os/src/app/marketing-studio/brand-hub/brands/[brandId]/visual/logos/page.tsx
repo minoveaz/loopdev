@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { LpdText, TechnicalText, Skeleton, BrandLogo } from '@loopdev/ui';
+import { LpdText, TechnicalText, Skeleton, EmptyState, BrandLogo } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -53,11 +53,12 @@ export default function BrandLogoPage() {
 
   if (!logoSystem) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <TechnicalText size="sm" className="uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          {'// logo_system_not_initialized'}
-        </TechnicalText>
-      </div>
+      <EmptyState
+        title="Logo system unavailable"
+        description="Approved logo variants will appear after the brand assets are configured."
+        icon="image"
+        variant="ghost"
+      />
     );
   }
 

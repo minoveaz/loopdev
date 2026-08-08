@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { LpdText, TechnicalText, Skeleton } from '@loopdev/ui';
+import { LpdText, TechnicalText, Skeleton, EmptyState } from '@loopdev/ui';
 
 // Components
 import { ColorContextBar } from '@/suites/marketing-studio/brand-hub/components/ColorContextBar';
@@ -74,9 +74,13 @@ export default function BrandColorsPage() {
 
   if (!brand?.palette) {
     return (
-      <div className="p-12 text-center border border-dashed border-border-technical rounded-3xl m-8 opacity-40">
-        <TechnicalText size="sm" className="uppercase tracking-widest">color_palette_not_initialized</TechnicalText>
-      </div>
+      <EmptyState
+        title="Color palette unavailable"
+        description="Add a brand palette to review its approved colors and surfaces."
+        icon="palette"
+        variant="ghost"
+        className="m-8"
+      />
     );
   }
 
@@ -171,9 +175,12 @@ export default function BrandColorsPage() {
             />
           </>
         ) : (
-          <div className="p-12 text-center border border-border-technical rounded-3xl opacity-40 bg-background-surface">
-            <TechnicalText size="sm" className="uppercase tracking-widest">table_view_mode_under_construction</TechnicalText>
-          </div>
+          <EmptyState
+            title="Table view coming soon"
+            description="Token groups are currently available in preview mode."
+            icon="table_chart"
+            variant="ghost"
+          />
         )}
 
         {filteredTokens.length === 0 && search && (

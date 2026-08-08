@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, TechnicalText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, EmptyState } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
 
@@ -52,11 +52,12 @@ export default function BrandTypographyPage() {
 
   if (!system) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <TechnicalText size="sm" className="uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          {'// typography_system_not_initialized'}
-        </TechnicalText>
-      </div>
+      <EmptyState
+        title="Typography system unavailable"
+        description="Approved font families and scales will appear after the brand system is configured."
+        icon="text_fields"
+        variant="ghost"
+      />
     );
   }
 
