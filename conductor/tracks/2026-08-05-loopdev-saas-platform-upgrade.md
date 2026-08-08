@@ -1,7 +1,7 @@
 # Track: Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad
 
 **Fecha:** 2026-08-05  
-**Estado:** Planificado  
+**Estado:** En curso — Fase 5C
 **Objetivo:** convertir `loopdev-os` en la plataforma SaaS multi-tenant del grupo LoopDev y de sus clientes, trasladando el backoffice de VitaBlue a LoopDev, reutilizando sus capacidades de marketing, CRM, operaciones y WhatsApp, y manteniendo las webs públicas de cada marca desacopladas.
 
 ## Contexto y decisión principal
@@ -29,6 +29,66 @@ VitaBlue contiene conocimiento de negocio y activos que deben incorporarse como 
 La decisión es construir un **monolito modular SaaS** en LoopDev, no iniciar una migración a microservicios ni copiar el backoffice de VitaBlue archivo por archivo.
 
 Las webs públicas de VitaBlue y Protege tu Salud pueden seguir alojadas en Hostinger durante la transición. El backoffice común se ejecutará en LoopDev y se desplegará en Render.
+
+## Checkpoint de implementación — 2026-08-08
+
+La rama actual `feature/loopdev-saas-platform-fase-5c` parte de `develop` actualizado (`origin/develop`, commit `ee71133`). El trabajo de Platform Core, tenancy, contratos, tipos Supabase y la base persistente/RLS de Marketing Studio ya está integrado en `develop`. La Fase 5C aún no está cerrada: queda migrar el comportamiento funcional de VitaBlue a los servicios persistentes de LoopDev y retirar `localStorage` como fuente autoritativa.
+
+### Hecho
+
+- Fases 0, 1, 1B y 1C: inventario, saneamiento, calidad estática y retirada de Storybook.
+- Fase 2: Platform Core, organizaciones, membresías, roles/permisos, marcas, workspaces, administradores de plataforma, RLS y transición de Quant.
+- Fase 3: contexto de autenticación, organización, marca, workspace y permisos; Launchpad y rutas protegidas por suite.
+- Fase 4 y 4B: contratos compartidos, servicios server-side, tipos Supabase generados desde Dev y typecheck validado.
+- Fase 5A: contratos y mapa de migración de Marketing Studio.
+- Fase 5B: migraciones aditivas de tenancy para Marketing, campañas canónicas, links/publicaciones, grants, índices, políticas RLS y pruebas de aislamiento. La validación remota se ejecutó con `supabase db push --linked --dry-run` y `supabase db push --linked`.
+- Calidad de frontend: el paquete de tests está integrado; la validación local actual alcanza `110` archivos de test y `389` tests exitosos.
+- CI: se corrigió el hydration mismatch de `TransitionOverlay` y se configuró la raíz de Turbopack para el monorepo.
+
+### Pendiente inmediato
+
+- Fase 5C: migrar campañas, copias, assets y Meta OAuth al modelo persistente y a servicios server-side.
+- Eliminar `localStorage` como fuente autoritativa y conservarlo, si se necesita, únicamente como caché.
+- Completar pruebas de servicio, OAuth, publicación y aislamiento entre VitaBlue y Protege tu Salud.
+- Crear el PR de la rama 5C y validar CI/Supabase en GitHub.
+
+Las capacidades avanzadas de Marketing Studio (Content Engine, Insights, Growth, Advisor y Compliance) permanecen en Fase 5E y no deben considerarse parte del cierre de 5C.
+
+### Decisión: integraciones LLM como fase futura
+
+La conexión con APIs de modelos LLM queda explícitamente fuera de Fase 5C y de la fundación actual de Content Engine. No se implementarán todavía proveedores, workers, generación automática ni selección de modelos.
+
+Queda registrada como deuda técnica futura:
+
+- diseñar un gateway server-side común para proveedores LLM;
+- implementar cada integración módulo por módulo, empezando por Content Engine;
+- mantener los secretos exclusivamente en servidor;
+- validar y versionar los prompts y contratos de entrada/salida;
+- registrar `brand_version_id` y los parámetros de contexto utilizados;
+- crear jobs idempotentes mediante `input_hash`;
+- controlar costes, límites, reintentos, timeouts y errores de proveedor;
+- exigir revisión humana antes de publicar contenido o ejecutar acciones;
+- añadir pruebas específicas por módulo y proveedor antes de activar cada conexión.
+
+La tabla `content_generation_jobs` y las conexiones de modelos no se consideran requisito de cierre de esta fase. Se retomarán en una fase futura de integraciones LLM, módulo por módulo.
+
+### Dependencia de Brand Hub para generación y campañas
+
+Brand Hub es la fuente de verdad de marca para el resto de Marketing Studio, no únicamente una superficie de configuración:
+
+- **Content Engine** consumirá identidad, logos, colores, tipografías, voz, tono, claims y reglas para elaborar piezas visuales y textos.
+- **Campaign Orchestrator** consumirá la configuración activa de marca, restricciones, canales y assets autorizados para crear y validar campañas.
+
+Por ello, antes de exponer Brand Hub a estos módulos se debe garantizar:
+
+- contratos de lectura estables y versionados para el contexto de marca;
+- resolución explícita de la versión publicada, no una lectura ambigua del JSON actual;
+- assets con metadatos, permisos y referencias de Storage;
+- reglas y claims distinguibles entre borrador, aprobados y publicados;
+- auditoría de cambios y trazabilidad de qué versión utilizó cada pieza o campaña;
+- separación entre configuración editable y snapshot inmutable consumido por una generación o campaña.
+
+La primera implementación puede conservar `identity`, `palette`, `typography`, `logos` y `rules_engine` como JSONB en `brands`, pero debe exponer un contrato de lectura único. No se deben crear integraciones directas de Content Engine o Campaign Orchestrator contra columnas JSONB dispersas. La normalización a tablas de versiones, assets, claims y reglas se hará cuando el flujo de aprobación y publicación lo requiera.
 
 ## Arquitectura objetivo
 

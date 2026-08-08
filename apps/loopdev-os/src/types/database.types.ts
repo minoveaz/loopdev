@@ -39,6 +39,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      brand_context_versions: {
+        Row: {
+          brand_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          organization_id: string
+          published_at: string | null
+          snapshot: Json
+          status: string
+          version_number: number
+        }
+        Insert: {
+          brand_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          organization_id: string
+          published_at?: string | null
+          snapshot?: Json
+          status?: string
+          version_number: number
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          organization_id?: string
+          published_at?: string | null
+          snapshot?: Json
+          status?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brand_context_versions_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "brand_context_versions_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brands: {
         Row: {
           created_at: string
@@ -853,6 +904,361 @@ export type Database = {
         }
         Relationships: []
       }
+      content_briefs: {
+        Row: {
+          audience: string | null
+          brand_id: string
+          brand_version_id: string | null
+          call_to_action: string | null
+          campaign_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          locale: string
+          name: string
+          objective: string
+          organization_id: string
+          updated_at: string
+          updated_by: string | null
+          workspace_id: string | null
+        }
+        Insert: {
+          audience?: string | null
+          brand_id: string
+          brand_version_id?: string | null
+          call_to_action?: string | null
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          locale?: string
+          name: string
+          objective: string
+          organization_id: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id?: string | null
+        }
+        Update: {
+          audience?: string | null
+          brand_id?: string
+          brand_version_id?: string | null
+          call_to_action?: string | null
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          locale?: string
+          name?: string
+          objective?: string
+          organization_id?: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_briefs_brand_id_organization_id_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "content_briefs_brand_version_id_fkey"
+            columns: ["brand_version_id"]
+            isOneToOne: false
+            referencedRelation: "brand_context_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_briefs_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaign_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_briefs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_briefs_workspace_id_organization_id_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      content_generation_jobs: {
+        Row: {
+          brand_id: string | null
+          brand_version_id: string | null
+          brief_id: string | null
+          completed_at: string | null
+          content_item_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          input_hash: string
+          model: string
+          organization_id: string
+          provider: string
+          status: string
+          updated_at: string
+          workspace_id: string | null
+        }
+        Insert: {
+          brand_id?: string | null
+          brand_version_id?: string | null
+          brief_id?: string | null
+          completed_at?: string | null
+          content_item_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          input_hash: string
+          model: string
+          organization_id: string
+          provider: string
+          status: string
+          updated_at?: string
+          workspace_id?: string | null
+        }
+        Update: {
+          brand_id?: string | null
+          brand_version_id?: string | null
+          brief_id?: string | null
+          completed_at?: string | null
+          content_item_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          input_hash?: string
+          model?: string
+          organization_id?: string
+          provider?: string
+          status?: string
+          updated_at?: string
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_generation_jobs_brand_id_organization_id_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "content_generation_jobs_brand_version_id_fkey"
+            columns: ["brand_version_id"]
+            isOneToOne: false
+            referencedRelation: "brand_context_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_generation_jobs_brief_id_fkey"
+            columns: ["brief_id"]
+            isOneToOne: false
+            referencedRelation: "content_briefs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_generation_jobs_content_item_id_fkey"
+            columns: ["content_item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_generation_jobs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_generation_jobs_workspace_id_organization_id_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      content_items: {
+        Row: {
+          brand_id: string
+          brand_version_id: string | null
+          brief_id: string | null
+          campaign_id: string | null
+          created_at: string
+          created_by: string | null
+          current_version: number
+          id: string
+          locale: string
+          organization_id: string
+          status: string
+          title: string
+          type: string
+          updated_at: string
+          updated_by: string | null
+          workspace_id: string | null
+        }
+        Insert: {
+          brand_id: string
+          brand_version_id?: string | null
+          brief_id?: string | null
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_version?: number
+          id?: string
+          locale?: string
+          organization_id: string
+          status?: string
+          title: string
+          type: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id?: string | null
+        }
+        Update: {
+          brand_id?: string
+          brand_version_id?: string | null
+          brief_id?: string | null
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_version?: number
+          id?: string
+          locale?: string
+          organization_id?: string
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_items_brand_id_organization_id_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "content_items_brand_version_id_fkey"
+            columns: ["brand_version_id"]
+            isOneToOne: false
+            referencedRelation: "brand_context_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_items_brief_id_fkey"
+            columns: ["brief_id"]
+            isOneToOne: false
+            referencedRelation: "content_briefs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_items_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaign_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_items_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_items_workspace_id_organization_id_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      content_versions: {
+        Row: {
+          body: string
+          brand_id: string
+          change_summary: string | null
+          content_item_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          organization_id: string
+          version: number
+          workspace_id: string | null
+        }
+        Insert: {
+          body: string
+          brand_id: string
+          change_summary?: string | null
+          content_item_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          organization_id: string
+          version: number
+          workspace_id?: string | null
+        }
+        Update: {
+          body?: string
+          brand_id?: string
+          change_summary?: string | null
+          content_item_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          organization_id?: string
+          version?: number
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_versions_brand_id_organization_id_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "content_versions_content_item_id_fkey"
+            columns: ["content_item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_versions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_versions_workspace_id_organization_id_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
       marketing_campaign_publications: {
         Row: {
           account_handle: string | null
@@ -967,6 +1373,7 @@ export type Database = {
         Row: {
           assets: Json
           brand_id: string
+          brand_version_id: string | null
           budget: number | null
           copies: Json
           created_at: string
@@ -988,6 +1395,7 @@ export type Database = {
         Insert: {
           assets?: Json
           brand_id: string
+          brand_version_id?: string | null
           budget?: number | null
           copies?: Json
           created_at?: string
@@ -1009,6 +1417,7 @@ export type Database = {
         Update: {
           assets?: Json
           brand_id?: string
+          brand_version_id?: string | null
           budget?: number | null
           copies?: Json
           created_at?: string
@@ -1034,6 +1443,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "brands"
             referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_campaign_records_brand_version_fkey"
+            columns: ["brand_version_id"]
+            isOneToOne: false
+            referencedRelation: "brand_context_versions"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "marketing_campaign_records_organization_fkey"

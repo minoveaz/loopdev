@@ -27,6 +27,7 @@ describe('Marketing contracts', () => {
     const result = OAuthAuthorizationStateSchema.safeParse({
       ...ids,
       brandId: null,
+      brandVersionId: ids.id,
       workspaceId: null,
       provider: 'facebook',
       stateHash: 'a'.repeat(64),
