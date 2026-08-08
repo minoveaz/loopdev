@@ -612,7 +612,7 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 - [x] Definir contratos de seguros, cotizaciones y operaciones.
 - [ ] Definir contratos de WhatsApp.
 - [ ] Definir contratos de Health OS.
-- [ ] Crear servicios server-side para operaciones sensibles.
+- [x] Crear servicios server-side para operaciones sensibles; el vault de Quant centraliza autorización, lectura, alta y prueba de conexiones fuera de los Route Handlers.
 - [x] Centralizar mapeos snake_case/camelCase para CRM; los siguientes servicios reutilizarán este límite validado.
 - [ ] Generar tipos de base de datos desde Supabase.
 - [ ] Prohibir tipos locales duplicados en módulos nuevos.
