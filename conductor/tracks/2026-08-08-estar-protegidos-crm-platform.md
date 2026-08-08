@@ -1,7 +1,7 @@
 # Track: CRM multi-tenant y comunicaciones de Estar Protegidos
 
 **Fecha:** 2026-08-08  
-**Estado:** Planificación aprobada — CRM Core + Insurance Pack  
+**Estado:** Planificación aprobada — roadmap backend-first  
 **Prioridad:** Alta para entorno Dev  
 **Organización objetivo:** Estar Protegidos  
 **Marcas iniciales:** Vitablue y Protege tu Salud
@@ -315,6 +315,137 @@ communications_delivery_events
 
 Todas las tablas nuevas tendrán como mínimo `organization_id`, timestamps y actor cuando aplique. Las entidades CRM tendrán `brand_id` y `workspace_id` cuando el dominio lo necesite. Los identificadores externos de proveedores tendrán constraints de unicidad dentro de su cuenta y organización.
 
+## Roadmap de desarrollo backend-first
+
+El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. El frontend no será la fuente de decisiones de dominio: se conectará después de que cada fase tenga contratos estables, datos persistentes y pruebas de aislamiento.
+
+### Fase B0 — Contratos y decisiones de dominio
+
+- [ ] Consolidar contratos de contactos, empresas, personas relacionadas, leads y oportunidades.
+- [ ] Definir comandos, lecturas, estados y eventos de dominio.
+- [ ] Definir normalización E.164, email, deduplicación y consentimiento.
+- [ ] Definir ownership por organización, workspace, marca y canal.
+- [ ] Separar CRM Core, Communications Core, Document Intelligence e Insurance Pack.
+- [ ] Cubrir invariantes con tests de contratos.
+
+**Salida:** contratos versionados y reglas de dominio aprobadas, sin depender de componentes visuales.
+
+### Fase B1 — CRM Core persistente y RLS
+
+- [ ] Crear migraciones aditivas para contactos, empresas, relaciones, leads y oportunidades.
+- [ ] Crear actividades, tareas, notas y eventos de auditoría.
+- [ ] Añadir foreign keys, constraints, índices y timestamps.
+- [ ] Añadir `organization_id`, `workspace_id` y `brand_id` donde aplique.
+- [ ] Crear políticas RLS por organización y workspace.
+- [ ] Añadir permisos de lectura, creación, edición, asignación y administración.
+- [ ] Crear fixtures mínimos únicamente para tests, nunca para producción.
+
+**Salida:** CRM Core persistente, aislado y consultable mediante Supabase sin UI.
+
+### Fase B2 — Servicios server-side y APIs CRM
+
+- [ ] Implementar servicios de contactos, empresas, leads y oportunidades.
+- [ ] Implementar deduplicación transaccional.
+- [ ] Implementar creación contacto + lead en una operación segura.
+- [ ] Implementar pipeline y cambios de etapa auditables.
+- [ ] Implementar actividades, tareas, notas y asignación.
+- [ ] Validar permisos en cada endpoint.
+- [ ] Crear tests de servicios, mappers y errores de concurrencia.
+
+**Salida:** API CRM funcional y preparada para consumo por frontend, formularios y webhooks.
+
+### Fase B3 — Captación y atribución
+
+- [ ] Crear contratos de fuentes, campañas, UTM y referidos.
+- [ ] Integrar leads desde formularios y Marketing Studio.
+- [ ] Preservar atribución por lead sin sobrescribir historiales.
+- [ ] Implementar idempotencia de entradas.
+- [ ] Asociar marca y workspace únicamente desde scopes autorizados.
+- [ ] Probar captación de dos marcas sin mezcla de datos.
+
+**Salida:** cualquier canal puede crear o reutilizar contactos y crear leads correctamente atribuidos.
+
+### Fase B4 — Communications Core
+
+- [ ] Crear modelo de cuentas, canales, conversaciones, mensajes y notas internas.
+- [ ] Crear referencias seguras a credenciales.
+- [ ] Definir mensajes conversacionales, marketing y transaccionales.
+- [ ] Crear estados normalizados de entrega.
+- [ ] Crear idempotencia, reintentos y auditoría.
+- [ ] Añadir permisos y consentimiento por canal.
+- [ ] Crear una interfaz server-side común para CRM, Marketing Studio e Insurance Pack.
+
+**Salida:** infraestructura de comunicación reutilizable sin acoplarla al CRM.
+
+### Fase B5 — WhatsApp inbound POC
+
+- [ ] Crear configuración de cuenta WhatsApp por organización y marca.
+- [ ] Implementar verificación y webhook server-side.
+- [ ] Validar firma, cuenta, payload y origen.
+- [ ] Normalizar teléfonos E.164.
+- [ ] Deduplicar eventos y mensajes externos.
+- [ ] Crear o actualizar contacto, conversación y mensaje.
+- [ ] Aplicar la ventana de 24 horas y plantillas aprobadas.
+- [ ] Registrar estados de entrega y errores.
+
+**Salida:** un mensaje entrante crea el contexto CRM correcto y aparece en una conversación persistente.
+
+### Fase B6 — Document Intelligence Core
+
+- [ ] Crear documentos, archivos, clasificaciones y extracciones.
+- [ ] Proteger archivos con Storage y referencias autorizadas.
+- [ ] Crear pipeline asíncrono sin acoplar proveedor de OCR.
+- [ ] Registrar confianza global y por campo.
+- [ ] Forzar revisión humana en documentos de baja confianza o campos críticos.
+- [ ] Versionar procesador, resultados y decisiones de revisión.
+- [ ] Crear adaptador inicial para CRM e Insurance Pack.
+
+**Salida:** documentos procesables, trazables y nunca convertidos automáticamente en datos definitivos sin validación.
+
+### Fase B7 — Insurance Pack backend
+
+- [ ] Crear productos, planes, aseguradoras y coberturas.
+- [ ] Crear reglas de elegibilidad testeables.
+- [ ] Crear cotizaciones versionadas.
+- [ ] Relacionar cotización con oportunidad, lead y contacto.
+- [ ] Modelar tomador, asegurado y beneficiario sin asumir contacto comunicable.
+- [ ] Aplicar permisos específicos y auditoría.
+
+**Salida:** flujo comercial de seguros sobre el CRM Core, sin contaminar sus entidades genéricas.
+
+### Fase B8 — IA asistida y segura
+
+- [ ] Crear contratos para resumen, clasificación, extracción y recomendaciones.
+- [ ] Crear gateway server-side de proveedores.
+- [ ] Registrar modelo, versión, prompt, contexto, confianza y resultado.
+- [ ] Implementar primero resúmenes, clasificación, extracción y tareas sugeridas.
+- [ ] Exigir aprobación humana para respuestas, cambios sensibles y cotizaciones.
+- [ ] Crear límites, costes, timeouts, reintentos e idempotencia.
+- [ ] Evitar acceso a datos sin permiso o consentimiento.
+
+**Salida:** IA asistiva auditable, sin decisiones autónomas de alto impacto.
+
+### Fase B9 — Customer Workspace backend
+
+- [ ] Crear endpoint agregado de Customer 360.
+- [ ] Resolver perfil, relaciones, leads, oportunidades, conversaciones, documentos y cotizaciones según permisos.
+- [ ] Ocultar personas relacionadas no comunicables de acciones de contacto.
+- [ ] Añadir auditoría de acceso a datos sensibles.
+- [ ] Probar aislamiento por agente, workspace, marca y organización.
+
+**Salida:** contrato estable para la vista Customer Workspace.
+
+### Fase B10 — Frontend, E2E y operación
+
+- [ ] Conectar dashboard, contactos, pipeline, Customer Workspace e inbox.
+- [ ] Conectar formularios y flujos de WhatsApp.
+- [ ] Añadir Playwright para captación, pipeline, conversación y cotización.
+- [ ] Ejecutar pruebas RLS y de aislamiento en Dev/CI.
+- [ ] Añadir observabilidad, métricas y alertas.
+- [ ] Documentar rollback, backups y manejo de secretos.
+
+**Salida:** producto usable en Dev con backend persistente, permisos reales y evidencia de calidad.
+
 ## Entregas
 
 ### Fase 6A — CRM persistente mínimo
@@ -627,4 +758,4 @@ La emisión, renovaciones y operaciones completas pertenecen a una fase posterio
 
 ## Siguiente acción
 
-Crear la migración y los servicios de Fase 6A empezando por `crm_contacts`, `crm_leads`, `crm_activities` y `crm_tasks`, después conectar el pipeline actual antes de abordar WhatsApp.
+Comenzar la Fase B0 y cerrar contratos de dominio antes de crear migraciones. Después implementar B1 con `crm_contacts`, `crm_companies`, `crm_related_people`, `crm_leads`, `crm_activities` y `crm_tasks`, incluyendo RLS y pruebas de aislamiento.
