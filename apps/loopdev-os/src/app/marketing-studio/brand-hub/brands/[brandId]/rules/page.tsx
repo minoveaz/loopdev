@@ -5,7 +5,12 @@ import { useParams } from 'next/navigation';
 import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
-import { RuleDomain, RulesEngine, type RuleDefinition } from '@loopdev/contracts';
+import {
+  RuleDomain,
+  RulesEngineSchema,
+  type RulesEngine,
+  type RuleDefinition,
+} from '@loopdev/contracts';
 
 // Industrial Components
 import { RuleDomainRail } from '@/suites/marketing-studio/brand-hub/components/rules/RuleDomainRail';
@@ -29,7 +34,8 @@ export default function BrandRulesPage() {
   const { data: brand, isLoading } = useActiveBrand(brandId);
 
   // Support both snake_case (DB) and camelCase (Contract) + Fallback to Fixture for LoopDev brand
-  const dbRules = brand?.rules_engine;
+  const parsedRules = RulesEngineSchema.safeParse(brand?.rules_engine);
+  const dbRules = parsedRules.success ? parsedRules.data : undefined;
   const rulesEngine: RulesEngine | undefined =
     dbRules?.rules && dbRules.rules.length > 0
       ? dbRules
@@ -191,7 +197,7 @@ export default function BrandRulesPage() {
             <div className="mt-4 pt-8 border-t border-border-technical/30">
               <RuleEditor
                 rule={selectedRule}
-                isEditable={brand.status === 'draft'}
+                isEditable={brand?.status === 'draft'}
                 onSave={(updated) => console.log('Save rule:', updated)}
               />
             </div>
