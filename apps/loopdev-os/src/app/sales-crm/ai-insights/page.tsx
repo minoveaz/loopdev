@@ -39,8 +39,8 @@ export default function AiInsights() {
             <Icon name="psychology" size="sm" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">¿Cómo funciona el scoring predictivo?</h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <Heading as="h3" size="sm" weight="bold" className="text-white uppercase tracking-wider">¿Cómo funciona el scoring predictivo?</Heading>
+            <p className="text-xs text-text-muted mt-0.5">
               Nuestro modelo evalúa más de 15 variables en tiempo real, incluyendo frecuencia de emails, cargos de interlocutores, descargas de recursos (Whitepapers, Specs) e histórico de conversiones del sector.
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function AiInsights() {
           <Heading size="sm" weight="bold" className="text-white tracking-tight uppercase">
             Clasificación de Probabilidad de Cierre
           </Heading>
-          <LpdText size="nano" className="font-mono text-slate-400 tracking-widest uppercase opacity-85">
+          <LpdText size="nano" className="font-mono text-text-muted tracking-widest uppercase opacity-85">
             RANKED_PROBABILITY_MATRIX
           </LpdText>
         </div>
@@ -79,7 +79,7 @@ export default function AiInsights() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-primary transition-colors">{lead.name}</h4>
+                  <Heading as="h4" size="sm" weight="bold" className="text-slate-100 group-hover:text-primary transition-colors">{lead.name}</Heading>
                   <span className="text-xs text-slate-400">{lead.company} · Valor: <span className="text-emerald-400 font-bold">${lead.dealValue.toLocaleString()} COP</span></span>
                 </div>
               </div>

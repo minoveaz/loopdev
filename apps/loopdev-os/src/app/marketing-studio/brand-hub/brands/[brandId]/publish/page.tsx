@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { LpdText } from '@loopdev/ui';
+import { Heading, LpdText } from '@loopdev/ui';
 
 export default function Page() {
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-2">
-        <h2 className="text-3xl font-black text-text-main uppercase tracking-tighter">
+        <Heading as="h2" size="2xl" weight="bold" className="text-text-main uppercase tracking-tight">
           publish
-        </h2>
+        </Heading>
         <LpdText size="sm" className="text-text-muted max-w-xl">
           This is the publish view for the active brand.
         </LpdText>

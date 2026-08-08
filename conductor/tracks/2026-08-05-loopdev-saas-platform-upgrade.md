@@ -525,15 +525,39 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - El workflow `.github/workflows/supabase.yml` levanta Supabase temporalmente solo ante cambios en `supabase/**`, en pushes de `develop`/`main` y en la ejecución nocturna; el CI general no se ralentiza en cada push de código.
 - Estado actual: Supabase CLI `2.111.0` está instalado. La migración fundacional `20260806000000_platform_core_foundation.sql` está preparada como cambio aditivo y se validará exclusivamente en el workflow de GitHub Actions.
 
-- [ ] Crear migraciones para `organizations` y `organization_memberships`.
-- [ ] Añadir `roles`, `permissions`, `role_permissions` y scopes.
-- [ ] Evolucionar `brands` para que dependa formalmente de `organization_id`.
-- [ ] Crear `workspaces` y configuración de suites habilitadas.
-- [ ] Crear funciones SQL de membresía y autorización.
-- [ ] Añadir índices y constraints de organización y marca.
-- [ ] Activar RLS con políticas verificables.
-- [ ] Crear pruebas de matriz RLS: propietario, admin, agente, viewer, usuario externo.
-- [ ] Eliminar políticas públicas heredadas.
+- [x] Crear migraciones para `organizations` y `organization_memberships`.
+- [x] Añadir `roles`, `permissions`, `role_permissions` y scopes como catálogo/matriz aditiva; la asignación continúa viviendo en `organization_memberships.role`.
+- [x] Evolucionar `brands` para que dependa formalmente de `organization_id`; conserva `tenant_id` solo como enlace heredado durante la transición, con backfill determinista y RLS por permiso de Marketing.
+- [x] Crear `workspaces` y configuración de suites habilitadas; `workspace_brands` permite alcance de organización completa o de varias marcas sin convertir submarcas en tenants.
+- [x] Crear funciones SQL de membresía y autorización.
+- [x] Añadir administradores globales de LoopDev separados de las membresías de organización; `platform owner` puede administrar el core y su acceso queda cubierto por RLS y pruebas.
+- [x] Añadir índices y constraints de organización y marca para Brand Hub (`brands.organization_id` con FK e índice).
+- [x] Activar RLS con políticas verificables.
+- [x] Conceder privilegios SQL explícitos a `authenticated` para las tablas Platform Core; la autorización efectiva sigue siendo exclusivamente RLS.
+- [x] Crear pruebas de matriz RLS: aislamiento entre organizaciones, owner, admin, agent, viewer y usuario externo.
+- [x] Eliminar políticas públicas heredadas de `brands` y sustituirlas por políticas de lectura/gestión basadas en permisos de la organización.
+
+#### Cierre inmediato de exposición pública heredada (2026-08-07)
+
+- [x] Preparar `20260813000000_platform_core_internal_quant_access.sql` para retirar las lecturas públicas de `tenants`, `quant_assets`, `quant_market_config` y `quant_market_history`.
+- [x] Restringir `tenants` a la membresía de la organización vinculada por `legacy_tenant_id`; un administrador global de LoopDev conserva el acceso operativo.
+- [x] Restringir los datos internos de referencia Quant a usuarios con `quant.read` en al menos una organización, o a administradores globales de LoopDev.
+- [x] Añadir pruebas negativas para un usuario autenticado sin membresía y pruebas positivas para un miembro autorizado.
+- [x] Validar la migración y la matriz RLS en la base efímera del workflow Supabase antes de aplicarla a Dev (PR #8: `Migrations and CI RLS baseline` en verde).
+
+Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa evolución estructural a `organization_id` requiere inventario, backfill y una migración de dominio independiente.
+
+#### Transición estructural de Quant a organizaciones (en curso)
+
+- [x] Inventariar los registros Quant ligados a `tenant_id`, incluidos bots, exchanges, estrategias, órdenes, posiciones, señales, riesgo, auditoría y resultados de backtest.
+- [x] Preparar la migración aditiva `20260814000000_quant_organization_tenancy.sql`: añade `organization_id`, realiza el backfill desde `legacy_tenant_id`, falla explícitamente ante registros sin correspondencia y conserva `tenant_id` de forma temporal.
+- [x] Sustituir las políticas legacy basadas en `tenant_id = auth.uid()` por RLS de `quant.read` y `quant.manage` por organización, incluido el aislamiento de auditoría y backtests.
+- [x] Adaptar las escrituras directas de bots, estrategias, riesgo y exchanges al contexto activo de organización; las cachés de React Query ya incluyen `organization_id`.
+- [x] Validar la migración y la matriz RLS en la base efímera de CI antes de aplicarla a Dev (PR #9: `Migrations and CI RLS baseline` en verde tras reintento del runner).
+- [x] Mover la gestión de `quant_exchanges` a rutas server-side protegidas: el navegador ya no consulta ni escribe la tabla y solo recibe metadatos saneados; `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` permanecen exclusivamente en servidor.
+- [ ] Configurar `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` en staging/Render antes de activar el vault en usuarios reales (Fase 10).
+
+Runbook preparado en `docs/quant-vault-environment.md`; el pendiente se cierra únicamente después de cargar y verificar los secretos en los entornos correspondientes.
 
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 
@@ -546,17 +570,32 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - Aplicar reglas más estrictas de `dependency-cruiser`.
 - Incorporar Playwright para login, navegación, permisos y estados de acceso multiempresa.
 
-- [ ] Refactorizar `AuthProvider` para cargar membresías.
-- [ ] Crear `OrganizationProvider`.
-- [ ] Crear `BrandProvider` y selector de marca cuando aplique.
-- [ ] Crear `WorkspaceProvider`.
-- [ ] Crear `PermissionProvider` y helpers server/client.
-- [ ] Aplicar permisos al Launchpad y navegación.
-- [ ] Bloquear rutas de suites no habilitadas para la organización.
-- [ ] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
-- [ ] Añadir pruebas de routing y autorización.
+- [x] Refactorizar `AuthProvider` para cargar membresías tipadas; mantiene fallback vacío hasta desplegar Platform Core en Supabase remoto.
+- [x] Crear `OrganizationProvider` con organización activa persistida y selección limitada a memberships autorizadas.
+- [x] Crear `BrandProvider`; resuelve automáticamente 0/1 marca y exige selección solo con varias marcas, siempre dentro de la organización activa.
+- [x] Crear `WorkspaceProvider`; carga únicamente suites activas autorizadas de la organización, mantiene la selección válida por organización y expone si una suite está habilitada.
+- [x] Crear `PermissionProvider` y helpers client: resuelve el catálogo de permisos una vez por organización y los guards/Launchpad consumen una única fuente de verdad.
+- [x] Aplicar permisos al Launchpad y navegación de las suites existentes (CRM, Marketing Studio, Health OS y Quant Ops); Financial Ops queda pendiente de ruta real.
+- [x] Bloquear rutas y Launchpad de suites no habilitadas para la organización; el acceso exige permiso y workspace activo para la suite.
+- [x] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
+- [x] Añadir pruebas de routing y autorización.
 
 **Criterio:** una misma cuenta puede pertenecer a varias organizaciones y ver solo los módulos y datos autorizados.
+
+#### Estado tras PR #11 (2026-08-07)
+
+- [x] Fusionar `PermissionProvider` y los helpers de permisos en `develop` (PR #11, merge commit `79a83ad`).
+- [x] Mantener una única fuente de verdad de permisos para Launchpad, navegación y guards de suites.
+- [x] Añadir estados de organización sin acceso, membresía pendiente y sesión expirada.
+- [x] Añadir pruebas de routing y autorización, incluyendo cambio de organización y suite no habilitada.
+
+#### Cierre de estados de acceso (2026-08-07)
+
+- [x] Las membresías ahora tienen ciclo de vida explícito (`pending`, `active`, `suspended`, `revoked`) y solo `active` autoriza funciones SQL, RLS, organizaciones, permisos y workspaces.
+- [x] El shell muestra estados dedicados para sesión expirada, membresía pendiente y ausencia de acceso organizacional; las rutas de suite redirigen de forma segura al Launchpad cuando corresponde.
+- [x] Las pruebas unitarias cubren el decisor de routing para carga, sesión expirada, sin acceso, membresía pendiente, activa, suspendida y revocada; el test de base comprueba la columna y el requisito de estado activo en el helper de permisos.
+
+El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pruebas de routing. La integración de Communications/WhatsApp queda fuera de este bloque y se retomará posteriormente mediante contratos y endpoints server-side estables.
 
 ### Fase 4 — Contracts y capa de servicios
 
@@ -567,14 +606,14 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - Generar y revisar tipos Supabase antes de exponerlos a las suites.
 - Mantener `dependency-cruiser` como gate arquitectónico.
 
-- [ ] Ampliar `@loopdev/contracts` con Zod y tipos de Platform Core.
-- [ ] Definir contratos de CRM y actividades.
-- [ ] Definir contratos de Marketing Studio.
-- [ ] Definir contratos de seguros, cotizaciones y operaciones.
+- [x] Ampliar `@loopdev/contracts` con Zod y tipos de Platform Core (organizaciones, memberships, roles y permisos).
+- [x] Definir contratos de CRM y actividades.
+- [x] Definir contratos de Marketing Studio.
+- [x] Definir contratos de seguros, cotizaciones y operaciones.
 - [ ] Definir contratos de WhatsApp.
 - [ ] Definir contratos de Health OS.
 - [ ] Crear servicios server-side para operaciones sensibles.
-- [ ] Centralizar mapeos snake_case/camelCase.
+- [x] Centralizar mapeos snake_case/camelCase para CRM; los siguientes servicios reutilizarán este límite validado.
 - [ ] Generar tipos de base de datos desde Supabase.
 - [ ] Prohibir tipos locales duplicados en módulos nuevos.
 
@@ -670,6 +709,8 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 - [ ] Respetar ventana de atención y plantillas autorizadas.
 - [ ] Añadir estados `sent`, `delivered`, `read` y `failed`.
 - [ ] Probar mensajes de texto, imagen, documento, audio y ubicación.
+
+La POC `crm-communications-poc` permanece temporalmente desacoplada. No se incorporan todavía sus migraciones ni su esquema CRM a LoopDev; la integración se retomará como una fase posterior mediante contratos y endpoints server-side.
 
 **Criterio:** un mensaje duplicado no duplica entidades y un agente autorizado puede responder sin exponer credenciales.
 
@@ -1220,8 +1261,8 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 - [x] Eliminar dependencias y devDependencies sin uso confirmado.
 - [x] Revisar exports y tipos exportados no consumidos; conservar solo APIs publicas documentadas.
 - [x] Resolver exports duplicados y entradas duplicadas de barril.
-- [ ] Revisar los clones de jscpd por porcentaje y tamano, extrayendo solo semantica realmente compartida.
-- [ ] Repetir la auditoria hasta obtener Knip limpio y jscpd dentro del umbral acordado.
+- [x] Revisar los clones de jscpd por porcentaje y tamano, extrayendo solo semantica realmente compartida.
+- [x] Repetir la auditoria hasta obtener Knip limpio y jscpd dentro del umbral acordado.
 - [x] Actualizar `quality:static`, CI y el track con baseline cero.
 - [x] Ejecutar typecheck, lint, tests, build y quality gates completos.
 
@@ -1235,7 +1276,7 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 - [x] Formato, clases y auditoria estatica pasan en `quality:static`.
 - [x] jscpd queda en 24 clones despues de extraer las abstracciones semánticas de CRM, BotCard, layouts, tablas y payloads de bots. Los clones restantes son shells de suites, tablas con columnas distintas, indicadores visuales con modelos propios y scripts Python con flujos independientes.
 
-La Fase 1D queda pendiente únicamente de registrar la matriz final de excepciones técnicas; no quedan clones TypeScript consolidables sin revisar.
+La Fase 1D queda cerrada: la matriz final de 24 excepciones técnicas está registrada en `conductor/jscpd-exceptions.md`; no quedan clones TypeScript consolidables sin revisar.
 
 #### Clasificacion de clones jscpd (2026-08-06)
 

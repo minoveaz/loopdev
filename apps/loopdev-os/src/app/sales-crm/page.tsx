@@ -35,7 +35,7 @@ export default function SalesCrmDashboard() {
   const avgAiScore = Math.round(leads.reduce((acc, l) => acc + l.aiScore, 0) / leads.length);
 
   // Calculate Revenue in Risk (stale leads: stage contacted & no contact for > 5 days)
-  const staleLeads = leads.filter(isLeadStale);
+  const staleLeads = leads.filter((lead) => isLeadStale(lead));
   const revenueInRisk = staleLeads.reduce((acc, l) => acc + l.dealValue, 0);
 
   // Filter high win probability deals
@@ -47,12 +47,12 @@ export default function SalesCrmDashboard() {
   return (
     <main className="h-full overflow-y-auto flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
       {/* Dashboard Header */}
-      <section className="flex justify-between items-center bg-slate-900/40 p-6 rounded-3xl border border-white/5">
+      <section className="flex justify-between items-center bg-shell-surface p-6 rounded-3xl border border-border-technical shadow-sm">
         <div className="flex flex-col gap-1">
-          <Heading size="lg" weight="bold" className="text-white tracking-tight uppercase">
+          <Heading size="lg" weight="bold" className="text-text-main tracking-tight uppercase">
             Centro de Mando Comercial
           </Heading>
-          <LpdText size="nano" className="text-slate-400 font-mono tracking-widest uppercase">
+          <LpdText size="nano" className="text-text-muted font-mono tracking-widest uppercase">
             SAAS_CRM_PIPELINE_ORCHESTRATOR
           </LpdText>
         </div>
@@ -61,7 +61,7 @@ export default function SalesCrmDashboard() {
             variant="outline"
             size="md"
             onClick={() => router.push('/sales-crm/pipeline')}
-            className="border-white/10 hover:bg-slate-900 text-slate-300 font-bold"
+            className="border-border-technical hover:bg-background-subtle text-text-main font-bold"
           >
             Ver Kanban
           </Button>
@@ -123,14 +123,14 @@ export default function SalesCrmDashboard() {
         <div className="lg:col-span-8 flex flex-col gap-6">
           <TechnicalSurface
             variant="surface"
-            className="p-6 flex flex-col gap-6 bg-slate-950/40 border border-white/5 shadow-2xl rounded-3xl h-[450px]"
+            className="p-6 flex flex-col gap-6 bg-shell-surface border border-border-technical shadow-sm rounded-3xl h-[450px]"
           >
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-1">
-                <Heading size="sm" weight="bold" className="text-white tracking-tight uppercase">
+                <Heading size="sm" weight="bold" className="text-text-main tracking-tight uppercase">
                   Distribución de Tratos por Etapa
                 </Heading>
-                <LpdText size="nano" className="text-slate-400 font-mono">
+                <LpdText size="nano" className="text-text-muted font-mono">
                   VALUE_DISTRIBUTION_CHART
                 </LpdText>
               </div>
@@ -156,16 +156,16 @@ export default function SalesCrmDashboard() {
                       key={stage}
                       className="flex-1 flex flex-col items-center gap-3 h-full justify-end group"
                     >
-                      <div className="text-[10px] font-mono text-slate-400 group-hover:text-primary font-bold transition-colors">
+                      <div className="text-[10px] font-mono text-text-muted group-hover:text-primary font-bold transition-colors">
                         ${(stageValue / 1000).toFixed(0)}k
                       </div>
                       <div
-                        className="w-full bg-slate-800 rounded-t-xl group-hover:bg-primary/90 transition-all duration-500 border border-white/5 shadow-inner"
+                        className="w-full bg-background-subtle rounded-t-xl group-hover:bg-primary/90 transition-all duration-500 border border-border-technical shadow-inner"
                         style={{ height: heightPercent }}
                       >
-                        <div className="w-full h-full bg-gradient-to-t from-slate-950/80 to-transparent rounded-t-xl opacity-40" />
+                        <div className="w-full h-full bg-gradient-to-t from-background-canvas/80 to-transparent rounded-t-xl opacity-40" />
                       </div>
-                      <div className="text-[10px] uppercase font-mono tracking-wider text-slate-400 mt-1">
+                      <div className="text-[10px] uppercase font-mono tracking-wider text-text-muted mt-1">
                         {stage} ({stageLeads.length})
                       </div>
                     </div>
@@ -180,13 +180,13 @@ export default function SalesCrmDashboard() {
         <div className="lg:col-span-4 flex flex-col gap-6">
           <TechnicalSurface
             variant="surface"
-            className="p-6 flex flex-col gap-6 bg-slate-950/40 border border-white/5 shadow-2xl rounded-3xl h-[450px]"
+            className="p-6 flex flex-col gap-6 bg-shell-surface border border-border-technical shadow-sm rounded-3xl h-[450px]"
           >
             <div className="flex flex-col gap-1">
-              <Heading size="xs" weight="bold" className="text-white uppercase tracking-tight">
+              <Heading size="xs" weight="bold" className="text-text-main uppercase tracking-tight">
                 AI Smart Leads
               </Heading>
-              <LpdText size="nano" className="text-slate-400 font-mono">
+              <LpdText size="nano" className="text-text-muted font-mono">
                 HIGH_PROBABILITY_DEALS_QUEUE
               </LpdText>
             </div>
@@ -196,20 +196,20 @@ export default function SalesCrmDashboard() {
                 <div
                   key={lead.id}
                   onClick={() => openLeadInspector(lead.id)}
-                  className="flex justify-between items-center p-3.5 bg-slate-900/60 rounded-2xl border border-white/5 hover:border-primary/50 cursor-pointer hover:bg-slate-900 transition-all group"
+                  className="flex justify-between items-center p-3.5 bg-background-subtle rounded-2xl border border-border-technical hover:border-primary/50 cursor-pointer hover:bg-shell-surface transition-all group"
                 >
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-bold text-slate-100 group-hover:text-primary transition-colors">
+                    <span className="text-xs font-bold text-text-main group-hover:text-primary transition-colors">
                       {lead.name}
                     </span>
-                    <span className="text-[10px] text-slate-400">{lead.company}</span>
+                    <span className="text-[10px] text-text-muted">{lead.company}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col items-end gap-0.5">
                       <span className="text-xs font-mono font-bold text-emerald-400">
                         ${(lead.dealValue / 1000).toFixed(0)}k
                       </span>
-                      <span className="text-[9px] text-slate-400 uppercase font-mono">
+                      <span className="text-[9px] text-text-muted uppercase font-mono">
                         {lead.stage}
                       </span>
                     </div>
@@ -223,7 +223,7 @@ export default function SalesCrmDashboard() {
 
             <Button
               variant="outline"
-              className="w-full border-white/10 hover:bg-slate-900 text-slate-300 font-bold"
+              className="w-full border-border-technical hover:bg-background-subtle text-text-main font-bold"
               onClick={() => router.push('/sales-crm/ai-insights')}
             >
               Ver Análisis Predictivo Completo
@@ -235,12 +235,12 @@ export default function SalesCrmDashboard() {
       {/* 3. RECENT DEALS TABLE */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between px-2">
-          <Heading size="sm" weight="bold" className="text-white tracking-tight uppercase">
+          <Heading size="sm" weight="bold" className="text-text-main tracking-tight uppercase">
             Lista Completa de Oportunidades
           </Heading>
           <LpdText
             size="nano"
-            className="font-mono text-slate-400 tracking-widest uppercase opacity-85"
+            className="font-mono text-text-muted tracking-widest uppercase opacity-85"
           >
             ALL_DEALS_INDEX
           </LpdText>
@@ -248,12 +248,12 @@ export default function SalesCrmDashboard() {
 
         <TechnicalSurface
           variant="surface"
-          className="bg-slate-950/40 border border-white/5 rounded-3xl overflow-hidden shadow-2xl"
+          className="bg-shell-surface border border-border-technical rounded-3xl overflow-hidden shadow-sm"
         >
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/5 bg-slate-900/30 text-[10px] uppercase font-mono text-slate-400 tracking-wider">
+                <tr className="border-b border-border-technical bg-background-subtle text-[10px] uppercase font-mono text-text-muted tracking-wider">
                   <th className="p-4 pl-6">ID</th>
                   <th className="p-4">Contacto</th>
                   <th className="p-4">Compañía</th>
@@ -264,16 +264,16 @@ export default function SalesCrmDashboard() {
                   <th className="p-4 pr-6 text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-xs text-slate-200">
+              <tbody className="divide-y divide-border-technical/50 text-xs text-text-main">
                 {leads.map((lead) => (
                   <tr
                     key={lead.id}
-                    className="hover:bg-slate-900/50 cursor-pointer transition-colors"
+                    className="hover:bg-background-subtle cursor-pointer transition-colors"
                     onClick={() => openLeadInspector(lead.id)}
                   >
-                    <td className="p-4 pl-6 font-mono font-bold text-slate-400">{lead.id}</td>
-                    <td className="p-4 font-bold text-white">{lead.name}</td>
-                    <td className="p-4 text-slate-400">{lead.company}</td>
+                    <td className="p-4 pl-6 font-mono font-bold text-text-muted">{lead.id}</td>
+                    <td className="p-4 font-bold text-text-main">{lead.name}</td>
+                    <td className="p-4 text-text-muted">{lead.company}</td>
                     <td className="p-4 font-mono font-bold text-emerald-400">
                       ${lead.dealValue.toLocaleString()} COP
                     </td>
@@ -307,7 +307,7 @@ export default function SalesCrmDashboard() {
                         </span>
                       </div>
                     </td>
-                    <td className="p-4 font-mono text-slate-400">{lead.lastContactDate}</td>
+                    <td className="p-4 font-mono text-text-muted">{lead.lastContactDate}</td>
                     <td className="p-4 pr-6 text-right" onClick={(e) => e.stopPropagation()}>
                       <Button
                         variant="ghost"

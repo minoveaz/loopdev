@@ -11,8 +11,20 @@ export const useThemeToggle = (props: ThemeToggleProps) => {
 
   // Inicialización: Detectar tema actual
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains('dark');
+    const storedTheme = localStorage.getItem('lpd-theme');
+    const isDarkMode = storedTheme ? storedTheme === 'dark' : document.documentElement.classList.contains('dark');
+    document.documentElement.classList.toggle('dark', isDarkMode);
     setIsDark(isDarkMode);
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key !== 'lpd-theme' || !event.newValue) return;
+      const nextIsDark = event.newValue === 'dark';
+      document.documentElement.classList.toggle('dark', nextIsDark);
+      setIsDark(nextIsDark);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const toggleTheme = () => {
@@ -33,17 +45,17 @@ export const useThemeToggle = (props: ThemeToggleProps) => {
   // Mapeo de tamaños industriales
   const sizeMap = {
     sm: 'w-8 h-8 p-1.5',
-    md: 'w-10 h-10 p-2',
+    md: 'w-9 h-9 p-1.5',
     lg: 'w-12 h-12 p-2.5',
   };
 
   // Composición de clases (Zero Hardcoding)
   const buttonClasses = `
-    rounded-lg transition-all duration-300 flex items-center justify-center shadow-sm
+    rounded-full transition-all duration-300 flex items-center justify-center shadow-sm border
     ${sizeMap[size]}
     ${variant === 'technical' 
-      ? 'bg-white border border-black/5 text-slate-500 hover:border-primary/50 hover:text-primary dark:bg-white/5 dark:border-white/10 dark:text-white/40 dark:hover:bg-white/10 dark:hover:text-primary dark:hover:border-primary/50' 
-      : 'bg-transparent border-transparent hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-white/40'
+      ? 'bg-transparent border-primary/50 text-text-muted hover:border-primary hover:text-text-muted dark:border-white/10 dark:text-text-muted dark:hover:border-primary/40'
+      : 'bg-transparent border-primary/35 hover:border-primary text-text-muted dark:border-white/10 dark:text-text-muted dark:hover:border-primary/40'
     }
     ${className}
   `.replace(/\s+/g, ' ').trim();

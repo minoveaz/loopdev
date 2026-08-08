@@ -99,7 +99,7 @@ export default function BrandHubPage() {
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 flex items-center gap-3">
+        <div className="bg-status-error/10 border border-status-error/20 text-status-error p-4 rounded-xl mb-6 flex items-center gap-3">
           <Icon name="error" />
           <LpdText size="sm">Error loading brands. Please try again later.</LpdText>
         </div>
@@ -131,12 +131,12 @@ export default function BrandHubPage() {
         
         {/* Tarjeta de "Crear Nuevo" (Solo si hay marcas) */}
         {!isLoading && brands && brands.length > 0 && (
-          <button className="border border-dashed border-white/10 rounded-xl p-6 flex flex-col items-center justify-center gap-4 text-text-muted hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 min-h-[240px]">
+          <Button variant="secondary" className="border border-dashed border-white/10 rounded-xl p-6 flex flex-col items-center justify-center gap-4 text-text-muted hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 min-h-[240px]">
             <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
               <Icon name="add" />
             </div>
             <span className="font-medium">Create another brand</span>
-          </button>
+          </Button>
         )}
       </div>
 

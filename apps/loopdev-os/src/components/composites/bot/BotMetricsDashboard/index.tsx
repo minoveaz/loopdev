@@ -13,6 +13,7 @@
 'use client';
 
 import React from 'react';
+import { Button, Heading } from '@loopdev/ui';
 
 function PositionPreview({
   side,
@@ -33,11 +34,11 @@ function PositionPreview({
           <span className="text-primary-light">Entry:</span>
           <span className="font-mono text-primary">${entry.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-green-500">
+        <div className="flex justify-between text-status-success">
           <span>Take Profit:</span>
           <span className="font-mono">${takeProfit.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-red-500">
+        <div className="flex justify-between text-status-error">
           <span>Stop Loss:</span>
           <span className="font-mono">${stopLoss.toFixed(2)}</span>
         </div>
@@ -80,15 +81,15 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
   if (error && !metrics) {
     return (
       <div
-        className={`border border-red-500 border-opacity-50 bg-red-500 bg-opacity-5 rounded-lg p-4 ${className}`}
+        className={`border border-status-error/50 bg-status-error/5 rounded-lg p-4 ${className}`}
       >
-        <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
-        <button
+        <p className="text-status-error text-sm">{error}</p>
+        <Button variant="ghost" size="sm" type="button"
           onClick={refresh}
-          className="mt-2 text-nano text-red-600 dark:text-red-400 underline hover:opacity-70"
+          className="mt-2 text-nano text-status-error underline hover:opacity-70"
         >
           Retry
-        </button>
+        </Button>
       </div>
     );
   }
@@ -106,7 +107,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-primary">{botName}</h2>
+          <Heading as="h2" size="lg" weight="bold" className="text-primary">{botName}</Heading>
           <p className="text-nano text-primary-light opacity-70">
             Updated {formatTimeAgo(metrics.last_updated)}
             {isConnected ? ' • Live' : ' • Polling'}
@@ -117,7 +118,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
         <div className="flex items-center gap-2">
           <div
             className={`w-2.5 h-2.5 rounded-full ${
-              isConnected ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'
+              isConnected ? 'bg-status-success animate-pulse' : 'bg-status-warning'
             }`}
           />
           <span className="text-nano text-primary-light">{isConnected ? 'Live' : 'Polling'}</span>
@@ -126,10 +127,10 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Health warnings */}
       {health.warnings.length > 0 && (
-        <div className="bg-yellow-500 bg-opacity-5 border border-yellow-500 border-opacity-50 rounded-lg p-3">
+        <div className="bg-status-warning/5 border border-status-warning/50 rounded-lg p-3">
           <ul className="space-y-1">
             {health.warnings.map((warning, idx) => (
-              <li key={idx} className="text-nano text-yellow-600 dark:text-yellow-400">
+              <li key={idx} className="text-nano text-status-warning">
                 ⚠ {warning}
               </li>
             ))}
@@ -206,20 +207,20 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Signal Analysis Section */}
       <div className="border border-border-technical rounded-lg backdrop-blur-sm bg-surface-dark bg-opacity-50 p-4 space-y-3">
-        <h3 className="text-technical font-medium text-primary">Entry Signals</h3>
+        <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Entry Signals</Heading>
 
         <div className="grid grid-cols-2 gap-4">
           <SignalCard
             label="LONG"
             signal={metrics.signals.long_entry}
-            readyColor="text-green-500"
-            gradient="from-green-500 to-green-600"
+            readyColor="text-status-success"
+            gradient="from-status-success to-status-success"
           />
           <SignalCard
             label="SHORT"
             signal={metrics.signals.short_entry}
-            readyColor="text-purple-500"
-            gradient="from-purple-500 to-purple-600"
+            readyColor="text-innovation-purple"
+            gradient="from-innovation-purple to-innovation-purple"
           />
         </div>
       </div>
@@ -227,7 +228,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       {/* Position Preview Section */}
       {showExtended && (
         <div className="border border-border-technical rounded-lg backdrop-blur-sm bg-surface-dark bg-opacity-50 p-4 space-y-3">
-          <h3 className="text-technical font-medium text-primary">Position Preview</h3>
+          <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Position Preview</Heading>
 
           <div className="grid grid-cols-2 gap-4">
             <PositionPreview
@@ -247,12 +248,13 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       )}
 
       {/* Refresh button */}
-      <button
+      <Button
+        variant="ghost"
         onClick={refresh}
         className="text-nano text-primary-light hover:text-primary opacity-70 hover:opacity-100 transition-opacity"
       >
         ↻ Refresh Metrics
-      </button>
+      </Button>
     </div>
   );
 };

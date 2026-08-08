@@ -159,14 +159,14 @@ export default function ExchangeVaultPage() {
       <TechnicalSurface
         variant="surface"
         depth="flat"
-        className="p-6 bg-blue-500/5 border-blue-500/20 rounded-2xl flex items-start gap-4"
+        className="p-6 bg-primary/5 border-primary/20 rounded-2xl flex items-start gap-4"
       >
-        <span className="material-symbols-outlined text-blue-500 font-bold">shield</span>
+        <span className="material-symbols-outlined text-primary font-bold">shield</span>
         <div className="flex flex-col gap-1">
-          <LpdText size="xs" weight="bold" className="text-blue-600 uppercase tracking-widest">
+          <LpdText size="xs" weight="bold" className="text-primary uppercase tracking-widest">
             Security_Protocol_Notice
           </LpdText>
-          <LpdText size="xs" className="text-blue-700/70 leading-relaxed">
+          <LpdText size="xs" className="text-primary/70 leading-relaxed">
             Always use API keys with restricted permissions. Ensure Withdrawal permissions are
             disabled for all keys linked to LoopDev Quant Core.
           </LpdText>

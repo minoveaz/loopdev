@@ -62,7 +62,7 @@ export const QualityShield: React.FC<QualityShieldProps> = ({ metrics, className
       {/* Footer / Bracketing */}
       <div className="mt-1 flex justify-between items-center text-[8px] font-mono text-white/20">
         <span>[SYSTEM_STABLE]</span>
-        <span className="text-amber-500/40">{"{ 🟢 }"}</span>
+        <span className="text-amber-500/40">{'{ OK }'}</span>
       </div>
     </div>
   );

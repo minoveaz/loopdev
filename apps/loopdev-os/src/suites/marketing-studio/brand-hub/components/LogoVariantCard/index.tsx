@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { LogoVariantCardProps } from './types';
-import { LpdText } from '@loopdev/ui';
+import { LpdText, Button, IconButton } from '@loopdev/ui';
 import { clsx } from 'clsx';
 
 /**
@@ -72,8 +72,11 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
           
           <div className="flex items-center gap-2">
             {/* SVG Action */}
-            <button 
-              className="text-[10px] font-bold text-primary hover:text-white uppercase tracking-wide px-2 py-1 rounded border border-primary/20 hover:bg-primary transition-colors"
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="text-[10px] font-bold text-primary hover:text-primary-foreground uppercase tracking-wide px-2 py-1 rounded border border-primary/20 hover:bg-primary transition-colors"
               onClick={() => {
                 if (logo?.rawSvg) {
                   navigator.clipboard.writeText(logo.rawSvg);
@@ -82,10 +85,13 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
               }}
             >
               SVG
-            </button>
-            <button className="p-1.5 rounded-lg bg-background-subtle hover:bg-background-surface text-text-muted hover:text-primary border border-border-technical transition-colors">
-              <span className="material-symbols-outlined text-[18px]">download</span>
-            </button>
+            </Button>
+            <IconButton
+              icon="download"
+              size="sm"
+              aria-label="Descargar variante de logo"
+              className="p-1.5 rounded-lg bg-background-subtle hover:bg-background-surface text-text-muted hover:text-primary border border-border-technical transition-colors"
+            />
           </div>
         </div>
       </div>

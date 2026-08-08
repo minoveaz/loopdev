@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Bell } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 import { 
   TechnicalDropdown, 
   ScrollArea
@@ -54,8 +54,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = (props) => 
       onOpenChange={handleOpenChange}
       className="w-full max-w-sm p-0 overflow-hidden bg-white dark:bg-surface-elevated shadow-2xl border-none" 
       trigger={
-        <button className="relative p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all group" aria-label="Abrir centro de notificaciones">
-          <Bell size={18} className="text-text-muted group-hover:text-primary transition-colors" />
+        <button className={`relative flex h-9 w-9 items-center justify-center rounded-full border transition-all group ${unreadCount > 0 ? 'border-red-400 hover:border-red-500 hover:bg-red-50 dark:border-red-500/40 dark:hover:border-red-400 dark:hover:bg-red-500/10' : 'border-primary/35 hover:border-primary hover:bg-primary/5 dark:border-white/10 dark:hover:border-primary/40 dark:hover:bg-primary/10'}`} aria-label="Abrir centro de notificaciones">
+          <Lightbulb size={16} className="text-text-muted transition-colors group-hover:text-primary" />
           {unreadCount > 0 && (
             <div className={badgeClasses}>
               {unreadCount > 99 ? '+99' : unreadCount}

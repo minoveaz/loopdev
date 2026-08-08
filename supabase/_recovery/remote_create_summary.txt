@@ -1,0 +1,131 @@
+CREATE SCHEMA public;
+CREATE TYPE public.trading_environment AS ENUM (
+CREATE FUNCTION public.communications_set_updated_at() RETURNS trigger
+CREATE FUNCTION public.consume_oauth_state(p_provider text, p_state_hash text) RETURNS boolean
+CREATE FUNCTION public.decrypt_api_key(encrypted_text text, secret_key text) RETURNS text
+CREATE FUNCTION public.delete_oauth_connection(p_provider text, p_external_account_id text) RETURNS boolean
+CREATE FUNCTION public.encrypt_api_key(plaintext text, secret_key text) RETURNS text
+CREATE FUNCTION public.get_my_marketing_role() RETURNS text
+CREATE FUNCTION public.has_marketing_role(required_role text) RETURNS boolean
+CREATE FUNCTION public.register_oauth_state(p_provider text, p_state_hash text) RETURNS void
+CREATE FUNCTION public.store_oauth_connection_secret(p_provider text, p_external_account_id text, p_display_name text, p_scopes text[], p_access_token text, p_refresh_token text, p_expires_at timestamp with time zone) RETURNS uuid
+CREATE FUNCTION public.update_updated_at_column() RETURNS trigger
+CREATE TABLE public.brands (
+CREATE TABLE public.communication_entity_links (
+CREATE TABLE public.communications_ai_feedback (
+CREATE TABLE public.communications_ai_suggestions (
+CREATE TABLE public.communications_attachments (
+CREATE TABLE public.communications_channels (
+CREATE TABLE public.communications_contacts (
+CREATE TABLE public.communications_conversation_imports (
+CREATE TABLE public.communications_conversations (
+CREATE TABLE public.communications_events (
+CREATE TABLE public.communications_internal_notes (
+CREATE TABLE public.communications_message_statuses (
+CREATE TABLE public.communications_messages (
+CREATE TABLE public.communications_migrations (
+CREATE TABLE public.communications_templates (
+CREATE TABLE public.communications_webhook_events (
+CREATE TABLE public.marketing_campaign_publications (
+CREATE TABLE public.marketing_campaigns (
+CREATE TABLE public.marketing_link_clicks (
+CREATE TABLE public.marketing_links (
+CREATE TABLE public.oauth_connections (
+CREATE TABLE public.oauth_states (
+CREATE TABLE public.quant_assets (
+CREATE TABLE public.quant_audit_logs (
+CREATE TABLE public.quant_book_metrics (
+CREATE TABLE public.quant_bots (
+CREATE TABLE public.quant_exchanges (
+CREATE TABLE public.quant_market_config (
+CREATE TABLE public.quant_market_history (
+CREATE TABLE public.quant_orders (
+CREATE TABLE public.quant_positions (
+CREATE TABLE public.quant_risk_settings (
+CREATE TABLE public.quant_signals (
+CREATE TABLE public.quant_strategies (
+CREATE TABLE public.quant_system_health (
+CREATE TABLE public.social_profiles (
+CREATE TABLE public.strategy_backtest_results (
+CREATE TABLE public.tenants (
+CREATE TABLE public.user_roles (
+CREATE INDEX communications_ai_feedback_reporting_idx ON public.communications_ai_feedback USING btree (workspace_id, event_date, action);
+CREATE INDEX communications_ai_suggestions_contact_idx ON public.communications_ai_suggestions USING btree (workspace_id, contact_id, created_at DESC);
+CREATE INDEX communications_channels_contact_idx ON public.communications_channels USING btree (workspace_id, contact_id);
+CREATE INDEX communications_conversations_inbox_idx ON public.communications_conversations USING btree (workspace_id, status, last_message_at DESC);
+CREATE INDEX communications_entity_links_external_idx ON public.communication_entity_links USING btree (workspace_id, external_entity_type, external_entity_id);
+CREATE INDEX communications_messages_conversation_idx ON public.communications_messages USING btree (workspace_id, conversation_id, created_at);
+CREATE INDEX communications_migrations_status_idx ON public.communications_migrations USING btree (workspace_id, status, updated_at DESC);
+CREATE INDEX communications_webhook_events_processing_idx ON public.communications_webhook_events USING btree (workspace_id, processing_status, received_at);
+CREATE INDEX idx_audit_logs_bot_id ON public.quant_audit_logs USING btree (bot_id);
+CREATE INDEX idx_audit_logs_created_at ON public.quant_audit_logs USING btree (created_at DESC);
+CREATE INDEX idx_audit_logs_event_type ON public.quant_audit_logs USING btree (event_type);
+CREATE INDEX idx_book_metrics_timestamp ON public.quant_book_metrics USING btree ("timestamp" DESC);
+CREATE INDEX idx_brands_tenant ON public.brands USING btree (tenant_id);
+CREATE INDEX idx_market_history_audit_time_lookup ON public.quant_market_history USING btree (timeframe, "timestamp" DESC);
+CREATE INDEX idx_market_history_pair_ts ON public.quant_market_history USING btree (pair, timeframe, "timestamp" DESC);
+CREATE INDEX idx_market_history_query ON public.quant_market_history USING btree (pair, environment, timeframe, "timestamp" DESC);
+CREATE INDEX idx_market_history_sentinel_sync ON public.quant_market_history USING btree (pair, timeframe, "timestamp");
+CREATE INDEX idx_market_history_strategy_fast_lookup ON public.quant_market_history USING btree (pair, timeframe, environment, "timestamp" DESC);
+CREATE INDEX idx_quant_bots_last_price ON public.quant_bots USING btree (last_price);
+CREATE INDEX idx_quant_bots_metrics_update ON public.quant_bots USING btree (last_metrics_update DESC);
+CREATE INDEX idx_quant_bots_strategy_id ON public.quant_bots USING btree (strategy_id);
+CREATE INDEX idx_signals_pending ON public.quant_signals USING btree (status, created_at DESC) WHERE ((status)::text = 'PENDING'::text);
+CREATE INDEX marketing_campaign_publications_campaign_idx ON public.marketing_campaign_publications USING btree (campaign_id);
+CREATE INDEX marketing_campaign_publications_platform_idx ON public.marketing_campaign_publications USING btree (platform);
+CREATE INDEX marketing_link_clicks_clicked_at_idx ON public.marketing_link_clicks USING btree (clicked_at);
+CREATE INDEX marketing_link_clicks_country_idx ON public.marketing_link_clicks USING btree (country_code);
+CREATE INDEX marketing_link_clicks_landing_url_idx ON public.marketing_link_clicks USING btree (landing_url);
+CREATE INDEX marketing_link_clicks_link_id_idx ON public.marketing_link_clicks USING btree (link_id);
+CREATE INDEX marketing_link_clicks_utm_campaign_idx ON public.marketing_link_clicks USING btree (utm_campaign);
+CREATE INDEX marketing_links_active_idx ON public.marketing_links USING btree (active);
+CREATE INDEX marketing_links_campaign_id_idx ON public.marketing_links USING btree (campaign_id);
+CREATE TRIGGER communications_channels_updated_at BEFORE UPDATE ON public.communications_channels FOR EACH ROW EXECUTE FUNCTION public.communications_set_updated_at();
+CREATE TRIGGER communications_contacts_updated_at BEFORE UPDATE ON public.communications_contacts FOR EACH ROW EXECUTE FUNCTION public.communications_set_updated_at();
+CREATE TRIGGER communications_conversation_imports_updated_at BEFORE UPDATE ON public.communications_conversation_imports FOR EACH ROW EXECUTE FUNCTION public.communications_set_updated_at();
+CREATE TRIGGER communications_conversations_updated_at BEFORE UPDATE ON public.communications_conversations FOR EACH ROW EXECUTE FUNCTION public.communications_set_updated_at();
+CREATE TRIGGER communications_messages_updated_at BEFORE UPDATE ON public.communications_messages FOR EACH ROW EXECUTE FUNCTION public.communications_set_updated_at();
+CREATE TRIGGER communications_migrations_updated_at BEFORE UPDATE ON public.communications_migrations FOR EACH ROW EXECUTE FUNCTION public.communications_set_updated_at();
+CREATE TRIGGER communications_templates_updated_at BEFORE UPDATE ON public.communications_templates FOR EACH ROW EXECUTE FUNCTION public.communications_set_updated_at();
+CREATE TRIGGER update_quant_bots_modtime BEFORE UPDATE ON public.quant_bots FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+CREATE TRIGGER update_quant_exchanges_modtime BEFORE UPDATE ON public.quant_exchanges FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+CREATE TRIGGER update_quant_market_config_modtime BEFORE UPDATE ON public.quant_market_config FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+CREATE TRIGGER update_quant_strategies_modtime BEFORE UPDATE ON public.quant_strategies FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+CREATE POLICY "Admins can manage brands" ON public.brands USING ((auth.role() = 'authenticated'::text)) WITH CHECK ((auth.role() = 'authenticated'::text));
+CREATE POLICY "Allow public read access to market history" ON public.quant_market_history FOR SELECT USING (true);
+CREATE POLICY "Allow read access to market config" ON public.quant_market_config FOR SELECT USING (true);
+CREATE POLICY "Anyone can view active tenants" ON public.tenants FOR SELECT USING ((is_active = true));
+CREATE POLICY "Certified assets are viewable by all users" ON public.quant_assets FOR SELECT USING (true);
+CREATE POLICY "Marketing admins can delete OAuth connections" ON public.oauth_connections FOR DELETE TO authenticated USING (public.has_marketing_role('admin'::text));
+CREATE POLICY "Marketing admins can delete campaign publications" ON public.marketing_campaign_publications FOR DELETE TO authenticated USING (public.has_marketing_role('admin'::text));
+CREATE POLICY "Marketing admins can delete campaigns" ON public.marketing_campaigns FOR DELETE TO authenticated USING (public.has_marketing_role('admin'::text));
+CREATE POLICY "Marketing admins can delete links" ON public.marketing_links FOR DELETE TO authenticated USING (public.has_marketing_role('admin'::text));
+CREATE POLICY "Marketing admins can delete social profiles" ON public.social_profiles FOR DELETE TO authenticated USING (public.has_marketing_role('admin'::text));
+CREATE POLICY "Marketing editors can create campaign publications" ON public.marketing_campaign_publications FOR INSERT TO authenticated WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can create campaigns" ON public.marketing_campaigns FOR INSERT TO authenticated WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can create links" ON public.marketing_links FOR INSERT TO authenticated WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can create social profiles" ON public.social_profiles FOR INSERT TO authenticated WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can manage OAuth connections" ON public.oauth_connections FOR INSERT TO authenticated WITH CHECK ((public.has_marketing_role('editor'::text) AND (created_by = auth.uid())));
+CREATE POLICY "Marketing editors can update OAuth connections" ON public.oauth_connections FOR UPDATE TO authenticated USING (public.has_marketing_role('editor'::text)) WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can update campaign publications" ON public.marketing_campaign_publications FOR UPDATE TO authenticated USING (public.has_marketing_role('editor'::text)) WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can update campaigns" ON public.marketing_campaigns FOR UPDATE TO authenticated USING (public.has_marketing_role('editor'::text)) WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can update links" ON public.marketing_links FOR UPDATE TO authenticated USING (public.has_marketing_role('editor'::text)) WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing editors can update social profiles" ON public.social_profiles FOR UPDATE TO authenticated USING (public.has_marketing_role('editor'::text)) WITH CHECK (public.has_marketing_role('editor'::text));
+CREATE POLICY "Marketing users can read OAuth connections" ON public.oauth_connections FOR SELECT TO authenticated USING (public.has_marketing_role('viewer'::text));
+CREATE POLICY "Marketing users can read campaign publications" ON public.marketing_campaign_publications FOR SELECT TO authenticated USING (public.has_marketing_role('viewer'::text));
+CREATE POLICY "Marketing users can read campaigns" ON public.marketing_campaigns FOR SELECT TO authenticated USING (public.has_marketing_role('viewer'::text));
+CREATE POLICY "Marketing users can read link clicks" ON public.marketing_link_clicks FOR SELECT TO authenticated USING (public.has_marketing_role('viewer'::text));
+CREATE POLICY "Marketing users can read links" ON public.marketing_links FOR SELECT TO authenticated USING (public.has_marketing_role('viewer'::text));
+CREATE POLICY "Marketing users can read their social profiles" ON public.social_profiles FOR SELECT TO authenticated USING (public.has_marketing_role('viewer'::text));
+CREATE POLICY "Public read access for market data" ON public.quant_market_history FOR SELECT USING (true);
+CREATE POLICY "Users can create brands" ON public.brands FOR INSERT WITH CHECK ((auth.uid() IS NOT NULL));
+CREATE POLICY "Users can manage their own risk settings" ON public.quant_risk_settings USING (((tenant_id = auth.uid()) OR (tenant_id = '00000000-0000-0000-0000-000000000000'::uuid)));
+CREATE POLICY "Users can only see signals from their bots" ON public.quant_signals USING (((tenant_id = auth.uid()) OR (tenant_id = '00000000-0000-0000-0000-000000000000'::uuid)));
+CREATE POLICY "Users can only view results of their strategies" ON public.strategy_backtest_results USING ((strategy_id IN ( SELECT quant_strategies.id
+CREATE POLICY "Users can only view their tenant's bots" ON public.quant_bots USING (((tenant_id = auth.uid()) OR (tenant_id = '00000000-0000-0000-0000-000000000000'::uuid)));
+CREATE POLICY "Users can only view their tenant's exchanges" ON public.quant_exchanges USING (((tenant_id = auth.uid()) OR (tenant_id = '00000000-0000-0000-0000-000000000000'::uuid)));
+CREATE POLICY "Users can only view their tenant's orders" ON public.quant_orders USING (((tenant_id = auth.uid()) OR (tenant_id = '00000000-0000-0000-0000-000000000000'::uuid)));
+CREATE POLICY "Users can only view their tenant's positions" ON public.quant_positions USING (((tenant_id = auth.uid()) OR (tenant_id = '00000000-0000-0000-0000-000000000000'::uuid)));
+CREATE POLICY "Users can only view their tenant's strategies" ON public.quant_strategies USING (((tenant_id = auth.uid()) OR (tenant_id = '00000000-0000-0000-0000-000000000000'::uuid)));
+CREATE POLICY "Users can view brands" ON public.brands FOR SELECT USING ((auth.uid() IS NOT NULL));
+CREATE POLICY "Users can view brands of their own tenant" ON public.brands FOR SELECT USING ((auth.role() = 'authenticated'::text));

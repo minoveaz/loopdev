@@ -42,8 +42,10 @@ export function ActivityPanel() {
 
   // Dynamic back button header for detailed forms
   const renderDetailHeader = (title: string) => (
-    <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-3 mb-4 select-none">
-      <button
+    <div className="flex items-center justify-between border-b border-border-technical pb-3 mb-4 select-none">
+      <Button
+        variant="ghost"
+        size="sm"
         type="button"
         onClick={() => {
           cancelEdit();
@@ -53,12 +55,12 @@ export function ActivityPanel() {
       >
         <Icon name="arrow_back" size="sm" />
         <span>Volver a Bitácora y Archivos</span>
-      </button>
+      </Button>
       <LpdText
         size="nano"
         weight="black"
         variant="mono"
-        className="text-text-muted dark:text-slate-400 uppercase tracking-widest"
+        className="text-text-muted uppercase tracking-widest"
       >
         {title}
       </LpdText>
@@ -66,7 +68,7 @@ export function ActivityPanel() {
   );
 
   const renderFormActions = () => (
-    <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-slate-200 dark:border-white/5 select-none">
+    <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-border-technical select-none">
       <Button
         variant="outline"
         size="sm"
@@ -100,7 +102,7 @@ export function ActivityPanel() {
         <LpdText
           size="xs"
           weight="bold"
-          className="text-text-main dark:text-white border-b border-slate-200 dark:border-white/5 pb-1 mb-1"
+          className="text-text-main border-b border-border-technical pb-1 mb-1"
         >
           Información Demográfica B2C
         </LpdText>
@@ -153,7 +155,7 @@ export function ActivityPanel() {
         <LpdText
           size="xs"
           weight="bold"
-          className="text-text-main dark:text-white border-b border-slate-200 dark:border-white/5 pb-1 mb-1"
+          className="text-text-main border-b border-border-technical pb-1 mb-1"
         >
           Dirección Residencial
         </LpdText>
@@ -233,10 +235,10 @@ export function ActivityPanel() {
             onChange={handleEditChange}
             size="sm"
           >
-            <option value="Mensual">Mensual 📅</option>
-            <option value="Trimestral">Trimestral 🗓️</option>
-            <option value="Semestral">Semestral 🗓️</option>
-            <option value="Anual">Anual 📆</option>
+            <option value="Mensual">Mensual</option>
+            <option value="Trimestral">Trimestral</option>
+            <option value="Semestral">Semestral</option>
+            <option value="Anual">Anual</option>
           </Select>
           <Select
             name="contractType"
@@ -245,9 +247,9 @@ export function ActivityPanel() {
             onChange={handleEditChange}
             size="sm"
           >
-            <option value="Individual">Plan Individual 👤</option>
-            <option value="Familiar">Plan Familiar Plus 👨‍👩‍👧‍👦</option>
-            <option value="Corporativo">Plan Corporativo Colectivo 🏢</option>
+            <option value="Individual">Plan Individual</option>
+            <option value="Familiar">Plan Familiar Plus</option>
+            <option value="Corporativo">Plan Corporativo Colectivo</option>
           </Select>
         </div>
 
@@ -256,12 +258,12 @@ export function ActivityPanel() {
         <LpdText
           size="xs"
           weight="bold"
-          className="text-text-main dark:text-white border-b border-slate-200 dark:border-white/5 pb-1 mb-1 select-none"
+          className="text-text-main border-b border-border-technical pb-1 mb-1 select-none"
         >
           Historial de Auditoría de Forecast
         </LpdText>
 
-        <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto custom-scrollbar text-[11px] text-slate-500 font-mono select-none">
+        <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto custom-scrollbar text-[11px] text-text-muted font-mono select-none">
           {lead.history?.map((h, idx) => (
             <div
               key={idx}
@@ -387,10 +389,10 @@ export function ActivityPanel() {
       const heightInMeters = h / 100;
       const bmi = w / (heightInMeters * heightInMeters);
       let classification = '';
-      if (bmi < 18.5) classification = 'Peso Bajo 🔵';
-      else if (bmi < 25) classification = 'Peso Normal ✅';
-      else if (bmi < 30) classification = 'Sobrepeso ⚠️';
-      else classification = 'Obesidad 🚨';
+      if (bmi < 18.5) classification = 'Peso Bajo';
+      else if (bmi < 25) classification = 'Peso Normal';
+      else if (bmi < 30) classification = 'Sobrepeso';
+      else classification = 'Obesidad';
 
       return { val: bmi.toFixed(1), class: classification };
     };
@@ -445,7 +447,7 @@ export function ActivityPanel() {
                     size="xs"
                     weight="bold"
                     variant="mono"
-                    className="text-slate-800 dark:text-slate-200 mt-0.5"
+                    className="text-text-main mt-0.5"
                   >
                     {bmi.val} kg/m²
                   </LpdText>
@@ -463,12 +465,12 @@ export function ActivityPanel() {
               onChange={handleEditChange}
               size="sm"
             >
-              <option value="No">No fuma 🚭</option>
-              <option value="Sí">Sí fuma 🚬</option>
+              <option value="No">No fuma</option>
+              <option value="Sí">Sí fuma</option>
             </Select>
             <Input
               name="preExistingConditions"
-              label="Enfermedades Preexistentes"
+              variant="outline"
               value={editedLead.preExistingConditions || ''}
               onChange={handleEditChange}
               placeholder="Ej. Hipertensión, Diabetes tipo 2"
@@ -478,6 +480,7 @@ export function ActivityPanel() {
               <Input
                 name="medicalNotes"
                 label="Observaciones Médicas / Tratamientos Activos"
+                variant="ghost"
                 value={editedLead.medicalNotes || ''}
                 onChange={handleEditChange}
                 size="sm"
@@ -503,70 +506,63 @@ export function ActivityPanel() {
   return (
     <div className="flex flex-col gap-4 w-full h-full">
       {/* Dynamic Tab Bar */}
-      <div className="flex border-b border-slate-200 dark:border-white/5 pb-0.5 mb-2 select-none">
-        <button
+      <div className="flex items-center gap-1 p-1 mb-2 rounded-lg border border-slate-200 bg-slate-100 dark:border-white/10 dark:bg-slate-950/60 select-none">
+        <Button
+          type="button"
+          variant="ghost"
           onClick={() => setActiveTab('timeline')}
-          className={`flex items-center gap-1.5 px-4 py-2 border-b-2 text-xs font-bold transition-all ${
+          className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold transition-all ${
             activeTab === 'timeline'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+              ? 'bg-white text-primary shadow-sm dark:bg-slate-800 dark:text-white'
+              : 'text-slate-500 hover:bg-white/70 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800/70 dark:hover:text-slate-200'
           }`}
         >
           <Icon name="feed" size="sm" />
-          <span>⚡ Bitácora de Actividad</span>
-        </button>
-        <button
+          <span className="truncate">Bitácora de Actividad</span>
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
           onClick={() => setActiveTab('documents')}
-          className={`flex items-center gap-1.5 px-4 py-2 border-b-2 text-xs font-bold transition-all ${
+          className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold transition-all ${
             activeTab === 'documents'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+              ? 'bg-white text-primary shadow-sm dark:bg-slate-800 dark:text-white'
+              : 'text-slate-500 hover:bg-white/70 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800/70 dark:hover:text-slate-200'
           }`}
         >
           <Icon name="upload" size="sm" />
-          <span>📁 Documentos e Historial ({lead.documents?.length || 0})</span>
-        </button>
+          <span className="truncate">Documentos e Historial ({lead.documents?.length || 0})</span>
+        </Button>
       </div>
 
       {/* Tab 1: Timeline Feed */}
       {activeTab === 'timeline' && (
         <div className="flex flex-col gap-3 max-h-[500px] overflow-y-auto custom-scrollbar pr-1 animate-in fade-in duration-200">
           {lead.activityLog && lead.activityLog.length > 0 ? (
-            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-white/5 flex flex-col gap-5 py-2 select-none">
+            <div className="relative ml-3 pl-8 border-l border-slate-300 dark:border-white/10 flex flex-col gap-4 py-1 select-none">
               {lead.activityLog.map((entry, idx) => {
                 // Determine icon mapping based on activity type
                 let iconName: string = ICON_REGISTRY.status.info;
-                let colorClasses = 'bg-slate-100 text-slate-500 border-slate-200';
 
                 if (entry.type === 'CALL') {
                   iconName = 'phone';
-                  colorClasses = 'bg-blue-500/10 text-blue-500 border-blue-500/20';
                 } else if (entry.type === 'NOTE') {
                   iconName = 'feed';
-                  colorClasses = 'bg-amber-500/10 text-amber-500 border-amber-500/20';
                 } else if (entry.type === 'TASK_CREATED' || entry.type === 'TASK_COMPLETED') {
                   iconName = 'task';
-                  colorClasses = 'bg-violet-500/10 text-violet-500 border-violet-500/20';
                 } else if (entry.type === 'DOCUMENT') {
                   iconName = 'upload';
-                  colorClasses = 'bg-teal-500/10 text-teal-500 border-teal-500/20';
                 } else if (entry.type === 'GENERIC') {
                   if (entry.action.toLowerCase().includes('whatsapp')) {
                     iconName = 'chat';
-                    colorClasses = 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
                   } else if (
                     entry.action.toLowerCase().includes('correo') ||
                     entry.action.toLowerCase().includes('email')
                   ) {
                     iconName = 'mail';
-                    colorClasses = 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20';
-                  } else {
-                    iconName = ICON_REGISTRY.status.info;
-                    colorClasses = 'bg-slate-100 text-slate-500 border-slate-200';
                   }
                 } else if (entry.type === 'STATUS_CHANGE') {
                   iconName = 'rocket';
-                  colorClasses = 'bg-rose-500/10 text-rose-500 border-rose-500/20';
                 }
 
                 return (
@@ -574,15 +570,14 @@ export function ActivityPanel() {
                     key={idx}
                     className="relative flex flex-col gap-1.5 animate-in fade-in duration-300"
                   >
-                    {/* Circle icon marker on the timeline line */}
                     <div
-                      className={`absolute -left-[37px] top-0.5 w-6 h-6 rounded-full border flex items-center justify-center ${colorClasses} text-[10px]`}
+                      className="absolute -left-[15px] top-1 w-7 h-7 rounded-md border border-border-technical bg-surface-elevated text-text-muted flex items-center justify-center text-[10px] ring-4 ring-slate-50 dark:ring-lpd-bg-dark"
                     >
                       <Icon name={iconName} size="sm" />
                     </div>
 
-                    <div className="flex items-center justify-between text-[10px]">
-                      <div className="flex items-center gap-1">
+                    <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-1 text-[10px]">
+                      <div className="flex min-w-0 items-center gap-2">
                         <LpdText
                           size="nano"
                           weight="bold"
@@ -591,27 +586,27 @@ export function ActivityPanel() {
                           {entry.actor}
                         </LpdText>
                         {entry.category && (
-                          <span className="text-[8px] font-bold uppercase tracking-wide bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/5 px-1.5 py-0.5 rounded-full select-none">
+                            <span className="text-[8px] font-bold uppercase tracking-wide text-text-muted dark:text-slate-400 border-l border-slate-300 dark:border-white/15 pl-2 select-none">
                             {entry.category}
                           </span>
                         )}
                       </div>
-                      <LpdText size="nano" variant="mono" className="text-text-muted">
+                      <LpdText size="nano" variant="mono" className="shrink-0 text-text-muted dark:text-slate-500">
                         {new Date(entry.timestamp).toLocaleString()}
                       </LpdText>
                     </div>
 
-                    <TechnicalCard variant="flat" className="p-3">
+                    <TechnicalCard variant="flat" className="border border-slate-200/80 bg-white p-3 dark:border-white/10 dark:bg-slate-900/45">
                       <LpdText
                         size="xs"
-                        className="text-slate-800 dark:text-slate-200 leading-relaxed font-sans font-medium"
+                        className="text-text-main leading-relaxed font-sans font-medium"
                       >
                         {entry.action}
                       </LpdText>
                       {entry.details && (
                         <LpdText
                           size="xs"
-                          className="text-slate-500 dark:text-slate-400 mt-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg border border-slate-200/50 dark:border-white/5 font-sans leading-relaxed whitespace-pre-wrap"
+                          className="mt-2 border-l-2 border-slate-200 bg-slate-50 px-2.5 py-2 text-slate-500 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-400 font-sans leading-relaxed whitespace-pre-wrap"
                         >
                           {entry.details}
                         </LpdText>
@@ -622,7 +617,7 @@ export function ActivityPanel() {
               })}
             </div>
           ) : (
-            <div className="p-8 text-center text-xs text-slate-400 dark:text-slate-500 font-sans select-none">
+            <div className="p-8 text-center text-xs text-text-muted font-sans select-none">
               No hay actividades registradas en la bitácora de este lead.
             </div>
           )}
@@ -648,10 +643,10 @@ export function ActivityPanel() {
                   onChange={(e) => setUploadCategory(e.target.value)}
                   size="sm"
                 >
-                  <option value="Identificación">Cédula / Identidad 🪪</option>
-                  <option value="Soporte Médico">Declaración / Historial Médico 🏥</option>
-                  <option value="Financiero">Soporte de Ingresos / Bancario 💵</option>
-                  <option value="Contrato Firmado">Contrato / Póliza Firmada 📄</option>
+                  <option value="Identificación">Cédula / Identidad</option>
+                  <option value="Soporte Médico">Declaración / Historial Médico</option>
+                  <option value="Financiero">Soporte de Ingresos / Bancario</option>
+                  <option value="Contrato Firmado">Contrato / Póliza Firmada</option>
                 </Select>
               </div>
 
@@ -720,19 +715,20 @@ export function ActivityPanel() {
                         }`}
                       >
                         {doc.status === 'verified'
-                          ? 'Validado ✅'
+                          ? 'Validado'
                           : doc.status === 'error'
-                            ? 'Rechazado 🚨'
-                            : 'Pendiente ⏳'}
+                            ? 'Rechazado'
+                            : 'Pendiente'}
                       </span>
 
-                      <button
+                      <Button
+                        variant="ghost"
                         onClick={() => handleDocumentDelete(doc.id)}
                         className="text-text-muted hover:text-rose-500 p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
                         title="Eliminar archivo"
                       >
                         <Icon name={ICON_REGISTRY.actions.delete} size="sm" />
-                      </button>
+                      </Button>
                     </div>
                   </TechnicalCard>
                 ))}

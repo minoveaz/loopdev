@@ -111,7 +111,7 @@ export const TimelineSkeleton: React.FC = () => (
   <div className="space-y-8 pl-4 border-l-2 border-slate-100 dark:border-white/5">
     {[1, 2, 3].map((i) => (
       <div key={i} className="relative">
-        <div className="absolute -left-[21px] top-1 w-4 h-4 bg-slate-200 dark:bg-white/10 rounded-full border-4 border-white dark:border-[#0F1115]" />
+        <div className="absolute -left-[21px] top-1 w-4 h-4 bg-slate-200 dark:bg-white/10 rounded-full border-4 border-white dark:border-lpd-bg-dark" />
         <div className="space-y-2">
           <Skeleton variant="text" width={120} height={14} />
           <Skeleton variant="text" width="100%" height={10} />

@@ -20,7 +20,14 @@ export const NavGroup: React.FC<NavGroupProps> = (props) => {
       {/* Etiqueta Técnica (Oculta en Rail Mode) */}
       {!isRail && (
         <div className="px-4 mb-1">
-          <TechnicalLabel variant="muted">
+          <TechnicalLabel
+            variant="muted"
+            size="xs"
+            weight="semibold"
+            fontFamily="sans"
+            isWide={false}
+            isUppercase={false}
+          >
             {label}
           </TechnicalLabel>
         </div>

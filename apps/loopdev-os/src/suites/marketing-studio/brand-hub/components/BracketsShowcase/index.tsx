@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BracketsShowcaseProps } from './types';
-import { LpdText } from '@loopdev/ui';
+import { Heading, LpdText } from '@loopdev/ui';
 
 /**
  * @component BracketsShowcase
@@ -19,7 +19,7 @@ export const BracketsShowcase: React.FC<BracketsShowcaseProps> = () => {
         {/* Visual Hero */}
         <div className="group relative overflow-hidden rounded-3xl border border-border-technical bg-background-surface dark:bg-background-laboratory min-h-[320px] flex flex-col items-center justify-center">
           {/* Grid Background */}
-          <div className="absolute inset-0 opacity-30 pointer-events-none bg-[linear-gradient(rgba(120,120,120,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+          <div className="absolute inset-0 opacity-30 pointer-events-none bg-background-subtle/30 bg-[size:40px_40px]"></div>
           
           <div className="relative z-10 flex items-center font-mono text-6xl md:text-8xl font-bold text-text-main tracking-tighter select-none">
             <span className="text-primary mr-4 transition-transform duration-700 group-hover:-translate-x-4">{`{`}</span>
@@ -37,7 +37,7 @@ export const BracketsShowcase: React.FC<BracketsShowcaseProps> = () => {
         {/* Text Context */}
         <div className="flex flex-col gap-4">
           <div className="p-8 rounded-3xl bg-background-surface border border-border-technical flex-1">
-            <LpdText size="lg" weight="bold" className="text-text-main mb-3">Concept & Role</LpdText>
+            <Heading as="h2" size="lg" weight="bold" className="text-text-main mb-3">Concept & Role</Heading>
             <LpdText size="sm" className="text-text-muted leading-relaxed mb-6">
               The curly brackets <span className="text-text-main font-mono bg-background-subtle px-1 rounded">{`{}`}</span> serve as a supporting brand element representing <strong>containment</strong> and <strong>modular systems</strong>. They visually frame content, signaling that the enclosed elements are part of a calculated, generative process.
             </LpdText>
@@ -77,8 +77,8 @@ export const BracketsShowcase: React.FC<BracketsShowcaseProps> = () => {
             <LpdText size="xs" className="text-text-muted">Primary Blue</LpdText>
           </div>
         </div>
-        <div className="p-4 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-mono text-xl font-bold">{`{`}</div>
+        <div className="p-4 rounded-2xl border border-energy-yellow/20 bg-energy-yellow/5 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-energy-yellow flex items-center justify-center text-text-main font-mono text-xl font-bold">{`{`}</div>
           <div>
             <LpdText size="sm" weight="bold" className="text-text-main">Emphasis</LpdText>
             <LpdText size="xs" className="text-text-muted">Brand Yellow</LpdText>

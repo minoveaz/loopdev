@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
+  BlueprintBackground,
+  LayoutProvider,
+  ModuleHeader,
+  ModuleWorkspace,
   SuiteSidebar,
   ThemeToggle,
   SystemStatus,
@@ -16,13 +20,16 @@ import {
   UserMenu,
   NotificationCenter,
   Divider,
+  TenantProvider,
+  ToastViewport,
 } from '@loopdev/ui';
-import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { SuiteHeaderLeft } from '@/components/layout/SuiteHeaderLeft';
 import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
 import { useAuth } from '@/hooks/useAuth';
+import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, type NavigationSchema } from '@loopdev/contracts';
+import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 // Local Navigation Schema for Health OS
 const HEALTH_OS_SCHEMA: NavigationSchema = {
@@ -31,7 +38,7 @@ const HEALTH_OS_SCHEMA: NavigationSchema = {
     suiteId: 'health-os',
     suiteName: 'Health OS',
     suiteIcon: 'Activity',
-    accentColor: '#10B981', // Emerald Green standard for Health
+    accentColor: 'var(--lpd-color-brand-primary)',
     surfaceVariant: 'canvas' as const,
     route: { routeId: '/health-os' },
   },
@@ -126,40 +133,8 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
-  // --- FORCE LIGHT MODE & EMERALD GREEN THEME ---
   useEffect(() => {
-    const root = document.documentElement;
-
-    // 1. Guardar estado del tema oscuro actual y forzar Tema Claro
-    const hadDark = root.classList.contains('dark');
-    root.classList.remove('dark');
-    root.classList.add('light');
-
-    // 2. Sobrescribir variables CSS con el Verde Esmeralda asistencial
-    root.style.setProperty('--lpd-color-brand-primary', '#10B981');
-    root.style.setProperty('--lpd-color-brand-primary-rgb', '16 185 129');
-    root.style.setProperty('--lpd-color-bg-primary-subtle', '#10B98126'); // Opaco
-    root.style.setProperty('--lpd-color-status-info', '#10B981');
-
-    return () => {
-      // Limpieza: Restaurar el tema oscuro original si existía
-      root.classList.remove('light');
-      if (hadDark) {
-        root.classList.add('dark');
-      }
-
-      // Restaurar el color azul corporativo predeterminado
-      root.style.setProperty('--lpd-color-brand-primary', '#135bec');
-      root.style.setProperty('--lpd-color-brand-primary-rgb', '19 91 236');
-      root.style.setProperty('--lpd-color-bg-primary-subtle', '#135bec26');
-      root.style.setProperty('--lpd-color-status-info', '#135bec');
-    };
-  }, []);
-
-  useEffect(() => {
-    if (pathname.split('/').length > 2) {
-      queueMicrotask(() => setNavMode('rail'));
-    }
+    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/health-os/agenda', '/health-os/triage', '/health-os/consultations', '/health-os/contracts', '/health-os/billing'] })));
   }, [pathname]);
 
   const currentSuite = HEALTH_OS_SCHEMA.suite;
@@ -182,6 +157,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   };
 
   return (
+    <SuitePermissionGuard permission="health.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -232,8 +208,6 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
               userName={user?.email || 'Medical User'}
               userEmail={user?.email}
               userRole="IPS_Clinician"
-              systemLabel="IPS"
-              userId={user?.id}
               notifications={notifications}
               unreadCount={unreadCount}
               onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
@@ -248,9 +222,23 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
         />
       }
     >
-      <SuiteContentFrame moduleId="health-os" tenant="estar-protegidos" activeTenantId="zonamedica">
-        {children}
-      </SuiteContentFrame>
+      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
+      <TenantProvider tenant="estar-protegidos">
+        <LayoutProvider>
+          <ToastViewport activeTenantId="zonamedica" />
+          <ModuleWorkspace
+            moduleId="health-os"
+            headerSlot={
+              <ModuleHeader
+                segments={[{ id: 'suite', label: 'Health OS', href: '/health-os', isActive: true }]}
+              />
+            }
+          >
+            {children}
+          </ModuleWorkspace>
+        </LayoutProvider>
+      </TenantProvider>
     </AppShell>
+    </SuitePermissionGuard>
   );
 }

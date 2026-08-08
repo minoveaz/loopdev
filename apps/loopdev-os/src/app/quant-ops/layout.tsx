@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
+  BlueprintBackground,
+  LayoutProvider,
+  ModuleHeader,
+  ModuleWorkspace,
   SuiteSidebar,
   QUANT_OPS_SCHEMA,
   ThemeToggle,
@@ -17,19 +21,24 @@ import {
   UserMenu,
   NotificationCenter,
   Divider,
+  TenantProvider,
+  ToastViewport,
 } from '@loopdev/ui';
-import { SuiteContentFrame } from '@/components/layout/SuiteContentFrame';
 import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
 import { useAuth } from '@/hooks/useAuth';
+import { useOrganization } from '@/hooks/useOrganization';
+import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext } from '@loopdev/contracts';
 import { QuantOpsProvider, useQuantOps } from './context';
 import { BotInspectorIndustrial } from './components/BotInspector';
+import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOut } = useAuth();
+  const { activeOrganization } = useOrganization();
   const { isInspectorOpen, closeInspector } = useQuantOps();
 
   const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } =
@@ -40,9 +49,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    if (pathname.split('/').length > 2) {
-      queueMicrotask(() => setNavMode('rail'));
-    }
+    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/quant-ops/bot-fleet', '/quant-ops/strategies', '/quant-ops/terminal', '/quant-ops/history', '/quant-ops/risk-control', '/quant-ops/exchanges'] })));
   }, [pathname]);
 
   const currentSuite = QUANT_OPS_SCHEMA.suite;
@@ -66,6 +73,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   };
 
   return (
+    <SuitePermissionGuard permission="quant.read">
     <AppShell
       config={{
         isLeftSidebarOpen: navMode === 'expanded',
@@ -110,7 +118,9 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
               />
               <Divider orientation="vertical" thickness="technical" className="h-4" />
               <ContextPath
-                segments={[{ id: 'suite', label: 'Quant Ops', href: '/quant-ops', isActive: true }]}
+                segments={[
+                  { id: 'workspace', label: activeOrganization?.name ?? 'Workspace', isActive: true },
+                ]}
               />
             </div>
           }
@@ -120,8 +130,6 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
               userName={user?.email || 'Quant User'}
               userEmail={user?.email}
               userRole="Quant_Architect"
-              systemLabel="TID"
-              userId={user?.id}
               notifications={notifications}
               unreadCount={unreadCount}
               onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
@@ -136,17 +144,27 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
         />
       }
     >
-      <SuiteContentFrame
-        moduleId="quant-ops"
-        tenant="loopdev"
-        activeTenantId="loopdev"
-        inspectorOpen={isInspectorOpen}
-        onInspectorChange={(open) => !open && closeInspector()}
-        inspectorSlot={<BotInspectorIndustrial />}
-      >
-        {children}
-      </SuiteContentFrame>
+      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
+      <TenantProvider tenant="loopdev">
+        <LayoutProvider>
+          <ToastViewport activeTenantId="loopdev" />
+          <ModuleWorkspace
+            moduleId="quant-ops"
+            inspectorOpen={isInspectorOpen}
+            onInspectorChange={(open) => !open && closeInspector()}
+            inspectorSlot={<BotInspectorIndustrial />}
+            headerSlot={
+              <ModuleHeader
+                segments={[{ id: 'suite', label: 'Quant Ops', href: '/quant-ops', isActive: true }]}
+              />
+            }
+          >
+            {children}
+          </ModuleWorkspace>
+        </LayoutProvider>
+      </TenantProvider>
     </AppShell>
+    </SuitePermissionGuard>
   );
 }
 
