@@ -615,7 +615,7 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 - [x] Crear servicios server-side para operaciones sensibles; el vault de Quant centraliza autorización, lectura, alta y prueba de conexiones fuera de los Route Handlers.
 - [x] Centralizar mapeos snake_case/camelCase para CRM; los siguientes servicios reutilizarán este límite validado.
 - [ ] Generar tipos de base de datos desde Supabase.
-- [ ] Prohibir tipos locales duplicados en módulos nuevos.
+- [x] Prohibir tipos locales duplicados en módulos nuevos mediante `contracts:ownership:check`, integrado en `quality:static` sin depender de Docker.
 
 **Criterio:** cada entidad compartida tiene un contrato único y validación de entrada/salida.
 
