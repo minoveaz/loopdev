@@ -42,20 +42,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
-
-      - name: Frontend quality gate
-        run: pnpm front:check
-
-      - name: Build shared contracts
-        run: pnpm --filter @loopdev/contracts build
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Unit and component tests
-        run: pnpm test:coverage
+      - name: CI validation
+        run: pnpm validate:ci
 
       - name: Upload coverage report
         if: always()
@@ -64,6 +52,3 @@ jobs:
           name: coverage-${{ github.sha }}
           path: coverage/
           if-no-files-found: ignore
-
-      - name: Production build
-        run: pnpm build
