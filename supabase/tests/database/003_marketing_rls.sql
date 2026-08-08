@@ -59,7 +59,7 @@ select lives_ok($$ insert into public.marketing_campaign_records (organization_i
  select throws_ok(
    $$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by)
       values ('00000000-0000-4000-9100-000000000002', '00000000-0000-4000-9200-000000000002', '00000000-0000-4000-9300-000000000002', 'Cross tenant', 'RLS fixture', '00000000-0000-4000-8100-000000000001', '00000000-0000-4000-8100-000000000001') $$,
-   '42501: new row violates row-level security policy for table "marketing_campaign_records"',
+  'new row violates row-level security policy for table "marketing_campaign_records"',
    'owner cannot create campaign in another organization'
  );
 
@@ -71,7 +71,7 @@ select is((select count(*)::integer from public.marketing_campaign_publications)
  select throws_ok(
    $$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by)
       values ('00000000-0000-4000-8100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Viewer cross tenant', 'RLS fixture', '00000000-0000-4000-8100-000000000002', '00000000-0000-4000-8100-000000000002') $$,
-   '42501: new row violates row-level security policy for table "marketing_campaign_records"',
+  'new row violates row-level security policy for table "marketing_campaign_records"',
    'viewer cannot create campaign'
  );
 
