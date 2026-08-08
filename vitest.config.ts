@@ -15,10 +15,13 @@ export default defineConfig({
         },
       },
       {
+        resolve: {
+          alias: { '@': path.resolve(root, 'apps/loopdev-os/src') },
+        },
         test: {
           name: 'loopdev-os',
           root: path.resolve(root, 'apps/loopdev-os'),
-          include: ['src/{core,lib}/**/*.test.ts'],
+          include: ['src/{core,lib,services}/**/*.test.ts'],
         },
       },
     ],
