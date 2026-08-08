@@ -33,8 +33,8 @@ values
   ('00000000-0000-4000-9300-000000000001', '00000000-0000-4000-9100-000000000001', '00000000-0000-4000-9200-000000000001'),
   ('00000000-0000-4000-9300-000000000002', '00000000-0000-4000-9100-000000000002', '00000000-0000-4000-9200-000000000002');
 
-insert into public.marketing_campaigns (id, name, objective)
-values ('marketing-legacy-a', 'Legacy campaign A', 'RLS fixture');
+insert into public.marketing_campaigns (id, name, objective, organization_id, brand_id, workspace_id)
+values ('marketing-legacy-a', 'Legacy campaign A', 'RLS fixture', '00000000-0000-4000-9100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001');
 
 insert into public.marketing_campaign_records (id, legacy_id, organization_id, brand_id, workspace_id, name, objective, created_by, updated_by)
 values ('00000000-0000-4000-9400-000000000001', 'marketing-legacy-a', '00000000-0000-4000-9100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Campaign A', 'RLS fixture', '00000000-0000-4000-8100-000000000001', '00000000-0000-4000-8100-000000000001');

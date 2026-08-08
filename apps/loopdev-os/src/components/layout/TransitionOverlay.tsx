@@ -6,12 +6,14 @@ import { LogoSpinner } from '@loopdev/ui';
 const TRANSITION_KEY = 'loopdev.organizationTransition';
 
 export function TransitionOverlay() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(() => (
+    typeof window !== 'undefined'
+    && window.sessionStorage.getItem(TRANSITION_KEY) === 'pending'
+  ));
 
   useLayoutEffect(() => {
     if (window.sessionStorage.getItem(TRANSITION_KEY) !== 'pending') return;
     window.sessionStorage.removeItem(TRANSITION_KEY);
-    setIsVisible(true);
     const timeout = window.setTimeout(() => setIsVisible(false), 1500);
     return () => window.clearTimeout(timeout);
   }, []);
