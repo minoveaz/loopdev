@@ -1,13 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createAdminSupabaseClient } from '@/lib/supabase/admin';
 import { authorizeQuantManagement } from '@/services/quant/authorization';
+import { createExchangeConnection, listExchangeConnections } from '@/services/quant/exchangeVault';
 
 const unauthorized = () => NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 const forbidden = () => NextResponse.json({ error: 'Quant management permission is required' }, { status: 403 });
-type ExchangeWithSecret = {
-  id: string; name: string; exchange_provider: string; is_active: boolean;
-  last_verified_at: string | null; last_error_message: string | null; created_at: string; api_key: string;
-};
 
 export async function GET(request: Request) {
   const organizationId = new URL(request.url).searchParams.get('organizationId');
@@ -16,20 +12,8 @@ export async function GET(request: Request) {
   const access = await authorizeQuantManagement(organizationId);
   if (!access.allowed) return access.status === 401 ? unauthorized() : forbidden();
 
-  const admin = createAdminSupabaseClient();
-  const { data, error } = await admin
-    .from('quant_exchanges')
-    .select('id, name, exchange_provider, is_active, last_verified_at, last_error_message, created_at, api_key')
-    .eq('organization_id', organizationId)
-    .order('created_at', { ascending: false });
-  if (error) return NextResponse.json({ error: 'Unable to load exchanges' }, { status: 500 });
-
-  return NextResponse.json(
-    ((data ?? []) as ExchangeWithSecret[]).map(({ api_key, ...exchange }) => ({
-      ...exchange,
-      apiKeyMasked: api_key.length > 8 ? `${api_key.slice(0, 4)}...${api_key.slice(-4)}` : 'Configured',
-    })),
-  );
+  try { return NextResponse.json(await listExchangeConnections(organizationId)); }
+  catch { return NextResponse.json({ error: 'Unable to load exchanges' }, { status: 500 }); }
 }
 
 export async function POST(request: Request) {
@@ -46,22 +30,6 @@ export async function POST(request: Request) {
   const access = await authorizeQuantManagement(organizationId);
   if (!access.allowed) return access.status === 401 ? unauthorized() : forbidden();
 
-  const admin = createAdminSupabaseClient();
-  const { data: organization, error: organizationError } = await admin
-    .from('organizations')
-    .select('legacy_tenant_id')
-    .eq('id', organizationId)
-    .single();
-  if (organizationError || !organization?.legacy_tenant_id) {
-    return NextResponse.json({ error: 'The organization has no legacy tenant mapping' }, { status: 409 });
-  }
-
-  const { data, error } = await admin
-    .from('quant_exchanges')
-    .insert({ organization_id: organizationId, tenant_id: organization.legacy_tenant_id, name, exchange_provider: provider, api_key: apiKey, api_secret: apiSecret, is_active: true })
-    .select('id, name, exchange_provider, is_active, last_verified_at, last_error_message, created_at')
-    .single();
-  if (error) return NextResponse.json({ error: 'Unable to save the exchange connection' }, { status: 500 });
-
-  return NextResponse.json({ ...data, apiKeyMasked: apiKey.length > 8 ? `${apiKey.slice(0, 4)}...${apiKey.slice(-4)}` : 'Configured' }, { status: 201 });
+  try { return NextResponse.json(await createExchangeConnection({ organizationId, name, provider, apiKey, apiSecret }), { status: 201 }); }
+  catch (error) { return NextResponse.json({ error: error instanceof Error && error.message === 'ORGANIZATION_MAPPING_MISSING' ? 'The organization has no legacy tenant mapping' : 'Unable to save the exchange connection' }, { status: error instanceof Error && error.message === 'ORGANIZATION_MAPPING_MISSING' ? 409 : 500 }); }
 }
