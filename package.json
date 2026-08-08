@@ -12,6 +12,8 @@
     "typecheck": "turbo typecheck",
     "test": "vitest run --config vitest.config.ts",
     "test:coverage": "vitest run --config vitest.config.ts --coverage",
+    "e2e:desktop": "playwright test --project=desktop",
+    "e2e:mobile:diagnostic": "playwright test --project=mobile --project=mobile-compact --reporter=line",
     "tests:scope": "node scripts/check-vitest-scope.mjs",
     "format": "prettier --write .",
     "format:check": "node scripts/check-format-changed.mjs",
@@ -32,7 +34,9 @@
     "validate:tokens": "node scripts/validate-tokens-sync.js"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.55.0",
     "@types/node": "^25.0.3",
     "@vitest/coverage-v8": "4.0.16",
     "chalk": "4",

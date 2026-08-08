@@ -18,6 +18,8 @@ export interface AppShellProps {
   bannerSlot?: ReactNode;
   /** Slot para la Status Bar inferior */
   footerSlot?: ReactNode;
+  /** Navegación persistente para mobile; recibe la acción para abrir el drawer */
+  mobileBottomSlot?: ReactNode | ((openMobileNav: () => void) => ReactNode);
 
   /** Configuración de estado visual */
   config?: {

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { AppShellProps } from './types';
 import { useAppShell } from './useAppShell';
 
@@ -20,43 +20,53 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     overlaySlot,
     bannerSlot,
     footerSlot,
+    mobileBottomSlot,
     onToggleLeftSidebar,
-    onToggleRightSidebar
+    onToggleRightSidebar,
   } = props;
-
-  const { 
-    styleTokens, 
-    isNavRendered, 
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return true;
+    return window.matchMedia('(min-width: 1024px)').matches;
+  });
+  const isMobileViewport =
+    typeof window !== 'undefined' && window.matchMedia?.('(max-width: 1023px)').matches === true;
+  const {
+    styleTokens,
+    isNavRendered,
     isContextRendered,
     isNavOpen,
     isContextOpen,
     navMode,
     scrollbarClass,
-    activeOverlay
+    activeOverlay,
   } = useAppShell(props);
+  const isMobileNavVisible = isMobileViewport ? isMobileNavOpen : isNavOpen;
 
   return (
-    <div 
+    <div
       style={styleTokens as React.CSSProperties}
       className={`flex h-screen w-full bg-shell-canvas text-slate-900 dark:text-white overflow-hidden font-sans @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
     >
       {/* Accesibilidad: Primer elemento del DOM para navegación por teclado */}
-      <a 
-        href="#main-content" 
+      <a
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-lg z-[5000] shadow-2xl font-bold uppercase text-[10px] tracking-widest"
       >
         Skip to main content
       </a>
 
       {/* 0. BACKDROP */}
-      {(isNavOpen || isContextOpen) && (
-        <div 
+      {((isMobileViewport ? isMobileNavVisible : isNavOpen) || isContextOpen) && (
+        <div
           role="presentation"
           aria-hidden="true"
           onClick={() => {
             if (activeOverlay === 'context' || (!activeOverlay && isContextOpen)) {
               props.onRequestCloseContext?.('backdrop');
             } else {
+              if (window.matchMedia?.('(max-width: 1023px)').matches) {
+                setIsMobileNavOpen(false);
+              }
               props.onRequestCloseNav?.('backdrop');
             }
           }}
@@ -66,22 +76,38 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
 
       {/* 1. LEFT SIDEBAR */}
       {isNavRendered && (
-        <nav 
+        <nav
           id="app-shell-nav"
           aria-label="Global Navigation"
           className={`
             flex-shrink-0 border-r border-black/5 dark:border-white/5 bg-white dark:bg-background-dark transition-all duration-300 
             overflow-hidden 
             absolute inset-y-0 left-0 shadow-2xl z-[var(--app-shell-z-nav)]
-            ${isNavOpen ? 'translate-x-0' : '-translate-x-full'}
+            ${isMobileNavVisible ? 'translate-x-0' : '-translate-x-full'}
             @lg:relative @lg:translate-x-0 @lg:shadow-none @lg:z-10
             ${navMode === 'rail' ? 'select-none' : ''}
           `}
-          style={{ width: 'var(--app-shell-nav-width)' }}
+          style={{
+            width: isMobileViewport ? 'min(82vw, 320px)' : 'var(--app-shell-nav-width)',
+          }}
         >
-          <div className={`h-full flex flex-col overflow-y-auto ${scrollbarClass} overflow-x-hidden`}>
+          <div
+            className={`h-full flex flex-col overflow-y-auto ${scrollbarClass} overflow-x-hidden`}
+          >
             {navSlot}
           </div>
+          {isMobileViewport && isMobileNavVisible && (
+            <button
+              type="button"
+              aria-label="Close navigation"
+              onClick={() => setIsMobileNavOpen(false)}
+              className="absolute right-3 top-3 z-20 flex size-9 items-center justify-center rounded-md bg-white/90 text-slate-600 shadow-sm dark:bg-background-dark/90 dark:text-slate-300 lg:hidden"
+            >
+              <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+                close
+              </span>
+            </button>
+          )}
         </nav>
       )}
 
@@ -89,26 +115,45 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
       <div className="flex flex-col flex-1 min-w-0 relative">
         {bannerSlot && <div className="w-full shrink-0 z-30">{bannerSlot}</div>}
 
-        <header 
+        <header
           role="banner"
           style={{ height: 'var(--app-shell-header-height)' }}
           className="w-full shrink-0 relative z-[var(--app-shell-z-header)] select-none"
         >
+          {navSlot && onToggleLeftSidebar && !mobileBottomSlot && (
+            <button
+              type="button"
+              aria-label="Toggle navigation"
+              aria-expanded={isMobileNavVisible}
+              aria-controls="app-shell-nav"
+              onClick={() => {
+                setIsMobileNavOpen((open) => !open);
+                if (!isMobileViewport) {
+                  onToggleLeftSidebar();
+                }
+              }}
+              className="absolute left-3 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-slate-300 dark:hover:bg-white/10 lg:hidden"
+            >
+              <span className="material-symbols-outlined text-[22px]" aria-hidden="true">
+                menu
+              </span>
+            </button>
+          )}
           {headerSlot}
         </header>
 
         <div className="flex flex-1 min-h-0 overflow-hidden relative bg-shell-canvas">
-          <main 
+          <main
             id="main-content"
-            role="main" 
-            className={`flex-1 overflow-hidden relative z-10 flex flex-col ${(isNavOpen || isContextOpen) ? '@max-lg:pointer-events-none @max-lg:overflow-hidden' : ''}`}
+            role="main"
+            className={`flex-1 overflow-hidden relative z-10 flex flex-col pb-16 lg:pb-0 ${isMobileNavVisible || isContextOpen ? '@max-lg:pointer-events-none @max-lg:overflow-hidden' : ''}`}
           >
             {children}
           </main>
 
           {/* CONTEXT PANEL */}
           {isContextRendered && (
-            <aside 
+            <aside
               id="app-shell-context"
               role="complementary"
               aria-label="Context Panel"
@@ -127,7 +172,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
         </div>
 
         {footerSlot && (
-          <footer 
+          <footer
             role="contentinfo"
             style={{ height: 'var(--app-shell-footer-height)' }}
             className="border-t border-black/5 dark:border-white/5 bg-white dark:bg-background-dark shrink-0 flex items-center px-4 z-[var(--app-shell-z-header)] select-none"
@@ -140,6 +185,17 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
       <div className="fixed inset-0 z-[var(--app-shell-z-overlay)] pointer-events-none [&>*]:pointer-events-auto">
         {overlaySlot}
       </div>
+
+      {mobileBottomSlot && (
+        <nav
+          aria-label="Mobile suite navigation"
+          className="fixed inset-x-0 bottom-0 z-[var(--app-shell-z-header)] border-t border-black/10 bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_18px_rgba(15,23,42,0.08)] backdrop-blur-md dark:border-white/10 dark:bg-background-dark/95 lg:hidden"
+        >
+          {typeof mobileBottomSlot === 'function'
+            ? mobileBottomSlot(() => setIsMobileNavOpen(true))
+            : mobileBottomSlot}
+        </nav>
+      )}
     </div>
   );
 };

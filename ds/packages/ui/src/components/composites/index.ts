@@ -25,6 +25,7 @@ export * from './content/ContextBar';
 export * from './content/ResponsiveTable';
 export * from './navigation/UserMenu';
 export * from './navigation/SidebarFlyout';
+export * from './navigation/MobileSuiteNav';
 
 // utilities
 

@@ -15,24 +15,19 @@ export const SuiteHeader: React.FC<SuiteHeaderProps> = (props) => {
   const { containerClasses, style } = useSuiteHeader(props);
 
   return (
-    <header 
-      className={containerClasses}
-      style={style}
-      role="banner"
-      aria-hidden={isInert}
-    >
+    <header className={containerClasses} style={style} role="banner" aria-hidden={isInert}>
       {/* Cápsula Izquierda: Orientación */}
-      <div className="flex items-center gap-4 flex-1 min-w-0">
+      <div className="flex min-w-0 flex-1 items-center gap-2 pl-10 md:gap-4 md:pl-0">
         {leftSlot}
       </div>
 
       {/* Cápsula Central: Comando */}
-      <div className="flex-1 flex items-center justify-center min-w-0 px-4">
+      <div className="hidden min-w-0 flex-1 items-center justify-center px-4 md:flex">
         {centerSlot}
       </div>
 
       {/* Cápsula Derecha: Estado y Control */}
-      <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+      <div className="flex min-w-0 shrink-0 items-center justify-end gap-1 md:flex-1 md:gap-2">
         {rightSlot}
       </div>
     </header>

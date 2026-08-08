@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 import { UserMenu } from './index';
@@ -22,7 +22,16 @@ describe('UserMenu', () => {
 
     expect(await axe(container)).toHaveNoViolations();
   });
-});import { describe, it, expect, vi } from 'vitest';
+  it('shows the active tenant in the profile menu', () => {
+    render(<UserMenu {...userProps} tenantName="LoopDev Workspace" />);
+
+    fireEvent.pointerDown(screen.getByRole('button', { name: 'Abrir menú de usuario' }));
+
+    expect(screen.getByText('LoopDev Workspace')).toBeInTheDocument();
+  });
+});
+
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { UserMenu } from './index';
 import { USER_MENU_FIXTURES } from './fixtures';

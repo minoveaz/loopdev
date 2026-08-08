@@ -18,7 +18,8 @@ describe('SuiteSidebar', () => {
       />,
     );
 
-    expect(screen.getByText('Marketing Studio')).toBeInTheDocument();
+    expect(screen.queryByText('Marketing Studio')).not.toBeInTheDocument();
+    expect(screen.getByText('loop.dev')).toBeInTheDocument();
     expect(screen.queryByText('Brand Hub')).not.toBeInTheDocument();
     expect(screen.getByText('Suite Dashboard')).toBeInTheDocument();
   });
@@ -26,7 +27,6 @@ describe('SuiteSidebar', () => {
   it('fires main action callbacks from exit, settings and rail controls', () => {
     const onExitToOS = vi.fn();
     const onToggleNavMode = vi.fn();
-    const onNavigate = vi.fn();
     const onAction = vi.fn();
 
     render(
@@ -36,7 +36,7 @@ describe('SuiteSidebar', () => {
         accessMap={{}}
         onExitToOS={onExitToOS}
         onToggleNavMode={onToggleNavMode}
-        onNavigate={onNavigate}
+        onNavigate={vi.fn()}
         onAction={onAction}
       />,
     );
@@ -49,9 +49,6 @@ describe('SuiteSidebar', () => {
 
     fireEvent.click(screen.getByTitle('Contraer'));
     expect(onToggleNavMode).toHaveBeenCalledTimes(1);
-
-    fireEvent.click(screen.getByText('loop.dev'));
-    expect(onNavigate).toHaveBeenCalledWith({ routeId: '/marketing-studio' });
   });
 
   it('has no accessibility violations in expanded mode', async () => {

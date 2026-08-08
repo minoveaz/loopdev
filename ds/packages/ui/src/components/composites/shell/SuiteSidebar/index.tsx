@@ -8,16 +8,13 @@ import {
   ExitHatch,
   IdentityBar,
   TechnicalLabel,
-  ScrollArea
+  ScrollArea,
 } from '../../../atoms';
 import { SidebarFooter } from '../SidebarFooter';
-import { SidebarIdentity } from '../SidebarIdentity';
 import { PanelLeftClose, PanelLeftOpen, Settings, User } from 'lucide-react';
 import { SuiteSidebarProps } from './types';
 import { useSuiteSidebar } from './useSuiteSidebar';
-import {
-  NavSidebarGroup
-} from './components';
+import { NavSidebarGroup } from './components';
 
 /**
  * @component SuiteSidebar (Context Controller v1.0)
@@ -33,7 +30,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
     onAction,
     accessMap,
     telemetry = {},
-    profileSlot
+    profileSlot,
   } = props;
 
   const {
@@ -43,7 +40,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
     scrollAreaClasses,
     suite,
     exitHatch,
-    activeModuleId
+    activeModuleId,
   } = useSuiteSidebar(props);
 
   return (
@@ -54,18 +51,17 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
       className={`${containerClasses} h-full border-r border-border-technical bg-shell-canvas`}
     >
       <div className="flex flex-col h-full">
-
-        {/* A. Suite Identity Header (Fijo) */}
-        <SidebarIdentity
-          logo={<BrandLogo variant={isRail ? 'isotype' : 'full'} size="sm" />}
-          name={suite.suiteName}
-          accentColor={suite.accentColor}
-          isRail={isRail}
+        {/* A. Global LoopDev identity (Fijo) */}
+        <button
+          type="button"
+          className="flex shrink-0 items-center px-4 py-3 text-left"
           onClick={() => onNavigate(suite.route || { routeId: '/' })}
-        />
+          aria-label="LoopDev home"
+        >
+          <BrandLogo variant={isRail ? 'isotype' : 'full'} size="sm" />
+        </button>
 
-        {/* Separador Técnico 0.5px */}
-        <div className="mx-4 h-[0.5px] bg-black/5 dark:bg-white/10 shrink-0" />
+        <div className="mx-4 h-[0.5px] shrink-0 bg-black/5 dark:bg-white/10" />
 
         {/* B. Exit Hatch (Fijo) */}
         <section className="shrink-0">
@@ -98,13 +94,12 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
           </nav>
         </ScrollArea>
 
-        {/* E. Sidebar Footer (Fijo - Consola de Control) */}
+        {/* D. Sidebar Footer (Fijo - Consola de Control) */}
         <SidebarFooter
           isRail={isRail}
           onToggleRail={onToggleNavMode}
           onSettingsClick={() => onAction?.('openSettings')}
         />
-
       </div>
     </TechnicalSurface>
   );

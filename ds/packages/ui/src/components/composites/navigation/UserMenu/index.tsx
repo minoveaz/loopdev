@@ -1,34 +1,37 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  TechnicalDropdown, 
-  TechnicalMenuItem, 
-  TechnicalDropdownSeparator, 
+import {
+  TechnicalDropdown,
+  TechnicalMenuItem,
+  TechnicalDropdownSeparator,
   TechnicalDropdownGroup,
   UserAvatar,
   TechnicalLabel,
-  LpdText
+  LpdText,
 } from '../../../atoms';
 import { UserMenuProps } from './types';
 import { useUserMenu } from './useUserMenu';
 
 /**
  * @component UserMenu
- * @description Centro de gestión de perfil y sesión. 
+ * @description Centro de gestión de perfil y sesión.
  * Integra identidad de usuario con controles de plataforma.
  * @category Composites
  * @phase 1
  */
 export const UserMenu: React.FC<UserMenuProps> = (props) => {
-  const { userSrc, onLogout, onProfileClick, onSettingsClick, onBillingClick, onOpenChange } = props;
+  const {
+    userSrc,
+    tenantName,
+    onLogout,
+    onProfileClick,
+    onSettingsClick,
+    onBillingClick,
+    onOpenChange,
+  } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const { 
-    userName, 
-    displayEmail, 
-    formattedRole, 
-    headerClasses 
-  } = useUserMenu(props);
+  const { userName, displayEmail, formattedRole, headerClasses } = useUserMenu(props);
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -36,19 +39,16 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
   };
 
   return (
-    <TechnicalDropdown 
-      align="end" 
+    <TechnicalDropdown
+      align="end"
       open={isOpen}
       onOpenChange={handleOpenChange}
       trigger={
-        <button className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/35 p-0.5 transition-all duration-500 hover:border-primary hover:ring-4 hover:ring-primary/5 dark:border-white/10 dark:hover:border-primary/40" aria-label="Abrir menú de usuario">
-          <UserAvatar 
-            name={userName} 
-            src={userSrc} 
-            size="sm" 
-            withStatus 
-            status="online" 
-          />
+        <button
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/35 p-0.5 transition-all duration-500 hover:border-primary hover:ring-4 hover:ring-primary/5 dark:border-white/10 dark:hover:border-primary/40"
+          aria-label="Abrir menú de usuario"
+        >
+          <UserAvatar name={userName} src={userSrc} size="sm" withStatus status="online" />
         </button>
       }
     >
@@ -58,7 +58,13 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
           <LpdText size="sm" weight="bold" className="text-text-main dark:text-white">
             {userName.split('@')[0]}
           </LpdText>
-          
+
+          {tenantName && (
+            <span className="mt-1 truncate text-xs font-medium text-text-muted dark:text-slate-300">
+              {tenantName}
+            </span>
+          )}
+
           <div className="flex items-center gap-1.5 mt-1">
             <span className="text-micro font-sans text-text-muted truncate flex-1">
               {displayEmail}
@@ -71,31 +77,13 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
 
         {/* Acciones de Cuenta */}
         <div className="flex flex-col py-1">
-          <TechnicalMenuItem 
-            icon="User" 
-            label="Profile" 
-            shortcut="⌘P" 
-            onClick={onProfileClick} 
-          />
-          <TechnicalMenuItem 
-            icon="Settings" 
-            label="Account Settings" 
-            onClick={onSettingsClick} 
-          />
-          <TechnicalMenuItem 
-            icon="CreditCard" 
-            label="Billing" 
-            onClick={onBillingClick} 
-          />
+          <TechnicalMenuItem icon="User" label="Profile" shortcut="⌘P" onClick={onProfileClick} />
+          <TechnicalMenuItem icon="Settings" label="Account Settings" onClick={onSettingsClick} />
+          <TechnicalMenuItem icon="CreditCard" label="Billing" onClick={onBillingClick} />
         </div>
 
         <div className="border-t border-border-technical">
-          <TechnicalMenuItem 
-            icon="LogOut" 
-            label="Sign Out" 
-            variant="danger" 
-            onClick={onLogout} 
-          />
+          <TechnicalMenuItem icon="LogOut" label="Sign Out" variant="danger" onClick={onLogout} />
         </div>
       </div>
     </TechnicalDropdown>
