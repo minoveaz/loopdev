@@ -48,13 +48,14 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/marketing-studio/brand-hub'] })));
+    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/marketing-studio/brand-hub', '/marketing-studio/campaigns'] })));
   }, [pathname]);
 
   const currentSuite = MARKETING_STUDIO_SCHEMA.suite;
 
   const getActiveModule = () => {
     if (pathname.includes('/brand-hub')) return 'brand-hub';
+    if (pathname.startsWith('/marketing-studio/campaigns')) return 'campaign-orchestrator';
     if (pathname.startsWith('/marketing-studio/content')) return 'content-engine';
     if (pathname.startsWith('/marketing-studio/dam')) return 'dam';
     return 'overview';
@@ -65,6 +66,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   const accessMap: Record<string, ModuleAccessState> = {
     'overview': 'enabled',
     'brand-hub': 'enabled',
+    'campaign-orchestrator': 'enabled',
     'content-engine': 'disabled',
     'dam': 'coming-soon'
   };
