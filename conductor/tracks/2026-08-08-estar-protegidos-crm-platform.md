@@ -505,11 +505,11 @@ La eliminación del legacy queda para una fase posterior, después de migrar o a
 - [x] Crear estados normalizados de entrega.
 - [x] Crear idempotencia básica de mensajes y eventos webhook.
 - [x] Implementar scheduling de reintentos controlados y auditoría de estados.
-- [ ] Añadir worker/cola para ejecutar reintentos cuando llegue `next_retry_at`.
+- [ ] Añadir worker/cola para ejecutar reintentos cuando llegue `next_retry_at`, una vez exista un adaptador de proveedor real.
 - [ ] Añadir permisos y consentimiento por canal.
 - [ ] Crear una interfaz server-side común para CRM, Marketing Studio e Insurance Pack.
 
-**Salida:** infraestructura de comunicación reutilizable sin acoplarla al CRM.
+**Salida parcial:** Communications Core persistente y reutilizable, con APIs protegidas, estados normalizados, auditoría e idempotencia. La ejecución automática de reintentos queda pendiente de los adaptadores de proveedores. El siguiente bloque es B5, WhatsApp inbound POC.
 
 ### Fase B5 — WhatsApp inbound POC
 
