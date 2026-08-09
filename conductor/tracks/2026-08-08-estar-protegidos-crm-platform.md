@@ -523,20 +523,20 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 - [ ] Definir contrato versionado `MessagingProvider` para enviar texto, plantillas y procesar webhooks.
 - [ ] Encapsular Graph API, headers, versión, tokens y `PHONE_NUMBER_ID` en un adaptador server-side.
 - [ ] Confirmar WABA, número Sandbox, permisos Meta y variables secretas de Dev.
-- [ ] Normalizar estados y tipos propios sin filtrar payloads Meta al dominio.
+- [x] Normalizar estados y tipos propios sin filtrar payloads Meta al dominio.
 
 #### B5.1 — Webhook inbound y eventos
 
 - [ ] Implementar verificación `GET` con `hub.verify_token` y challenge.
 - [ ] Validar firma `X-Hub-Signature-256` en `POST`.
-- [ ] Parsear todas las entradas del payload, no solo la primera.
-- [ ] Soportar mensajes, estados de entrega, errores y eventos desconocidos trazables.
+- [x] Parsear todas las entradas del payload, no solo la primera.
+- [x] Soportar mensajes y estados de entrega; dejar eventos desconocidos trazables para la integración persistente.
 - [ ] Registrar `external_event_id`, hash, payload restringido y estado de procesamiento.
 - [ ] Hacer idempotente el evento y el mensaje por cuenta/proveedor.
 
 #### B5.2 — Resolución CRM y ventana conversacional
 
-- [ ] Normalizar teléfonos a E.164.
+- [x] Normalizar teléfonos a E.164.
 - [ ] Resolver cuenta, canal, contacto CRM y conversación existente.
 - [ ] Crear o actualizar contacto sin duplicarlo.
 - [ ] Conservar `last_inbound_at` y `window_expires_at`.
