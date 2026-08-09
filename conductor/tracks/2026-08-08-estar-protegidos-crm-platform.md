@@ -470,28 +470,132 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 ### Fase B3 — Captación y atribución
 
-- [ ] Crear contratos de fuentes, campañas, UTM y referidos.
-- [ ] Integrar leads desde formularios y Marketing Studio.
-- [ ] Preservar atribución por lead sin sobrescribir historiales.
-- [ ] Implementar idempotencia de entradas.
-- [ ] Asociar marca y workspace únicamente desde scopes autorizados.
-- [ ] Probar captación de dos marcas sin mezcla de datos.
+- [x] Crear contratos de fuentes, campañas, UTM y referidos.
+- [x] Implementar endpoint de captación CRM protegido.
+- [x] Reutilizar o crear contacto y crear el lead asociado.
+- [x] Preservar atribución por lead sin sobrescribir historiales.
+- [x] Asociar marca y workspace mediante las relaciones validadas por Supabase.
+- [x] Añadir tests de payload y normalización de captación.
+- [ ] Integrar formularios externos y Marketing Studio.
+- [x] Completar idempotencia por `external_lead_id` para reintentos de proveedores.
+- [ ] Probar captación remota de dos marcas sin mezcla de datos.
 
-**Salida:** cualquier canal puede crear o reutilizar contactos y crear leads correctamente atribuidos.
+**Salida parcial:** la API CRM ya captura contactos/leads, guarda atribución y evita duplicados cuando el proveedor reintenta el mismo `external_lead_id`. Queda conectar entradas externas/Marketing Studio y ejecutar pruebas remotas de dos marcas sin mezcla de atribución.
 
 ### Fase B4 — Communications Core
 
-- [ ] Crear modelo de cuentas, canales, conversaciones, mensajes y notas internas.
-- [ ] Crear referencias seguras a credenciales.
-- [ ] Definir mensajes conversacionales, marketing y transaccionales.
-- [ ] Crear estados normalizados de entrega.
-- [ ] Crear idempotencia, reintentos y auditoría.
+#### Decisión sobre el modelo de comunicaciones de la POC
+
+La auditoría del esquema legacy (`communications_*`) concluye que no será el modelo canónico del CRM. Fue diseñado para una POC de WhatsApp y tiene limitaciones estructurales: está restringido a WhatsApp, usa `workspace_id` como texto sin relación con la organización, duplica contactos fuera de `crm_contacts`, no soporta `brand_id` de forma consistente y mezcla conceptos de canal, contacto, conversación y proveedor.
+
+No se eliminarán esas tablas inmediatamente para no romper la POC ni perder trazabilidad. Quedarán como legacy/deprecadas y no recibirán nuevas funcionalidades. Communications Core tendrá un modelo nuevo alineado con CRM:
+
+- cuentas y canales por organización, con marca opcional y proveedor desacoplado;
+- conversaciones y mensajes referenciados al contacto canónico de `crm_contacts`;
+- notas internas, consentimientos y estados de entrega normalizados;
+- `organization_id` obligatorio y relaciones compuestas para workspace/marca;
+- eventos externos idempotentes, auditoría y referencias seguras a credenciales;
+- adaptadores de migración/lectura para la POC mientras se completa la transición.
+
+La eliminación del legacy queda para una fase posterior, después de migrar o archivar sus datos y verificar que ninguna ruta activa lo consume.
+
+- [x] Crear modelo de cuentas, canales, conversaciones, mensajes y notas internas.
+- [x] Crear referencias seguras a credenciales.
+- [x] Definir mensajes conversacionales, marketing y transaccionales.
+- [x] Crear estados normalizados de entrega.
+- [x] Crear idempotencia básica de mensajes y eventos webhook.
+- [x] Implementar scheduling de reintentos controlados y auditoría de estados.
+- [ ] Añadir worker/cola para ejecutar reintentos cuando llegue `next_retry_at`, una vez exista un adaptador de proveedor real.
 - [ ] Añadir permisos y consentimiento por canal.
 - [ ] Crear una interfaz server-side común para CRM, Marketing Studio e Insurance Pack.
 
-**Salida:** infraestructura de comunicación reutilizable sin acoplarla al CRM.
+**Salida parcial:** Communications Core persistente y reutilizable, con APIs protegidas, estados normalizados, auditoría e idempotencia. La ejecución automática de reintentos queda pendiente de los adaptadores de proveedores. El siguiente bloque es B5, WhatsApp inbound POC.
 
 ### Fase B5 — WhatsApp inbound POC
+
+La revisión de `whatsapp-poc` amplía B5: además del webhook inbound básico, debemos conservar el
+aislamiento del proveedor, el soporte de multimedia, plantillas, migración desde números personales,
+importación de historial y sugerencias supervisadas. Estas capacidades se implementarán sobre el
+Communications Core nuevo, no sobre las tablas legacy de la POC.
+
+#### B5.0 — Contrato y adaptador Meta Cloud API
+
+- [ ] Definir contrato versionado `MessagingProvider` para enviar texto, plantillas y procesar webhooks.
+- [ ] Encapsular Graph API, headers, versión, tokens y `PHONE_NUMBER_ID` en un adaptador server-side.
+- [ ] Confirmar WABA, número Sandbox, permisos Meta y variables secretas de Dev.
+- [x] Revisar la configuración de `whatsapp-poc`: ya define `META_ACCESS_TOKEN`, `PHONE_NUMBER_ID` y `VERIFY_TOKEN` mediante secretos server-side.
+- [x] Añadir y configurar `META_APP_SECRET` para validar `X-Hub-Signature-256`.
+- [x] Confirmar y persistir `META_WABA_ID` para onboarding y sincronización de plantillas.
+- [x] Normalizar estados y tipos propios sin filtrar payloads Meta al dominio.
+
+#### B5.1 — Webhook inbound y eventos
+
+- [x] Implementar verificación `GET` con `hub.verify_token` y challenge.
+- [x] Validar firma `X-Hub-Signature-256` en `POST`.
+- [x] Crear Edge Function estable `loopdev-whatsapp-webhook`, separada de la POC.
+- [x] Parsear todas las entradas del payload, no solo la primera.
+- [x] Soportar mensajes y estados de entrega; dejar eventos desconocidos trazables para la integración persistente.
+- [x] Registrar `external_event_id` y estado de procesamiento; completar hash/payload restringido al conectar la persistencia final.
+- [x] Hacer idempotente el evento por cuenta/proveedor.
+
+#### B5.2 — Resolución CRM y ventana conversacional
+
+- [x] Normalizar teléfonos a E.164.
+- [x] Resolver cuenta, canal, contacto CRM y conversación existente.
+- [x] Crear o actualizar contacto sin duplicarlo.
+- [x] Conservar `last_inbound_at` y `window_expires_at`.
+- [ ] Persistir referral, anuncio, fuente y campaña como atribución, sin asumir que el texto del cliente es atribución definitiva.
+- [ ] Probar dos marcas de una misma organización sin mezclar atribución.
+
+#### B5.3 — Tipos de mensaje y multimedia
+
+- [ ] Soportar texto, interactivos, imagen, documento, audio, vídeo, ubicación y respuestas citadas.
+- [ ] Registrar media ID, MIME, nombre, tamaño y referencia de Storage.
+- [ ] Descargar multimedia exclusivamente server-side a bucket privado.
+- [ ] Generar URLs firmadas temporales para agentes autorizados.
+- [ ] Evitar duplicar el binario cuando el mismo media ID se reprocese.
+- [ ] Mantener adjunto recibido separado de documento promovido explícitamente a la ficha CRM.
+
+#### B5.4 — Respuesta controlada y plantillas
+
+- [ ] Permitir texto libre solo dentro de la ventana válida.
+- [ ] Exigir plantilla aprobada fuera de la ventana.
+- [ ] Sincronizar nombre, idioma, categoría, estado y componentes de plantillas.
+- [ ] Validar parámetros, botones, listas y media headers antes del envío.
+- [ ] Registrar request, response, provider message ID, estado y error sin secretos.
+- [ ] Mantener aprobación humana; no activar envíos autónomos ni campañas masivas.
+
+#### B5.5 — Migración desde número personal
+
+- [ ] Modelar estados `pending`, `agent_notified`, `template_sent`, `waiting_reply`, `migrated`, `failed`.
+- [ ] Conservar canales personal y oficial como canales distintos del mismo contacto.
+- [ ] Exigir consentimiento y plantilla aprobada para el aviso de migración.
+- [ ] Convertir la respuesta del cliente en señal de migración, sin fingir que el historial personal fue recibido por Meta.
+- [ ] Auditar agente, plantilla, idioma, variables y fechas.
+
+#### B5.6 — Historial y bandeja operativa
+
+- [ ] Importar historiales `.txt` como contexto separado de mensajes oficiales.
+- [ ] Conservar fuente, archivo, codificación, estado y errores de importación.
+- [ ] Crear timeline con separación visual entre mensaje oficial, nota interna e historial importado.
+- [ ] Permitir asignación, etiquetas, notas internas y estado de conversación.
+- [ ] Preparar simulador y fixtures para regresión sin depender siempre de Meta.
+
+#### B5.7 — Sugerencias asistidas y documental ligero
+
+- [ ] Detectar email, nombre, fecha de nacimiento y señales comerciales como sugerencias.
+- [ ] Registrar confianza y exigir confirmación humana antes de actualizar CRM.
+- [ ] Separar datos operativos de feedback analítico anonimizado.
+- [ ] Permitir clasificar manualmente adjuntos como póliza, identidad, presupuesto, documentación médica u otro.
+- [ ] Mantener OCR, extracción automática y decisiones de IA como fases posteriores.
+
+#### B5.8 — Pruebas y operación
+
+- [ ] Probar texto, interactivos, multimedia, duplicados, estados y errores de Meta.
+- [ ] Probar plantilla válida, rechazada y respuesta fuera de ventana.
+- [ ] Probar migración personal/oficial e importación de historial.
+- [ ] Verificar que ningún secreto aparece en frontend, logs, fixtures o contratos públicos.
+- [ ] Verificar RLS, auditoría, reintentos y recuperación tras reinicio.
 
 - [ ] Crear configuración de cuenta WhatsApp por organización y marca.
 - [ ] Implementar verificación y webhook server-side.
@@ -503,6 +607,19 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 - [ ] Registrar estados de entrega y errores.
 
 **Salida:** un mensaje entrante crea el contexto CRM correcto y aparece en una conversación persistente.
+
+**Validación B5 realizada en Dev (2026-08-09):** se configuró un WABA/Phone Number Sandbox de Meta y
+se conectó a `loopdev-whatsapp-webhook` en Supabase. La verificación `GET` y los `POST` firmados ya
+responden `200`. Un mensaje real creó de forma idempotente un registro en `communication_webhook_events`
+con `processing_status = processed`, además de un `crm_contact`, un `communication_channel`, una
+`communication_conversation` abierta y un `communication_message` inbound con estado `delivered`.
+El evento sintético `wamid.TEST` queda como `received` porque no contiene todos los datos de un mensaje
+real. El Sandbox de VitaBlue se considera únicamente una conexión temporal de desarrollo; la conexión
+multi-organización productiva se implementará mediante onboarding de Meta y credenciales por cuenta.
+
+**Pendiente inmediato:** construir la interfaz de bandeja CRM y el adaptador server-side de envío. Aún
+no se han habilitado el envío productivo, las plantillas, la multimedia, la atribución ni el onboarding
+multi-organización.
 
 ### Fase B6 — Product Catalog Core
 
