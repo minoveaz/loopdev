@@ -1,18 +1,19 @@
 import type {
-  ActivityItem,
-  HomeDataSource,
-  MobileOrganization,
-  NotificationItem,
+  OrganizationSummary,
+  PlatformActivityItem,
+  PlatformHomeDataSource,
+  PlatformNotificationItem,
+  PlatformSuiteSummary,
   PlatformOverview,
-} from '../../contracts/home';
+} from '@loopdev/contracts';
 
-export const organizations: MobileOrganization[] = [
+export const organizations: OrganizationSummary[] = [
   { id: 'org-loopdev', name: 'LoopDev', memberCount: 24, status: 'active' },
   { id: 'org-nova', name: 'Nova Labs', memberCount: 11, status: 'active' },
   { id: 'org-atlas', name: 'Atlas Studio', memberCount: 7, status: 'paused' },
 ];
 
-export const activity: ActivityItem[] = [
+export const activity: PlatformActivityItem[] = [
   {
     id: 'activity-1',
     title: 'Nueva organización conectada',
@@ -28,7 +29,7 @@ export const activity: ActivityItem[] = [
   },
 ];
 
-export const notifications: NotificationItem[] = [
+export const notifications: PlatformNotificationItem[] = [
   {
     id: 'notification-1',
     title: 'Revisión pendiente',
@@ -50,9 +51,18 @@ export const platformOverview: PlatformOverview = {
   pendingNotifications: notifications.filter(({ unread }) => unread).length,
 };
 
-export const fixturesHomeDataSource: HomeDataSource = {
+export const suites: PlatformSuiteSummary[] = [
+  { id: 'workspace-marketing', suiteKey: 'marketing', name: 'Marketing Studio', slug: 'marketing-studio', status: 'active' },
+  { id: 'workspace-crm', suiteKey: 'crm', name: 'Sales & CRM', slug: 'sales-crm', status: 'active' },
+  { id: 'workspace-quant', suiteKey: 'quant', name: 'Quant Ops', slug: 'quant-ops', status: 'active' },
+];
+
+export const fixturesHomeDataSource: PlatformHomeDataSource = {
   async getOrganizations() {
     return organizations;
+  },
+  async getSuites() {
+    return suites;
   },
   async getActivity() {
     return activity;

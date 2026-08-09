@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import type { HomeDataSource } from './contracts/home';
 import type {
-  ActivityItem,
-  MobileOrganization,
-  NotificationItem,
+  OrganizationSummary,
+  PlatformActivityItem,
+  PlatformHomeDataSource,
+  PlatformNotificationItem,
+  PlatformSuiteSummary,
   PlatformOverview,
-} from './contracts/home';
+} from '@loopdev/contracts';
 
 export type HomeDataState = {
   status: 'loading' | 'success' | 'error';
-  organizations: MobileOrganization[];
-  activity: ActivityItem[];
-  notifications: NotificationItem[];
+  organizations: OrganizationSummary[];
+  activity: PlatformActivityItem[];
+  notifications: PlatformNotificationItem[];
+  suites: PlatformSuiteSummary[];
   overview: PlatformOverview | null;
   error: Error | null;
 };
@@ -21,21 +23,23 @@ const loadingState: HomeDataState = {
   organizations: [],
   activity: [],
   notifications: [],
+  suites: [],
   overview: null,
   error: null,
 };
 
-export async function loadHomeData(dataSource: HomeDataSource): Promise<HomeDataState> {
-  const [organizations, activity, notifications, overview] = await Promise.all([
+export async function loadHomeData(dataSource: PlatformHomeDataSource, organizationId?: string): Promise<HomeDataState> {
+  const [organizations, suites, activity, notifications, overview] = await Promise.all([
     dataSource.getOrganizations(),
-    dataSource.getActivity(),
-    dataSource.getNotifications(),
-    dataSource.getPlatformOverview(),
+    dataSource.getSuites(organizationId),
+    dataSource.getActivity(organizationId),
+    dataSource.getNotifications(organizationId),
+    dataSource.getPlatformOverview(organizationId),
   ]);
-  return { status: 'success', organizations, activity, notifications, overview, error: null };
+  return { status: 'success', organizations, suites, activity, notifications, overview, error: null };
 }
 
-export function useHomeData(dataSource?: HomeDataSource): HomeDataState {
+export function useHomeData(dataSource?: PlatformHomeDataSource, organizationId?: string): HomeDataState {
   const [state, setState] = useState<HomeDataState>(loadingState);
   useEffect(() => {
     if (!dataSource) {
@@ -43,7 +47,7 @@ export function useHomeData(dataSource?: HomeDataSource): HomeDataState {
       return;
     }
     let active = true;
-    loadHomeData(dataSource)
+    loadHomeData(dataSource, organizationId)
       .then((nextState) => {
         if (active) setState(nextState);
       })
@@ -58,6 +62,6 @@ export function useHomeData(dataSource?: HomeDataSource): HomeDataState {
     return () => {
       active = false;
     };
-  }, [dataSource]);
+  }, [dataSource, organizationId]);
   return state;
 }

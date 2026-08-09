@@ -1,8 +1,42 @@
 # Track: Fundación de la aplicación móvil de LoopDev
 
 **Fecha:** 2026-08-09  
-**Estado:** Propuesto — pendiente de revisión  
-**Objetivo:** crear la base de una aplicación móvil iOS/Android para LoopDev, empezando por un entorno local reproducible, una experiencia UI/UX móvil sólida y una estrategia de pruebas integrada con GitHub Actions. El módulo CRM se iniciará únicamente cuando la fundación móvil haya sido validada.
+**Estado:** En progreso — fundación integrada en `develop`; Launchpad móvil pendiente
+**Objetivo:** consolidar la base de una aplicación móvil iOS/Android para LoopDev con autenticación Supabase, contexto multi-organización, una entrada Launchpad multi-suite y una experiencia UI/UX móvil propia. CRM y comunicaciones se construirán como una suite posterior, no como la entrada global de la aplicación.
+
+## Estado actual — 2026-08-09
+
+La fundación inicial fue implementada en `apps/loopdev-mobile` y fusionada en `develop` mediante el PR #32. Los checks de CI, CodeQL, typecheck, lint, tests y frontend terminaron correctamente.
+
+### Completado
+
+- Aplicación Expo/React Native con ejecución web, Android preparado y ruta de prueba para iOS mediante Expo Go.
+- Login, logout y restauración de sesión con Supabase Auth.
+- Persistencia de sesión en SecureStore para native y localStorage para web.
+- Carga real de organizaciones, membresías, roles, permisos, estado y conteos desde Supabase/RLS.
+- Filtrado explícito de organizaciones por membresías del usuario.
+- Persistencia y restauración de la organización activa.
+- Selector de organización reutilizable con cambio interactivo y rol visible.
+- Contratos de datos separados de fixtures y adaptadores.
+- Suite móvil aislada de los tests del escritorio.
+- Checks móviles y guardas estructurales integrados en CI.
+
+### Pendiente inmediato
+
+- Estandarizar el Login móvil visualmente con el acceso desktop usando componentes nativos.
+- Separar el estado autenticado en `Launchpad` y suites, en lugar de abrir directamente el Home administrativo.
+- Resolver suites disponibles según organización, membresía, permisos y workspaces habilitados.
+- Crear cards móviles de suite para Marketing Studio, Sales & CRM, Quant Ops y Health OS según acceso real.
+- Crear el shell independiente de cada suite; CRM será la primera suite funcional y alojará comunicaciones/WhatsApp.
+- Formalizar el Design System multiplataforma fuera de las aplicaciones: `design-tokens`, `design-contracts`, `@loopdev/ui` para web y `@loopdev/ui-native` para React Native.
+- Mantener `loopdev-os` funcionando con sus imports actuales durante la migración; extraer tokens y contratos de forma incremental.
+- Sustituir la paleta semántica local de `loopdev-mobile` por tokens compartidos sin importar componentes web basados en DOM.
+
+La selección de suite será el primer destino después del login:
+
+```text
+Login -> Launchpad -> organización activa -> suite autorizada -> shell de suite
+```
 
 ## Contexto y decisión principal
 
@@ -13,12 +47,12 @@ Todavía no existe una aplicación móvil en el repositorio ni una integración 
 La decisión inicial es:
 
 - crear una aplicación independiente en `apps/loopdev-mobile`;
-- utilizar Expo, React Native, TypeScript y Expo Router;
+- utilizar Expo, React Native y TypeScript; la navegación actual parte de un shell React Native controlado por `AppRoot` y evolucionará a stacks/tabs explícitos al implementar el Launchpad;
 - reutilizar contratos, dominio, permisos y tokens conceptuales, pero no copiar componentes web literalmente;
 - trabajar inicialmente con fixtures y/o Supabase local o de desarrollo;
 - preparar desde el inicio una frontera de API compatible con el futuro backend desplegado en Render;
 - priorizar una experiencia móvil propia, no una versión reducida del AppShell de escritorio;
-- posponer el desarrollo funcional profundo del CRM hasta cerrar la fundación y los criterios de calidad.
+- posponer el desarrollo funcional profundo del CRM hasta cerrar el Launchpad multi-suite y los criterios de calidad de la fundación.
 
 ## Resultado esperado del track
 
@@ -79,6 +113,21 @@ Render futuro
         +--> operaciones con secretos
 ```
 
+### Design System multiplataforma
+
+```text
+ds/packages/
+        design-tokens       valores y roles semánticos compartidos
+        design-contracts    estados, variantes y contratos compartidos
+        ui                  implementación web
+        ui-native           implementación React Native
+
+apps/loopdev-os     -> @loopdev/ui        -> tokens + contracts
+apps/loopdev-mobile -> @loopdev/ui-native -> tokens + contracts
+```
+
+La web no se migra mediante un cambio masivo de rutas o imports. `@loopdev/ui` se conserva como API pública de `loopdev-os`; primero se añaden los paquetes compartidos, después se conectan gradualmente a web y móvil. La arquitectura, el mapeo de componentes y las reglas de composición están documentados en `docs/02-frontend/MULTIPLATFORM_DESIGN_SYSTEM_ARCHITECTURE.md`.
+
 ## Estructura inicial propuesta
 
 ```text
@@ -124,15 +173,15 @@ La estructura es orientativa. No se deben crear carpetas vacías o abstracciones
 
 **Propósito:** cerrar las decisiones mínimas antes de escribir pantallas para evitar construir una app genérica sin usuario ni flujo principal.
 
-**Decisión inicial:** el usuario principal de esta primera versión móvil será `superdev`, el perfil administrador global de LoopDev. Podrá acceder a toda la aplicación y consultar la información disponible para supervisar el estado general de la plataforma.
+**Decisión inicial:** el usuario principal de esta primera versión móvil será un usuario autenticado de LoopDev, con identidad, membresías, roles y permisos provenientes de Supabase. `superdev` puede servir como usuario de validación, pero no debe estar codificado como identidad ni conceder acceso implícito a todas las organizaciones.
 
 El primer flujo móvil será:
 
-1. iniciar sesión como `superdev`;
-2. acceder al shell autenticado de LoopDev;
-3. consultar un resumen global de la plataforma;
-4. navegar hacia actividad, notificaciones, organizaciones y perfil;
-5. cambiar de organización cuando el contexto de una organización concreta sea necesario;
+1. iniciar sesión con Supabase Auth;
+2. acceder al Launchpad móvil de LoopDev;
+3. seleccionar una organización válida según sus membresías;
+4. consultar las suites habilitadas para esa organización;
+5. entrar al shell de una suite autorizada;
 6. cerrar sesión y volver al flujo público.
 
 El acceso global del usuario `superdev` es una capacidad de producto, no una razón para omitir controles. La UI, los adaptadores de datos y las futuras APIs deben seguir expresando permisos, organización activa y trazabilidad para que el modelo pueda extenderse a otros perfiles sin rehacer el shell.
@@ -211,6 +260,8 @@ pnpm --filter loopdev-mobile test
 
 **Propósito:** diseñar y construir el lenguaje visual y los patrones de interacción móviles antes de implementar CRM.
 
+**Decisión de design system:** la implementación móvil vivirá en `@loopdev/ui-native`. No se copiará `@loopdev/ui` dentro de `apps/loopdev-mobile`; ambas implementaciones consumirán tokens y contratos compartidos.
+
 **Principio:** la interfaz móvil no será una copia comprimida del escritorio. El AppShell y el ModuleWorkspace web se transformarán en navegación, stacks, tabs, drawers y bottom sheets apropiados para interacción táctil.
 
 **Tareas de experiencia:**
@@ -226,6 +277,10 @@ pnpm --filter loopdev-mobile test
 - definir comportamiento ante notch, safe areas y teclado virtual;
 - definir feedback táctil solo para acciones significativas;
 - preparar navegación por deep link como capacidad futura, sin acoplarla a una suite concreta.
+- definir la frontera `design-tokens` / `design-contracts` / `@loopdev/ui` / `@loopdev/ui-native`;
+- documentar el mapeo entre componentes web y composiciones nativas;
+- sustituir los colores locales por roles semánticos compartidos;
+- validar que la extracción de tokens no cambia los imports ni rompe `loopdev-os`.
 
 **Tareas de implementación:**
 
@@ -358,16 +413,16 @@ pnpm --filter loopdev-mobile test
 
 **Checklist de salida:**
 
-- [ ] Instalación local documentada y verificada por otra persona.
-- [ ] Expo app arranca sin Render.
-- [ ] Android local validado.
+- [x] Instalación local documentada y verificada en el worktree móvil.
+- [x] Expo app arranca sin Render.
+- [ ] Android local validado en emulador o dispositivo físico.
 - [ ] Preparación de iOS documentada, aunque el desarrollo inicial se haga en Windows.
-- [ ] Shell móvil aprobado funcionalmente.
+- [ ] Shell móvil aprobado funcionalmente como Launchpad multi-suite.
 - [ ] Tokens y componentes base aprobados.
 - [ ] Estados de UX definidos para las pantallas prioritarias.
-- [ ] Navegación pública y autenticada cubierta por tests.
-- [ ] Auth y persistencia de sesión cubiertas por tests.
-- [ ] Organización activa y permisos cubiertos por tests.
+- [ ] Navegación pública, Launchpad y suites cubierta por tests.
+- [x] Auth y persistencia de sesión implementadas y cubiertas por tests base.
+- [ ] Organización activa, membresías, permisos y selección de suite cubiertos por tests.
 - [ ] Cliente de datos desacoplado de la UI.
 - [ ] Fixtures y datos reales separados.
 - [ ] CI ejecuta checks móviles de forma estable.
@@ -455,4 +510,10 @@ La aplicación no debe contener `SUPABASE_SERVICE_ROLE_KEY`, credenciales de pro
 
 ## Próxima acción propuesta
 
-La primera acción de implementación será confirmar la Fase 0 y después crear la aplicación `apps/loopdev-mobile` con el mínimo arranque local. No se iniciará todavía código del CRM ni se conectarán operaciones sensibles.
+La siguiente implementación será estandarizar el acceso móvil y reemplazar la entrada directa al Home por un Launchpad multi-suite:
+
+1. alinear visualmente `LoginScreen` con el login desktop usando componentes nativos;
+2. crear `LaunchpadScreen` con la organización activa y cards de suites;
+3. cargar suites disponibles desde membresías, permisos y workspaces habilitados;
+4. navegar a un shell inicial de `Sales & CRM` como primera suite funcional;
+5. mantener CRM/WhatsApp detrás de ese shell y no como entrada global de la aplicación.

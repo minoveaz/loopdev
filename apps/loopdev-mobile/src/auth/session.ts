@@ -2,7 +2,7 @@ export type SessionStatus = 'signed-out' | 'loading' | 'authenticated' | 'expire
 
 export type MobileUser = {
   id: string;
-  username: 'superdev';
+  username: string;
   displayName: string;
   isGlobalAdmin: boolean;
 };
@@ -48,12 +48,14 @@ export const superdevFixture: MobileUser = {
 export function mobileUserFromSupabase(user: {
   id: string;
   email?: string | null;
-  user_metadata?: { display_name?: string; full_name?: string };
+  user_metadata?: { display_name?: string; full_name?: string; username?: string };
+  app_metadata?: Record<string, unknown>;
 }): MobileUser {
   const displayName =
     user.user_metadata?.display_name ??
     user.user_metadata?.full_name ??
     user.email ??
     'Usuario LoopDev';
-  return { id: user.id, username: 'superdev', displayName, isGlobalAdmin: false };
+  const username = user.user_metadata?.username ?? user.email?.split('@')[0] ?? user.id;
+  return { id: user.id, username, displayName, isGlobalAdmin: user.app_metadata?.is_global_admin === true };
 }
