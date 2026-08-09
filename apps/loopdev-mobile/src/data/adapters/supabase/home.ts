@@ -1,24 +1,24 @@
 import type {
-  ActivityItem,
-  HomeDataSource,
-  MobileOrganization,
-  MobileOrganizationMembership,
-  NotificationItem,
+  OrganizationMembershipSummary,
+  OrganizationSummary,
+  PlatformActivityItem,
+  PlatformHomeDataSource,
+  PlatformNotificationItem,
   PlatformOverview,
-} from '../../contracts/home';
+} from '@loopdev/contracts';
 import { createSupabaseMobileClient } from './client';
 
 type OrganizationRow = { id: string; name: string; slug: string; is_active: boolean };
 type MembershipRow = {
   organization_id: string;
   user_id: string;
-  role: MobileOrganizationMembership['role'];
+  role: OrganizationMembershipSummary['role'];
 };
 type PermissionRow = { key: string };
 
 export type SupabaseHomeData = {
-  organizations: MobileOrganization[];
-  memberships: MobileOrganizationMembership[];
+  organizations: OrganizationSummary[];
+  memberships: OrganizationMembershipSummary[];
   userId: string;
   permissionsByOrganization: Record<string, string[]>;
 };
@@ -59,7 +59,7 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
     role: membership.role,
   }));
 
-  const normalizedOrganizations: MobileOrganization[] = await Promise.all(
+  const normalizedOrganizations: OrganizationSummary[] = await Promise.all(
     visibleOrganizations.map(async (organization) => {
       const { count } = (await supabase
         .from('organization_memberships')
@@ -107,14 +107,14 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
   };
 }
 
-export const supabaseHomeDataSource: HomeDataSource = {
+export const supabaseHomeDataSource: PlatformHomeDataSource = {
   async getOrganizations() {
     return (await loadSupabaseOrganizations()).organizations;
   },
-  async getActivity(_organizationId?: string): Promise<ActivityItem[]> {
+  async getActivity(_organizationId?: string): Promise<PlatformActivityItem[]> {
     return [];
   },
-  async getNotifications(_organizationId?: string): Promise<NotificationItem[]> {
+  async getNotifications(_organizationId?: string): Promise<PlatformNotificationItem[]> {
     return [];
   },
   async getPlatformOverview(_organizationId?: string): Promise<PlatformOverview> {

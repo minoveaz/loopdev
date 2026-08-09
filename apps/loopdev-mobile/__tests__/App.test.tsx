@@ -47,13 +47,14 @@ describe('App', () => {
     expect(inputs).toBeTruthy();
     await fireEvent.press(getByText('Iniciar sesión'));
 
-    expect(getByText('Resumen de plataforma')).toBeTruthy();
+    expect(getByText('CORE_SUITES_AVAILABLE')).toBeTruthy();
+    expect(getByText('Inicializa tu contexto de trabajo.')).toBeTruthy();
     expect(getByText('Todo operativo')).toBeTruthy();
 
     await fireEvent.press(getByLabelText('Perfil'));
     await fireEvent.press(getByLabelText('Cerrar sesión'));
 
     expect(getByText('Acceso de supervisión')).toBeTruthy();
-    expect(queryByText('Resumen de plataforma')).toBeNull();
+    expect(queryByText('CORE_SUITES_AVAILABLE')).toBeNull();
   });
 });

@@ -1,4 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
+import { useFonts } from 'expo-font';
+import { Inter_400Regular } from '@expo-google-fonts/inter';
+import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
 import { useEffect, useMemo, useReducer, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { initialSessionState, mobileUserFromSupabase, sessionReducer } from '../auth/session';
@@ -14,7 +17,7 @@ import { NotificationsScreen } from '../features/notifications/screens/Notificat
 import { OrganizationsScreen } from '../features/organizations/screens/OrganizationsScreen';
 import { OrganizationSwitcher } from '../features/organizations/components/OrganizationSwitcher';
 import { ProfileScreen } from '../features/profile/screens/ProfileScreen';
-import { colors } from '../theme/colors';
+import { ThemeProvider, useTheme } from '../theme/ThemeProvider';
 
 type Tab = 'home' | 'activity' | 'notifications' | 'organizations' | 'profile';
 const tabs: { key: Tab; label: string }[] = [
@@ -26,6 +29,16 @@ const tabs: { key: Tab; label: string }[] = [
 ];
 
 export default function AppRoot() {
+  const [fontsLoaded] = useFonts({
+    Inter: Inter_400Regular,
+    'JetBrains Mono': JetBrainsMono_400Regular,
+  });
+  if (!fontsLoaded) return null;
+  return <ThemeProvider><ThemedAppRoot /></ThemeProvider>;
+}
+
+function ThemedAppRoot() {
+  const { colors: themeColors, mode, toggleMode } = useTheme();
   const [session, dispatch] = useReducer(sessionReducer, initialSessionState);
   const [authError, setAuthError] = useState<Error | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -89,9 +102,9 @@ export default function AppRoot() {
       />
     );
   return (
-    <View style={styles.shell}>
+    <View style={[styles.shell, { backgroundColor: themeColors.canvas }]}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.eyebrow}>
+        <Text style={[styles.eyebrow, { color: themeColors.accent }]}>
           LOOPDEV MOBILE / {session.user.displayName.toUpperCase()}
         </Text>
         <OrganizationSwitcher organizations={homeData.organizations} activeOrganizationId={activeOrganizationId} onSelect={selectOrganization} />
@@ -102,6 +115,8 @@ export default function AppRoot() {
         {activeTab === 'profile' && (
           <ProfileScreen
             displayName={session.user.displayName}
+            themeMode={mode}
+            onToggleTheme={toggleMode}
             onSignOut={() => {
               signOutFromSupabase().catch(() => undefined);
               setActiveOrganizationId(null);
@@ -111,7 +126,7 @@ export default function AppRoot() {
           />
         )}
       </ScrollView>
-      <View style={styles.tabBar} accessibilityRole="tablist">
+      <View style={[styles.tabBar, { backgroundColor: themeColors.surface, borderTopColor: themeColors.line }]} accessibilityRole="tablist">
         {tabs.map(({ key, label }) => (
           <Pressable
             key={key}
@@ -119,9 +134,9 @@ export default function AppRoot() {
             accessibilityLabel={label}
             accessibilityState={{ selected: activeTab === key }}
             onPress={() => setActiveTab(key)}
-            style={[styles.tab, activeTab === key && styles.activeTab]}
+            style={[styles.tab, activeTab === key && { borderTopColor: themeColors.accent, borderTopWidth: 2 }]}
           >
-            <Text style={[styles.tabLabel, activeTab === key && styles.activeTabLabel]}>
+            <Text style={[styles.tabLabel, { color: activeTab === key ? themeColors.accent : themeColors.muted }]}>
               {label}
             </Text>
           </Pressable>
@@ -133,18 +148,15 @@ export default function AppRoot() {
 }
 
 const styles = StyleSheet.create({
-  shell: { backgroundColor: colors.canvas, flex: 1 },
+  shell: { flex: 1 },
   content: { flexGrow: 1, padding: 32, paddingTop: 64 },
   eyebrow: {
-    color: colors.accent,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 1.5,
     marginBottom: 12,
   },
   tabBar: {
-    backgroundColor: colors.white,
-    borderTopColor: colors.line,
     borderTopWidth: 1,
     flexDirection: 'row',
     paddingBottom: 12,
@@ -158,7 +170,5 @@ const styles = StyleSheet.create({
     minHeight: 44,
     paddingHorizontal: 2,
   },
-  activeTab: { borderTopColor: colors.accent, borderTopWidth: 2 },
-  tabLabel: { color: colors.muted, fontSize: 11, fontWeight: '600', textAlign: 'center' },
-  activeTabLabel: { color: colors.accent },
+  tabLabel: { fontSize: 11, fontWeight: '600', textAlign: 'center' },
 });

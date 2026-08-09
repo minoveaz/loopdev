@@ -1,18 +1,18 @@
 import type {
-  ActivityItem,
-  HomeDataSource,
-  MobileOrganization,
-  NotificationItem,
+  OrganizationSummary,
+  PlatformActivityItem,
+  PlatformHomeDataSource,
+  PlatformNotificationItem,
   PlatformOverview,
-} from '../../contracts/home';
+} from '@loopdev/contracts';
 
-export const organizations: MobileOrganization[] = [
+export const organizations: OrganizationSummary[] = [
   { id: 'org-loopdev', name: 'LoopDev', memberCount: 24, status: 'active' },
   { id: 'org-nova', name: 'Nova Labs', memberCount: 11, status: 'active' },
   { id: 'org-atlas', name: 'Atlas Studio', memberCount: 7, status: 'paused' },
 ];
 
-export const activity: ActivityItem[] = [
+export const activity: PlatformActivityItem[] = [
   {
     id: 'activity-1',
     title: 'Nueva organización conectada',
@@ -28,7 +28,7 @@ export const activity: ActivityItem[] = [
   },
 ];
 
-export const notifications: NotificationItem[] = [
+export const notifications: PlatformNotificationItem[] = [
   {
     id: 'notification-1',
     title: 'Revisión pendiente',
@@ -50,7 +50,7 @@ export const platformOverview: PlatformOverview = {
   pendingNotifications: notifications.filter(({ unread }) => unread).length,
 };
 
-export const fixturesHomeDataSource: HomeDataSource = {
+export const fixturesHomeDataSource: PlatformHomeDataSource = {
   async getOrganizations() {
     return organizations;
   },

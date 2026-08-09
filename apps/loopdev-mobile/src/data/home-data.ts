@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import type { HomeDataSource } from './contracts/home';
 import type {
-  ActivityItem,
-  MobileOrganization,
-  NotificationItem,
+  OrganizationSummary,
+  PlatformActivityItem,
+  PlatformHomeDataSource,
+  PlatformNotificationItem,
   PlatformOverview,
-} from './contracts/home';
+} from '@loopdev/contracts';
 
 export type HomeDataState = {
   status: 'loading' | 'success' | 'error';
-  organizations: MobileOrganization[];
-  activity: ActivityItem[];
-  notifications: NotificationItem[];
+  organizations: OrganizationSummary[];
+  activity: PlatformActivityItem[];
+  notifications: PlatformNotificationItem[];
   overview: PlatformOverview | null;
   error: Error | null;
 };
@@ -25,7 +25,7 @@ const loadingState: HomeDataState = {
   error: null,
 };
 
-export async function loadHomeData(dataSource: HomeDataSource, organizationId?: string): Promise<HomeDataState> {
+export async function loadHomeData(dataSource: PlatformHomeDataSource, organizationId?: string): Promise<HomeDataState> {
   const [organizations, activity, notifications, overview] = await Promise.all([
     dataSource.getOrganizations(),
     dataSource.getActivity(organizationId),
@@ -35,7 +35,7 @@ export async function loadHomeData(dataSource: HomeDataSource, organizationId?: 
   return { status: 'success', organizations, activity, notifications, overview, error: null };
 }
 
-export function useHomeData(dataSource?: HomeDataSource, organizationId?: string): HomeDataState {
+export function useHomeData(dataSource?: PlatformHomeDataSource, organizationId?: string): HomeDataState {
   const [state, setState] = useState<HomeDataState>(loadingState);
   useEffect(() => {
     if (!dataSource) {
