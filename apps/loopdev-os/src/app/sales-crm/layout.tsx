@@ -195,6 +195,8 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
     'ai-insights': 'enabled',
   };
 
+  if (!isMounted) return null;
+
   return (
     <SuitePermissionGuard permission="crm.read">
       <AppShell

@@ -17,7 +17,7 @@ const e2eSession = {
   access_token: 'e2e-access-token',
   refresh_token: 'e2e-refresh-token',
   expires_in: 3600,
-  expires_at: Math.floor(Date.now() / 1000) + 3600,
+  expires_at: 4102444800,
   token_type: 'bearer',
   user: e2eUser,
 } as Session;
