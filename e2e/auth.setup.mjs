@@ -7,6 +7,12 @@ const storageStatePath = path.join(authDirectory, 'user.json');
 
 export default async function globalSetup() {
   process.loadEnvFile('.env.local');
+  fs.mkdirSync(authDirectory, { recursive: true });
+
+  if (process.env.PLAYWRIGHT_E2E_AUTH_BYPASS === 'true') {
+    fs.writeFileSync(storageStatePath, JSON.stringify({ cookies: [], origins: [] }));
+    return;
+  }
 
   const email = process.env.E2E_TEST_EMAIL;
   const password = process.env.E2E_TEST_PASSWORD;
@@ -15,16 +21,10 @@ export default async function globalSetup() {
     throw new Error('E2E_TEST_EMAIL and E2E_TEST_PASSWORD are required in .env.local');
   }
 
-  fs.mkdirSync(authDirectory, { recursive: true });
   const browser = await chromium.launch();
   const contextOptions = {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000',
   };
-
-  if (process.env.PLAYWRIGHT_E2E_AUTH_BYPASS === 'true') {
-    await browser.close();
-    return;
-  }
 
   if (fs.existsSync(storageStatePath)) {
     const existingContext = await browser.newContext({
