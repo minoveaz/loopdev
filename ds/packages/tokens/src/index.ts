@@ -10,3 +10,5 @@ export const themes = {
   estarProtegidos: 'theme-estar-protegidos',
   clientB: 'theme-client-b',
 } as const;
+
+export * from './semantic';

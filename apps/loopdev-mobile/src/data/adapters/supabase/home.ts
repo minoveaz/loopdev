@@ -1,24 +1,26 @@
 import type {
-  ActivityItem,
-  HomeDataSource,
-  MobileOrganization,
-  MobileOrganizationMembership,
-  NotificationItem,
+  OrganizationMembershipSummary,
+  OrganizationSummary,
+  PlatformActivityItem,
+  PlatformHomeDataSource,
+  PlatformNotificationItem,
+  PlatformSuiteSummary,
   PlatformOverview,
-} from '../../contracts/home';
+} from '@loopdev/contracts';
 import { createSupabaseMobileClient } from './client';
 
 type OrganizationRow = { id: string; name: string; slug: string; is_active: boolean };
 type MembershipRow = {
   organization_id: string;
   user_id: string;
-  role: MobileOrganizationMembership['role'];
+  role: OrganizationMembershipSummary['role'];
 };
 type PermissionRow = { key: string };
+type WorkspaceRow = { id: string; suite_key: PlatformSuiteSummary['suiteKey']; name: string; slug: string; status: PlatformSuiteSummary['status'] };
 
 export type SupabaseHomeData = {
-  organizations: MobileOrganization[];
-  memberships: MobileOrganizationMembership[];
+  organizations: OrganizationSummary[];
+  memberships: OrganizationMembershipSummary[];
   userId: string;
   permissionsByOrganization: Record<string, string[]>;
 };
@@ -27,6 +29,11 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
   const supabase = createSupabaseMobileClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
   if (authError || !authData.user) throw new Error('A signed-in Supabase user is required');
+
+  const { data: isPlatformAdministrator, error: administratorError } = (await supabase.rpc(
+    'is_platform_administrator',
+  )) as unknown as { data: boolean | null; error: Error | null };
+  if (administratorError) throw administratorError;
 
   const { data: organizations, error: organizationsError } = (await supabase
     .from('organizations')
@@ -43,8 +50,26 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
   };
   if (membershipsError) throw membershipsError;
 
-  const normalizedOrganizations: MobileOrganization[] = await Promise.all(
-    (organizations ?? []).map(async (organization) => {
+  const membershipOrganizationIds = [...new Set((memberships ?? []).map(({ organization_id }) => organization_id))];
+  if (!isPlatformAdministrator && membershipOrganizationIds.length === 0) {
+    return {
+      organizations: [],
+      memberships: [],
+      userId: authData.user.id,
+      permissionsByOrganization: {},
+    };
+  }
+  const visibleOrganizations = isPlatformAdministrator
+    ? organizations ?? []
+    : (organizations ?? []).filter(({ id }) => membershipOrganizationIds.includes(id));
+  const normalizedMemberships = (memberships ?? []).map((membership) => ({
+    organizationId: membership.organization_id,
+    userId: membership.user_id,
+    role: membership.role,
+  }));
+
+  const normalizedOrganizations: OrganizationSummary[] = await Promise.all(
+    visibleOrganizations.map(async (organization) => {
       const { count } = (await supabase
         .from('organization_memberships')
         .select('user_id', { count: 'exact', head: true })
@@ -53,16 +78,12 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
         id: organization.id,
         name: organization.name,
         slug: organization.slug,
+        role: normalizedMemberships.find(({ organizationId }) => organizationId === organization.id)?.role,
         memberCount: count ?? 0,
         status: organization.is_active ? 'active' : 'paused',
       };
     }),
   );
-  const normalizedMemberships = (memberships ?? []).map((membership) => ({
-    organizationId: membership.organization_id,
-    userId: membership.user_id,
-    role: membership.role,
-  }));
   const permissionsByOrganization: Record<string, string[]> = {};
   for (const organization of normalizedOrganizations) {
     const { data: permissionKeys } = (await supabase
@@ -95,22 +116,33 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
   };
 }
 
-export const supabaseHomeDataSource: HomeDataSource = {
+export const supabaseHomeDataSource: PlatformHomeDataSource = {
   async getOrganizations() {
     return (await loadSupabaseOrganizations()).organizations;
   },
-  async getActivity(): Promise<ActivityItem[]> {
+  async getSuites(organizationId?: string): Promise<PlatformSuiteSummary[]> {
+    if (!organizationId) return [];
+    const { data, error } = (await createSupabaseMobileClient()
+      .from('workspaces')
+      .select('id, suite_key, name, slug, status')
+      .eq('organization_id', organizationId)
+      .eq('status', 'active')
+      .order('name')) as unknown as { data: WorkspaceRow[] | null; error: Error | null };
+    if (error) throw error;
+    return (data ?? []).map(({ id, suite_key, name, slug, status }) => ({ id, suiteKey: suite_key, name, slug, status }));
+  },
+  async getActivity(_organizationId?: string): Promise<PlatformActivityItem[]> {
     return [];
   },
-  async getNotifications(): Promise<NotificationItem[]> {
+  async getNotifications(_organizationId?: string): Promise<PlatformNotificationItem[]> {
     return [];
   },
-  async getPlatformOverview(): Promise<PlatformOverview> {
+  async getPlatformOverview(_organizationId?: string): Promise<PlatformOverview> {
     const organizations = await loadSupabaseOrganizations();
     return {
       systemStatus: 'operational',
       activeUsers: 0,
-      activeOrganizations: organizations.organizations.length,
+        activeOrganizations: organizations.organizations.length,
       pendingNotifications: 0,
     };
   },

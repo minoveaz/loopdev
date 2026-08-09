@@ -9,6 +9,7 @@ export * from './brands/version';
 // Export Platform Navigation Contracts
 export * from './platform/navigation';
 export * from './platform/tenancy';
+export * from './platform/home';
 
 // Export CRM contracts
 export * from './crm/crm';

@@ -61,6 +61,11 @@
 
 ---
 
+## [~] Track: Fundación de la aplicación móvil de LoopDev
+*Link: [./conductor/tracks/2026-08-09-mobile-app-foundation.md](./conductor/tracks/2026-08-09-mobile-app-foundation.md)*
+
+---
+
 ## [x] Track: Brand Hub Logo System (Assets v1.0)
 *Link: [./conductor/tracks/brand-hub-logo-system_20260119/](./conductor/tracks/brand-hub-logo-system_20260119/)*
 
