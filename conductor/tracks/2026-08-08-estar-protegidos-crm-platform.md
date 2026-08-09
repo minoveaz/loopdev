@@ -470,14 +470,17 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 ### Fase B3 — Captación y atribución
 
-- [ ] Crear contratos de fuentes, campañas, UTM y referidos.
-- [ ] Integrar leads desde formularios y Marketing Studio.
-- [ ] Preservar atribución por lead sin sobrescribir historiales.
-- [ ] Implementar idempotencia de entradas.
-- [ ] Asociar marca y workspace únicamente desde scopes autorizados.
-- [ ] Probar captación de dos marcas sin mezcla de datos.
+- [x] Crear contratos de fuentes, campañas, UTM y referidos.
+- [x] Implementar endpoint de captación CRM protegido.
+- [x] Reutilizar o crear contacto y crear el lead asociado.
+- [x] Preservar atribución por lead sin sobrescribir historiales.
+- [x] Asociar marca y workspace mediante las relaciones validadas por Supabase.
+- [x] Añadir tests de payload y normalización de captación.
+- [ ] Integrar formularios externos y Marketing Studio.
+- [ ] Completar idempotencia por `external_lead_id` para reintentos de proveedores.
+- [ ] Probar captación remota de dos marcas sin mezcla de datos.
 
-**Salida:** cualquier canal puede crear o reutilizar contactos y crear leads correctamente atribuidos.
+**Salida parcial:** la API CRM ya captura contactos/leads y guarda atribución. Queda conectar entradas externas y añadir una clave de idempotencia de proveedor antes del cierre de B3.
 
 ### Fase B4 — Communications Core
 

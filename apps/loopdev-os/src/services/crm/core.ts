@@ -1,10 +1,11 @@
 import {
+  CrmCaptureLeadCommandSchema,
   CrmContactSchema,
   CrmCreateLeadCommandSchema,
   CrmLeadSchema,
   CrmOpportunitySchema,
 } from '@loopdev/contracts';
-import type { CrmContact, CrmCreateLeadCommand, CrmLead, CrmOpportunity } from '@loopdev/contracts';
+import type { CrmCaptureLeadCommand, CrmContact, CrmCreateLeadCommand, CrmLead, CrmOpportunity } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 type ContactRow = {
@@ -178,6 +179,19 @@ export async function createLead(input: CrmCreateLeadCommand, userId: string): P
     .single();
   if (error) throw new Error('Unable to create CRM lead');
   return mapLead(data as unknown as LeadRow);
+}
+
+export async function captureLead(input: CrmCaptureLeadCommand, userId: string) {
+  const parsed = CrmCaptureLeadCommandSchema.parse(input);
+  const contact = await findOrCreateContact({ organizationId: parsed.organizationId, firstName: parsed.firstName, lastName: parsed.lastName, email: parsed.email, phone: parsed.phone, companyName: parsed.companyName });
+  const lead = await createLead({ organizationId: parsed.organizationId, contactId: contact.id, brandId: parsed.brandId, workspaceId: parsed.workspaceId, source: parsed.source, campaign: parsed.campaign, utm: {} }, userId);
+  const supabase = await createServerSupabaseClient();
+  const { data: attribution, error } = await supabase.from('crm_lead_attributions').insert({ organization_id: parsed.organizationId, lead_id: lead.id, source: parsed.source, campaign: parsed.utm.campaign ?? parsed.campaign ?? null, medium: parsed.utm.medium ?? null, content: parsed.utm.content ?? null, term: parsed.utm.term ?? null }).select().single();
+  if (error) {
+    await supabase.from('crm_leads').delete().eq('id', lead.id).eq('organization_id', parsed.organizationId);
+    throw new Error('Unable to persist CRM lead attribution');
+  }
+  return { contact, lead, attribution };
 }
 
 export async function listLeads(organizationId: string, workspaceId?: string): Promise<CrmLead[]> {
