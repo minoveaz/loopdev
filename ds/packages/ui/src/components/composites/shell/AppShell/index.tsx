@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppShellProps } from './types';
 import { useAppShell } from './useAppShell';
 
@@ -24,12 +24,19 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     onToggleLeftSidebar,
     onToggleRightSidebar,
   } = props;
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return true;
-    return window.matchMedia('(min-width: 1024px)').matches;
-  });
-  const isMobileViewport =
-    typeof window !== 'undefined' && window.matchMedia?.('(max-width: 1023px)').matches === true;
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [isViewportReady, setIsViewportReady] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 1023px)');
+    const updateViewport = () => {
+      setIsMobileViewport(mediaQuery.matches);
+      setIsViewportReady(true);
+    };
+    updateViewport();
+    mediaQuery.addEventListener('change', updateViewport);
+    return () => mediaQuery.removeEventListener('change', updateViewport);
+  }, []);
   const {
     styleTokens,
     isNavRendered,
@@ -40,7 +47,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     scrollbarClass,
     activeOverlay,
   } = useAppShell(props);
-  const isMobileNavVisible = isMobileViewport ? isMobileNavOpen : isNavOpen;
+  const isMobileNavVisible = isViewportReady && (isMobileViewport ? isMobileNavOpen : isNavOpen);
 
   return (
     <div
@@ -105,6 +112,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           type="button"
           aria-label="Close navigation"
           onClick={() => setIsMobileNavOpen(false)}
+          style={{ pointerEvents: 'auto', zIndex: 5000 }}
           className="fixed left-[calc(min(82vw,320px)-48px)] top-3 z-[200] flex size-9 items-center justify-center rounded-md bg-white/90 text-slate-600 shadow-sm dark:bg-background-dark/90 dark:text-slate-300 lg:hidden"
         >
           <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
