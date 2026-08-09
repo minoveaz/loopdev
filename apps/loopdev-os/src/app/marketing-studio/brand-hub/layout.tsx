@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useSyncExternalStore } from 'react';
 import { usePathname, useRouter, useParams } from 'next/navigation';
 import { BrandStatusSchema, type NavGroup } from '@loopdev/contracts';
 import {
@@ -63,17 +63,21 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   }, [currentBrand, setActiveBrand]);
 
   // 2. Estado de la Máquina de Paneles
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobileViewport = useSyncExternalStore(
+    (onStoreChange) => {
+      const mediaQuery = window.matchMedia('(max-width: 1023px)');
+      mediaQuery.addEventListener('change', onStoreChange);
+      return () => mediaQuery.removeEventListener('change', onStoreChange);
+    },
+    () => window.matchMedia('(max-width: 1023px)').matches,
+    () => false,
+  );
+  const [sidebarOpen, setSidebarOpen] = useState(() => !isMobileViewport);
   const [flyoutOpen, setFlyoutOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState('overview');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Cleanup al salir del módulo o cambiar de marca
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 1023px)');
-    setSidebarOpen(!mediaQuery.matches);
-  }, []);
-
   useEffect(() => {
     if (!brandId) {
       queueMicrotask(() => {

@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useSyncExternalStore } from 'react';
 import {
   LpdText,
   Heading,
   TechnicalSurface,
   StatusPulse,
   Icon,
-  MetricCard,
   Button,
   IndustrialMetric,
 } from '@loopdev/ui';
@@ -18,12 +17,11 @@ import { isLeadStale } from './utils/leadActivity';
 export default function SalesCrmDashboard() {
   const router = useRouter();
   const { leads, openLeadInspector } = useSalesCrm();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  const [showAddModal, setShowAddModal] = useState(false);
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   // Calculate metrics
   const totalPipeline = leads.reduce((acc, lead) => {

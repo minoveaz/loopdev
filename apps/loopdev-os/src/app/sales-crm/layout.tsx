@@ -1,17 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
   BlueprintBackground,
-  Button,
   LayoutProvider,
   ModuleHeader,
   ModuleWorkspace,
   SuiteSidebar,
   ThemeToggle,
-  SystemStatus,
   UserAvatar,
   SuiteHeader,
   CommandBarTrigger,
@@ -120,12 +118,12 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const { activeOrganization } = useOrganization();
   const { leads, openLeadInspector, isInspectorOpen, closeInspector, selectedLead } = useSalesCrm();
 
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [syncedNotifications, setSyncedNotifications] = useState<NotificationItem[]>([]);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     // Generate stale lead alerts notifications in real-time
