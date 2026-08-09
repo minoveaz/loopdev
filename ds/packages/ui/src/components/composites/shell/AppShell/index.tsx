@@ -47,7 +47,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     scrollbarClass,
     activeOverlay,
   } = useAppShell(props);
-  const isMobileNavVisible = isViewportReady && (isMobileViewport ? isMobileNavOpen : isNavOpen);
+  const isMobileNavVisible = isViewportReady && isMobileViewport && isMobileNavOpen;
 
   return (
     <div
@@ -96,7 +96,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           `}
           style={{
             width: isMobileViewport ? 'min(82vw, 320px)' : 'var(--app-shell-nav-width)',
-            zIndex: isMobileViewport ? 100 : undefined,
+            zIndex: isMobileViewport ? 'var(--app-shell-z-context)' : undefined,
           }}
         >
           <div

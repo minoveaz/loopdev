@@ -47,13 +47,31 @@
 - **Fase 1 — Primitives y contratos visuales:** completada en esta iteración.
 - **Fase 2 — Quality Gate automático:** completada en esta iteración.
 - **Fase 3 — Pruebas de componentes:** completada; cobertura de componentes compartidos, navegación, indicators, surfaces e composites complejos validada con Vitest/Testing Library y Axe donde el montaje es estable.
-- **Fase 4 — Pruebas reales de aplicación:** en progreso; el primer vertical slice ya tiene validación Playwright productiva para Brand Hub y Pipeline en `mobile-compact`.
-- **Fase 4.1 — Flujo de certificación frontend:** pendiente; incluye la ejecución estable en GitHub Actions.
-- **Fase 5 — Migración por suite:** pendiente.
+- **Fase 4 — Pruebas reales de aplicación:** completada; las suites prioritarias tienen cobertura Playwright separada por Desktop Web, Mobile Web y Mobile Compact, con checks de navegación, responsive, overflow y accesibilidad según su alcance.
+- **Fase 4.1 — Flujo de certificación frontend:** completada; el flujo `front:audit` → Vitest/Testing Library → Playwright → Axe → snapshots visuales está integrado en CI y cuenta con evidencia versionada.
+- **Fase 5 — Migración por suite:** completada; Launchpad, Marketing Studio, Sales CRM, Health OS y Quant Ops fueron revisadas con auditoría, build y certificación de aplicación light/dark. Health OS queda certificado en alcance shell/responsive y Quant Ops en Desktop Web-only.
 
 La ejecución de checks en GitHub Actions no constituye una fase independiente. Los checks estáticos y `front:check` se incorporan en la Fase 2; Playwright, Axe, snapshots y los checks requeridos de Pull Request se incorporan en la Fase 4.1.
 
-La siguiente acción recomendada es avanzar a la Fase 4 con pruebas Playwright sobre la aplicación real. GitHub Actions E2E, Axe de navegador y snapshots siguen reservados para la Fase 4.1.
+La Fase 5 queda cerrada con la evidencia registrada en la matriz. GitHub Actions E2E, Axe de navegador y snapshots se ejecutan en sus proyectos definidos, mientras que las suites sin versión móvil permanecen fuera de los proyectos mobile.
+
+### Evidencia de separación Playwright
+
+La configuración actual lista `19` tests en `desktop`, `12` tests en `mobile` y `12` tests en `mobile-compact`. `authenticated.application.spec.mjs`, incluidos Sales CRM y Quant Ops, se ejecuta únicamente en desktop; `authenticated.mobile.spec.mjs` se ejecuta únicamente en los dos proyectos mobile. Quant Ops queda fuera de mobile por decisión de producto. Health OS conserva únicamente cobertura de shell/responsive en mobile, no certificación funcional de sus módulos internos.
+
+El scan Axe desktop cubre login, launchpad y Sales Pipeline sin violaciones críticas o serias. Sales Pipeline queda certificado en accesibilidad de navegador para desktop; el resto de suites mantiene el alcance indicado en la matriz.
+
+### Evidencia de cierre de Fase 5
+
+`e2e/phase5.certification.spec.mjs` valida las cinco suites en light y dark con sesión E2E, contenido principal visible, ausencia de overflow horizontal y ausencia de errores de navegador no conocidos: 10 tests PASS. `front:audit --file` devuelve 0 hallazgos para cada suite y `pnpm --filter loopdev-os build` pasa con el bypass E2E de CI.
+
+### Nomenclatura de superficies
+
+- **Desktop Web:** aplicación web en viewport de escritorio; proyecto Playwright `desktop`.
+- **Responsive Web:** comportamiento adaptable de la aplicación web, validado mediante Mobile Web y Mobile Compact.
+- **Mobile Web:** aplicación web en viewport móvil; proyecto Playwright `mobile`.
+- **Mobile Compact:** viewport móvil extremo de `320x800`; proyecto Playwright `mobile-compact`.
+- **Mobile App:** aplicación instalada de `apps/loopdev-mobile`, independiente de los proyectos Playwright web.
 
 ## 1. Contexto
 

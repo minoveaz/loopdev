@@ -40,6 +40,13 @@ for (const route of authenticatedRoutes) {
     await moreNavigationButton.click();
     await expect(page.locator('#app-shell-nav')).toHaveClass(/translate-x-0/);
     await expect(page.getByRole('button', { name: 'Close navigation' })).toBeVisible();
+
+    if (route.name === 'marketing-studio') {
+      await page.getByRole('menuitem', { name: 'Brand Hub' }).click();
+      await expect(page).toHaveURL(/\/marketing-studio\/brand-hub$/);
+      return;
+    }
+
     await page.getByRole('button', { name: 'Close navigation' }).click();
     await expect(page.locator('#app-shell-nav')).toHaveClass(/-translate-x-full/);
     await expect(page.locator('#main-content')).toBeVisible({ timeout: 15000 });

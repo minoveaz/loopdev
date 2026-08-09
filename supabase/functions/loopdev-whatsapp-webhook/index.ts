@@ -180,6 +180,25 @@ Deno.serve(async (request) => {
           if (result.error?.code === '23505') duplicates += 1;
           else if (result.error) throw result.error;
           else processed += 1;
+          const messageResult = await supabase.from('communication_messages').select('id')
+            .eq('organization_id', account.organization_id).eq('external_id', status.id).maybeSingle();
+          if (messageResult.error) throw messageResult.error;
+          if (messageResult.data) {
+            const statusResult = await supabase.from('communication_message_statuses').insert({
+              organization_id: account.organization_id, message_id: messageResult.data.id,
+              status: status.status, provider_timestamp: timestamp(status.timestamp),
+            });
+            if (statusResult.error && statusResult.error.code !== '23505') throw statusResult.error;
+            const updateResult = await supabase.from('communication_messages').update({
+              status: status.status, updated_at: new Date().toISOString(),
+            }).eq('organization_id', account.organization_id).eq('id', messageResult.data.id);
+            if (updateResult.error) throw updateResult.error;
+          }
+          const processedEvent = await supabase.from('communication_webhook_events').update({
+            processing_status: 'processed', processed_at: new Date().toISOString(),
+          }).eq('organization_id', account.organization_id).eq('account_id', account.id)
+            .eq('external_event_id', eventKey('status', status.id));
+          if (processedEvent.error) throw processedEvent.error;
         }
 
         for (const message of value.messages ?? []) {

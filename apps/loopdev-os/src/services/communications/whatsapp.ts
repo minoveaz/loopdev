@@ -39,6 +39,41 @@ export function normalizeWhatsAppPhone(value: string) {
   return `+${digits}`;
 }
 
+export type WhatsAppOutboundResult = {
+  providerMessageId: string;
+  status: 'accepted';
+};
+
+export async function sendWhatsAppText(input: {
+  phoneNumberId: string;
+  accessToken: string;
+  to: string;
+  body: string;
+  graphApiVersion?: string;
+}): Promise<WhatsAppOutboundResult> {
+  const response = await fetch(
+    `https://graph.facebook.com/${input.graphApiVersion ?? 'v20.0'}/${input.phoneNumberId}/messages`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${input.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        to: normalizeWhatsAppPhone(input.to).replace('+', ''),
+        type: 'text',
+        text: { body: input.body },
+      }),
+    },
+  );
+  const payload = await response.json().catch(() => null) as { messages?: Array<{ id?: string }>; error?: { message?: string } } | null;
+  if (!response.ok || !payload?.messages?.[0]?.id) {
+    throw new Error(payload?.error?.message ?? 'WhatsApp provider rejected the message');
+  }
+  return { providerMessageId: payload.messages[0].id, status: 'accepted' };
+}
+
 function timestamp(value: unknown) {
   const seconds = Number(value);
   return Number.isFinite(seconds) ? new Date(seconds * 1000).toISOString() : new Date().toISOString();

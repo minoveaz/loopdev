@@ -1,7 +1,7 @@
 # Track: Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad
 
 **Fecha:** 2026-08-05  
-**Estado:** Fase 5E pausada — prioridad actual: Fase 6 CRM + POC de comunicaciones para Estar Protegidos
+**Estado:** Reconfiguración de roadmap — prioridad actual: Fase 6 CRM + comunicaciones para Estar Protegidos
 **Objetivo:** convertir `loopdev-os` en la plataforma SaaS multi-tenant del grupo LoopDev y de sus clientes, trasladando el backoffice de VitaBlue a LoopDev, reutilizando sus capacidades de marketing, CRM, operaciones y WhatsApp, y manteniendo las webs públicas de cada marca desacopladas.
 
 ## Contexto y decisión principal
@@ -58,14 +58,16 @@ La Fase 5D queda implementada en la rama `feature/loopdev-saas-platform-fase-5d`
 
 ### Decisión de priorización — 2026-08-08
 
-Se pausa temporalmente la Fase 5E. El objetivo inmediato es disponer en Dev de un CRM funcional para Estar Protegidos y de una POC inbound de comunicaciones, empezando por WhatsApp Business.
+Se pausa temporalmente la ejecución de la Fase 5E. El objetivo inmediato es disponer en Dev de un CRM funcional para Estar Protegidos y de comunicaciones integradas en el CRM, empezando por WhatsApp Business.
 
 El orden operativo pasa a ser:
 
 1. **Fase 6A — CRM persistente mínimo:** contactos, leads, pipeline, asignación, actividades, tareas, notas internas, búsqueda y RLS.
 2. **Fase 6B — Integración de captación:** marca, workspace, campaña, UTM y entrada de leads del wizard sin duplicados.
-3. **Fase 8A — POC WhatsApp inbound:** cuenta por organización/marca, webhook verificado, normalización E.164, idempotencia, contacto/conversación/mensaje y bandeja CRM.
-4. **Fase 8B — Respuesta controlada:** envío server-side, ventana de atención, plantillas autorizadas y estados de entrega.
+3. **Fase 6C — Comunicaciones y WhatsApp inbound:** cuenta por organización/marca, webhook verificado, normalización E.164, idempotencia, contacto/conversación/mensaje y bandeja CRM.
+4. **Fase 6D — Respuesta controlada:** envío server-side, ventana de atención, plantillas autorizadas y estados de entrega.
+5. **Fase 7 — Insurance Pack y Operations:** productos, coberturas, elegibilidad, cotizaciones versionadas, onboarding y seguimiento postventa.
+6. **Fase 8 — Evolución de Marketing Studio:** Content Engine, Insights, Growth, Advisor, Compliance, integraciones y capacidades avanzadas multi-tenant.
 
 La POC no incluirá todavía todos los proveedores ni automatizaciones. Las credenciales permanecerán en servidor/Vault y ninguna acción de envío se ejecutará desde el navegador.
 
@@ -74,12 +76,12 @@ La POC no incluirá todavía todos los proveedores ni automatizaciones. Las cred
 - Crear la rama de trabajo para Fase 6A desde `develop` actualizado.
 - Inventariar el contexto CRM actual y separar fixtures de datos persistentes.
 - Diseñar migraciones aditivas para CRM y contratos de comandos/lecturas.
-- Definir el límite exacto de la POC WhatsApp antes de incorporar migraciones de comunicaciones.
+- Definir el límite exacto de la integración WhatsApp antes de incorporar migraciones de comunicaciones.
 - Eliminar `localStorage` como fuente autoritativa y conservarlo, si se necesita, únicamente como caché.
 - Completar pruebas de servicio, OAuth, publicación y aislamiento entre VitaBlue y Protege tu Salud.
 - Crear el PR de la rama 5C y validar CI/Supabase en GitHub.
 
-Las capacidades avanzadas de Marketing Studio (Content Engine, Insights, Growth, Advisor y Compliance) permanecen en Fase 5E y no deben considerarse parte del cierre de 5C.
+Las capacidades avanzadas de Marketing Studio (Content Engine, Insights, Growth, Advisor y Compliance) quedan reubicadas en la Fase 8 y no forman parte del alcance de CRM, comunicaciones ni Operations.
 
 ### Decisión: integraciones LLM como fase futura
 
@@ -697,7 +699,7 @@ El siguiente bloque de Fase 3 son los estados de sesión/autorización y las pru
 - [x] Definir contratos de CRM y actividades.
 - [x] Definir contratos de Marketing Studio.
 - [x] Definir contratos de seguros, cotizaciones y operaciones.
-- [x] Diferir contratos de WhatsApp a Fase 8, hasta disponer de contratos de POC y endpoints server-side estables.
+- [x] Definir contratos de WhatsApp y endpoints server-side estables como parte de la Fase 6C/6D.
 - [x] Diferir contratos de Health OS a Fase 9, después de definir el modelo clínico, la clasificación de datos y la retención.
 - [x] Crear servicios server-side para operaciones sensibles; el vault de Quant centraliza autorización, lectura, alta y prueba de conexiones fuera de los Route Handlers.
 - [x] Centralizar mapeos snake_case/camelCase para CRM; los siguientes servicios reutilizarán este límite validado.
@@ -881,7 +883,7 @@ El equipo del Mac ejecutará 4B, 5B y 5C en este orden, partiendo de la rama que
 
 **Criterio:** un lead puede pasar de captación a cotización y onboarding con historial completo.
 
-### Fase 8 — WhatsApp Business inbound-first
+### Fase 6C — Comunicaciones y WhatsApp inbound
 
 #### Herramientas y controles
 
@@ -900,14 +902,61 @@ El equipo del Mac ejecutará 4B, 5B y 5C en este orden, partiendo de la rama que
 - [ ] Capturar fuente de anuncio, referido y campaña.
 - [ ] Crear bandeja protegida en CRM.
 - [ ] Añadir asignación, etiquetas, estados y notas.
-- [ ] Crear función server-side de respuesta.
-- [ ] Respetar ventana de atención y plantillas autorizadas.
-- [ ] Añadir estados `sent`, `delivered`, `read` y `failed`.
 - [ ] Probar mensajes de texto, imagen, documento, audio y ubicación.
 
-La POC `crm-communications-poc` permanece temporalmente desacoplada. No se incorporan todavía sus migraciones ni su esquema CRM a LoopDev; la integración se retomará como una fase posterior mediante contratos y endpoints server-side.
+La POC `crm-communications-poc` permanece temporalmente desacoplada. No se incorporan sus migraciones ni su esquema CRM a LoopDev; la integración se realizará mediante los contratos y endpoints server-side de la Fase 6.
 
-**Criterio:** un mensaje duplicado no duplica entidades y un agente autorizado puede responder sin exponer credenciales.
+**Criterio:** un mensaje duplicado no duplica entidades y el inbound queda disponible para un agente autorizado dentro del CRM.
+
+### Fase 6D — Respuesta controlada y operación de conversaciones
+
+#### Herramientas y controles
+
+- Servicios server-side para el envío y la autorización por organización, marca y workspace.
+- Ventana de atención, plantillas autorizadas y estados de entrega normalizados.
+- Idempotencia, auditoría, reintentos controlados y observabilidad.
+- Playwright para la bandeja CRM y los flujos del agente.
+
+- [ ] Crear función server-side de respuesta integrada en la bandeja CRM.
+- [ ] Respetar ventana de atención y plantillas autorizadas.
+- [ ] Añadir estados `sent`, `delivered`, `read` y `failed`.
+- [ ] Registrar auditoría de envío y errores sin exponer credenciales.
+- [ ] Añadir reintentos controlados y métricas operativas.
+- [ ] Probar respuestas autorizadas con datos seed anonimizados.
+
+**Criterio:** un agente autorizado puede responder desde el CRM y cada envío queda auditado, controlado e idempotente.
+
+### Fase 8 — Evolución de Marketing Studio
+
+La Fase 8 retoma las capacidades avanzadas de Marketing Studio que quedaron fuera del núcleo de plataforma y del CRM. LoopDev sigue siendo la implementación canónica y cada capacidad debe respetar organización, marca, workspace, permisos y aprobación humana.
+
+#### Alcance
+
+- Content Engine: briefs, piezas, versiones, plantillas y generación asistida.
+- Insights & Intel: métricas, atribución, embudos e insights.
+- Growth Ops: hipótesis, experimentos, variantes, métricas e iniciativas.
+- Advisor System: recomendaciones con evidencia, feedback y aprobación.
+- Compliance: políticas, reglas, checks, hallazgos y revisiones.
+- Integrations: proveedores, conexiones OAuth y límites por workspace.
+- Suite Dashboard y Settings: agregados operativos, locales, notificaciones y configuración.
+
+#### Herramientas y controles
+
+- Contratos Zod y servicios server-side por capacidad.
+- Persistencia multi-tenant con RLS y auditoría.
+- Aprobación humana para publicaciones y acciones de impacto.
+- Playwright, Axe y snapshots para las superficies entregadas.
+- Gateway LLM server-side únicamente cuando exista un contrato aprobado y controles de coste, secretos y trazabilidad.
+
+- [ ] Completar Content Engine sin proveedores LLM obligatorios.
+- [ ] Implementar Insights & Intel con métricas y atribución persistentes.
+- [ ] Implementar Growth Ops con experimentos auditables.
+- [ ] Implementar Advisor System con recomendaciones no autónomas.
+- [ ] Persistir workflow de Compliance y sus aprobaciones.
+- [ ] Migrar Integrations y Suite Settings a servicios protegidos.
+- [ ] Certificar cada módulo en desktop, responsive, light y dark según su alcance.
+
+**Criterio:** Marketing Studio ofrece capacidades avanzadas multi-tenant sin duplicar la implementación de VitaBlue, sin acciones autónomas no aprobadas y sin mezclar datos entre organizaciones.
 
 ### Fase 9 — Health OS y clientes de suite única
 

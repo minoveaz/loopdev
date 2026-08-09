@@ -36,6 +36,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
       onClick={handleClick}
       className={containerClasses}
       role="menuitem"
+      aria-label={label}
       aria-current={isActive ? 'page' : undefined}
       aria-disabled={isDisabled || isComingSoon}
     >
