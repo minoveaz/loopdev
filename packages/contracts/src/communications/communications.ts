@@ -91,3 +91,34 @@ export const SendCommunicationCommandSchema = z.object({
   }
 });
 export type SendCommunicationCommand = z.infer<typeof SendCommunicationCommandSchema>;
+
+export const CreateCommunicationConversationCommandSchema = z.object({
+  organizationId: IdSchema,
+  brandId: IdSchema.nullable().optional(),
+  workspaceId: IdSchema.nullable().optional(),
+  contactId: IdSchema,
+  channelId: IdSchema,
+  channel: CommunicationChannelSchema,
+});
+export type CreateCommunicationConversationCommand = z.infer<typeof CreateCommunicationConversationCommandSchema>;
+
+export const CreateCommunicationMessageCommandSchema = z.object({
+  organizationId: IdSchema,
+  conversationId: IdSchema,
+  externalId: z.string().trim().max(240).nullable().optional(),
+  direction: CommunicationMessageDirectionSchema,
+  status: CommunicationMessageStatusSchema.default('queued'),
+  body: z.string().max(100_000).nullable().optional(),
+  templateId: IdSchema.nullable().optional(),
+}).superRefine((value, context) => {
+  if (!value.body && !value.templateId) context.addIssue({ code: z.ZodIssueCode.custom, message: 'body or templateId is required' });
+});
+export type CreateCommunicationMessageCommand = z.infer<typeof CreateCommunicationMessageCommandSchema>;
+
+export const CreateCommunicationInternalNoteCommandSchema = z.object({
+  organizationId: IdSchema,
+  conversationId: IdSchema,
+  authorId: IdSchema,
+  body: z.string().trim().min(1).max(100_000),
+});
+export type CreateCommunicationInternalNoteCommand = z.infer<typeof CreateCommunicationInternalNoteCommandSchema>;

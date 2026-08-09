@@ -499,11 +499,12 @@ No se eliminarán esas tablas inmediatamente para no romper la POC ni perder tra
 
 La eliminación del legacy queda para una fase posterior, después de migrar o archivar sus datos y verificar que ninguna ruta activa lo consume.
 
-- [ ] Crear modelo de cuentas, canales, conversaciones, mensajes y notas internas.
-- [ ] Crear referencias seguras a credenciales.
-- [ ] Definir mensajes conversacionales, marketing y transaccionales.
-- [ ] Crear estados normalizados de entrega.
-- [ ] Crear idempotencia, reintentos y auditoría.
+- [x] Crear modelo de cuentas, canales, conversaciones, mensajes y notas internas.
+- [x] Crear referencias seguras a credenciales.
+- [x] Definir mensajes conversacionales, marketing y transaccionales.
+- [x] Crear estados normalizados de entrega.
+- [x] Crear idempotencia básica de mensajes y eventos webhook.
+- [ ] Completar reintentos controlados y auditoría de comunicaciones.
 - [ ] Añadir permisos y consentimiento por canal.
 - [ ] Crear una interfaz server-side común para CRM, Marketing Studio e Insurance Pack.
 
