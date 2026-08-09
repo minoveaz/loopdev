@@ -113,6 +113,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    if (isE2EAuthBypassEnabled) return;
+
     let isMounted = true;
 
     const initializeAuth = async () => {
