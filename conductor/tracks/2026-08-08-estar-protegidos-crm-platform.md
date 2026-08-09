@@ -513,6 +513,86 @@ La eliminación del legacy queda para una fase posterior, después de migrar o a
 
 ### Fase B5 — WhatsApp inbound POC
 
+La revisión de `whatsapp-poc` amplía B5: además del webhook inbound básico, debemos conservar el
+aislamiento del proveedor, el soporte de multimedia, plantillas, migración desde números personales,
+importación de historial y sugerencias supervisadas. Estas capacidades se implementarán sobre el
+Communications Core nuevo, no sobre las tablas legacy de la POC.
+
+#### B5.0 — Contrato y adaptador Meta Cloud API
+
+- [ ] Definir contrato versionado `MessagingProvider` para enviar texto, plantillas y procesar webhooks.
+- [ ] Encapsular Graph API, headers, versión, tokens y `PHONE_NUMBER_ID` en un adaptador server-side.
+- [ ] Confirmar WABA, número Sandbox, permisos Meta y variables secretas de Dev.
+- [ ] Normalizar estados y tipos propios sin filtrar payloads Meta al dominio.
+
+#### B5.1 — Webhook inbound y eventos
+
+- [ ] Implementar verificación `GET` con `hub.verify_token` y challenge.
+- [ ] Validar firma `X-Hub-Signature-256` en `POST`.
+- [ ] Parsear todas las entradas del payload, no solo la primera.
+- [ ] Soportar mensajes, estados de entrega, errores y eventos desconocidos trazables.
+- [ ] Registrar `external_event_id`, hash, payload restringido y estado de procesamiento.
+- [ ] Hacer idempotente el evento y el mensaje por cuenta/proveedor.
+
+#### B5.2 — Resolución CRM y ventana conversacional
+
+- [ ] Normalizar teléfonos a E.164.
+- [ ] Resolver cuenta, canal, contacto CRM y conversación existente.
+- [ ] Crear o actualizar contacto sin duplicarlo.
+- [ ] Conservar `last_inbound_at` y `window_expires_at`.
+- [ ] Persistir referral, anuncio, fuente y campaña como atribución, sin asumir que el texto del cliente es atribución definitiva.
+- [ ] Probar dos marcas de una misma organización sin mezclar atribución.
+
+#### B5.3 — Tipos de mensaje y multimedia
+
+- [ ] Soportar texto, interactivos, imagen, documento, audio, vídeo, ubicación y respuestas citadas.
+- [ ] Registrar media ID, MIME, nombre, tamaño y referencia de Storage.
+- [ ] Descargar multimedia exclusivamente server-side a bucket privado.
+- [ ] Generar URLs firmadas temporales para agentes autorizados.
+- [ ] Evitar duplicar el binario cuando el mismo media ID se reprocese.
+- [ ] Mantener adjunto recibido separado de documento promovido explícitamente a la ficha CRM.
+
+#### B5.4 — Respuesta controlada y plantillas
+
+- [ ] Permitir texto libre solo dentro de la ventana válida.
+- [ ] Exigir plantilla aprobada fuera de la ventana.
+- [ ] Sincronizar nombre, idioma, categoría, estado y componentes de plantillas.
+- [ ] Validar parámetros, botones, listas y media headers antes del envío.
+- [ ] Registrar request, response, provider message ID, estado y error sin secretos.
+- [ ] Mantener aprobación humana; no activar envíos autónomos ni campañas masivas.
+
+#### B5.5 — Migración desde número personal
+
+- [ ] Modelar estados `pending`, `agent_notified`, `template_sent`, `waiting_reply`, `migrated`, `failed`.
+- [ ] Conservar canales personal y oficial como canales distintos del mismo contacto.
+- [ ] Exigir consentimiento y plantilla aprobada para el aviso de migración.
+- [ ] Convertir la respuesta del cliente en señal de migración, sin fingir que el historial personal fue recibido por Meta.
+- [ ] Auditar agente, plantilla, idioma, variables y fechas.
+
+#### B5.6 — Historial y bandeja operativa
+
+- [ ] Importar historiales `.txt` como contexto separado de mensajes oficiales.
+- [ ] Conservar fuente, archivo, codificación, estado y errores de importación.
+- [ ] Crear timeline con separación visual entre mensaje oficial, nota interna e historial importado.
+- [ ] Permitir asignación, etiquetas, notas internas y estado de conversación.
+- [ ] Preparar simulador y fixtures para regresión sin depender siempre de Meta.
+
+#### B5.7 — Sugerencias asistidas y documental ligero
+
+- [ ] Detectar email, nombre, fecha de nacimiento y señales comerciales como sugerencias.
+- [ ] Registrar confianza y exigir confirmación humana antes de actualizar CRM.
+- [ ] Separar datos operativos de feedback analítico anonimizado.
+- [ ] Permitir clasificar manualmente adjuntos como póliza, identidad, presupuesto, documentación médica u otro.
+- [ ] Mantener OCR, extracción automática y decisiones de IA como fases posteriores.
+
+#### B5.8 — Pruebas y operación
+
+- [ ] Probar texto, interactivos, multimedia, duplicados, estados y errores de Meta.
+- [ ] Probar plantilla válida, rechazada y respuesta fuera de ventana.
+- [ ] Probar migración personal/oficial e importación de historial.
+- [ ] Verificar que ningún secreto aparece en frontend, logs, fixtures o contratos públicos.
+- [ ] Verificar RLS, auditoría, reintentos y recuperación tras reinicio.
+
 - [ ] Crear configuración de cuenta WhatsApp por organización y marca.
 - [ ] Implementar verificación y webhook server-side.
 - [ ] Validar firma, cuenta, payload y origen.
