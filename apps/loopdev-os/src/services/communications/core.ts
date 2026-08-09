@@ -2,11 +2,13 @@ import {
   CreateCommunicationConversationCommandSchema,
   CreateCommunicationInternalNoteCommandSchema,
   CreateCommunicationMessageCommandSchema,
+  RecordCommunicationMessageStatusCommandSchema,
 } from '@loopdev/contracts';
 import type {
   CreateCommunicationConversationCommand,
   CreateCommunicationInternalNoteCommand,
   CreateCommunicationMessageCommand,
+  RecordCommunicationMessageStatusCommand,
 } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
@@ -75,4 +77,28 @@ export async function registerWebhookEvent(input: {
     return { event: existing.data, duplicate: true };
   }
   return { event: data, duplicate: false };
+}
+
+export async function recordMessageStatus(input: RecordCommunicationMessageStatusCommand, actorUserId?: string | null) {
+  const parsed = RecordCommunicationMessageStatusCommandSchema.parse(input);
+  const supabase = await createServerSupabaseClient();
+  const { data: status, error } = await supabase.from('communication_message_statuses').insert({
+    organization_id: parsed.organizationId,
+    message_id: parsed.messageId,
+    status: parsed.status,
+    provider_timestamp: parsed.providerTimestamp ?? null,
+  }).select().single();
+  if (error) throw new Error('Unable to record communication message status');
+  const { error: auditError } = await supabase.from('crm_audit_events').insert({
+    organization_id: parsed.organizationId,
+    actor_user_id: actorUserId ?? null,
+    entity_type: 'communication_message',
+    entity_id: parsed.messageId,
+    action: `status_${parsed.status}`,
+    before_state: null,
+    after_state: { status: parsed.status },
+    metadata: { source: 'communications_core' },
+  });
+  if (auditError) throw new Error('Unable to audit communication message status');
+  return status;
 }

@@ -121,3 +121,11 @@ export const CreateCommunicationInternalNoteCommandSchema = z.object({
   body: z.string().trim().min(1).max(100_000),
 });
 export type CreateCommunicationInternalNoteCommand = z.infer<typeof CreateCommunicationInternalNoteCommandSchema>;
+
+export const RecordCommunicationMessageStatusCommandSchema = z.object({
+  organizationId: IdSchema,
+  messageId: IdSchema,
+  status: CommunicationMessageStatusSchema,
+  providerTimestamp: TimestampSchema.nullable().optional(),
+});
+export type RecordCommunicationMessageStatusCommand = z.infer<typeof RecordCommunicationMessageStatusCommandSchema>;
