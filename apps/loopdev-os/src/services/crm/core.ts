@@ -29,6 +29,7 @@ type LeadRow = {
   stage: string;
   status: string;
   source: string;
+  external_lead_id: string | null;
   campaign: string | null;
   assigned_to_user_id: string | null;
   created_at: string;
@@ -53,7 +54,7 @@ type OpportunityRow = {
 const contactColumns =
   'id, organization_id, first_name, last_name, email, phone, company_name, created_at, updated_at';
 const leadColumns =
-  'id, organization_id, contact_id, brand_id, workspace_id, stage, status, source, campaign, assigned_to_user_id, created_at, updated_at';
+  'id, organization_id, contact_id, brand_id, workspace_id, stage, status, source, external_lead_id, campaign, assigned_to_user_id, created_at, updated_at';
 const opportunityColumns =
   'id, organization_id, lead_id, workspace_id, name, stage, amount, currency, probability, expected_close_at, created_at, updated_at';
 
@@ -91,6 +92,7 @@ function mapLead(row: LeadRow): CrmLead {
     stage: row.stage,
     status: row.status,
     source: row.source,
+    externalLeadId: row.external_lead_id,
     campaign: row.campaign,
     assignedToUserId: row.assigned_to_user_id,
     createdAt: row.created_at,
@@ -172,6 +174,7 @@ export async function createLead(input: CrmCreateLeadCommand, userId: string): P
       brand_id: parsed.brandId ?? null,
       workspace_id: parsed.workspaceId ?? null,
       source: parsed.source,
+      external_lead_id: parsed.externalLeadId ?? null,
       campaign: parsed.campaign ?? null,
       assigned_to_user_id: userId,
     })
@@ -183,9 +186,29 @@ export async function createLead(input: CrmCreateLeadCommand, userId: string): P
 
 export async function captureLead(input: CrmCaptureLeadCommand, userId: string) {
   const parsed = CrmCaptureLeadCommandSchema.parse(input);
-  const contact = await findOrCreateContact({ organizationId: parsed.organizationId, firstName: parsed.firstName, lastName: parsed.lastName, email: parsed.email, phone: parsed.phone, companyName: parsed.companyName });
-  const lead = await createLead({ organizationId: parsed.organizationId, contactId: contact.id, brandId: parsed.brandId, workspaceId: parsed.workspaceId, source: parsed.source, campaign: parsed.campaign, utm: {} }, userId);
   const supabase = await createServerSupabaseClient();
+  if (parsed.externalLeadId) {
+    const { data: existingLead, error: existingLeadError } = await supabase
+      .from('crm_leads')
+      .select(leadColumns)
+      .eq('organization_id', parsed.organizationId)
+      .eq('source', parsed.source)
+      .eq('external_lead_id', parsed.externalLeadId)
+      .maybeSingle();
+    if (existingLeadError) throw new Error('Unable to resolve existing CRM lead');
+    if (existingLead) {
+      const existingContact = await supabase
+        .from('crm_contacts')
+        .select(contactColumns)
+        .eq('id', (existingLead as unknown as LeadRow).contact_id)
+        .eq('organization_id', parsed.organizationId)
+        .single();
+      if (existingContact.error) throw new Error('Unable to resolve existing CRM contact');
+      return { contact: mapContact(existingContact.data as unknown as ContactRow), lead: mapLead(existingLead as unknown as LeadRow), attribution: null };
+    }
+  }
+  const contact = await findOrCreateContact({ organizationId: parsed.organizationId, firstName: parsed.firstName, lastName: parsed.lastName, email: parsed.email, phone: parsed.phone, companyName: parsed.companyName });
+  const lead = await createLead({ organizationId: parsed.organizationId, contactId: contact.id, brandId: parsed.brandId, workspaceId: parsed.workspaceId, source: parsed.source, externalLeadId: parsed.externalLeadId, campaign: parsed.campaign, utm: {} }, userId);
   const { data: attribution, error } = await supabase.from('crm_lead_attributions').insert({ organization_id: parsed.organizationId, lead_id: lead.id, source: parsed.source, campaign: parsed.utm.campaign ?? parsed.campaign ?? null, medium: parsed.utm.medium ?? null, content: parsed.utm.content ?? null, term: parsed.utm.term ?? null }).select().single();
   if (error) {
     await supabase.from('crm_leads').delete().eq('id', lead.id).eq('organization_id', parsed.organizationId);

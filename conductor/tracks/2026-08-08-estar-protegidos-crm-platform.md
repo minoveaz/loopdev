@@ -477,10 +477,10 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 - [x] Asociar marca y workspace mediante las relaciones validadas por Supabase.
 - [x] Añadir tests de payload y normalización de captación.
 - [ ] Integrar formularios externos y Marketing Studio.
-- [ ] Completar idempotencia por `external_lead_id` para reintentos de proveedores.
+- [x] Completar idempotencia por `external_lead_id` para reintentos de proveedores.
 - [ ] Probar captación remota de dos marcas sin mezcla de datos.
 
-**Salida parcial:** la API CRM ya captura contactos/leads y guarda atribución. Queda conectar entradas externas y añadir una clave de idempotencia de proveedor antes del cierre de B3.
+**Salida parcial:** la API CRM ya captura contactos/leads, guarda atribución y evita duplicados cuando el proveedor reintenta el mismo `external_lead_id`. Queda conectar entradas externas/Marketing Studio y ejecutar pruebas remotas de dos marcas sin mezcla de atribución.
 
 ### Fase B4 — Communications Core
 

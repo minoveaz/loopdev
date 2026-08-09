@@ -1818,6 +1818,7 @@ export type Database = {
           id: string
           organization_id: string
           source: string
+          external_lead_id: string | null
           stage: string
           status: string
           updated_at: string
@@ -1832,6 +1833,7 @@ export type Database = {
           id?: string
           organization_id: string
           source?: string
+          external_lead_id?: string | null
           stage?: string
           status?: string
           updated_at?: string
@@ -1846,6 +1848,7 @@ export type Database = {
           id?: string
           organization_id?: string
           source?: string
+          external_lead_id?: string | null
           stage?: string
           status?: string
           updated_at?: string
