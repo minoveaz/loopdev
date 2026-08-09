@@ -30,7 +30,9 @@ Este registro certifica la capa estática de Fase 2 y la cobertura parcial de co
 
 Una suite solo puede pasar a `Front_Certified` cuando las columnas bloqueantes estén verificadas y exista evidencia de Vitest, Playwright, Axe, light/dark y responsive.
 
-El alcance de Fase 4 es explícito: Marketing Studio, Brand Hub, Sales CRM y Pipeline se validan en mobile; Quant Ops se valida únicamente en desktop porque no tendrá versión móvil; Health OS conserva smoke de shell, pero su funcionalidad interna queda fuera de prioridad hasta que la suite esté desarrollada.
+El alcance de Fase 4 es explícito: Marketing Studio, Brand Hub, Sales CRM y Pipeline se validan en mobile; Quant Ops se valida únicamente en desktop porque no tendrá versión móvil; Health OS conserva smoke de shell/responsive en mobile, pero su funcionalidad interna queda fuera de prioridad hasta que la suite esté desarrollada.
+
+La separación de proyectos Playwright queda verificada con `18` tests en `desktop`, `12` en `mobile` y `12` en `mobile-compact`. Los tests de interacción autenticada de `authenticated.application.spec.mjs` son desktop-only; las rutas de `authenticated.mobile.spec.mjs` se ejecutan en los dos proyectos mobile.
 
 ## Próxima evidencia
 
