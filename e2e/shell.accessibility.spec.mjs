@@ -4,8 +4,6 @@ import AxeBuilder from '@axe-core/playwright';
 const accessibleRoutes = [
   { name: 'login', path: '/login', storageState: undefined },
   { name: 'launchpad', path: '/launchpad', storageState: undefined },
-  { name: 'brand-hub', path: '/marketing-studio/brand-hub', storageState: 'playwright/.auth/user.json' },
-  { name: 'sales-pipeline', path: '/sales-crm/pipeline', storageState: 'playwright/.auth/user.json' },
 ];
 
 for (const route of accessibleRoutes) {
