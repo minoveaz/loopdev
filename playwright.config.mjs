@@ -38,6 +38,7 @@ export default defineConfig({
         '**/*.accessibility.spec.mjs',
         '**/*.visual.spec.mjs',
         '**/authenticated.application.spec.mjs',
+        '**/phase5.certification.spec.mjs',
       ],
       testIgnore: ['**/responsive.visual.spec.mjs'],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },

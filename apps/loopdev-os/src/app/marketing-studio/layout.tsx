@@ -120,7 +120,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             leftSlot={
               <div className="flex min-w-0 items-center gap-3">
                 <BrandLogo variant="isotype" size="sm" className="shrink-0 md:hidden" />
-                <span className="truncate text-sm font-semibold text-text-main dark:text-white">
+                <span className="truncate text-sm font-semibold text-text-main">
                   {currentSuite.suiteName}
                 </span>
               </div>

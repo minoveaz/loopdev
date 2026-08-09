@@ -2,7 +2,17 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Heading, LpdText, TechnicalText, SectionHeader, ModuleCard, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
+import {
+  Heading,
+  LpdText,
+  TechnicalText,
+  SectionHeader,
+  ModuleCard,
+  Skeleton,
+  EmptyState,
+  Button,
+  Icon,
+} from '@loopdev/ui';
 import { useBrands } from '@/hooks/brand-hub/useBrands';
 
 /**
@@ -19,14 +29,24 @@ export default function BrandHubOverview() {
       <header className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <Heading as="h2" size="2xl" weight="bold" className="text-text-main uppercase tracking-tight">
+            <Heading
+              as="h2"
+              size="2xl"
+              weight="bold"
+              className="text-text-main uppercase tracking-tight"
+            >
               Module_Overview
             </Heading>
             <LpdText size="sm" className="text-text-muted max-w-xl">
-              Welcome to the Brand Oracle. Monitor the health of your identities and govern compliance.
+              Welcome to the Brand Oracle. Monitor the health of your identities and govern
+              compliance.
             </LpdText>
           </div>
-          <Button variant="outline" size="sm" onClick={() => router.push('/marketing-studio/brand-hub/brands')}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push('/marketing-studio/brand-hub/brands')}
+          >
             View All Brands
           </Button>
         </div>
@@ -40,36 +60,42 @@ export default function BrandHubOverview() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {isLoading ? (
-            [1, 2, 3].map(i => <Skeleton key={i} className="aspect-square rounded-2xl" />)
-          ) : (
-            brands.slice(0, 3).map((brand) => (
-              <ModuleCard
-                key={brand.id}
-                title={brand.name}
-                statusBadge={brand.status.toUpperCase()}
-                statusTone={brand.status === 'published' ? 'success' : 'warning'}
-                footerContent={
-                  <div className="flex flex-col">
-                    <TechnicalText size="nano" className="text-text-muted opacity-60 uppercase">Last Update</TechnicalText>
-                    <LpdText size="xs" className="text-text-main font-medium">{brand.updatedAt}</LpdText>
-                  </div>
-                }
-                onClick={() => router.push(`/marketing-studio/brand-hub/brands/${brand.id}/overview`)}
-              />
-            ))
-          )}
-          
+          {isLoading
+            ? [1, 2, 3].map((i) => <Skeleton key={i} className="aspect-square rounded-2xl" />)
+            : brands.slice(0, 3).map((brand) => (
+                <ModuleCard
+                  key={brand.id}
+                  title={brand.name}
+                  statusBadge={brand.status.toUpperCase()}
+                  statusTone={brand.status === 'published' ? 'success' : 'warning'}
+                  footerContent={
+                    <div className="flex flex-col">
+                      <TechnicalText size="nano" className="text-text-muted opacity-60 uppercase">
+                        Last Update
+                      </TechnicalText>
+                      <LpdText size="xs" className="text-text-main font-medium">
+                        {brand.updatedAt}
+                      </LpdText>
+                    </div>
+                  }
+                  onClick={() =>
+                    router.push(`/marketing-studio/brand-hub/brands/${brand.id}/overview`)
+                  }
+                />
+              ))}
+
           {/* Card de "Crear Nueva" */}
           <Button
             variant="secondary"
             onClick={() => console.log('New Brand Flow')}
-            className="flex flex-col items-center justify-center p-6 border border-dashed border-border-technical rounded-2xl bg-white/2 hover:bg-primary/5 hover:border-primary/30 transition-all group aspect-square"
+            className="flex flex-col items-center justify-center p-6 border border-dashed border-border-technical rounded-2xl bg-background-subtle/40 hover:bg-primary/5 hover:border-primary/30 transition-all group aspect-square"
           >
             <div className="w-12 h-12 rounded-full bg-background-subtle group-hover:bg-primary/10 flex items-center justify-center mb-4 transition-colors">
               <Icon name="add" className="text-text-muted group-hover:text-primary" />
             </div>
-            <LpdText size="sm" weight="bold" className="text-text-muted group-hover:text-primary">Create Brand</LpdText>
+            <LpdText size="sm" weight="bold" className="text-text-muted group-hover:text-primary">
+              Create Brand
+            </LpdText>
           </Button>
         </div>
       </section>
