@@ -6,7 +6,9 @@ const authDirectory = path.resolve('playwright/.auth');
 const storageStatePath = path.join(authDirectory, 'user.json');
 
 export default async function globalSetup() {
-  process.loadEnvFile('.env.local');
+  if (fs.existsSync('.env.local')) {
+    process.loadEnvFile('.env.local');
+  }
   fs.mkdirSync(authDirectory, { recursive: true });
 
   if (process.env.PLAYWRIGHT_E2E_AUTH_BYPASS === 'true') {
