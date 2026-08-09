@@ -1,6 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import fs from 'node:fs';
 
-process.loadEnvFile('.env.local');
+if (fs.existsSync('.env.local')) {
+  process.loadEnvFile('.env.local');
+}
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000';
 
@@ -30,7 +33,12 @@ export default defineConfig({
   projects: [
     {
       name: 'desktop',
-      testMatch: ['**/*.smoke.spec.mjs', '**/*.accessibility.spec.mjs', '**/*.visual.spec.mjs'],
+      testMatch: [
+        '**/*.smoke.spec.mjs',
+        '**/*.accessibility.spec.mjs',
+        '**/*.visual.spec.mjs',
+        '**/authenticated.application.spec.mjs',
+      ],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
     {

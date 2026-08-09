@@ -13,6 +13,14 @@ const e2eUser = {
   role: 'authenticated',
   email: 'e2e@loopdev.test',
 } as User;
+const e2eSession = {
+  access_token: 'e2e-access-token',
+  refresh_token: 'e2e-refresh-token',
+  expires_in: 3600,
+  expires_at: 4102444800,
+  token_type: 'bearer',
+  user: e2eUser,
+} as Session;
 const e2eMembership = {
   organizationId: 'e2e-organization',
   userId: 'e2e-user',
@@ -43,7 +51,7 @@ const getSupabaseInstance = () => {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(isE2EAuthBypassEnabled ? e2eUser : null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>(isE2EAuthBypassEnabled ? e2eSession : null);
   const [memberships, setMemberships] = useState<OrganizationMembership[]>(
     isE2EAuthBypassEnabled ? [e2eMembership] : [],
   );
@@ -105,6 +113,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    if (isE2EAuthBypassEnabled) return;
+
     let isMounted = true;
 
     const initializeAuth = async () => {
