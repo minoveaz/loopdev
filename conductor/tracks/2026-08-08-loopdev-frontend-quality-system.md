@@ -59,6 +59,14 @@ La siguiente acción recomendada es consolidar la evidencia de Fase 4.1 y manten
 
 La configuración actual lista `18` tests en `desktop`, `12` tests en `mobile` y `12` tests en `mobile-compact`. `authenticated.application.spec.mjs`, incluidos Sales CRM y Quant Ops, se ejecuta únicamente en desktop; `authenticated.mobile.spec.mjs` se ejecuta únicamente en los dos proyectos mobile. Quant Ops queda fuera de mobile por decisión de producto. Health OS conserva únicamente cobertura de shell/responsive en mobile, no certificación funcional de sus módulos internos.
 
+### Nomenclatura de superficies
+
+- **Desktop Web:** aplicación web en viewport de escritorio; proyecto Playwright `desktop`.
+- **Responsive Web:** comportamiento adaptable de la aplicación web, validado mediante Mobile Web y Mobile Compact.
+- **Mobile Web:** aplicación web en viewport móvil; proyecto Playwright `mobile`.
+- **Mobile Compact:** viewport móvil extremo de `320x800`; proyecto Playwright `mobile-compact`.
+- **Mobile App:** aplicación instalada de `apps/loopdev-mobile`, independiente de los proyectos Playwright web.
+
 ## 1. Contexto
 
 LoopDev ya dispone de una base sólida:

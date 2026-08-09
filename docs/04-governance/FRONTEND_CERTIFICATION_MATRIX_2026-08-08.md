@@ -26,6 +26,14 @@ El baseline versionado está en `config/frontend-audit-baseline.json` y contiene
 
 ## Alcance de este resultado
 
+### Nomenclatura de superficies
+
+- **Desktop Web:** aplicación web en viewport de escritorio; en Playwright corresponde al proyecto `desktop` (`1440x900`).
+- **Responsive Web:** la aplicación web adaptada a distintos tamaños; se evidencia mediante `Mobile Web` y `Mobile Compact`.
+- **Mobile Web:** aplicación web en viewport móvil; en Playwright corresponde al proyecto `mobile` con dispositivo iPhone 13.
+- **Mobile Compact:** caso extremo de Responsive Web; en Playwright corresponde al proyecto `mobile-compact` con viewport `320x800`.
+- **Mobile App:** aplicación móvil instalada de `apps/loopdev-mobile`; es una superficie distinta de Mobile Web y no se incluye en los proyectos Playwright web.
+
 Este registro certifica la capa estática de Fase 2 y la cobertura parcial de componentes/Axe de Fase 3. La evidencia Axe cubre actualmente primitives compartidos en `@loopdev/ui` y no certifica todavía el comportamiento real de las suites en navegador, responsive en los viewports oficiales, temas ni snapshots visuales.
 
 Una suite solo puede pasar a `Front_Certified` cuando las columnas bloqueantes estén verificadas y exista evidencia de Vitest, Playwright, Axe, light/dark y responsive.
