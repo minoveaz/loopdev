@@ -9,6 +9,7 @@ export const MarketingCopyChannelSchema = z.enum(['social', 'email', 'landing_pa
 export const MarketingCampaignSchema = MarketingScopedRecordSchema.extend({
   brandId: MarketingIdSchema,
   workspaceId: MarketingIdSchema,
+  brandVersionId: MarketingIdSchema.nullable().optional(),
   name: z.string().trim().min(1).max(160),
   objective: z.string().trim().min(1).max(240),
   status: MarketingCampaignStatusSchema.default('draft'),
@@ -59,3 +60,21 @@ export const CreateMarketingCampaignSchema = MarketingCampaignSchema.omit({
   id: true, createdAt: true, updatedAt: true, createdBy: true, updatedBy: true,
 });
 export type CreateMarketingCampaignInput = z.infer<typeof CreateMarketingCampaignSchema>;
+
+export const UpdateMarketingCampaignSchema = z.object({
+  organizationId: MarketingIdSchema,
+  workspaceId: MarketingIdSchema,
+  campaignId: MarketingIdSchema,
+  brandId: MarketingIdSchema.optional(),
+  brandVersionId: MarketingIdSchema.nullable().optional(),
+  name: MarketingCampaignSchema.shape.name.optional(),
+  objective: MarketingCampaignSchema.shape.objective.optional(),
+  status: MarketingCampaignStatusSchema.optional(),
+  startsAt: MarketingCampaignSchema.shape.startsAt,
+  endsAt: MarketingCampaignSchema.shape.endsAt,
+  budget: MarketingCampaignSchema.shape.budget,
+  currency: MarketingCampaignSchema.shape.currency.optional(),
+}).refine((input) => Object.keys(input).some((key) => !['organizationId', 'workspaceId', 'campaignId'].includes(key)), {
+  message: 'At least one campaign field is required',
+});
+export type UpdateMarketingCampaignInput = z.infer<typeof UpdateMarketingCampaignSchema>;

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
 import { Heading, LpdText, TechnicalText, Skeleton, EmptyState } from '@loopdev/ui';
 import type { ToneProfile, RegulatedClaim } from '@/suites/marketing-studio/brand-hub/types';
@@ -20,7 +20,7 @@ import type { BrandIdentity } from '@/suites/marketing-studio/brand-hub/types';
 export default function BrandIdentityPage() {
   const params = useParams();
   const brandId = params.brandId as string;
-  const { data: brand, isLoading } = useActiveBrand(brandId);
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
   const { setInspectorOpen, setSelectedEntity } = useBrandHub();
   
   // Local state for active tab in inspector (simulated for now)
@@ -35,8 +35,8 @@ export default function BrandIdentityPage() {
     );
   }
 
-  const identity = brand?.identity as BrandIdentity | undefined;
-  const isDraft = brand?.status === 'draft';
+  const identity = brandContext?.brand.identity as BrandIdentity | undefined;
+  const isDraft = brandContext?.brand.status === 'draft';
 
   // --- CONSEQUENCE WIRING (Inspector Handlers) ---
 

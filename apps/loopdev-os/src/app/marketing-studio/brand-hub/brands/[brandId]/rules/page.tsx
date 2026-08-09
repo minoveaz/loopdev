@@ -2,9 +2,9 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, TechnicalText, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
+import { Heading, LpdText, Skeleton, EmptyState, Button, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import {
   RuleDomain,
   RulesEngineSchema,
@@ -17,9 +17,6 @@ import { RuleDomainRail } from '@/suites/marketing-studio/brand-hub/components/r
 import { RuleRow } from '@/suites/marketing-studio/brand-hub/components/rules/RuleRow';
 import { RuleEditor } from '@/suites/marketing-studio/brand-hub/components/rules/RuleEditor';
 
-// Data Source Fallback
-import { LOOPDEV_RULES_ENGINE } from '@/suites/marketing-studio/brand-hub/fixtures/rules-data';
-
 /**
  * @page BrandRulesPage
  * @description The control center for brand governance laws.
@@ -31,17 +28,13 @@ export default function BrandRulesPage() {
   const { setSelectedEntity } = useBrandHub();
 
   // Data Acquisition
-  const { data: brand, isLoading } = useActiveBrand(brandId);
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
+  const brand = brandContext?.brand;
 
-  // Support both snake_case (DB) and camelCase (Contract) + Fallback to Fixture for LoopDev brand
-  const parsedRules = RulesEngineSchema.safeParse(brand?.rules_engine);
+  // Rules are read from the active brand record; no fixture is authoritative.
+  const parsedRules = RulesEngineSchema.safeParse(brand?.rulesEngine);
   const dbRules = parsedRules.success ? parsedRules.data : undefined;
-  const rulesEngine: RulesEngine | undefined =
-    dbRules?.rules && dbRules.rules.length > 0
-      ? dbRules
-      : brand?.name === 'LoopDev'
-        ? LOOPDEV_RULES_ENGINE
-        : dbRules;
+  const rulesEngine: RulesEngine | undefined = dbRules;
 
   // Local State
   const [activeDomain, setActiveDomain] = useState<RuleDomain | 'all'>('all');
