@@ -120,7 +120,12 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const { activeOrganization } = useOrganization();
   const { leads, openLeadInspector, isInspectorOpen, closeInspector, selectedLead } = useSalesCrm();
 
+  const [isMounted, setIsMounted] = useState(false);
   const [syncedNotifications, setSyncedNotifications] = useState<NotificationItem[]>([]);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     // Generate stale lead alerts notifications in real-time
@@ -219,7 +224,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
             }
             profileSlot={
               <UserAvatar
-                name={user?.email || 'Sales Manager'}
+                name={isMounted ? user?.email || 'Sales Manager' : 'Sales Manager'}
                 size={navMode === 'rail' ? 'md' : 'sm'}
                 withStatus
                 status="online"
@@ -245,7 +250,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
                   segments={[
                     {
                       id: 'workspace',
-                      label: activeOrganization?.name ?? 'Workspace',
+                      label: isMounted ? activeOrganization?.name ?? 'Workspace' : 'Workspace',
                       isActive: true,
                     },
                   ]}
@@ -268,8 +273,8 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
 
                 <ThemeToggle variant="technical" size="md" />
                 <UserMenu
-                  userName={user?.email || 'Sales Manager'}
-                  userEmail={user?.email}
+                  userName={isMounted ? user?.email || 'Sales Manager' : 'Sales Manager'}
+                  userEmail={isMounted ? user?.email : undefined}
                   userRole="Sales_Executive"
                   onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
                   onLogout={() => signOut()}

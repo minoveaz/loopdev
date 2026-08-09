@@ -63,12 +63,17 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   }, [currentBrand, setActiveBrand]);
 
   // 2. Estado de la Máquina de Paneles
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [flyoutOpen, setFlyoutOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState('overview');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Cleanup al salir del módulo o cambiar de marca
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 1023px)');
+    setSidebarOpen(!mediaQuery.matches);
+  }, []);
+
   useEffect(() => {
     if (!brandId) {
       queueMicrotask(() => {

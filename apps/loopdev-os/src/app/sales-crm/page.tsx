@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LpdText,
   Heading,
@@ -18,6 +18,11 @@ import { isLeadStale } from './utils/leadActivity';
 export default function SalesCrmDashboard() {
   const router = useRouter();
   const { leads, openLeadInspector } = useSalesCrm();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const [showAddModal, setShowAddModal] = useState(false);
 
   // Calculate metrics
@@ -35,7 +40,7 @@ export default function SalesCrmDashboard() {
   const avgAiScore = Math.round(leads.reduce((acc, l) => acc + l.aiScore, 0) / leads.length);
 
   // Calculate Revenue in Risk (stale leads: stage contacted & no contact for > 5 days)
-  const staleLeads = leads.filter((lead) => isLeadStale(lead));
+  const staleLeads = isMounted ? leads.filter((lead) => isLeadStale(lead)) : [];
   const revenueInRisk = staleLeads.reduce((acc, l) => acc + l.dealValue, 0);
 
   // Filter high win probability deals
