@@ -343,6 +343,205 @@ export type Database = {
           },
         ]
       }
+      communication_accounts: {
+        Row: {
+          brand_id: string | null
+          channel: string
+          created_at: string
+          credentials_ref: string
+          external_account_id: string
+          id: string
+          organization_id: string
+          provider: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string | null
+          channel: string
+          created_at?: string
+          credentials_ref: string
+          external_account_id: string
+          id?: string
+          organization_id: string
+          provider: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string | null
+          channel?: string
+          created_at?: string
+          credentials_ref?: string
+          external_account_id?: string
+          id?: string
+          organization_id?: string
+          provider?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_accounts_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "communication_accounts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communication_channels: {
+        Row: {
+          account_id: string
+          address: string
+          channel: string
+          contact_id: string
+          created_at: string
+          display_name: string | null
+          id: string
+          is_primary: boolean
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          address: string
+          channel: string
+          contact_id: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_primary?: boolean
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          address?: string
+          channel?: string
+          contact_id?: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_primary?: boolean
+          organization_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_channels_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "communication_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_channels_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_channels_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communication_conversations: {
+        Row: {
+          assigned_to_user_id: string | null
+          brand_id: string | null
+          channel: string
+          channel_id: string
+          contact_id: string
+          created_at: string
+          id: string
+          last_inbound_at: string | null
+          organization_id: string
+          status: string
+          updated_at: string
+          window_expires_at: string | null
+          workspace_id: string | null
+        }
+        Insert: {
+          assigned_to_user_id?: string | null
+          brand_id?: string | null
+          channel: string
+          channel_id: string
+          contact_id: string
+          created_at?: string
+          id?: string
+          last_inbound_at?: string | null
+          organization_id: string
+          status?: string
+          updated_at?: string
+          window_expires_at?: string | null
+          workspace_id?: string | null
+        }
+        Update: {
+          assigned_to_user_id?: string | null
+          brand_id?: string | null
+          channel?: string
+          channel_id?: string
+          contact_id?: string
+          created_at?: string
+          id?: string
+          last_inbound_at?: string | null
+          organization_id?: string
+          status?: string
+          updated_at?: string
+          window_expires_at?: string | null
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_conversations_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "communication_conversations_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "communication_channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_conversations_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_conversations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_conversations_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
       communication_entity_links: {
         Row: {
           communication_id: string
@@ -375,6 +574,259 @@ export type Database = {
           workspace_id?: string
         }
         Relationships: []
+      }
+      communication_internal_notes: {
+        Row: {
+          author_id: string | null
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          organization_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          organization_id: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          organization_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_internal_notes_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "communication_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_internal_notes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communication_message_statuses: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          organization_id: string
+          provider_timestamp: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          organization_id: string
+          provider_timestamp?: string | null
+          status: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          organization_id?: string
+          provider_timestamp?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_message_statuses_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "communication_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_message_statuses_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communication_messages: {
+        Row: {
+          body: string | null
+          conversation_id: string
+          created_at: string
+          direction: string
+          external_id: string | null
+          id: string
+          organization_id: string
+          status: string
+          template_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          conversation_id: string
+          created_at?: string
+          direction: string
+          external_id?: string | null
+          id?: string
+          organization_id: string
+          status?: string
+          template_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          conversation_id?: string
+          created_at?: string
+          direction?: string
+          external_id?: string | null
+          id?: string
+          organization_id?: string
+          status?: string
+          template_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "communication_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_messages_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_messages_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "communication_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communication_templates: {
+        Row: {
+          body: string
+          brand_id: string | null
+          channel: string
+          created_at: string
+          external_template_id: string
+          id: string
+          language: string
+          organization_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          brand_id?: string | null
+          channel: string
+          created_at?: string
+          external_template_id: string
+          id?: string
+          language: string
+          organization_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          brand_id?: string | null
+          channel?: string
+          created_at?: string
+          external_template_id?: string
+          id?: string
+          language?: string
+          organization_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_templates_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "communication_templates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communication_webhook_events: {
+        Row: {
+          account_id: string
+          external_event_id: string
+          external_message_id: string | null
+          id: string
+          organization_id: string
+          payload_version: string
+          processed_at: string | null
+          processing_status: string
+          received_at: string
+          retry_count: number
+        }
+        Insert: {
+          account_id: string
+          external_event_id: string
+          external_message_id?: string | null
+          id?: string
+          organization_id: string
+          payload_version: string
+          processed_at?: string | null
+          processing_status?: string
+          received_at?: string
+          retry_count?: number
+        }
+        Update: {
+          account_id?: string
+          external_event_id?: string
+          external_message_id?: string | null
+          id?: string
+          organization_id?: string
+          payload_version?: string
+          processed_at?: string | null
+          processing_status?: string
+          received_at?: string
+          retry_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_webhook_events_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "communication_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_webhook_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       communications_ai_feedback: {
         Row: {
