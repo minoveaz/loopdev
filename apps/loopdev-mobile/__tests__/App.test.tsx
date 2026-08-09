@@ -1,5 +1,34 @@
 import { fireEvent, render } from '@testing-library/react-native';
 
+jest.mock('../src/data/adapters/supabase/client', () => ({
+  createSupabaseMobileClient: () => ({
+    auth: { getUser: jest.fn().mockResolvedValue({ data: { user: null }, error: null }) },
+  }),
+}));
+
+jest.mock('../src/data/adapters/supabase/home', () => ({
+  signInWithSupabase: jest.fn().mockResolvedValue({
+    id: 'user-superdev',
+    email: 'superdev@example.com',
+    user_metadata: { display_name: 'SuperDev' },
+  }),
+  signOutFromSupabase: jest.fn().mockResolvedValue(undefined),
+}));
+
+jest.mock('../src/data/data-source', () => ({
+  createHomeDataSource: () => ({
+    getOrganizations: jest.fn().mockResolvedValue([]),
+    getActivity: jest.fn().mockResolvedValue([]),
+    getNotifications: jest.fn().mockResolvedValue([]),
+    getPlatformOverview: jest.fn().mockResolvedValue({
+      activeOrganizations: 1,
+      activeUsers: 1,
+      pendingNotifications: 0,
+      systemStatus: 'operational',
+    }),
+  }),
+}));
+
 import App from '../App';
 
 describe('App', () => {
@@ -8,13 +37,15 @@ describe('App', () => {
 
     expect(getByText('LOOPDEV MOBILE')).toBeTruthy();
     expect(getByText('Acceso de supervisión')).toBeTruthy();
-    expect(getByText('Iniciar sesión como superdev')).toBeTruthy();
+    expect(getByText('Iniciar sesión')).toBeTruthy();
   });
 
   it('opens the authenticated shell for superdev and supports logout', async () => {
     const { getByLabelText, getByText, queryByText } = await render(<App />);
 
-    await fireEvent.press(getByLabelText('Iniciar sesión como superdev'));
+    const inputs = getByText('Acceso de supervisión');
+    expect(inputs).toBeTruthy();
+    await fireEvent.press(getByText('Iniciar sesión'));
 
     expect(getByText('Resumen de plataforma')).toBeTruthy();
     expect(getByText('Todo operativo')).toBeTruthy();

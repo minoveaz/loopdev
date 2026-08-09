@@ -4,7 +4,7 @@ export type MobileUser = {
   id: string;
   username: 'superdev';
   displayName: string;
-  isGlobalAdmin: true;
+  isGlobalAdmin: boolean;
 };
 
 export type SessionState = {
@@ -44,3 +44,16 @@ export const superdevFixture: MobileUser = {
   displayName: 'SuperDev',
   isGlobalAdmin: true,
 };
+
+export function mobileUserFromSupabase(user: {
+  id: string;
+  email?: string | null;
+  user_metadata?: { display_name?: string; full_name?: string };
+}): MobileUser {
+  const displayName =
+    user.user_metadata?.display_name ??
+    user.user_metadata?.full_name ??
+    user.email ??
+    'Usuario LoopDev';
+  return { id: user.id, username: 'superdev', displayName, isGlobalAdmin: false };
+}

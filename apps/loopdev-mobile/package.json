@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
-    "expo": "~57.0.11",
-    "expo-status-bar": "~57.0.1",
+    "@expo/metro-runtime": "^57.0.8",
     "@supabase/supabase-js": "^2.89.0",
+    "expo": "~57.0.11",
+    "expo-secure-store": "~15.0.7",
+    "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
-    "react-native": "0.86.2"
+    "react-dom": "19.2.3",
+    "react-native": "0.86.2",
+    "react-native-web": "^0.21.2"
   },
   "devDependencies": {
     "@testing-library/jest-native": "^5.4.3",
