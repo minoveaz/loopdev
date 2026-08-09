@@ -19,6 +19,21 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 export async function createConversation(input: CreateCommunicationConversationCommand) {
   const parsed = CreateCommunicationConversationCommandSchema.parse(input);
   const supabase = await createServerSupabaseClient();
+  const [contact, channel] = await Promise.all([
+    supabase.from('crm_contacts').select('id').eq('id', parsed.contactId).eq('organization_id', parsed.organizationId).maybeSingle(),
+    supabase.from('communication_channels').select('id, organization_id, contact_id').eq('id', parsed.channelId).eq('organization_id', parsed.organizationId).maybeSingle(),
+  ]);
+  if (contact.error || channel.error || !contact.data || !channel.data || channel.data.contact_id !== parsed.contactId) {
+    throw new Error('Communication conversation references do not belong to the organization');
+  }
+  if (parsed.brandId) {
+    const brand = await supabase.from('brands').select('id').eq('id', parsed.brandId).eq('organization_id', parsed.organizationId).maybeSingle();
+    if (brand.error || !brand.data) throw new Error('Communication brand does not belong to the organization');
+  }
+  if (parsed.workspaceId) {
+    const workspace = await supabase.from('workspaces').select('id').eq('id', parsed.workspaceId).eq('organization_id', parsed.organizationId).maybeSingle();
+    if (workspace.error || !workspace.data) throw new Error('Communication workspace does not belong to the organization');
+  }
   const { data, error } = await supabase.from('communication_conversations').insert({
     organization_id: parsed.organizationId,
     brand_id: parsed.brandId ?? null,
@@ -34,6 +49,11 @@ export async function createConversation(input: CreateCommunicationConversationC
 export async function createMessage(input: CreateCommunicationMessageCommand) {
   const parsed = CreateCommunicationMessageCommandSchema.parse(input);
   const supabase = await createServerSupabaseClient();
+  const conversation = await supabase.from('communication_conversations').select('id, organization_id')
+    .eq('id', parsed.conversationId).eq('organization_id', parsed.organizationId).maybeSingle();
+  if (conversation.error || !conversation.data) {
+    throw new Error('Communication conversation does not belong to the organization');
+  }
   const { data, error } = await supabase.from('communication_messages').insert({
     organization_id: parsed.organizationId,
     conversation_id: parsed.conversationId,

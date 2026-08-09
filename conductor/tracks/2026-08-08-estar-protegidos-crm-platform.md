@@ -621,6 +621,25 @@ multi-organización productiva se implementará mediante onboarding de Meta y cr
 no se han habilitado el envío productivo, las plantillas, la multimedia, la atribución ni el onboarding
 multi-organización.
 
+**Decisión de secuencia frontend:** no se construirá la bandeja de WhatsApp como una pantalla aislada.
+El frontend del CRM se adelantará con un vertical slice que incluya shell, contactos, Customer 360 mínimo,
+leads y, sobre esa base, la bandeja de comunicaciones. WhatsApp consumirá el contexto CRM existente para
+evitar rehacer la bandeja cuando estén disponibles clientes, leads, notas y actividades.
+
+### Fase F1 — CRM Frontend Foundation
+
+- [ ] Conectar el shell de Sales CRM con organización, workspace y permisos activos.
+- [ ] Crear navegación CRM: dashboard, contactos, leads, pipeline, comunicaciones y configuración.
+- [ ] Crear lista y detalle de contactos con estados de carga, vacío y error.
+- [ ] Crear Customer 360 mínimo con contacto, leads, actividades, notas y conversaciones.
+- [ ] Crear lista y detalle de leads con etapa, asignación y origen.
+- [ ] Preparar componentes reutilizables de timeline, filtros, tablas, paneles y estados de permiso.
+- [ ] Integrar la bandeja WhatsApp sobre conversaciones persistentes, sin implementar aún el envío.
+- [ ] Añadir tests de navegación, permisos, cambio de organización y aislamiento visual.
+
+**Salida:** primer slice frontend usable del CRM, conectado a APIs reales, con contexto suficiente para
+integrar WhatsApp sin tratarlo como un módulo independiente.
+
 ### Fase B6 — Product Catalog Core
 
 - [ ] Crear productos, servicios, planes, suscripciones y bundles.
@@ -679,6 +698,9 @@ multi-organización.
 **Salida:** contrato estable para la vista Customer Workspace.
 
 ### Fase B11 — Frontend, E2E y operación
+
+La implementación inicial de frontend se adelanta a la Fase F1 para validar pronto el producto CRM.
+B11 queda como consolidación final, E2E, observabilidad y operación después de completar los módulos.
 
 - [ ] Conectar dashboard, contactos, pipeline, Customer Workspace e inbox.
 - [ ] Conectar formularios y flujos de WhatsApp.

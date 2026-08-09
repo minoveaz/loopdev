@@ -28,4 +28,29 @@ describe('WhatsApp webhook parser', () => {
   it('returns no events for unrelated webhook objects', () => {
     expect(parseWhatsAppWebhook({ object: 'instagram' })).toEqual([]);
   });
+
+  it('keeps the account identifier attached to every event in a multi-account payload', () => {
+    const events = parseWhatsAppWebhook({
+      object: 'whatsapp_business_account',
+      entry: [{ changes: [
+        { value: { metadata: { phone_number_id: 'phone-a' }, messages: [{ id: 'message-a', from: '34600123456', type: 'text', text: { body: 'A' } }] } },
+        { value: { metadata: { phone_number_id: 'phone-b' }, statuses: [{ id: 'message-b', status: 'read', timestamp: '1700000000' }] } },
+      ] }],
+    });
+    expect(events).toMatchObject([
+      { kind: 'message', phoneNumberId: 'phone-a', externalMessageId: 'message-a' },
+      { kind: 'status', phoneNumberId: 'phone-b', externalMessageId: 'message-b' },
+    ]);
+  });
+
+  it('ignores malformed message and status entries without throwing', () => {
+    expect(parseWhatsAppWebhook({
+      object: 'whatsapp_business_account',
+      entry: [{ changes: [{ value: {
+        metadata: { phone_number_id: 'phone-1' },
+        messages: [{ from: '34600123456' }, { id: 'missing-from', type: 'text' }],
+        statuses: [{ status: 'delivered' }, { id: 'missing-status' }],
+      } }] }],
+    })).toEqual([]);
+  });
 });
