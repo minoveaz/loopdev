@@ -49,11 +49,12 @@ export async function createMessage(input: CreateCommunicationMessageCommand) {
 
 export async function createInternalNote(input: CreateCommunicationInternalNoteCommand & { authorId: string }) {
   const parsed = CreateCommunicationInternalNoteCommandSchema.parse(input);
+  const authorId = input.authorId;
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from('communication_internal_notes').insert({
     organization_id: parsed.organizationId,
     conversation_id: parsed.conversationId,
-    author_id: parsed.authorId,
+    author_id: authorId,
     body: parsed.body,
   }).select().single();
   if (error) throw new Error('Unable to create communication internal note');

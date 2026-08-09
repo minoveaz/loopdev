@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 401 });
   }
   try {
-    const payload = JSON.parse(rawBody) as Record<string, any>;
+    const payload = JSON.parse(rawBody) as unknown;
     const events = parseWhatsAppWebhook(payload);
     const phoneNumberId = events.find((event) => event.phoneNumberId)?.phoneNumberId;
     if (!phoneNumberId) return NextResponse.json({ received: true, events: 0 });
