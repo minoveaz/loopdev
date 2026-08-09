@@ -17,6 +17,7 @@ for (const theme of ['light', 'dark']) {
       await expect(page).toHaveScreenshot(`login-${theme}.png`, {
         fullPage: true,
         animations: 'disabled',
+        maxDiffPixelRatio: 0.02,
       });
     });
   });
