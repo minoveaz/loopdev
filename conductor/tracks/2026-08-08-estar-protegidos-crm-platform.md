@@ -521,7 +521,7 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 #### B5.0 — Contrato y adaptador Meta Cloud API
 
 - [ ] Definir contrato versionado `MessagingProvider` para enviar texto, plantillas y procesar webhooks.
-- [ ] Encapsular Graph API, headers, versión, tokens y `PHONE_NUMBER_ID` en un adaptador server-side.
+- [x] Encapsular Graph API, headers, versión, tokens y `PHONE_NUMBER_ID` en un adaptador server-side para texto.
 - [ ] Confirmar WABA, número Sandbox, permisos Meta y variables secretas de Dev.
 - [x] Revisar la configuración de `whatsapp-poc`: ya define `META_ACCESS_TOKEN`, `PHONE_NUMBER_ID` y `VERIFY_TOKEN` mediante secretos server-side.
 - [x] Añadir y configurar `META_APP_SECRET` para validar `X-Hub-Signature-256`.
@@ -558,11 +558,11 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 
 #### B5.4 — Respuesta controlada y plantillas
 
-- [ ] Permitir texto libre solo dentro de la ventana válida.
+- [x] Permitir texto libre solo dentro de la ventana válida.
 - [ ] Exigir plantilla aprobada fuera de la ventana.
 - [ ] Sincronizar nombre, idioma, categoría, estado y componentes de plantillas.
 - [ ] Validar parámetros, botones, listas y media headers antes del envío.
-- [ ] Registrar request, response, provider message ID, estado y error sin secretos.
+- [x] Registrar request, response, provider message ID, estado y error sin secretos para texto saliente.
 - [ ] Mantener aprobación humana; no activar envíos autónomos ni campañas masivas.
 
 #### B5.5 — Migración desde número personal
@@ -620,6 +620,19 @@ multi-organización productiva se implementará mediante onboarding de Meta y cr
 **Pendiente inmediato:** construir la interfaz de bandeja CRM y el adaptador server-side de envío. Aún
 no se han habilitado el envío productivo, las plantillas, la multimedia, la atribución ni el onboarding
 multi-organización.
+
+**Evidencia adicional de Dev (2026-08-09):** `20260901000000_communications_tenant_integrity.sql`
+aparece aplicada tanto en Local como en Remote mediante `supabase migration list --linked`.
+
+**Avance adicional B5 (2026-08-09):** el envío saliente de texto ya dispone de un servicio compartido
+`sendWhatsAppConversationText` y de la ruta protegida `POST /api/communications/whatsapp/send`. La ruta
+autoriza la organización, valida la conversación y la cuenta WhatsApp, impide envíos fuera de la ventana
+conversacional de 24 horas y registra la transición `queued → sent/failed` junto con el ID del proveedor.
+La integración real con plantillas, multimedia y el worker de reintentos sigue pendiente.
+
+**Fase activa:** F1 — CRM Frontend Foundation. B5 queda parcialmente completada: inbound persistente,
+resolución multi-cuenta, estados, integridad tenant y texto saliente controlado están validados; siguen
+pendientes plantillas, multimedia, atribución, migración desde número personal, bandeja y pruebas E2E.
 
 **Decisión de secuencia frontend:** no se construirá la bandeja de WhatsApp como una pantalla aislada.
 El frontend del CRM se adelantará con un vertical slice que incluya shell, contactos, Customer 360 mínimo,

@@ -13,6 +13,7 @@ import type {
   RetryCommunicationMessageCommand,
 } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { sendWhatsAppText } from './whatsapp';
 import type { Database } from '@/types/database.types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -65,6 +66,56 @@ export async function createMessage(input: CreateCommunicationMessageCommand) {
   }).select().single();
   if (error) throw new Error('Unable to create communication message');
   return data;
+}
+
+export async function sendWhatsAppConversationText(input: {
+  organizationId: string;
+  conversationId: string;
+  body: string;
+}) {
+  const supabase = await createServerSupabaseClient();
+  const conversation = await supabase.from('communication_conversations').select('id, channel_id, window_expires_at')
+    .eq('id', input.conversationId).eq('organization_id', input.organizationId).maybeSingle();
+  if (conversation.error || !conversation.data) throw new Error('Communication conversation does not belong to the organization');
+  if (!conversation.data.window_expires_at || Date.parse(conversation.data.window_expires_at) <= Date.now()) {
+    throw new Error('WhatsApp conversation window has expired; an approved template is required');
+  }
+
+  const channel = await supabase.from('communication_channels').select('id, account_id, address, channel')
+    .eq('id', conversation.data.channel_id).eq('organization_id', input.organizationId).maybeSingle();
+  if (channel.error || !channel.data || channel.data.channel !== 'whatsapp') throw new Error('WhatsApp channel not found');
+
+  const account = await supabase.from('communication_accounts').select('id, external_account_id')
+    .eq('id', channel.data.account_id).eq('organization_id', input.organizationId).maybeSingle();
+  if (account.error || !account.data) throw new Error('WhatsApp account not found');
+  const accessToken = process.env.META_ACCESS_TOKEN;
+  if (!accessToken) throw new Error('META_ACCESS_TOKEN is not configured');
+
+  const queued = await supabase.from('communication_messages').insert({
+    organization_id: input.organizationId, conversation_id: input.conversationId,
+    direction: 'outbound', status: 'queued', body: input.body,
+  }).select().single();
+  if (queued.error) throw new Error('Unable to queue communication message');
+
+  try {
+    const sent = await sendWhatsAppText({
+      phoneNumberId: account.data.external_account_id,
+      accessToken,
+      to: channel.data.address,
+      body: input.body,
+      graphApiVersion: process.env.META_GRAPH_API_VERSION,
+    });
+    const updated = await supabase.from('communication_messages').update({
+      external_id: sent.providerMessageId, status: 'sent', updated_at: new Date().toISOString(),
+    }).eq('id', queued.data.id).eq('organization_id', input.organizationId).select().single();
+    if (updated.error) throw new Error('Unable to finalize outbound communication message');
+    return updated.data;
+  } catch (error) {
+    await supabase.from('communication_messages').update({
+      status: 'failed', updated_at: new Date().toISOString(),
+    }).eq('id', queued.data.id).eq('organization_id', input.organizationId);
+    throw error;
+  }
 }
 
 export async function createInternalNote(input: CreateCommunicationInternalNoteCommand & { authorId: string }) {

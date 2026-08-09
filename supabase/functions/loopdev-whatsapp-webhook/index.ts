@@ -194,6 +194,11 @@ Deno.serve(async (request) => {
             }).eq('organization_id', account.organization_id).eq('id', messageResult.data.id);
             if (updateResult.error) throw updateResult.error;
           }
+          const processedEvent = await supabase.from('communication_webhook_events').update({
+            processing_status: 'processed', processed_at: new Date().toISOString(),
+          }).eq('organization_id', account.organization_id).eq('account_id', account.id)
+            .eq('external_event_id', eventKey('status', status.id));
+          if (processedEvent.error) throw processedEvent.error;
         }
 
         for (const message of value.messages ?? []) {

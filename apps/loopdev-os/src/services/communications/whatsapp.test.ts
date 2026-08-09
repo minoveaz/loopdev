@@ -1,7 +1,9 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeWhatsAppPhone, parseWhatsAppWebhook } from './whatsapp';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { normalizeWhatsAppPhone, parseWhatsAppWebhook, sendWhatsAppText } from './whatsapp';
 
 describe('WhatsApp webhook parser', () => {
+  afterEach(() => vi.restoreAllMocks());
+
   it('normalizes phone numbers to E.164-like values', () => {
     expect(normalizeWhatsAppPhone('+34 600-123-456')).toBe('+34600123456');
   });
@@ -52,5 +54,16 @@ describe('WhatsApp webhook parser', () => {
         statuses: [{ status: 'delivered' }, { id: 'missing-status' }],
       } }] }],
     })).toEqual([]);
+  });
+
+  it('sends text through the Meta Cloud API adapter and returns the provider id', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ messages: [{ id: 'wamid.outbound' }] }), { status: 200 })));
+    await expect(sendWhatsAppText({ phoneNumberId: 'phone-1', accessToken: 'token', to: '+34 600 123 456', body: 'Hola' })).resolves.toEqual({ providerMessageId: 'wamid.outbound', status: 'accepted' });
+    expect(fetch).toHaveBeenCalledWith('https://graph.facebook.com/v20.0/phone-1/messages', expect.objectContaining({ method: 'POST' }));
+  });
+
+  it('surfaces provider errors from the Meta Cloud API adapter', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { message: 'Invalid token' } }), { status: 401 })));
+    await expect(sendWhatsAppText({ phoneNumberId: 'phone-1', accessToken: 'token', to: '34600123456', body: 'Hola' })).rejects.toThrow('Invalid token');
   });
 });
