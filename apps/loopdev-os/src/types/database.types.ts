@@ -1815,10 +1815,10 @@ export type Database = {
           campaign: string | null
           contact_id: string
           created_at: string
+          external_lead_id: string | null
           id: string
           organization_id: string
           source: string
-          external_lead_id: string | null
           stage: string
           status: string
           updated_at: string
@@ -1830,10 +1830,10 @@ export type Database = {
           campaign?: string | null
           contact_id: string
           created_at?: string
+          external_lead_id?: string | null
           id?: string
           organization_id: string
           source?: string
-          external_lead_id?: string | null
           stage?: string
           status?: string
           updated_at?: string
@@ -1845,10 +1845,10 @@ export type Database = {
           campaign?: string | null
           contact_id?: string
           created_at?: string
+          external_lead_id?: string | null
           id?: string
           organization_id?: string
           source?: string
-          external_lead_id?: string | null
           stage?: string
           status?: string
           updated_at?: string
