@@ -125,5 +125,14 @@ jobs:
       - name: Run desktop checks
         run: pnpm exec playwright test --project=desktop --workers=1 --reporter=line
 
-      - name: Run authenticated mobile checks
+      - name: Run authenticated Mobile Web checks
+        run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile --workers=1 --reporter=line
+
+      - name: Run authenticated Mobile Compact checks
         run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Run Mobile Web visual checks
+        run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile --workers=1 --reporter=line
+
+      - name: Run Mobile Compact visual checks
+        run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile-compact --workers=1 --reporter=line

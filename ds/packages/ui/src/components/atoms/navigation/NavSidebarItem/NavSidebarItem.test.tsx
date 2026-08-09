@@ -30,6 +30,7 @@ describe('NavSidebarItem Atom', () => {
   it('debe ocultar el texto en modo Rail', () => {
     render(<NavSidebarItem label="Hidden Text" icon="LibraryBig" isRail={true} />);
     expect(screen.queryByText('Hidden Text')).not.toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Hidden Text' })).toBeInTheDocument();
   });
 
   it('debe mostrar el rol ARIA activo correctamente', () => {
@@ -41,6 +42,16 @@ describe('NavSidebarItem Atom', () => {
     const { container } = render(
       <div role="menu">
         <NavSidebarItem label="Brand Hub" icon="LibraryBig" isActive={true} />
+      </div>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('has no accessibility violations in rail navigation state', async () => {
+    const { container } = render(
+      <div role="menu">
+        <NavSidebarItem label="Brand Hub" icon="LibraryBig" isRail={true} />
       </div>,
     );
 

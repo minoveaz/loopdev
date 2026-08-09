@@ -2,7 +2,20 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
-import { Heading, LpdText, Icon, BrandLogo, UIKitIllustration, SuiteCard, ThemeToggle, SystemStatus, UserMenu, BlueprintBackground, TechnicalSurface } from '@loopdev/ui';
+import {
+  Heading,
+  LpdText,
+  TechnicalText,
+  Icon,
+  BrandLogo,
+  UIKitIllustration,
+  SuiteCard,
+  ThemeToggle,
+  SystemStatus,
+  UserMenu,
+  BlueprintBackground,
+  TechnicalSurface,
+} from '@loopdev/ui';
 import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
 import { ContextSwitcher } from '@/components/layout/ContextSwitcher';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
@@ -12,7 +25,13 @@ import { resolveAccessState } from '@/core/access/accessState';
 import { AccessStatePanel } from '@/components/layout/AccessStatePanel';
 
 export default function LaunchpadPage() {
-  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading, signOut } = useAuth();
+  const {
+    user,
+    memberships,
+    isPlatformAdministrator,
+    isLoading: isAuthLoading,
+    signOut,
+  } = useAuth();
   const { organizations, activeOrganization, isLoading: isOrganizationLoading } = useOrganization();
   const { hasPermission, isLoading: isLoadingPermissions } = useOrganizationPermissions([
     'marketing.read',
@@ -26,7 +45,11 @@ export default function LaunchpadPage() {
   const shouldShowSuite = (suite: 'marketing' | 'crm' | 'health' | 'quant') =>
     isPlatformScope || isSuiteEnabled(suite);
   const isLocked = (permission: string, suite: 'marketing' | 'crm' | 'health' | 'quant') =>
-    !isPlatformScope && (isLoadingPermissions || isLoadingWorkspaces || !hasPermission(permission) || !isSuiteEnabled(suite));
+    !isPlatformScope &&
+    (isLoadingPermissions ||
+      isLoadingWorkspaces ||
+      !hasPermission(permission) ||
+      !isSuiteEnabled(suite));
 
   const accessState = resolveAccessState({
     isAuthLoading,
@@ -39,29 +62,38 @@ export default function LaunchpadPage() {
     return <AccessStatePanel state={accessState} />;
   }
 
-  if (accessState === 'authorized' && !isPlatformAdministrator && !isOrganizationLoading && organizations.length === 0) {
+  if (
+    accessState === 'authorized' &&
+    !isPlatformAdministrator &&
+    !isOrganizationLoading &&
+    organizations.length === 0
+  ) {
     return <AccessStatePanel state="no-organization-access" />;
   }
 
   return (
     <div className="min-h-screen bg-shell-canvas transition-colors duration-300 flex flex-col font-sans selection:bg-primary/30 relative overflow-hidden">
-      
       {/* 1. Technical Atmosphere (Standardized) */}
-      <BlueprintBackground variant="monochrome" intensity="high" className="fixed inset-0 pointer-events-none" />
+      <BlueprintBackground
+        variant="monochrome"
+        intensity="high"
+        className="fixed inset-0 pointer-events-none"
+      />
 
       {/* 2. Asymmetric Header */}
-      <TechnicalSurface 
-        variant="canvas" 
-        depth="flat" 
-        className="relative z-10 p-8 border-b border-black/5 dark:border-white/5 backdrop-blur-md"
+      <TechnicalSurface
+        variant="canvas"
+        depth="flat"
+        className="relative z-10 p-8 border-b border-border-technical backdrop-blur-md"
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-6">
             <BrandLogo variant="full" size="md" />
-            <div className="h-8 w-px bg-black/10 dark:bg-white/10 hidden md:block"></div>
+            <div className="h-8 w-px bg-border-technical hidden md:block"></div>
             <div>
               <LpdText size="sm" weight="bold" className="text-slate-900 dark:text-white">
-                Welcome, <span className="text-primary font-black">{user?.email?.split('@')[0]}</span>
+                Welcome,{' '}
+                <span className="text-primary font-black">{user?.email?.split('@')[0]}</span>
               </LpdText>
             </div>
           </div>
@@ -70,7 +102,7 @@ export default function LaunchpadPage() {
           <div className="flex items-center gap-4">
             <ContextSwitcher />
             <SystemStatus state="operational" id={user?.id} label="ID" />
-            
+
             <ThemeToggle variant="technical" size="md" />
             <UserMenu
               userName={user?.email?.split('@')[0] ?? 'User'}
@@ -83,47 +115,108 @@ export default function LaunchpadPage() {
       </TechnicalSurface>
 
       {/* 3. Main Launchpad Grid */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 lg:p-24">
+      <main
+        id="main-content"
+        className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 lg:p-24"
+      >
         <div className="w-full max-w-6xl">
           <div className="mb-16">
-            <LpdText size="nano" weight="black" className="text-primary tracking-[0.5em] uppercase mb-4">Core_Suites_Available</LpdText>
+            <LpdText
+              size="nano"
+              weight="black"
+              className="text-primary tracking-[0.5em] uppercase mb-4"
+            >
+              Core_Suites_Available
+            </LpdText>
             <Heading size="3xl" weight="bold" className="text-text-main tracking-tight max-w-2xl">
-              Initialize your <span className="text-primary font-black">Work Context</span> to start building.
+              Initialize your <span className="text-primary font-black">Work Context</span> to start
+              building.
             </Heading>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {shouldShowSuite('marketing') && <SuiteCard
-              title="Marketing Studio" description="High-performance identity governance and generative content engine for modern teams."
-              illustration={<UIKitIllustration />} href="/marketing-studio" version="1.0.4"
-              isLocked={isLocked('marketing.read', 'marketing')} />}
-            {shouldShowSuite('crm') && <SuiteCard
-              title="Sales & CRM" description="Pipeline intelligence and relationship management powered by predictive neural models."
-              illustration={<Icon name="groups" size="md" />} href="/sales-crm" version="0.8.2"
-              isLocked={isLocked('crm.read', 'crm')} />}
-            {isPlatformScope && <SuiteCard
-              title="Financial Ops" description="Automated billing, payroll, and industrial-grade fiscal compliance orchestration."
-              illustration={<Icon name="payments" size="md" />} href="#" version="0.5.0" isLocked />}
-            {shouldShowSuite('quant') && <SuiteCard
-              title="Quant Ops" description="Algorithmic trading engine and high-frequency execution command center."
-              illustration={<Icon name="trending_up" size="md" />} href="/quant-ops" version="0.0.1"
-              isLocked={isLocked('quant.read', 'quant')} />}
-            {shouldShowSuite('health') && <SuiteCard
-              title="Health OS" description="Industrial-grade clinical care, electronic health records (HCE), and medical agenda for IPS providers."
-              illustration={<Icon name="medical_services" size="md" />} href="/health-os" version="0.1.0"
-              isLocked={isLocked('health.read', 'health')} />}
+            {shouldShowSuite('marketing') && (
+              <SuiteCard
+                title="Marketing Studio"
+                description="High-performance identity governance and generative content engine for modern teams."
+                illustration={<UIKitIllustration />}
+                href="/marketing-studio"
+                version="1.0.4"
+                isLocked={isLocked('marketing.read', 'marketing')}
+              />
+            )}
+            {shouldShowSuite('crm') && (
+              <SuiteCard
+                title="Sales & CRM"
+                description="Pipeline intelligence and relationship management powered by predictive neural models."
+                illustration={<Icon name="groups" size="md" />}
+                href="/sales-crm"
+                version="0.8.2"
+                isLocked={isLocked('crm.read', 'crm')}
+              />
+            )}
+            {isPlatformScope && (
+              <SuiteCard
+                title="Financial Ops"
+                description="Automated billing, payroll, and industrial-grade fiscal compliance orchestration."
+                illustration={<Icon name="payments" size="md" />}
+                href="#"
+                version="0.5.0"
+                isLocked
+              />
+            )}
+            {shouldShowSuite('quant') && (
+              <SuiteCard
+                title="Quant Ops"
+                description="Algorithmic trading engine and high-frequency execution command center."
+                illustration={<Icon name="trending_up" size="md" />}
+                href="/quant-ops"
+                version="0.0.1"
+                isLocked={isLocked('quant.read', 'quant')}
+              />
+            )}
+            {shouldShowSuite('health') && (
+              <SuiteCard
+                title="Health OS"
+                description="Industrial-grade clinical care, electronic health records (HCE), and medical agenda for IPS providers."
+                illustration={<Icon name="medical_services" size="md" />}
+                href="/health-os"
+                version="0.1.0"
+                isLocked={isLocked('health.read', 'health')}
+              />
+            )}
           </div>
         </div>
       </main>
 
       {/* Footer Branding */}
-      <footer className="relative z-10 p-8 border-t border-white/5 dark:border-white/5 border-black/5 flex justify-between items-center dark:text-white/20 text-slate-400 font-mono text-[9px] uppercase tracking-widest">
-        <div>© 2026 LoopDev Systems Architecture</div>
-        <div className="flex gap-4">
-          <span className="hover:text-primary cursor-pointer transition-colors">Documentation</span>
-          <span>/</span>
-          <span className="hover:text-primary cursor-pointer transition-colors">API Status</span>
-        </div>
+      <footer className="relative z-10 p-8 border-t border-border-technical flex flex-wrap gap-4 justify-between items-center">
+        <TechnicalText size="nano" className="text-text-muted uppercase tracking-widest">
+          © 2026 LoopDev Systems Architecture
+        </TechnicalText>
+        <nav aria-label="Launchpad resources" className="flex gap-4">
+          <TechnicalText
+            size="nano"
+            as="span"
+            className="text-text-muted hover:text-primary cursor-pointer transition-colors uppercase tracking-widest"
+          >
+            Documentation
+          </TechnicalText>
+          <TechnicalText
+            size="nano"
+            as="span"
+            className="text-text-muted uppercase tracking-widest"
+          >
+            /
+          </TechnicalText>
+          <TechnicalText
+            size="nano"
+            as="span"
+            className="text-text-muted hover:text-primary cursor-pointer transition-colors uppercase tracking-widest"
+          >
+            API Status
+          </TechnicalText>
+        </nav>
       </footer>
     </div>
   );

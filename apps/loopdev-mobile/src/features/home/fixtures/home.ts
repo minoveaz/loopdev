@@ -1,0 +1,1 @@
+export * from '../../../data/adapters/fixtures/home';
