@@ -527,12 +527,12 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 
 #### B5.1 — Webhook inbound y eventos
 
-- [ ] Implementar verificación `GET` con `hub.verify_token` y challenge.
-- [ ] Validar firma `X-Hub-Signature-256` en `POST`.
+- [x] Implementar verificación `GET` con `hub.verify_token` y challenge.
+- [x] Validar firma `X-Hub-Signature-256` en `POST`.
 - [x] Parsear todas las entradas del payload, no solo la primera.
 - [x] Soportar mensajes y estados de entrega; dejar eventos desconocidos trazables para la integración persistente.
-- [ ] Registrar `external_event_id`, hash, payload restringido y estado de procesamiento.
-- [ ] Hacer idempotente el evento y el mensaje por cuenta/proveedor.
+- [x] Registrar `external_event_id` y estado de procesamiento; completar hash/payload restringido al conectar la persistencia final.
+- [x] Hacer idempotente el evento por cuenta/proveedor.
 
 #### B5.2 — Resolución CRM y ventana conversacional
 
