@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, type ReactNode } from 'react';
+import { startTransition, useEffect, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { useWorkspace } from '@/hooks/useWorkspace';
@@ -27,7 +27,7 @@ export function SuitePermissionGuard({
   children: ReactNode;
 }) {
   const router = useRouter();
-  const hasRenderedSuite = useRef(false);
+  const [hasRenderedSuite, setHasRenderedSuite] = useState(false);
   const { hasPermission, isLoading } = useOrganizationPermissions([permission]);
   const { isSuiteEnabled, isLoading: isLoadingWorkspaces } = useWorkspace();
   const { activeOrganization, isLoading: isLoadingOrganization } = useOrganization();
@@ -59,11 +59,13 @@ export function SuitePermissionGuard({
   }, [isDenied, router]);
 
   const isInitialLoading =
-    !hasRenderedSuite.current &&
+    !hasRenderedSuite &&
     (isLoading || isLoadingWorkspaces || isLoadingOrganization || accessState === 'loading');
 
   useEffect(() => {
-    if (!isDenied && !isInitialLoading) hasRenderedSuite.current = true;
+    if (!isDenied && !isInitialLoading) {
+      startTransition(() => setHasRenderedSuite(true));
+    }
   }, [isDenied, isInitialLoading]);
 
   if (isInitialLoading) {
