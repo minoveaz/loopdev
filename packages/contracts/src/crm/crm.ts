@@ -94,6 +94,7 @@ export const CrmLeadSchema = z.object({
   stage: CrmLeadStageSchema.default('lead'),
   status: CrmLeadStatusSchema.default('active'),
   source: CrmLeadSourceSchema.default('manual'),
+  externalLeadId: z.string().trim().max(240).nullable().optional(),
   campaign: z.string().trim().max(160).nullable().optional(),
   assignedToUserId: IdSchema.nullable().optional(),
   createdAt: TimestampSchema,
@@ -107,11 +108,48 @@ export const CrmCreateLeadCommandSchema = z.object({
   brandId: IdSchema.nullable().optional(),
   workspaceId: IdSchema.nullable().optional(),
   source: CrmLeadSourceSchema.default('manual'),
+  externalLeadId: z.string().trim().max(240).nullable().optional(),
   campaign: z.string().trim().max(160).nullable().optional(),
   utm: z.record(z.string(), z.string().max(500)).default({}),
   interest: z.string().trim().max(240).nullable().optional(),
 });
 export type CrmCreateLeadCommand = z.infer<typeof CrmCreateLeadCommandSchema>;
+
+export const CrmLeadAttributionSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  leadId: IdSchema,
+  source: CrmLeadSourceSchema,
+  externalLeadId: z.string().trim().max(240).nullable().optional(),
+  campaign: z.string().trim().max(160).nullable().optional(),
+  medium: z.string().trim().max(120).nullable().optional(),
+  content: z.string().trim().max(240).nullable().optional(),
+  term: z.string().trim().max(240).nullable().optional(),
+  capturedAt: TimestampSchema,
+});
+export type CrmLeadAttribution = z.infer<typeof CrmLeadAttributionSchema>;
+
+export const CrmCaptureLeadCommandSchema = z.object({
+  organizationId: IdSchema,
+  brandId: IdSchema.nullable().optional(),
+  workspaceId: IdSchema.nullable().optional(),
+  firstName: z.string().trim().min(1).max(120),
+  lastName: z.string().trim().max(120).nullable().optional(),
+  email: z.string().email().nullable().optional(),
+  phone: z.string().trim().min(3).max(32).nullable().optional(),
+  companyName: z.string().trim().max(160).nullable().optional(),
+  source: CrmLeadSourceSchema,
+  externalLeadId: z.string().trim().max(240).nullable().optional(),
+  campaign: z.string().trim().max(160).nullable().optional(),
+  utm: z.object({
+    source: z.string().trim().max(120).nullable().optional(),
+    medium: z.string().trim().max(120).nullable().optional(),
+    campaign: z.string().trim().max(160).nullable().optional(),
+    content: z.string().trim().max(240).nullable().optional(),
+    term: z.string().trim().max(240).nullable().optional(),
+  }).default({}),
+});
+export type CrmCaptureLeadCommand = z.infer<typeof CrmCaptureLeadCommandSchema>;
 
 export const CrmPipelineStageSchema = z.object({
   id: IdSchema,
