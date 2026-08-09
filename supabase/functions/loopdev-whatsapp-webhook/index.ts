@@ -36,6 +36,95 @@ const timestamp = (value: unknown) => {
 
 const eventKey = (kind: string, id: string) => `${kind}:${id}`;
 
+const messageBody = (message: Record<string, any>) => {
+  if (message.type === 'text') return message.text?.body ?? null;
+  if (message.type) return `[whatsapp:${message.type}]`;
+  return null;
+};
+
+async function persistInboundMessage(
+  account: { id: string; organization_id: string },
+  value: Record<string, any>,
+  message: Record<string, any>,
+) {
+  const phone = normalizePhone(String(message.from));
+  const profileName = value.contacts?.find((contact: Record<string, any>) => contact.wa_id === message.from)?.profile?.name;
+  const firstName = String(profileName || phone).trim().split(/\s+/)[0] || phone;
+  const lastName = profileName ? String(profileName).trim().split(/\s+/).slice(1).join(' ') || null : null;
+
+  const contactResult = await supabase.from('crm_contacts')
+    .select('id')
+    .eq('organization_id', account.organization_id)
+    .eq('phone_normalized', phone)
+    .maybeSingle();
+  if (contactResult.error) throw contactResult.error;
+  let contactId = contactResult.data?.id;
+  if (!contactId) {
+    const createdContact = await supabase.from('crm_contacts').insert({
+      organization_id: account.organization_id,
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      phone_normalized: phone,
+    }).select('id').single();
+    if (createdContact.error?.code === '23505') {
+      const existingContact = await supabase.from('crm_contacts').select('id')
+        .eq('organization_id', account.organization_id).eq('phone_normalized', phone).single();
+      if (existingContact.error) throw existingContact.error;
+      contactId = existingContact.data.id;
+    } else if (createdContact.error) throw createdContact.error;
+    else contactId = createdContact.data.id;
+  }
+
+  const channelResult = await supabase.from('communication_channels').select('id')
+    .eq('organization_id', account.organization_id).eq('account_id', account.id)
+    .eq('channel', 'whatsapp').eq('address', phone).maybeSingle();
+  if (channelResult.error) throw channelResult.error;
+  let channelId = channelResult.data?.id;
+  if (!channelId) {
+    const createdChannel = await supabase.from('communication_channels').insert({
+      organization_id: account.organization_id, account_id: account.id, contact_id: contactId,
+      channel: 'whatsapp', address: phone, display_name: profileName ?? null, is_primary: true,
+    }).select('id').single();
+    if (createdChannel.error?.code === '23505') {
+      const existingChannel = await supabase.from('communication_channels').select('id')
+        .eq('organization_id', account.organization_id).eq('account_id', account.id)
+        .eq('channel', 'whatsapp').eq('address', phone).single();
+      if (existingChannel.error) throw existingChannel.error;
+      channelId = existingChannel.data.id;
+    } else if (createdChannel.error) throw createdChannel.error;
+    else channelId = createdChannel.data.id;
+  }
+
+  const conversationResult = await supabase.from('communication_conversations').select('id')
+    .eq('organization_id', account.organization_id).eq('contact_id', contactId)
+    .eq('channel_id', channelId).in('status', ['open', 'pending']).order('updated_at', { ascending: false }).limit(1).maybeSingle();
+  if (conversationResult.error) throw conversationResult.error;
+  let conversationId = conversationResult.data?.id;
+  if (!conversationId) {
+    const createdConversation = await supabase.from('communication_conversations').insert({
+      organization_id: account.organization_id, contact_id: contactId, channel_id: channelId,
+      channel: 'whatsapp', status: 'open', last_inbound_at: timestamp(message.timestamp),
+      window_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    }).select('id').single();
+    if (createdConversation.error) throw createdConversation.error;
+    conversationId = createdConversation.data.id;
+  } else {
+    const updatedConversation = await supabase.from('communication_conversations').update({
+      last_inbound_at: timestamp(message.timestamp),
+      window_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      updated_at: new Date().toISOString(),
+    }).eq('id', conversationId).select('id').single();
+    if (updatedConversation.error) throw updatedConversation.error;
+  }
+
+  const createdMessage = await supabase.from('communication_messages').insert({
+    organization_id: account.organization_id, conversation_id: conversationId,
+    external_id: message.id, direction: 'inbound', status: 'delivered', body: messageBody(message),
+  });
+  if (createdMessage.error && createdMessage.error.code !== '23505') throw createdMessage.error;
+}
+
 Deno.serve(async (request) => {
   if (request.method === 'GET') {
     const url = new URL(request.url);
@@ -47,7 +136,15 @@ Deno.serve(async (request) => {
 
   if (request.method !== 'POST') return new Response('Method not allowed', { status: 405 });
   const rawBody = await request.text();
-  if (!(await verifySignature(rawBody, request.headers.get('x-hub-signature-256')))) {
+  const signature = request.headers.get('x-hub-signature-256');
+  const signatureValid = await verifySignature(rawBody, signature);
+  if (!signatureValid) {
+    console.warn('WhatsApp webhook signature rejected', {
+      hasAppSecret: Boolean(appSecret),
+      hasSignature: Boolean(signature),
+      signatureLength: signature?.length ?? 0,
+      bodyLength: rawBody.length,
+    });
     return json({ error: 'Invalid webhook signature' }, 401);
   }
 
@@ -65,7 +162,13 @@ Deno.serve(async (request) => {
         const { data: account, error: accountError } = await supabase.from('communication_accounts')
           .select('id, organization_id').eq('external_account_id', phoneNumberId).maybeSingle();
         if (accountError) throw accountError;
-        if (!account) return json({ error: 'WhatsApp account not configured' }, 404);
+        if (!account) {
+          console.warn('WhatsApp account not configured', {
+            phoneNumberId,
+            object: payload.object,
+          });
+          return json({ error: 'WhatsApp account not configured' }, 404);
+        }
 
         for (const status of value.statuses ?? []) {
           if (!status.id) continue;
@@ -89,9 +192,11 @@ Deno.serve(async (request) => {
           if (result.error?.code === '23505') duplicates += 1;
           else if (result.error) throw result.error;
           else processed += 1;
-          // Message-to-CRM persistence follows after event registration.
-          void normalizePhone(message.from);
-          void timestamp(message.timestamp);
+          await persistInboundMessage(account, value, message);
+          await supabase.from('communication_webhook_events').update({
+            processing_status: 'processed', processed_at: new Date().toISOString(),
+          }).eq('organization_id', account.organization_id).eq('account_id', account.id)
+            .eq('external_event_id', eventKey('message', message.id));
         }
       }
     }

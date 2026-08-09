@@ -524,8 +524,8 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 - [ ] Encapsular Graph API, headers, versión, tokens y `PHONE_NUMBER_ID` en un adaptador server-side.
 - [ ] Confirmar WABA, número Sandbox, permisos Meta y variables secretas de Dev.
 - [x] Revisar la configuración de `whatsapp-poc`: ya define `META_ACCESS_TOKEN`, `PHONE_NUMBER_ID` y `VERIFY_TOKEN` mediante secretos server-side.
-- [ ] Añadir y configurar `META_APP_SECRET` para validar `X-Hub-Signature-256`.
-- [ ] Confirmar si necesitamos persistir `META_WABA_ID` para onboarding y sincronización de plantillas.
+- [x] Añadir y configurar `META_APP_SECRET` para validar `X-Hub-Signature-256`.
+- [x] Confirmar y persistir `META_WABA_ID` para onboarding y sincronización de plantillas.
 - [x] Normalizar estados y tipos propios sin filtrar payloads Meta al dominio.
 
 #### B5.1 — Webhook inbound y eventos
@@ -541,9 +541,9 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 #### B5.2 — Resolución CRM y ventana conversacional
 
 - [x] Normalizar teléfonos a E.164.
-- [ ] Resolver cuenta, canal, contacto CRM y conversación existente.
-- [ ] Crear o actualizar contacto sin duplicarlo.
-- [ ] Conservar `last_inbound_at` y `window_expires_at`.
+- [x] Resolver cuenta, canal, contacto CRM y conversación existente.
+- [x] Crear o actualizar contacto sin duplicarlo.
+- [x] Conservar `last_inbound_at` y `window_expires_at`.
 - [ ] Persistir referral, anuncio, fuente y campaña como atribución, sin asumir que el texto del cliente es atribución definitiva.
 - [ ] Probar dos marcas de una misma organización sin mezclar atribución.
 
@@ -607,6 +607,19 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 - [ ] Registrar estados de entrega y errores.
 
 **Salida:** un mensaje entrante crea el contexto CRM correcto y aparece en una conversación persistente.
+
+**Validación B5 realizada en Dev (2026-08-09):** se configuró un WABA/Phone Number Sandbox de Meta y
+se conectó a `loopdev-whatsapp-webhook` en Supabase. La verificación `GET` y los `POST` firmados ya
+responden `200`. Un mensaje real creó de forma idempotente un registro en `communication_webhook_events`
+con `processing_status = processed`, además de un `crm_contact`, un `communication_channel`, una
+`communication_conversation` abierta y un `communication_message` inbound con estado `delivered`.
+El evento sintético `wamid.TEST` queda como `received` porque no contiene todos los datos de un mensaje
+real. El Sandbox de VitaBlue se considera únicamente una conexión temporal de desarrollo; la conexión
+multi-organización productiva se implementará mediante onboarding de Meta y credenciales por cuenta.
+
+**Pendiente inmediato:** construir la interfaz de bandeja CRM y el adaptador server-side de envío. Aún
+no se han habilitado el envío productivo, las plantillas, la multimedia, la atribución ni el onboarding
+multi-organización.
 
 ### Fase B6 — Product Catalog Core
 
