@@ -47,8 +47,8 @@
 - **Fase 1 — Primitives y contratos visuales:** completada en esta iteración.
 - **Fase 2 — Quality Gate automático:** completada en esta iteración.
 - **Fase 3 — Pruebas de componentes:** completada; cobertura de componentes compartidos, navegación, indicators, surfaces e composites complejos validada con Vitest/Testing Library y Axe donde el montaje es estable.
-- **Fase 4 — Pruebas reales de aplicación:** en progreso; las suites prioritarias ya tienen cobertura Playwright separada por desktop, mobile y mobile-compact.
-- **Fase 4.1 — Flujo de certificación frontend:** en progreso; la matriz de proyectos y la ejecución estable en GitHub Actions ya están verificadas.
+- **Fase 4 — Pruebas reales de aplicación:** completada; las suites prioritarias tienen cobertura Playwright separada por Desktop Web, Mobile Web y Mobile Compact, con checks de navegación, responsive, overflow y accesibilidad según su alcance.
+- **Fase 4.1 — Flujo de certificación frontend:** completada; el flujo `front:audit` → Vitest/Testing Library → Playwright → Axe → snapshots visuales está integrado en CI y cuenta con evidencia versionada.
 - **Fase 5 — Migración por suite:** pendiente.
 
 La ejecución de checks en GitHub Actions no constituye una fase independiente. Los checks estáticos y `front:check` se incorporan en la Fase 2; Playwright, Axe, snapshots y los checks requeridos de Pull Request se incorporan en la Fase 4.1.
