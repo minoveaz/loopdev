@@ -523,6 +523,9 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 - [ ] Definir contrato versionado `MessagingProvider` para enviar texto, plantillas y procesar webhooks.
 - [ ] Encapsular Graph API, headers, versión, tokens y `PHONE_NUMBER_ID` en un adaptador server-side.
 - [ ] Confirmar WABA, número Sandbox, permisos Meta y variables secretas de Dev.
+- [x] Revisar la configuración de `whatsapp-poc`: ya define `META_ACCESS_TOKEN`, `PHONE_NUMBER_ID` y `VERIFY_TOKEN` mediante secretos server-side.
+- [ ] Añadir y configurar `META_APP_SECRET` para validar `X-Hub-Signature-256`.
+- [ ] Confirmar si necesitamos persistir `META_WABA_ID` para onboarding y sincronización de plantillas.
 - [x] Normalizar estados y tipos propios sin filtrar payloads Meta al dominio.
 
 #### B5.1 — Webhook inbound y eventos
