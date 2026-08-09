@@ -211,6 +211,79 @@ La autorización debe verificarse en tres capas: navegación/UI para experiencia
 - [ ] Un contexto inválido o incompleto devuelve un error tipado, no una lista global.
 - [ ] La ausencia de red no convierte fixtures en datos autoritativos de producción.
 
+## Mapa de fixtures y escenarios offline
+
+Este mapa se implementará después de recibir la migración oficial de contratos. Mientras tanto fija los casos de comportamiento sin inventar nombres de entidades ni esquemas alternativos.
+
+### Contextos base
+
+| Contexto | Organización | Marca | Workspace | Usuario | Rol |
+| --- | --- | --- | --- | --- | --- |
+| `vitablue-admin` | VitaBlue | VitaBlue Salud | Marketing Principal | `user-vb-admin` | admin |
+| `vitablue-editor` | VitaBlue | VitaBlue Salud | Marketing Principal | `user-vb-editor` | editor |
+| `vitablue-viewer` | VitaBlue | VitaBlue Salud | Marketing Principal | `user-vb-viewer` | viewer |
+| `protege-admin` | Protege tu Salud | Protege Salud | Marketing Principal | `user-pts-admin` | admin |
+| `protege-editor` | Protege tu Salud | Protege Salud | Marketing Principal | `user-pts-editor` | editor |
+| `no-membership` | VitaBlue | VitaBlue Salud | Marketing Principal | `user-no-member` | sin membresía |
+| `pending-membership` | VitaBlue | VitaBlue Salud | Marketing Principal | `user-pending` | membresía pendiente |
+
+Cada organización tendrá al menos una segunda marca y un segundo workspace para probar que el aislamiento no depende únicamente del identificador de marca.
+
+### Datos mínimos por contexto
+
+- un `BrandContextSnapshot` publicado y una versión no publicada;
+- una campaña en borrador y otra aprobada;
+- un asset original y una variante derivada;
+- una pieza pendiente de revisión;
+- una conexión social simulada con estado `connected` y otra `expired`;
+- una aprobación aceptada y otra rechazada;
+- un evento de auditoría de lectura y otro de modificación.
+
+### Escenarios de lectura
+
+| Caso | Actor | Operación | Resultado esperado |
+| --- | --- | --- | --- |
+| Lectura propia | `vitablue-viewer` | Listar campañas del workspace activo | Devuelve solo campañas de VitaBlue y ese workspace. |
+| Lectura cruzada de organización | `vitablue-viewer` | Solicitar campañas de Protege tu Salud | Rechazo tipado o colección vacía; nunca datos de la otra organización. |
+| Lectura cruzada de workspace | `vitablue-editor` | Solicitar campañas de otro workspace | Rechazo si no existe scope explícito. |
+| Contexto de marca ajeno | `vitablue-editor` | Obtener snapshot de marca Protege Salud | Rechazo tipado. |
+| Sin membresía | `no-membership` | Abrir Marketing Studio | Estado sin acceso y ninguna lectura de datos. |
+| Membresía pendiente | `pending-membership` | Abrir Campaign Orchestrator | Estado de membresía pendiente y ninguna lectura de datos. |
+
+### Escenarios de comandos
+
+| Caso | Actor | Comando | Resultado esperado |
+| --- | --- | --- | --- |
+| Crear campaña | `vitablue-editor` | Crear campaña en su workspace | Éxito, scope conservado y auditoría creada. |
+| Editar campaña | `vitablue-editor` | Editar campaña propia | Éxito si permanece dentro de organización, marca y workspace autorizados. |
+| Editar como viewer | `vitablue-viewer` | Cambiar nombre o estado | Rechazo de permiso sin mutación. |
+| Aprobar contenido | `vitablue-editor` | Aprobar pieza | Solo éxito si el permiso de aprobación está concedido explícitamente. |
+| Administrar conexión | `vitablue-editor` | Crear o revocar conexión | Rechazo si la política reserva la acción a admin. |
+| Administrar conexión | `vitablue-admin` | Crear o revocar conexión simulada | Éxito, sin guardar tokens y con auditoría. |
+| Mutación cruzada | `vitablue-admin` | Modificar campaña de Protege tu Salud | Rechazo aunque el payload contenga un ID válido. |
+
+### Estados de UI que deben poder reproducirse sin red
+
+- carga inicial;
+- datos disponibles;
+- colección vacía;
+- error de repositorio;
+- sin acceso;
+- membresía pendiente;
+- sesión expirada;
+- comando rechazado por permisos;
+- conflicto de versión;
+- conexión externa expirada.
+
+### Entrega posterior a la migración de contratos
+
+- [ ] Sustituir los identificadores provisionales por IDs y enums de `@loopdev/contracts`.
+- [ ] Implementar fixtures deterministas en el repositorio offline.
+- [ ] Convertir cada fila de las tablas anteriores en un test de repositorio o servicio.
+- [ ] Añadir pruebas de no mutación cuando una autorización falla.
+- [ ] Añadir pruebas de auditoría para comandos aceptados y rechazados.
+- [ ] Marcar como bloqueadas las pruebas de RLS real hasta CI o entorno autorizado.
+
 ## Criterios de aceptación del inventario
 
 - [ ] Cada ruta de Marketing Studio tiene módulo, scope, estado de datos y estado de permisos documentados.
