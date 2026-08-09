@@ -163,6 +163,63 @@ Blocked validation: ...
 - Políticas, reglas, checks, hallazgos, revisiones, aprobaciones y evidencias.
 - Aplicación por organización, marca, canal y tipo de contenido.
 
+## Inventario de superficies y estado actual
+
+La primera revisión del código de LoopDev muestra que la Fase 8 no parte de una aplicación vacía. El trabajo debe completar y conectar capacidades existentes, no duplicarlas.
+
+| Superficie | Estado en LoopDev | Decisión para Fase 8A |
+| --- | --- | --- |
+| Marketing Studio shell y navegación | Existe en `apps/loopdev-os/src/app/marketing-studio` | Reutilizar shell, `ModuleWorkspace` y rutas existentes. |
+| Brand Hub | Existe con overview, marcas, identidad, colores, logos, tipografía y reglas | Reutilizar UI y `BrandContextSnapshot`; documentar fixtures y límites de persistencia. |
+| Campaign Orchestrator | Existe pantalla, hook, API y servicio server-side con organización/workspace | No reconstruir; cubrir con repositorio offline y ampliar contratos solo cuando llegue la migración oficial. |
+| Content Engine | Ruta y capacidades parciales existentes | Inventariar estados y conectar posteriormente al repositorio común. |
+| Asset Manager / DAM | Ruta prevista en el shell, sin flujo persistente completo | Definir contrato y proveedor local, sin Storage remoto. |
+| Integrations | No es un flujo completo en LoopDev | Preparar estados simulados y contrato; OAuth real queda bloqueado. |
+| Insights, Growth, Advisor y Compliance | Roadmap, fixtures o capacidades parciales | Separar métricas sintéticas de datos reales y entregar por incrementos. |
+
+### Inventario de rutas y flujos
+
+- [ ] Revisar `/marketing-studio` y estados del dashboard.
+- [ ] Revisar `/marketing-studio/brand-hub`, `/brands` y las vistas por `brandId`.
+- [ ] Revisar `/marketing-studio/campaigns` y sus estados de carga, error, vacío y creación.
+- [ ] Revisar rutas previstas de `/marketing-studio/content` y `/marketing-studio/dam`.
+- [ ] Registrar rutas no implementadas o con fixtures antes de conectarlas a datos.
+- [ ] Mapear los flujos funcionales de VitaBlue a superficies existentes de LoopDev.
+
+## Matriz de permisos y aislamiento
+
+La autorización debe verificarse en tres capas: navegación/UI para experiencia, servicios server-side para control de comandos y RLS para la barrera definitiva cuando exista conectividad. La capa offline prueba el comportamiento esperado, pero no sustituye RLS.
+
+| Acción | Viewer | Editor | Admin | Scope obligatorio |
+| --- | --- | --- | --- | --- |
+| Ver dashboard, marcas y campañas | Sí | Sí | Sí | organización + workspace |
+| Ver contexto de marca publicado | Sí | Sí | Sí | organización + marca |
+| Crear o editar contenido | No | Sí | Sí | organización + workspace + marca |
+| Crear o editar campaña | No | Sí | Sí | organización + workspace + marca |
+| Aprobar contenido o campaña | No | Según permiso explícito | Sí | organización + workspace + marca |
+| Gestionar conexiones | No | Según permiso explícito | Sí | organización + marca |
+| Publicar en proveedor externo | No | Según permiso explícito | Sí | organización + workspace + marca |
+| Gestionar configuración y políticas | No | No | Sí | organización |
+
+### Casos negativos obligatorios
+
+- [ ] Una organización no puede leer marcas, campañas o assets de otra organización.
+- [ ] Un workspace no puede leer campañas de otro workspace de la misma organización si no existe autorización explícita.
+- [ ] Una marca no puede consumir un `BrandContextSnapshot` perteneciente a otra organización.
+- [ ] Un viewer no puede ejecutar comandos de creación, edición, aprobación o publicación.
+- [ ] Un editor no puede ejecutar acciones reservadas a administración.
+- [ ] Un contexto inválido o incompleto devuelve un error tipado, no una lista global.
+- [ ] La ausencia de red no convierte fixtures en datos autoritativos de producción.
+
+## Criterios de aceptación del inventario
+
+- [ ] Cada ruta de Marketing Studio tiene módulo, scope, estado de datos y estado de permisos documentados.
+- [ ] Cada flujo heredado de VitaBlue tiene una superficie destino en LoopDev o una decisión explícita de descarte.
+- [ ] Las capacidades existentes de Brand Hub y campañas se reutilizan en lugar de duplicarse.
+- [ ] Las funciones nuevas consumen contratos y repositorios, no tablas directamente.
+- [ ] Los estados de UI se pueden probar sin Supabase ni secretos.
+- [ ] La matriz de permisos cubre navegación, lectura, comandos y futuras acciones externas.
+
 ## Plan de fases
 
 ### Fase 8A — Contratos y mapa de migración
