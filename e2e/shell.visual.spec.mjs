@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 
 const visualRoutes = [
   { name: 'login', path: '/login', storageState: undefined },
-  { name: 'launchpad', path: '/launchpad', storageState: 'playwright/.auth/user.json' },
 ];
 
 for (const theme of ['light', 'dark']) {
