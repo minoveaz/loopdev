@@ -532,6 +532,7 @@ Communications Core nuevo, no sobre las tablas legacy de la POC.
 
 - [x] Implementar verificación `GET` con `hub.verify_token` y challenge.
 - [x] Validar firma `X-Hub-Signature-256` en `POST`.
+- [x] Crear Edge Function estable `loopdev-whatsapp-webhook`, separada de la POC.
 - [x] Parsear todas las entradas del payload, no solo la primera.
 - [x] Soportar mensajes y estados de entrega; dejar eventos desconocidos trazables para la integración persistente.
 - [x] Registrar `external_event_id` y estado de procesamiento; completar hash/payload restringido al conectar la persistencia final.
