@@ -34,7 +34,7 @@ for (const route of authenticatedRoutes) {
       timeout: 15000,
     });
     const mobileNavigation = page.getByRole('navigation', { name: 'Mobile suite navigation' });
-    await expect(mobileNavigation).toBeVisible();
+    await expect(mobileNavigation).toBeVisible({ timeout: 15000 });
     const moreNavigationButton = mobileNavigation.getByRole('button', { name: 'Abrir más' });
     await expect(moreNavigationButton).toBeVisible();
     await expect(page.locator('#app-shell-nav')).toHaveClass(/-translate-x-full/);

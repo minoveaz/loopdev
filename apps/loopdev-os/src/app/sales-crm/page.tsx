@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useSyncExternalStore } from 'react';
 import {
   LpdText,
   Heading,
   TechnicalSurface,
   StatusPulse,
   Icon,
-  MetricCard,
   Button,
   IndustrialMetric,
 } from '@loopdev/ui';
@@ -18,7 +17,11 @@ import { isLeadStale } from './utils/leadActivity';
 export default function SalesCrmDashboard() {
   const router = useRouter();
   const { leads, openLeadInspector } = useSalesCrm();
-  const [showAddModal, setShowAddModal] = useState(false);
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   // Calculate metrics
   const totalPipeline = leads.reduce((acc, lead) => {
@@ -35,7 +38,7 @@ export default function SalesCrmDashboard() {
   const avgAiScore = Math.round(leads.reduce((acc, l) => acc + l.aiScore, 0) / leads.length);
 
   // Calculate Revenue in Risk (stale leads: stage contacted & no contact for > 5 days)
-  const staleLeads = leads.filter((lead) => isLeadStale(lead));
+  const staleLeads = isMounted ? leads.filter((lead) => isLeadStale(lead)) : [];
   const revenueInRisk = staleLeads.reduce((acc, l) => acc + l.dealValue, 0);
 
   // Filter high win probability deals

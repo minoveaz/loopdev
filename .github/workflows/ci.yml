@@ -15,6 +15,33 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    name: Detect affected surfaces
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect frontend changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            frontend:
+              - 'apps/loopdev-os/**'
+              - 'ds/packages/ui/**'
+              - 'packages/contracts/**'
+              - 'e2e/**'
+              - 'playwright.config.mjs'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/ci.yml'
+
   quality:
     name: Lint, typecheck, tests and build
     runs-on: ubuntu-latest
@@ -52,3 +79,51 @@ jobs:
           name: coverage-${{ github.sha }}
           path: coverage/
           if-no-files-found: ignore
+
+  frontend-e2e:
+    name: Frontend E2E, accessibility and visual checks
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
+
+      - name: Build shared UI
+        run: pnpm --filter @loopdev/ui build
+
+      - name: Build application
+        run: pnpm --filter loopdev-os build
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run desktop checks
+        run: pnpm exec playwright test --project=desktop --workers=1 --reporter=line
+
+      - name: Run authenticated mobile checks
+        run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile-compact --workers=1 --reporter=line

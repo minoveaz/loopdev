@@ -47,7 +47,7 @@
 - **Fase 1 — Primitives y contratos visuales:** completada en esta iteración.
 - **Fase 2 — Quality Gate automático:** completada en esta iteración.
 - **Fase 3 — Pruebas de componentes:** completada; cobertura de componentes compartidos, navegación, indicators, surfaces e composites complejos validada con Vitest/Testing Library y Axe donde el montaje es estable.
-- **Fase 4 — Pruebas reales de aplicación:** pendiente; todavía no existe infraestructura Playwright.
+- **Fase 4 — Pruebas reales de aplicación:** en progreso; el primer vertical slice ya tiene validación Playwright productiva para Brand Hub y Pipeline en `mobile-compact`.
 - **Fase 4.1 — Flujo de certificación frontend:** pendiente; incluye la ejecución estable en GitHub Actions.
 - **Fase 5 — Migración por suite:** pendiente.
 
@@ -319,6 +319,12 @@ Cada suite debe probar:
 - nombre accesible de botones e iconos;
 - visibilidad de headers, sidebars y contenido principal;
 - screenshots de referencia light/dark tras revisión humana.
+
+Evidencia inicial validada el 2026-08-09:
+
+- `pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile-compact --grep "brand-hub|sales-pipeline" --workers=1`: 2 tests passed.
+- `pnpm --filter @loopdev/ui exec vitest run src/components/composites/shell/AppShell`: 8 tests passed.
+- Se corrigió el estado inicial del sidebar interno de Brand Hub para que no abra un Dialog modal en movil y oculte el shell global.
 
 Checks estructurales mínimos:
 
