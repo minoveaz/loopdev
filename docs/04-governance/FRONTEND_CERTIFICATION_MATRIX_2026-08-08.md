@@ -16,13 +16,13 @@ El baseline versionado está en `config/frontend-audit-baseline.json` y contiene
 
 ## Estado por suite
 
-| Suite            | Front audit | Tokens    | Typography | Icons     | Light     | Dark      | Mobile    | A11y      | Playwright                 | Estado      |
-| ---------------- | ----------- | --------- | ---------- | --------- | --------- | --------- | --------- | --------- | -------------------------- | ----------- |
-| Launchpad        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente                  | Front_Audit |
-| Marketing Studio | PASS        | pendiente | parcial    | parcial   | pendiente | pendiente | pendiente | pendiente | pendiente                  | Front_Audit |
-| Sales CRM        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | shell     | pendiente | PASS desktop + mobile      | Front_Audit |
-| Health OS        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | shell     | pendiente | fuera de alcance funcional | Front_Audit |
-| Quant Ops        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | N/A       | pendiente | PASS desktop-only          | Front_Audit |
+| Suite            | Front audit | Tokens    | Typography | Icons     | Light     | Dark                    | Mobile    | A11y      | Playwright                 | Estado      |
+| ---------------- | ----------- | --------- | ---------- | --------- | --------- | ----------------------- | --------- | --------- | -------------------------- | ----------- |
+| Launchpad        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente               | pendiente | pendiente | pendiente                  | Front_Audit |
+| Marketing Studio | PASS        | pendiente | parcial    | parcial   | pendiente | pendiente               | pendiente | pendiente | pendiente                  | Front_Audit |
+| Sales CRM        | PASS        | pendiente | pendiente  | pendiente | pendiente | PASS (Pipeline desktop) | shell     | pendiente | PASS desktop + mobile      | Front_Audit |
+| Health OS        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente               | shell     | pendiente | fuera de alcance funcional | Front_Audit |
+| Quant Ops        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente               | N/A       | pendiente | PASS desktop-only          | Front_Audit |
 
 ## Alcance de este resultado
 
@@ -40,7 +40,7 @@ Una suite solo puede pasar a `Front_Certified` cuando las columnas bloqueantes e
 
 El alcance de Fase 4 es explícito: Marketing Studio, Brand Hub, Sales CRM y Pipeline se validan en mobile; Quant Ops se valida únicamente en desktop porque no tendrá versión móvil; Health OS conserva smoke de shell/responsive en mobile, pero su funcionalidad interna queda fuera de prioridad hasta que la suite esté desarrollada.
 
-La separación de proyectos Playwright queda verificada con `18` tests en `desktop`, `12` en `mobile` y `12` en `mobile-compact`. Los tests de interacción autenticada de `authenticated.application.spec.mjs` son desktop-only; las rutas de `authenticated.mobile.spec.mjs` se ejecutan en los dos proyectos mobile.
+La separación de proyectos Playwright queda verificada con `19` tests en `desktop`, `12` en `mobile` y `12` en `mobile-compact`. Los tests de interacción autenticada de `authenticated.application.spec.mjs` son desktop-only; las rutas de `authenticated.mobile.spec.mjs` se ejecutan en los dos proyectos mobile. Axe desktop cubre ahora login, launchpad y Sales Pipeline sin violaciones críticas o serias.
 
 ## Próxima evidencia
 

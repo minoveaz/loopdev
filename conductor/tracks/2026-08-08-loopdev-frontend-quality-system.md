@@ -57,7 +57,9 @@ La siguiente acción recomendada es consolidar la evidencia de Fase 4.1 y manten
 
 ### Evidencia de separación Playwright
 
-La configuración actual lista `18` tests en `desktop`, `12` tests en `mobile` y `12` tests en `mobile-compact`. `authenticated.application.spec.mjs`, incluidos Sales CRM y Quant Ops, se ejecuta únicamente en desktop; `authenticated.mobile.spec.mjs` se ejecuta únicamente en los dos proyectos mobile. Quant Ops queda fuera de mobile por decisión de producto. Health OS conserva únicamente cobertura de shell/responsive en mobile, no certificación funcional de sus módulos internos.
+La configuración actual lista `19` tests en `desktop`, `12` tests en `mobile` y `12` tests en `mobile-compact`. `authenticated.application.spec.mjs`, incluidos Sales CRM y Quant Ops, se ejecuta únicamente en desktop; `authenticated.mobile.spec.mjs` se ejecuta únicamente en los dos proyectos mobile. Quant Ops queda fuera de mobile por decisión de producto. Health OS conserva únicamente cobertura de shell/responsive en mobile, no certificación funcional de sus módulos internos.
+
+El scan Axe desktop cubre login, launchpad y Sales Pipeline sin violaciones críticas o serias. Sales Pipeline queda certificado en accesibilidad de navegador para desktop; el resto de suites mantiene el alcance indicado en la matriz.
 
 ### Nomenclatura de superficies
 
