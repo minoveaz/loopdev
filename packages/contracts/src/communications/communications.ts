@@ -129,3 +129,10 @@ export const RecordCommunicationMessageStatusCommandSchema = z.object({
   providerTimestamp: TimestampSchema.nullable().optional(),
 });
 export type RecordCommunicationMessageStatusCommand = z.infer<typeof RecordCommunicationMessageStatusCommandSchema>;
+
+export const RetryCommunicationMessageCommandSchema = z.object({
+  organizationId: IdSchema,
+  messageId: IdSchema,
+  errorCode: z.string().trim().max(120).nullable().optional(),
+});
+export type RetryCommunicationMessageCommand = z.infer<typeof RetryCommunicationMessageCommandSchema>;

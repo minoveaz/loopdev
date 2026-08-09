@@ -3,12 +3,14 @@ import {
   CreateCommunicationInternalNoteCommandSchema,
   CreateCommunicationMessageCommandSchema,
   RecordCommunicationMessageStatusCommandSchema,
+  RetryCommunicationMessageCommandSchema,
 } from '@loopdev/contracts';
 import type {
   CreateCommunicationConversationCommand,
   CreateCommunicationInternalNoteCommand,
   CreateCommunicationMessageCommand,
   RecordCommunicationMessageStatusCommand,
+  RetryCommunicationMessageCommand,
 } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
@@ -101,4 +103,25 @@ export async function recordMessageStatus(input: RecordCommunicationMessageStatu
   });
   if (auditError) throw new Error('Unable to audit communication message status');
   return status;
+}
+
+export async function scheduleMessageRetry(input: RetryCommunicationMessageCommand) {
+  const parsed = RetryCommunicationMessageCommandSchema.parse(input);
+  const supabase = await createServerSupabaseClient();
+  const { data: message, error: loadError } = await supabase.from('communication_messages')
+    .select('id, status, retry_count, max_retries')
+    .eq('organization_id', parsed.organizationId)
+    .eq('id', parsed.messageId)
+    .maybeSingle();
+  if (loadError || !message) throw new Error('Unable to resolve communication message');
+  if (message.status !== 'failed') throw new Error('Only failed communication messages can be retried');
+  if (message.retry_count >= message.max_retries) throw new Error('Communication message retry limit reached');
+  const retryCount = message.retry_count + 1;
+  const delaySeconds = Math.min(300, 15 * (2 ** (retryCount - 1)));
+  const nextRetryAt = new Date(Date.now() + delaySeconds * 1000).toISOString();
+  const { data, error } = await supabase.from('communication_messages').update({
+    status: 'queued', retry_count: retryCount, next_retry_at: nextRetryAt, last_error_code: parsed.errorCode ?? null,
+  }).eq('organization_id', parsed.organizationId).eq('id', parsed.messageId).eq('status', 'failed').select().single();
+  if (error) throw new Error('Unable to schedule communication message retry');
+  return data;
 }

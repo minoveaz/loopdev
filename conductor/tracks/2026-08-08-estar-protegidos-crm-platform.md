@@ -504,7 +504,8 @@ La eliminación del legacy queda para una fase posterior, después de migrar o a
 - [x] Definir mensajes conversacionales, marketing y transaccionales.
 - [x] Crear estados normalizados de entrega.
 - [x] Crear idempotencia básica de mensajes y eventos webhook.
-- [ ] Completar reintentos controlados y auditoría de comunicaciones.
+- [x] Implementar scheduling de reintentos controlados y auditoría de estados.
+- [ ] Añadir worker/cola para ejecutar reintentos cuando llegue `next_retry_at`.
 - [ ] Añadir permisos y consentimiento por canal.
 - [ ] Crear una interfaz server-side común para CRM, Marketing Studio e Insurance Pack.
 
