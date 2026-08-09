@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminSupabaseClient } from '@/lib/supabase/admin';
 import { registerWebhookEvent } from '@/services/communications/core';
 import { parseWhatsAppWebhook } from '@/services/communications/whatsapp';
 import { verifyWhatsAppSignature } from '@/services/communications/whatsappSignature';
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const events = parseWhatsAppWebhook(payload);
     const phoneNumberId = events.find((event) => event.phoneNumberId)?.phoneNumberId;
     if (!phoneNumberId) return NextResponse.json({ received: true, events: 0 });
-    const supabase = await createServerSupabaseClient();
+    const supabase = createAdminSupabaseClient();
     const { data: account, error: accountError } = await supabase.from('communication_accounts')
       .select('id, organization_id')
       .eq('external_account_id', phoneNumberId)
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
         externalEventId: `${event.kind}:${event.externalMessageId}`,
         externalMessageId: event.externalMessageId,
         payloadVersion: 'whatsapp-cloud-v1',
-      });
+      }, supabase);
       if (result.duplicate) duplicates += 1;
     }
     return NextResponse.json({ received: true, events: events.length, duplicates });

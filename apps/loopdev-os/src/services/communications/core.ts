@@ -13,6 +13,8 @@ import type {
   RetryCommunicationMessageCommand,
 } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import type { Database } from '@/types/database.types';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export async function createConversation(input: CreateCommunicationConversationCommand) {
   const parsed = CreateCommunicationConversationCommandSchema.parse(input);
@@ -64,8 +66,8 @@ export async function registerWebhookEvent(input: {
   externalEventId: string;
   externalMessageId?: string | null;
   payloadVersion: string;
-}) {
-  const supabase = await createServerSupabaseClient();
+}, client?: SupabaseClient<Database>) {
+  const supabase = client ?? await createServerSupabaseClient();
   const { data, error } = await supabase.from('communication_webhook_events').insert({
     organization_id: input.organizationId,
     account_id: input.accountId,
