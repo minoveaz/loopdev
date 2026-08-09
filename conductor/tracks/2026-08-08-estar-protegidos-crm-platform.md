@@ -484,6 +484,21 @@ El trabajo se ejecutará primero en contratos, Supabase, RLS, servicios y APIs. 
 
 ### Fase B4 — Communications Core
 
+#### Decisión sobre el modelo de comunicaciones de la POC
+
+La auditoría del esquema legacy (`communications_*`) concluye que no será el modelo canónico del CRM. Fue diseñado para una POC de WhatsApp y tiene limitaciones estructurales: está restringido a WhatsApp, usa `workspace_id` como texto sin relación con la organización, duplica contactos fuera de `crm_contacts`, no soporta `brand_id` de forma consistente y mezcla conceptos de canal, contacto, conversación y proveedor.
+
+No se eliminarán esas tablas inmediatamente para no romper la POC ni perder trazabilidad. Quedarán como legacy/deprecadas y no recibirán nuevas funcionalidades. Communications Core tendrá un modelo nuevo alineado con CRM:
+
+- cuentas y canales por organización, con marca opcional y proveedor desacoplado;
+- conversaciones y mensajes referenciados al contacto canónico de `crm_contacts`;
+- notas internas, consentimientos y estados de entrega normalizados;
+- `organization_id` obligatorio y relaciones compuestas para workspace/marca;
+- eventos externos idempotentes, auditoría y referencias seguras a credenciales;
+- adaptadores de migración/lectura para la POC mientras se completa la transición.
+
+La eliminación del legacy queda para una fase posterior, después de migrar o archivar sus datos y verificar que ninguna ruta activa lo consume.
+
 - [ ] Crear modelo de cuentas, canales, conversaciones, mensajes y notas internas.
 - [ ] Crear referencias seguras a credenciales.
 - [ ] Definir mensajes conversacionales, marketing y transaccionales.
