@@ -33,7 +33,12 @@ export default defineConfig({
   projects: [
     {
       name: 'desktop',
-      testMatch: ['**/*.smoke.spec.mjs', '**/*.accessibility.spec.mjs', '**/*.visual.spec.mjs'],
+      testMatch: [
+        '**/*.smoke.spec.mjs',
+        '**/*.accessibility.spec.mjs',
+        '**/*.visual.spec.mjs',
+        '**/authenticated.application.spec.mjs',
+      ],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
     {
