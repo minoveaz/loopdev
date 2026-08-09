@@ -118,7 +118,6 @@ export type CreateCommunicationMessageCommand = z.infer<typeof CreateCommunicati
 export const CreateCommunicationInternalNoteCommandSchema = z.object({
   organizationId: IdSchema,
   conversationId: IdSchema,
-  authorId: IdSchema,
   body: z.string().trim().min(1).max(100_000),
 });
 export type CreateCommunicationInternalNoteCommand = z.infer<typeof CreateCommunicationInternalNoteCommandSchema>;

@@ -41,7 +41,7 @@ export async function createMessage(input: CreateCommunicationMessageCommand) {
   return data;
 }
 
-export async function createInternalNote(input: CreateCommunicationInternalNoteCommand) {
+export async function createInternalNote(input: CreateCommunicationInternalNoteCommand & { authorId: string }) {
   const parsed = CreateCommunicationInternalNoteCommandSchema.parse(input);
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from('communication_internal_notes').insert({
