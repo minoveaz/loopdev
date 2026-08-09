@@ -20,7 +20,7 @@ El baseline versionado está en `config/frontend-audit-baseline.json` y contiene
 | ---------------- | ----------- | --------- | ---------- | --------- | --------- | --------- | --------- | --------- | -------------------------- | ----------- |
 | Launchpad        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente                  | Front_Audit |
 | Marketing Studio | PASS        | pendiente | parcial    | parcial   | pendiente | pendiente | pendiente | pendiente | pendiente                  | Front_Audit |
-| Sales CRM        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente                  | Front_Audit |
+| Sales CRM        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | shell     | pendiente | PASS desktop + mobile      | Front_Audit |
 | Health OS        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | shell     | pendiente | fuera de alcance funcional | Front_Audit |
 | Quant Ops        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | N/A       | pendiente | PASS desktop-only          | Front_Audit |
 

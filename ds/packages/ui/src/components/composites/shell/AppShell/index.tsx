@@ -47,7 +47,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     scrollbarClass,
     activeOverlay,
   } = useAppShell(props);
-  const isMobileNavVisible = isViewportReady && (isMobileViewport ? isMobileNavOpen : isNavOpen);
+  const isMobileNavVisible = isViewportReady && isMobileViewport && isMobileNavOpen;
 
   return (
     <div
