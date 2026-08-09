@@ -78,6 +78,7 @@ export const PipelineFilters: React.FC<PipelineFiltersProps> = ({
         <div className="flex-1 min-w-0">
           <Input
             id="search"
+            aria-label="Buscar leads"
             value={searchTerm}
             onChange={(e) => onSearchTermChange(e.target.value)}
             placeholder="Buscar lead..."

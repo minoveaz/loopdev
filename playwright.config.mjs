@@ -39,25 +39,36 @@ export default defineConfig({
         '**/*.visual.spec.mjs',
         '**/authenticated.application.spec.mjs',
       ],
+      testIgnore: ['**/responsive.visual.spec.mjs'],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
     {
       name: 'mobile',
-      testMatch: ['**/*.mobile-diagnostic.spec.mjs', '**/authenticated.mobile.spec.mjs'],
+      testMatch: [
+        '**/*.mobile-diagnostic.spec.mjs',
+        '**/*.visual.spec.mjs',
+        '**/authenticated.mobile.spec.mjs',
+      ],
       workers: 1,
       use: {
         ...devices['iPhone 13'],
         browserName: 'chromium',
+        snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}',
       },
     },
     {
       name: 'mobile-compact',
-      testMatch: ['**/*.mobile-diagnostic.spec.mjs', '**/authenticated.mobile.spec.mjs'],
+      testMatch: [
+        '**/*.mobile-diagnostic.spec.mjs',
+        '**/*.visual.spec.mjs',
+        '**/authenticated.mobile.spec.mjs',
+      ],
       workers: 1,
       use: {
         ...devices['iPhone 13'],
         browserName: 'chromium',
         viewport: { width: 320, height: 800 },
+        snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}',
       },
     },
   ],

@@ -16,13 +16,13 @@ El baseline versionado está en `config/frontend-audit-baseline.json` y contiene
 
 ## Estado por suite
 
-| Suite            | Front audit | Tokens    | Typography | Icons     | Light     | Dark      | Mobile    | A11y      | Playwright                 | Estado      |
-| ---------------- | ----------- | --------- | ---------- | --------- | --------- | --------- | --------- | --------- | -------------------------- | ----------- |
-| Launchpad        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | pendiente | pendiente | pendiente                  | Front_Audit |
-| Marketing Studio | PASS        | pendiente | parcial    | parcial   | pendiente | pendiente | pendiente | pendiente | pendiente                  | Front_Audit |
-| Sales CRM        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | shell     | pendiente | PASS desktop + mobile      | Front_Audit |
-| Health OS        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | shell     | pendiente | fuera de alcance funcional | Front_Audit |
-| Quant Ops        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente | N/A       | pendiente | PASS desktop-only          | Front_Audit |
+| Suite            | Front audit | Tokens    | Typography | Icons     | Light     | Dark                    | Mobile    | A11y      | Playwright                 | Estado      |
+| ---------------- | ----------- | --------- | ---------- | --------- | --------- | ----------------------- | --------- | --------- | -------------------------- | ----------- |
+| Launchpad        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente               | pendiente | pendiente | pendiente                  | Front_Audit |
+| Marketing Studio | PASS        | pendiente | parcial    | parcial   | pendiente | pendiente               | pendiente | pendiente | pendiente                  | Front_Audit |
+| Sales CRM        | PASS        | pendiente | pendiente  | pendiente | pendiente | PASS (Pipeline desktop) | shell     | pendiente | PASS desktop + mobile      | Front_Audit |
+| Health OS        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente               | shell     | pendiente | fuera de alcance funcional | Front_Audit |
+| Quant Ops        | PASS        | pendiente | pendiente  | pendiente | pendiente | pendiente               | N/A       | pendiente | PASS desktop-only          | Front_Audit |
 
 ## Alcance de este resultado
 
@@ -34,17 +34,17 @@ El baseline versionado está en `config/frontend-audit-baseline.json` y contiene
 - **Mobile Compact:** caso extremo de Responsive Web; en Playwright corresponde al proyecto `mobile-compact` con viewport `320x800`.
 - **Mobile App:** aplicación móvil instalada de `apps/loopdev-mobile`; es una superficie distinta de Mobile Web y no se incluye en los proyectos Playwright web.
 
-Este registro certifica la capa estática de Fase 2 y la cobertura parcial de componentes/Axe de Fase 3. La evidencia Axe cubre actualmente primitives compartidos en `@loopdev/ui` y no certifica todavía el comportamiento real de las suites en navegador, responsive en los viewports oficiales, temas ni snapshots visuales.
+Este registro consolida la evidencia estática, de componentes y de aplicación de las fases anteriores. La evidencia de navegador incluye Axe en login, launchpad y Sales Pipeline, además de snapshots light/dark en Desktop Web, Mobile Web y Mobile Compact para login.
 
 Una suite solo puede pasar a `Front_Certified` cuando las columnas bloqueantes estén verificadas y exista evidencia de Vitest, Playwright, Axe, light/dark y responsive.
 
 El alcance de Fase 4 es explícito: Marketing Studio, Brand Hub, Sales CRM y Pipeline se validan en mobile; Quant Ops se valida únicamente en desktop porque no tendrá versión móvil; Health OS conserva smoke de shell/responsive en mobile, pero su funcionalidad interna queda fuera de prioridad hasta que la suite esté desarrollada.
 
-La separación de proyectos Playwright queda verificada con `18` tests en `desktop`, `12` en `mobile` y `12` en `mobile-compact`. Los tests de interacción autenticada de `authenticated.application.spec.mjs` son desktop-only; las rutas de `authenticated.mobile.spec.mjs` se ejecutan en los dos proyectos mobile.
+La separación de proyectos Playwright queda verificada con `19` tests en `desktop`, `12` en `mobile` y `12` en `mobile-compact`. Los tests de interacción autenticada de `authenticated.application.spec.mjs` son desktop-only; las rutas de `authenticated.mobile.spec.mjs` se ejecutan en los dos proyectos mobile. Axe desktop cubre ahora login, launchpad y Sales Pipeline sin violaciones críticas o serias.
 
-## Próxima evidencia
+## Evidencia de cierre de Fase 4 y 4.1
 
 1. Fase 3 completada en el Design System: `pnpm --filter @loopdev/ui exec vitest run` → 204 suites, 341 tests PASS; `pnpm --filter @loopdev/ui typecheck` → PASS. Cobertura Axe explícita en 43 archivos; composites complejos cuentan con tests propios y Axe cuando el montaje es estable. `SuiteLaunchpad` conserva un gap Axe documentado por un input sin label visible en producción.
-2. Ampliar las rutas representativas y pruebas Playwright de las suites prioritarias en Fase 4.
-3. Mantener las excepciones de alcance de Quant Ops y Health OS explícitas en cada actualización.
-4. Registrar evidencias por viewport y tema antes de cambiar el estado de una suite.
+2. `pnpm exec playwright test --project=desktop --project=mobile --project=mobile-compact --workers=1` → 43 tests PASS.
+3. `pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1` → 4 snapshots PASS.
+4. CI ejecuta Desktop Web, Mobile Web, Mobile Compact, Axe de navegador y snapshots visuales. Quant Ops permanece desktop-only y Health OS limita la cobertura móvil a shell/responsive.
