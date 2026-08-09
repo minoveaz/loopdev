@@ -2,6 +2,7 @@ export type MobileOrganization = {
   id: string;
   name: string;
   slug?: string;
+  role?: MobileOrganizationMembership['role'];
   memberCount: number;
   status: 'active' | 'paused';
 };
@@ -24,7 +25,7 @@ export type PlatformOverview = {
 
 export interface HomeDataSource {
   getOrganizations(): Promise<MobileOrganization[]>;
-  getActivity(): Promise<ActivityItem[]>;
-  getNotifications(): Promise<NotificationItem[]>;
-  getPlatformOverview(): Promise<PlatformOverview>;
+  getActivity(organizationId?: string): Promise<ActivityItem[]>;
+  getNotifications(organizationId?: string): Promise<NotificationItem[]>;
+  getPlatformOverview(organizationId?: string): Promise<PlatformOverview>;
 }

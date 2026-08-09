@@ -25,17 +25,17 @@ const loadingState: HomeDataState = {
   error: null,
 };
 
-export async function loadHomeData(dataSource: HomeDataSource): Promise<HomeDataState> {
+export async function loadHomeData(dataSource: HomeDataSource, organizationId?: string): Promise<HomeDataState> {
   const [organizations, activity, notifications, overview] = await Promise.all([
     dataSource.getOrganizations(),
-    dataSource.getActivity(),
-    dataSource.getNotifications(),
-    dataSource.getPlatformOverview(),
+    dataSource.getActivity(organizationId),
+    dataSource.getNotifications(organizationId),
+    dataSource.getPlatformOverview(organizationId),
   ]);
   return { status: 'success', organizations, activity, notifications, overview, error: null };
 }
 
-export function useHomeData(dataSource?: HomeDataSource): HomeDataState {
+export function useHomeData(dataSource?: HomeDataSource, organizationId?: string): HomeDataState {
   const [state, setState] = useState<HomeDataState>(loadingState);
   useEffect(() => {
     if (!dataSource) {
@@ -43,7 +43,7 @@ export function useHomeData(dataSource?: HomeDataSource): HomeDataState {
       return;
     }
     let active = true;
-    loadHomeData(dataSource)
+    loadHomeData(dataSource, organizationId)
       .then((nextState) => {
         if (active) setState(nextState);
       })
@@ -58,6 +58,6 @@ export function useHomeData(dataSource?: HomeDataSource): HomeDataState {
     return () => {
       active = false;
     };
-  }, [dataSource]);
+  }, [dataSource, organizationId]);
   return state;
 }

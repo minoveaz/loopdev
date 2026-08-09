@@ -43,8 +43,24 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
   };
   if (membershipsError) throw membershipsError;
 
+  const membershipOrganizationIds = [...new Set((memberships ?? []).map(({ organization_id }) => organization_id))];
+  if (membershipOrganizationIds.length === 0) {
+    return {
+      organizations: [],
+      memberships: [],
+      userId: authData.user.id,
+      permissionsByOrganization: {},
+    };
+  }
+  const visibleOrganizations = (organizations ?? []).filter(({ id }) => membershipOrganizationIds.includes(id));
+  const normalizedMemberships = (memberships ?? []).map((membership) => ({
+    organizationId: membership.organization_id,
+    userId: membership.user_id,
+    role: membership.role,
+  }));
+
   const normalizedOrganizations: MobileOrganization[] = await Promise.all(
-    (organizations ?? []).map(async (organization) => {
+    visibleOrganizations.map(async (organization) => {
       const { count } = (await supabase
         .from('organization_memberships')
         .select('user_id', { count: 'exact', head: true })
@@ -53,16 +69,12 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
         id: organization.id,
         name: organization.name,
         slug: organization.slug,
+        role: normalizedMemberships.find(({ organizationId }) => organizationId === organization.id)?.role,
         memberCount: count ?? 0,
         status: organization.is_active ? 'active' : 'paused',
       };
     }),
   );
-  const normalizedMemberships = (memberships ?? []).map((membership) => ({
-    organizationId: membership.organization_id,
-    userId: membership.user_id,
-    role: membership.role,
-  }));
   const permissionsByOrganization: Record<string, string[]> = {};
   for (const organization of normalizedOrganizations) {
     const { data: permissionKeys } = (await supabase
@@ -99,18 +111,18 @@ export const supabaseHomeDataSource: HomeDataSource = {
   async getOrganizations() {
     return (await loadSupabaseOrganizations()).organizations;
   },
-  async getActivity(): Promise<ActivityItem[]> {
+  async getActivity(_organizationId?: string): Promise<ActivityItem[]> {
     return [];
   },
-  async getNotifications(): Promise<NotificationItem[]> {
+  async getNotifications(_organizationId?: string): Promise<NotificationItem[]> {
     return [];
   },
-  async getPlatformOverview(): Promise<PlatformOverview> {
+  async getPlatformOverview(_organizationId?: string): Promise<PlatformOverview> {
     const organizations = await loadSupabaseOrganizations();
     return {
       systemStatus: 'operational',
       activeUsers: 0,
-      activeOrganizations: organizations.organizations.length,
+        activeOrganizations: organizations.organizations.length,
       pendingNotifications: 0,
     };
   },

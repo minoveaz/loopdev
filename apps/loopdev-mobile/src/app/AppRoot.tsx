@@ -5,12 +5,14 @@ import { initialSessionState, mobileUserFromSupabase, sessionReducer } from '../
 import { createSupabaseMobileClient } from '../data/adapters/supabase/client';
 import { signInWithSupabase, signOutFromSupabase } from '../data/adapters/supabase/home';
 import { createHomeDataSource } from '../data/data-source';
+import { clearActiveOrganizationId, loadActiveOrganizationId, saveActiveOrganizationId } from '../data/organization-context';
 import { useHomeData } from '../data/home-data';
 import { ActivityScreen } from '../features/activity/screens/ActivityScreen';
 import { LoginScreen } from '../features/auth/screens/LoginScreen';
 import { HomeScreen } from '../features/home/screens/HomeScreen';
 import { NotificationsScreen } from '../features/notifications/screens/NotificationsScreen';
 import { OrganizationsScreen } from '../features/organizations/screens/OrganizationsScreen';
+import { OrganizationSwitcher } from '../features/organizations/components/OrganizationSwitcher';
 import { ProfileScreen } from '../features/profile/screens/ProfileScreen';
 import { colors } from '../theme/colors';
 
@@ -27,11 +29,28 @@ export default function AppRoot() {
   const [session, dispatch] = useReducer(sessionReducer, initialSessionState);
   const [authError, setAuthError] = useState<Error | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>('home');
+  const [activeOrganizationId, setActiveOrganizationId] = useState<string | null>(null);
   const dataSource = useMemo(
     () => (session.status === 'authenticated' ? createHomeDataSource('supabase') : undefined),
     [session.status],
   );
-  const homeData = useHomeData(dataSource);
+  const homeData = useHomeData(dataSource, activeOrganizationId ?? undefined);
+  useEffect(() => {
+    if (session.status !== 'authenticated' || homeData.status !== 'success' || homeData.organizations.length === 0) return;
+    let active = true;
+    loadActiveOrganizationId().then((storedId) => {
+      if (!active) return;
+      const storedOrganization = homeData.organizations.find(({ id }) => id === storedId);
+      const nextId = storedOrganization?.id ?? homeData.organizations[0].id;
+      setActiveOrganizationId(nextId);
+      void saveActiveOrganizationId(nextId);
+    });
+    return () => { active = false; };
+  }, [homeData.organizations, homeData.status, session.status]);
+  const selectOrganization = (organizationId: string) => {
+    setActiveOrganizationId(organizationId);
+    void saveActiveOrganizationId(organizationId);
+  };
   useEffect(() => {
     let active = true;
     dispatch({ type: 'start' });
@@ -75,15 +94,18 @@ export default function AppRoot() {
         <Text style={styles.eyebrow}>
           LOOPDEV MOBILE / {session.user.displayName.toUpperCase()}
         </Text>
+        <OrganizationSwitcher organizations={homeData.organizations} activeOrganizationId={activeOrganizationId} onSelect={selectOrganization} />
         {activeTab === 'home' && <HomeScreen data={homeData} onNavigate={setActiveTab} />}
         {activeTab === 'activity' && <ActivityScreen data={homeData} />}
         {activeTab === 'notifications' && <NotificationsScreen data={homeData} />}
-        {activeTab === 'organizations' && <OrganizationsScreen data={homeData} />}
+        {activeTab === 'organizations' && <OrganizationsScreen data={homeData} activeOrganizationId={activeOrganizationId} onSelectOrganization={selectOrganization} />}
         {activeTab === 'profile' && (
           <ProfileScreen
             displayName={session.user.displayName}
             onSignOut={() => {
               signOutFromSupabase().catch(() => undefined);
+              setActiveOrganizationId(null);
+              void clearActiveOrganizationId();
               dispatch({ type: 'sign-out' });
             }}
           />
