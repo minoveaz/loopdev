@@ -8,7 +8,6 @@ const authenticatedRoutes = [
   { name: 'brands', path: '/marketing-studio/brand-hub/brands' },
   { name: 'sales-crm', path: '/sales-crm' },
   { name: 'sales-pipeline', path: '/sales-crm/pipeline' },
-  { name: 'quant-ops', path: '/quant-ops' },
   { name: 'health-os', path: '/health-os' },
 ];
 
