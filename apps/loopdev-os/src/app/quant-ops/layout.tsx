@@ -23,6 +23,7 @@ import {
   Divider,
   TenantProvider,
   ToastViewport,
+  MobileSuiteNav,
 } from '@loopdev/ui';
 import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
 import { useAuth } from '@/hooks/useAuth';
@@ -49,7 +50,20 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/quant-ops/bot-fleet', '/quant-ops/strategies', '/quant-ops/terminal', '/quant-ops/history', '/quant-ops/risk-control', '/quant-ops/exchanges'] })));
+    queueMicrotask(() =>
+      setNavMode(
+        getSuiteNavMode(pathname, {
+          railPrefixes: [
+            '/quant-ops/bot-fleet',
+            '/quant-ops/strategies',
+            '/quant-ops/terminal',
+            '/quant-ops/history',
+            '/quant-ops/risk-control',
+            '/quant-ops/exchanges',
+          ],
+        }),
+      ),
+    );
   }, [pathname]);
 
   const currentSuite = QUANT_OPS_SCHEMA.suite;
@@ -74,96 +88,136 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
 
   return (
     <SuitePermissionGuard permission="quant.read">
-    <AppShell
-      config={{
-        isLeftSidebarOpen: navMode === 'expanded',
-        isRightSidebarOpen: false,
-        navBehavior: 'auto',
-        context: context,
-        activeOverlay: activeOverlay,
-      }}
-      onToggleLeftSidebar={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
-      navSlot={
-        <SuiteSidebar
-          schema={QUANT_OPS_SCHEMA}
-          navMode={navMode}
-          context={context}
-          activeModuleId={activeModuleId}
-          accessMap={accessMap}
-          onExitToOS={() => router.push('/launchpad')}
-          onNavigate={(route) => router.push(route.routeId)}
-          onToggleNavMode={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
-          profileSlot={
-            <UserAvatar
-              name={user?.email || 'Quant User'}
-              size={navMode === 'rail' ? 'md' : 'sm'}
-              withStatus
-              status="online"
-            />
-          }
-        />
-      }
-      headerSlot={
-        <SuiteHeader
-          isInert={activeOverlay !== null}
-          leftSlot={
-            <div className="flex items-center gap-4">
-              <SuiteSwitcher
-                currentSuite={currentSuite}
-                availableSuites={AVAILABLE_SUITES_FIXTURES}
-                onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
-                onSuiteChange={(id) =>
-                  id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
-                }
-              />
-              <Divider orientation="vertical" thickness="technical" className="h-4" />
-              <ContextPath
-                segments={[
-                  { id: 'workspace', label: activeOrganization?.name ?? 'Workspace', isActive: true },
-                ]}
-              />
-            </div>
-          }
-          centerSlot={<CommandBarTrigger onOpen={() => {}} />}
-          rightSlot={
-            <SuiteHeaderRight
-              userName={user?.email || 'Quant User'}
-              userEmail={user?.email}
-              userRole="Quant_Architect"
-              notifications={notifications}
-              unreadCount={unreadCount}
-              onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-              onMarkAsRead={markAsRead}
-              onMarkAllAsRead={markAllAsRead}
-              onRemove={removeNotification}
-              onClear={clearAll}
-              onLogout={() => signOut()}
-              onViewAll={() => console.log('Open Notifications')}
-            />
-          }
-        />
-      }
-    >
-      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
-      <TenantProvider tenant="loopdev">
-        <LayoutProvider>
-          <ToastViewport activeTenantId="loopdev" />
-          <ModuleWorkspace
-            moduleId="quant-ops"
-            inspectorOpen={isInspectorOpen}
-            onInspectorChange={(open) => !open && closeInspector()}
-            inspectorSlot={<BotInspectorIndustrial />}
-            headerSlot={
-              <ModuleHeader
-                segments={[{ id: 'suite', label: 'Quant Ops', href: '/quant-ops', isActive: true }]}
+      <AppShell
+        config={{
+          isLeftSidebarOpen: navMode === 'expanded',
+          isRightSidebarOpen: false,
+          navBehavior: 'auto',
+          context: context,
+          activeOverlay: activeOverlay,
+        }}
+        onToggleLeftSidebar={() =>
+          setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))
+        }
+        navSlot={
+          <SuiteSidebar
+            schema={QUANT_OPS_SCHEMA}
+            navMode={navMode}
+            context={context}
+            activeModuleId={activeModuleId}
+            accessMap={accessMap}
+            onExitToOS={() => router.push('/launchpad')}
+            onNavigate={(route) => router.push(route.routeId)}
+            onToggleNavMode={() =>
+              setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))
+            }
+            profileSlot={
+              <UserAvatar
+                name={user?.email || 'Quant User'}
+                size={navMode === 'rail' ? 'md' : 'sm'}
+                withStatus
+                status="online"
               />
             }
-          >
-            {children}
-          </ModuleWorkspace>
-        </LayoutProvider>
-      </TenantProvider>
-    </AppShell>
+          />
+        }
+        headerSlot={
+          <SuiteHeader
+            isInert={activeOverlay !== null}
+            leftSlot={
+              <div className="flex items-center gap-4">
+                <SuiteSwitcher
+                  currentSuite={currentSuite}
+                  availableSuites={AVAILABLE_SUITES_FIXTURES}
+                  onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
+                  onSuiteChange={(id) =>
+                    id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
+                  }
+                />
+                <Divider orientation="vertical" thickness="technical" className="h-4" />
+                <ContextPath
+                  segments={[
+                    {
+                      id: 'workspace',
+                      label: activeOrganization?.name ?? 'Workspace',
+                      isActive: true,
+                    },
+                  ]}
+                />
+              </div>
+            }
+            centerSlot={<CommandBarTrigger onOpen={() => {}} />}
+            rightSlot={
+              <SuiteHeaderRight
+                userName={user?.email || 'Quant User'}
+                userEmail={user?.email}
+                userRole="Quant_Architect"
+                notifications={notifications}
+                unreadCount={unreadCount}
+                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
+                onMarkAsRead={markAsRead}
+                onMarkAllAsRead={markAllAsRead}
+                onRemove={removeNotification}
+                onClear={clearAll}
+                onLogout={() => signOut()}
+                onViewAll={() => console.log('Open Notifications')}
+              />
+            }
+          />
+        }
+        mobileBottomSlot={(openMobileNav) => (
+          <MobileSuiteNav
+            items={[
+              {
+                label: 'Quant',
+                icon: 'monitoring',
+                path: '/quant-ops',
+                active: pathname === '/quant-ops',
+              },
+              {
+                label: 'Bots',
+                icon: 'smart_toy',
+                path: '/quant-ops/bot-fleet',
+                active: pathname.startsWith('/quant-ops/bot-fleet'),
+              },
+              {
+                label: 'Terminal',
+                icon: 'terminal',
+                path: '/quant-ops/terminal',
+                active: pathname.startsWith('/quant-ops/terminal'),
+              },
+              { label: 'Más', icon: 'more_horiz' },
+            ]}
+            onNavigate={(item) => (item.path ? router.push(item.path) : openMobileNav())}
+          />
+        )}
+      >
+        <BlueprintBackground
+          variant="monochrome"
+          intensity="low"
+          className="fixed inset-0 pointer-events-none opacity-40"
+        />
+        <TenantProvider tenant="loopdev">
+          <LayoutProvider>
+            <ToastViewport activeTenantId="loopdev" />
+            <ModuleWorkspace
+              moduleId="quant-ops"
+              inspectorOpen={isInspectorOpen}
+              onInspectorChange={(open) => !open && closeInspector()}
+              inspectorSlot={<BotInspectorIndustrial />}
+              headerSlot={
+                <ModuleHeader
+                  segments={[
+                    { id: 'suite', label: 'Quant Ops', href: '/quant-ops', isActive: true },
+                  ]}
+                />
+              }
+            >
+              {children}
+            </ModuleWorkspace>
+          </LayoutProvider>
+        </TenantProvider>
+      </AppShell>
     </SuitePermissionGuard>
   );
 }

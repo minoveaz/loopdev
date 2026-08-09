@@ -22,6 +22,7 @@ import {
   Divider,
   TenantProvider,
   ToastViewport,
+  MobileSuiteNav,
 } from '@loopdev/ui';
 import { SuiteHeaderLeft } from '@/components/layout/SuiteHeaderLeft';
 import { SuiteHeaderRight } from '@/components/layout/SuiteHeaderRight';
@@ -134,7 +135,19 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/health-os/agenda', '/health-os/triage', '/health-os/consultations', '/health-os/contracts', '/health-os/billing'] })));
+    queueMicrotask(() =>
+      setNavMode(
+        getSuiteNavMode(pathname, {
+          railPrefixes: [
+            '/health-os/agenda',
+            '/health-os/triage',
+            '/health-os/consultations',
+            '/health-os/contracts',
+            '/health-os/billing',
+          ],
+        }),
+      ),
+    );
   }, [pathname]);
 
   const currentSuite = HEALTH_OS_SCHEMA.suite;
@@ -158,87 +171,123 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
 
   return (
     <SuitePermissionGuard permission="health.read">
-    <AppShell
-      config={{
-        isLeftSidebarOpen: navMode === 'expanded',
-        isRightSidebarOpen: false,
-        navBehavior: 'auto',
-        context: context,
-        activeOverlay: activeOverlay,
-      }}
-      onToggleLeftSidebar={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
-      navSlot={
-        <SuiteSidebar
-          schema={HEALTH_OS_SCHEMA}
-          navMode={navMode}
-          context={context}
-          activeModuleId={activeModuleId}
-          accessMap={accessMap}
-          onExitToOS={() => router.push('/launchpad')}
-          onNavigate={(route) => router.push(route.routeId)}
-          onToggleNavMode={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
-          profileSlot={
-            <UserAvatar
-              name={user?.email || 'Medical User'}
-              size={navMode === 'rail' ? 'md' : 'sm'}
-              withStatus
-              status="online"
-            />
-          }
-        />
-      }
-      headerSlot={
-        <SuiteHeader
-          isInert={activeOverlay !== null}
-          leftSlot={
-            <SuiteHeaderLeft
-              currentSuite={currentSuite}
-              availableSuites={AVAILABLE_SUITES_FIXTURES}
-              label="Health OS"
-              href="/health-os"
-              onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
-              onSuiteChange={(id) =>
-                id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
-              }
-            />
-          }
-          centerSlot={<CommandBarTrigger onOpen={() => {}} />}
-          rightSlot={
-            <SuiteHeaderRight
-              userName={user?.email || 'Medical User'}
-              userEmail={user?.email}
-              userRole="IPS_Clinician"
-              notifications={notifications}
-              unreadCount={unreadCount}
-              onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-              onMarkAsRead={markAsRead}
-              onMarkAllAsRead={markAllAsRead}
-              onRemove={removeNotification}
-              onClear={clearAll}
-              onLogout={() => signOut()}
-              onViewAll={() => console.log('Open Notifications')}
-            />
-          }
-        />
-      }
-    >
-      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
-      <TenantProvider tenant="estar-protegidos">
-        <LayoutProvider>
-          <ToastViewport activeTenantId="zonamedica" />
-          <ModuleWorkspace
-            moduleId="health-os"
-            headerSlot={
-              <ModuleHeader
-                segments={[{ id: 'suite', label: 'Health OS', href: '/health-os', isActive: true }]}
+      <AppShell
+        config={{
+          isLeftSidebarOpen: navMode === 'expanded',
+          isRightSidebarOpen: false,
+          navBehavior: 'auto',
+          context: context,
+          activeOverlay: activeOverlay,
+        }}
+        onToggleLeftSidebar={() =>
+          setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))
+        }
+        navSlot={
+          <SuiteSidebar
+            schema={HEALTH_OS_SCHEMA}
+            navMode={navMode}
+            context={context}
+            activeModuleId={activeModuleId}
+            accessMap={accessMap}
+            onExitToOS={() => router.push('/launchpad')}
+            onNavigate={(route) => router.push(route.routeId)}
+            onToggleNavMode={() =>
+              setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))
+            }
+            profileSlot={
+              <UserAvatar
+                name={user?.email || 'Medical User'}
+                size={navMode === 'rail' ? 'md' : 'sm'}
+                withStatus
+                status="online"
               />
             }
-          >
-            {children}
-          </ModuleWorkspace>
-        </LayoutProvider>
-      </TenantProvider>
-    </AppShell>
+          />
+        }
+        headerSlot={
+          <SuiteHeader
+            isInert={activeOverlay !== null}
+            leftSlot={
+              <SuiteHeaderLeft
+                currentSuite={currentSuite}
+                availableSuites={AVAILABLE_SUITES_FIXTURES}
+                label="Health OS"
+                href="/health-os"
+                onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
+                onSuiteChange={(id) =>
+                  id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
+                }
+              />
+            }
+            centerSlot={<CommandBarTrigger onOpen={() => {}} />}
+            rightSlot={
+              <SuiteHeaderRight
+                userName={user?.email || 'Medical User'}
+                userEmail={user?.email}
+                userRole="IPS_Clinician"
+                notifications={notifications}
+                unreadCount={unreadCount}
+                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
+                onMarkAsRead={markAsRead}
+                onMarkAllAsRead={markAllAsRead}
+                onRemove={removeNotification}
+                onClear={clearAll}
+                onLogout={() => signOut()}
+                onViewAll={() => console.log('Open Notifications')}
+              />
+            }
+          />
+        }
+        mobileBottomSlot={(openMobileNav) => (
+          <MobileSuiteNav
+            items={[
+              {
+                label: 'Health',
+                icon: 'health_and_safety',
+                path: '/health-os',
+                active: pathname === '/health-os',
+              },
+              {
+                label: 'Agenda',
+                icon: 'calendar_month',
+                path: '/health-os/agenda',
+                active: pathname.startsWith('/health-os/agenda'),
+              },
+              {
+                label: 'Triage',
+                icon: 'monitor_heart',
+                path: '/health-os/triage',
+                active: pathname.startsWith('/health-os/triage'),
+              },
+              { label: 'Más', icon: 'more_horiz' },
+            ]}
+            onNavigate={(item) => (item.path ? router.push(item.path) : openMobileNav())}
+          />
+        )}
+      >
+        <BlueprintBackground
+          variant="monochrome"
+          intensity="low"
+          className="fixed inset-0 pointer-events-none opacity-40"
+        />
+        <TenantProvider tenant="estar-protegidos">
+          <LayoutProvider>
+            <ToastViewport activeTenantId="zonamedica" />
+            <ModuleWorkspace
+              moduleId="health-os"
+              headerSlot={
+                <ModuleHeader
+                  segments={[
+                    { id: 'suite', label: 'Health OS', href: '/health-os', isActive: true },
+                  ]}
+                />
+              }
+            >
+              {children}
+            </ModuleWorkspace>
+          </LayoutProvider>
+        </TenantProvider>
+      </AppShell>
     </SuitePermissionGuard>
   );
 }

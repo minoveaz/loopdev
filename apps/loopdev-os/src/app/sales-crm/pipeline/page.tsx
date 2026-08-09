@@ -1,15 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { 
-  LpdText, 
-  Heading, 
-  TechnicalSurface, 
-  Button,
-  Icon,
-  KanbanBoard,
-  cn
-} from '@loopdev/ui';
+import { LpdText, Heading, TechnicalSurface, Button, Icon, KanbanBoard, cn } from '@loopdev/ui';
 import { useSalesCrm, Lead, type LeadLabel } from '../context';
 import { PipelineFilters } from '../components/PipelineFilters';
 import { PipelineCard } from '../components/PipelineCard';
@@ -19,7 +11,7 @@ import { QuotationForm } from '../components/QuotationForm';
 export default function PipelineKanban() {
   const { leads, openLeadInspector, updateLeadStage, addLead } = useSalesCrm();
   const [showAddForm, setShowAddForm] = useState(false);
-  
+
   // Navigation Tabs
   const [activeTab, setActiveTab] = useState<'pipeline' | 'history'>('pipeline');
 
@@ -31,31 +23,73 @@ export default function PipelineKanban() {
   const [assigneeFilter, setAssigneeFilter] = useState<string[]>([]);
   const [labelFilter, setLabelFilter] = useState<LeadLabel[]>([]);
 
-
-
-  const stages: Array<{ id: Lead['stage']; title: string; bgClass: string; headerClass: string }> = [
-    { id: 'lead', title: 'Nuevo Lead', bgClass: 'bg-slate-100/50 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-800/40 shadow-sm', headerClass: 'border-l-2 border-slate-400 pl-2' },
-    { id: 'contacted', title: 'Contactado', bgClass: 'bg-blue-50/40 dark:bg-blue-950/15 border border-blue-100/30 dark:border-blue-900/30 shadow-sm', headerClass: 'border-l-2 border-blue-500 pl-2' },
-    { id: 'proposal', title: 'Propuesta', bgClass: 'bg-purple-50/40 dark:bg-purple-950/15 border border-purple-100/30 dark:border-purple-900/30 shadow-sm', headerClass: 'border-l-2 border-purple-500 pl-2' },
-    { id: 'negotiation', title: 'Negociación', bgClass: 'bg-amber-50/40 dark:bg-amber-950/15 border border-amber-100/30 dark:border-amber-900/30 shadow-sm', headerClass: 'border-l-2 border-amber-500 pl-2' },
-    { id: 'won', title: 'Ganado', bgClass: 'bg-emerald-50/40 dark:bg-emerald-950/15 border border-emerald-100/30 dark:border-emerald-900/30 shadow-sm', headerClass: 'border-l-2 border-emerald-500 pl-2' },
-    { id: 'rejected', title: 'Rechazado', bgClass: 'bg-rose-50/40 dark:bg-rose-950/15 border border-rose-100/30 dark:border-rose-900/30 shadow-sm', headerClass: 'border-l-2 border-rose-500 pl-2' },
-    { id: 'discarded', title: 'Descartado', bgClass: 'bg-slate-100/40 dark:bg-slate-900/15 border border-slate-200/30 dark:border-slate-800/30 shadow-sm', headerClass: 'border-l-2 border-slate-400 pl-2' }
-  ];
+  const stages: Array<{ id: Lead['stage']; title: string; bgClass: string; headerClass: string }> =
+    [
+      {
+        id: 'lead',
+        title: 'Nuevo Lead',
+        bgClass:
+          'bg-slate-100/50 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-800/40 shadow-sm',
+        headerClass: 'border-l-2 border-slate-400 pl-2',
+      },
+      {
+        id: 'contacted',
+        title: 'Contactado',
+        bgClass:
+          'bg-blue-50/40 dark:bg-blue-950/15 border border-blue-100/30 dark:border-blue-900/30 shadow-sm',
+        headerClass: 'border-l-2 border-blue-500 pl-2',
+      },
+      {
+        id: 'proposal',
+        title: 'Propuesta',
+        bgClass:
+          'bg-purple-50/40 dark:bg-purple-950/15 border border-purple-100/30 dark:border-purple-900/30 shadow-sm',
+        headerClass: 'border-l-2 border-purple-500 pl-2',
+      },
+      {
+        id: 'negotiation',
+        title: 'Negociación',
+        bgClass:
+          'bg-amber-50/40 dark:bg-amber-950/15 border border-amber-100/30 dark:border-amber-900/30 shadow-sm',
+        headerClass: 'border-l-2 border-amber-500 pl-2',
+      },
+      {
+        id: 'won',
+        title: 'Ganado',
+        bgClass:
+          'bg-emerald-50/40 dark:bg-emerald-950/15 border border-emerald-100/30 dark:border-emerald-900/30 shadow-sm',
+        headerClass: 'border-l-2 border-emerald-500 pl-2',
+      },
+      {
+        id: 'rejected',
+        title: 'Rechazado',
+        bgClass:
+          'bg-rose-50/40 dark:bg-rose-950/15 border border-rose-100/30 dark:border-rose-900/30 shadow-sm',
+        headerClass: 'border-l-2 border-rose-500 pl-2',
+      },
+      {
+        id: 'discarded',
+        title: 'Descartado',
+        bgClass:
+          'bg-slate-100/40 dark:bg-slate-900/15 border border-slate-200/30 dark:border-slate-800/30 shadow-sm',
+        headerClass: 'border-l-2 border-slate-400 pl-2',
+      },
+    ];
 
   // Client-side filtering logic
   const filteredLeads = useMemo(() => {
-    return leads.filter(lead => {
+    return leads.filter((lead) => {
       // 1. Search filter
       const lowerSearch = searchTerm.toLowerCase();
-      const matchesSearch = !searchTerm || 
+      const matchesSearch =
+        !searchTerm ||
         lead.name.toLowerCase().includes(lowerSearch) ||
         lead.company.toLowerCase().includes(lowerSearch) ||
         lead.notes.toLowerCase().includes(lowerSearch);
 
       // 2. Company filter
-      const matchesCompany = companyFilter === 'all' || 
-        lead.company.toLowerCase() === companyFilter.toLowerCase();
+      const matchesCompany =
+        companyFilter === 'all' || lead.company.toLowerCase() === companyFilter.toLowerCase();
 
       // 3. Time filter (Leads creados / lastContactDate)
       let matchesTime = true;
@@ -64,7 +98,7 @@ export default function PipelineKanban() {
         const currentDate = new Date();
         const diffTime = Math.abs(currentDate.getTime() - contactDate.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (timeFilter === '7d') matchesTime = diffDays <= 7;
         else if (timeFilter === '14d') matchesTime = diffDays <= 14;
         else if (timeFilter === '30d') matchesTime = diffDays <= 30;
@@ -74,7 +108,8 @@ export default function PipelineKanban() {
       const matchesAssignee = assigneeFilter.length === 0 || assigneeFilter.includes(lead.assignee);
 
       // 5. Label filter
-      const matchesLabel = labelFilter.length === 0 || labelFilter.some(l => lead.labels.includes(l));
+      const matchesLabel =
+        labelFilter.length === 0 || labelFilter.some((l) => lead.labels.includes(l));
 
       return matchesSearch && matchesCompany && matchesTime && matchesAssignee && matchesLabel;
     });
@@ -95,31 +130,34 @@ export default function PipelineKanban() {
   };
 
   return (
-    <main className="h-full overflow-hidden flex flex-col gap-6 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-16">
-      
+    <main className="h-full min-w-0 overflow-hidden flex flex-col gap-6 p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-16">
       {/* Header Panel */}
-      <TechnicalSurface 
-        variant="surface" 
-        depth="raised" 
+      <TechnicalSurface
+        variant="surface"
+        depth="raised"
         className="rounded-3xl border border-slate-200 dark:border-white/5 shrink-0 overflow-hidden"
       >
-        <div className="flex justify-between items-center p-6 w-full h-full">
+        <div className="flex flex-col items-stretch gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6 w-full h-full min-w-0">
           <div className="flex flex-col gap-1">
-            <Heading size="lg" weight="bold" className="text-slate-900 dark:text-white tracking-tight uppercase">
+            <Heading
+              size="lg"
+              weight="bold"
+              className="text-slate-900 dark:text-white tracking-tight uppercase"
+            >
               Embudo de Ventas (Pipeline)
             </Heading>
             <LpdText size="nano" className="text-text-muted font-mono tracking-widest uppercase">
               KANBAN_DEAL_BOARD_FLOW
             </LpdText>
           </div>
-          <Button 
-            variant="primary" 
-            size="md" 
+          <Button
+            variant="primary"
+            size="md"
             onClick={() => setShowAddForm(!showAddForm)}
             className="whitespace-nowrap flex-shrink-0"
           >
             <span className="flex items-center gap-2 justify-center">
-                <Icon name="add" size="sm" />
+              <Icon name="add" size="sm" />
               <span>Nuevo Lead</span>
             </span>
           </Button>
@@ -127,34 +165,34 @@ export default function PipelineKanban() {
       </TechnicalSurface>
 
       {/* Add Lead Form (QuotationForm) */}
-      <QuotationForm 
+      <QuotationForm
         isOpen={showAddForm}
         onClose={() => setShowAddForm(false)}
         onSubmit={handleCreateLead}
       />
 
       {/* Sub-navigation Tabs */}
-      <div className="flex shrink-0 gap-2">
+      <div className="flex shrink-0 flex-wrap gap-2">
         <Button
           variant="ghost"
-          onClick={() => setActiveTab('pipeline')} 
+          onClick={() => setActiveTab('pipeline')}
           className={cn(
-            "px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2",
-            activeTab === 'pipeline' 
-              ? 'text-primary border-primary' 
-              : 'text-text-muted border-transparent hover:text-text-main'
+            'px-4 sm:px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2',
+            activeTab === 'pipeline'
+              ? 'text-primary border-primary'
+              : 'text-text-muted border-transparent hover:text-text-main',
           )}
         >
           Pipeline
         </Button>
         <Button
           variant="ghost"
-          onClick={() => setActiveTab('history')} 
+          onClick={() => setActiveTab('history')}
           className={cn(
-            "px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2",
-            activeTab === 'history' 
-              ? 'text-primary border-primary' 
-              : 'text-text-muted border-transparent hover:text-text-main'
+            'px-4 sm:px-6 py-2.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2',
+            activeTab === 'history'
+              ? 'text-primary border-primary'
+              : 'text-text-muted border-transparent hover:text-text-main',
           )}
         >
           Historial de Leads
@@ -199,10 +237,7 @@ export default function PipelineKanban() {
                 };
               }}
               renderCard={(lead) => (
-                <PipelineCard 
-                  lead={lead} 
-                  onClick={() => openLeadInspector(lead.id)} 
-                />
+                <PipelineCard lead={lead} onClick={() => openLeadInspector(lead.id)} />
               )}
             />
           </div>
@@ -210,7 +245,6 @@ export default function PipelineKanban() {
       ) : (
         <LeadHistory leads={leads} onViewDetails={openLeadInspector} />
       )}
-
     </main>
   );
 }

@@ -9,13 +9,15 @@ export const useSuiteHeader = (props: SuiteHeaderProps) => {
 
   // 1. Composición de Clases del Contenedor (Chasis Inmutable)
   const containerClasses = `
-    w-full border-b flex items-center px-4 md:px-6
+    w-full border-b flex items-center overflow-hidden px-2 md:px-6
     transition-all duration-500 select-none
     border-border-technical
     bg-shell-canvas
     ${isInert ? 'pointer-events-none cursor-default shadow-none' : 'shadow-sm'}
     ${className}
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
 
   // 2. Estilos para la altura sincronizada con el chasis
   const style = {
@@ -24,6 +26,6 @@ export const useSuiteHeader = (props: SuiteHeaderProps) => {
 
   return {
     containerClasses,
-    style
+    style,
   };
 };

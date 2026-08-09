@@ -4,7 +4,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { AppShell } from './index';
 
 describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
-  
   const mockSlots = {
     nav: <div data-testid="nav-slot">Navigation</div>,
     header: <div data-testid="header-slot">Header</div>,
@@ -18,13 +17,13 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
   // CATEGORÍA 1: ESTRUCTURA Y MODOS
   it('US-LAYOUT-01: renders nav tag for global navigation and aside for context', () => {
     render(
-      <AppShell 
+      <AppShell
         navSlot={mockSlots.nav}
         headerSlot={mockSlots.header}
         contextSlot={mockSlots.context}
       >
         {mockSlots.content}
-      </AppShell>
+      </AppShell>,
     );
 
     expect(screen.getByRole('navigation', { name: /global navigation/i })).toBeInTheDocument();
@@ -33,18 +32,18 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
 
   it('US-LAYOUT-02: respects navBehavior="hidden"', () => {
     const { container } = render(
-      <AppShell 
-        navSlot={mockSlots.nav} 
-        headerSlot={mockSlots.header} 
+      <AppShell
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
         config={{ navBehavior: 'hidden' }}
       >
         {mockSlots.content}
-      </AppShell>
+      </AppShell>,
     );
 
     const nav = container.querySelector('#app-shell-nav');
     expect(nav).not.toBeInTheDocument();
-    
+
     const wrapper = container.firstChild as HTMLElement;
     expect(wrapper.style.getPropertyValue('--app-shell-nav-width')).toBe('0px');
   });
@@ -53,9 +52,9 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
   it('US-A11Y-04: closes only the topmost panel when Escape is pressed (Context priority)', () => {
     const onCloseNav = vi.fn();
     const onCloseContext = vi.fn();
-    
+
     render(
-      <AppShell 
+      <AppShell
         navSlot={mockSlots.nav}
         headerSlot={mockSlots.header}
         contextSlot={mockSlots.context}
@@ -64,11 +63,11 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
         onRequestCloseContext={onCloseContext}
       >
         {mockSlots.content}
-      </AppShell>
+      </AppShell>,
     );
 
     fireEvent.keyDown(window, { key: 'Escape' });
-    
+
     // Debería intentar cerrar el contexto primero
     expect(onCloseContext).toHaveBeenCalledWith('escape');
     expect(onCloseNav).not.toHaveBeenCalled();
@@ -77,10 +76,10 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
   it('US-A11Y-05: backdrop closes the correct active panel based on hierarchy', () => {
     const onCloseNav = vi.fn();
     const onCloseContext = vi.fn();
-    
+
     // Escenario: Ambos abiertos -> cierra context
     const { rerender } = render(
-      <AppShell 
+      <AppShell
         navSlot={mockSlots.nav}
         headerSlot={mockSlots.header}
         contextSlot={mockSlots.context}
@@ -89,16 +88,16 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
         onRequestCloseContext={onCloseContext}
       >
         {mockSlots.content}
-      </AppShell>
+      </AppShell>,
     );
 
-    const backdrop = screen.getByRole('presentation', { hidden: true });
-    fireEvent.click(backdrop);
+    fireEvent.click(screen.getByRole('presentation', { hidden: true }));
     expect(onCloseContext).toHaveBeenCalledWith('backdrop');
 
     // Escenario: Solo Nav abierto
     rerender(
-      <AppShell 
+      <AppShell
+        key="nav-open"
         navSlot={mockSlots.nav}
         headerSlot={mockSlots.header}
         contextSlot={mockSlots.context}
@@ -107,9 +106,9 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
         onRequestCloseContext={onCloseContext}
       >
         {mockSlots.content}
-      </AppShell>
+      </AppShell>,
     );
-    fireEvent.click(backdrop);
+    fireEvent.click(screen.getByRole('presentation', { hidden: true }));
     expect(onCloseNav).toHaveBeenCalledWith('backdrop');
   });
 
@@ -118,7 +117,7 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
     const { container } = render(
       <AppShell headerSlot={mockSlots.header} config={{ density: 'compact' }}>
         {mockSlots.content}
-      </AppShell>
+      </AppShell>,
     );
 
     const wrapper = container.firstChild as HTMLElement;
@@ -128,13 +127,53 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
 
   it('US-SHELL-STATE-01: initializes with correct open/closed states from config', () => {
     const { container } = render(
-      <AppShell navSlot={mockSlots.nav} headerSlot={mockSlots.header} config={{ isLeftSidebarOpen: false }}>
+      <AppShell
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
+        config={{ isLeftSidebarOpen: false }}
+      >
         {mockSlots.content}
-      </AppShell>
+      </AppShell>,
     );
-    
+
     const wrapper = container.firstChild as HTMLElement;
     expect(wrapper.style.getPropertyValue('--app-shell-nav-width')).toBe('var(--lpd-space-16)');
   });
 
+  it('US-A11Y-06: exposes a mobile navigation toggle with state semantics', () => {
+    const onToggle = vi.fn();
+
+    render(
+      <AppShell
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
+        onToggleLeftSidebar={onToggle}
+        config={{ isLeftSidebarOpen: false }}
+      >
+        {mockSlots.content}
+      </AppShell>,
+    );
+
+    const toggle = screen.getByRole('button', { name: 'Toggle navigation' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(toggle).toHaveAttribute('aria-controls', 'app-shell-nav');
+
+    fireEvent.click(toggle);
+    expect(onToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it('US-MOBILE-01: renders persistent mobile navigation with accessible label', () => {
+    render(
+      <AppShell
+        headerSlot={mockSlots.header}
+        mobileBottomSlot={<div data-testid="mobile-bottom-slot">Quick actions</div>}
+      >
+        {mockSlots.content}
+      </AppShell>,
+    );
+
+    expect(screen.getByRole('navigation', { name: 'Mobile suite navigation' })).toContainElement(
+      screen.getByTestId('mobile-bottom-slot'),
+    );
+  });
 });

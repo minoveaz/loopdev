@@ -12,11 +12,13 @@ export interface UserMenuProps {
   userEmail?: string;
   /** Rol técnico del usuario (ej: Admin, Editor) */
   userRole?: string;
+  /** Organización o tenant activo */
+  tenantName?: string;
   /** URL opcional de la foto de perfil */
   userSrc?: string | null;
   /** Indica si está en modo Rail (para adaptar el trigger) */
   isRail?: boolean;
-  
+
   /** Callback para cerrar sesión */
   onLogout: () => void;
   /** Callback para ir a los ajustes de perfil */
@@ -27,7 +29,7 @@ export interface UserMenuProps {
   onBillingClick?: () => void;
   /** Callback al cambiar el estado de apertura */
   onOpenChange?: (open: boolean) => void;
-  
+
   /** Clase CSS adicional */
   className?: string;
 }
