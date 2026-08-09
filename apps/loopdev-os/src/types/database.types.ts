@@ -667,11 +667,11 @@ export type Database = {
           direction: string
           external_id: string | null
           id: string
-          organization_id: string
-          retry_count: number
+          last_error_code: string | null
           max_retries: number
           next_retry_at: string | null
-          last_error_code: string | null
+          organization_id: string
+          retry_count: number
           status: string
           template_id: string | null
           updated_at: string
@@ -683,11 +683,11 @@ export type Database = {
           direction: string
           external_id?: string | null
           id?: string
-          organization_id: string
-          retry_count?: number
+          last_error_code?: string | null
           max_retries?: number
           next_retry_at?: string | null
-          last_error_code?: string | null
+          organization_id: string
+          retry_count?: number
           status?: string
           template_id?: string | null
           updated_at?: string
@@ -699,11 +699,11 @@ export type Database = {
           direction?: string
           external_id?: string | null
           id?: string
-          organization_id?: string
-          retry_count?: number
+          last_error_code?: string | null
           max_retries?: number
           next_retry_at?: string | null
-          last_error_code?: string | null
+          organization_id?: string
+          retry_count?: number
           status?: string
           template_id?: string | null
           updated_at?: string
