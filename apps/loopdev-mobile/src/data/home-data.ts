@@ -4,6 +4,7 @@ import type {
   PlatformActivityItem,
   PlatformHomeDataSource,
   PlatformNotificationItem,
+  PlatformSuiteSummary,
   PlatformOverview,
 } from '@loopdev/contracts';
 
@@ -12,6 +13,7 @@ export type HomeDataState = {
   organizations: OrganizationSummary[];
   activity: PlatformActivityItem[];
   notifications: PlatformNotificationItem[];
+  suites: PlatformSuiteSummary[];
   overview: PlatformOverview | null;
   error: Error | null;
 };
@@ -21,18 +23,20 @@ const loadingState: HomeDataState = {
   organizations: [],
   activity: [],
   notifications: [],
+  suites: [],
   overview: null,
   error: null,
 };
 
 export async function loadHomeData(dataSource: PlatformHomeDataSource, organizationId?: string): Promise<HomeDataState> {
-  const [organizations, activity, notifications, overview] = await Promise.all([
+  const [organizations, suites, activity, notifications, overview] = await Promise.all([
     dataSource.getOrganizations(),
+    dataSource.getSuites(organizationId),
     dataSource.getActivity(organizationId),
     dataSource.getNotifications(organizationId),
     dataSource.getPlatformOverview(organizationId),
   ]);
-  return { status: 'success', organizations, activity, notifications, overview, error: null };
+  return { status: 'success', organizations, suites, activity, notifications, overview, error: null };
 }
 
 export function useHomeData(dataSource?: PlatformHomeDataSource, organizationId?: string): HomeDataState {

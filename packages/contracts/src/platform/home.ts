@@ -1,4 +1,4 @@
-import type { OrganizationRole } from './tenancy';
+import type { OrganizationRole, SuiteKey } from './tenancy';
 
 export type OrganizationSummary = {
   id: string;
@@ -36,8 +36,17 @@ export type PlatformOverview = {
   pendingNotifications: number;
 };
 
+export type PlatformSuiteSummary = {
+  id: string;
+  suiteKey: SuiteKey;
+  name: string;
+  slug: string;
+  status: 'active' | 'disabled' | 'archived';
+};
+
 export interface PlatformHomeDataSource {
   getOrganizations(): Promise<OrganizationSummary[]>;
+  getSuites(organizationId?: string): Promise<PlatformSuiteSummary[]>;
   getActivity(organizationId?: string): Promise<PlatformActivityItem[]>;
   getNotifications(organizationId?: string): Promise<PlatformNotificationItem[]>;
   getPlatformOverview(organizationId?: string): Promise<PlatformOverview>;

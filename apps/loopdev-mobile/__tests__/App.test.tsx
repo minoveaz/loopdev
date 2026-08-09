@@ -18,6 +18,7 @@ jest.mock('../src/data/adapters/supabase/home', () => ({
 jest.mock('../src/data/data-source', () => ({
   createHomeDataSource: () => ({
     getOrganizations: jest.fn().mockResolvedValue([]),
+    getSuites: jest.fn().mockResolvedValue([]),
     getActivity: jest.fn().mockResolvedValue([]),
     getNotifications: jest.fn().mockResolvedValue([]),
     getPlatformOverview: jest.fn().mockResolvedValue({

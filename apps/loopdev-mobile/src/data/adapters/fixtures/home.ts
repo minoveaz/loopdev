@@ -3,6 +3,7 @@ import type {
   PlatformActivityItem,
   PlatformHomeDataSource,
   PlatformNotificationItem,
+  PlatformSuiteSummary,
   PlatformOverview,
 } from '@loopdev/contracts';
 
@@ -50,9 +51,18 @@ export const platformOverview: PlatformOverview = {
   pendingNotifications: notifications.filter(({ unread }) => unread).length,
 };
 
+export const suites: PlatformSuiteSummary[] = [
+  { id: 'workspace-marketing', suiteKey: 'marketing', name: 'Marketing Studio', slug: 'marketing-studio', status: 'active' },
+  { id: 'workspace-crm', suiteKey: 'crm', name: 'Sales & CRM', slug: 'sales-crm', status: 'active' },
+  { id: 'workspace-quant', suiteKey: 'quant', name: 'Quant Ops', slug: 'quant-ops', status: 'active' },
+];
+
 export const fixturesHomeDataSource: PlatformHomeDataSource = {
   async getOrganizations() {
     return organizations;
+  },
+  async getSuites() {
+    return suites;
   },
   async getActivity() {
     return activity;

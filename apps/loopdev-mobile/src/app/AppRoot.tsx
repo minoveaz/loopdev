@@ -108,7 +108,7 @@ function ThemedAppRoot() {
           LOOPDEV MOBILE / {session.user.displayName.toUpperCase()}
         </Text>
         <OrganizationSwitcher organizations={homeData.organizations} activeOrganizationId={activeOrganizationId} onSelect={selectOrganization} />
-        {activeTab === 'home' && <HomeScreen data={homeData} onNavigate={setActiveTab} />}
+        {activeTab === 'home' && <HomeScreen data={homeData} activeOrganizationId={activeOrganizationId} isPlatformAdministrator={session.user.isGlobalAdmin} onNavigate={setActiveTab} />}
         {activeTab === 'activity' && <ActivityScreen data={homeData} />}
         {activeTab === 'notifications' && <NotificationsScreen data={homeData} />}
         {activeTab === 'organizations' && <OrganizationsScreen data={homeData} activeOrganizationId={activeOrganizationId} onSelectOrganization={selectOrganization} />}

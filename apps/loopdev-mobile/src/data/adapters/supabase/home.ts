@@ -4,6 +4,7 @@ import type {
   PlatformActivityItem,
   PlatformHomeDataSource,
   PlatformNotificationItem,
+  PlatformSuiteSummary,
   PlatformOverview,
 } from '@loopdev/contracts';
 import { createSupabaseMobileClient } from './client';
@@ -15,6 +16,7 @@ type MembershipRow = {
   role: OrganizationMembershipSummary['role'];
 };
 type PermissionRow = { key: string };
+type WorkspaceRow = { id: string; suite_key: PlatformSuiteSummary['suiteKey']; name: string; slug: string; status: PlatformSuiteSummary['status'] };
 
 export type SupabaseHomeData = {
   organizations: OrganizationSummary[];
@@ -27,6 +29,11 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
   const supabase = createSupabaseMobileClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
   if (authError || !authData.user) throw new Error('A signed-in Supabase user is required');
+
+  const { data: isPlatformAdministrator, error: administratorError } = (await supabase.rpc(
+    'is_platform_administrator',
+  )) as unknown as { data: boolean | null; error: Error | null };
+  if (administratorError) throw administratorError;
 
   const { data: organizations, error: organizationsError } = (await supabase
     .from('organizations')
@@ -44,7 +51,7 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
   if (membershipsError) throw membershipsError;
 
   const membershipOrganizationIds = [...new Set((memberships ?? []).map(({ organization_id }) => organization_id))];
-  if (membershipOrganizationIds.length === 0) {
+  if (!isPlatformAdministrator && membershipOrganizationIds.length === 0) {
     return {
       organizations: [],
       memberships: [],
@@ -52,7 +59,9 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
       permissionsByOrganization: {},
     };
   }
-  const visibleOrganizations = (organizations ?? []).filter(({ id }) => membershipOrganizationIds.includes(id));
+  const visibleOrganizations = isPlatformAdministrator
+    ? organizations ?? []
+    : (organizations ?? []).filter(({ id }) => membershipOrganizationIds.includes(id));
   const normalizedMemberships = (memberships ?? []).map((membership) => ({
     organizationId: membership.organization_id,
     userId: membership.user_id,
@@ -110,6 +119,17 @@ export async function loadSupabaseOrganizations(): Promise<SupabaseHomeData> {
 export const supabaseHomeDataSource: PlatformHomeDataSource = {
   async getOrganizations() {
     return (await loadSupabaseOrganizations()).organizations;
+  },
+  async getSuites(organizationId?: string): Promise<PlatformSuiteSummary[]> {
+    if (!organizationId) return [];
+    const { data, error } = (await createSupabaseMobileClient()
+      .from('workspaces')
+      .select('id, suite_key, name, slug, status')
+      .eq('organization_id', organizationId)
+      .eq('status', 'active')
+      .order('name')) as unknown as { data: WorkspaceRow[] | null; error: Error | null };
+    if (error) throw error;
+    return (data ?? []).map(({ id, suite_key, name, slug, status }) => ({ id, suiteKey: suite_key, name, slug, status }));
   },
   async getActivity(_organizationId?: string): Promise<PlatformActivityItem[]> {
     return [];

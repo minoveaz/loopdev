@@ -5,6 +5,7 @@ import type {
   PlatformHomeDataSource,
   PlatformNotificationItem,
   PlatformOverview,
+  PlatformSuiteSummary,
 } from '@loopdev/contracts';
 import type { MobileUser } from '../../auth/session';
 
@@ -48,6 +49,12 @@ export const fixtureSuites: SuiteCardContract[] = [
   },
 ];
 
+const suites: PlatformSuiteSummary[] = [
+  { id: 'fixture-marketing', suiteKey: 'marketing', name: 'Marketing Studio', slug: 'marketing-studio', status: 'active' },
+  { id: 'fixture-crm', suiteKey: 'crm', name: 'Sales & CRM', slug: 'sales-crm', status: 'active' },
+  { id: 'fixture-quant', suiteKey: 'quant', name: 'Quant Ops', slug: 'quant-ops', status: 'active' },
+];
+
 const organizations: OrganizationSummary[] = [
   { id: 'org-loopdev', name: 'LoopDev', slug: 'loopdev', role: 'owner', memberCount: 24, status: 'active' },
   { id: 'org-acme', name: 'Acme Corp', slug: 'acme', role: 'admin', memberCount: 12, status: 'active' },
@@ -78,6 +85,7 @@ export function createFixtureHomeDataSource(scenario: MobileFixtureScenario = 'o
   if (scenario === 'error') {
     return {
       getOrganizations: async () => { throw new Error('Fixture backend unavailable'); },
+      getSuites: async () => { throw new Error('Fixture backend unavailable'); },
       getActivity: async () => { throw new Error('Fixture backend unavailable'); },
       getNotifications: async () => { throw new Error('Fixture backend unavailable'); },
       getPlatformOverview: async () => { throw new Error('Fixture backend unavailable'); },
@@ -95,6 +103,7 @@ export function createFixtureHomeDataSource(scenario: MobileFixtureScenario = 'o
 
   return {
     getOrganizations: async () => delayed(scenarioOrganizations),
+    getSuites: async () => delayed(scenario === 'empty' ? [] : suites),
     getActivity: async () => delayed(scenario === 'empty' ? [] : activity),
     getNotifications: async () => delayed(scenario === 'empty' ? [] : notifications),
     getPlatformOverview: async () => delayed(scenarioOverview),
