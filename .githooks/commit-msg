@@ -1,0 +1,3 @@
+#!/bin/sh
+
+pnpm exec node scripts/validate-git-conventions.mjs --commit-msg "$1"

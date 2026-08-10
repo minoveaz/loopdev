@@ -1,5 +1,7 @@
 # Contributing to LoopDev
 
+La normativa canónica de ramas, commits y Pull Requests está en [docs/03-platform/GIT_WORKFLOW.md](docs/03-platform/GIT_WORKFLOW.md). Este documento resume el flujo de entrada para contribuir.
+
 ## Flujo obligatorio
 
 Cada cambio debe realizarse en una rama propia y abrir un Pull Request hacia `develop`. No se deben hacer pushes directos a `develop` ni `main`.
@@ -27,7 +29,7 @@ Una rama debe tener una sola intención principal. No se deben mezclar en la mis
 
 No se deben hacer pushes directos a `develop` ni `main`. Las reglas de protección de ambas ramas deben exigir PR, checks obligatorios y revisión.
 
-### Convención de ramas
+### Convención resumida de ramas
 
 La convención oficial es:
 
@@ -50,6 +52,8 @@ docs/git-workflow
 ```
 
 `feat/` puede aparecer en commits, pero no es la convención preferida para nombres de ramas. Las ramas de estándares, workflows o Design System deben mantenerse separadas y ser revisables por sí mismas.
+
+La validación automática de CI comprueba el prefijo, el formato y la intención de la rama. Usa `feature/` para cambios de producto o arquitectura con impacto funcional; usa `chore/` para mantenimiento, tooling o gobernanza sin cambio funcional.
 
 ### Reglas de commits
 

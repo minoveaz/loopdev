@@ -1,5 +1,7 @@
 # 📦 Pull Request — LoopDev Platform
 
+> El título debe seguir `type(scope): descripción breve en imperativo`, por ejemplo `chore(governance): standardize Git workflow`.
+
 ## 🎯 Intención del PR
 
 Describe de forma clara **qué problema resuelve** este PR y **qué cambia**.
@@ -65,3 +67,7 @@ Enumera los checks ejecutados y su resultado. Usa nombres comprensibles y explic
 ## 🚨 Riesgos conocidos
 
 Describe cualquier riesgo técnico o deuda aceptada.
+
+## 🔗 Issue
+
+Closes #

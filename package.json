@@ -25,6 +25,7 @@
     "front:check": "pnpm format:check && pnpm classes:check && pnpm contracts:ownership:check && pnpm front:audit --fail-on-new-findings --baseline=config/frontend-audit-baseline.json && pnpm duplication:check && pnpm knip --no-exit-code --reporter compact",
     "check": "pnpm format:check && pnpm lint && pnpm front:check && pnpm tests:scope && pnpm --filter @loopdev/contracts build && pnpm typecheck && pnpm test",
     "validate:ci": "node scripts/validate-ci.mjs",
+    "validate:git-conventions": "node scripts/validate-git-conventions.mjs",
     "hooks:install": "git config core.hooksPath .githooks",
     "quality:static": "pnpm front:check",
     "validate": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
