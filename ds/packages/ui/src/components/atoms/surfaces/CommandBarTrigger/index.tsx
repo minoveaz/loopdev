@@ -28,7 +28,7 @@ export const CommandBarTrigger: React.FC<CommandBarTriggerProps> = (props) => {
       aria-label="Abrir paleta de comandos"
     >
       <div className="flex items-center gap-2">
-        <Search size={14} className="text-text-muted/80 group-hover:text-primary transition-colors" />
+        <Search size={14} className="text-text-muted/80 group-hover:text-accent transition-colors" />
         <StatusPulse variant="innovation" size="md" className="opacity-100" />
       </div>
 

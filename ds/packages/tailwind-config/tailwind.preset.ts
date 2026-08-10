@@ -54,6 +54,7 @@ const preset: Config = {
         'lpd-space-6': 'var(--lpd-space-6)',
         'lpd-space-8': 'var(--lpd-space-8)',
         'lpd-space-12': 'var(--lpd-space-12)',
+        'lpd-space-14': 'var(--lpd-space-14)',
         'lpd-space-16': 'var(--lpd-space-16)',
       },
       borderRadius: {

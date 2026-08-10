@@ -45,7 +45,7 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
       onOpenChange={handleOpenChange}
       trigger={
         <button
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/35 p-0.5 transition-all duration-500 hover:border-primary hover:ring-4 hover:ring-primary/5 dark:border-white/10 dark:hover:border-primary/40"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 p-0.5 transition-all duration-500 hover:border-accent/50 hover:ring-4 hover:ring-accent/5 dark:border-white/10 dark:hover:border-accent/50 dark:hover:ring-accent/10"
           aria-label="Abrir menú de usuario"
         >
           <UserAvatar name={userName} src={userSrc} size="sm" withStatus status="online" />

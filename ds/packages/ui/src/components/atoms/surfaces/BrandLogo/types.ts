@@ -4,6 +4,8 @@ export type BrandLogoSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export interface BrandLogoProps {
   /** Variante del logo a mostrar */
   variant?: BrandLogoVariant;
+  /** Superficie del isotipo */
+  surface?: 'solid' | 'plain';
   /** Tamaño del componente */
   size?: BrandLogoSize;
   /** Clase CSS adicional */

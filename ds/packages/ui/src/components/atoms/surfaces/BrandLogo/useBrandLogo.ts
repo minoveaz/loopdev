@@ -2,7 +2,8 @@ import { BrandLogoProps, BrandLogoSize } from './types';
 
 export const useBrandLogo = (props: BrandLogoProps) => {
   const { 
-    variant = 'full', 
+    variant = 'full',
+    surface = 'solid',
     size = 'md', 
     className = '',
     colorMode 
@@ -33,6 +34,7 @@ export const useBrandLogo = (props: BrandLogoProps) => {
 
   return {
     variant,
+    surface,
     currentSize,
     containerClasses,
     textClasses

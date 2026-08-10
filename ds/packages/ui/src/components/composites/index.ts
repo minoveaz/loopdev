@@ -2,6 +2,9 @@
 export * from './shell/AppShell';
 export * from './shell/SuiteSidebar';
 export * from './shell/SuiteHeader';
+export * from './shell/PlatformHeader';
+export * from './shell/SuiteShell';
+export * from './shell/ModuleShell';
 export * from './shell/SuiteSwitcher';
 export * from './shell/SidebarFooter';
 export * from './shell/SidebarIdentity';
@@ -26,6 +29,7 @@ export * from './content/ResponsiveTable';
 export * from './navigation/UserMenu';
 export * from './navigation/SidebarFlyout';
 export * from './navigation/MobileSuiteNav';
+export * from './navigation/OrganizationSwitcher';
 
 // utilities
 
