@@ -4,6 +4,7 @@ import { Inter_400Regular } from '@expo-google-fonts/inter';
 import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
 import { useEffect, useMemo, useReducer, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { NativeAppHeader } from '@loopdev/ui-native';
 import { initialSessionState, mobileUserFromSupabase, sessionReducer } from '../auth/session';
 import { createSupabaseMobileClient } from '../data/adapters/supabase/client';
 import { signInWithSupabase, signOutFromSupabase } from '../data/adapters/supabase/home';
@@ -15,7 +16,6 @@ import { LoginScreen } from '../features/auth/screens/LoginScreen';
 import { HomeScreen } from '../features/home/screens/HomeScreen';
 import { NotificationsScreen } from '../features/notifications/screens/NotificationsScreen';
 import { OrganizationsScreen } from '../features/organizations/screens/OrganizationsScreen';
-import { OrganizationSwitcher } from '../features/organizations/components/OrganizationSwitcher';
 import { ProfileScreen } from '../features/profile/screens/ProfileScreen';
 import { ThemeProvider, useTheme } from '../theme/ThemeProvider';
 
@@ -104,10 +104,14 @@ function ThemedAppRoot() {
   return (
     <View style={[styles.shell, { backgroundColor: themeColors.canvas }]}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={[styles.eyebrow, { color: themeColors.accent }]}>
-          LOOPDEV MOBILE / {session.user.displayName.toUpperCase()}
-        </Text>
-        <OrganizationSwitcher organizations={homeData.organizations} activeOrganizationId={activeOrganizationId} onSelect={selectOrganization} />
+        <NativeAppHeader
+            organizations={homeData.organizations}
+            activeOrganizationId={activeOrganizationId}
+            canSwitchOrganization={session.user.isGlobalAdmin || homeData.organizations.some(({ role }) => role === 'owner' || role === 'admin')}
+            onSelectOrganization={selectOrganization}
+            onProfile={() => setActiveTab('profile')}
+            colors={themeColors}
+          />
         {activeTab === 'home' && <HomeScreen data={homeData} activeOrganizationId={activeOrganizationId} isPlatformAdministrator={session.user.isGlobalAdmin} onNavigate={setActiveTab} />}
         {activeTab === 'activity' && <ActivityScreen data={homeData} />}
         {activeTab === 'notifications' && <NotificationsScreen data={homeData} />}
@@ -150,12 +154,6 @@ function ThemedAppRoot() {
 const styles = StyleSheet.create({
   shell: { flex: 1 },
   content: { flexGrow: 1, padding: 32, paddingTop: 64 },
-  eyebrow: {
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 1.5,
-    marginBottom: 12,
-  },
   tabBar: {
     borderTopWidth: 1,
     flexDirection: 'row',
