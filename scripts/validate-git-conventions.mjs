@@ -6,7 +6,6 @@ import { readFileSync } from 'node:fs';
 const allowedBranchPrefixes = ['feature/', 'fix/', 'chore/', 'docs/', 'test/'];
 const conventionalCommitPattern =
   /^(feat|fix|chore|docs|test|refactor|perf)\([a-z0-9][a-z0-9._/-]*\)!?: .+/;
-const branchPattern = /^(feature|fix|chore|docs|test)\/[a-z0-9][a-z0-9-]*(?:-[a-z0-9][a-z0-9-]*)*$/;
 
 function getOption(name) {
   const index = process.argv.indexOf(name);
@@ -29,7 +28,13 @@ const commitMessageFile = getOption('--commit-msg');
 const range = getOption('--range');
 const errors = [];
 
-if (!['develop', 'main'].includes(branch) && !branchPattern.test(branch)) {
+const [branchPrefix, ...branchSegments] = branch.split('/');
+const hasValidBranchName =
+  allowedBranchPrefixes.includes(`${branchPrefix}/`) &&
+  branchSegments.length === 1 &&
+  branchSegments[0].split('-').every((segment) => /^[a-z0-9]+$/.test(segment));
+
+if (!['develop', 'main'].includes(branch) && !hasValidBranchName) {
   errors.push(
     `invalid branch '${branch}'. Use feature/<area>-<topic>, fix/<area>-<topic>, chore/<area>-<topic>, docs/<area>-<topic>, or test/<area>-<topic>`,
   );
