@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Badge, Heading, LpdText, TechnicalCard } from '@loopdev/ui';
+import { Badge, Button, Heading, LpdText, TechnicalCard } from '@loopdev/ui';
 import type { MarketingAsset } from '@loopdev/contracts';
 import { marketingFixtureAssets } from '@/services/marketing/fixtures/marketing-data';
 import { useAssetManager } from './context';
@@ -23,7 +23,7 @@ function AssetPreview({ asset, large = false }: { asset: MarketingAsset; large?:
 
 function AssetCard({ asset, selected, onSelect }: { asset: MarketingAsset; selected: boolean; onSelect: () => void }) {
   return (
-    <button type="button" onClick={onSelect} className="min-w-0 text-left" aria-pressed={selected}>
+    <Button type="button" onClick={onSelect} variant="ghost" className="min-w-0 text-left" aria-pressed={selected}>
       <TechnicalCard variant={selected ? 'interactive' : 'flat'} className={selected ? 'border-primary ring-primary/30 ring-1' : ''}>
         <AssetPreview asset={asset} />
         <div className="space-y-2 p-4">
@@ -35,7 +35,7 @@ function AssetCard({ asset, selected, onSelect }: { asset: MarketingAsset; selec
           <LpdText size="nano" className="text-text-muted">{asset.sizeBytes.toLocaleString()} bytes</LpdText>
         </div>
       </TechnicalCard>
-    </button>
+    </Button>
   );
 }
 
