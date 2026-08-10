@@ -15,6 +15,33 @@ permissions:
   contents: read
 
 jobs:
+  git-conventions:
+    name: Validate Git conventions
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate branch, PR title and commits
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          COMMIT_RANGE: ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
+        run: pnpm exec node scripts/validate-git-conventions.mjs --branch "$HEAD_BRANCH" --pr-title "$PR_TITLE" --range "$COMMIT_RANGE"
+
   changes:
     name: Detect affected surfaces
     runs-on: ubuntu-latest
