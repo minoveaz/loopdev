@@ -89,6 +89,7 @@ export default function LaunchpadPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-6">
             <BrandLogo variant="full" size="md" />
+            <SystemStatus state="operational" id={user?.id} label="ID" />
             <div className="h-8 w-px bg-border-technical hidden md:block"></div>
             <div>
               <LpdText size="sm" weight="bold" className="text-slate-900 dark:text-white">
@@ -101,8 +102,6 @@ export default function LaunchpadPage() {
           {/* System Status & Theme Toggle */}
           <div className="flex items-center gap-4">
             <ContextSwitcher />
-            <SystemStatus state="operational" id={user?.id} label="ID" />
-
             <ThemeToggle variant="technical" size="md" />
             <UserMenu
               userName={user?.email?.split('@')[0] ?? 'User'}

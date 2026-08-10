@@ -22,6 +22,7 @@ export * from './catalog/catalog';
 // Export Marketing contracts
 export * from './marketing/marketing';
 export * from './marketing/content';
+export * from './marketing/asset';
 
 // Export insurance and operations contracts
 export * from './insurance/insurance';

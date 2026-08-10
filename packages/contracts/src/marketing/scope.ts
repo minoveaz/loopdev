@@ -10,6 +10,23 @@ export const MarketingOwnershipSchema = z.object({
   workspaceId: MarketingIdSchema.nullable().optional(),
 });
 
+export const MarketingPermissionSchema = z.enum(['read', 'edit', 'approve', 'publish', 'manage']);
+export type MarketingPermission = z.infer<typeof MarketingPermissionSchema>;
+
+export const MarketingAccessGrantSchema = z.object({
+  userId: MarketingIdSchema,
+  organizationId: MarketingIdSchema,
+  workspaceId: MarketingIdSchema.nullable().optional(),
+  brandId: MarketingIdSchema.nullable().optional(),
+  permission: MarketingPermissionSchema,
+  grantedBy: MarketingIdSchema,
+  expiresAt: MarketingTimestampSchema.nullable().optional(),
+  createdAt: MarketingTimestampSchema,
+  updatedAt: MarketingTimestampSchema,
+});
+
+export type MarketingAccessGrant = z.infer<typeof MarketingAccessGrantSchema>;
+
 export const MarketingAuditFieldsSchema = z.object({
   createdAt: MarketingTimestampSchema,
   updatedAt: MarketingTimestampSchema,

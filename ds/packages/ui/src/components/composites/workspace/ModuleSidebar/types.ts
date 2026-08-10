@@ -43,4 +43,12 @@ export interface ModuleSidebarProps {
 
   /** Clase CSS adicional */
   className?: string;
+
+  /** Acción primaria del footer del módulo */
+  footerAction?: {
+    label: string;
+    icon?: string;
+    onClick?: () => void;
+    disabled?: boolean;
+  };
 }

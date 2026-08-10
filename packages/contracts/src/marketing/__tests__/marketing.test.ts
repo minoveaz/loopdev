@@ -3,6 +3,7 @@ import {
   AdvisorRecommendationSchema,
   ComplianceFindingSchema,
   ContentGenerationJobSchema,
+  MarketingAccessGrantSchema,
   MarketingCampaignSchema,
   MarketingCopySchema,
   OAuthAuthorizationStateSchema,
@@ -16,6 +17,23 @@ describe('Marketing contracts', () => {
   it('requires organization, brand and workspace ownership for campaigns', () => {
     expect(MarketingCampaignSchema.safeParse({ ...ids, name: 'Summer launch', objective: 'Generate leads', createdAt: timestamp, updatedAt: timestamp }).success).toBe(true);
     expect(MarketingCampaignSchema.safeParse({ id: ids.id, name: 'Invalid', objective: 'Missing tenancy', createdAt: timestamp, updatedAt: timestamp }).success).toBe(false);
+  });
+
+  it('models marketing access grants at organization, brand and workspace scope', () => {
+    const baseGrant = {
+      userId: ids.id,
+      organizationId: ids.organizationId,
+      permission: 'read',
+      grantedBy: ids.id,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+
+    expect(MarketingAccessGrantSchema.safeParse(baseGrant).success).toBe(true);
+    expect(MarketingAccessGrantSchema.safeParse({ ...baseGrant, brandId: ids.brandId }).success).toBe(true);
+    expect(MarketingAccessGrantSchema.safeParse({ ...baseGrant, workspaceId: ids.workspaceId }).success).toBe(true);
+    expect(MarketingAccessGrantSchema.safeParse({ ...baseGrant, brandId: ids.brandId, workspaceId: ids.workspaceId, permission: 'edit' }).success).toBe(true);
+    expect(MarketingAccessGrantSchema.safeParse({ ...baseGrant, permission: 'delete' }).success).toBe(false);
   });
 
   it('keeps copy and provider connection secrets out of public contracts', () => {

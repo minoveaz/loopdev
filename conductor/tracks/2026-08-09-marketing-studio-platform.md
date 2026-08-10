@@ -213,7 +213,19 @@ La autorización debe verificarse en tres capas: navegación/UI para experiencia
 
 ## Mapa de fixtures y escenarios offline
 
-Este mapa se implementará después de recibir la migración oficial de contratos. Mientras tanto fija los casos de comportamiento sin inventar nombres de entidades ni esquemas alternativos.
+Este mapa consume los contratos oficiales existentes de Marketing, incluido `MarketingAccessGrant`. Los fixtures pueden implementarse offline sin inventar entidades alternativas; la persistencia del grant y su enforcement mediante RLS quedan como entregables posteriores.
+
+### Grants de acceso por marca y workspace
+
+`MarketingAccessGrant` representa una autorización adicional dentro de Marketing Studio, independiente del rol global de la organización. Su alcance se interpreta así:
+
+- `brandId = null`: acceso a todas las marcas permitidas por la organización y el workspace indicado.
+- `brandId` concreto: acceso únicamente a esa marca.
+- `workspaceId = null`: acceso a todos los workspaces de Marketing permitidos por la organización.
+- `workspaceId` concreto: acceso únicamente a ese workspace.
+- ambos valores concretos: acceso a la intersección de esa marca y ese workspace.
+
+La resolución efectiva debe comprobar siempre `userId`, `organizationId`, estado de membresía, alcance de workspace/marca, permiso de acción y `expiresAt`. Este contrato no sustituye las políticas RLS ni demuestra aislamiento de base de datos.
 
 ### Contextos base
 
@@ -275,11 +287,17 @@ Cada organización tendrá al menos una segunda marca y un segundo workspace par
 - conflicto de versión;
 - conexión externa expirada.
 
-### Entrega posterior a la migración de contratos
+### Entrega offline con contratos oficiales
 
-- [ ] Sustituir los identificadores provisionales por IDs y enums de `@loopdev/contracts`.
-- [ ] Implementar fixtures deterministas en el repositorio offline.
-- [ ] Convertir cada fila de las tablas anteriores en un test de repositorio o servicio.
+- [x] Sustituir los identificadores provisionales por IDs y enums de `@loopdev/contracts`.
+- [x] Implementar fixtures deterministas para dos organizaciones, marcas, assets, snapshots y conexiones simuladas.
+- [x] Implementar el primer repositorio offline de campañas con datos deterministas de aislamiento.
+- [x] Integrar Brand Hub, assets y conexiones simuladas en el repositorio offline con filtros de scope.
+- [x] Implementar actualización offline de campañas con permiso `edit` y rechazo de mutaciones fuera de scope.
+- [x] Implementar desconexión social offline con permiso `manage`, sin OAuth ni proveedor externo.
+- [x] Implementar aprobación offline de campañas con permiso explícito `approve` y estados válidos.
+- [x] Implementar Asset Manager offline: edición de metadatos, archivado y lectura de variantes con scope.
+- [x] Convertir los escenarios iniciales de campañas y grants en tests de repositorio y servicio.
 - [ ] Añadir pruebas de no mutación cuando una autorización falla.
 - [ ] Añadir pruebas de auditoría para comandos aceptados y rechazados.
 - [ ] Marcar como bloqueadas las pruebas de RLS real hasta CI o entorno autorizado.
@@ -295,13 +313,13 @@ Cada organización tendrá al menos una segunda marca y un segundo workspace par
 
 ## Plan de fases
 
-### Fase 8A — Contratos y mapa de migración
+### Fase 8A — Contratos, autorización y mapa de migración
 
 - [ ] Inventariar las rutas, componentes, modelos y flujos de VitaBlue.
-- [ ] Definir contratos Zod en `@loopdev/contracts` para Brand Hub, assets, campaigns, content, connections y approvals.
-- [ ] Definir `MarketingRepository` y comandos/lecturas independientes del proveedor de persistencia.
-- [ ] Implementar `InMemoryMarketingRepository` con fixtures multi-tenant deterministas.
-- [ ] Implementar autorización de dominio para organización, workspace, marca y rol.
+- [x] Definir contratos Zod en `@loopdev/contracts` para Brand Hub, assets, campaigns, content, connections, approvals y grants de acceso.
+- [x] Definir `MarketingRepository` y comandos/lecturas independientes del proveedor de persistencia.
+- [x] Implementar `InMemoryMarketingRepository` con campañas, Brand Hub, assets y conexiones multi-tenant deterministas.
+- [x] Implementar resolución offline de autorización para organización, workspace, marca, usuario, permiso y expiración.
 - [ ] Mapear `Campaign`, `CampaignAsset`, perfiles sociales, conexiones y generador de contenido a contratos agnósticos.
 - [ ] Definir estados, comandos, lecturas y errores de cada módulo.
 - [ ] Definir estrategia de importación de campañas, perfiles, assets y metadatos de VitaBlue.
@@ -309,6 +327,17 @@ Cada organización tendrá al menos una segunda marca y un segundo workspace par
 - [ ] Añadir tests de aislamiento y permisos sin requerir Supabase.
 
 **Salida:** contrato compartido y mapa de migración aprobados antes de ampliar la persistencia.
+
+### Database impact de la entrega offline
+
+```text
+Schema: none
+RLS: none
+Storage: none
+Secrets/external providers: none
+Offline validation: contratos, grants, aislamiento de campañas y comandos en memoria
+Blocked validation: adaptador Supabase, persistencia, RLS real y pruebas remotas
+```
 
 ### Fase 8B — Brand Hub y contexto publicado
 
@@ -324,11 +353,131 @@ Cada organización tendrá al menos una segunda marca y un segundo workspace par
 
 **Salida:** una marca puede publicar un contexto consumible por el resto de la suite y otra organización no puede consultarlo.
 
-### Fase 8C — Asset Manager y Content Engine MVP
+## Orden de desarrollo recomendado
 
-- [ ] Crear persistencia de assets, variantes, formatos, tags y colecciones.
-- [ ] Definir el contrato de Storage y un proveedor local de archivos/fixtures.
-- [ ] Preparar Storage privado y URLs firmadas para CI/entorno autorizado.
+La ejecución de Asset Manager se hará en incrementos pequeños, cada uno con validación local antes de abrir el siguiente:
+
+### Paso 1 — Dominio offline
+
+- Consumir `MarketingAssetSchema`, `MarketingAssetVariantSchema` y `MarketingAccessGrant`.
+- Mantener `InMemoryMarketingRepository` como implementación actual.
+- Validar lectura, edición, archivado, variantes y aislamiento multi-tenant.
+
+**Estado:** completado y cubierto por tests.
+
+### Paso 2 — Composición visual
+
+- Crear `AssetManagerView` y sus componentes de dominio.
+- Reutilizar `ModuleWorkspace`, `ModuleHeader`, `ModuleToolbar`, `InspectorPanel`, `TechnicalCard`, `Input`, `Select`, `FilterDropdown`, `Badge`, `EmptyState` y `LoadingState`.
+- Crear la ruta `/marketing-studio/dam` y retirar el estado `coming-soon`.
+- Usar fixtures offline claramente identificados.
+
+**Validación:** tests de componentes, estados loading/empty/error/denied y responsive.
+
+### Paso 3 — Lecturas de aplicación
+
+- Añadir hook/API server-side para listar assets según organización, marca y workspace activos.
+- Mantener la UI ajena a Supabase y a nombres de tablas.
+- Añadir búsqueda y filtros locales sobre datos autorizados.
+
+**Validación:** tests de API y aislamiento, sin red.
+
+### Paso 4 — Comandos de UI
+
+- Conectar edición de metadatos y archivado.
+- Mostrar acciones solo cuando exista el permiso explícito correspondiente.
+- Mantener estados de mutación, error y confirmación.
+
+**Validación:** tests de no mutación cuando se deniega acceso y pruebas de accesibilidad.
+
+### Paso 5 — Infraestructura futura
+
+- Definir el contrato de Storage y el adaptador `SupabaseMarketingRepository` o proveedor equivalente.
+- Preparar Storage privado, URLs firmadas, RLS y migraciones SQL.
+- Ejecutar esa validación únicamente en CI o entorno autorizado.
+
+**Estado:** bloqueado por conectividad y secretos del entorno actual.
+
+Cada paso debe producir un diff pequeño, tests focalizados y una sección `Database impact` cuando introduzca una dependencia futura de infraestructura.
+
+### Fase 8C1 — Asset Manager MVP
+
+Asset Manager se desarrollará como un módulo operativo de Marketing Studio inspirado en la exploración visual de Canva, pero sin convertirlo en un editor creativo ni copiar su interfaz. La prioridad será encontrar, inspeccionar, gobernar y reutilizar assets por organización, marca y workspace.
+
+#### Composición de UI
+
+La página de ruta debe ser delgada y delegar en el módulo de dominio:
+
+```text
+apps/loopdev-os/src/app/marketing-studio/dam/page.tsx
+	-> AssetManagerRoute
+		-> AssetManagerView
+			-> AssetManagerHeader
+			-> AssetManagerToolbar
+			-> AssetFilters
+			-> AssetGrid
+				-> AssetCard
+					-> AssetPreview
+			-> AssetInspector
+				-> AssetMetadataSection
+				-> AssetVariantsSection
+				-> AssetActions
+```
+
+Los componentes de dominio vivirán en `apps/loopdev-os/src/suites/marketing-studio/asset-manager/`. No se creará un `DamPage` monolítico ni se importará Supabase desde la UI.
+
+#### Componentes existentes que se reutilizan
+
+- `ModuleWorkspace` para la composición de contenido, filtros e inspector.
+- `ModuleHeader` o `PageHeader` para la cabecera del módulo.
+- `ModuleToolbar` para acciones y filtros.
+- `InspectorPanel` o `UnifiedInspector` para el detalle lateral.
+- `TechnicalSurface`, `TechnicalCard`, `Divider` y `ScrollArea` para superficies y estructura.
+- `Input`, `Select`, `FilterDropdown`, `Button` e `IconButton` para controles.
+- `Badge` o `TechnicalStatusBadge` para estados de aprobación.
+- `EmptyState`, `LoadingState` y `Skeleton` para estados de datos.
+- `TechnicalTooltip` para acciones iconográficas no obvias.
+
+#### Componentes nuevos, inicialmente específicos de Marketing Studio
+
+- `AssetManagerView`: coordina estado de selección, filtros y estados de datos.
+- `AssetManagerHeader`: título, contador, búsqueda y acción de upload.
+- `AssetManagerToolbar`: filtros por tipo, estado, marca y workspace, más modo grid/list.
+- `AssetFilters`: estado tipado de filtros, sin strings arbitrarios.
+- `AssetGrid`: composición responsive de assets.
+- `AssetCard`: thumbnail, nombre, tipo, dimensiones, estado y selección.
+- `AssetPreview`: preview por tipo y fallback explícito cuando el archivo no está disponible.
+- `AssetInspector`: panel de detalle compuesto sobre `InspectorPanel`.
+- `AssetMetadataSection`: lectura y edición de metadatos.
+- `AssetVariantsSection`: variantes, propósito, dimensiones y MIME type.
+- `AssetActions`: editar, archivar y futuras acciones condicionadas por permisos.
+
+No se añadirá inicialmente ningún componente DAM a `@loopdev/ui`. Solo se elevará un componente cuando se demuestre que es reutilizable por Campaigns, Content Engine u otro módulo.
+
+#### Entregas por fases
+
+- [x] Implementar `listAssets`, edición de metadatos, archivado y lectura de variantes en `InMemoryMarketingRepository`.
+- [x] Validar aislamiento de assets por organización, marca y workspace.
+- [x] Crear la ruta `/marketing-studio/dam` y sustituir `coming-soon` por una vista funcional.
+- [x] Componer la pantalla con `ModuleWorkspace`, grid, inspector y estados de UI.
+- [x] Añadir búsqueda y filtros locales por tipo y estado; marca y workspace quedan ligados al contexto activo en el siguiente paso.
+- [ ] Añadir edición de metadatos y archivado condicionados por permisos.
+- [ ] Mostrar variantes y estados de archivo no disponible sin simular URLs públicas.
+- [ ] Definir proveedor local de archivos/fixtures, separado de Storage real.
+- [ ] Preparar contrato de Storage, buckets privados y URLs firmadas para CI/entorno autorizado.
+- [ ] Añadir tests de componentes, accesibilidad y estados responsive.
+
+#### Límites de esta fase
+
+- Tags y colecciones quedan pendientes hasta que exista contrato oficial.
+- Upload real, Storage, URLs firmadas y eliminación física quedan bloqueados.
+- `storagePath` se mostrará como referencia lógica, nunca como URL pública.
+- Los fixtures se identificarán como datos offline y no serán evidencia de RLS o Storage.
+
+**Salida:** un usuario autorizado puede explorar, filtrar, inspeccionar, editar metadatos y archivar assets sin red ni Storage real.
+
+### Fase 8C2 — Content Engine MVP
+
 - [ ] Migrar el generador social inicial de VitaBlue como capacidad de exportación.
 - [ ] Soportar formatos 1:1, 9:16 y banners mediante presets configurables.
 - [ ] Crear briefs, piezas, copies y versiones con revisión humana.

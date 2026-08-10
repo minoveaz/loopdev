@@ -4,12 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
-  Button,
   BrandLogo,
   SuiteSidebar,
   MARKETING_STUDIO_SCHEMA,
   ThemeToggle,
-  SystemStatus,
   UserAvatar,
   SuiteHeader,
   CommandBarTrigger,
@@ -52,7 +50,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     queueMicrotask(() =>
       setNavMode(
         getSuiteNavMode(pathname, {
-          railPrefixes: ['/marketing-studio/brand-hub', '/marketing-studio/campaigns'],
+          railPrefixes: ['/marketing-studio/brand-hub', '/marketing-studio/campaigns', '/marketing-studio/dam'],
         }),
       ),
     );
@@ -64,7 +62,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     if (pathname.includes('/brand-hub')) return 'brand-hub';
     if (pathname.startsWith('/marketing-studio/campaigns')) return 'campaign-orchestrator';
     if (pathname.startsWith('/marketing-studio/content')) return 'content-engine';
-    if (pathname.startsWith('/marketing-studio/dam')) return 'dam';
+    if (pathname.startsWith('/marketing-studio/dam')) return 'asset-manager';
     return 'overview';
   };
 
@@ -75,7 +73,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     'brand-hub': 'enabled',
     'campaign-orchestrator': 'enabled',
     'content-engine': 'disabled',
-    dam: 'coming-soon',
+    'asset-manager': 'enabled',
   };
 
   const handleToggleLeftSidebar = () =>
