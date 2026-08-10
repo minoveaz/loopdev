@@ -82,7 +82,7 @@ Activa los hooks del repositorio una vez en cada clon:
 pnpm hooks:install
 ```
 
-Los hooks validan mensajes de commit, whitespace staged, nombres de rama y pushes directos a `develop` o `main`. El `pre-push` también ejecuta `pnpm check`; los hooks locales adelantan feedback, pero CI sigue siendo la autoridad obligatoria.
+Los hooks validan mensajes de commit, whitespace staged, nombres de rama y pushes directos a `develop` o `main`. El `pre-push` solo ejecuta comprobaciones rápidas; lint, auditoría frontend, typecheck, tests y build completos pertenecen a CI.
 
 Los cambios generados por builds, archivos locales previos, secretos y cambios de otras tareas deben revisarse y mantenerse fuera del commit salvo decisión explícita.
 

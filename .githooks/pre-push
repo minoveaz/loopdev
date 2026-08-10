@@ -9,4 +9,4 @@ case "$branch" in
 esac
 
 pnpm exec node scripts/validate-git-conventions.mjs
-pnpm check
+git diff --check

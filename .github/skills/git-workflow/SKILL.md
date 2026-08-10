@@ -39,7 +39,7 @@ Use this workflow for every branch, commit, push, or Pull Request operation.
 2. Confirm the remote and upstream are expected.
 3. Review `git log --oneline -5` and `git status --short --branch`.
 4. Install hooks once per clone with `pnpm hooks:install`.
-5. Let `pre-push` run its validation; do not bypass it without an explicit reason.
+5. Let `pre-push` run its fast validation; do not bypass it without an explicit reason.
 
 ## Before opening or updating a Pull Request
 
