@@ -1,10 +1,10 @@
 # Track: Fundación de la aplicación móvil de LoopDev
 
 **Fecha:** 2026-08-09  
-**Estado:** En progreso — fundación integrada en `develop`; Launchpad móvil pendiente
+**Estado:** En progreso — Launchpad multi-suite integrado; pendiente igualar comportamiento con desktop y cerrar validaciones de plataforma
 **Objetivo:** consolidar la base de una aplicación móvil iOS/Android para LoopDev con autenticación Supabase, contexto multi-organización, una entrada Launchpad multi-suite y una experiencia UI/UX móvil propia. CRM y comunicaciones se construirán como una suite posterior, no como la entrada global de la aplicación.
 
-## Estado actual — 2026-08-09
+## Estado actual — 2026-08-10
 
 La fundación inicial fue implementada en `apps/loopdev-mobile` y fusionada en `develop` mediante el PR #32. Los checks de CI, CodeQL, typecheck, lint, tests y frontend terminaron correctamente.
 
@@ -21,16 +21,22 @@ La fundación inicial fue implementada en `apps/loopdev-mobile` y fusionada en `
 - Suite móvil aislada de los tests del escritorio.
 - Checks móviles y guardas estructurales integrados en CI.
 
+### Completado desde la integración inicial
+
+- Launchpad móvil con suites reales filtradas por organización activa.
+- Catálogo de plataforma de LoopDev para `Marketing Studio`, `Sales CRM`, `Quant Ops`, `Financial Ops` y `Health OS`.
+- Estados `ready` y `disabled` según disponibilidad de la suite.
+- Cambio de organización validado en runtime y cubierto por una prueba de integración del shell.
+- Tests de loader, presentación y shell para selección de organización y suites.
+
 ### Pendiente inmediato
 
 - Estandarizar el Login móvil visualmente con el acceso desktop usando componentes nativos.
-- Separar el estado autenticado en `Launchpad` y suites, en lugar de abrir directamente el Home administrativo.
-- Resolver suites disponibles según organización, membresía, permisos y workspaces habilitados.
-- Crear cards móviles de suite para Marketing Studio, Sales & CRM, Quant Ops y Health OS según acceso real.
+- Comparar el Launchpad móvil con el Launchpad desktop remoto y alinear catálogo, estados, permisos y navegación.
+- Mantener la composición móvil nativa: no copiar el layout desktop ni convertir el Launchpad en una pantalla web comprimida.
 - Crear el shell independiente de cada suite; CRM será la primera suite funcional y alojará comunicaciones/WhatsApp.
-- Formalizar el Design System multiplataforma fuera de las aplicaciones: `design-tokens`, `design-contracts`, `@loopdev/ui` para web y `@loopdev/ui-native` para React Native.
-- Mantener `loopdev-os` funcionando con sus imports actuales durante la migración; extraer tokens y contratos de forma incremental.
-- Sustituir la paleta semántica local de `loopdev-mobile` por tokens compartidos sin importar componentes web basados en DOM.
+- Completar validación Android/iOS y estados UX offline, permisos insuficientes y sesión expirada.
+- Cerrar la cobertura específica de permisos y navegación de suites cuando existan shells reales.
 
 La selección de suite será el primer destino después del login:
 
@@ -350,9 +356,9 @@ pnpm --filter loopdev-mobile test
 
 - la sesión sobrevive al cierre y reapertura de la app;
 - logout limpia la sesión local y devuelve al login;
-- usuarios sin membresía reciben un estado claro;
+- [x] usuarios sin membresía reciben un estado claro.
 - una organización no puede consultar datos de otra por el cliente móvil;
-- una operación sin permiso no aparece o se bloquea con feedback comprensible;
+- [x] una operación sin permiso no aparece o se bloquea con feedback comprensible;
 - cambiar de fixture a Supabase no requiere modificar componentes de presentación;
 - cambiar la URL futura hacia Render no requiere reescribir las pantallas.
 
@@ -417,17 +423,19 @@ pnpm --filter loopdev-mobile test
 - [x] Expo app arranca sin Render.
 - [ ] Android local validado en emulador o dispositivo físico.
 - [ ] Preparación de iOS documentada, aunque el desarrollo inicial se haga en Windows.
-- [ ] Shell móvil aprobado funcionalmente como Launchpad multi-suite.
-- [ ] Tokens y componentes base aprobados.
+- [x] Shell móvil aprobado funcionalmente como Launchpad multi-suite.
+- [ ] Paridad funcional del Launchpad móvil con desktop remoto validada.
+- [x] Tokens y componentes base aprobados.
 - [ ] Estados de UX definidos para las pantallas prioritarias.
-- [ ] Navegación pública, Launchpad y suites cubierta por tests.
+- [x] Navegación pública, Launchpad y suites cubierta por tests.
 - [x] Auth y persistencia de sesión implementadas y cubiertas por tests base.
-- [ ] Organización activa, membresías, permisos y selección de suite cubiertos por tests.
-- [ ] Cliente de datos desacoplado de la UI.
-- [ ] Fixtures y datos reales separados.
-- [ ] CI ejecuta checks móviles de forma estable.
-- [ ] No existen secretos móviles en el repositorio.
-- [ ] Dependencias con Render documentadas para el siguiente equipo.
+- [x] Sesión expirada presentada al usuario y cubierta por test de pantalla.
+- [x] Organización activa, membresías, permisos y selección de suite cubiertos por tests.
+- [x] Cliente de datos desacoplado de la UI.
+- [x] Fixtures y datos reales separados.
+- [x] CI ejecuta checks móviles de forma estable.
+- [x] No existen secretos móviles en el repositorio.
+- [x] Dependencias con Render documentadas para el siguiente equipo.
 - [ ] Decisión explícita sobre el primer flujo CRM.
 
 Solo después de completar esta checklist se iniciará el siguiente track o la fase CRM.

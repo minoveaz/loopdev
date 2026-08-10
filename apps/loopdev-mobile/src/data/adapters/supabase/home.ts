@@ -17,6 +17,13 @@ type MembershipRow = {
 };
 type PermissionRow = { key: string };
 type WorkspaceRow = { id: string; suite_key: PlatformSuiteSummary['suiteKey']; name: string; slug: string; status: PlatformSuiteSummary['status'] };
+const suiteReadPermissions: Partial<Record<PlatformSuiteSummary['suiteKey'], string>> = {
+  marketing: 'marketing.read',
+  crm: 'crm.read',
+  health: 'health.read',
+  quant: 'quant.read',
+  finance: 'finance.read',
+};
 
 export type SupabaseHomeData = {
   organizations: OrganizationSummary[];
@@ -122,14 +129,36 @@ export const supabaseHomeDataSource: PlatformHomeDataSource = {
   },
   async getSuites(organizationId?: string): Promise<PlatformSuiteSummary[]> {
     if (!organizationId) return [];
-    const { data, error } = (await createSupabaseMobileClient()
+    const supabase = createSupabaseMobileClient();
+    const { data: isPlatformAdministrator, error: administratorError } = (await supabase.rpc(
+      'is_platform_administrator',
+    )) as unknown as { data: boolean | null; error: Error | null };
+    if (administratorError) throw administratorError;
+    const { data, error } = (await supabase
       .from('workspaces')
       .select('id, suite_key, name, slug, status')
       .eq('organization_id', organizationId)
       .eq('status', 'active')
       .order('name')) as unknown as { data: WorkspaceRow[] | null; error: Error | null };
     if (error) throw error;
-    return (data ?? []).map(({ id, suite_key, name, slug, status }) => ({ id, suiteKey: suite_key, name, slug, status }));
+    const visibleWorkspaces = isPlatformAdministrator
+      ? data ?? []
+      : await Promise.all((data ?? []).map(async (workspace) => {
+        const requiredPermission = suiteReadPermissions[workspace.suite_key];
+        if (!requiredPermission) return workspace;
+        const { data: hasPermission, error: permissionError } = await (
+          supabase.rpc as unknown as (
+            name: string,
+            args: Record<string, string>,
+          ) => Promise<{ data: boolean | null; error: Error | null }>
+        )(
+          'has_organization_permission',
+          { target_organization_id: organizationId, required_permission: requiredPermission },
+        );
+        if (permissionError) throw permissionError;
+        return hasPermission === true ? workspace : null;
+      })).then((workspaces) => workspaces.filter((workspace): workspace is WorkspaceRow => workspace !== null));
+    return visibleWorkspaces.map(({ id, suite_key, name, slug, status }) => ({ id, suiteKey: suite_key, name, slug, status }));
   },
   async getActivity(_organizationId?: string): Promise<PlatformActivityItem[]> {
     return [];
