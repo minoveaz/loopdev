@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 const allowedBranchPrefixes = ['feature/', 'fix/', 'chore/', 'docs/', 'test/'];
 const conventionalCommitPattern =
@@ -24,6 +25,7 @@ function fail(message) {
 const branch =
   getOption('--branch') || process.env.GITHUB_HEAD_REF || runGit(['branch', '--show-current']);
 const prTitle = getOption('--pr-title') || process.env.PR_TITLE;
+const commitMessageFile = getOption('--commit-msg');
 const range = getOption('--range');
 const errors = [];
 
@@ -35,6 +37,13 @@ if (!['develop', 'main'].includes(branch) && !branchPattern.test(branch)) {
 
 if (prTitle && !conventionalCommitPattern.test(prTitle)) {
   errors.push(`invalid PR title '${prTitle}'. Use type(scope): imperative description`);
+}
+
+if (commitMessageFile) {
+  const subject = readFileSync(commitMessageFile, 'utf8').split('\n', 1)[0].trim();
+  if (!conventionalCommitPattern.test(subject)) {
+    errors.push(`invalid commit message '${subject}'. Use type(scope): imperative description`);
+  }
 }
 
 if (range) {
