@@ -2,6 +2,7 @@
 
 import React from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { ChevronRight } from 'lucide-react';
 import { TechnicalDropdownProps, TechnicalDropdownItemProps } from './types';
 import { useTechnicalDropdown } from './useTechnicalDropdown';
 
@@ -66,8 +67,8 @@ export const TechnicalDropdownSeparator: React.FC = () => {
 export const TechnicalDropdownGroup: React.FC<{ children: React.ReactNode, label?: string }> = ({ children, label }) => (
   <DropdownMenu.Group>
     {label && (
-      <div className="px-3 py-2 mb-1">
-        <span className="text-text-muted/40 uppercase tracking-[0.3em] text-[8px] font-black">
+      <div className="px-3 py-2">
+        <span className="text-text-muted text-xs font-medium">
           {label}
         </span>
       </div>
@@ -75,3 +76,38 @@ export const TechnicalDropdownGroup: React.FC<{ children: React.ReactNode, label
     {children}
   </DropdownMenu.Group>
 );
+
+interface TechnicalDropdownSubmenuProps {
+  label: React.ReactNode;
+  children: React.ReactNode;
+  disabled?: boolean;
+}
+
+/** Menú secundario para opciones como preferencias, timezone o navegación contextual. */
+export const TechnicalDropdownSubmenu: React.FC<TechnicalDropdownSubmenuProps> = ({
+  label,
+  children,
+  disabled = false,
+}) => {
+  const { getContentClasses } = useTechnicalDropdown();
+
+  return (
+    <DropdownMenu.Sub>
+      <DropdownMenu.SubTrigger
+        disabled={disabled}
+        className="dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/10 hover:text-accent flex min-h-9 items-center gap-2.5 rounded-sm px-3 py-2 text-[13px] font-normal text-slate-600 outline-none transition-colors duration-150 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40"
+      >
+        <span className="min-w-0 flex-1 truncate">{label}</span>
+        <ChevronRight size={14} className="shrink-0" aria-hidden="true" />
+      </DropdownMenu.SubTrigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.SubContent
+          sideOffset={4}
+          className={getContentClasses()}
+        >
+          {children}
+        </DropdownMenu.SubContent>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Sub>
+  );
+};

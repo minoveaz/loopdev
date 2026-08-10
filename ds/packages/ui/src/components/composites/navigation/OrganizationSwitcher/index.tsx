@@ -38,7 +38,7 @@ export const OrganizationSwitcher: React.FC<OrganizationSwitcherProps> = ({
         type="button"
         disabled={isLoading || !onOrganizationNavigate}
         onClick={onOrganizationNavigate}
-        className="focus-visible:ring-primary hover:bg-accent/5 group flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-all duration-200 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 disabled:cursor-default disabled:opacity-100"
+        className="focus-visible:ring-primary hover:bg-accent/10 group flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-all duration-200 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 disabled:cursor-default disabled:opacity-100"
       >
         <span className="flex min-w-0 items-center gap-2">
           <span className="text-text-main group-hover:text-accent max-w-48 truncate text-xs font-normal group-hover:underline group-hover:underline-offset-4 dark:text-white">
@@ -61,13 +61,13 @@ export const OrganizationSwitcher: React.FC<OrganizationSwitcherProps> = ({
             aria-label="Select organization"
             aria-expanded={isOpen}
             disabled={isLoading}
-            className="text-text-muted hover:text-accent focus-visible:ring-primary hover:bg-accent/5 group flex size-8 shrink-0 items-center justify-center rounded-md transition-all duration-200 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
+            className="text-text-muted hover:text-accent focus-visible:ring-primary hover:bg-accent/10 group flex size-8 shrink-0 items-center justify-center rounded-md transition-all duration-200 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
           >
             <ChevronDown size={14} className="text-text-muted group-hover:text-accent shrink-0 transition-colors" aria-hidden="true" />
           </button>
         }
       >
-        <div className="dark:bg-surface-elevated w-[min(360px,calc(100vw-2rem))] bg-white">
+        <div className="dark:bg-surface-elevated bg-white">
           <div className="border-border-technical flex items-center gap-2 border-b px-3 py-2">
             <Search size={16} className="text-text-muted shrink-0" aria-hidden="true" />
             <input
@@ -86,6 +86,7 @@ export const OrganizationSwitcher: React.FC<OrganizationSwitcherProps> = ({
               return (
                 <TechnicalDropdownItem
                   key={organization.id}
+                  isActive={isActive}
                   onClick={() => {
                     onOrganizationChange(organization.id);
                     setIsOpen(false);

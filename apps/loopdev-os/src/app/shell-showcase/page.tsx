@@ -81,6 +81,11 @@ export default function ShellShowcasePage() {
               userRole="Tenant_Admin"
               tenantName="Showcase Workspace"
               userSrc="https://i.pravatar.cc/64?img=12"
+              timezoneOptions={[
+                { label: 'Auto detect', isActive: true },
+                { label: '(UTC) Coordinated Universal Time' },
+                { label: '(UTC-05:00) Eastern Time' },
+              ]}
               onOpenChange={() => undefined}
               onLogout={() => undefined}
             />

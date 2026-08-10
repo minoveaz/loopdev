@@ -1,4 +1,8 @@
-import { ReactNode } from 'react';
+export interface UserMenuSubmenuOption {
+  label: string;
+  isActive?: boolean;
+  onSelect?: () => void;
+}
 
 /**
  * @file types.ts
@@ -29,6 +33,8 @@ export interface UserMenuProps {
   onBillingClick?: () => void;
   /** Callback al cambiar el estado de apertura */
   onOpenChange?: (open: boolean) => void;
+  /** Opciones opcionales del submenu de timezone */
+  timezoneOptions?: UserMenuSubmenuOption[];
 
   /** Clase CSS adicional */
   className?: string;

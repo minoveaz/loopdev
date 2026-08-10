@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import {
   TechnicalDropdown,
   TechnicalMenuItem,
+  TechnicalDropdownItem,
   TechnicalDropdownSeparator,
-  TechnicalDropdownGroup,
+  TechnicalDropdownSubmenu,
   UserAvatar,
-  TechnicalLabel,
   LpdText,
 } from '../../../atoms';
 import { UserMenuProps } from './types';
@@ -29,6 +29,7 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
     onSettingsClick,
     onBillingClick,
     onOpenChange,
+    timezoneOptions,
   } = props;
   const [isOpen, setIsOpen] = useState(false);
   const { userName, displayEmail, formattedRole, headerClasses } = useUserMenu(props);
@@ -45,44 +46,59 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
       onOpenChange={handleOpenChange}
       trigger={
         <button
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 p-0.5 transition-all duration-500 hover:border-accent/50 hover:ring-4 hover:ring-accent/5 dark:border-white/10 dark:hover:border-accent/50 dark:hover:ring-accent/10"
+          className="hover:border-accent/50 hover:ring-accent/5 dark:hover:border-accent/50 dark:hover:ring-accent/10 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 p-0.5 transition-all duration-500 hover:ring-4 dark:border-white/10"
           aria-label="Abrir menú de usuario"
         >
           <UserAvatar name={userName} src={userSrc} size="sm" withStatus status="online" />
         </button>
       }
     >
-      <div className="flex flex-col w-[240px] bg-white dark:bg-surface-elevated">
-        {/* Identidad Estructural */}
-        <div className="px-4 py-4 border-b border-border-technical bg-white dark:bg-surface-elevated">
-          <LpdText size="sm" weight="bold" className="text-text-main dark:text-white">
+      <div className="dark:bg-surface-elevated flex flex-col bg-white">
+        <div className={`${headerClasses} dark:bg-surface-elevated bg-white`}>
+          <LpdText size="sm" weight="bold" className="text-text-main block dark:text-white">
             {userName.split('@')[0]}
           </LpdText>
 
           {tenantName && (
-            <span className="mt-1 truncate text-xs font-medium text-text-muted dark:text-slate-300">
+            <span className="text-text-muted truncate text-xs dark:text-slate-300">
               {tenantName}
             </span>
           )}
 
-          <div className="flex items-center gap-1.5 mt-1">
-            <span className="text-micro font-sans text-text-muted truncate flex-1">
+          <div className="mt-1 flex items-center gap-2">
+            <span className="text-micro text-text-muted min-w-0 flex-1 truncate font-sans">
               {displayEmail}
             </span>
-            <span className="flex items-center text-[10px] font-bold text-primary px-1.5 py-0.5 rounded bg-primary/5 border border-primary/10">
+            <span className="border-primary/10 bg-primary/5 text-primary flex shrink-0 items-center rounded border px-1.5 py-0.5 text-[10px] font-bold">
               {formattedRole}
             </span>
           </div>
         </div>
 
-        {/* Acciones de Cuenta */}
         <div className="flex flex-col py-1">
           <TechnicalMenuItem icon="User" label="Profile" shortcut="⌘P" onClick={onProfileClick} />
           <TechnicalMenuItem icon="Settings" label="Account Settings" onClick={onSettingsClick} />
           <TechnicalMenuItem icon="CreditCard" label="Billing" onClick={onBillingClick} />
         </div>
 
-        <div className="border-t border-border-technical">
+        {timezoneOptions && timezoneOptions.length > 0 && (
+          <>
+            <TechnicalDropdownSeparator />
+            <TechnicalDropdownSubmenu label="Timezone">
+              {timezoneOptions.map((option) => (
+                <TechnicalDropdownItem
+                  key={option.label}
+                  isActive={option.isActive}
+                  onClick={option.onSelect}
+                >
+                  {option.label}
+                </TechnicalDropdownItem>
+              ))}
+            </TechnicalDropdownSubmenu>
+          </>
+        )}
+
+        <div className="border-border-technical border-t pt-1">
           <TechnicalMenuItem icon="LogOut" label="Sign Out" variant="danger" onClick={onLogout} />
         </div>
       </div>

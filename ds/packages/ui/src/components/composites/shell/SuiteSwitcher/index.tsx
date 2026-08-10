@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { 
   TechnicalDropdown, 
-  TechnicalMenuItem, 
+  TechnicalDropdownItem,
+  TechnicalDropdownSeparator,
   UIKitIllustration,
   LpdText,
   TechnicalTooltip
@@ -68,15 +69,8 @@ export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
         </button>
       }
     >
-      <div className="dark:bg-surface-elevated flex w-[260px] flex-col bg-white">
-        {/* Header Minimalista Estándar Lab */}
-        <div className="border-border-technical dark:bg-surface-elevated border-b bg-white p-4 pb-2">
-          <LpdText size="sm" weight="bold" className="text-text-main dark:text-white">
-            Suites Disponibles
-          </LpdText>
-        </div>
-
-        <div className="flex flex-col py-1">
+      <div className="dark:bg-surface-elevated flex flex-col bg-white">
+        <div className="flex flex-col">
           {availableSuites.map((suite) => {
             const isActive = suite.suiteId === currentSuite.suiteId;
             const isDisabled = accessMap[suite.suiteId] === 'disabled';
@@ -87,10 +81,9 @@ export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
                 content={isDisabled ? "Esta suite no está incluida en tu plan actual" : undefined}
                 side="right"
               >
-                <TechnicalMenuItem 
-                  label={suite.suiteName}
+                <TechnicalDropdownItem
                   isActive={isActive}
-                  isDisabled={isDisabled}
+                  disabled={isDisabled}
                   onClick={() => !isActive && !isDisabled && onSuiteChange(suite.suiteId)}
                 >
                   <div className={`bg-background-subtle border-border-technical relative flex h-7 w-7 shrink-0 items-center justify-center rounded border dark:bg-white/5`}>
@@ -101,22 +94,22 @@ export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
                       </div>
                     )}
                   </div>
-                  <span className="text-technical flex-1 truncate">{suite.suiteName}</span>
+                  <span className="flex-1 truncate">{suite.suiteName}</span>
                   {isDisabled && (
                     <span className="text-text-muted font-mono text-[8px] uppercase tracking-tighter opacity-40">Plan_Locked</span>
                   )}
-                </TechnicalMenuItem>
+                </TechnicalDropdownItem>
               </TechnicalTooltip>
             );
           })}
         </div>
 
-        <div className="border-border-technical border-t">
-          <TechnicalMenuItem 
-            label="Volver al Launchpad"
-            icon="Home"
-            onClick={() => onSuiteChange('os.home')}
-          />
+        <TechnicalDropdownSeparator />
+        <div>
+          <TechnicalDropdownItem onClick={() => onSuiteChange('os.home')}>
+            <LucideIcons.Home size={16} className="shrink-0" aria-hidden="true" />
+            <span className="flex-1 truncate">Volver al Launchpad</span>
+          </TechnicalDropdownItem>
         </div>
       </div>
     </TechnicalDropdown>
