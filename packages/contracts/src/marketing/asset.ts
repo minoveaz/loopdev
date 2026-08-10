@@ -24,6 +24,7 @@ export const MarketingAssetVariantSchema = MarketingScopedRecordSchema.extend({
   width: z.number().int().positive().nullable().optional(),
   height: z.number().int().positive().nullable().optional(),
 });
+export type MarketingAssetVariant = z.infer<typeof MarketingAssetVariantSchema>;
 
 export const MarketingAssetLinkSchema = MarketingScopedRecordSchema.extend({
   assetId: MarketingIdSchema,
