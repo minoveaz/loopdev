@@ -14,6 +14,7 @@ import {
   GlobalContextPanel,
   MARKETING_STUDIO_SCHEMA,
   SuiteSidebar,
+  Heading,
   type GlobalContextPanelMode,
 } from '@loopdev/ui';
 import { useOrganization } from '@/hooks/useOrganization';
@@ -26,9 +27,9 @@ export default function ShellShowcasePage() {
   const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<ShowcaseNavMode>('hover');
   const router = useRouter();
-  const currentSuite = AVAILABLE_SUITES_FIXTURES.find(
-    (suite) => suite.suiteId === 'salesCRM',
-  ) ?? AVAILABLE_SUITES_FIXTURES[0];
+  const currentSuite =
+    AVAILABLE_SUITES_FIXTURES.find((suite) => suite.suiteId === 'salesCRM') ??
+    AVAILABLE_SUITES_FIXTURES[0];
   const {
     organizations,
     activeOrganization,
@@ -109,7 +110,9 @@ export default function ShellShowcasePage() {
         />
       </div>
       <div className="group/sidebar-nav flex min-h-[calc(100vh-var(--lpd-space-14))]">
-        <div className={`${navMode === 'expanded' ? 'w-64' : 'w-16'} relative sidebar-hover-host h-[calc(100vh-var(--lpd-space-14))] shrink-0`}>
+        <div
+          className={`${navMode === 'expanded' ? 'w-64' : 'w-16'} relative sidebar-hover-host h-[calc(100vh-var(--lpd-space-14))] shrink-0`}
+        >
           <SuiteSidebar
             schema={MARKETING_STUDIO_SCHEMA}
             navMode={navMode}
@@ -121,7 +124,9 @@ export default function ShellShowcasePage() {
         </div>
         <section className="flex-1 p-8">
           <p className="text-text-muted text-xs uppercase tracking-[0.18em]">Shell showcase</p>
-          <h1 className="text-text-main mt-2 text-2xl font-semibold">Suite navigation</h1>
+          <Heading as="h1" size="2xl" weight="semibold" className="text-text-main mt-2">
+            Suite navigation
+          </Heading>
         </section>
       </div>
       {contextMode && (

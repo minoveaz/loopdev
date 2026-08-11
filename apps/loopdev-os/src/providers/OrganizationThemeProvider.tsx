@@ -1,25 +1,46 @@
 'use client';
 
 import { DynamicThemeProvider, type ThemeConfig } from '@loopdev/ui';
+import { semanticColors } from '@loopdev/tokens';
 import { useOrganization } from '@/hooks/useOrganization';
 
 const ORGANIZATION_THEMES: Record<string, ThemeConfig> = {
   loopdev: {
-    colors: { primary: '#135bec', accent: '#FFD025', energy: '#FFD025' },
+    colors: {
+      primary: semanticColors.primary,
+      accent: semanticColors.energy,
+      energy: semanticColors.energy,
+    },
   },
   'estar-protegidos': {
-    colors: { primary: '#57C19A', accent: '#00745A', energy: '#57C19A' },
+    colors: {
+      primary: 'var(--lpd-color-brand-primary)',
+      accent: 'var(--lpd-color-brand-secondary)',
+      energy: 'var(--lpd-color-brand-primary)',
+    },
   },
   'protege-tu-salud': {
-    colors: { primary: '#22C7A9', accent: '#22C7A9', energy: '#22C7A9' },
+    colors: {
+      primary: 'var(--lpd-color-brand-primary)',
+      accent: 'var(--lpd-color-brand-primary)',
+      energy: 'var(--lpd-color-brand-primary)',
+    },
   },
   'protege-salud': {
-    colors: { primary: '#22C7A9', accent: '#22C7A9', energy: '#22C7A9' },
+    colors: {
+      primary: 'var(--lpd-color-brand-primary)',
+      accent: 'var(--lpd-color-brand-primary)',
+      energy: 'var(--lpd-color-brand-primary)',
+    },
   },
 };
 
 const DEFAULT_THEME: ThemeConfig = {
-  colors: { primary: '#135bec', accent: '#FFD025', energy: '#FFD025' },
+  colors: {
+    primary: semanticColors.primary,
+    accent: semanticColors.energy,
+    energy: semanticColors.energy,
+  },
 };
 
 export function OrganizationThemeProvider({ children }: { children: React.ReactNode }) {

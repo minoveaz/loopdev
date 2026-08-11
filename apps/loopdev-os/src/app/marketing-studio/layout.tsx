@@ -93,7 +93,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               }
 
               const suite = AVAILABLE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
-              router.push(suite?.route.routeId ?? '/launchpad');
+              router.push(suite?.route?.routeId ?? '/launchpad');
             }}
           />
         }
