@@ -82,6 +82,9 @@ jobs:
               - 'apps/loopdev-os/src/app/globals.css'
               - 'apps/loopdev-os/src/app/layout.tsx'
               - 'apps/loopdev-os/src/app/shell-showcase/**'
+              - 'e2e/shell-showcase.contract.spec.mjs'
+              - 'e2e/shell.visual.spec.mjs'
+              - 'e2e/shell.visual.spec.mjs-snapshots/**'
               - 'apps/loopdev-os/src/components/layout/suiteNavMode.ts'
               - 'ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/**'
               - 'ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/**'
@@ -286,7 +289,11 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run desktop checks
-        run: pnpm exec playwright test --project=desktop --workers=1 --reporter=line
+        run: pnpm exec playwright test --project=desktop --grep-invert shell-showcase --workers=1 --reporter=line
+
+      - name: Run Shell Showcase desktop contract
+        if: needs.changes.outputs.shell == 'true'
+        run: pnpm exec playwright test e2e/shell-showcase.contract.spec.mjs e2e/shell.visual.spec.mjs --project=desktop --workers=1 --reporter=line
 
       - name: Run authenticated Mobile Web checks
         run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile --workers=1 --reporter=line
@@ -299,3 +306,7 @@ jobs:
 
       - name: Run Mobile Compact visual checks
         run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Run Shell Showcase mobile visual contract
+        if: needs.changes.outputs.shell == 'true'
+        run: pnpm exec playwright test e2e/shell.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1 --reporter=line
