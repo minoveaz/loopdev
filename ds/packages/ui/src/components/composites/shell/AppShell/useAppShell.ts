@@ -6,8 +6,8 @@ import { AppShellProps } from './types';
 export const useAppShell = (props: AppShellProps) => {
   const { config = {} } = props;
 
-  const { 
-    context = 'normal', 
+  const {
+    context = 'normal',
     density = 'comfortable',
     showScrollbars = true,
     isLeftSidebarOpen = true,
@@ -15,7 +15,7 @@ export const useAppShell = (props: AppShellProps) => {
     navBehavior = 'auto',
     navigationMode = 'expanded',
     contextBehavior = 'auto',
-    activeOverlay = null
+    activeOverlay = null,
   } = config;
 
   // 1. Determinar Modos de Panel
@@ -58,12 +58,13 @@ export const useAppShell = (props: AppShellProps) => {
   // 4. Cálculo de variables de CSS (Tokens Industriales v1.1)
   const styleTokens = useMemo(() => {
     const isCompact = density === 'compact';
-    const railWidth = 'var(--lpd-space-16)'; 
-    const expandedNavWidth = 'var(--lpd-space-64)';
+    const railWidth = 'var(--lpd-space-16)';
+    const expandedNavWidth = 'var(--lpd-space-56)';
     const expandedContextWidth = 'var(--lpd-space-80)';
 
     return {
-      '--app-shell-nav-width': navMode === 'open' ? expandedNavWidth : (navMode === 'rail' ? railWidth : '0px'),
+      '--app-shell-nav-width':
+        navMode === 'open' ? expandedNavWidth : navMode === 'rail' ? railWidth : '0px',
       '--app-shell-expanded-nav-width': expandedNavWidth,
       '--app-shell-context-width': contextMode === 'open' ? expandedContextWidth : '0px',
       '--app-shell-header-height': isCompact ? 'var(--lpd-space-12)' : 'var(--lpd-space-14)',
@@ -72,7 +73,7 @@ export const useAppShell = (props: AppShellProps) => {
       // Z-Indexes Diferenciados (Industrial Scale)
       '--app-shell-z-backdrop': '4000',
       '--app-shell-z-nav': '4100',
-      '--app-shell-z-context': '4100', 
+      '--app-shell-z-context': '4100',
       '--app-shell-z-header': '4200',
       '--app-shell-z-overlay': '5000',
     };

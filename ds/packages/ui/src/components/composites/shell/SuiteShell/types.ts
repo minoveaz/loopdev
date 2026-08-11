@@ -10,6 +10,8 @@ import type {
   TelemetryMap,
 } from '@loopdev/contracts';
 import type { MobileSuiteNavItem } from '../../navigation/MobileSuiteNav';
+import type { ModuleContextSidebarWidth } from '../ModuleContextSidebar';
+import type { ModuleContextPanelWidth } from '../ModuleContextPanel';
 
 export interface SuiteShellProps {
   schema: NavigationSchema;
@@ -22,6 +24,14 @@ export interface SuiteShellProps {
   centerSlot: ReactNode;
   rightSlot: ReactNode;
   profileSlot?: ReactNode;
+  moduleContextSlot?: ReactNode;
+  moduleContextFooterSlot?: ReactNode;
+  moduleContextLabel?: string;
+  moduleContextWidth?: ModuleContextSidebarWidth;
+  moduleContextPanelSlot?: ReactNode;
+  moduleContextPanelFooterSlot?: ReactNode;
+  moduleContextPanelLabel?: string;
+  moduleContextPanelWidth?: ModuleContextPanelWidth;
   /** Extensiones del header persistente sin romper los slots legacy de la suite. */
   platformHeaderProps?: Omit<PlatformHeaderProps, 'identitySlot' | 'isInert'>;
   mobileNavigation?: {

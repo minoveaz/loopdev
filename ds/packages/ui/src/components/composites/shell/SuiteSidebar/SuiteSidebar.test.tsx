@@ -53,7 +53,7 @@ describe('SuiteSidebar', () => {
 
       expect(sidebar).toHaveClass('!w-16');
       fireEvent.mouseEnter(sidebar!);
-      expect(sidebar).toHaveClass('!w-64');
+      expect(sidebar).toHaveClass('!w-56');
       expect(screen.getByText('Brand Hub')).toBeInTheDocument();
     });
 
@@ -66,7 +66,7 @@ describe('SuiteSidebar', () => {
       await user.click(control);
       fireEvent.mouseLeave(sidebar!);
 
-      await waitFor(() => expect(sidebar).toHaveClass('!w-64'));
+      await waitFor(() => expect(sidebar).toHaveClass('!w-56'));
       expect(screen.getByRole('menu', { name: 'Sidebar control' })).toBeInTheDocument();
     });
   });
@@ -79,7 +79,7 @@ describe('SuiteSidebar', () => {
 
       await user.click(screen.getByRole('button', { name: 'Sidebar control' }));
 
-      expect(sidebar).toHaveClass('!w-64');
+      expect(sidebar).toHaveClass('!w-56');
       expect(screen.getByRole('menu', { name: 'Sidebar control' })).toBeInTheDocument();
     });
 

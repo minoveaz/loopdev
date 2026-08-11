@@ -13,7 +13,11 @@ import type { TypographyProps, HeadingProps, TypographyVariant } from './types';
 export const LpdText = (props: TypographyProps & Record<string, unknown>) => {
   const { classes, Component } = useTypography(props);
   const { children, size, weight, variant, className, as, ...rest } = props;
-  return <Component className={classes} {...rest}>{children}</Component>;
+  return (
+    <Component className={classes} {...rest}>
+      {children}
+    </Component>
+  );
 };
 
 /**
@@ -28,9 +32,7 @@ export const TechnicalText: React.FC<TypographyProps & Record<string, unknown>> 
   variant = 'mono',
   as = 'span',
   ...props
-}) => (
-  <LpdText size={size} weight={weight} variant={variant} as={as} {...props} />
-);
+}) => <LpdText size={size} weight={weight} variant={variant} as={as} {...props} />;
 
 /**
  * @component Heading
@@ -38,14 +40,12 @@ export const TechnicalText: React.FC<TypographyProps & Record<string, unknown>> 
  * @category Foundations
  * @status stable
  */
-export const Heading: React.FC<HeadingProps & React.HTMLAttributes<HTMLHeadingElement>> = ({ 
-  size = '3xl', 
-  weight = 'black', 
+export const Heading: React.FC<HeadingProps & React.HTMLAttributes<HTMLHeadingElement>> = ({
+  size = '3xl',
+  weight = 'semibold',
   as = 'h1',
-  ...props 
-}) => (
-  <LpdText size={size} weight={weight} as={as} {...props} />
-);
+  ...props
+}) => <LpdText size={size} weight={weight} as={as} {...props} />;
 
 /**
  * @component Code
@@ -54,9 +54,9 @@ export const Heading: React.FC<HeadingProps & React.HTMLAttributes<HTMLHeadingEl
  * @status stable
  */
 export const Code = ({ variant = 'mono' as TypographyVariant, className = '', ...props }) => (
-  <LpdText 
-    variant={variant} 
-    className={`bg-surface-glass px-1.5 py-0.5 rounded border border-border-subtle text-text-muted ${className}`} 
-    {...props} 
+  <LpdText
+    variant={variant}
+    className={`bg-surface-glass px-1.5 py-0.5 rounded border border-border-subtle text-text-muted ${className}`}
+    {...props}
   />
 );

@@ -61,9 +61,9 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
             }
           : undefined
       }
-      className={`${containerClasses} ${shouldExpandOnHover ? `sidebar-hover-surface ${isHoverExpanded || isControlMenuOpen ? '!w-64' : '!w-16'}` : ''} h-full border-r border-border-technical bg-shell-canvas`}
+      className={`${containerClasses} ${shouldExpandOnHover ? `sidebar-hover-surface ${isHoverExpanded || isControlMenuOpen ? '!w-56' : '!w-16'}` : ''} border-border-technical bg-shell-canvas h-full !rounded-none border-r`}
     >
-      <div className="flex flex-col h-full">
+      <div className="flex h-full flex-col">
         {/* Suite dashboard */}
         <div className="shrink-0 px-4 py-3" role="menu" aria-label="Suite home">
           <NavSidebarItem

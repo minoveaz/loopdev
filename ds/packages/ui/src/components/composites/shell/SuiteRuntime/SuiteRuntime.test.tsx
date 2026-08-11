@@ -64,4 +64,26 @@ describe('SuiteRuntime', () => {
     );
     expect(screen.queryByText('Overview content')).not.toBeInTheDocument();
   });
+
+  it('renders contextual content only for the active module', () => {
+    render(
+      <SuiteRuntime
+        config={suiteConfig}
+        activeModuleId="brand-hub"
+        moduleContextRenderers={{
+          'brand-hub': (module) => <div>{module.label} context</div>,
+          overview: () => <div>Overview context</div>,
+        }}
+        moduleContextWidths={{ 'brand-hub': 'wide' }}
+        leftSlot={<div>identity</div>}
+        centerSlot={<div>search</div>}
+        rightSlot={<div>controls</div>}
+        onNavigate={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('complementary', { name: 'Brand Hub' })).toBeInTheDocument();
+    expect(screen.getByText('Brand Hub context')).toBeInTheDocument();
+    expect(screen.queryByText('Overview context')).not.toBeInTheDocument();
+  });
 });

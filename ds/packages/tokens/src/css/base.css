@@ -4,18 +4,19 @@
   --lpd-font-mono: 'JetBrains Mono', system-ui, sans-serif;
 
   /* --- BRAND CORE (LoopDev Standard) --- */
-  --lpd-color-brand-primary: #135BEC;
+  --lpd-color-brand-primary: #135bec;
   --lpd-color-brand-secondary: #4b5563;
-  --lpd-color-brand-energy: #FFD025;
+  --lpd-color-brand-energy: #ffd025;
   --lpd-color-brand-surface: #ffffff;
   --lpd-color-brand-outline: #e2e8f0;
   --lpd-color-border-subtle: #e2e8f0;
-  --lpd-color-innovation-purple: #9333EA;
+  --lpd-color-border-technical: #cbd5e1;
+  --lpd-color-innovation-purple: #9333ea;
 
   /* --- STATE COLORS --- */
-  --lpd-color-status-success: #10B981;
-  --lpd-color-status-error: #EF4444;
-  --lpd-color-status-warning: #FFD025;
+  --lpd-color-status-success: #10b981;
+  --lpd-color-status-error: #ef4444;
+  --lpd-color-status-warning: #ffd025;
   --lpd-color-status-info: #3b82f6;
 
   /* --- NEUTRALS --- */
@@ -38,6 +39,7 @@
   --lpd-color-brand-surface: #181b21;
   --lpd-color-brand-outline: #2d3442;
   --lpd-color-border-subtle: #2d3442;
+  --lpd-color-border-technical: #334155;
   --lpd-color-text-base: #f8fafc;
   --lpd-color-text-muted: #94a3b8;
   --lpd-color-bg-base: #0f1115;

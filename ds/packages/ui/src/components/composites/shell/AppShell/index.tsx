@@ -54,7 +54,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
   return (
     <div
       style={styleTokens as React.CSSProperties}
-      className={`flex h-screen w-full bg-shell-canvas text-slate-900 dark:text-white overflow-hidden font-sans @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
+      className={`flex h-screen w-full bg-shell-canvas text-slate-900 dark:text-white overflow-hidden font-sans text-lpd-sm leading-normal @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
     >
       {/* Accesibilidad: Primer elemento del DOM para navegación por teclado */}
       <a

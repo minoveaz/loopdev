@@ -13,15 +13,52 @@ import {
   GlobalContextPanel,
   MARKETING_STUDIO_SCHEMA,
   SuiteRuntime,
-  Heading,
+  Button,
+  ModuleHeader,
+  ModuleToolbar,
+  ModuleContextPanel,
   type GlobalContextPanelMode,
 } from '@loopdev/ui';
-import type { SuiteConfig } from '@loopdev/contracts';
+import type { NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { useRouter } from 'next/navigation';
 
 type ShowcaseNavMode = 'expanded' | 'rail' | 'hover';
+type CanvasMode = 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed';
+
+const CANVAS_MODES: Array<{ id: CanvasMode; label: string; description: string }> = [
+  {
+    id: 'overview',
+    label: 'Overview',
+    description: 'SuiteHome and summary blocks',
+  },
+  {
+    id: 'data',
+    label: 'Data',
+    description: 'Filters, views, table and pagination',
+  },
+  {
+    id: 'workspace',
+    label: 'Workspace',
+    description: 'Local navigation, tabs and results',
+  },
+  {
+    id: 'split',
+    label: 'Split',
+    description: 'ModuleContextSidebar with SuiteCanvas',
+  },
+  {
+    id: 'board',
+    label: 'Board',
+    description: 'Columns, cards and horizontal flow',
+  },
+  {
+    id: 'full-bleed',
+    label: 'Full-bleed',
+    description: 'Immersive visualisation surface',
+  },
+];
 
 const SHOWCASE_THEME_VARIABLES = [
   '--lpd-color-brand-primary',
@@ -49,24 +86,409 @@ const SHOWCASE_ORGANIZATIONS = [
   },
 ];
 
-const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
-  identity: MARKETING_STUDIO_SCHEMA.suite,
-  navigation: MARKETING_STUDIO_SCHEMA,
-  accessMap: {},
-  modules: [
+const SHOWCASE_NAVIGATION: NavigationSchema = {
+  version: '1.0',
+  suite: MARKETING_STUDIO_SCHEMA.suite,
+  exitHatch: MARKETING_STUDIO_SCHEMA.exitHatch,
+  groups: [
     {
-      moduleId: 'showcase-navigation',
-      label: 'Suite navigation',
-      route: '/shell-showcase',
-      breadcrumbs: ['Shell Showcase'],
-      capabilities: ['sidebar'],
+      id: 'canvas-modes',
+      label: 'Canvas modes',
+      priority: 1,
+      items: CANVAS_MODES.map((mode, index) => ({
+        id: `canvas.${mode.id}`,
+        kind: 'module' as const,
+        moduleId: mode.id,
+        label: mode.label,
+        icon:
+          mode.id === 'overview'
+            ? 'LayoutDashboard'
+            : mode.id === 'data'
+              ? 'Table2'
+              : mode.id === 'workspace'
+                ? 'PanelsTopLeft'
+                : mode.id === 'split'
+                  ? 'Columns3'
+                  : mode.id === 'board'
+                    ? 'KanbanSquare'
+                    : 'Maximize2',
+        priority: index + 1,
+        route: { routeId: `/shell-showcase?canvasMode=${mode.id}` },
+      })),
     },
   ],
 };
 
+const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
+  identity: MARKETING_STUDIO_SCHEMA.suite,
+  navigation: SHOWCASE_NAVIGATION,
+  accessMap: {},
+  modules: CANVAS_MODES.map((mode) => ({
+    moduleId: mode.id,
+    label: mode.label,
+    route: `/shell-showcase?canvasMode=${mode.id}`,
+    breadcrumbs: ['Shell Showcase', mode.label],
+    capabilities: mode.id === 'data' ? ['sidebar', 'toolbar'] : ['sidebar'],
+  })),
+};
+
+function CanvasFixture({ mode }: { mode: CanvasMode }) {
+  if (mode === 'data') {
+    return (
+      <div className="text-lpd-sm flex min-h-full flex-col gap-4 p-4 font-sans leading-normal sm:p-6 lg:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
+              {'{DataFixture}'}
+            </p>
+            <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+              Resource directory
+            </h2>
+          </div>
+          <span className="border-border-technical bg-shell-canvas text-text-muted text-lpd-xs rounded-md border px-3 py-1.5 leading-tight">
+            128 records
+          </span>
+        </div>
+        <div className="border-border-technical bg-background flex flex-wrap gap-3 rounded-lg border p-3">
+          <div className="bg-shell-canvas text-text-muted text-lpd-sm min-w-44 rounded-md border px-3 py-2 leading-normal">
+            Search resources
+          </div>
+          <Button size="sm">Filter</Button>
+          <Button variant="outline" size="sm">
+            Export
+          </Button>
+        </div>
+        <div className="border-border-technical bg-background overflow-hidden rounded-lg border">
+          <div className="border-border-technical text-text-muted text-lpd-xs grid grid-cols-3 gap-4 border-b px-4 py-3 font-medium uppercase leading-tight tracking-wide">
+            <span>Name</span>
+            <span>Status</span>
+            <span>Updated</span>
+          </div>
+          {['Northstar workspace', 'Launch sequence', 'Shared resources'].map((name, index) => (
+            <div
+              key={name}
+              className="border-border-technical text-text-main text-lpd-sm grid grid-cols-3 gap-4 border-b px-4 py-3 leading-normal last:border-b-0"
+            >
+              <span>{name}</span>
+              <span className="text-text-muted">{index === 1 ? 'Review' : 'Ready'}</span>
+              <span className="text-text-muted">Today, 09:{index + 2}0</span>
+            </div>
+          ))}
+        </div>
+        <div className="text-text-muted text-lpd-xs flex flex-wrap items-center justify-between gap-3 leading-tight">
+          <span>Showing 1-3 of 128</span>
+          <div className="flex gap-1" aria-label="Pagination">
+            {['Previous', '1', '2', 'Next'].map((item) => (
+              <Button key={item} variant="outline" size="sm">
+                {item}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === 'workspace') {
+    return (
+      <div className="text-lpd-sm flex min-h-full flex-col font-sans leading-normal">
+        <div className="border-border-technical flex items-center gap-1 overflow-x-auto border-b px-3 pt-2">
+          {['Untitled query', 'Resource audit', 'New document'].map((tab, index) => (
+            <Button
+              key={tab}
+              variant="ghost"
+              size="sm"
+              className={`whitespace-nowrap !rounded-none border-b-2 px-4 ${index === 0 ? 'border-primary bg-background text-text-main' : 'text-text-muted border-transparent'}`}
+            >
+              {tab}
+            </Button>
+          ))}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-lpd-lg !rounded-none px-3 leading-none"
+            aria-label="Create workspace tab"
+          >
+            +
+          </Button>
+        </div>
+        <div className="text-lpd-sm flex flex-1 flex-col gap-4 p-4 font-sans leading-normal sm:p-6 lg:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
+                {'{WorkspaceFixture}'}
+              </p>
+              <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+                Document workspace
+              </h2>
+            </div>
+            <Button size="sm">Run action</Button>
+          </div>
+          <div className="border-border-technical bg-background text-lpd-sm flex min-h-48 flex-1 items-center justify-center rounded-lg border font-mono leading-normal">
+            <span className="text-text-muted">// Main workspace content</span>
+          </div>
+          <div className="border-border-technical text-lpd-sm flex items-center gap-4 border-t pt-3 leading-normal">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="border-primary text-primary !rounded-none border-b-2 pb-2"
+            >
+              Results
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-text-muted !rounded-none border-b-2 border-transparent pb-2"
+            >
+              Chart
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === 'split') {
+    return <SplitModuleFixture />;
+  }
+
+  if (mode === 'board') {
+    return (
+      <div className="text-lpd-sm flex min-h-full flex-col gap-4 p-4 font-sans leading-normal sm:p-6 lg:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
+              {'{BoardFixture}'}
+            </p>
+            <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+              Work queue
+            </h2>
+          </div>
+          <Button size="sm">Add card</Button>
+        </div>
+        <div className="flex min-w-0 gap-4 overflow-x-auto pb-2">
+          {[
+            ['Queued', ['Prepare brief', 'Review access']],
+            ['In progress', ['Build fixture', 'Check responsive']],
+            ['Complete', ['Approve mode']],
+          ].map(([column, cards]) => (
+            <section
+              key={column as string}
+              className="border-border-technical bg-background min-w-64 flex-1 rounded-lg border p-3"
+            >
+              <h2 className="text-text-main text-lpd-sm font-semibold leading-normal">{column}</h2>
+              <div className="mt-3 space-y-2">
+                {(cards as string[]).map((card) => (
+                  <div
+                    key={card}
+                    className="border-border-technical bg-shell-canvas text-lpd-sm rounded-md border p-3 leading-normal"
+                  >
+                    <p className="text-text-main">{card}</p>
+                    <p className="text-text-muted text-lpd-xs mt-2 leading-tight">
+                      Neutral fixture card
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === 'full-bleed') {
+    return (
+      <div className="bg-shell-canvas text-lpd-sm relative min-h-full overflow-hidden font-sans leading-normal">
+        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,hsl(var(--border-technical)/0.35)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border-technical)/0.35)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="relative flex min-h-[28rem] flex-col justify-between p-4 sm:p-6 lg:p-8">
+          <div>
+            <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
+              {'{FullBleedFixture}'}
+            </p>
+            <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+              Immersive canvas
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {['Zoom in', 'Zoom out', 'Reset view'].map((action) => (
+              <Button key={action} variant="outline" size="sm">
+                {action}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="text-lpd-sm flex min-h-full flex-col gap-6 p-4 font-sans leading-normal sm:p-6 lg:p-8">
+      <div>
+        <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
+          {'{OverviewFixture}'}
+        </p>
+        <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+          SuiteHome canvas
+        </h2>
+        <p className="text-text-muted text-lpd-sm mt-2 max-w-2xl leading-normal">
+          A neutral overview surface for summary blocks, activity and suite actions.
+        </p>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {[
+          ['System status', 'All services operational'],
+          ['Active resources', '24 resources in scope'],
+          ['Recent activity', '8 updates this week'],
+        ].map(([label, value]) => (
+          <div key={label} className="border-border-technical bg-background rounded-lg border p-5">
+            <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-wide">
+              {label}
+            </p>
+            <p className="text-text-main text-lpd-lg mt-3 font-semibold leading-tight">{value}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ModuleContextFixture() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Content}'}</p>
+      <p className="text-text-muted text-lpd-sm leading-normal">
+        Context content for the active module.
+      </p>
+    </div>
+  );
+}
+
+function ModuleContextFooterFixture() {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Footer}'}</p>
+      <Button variant="outline" size="sm" className="w-full justify-start">
+        View details
+      </Button>
+      <Button variant="outline" size="sm" className="w-full justify-start">
+        Manage access
+      </Button>
+    </div>
+  );
+}
+
+function ModuleContextPanelFixture() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Content}'}</p>
+      <p className="text-text-muted text-lpd-sm leading-normal">
+        Module-specific details and related actions.
+      </p>
+    </div>
+  );
+}
+
+function ModuleContextPanelFooterFixture() {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Footer}'}</p>
+      <Button size="sm" className="w-full justify-start">
+        Apply changes
+      </Button>
+    </div>
+  );
+}
+
+function SplitModuleFixture() {
+  return (
+    <div className="bg-shell-canvas text-lpd-sm flex h-full min-h-full min-w-0 flex-col font-sans leading-normal">
+      <ModuleHeader
+        segments={[
+          { id: 'suite', label: 'Shell Showcase' },
+          { id: 'module', label: 'Users', isActive: true },
+        ]}
+        statusLabel="Active"
+        statusSeverity="success"
+        rightSlot={
+          <Button variant="outline" size="sm">
+            Module action
+          </Button>
+        }
+      />
+      <ModuleToolbar
+        left={
+          <div className="border-border-technical bg-background text-text-muted flex items-center gap-2 rounded-md border px-3 py-1.5">
+            <span aria-hidden="true">⌕</span>
+            <span>Search users</span>
+          </div>
+        }
+        center={
+          <div className="text-text-muted flex items-center gap-2 text-xs">
+            <Button variant="ghost" size="sm">
+              All columns
+            </Button>
+            <Button variant="ghost" size="sm">
+              Sorted by user ID
+            </Button>
+          </div>
+        }
+        right={<Button size="sm">Add user</Button>}
+      />
+      <div className="border-border-technical flex min-h-0 flex-1 flex-col border-t lg:flex-row">
+        <section
+          className="bg-background min-w-0 flex-1 overflow-auto p-4 sm:p-6"
+          aria-label="SuiteCanvas"
+        >
+          <p className="text-primary text-lpd-xs font-semibold leading-tight tracking-[0.18em]">
+            {'{SuiteCanvas}'}
+          </p>
+          <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">Users</h2>
+          <div className="border-border-technical mt-5 overflow-hidden rounded-lg border">
+            <div className="border-border-technical text-text-muted grid grid-cols-3 gap-4 border-b px-4 py-3 text-xs font-semibold uppercase tracking-wide">
+              <span>Email</span>
+              <span>Status</span>
+              <span>Created</span>
+            </div>
+            {['admin@localhost.com', 'editor@localhost.com', 'viewer@localhost.com'].map(
+              (email) => (
+                <div
+                  key={email}
+                  className="border-border-technical text-text-main grid grid-cols-3 gap-4 border-b px-4 py-4 text-sm last:border-b-0"
+                >
+                  <span>{email}</span>
+                  <span className="text-text-muted">Active</span>
+                  <span className="text-text-muted">Today</span>
+                </div>
+              ),
+            )}
+          </div>
+        </section>
+        <ModuleContextPanel
+          label="ModuleContextPanel"
+          width="standard"
+          footer={<ModuleContextPanelFooterFixture />}
+          className="lg:max-h-none"
+        >
+          <ModuleContextPanelFixture />
+        </ModuleContextPanel>
+      </div>
+    </div>
+  );
+}
+
+function ShowcaseCanvas({ mode }: { mode: CanvasMode }) {
+  return (
+    <main className="bg-shell-canvas text-lpd-sm h-full min-h-full font-sans leading-normal">
+      <CanvasFixture mode={mode} />
+    </main>
+  );
+}
+
 export default function ShellShowcasePage() {
   const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<ShowcaseNavMode>('hover');
+  const [canvasMode, setCanvasMode] = useState<CanvasMode>('overview');
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const currentSuite =
@@ -107,8 +529,26 @@ export default function ShellShowcasePage() {
     <div className={`${activeOrganization?.theme ?? ''} h-full`}>
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
+        activeModuleId={canvasMode}
+        moduleRenderers={Object.fromEntries(
+          CANVAS_MODES.map((mode) => [mode.id, () => <ShowcaseCanvas mode={mode.id} />]),
+        )}
+        moduleContextRenderers={{ split: () => <ModuleContextFixture /> }}
+        moduleContextFooterRenderers={{ split: () => <ModuleContextFooterFixture /> }}
+        moduleContextLabels={{ split: 'ModuleContextSidebar' }}
+        moduleContextWidths={{ split: 'standard' }}
         onNavModeChange={setNavMode}
-        onNavigate={(route) => router.push(route.routeId)}
+        onNavigate={(route) => {
+          const selectedMode = new URL(route.routeId, window.location.origin).searchParams.get(
+            'canvasMode',
+          );
+          if (selectedMode && CANVAS_MODES.some((mode) => mode.id === selectedMode)) {
+            setCanvasMode(selectedMode as CanvasMode);
+            return;
+          }
+
+          router.push(route.routeId);
+        }}
         leftSlot={
           <div className="flex min-w-0 items-center gap-3">
             <BrandLogo variant="isotype" size="sm" className="shrink-0" />
@@ -175,26 +615,17 @@ export default function ShellShowcasePage() {
         appShellProps={{
           config: { activeOverlay: contextMode ? 'context' : null },
         }}
-      >
-        <main className="bg-shell-canvas min-h-full">
-          <section className="flex-1 p-8">
-            <p className="text-text-muted text-xs uppercase tracking-[0.18em]">Shell showcase</p>
-            <Heading as="h1" size="2xl" weight="semibold" className="text-text-main mt-2">
-              Suite navigation
-            </Heading>
-          </section>
-        </main>
-        {contextMode && (
-          <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
-            <GlobalContextPanel
-              mode={contextMode}
-              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-              onClose={() => setContextMode(null)}
-            />
-          </div>
-        )}
-      </SuiteRuntime>
+      />
+      {contextMode && (
+        <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
+          <GlobalContextPanel
+            mode={contextMode}
+            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+            onClose={() => setContextMode(null)}
+          />
+        </div>
+      )}
     </div>
   );
 }

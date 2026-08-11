@@ -8,6 +8,14 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   config,
   activeModuleId,
   moduleRenderers,
+  moduleContextRenderers,
+  moduleContextFooterRenderers,
+  moduleContextLabels,
+  moduleContextWidths,
+  moduleContextPanelRenderers,
+  moduleContextPanelFooterRenderers,
+  moduleContextPanelLabels,
+  moduleContextPanelWidths,
   children,
   leftSlot,
   centerSlot,
@@ -23,6 +31,18 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   const moduleContent = activeModule
     ? (moduleRenderers?.[activeModule.moduleId]?.(activeModule) ?? children)
     : children;
+  const moduleContextContent = activeModule
+    ? moduleContextRenderers?.[activeModule.moduleId]?.(activeModule)
+    : undefined;
+  const moduleContextFooterContent = activeModule
+    ? moduleContextFooterRenderers?.[activeModule.moduleId]?.(activeModule)
+    : undefined;
+  const moduleContextPanelContent = activeModule
+    ? moduleContextPanelRenderers?.[activeModule.moduleId]?.(activeModule)
+    : undefined;
+  const moduleContextPanelFooterContent = activeModule
+    ? moduleContextPanelFooterRenderers?.[activeModule.moduleId]?.(activeModule)
+    : undefined;
 
   return (
     <SuiteShell
@@ -34,6 +54,24 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
       centerSlot={centerSlot}
       rightSlot={rightSlot}
       profileSlot={profileSlot}
+      moduleContextSlot={moduleContextContent}
+      moduleContextFooterSlot={moduleContextFooterContent}
+      moduleContextLabel={
+        activeModule
+          ? (moduleContextLabels?.[activeModule.moduleId] ?? activeModule.label)
+          : undefined
+      }
+      moduleContextWidth={activeModule ? moduleContextWidths?.[activeModule.moduleId] : undefined}
+      moduleContextPanelSlot={moduleContextPanelContent}
+      moduleContextPanelFooterSlot={moduleContextPanelFooterContent}
+      moduleContextPanelLabel={
+        activeModule
+          ? (moduleContextPanelLabels?.[activeModule.moduleId] ?? activeModule.label)
+          : undefined
+      }
+      moduleContextPanelWidth={
+        activeModule ? moduleContextPanelWidths?.[activeModule.moduleId] : undefined
+      }
       platformHeaderProps={platformHeaderProps}
       onNavigate={onNavigate}
       onNavModeChange={onNavModeChange}

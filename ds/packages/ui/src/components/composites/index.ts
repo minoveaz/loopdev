@@ -5,6 +5,8 @@ export * from './shell/SuiteHeader';
 export * from './shell/PlatformHeader';
 export * from './shell/SuiteShell';
 export * from './shell/SuiteRuntime';
+export * from './shell/ModuleContextSidebar';
+export * from './shell/ModuleContextPanel';
 export * from './shell/ModuleShell';
 export * from './shell/SuiteSwitcher';
 export * from './shell/SidebarFooter';
