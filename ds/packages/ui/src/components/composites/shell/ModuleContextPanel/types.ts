@@ -8,5 +8,6 @@ export interface ModuleContextPanelProps {
   footer?: ReactNode;
   label: string;
   width?: ModuleContextPanelWidth;
+  onClose?: () => void;
   className?: string;
 }

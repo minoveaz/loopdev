@@ -7,6 +7,7 @@ const widthClasses = {
   narrow: 'w-48',
   standard: 'w-64',
   wide: 'w-72',
+  'extra-wide': 'w-80',
 } as const;
 
 export const ModuleContextSidebar: React.FC<ModuleContextSidebarProps> = ({

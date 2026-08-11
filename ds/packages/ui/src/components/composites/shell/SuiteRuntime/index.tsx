@@ -3,6 +3,8 @@
 import React from 'react';
 import type { SuiteRuntimeProps } from './types';
 import { SuiteShell } from '../SuiteShell';
+import { SuiteCanvas } from '../../workspace/SuiteCanvas';
+import { ModuleContextPanel } from '../ModuleContextPanel';
 
 export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   config,
@@ -16,6 +18,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   moduleContextPanelFooterRenderers,
   moduleContextPanelLabels,
   moduleContextPanelWidths,
+  moduleContextPanelOnClose,
   children,
   leftSlot,
   centerSlot,
@@ -25,6 +28,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   onNavigate,
   onNavModeChange,
   appShellProps,
+  canvasProps,
 }) => {
   const activeModule =
     config.modules.find((module) => module.moduleId === activeModuleId) ?? config.modules[0];
@@ -62,22 +66,34 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
           : undefined
       }
       moduleContextWidth={activeModule ? moduleContextWidths?.[activeModule.moduleId] : undefined}
-      moduleContextPanelSlot={moduleContextPanelContent}
-      moduleContextPanelFooterSlot={moduleContextPanelFooterContent}
-      moduleContextPanelLabel={
-        activeModule
-          ? (moduleContextPanelLabels?.[activeModule.moduleId] ?? activeModule.label)
-          : undefined
-      }
-      moduleContextPanelWidth={
-        activeModule ? moduleContextPanelWidths?.[activeModule.moduleId] : undefined
-      }
       platformHeaderProps={platformHeaderProps}
       onNavigate={onNavigate}
       onNavModeChange={onNavModeChange}
       appShellProps={appShellProps}
     >
-      {moduleContent}
+      <SuiteCanvas
+        {...canvasProps}
+        aside={
+          moduleContextPanelContent ? (
+            <ModuleContextPanel
+              label={
+                activeModule
+                  ? (moduleContextPanelLabels?.[activeModule.moduleId] ?? activeModule.label)
+                  : 'Module context'
+              }
+              width={activeModule ? moduleContextPanelWidths?.[activeModule.moduleId] : undefined}
+              onClose={moduleContextPanelOnClose}
+              footer={moduleContextPanelFooterContent}
+            >
+              {moduleContextPanelContent}
+            </ModuleContextPanel>
+          ) : (
+            canvasProps?.aside
+          )
+        }
+      >
+        {moduleContent}
+      </SuiteCanvas>
     </SuiteShell>
   );
 };

@@ -4,6 +4,7 @@ import type { NavMode, NavRouteRef } from '@loopdev/contracts';
 import type { SuiteShellProps } from '../SuiteShell/types';
 import type { ModuleContextSidebarWidth } from '../ModuleContextSidebar';
 import type { ModuleContextPanelWidth } from '../ModuleContextPanel';
+import type { SuiteCanvasProps } from '../../workspace/SuiteCanvas';
 
 export type SuiteModuleRenderer = (module: ModuleConfig) => ReactNode;
 export type SuiteModuleContextRenderer = (module: ModuleConfig) => ReactNode;
@@ -23,6 +24,7 @@ export interface SuiteRuntimeProps {
   moduleContextPanelFooterRenderers?: Record<string, SuiteModuleContextPanelFooterRenderer>;
   moduleContextPanelLabels?: Partial<Record<string, string>>;
   moduleContextPanelWidths?: Partial<Record<string, ModuleContextPanelWidth>>;
+  moduleContextPanelOnClose?: () => void;
   children?: ReactNode;
   leftSlot: ReactNode;
   centerSlot: ReactNode;
@@ -32,4 +34,5 @@ export interface SuiteRuntimeProps {
   onNavigate: (route: NavRouteRef) => void;
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   appShellProps?: SuiteShellProps['appShellProps'];
+  canvasProps?: Omit<SuiteCanvasProps, 'children'>;
 }

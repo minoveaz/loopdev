@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { ModuleContextPanel } from './index';
 
 describe('ModuleContextPanel', () => {
@@ -25,5 +25,28 @@ describe('ModuleContextPanel', () => {
     expect(panel).toHaveClass('w-80', 'border-l');
     expect(panel.className).not.toMatch(/rounded/);
     expect(screen.getByText('Panel actions').parentElement).toHaveClass('border-t');
+  });
+
+  it('supports an extra-wide inspector for dense record details', () => {
+    render(
+      <ModuleContextPanel label="Record details" width="extra-wide">
+        <div>Details</div>
+      </ModuleContextPanel>,
+    );
+
+    expect(screen.getByTestId('module-context-panel')).toHaveClass('w-[26rem]');
+  });
+
+  it('renders an accessible close action when provided', () => {
+    const onClose = vi.fn();
+
+    render(
+      <ModuleContextPanel label="Record details" onClose={onClose}>
+        <div>Details</div>
+      </ModuleContextPanel>,
+    );
+
+    screen.getByRole('button', { name: 'Close Record details' }).click();
+    expect(onClose).toHaveBeenCalledOnce();
   });
 });
