@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import type { NavMode } from '@loopdev/contracts';
 
 type LayoutContext = 'normal' | 'focus' | 'inmersive';
 type LayoutDensity = 'comfortable' | 'compact';
@@ -30,6 +31,8 @@ export interface AppShellProps {
     showScrollbars?: boolean;
     /** Comportamiento de la navegación: auto (basado en contexto), always (siempre visible), hidden (forzar oculto) */
     navBehavior?: 'auto' | 'always' | 'hidden';
+    /** Preferencia visual del sidebar: expandido, rail o expansión al hover */
+    navigationMode?: Exclude<NavMode, 'hidden'>;
     /** Comportamiento del panel de contexto */
     contextBehavior?: 'auto' | 'hidden';
     /** Determina qué panel tiene prioridad en modo overlay (mobile) */

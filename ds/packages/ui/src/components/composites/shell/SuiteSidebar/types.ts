@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import {
   NavigationSchema,
   NavMode,
@@ -28,17 +27,10 @@ export interface SuiteSidebarProps {
   accessMap: AccessMap;
   /** Mapa de telemetría para badges */
   telemetry?: TelemetryMap;
-  /** Slot opcional para el perfil de usuario en el footer */
-  profileSlot?: ReactNode;
-
-  /** Callback para volver al Launchpad (OS) */
-  onExitToOS: () => void;
-  /** Callback para alternar entre Rail y Expanded */
-  onToggleNavMode: () => void;
+  /** Callback para seleccionar Expanded, Collapsed o Expand on hover */
+  onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   /** Callback genérico de navegación */
   onNavigate: (route: NavRouteRef) => void;
-  /** Callback para acciones personalizadas (ej: abrir búsqueda) */
-  onAction?: (actionId: string) => void;
 
   /** Clase CSS adicional */
   className?: string;

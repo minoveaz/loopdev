@@ -26,7 +26,7 @@ export const useTechnicalDropdown = () => {
         ? 'bg-[var(--lpd-color-bg-primary-subtle)] text-primary'
         : disabled
           ? 'opacity-40 grayscale cursor-not-allowed'
-          : 'text-slate-600 dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/10 hover:text-accent cursor-pointer'
+          : 'text-slate-600 dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/15 hover:!text-accent dark:hover:!text-accent cursor-pointer'
       }
       ${className}
     `.replace(/\s+/g, ' ').trim();

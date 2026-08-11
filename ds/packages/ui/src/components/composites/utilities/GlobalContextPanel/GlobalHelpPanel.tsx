@@ -15,7 +15,7 @@ export function GlobalHelpPanel({ children }: GlobalHelpPanelProps) {
       {children ?? (
         <div className="flex flex-col gap-2 p-4">
           {HELP_OPTIONS.map((item) => (
-            <button key={item} type="button" className="border-border-technical text-text-main hover:bg-accent/10 hover:text-accent flex items-center justify-between rounded-md border px-3 py-3 text-left text-xs transition-colors dark:text-white">
+            <button key={item} type="button" className="border-border-technical text-text-main hover:bg-accent/10 hover:text-accent dark:hover:text-accent flex items-center justify-between rounded-md border px-3 py-3 text-left text-xs transition-colors dark:text-white dark:hover:bg-accent/15">
               {item}
               <span aria-hidden="true">→</span>
             </button>

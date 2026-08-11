@@ -42,8 +42,8 @@ const config: Config = {
           vivid: '#f43f5e',
         },
         accent: {
-          DEFAULT: '#F59E0B', // Amber 500
-          hover: '#D97706', // Amber 600
+          DEFAULT: 'rgb(var(--lpd-color-brand-secondary-rgb, 255 208 37) / <alpha-value>)',
+          hover: 'rgb(var(--lpd-color-brand-secondary-rgb, 255 208 37) / <alpha-value>)',
         },
         energy: {
           DEFAULT: '#F59E0B', // Amber 500

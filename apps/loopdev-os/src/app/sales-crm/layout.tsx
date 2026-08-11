@@ -10,7 +10,6 @@ import {
   ModuleWorkspace,
   SuiteSidebar,
   ThemeToggle,
-  UserAvatar,
   SuiteHeader,
   CommandBarTrigger,
   SuiteSwitcher,
@@ -164,7 +163,7 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
     setSyncedNotifications([]);
   };
 
-  const [navMode, setNavMode] = useState<NavMode>('expanded');
+  const [navMode, setNavMode] = useState<NavMode>('hover');
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
@@ -214,22 +213,11 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
           <SuiteSidebar
             schema={SALES_CRM_SCHEMA}
             navMode={navMode}
+            onNavModeChange={setNavMode}
             context={context}
             activeModuleId={activeModuleId}
             accessMap={accessMap}
-            onExitToOS={() => router.push('/launchpad')}
             onNavigate={(route) => router.push(route.routeId)}
-            onToggleNavMode={() =>
-              setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))
-            }
-            profileSlot={
-              <UserAvatar
-                name={isMounted ? user?.email || 'Sales Manager' : 'Sales Manager'}
-                size={navMode === 'rail' ? 'md' : 'sm'}
-                withStatus
-                status="online"
-              />
-            }
           />
         }
         headerSlot={

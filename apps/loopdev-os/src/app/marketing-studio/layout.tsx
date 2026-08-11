@@ -31,7 +31,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } =
     useNotifications(NOTIFICATION_CENTER_FIXTURES.recent);
 
-  const [navMode, setNavMode] = useState<NavMode>('expanded');
+  const [navMode, setNavMode] = useState<NavMode>('hover');
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
   useEffect(() => {
@@ -76,12 +76,11 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <SuiteShell
         schema={MARKETING_STUDIO_SCHEMA}
         navMode={navMode}
+        onNavModeChange={setNavMode}
         activeModuleId={activeModuleId}
         accessMap={accessMap}
         context={context}
-        onExitToOS={() => router.push('/launchpad')}
         onNavigate={(route) => router.push(route.routeId)}
-        onToggleNavMode={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
         leftSlot={
           <SuiteSwitcher
             currentSuite={currentSuite}

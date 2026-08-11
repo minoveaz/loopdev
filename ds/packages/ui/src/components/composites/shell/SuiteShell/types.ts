@@ -29,10 +29,8 @@ export interface SuiteShellProps {
     onNavigate: (item: MobileSuiteNavItem) => void;
     onOpenNavigation?: () => void;
   };
-  onExitToOS: () => void;
   onNavigate: (route: NavRouteRef) => void;
-  onToggleNavMode: () => void;
-  onAction?: (actionId: string) => void;
+  onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   isHeaderInert?: boolean;
   appShellProps?: Pick<
     AppShellProps,

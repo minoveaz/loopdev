@@ -44,6 +44,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     isNavOpen,
     isContextOpen,
     navMode,
+    navigationMode,
     scrollbarClass,
     activeOverlay,
   } = useAppShell(props);
@@ -86,13 +87,14 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
         <nav
           id="app-shell-nav"
           aria-label="Global Navigation"
-          className={`
+          className={`group/sidebar-nav
             flex-shrink-0 border-r border-black/5 dark:border-white/5 bg-white dark:bg-background-dark transition-all duration-300 
-            overflow-hidden 
+            overflow-hidden
+            ${navigationMode === 'hover' ? '@lg:overflow-visible' : ''}
             fixed inset-y-0 left-0 shadow-2xl z-[100]
             ${isMobileNavVisible ? 'translate-x-0' : '-translate-x-full'}
             @lg:relative @lg:translate-x-0 @lg:shadow-none @lg:z-10
-            ${navMode === 'rail' ? 'select-none' : ''}
+            ${navMode === 'rail' || navigationMode === 'hover' ? 'select-none' : ''}
           `}
           style={{
             width: isMobileViewport ? 'min(82vw, 320px)' : 'var(--app-shell-nav-width)',
@@ -100,7 +102,7 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
           }}
         >
           <div
-            className={`h-full flex flex-col overflow-y-auto ${scrollbarClass} overflow-x-hidden`}
+            className={`h-full flex flex-col overflow-y-auto ${scrollbarClass} ${navigationMode === 'hover' ? '@lg:overflow-visible' : 'overflow-x-hidden'}`}
           >
             {navSlot}
           </div>

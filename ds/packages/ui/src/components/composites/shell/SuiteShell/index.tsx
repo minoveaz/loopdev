@@ -20,10 +20,8 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
   profileSlot,
   platformHeaderProps,
   mobileNavigation,
-  onExitToOS,
   onNavigate,
-  onToggleNavMode,
-  onAction,
+  onNavModeChange,
   isHeaderInert = false,
   appShellProps,
   children,
@@ -44,6 +42,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
       config={{
         ...appShellProps?.config,
         isLeftSidebarOpen: navMode === 'expanded',
+        navigationMode: navMode === 'hover' ? 'hover' : navMode === 'rail' ? 'rail' : 'expanded',
         navBehavior: navMode === 'hidden' ? 'hidden' : 'auto',
         context: context,
       }}
@@ -56,11 +55,8 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
           activeModuleId={activeModuleId}
           accessMap={accessMap}
           telemetry={telemetry}
-          profileSlot={profileSlot}
-          onExitToOS={onExitToOS}
           onNavigate={onNavigate}
-          onToggleNavMode={onToggleNavMode}
-          onAction={onAction}
+          onNavModeChange={onNavModeChange}
         />
       }
       headerSlot={

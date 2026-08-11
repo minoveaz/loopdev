@@ -15,4 +15,21 @@ describe('BrandLogo', () => {
     expect(screen.getByText('loop.dev')).toBeInTheDocument();
     expect(container.querySelector('svg')).not.toBeInTheDocument();
   });
+
+  it('keeps the corporate blue independent from the active organization theme', () => {
+    const { container } = render(<BrandLogo variant="full" />);
+    const isotype = container.firstElementChild?.firstElementChild;
+    const path = container.querySelector('path');
+    const logotype = screen.getByText('loop.dev').parentElement;
+
+    expect(isotype).toHaveClass('bg-[#135bec]');
+    expect(path).toHaveClass('text-white');
+    expect(logotype).toHaveClass('text-[#135bec]');
+  });
+
+  it('keeps the plain logo blue without hover or accent theme colors', () => {
+    const { container } = render(<BrandLogo variant="isotype" surface="plain" />);
+
+    expect(container.querySelector('path')).toHaveClass('text-[#135bec]');
+  });
 });

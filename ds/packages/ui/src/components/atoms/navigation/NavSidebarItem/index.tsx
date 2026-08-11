@@ -19,6 +19,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
   const { icon, label, accentColor, telemetry } = props;
   const { 
     isRail, 
+    revealOnHover,
     isActive, 
     isDisabled, 
     isComingSoon,
@@ -61,6 +62,11 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
           {label}
         </span>
       )}
+      {isRail && revealOnHover && (
+        <span data-sidebar-label className="pointer-events-none absolute left-12 top-1/2 z-50 hidden -translate-y-1/2 whitespace-nowrap rounded-md border border-border-technical bg-surface-light px-3 py-2 text-sm font-medium text-text-main shadow-lg dark:bg-surface-dark dark:text-white">
+          {label}
+        </span>
+      )}
 
       {/* 4. Momentum Dot (Contexto Vivo - Solo en Expanded) */}
       {isActive && !isRail && (
@@ -89,7 +95,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
   // Si estamos en Rail, envolvemos en el Tooltip Técnico
   if (isRail && technicalTooltip) {
     return (
-      <TechnicalTooltip content={technicalTooltip} side="right">
+      <TechnicalTooltip content={technicalTooltip} side="right" variant="popover" delayDuration={100}>
         {ItemContent}
       </TechnicalTooltip>
     );

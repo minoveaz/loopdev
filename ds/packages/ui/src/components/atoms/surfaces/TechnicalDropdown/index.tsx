@@ -95,7 +95,7 @@ export const TechnicalDropdownSubmenu: React.FC<TechnicalDropdownSubmenuProps> =
     <DropdownMenu.Sub>
       <DropdownMenu.SubTrigger
         disabled={disabled}
-        className="dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/10 hover:text-accent flex min-h-9 items-center gap-2.5 rounded-sm px-3 py-2 text-[13px] font-normal text-slate-600 outline-none transition-colors duration-150 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40"
+        className="dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/15 hover:!text-accent dark:hover:!text-accent flex min-h-9 items-center gap-2.5 rounded-sm px-3 py-2 text-[13px] font-normal text-slate-600 outline-none transition-colors duration-150 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40"
       >
         <span className="min-w-0 flex-1 truncate">{label}</span>
         <ChevronRight size={14} className="shrink-0" aria-hidden="true" />

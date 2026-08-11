@@ -18,7 +18,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = (props) => {
   const infinityPath = "M31.5,50c-8.5,0-15.5-7-15.5-15.5S23,19,31.5,19c5.2,0,9.8,2.5,12.5,6.5L56,43.5c2.7,4,7.3,6.5,12.5,6.5c8.5,0,15.5-7,15.5-15.5S77,19,68.5,19c-5.2,0-9.8,2.5-12.5,6.5L44,43.5C41.3,47.5,36.7,50,31.5,50z";
 
   const Isotype = (
-    <div className={`${currentSize.box} ${surface === 'solid' ? 'bg-primary shadow-lg shadow-primary/20 overflow-hidden' : ''} flex items-center justify-center relative shrink-0`}>
+    <div className={`${currentSize.box} ${surface === 'solid' ? 'bg-[#135bec] shadow-[0_10px_20px_rgba(19,91,236,0.2)] overflow-hidden' : ''} flex items-center justify-center relative shrink-0`}>
       {surface === 'solid' && (
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4px_4px]"></div>
       )}
@@ -33,7 +33,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = (props) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d={infinityPath} className={`${surface === 'solid' ? 'text-white' : 'text-text-muted group-hover:text-accent'} ${isotypeClassName}`} stroke="currentColor" />
+        <path d={infinityPath} className={`${surface === 'solid' ? 'text-white' : 'text-[#135bec]'} ${isotypeClassName}`} stroke="currentColor" />
       </svg>
     </div>
   );

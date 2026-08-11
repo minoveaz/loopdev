@@ -16,7 +16,7 @@ export const useTechnicalMenuItem = (props: TechnicalMenuItemProps) => {
   const variantMap: Record<MenuItemVariant, string> = {
     default: isActive 
       ? 'bg-[var(--lpd-color-bg-primary-subtle)] text-primary'
-      : 'text-slate-600 dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/10 hover:text-accent',
+      : 'text-slate-600 dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/15 hover:!text-accent dark:hover:!text-accent',
     danger: 'text-danger hover:bg-danger/[0.04] hover:text-danger-vivid'
   };
 

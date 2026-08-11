@@ -54,7 +54,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = (props) => 
       onOpenChange={handleOpenChange}
       className="w-full max-w-sm p-0 overflow-hidden bg-white dark:bg-surface-elevated shadow-2xl border-none" 
       trigger={
-        <button className={`relative flex h-9 w-9 items-center justify-center rounded-full border transition-all group ${unreadCount > 0 ? 'border-red-400 hover:border-red-500 hover:bg-red-50 dark:border-red-500/40 dark:hover:border-red-400 dark:hover:bg-red-500/10' : 'border-black/10 hover:border-accent/50 hover:bg-accent/5 dark:border-white/10 dark:hover:border-accent/50 dark:hover:bg-accent/10'}`} aria-label="Abrir centro de notificaciones">
+        <button className={`relative flex h-9 w-9 items-center justify-center rounded-full border transition-all group ${unreadCount > 0 ? 'border-red-400 hover:border-red-500 hover:bg-red-50 dark:border-red-500/40 dark:hover:border-red-400 dark:hover:bg-red-500/10' : 'border-black/10 hover:border-accent/50 hover:bg-accent/10 dark:border-white/10 dark:hover:border-accent/50 dark:hover:bg-accent/15'}`} aria-label="Abrir centro de notificaciones">
           <Lightbulb size={16} className={`${unreadCount > 0 ? 'text-danger group-hover:text-danger' : 'text-text-muted group-hover:text-accent'} transition-colors`} />
           {unreadCount > 0 && (
             <div className={badgeClasses}>

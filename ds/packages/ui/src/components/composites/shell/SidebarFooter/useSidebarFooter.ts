@@ -9,18 +9,14 @@ export const useSidebarFooter = (props: SidebarFooterProps) => {
 
   // 1. Contenedor Principal (Cierre Semántico)
   const containerClasses = `
-    shrink-0 mt-auto p-4 border-t-[0.5px] border-black/5 dark:border-white/10
-    bg-black/[0.01] dark:bg-white/[0.01] flex flex-col gap-5
+    shrink-0 mt-auto p-2 border-t-[0.5px] border-black/5 dark:border-white/10
+    bg-black/[0.01] dark:bg-white/[0.01] flex flex-col gap-2
     ${className}
   `.replace(/\s+/g, ' ').trim();
 
   // 2. Bloque de Consola Técnica (Congruencia Visual)
   const consoleClasses = `
-    flex items-center gap-2
-    ${isRail 
-      ? 'flex-col' 
-      : 'justify-between bg-black/5 dark:bg-white/5 p-1.5 rounded-xl border border-black/5 dark:border-white/5'
-    }
+    flex items-center justify-start gap-2
   `.replace(/\s+/g, ' ').trim();
 
   // 3. Estilo de Botón Técnico (Unificado)

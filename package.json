@@ -11,6 +11,8 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "vitest run --config vitest.config.ts",
+    "test:shell": "node scripts/check-shell.mjs",
+    "test:shell:changed": "node scripts/check-shell.mjs --changed-only",
     "test:coverage": "vitest run --config vitest.config.ts --coverage",
     "e2e:desktop": "playwright test --project=desktop",
     "e2e:mobile:diagnostic": "playwright test --project=mobile --project=mobile-compact --reporter=line",

@@ -12,14 +12,19 @@ import {
   UserMenu,
   AVAILABLE_SUITES_FIXTURES,
   GlobalContextPanel,
+  MARKETING_STUDIO_SCHEMA,
+  SuiteSidebar,
   type GlobalContextPanelMode,
 } from '@loopdev/ui';
 import { useOrganization } from '@/hooks/useOrganization';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { useRouter } from 'next/navigation';
 
+type ShowcaseNavMode = 'expanded' | 'rail' | 'hover';
+
 export default function ShellShowcasePage() {
   const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
+  const [navMode, setNavMode] = useState<ShowcaseNavMode>('hover');
   const router = useRouter();
   const currentSuite = AVAILABLE_SUITES_FIXTURES.find(
     (suite) => suite.suiteId === 'salesCRM',
@@ -69,7 +74,7 @@ export default function ShellShowcasePage() {
                   }
 
                   const suite = AVAILABLE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
-                  router.push(suite?.route.routeId ?? '/launchpad');
+                  router.push(suite?.route?.routeId ?? '/launchpad');
                 }}
               />
             </div>
@@ -102,6 +107,22 @@ export default function ShellShowcasePage() {
             />
           }
         />
+      </div>
+      <div className="group/sidebar-nav flex min-h-[calc(100vh-var(--lpd-space-14))]">
+        <div className={`${navMode === 'expanded' ? 'w-64' : 'w-16'} relative sidebar-hover-host h-[calc(100vh-var(--lpd-space-14))] shrink-0`}>
+          <SuiteSidebar
+            schema={MARKETING_STUDIO_SCHEMA}
+            navMode={navMode}
+            className={navMode === 'hover' ? 'absolute inset-y-0 left-0 z-40' : undefined}
+            accessMap={{}}
+            onNavModeChange={setNavMode}
+            onNavigate={(route) => router.push(route.routeId)}
+          />
+        </div>
+        <section className="flex-1 p-8">
+          <p className="text-text-muted text-xs uppercase tracking-[0.18em]">Shell showcase</p>
+          <h1 className="text-text-main mt-2 text-2xl font-semibold">Suite navigation</h1>
+        </section>
       </div>
       {contextMode && (
         <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
