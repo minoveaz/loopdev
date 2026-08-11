@@ -71,7 +71,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
             label="Suite Dashboard"
             isRail={renderAsRail}
             revealOnHover={shouldExpandOnHover}
-            isActive
+            isActive={!activeModuleId}
             onNavigate={onNavigate}
             route={suite.route || { routeId: '/' }}
             accentColor={suite.accentColor}

@@ -3,25 +3,24 @@
 import { useEffect, useState } from 'react';
 
 import {
+  AVAILABLE_SUITES_FIXTURES,
   BrandLogo,
   CommandBarTrigger,
+  GlobalContextPanel,
+  Heading,
   NOTIFICATION_CENTER_FIXTURES,
   OrganizationSwitcher,
+  SuiteRuntime,
   SuiteSwitcher,
   UserMenu,
-  AVAILABLE_SUITES_FIXTURES,
-  GlobalContextPanel,
-  MARKETING_STUDIO_SCHEMA,
-  SuiteRuntime,
-  Heading,
   type GlobalContextPanelMode,
 } from '@loopdev/ui';
-import type { SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
-import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { useRouter } from 'next/navigation';
+import { OPERATION_OS_CONFIG } from '@/suites/operation-os/config';
+import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 
-type ShowcaseNavMode = 'expanded' | 'rail' | 'hover';
+type OperationNavMode = 'expanded' | 'rail' | 'hover';
 
 const SHOWCASE_THEME_VARIABLES = [
   '--lpd-color-brand-primary',
@@ -49,29 +48,12 @@ const SHOWCASE_ORGANIZATIONS = [
   },
 ];
 
-const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
-  identity: MARKETING_STUDIO_SCHEMA.suite,
-  navigation: MARKETING_STUDIO_SCHEMA,
-  accessMap: {},
-  modules: [
-    {
-      moduleId: 'showcase-navigation',
-      label: 'Suite navigation',
-      route: '/shell-showcase',
-      breadcrumbs: ['Shell Showcase'],
-      capabilities: ['sidebar'],
-    },
-  ],
-};
-
-export default function ShellShowcasePage() {
+export default function OperationOsPage() {
   const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
-  const [navMode, setNavMode] = useState<ShowcaseNavMode>('hover');
+  const [navMode, setNavMode] = useState<OperationNavMode>('hover');
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
-  const currentSuite =
-    AVAILABLE_SUITES_FIXTURES.find((suite) => suite.suiteId === 'salesCRM') ??
-    AVAILABLE_SUITES_FIXTURES[0];
+  const availableSuites = [...AVAILABLE_SUITES_FIXTURES, OPERATION_OS_CONFIG.identity];
   const activeOrganization = SHOWCASE_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
 
   useEffect(() => {
@@ -106,7 +88,7 @@ export default function ShellShowcasePage() {
   return (
     <div className={`${activeOrganization?.theme ?? ''} h-full`}>
       <SuiteRuntime
-        config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
+        config={{ ...OPERATION_OS_CONFIG, navMode }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => router.push(route.routeId)}
         leftSlot={
@@ -130,16 +112,11 @@ export default function ShellShowcasePage() {
                 |
               </span>
               <SuiteSwitcher
-                currentSuite={currentSuite}
-                availableSuites={AVAILABLE_SUITES_FIXTURES}
+                currentSuite={OPERATION_OS_CONFIG.identity}
+                availableSuites={availableSuites}
                 showIcon={false}
                 onSuiteChange={(suiteId) => {
-                  if (suiteId === 'os.home') {
-                    router.push('/launchpad');
-                    return;
-                  }
-
-                  const suite = AVAILABLE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
+                  const suite = availableSuites.find((item) => item.suiteId === suiteId);
                   router.push(suite?.route?.routeId ?? '/launchpad');
                 }}
               />
@@ -159,9 +136,9 @@ export default function ShellShowcasePage() {
         profileSlot={
           <UserMenu
             userName="Alex Morgan"
-            userEmail="showcase@loopdev.local"
+            userEmail="operations@loopdev.local"
             userRole="Tenant_Admin"
-            tenantName="Showcase Workspace"
+            tenantName="Operation Workspace"
             userSrc="https://i.pravatar.cc/64?img=12"
             timezoneOptions={[
               { label: 'Auto detect', isActive: true },
@@ -178,10 +155,13 @@ export default function ShellShowcasePage() {
       >
         <main className="bg-shell-canvas min-h-full">
           <section className="flex-1 p-8">
-            <p className="text-text-muted text-xs uppercase tracking-[0.18em]">Shell showcase</p>
+            <p className="text-text-muted text-xs uppercase tracking-[0.18em]">Operation OS</p>
             <Heading as="h1" size="2xl" weight="semibold" className="text-text-main mt-2">
-              Suite navigation
+              Operational overview
             </Heading>
+            <p className="text-text-muted mt-3 max-w-2xl text-sm">
+              This suite is mounted from its own SuiteConfig using the canonical Showcase shell.
+            </p>
           </section>
         </main>
         {contextMode && (

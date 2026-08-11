@@ -121,15 +121,42 @@ describe('SuiteSidebar', () => {
         />,
       );
 
-      expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).toHaveAttribute('aria-current', 'page');
+      expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    });
+
+    it('marca solo el módulo activo cuando la suite está dentro de un módulo', () => {
+      render(
+        <SuiteSidebar
+          schema={MARKETING_STUDIO_SCHEMA}
+          navMode="expanded"
+          activeModuleId="brand-hub"
+          accessMap={{}}
+          onNavigate={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).not.toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+      expect(screen.getByRole('menuitem', { name: 'Brand Hub' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
     });
   });
 
   describe('accesibilidad', () => {
-    it.each(['expanded', 'rail', 'hover'] as const)('no tiene violaciones en modo %s', async (navMode) => {
-      const { container } = renderSidebar(navMode);
-      expect(await axe(container)).toHaveNoViolations();
-    });
+    it.each(['expanded', 'rail', 'hover'] as const)(
+      'no tiene violaciones en modo %s',
+      async (navMode) => {
+        const { container } = renderSidebar(navMode);
+        expect(await axe(container)).toHaveNoViolations();
+      },
+    );
   });
 
   it('renders the suite context and hides modules with hidden access', () => {

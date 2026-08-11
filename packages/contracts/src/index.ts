@@ -8,6 +8,7 @@ export * from './brands/version';
 
 // Export Platform Navigation Contracts
 export * from './platform/navigation';
+export * from './platform/shell';
 export * from './platform/tenancy';
 export * from './platform/home';
 
