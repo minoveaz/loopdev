@@ -12,7 +12,7 @@ import { useBrandLogo } from './useBrandLogo';
  * @phase 1
  */
 export const BrandLogo: React.FC<BrandLogoProps> = (props) => {
-  const { variant, surface, currentSize, containerClasses, textClasses } = useBrandLogo(props);
+  const { variant, surface, currentSize, containerClasses, textClasses, isotypeClassName } = useBrandLogo(props);
 
   // Path oficial del infinito LoopDev (extraído del sistema generativo)
   const infinityPath = "M31.5,50c-8.5,0-15.5-7-15.5-15.5S23,19,31.5,19c5.2,0,9.8,2.5,12.5,6.5L56,43.5c2.7,4,7.3,6.5,12.5,6.5c8.5,0,15.5-7,15.5-15.5S77,19,68.5,19c-5.2,0-9.8,2.5-12.5,6.5L44,43.5C41.3,47.5,36.7,50,31.5,50z";
@@ -33,7 +33,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = (props) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d={infinityPath} className={surface === 'solid' ? 'text-white' : 'text-text-muted group-hover:text-accent'} stroke="currentColor" />
+        <path d={infinityPath} className={`${surface === 'solid' ? 'text-white' : 'text-text-muted group-hover:text-accent'} ${isotypeClassName}`} stroke="currentColor" />
       </svg>
     </div>
   );

@@ -34,6 +34,7 @@ export * from './navigation/OrganizationSwitcher';
 // utilities
 
 export * from './utilities/NotificationCenter';
+export * from './utilities/GlobalContextPanel';
 
 export * from './utilities/QuickActionMenu';
 

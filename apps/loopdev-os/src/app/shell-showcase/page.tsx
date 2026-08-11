@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import {
   BrandLogo,
   CommandBarTrigger,
@@ -9,12 +11,15 @@ import {
   SuiteSwitcher,
   UserMenu,
   AVAILABLE_SUITES_FIXTURES,
+  GlobalContextPanel,
+  type GlobalContextPanelMode,
 } from '@loopdev/ui';
 import { useOrganization } from '@/hooks/useOrganization';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { useRouter } from 'next/navigation';
 
 export default function ShellShowcasePage() {
+  const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
   const router = useRouter();
   const currentSuite = AVAILABLE_SUITES_FIXTURES.find(
     (suite) => suite.suiteId === 'salesCRM',
@@ -70,10 +75,16 @@ export default function ShellShowcasePage() {
             </div>
           }
           searchSlot={<CommandBarTrigger className="w-full" onOpen={() => undefined} />}
-          controlsSlot={<PlatformHeaderControls
-            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-          />}
+          controlsSlot={
+            <PlatformHeaderControls
+              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+              activeContext={contextMode}
+              onOpenNotifications={() => setContextMode('notifications')}
+              onOpenHelp={() => setContextMode('help')}
+              onOpenAI={() => setContextMode('assistant')}
+            />
+          }
           profileSlot={
             <UserMenu
               userName="Alex Morgan"
@@ -92,6 +103,16 @@ export default function ShellShowcasePage() {
           }
         />
       </div>
+      {contextMode && (
+        <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
+          <GlobalContextPanel
+            mode={contextMode}
+            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+            onClose={() => setContextMode(null)}
+          />
+        </div>
+      )}
     </main>
   );
 }

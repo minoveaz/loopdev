@@ -6,6 +6,7 @@ export const useBrandLogo = (props: BrandLogoProps) => {
     surface = 'solid',
     size = 'md', 
     className = '',
+    isotypeClassName = '',
     colorMode 
   } = props;
 
@@ -36,6 +37,7 @@ export const useBrandLogo = (props: BrandLogoProps) => {
     variant,
     surface,
     currentSize,
+    isotypeClassName,
     containerClasses,
     textClasses
   };

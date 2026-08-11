@@ -10,6 +10,8 @@ export interface BrandLogoProps {
   size?: BrandLogoSize;
   /** Clase CSS adicional */
   className?: string;
+  /** Clase CSS adicional para el isotipo SVG */
+  isotypeClassName?: string;
   /** Forzar un modo de color específico (opcional) */
   colorMode?: 'light' | 'dark';
 }
