@@ -4,7 +4,7 @@
  * Define la estructura de datos que deben seguir todas las suites (Marketing, CRM, etc).
  */
 
-export type NavMode = 'expanded' | 'rail' | 'hidden';
+export type NavMode = 'expanded' | 'rail' | 'hover' | 'hidden';
 export type LayoutContext = 'normal' | 'focus' | 'inmersive';
 
 export type ModuleAccessState = 'enabled' | 'disabled' | 'hidden' | 'coming-soon';

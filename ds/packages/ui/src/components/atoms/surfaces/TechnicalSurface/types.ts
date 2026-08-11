@@ -23,4 +23,6 @@ export interface TechnicalSurfaceProps {
   children?: ReactNode;
   /** Propagar eventos de clic si es necesario */
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }

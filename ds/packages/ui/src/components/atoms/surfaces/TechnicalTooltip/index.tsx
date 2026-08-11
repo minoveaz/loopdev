@@ -13,7 +13,7 @@ import { useTechnicalTooltip } from './useTechnicalTooltip';
  * @phase 1
  */
 export const TechnicalTooltip: React.FC<TechnicalTooltipProps> = (props) => {
-  const { children, content, side = 'right', align = 'center', open } = props;
+  const { children, content, side = 'right', align = 'center', open, variant = 'technical' } = props;
   const { contentClasses, textClasses, delayDuration } = useTechnicalTooltip(props);
 
   return (
@@ -30,16 +30,15 @@ export const TechnicalTooltip: React.FC<TechnicalTooltipProps> = (props) => {
             sideOffset={8}
             className={contentClasses}
           >
-            <div className="flex items-center gap-1.5">
-              {/* Brackets en Azul (Tu propuesta de diseño) */}
-              <span className="text-primary-light font-bold select-none">{`{`}</span>
-              
-              <div className={textClasses}>
-                {content}
+            {variant === 'popover' ? (
+              <div className={textClasses}>{content}</div>
+            ) : (
+              <div className="flex items-center gap-1.5">
+                <span className="text-primary-light font-bold select-none">{`{`}</span>
+                <div className={textClasses}>{content}</div>
+                <span className="text-primary-light font-bold select-none">{`}`}</span>
               </div>
-              
-              <span className="text-primary-light font-bold select-none">{`}`}</span>
-            </div>
+            )}
             
             {/* Nota: No incluimos Arrow para mantener el minimalismo industrial */}
           </Tooltip.Content>

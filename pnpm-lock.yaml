@@ -216,6 +216,9 @@ importers:
       '@loopdev/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@loopdev/tokens':
+        specifier: workspace:*
+        version: link:../../ds/packages/tokens
       '@loopdev/ui':
         specifier: workspace:*
         version: link:../../ds/packages/ui

@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { SuiteIdentity } from '@loopdev/contracts';
 
 /**
@@ -17,6 +16,8 @@ export interface SuiteSwitcherProps {
   onSuiteChange: (suiteId: string) => void;
   /** Callback al cambiar el estado de apertura */
   onOpenChange?: (open: boolean) => void;
+  /** Muestra el icono de la suite en el trigger */
+  showIcon?: boolean;
   /** Clase CSS adicional */
   className?: string;
 }

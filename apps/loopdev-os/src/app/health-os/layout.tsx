@@ -11,7 +11,6 @@ import {
   SuiteSidebar,
   ThemeToggle,
   SystemStatus,
-  UserAvatar,
   SuiteHeader,
   CommandBarTrigger,
   SuiteSwitcher,
@@ -130,7 +129,7 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
   const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } =
     useNotifications([]);
 
-  const [navMode, setNavMode] = useState<NavMode>('expanded');
+  const [navMode, setNavMode] = useState<NavMode>('hover');
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
@@ -186,22 +185,11 @@ export default function HealthOpsLayout({ children }: { children: React.ReactNod
           <SuiteSidebar
             schema={HEALTH_OS_SCHEMA}
             navMode={navMode}
+            onNavModeChange={setNavMode}
             context={context}
             activeModuleId={activeModuleId}
             accessMap={accessMap}
-            onExitToOS={() => router.push('/launchpad')}
             onNavigate={(route) => router.push(route.routeId)}
-            onToggleNavMode={() =>
-              setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))
-            }
-            profileSlot={
-              <UserAvatar
-                name={user?.email || 'Medical User'}
-                size={navMode === 'rail' ? 'md' : 'sm'}
-                withStatus
-                status="online"
-              />
-            }
           />
         }
         headerSlot={

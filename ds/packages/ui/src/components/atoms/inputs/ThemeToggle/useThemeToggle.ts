@@ -54,7 +54,7 @@ export const useThemeToggle = (props: ThemeToggleProps) => {
     rounded-full transition-all duration-300 flex items-center justify-center shadow-sm border
     ${sizeMap[size]}
     ${variant === 'technical' 
-      ? 'bg-transparent border-primary/50 text-text-muted hover:border-primary hover:text-text-muted dark:border-white/10 dark:text-text-muted dark:hover:border-primary/40'
+      ? 'bg-transparent border-black/10 text-text-muted hover:border-accent/50 hover:text-text-muted dark:border-white/10 dark:text-text-muted dark:hover:border-accent/50'
       : 'bg-transparent border-primary/35 hover:border-primary text-text-muted dark:border-white/10 dark:text-text-muted dark:hover:border-primary/40'
     }
     ${className}

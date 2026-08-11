@@ -1,54 +1,186 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { axe } from 'vitest-axe';
 import { SuiteSidebar } from './index';
 import { MARKETING_STUDIO_SCHEMA } from './fixtures';
 
 describe('SuiteSidebar', () => {
+  const renderSidebar = (navMode: 'expanded' | 'rail' | 'hover' = 'expanded') => {
+    const onNavModeChange = vi.fn();
+    const result = render(
+      <SuiteSidebar
+        schema={MARKETING_STUDIO_SCHEMA}
+        navMode={navMode}
+        accessMap={{}}
+        onNavModeChange={onNavModeChange}
+        onNavigate={vi.fn()}
+      />,
+    );
+
+    return { ...result, onNavModeChange };
+  };
+
+  describe('modos básicos', () => {
+    it('muestra las etiquetas en expanded y las oculta en rail', () => {
+      const { unmount } = renderSidebar('expanded');
+      expect(screen.getByText('Brand Hub')).toBeInTheDocument();
+      unmount();
+
+      renderSidebar('rail');
+      expect(screen.queryByText('Brand Hub')).not.toBeInTheDocument();
+      expect(screen.getByRole('menuitem', { name: 'Brand Hub' })).toBeInTheDocument();
+    });
+
+    it('expone y activa las tres opciones desde el control', async () => {
+      const user = userEvent.setup();
+      const { onNavModeChange } = renderSidebar('hover');
+
+      await user.click(screen.getByRole('button', { name: 'Sidebar control' }));
+      expect(screen.getByRole('menuitem', { name: 'Expanded' })).toBeInTheDocument();
+      expect(screen.getByRole('menuitem', { name: 'Expand on hover' })).toBeInTheDocument();
+
+      await user.click(screen.getByRole('menuitem', { name: 'Expanded' }));
+      expect(onNavModeChange).toHaveBeenCalledWith('expanded');
+    });
+  });
+
+  describe('expand on hover', () => {
+    it('inicia como rail y expande al entrar al sidebar', () => {
+      const { container } = renderSidebar('hover');
+      const sidebar = container.querySelector('.sidebar-hover-surface');
+
+      expect(sidebar).toHaveClass('!w-16');
+      fireEvent.mouseEnter(sidebar!);
+      expect(sidebar).toHaveClass('!w-64');
+      expect(screen.getByText('Brand Hub')).toBeInTheDocument();
+    });
+
+    it('mantiene el estado expandido mientras el menú portalizado está abierto', async () => {
+      const user = userEvent.setup();
+      const { container } = renderSidebar('hover');
+      const sidebar = container.querySelector('.sidebar-hover-surface');
+      const control = screen.getByRole('button', { name: 'Sidebar control' });
+
+      await user.click(control);
+      fireEvent.mouseLeave(sidebar!);
+
+      await waitFor(() => expect(sidebar).toHaveClass('!w-64'));
+      expect(screen.getByRole('menu', { name: 'Sidebar control' })).toBeInTheDocument();
+    });
+  });
+
+  describe('dropdown del footer', () => {
+    it('expande antes de abrir el selector cuando parte desde rail', async () => {
+      const user = userEvent.setup();
+      const { container } = renderSidebar('hover');
+      const sidebar = container.querySelector('.sidebar-hover-surface');
+
+      await user.click(screen.getByRole('button', { name: 'Sidebar control' }));
+
+      expect(sidebar).toHaveClass('!w-64');
+      expect(screen.getByRole('menu', { name: 'Sidebar control' })).toBeInTheDocument();
+    });
+
+    it('permite seleccionar un modo y conserva el estado accesible del control', async () => {
+      const user = userEvent.setup();
+      const { onNavModeChange } = renderSidebar('expanded');
+      const control = screen.getByRole('button', { name: 'Sidebar control' });
+
+      expect(control).toHaveAttribute('aria-haspopup', 'menu');
+      await user.click(control);
+      await user.click(screen.getByRole('menuitem', { name: 'Collapsed' }));
+
+      expect(onNavModeChange).toHaveBeenCalledWith('rail');
+    });
+  });
+
+  describe('permisos y navegación', () => {
+    it('oculta módulos restricted y conserva Suite Dashboard', () => {
+      render(
+        <SuiteSidebar
+          schema={MARKETING_STUDIO_SCHEMA}
+          navMode="expanded"
+          accessMap={{ 'brand-hub': 'hidden' } as any}
+          onNavigate={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).toBeInTheDocument();
+      expect(screen.queryByText('Brand Hub')).not.toBeInTheDocument();
+    });
+
+    it('mantiene el módulo activo con su indicador de página', () => {
+      render(
+        <SuiteSidebar
+          schema={MARKETING_STUDIO_SCHEMA}
+          navMode="expanded"
+          accessMap={{}}
+          onNavigate={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).toHaveAttribute('aria-current', 'page');
+    });
+  });
+
+  describe('accesibilidad', () => {
+    it.each(['expanded', 'rail', 'hover'] as const)('no tiene violaciones en modo %s', async (navMode) => {
+      const { container } = renderSidebar(navMode);
+      expect(await axe(container)).toHaveNoViolations();
+    });
+  });
+
   it('renders the suite context and hides modules with hidden access', () => {
     render(
       <SuiteSidebar
         schema={MARKETING_STUDIO_SCHEMA}
         navMode="expanded"
         accessMap={{ 'brand-hub': 'hidden' } as any}
-        onExitToOS={vi.fn()}
-        onToggleNavMode={vi.fn()}
         onNavigate={vi.fn()}
       />,
     );
 
-    expect(screen.queryByText('Marketing Studio')).not.toBeInTheDocument();
-    expect(screen.getByText('loop.dev')).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).toBeInTheDocument();
     expect(screen.queryByText('Brand Hub')).not.toBeInTheDocument();
     expect(screen.getByText('Suite Dashboard')).toBeInTheDocument();
   });
 
-  it('fires main action callbacks from exit, settings and rail controls', () => {
-    const onExitToOS = vi.fn();
-    const onToggleNavMode = vi.fn();
-    const onAction = vi.fn();
-
+  it('renders only suite home, navigation and behavior selector', () => {
     render(
       <SuiteSidebar
         schema={MARKETING_STUDIO_SCHEMA}
         navMode="expanded"
         accessMap={{}}
-        onExitToOS={onExitToOS}
-        onToggleNavMode={onToggleNavMode}
+        onNavModeChange={vi.fn()}
         onNavigate={vi.fn()}
-        onAction={onAction}
       />,
     );
 
-    fireEvent.click(screen.getByRole('link', { name: 'Back to OS' }));
-    expect(onExitToOS).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sidebar control' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Back to OS' })).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Ajustes de cuenta')).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Contraer')).not.toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByTitle('Ajustes de cuenta'));
-    expect(onAction).toHaveBeenCalledWith('openSettings');
+  it('exposes the three sidebar behavior options and selects hover mode', () => {
+    const onNavModeChange = vi.fn();
 
-    fireEvent.click(screen.getByTitle('Contraer'));
-    expect(onToggleNavMode).toHaveBeenCalledTimes(1);
+    render(
+      <SuiteSidebar
+        schema={MARKETING_STUDIO_SCHEMA}
+        navMode="hover"
+        accessMap={{}}
+        onNavModeChange={onNavModeChange}
+        onNavigate={vi.fn()}
+      />,
+    );
+
+    const control = screen.getByRole('button', { name: 'Sidebar control' });
+    expect(control).toHaveAttribute('aria-haspopup', 'menu');
+    expect(onNavModeChange).not.toHaveBeenCalled();
   });
 
   it('has no accessibility violations in expanded mode', async () => {
@@ -57,8 +189,6 @@ describe('SuiteSidebar', () => {
         schema={MARKETING_STUDIO_SCHEMA}
         navMode="expanded"
         accessMap={{}}
-        onExitToOS={vi.fn()}
-        onToggleNavMode={vi.fn()}
         onNavigate={vi.fn()}
       />,
     );

@@ -17,6 +17,8 @@ export interface NavSidebarItemProps {
   isActive?: boolean;
   /** Modo compacto del sidebar */
   isRail?: boolean;
+  /** Muestra la etiqueta como overlay al pasar sobre el shell en modo hover */
+  revealOnHover?: boolean;
   /** Estado de acceso y disponibilidad */
   status?: NavItemStatus;
   /** Datos de telemetría (badges) */

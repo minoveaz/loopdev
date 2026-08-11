@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Settings, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { PanelLeft } from 'lucide-react';
+import { TechnicalDropdown, TechnicalDropdownGroup, TechnicalDropdownItem } from '../../../atoms';
 import { SidebarFooterProps } from './types';
 import { useSidebarFooter } from './useSidebarFooter';
 
@@ -13,39 +14,54 @@ import { useSidebarFooter } from './useSidebarFooter';
  * @phase 1
  */
 export const SidebarFooter: React.FC<SidebarFooterProps> = (props) => {
-  const { onToggleRail, onSettingsClick, extraActionsSlot } = props;
-  const { isRail, containerClasses, consoleClasses, technicalButtonClasses } = useSidebarFooter(props);
+  const { onNavModeChange } = props;
+  const { isRail, containerClasses, consoleClasses } = useSidebarFooter(props);
+  const navMode = props.navMode ?? (isRail ? 'rail' : 'expanded');
+  const menuIsRail = isRail || navMode === 'hover';
+  const modeLabels = {
+    expanded: 'Expanded',
+    rail: 'Collapsed',
+    hover: 'Expand on hover',
+  } as const;
 
   return (
-    <footer className={containerClasses}>
-      {/* Acciones adicionales del contexto, si existen */}
-      {extraActionsSlot && (
-        <div className={`flex ${isRail ? 'flex-col items-center' : 'px-1'} gap-2`}>
-          {extraActionsSlot}
-        </div>
-      )}
-
-      {/* Controles del sidebar */}
+    <footer
+      className={containerClasses}
+      onMouseEnter={() => props.onFooterHoverChange?.(true)}
+      onMouseLeave={() => props.onFooterHoverChange?.(false)}
+    >
       <div className={consoleClasses}>
-        <button 
-          onClick={onSettingsClick}
-          className={technicalButtonClasses}
-          title="Ajustes de cuenta"
-        >
-          <Settings size={18} />
-        </button>
-
-        {!isRail && (
-          <div className="mx-1 h-4 w-[0.5px] bg-black/10 dark:bg-white/10" />
+        {onNavModeChange && (
+          <TechnicalDropdown
+            side={menuIsRail ? 'right' : 'top'}
+            align="end"
+            sideOffset={8}
+            onOpenChange={props.onMenuOpenChange}
+            trigger={
+              <button
+                type="button"
+                aria-label="Sidebar control"
+                onPointerDown={props.onMenuTrigger}
+                className="text-text-muted hover:bg-accent/10 hover:text-accent dark:hover:bg-accent/15 dark:hover:text-accent focus-visible:ring-primary flex size-10 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2"
+              >
+              <PanelLeft size={18} aria-hidden="true" />
+              </button>
+            }
+          >
+            <TechnicalDropdownGroup label="Sidebar control">
+              {(Object.entries(modeLabels) as Array<[typeof navMode, string]>).map(([mode, label]) => (
+                <TechnicalDropdownItem
+                  key={mode}
+                  isActive={navMode === mode}
+                  onClick={() => onNavModeChange(mode)}
+                >
+                  <span className={`size-2 rounded-full ${navMode === mode ? 'bg-primary' : 'border border-text-muted'}`} />
+                  {label}
+                </TechnicalDropdownItem>
+              ))}
+            </TechnicalDropdownGroup>
+          </TechnicalDropdown>
         )}
-
-        <button 
-          onClick={onToggleRail}
-          className={technicalButtonClasses}
-          title={isRail ? 'Expandir' : 'Contraer'}
-        >
-          {isRail ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-        </button>
       </div>
     </footer>
   );

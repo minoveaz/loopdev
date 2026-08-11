@@ -12,18 +12,18 @@ export const useTechnicalMenuItem = (props: TechnicalMenuItemProps) => {
     className = '' 
   } = props;
 
-  // 1. Mapeo de Variantes de Color (Reactivo al Estándar Lab)
+  // 1. Variantes semánticas sobre la misma fila base del dropdown.
   const variantMap: Record<MenuItemVariant, string> = {
     default: isActive 
-      ? 'bg-primary/5 text-primary' 
-      : 'text-text-muted hover:bg-black/[0.02] dark:hover:bg-white/[0.02] hover:text-text-main dark:hover:text-white',
+      ? 'bg-[var(--lpd-color-bg-primary-subtle)] text-primary'
+      : 'text-slate-600 dark:text-text-muted hover:bg-accent/10 dark:hover:bg-accent/15 hover:!text-accent dark:hover:!text-accent',
     danger: 'text-danger hover:bg-danger/[0.04] hover:text-danger-vivid'
   };
 
-  // 2. Composición de Clases del Contenedor
+  // 2. Misma densidad y geometría que TechnicalDropdownItem.
   const containerClasses = `
-    flex items-center gap-3 px-4 py-2.5 transition-all duration-200
-    outline-none select-none text-technical font-bold
+    flex min-h-9 items-center gap-2.5 rounded-sm px-3 py-2 text-[13px] font-normal transition-colors duration-150
+    outline-none select-none
     ${isDisabled ? 'opacity-40 grayscale cursor-not-allowed pointer-events-none' : 'cursor-pointer'}
     ${variantMap[variant]}
     ${className}

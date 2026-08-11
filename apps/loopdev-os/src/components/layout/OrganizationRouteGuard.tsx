@@ -13,7 +13,11 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
   const { activeOrganizationId, isLoading: isOrganizationLoading } = useOrganization();
   const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
 
-  const requiresOrganization = pathname !== '/login' && pathname !== '/launchpad' && !pathname.startsWith('/auth/');
+  const requiresOrganization =
+    pathname !== '/login' &&
+    pathname !== '/launchpad' &&
+    pathname !== '/shell-showcase' &&
+    !pathname.startsWith('/auth/');
   const accessState = resolveAccessState({
     isAuthLoading,
     hasSession: Boolean(user),
@@ -21,10 +25,11 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
     membershipStatuses: memberships.map((membership) => membership.status),
   });
   const hasActiveOrganization = Boolean(activeOrganizationId);
-  const isBlocked = requiresOrganization && !isAuthLoading && (
-    !canAccessOrganizationRoute(accessState) ||
-    (!isPlatformAdministrator && !isOrganizationLoading && !hasActiveOrganization)
-  );
+  const isBlocked =
+    requiresOrganization &&
+    !isAuthLoading &&
+    (!canAccessOrganizationRoute(accessState) ||
+      (!isPlatformAdministrator && !isOrganizationLoading && !hasActiveOrganization));
 
   useEffect(() => {
     if (isBlocked && accessState !== 'session-expired') router.replace('/launchpad');
@@ -41,7 +46,11 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
   if (isBlocked) {
     if (accessState === 'session-expired') return <AccessStatePanel state={accessState} />;
     if (accessState === 'authorized') return <AccessStatePanel state="no-organization-access" />;
-    return <AccessStatePanel state={accessState === 'loading' ? 'no-organization-access' : accessState} />;
+    return (
+      <AccessStatePanel
+        state={accessState === 'loading' ? 'no-organization-access' : accessState}
+      />
+    );
   }
 
   return children;

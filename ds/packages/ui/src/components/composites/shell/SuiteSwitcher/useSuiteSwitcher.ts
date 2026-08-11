@@ -9,8 +9,8 @@ export const useSuiteSwitcher = (props: SuiteSwitcherProps) => {
 
   // 1. Composición de Clases del Trigger (Botón del Header)
   const triggerClasses = `
-    flex items-center gap-3 px-3 py-1.5 rounded-lg transition-all duration-300
-    hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer select-none
+    group flex items-center gap-3 rounded-lg px-3 py-1.5 transition-all duration-200
+    hover:-translate-y-px hover:bg-accent/10 cursor-pointer select-none
     ${className}
   `.replace(/\s+/g, ' ').trim();
 
@@ -26,7 +26,7 @@ export const useSuiteSwitcher = (props: SuiteSwitcherProps) => {
     flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
     outline-none select-none
     ${isActive 
-      ? 'bg-primary/5 text-primary' 
+      ? 'bg-[var(--lpd-color-bg-primary-subtle)] text-primary'
       : isDisabled
         ? 'opacity-40 grayscale cursor-not-allowed'
         : 'text-slate-600 dark:text-text-muted hover:bg-black/5 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white cursor-pointer'

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { NavMode } from '@loopdev/contracts';
 
 /**
  * @file types.ts
@@ -8,19 +8,16 @@ import { ReactNode } from 'react';
 export interface SidebarFooterProps {
   /** Indica si el sidebar está en modo contraído */
   isRail?: boolean;
-  /** Nombre del usuario para el avatar y texto */
-  userName?: string;
-  /** Rol o subtítulo del usuario */
-  userRole?: string;
-  /** URL opcional de la imagen de perfil */
-  userSrc?: string | null;
-  /** Slot opcional para acciones adicionales */
-  extraActionsSlot?: ReactNode;
-  
-  /** Callback para alternar el modo del sidebar */
-  onToggleRail: () => void;
-  /** Callback para abrir ajustes */
-  onSettingsClick?: () => void;
+  /** Callback para seleccionar el comportamiento persistente del sidebar */
+  onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
+  /** Modo actual del sidebar */
+  navMode?: Exclude<NavMode, 'hidden'>;
+  /** Mantiene estable el rail mientras el selector está abierto */
+  onMenuOpenChange?: (open: boolean) => void;
+  /** Expande el sidebar antes de que Radix monte el menú en portal */
+  onMenuTrigger?: () => void;
+  /** Mantiene expanded el sidebar mientras el cursor está sobre el footer */
+  onFooterHoverChange?: (hovered: boolean) => void;
   /** Clase CSS adicional */
   className?: string;
 }

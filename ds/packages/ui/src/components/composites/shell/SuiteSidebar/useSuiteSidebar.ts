@@ -21,7 +21,7 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
   // 1. Estado de Densidad (Ahora consciente del contexto)
   // En modo focus o inmersivo, siempre queremos el modo Rail.
   const isRail =
-    !mobileMode && (navMode === 'rail' || context === 'focus' || context === 'inmersive');
+    !mobileMode && (navMode === 'rail' || navMode === 'hover' || context === 'focus' || context === 'inmersive');
 
   // 2. Procesamiento de Navegación (Filtrado y Ordenación)
   const visibleGroups = useMemo(() => {
@@ -37,7 +37,10 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
             })
             .sort((a, b) => a.priority - b.priority);
 
-          return { ...group, items: filteredItems };
+          return {
+            ...group,
+            items: filteredItems.filter((item) => (item as any).moduleId !== 'overview'),
+          };
         })
         // Ocultar grupos que se hayan quedado vacíos tras el filtrado
         .filter((group) => group.items.length > 0)
@@ -55,7 +58,7 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
 
   const scrollAreaClasses = `
     flex-1 min-h-0 overflow-y-auto overflow-x-hidden
-    ${isRail ? 'scrollbar-hide' : 'scrollbar-hide hover:scrollbar-default'}
+    ${isRail ? 'scrollbar-hide' : 'custom-scrollbar'}
   `
     .replace(/\s+/g, ' ')
     .trim();

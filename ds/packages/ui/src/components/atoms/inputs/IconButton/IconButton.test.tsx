@@ -18,6 +18,18 @@ describe('IconButton', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
+  it('renders custom content when provided', () => {
+    render(
+      <IconButton ariaLabel="Open help">
+        <span data-testid="custom-icon">Help</span>
+      </IconButton>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Open help' })).toContainElement(
+      screen.getByTestId('custom-icon'),
+    );
+  });
+
   it('disables itself while loading and shows progress glyph', () => {
     render(<IconButton icon="settings" isLoading tooltip="Loading action" />);
 

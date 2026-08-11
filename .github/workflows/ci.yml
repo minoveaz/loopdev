@@ -50,6 +50,7 @@ jobs:
       pull-requests: read
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
+      shell: ${{ steps.filter.outputs.shell }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,6 +69,53 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/ci.yml'
+            shell:
+              - 'apps/loopdev-os/src/app/globals.css'
+              - 'apps/loopdev-os/src/app/layout.tsx'
+              - 'apps/loopdev-os/src/app/shell-showcase/**'
+              - 'apps/loopdev-os/src/components/layout/suiteNavMode.ts'
+              - 'ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/**'
+              - 'ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/**'
+              - 'ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/**'
+              - 'ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/**'
+              - 'ds/packages/ui/src/components/composites/shell/**'
+              - 'ds/packages/ui/src/components/composites/utilities/GlobalContextPanel/**'
+              - 'ds/packages/ui/src/styles/globals.css'
+              - 'packages/contracts/src/platform/navigation.ts'
+              - 'scripts/check-shell.mjs'
+              - 'vitest.config.ts'
+              - 'package.json'
+
+  shell-validation:
+    name: Shell Interaction Surface
+    needs: changes
+    if: needs.changes.outputs.shell == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
+
+      - name: Validate shell interaction surface
+        run: pnpm test:shell
 
   quality:
     name: Lint, typecheck, tests and build

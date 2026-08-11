@@ -33,9 +33,23 @@ describe('NavSidebarItem Atom', () => {
     expect(screen.getByRole('menuitem', { name: 'Hidden Text' })).toBeInTheDocument();
   });
 
+  it('debe mantener el icono en el rail y preparar la etiqueta para reveal on hover', () => {
+    render(<NavSidebarItem label="Hover Label" icon="LibraryBig" isRail={true} revealOnHover={true} />);
+    expect(screen.getByText('Hover Label')).toHaveAttribute('data-sidebar-label');
+    expect(screen.getByText('Hover Label')).toHaveClass('absolute', 'left-12', 'top-1/2', 'text-text-main', 'hidden');
+    expect(screen.getByRole('menuitem', { name: 'Hover Label' })).toHaveClass('size-10', 'justify-center');
+  });
+
   it('debe mostrar el rol ARIA activo correctamente', () => {
     render(<NavSidebarItem label="Active" icon="LibraryBig" isActive={true} />);
-    expect(screen.getByRole('menuitem')).toHaveAttribute('aria-current', 'page');
+    const item = screen.getByRole('menuitem');
+    expect(item).toHaveAttribute('aria-current', 'page');
+    expect(item).toHaveClass('bg-primary', 'text-white');
+  });
+
+  it('debe usar el acento amarillo para hover en estados interactivos', () => {
+    render(<NavSidebarItem label="Hoverable" icon="LibraryBig" />);
+    expect(screen.getByRole('menuitem')).toHaveClass('hover:bg-accent/10', 'hover:!text-accent');
   });
 
   it('has no accessibility violations in the active navigation state', async () => {
