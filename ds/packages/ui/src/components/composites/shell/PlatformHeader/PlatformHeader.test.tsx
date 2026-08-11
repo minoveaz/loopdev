@@ -28,6 +28,13 @@ describe('PlatformHeader Composite', () => {
     expect(screen.getByTestId('identity').parentElement?.parentElement).toHaveClass('h-full');
   });
 
+  it('preserves the semantic shell surface and technical boundary', () => {
+    render(<PlatformHeader identitySlot="LoopDev" />);
+
+    const header = screen.getByRole('banner');
+    expect(header).toHaveClass('bg-shell-canvas', 'border-border-technical');
+  });
+
   it('marks the header inert when a blocking overlay is active', () => {
     render(<PlatformHeader identitySlot="LoopDev" isInert />);
 

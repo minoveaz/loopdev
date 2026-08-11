@@ -56,34 +56,33 @@ export function GlobalNotificationsPanel({
         {displayedNotifications.length > 0 ? (
           <div className="flex flex-col">
             {displayedNotifications.map((notification) => (
-              <button
+              <div
                 key={notification.id}
-                type="button"
-                onClick={() => onMarkAsRead?.(notification.id)}
                 className={`border-border-technical group flex gap-3 border-b px-4 py-4 text-left transition-colors ${notification.read ? 'hover:bg-accent/10' : 'hover:bg-accent/10 bg-[var(--lpd-color-bg-primary-subtle)]'}`}
               >
-                <span className={`mt-1 size-2 shrink-0 rounded-full ${notification.type === 'error' ? 'bg-danger' : notification.type === 'warning' ? 'bg-energy' : 'bg-primary'}`} />
-                <span className="min-w-0 flex-1">
-                  <span className="flex items-start justify-between gap-2">
-                    <span className="text-text-main truncate text-xs font-semibold dark:text-white">{notification.title}</span>
-                    {notification.read && onRemoveNotification && (
-                      <span
-                        role="button"
-                        aria-label={`Remove ${notification.title}`}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          onRemoveNotification(notification.id);
-                        }}
-                        className="text-text-muted hover:text-danger opacity-0 transition-opacity group-hover:opacity-100"
-                      >
-                        <X size={13} aria-hidden="true" />
-                      </span>
-                    )}
+                <button
+                  type="button"
+                  onClick={() => onMarkAsRead?.(notification.id)}
+                  className="flex min-w-0 flex-1 gap-3 text-left"
+                >
+                  <span className={`mt-1 size-2 shrink-0 rounded-full ${notification.type === 'error' ? 'bg-danger' : notification.type === 'warning' ? 'bg-energy' : 'bg-primary'}`} />
+                  <span className="min-w-0 flex-1">
+                    <span className="text-text-main block truncate text-xs font-semibold dark:text-white">{notification.title}</span>
+                    <span className="text-text-muted mt-1 block text-xs leading-relaxed">{notification.description}</span>
+                    <span className="text-text-muted/60 mt-2 block font-mono text-[10px] uppercase">{notification.timestamp}</span>
                   </span>
-                  <span className="text-text-muted mt-1 block text-xs leading-relaxed">{notification.description}</span>
-                  <span className="text-text-muted/60 mt-2 block font-mono text-[10px] uppercase">{notification.timestamp}</span>
-                </span>
-              </button>
+                </button>
+                {notification.read && onRemoveNotification && (
+                  <button
+                    type="button"
+                    aria-label={`Remove ${notification.title}`}
+                    onClick={() => onRemoveNotification(notification.id)}
+                    className="text-text-muted hover:text-danger self-start opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    <X size={13} aria-hidden="true" />
+                  </button>
+                )}
+              </div>
             ))}
           </div>
         ) : (

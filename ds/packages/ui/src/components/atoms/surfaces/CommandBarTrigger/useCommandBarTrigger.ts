@@ -13,9 +13,9 @@ export const useCommandBarTrigger = (props: CommandBarTriggerProps) => {
   const containerClasses = `
     group flex items-center gap-2 h-9 px-3 rounded-lg border transition-all duration-300
     bg-white/50 dark:bg-black/20 border-black/10 dark:border-white/10
-    hover:border-accent/50 hover:bg-[linear-gradient(to_right,rgba(0,95,115,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,95,115,0.05)_1px,transparent_1px)] hover:bg-[length:12px_12px]
+    hover:border-accent/50 dark:hover:border-accent/50 hover:bg-[linear-gradient(to_right,rgba(0,95,115,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,95,115,0.05)_1px,transparent_1px)] hover:bg-[length:12px_12px]
     dark:hover:bg-[linear-gradient(to_right,rgba(0,95,115,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,95,115,0.08)_1px,transparent_1px)]
-    focus-visible:border-accent/50 focus-visible:bg-[linear-gradient(to_right,rgba(0,95,115,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,95,115,0.05)_1px,transparent_1px)] focus-visible:bg-[length:12px_12px]
+    focus-visible:border-accent/50 dark:focus-visible:border-accent/50 focus-visible:bg-[linear-gradient(to_right,rgba(0,95,115,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,95,115,0.05)_1px,transparent_1px)] focus-visible:bg-[length:12px_12px]
     dark:focus-visible:bg-[linear-gradient(to_right,rgba(0,95,115,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,95,115,0.08)_1px,transparent_1px)]
     cursor-pointer
     ${isIconMode ? 'w-9 justify-center' : 'min-w-64'}
