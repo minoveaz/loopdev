@@ -25,6 +25,7 @@ describe('SuiteCanvas', () => {
         toolbar={<div>Module toolbar</div>}
         localNav={<div>Local navigation</div>}
         tabs={<div>Workspace tabs</div>}
+        contextAside={<aside>Context navigation</aside>}
         aside={<div>Context details</div>}
         footer={<div>Module footer</div>}
       >
@@ -36,6 +37,7 @@ describe('SuiteCanvas', () => {
     expect(screen.getByText('Module toolbar')).toBeInTheDocument();
     expect(screen.getByText('Local navigation')).toBeInTheDocument();
     expect(screen.getByText('Workspace tabs')).toBeInTheDocument();
+    expect(screen.getByText('Context navigation')).toBeInTheDocument();
     expect(screen.getByText('Main content')).toBeInTheDocument();
     expect(screen.getByText('Context details')).toBeInTheDocument();
     expect(screen.getByText('Module footer')).toBeInTheDocument();

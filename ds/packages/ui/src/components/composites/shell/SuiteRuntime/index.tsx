@@ -4,6 +4,7 @@ import React from 'react';
 import type { SuiteRuntimeProps } from './types';
 import { SuiteShell } from '../SuiteShell';
 import { SuiteCanvas } from '../../workspace/SuiteCanvas';
+import { ContextPanel } from '../ModuleContextSidebar';
 import { ModuleContextPanel } from '../ModuleContextPanel';
 
 export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
@@ -58,14 +59,6 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
       centerSlot={centerSlot}
       rightSlot={rightSlot}
       profileSlot={profileSlot}
-      moduleContextSlot={moduleContextContent}
-      moduleContextFooterSlot={moduleContextFooterContent}
-      moduleContextLabel={
-        activeModule
-          ? (moduleContextLabels?.[activeModule.moduleId] ?? activeModule.label)
-          : undefined
-      }
-      moduleContextWidth={activeModule ? moduleContextWidths?.[activeModule.moduleId] : undefined}
       platformHeaderProps={platformHeaderProps}
       onNavigate={onNavigate}
       onNavModeChange={onNavModeChange}
@@ -73,6 +66,21 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
     >
       <SuiteCanvas
         {...canvasProps}
+        contextAside={
+          moduleContextContent ? (
+            <ContextPanel
+              label={
+                activeModule
+                  ? (moduleContextLabels?.[activeModule.moduleId] ?? activeModule.label)
+                  : 'Module context'
+              }
+              width={activeModule ? moduleContextWidths?.[activeModule.moduleId] : undefined}
+              footer={moduleContextFooterContent}
+            >
+              {moduleContextContent}
+            </ContextPanel>
+          ) : undefined
+        }
         aside={
           moduleContextPanelContent ? (
             <ModuleContextPanel

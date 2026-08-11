@@ -8,6 +8,7 @@ export interface SuiteCanvasProps {
   toolbar?: ReactNode;
   localNav?: ReactNode;
   tabs?: ReactNode;
+  contextAside?: ReactNode;
   aside?: ReactNode;
   footer?: ReactNode;
   children: ReactNode;

@@ -18,6 +18,7 @@ export const SuiteCanvas: React.FC<SuiteCanvasProps> = ({
   toolbar,
   localNav,
   tabs,
+  contextAside,
   aside,
   footer,
   children,
@@ -34,6 +35,7 @@ export const SuiteCanvas: React.FC<SuiteCanvasProps> = ({
     {localNav ? <nav className="suite-canvas__local-nav shrink-0">{localNav}</nav> : null}
     {tabs ? <div className="suite-canvas__tabs shrink-0">{tabs}</div> : null}
     <div className="suite-canvas__body relative flex h-full min-h-0 min-w-0 flex-1 overflow-hidden">
+      {contextAside}
       <main className={`suite-canvas__content min-h-0 min-w-0 flex-1 overflow-auto ${contentClassName}`}>
         {children}
       </main>
