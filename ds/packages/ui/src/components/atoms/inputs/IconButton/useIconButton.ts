@@ -6,7 +6,8 @@ import { useMemo } from 'react';
 
 export const useIconButton = (props: any) => {
   const { 
-    icon, 
+    icon,
+    children,
     variant = 'neutral', 
     size = 'md', 
     isLoading = false, 
@@ -41,6 +42,7 @@ export const useIconButton = (props: any) => {
   return {
     finalClassName,
     icon,
+    children,
     size,
     isLoading,
     tooltip,

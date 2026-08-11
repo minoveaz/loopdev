@@ -3,7 +3,8 @@ import { useIconButton } from './useIconButton';
 import { IconButtonContent } from './components';
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: string;
+  icon?: string;
+  children?: React.ReactNode;
   variant?: 'neutral' | 'primary' | 'danger' | 'success' | 'ghost' | 'energy';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
@@ -18,7 +19,7 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
  * @status stable
  */
 export const IconButton: React.FC<IconButtonProps> = (props) => {
-  const { finalClassName, icon, size, isLoading, tooltip, ariaLabel, disabled, ...rest } = useIconButton(props);
+  const { finalClassName, icon, children, size, isLoading, tooltip, ariaLabel, disabled, ...rest } = useIconButton(props);
 
   return (
     <button 
@@ -29,12 +30,14 @@ export const IconButton: React.FC<IconButtonProps> = (props) => {
       disabled={disabled}
       {...rest}
     >
-      <IconButtonContent 
-        icon={icon} 
-        size={size} 
-        isLoading={isLoading} 
-        ariaLabel={ariaLabel || tooltip}
-      />
+      {children ?? (
+        <IconButtonContent
+          icon={icon ?? 'help'}
+          size={size}
+          isLoading={isLoading}
+          ariaLabel={ariaLabel || tooltip}
+        />
+      )}
     </button>
   );
 };

@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { CircleHelp, Lightbulb } from 'lucide-react';
 import {
   BrandLogo,
+  IconButton,
   NotificationCenter,
   type GlobalContextPanelMode,
   type NotificationItem,
@@ -28,16 +29,18 @@ export function PlatformHeaderActionButton({
   children,
 }: PlatformHeaderActionButtonProps) {
   return (
-    <button
-      type="button"
+    <IconButton
+      icon="help"
       aria-label={label}
       aria-pressed={active}
       title={title}
-      className={`${active ? `${danger ? 'border-danger' : 'border-[var(--lpd-color-brand-primary)]'} bg-[var(--lpd-color-brand-primary)] text-white` : `${danger ? 'border-danger dark:border-danger' : 'border-black/10 dark:border-white/10'} text-text-muted bg-white/50 dark:bg-black/20`} ${danger ? 'hover:border-danger dark:hover:border-danger' : 'hover:border-accent/50 dark:hover:border-accent/50'} hover:bg-accent/10 hover:text-accent focus-visible:border-accent/50 focus-visible:ring-primary dark:hover:bg-accent/10 group relative flex size-9 items-center justify-center rounded-full border transition-all duration-300 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2`}
+      ariaLabel={label}
+      tooltip={title}
+      className={`${active ? `${danger ? 'border-danger' : 'border-transparent'} bg-[var(--lpd-color-brand-primary)] text-white` : `${danger ? 'border-danger dark:border-danger' : 'border-black/10 dark:border-white/10'} text-text-muted bg-white/50 dark:bg-black/20`} ${danger ? 'hover:border-danger dark:hover:border-danger' : active ? 'hover:border-transparent' : 'hover:border-accent/50 dark:hover:border-accent/50'} hover:bg-accent/10 hover:text-accent focus-visible:border-accent/50 focus-visible:ring-primary dark:hover:bg-accent/10 group relative flex !size-9 items-center justify-center !rounded-full border transition-all duration-300 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2`}
       onClick={onClick}
     >
       {children}
-    </button>
+    </IconButton>
   );
 }
 
