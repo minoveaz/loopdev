@@ -3,15 +3,19 @@
   --lpd-font-sans: 'Inter', sans-serif;
 
   /* Mapeo Exacto de BrandData.ts */
-  --lpd-color-brand-primary: #57C19A;
-  --lpd-color-brand-secondary: #00745A;
-  --lpd-color-bg-base: #F6F3EE;
+  --lpd-color-brand-primary: #57c19a;
+  --lpd-color-brand-primary-rgb: 87 193 154;
+  --lpd-color-bg-primary-subtle: #57c19a2e;
+  --lpd-color-brand-secondary: #00745a;
+  --lpd-color-brand-secondary-rgb: 0 116 90;
+  --lpd-color-brand-energy: #57c19a;
+  --lpd-color-bg-base: #f6f3ee;
   --lpd-color-text-base: #324450;
 
   /* Tokens Legacy para compatibilidad */
-  --brand-primary: #57C19A;
-  --brand-secondary: #00745A;
+  --brand-primary: #57c19a;
+  --brand-secondary: #00745a;
   --brand-tertiary: #124559;
-  --brand-surface: #F6F3EE;
-  --text-on-primary: #00382B;
+  --brand-surface: #f6f3ee;
+  --text-on-primary: #00382b;
 }

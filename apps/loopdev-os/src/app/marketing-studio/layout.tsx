@@ -4,11 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   MARKETING_STUDIO_SCHEMA,
-  ThemeToggle,
+  BrandLogo,
+  OrganizationSwitcher,
   UserAvatar,
   CommandBarTrigger,
-  UserMenu,
-  NotificationCenter,
   NOTIFICATION_CENTER_FIXTURES,
   LayoutProvider,
   SuiteShell,
@@ -21,13 +20,19 @@ import { useOrganization } from '@/hooks/useOrganization';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NavMode, LayoutContext, ModuleAccessState } from '@loopdev/contracts';
 import { SuitePermissionGuard } from '@/components/layout/SuitePermissionGuard';
+import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { getSuiteNavMode } from '@/components/layout/suiteNavMode';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, signOut } = useAuth();
-  const { activeOrganization } = useOrganization();
+  const { user } = useAuth();
+  const {
+    organizations,
+    activeOrganization,
+    setActiveOrganizationId,
+    isLoading: isOrganizationLoading,
+  } = useOrganization();
   const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } =
     useNotifications(NOTIFICATION_CENTER_FIXTURES.recent);
 
@@ -82,45 +87,62 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         context={context}
         onNavigate={(route) => router.push(route.routeId)}
         leftSlot={
-          <SuiteSwitcher
-            currentSuite={currentSuite}
-            availableSuites={AVAILABLE_SUITES_FIXTURES}
-            onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
-            onSuiteChange={(suiteId) => {
-              if (suiteId === 'os.home') {
-                router.push('/launchpad');
-                return;
-              }
-
-              const suite = AVAILABLE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
-              router.push(suite?.route?.routeId ?? '/launchpad');
-            }}
-          />
+          <div className="flex min-w-0 items-center gap-3">
+            <BrandLogo variant="isotype" size="sm" className="shrink-0" />
+          </div>
         }
         centerSlot={<CommandBarTrigger onOpen={() => {}} />}
-        rightSlot={
-          <div className="flex items-center gap-4">
-            <NotificationCenter
-              notifications={notifications}
-              unreadCount={unreadCount}
-              onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-              onMarkAsRead={markAsRead}
-              onMarkAllRead={markAllAsRead}
-              onRemove={removeNotification}
-              onClear={clearAll}
-              onViewAll={() => console.log('Open SuiteContextPanel')}
-            />
+        platformHeaderProps={{
+          contextSlot: (
+            <div className="flex min-w-0 items-center gap-2">
+              <OrganizationSwitcher
+                organizations={organizations.map(({ id, name }) => ({
+                  id,
+                  name,
+                  planLabel: 'FREE',
+                }))}
+                activeOrganizationId={activeOrganization?.id}
+                isLoading={isOrganizationLoading}
+                onOrganizationNavigate={() => router.push('/launchpad')}
+                onOrganizationChange={setActiveOrganizationId}
+                onAllOrganizations={() => undefined}
+                onCreateOrganization={() => undefined}
+              />
+              <span className="text-primary px-1 text-xs font-normal" aria-hidden="true">
+                |
+              </span>
+              <SuiteSwitcher
+                currentSuite={currentSuite}
+                availableSuites={AVAILABLE_SUITES_FIXTURES}
+                showIcon={false}
+                onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
+                onSuiteChange={(suiteId) => {
+                  if (suiteId === 'os.home') {
+                    router.push('/launchpad');
+                    return;
+                  }
 
-            <ThemeToggle variant="technical" size="md" />
-            <UserMenu
-              userName={user?.email || 'User'}
-              userEmail={user?.email}
-              userRole="Tenant_Admin"
-              tenantName={activeOrganization?.name ?? 'Workspace'}
-              onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-              onLogout={() => signOut()}
-            />
-          </div>
+                  const suite = AVAILABLE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
+                  router.push(suite?.route?.routeId ?? '/launchpad');
+                }}
+              />
+            </div>
+          ),
+        }}
+        rightSlot={
+          <PlatformHeaderControls
+            notifications={notifications}
+            unreadCount={unreadCount}
+            activeContext={activeOverlay === 'context' ? 'notifications' : null}
+            onOpenNotifications={() => setActiveOverlay('context')}
+            onOpenHelp={() => setActiveOverlay('context')}
+            onOpenAI={() => setActiveOverlay('context')}
+            onViewAllNotifications={() => undefined}
+            onMarkAsRead={markAsRead}
+            onMarkAllRead={markAllAsRead}
+            onRemoveNotification={removeNotification}
+            onClearNotifications={clearAll}
+          />
         }
         profileSlot={
           <UserAvatar

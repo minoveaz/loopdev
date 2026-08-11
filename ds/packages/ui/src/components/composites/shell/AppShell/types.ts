@@ -33,6 +33,8 @@ export interface AppShellProps {
     navBehavior?: 'auto' | 'always' | 'hidden';
     /** Preferencia visual del sidebar: expandido, rail o expansión al hover */
     navigationMode?: Exclude<NavMode, 'hidden'>;
+    /** Ubicación del header respecto al sidebar en composiciones de suite */
+    headerPlacement?: 'split' | 'top';
     /** Comportamiento del panel de contexto */
     contextBehavior?: 'auto' | 'hidden';
     /** Determina qué panel tiene prioridad en modo overlay (mobile) */

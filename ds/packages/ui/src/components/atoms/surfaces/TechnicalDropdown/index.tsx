@@ -11,20 +11,28 @@ import { useTechnicalDropdown } from './useTechnicalDropdown';
  * @description Átomo oficial que envuelve Radix Dropdown con la estética LoopDev OS.
  */
 export const TechnicalDropdown: React.FC<TechnicalDropdownProps> = (props) => {
-  const { trigger, children, align = 'start', side = 'bottom', sideOffset = 8, avoidCollisions = true, open, onOpenChange, className } = props;
+  const {
+    trigger,
+    children,
+    align = 'start',
+    side = 'bottom',
+    sideOffset = 8,
+    avoidCollisions = true,
+    open,
+    onOpenChange,
+    className,
+  } = props;
   const { getContentClasses } = useTechnicalDropdown();
 
   return (
     <DropdownMenu.Root open={open} onOpenChange={onOpenChange}>
-      <DropdownMenu.Trigger asChild>
-        {trigger}
-      </DropdownMenu.Trigger>
+      <DropdownMenu.Trigger asChild>{trigger}</DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content 
-          align={align} 
-          side={side} 
-          sideOffset={sideOffset} 
+        <DropdownMenu.Content
+          align={align}
+          side={side}
+          sideOffset={sideOffset}
           avoidCollisions={avoidCollisions}
           className={getContentClasses(className)}
         >
@@ -39,12 +47,13 @@ export const TechnicalDropdown: React.FC<TechnicalDropdownProps> = (props) => {
  * @component TechnicalDropdownItem
  */
 export const TechnicalDropdownItem: React.FC<TechnicalDropdownItemProps> = (props) => {
-  const { children, onClick, disabled } = props;
+  const { children, onClick, onSelect, disabled } = props;
   const { getItemClasses } = useTechnicalDropdown();
 
   return (
-    <DropdownMenu.Item 
+    <DropdownMenu.Item
       onClick={onClick}
+      onSelect={onSelect}
       disabled={disabled}
       className={getItemClasses(props)}
     >
@@ -64,13 +73,14 @@ export const TechnicalDropdownSeparator: React.FC = () => {
 /**
  * @component TechnicalDropdownGroup
  */
-export const TechnicalDropdownGroup: React.FC<{ children: React.ReactNode, label?: string }> = ({ children, label }) => (
+export const TechnicalDropdownGroup: React.FC<{ children: React.ReactNode; label?: string }> = ({
+  children,
+  label,
+}) => (
   <DropdownMenu.Group>
     {label && (
       <div className="px-3 py-2">
-        <span className="text-text-muted text-xs font-medium">
-          {label}
-        </span>
+        <span className="text-text-muted text-xs font-medium">{label}</span>
       </div>
     )}
     {children}
@@ -101,10 +111,7 @@ export const TechnicalDropdownSubmenu: React.FC<TechnicalDropdownSubmenuProps> =
         <ChevronRight size={14} className="shrink-0" aria-hidden="true" />
       </DropdownMenu.SubTrigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.SubContent
-          sideOffset={4}
-          className={getContentClasses()}
-        >
+        <DropdownMenu.SubContent sideOffset={4} className={getContentClasses()}>
           {children}
         </DropdownMenu.SubContent>
       </DropdownMenu.Portal>

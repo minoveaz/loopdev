@@ -1,8 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
-  TechnicalSurface,
-  ScrollArea,
-} from '../../../atoms';
+import { TechnicalSurface, ScrollArea } from '../../../atoms';
 import { SidebarFooter } from '../SidebarFooter';
 import { SuiteSidebarProps } from './types';
 import { useSuiteSidebar } from './useSuiteSidebar';
@@ -21,20 +18,9 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
   const [isFooterHovered, setIsFooterHovered] = useState(false);
   const isSidebarHovered = useRef(false);
   const hoverCollapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const {
-    onNavModeChange,
-    onNavigate,
-    accessMap,
-    telemetry = {},
-  } = props;
+  const { onNavModeChange, onNavigate, accessMap, telemetry = {} } = props;
 
-  const {
-    isRail,
-    visibleGroups,
-    containerClasses,
-    suite,
-    activeModuleId,
-  } = useSuiteSidebar(props);
+  const { isRail, visibleGroups, containerClasses, suite, activeModuleId } = useSuiteSidebar(props);
   const shouldExpandOnHover = props.navMode === 'hover' && !props.mobileMode;
   const renderAsRail = isRail && !(shouldExpandOnHover && (isHoverExpanded || isControlMenuOpen));
   const clearHoverCollapse = () => {
@@ -58,15 +44,23 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
       variant="canvas"
       depth="flat"
       overflow="visible"
-      onMouseEnter={shouldExpandOnHover ? () => {
-        clearHoverCollapse();
-        isSidebarHovered.current = true;
-        setIsHoverExpanded(true);
-      } : undefined}
-      onMouseLeave={shouldExpandOnHover ? () => {
-        isSidebarHovered.current = false;
-        if (!isControlMenuOpen && !isFooterHovered) scheduleHoverCollapse();
-      } : undefined}
+      onMouseEnter={
+        shouldExpandOnHover
+          ? () => {
+              clearHoverCollapse();
+              isSidebarHovered.current = true;
+              setIsHoverExpanded(true);
+            }
+          : undefined
+      }
+      onMouseLeave={
+        shouldExpandOnHover
+          ? () => {
+              isSidebarHovered.current = false;
+              if (!isControlMenuOpen && !isFooterHovered) scheduleHoverCollapse();
+            }
+          : undefined
+      }
       className={`${containerClasses} ${shouldExpandOnHover ? `sidebar-hover-surface ${isHoverExpanded || isControlMenuOpen ? '!w-64' : '!w-16'}` : ''} h-full border-r border-border-technical bg-shell-canvas`}
     >
       <div className="flex flex-col h-full">
@@ -76,6 +70,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
             icon="LayoutDashboard"
             label="Suite Dashboard"
             isRail={renderAsRail}
+            revealOnHover={shouldExpandOnHover}
             isActive
             onNavigate={onNavigate}
             route={suite.route || { routeId: '/' }}
@@ -93,7 +88,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
                 key={group.id}
                 group={group}
                 isRail={renderAsRail}
-                revealOnHover={false}
+                revealOnHover={shouldExpandOnHover}
                 activeModuleId={activeModuleId}
                 accessMap={accessMap}
                 telemetry={telemetry}

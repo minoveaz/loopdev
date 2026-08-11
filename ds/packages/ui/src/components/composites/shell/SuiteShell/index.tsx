@@ -41,6 +41,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
       {...appShellProps}
       config={{
         ...appShellProps?.config,
+        headerPlacement: 'top',
         isLeftSidebarOpen: navMode === 'expanded',
         navigationMode: navMode === 'hover' ? 'hover' : navMode === 'rail' ? 'rail' : 'expanded',
         navBehavior: navMode === 'hidden' ? 'hidden' : 'auto',

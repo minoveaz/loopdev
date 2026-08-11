@@ -10,7 +10,7 @@ describe('TechnicalTooltip Atom', () => {
     render(
       <TechnicalTooltip content="Info">
         <button>Hover me</button>
-      </TechnicalTooltip>
+      </TechnicalTooltip>,
     );
     expect(screen.getByText('Hover me')).toBeInTheDocument();
   });
@@ -20,7 +20,7 @@ describe('TechnicalTooltip Atom', () => {
     render(
       <TechnicalTooltip content="Metadata_Technical" delayDuration={0}>
         <button>Trigger</button>
-      </TechnicalTooltip>
+      </TechnicalTooltip>,
     );
 
     const trigger = screen.getByText('Trigger');
@@ -37,13 +37,23 @@ describe('TechnicalTooltip Atom', () => {
     render(
       <TechnicalTooltip content="Test" delayDuration={0} open={true}>
         <button>Trigger</button>
-      </TechnicalTooltip>
+      </TechnicalTooltip>,
     );
 
     // Verificamos la presencia de los brackets { y }
     // Radix duplica el contenido para lectores de pantalla, usamos getAll
     expect(screen.getAllByText('{')[0]).toBeInTheDocument();
     expect(screen.getAllByText('}')[0]).toBeInTheDocument();
+  });
+
+  it('debe mantener el tooltip por encima de la shell', () => {
+    render(
+      <TechnicalTooltip content="Rail module" variant="popover" open={true}>
+        <button>Trigger</button>
+      </TechnicalTooltip>,
+    );
+
+    expect(screen.getAllByText('Rail module')[0].parentElement).toHaveClass('z-[2000]');
   });
 
   it('has no accessibility violations for the tooltip trigger', async () => {
