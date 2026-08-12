@@ -6,9 +6,9 @@ created: 2026-08-12
 updated: 2026-08-12
 owner: platform
 lead: null
-branch: chore/platform-package-readiness
+branch: chore/platform-package-validation
 branches: []
-phase: 0
+phase: 1
 pull_requests: [52, 54]
 issues: []
 packages: ["@loopdev/contracts", "@loopdev/ui", "@loopdev/ui-native", "@loopdev/design-contracts", "@loopdev/tokens", "@loopdev/tailwind-config", "@loopdev/eslint-config", "@loopdev/tsconfig"]
@@ -63,6 +63,7 @@ confirmed.
 | 2026-08-12 | Create a separate package lifecycle track owned by `platform` | Package governance is broader than the completed track automation and belongs to shared platform ownership | Package policy and release automation are handled independently from repository governance | User |
 | 2026-08-12 | Treat shared libraries as independently versionable when publication is justified | Contracts and UI can evolve at different rates from applications | Applications are not forced into package releases | User |
 | 2026-08-12 | Defer Changesets, registry, and publication automation until package classification and distribution needs are approved | The current packages are internal and there is no release workflow | Phase 0 remains focused on inventory, policy, and validation readiness | User |
+| 2026-08-12 | Classify `@loopdev/ui` as the only publication candidate; classify all other packages as internal and applications/playgrounds as application-only | The user confirmed that only the shared web UI may require distribution outside the monorepo | Phase 1 validates internal consumers without changing package privacy or enabling publication; phase 2 may revisit only UI distribution prerequisites | User |
 
 ## Arquitectura y contratos
 
@@ -81,10 +82,10 @@ environment in the related track evidence.
 
 ## Branch strategy
 
-This is an active governance and platform track executing phase 0 on
-`chore/platform-package-readiness`. The branch contains inventory, classification, consumer
-mapping, and validation-readiness evidence only. Package validation automation and release tooling
-remain separate future implementation slices.
+This is an active governance and platform track executing phase 1 on
+`chore/platform-package-validation`. Phase 0 inventory and classification are approved. This
+branch implements affected-package validation while preserving the full fallback for shared,
+dependency, root, workflow, and ambiguous changes. Release tooling remains deferred.
 
 ## Inventario de packages y consumidores
 
@@ -94,11 +95,11 @@ the following shared packages and workspaces:
 
 | Package/workspace | Ruta | Clasificación inicial | Privacidad | Scripts relevantes | Consumidores directos conocidos |
 | --- | --- | --- | --- | --- | --- |
-| `@loopdev/contracts` | `packages/contracts` | Shared contract library; publishable candidate only after need is approved | Private | `build`, `lint`, `typecheck` | `@loopdev/ui`, `loopdev-os`, `loopdev-mobile` |
-| `@loopdev/ui` | `ds/packages/ui` | Shared web UI library; publishable candidate only after need is approved | Not marked private | `build`, `lint`, `typecheck`, `test` | `loopdev-os` |
+| `@loopdev/contracts` | `packages/contracts` | Internal shared contract library | Private | `build`, `lint`, `typecheck` | `@loopdev/ui`, `loopdev-os`, `loopdev-mobile` |
+| `@loopdev/ui` | `ds/packages/ui` | Shared web UI library; only publication candidate | Not marked private | `build`, `lint`, `typecheck`, `test` | `loopdev-os` |
 | `@loopdev/ui-native` | `ds/packages/ui-native` | Internal mobile UI library | Private | `lint`, `typecheck` | `loopdev-mobile` |
 | `@loopdev/design-contracts` | `ds/packages/design-contracts` | Internal design-system contracts | Private | `lint`, `typecheck` | `@loopdev/ui-native`, `loopdev-mobile` |
-| `@loopdev/tokens` | `ds/packages/tokens` | Shared design foundation; publication decision deferred | Not marked private | `lint`, `typecheck` | `@loopdev/ui-native`, `loopdev-os`, `loopdev-mobile`; UI has a TypeScript path reference |
+| `@loopdev/tokens` | `ds/packages/tokens` | Internal shared design foundation | Not marked private | `lint`, `typecheck` | `@loopdev/ui-native`, `loopdev-os`, `loopdev-mobile`; UI has a TypeScript path reference |
 | `@loopdev/tailwind-config` | `ds/packages/tailwind-config` | Internal web tooling/configuration | Not marked private | `lint`, `typecheck` | `@loopdev/ui` |
 | `@loopdev/eslint-config` | `ds/packages/eslint-config` | Internal tooling/configuration; no workspace consumer found | Not marked private | `lint`, `typecheck` | None found in current source scan |
 | `@loopdev/tsconfig` | `ds/packages/tsconfig` | Internal TypeScript configuration; no workspace consumer found | Not marked private | `lint`, `typecheck` | None found in current source scan |
@@ -139,11 +140,21 @@ artifact; phase 1 may replace the manual mapping with affected-package automatio
 | Tooling/configuration package | Version only if independently distributed; otherwise repository-owned | Current default |
 | Application or playground | Application deployment/versioning, never npm package release | Excluded from package publication |
 
-### Propuesta pendiente de aprobación
+### Decisión aprobada: clasificación de distribución
 
-The current proposal is to keep `@loopdev/contracts` private, treat `@loopdev/ui` as a publication
-candidate, and keep mobile/design/configuration packages internal until a distribution need and
-owner are approved. This proposal does not change package metadata or publication visibility.
+The approved classification is to keep `@loopdev/contracts` and all non-UI packages internal, treat
+`@loopdev/ui` as the only publication candidate, and keep applications/playgrounds application-only.
+This classification does not change `private` metadata, publish to a registry, or authorize a
+release.
+
+In this track, **internal** means that a package is owned and consumed by this repository and its
+applications. Its API is validated through workspace consumers and commits, but it has no approved
+external distribution contract, registry publication, or independent release process.
+
+**Publication candidate** means that a package has a package boundary that may justify distribution
+outside this monorepo. It is not public and is not publishable by default: an external consumer,
+package owner, versioning policy, registry, authentication, release approval, and rollback policy
+must be approved before phase 2 or phase 3 can authorize publication.
 
 ## Matriz de validación de impacto
 
@@ -174,23 +185,23 @@ requirements before introducing release tooling.
 
 **Definition of Ready**
 
-- [ ] Current package and shared-module inventory is complete.
-- [ ] `@loopdev/contracts`, `@loopdev/ui`, applications, and non-publishable modules are classified.
-- [ ] Package owners and primary consumers are identified.
-- [ ] The distinction between package publication and application deployment is documented.
+- [x] Current package and shared-module inventory is complete.
+- [x] `@loopdev/contracts`, `@loopdev/ui`, applications, and non-publishable modules are classified.
+- [x] Package owners and primary consumers are identified.
+- [x] The distinction between package publication and application deployment is documented.
 
 **Entregables**
 
-- [ ] Package inventory with privacy and publication intent.
-- [ ] Independent versioning policy for publishable packages.
-- [ ] Package-impact rules for tracks and pull requests.
-- [ ] Validation matrix for package-only, consumer, dependency, and root changes.
+- [x] Package inventory with privacy and publication intent.
+- [x] Independent versioning policy for publishable packages.
+- [x] Package-impact rules for tracks and pull requests.
+- [x] Validation matrix for package-only, consumer, dependency, and root changes.
 
 **Validación**
 
-- [ ] Inventory is reviewed against the pnpm workspace and Turbo configuration.
-- [ ] Each shared package has a build and typecheck command or an explicit exception.
-- [ ] At least one representative contracts change and one UI change are mapped to validation.
+- [x] Inventory is reviewed against the pnpm workspace and Turbo configuration.
+- [x] Each shared package has a build and typecheck command or an explicit exception.
+- [x] At least one representative contracts change and one UI change are mapped to validation.
 
 **Evidencia:** Manifest inventory, dependency declarations, source imports, Next transpilation
 configuration, and UI TypeScript path mappings were inspected. `@loopdev/contracts` build and
@@ -199,7 +210,7 @@ configuration, and UI TypeScript path mappings were inspected. `@loopdev/contrac
 configuration/resource behavior remains a validation gap. Mobile Jest/Expo checks are declared in
 the package but are not wired into root CI.
 
-**Estado:** en ejecución
+**Estado:** completada
 
 ### Fase 1: Package validation implementation
 
@@ -208,8 +219,8 @@ existing full validation fallback.
 
 **Definition of Ready**
 
-- [ ] Phase 0 inventory and validation matrix are approved.
-- [ ] Shared contracts and root/dependency fallback rules are explicit.
+- [x] Phase 0 inventory and validation matrix are approved.
+- [x] Shared contracts and root/dependency fallback rules are explicit.
 
 **Entregables**
 
@@ -225,7 +236,7 @@ existing full validation fallback.
 
 **Evidencia:** Pendiente.
 
-**Estado:** pendiente
+**Estado:** en ejecución
 
 ### Fase 2: Release policy and publication decision
 
@@ -286,6 +297,7 @@ complete.
 | Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
 | --- | --- | --- | --- | --- |
 | 2026-08-12 | Make global quality conditional and decouple workflow changes from frontend E2E | Documentation-only changes should not wait for lint, typecheck, tests, and build; workflow changes retain full quality validation without implying frontend changes | Phase 0 PR validation becomes faster without reducing executable-change coverage | User |
+| 2026-08-12 | Classify `@loopdev/ui` as the only publication candidate and all other packages as internal | The user confirmed that external distribution is only a future possibility for the shared web UI | Phase 1 validates internal consumers without changing package privacy or enabling publication | User |
 
 ## Riesgos y bloqueos
 
@@ -313,16 +325,18 @@ complete.
 | 2026-08-12 | Release tooling inventory | No `.changeset` directory or release/publication workflow found | Repository inspection |
 | 2026-08-12 | Planned-to-active transition | Passed; track status, directory, owner, branch, and unique id validated | `node scripts/tracks/validate-tracks.mjs` |
 | 2026-08-12 | Track dashboard generation | Passed; dashboard regenerated from the active inventory | `node scripts/tracks/generate-tracks-index.mjs` |
+| 2026-08-12 | Package classification approval | User approved `@loopdev/ui` as the only publication candidate; all other packages are internal and applications/playgrounds are application-only | User decision recorded in `Decisiones aprobadas` |
+| 2026-08-12 | Phase 0 readiness merge | Passed; inventory, consumers, versioning policy, and impact matrix merged in PR #54 | Commit `0832cca` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-12.
-- **Rama de continuación:** chore/platform-package-inventory.
-- **Commit de partida:** c77204d.
-- **Estado alcanzado:** Phase 0 activated on the package inventory branch; package inventory and policy readiness are now in execution.
+- **Rama de continuación:** chore/platform-package-validation.
+- **Commit de partida:** 0832cca.
+- **Estado alcanzado:** Phase 0 classification and readiness were approved and merged; phase 1 is active for affected-package validation.
 - **Decisiones, bloqueos y riesgos:** Packages remain internal; Changesets, registry, and publication are deferred until distribution need is approved.
 - **Validación ejecutada:** Track validator passed before and after dashboard generation; staged diff check and Git convention hooks passed.
-- **Siguiente acción concreta:** Complete the package inventory and review consumers against workspace and Turbo configuration.
+- **Siguiente acción concreta:** Implement affected-package validation routing with a full fallback for shared and ambiguous changes.
 
 ## Cierre
 
