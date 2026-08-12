@@ -15,6 +15,7 @@ describe('SuiteCanvas', () => {
       'split',
     );
     expect(screen.getByText('Module content')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'SuiteCanvas' }).querySelector('main')).toBeNull();
   });
 
   it('renders optional structural regions without owning their content', () => {

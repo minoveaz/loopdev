@@ -31,8 +31,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   appShellProps,
   canvasProps,
 }) => {
-  const activeModule =
-    config.modules.find((module) => module.moduleId === activeModuleId) ?? config.modules[0];
+  const activeModule = config.modules.find((module) => module.moduleId === activeModuleId);
   const moduleContent = activeModule
     ? (moduleRenderers?.[activeModule.moduleId]?.(activeModule) ?? children)
     : children;

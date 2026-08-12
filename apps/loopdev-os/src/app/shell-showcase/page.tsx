@@ -60,6 +60,9 @@ const CANVAS_MODES: Array<{ id: CanvasMode; label: string; description: string }
   },
 ];
 
+const isCanvasMode = (value: string | null): value is CanvasMode =>
+  value !== null && CANVAS_MODES.some((mode) => mode.id === value);
+
 const SHOWCASE_THEME_VARIABLES = [
   '--lpd-color-brand-primary',
   '--lpd-color-brand-primary-rgb',
@@ -520,6 +523,17 @@ export default function ShellShowcasePage() {
   const activeOrganization = SHOWCASE_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
 
   useEffect(() => {
+    const syncCanvasMode = () => {
+      const requestedMode = new URLSearchParams(window.location.search).get('canvasMode');
+      setCanvasMode(isCanvasMode(requestedMode) ? requestedMode : 'overview');
+    };
+
+    syncCanvasMode();
+    window.addEventListener('popstate', syncCanvasMode);
+    return () => window.removeEventListener('popstate', syncCanvasMode);
+  }, []);
+
+  useEffect(() => {
     const themeClass = activeOrganization?.theme;
     if (!themeClass) return;
 
@@ -552,7 +566,7 @@ export default function ShellShowcasePage() {
     <div className={`${activeOrganization?.theme ?? ''} h-full`}>
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
-        activeModuleId={canvasMode}
+        activeModuleId={canvasMode === 'overview' ? undefined : canvasMode}
         moduleRenderers={Object.fromEntries(
           CANVAS_MODES.map((mode) => [mode.id, () => <ShowcaseCanvas mode={mode.id} />]),
         )}
@@ -579,8 +593,9 @@ export default function ShellShowcasePage() {
           const selectedMode = new URL(route.routeId, window.location.origin).searchParams.get(
             'canvasMode',
           );
-          if (selectedMode && CANVAS_MODES.some((mode) => mode.id === selectedMode)) {
-            setCanvasMode(selectedMode as CanvasMode);
+          if (isCanvasMode(selectedMode)) {
+            setCanvasMode(selectedMode);
+            router.push(route.routeId);
             return;
           }
 
@@ -652,7 +667,9 @@ export default function ShellShowcasePage() {
         appShellProps={{
           config: { activeOverlay: contextMode ? 'context' : null },
         }}
-      />
+      >
+        <ShowcaseCanvas mode="overview" />
+      </SuiteRuntime>
       {contextMode && (
         <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
           <GlobalContextPanel

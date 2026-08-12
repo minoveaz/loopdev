@@ -36,4 +36,23 @@ test.describe('shell-showcase canonical contract', () => {
     await suiteMenu.getByRole('menuitem', { name: 'Volver al Launchpad' }).click();
     await expect(page).toHaveURL(/\/launchpad$/);
   });
+
+  test('hydrates canvas modes from the URL and preserves browser history', async ({ page }) => {
+    await page.goto('/shell-showcase?canvasMode=board');
+
+    await expect(page.getByRole('heading', { name: 'Work queue' })).toBeVisible();
+    await expect(page.getByRole('menuitem', { name: 'Board', exact: true })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    await expect(page.locator('main')).toHaveCount(1);
+
+    await page.getByRole('menuitem', { name: 'Data' }).click();
+    await expect(page).toHaveURL(/\/shell-showcase\?canvasMode=data$/);
+    await expect(page.getByRole('heading', { name: 'Resource directory' })).toBeVisible();
+
+    await page.goBack();
+    await expect(page).toHaveURL(/\/shell-showcase\?canvasMode=board$/);
+    await expect(page.getByRole('heading', { name: 'Work queue' })).toBeVisible();
+  });
 });

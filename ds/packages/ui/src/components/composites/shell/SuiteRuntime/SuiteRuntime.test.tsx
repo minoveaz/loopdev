@@ -47,10 +47,11 @@ describe('SuiteRuntime', () => {
     expect(screen.queryByText('Overview content')).not.toBeInTheDocument();
   });
 
-  it('keeps Suite Dashboard active when no module is selected', () => {
+  it('renders Suite Home content and keeps Suite Dashboard active when no module is selected', () => {
     render(
       <SuiteRuntime
         config={{ ...suiteConfig, navMode: 'expanded' }}
+        children={<div>Suite Home content</div>}
         leftSlot={<div>identity</div>}
         centerSlot={<div>search</div>}
         rightSlot={<div>controls</div>}
@@ -62,6 +63,7 @@ describe('SuiteRuntime', () => {
       'aria-current',
       'page',
     );
+    expect(screen.getByText('Suite Home content')).toBeInTheDocument();
     expect(screen.queryByText('Overview content')).not.toBeInTheDocument();
   });
 
