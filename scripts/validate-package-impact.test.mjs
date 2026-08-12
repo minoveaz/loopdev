@@ -45,8 +45,23 @@ test('keeps package validation in dependency order for mixed changes', () => {
   ]);
 
   assert.ok(
-    commands.indexOf('--filter @loopdev/contracts build') < commands.indexOf('--filter @loopdev/ui build'),
+    commands.indexOf('--filter @loopdev/contracts build') <
+      commands.indexOf('--filter @loopdev/ui build'),
   );
+});
+
+test('can omit native mobile consumers for a shell-only validation scope', () => {
+  const files = ['packages/contracts/src/platform/navigation.ts'];
+  const skippedConsumers = new Set(['@loopdev/ui-native', 'loopdev-mobile']);
+  const commands = buildCommands(resolveImpact(files).packageRules, skippedConsumers).map((args) =>
+    args.join(' '),
+  );
+
+  assert.ok(commands.includes('--filter @loopdev/ui build'));
+  assert.ok(commands.includes('--filter loopdev-os build'));
+  assert.ok(!commands.includes('--filter @loopdev/ui-native typecheck'));
+  assert.ok(!commands.includes('--filter loopdev-mobile typecheck'));
+  assert.ok(!commands.includes('--filter loopdev-mobile test'));
 });
 
 test('routes mobile application changes to global and mobile validation', () => {
