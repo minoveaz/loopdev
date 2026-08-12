@@ -1,0 +1,16 @@
+{
+  "kind": "visual-contract-change",
+  "surfaces": [
+    "apps/loopdev-os/src/app/shell-showcase",
+    "apps/loopdev-os/src/app/login",
+    "e2e/shell.visual.spec.mjs",
+    "docs/03-platform/SHELL_SHOWCASE_CONTRACT.md"
+  ],
+  "userIntent": "Establish the SuiteShell composition and preserve its responsive light and dark visual contract across the shell showcase and login experience.",
+  "evidence": {
+    "functional": "Shell navigation and selected states are covered by the shell showcase contract tests.",
+    "accessibility": "The shell contract keeps accessible navigation semantics and responsive interaction coverage.",
+    "visual": "Updated light and dark snapshots were reviewed for desktop, mobile, and compact mobile shell states and the shared login surface."
+  },
+  "approvedBy": "design-system"
+}
