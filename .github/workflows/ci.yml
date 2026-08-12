@@ -51,19 +51,20 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       shell: ${{ steps.filter.outputs.shell }}
-      quality: ${{ steps.filter.outputs.quality }}
+      quality: ${{ steps.impact.outputs.global_fallback }}
+      package_validation: ${{ steps.impact.outputs.has_targeted_validation }}
+      mobile: ${{ steps.impact.outputs.mobile }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Detect frontend changes
         id: filter
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            quality:
-              - '**/*.{ts,tsx,js,jsx,mjs,cjs,json,yaml,yml,toml,css,scss}'
-              - '.github/workflows/**'
             frontend:
               - 'apps/loopdev-os/**'
               - 'ds/packages/ui/**'
@@ -88,6 +89,83 @@ jobs:
               - 'scripts/check-shell.mjs'
               - 'vitest.config.ts'
               - 'package.json'
+
+      - name: Resolve package impact
+        id: impact
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: node scripts/validate-package-impact.mjs --base "$BASE_SHA" --head "$HEAD_SHA"
+
+      - name: Validate package impact resolver
+        run: pnpm test:package-impact
+
+  package-validation:
+    name: Affected package validation
+    needs: changes
+    if: needs.changes.outputs.package_validation == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate affected packages and consumers
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: pnpm validate:package-impact --base "$BASE_SHA" --head "$HEAD_SHA"
+
+  mobile-validation:
+    name: Mobile package validation
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate mobile lint
+        run: pnpm --filter loopdev-mobile lint
+
+      - name: Validate mobile typecheck
+        run: pnpm --filter loopdev-mobile typecheck
+
+      - name: Validate mobile tests
+        run: pnpm --filter loopdev-mobile test
 
   shell-validation:
     name: Shell Interaction Surface

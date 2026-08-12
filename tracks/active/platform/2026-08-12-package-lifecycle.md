@@ -6,10 +6,10 @@ created: 2026-08-12
 updated: 2026-08-12
 owner: platform
 lead: null
-branch: chore/platform-package-validation
+branch: chore/platform-package-impact-validation
 branches: []
 phase: 1
-pull_requests: [52, 54]
+pull_requests: [52, 54, 55]
 issues: []
 packages: ["@loopdev/contracts", "@loopdev/ui", "@loopdev/ui-native", "@loopdev/design-contracts", "@loopdev/tokens", "@loopdev/tailwind-config", "@loopdev/eslint-config", "@loopdev/tsconfig"]
 release: not-required
@@ -83,7 +83,7 @@ environment in the related track evidence.
 ## Branch strategy
 
 This is an active governance and platform track executing phase 1 on
-`chore/platform-package-validation`. Phase 0 inventory and classification are approved. This
+`chore/platform-package-impact-validation`. Phase 0 inventory and classification are approved. This
 branch implements affected-package validation while preserving the full fallback for shared,
 dependency, root, workflow, and ambiguous changes. Release tooling remains deferred.
 
@@ -224,17 +224,30 @@ existing full validation fallback.
 
 **Entregables**
 
-- [ ] Affected-package build and typecheck routing where reliable.
-- [ ] Consumer validation for packages with known application consumers.
+- [x] Affected-package build and typecheck routing where reliable.
+- [x] Consumer validation for packages with known application consumers.
 - [ ] Track evidence produced by package-impacting pull requests.
 
 **Validación**
 
-- [ ] Package-only, consumer, dependency, and root changes trigger the expected checks.
-- [ ] Protected branches retain full validation coverage.
-- [ ] Skipped package checks are visible and cannot hide a required fallback.
+- [x] Package-only, consumer, dependency, and root changes trigger the expected checks.
+- [x] Protected branches retain full validation coverage.
+- [x] Skipped package checks are visible and cannot hide a required fallback.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Added `scripts/validate-package-impact.mjs` and focused `node:test` coverage for
+documentation, UI, contracts, mobile, Supabase, root, shared configuration, and unknown paths.
+Dry-runs confirm UI routing to package checks plus `loopdev-os` build, contracts routing to its
+declared consumers plus global fallback, mobile routing to global plus mobile checks, and
+Supabase-only changes remaining in the specialized workflow. The new CI jobs install frozen
+dependencies and expose the resolver outputs for package and mobile validation while retaining
+the existing `validate:ci` fallback.
+
+Focused resolver tests, Node syntax, ESLint, Prettier, UI lint/typecheck/build, and mobile
+lint/typecheck passed. Mobile Jest currently has three pre-existing failures in `App.test.tsx`
+(two 5-second timeouts and one organization-state expectation); the `loopdev-os` consumer build
+also fails in generated `.next/dev/types` because `src/app/operation-os/page.tsx` cannot be
+resolved. The full phase remains open until those validation gaps are addressed or explicitly
+accepted in a later evidence update.
 
 **Estado:** en ejecución
 
@@ -327,13 +340,14 @@ complete.
 | 2026-08-12 | Track dashboard generation | Passed; dashboard regenerated from the active inventory | `node scripts/tracks/generate-tracks-index.mjs` |
 | 2026-08-12 | Package classification approval | User approved `@loopdev/ui` as the only publication candidate; all other packages are internal and applications/playgrounds are application-only | User decision recorded in `Decisiones aprobadas` |
 | 2026-08-12 | Phase 0 readiness merge | Passed; inventory, consumers, versioning policy, and impact matrix merged in PR #54 | Commit `0832cca` |
+| 2026-08-12 | Phase 1 activation merge | Passed; approved classification and phase 1 readiness merged in PR #55 | Commit `47915d4` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-12.
-- **Rama de continuación:** chore/platform-package-validation.
-- **Commit de partida:** 0832cca.
-- **Estado alcanzado:** Phase 0 classification and readiness were approved and merged; phase 1 is active for affected-package validation.
+- **Rama de continuación:** chore/platform-package-impact-validation.
+- **Commit de partida:** 47915d4.
+- **Estado alcanzado:** Phase 0 classification and readiness were approved and merged; phase 1 implementation is active for affected-package validation.
 - **Decisiones, bloqueos y riesgos:** Packages remain internal; Changesets, registry, and publication are deferred until distribution need is approved.
 - **Validación ejecutada:** Track validator passed before and after dashboard generation; staged diff check and Git convention hooks passed.
 - **Siguiente acción concreta:** Implement affected-package validation routing with a full fallback for shared and ambiguous changes.
