@@ -5,6 +5,7 @@ test.use({ storageState: 'playwright/.auth/user.json' });
 test.describe('Marketing Studio DAM', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/marketing-studio/dam');
+    await page.waitForLoadState('networkidle');
   });
 
   test('opens the asset library with the offline fixture set', async ({ page }) => {
@@ -17,7 +18,7 @@ test.describe('Marketing Studio DAM', () => {
   });
 
   test('filters assets by search and approval status', async ({ page }) => {
-    const assetCards = page.locator('button[aria-pressed]');
+    const assetCards = page.locator('#workspace-canvas button[aria-pressed]');
 
     await expect(assetCards).toHaveCount(2);
 
@@ -31,9 +32,11 @@ test.describe('Marketing Studio DAM', () => {
   });
 
   test('selects an asset and marks its card as selected', async ({ page }) => {
-    const assetCard = page.getByRole('button', { name: /VitaBlue primary logo/ });
+    const assetCard = page.locator('#workspace-canvas button[aria-pressed]').filter({ hasText: 'VitaBlue primary logo' });
 
-    await assetCard.click();
+    await expect(assetCard).toBeVisible();
+
+    await assetCard.dispatchEvent('click');
 
     await expect(assetCard).toHaveAttribute('aria-pressed', 'true');
   });

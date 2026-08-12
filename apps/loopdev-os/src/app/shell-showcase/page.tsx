@@ -224,7 +224,7 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <Button size="sm">Run action</Button>
           </div>
           <div className="border-border-technical bg-background text-lpd-sm flex min-h-48 flex-1 items-center justify-center rounded-lg border font-mono leading-normal">
-            <span className="text-text-muted">// Main workspace content</span>
+            <span className="text-text-muted">{'// Main workspace content'}</span>
           </div>
           <div className="border-border-technical text-lpd-sm flex items-center gap-4 border-t pt-3 leading-normal">
             <Button
