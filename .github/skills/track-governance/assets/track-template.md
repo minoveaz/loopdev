@@ -5,7 +5,14 @@ status: planned
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 owner: <area>
+lead: null
 branch: null
+branches: []
+phase: 0
+pull_requests: []
+issues: []
+packages: []
+release: not-required
 areas: []
 dependencies: []
 blocked_by: []
@@ -30,6 +37,11 @@ supersedes: []
 | --- | --- | --- | --- | --- |
 
 ## Arquitectura y contratos
+
+## Branch strategy
+
+Use `branch` for a single implementation branch. A transversal track may use `branch: null` only
+when this section explains why, and declares its branches in `branches` or in the relevant phase.
 
 ## Fases
 
@@ -72,6 +84,19 @@ supersedes: []
 
 | Fecha | Validación | Resultado | Referencia |
 | --- | --- | --- | --- |
+
+## Handoff de sesión
+
+Actualizar al finalizar una sesión de implementación. Es un resumen breve y reemplazable: no duplica
+la especificación, el historial de Git ni la conversación.
+
+- **Fecha:** Pendiente.
+- **Rama de continuación:** Pendiente.
+- **Commit de partida:** Pendiente.
+- **Estado alcanzado:** Pendiente.
+- **Decisiones, bloqueos y riesgos:** Pendiente.
+- **Validación ejecutada:** Pendiente.
+- **Siguiente acción concreta:** Pendiente.
 
 ## Cierre
 

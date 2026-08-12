@@ -4,35 +4,50 @@
 
 ## Planificados
 
-- [CRM multi-tenant y comunicaciones de Estar Protegidos](./planned/2026-08-08-estar-protegidos-crm-platform.md) · `sales-crm`
-- [Marketing Studio multi-tenant para LoopDev](./planned/2026-08-09-marketing-studio-platform.md) · `marketing`
-- [Estandarización del shell de LoopDev OS](./planned/2026-08-10-shell-standardization.md) · `platform`
+### Marketing Studio
+
+- [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
 ## En curso
 
-- [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./active/2026-08-05-loopdev-saas-platform-upgrade.md) · `platform`
-- [LoopDev Frontend Quality System](./active/2026-08-08-loopdev-frontend-quality-system.md) · `governance`
-- [Fundación de la aplicación móvil de LoopDev](./active/2026-08-09-mobile-app-foundation.md) · `mobile`
-- [Track Governance and Migration](./active/2026-08-12-track-governance.md) · `governance` · `feature/track-governance`
+### CRM
+
+- [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
+
+### Mobile
+
+- [Fundación de la aplicación móvil de LoopDev](./active/mobile/2026-08-09-mobile-app-foundation.md) · fase 1
+
+### Platform
+
+- [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./active/platform/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
+- [Estandarización del shell de LoopDev OS](./active/platform/2026-08-10-shell-standardization.md) · fase 4
+
+### Governance
+
+- [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
+- [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 0
 ## Cerrados
 
-- [Design System Reorganization](./closed/2026-01-07-design-system-architecture.md) · `platform`
-- [Module Essentials Kit Implementation](./closed/2026-01-07-module-essentials.md) · `platform`
-- [ModuleWorkspace Implementation](./closed/2026-01-07-module-workspace.md) · `platform`
-- [Suite Home Hardening](./closed/2026-01-07-suite-home-hardening.md) · `platform`
-- [Suite Home System](./closed/2026-01-07-suite-home.md) · `platform`
-- [Brand Hub Operation](./closed/2026-01-08-brand-hub-operation.md) · `marketing`
-- [System Notice Rail](./closed/2026-01-08-suite-notices-rail.md) · `platform`
-- [Technical Status Badge](./closed/2026-01-08-technical-status-badge.md) · `platform`
-- [Brand Hub Overview Page (v1.1)](./closed/2026-01-11-brand-hub-overview.md) · `marketing`
-- [Brand Hub Identity Page](./closed/2026-01-12-brand-hub-identity.md) · `marketing`
-- [Brand Hub Visual System (Colors v1.5)](./closed/2026-01-13-brand-hub-visual-system.md) · `marketing`
-- [Brand Hub Logo System (v1.0)](./closed/2026-01-19-brand-hub-logo-system.md) · `marketing`
-- [Brand Hub Rules Engine (v1.0)](./closed/2026-01-19-brand-hub-rules-engine.md) · `marketing`
-- [Brand Hub Typography (v1.0)](./closed/2026-01-19-brand-hub-typography.md) · `marketing`
-- [Quant Ops Suite - Industrial Engine (v1.0)](./closed/2026-01-20-quant-ops-suite.md) · `quant`
-- [LoopDev Quant Architecture (3-Tier Industrial)](./closed/2026-03-21-quant-3-tier-architecture.md) · `quant`
-- [Quant Unified Reconnection (Industrial Sync)](./closed/2026-03-21-quant-unified-reconnection.md) · `quant`
-- [Ingestor Hardening](./closed/2026-04-11-ingestor-hardening.md) · `quant`
-- [Order Flow Integration](./closed/2026-04-11-order-flow-integration.md) · `quant`
-- [Health OS Occupational Health Suite](./closed/2026-06-28-health-os-occupational.md) · `health`
-- [Sales & CRM Suite Integration](./closed/2026-07-18-sales-crm-integration.md) · `sales-crm`
+### 2026
+
+- [Design System Reorganization](./closed/2026/2026-01-07-design-system-architecture.md) · fase 0
+- [Module Essentials Kit Implementation](./closed/2026/2026-01-07-module-essentials.md) · fase 0
+- [ModuleWorkspace Implementation](./closed/2026/2026-01-07-module-workspace.md) · fase 0
+- [Suite Home Hardening](./closed/2026/2026-01-07-suite-home-hardening.md) · fase 0
+- [Suite Home System](./closed/2026/2026-01-07-suite-home.md) · fase 0
+- [Brand Hub Operation](./closed/2026/2026-01-08-brand-hub-operation.md) · fase 0
+- [System Notice Rail](./closed/2026/2026-01-08-suite-notices-rail.md) · fase 0
+- [Technical Status Badge](./closed/2026/2026-01-08-technical-status-badge.md) · fase 0
+- [Brand Hub Overview Page (v1.1)](./closed/2026/2026-01-11-brand-hub-overview.md) · fase 0
+- [Brand Hub Identity Page](./closed/2026/2026-01-12-brand-hub-identity.md) · fase 0
+- [Brand Hub Visual System (Colors v1.5)](./closed/2026/2026-01-13-brand-hub-visual-system.md) · fase 0
+- [Brand Hub Logo System (v1.0)](./closed/2026/2026-01-19-brand-hub-logo-system.md) · fase 0
+- [Brand Hub Rules Engine (v1.0)](./closed/2026/2026-01-19-brand-hub-rules-engine.md) · fase 0
+- [Brand Hub Typography (v1.0)](./closed/2026/2026-01-19-brand-hub-typography.md) · fase 0
+- [Quant Ops Suite - Industrial Engine (v1.0)](./closed/2026/2026-01-20-quant-ops-suite.md) · fase 0
+- [LoopDev Quant Architecture (3-Tier Industrial)](./closed/2026/2026-03-21-quant-3-tier-architecture.md) · fase 0
+- [Quant Unified Reconnection (Industrial Sync)](./closed/2026/2026-03-21-quant-unified-reconnection.md) · fase 0
+- [Ingestor Hardening](./closed/2026/2026-04-11-ingestor-hardening.md) · fase 0
+- [Order Flow Integration](./closed/2026/2026-04-11-order-flow-integration.md) · fase 0
+- [Health OS Occupational Health Suite](./closed/2026/2026-06-28-health-os-occupational.md) · fase 0
+- [Sales & CRM Suite Integration](./closed/2026/2026-07-18-sales-crm-integration.md) · fase 0

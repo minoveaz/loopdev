@@ -1,5 +1,5 @@
 ---
-name: Review Track
+name: "LoopDev: Tracks: Review"
 description: "Review a LoopDev track for phase readiness, evidence, risks, decisions, dependencies, and closure gaps."
 argument-hint: "Track id or path"
 agent: agent

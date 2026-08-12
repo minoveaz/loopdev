@@ -1,5 +1,5 @@
 ---
-name: Close Track
+name: "LoopDev: Tracks: Close"
 description: "Prepare and approve closure of a LoopDev track after verifying its evidence and criteria."
 argument-hint: "Track id or path"
 agent: agent

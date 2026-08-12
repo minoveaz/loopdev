@@ -3,18 +3,29 @@ import path from 'node:path';
 
 export const TRACKS_ROOT = path.resolve('tracks');
 export const TRACK_STATUSES = ['planned', 'active', 'closed'];
-export const REQUIRED_FIELDS = ['id', 'title', 'status', 'created', 'updated', 'owner'];
+export const REQUIRED_FIELDS = ['id', 'title', 'status', 'created', 'updated', 'owner', 'lead', 'branch', 'branches', 'phase', 'pull_requests', 'issues', 'packages', 'release'];
 
 export async function getTrackFiles() {
   const files = [];
   for (const status of TRACK_STATUSES) {
     const directory = path.join(TRACKS_ROOT, status);
-    const entries = await fs.readdir(directory, { withFileTypes: true }).catch(() => []);
-    for (const entry of entries) {
-      if (entry.isFile() && entry.name.endsWith('.md')) files.push(path.join(directory, entry.name));
-    }
+    await collectMarkdownFiles(directory, files);
   }
   return files.sort();
+}
+
+async function collectMarkdownFiles(directory, files) {
+  const entries = await fs.readdir(directory, { withFileTypes: true }).catch(() => []);
+  for (const entry of entries) {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) await collectMarkdownFiles(entryPath, files);
+    if (entry.isFile() && entry.name.endsWith('.md')) files.push(entryPath);
+  }
+}
+
+export async function getDomains() {
+  const content = await fs.readFile(path.join(TRACKS_ROOT, 'domains.md'), 'utf8');
+  return new Set([...content.matchAll(/^\| ([a-z0-9]+(?:-[a-z0-9]+)*) \|/gm)].map((match) => match[1]));
 }
 
 export function parseFrontmatter(content) {

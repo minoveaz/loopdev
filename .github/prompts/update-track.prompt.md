@@ -1,5 +1,5 @@
 ---
-name: Update Track
+name: "LoopDev: Tracks: Update"
 description: "Reconcile an active LoopDev track with implementation evidence, approved decisions, phases, risks, and validation."
 argument-hint: "Track id or path"
 agent: agent

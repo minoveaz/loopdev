@@ -1,5 +1,5 @@
 ---
-name: Create Track
+name: "LoopDev: Tracks: Create"
 description: "Create a LoopDev specification-driven engineering track using the track governance skill and approved template."
 argument-hint: "Track title and intended outcome"
 agent: agent
