@@ -13,7 +13,7 @@ supersedes: []
 lead: null
 branches: []
 phase: 1
-pull_requests: []
+pull_requests: [47]
 issues: []
 packages: []
 release: not-required
