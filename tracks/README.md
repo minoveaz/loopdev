@@ -8,6 +8,10 @@
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
 
+### Platform
+
+- [Package lifecycle and release readiness](./planned/platform/2026-08-12-package-lifecycle.md) · fase 0
+
 ### Governance
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 0
