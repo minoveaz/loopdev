@@ -179,7 +179,7 @@ addition to targeted track validation.
 | Fecha      | Validación           | Resultado | Referencia                                              |
 | ---------- | -------------------- | --------- | ------------------------------------------------------- |
 | 2026-08-12 | CI checks for PR #47 | Correcta  | Bootstrap de validación de tracks; motivación del track |
-| 2026-08-12 | Track PR status en PR #48 | Pendiente | Observación temporal para verificar labels, comentario único y transición de `blocked`; se revertirá tras la prueba |
+| 2026-08-12 | Track PR status en PR #48 | Pendiente | Run `31585964720` correcto: labels y comentario único verificados; falta comprobar la transición reversible de `blocked` |
 
 ## Handoff de sesión
 
