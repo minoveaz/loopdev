@@ -37,6 +37,18 @@ test('forces global fallback for contracts and validates declared consumers', ()
   assert.ok(commands.includes('--filter loopdev-mobile test'));
 });
 
+test('keeps package validation in dependency order for mixed changes', () => {
+  const commands = commandList([
+    'ds/packages/tokens/src/index.ts',
+    'ds/packages/ui/src/index.ts',
+    'packages/contracts/src/platform/navigation.ts',
+  ]);
+
+  assert.ok(
+    commands.indexOf('--filter @loopdev/contracts build') < commands.indexOf('--filter @loopdev/ui build'),
+  );
+});
+
 test('routes mobile application changes to global and mobile validation', () => {
   const impact = resolveImpact(['apps/loopdev-mobile/src/App.tsx']);
 

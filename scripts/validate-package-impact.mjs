@@ -193,7 +193,7 @@ function resolveImpact(files) {
   return {
     changedFiles: files,
     packageIds: [...rules.keys()],
-    packageRules: [...rules.values()],
+    packageRules: packageRules.filter((rule) => rules.has(rule.id)),
     globalFallback,
     hasTargetedValidation: rules.size > 0,
     mobile,
