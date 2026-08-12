@@ -6,12 +6,12 @@ created: 2026-08-12
 updated: 2026-08-12
 owner: platform
 lead: null
-branch: chore/platform-package-inventory
+branch: chore/platform-package-readiness
 branches: []
 phase: 0
 pull_requests: [52]
 issues: []
-packages: ["@loopdev/contracts", "@loopdev/ui"]
+packages: ["@loopdev/contracts", "@loopdev/ui", "@loopdev/ui-native", "@loopdev/design-contracts", "@loopdev/tokens", "@loopdev/tailwind-config", "@loopdev/eslint-config", "@loopdev/tsconfig"]
 release: not-required
 areas: [platform, governance]
 dependencies: [track-governance]
@@ -81,9 +81,89 @@ environment in the related track evidence.
 
 ## Branch strategy
 
-This is a planned governance and platform track. It starts without an implementation branch. A
-branch is selected when phase 0 produces an approved implementation scope for package validation or
-release automation.
+This is an active governance and platform track executing phase 0 on
+`chore/platform-package-readiness`. The branch contains inventory, classification, consumer
+mapping, and validation-readiness evidence only. Package validation automation and release tooling
+remain separate future implementation slices.
+
+## Inventario de packages y consumidores
+
+The workspace is declared by `pnpm-workspace.yaml` across `apps/*`, `packages/*`,
+`modules/*`, `ds/packages/*`, `ds/apps/*`, and `labdev`. The current manifest inventory contains
+the following shared packages and workspaces:
+
+| Package/workspace | Ruta | Clasificación inicial | Privacidad | Scripts relevantes | Consumidores directos conocidos |
+| --- | --- | --- | --- | --- | --- |
+| `@loopdev/contracts` | `packages/contracts` | Shared contract library; publishable candidate only after need is approved | Private | `build`, `lint`, `typecheck` | `@loopdev/ui`, `loopdev-os`, `loopdev-mobile` |
+| `@loopdev/ui` | `ds/packages/ui` | Shared web UI library; publishable candidate only after need is approved | Not marked private | `build`, `lint`, `typecheck`, `test` | `loopdev-os` |
+| `@loopdev/ui-native` | `ds/packages/ui-native` | Internal mobile UI library | Private | `lint`, `typecheck` | `loopdev-mobile` |
+| `@loopdev/design-contracts` | `ds/packages/design-contracts` | Internal design-system contracts | Private | `lint`, `typecheck` | `@loopdev/ui-native`, `loopdev-mobile` |
+| `@loopdev/tokens` | `ds/packages/tokens` | Shared design foundation; publication decision deferred | Not marked private | `lint`, `typecheck` | `@loopdev/ui-native`, `loopdev-os`, `loopdev-mobile`; UI has a TypeScript path reference |
+| `@loopdev/tailwind-config` | `ds/packages/tailwind-config` | Internal web tooling/configuration | Not marked private | `lint`, `typecheck` | `@loopdev/ui` |
+| `@loopdev/eslint-config` | `ds/packages/eslint-config` | Internal tooling/configuration; no workspace consumer found | Not marked private | `lint`, `typecheck` | None found in current source scan |
+| `@loopdev/tsconfig` | `ds/packages/tsconfig` | Internal TypeScript configuration; no workspace consumer found | Not marked private | `lint`, `typecheck` | None found in current source scan |
+| `loopdev-os` | `apps/loopdev-os` | Deployable web application | Private | `build`, `lint`; tests run from root Vitest projects | `@loopdev/contracts`, `@loopdev/tokens`, `@loopdev/ui` |
+| `loopdev-mobile` | `apps/loopdev-mobile` | Deployable mobile application | Private | `lint`, `typecheck`, `test`, `test:coverage` | `@loopdev/design-contracts`, `@loopdev/contracts`, `@loopdev/tokens`, `@loopdev/ui-native` |
+| `estar-protegidos` | `ds/apps/estar-protegidos` | Deployable application | Not marked private | `build`, `lint`, `typecheck` | No shared workspace dependency declared |
+| `playground` | `ds/apps/playground` | Development playground; not a release package | Not marked private | `lint`, `typecheck` | No shared workspace dependency declared |
+| `my-company-web-platform` | `ds` | Private workspace container, not a distributable package | Private | Delegates to Turbo | Contains the design-system workspace |
+
+Applications and the `ds` workspace container are not candidates for npm publication. A manifest
+without `"private": true` is not publication approval; publication intent requires an explicit
+decision in this track.
+
+### Dependency graph
+
+```text
+@loopdev/contracts -> @loopdev/ui -> loopdev-os
+@loopdev/contracts -----------------> loopdev-os
+@loopdev/contracts -----------------> loopdev-mobile
+@loopdev/design-contracts -> @loopdev/ui-native -> loopdev-mobile
+@loopdev/design-contracts -----------------------> loopdev-mobile
+@loopdev/tokens -> @loopdev/ui-native -> loopdev-mobile
+@loopdev/tokens ---------------------> loopdev-os
+@loopdev/tokens ---------------------> loopdev-mobile
+@loopdev/tailwind-config -> @loopdev/ui -> loopdev-os
+```
+
+The graph is based on workspace dependency declarations, source imports, Next transpilation
+configuration, and the UI TypeScript path mapping. It is a validation baseline, not a release
+artifact; phase 1 may replace the manual mapping with affected-package automation.
+
+## Política inicial de versionado
+
+| Category | Versioning policy | Release status |
+| --- | --- | --- |
+| Shared library with approved external consumer | Independent package version; breaking API or contract changes require explicit release evidence | Deferred until phase 2 approval |
+| Internal shared library | Repository changes are validated through consumers; no registry release | Current default |
+| Tooling/configuration package | Version only if independently distributed; otherwise repository-owned | Current default |
+| Application or playground | Application deployment/versioning, never npm package release | Excluded from package publication |
+
+### Propuesta pendiente de aprobación
+
+The current proposal is to keep `@loopdev/contracts` private, treat `@loopdev/ui` as a publication
+candidate, and keep mobile/design/configuration packages internal until a distribution need and
+owner are approved. This proposal does not change package metadata or publication visibility.
+
+## Matriz de validación de impacto
+
+| Change surface | Minimum validation | Consumer/fallback validation |
+| --- | --- | --- |
+| `@loopdev/contracts` | Package lint, typecheck, and build | `@loopdev/ui`, `loopdev-os`, mobile tests/typecheck; full root fallback for contract or dependency changes |
+| `@loopdev/ui` | Package lint, typecheck, build, and Vitest tests | `loopdev-os` build and frontend E2E when its web surface is affected |
+| `@loopdev/ui-native` | Package lint and typecheck | Mobile lint, typecheck, and Jest/Expo tests |
+| `@loopdev/design-contracts` | Package lint and typecheck | `@loopdev/ui-native` and mobile validation |
+| `@loopdev/tokens` | Package lint and typecheck | UI, UI Native, web app, and mobile validation according to consumers |
+| `@loopdev/tailwind-config` | Package lint and typecheck | UI build and affected web application validation |
+| `@loopdev/eslint-config` or `@loopdev/tsconfig` | Package lint and typecheck | Full fallback when shared configuration changes affect repository tooling |
+| `supabase/**` | Supabase migration reset, schema lint, and database contract tests from `supabase.yml` | Application quality only when application code also changes |
+| Root, lockfile, Turbo, workflows, or ambiguous shared changes | Full `pnpm validate:ci` and relevant specialized workflows | Protected branch fallback; do not reduce checks from path heuristics |
+| Application-only change | Application package checks | E2E or mobile checks when the affected application surface requires them |
+
+Current CI runs the root quality job for executable/configuration changes and the specialized
+Supabase workflow for `supabase/**`. Mobile package checks are declared in `apps/loopdev-mobile`
+but are not currently part of the root CI workflow; this is a phase 0 gap to resolve before phase 1
+automation is considered complete.
 
 ## Fases
 
@@ -112,9 +192,14 @@ requirements before introducing release tooling.
 - [ ] Each shared package has a build and typecheck command or an explicit exception.
 - [ ] At least one representative contracts change and one UI change are mapped to validation.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Manifest inventory, dependency declarations, source imports, Next transpilation
+configuration, and UI TypeScript path mappings were inspected. `@loopdev/contracts` build and
+`@loopdev/ui` build passed. UI tests passed with Vitest 4 constrained to one worker (`101` files,
+`373` tests); the default concurrent package test run exited before executing tests, so worker
+configuration/resource behavior remains a validation gap. Mobile Jest/Expo checks are declared in
+the package but are not wired into root CI.
 
-**Estado:** pendiente
+**Estado:** en ejecución
 
 ### Fase 1: Package validation implementation
 
