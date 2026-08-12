@@ -4,7 +4,7 @@ test.describe('shell-showcase canonical contract', () => {
   test('preserves the shell navigation model', async ({ page }) => {
     await page.goto('/shell-showcase');
 
-    await expect(page.getByRole('heading', { name: 'Suite navigation' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'SuiteHome canvas' })).toBeVisible();
     const organizationButton = page.getByRole('button', { name: 'Select organization' });
     await expect(organizationButton).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sales & CRM' })).toBeVisible();
