@@ -8,7 +8,7 @@ import { useSidebarFooter } from './useSidebarFooter';
 
 /**
  * @component SidebarFooter
- * @description Bloque compuesto de cierre semántico para sidebars. 
+ * @description Bloque compuesto de cierre semántico para sidebars.
  * Integra identidad de usuario y controles de sistema.
  * @category Composites
  * @phase 1
@@ -44,21 +44,25 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = (props) => {
                 onPointerDown={props.onMenuTrigger}
                 className="text-text-muted hover:bg-accent/10 hover:text-accent dark:hover:bg-accent/15 dark:hover:text-accent focus-visible:ring-primary flex size-10 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2"
               >
-              <PanelLeft size={18} aria-hidden="true" />
+                <PanelLeft size={18} aria-hidden="true" />
               </button>
             }
           >
             <TechnicalDropdownGroup label="Sidebar control">
-              {(Object.entries(modeLabels) as Array<[typeof navMode, string]>).map(([mode, label]) => (
-                <TechnicalDropdownItem
-                  key={mode}
-                  isActive={navMode === mode}
-                  onClick={() => onNavModeChange(mode)}
-                >
-                  <span className={`size-2 rounded-full ${navMode === mode ? 'bg-primary' : 'border border-text-muted'}`} />
-                  {label}
-                </TechnicalDropdownItem>
-              ))}
+              {(Object.entries(modeLabels) as Array<[typeof navMode, string]>).map(
+                ([mode, label]) => (
+                  <TechnicalDropdownItem
+                    key={mode}
+                    isActive={navMode === mode}
+                    onSelect={() => onNavModeChange(mode)}
+                  >
+                    <span
+                      className={`size-2 rounded-full ${navMode === mode ? 'bg-primary' : 'border border-text-muted'}`}
+                    />
+                    {label}
+                  </TechnicalDropdownItem>
+                ),
+              )}
             </TechnicalDropdownGroup>
           </TechnicalDropdown>
         )}

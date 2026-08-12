@@ -26,6 +26,7 @@ const checks = {
     risk: 'Navigation, layout behavior, accessibility, and responsive shell geometry remain valid.',
     paths: [
       'apps/loopdev-os/src/app/shell-showcase/',
+      'apps/loopdev-os/src/app/launchpad/',
       'ds/packages/ui/src/components/composites/shell/',
       'ds/packages/ui/src/components/composites/utilities/GlobalContextPanel/',
       'scripts/check-shell.mjs',

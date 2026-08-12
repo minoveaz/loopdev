@@ -56,7 +56,7 @@ describe('App', () => {
 
     expect(getByText('CORE_SUITES_AVAILABLE')).toBeTruthy();
     expect(getByText('Inicializa tu contexto de trabajo.')).toBeTruthy();
-    expect(getByText('Todo operativo')).toBeTruthy();
+    expect(getByText('Quant Ops')).toBeTruthy();
 
     await fireEvent.press(getByRole('button', { name: 'Perfil' }));
     await fireEvent.press(getByLabelText('Cerrar sesión'));

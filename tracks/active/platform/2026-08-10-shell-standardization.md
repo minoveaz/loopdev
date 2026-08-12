@@ -45,10 +45,25 @@ Las fases, checkpoints y tareas existentes se preservan en la especificación mi
 ## Especificación migrada
 
 **Fecha:** 2026-08-10
-**Estado:** Propuesto
-**Rama:** `feature/shell-standardization`
+**Estado:** En curso
+**Rama de origen:** `feature/shell-standardization` (mergeada en `develop`)
+**Rama actual:** `feature/suiteshell-composition`
 **Dependencia:** `2026-08-05-loopdev-saas-platform-upgrade.md`
 **Ámbito:** todas las suites y módulos protegidos de `apps/loopdev-os`
+
+### Actualización 2026-08-11
+
+La primera entrega de estandarización del shell fue mergeada en `develop` mediante el PR #46
+(`feat(shell): standardize platform shell interactions`). Esa entrega dejó disponibles en
+`@loopdev/ui` los primitives `PlatformHeader`, `SuiteSidebar`, `SuiteShell` y los contratos de
+interacción del rail, expandido y hover, además del `Shell Showcase` visible y la validación
+focalizada del shell.
+
+El track continúa abierto para completar la migración de los módulos de suite a `ModuleShell` y
+ampliar los tests de contrato específicos de `SuiteShell`. El Showcase ya consume `SuiteShell` como
+referencia ejecutable y Marketing Studio adopta la misma composición, slots y geometría del shell;
+solo cambian sus datos de tenant, permisos, notificaciones y contenido de dominio. El siguiente
+tramo se trabaja en `feature/suiteshell-composition` desde el `develop` actualizado.
 
 ## Objetivo
 
@@ -57,8 +72,8 @@ Establecer una arquitectura de shell común para todas las suites y módulos de 
 El objetivo no es hacer que Marketing, CRM, Health OS y Quant parezcan la misma aplicación. La consistencia debe estar en la composición y en los contratos del shell; el contenido y las herramientas pueden variar por dominio.
 
 El track también establecerá un `Shell Showcase` permanente y visible que funcione como referencia
-ejecutable del esqueleto común. El Showcase no será una suite de producto ni la fuente de
-implementación: consumirá los mismos contratos y primitives que las suites, mientras que
+ejecutable del esqueleto común. El Showcase no será una suite de producto ni una composición
+paralela: consumirá `SuiteShell` con la misma estructura contractual que las suites, mientras que
 `@loopdev/ui` seguirá siendo la fuente compartida de `AppShell`, `SuiteShell`, `ModuleShell`,
 `ModuleWorkspace` y sus estados.
 
@@ -298,7 +313,7 @@ migración, no como un compromiso de reescritura inmediata.
 | Superficie       | Composición actual                                                                                                               | Duplicaciones o riesgos                                                                                           | Destino                                                         | Estado                 |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------- |
 | OS global        | `AppShell` + providers globales                                                                                                  | Verificar guards, tenancy, overlays y contexto común                                                              | `AppShell`                                                      | Por auditar            |
-| Marketing Studio | `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `MobileSuiteNav`                                          | Módulo activo, viewport, overlays, permisos y navegación resueltos en el layout                                   | `AppShell` + `SuiteShell`                                       | Referencia de suite    |
+| Marketing Studio | `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `MobileSuiteNav`                                          | Módulo activo, viewport, overlays, permisos y navegación resueltos en el layout                                   | `AppShell` + `SuiteShell`                                       | `SuiteShell` disponible; migración pendiente |
 | Brand Hub        | Provider propio + `ModuleWorkspace` + `ModuleSidebar` + `ModuleHeader` + flyout + inspector                                      | Datos de marca, breadcrumbs, permisos, navegación interna y estado de paneles mezclados con la composición visual | `SuiteShell` + `ModuleShell` + `ModuleWorkspace`                | Referencia de módulo   |
 | DAM              | Provider propio + `ModuleWorkspace` + `ModuleSidebar` + `ModuleHeader` + toolbar + inspector                                     | Selección de asset, offline-first, toolbar, navegación y estados estructurales requieren contrato común           | `SuiteShell` + `ModuleShell` + `ModuleWorkspace`                | Referencia offline     |
 | Campaigns        | Ruta y layout de Marketing Studio por auditar                                                                                    | Navegación y estados pueden divergir del resto de Marketing Studio                                                | `SuiteShell` + `ModuleShell`                                    | Pendiente de auditoría |
@@ -680,10 +695,10 @@ o tenancy.
 
 ### Paso 3: extraer `SuiteShell`
 
-- reutilizar `AppShell`, `SuiteSidebar` y `SuiteHeader` existentes;
-- trasladar a `SuiteShell` la composición común de identidad, navegación, permisos y responsive;
+- [x] reutilizar `AppShell`, `SuiteSidebar` y `PlatformHeader` existentes;
+- [x] trasladar a `SuiteShell` la composición común de identidad, navegación, permisos y responsive;
 - mantener adaptadores temporales para layouts que todavía no puedan migrarse;
-- añadir tests de contrato para navegación, permisos y estados de suite;
+- [ ] añadir tests de contrato para navegación, permisos y estados de suite;
 - no introducir lógica de datos de dominio en el shell.
 
 ### Paso 4: extraer `ModuleShell`
@@ -767,17 +782,17 @@ El shell debe recibir o resolver de forma canónica el contexto de suite, módul
 
 ### Fase 1: inventario y contrato
 
-- [ ] inventariar rutas protegidas, suites, módulos y layouts actuales;
-- [ ] clasificar cada superficie por `OS Shell`, `Suite Shell`, `Module Shell` y contenido;
-- [ ] documentar divergencias, excepciones y duplicaciones;
-- [ ] definir invariantes de shell y contrato inicial;
-- [ ] crear matriz de migración por suite y módulo.
+- [x] inventariar rutas protegidas, suites, módulos y layouts actuales;
+- [x] clasificar cada superficie por `OS Shell`, `Suite Shell`, `Module Shell` y contenido;
+- [x] documentar divergencias, excepciones y duplicaciones;
+- [x] definir invariantes de shell y contrato inicial;
+- [x] crear matriz de migración por suite y módulo.
 
 ### Fase 2: referencia visual y técnica
 
 - [ ] crear fixtures de shell para desktop, tablet y móvil;
-- [ ] crear y mantener la ruta visible del `Shell Showcase`;
-- [ ] garantizar que el Showcase use los mismos primitives que producción;
+- [x] crear y mantener la ruta visible del `Shell Showcase`;
+- [ ] garantizar que el Showcase use `SuiteShell`, `ModuleShell` y los mismos primitives que producción;
 - [ ] fijar estados de loading, error, empty, forbidden, read-only y offline;
 - [ ] probar navegación, breadcrumbs, overlays, inspector y toolbar;
 - [ ] validar accesibilidad y ausencia de overflow;
@@ -790,13 +805,13 @@ El shell debe recibir o resolver de forma canónica el contexto de suite, módul
 
 ### Fase 3: extracción de primitives
 
-- [ ] evaluar qué responsabilidades deben vivir en `AppShell`;
-- [ ] definir la API común de `SuiteShell`;
+- [x] evaluar qué responsabilidades deben vivir en `AppShell`;
+- [x] definir la API común inicial de `SuiteShell`;
 - [ ] definir la API común de `ModuleShell`;
-- [ ] conectar el Showcase a los contratos finales;
+- [ ] conectar el Showcase a los contratos finales de `SuiteShell`;
 - [ ] extraer hooks de viewport, navegación y contexto cuando proceda;
 - [ ] preservar compatibilidad durante la migración incremental;
-- [ ] añadir tests unitarios y de contrato para las piezas compartidas.
+- [ ] añadir tests unitarios y de contrato para `SuiteShell` y las piezas compartidas.
 
 ### Fase 4: migración de referencia
 

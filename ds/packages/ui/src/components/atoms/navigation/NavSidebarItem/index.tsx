@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { StatusPulse } from '../..';
 import { IdentityBar } from '../..';
@@ -10,31 +10,34 @@ import { useNavSidebarItem } from './useNavSidebarItem';
 
 /**
  * @component NavSidebarItem
- * @description Átomo oficial de navegación para el SuiteSidebar. 
+ * @description Átomo oficial de navegación para el SuiteSidebar.
  * Gestiona la identidad modular, el gobierno de acceso y el momentum.
  * @category Foundations
  * @phase 1
  */
 export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
   const { icon, label, accentColor, telemetry } = props;
-  const { 
-    isRail, 
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const {
+    isRail,
     revealOnHover,
-    isActive, 
-    isDisabled, 
+    isActive,
+    isDisabled,
     isComingSoon,
-    containerClasses, 
-    contentClasses, 
+    containerClasses,
+    contentClasses,
     technicalTooltip,
-    handleClick 
+    handleClick,
   } = useNavSidebarItem(props);
 
   // Resolver icono de Lucide
   const IconComponent = (LucideIcons as any)[icon] || LucideIcons.HelpCircle;
 
   const ItemContent = (
-    <div 
+    <div
       onClick={handleClick}
+      onPointerEnter={isRail && technicalTooltip ? () => setIsTooltipOpen(true) : undefined}
+      onPointerLeave={isRail && technicalTooltip ? () => setIsTooltipOpen(false) : undefined}
       className={containerClasses}
       role="menuitem"
       aria-label={label}
@@ -43,27 +46,23 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
     >
       {/* 1. Indicador Lateral (Exclusivo Rail Mode) */}
       {isActive && isRail && (
-        <IdentityBar 
-          color={accentColor} 
-          size="technical" 
-          className="absolute left-[-4px] top-3 bottom-3" 
+        <IdentityBar
+          color={accentColor}
+          size="technical"
+          className="absolute left-[-4px] top-3 bottom-3"
         />
       )}
 
       {/* 2. Icono Principal */}
-      <IconComponent 
-        size={isRail ? 20 : 18} 
-        className={`${contentClasses} shrink-0`} 
-      />
-      
+      <IconComponent size={isRail ? 20 : 18} className={`${contentClasses} shrink-0`} />
+
       {/* 3. Etiqueta de Texto (Oculta en Rail) */}
-      {!isRail && (
-        <span className={`${contentClasses} text-sm truncate flex-1`}>
-          {label}
-        </span>
-      )}
+      {!isRail && <span className={`${contentClasses} text-sm truncate flex-1`}>{label}</span>}
       {isRail && revealOnHover && (
-        <span data-sidebar-label className="pointer-events-none absolute left-12 top-1/2 z-50 hidden -translate-y-1/2 whitespace-nowrap rounded-md border border-border-technical bg-surface-light px-3 py-2 text-sm font-medium text-text-main shadow-lg dark:bg-surface-dark dark:text-white">
+        <span
+          data-sidebar-label
+          className="pointer-events-none absolute left-12 top-1/2 z-50 hidden -translate-y-1/2 whitespace-nowrap rounded-md border border-border-technical bg-surface-light px-3 py-2 text-sm font-medium text-text-main shadow-lg dark:bg-surface-dark dark:text-white"
+        >
           {label}
         </span>
       )}
@@ -95,7 +94,13 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
   // Si estamos en Rail, envolvemos en el Tooltip Técnico
   if (isRail && technicalTooltip) {
     return (
-      <TechnicalTooltip content={technicalTooltip} side="right" variant="popover" delayDuration={100}>
+      <TechnicalTooltip
+        content={technicalTooltip}
+        side="right"
+        variant="popover"
+        delayDuration={100}
+        open={isTooltipOpen}
+      >
         {ItemContent}
       </TechnicalTooltip>
     );

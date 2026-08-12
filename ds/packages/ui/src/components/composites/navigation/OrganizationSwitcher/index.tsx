@@ -59,11 +59,14 @@ export const OrganizationSwitcher: React.FC<OrganizationSwitcherProps> = ({
           <button
             type="button"
             aria-label="Select organization"
-            aria-expanded={isOpen}
             disabled={isLoading}
             className="text-text-muted hover:text-accent focus-visible:ring-primary hover:bg-accent/10 group flex size-8 shrink-0 items-center justify-center rounded-md transition-all duration-200 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
           >
-            <ChevronDown size={14} className="text-text-muted group-hover:text-accent shrink-0 transition-colors" aria-hidden="true" />
+            <ChevronDown
+              size={14}
+              className="text-text-muted group-hover:text-accent shrink-0 transition-colors"
+              aria-hidden="true"
+            />
           </button>
         }
       >
@@ -87,7 +90,7 @@ export const OrganizationSwitcher: React.FC<OrganizationSwitcherProps> = ({
                 <TechnicalDropdownItem
                   key={organization.id}
                   isActive={isActive}
-                  onClick={() => {
+                  onSelect={() => {
                     onOrganizationChange(organization.id);
                     setIsOpen(false);
                   }}

@@ -85,6 +85,9 @@ jobs:
               - 'apps/loopdev-os/src/app/globals.css'
               - 'apps/loopdev-os/src/app/layout.tsx'
               - 'apps/loopdev-os/src/app/shell-showcase/**'
+              - 'e2e/shell-showcase.contract.spec.mjs'
+              - 'e2e/shell.visual.spec.mjs'
+              - 'e2e/shell.visual.spec.mjs-snapshots/**'
               - 'apps/loopdev-os/src/components/layout/suiteNavMode.ts'
               - 'ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/**'
               - 'ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/**'
@@ -103,7 +106,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-        run: node scripts/validate-package-impact.mjs --base "$BASE_SHA" --head "$HEAD_SHA"
+        run: node scripts/validate-package-impact.mjs --base "$BASE_SHA" --head "$HEAD_SHA" --dry-run
 
       - name: Validate package impact resolver
         run: pnpm test:package-impact
@@ -151,6 +154,9 @@ jobs:
     if: needs.changes.outputs.package_validation == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
     steps:
       - name: Checkout
@@ -333,6 +339,10 @@ jobs:
         if: needs.changes.outputs.browser_desktop == 'true'
         run: pnpm exec playwright test --project=desktop --workers=1 --reporter=line
 
+      - name: Run Shell Showcase desktop contract
+        if: needs.changes.outputs.shell == 'true'
+        run: pnpm exec playwright test e2e/shell-showcase.contract.spec.mjs e2e/shell.visual.spec.mjs --project=desktop --workers=1 --reporter=line
+
       - name: Run authenticated Mobile Web checks
         if: needs.changes.outputs.browser_mobile == 'true'
         run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile --workers=1 --reporter=line
@@ -348,3 +358,7 @@ jobs:
       - name: Run Mobile Compact visual checks
         if: needs.changes.outputs.browser_visual == 'true'
         run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Run Shell Showcase mobile visual contract
+        if: needs.changes.outputs.shell == 'true'
+        run: pnpm exec playwright test e2e/shell.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1 --reporter=line

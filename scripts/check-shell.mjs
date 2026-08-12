@@ -10,6 +10,8 @@ const shellPaths = [
   'apps/loopdev-os/src/app/globals.css',
   'apps/loopdev-os/src/app/layout.tsx',
   'apps/loopdev-os/src/app/shell-showcase/',
+  'e2e/shell-showcase.contract.spec.mjs',
+  'e2e/shell.visual.spec.mjs',
   'apps/loopdev-os/src/components/layout/suiteNavMode.ts',
   'ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/',
   'ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/',
