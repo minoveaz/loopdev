@@ -3,7 +3,7 @@ id: ci-validation-scope
 title: CI validation scope and required checks
 status: planned
 created: 2026-08-12
-updated: 2026-08-12
+updated: 2026-08-13
 owner: governance
 lead: null
 branch: chore/ci-validation-scope-track
@@ -57,6 +57,7 @@ and shell surfaces; its validation matrix needs a deliberate, evidence-based sco
 | Fecha      | Decisión                                            | Motivo                                                                                    | Impacto                                                          | Aprobado por |
 | ---------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ------------ |
 | 2026-08-12 | Plan CI scope review as a separate governance track | Track-only PRs revealed that the universal quality job is broader than their risk surface | CI routing will be evaluated independently from track automation | User         |
+| 2026-08-13 | Treat frozen dependency installation as a blocking preflight | PR #53 exposed a broken lockfile that was repeated independently by multiple domain jobs | A single dependency preflight must pass before package, mobile, shell, quality, or web validation is interpreted | User |
 
 ## Arquitectura y contratos
 
@@ -64,8 +65,13 @@ and shell surfaces; its validation matrix needs a deliberate, evidence-based sco
 pull request
   -> changed-path classification
   -> required baseline checks
+  -> dependency lockfile preflight
   -> surface-specific checks
   -> full validation fallback for shared or root changes
+
+dependency preflight failure
+  -> stop downstream domain validation
+  -> report one causal blocker instead of repeated install failures
 
 develop/main
   -> full repository validation before or after integration
@@ -126,7 +132,16 @@ addition to targeted track validation.
       expected checks.
 - [ ] `develop` and `main` retain full validation coverage.
 
-**Evidencia:** Pendiente.
+**Evidencia:** PR #53 (`feat(shell): compose contextual suite canvas`) terminó fusionado, pero su
+historial de 23 commits mostró una secuencia de diagnósticos mezclados: una modificación del
+agente dejó `pnpm-lock.yaml` incoherente, `pnpm install --frozen-lockfile` falló con
+`ERR_PNPM_LOCKFILE_MISSING_DEPENDENCY` para `react-is@19.2.8`, y otros jobs repitieron el mismo
+preflight de forma independiente. La ejecución final pasó después de reparaciones, pero el scope
+`shell-showcase` llegó a omitir Mobile y la certificación global aunque el diff incluía workflow,
+lockfile, Mobile, Web, paquetes compartidos y snapshots. El caso se convirtió en una regresión de
+`scripts/validate-plan.test.mjs` que exige fallback completo para ese patrón y en un job único
+`Dependency lockfile preflight` que bloquea la interpretación de los jobs de dominio si la
+instalación congelada falla. La evidencia no justifica reducir controles.
 
 **Estado:** pendiente
 
@@ -164,6 +179,8 @@ addition to targeted track validation.
 | Conditional routing skips a required validation                            | Regression reaches a protected branch                   | Use a conservative shared/root fallback and test PR fixtures             | governance  | open   |
 | Required check is absent rather than reported as skipped                   | PRs cannot merge or protection is weakened accidentally | Verify GitHub branch-protection behavior before changing required checks | governance  | open   |
 | Affected-package routing is slower or less reliable than global validation | More CI complexity without a practical benefit          | Measure representative PRs and keep the simpler fallback when needed     | governance  | open   |
+| Broken lockfile is repeated as unrelated domain failures                   | Contributors enter speculative fix loops and misread secondary errors | Run one `pnpm install --frozen-lockfile` preflight and block downstream validation | governance | open |
+| Explicit or branch-specific scope hides cross-domain changes               | Mobile, Web, or global protections are falsely skipped | Derive the effective plan from the complete diff; never let a reduced scope clear full fallback | governance | open |
 
 ## Criterios de cierre
 
@@ -180,6 +197,7 @@ addition to targeted track validation.
 | ---------- | -------------------- | --------- | ------------------------------------------------------- |
 | 2026-08-12 | CI checks for PR #47 | Correcta  | Bootstrap de validación de tracks; motivación del track |
 | 2026-08-12 | Track PR status en PR #48 | Correcta | Runs `31585964720` y `31586131453` correctos: labels sincronizadas, comentario único idempotente y transición reversible de `blocked` verificada |
+| 2026-08-13 | PR #53 final CI and routing review | Correcta como evidencia de calibración; no apta para reducir controles | PR #53 fusionado; 10 checks correctos, 2 omitidos, 23 commits; lockfile repaired before final green run; cross-domain regression added and dependency preflight implemented in the framework worktree |
 
 ## Handoff de sesión
 

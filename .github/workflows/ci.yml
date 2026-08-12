@@ -121,9 +121,33 @@ jobs:
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: pnpm design:visual:changed
 
+  dependency-preflight:
+    name: Dependency lockfile preflight
+    needs: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Validate frozen dependency graph
+        run: pnpm install --frozen-lockfile
+
   package-validation:
     name: Shared package contracts and consumers
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: needs.changes.outputs.package_validation == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -156,7 +180,7 @@ jobs:
 
   mobile-validation:
     name: Mobile contracts and behavior
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: needs.changes.outputs.mobile == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -190,7 +214,7 @@ jobs:
 
   shell-validation:
     name: Shell navigation, accessibility and geometry
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: needs.changes.outputs.shell == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -221,7 +245,7 @@ jobs:
 
   quality:
     name: Lint, typecheck, tests and build
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: github.event_name != 'pull_request' || needs.changes.outputs.quality == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -261,7 +285,7 @@ jobs:
 
   frontend-e2e:
     name: Web flows, accessibility and visual behavior
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: >-
       needs.changes.outputs.frontend == 'true' &&
       (needs.changes.outputs.browser_desktop == 'true' ||
