@@ -10,7 +10,7 @@
 
 ### Governance
 
-- [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 0 · bloqueado
+- [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 0
 ## En curso
 
 ### CRM

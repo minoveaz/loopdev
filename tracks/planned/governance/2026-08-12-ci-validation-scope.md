@@ -15,7 +15,7 @@ packages: []
 release: not-required
 areas: [governance, platform]
 dependencies: [track-governance]
-blocked_by: [workflow-observation]
+blocked_by: []
 supersedes: []
 ---
 
@@ -179,7 +179,7 @@ addition to targeted track validation.
 | Fecha      | Validación           | Resultado | Referencia                                              |
 | ---------- | -------------------- | --------- | ------------------------------------------------------- |
 | 2026-08-12 | CI checks for PR #47 | Correcta  | Bootstrap de validación de tracks; motivación del track |
-| 2026-08-12 | Track PR status en PR #48 | Pendiente | Run `31585964720` correcto: labels y comentario único verificados; falta comprobar la transición reversible de `blocked` |
+| 2026-08-12 | Track PR status en PR #48 | Correcta | Runs `31585964720` y `31586131453` correctos: labels sincronizadas, comentario único idempotente y transición reversible de `blocked` verificada |
 
 ## Handoff de sesión
 
