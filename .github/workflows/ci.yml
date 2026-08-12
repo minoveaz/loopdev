@@ -338,11 +338,3 @@ jobs:
       - name: Run Shell Showcase mobile visual contract
         if: needs.changes.outputs.shell == 'true'
         run: pnpm exec playwright test e2e/shell.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1 --reporter=line
-
-      - name: Upload Playwright diagnostics
-        if: always() && needs.changes.outputs.shell == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: shell-playwright-diagnostics-${{ github.sha }}
-          path: test-results/
-          if-no-files-found: ignore
