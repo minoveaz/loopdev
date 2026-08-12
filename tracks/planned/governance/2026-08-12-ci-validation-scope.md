@@ -167,6 +167,31 @@ instalación congelada falla. La evidencia no justifica reducir controles.
 
 **Estado:** pendiente
 
+### Fase 3: Track integrity alert
+
+**Objetivo:** make changes to tests, test support, track governance, and CI workflows visible to
+reviewers without turning the signal into an additional blocking validation rule.
+
+**Definition of Ready**
+
+- [ ] Fase 1 is deployed to `develop`.
+- [ ] The alert categories and non-blocking behavior are agreed.
+
+**Entregables**
+
+- [ ] A centralized GitHub Actions job reports validation-related file changes.
+- [ ] The job lists the exact changed files in the workflow summary and emits a warning annotation.
+- [ ] The job remains successful when it finds changes.
+- [ ] Unit tests cover test files, test support, track integrity, and workflow changes.
+
+**Validación**
+
+- [ ] A PR changing a test receives an informational warning with the changed path.
+- [ ] A PR changing only product code receives a successful job with no warning.
+- [ ] The alert cannot alter the selected validation plan or bypass required checks.
+
+**Estado:** pendiente
+
 ## Registro de cambios de enfoque
 
 | Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
