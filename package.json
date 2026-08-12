@@ -39,6 +39,8 @@
     "validate:branch-base": "node scripts/validate-branch-base.mjs",
     "validate:package-impact": "node scripts/validate-package-impact.mjs",
     "test:package-impact": "node --test scripts/validate-package-impact.test.mjs",
+    "validate:track-integrity": "node scripts/validate-track-integrity.mjs",
+    "test:track-integrity": "node --test scripts/validate-track-integrity.test.mjs",
     "validate:git-conventions": "node scripts/validate-git-conventions.mjs",
     "hooks:install": "git config core.hooksPath .githooks",
     "quality:static": "pnpm front:check",
