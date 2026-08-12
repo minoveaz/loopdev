@@ -1,15 +1,15 @@
 ---
 id: package-lifecycle
 title: Package lifecycle and release readiness
-status: planned
+status: active
 created: 2026-08-12
 updated: 2026-08-12
 owner: platform
 lead: null
-branch: null
+branch: chore/platform-package-inventory
 branches: []
 phase: 0
-pull_requests: []
+pull_requests: [52]
 issues: []
 packages: ["@loopdev/contracts", "@loopdev/ui"]
 release: not-required
@@ -200,6 +200,7 @@ complete.
 
 | Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
 | --- | --- | --- | --- | --- |
+| 2026-08-12 | Make global quality conditional and decouple workflow changes from frontend E2E | Documentation-only changes should not wait for lint, typecheck, tests, and build; workflow changes retain full quality validation without implying frontend changes | Phase 0 PR validation becomes faster without reducing executable-change coverage | User |
 
 ## Riesgos y bloqueos
 
@@ -225,16 +226,18 @@ complete.
 | --- | --- | --- | --- |
 | 2026-08-12 | Repository package inventory | Initial inventory found `@loopdev/contracts`; UI package remains under `ds/packages/ui` | `package.json` files |
 | 2026-08-12 | Release tooling inventory | No `.changeset` directory or release/publication workflow found | Repository inspection |
+| 2026-08-12 | Planned-to-active transition | Passed; track status, directory, owner, branch, and unique id validated | `node scripts/tracks/validate-tracks.mjs` |
+| 2026-08-12 | Track dashboard generation | Passed; dashboard regenerated from the active inventory | `node scripts/tracks/generate-tracks-index.mjs` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-12.
-- **Rama de continuación:** chore/platform-package-lifecycle.
-- **Commit de partida:** c75457d.
-- **Estado alcanzado:** Planned track created with phase 0 focused on package inventory and policy readiness.
+- **Rama de continuación:** chore/platform-package-inventory.
+- **Commit de partida:** c77204d.
+- **Estado alcanzado:** Phase 0 activated on the package inventory branch; package inventory and policy readiness are now in execution.
 - **Decisiones, bloqueos y riesgos:** Packages remain internal; Changesets, registry, and publication are deferred until distribution need is approved.
-- **Validación ejecutada:** Pending.
-- **Siguiente acción concreta:** Validate the track and review the package inventory against workspace and Turbo configuration.
+- **Validación ejecutada:** Track validator passed before and after dashboard generation; staged diff check and Git convention hooks passed.
+- **Siguiente acción concreta:** Complete the package inventory and review consumers against workspace and Turbo configuration.
 
 ## Cierre
 
