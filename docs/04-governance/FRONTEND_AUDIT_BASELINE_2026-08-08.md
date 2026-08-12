@@ -7,6 +7,8 @@
 - **Script:** `scripts/front-audit.mjs`.
 - **Filtros:** `--file=<fragmento>` y `--rule=<regla>` para auditorías focalizadas.
 - **CI opcional:** `--fail-on-findings` establece código de salida 1 si hay hallazgos.
+- **Baseline versionado:** `config/frontend-audit-baseline.json` conserva únicamente hallazgos aceptados de forma explícita.
+- **Gate CI:** `pnpm front:check` ejecuta `--fail-on-new-findings` y bloquea regresiones sin bloquear deuda ya registrada.
 - **Ramas:** `feature/loopdev-frontend-work`.
 - **Alcance:** `apps/loopdev-os/src`, `ds/packages/ui/src` y `modules`.
 - **Exclusiones:** `node_modules`, `.next`, `dist` y `coverage`.
@@ -16,21 +18,21 @@
 La tabla siguiente conserva la fotografía inicial anterior a la calibración de las
 heurísticas. No debe interpretarse como el resultado actual del auditor.
 
-| Categoría | Hallazgos |
-|---|---:|
-| Tipografía | 0 |
-| Hardcoded colors | 14 |
-| Forced theme | 0 |
-| Theme isolation | 0 |
-| Iconography review | 6 |
-| Emoji iconography | 0 |
-| Filter primitive consistency | 0 |
-| Approved interactive primitive review | 0 |
-| Tab underline collision review | 0 |
-| Low contrast outline action review | 2 |
-| Sidebar route policy review | 0 |
-| Duplicate import binding review | 0 |
-| **Total** | **22** |
+| Categoría                             | Hallazgos |
+| ------------------------------------- | --------: |
+| Tipografía                            |         0 |
+| Hardcoded colors                      |        14 |
+| Forced theme                          |         0 |
+| Theme isolation                       |         0 |
+| Iconography review                    |         6 |
+| Emoji iconography                     |         0 |
+| Filter primitive consistency          |         0 |
+| Approved interactive primitive review |         0 |
+| Tab underline collision review        |         0 |
+| Low contrast outline action review    |         2 |
+| Sidebar route policy review           |         0 |
+| Duplicate import binding review       |         0 |
+| **Total**                             |    **22** |
 
 ## Interpretación
 
@@ -64,25 +66,25 @@ antes de actualizar esta tabla numérica.
 
 ## Reglas actuales
 
-| Regla | Detección | Estado |
-|---|---|---|
-| `typography` | headings con clases locales, mono/telemetría e inline typography, excluyendo hooks y componentes técnicos reconocidos | Informativa |
-| `hardcodedColor` | HEX en clases o código fuente, excluyendo tests, fallbacks `var(--token, #fallback)` y owners del design system | Informativa |
-| `forcedTheme` | manipulación local de `dark`/`light` fuera del owner oficial `ThemeToggle` | Informativa |
-| `themeIsolation` | mutación de clases globales o variables `--lpd-color` desde una suite; los owners del sistema quedan explícitamente excluidos | Informativa |
-| `iconography` | SVG fuera de ubicaciones reconocidas; el primitive `Icon` de `@loopdev/ui`, su implementación interna y visualizaciones reconocidas quedan aceptados | Informativa |
+| Regla                          | Detección                                                                                                                                                                   | Estado      |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `typography`                   | headings con clases locales, mono/telemetría e inline typography, excluyendo hooks y componentes técnicos reconocidos                                                       | Informativa |
+| `hardcodedColor`               | HEX en clases o código fuente, excluyendo tests, fallbacks `var(--token, #fallback)` y owners del design system                                                             | Informativa |
+| `forcedTheme`                  | manipulación local de `dark`/`light` fuera del owner oficial `ThemeToggle`                                                                                                  | Informativa |
+| `themeIsolation`               | mutación de clases globales o variables `--lpd-color` desde una suite; los owners del sistema quedan explícitamente excluidos                                               | Informativa |
+| `iconography`                  | SVG fuera de ubicaciones reconocidas; el primitive `Icon` de `@loopdev/ui`, su implementación interna y visualizaciones reconocidas quedan aceptados                        | Informativa |
 | `approvedInteractivePrimitive` | botones nativos de consumidores de producto fuera de componentes aprobados, excluyendo tests y la implementación interna de `@loopdev/ui`, como lista de migración/revisión | Informativa |
-| `tabUnderlineCollision` | contenedores de navegación con `border-b` combinado con botones activos que usan `border-b-2` | Informativa |
-| `tabControlConsistency` | tabs que dependen del variant por defecto del botón en vez de declarar variante, espaciado y estado explícitos | Informativa |
-| `timelineConsistency` | timelines de actividad con marcadores circulares absolutos que pueden colisionar con la línea o el contenido | Informativa |
-| `implicitButtonVariant` | botones de producto que dependen del variant primario por defecto | Informativa |
-| `lightModeActionContrast` | botones con texto o iconos claros sin override que garantice contraste en modo claro | Informativa |
-| `iconColorConsistency` | iconos con paletas arbitrarias en vez de tokens semánticos o color heredado del control | Informativa |
-| `lowContrastOutlineAction` | acciones `outline` con utilidades de texto/borde de bajo contraste; analiza cada botón y respeta overrides `dark:` | Informativa |
-| `sidebarRoutePolicy` | layouts de suite deben usar `getSuiteNavMode` y declarar prefijos operativos; se rechaza inferir `rail` solo por profundidad de URL | Informativa |
-| `duplicateImportBinding` | imports nombrados duplicados que provocan errores de parsing/build antes de llegar a TypeScript | Informativa |
-| `tokenUsage` | utilidades de paleta directa (`slate`, `emerald`, etc.) o valores de color inline fuera de tokens semánticos; excluye el design system, owners de color y tests | Informativa |
-| `shellArchitecture` | los layouts de suite deben reservar `AppShell` para el shell global y los layouts de módulo deben componer `ModuleWorkspace` directamente | Informativa |
+| `tabUnderlineCollision`        | contenedores de navegación con `border-b` combinado con botones activos que usan `border-b-2`                                                                               | Informativa |
+| `tabControlConsistency`        | tabs que dependen del variant por defecto del botón en vez de declarar variante, espaciado y estado explícitos                                                              | Informativa |
+| `timelineConsistency`          | timelines de actividad con marcadores circulares absolutos que pueden colisionar con la línea o el contenido                                                                | Informativa |
+| `implicitButtonVariant`        | botones de producto que dependen del variant primario por defecto                                                                                                           | Informativa |
+| `lightModeActionContrast`      | botones con texto o iconos claros sin override que garantice contraste en modo claro                                                                                        | Informativa |
+| `iconColorConsistency`         | iconos con paletas arbitrarias en vez de tokens semánticos o color heredado del control                                                                                     | Informativa |
+| `lowContrastOutlineAction`     | acciones `outline` con utilidades de texto/borde de bajo contraste; analiza cada botón y respeta overrides `dark:`                                                          | Informativa |
+| `sidebarRoutePolicy`           | layouts de suite deben usar `getSuiteNavMode` y declarar prefijos operativos; se rechaza inferir `rail` solo por profundidad de URL                                         | Informativa |
+| `duplicateImportBinding`       | imports nombrados duplicados que provocan errores de parsing/build antes de llegar a TypeScript                                                                             | Informativa |
+| `tokenUsage`                   | utilidades de paleta directa (`slate`, `emerald`, etc.) o valores de color inline fuera de tokens semánticos; excluye el design system, owners de color y tests             | Informativa |
+| `shellArchitecture`            | los layouts de suite deben reservar `AppShell` para el shell global y los layouts de módulo deben componer `ModuleWorkspace` directamente                                   | Informativa |
 
 ## Uso reproducible
 
@@ -111,15 +113,21 @@ node scripts/front-audit.mjs --rule=tokenUsage --file=PipelineFilters.tsx
 Modo estricto para CI:
 
 ```bash
+node scripts/front-audit.mjs --fail-on-new-findings --baseline=config/frontend-audit-baseline.json
+```
+
+Auditoría completamente estricta, sin aceptar baseline:
+
+```bash
 node scripts/front-audit.mjs --fail-on-findings
 ```
 
 ## Siguiente paso
 
-Antes de bloquear código, revisar una muestra representativa de cada categoría y ajustar el auditor para:
+Para añadir deuda conocida al baseline, revisar una muestra representativa y registrar el hallazgo completo (archivo, línea, regla y mensaje) en `config/frontend-audit-baseline.json`. No se debe usar el baseline para ocultar una regresión nueva.
 
-- aceptar excepciones explícitas;
-- reconocer primitives certificados;
-- distinguir archivos de laboratorio y visualización;
-- producir baseline por archivo y regla;
-- fallar solo por hallazgos introducidos en cambios nuevos.
+El gate distingue así:
+
+- deuda aceptada: aparece en el baseline y no bloquea `front:check`;
+- regresión nueva: no aparece en el baseline y bloquea `front:check`;
+- auditoría total: `--fail-on-findings` bloquea cualquier hallazgo, incluido el baseline.

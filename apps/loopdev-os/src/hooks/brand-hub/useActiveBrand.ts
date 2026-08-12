@@ -2,36 +2,30 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { MOCK_BRANDS } from '@/data/mock-brands';
+import { useOrganization } from '@/hooks/useOrganization';
 
 /**
  * @hook useActiveBrand
  * @description Recupera los detalles de una marca específica.
- * Modo DEV: Bypass a mocks para evitar loading infinito si no hay Supabase.
  */
 export const useActiveBrand = (brandId: string | null) => {
+  const { activeOrganizationId } = useOrganization();
+
   return useQuery({
-    queryKey: ['brand', brandId],
+    queryKey: ['brand', activeOrganizationId, brandId],
     queryFn: async () => {
-      if (!brandId) return null;
+      if (!activeOrganizationId || !brandId) return null;
 
-      try {
-        const { data, error } = await supabase
-          .from('brands')
-          .select('*')
-          .eq('id', brandId)
-          .single();
+      const { data, error } = await supabase
+        .from('brands')
+        .select('*')
+        .eq('organization_id', activeOrganizationId)
+        .eq('id', brandId)
+        .maybeSingle();
 
-        if (error) throw error;
-        return data;
-      } catch (e) {
-        // Fallback a mocks si falla la red o no existe en DB
-        const mockBrand = MOCK_BRANDS.find(b => b.id === brandId);
-        return mockBrand || null;
-      }
+      if (error) throw error;
+      return data;
     },
-    enabled: !!brandId,
-    // Eliminamos initialData estático para permitir que el loading state sea real si se desea, 
-    // o lo mantenemos si queremos optimismo extremo. Lo quitaré para verificar la carga real.
+    enabled: !!activeOrganizationId && !!brandId,
   });
 };

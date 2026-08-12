@@ -65,5 +65,15 @@ Cualquier funcionalidad potenciada por Inteligencia Artificial debe usar la fami
 4.  **Fuentes Mono:** Usa `font-mono` (JetBrains) solo para datos técnicos (IDs, fechas, comandos, logs, shortcuts, precios y payloads). No usarlo como estilo predeterminado de navegación.
 5.  **Inert Mode:** Los componentes del header deben responder a la prop `isInert` reduciendo su feedback visual.
 
+## 6. Consumo multiplataforma
+
+Los tokens semánticos son compartidos por las implementaciones web y React Native. La web los consume mediante `@loopdev/ui` y la aplicación móvil mediante `@loopdev/ui-native`.
+
+`@loopdev/ui-native` no debe importar `react-dom`, Radix UI ni componentes web. La implementación nativa conserva el significado de los tokens y contratos, adaptando la composición a primitives nativas, safe areas, teclado, accesibilidad y navegación táctil.
+
+La migración es incremental: `loopdev-os` conserva sus imports actuales de `@loopdev/ui` mientras los tokens se extraen y `loopdev-mobile` deja de mantener una paleta semántica independiente.
+
+La arquitectura completa está documentada en `docs/02-frontend/MULTIPLATFORM_DESIGN_SYSTEM_ARCHITECTURE.md`.
+
 ---
 *Gobernanza de Frontend - LoopDev Engineering Board*

@@ -28,6 +28,7 @@ modules/mod-quant-core/keys.txt
 .env.local
 .env.*.local
 *.env
+playwright/.auth/
 
 # Monorepo / Tooling
 .turbo/

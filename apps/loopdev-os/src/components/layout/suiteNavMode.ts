@@ -7,7 +7,7 @@ export interface SuiteNavModePolicy {
 
 /**
  * Determina el modo del sidebar a partir de una política explícita de suite.
- * La raíz siempre muestra la navegación completa; los módulos operativos usan Rail.
+ * La raíz usa expansión al hover; los módulos operativos usan Rail.
  */
 export function getSuiteNavMode(pathname: string, policy: SuiteNavModePolicy): NavMode {
   const normalizedPath = pathname.replace(/\/$/, '') || '/';
@@ -16,5 +16,5 @@ export function getSuiteNavMode(pathname: string, policy: SuiteNavModePolicy): N
     return normalizedPath === normalizedPrefix || normalizedPath.startsWith(`${normalizedPrefix}/`);
   });
 
-  return isOperationalRoute ? 'rail' : 'expanded';
+  return isOperationalRoute ? 'rail' : 'hover';
 }

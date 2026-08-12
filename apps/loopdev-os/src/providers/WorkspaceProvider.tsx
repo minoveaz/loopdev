@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useOrganization } from '@/hooks/useOrganization';
 
 const storageKey = (organizationId: string) => `loopdev.activeWorkspaceId:${organizationId}`;
+const normalizeTimestamp = (value: unknown) => Array.isArray(value) ? String(value[0]) : String(value);
 
 export type WorkspaceContextType = {
   workspaces: Workspace[];
@@ -45,11 +46,21 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         console.warn('Workspaces are not available yet:', error.message);
         setWorkspaces([]);
       } else {
-        setWorkspaces((data ?? []).map((row) => WorkspaceSchema.safeParse({
-          id: row.id, organizationId: row.organization_id, suiteKey: row.suite_key,
-          name: row.name, slug: row.slug, status: row.status, configuration: row.configuration,
-          createdAt: row.created_at, updatedAt: row.updated_at,
-        })).flatMap((result) => result.success ? [result.data] : []));
+        const parsedWorkspaces = (data ?? []).flatMap((row) => {
+          const workspace = {
+            id: row.id, organizationId: row.organization_id, suiteKey: row.suite_key,
+            name: row.name, slug: row.slug, status: row.status,
+            configuration: row.configuration ?? {},
+            createdAt: normalizeTimestamp(row.created_at), updatedAt: normalizeTimestamp(row.updated_at),
+          };
+          const result = WorkspaceSchema.safeParse(workspace);
+          if (!result.success) {
+            console.warn('Workspace schema mismatch:', result.error.flatten().fieldErrors, workspace);
+            return [];
+          }
+          return [result.data];
+        });
+        setWorkspaces(parsedWorkspaces);
       }
       setIsLoading(false);
     };

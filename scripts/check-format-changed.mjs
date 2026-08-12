@@ -23,9 +23,6 @@ const files = [
   ...gitFiles([]),
   ...gitFiles(['--cached']),
   ...(base ? gitFiles([`${base}...${process.env.GITHUB_SHA ?? 'HEAD'}`]) : []),
-  ...execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { encoding: 'utf8' })
-    .split(/\r?\n/)
-    .filter(Boolean),
 ]
   .filter((file, index, all) => all.indexOf(file) === index)
   .filter((file) => supported.test(file) && !ignored.test(file) && file !== 'pnpm-lock.yaml');

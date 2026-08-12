@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { NavSidebarItem } from './index';
 import React from 'react';
+import { axe } from 'vitest-axe';
 
 describe('NavSidebarItem Atom', () => {
   it('debe renderizar la etiqueta del módulo correctamente', () => {
@@ -29,10 +30,45 @@ describe('NavSidebarItem Atom', () => {
   it('debe ocultar el texto en modo Rail', () => {
     render(<NavSidebarItem label="Hidden Text" icon="LibraryBig" isRail={true} />);
     expect(screen.queryByText('Hidden Text')).not.toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Hidden Text' })).toBeInTheDocument();
+  });
+
+  it('debe mantener el icono en el rail y preparar la etiqueta para reveal on hover', () => {
+    render(<NavSidebarItem label="Hover Label" icon="LibraryBig" isRail={true} revealOnHover={true} />);
+    expect(screen.getByText('Hover Label')).toHaveAttribute('data-sidebar-label');
+    expect(screen.getByText('Hover Label')).toHaveClass('absolute', 'left-12', 'top-1/2', 'text-text-main', 'hidden');
+    expect(screen.getByRole('menuitem', { name: 'Hover Label' })).toHaveClass('size-10', 'justify-center');
   });
 
   it('debe mostrar el rol ARIA activo correctamente', () => {
     render(<NavSidebarItem label="Active" icon="LibraryBig" isActive={true} />);
-    expect(screen.getByRole('menuitem')).toHaveAttribute('aria-current', 'page');
+    const item = screen.getByRole('menuitem');
+    expect(item).toHaveAttribute('aria-current', 'page');
+    expect(item).toHaveClass('bg-primary', 'text-white');
+  });
+
+  it('debe usar el acento amarillo para hover en estados interactivos', () => {
+    render(<NavSidebarItem label="Hoverable" icon="LibraryBig" />);
+    expect(screen.getByRole('menuitem')).toHaveClass('hover:bg-accent/10', 'hover:!text-accent');
+  });
+
+  it('has no accessibility violations in the active navigation state', async () => {
+    const { container } = render(
+      <div role="menu">
+        <NavSidebarItem label="Brand Hub" icon="LibraryBig" isActive={true} />
+      </div>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('has no accessibility violations in rail navigation state', async () => {
+    const { container } = render(
+      <div role="menu">
+        <NavSidebarItem label="Brand Hub" icon="LibraryBig" isRail={true} />
+      </div>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

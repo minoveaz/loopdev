@@ -19,6 +19,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
   const { icon, label, accentColor, telemetry } = props;
   const { 
     isRail, 
+    revealOnHover,
     isActive, 
     isDisabled, 
     isComingSoon,
@@ -36,6 +37,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
       onClick={handleClick}
       className={containerClasses}
       role="menuitem"
+      aria-label={label}
       aria-current={isActive ? 'page' : undefined}
       aria-disabled={isDisabled || isComingSoon}
     >
@@ -57,6 +59,11 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
       {/* 3. Etiqueta de Texto (Oculta en Rail) */}
       {!isRail && (
         <span className={`${contentClasses} text-sm truncate flex-1`}>
+          {label}
+        </span>
+      )}
+      {isRail && revealOnHover && (
+        <span data-sidebar-label className="pointer-events-none absolute left-12 top-1/2 z-50 hidden -translate-y-1/2 whitespace-nowrap rounded-md border border-border-technical bg-surface-light px-3 py-2 text-sm font-medium text-text-main shadow-lg dark:bg-surface-dark dark:text-white">
           {label}
         </span>
       )}
@@ -88,7 +95,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
   // Si estamos en Rail, envolvemos en el Tooltip Técnico
   if (isRail && technicalTooltip) {
     return (
-      <TechnicalTooltip content={technicalTooltip} side="right">
+      <TechnicalTooltip content={technicalTooltip} side="right" variant="popover" delayDuration={100}>
         {ItemContent}
       </TechnicalTooltip>
     );

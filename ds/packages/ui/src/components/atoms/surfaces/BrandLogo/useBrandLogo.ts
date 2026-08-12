@@ -2,9 +2,11 @@ import { BrandLogoProps, BrandLogoSize } from './types';
 
 export const useBrandLogo = (props: BrandLogoProps) => {
   const { 
-    variant = 'full', 
+    variant = 'full',
+    surface = 'solid',
     size = 'md', 
     className = '',
+    isotypeClassName = '',
     colorMode 
   } = props;
 
@@ -26,14 +28,16 @@ export const useBrandLogo = (props: BrandLogoProps) => {
 
   // Lógica de clases para el texto (Reactividad de tema)
   const textClasses = `font-black tracking-tighter ${currentSize.text} ${
-    colorMode === 'dark' ? 'text-white' : 
-    colorMode === 'light' ? 'text-slate-900' : 
-    'text-slate-900 dark:text-white'
+    colorMode === 'dark' ? 'text-[#135bec]' :
+    colorMode === 'light' ? 'text-[#135bec]' :
+    'text-[#135bec]'
   }`;
 
   return {
     variant,
+    surface,
     currentSize,
+    isotypeClassName,
     containerClasses,
     textClasses
   };

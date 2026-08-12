@@ -7,6 +7,7 @@ import { ReactNode } from 'react';
 
 type TooltipSide = 'top' | 'right' | 'bottom' | 'left';
 type TooltipAlign = 'start' | 'center' | 'end';
+type TechnicalTooltipVariant = 'technical' | 'popover';
 
 export interface TechnicalTooltipProps {
   /** Elemento que dispara el tooltip al hacer hover/focus */
@@ -23,4 +24,6 @@ export interface TechnicalTooltipProps {
   open?: boolean;
   /** Clase CSS adicional para el contenido */
   className?: string;
+  /** Variante visual para tooltips técnicos o ayudas contextuales */
+  variant?: TechnicalTooltipVariant;
 }

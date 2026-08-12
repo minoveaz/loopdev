@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
-import { 
-  NavigationSchema, 
-  NavMode, 
-  AccessMap, 
-  TelemetryMap, 
+import {
+  NavigationSchema,
+  NavMode,
+  AccessMap,
+  TelemetryMap,
   NavRouteRef,
-  LayoutContext // Importamos el tipo de contexto oficial
+  LayoutContext, // Importamos el tipo de contexto oficial
 } from '@loopdev/contracts';
 
 /**
@@ -18,6 +17,8 @@ export interface SuiteSidebarProps {
   schema: NavigationSchema;
   /** Modo actual del Sidebar (controlado por AppShell) */
   navMode: NavMode;
+  /** Fuerza el contenido expandido cuando el sidebar se usa como drawer mobile */
+  mobileMode?: boolean;
   /** Contexto de enfoque global de la aplicación */
   context?: LayoutContext;
   /** ID del módulo activo (para Momentum y Focus) */
@@ -26,18 +27,11 @@ export interface SuiteSidebarProps {
   accessMap: AccessMap;
   /** Mapa de telemetría para badges */
   telemetry?: TelemetryMap;
-  /** Slot opcional para el perfil de usuario en el footer */
-  profileSlot?: ReactNode;
-  
-  /** Callback para volver al Launchpad (OS) */
-  onExitToOS: () => void;
-  /** Callback para alternar entre Rail y Expanded */
-  onToggleNavMode: () => void;
+  /** Callback para seleccionar Expanded, Collapsed o Expand on hover */
+  onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   /** Callback genérico de navegación */
   onNavigate: (route: NavRouteRef) => void;
-  /** Callback para acciones personalizadas (ej: abrir búsqueda) */
-  onAction?: (actionId: string) => void;
-  
+
   /** Clase CSS adicional */
   className?: string;
 }

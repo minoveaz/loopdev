@@ -37,7 +37,12 @@ export function KanbanBoard<T>({
 
   if (isLoading) {
     return (
-      <div className="flex flex-row overflow-x-auto gap-4 h-full min-h-[400px] p-1 select-none custom-scrollbar">
+      <div
+        role="region"
+        aria-label="Tablero Kanban"
+        tabIndex={0}
+        className="flex flex-row overflow-x-auto gap-4 h-full min-h-[400px] p-1 select-none custom-scrollbar"
+      >
         {columns.map((col) => (
           <div
             key={col.id}
@@ -64,7 +69,12 @@ export function KanbanBoard<T>({
   }
 
   return (
-    <div className="flex flex-row overflow-x-auto gap-4 h-full min-h-[400px] p-1 select-none custom-scrollbar">
+    <div
+      role="region"
+      aria-label="Tablero Kanban"
+      tabIndex={0}
+      className="flex flex-row overflow-x-auto gap-4 h-full min-h-[400px] p-1 select-none custom-scrollbar"
+    >
       {columns.map((col) => {
         const columnItems = items.filter((item) => getColumnId(item) === col.id);
         

@@ -27,7 +27,7 @@ export const WorkspaceSchema = z.object({
   id: z.string().uuid(), organizationId: z.string().uuid(), suiteKey: SuiteKeySchema,
   name: z.string().trim().min(2).max(120), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   status: WorkspaceStatusSchema.default('active'), configuration: z.record(z.string(), z.unknown()).default({}),
-  createdAt: z.string().datetime(), updatedAt: z.string().datetime(),
+  createdAt: z.string().min(1), updatedAt: z.string().min(1),
 });
 export type Workspace = z.infer<typeof WorkspaceSchema>;
 
@@ -45,8 +45,8 @@ export const OrganizationSchema = z.object({
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   legacyTenantId: z.string().uuid().nullable().optional(),
   isActive: z.boolean().default(true),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.string().min(1),
+  updatedAt: z.string().min(1),
 });
 
 export type Organization = z.infer<typeof OrganizationSchema>;

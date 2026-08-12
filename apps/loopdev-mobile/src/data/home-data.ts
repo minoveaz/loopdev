@@ -1,0 +1,67 @@
+import { useEffect, useState } from 'react';
+import type {
+  OrganizationSummary,
+  PlatformActivityItem,
+  PlatformHomeDataSource,
+  PlatformNotificationItem,
+  PlatformSuiteSummary,
+  PlatformOverview,
+} from '@loopdev/contracts';
+
+export type HomeDataState = {
+  status: 'loading' | 'success' | 'error';
+  organizations: OrganizationSummary[];
+  activity: PlatformActivityItem[];
+  notifications: PlatformNotificationItem[];
+  suites: PlatformSuiteSummary[];
+  overview: PlatformOverview | null;
+  error: Error | null;
+};
+
+const loadingState: HomeDataState = {
+  status: 'loading',
+  organizations: [],
+  activity: [],
+  notifications: [],
+  suites: [],
+  overview: null,
+  error: null,
+};
+
+export async function loadHomeData(dataSource: PlatformHomeDataSource, organizationId?: string): Promise<HomeDataState> {
+  const [organizations, suites, activity, notifications, overview] = await Promise.all([
+    dataSource.getOrganizations(),
+    dataSource.getSuites(organizationId),
+    dataSource.getActivity(organizationId),
+    dataSource.getNotifications(organizationId),
+    dataSource.getPlatformOverview(organizationId),
+  ]);
+  return { status: 'success', organizations, suites, activity, notifications, overview, error: null };
+}
+
+export function useHomeData(dataSource?: PlatformHomeDataSource, organizationId?: string): HomeDataState {
+  const [state, setState] = useState<HomeDataState>(loadingState);
+  useEffect(() => {
+    if (!dataSource) {
+      setState(loadingState);
+      return;
+    }
+    let active = true;
+    loadHomeData(dataSource, organizationId)
+      .then((nextState) => {
+        if (active) setState(nextState);
+      })
+      .catch((error: unknown) => {
+        if (active)
+          setState({
+            ...loadingState,
+            status: 'error',
+            error: error instanceof Error ? error : new Error('Unable to load home data'),
+          });
+      });
+    return () => {
+      active = false;
+    };
+  }, [dataSource, organizationId]);
+  return state;
+}

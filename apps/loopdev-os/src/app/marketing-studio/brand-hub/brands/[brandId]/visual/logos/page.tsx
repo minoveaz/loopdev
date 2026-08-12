@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { LpdText, Skeleton, BrandLogo } from '@loopdev/ui';
-import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { Heading, LpdText, Skeleton, EmptyState, BrandLogo, Icon } from '@loopdev/ui';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 
 // Industrial Components
+import { LogoSystemSchema } from '@loopdev/contracts';
 import { LogoShowcase } from '@/suites/marketing-studio/brand-hub/components/LogoShowcase';
 import { LogoVariantCard } from '@/suites/marketing-studio/brand-hub/components/LogoVariantCard';
 import { LogoScaleTest } from '@/suites/marketing-studio/brand-hub/components/LogoScaleTest';
@@ -20,23 +20,13 @@ import { BracketsShowcase } from '@/suites/marketing-studio/brand-hub/components
 export default function BrandLogoPage() {
   const params = useParams();
   const brandId = params.brandId as string;
-  const { setSelectedEntity, setInspectorOpen } = useBrandHub();
-  
   // Data Acquisition
-  const { data: brand, isLoading } = useActiveBrand(brandId);
-  const logoSystem = brand?.logos;
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
+  const parsedLogoSystem = LogoSystemSchema.safeParse(brandContext?.brand.logos);
+  const logoSystem = parsedLogoSystem.success ? parsedLogoSystem.data : undefined;
 
   // LOOPDEV CERTIFICATION CHECK
   const isLoopDev = brandId === 'a399ff27-fff1-406a-b82a-80dd76115dd2';
-
-  const handleLogoClick = (id: string, name: string) => {
-    setSelectedEntity({
-      type: 'brand.logo',
-      id: id,
-      name: name
-    });
-    setInspectorOpen(true);
-  };
 
   if (isLoading) {
     return (
@@ -53,11 +43,12 @@ export default function BrandLogoPage() {
 
   if (!logoSystem) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          {'// logo_system_not_initialized'}
-        </LpdText>
-      </div>
+      <EmptyState
+        title="Logo system unavailable"
+        description="Approved logo variants will appear after the brand assets are configured."
+        icon="image"
+        variant="ghost"
+      />
     );
   }
 
@@ -65,29 +56,34 @@ export default function BrandLogoPage() {
 
   return (
     <div className="flex flex-col gap-16 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32">
-      
       {/* HEADER */}
       <header className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+            <Heading
+              as="h1"
+              size="2xl"
+              weight="bold"
+              className="text-text-main tracking-tight uppercase"
+            >
               Visual System _LOGOS
-            </LpdText>
+            </Heading>
             <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-[12px]">verified</span>
+              <Icon name="verified" size="sm" />
               {isLoopDev ? 'Certified Identity' : 'Official Assets'}
             </div>
           </div>
           <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-            The definitive source for all brand marks. Use these assets to ensure consistency across marketing, product, and communications.
+            The definitive source for all brand marks. Use these assets to ensure consistency across
+            marketing, product, and communications.
           </LpdText>
         </div>
       </header>
 
       {/* 1. THE ISOTYPE (Hero) */}
       <section>
-        <LogoShowcase 
-          logo={primary.isotype} 
+        <LogoShowcase
+          logo={primary.isotype}
           logoNode={isLoopDev ? <BrandLogo variant="isotype" size="xl" /> : undefined}
           description="The infinite loop symbol is the core of our visual language, representing continuous learning and generative cycles."
         />
@@ -96,22 +92,30 @@ export default function BrandLogoPage() {
       {/* 2. PRIMARY LOCKUPS */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
-          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">02</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Primary Lockups</LpdText>
+          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">
+            02
+          </span>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">
+            Primary Lockups
+          </Heading>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <LogoVariantCard 
-            logo={primary.horizontal} 
-            logoNode={isLoopDev ? <BrandLogo variant="full" size="md" colorMode="dark" /> : undefined}
-            label="Horizontal Lockup" 
+          <LogoVariantCard
+            logo={primary.horizontal}
+            logoNode={
+              isLoopDev ? <BrandLogo variant="full" size="md" colorMode="dark" /> : undefined
+            }
+            label="Horizontal Lockup"
             description="Primary usage for web headers & print."
             theme="dark"
           />
-          <LogoVariantCard 
-            logo={primary.vertical} 
-            logoNode={isLoopDev ? <BrandLogo variant="full" size="md" colorMode="dark" /> : undefined}
-            label="Vertical Lockup" 
+          <LogoVariantCard
+            logo={primary.vertical}
+            logoNode={
+              isLoopDev ? <BrandLogo variant="full" size="md" colorMode="dark" /> : undefined
+            }
+            label="Vertical Lockup"
             description="For avatars, social media, & merch."
             theme="dark"
           />
@@ -121,27 +125,37 @@ export default function BrandLogoPage() {
       {/* 3. CONTEXTUAL VARIANTS */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
-          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">03</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Context Variants</LpdText>
+          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">
+            03
+          </span>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">
+            Context Variants
+          </Heading>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <LogoVariantCard 
-            logo={primary.horizontal || primary.isotype} 
-            logoNode={isLoopDev ? <BrandLogo variant="full" size="sm" colorMode="light" /> : undefined}
-            label="Full Color (Light)" 
+          <LogoVariantCard
+            logo={primary.horizontal || primary.isotype}
+            logoNode={
+              isLoopDev ? <BrandLogo variant="full" size="sm" colorMode="light" /> : undefined
+            }
+            label="Full Color (Light)"
             theme="light"
           />
-          <LogoVariantCard 
-            logo={monochrome?.negative?.isotype} 
-            logoNode={isLoopDev ? <BrandLogo variant="full" size="sm" colorMode="dark" /> : undefined}
-            label="Monochrome (Dark)" 
+          <LogoVariantCard
+            logo={monochrome?.negative?.isotype}
+            logoNode={
+              isLoopDev ? <BrandLogo variant="full" size="sm" colorMode="dark" /> : undefined
+            }
+            label="Monochrome (Dark)"
             theme="dark"
           />
-          <LogoVariantCard 
-            logo={monochrome?.positive?.isotype} 
-            logoNode={isLoopDev ? <BrandLogo variant="full" size="sm" colorMode="dark" /> : undefined}
-            label="Monochrome (Brand)" 
+          <LogoVariantCard
+            logo={monochrome?.positive?.isotype}
+            logoNode={
+              isLoopDev ? <BrandLogo variant="full" size="sm" colorMode="dark" /> : undefined
+            }
+            label="Monochrome (Brand)"
             theme="brand"
           />
         </div>
@@ -150,11 +164,15 @@ export default function BrandLogoPage() {
       {/* 4. SCALE TEST */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
-          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">04</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Scale Validation</LpdText>
+          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">
+            04
+          </span>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">
+            Scale Validation
+          </Heading>
         </div>
-        <LogoScaleTest 
-          logo={primary.isotype} 
+        <LogoScaleTest
+          logo={primary.isotype}
           logoNode={isLoopDev ? <BrandLogo variant="isotype" size="xs" /> : undefined}
         />
       </section>
@@ -162,12 +180,15 @@ export default function BrandLogoPage() {
       {/* 5. BRACKETS (Supporting Elements) */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
-          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">05</span>
-          <LpdText size="xl" weight="bold" className="text-text-main tracking-tight">Supporting Elements: Brackets</LpdText>
+          <span className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary font-bold text-sm border border-primary/20">
+            05
+          </span>
+          <Heading as="h2" size="xl" weight="bold" className="text-text-main tracking-tight">
+            Supporting Elements: Brackets
+          </Heading>
         </div>
         <BracketsShowcase />
       </section>
-
     </div>
   );
 }

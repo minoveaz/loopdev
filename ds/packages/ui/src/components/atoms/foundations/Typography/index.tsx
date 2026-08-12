@@ -17,6 +17,22 @@ export const LpdText = (props: TypographyProps & Record<string, unknown>) => {
 };
 
 /**
+ * @component TechnicalText
+ * @description Texto para IDs, estados, timestamps y labels operativos.
+ * @category Foundations
+ * @status stable
+ */
+export const TechnicalText: React.FC<TypographyProps & Record<string, unknown>> = ({
+  size = 'sm',
+  weight = 'normal',
+  variant = 'mono',
+  as = 'span',
+  ...props
+}) => (
+  <LpdText size={size} weight={weight} variant={variant} as={as} {...props} />
+);
+
+/**
  * @component Heading
  * @description Variante preconfigurada para titulares de alto impacto. Inter Black con tracking negativo.
  * @category Foundations

@@ -3,16 +3,26 @@ export * from './brands/brand';
 export * from './brands/typography.schema';
 export * from './brands/logo.schema';
 export * from './brands/rules.schema';
+export * from './brands/context';
+export * from './brands/version';
 
 // Export Platform Navigation Contracts
 export * from './platform/navigation';
 export * from './platform/tenancy';
+export * from './platform/home';
 
 // Export CRM contracts
 export * from './crm/crm';
+export * from './crm/customer-workspace';
+export * from './communications/communications';
+export * from './documents/documents';
+export * from './ai/assistant';
+export * from './catalog/catalog';
 
 // Export Marketing contracts
 export * from './marketing/marketing';
+export * from './marketing/content';
+export * from './marketing/asset';
 
 // Export insurance and operations contracts
 export * from './insurance/insurance';
@@ -31,7 +41,7 @@ export const ApiMetaSchema = z.object({
   traceId: z.string().optional(),
 });
 
-export const createApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) => 
+export const createApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
   z.object({
     data: dataSchema,
     meta: ApiMetaSchema.optional(),

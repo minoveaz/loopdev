@@ -5,6 +5,7 @@ import React, { createContext, useContext, useEffect, useMemo } from 'react';
 export interface ThemeConfig {
   colors?: {
     primary?: string;
+    accent?: string;
     energy?: string;
     success?: string;
     danger?: string;
@@ -51,10 +52,10 @@ export const DynamicThemeProvider: React.FC<{ config: ThemeConfig; children: Rea
       '--lpd-color-bg-primary-subtle': config.colors?.primary ? `${config.colors.primary}42` : undefined, // 26% opacity hex
       '--lpd-color-status-info': config.colors?.primary,
       
-      // 2. ENERGY CHAIN (Amarillo IA)
+      // 2. ACCENT / ENERGY CHAIN
       '--lpd-color-brand-energy': config.colors?.energy,
-      '--lpd-color-brand-secondary-rgb': config.colors?.energy ? hexToRgbChannels(config.colors.energy) : undefined,
-      '--lpd-color-status-warning': config.colors?.energy,
+      '--lpd-color-brand-secondary-rgb': hexToRgbChannels(config.colors?.accent ?? config.colors?.energy ?? ''),
+      '--lpd-color-status-warning': config.colors?.energy ?? config.colors?.accent,
 
       // 3. SUCCESS CHAIN
       '--lpd-color-status-success': config.colors?.success,
@@ -69,10 +70,10 @@ export const DynamicThemeProvider: React.FC<{ config: ThemeConfig; children: Rea
       '--lpd-color-text-base': config.colors?.text,
     };
 
+    const managedVariables = Object.keys(cssMap);
+    managedVariables.forEach((variable) => root.style.removeProperty(variable));
     Object.entries(cssMap).forEach(([variable, value]) => {
-      if (value) {
-        root.style.setProperty(variable, value);
-      }
+      if (value) root.style.setProperty(variable, value);
     });
 
   }, [config]);

@@ -39,6 +39,8 @@ export const NavSidebarGroup: React.FC<{
 
   isRail: boolean;
 
+  revealOnHover: boolean;
+
   activeModuleId?: string;
 
   accessMap: AccessMap;
@@ -48,9 +50,9 @@ export const NavSidebarGroup: React.FC<{
   onNavigate: (route: NavRouteRef) => void;
 
   accentColor?: string;
-}> = ({ group, isRail, activeModuleId, accessMap, telemetry, onNavigate, accentColor }) => (
+}> = ({ group, isRail, revealOnHover, activeModuleId, accessMap, telemetry, onNavigate, accentColor }) => (
   <NavGroupAtom label={group.label} isRail={isRail}>
-    <div className="space-y-0.5">
+    <div className="space-y-0.5" role="menu" aria-label={group.label}>
       {group.items.map((item) => (
         <NavSidebarItem
           key={item.id}
@@ -62,6 +64,8 @@ export const NavSidebarGroup: React.FC<{
           isActive={item.kind === 'module' && item.moduleId === activeModuleId}
 
           isRail={isRail}
+
+          revealOnHover={revealOnHover}
 
           status={
             item.kind === 'module' ? (accessMap[item.moduleId] as any) || 'enabled' : 'enabled'

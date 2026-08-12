@@ -2,15 +2,16 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { Heading, LpdText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, TechnicalText, Skeleton, EmptyState } from '@loopdev/ui';
 import type { ToneProfile, RegulatedClaim } from '@/suites/marketing-studio/brand-hub/types';
 
 // Components (Certified Blocks)
 import { NarrativeBlock } from '@/suites/marketing-studio/brand-hub/components/NarrativeBlock';
 import { VoiceToneBlock } from '@/suites/marketing-studio/brand-hub/components/VoiceToneBlock';
 import { ClaimsGovernanceBlock } from '@/suites/marketing-studio/brand-hub/components/ClaimsGovernanceBlock';
+import type { BrandIdentity } from '@/suites/marketing-studio/brand-hub/types';
 
 /**
  * @page BrandIdentityPage
@@ -19,7 +20,7 @@ import { ClaimsGovernanceBlock } from '@/suites/marketing-studio/brand-hub/compo
 export default function BrandIdentityPage() {
   const params = useParams();
   const brandId = params.brandId as string;
-  const { data: brand, isLoading } = useActiveBrand(brandId);
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
   const { setInspectorOpen, setSelectedEntity } = useBrandHub();
   
   // Local state for active tab in inspector (simulated for now)
@@ -34,8 +35,8 @@ export default function BrandIdentityPage() {
     );
   }
 
-  const identity = brand?.identity;
-  const isDraft = brand?.status === 'draft';
+  const identity = brandContext?.brand.identity as BrandIdentity | undefined;
+  const isDraft = brandContext?.brand.status === 'draft';
 
   // --- CONSEQUENCE WIRING (Inspector Handlers) ---
 
@@ -78,9 +79,13 @@ export default function BrandIdentityPage() {
 
   if (!identity) {
     return (
-      <div className="p-12 text-center border border-dashed border-border-technical rounded-3xl m-8 opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest">{'// brand_identity_not_initialized'}</LpdText>
-      </div>
+      <EmptyState
+        title="Brand identity unavailable"
+        description="This brand does not have an identity profile configured yet."
+        icon="badge"
+        variant="ghost"
+        className="m-8"
+      />
     );
   }
 

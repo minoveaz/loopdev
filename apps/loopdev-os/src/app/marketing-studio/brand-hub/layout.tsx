@@ -1,14 +1,14 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useSyncExternalStore } from 'react';
 import { usePathname, useRouter, useParams } from 'next/navigation';
-import type { NavGroup } from '@loopdev/contracts';
+import { BrandStatusSchema, type NavGroup } from '@loopdev/contracts';
 import {
   ModuleWorkspace,
   ModuleHeader,
   ModuleSidebar,
   SidebarFlyout,
-  Button,
+  IconButton,
   UnifiedInspector,
   InspectorContext,
 } from '@loopdev/ui';
@@ -38,11 +38,41 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
   const { data: currentBrand, isLoading: isBrandLoading } = useActiveBrand(brandId);
 
   useEffect(() => {
-    if (currentBrand) queueMicrotask(() => setActiveBrand(currentBrand));
+    if (currentBrand) {
+      const parsedStatus = BrandStatusSchema.safeParse(currentBrand.status);
+      if (parsedStatus.success) {
+        const paletteRecord =
+          currentBrand.palette &&
+          typeof currentBrand.palette === 'object' &&
+          !Array.isArray(currentBrand.palette)
+            ? (currentBrand.palette as { tokens?: unknown })
+            : undefined;
+        const palette = Array.isArray(paletteRecord?.tokens)
+          ? {
+              tokens: paletteRecord.tokens.filter(
+                (token) => typeof token === 'object' && token !== null && 'id' in token,
+              ) as Array<{ id: string; [key: string]: unknown }>,
+            }
+          : undefined;
+
+        queueMicrotask(() =>
+          setActiveBrand({ ...currentBrand, status: parsedStatus.data, palette }),
+        );
+      }
+    }
   }, [currentBrand, setActiveBrand]);
 
   // 2. Estado de la Máquina de Paneles
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const isMobileViewport = useSyncExternalStore(
+    (onStoreChange) => {
+      const mediaQuery = window.matchMedia('(max-width: 1023px)');
+      mediaQuery.addEventListener('change', onStoreChange);
+      return () => mediaQuery.removeEventListener('change', onStoreChange);
+    },
+    () => window.matchMedia('(max-width: 1023px)').matches,
+    () => false,
+  );
+  const [sidebarOpen, setSidebarOpen] = useState(() => !isMobileViewport);
   const [flyoutOpen, setFlyoutOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState('overview');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -194,12 +224,12 @@ function BrandHubLayoutInner({ children }: { children: React.ReactNode }) {
           rightSlot={
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Button
-                  variant={isInspectorOpen ? 'secondary' : 'ghost'}
+                <IconButton
+                  variant={isInspectorOpen ? 'primary' : 'ghost'}
                   size="sm"
-                  startIcon="info"
+                  icon="info"
+                  tooltip={isInspectorOpen ? 'Close inspector' : 'Open inspector'}
                   onClick={() => setInspectorOpen(!isInspectorOpen)}
-                  aria-label="Toggle Inspector"
                 />
               </div>
             </div>

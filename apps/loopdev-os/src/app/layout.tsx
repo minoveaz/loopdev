@@ -6,7 +6,8 @@ import { BrandProvider } from "@/providers/BrandProvider";
 import { WorkspaceProvider } from "@/providers/WorkspaceProvider";
 import { PermissionProvider } from "@/providers/PermissionProvider";
 import { OrganizationRouteGuard } from "@/components/layout/OrganizationRouteGuard";
-import { DynamicThemeProvider } from "@loopdev/ui";
+import { TransitionOverlay } from "@/components/layout/TransitionOverlay";
+import { OrganizationThemeProvider } from "@/providers/OrganizationThemeProvider";
 
 // Importamos los estilos globales de nuestro Design System
 import "@loopdev/ui/styles/globals.css";
@@ -29,6 +30,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
       <body className="font-sans antialiased">
+        <TransitionOverlay />
         <QueryProvider>
           <AuthProvider>
             <OrganizationProvider>
@@ -36,14 +38,7 @@ export default function RootLayout({
             <BrandProvider>
             <WorkspaceProvider>
             <OrganizationRouteGuard>
-                      <DynamicThemeProvider config={{
-                        fontFamily: 'var(--lpd-font-sans)',
-                        colors: {
-                          primary: '#135bec',
-                          energy: '#FFD025',
-                        }
-                      }}>              {children}
-            </DynamicThemeProvider>
+              <OrganizationThemeProvider>{children}</OrganizationThemeProvider>
             </OrganizationRouteGuard>
             </WorkspaceProvider>
             </BrandProvider>

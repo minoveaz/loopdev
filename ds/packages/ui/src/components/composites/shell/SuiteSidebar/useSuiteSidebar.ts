@@ -8,47 +8,60 @@ import { NavGroup, NavItem } from '@loopdev/contracts';
  * Gestiona el filtrado de permisos, prioridades y estados de densidad.
  */
 export const useSuiteSidebar = (props: SuiteSidebarProps) => {
-  const { 
-    schema, 
-    navMode, 
+  const {
+    schema,
+    navMode,
+    mobileMode = false,
     context = 'normal',
-    accessMap, 
+    accessMap,
     activeModuleId,
-    className = '' 
+    className = '',
   } = props;
 
   // 1. Estado de Densidad (Ahora consciente del contexto)
   // En modo focus o inmersivo, siempre queremos el modo Rail.
-  const isRail = navMode === 'rail' || context === 'focus' || context === 'inmersive';
+  const isRail =
+    !mobileMode && (navMode === 'rail' || navMode === 'hover' || context === 'focus' || context === 'inmersive');
 
   // 2. Procesamiento de Navegación (Filtrado y Ordenación)
   const visibleGroups = useMemo(() => {
-    return schema.groups
-      .map(group => {
-        // Filtrar items del grupo según el mapa de acceso
-        const filteredItems = group.items.filter(item => {
-          const moduleId = (item as any).moduleId; // Solo los de tipo 'module' tienen moduleId
-          const access = moduleId ? accessMap[moduleId] : 'enabled';
-          return access !== 'hidden';
-        }).sort((a, b) => a.priority - b.priority);
+    return (
+      schema.groups
+        .map((group) => {
+          // Filtrar items del grupo según el mapa de acceso
+          const filteredItems = group.items
+            .filter((item) => {
+              const moduleId = (item as any).moduleId; // Solo los de tipo 'module' tienen moduleId
+              const access = moduleId ? accessMap[moduleId] : 'enabled';
+              return access !== 'hidden';
+            })
+            .sort((a, b) => a.priority - b.priority);
 
-        return { ...group, items: filteredItems };
-      })
-      // Ocultar grupos que se hayan quedado vacíos tras el filtrado
-      .filter(group => group.items.length > 0)
-      .sort((a, b) => a.priority - b.priority);
+          return {
+            ...group,
+            items: filteredItems.filter((item) => (item as any).moduleId !== 'overview'),
+          };
+        })
+        // Ocultar grupos que se hayan quedado vacíos tras el filtrado
+        .filter((group) => group.items.length > 0)
+        .sort((a, b) => a.priority - b.priority)
+    );
   }, [schema.groups, accessMap]);
-  
+
   // El resto del hook no cambia...
   const containerClasses = `
     flex flex-col h-full w-full transition-all duration-300
     ${className}
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
 
   const scrollAreaClasses = `
     flex-1 min-h-0 overflow-y-auto overflow-x-hidden
-    ${isRail ? 'scrollbar-hide' : 'scrollbar-hide hover:scrollbar-default'}
-  `.replace(/\s+/g, ' ').trim();
+    ${isRail ? 'scrollbar-hide' : 'custom-scrollbar'}
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
 
   return {
     isRail,
@@ -57,6 +70,6 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
     scrollAreaClasses,
     suite: schema.suite,
     exitHatch: schema.exitHatch,
-    activeModuleId
+    activeModuleId,
   };
 };

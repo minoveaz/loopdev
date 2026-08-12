@@ -29,7 +29,8 @@ export const ModuleSidebar: React.FC<ModuleSidebarProps> = (props) => {
     onNavigate,
     activeRouteId,
     isLoading = false,
-    className = '' 
+    className = '',
+    footerAction,
   } = props;
 
   const renderSkeletons = () => (
@@ -104,8 +105,8 @@ export const ModuleSidebar: React.FC<ModuleSidebarProps> = (props) => {
 
         {/* Footer: Action */}
         <div className="p-4 border-t border-border-technical bg-shell-canvas">
-          <Button variant="outline" size="sm" startIcon="add" fullWidth disabled={isLoading}>
-            New Brand
+          <Button variant="outline" size="sm" startIcon={footerAction?.icon ?? 'add'} fullWidth disabled={isLoading || footerAction?.disabled} onClick={footerAction?.onClick}>
+            {footerAction?.label ?? 'New Brand'}
           </Button>
         </div>
       </div>
@@ -180,6 +181,11 @@ export const ModuleSidebar: React.FC<ModuleSidebarProps> = (props) => {
 
       {/* Footer: Meta */}
       <div className="p-3 border-t border-border-technical flex justify-between items-center opacity-60">
+        {footerAction && (
+          <Button variant="outline" size="sm" startIcon={footerAction.icon} disabled={isLoading || footerAction.disabled} onClick={footerAction.onClick}>
+            {footerAction.label}
+          </Button>
+        )}
         <LpdText size="nano" className="font-mono">v1.0.4</LpdText>
         <div className="w-2 h-2 rounded-full bg-emerald-500" />
       </div>

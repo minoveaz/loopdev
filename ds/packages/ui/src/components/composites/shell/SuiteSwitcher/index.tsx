@@ -4,12 +4,10 @@ import React, { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { 
   TechnicalDropdown, 
-  TechnicalMenuItem, 
-  TechnicalDropdownSeparator, 
-  TechnicalDropdownGroup,
+  TechnicalDropdownItem,
+  TechnicalDropdownSeparator,
   UIKitIllustration,
   LpdText,
-  TechnicalLabel,
   TechnicalTooltip
 } from '../../../atoms';
 import { SuiteSwitcherProps } from './types';
@@ -34,7 +32,7 @@ const SuiteIllustration: React.FC<{ suiteId: string, className?: string }> = ({ 
  * @phase 1
  */
 export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
-  const { availableSuites, onSuiteChange, accessMap = {}, onOpenChange } = props;
+  const { availableSuites, onSuiteChange, accessMap = {}, onOpenChange, showIcon = true } = props;
   const [isOpen, setIsOpen] = useState(false);
   const { triggerClasses, currentSuite } = useSuiteSwitcher(props);
 
@@ -49,27 +47,30 @@ export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
       onOpenChange={handleOpenChange}
       trigger={
         <button className={triggerClasses}>
-          <div className="w-5 h-5 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
-            <SuiteIllustration suiteId={currentSuite.suiteId} className="w-full h-full text-primary" />
-          </div>
+          {showIcon && (
+            <div className="h-5 w-5 shrink-0 opacity-80 transition-opacity group-hover:opacity-100">
+              <SuiteIllustration suiteId={currentSuite.suiteId} className="text-primary h-full w-full" />
+            </div>
+          )}
           <div className="flex items-center gap-2">
-            <LpdText size="sm" weight="bold" className="tracking-tight text-text-main dark:text-white">
+            <LpdText
+              size="xs"
+              weight="normal"
+              variant="sans"
+              className="text-text-main group-hover:text-accent dark:text-white"
+            >
               {currentSuite.suiteName}
             </LpdText>
-            <LucideIcons.ChevronDown size={12} className="text-text-muted opacity-40" />
+            <LucideIcons.ChevronDown
+              size={12}
+              className="text-text-muted group-hover:text-accent opacity-40 transition-colors"
+            />
           </div>
         </button>
       }
     >
-      <div className="flex flex-col w-[260px] bg-white dark:bg-surface-elevated">
-        {/* Header Minimalista Estándar Lab */}
-        <div className="p-4 pb-2 border-b border-border-technical bg-white dark:bg-surface-elevated">
-          <LpdText size="sm" weight="bold" className="text-text-main dark:text-white">
-            Suites Disponibles
-          </LpdText>
-        </div>
-
-        <div className="flex flex-col py-1">
+      <div className="dark:bg-surface-elevated flex flex-col bg-white">
+        <div className="flex flex-col">
           {availableSuites.map((suite) => {
             const isActive = suite.suiteId === currentSuite.suiteId;
             const isDisabled = accessMap[suite.suiteId] === 'disabled';
@@ -80,36 +81,35 @@ export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
                 content={isDisabled ? "Esta suite no está incluida en tu plan actual" : undefined}
                 side="right"
               >
-                <TechnicalMenuItem 
-                  label={suite.suiteName}
+                <TechnicalDropdownItem
                   isActive={isActive}
-                  isDisabled={isDisabled}
+                  disabled={isDisabled}
                   onClick={() => !isActive && !isDisabled && onSuiteChange(suite.suiteId)}
                 >
-                  <div className={`w-7 h-7 rounded bg-background-subtle dark:bg-white/5 flex items-center justify-center shrink-0 border border-border-technical relative`}>
-                    <SuiteIllustration suiteId={suite.suiteId} className="w-4 h-4" />
+                  <div className={`bg-background-subtle border-border-technical relative flex h-7 w-7 shrink-0 items-center justify-center rounded border dark:bg-white/5`}>
+                    <SuiteIllustration suiteId={suite.suiteId} className="h-4 w-4" />
                     {isDisabled && (
-                      <div className="absolute -top-1 -right-1 bg-surface-elevated rounded-full p-0.5 border border-border-technical">
+                      <div className="bg-surface-elevated border-border-technical absolute -right-1 -top-1 rounded-full border p-0.5">
                         <LucideIcons.Lock size={8} className="text-text-muted" />
                       </div>
                     )}
                   </div>
-                  <span className="flex-1 truncate text-technical">{suite.suiteName}</span>
+                  <span className="flex-1 truncate">{suite.suiteName}</span>
                   {isDisabled && (
-                    <span className="text-[8px] font-mono text-text-muted opacity-40 uppercase tracking-tighter">Plan_Locked</span>
+                    <span className="text-text-muted font-mono text-[8px] uppercase tracking-tighter opacity-40">Plan_Locked</span>
                   )}
-                </TechnicalMenuItem>
+                </TechnicalDropdownItem>
               </TechnicalTooltip>
             );
           })}
         </div>
 
-        <div className="border-t border-border-technical">
-          <TechnicalMenuItem 
-            label="Volver al Launchpad"
-            icon="Home"
-            onClick={() => onSuiteChange('os.home')}
-          />
+        <TechnicalDropdownSeparator />
+        <div>
+          <TechnicalDropdownItem onClick={() => onSuiteChange('os.home')}>
+            <LucideIcons.Home size={16} className="shrink-0" aria-hidden="true" />
+            <span className="flex-1 truncate">Volver al Launchpad</span>
+          </TechnicalDropdownItem>
         </div>
       </div>
     </TechnicalDropdown>

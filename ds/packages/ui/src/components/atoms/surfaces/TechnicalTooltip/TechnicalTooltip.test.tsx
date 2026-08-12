@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TechnicalTooltip } from './index';
 import React from 'react';
+import { axe } from 'vitest-axe';
 
 describe('TechnicalTooltip Atom', () => {
   it('debe renderizar el disparador correctamente', () => {
@@ -43,5 +44,15 @@ describe('TechnicalTooltip Atom', () => {
     // Radix duplica el contenido para lectores de pantalla, usamos getAll
     expect(screen.getAllByText('{')[0]).toBeInTheDocument();
     expect(screen.getAllByText('}')[0]).toBeInTheDocument();
+  });
+
+  it('has no accessibility violations for the tooltip trigger', async () => {
+    const { container } = render(
+      <TechnicalTooltip content="Additional information">
+        <button type="button">Details</button>
+      </TechnicalTooltip>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

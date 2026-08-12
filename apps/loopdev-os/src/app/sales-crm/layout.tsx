@@ -1,18 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   AppShell,
   BlueprintBackground,
-  Button,
   LayoutProvider,
   ModuleHeader,
   ModuleWorkspace,
   SuiteSidebar,
   ThemeToggle,
-  SystemStatus,
-  UserAvatar,
   SuiteHeader,
   CommandBarTrigger,
   SuiteSwitcher,
@@ -23,6 +20,7 @@ import {
   Divider,
   TenantProvider,
   ToastViewport,
+  MobileSuiteNav,
 } from '@loopdev/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
@@ -119,21 +117,28 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
   const { activeOrganization } = useOrganization();
   const { leads, openLeadInspector, isInspectorOpen, closeInspector, selectedLead } = useSalesCrm();
 
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [syncedNotifications, setSyncedNotifications] = useState<NotificationItem[]>([]);
 
   useEffect(() => {
     // Generate stale lead alerts notifications in real-time
-    const staleAlerts = leads.filter((lead) => isLeadStale(lead)).map((lead) => {
-      const diffDays = daysSinceContact(lead.lastContactDate);
-      return {
-        id: `stale-${lead.id}`,
-        title: `Lead Estancado: ${lead.name}`,
-        description: `El lead de ${lead.company} lleva ${diffDays} días sin contacto.`,
-        timestamp: `${diffDays}d ago`,
-        type: 'warning' as const,
-        read: false,
-      };
-    });
+    const staleAlerts = leads
+      .filter((lead) => isLeadStale(lead))
+      .map((lead) => {
+        const diffDays = daysSinceContact(lead.lastContactDate);
+        return {
+          id: `stale-${lead.id}`,
+          title: `Lead Estancado: ${lead.name}`,
+          description: `El lead de ${lead.company} lleva ${diffDays} días sin contacto.`,
+          timestamp: `${diffDays}d ago`,
+          type: 'warning' as const,
+          read: false,
+        };
+      });
 
     queueMicrotask(() => setSyncedNotifications(staleAlerts));
   }, [leads]);
@@ -158,12 +163,18 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
     setSyncedNotifications([]);
   };
 
-  const [navMode, setNavMode] = useState<NavMode>('expanded');
+  const [navMode, setNavMode] = useState<NavMode>('hover');
   const [context] = useState<LayoutContext>('normal');
   const [activeOverlay, setActiveOverlay] = useState<'nav' | 'context' | null>(null);
 
   useEffect(() => {
-    queueMicrotask(() => setNavMode(getSuiteNavMode(pathname, { railPrefixes: ['/sales-crm/pipeline', '/sales-crm/customers', '/sales-crm/ai-insights'] })));
+    queueMicrotask(() =>
+      setNavMode(
+        getSuiteNavMode(pathname, {
+          railPrefixes: ['/sales-crm/pipeline', '/sales-crm/customers', '/sales-crm/ai-insights'],
+        }),
+      ),
+    );
   }, [pathname]);
 
   const currentSuite: SuiteIdentity = SALES_CRM_SCHEMA.suite;
@@ -183,106 +194,141 @@ function SalesCrmLayoutInner({ children }: { children: React.ReactNode }) {
     'ai-insights': 'enabled',
   };
 
+  if (!isMounted) return null;
+
   return (
     <SuitePermissionGuard permission="crm.read">
-    <AppShell
-      config={{
-        isLeftSidebarOpen: navMode === 'expanded',
-        isRightSidebarOpen: false,
-        navBehavior: 'auto',
-        context: context,
-        activeOverlay: activeOverlay,
-      }}
-      onToggleLeftSidebar={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
-      navSlot={
-        <SuiteSidebar
-          schema={SALES_CRM_SCHEMA}
-          navMode={navMode}
-          context={context}
-          activeModuleId={activeModuleId}
-          accessMap={accessMap}
-          onExitToOS={() => router.push('/launchpad')}
-          onNavigate={(route) => router.push(route.routeId)}
-          onToggleNavMode={() => setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))}
-          profileSlot={
-            <UserAvatar
-              name={user?.email || 'Sales Manager'}
-              size={navMode === 'rail' ? 'md' : 'sm'}
-              withStatus
-              status="online"
-            />
-          }
-        />
-      }
-      headerSlot={
-        <SuiteHeader
-          isInert={activeOverlay !== null}
-          leftSlot={
-            <div className="flex items-center gap-4">
-              <SuiteSwitcher
-                currentSuite={currentSuite}
-                availableSuites={AVAILABLE_SUITES_FIXTURES}
-                onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
-                onSuiteChange={(id) =>
-                  id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
-                }
-              />
-              <Divider orientation="vertical" thickness="technical" className="h-4" />
-              <ContextPath
-                segments={[
-                  { id: 'workspace', label: activeOrganization?.name ?? 'Workspace', isActive: true },
-                ]}
-              />
-            </div>
-          }
-          centerSlot={<CommandBarTrigger onOpen={() => {}} />}
-          rightSlot={
-            <div className="flex items-center gap-4">
-              <NotificationCenter
-                notifications={syncedNotifications}
-                unreadCount={syncedNotifications.filter((n) => !n.read).length}
-                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-                onMarkAsRead={handleMarkAsRead}
-                onMarkAllRead={handleMarkAllRead}
-                onRemove={handleRemoveNotification}
-                onClear={handleClearAll}
-                onViewAll={() => console.log('Open Notifications')}
-              />
-
-              <ThemeToggle variant="technical" size="md" />
-              <UserMenu
-                userName={user?.email || 'Sales Manager'}
-                userEmail={user?.email}
-                userRole="Sales_Executive"
-                onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
-                onLogout={() => signOut()}
-              />
-            </div>
-          }
-        />
-      }
-    >
-      <BlueprintBackground variant="monochrome" intensity="low" className="fixed inset-0 pointer-events-none opacity-40" />
-      <TenantProvider tenant="loopdev">
-        <LayoutProvider>
-          <ToastViewport activeTenantId="loopdev" />
-          <ModuleWorkspace
-            moduleId="sales-crm"
-            config={{ inspectorWidth: '0px' }}
-            overlay={{ force: false, closeOnBackdrop: false }}
-            headerSlot={
-              <ModuleHeader
-                segments={[{ id: 'suite', label: 'Sales & CRM', href: '/sales-crm', isActive: true }]}
-              />
+      <AppShell
+        config={{
+          isLeftSidebarOpen: navMode === 'expanded',
+          isRightSidebarOpen: false,
+          navBehavior: 'auto',
+          context: context,
+          activeOverlay: activeOverlay,
+        }}
+        onToggleLeftSidebar={() =>
+          setNavMode((prev) => (prev === 'expanded' ? 'rail' : 'expanded'))
+        }
+        navSlot={
+          <SuiteSidebar
+            schema={SALES_CRM_SCHEMA}
+            navMode={navMode}
+            onNavModeChange={setNavMode}
+            context={context}
+            activeModuleId={activeModuleId}
+            accessMap={accessMap}
+            onNavigate={(route) => router.push(route.routeId)}
+          />
+        }
+        headerSlot={
+          <SuiteHeader
+            isInert={activeOverlay !== null}
+            leftSlot={
+              <div className="flex items-center gap-4">
+                <SuiteSwitcher
+                  currentSuite={currentSuite}
+                  availableSuites={AVAILABLE_SUITES_FIXTURES}
+                  onOpenChange={(open) => setActiveOverlay(open ? 'nav' : null)}
+                  onSuiteChange={(id) =>
+                    id === 'os.home' ? router.push('/launchpad') : router.push(`/${id}`)
+                  }
+                />
+                <Divider orientation="vertical" thickness="technical" className="h-4" />
+                <ContextPath
+                  segments={[
+                    {
+                      id: 'workspace',
+                      label: isMounted ? activeOrganization?.name ?? 'Workspace' : 'Workspace',
+                      isActive: true,
+                    },
+                  ]}
+                />
+              </div>
             }
-          >
-            <AiBudgetGenerator />
-            <MasterDetailModal isOpen={isInspectorOpen} lead={selectedLead} onClose={closeInspector} />
-            {children}
-          </ModuleWorkspace>
-        </LayoutProvider>
-      </TenantProvider>
-    </AppShell>
+            centerSlot={<CommandBarTrigger onOpen={() => {}} />}
+            rightSlot={
+              <div className="flex items-center gap-4">
+                <NotificationCenter
+                  notifications={syncedNotifications}
+                  unreadCount={syncedNotifications.filter((n) => !n.read).length}
+                  onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
+                  onMarkAsRead={handleMarkAsRead}
+                  onMarkAllRead={handleMarkAllRead}
+                  onRemove={handleRemoveNotification}
+                  onClear={handleClearAll}
+                  onViewAll={() => console.log('Open Notifications')}
+                />
+
+                <ThemeToggle variant="technical" size="md" />
+                <UserMenu
+                  userName={isMounted ? user?.email || 'Sales Manager' : 'Sales Manager'}
+                  userEmail={isMounted ? user?.email : undefined}
+                  userRole="Sales_Executive"
+                  onOpenChange={(open) => setActiveOverlay(open ? 'context' : null)}
+                  onLogout={() => signOut()}
+                />
+              </div>
+            }
+          />
+        }
+        mobileBottomSlot={(openMobileNav) => (
+          <MobileSuiteNav
+            items={[
+              {
+                label: 'CRM',
+                icon: 'dashboard',
+                path: '/sales-crm',
+                active: pathname === '/sales-crm',
+              },
+              {
+                label: 'Pipeline',
+                icon: 'trending_up',
+                path: '/sales-crm/pipeline',
+                active: pathname.startsWith('/sales-crm/pipeline'),
+              },
+              {
+                label: 'Clientes',
+                icon: 'group',
+                path: '/sales-crm/customers',
+                active: pathname.startsWith('/sales-crm/customers'),
+              },
+              { label: 'Más', icon: 'more_horiz' },
+            ]}
+            onNavigate={(item) => (item.path ? router.push(item.path) : openMobileNav())}
+          />
+        )}
+      >
+        <BlueprintBackground
+          variant="monochrome"
+          intensity="low"
+          className="fixed inset-0 pointer-events-none opacity-40"
+        />
+        <TenantProvider tenant="loopdev">
+          <LayoutProvider>
+            <ToastViewport activeTenantId="loopdev" />
+            <ModuleWorkspace
+              moduleId="sales-crm"
+              config={{ inspectorWidth: '0px' }}
+              overlay={{ force: false, closeOnBackdrop: false }}
+              headerSlot={
+                <ModuleHeader
+                  segments={[
+                    { id: 'suite', label: 'Sales & CRM', href: '/sales-crm', isActive: true },
+                  ]}
+                />
+              }
+            >
+              <AiBudgetGenerator />
+              <MasterDetailModal
+                isOpen={isInspectorOpen}
+                lead={selectedLead}
+                onClose={closeInspector}
+              />
+              {children}
+            </ModuleWorkspace>
+          </LayoutProvider>
+        </TenantProvider>
+      </AppShell>
     </SuitePermissionGuard>
   );
 }

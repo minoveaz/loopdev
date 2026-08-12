@@ -1,23 +1,13 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   TechnicalSurface,
-  BrandLogo,
-  LpdText,
-  Heading,
-  Divider,
-  ExitHatch,
-  IdentityBar,
-  TechnicalLabel,
-  ScrollArea
+  ScrollArea,
 } from '../../../atoms';
 import { SidebarFooter } from '../SidebarFooter';
-import { SidebarIdentity } from '../SidebarIdentity';
-import { PanelLeftClose, PanelLeftOpen, Settings, User } from 'lucide-react';
 import { SuiteSidebarProps } from './types';
 import { useSuiteSidebar } from './useSuiteSidebar';
-import {
-  NavSidebarGroup
-} from './components';
+import { NavSidebarGroup } from './components';
+import { NavSidebarItem } from '../../../atoms';
 
 /**
  * @component SuiteSidebar (Context Controller v1.0)
@@ -26,68 +16,84 @@ import {
  * @category Composites
  */
 export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
+  const [isHoverExpanded, setIsHoverExpanded] = useState(false);
+  const [isControlMenuOpen, setIsControlMenuOpen] = useState(false);
+  const [isFooterHovered, setIsFooterHovered] = useState(false);
+  const isSidebarHovered = useRef(false);
+  const hoverCollapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
-    onExitToOS,
-    onToggleNavMode,
+    onNavModeChange,
     onNavigate,
-    onAction,
     accessMap,
     telemetry = {},
-    profileSlot
   } = props;
 
   const {
     isRail,
     visibleGroups,
     containerClasses,
-    scrollAreaClasses,
     suite,
-    exitHatch,
-    activeModuleId
+    activeModuleId,
   } = useSuiteSidebar(props);
+  const shouldExpandOnHover = props.navMode === 'hover' && !props.mobileMode;
+  const renderAsRail = isRail && !(shouldExpandOnHover && (isHoverExpanded || isControlMenuOpen));
+  const clearHoverCollapse = () => {
+    if (hoverCollapseTimer.current) {
+      clearTimeout(hoverCollapseTimer.current);
+      hoverCollapseTimer.current = null;
+    }
+  };
+  const scheduleHoverCollapse = () => {
+    clearHoverCollapse();
+    hoverCollapseTimer.current = setTimeout(() => {
+      hoverCollapseTimer.current = null;
+      if (!isControlMenuOpen && !isFooterHovered && !isSidebarHovered.current) {
+        setIsHoverExpanded(false);
+      }
+    }, 150);
+  };
 
   return (
     <TechnicalSurface
       variant="canvas"
       depth="flat"
       overflow="visible"
-      className={`${containerClasses} h-full border-r border-border-technical bg-shell-canvas`}
+      onMouseEnter={shouldExpandOnHover ? () => {
+        clearHoverCollapse();
+        isSidebarHovered.current = true;
+        setIsHoverExpanded(true);
+      } : undefined}
+      onMouseLeave={shouldExpandOnHover ? () => {
+        isSidebarHovered.current = false;
+        if (!isControlMenuOpen && !isFooterHovered) scheduleHoverCollapse();
+      } : undefined}
+      className={`${containerClasses} ${shouldExpandOnHover ? `sidebar-hover-surface ${isHoverExpanded || isControlMenuOpen ? '!w-64' : '!w-16'}` : ''} h-full border-r border-border-technical bg-shell-canvas`}
     >
       <div className="flex flex-col h-full">
-
-        {/* A. Suite Identity Header (Fijo) */}
-        <SidebarIdentity
-          logo={<BrandLogo variant={isRail ? 'isotype' : 'full'} size="sm" />}
-          name={suite.suiteName}
-          accentColor={suite.accentColor}
-          isRail={isRail}
-          onClick={() => onNavigate(suite.route || { routeId: '/' })}
-        />
-
-        {/* Separador Técnico 0.5px */}
-        <div className="mx-4 h-[0.5px] bg-black/5 dark:bg-white/10 shrink-0" />
-
-        {/* B. Exit Hatch (Fijo) */}
-        <section className="shrink-0">
-          <ExitHatch
-            isRail={isRail}
-            label={exitHatch.label}
-            icon={exitHatch.icon}
-            onClick={onExitToOS}
+        {/* Suite dashboard */}
+        <div className="shrink-0 px-4 py-3" role="menu" aria-label="Suite home">
+          <NavSidebarItem
+            icon="LayoutDashboard"
+            label="Suite Dashboard"
+            isRail={renderAsRail}
+            isActive
+            onNavigate={onNavigate}
+            route={suite.route || { routeId: '/' }}
+            accentColor={suite.accentColor}
           />
-        </section>
+        </div>
 
-        {/* Separador Técnico 0.5px */}
-        <div className="mx-4 h-[0.5px] bg-black/5 dark:bg-white/10 shrink-0" />
+        <div className="mx-4 h-[0.5px] shrink-0 bg-black/5 dark:bg-white/10" />
 
-        {/* C. Navigation Groups (Scrollable) */}
-        <ScrollArea visibility={isRail ? 'hidden' : 'auto'} className="flex-1">
-          <nav className="p-4 space-y-8">
+        {/* Navigation groups (scrollable) */}
+        <ScrollArea visibility={renderAsRail ? 'hidden' : 'auto'} className="flex-1">
+          <nav className="space-y-8 p-4 pb-8">
             {visibleGroups.map((group) => (
               <NavSidebarGroup
                 key={group.id}
                 group={group}
-                isRail={isRail}
+                isRail={renderAsRail}
+                revealOnHover={false}
                 activeModuleId={activeModuleId}
                 accessMap={accessMap}
                 telemetry={telemetry}
@@ -98,13 +104,31 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
           </nav>
         </ScrollArea>
 
-        {/* E. Sidebar Footer (Fijo - Consola de Control) */}
+        {/* Sidebar behavior selector */}
         <SidebarFooter
-          isRail={isRail}
-          onToggleRail={onToggleNavMode}
-          onSettingsClick={() => onAction?.('openSettings')}
+          isRail={renderAsRail}
+          navMode={props.navMode === 'hover' ? 'hover' : isRail ? 'rail' : 'expanded'}
+          onMenuTrigger={() => {
+            if (shouldExpandOnHover) setIsHoverExpanded(true);
+          }}
+          onFooterHoverChange={(hovered) => {
+            setIsFooterHovered(hovered);
+            if (shouldExpandOnHover && hovered) {
+              clearHoverCollapse();
+              setIsHoverExpanded(true);
+            }
+          }}
+          onMenuOpenChange={(open) => {
+            setIsControlMenuOpen(open);
+            if (open) {
+              clearHoverCollapse();
+              setIsHoverExpanded(true);
+            } else if (!isSidebarHovered.current && !isFooterHovered) {
+              scheduleHoverCollapse();
+            }
+          }}
+          onNavModeChange={onNavModeChange}
         />
-
       </div>
     </TechnicalSurface>
   );

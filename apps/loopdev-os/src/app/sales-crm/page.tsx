@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useSyncExternalStore } from 'react';
 import {
   LpdText,
   Heading,
   TechnicalSurface,
   StatusPulse,
   Icon,
-  MetricCard,
   Button,
   IndustrialMetric,
 } from '@loopdev/ui';
@@ -18,7 +17,11 @@ import { isLeadStale } from './utils/leadActivity';
 export default function SalesCrmDashboard() {
   const router = useRouter();
   const { leads, openLeadInspector } = useSalesCrm();
-  const [showAddModal, setShowAddModal] = useState(false);
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   // Calculate metrics
   const totalPipeline = leads.reduce((acc, lead) => {
@@ -35,7 +38,7 @@ export default function SalesCrmDashboard() {
   const avgAiScore = Math.round(leads.reduce((acc, l) => acc + l.aiScore, 0) / leads.length);
 
   // Calculate Revenue in Risk (stale leads: stage contacted & no contact for > 5 days)
-  const staleLeads = leads.filter((lead) => isLeadStale(lead));
+  const staleLeads = isMounted ? leads.filter((lead) => isLeadStale(lead)) : [];
   const revenueInRisk = staleLeads.reduce((acc, l) => acc + l.dealValue, 0);
 
   // Filter high win probability deals
@@ -45,9 +48,9 @@ export default function SalesCrmDashboard() {
     .slice(0, 3);
 
   return (
-    <main className="h-full overflow-y-auto flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
+    <main className="h-full overflow-y-auto flex flex-col gap-8 p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar min-w-0">
       {/* Dashboard Header */}
-      <section className="flex justify-between items-center bg-shell-surface p-6 rounded-3xl border border-border-technical shadow-sm">
+      <section className="flex flex-col items-stretch gap-5 bg-shell-surface p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6 rounded-3xl border border-border-technical shadow-sm min-w-0">
         <div className="flex flex-col gap-1">
           <Heading size="lg" weight="bold" className="text-text-main tracking-tight uppercase">
             Centro de Mando Comercial
@@ -56,12 +59,12 @@ export default function SalesCrmDashboard() {
             SAAS_CRM_PIPELINE_ORCHESTRATOR
           </LpdText>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Button
             variant="outline"
             size="md"
             onClick={() => router.push('/sales-crm/pipeline')}
-            className="border-border-technical hover:bg-background-subtle text-text-main font-bold"
+            className="border-border-technical hover:bg-background-subtle text-text-main font-bold flex-1 sm:flex-none"
           >
             Ver Kanban
           </Button>
@@ -69,7 +72,7 @@ export default function SalesCrmDashboard() {
             variant="primary"
             size="md"
             onClick={() => router.push('/sales-crm/customers')}
-            className="bg-primary hover:bg-primary/95 text-white font-bold"
+            className="bg-primary hover:bg-primary/95 text-white font-bold flex-1 sm:flex-none"
           >
             Directorio Clientes
           </Button>
@@ -127,7 +130,11 @@ export default function SalesCrmDashboard() {
           >
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-1">
-                <Heading size="sm" weight="bold" className="text-text-main tracking-tight uppercase">
+                <Heading
+                  size="sm"
+                  weight="bold"
+                  className="text-text-main tracking-tight uppercase"
+                >
                   Distribución de Tratos por Etapa
                 </Heading>
                 <LpdText size="nano" className="text-text-muted font-mono">

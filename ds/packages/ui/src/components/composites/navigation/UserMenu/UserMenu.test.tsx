@@ -1,3 +1,36 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { axe } from 'vitest-axe';
+import { UserMenu } from './index';
+
+const userProps = {
+  userName: 'Ada Lovelace',
+  userEmail: 'ada@example.com',
+  userRole: 'Admin',
+  onLogout: vi.fn(),
+};
+
+describe('UserMenu', () => {
+  it('renders an accessible user menu trigger', () => {
+    render(<UserMenu {...userProps} />);
+
+    expect(screen.getByRole('button', { name: 'Abrir menú de usuario' })).toBeInTheDocument();
+  });
+
+  it('has no accessibility violations before opening', async () => {
+    const { container } = render(<UserMenu {...userProps} />);
+
+    expect(await axe(container)).toHaveNoViolations();
+  });
+  it('shows the active tenant in the profile menu', () => {
+    render(<UserMenu {...userProps} tenantName="LoopDev Workspace" />);
+
+    fireEvent.pointerDown(screen.getByRole('button', { name: 'Abrir menú de usuario' }));
+
+    expect(screen.getByText('LoopDev Workspace')).toBeInTheDocument();
+  });
+});
+
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { UserMenu } from './index';

@@ -4,18 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type { ActivityEvent } from '@loopdev/ui';
 
-interface QuantOrderRow {
-  id: string;
-  created_at: string;
-  side?: string;
-  pair?: string;
-  filled_quantity?: number | string | null;
-  average_fill_price?: number | string | null;
-  status?: string;
-  signal_source?: string;
-  quant_bots?: { name?: string } | null;
-}
-
 /**
  * @hook useActivityStream
  * @description Fetches the latest trading events from the quant_orders table.
@@ -32,16 +20,22 @@ export const useActivityStream = () => {
 
       if (error) throw error;
 
-      return data.map((order: QuantOrderRow): ActivityEvent => ({
+      return data.map((order): ActivityEvent => ({
         id: order.id,
-        time: new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        time: order.created_at
+          ? new Date(order.created_at).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            })
+          : 'Unknown time',
         type: order.side?.toUpperCase() === 'SELL' ? 'SELL' : 'BUY',
-        pair: order.pair || '---',
+        pair: '---',
         qty: order.filled_quantity?.toString() || '0',
         price: order.average_fill_price?.toLocaleString() || '0',
         status: order.status === 'filled' ? 'filled' : 'rejected',
         strategy: order.quant_bots?.name || 'Unknown_Agent',
-        message: order.signal_source
+        message: order.signal_source ?? undefined,
       }));
     },
     refetchInterval: 10000, // Refresh activity every 10 seconds

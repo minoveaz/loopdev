@@ -8,7 +8,6 @@ export const BrandStatusSchema = z.enum(['draft', 'published', 'archived']);
 export const BrandSchema = z.object({
   id: z.string().uuid({ message: "Invalid Brand ID format" }),
   organizationId: z.string().uuid({ message: "Invalid Organization ID format" }),
-  tenantId: z.string().uuid({ message: "Invalid legacy Tenant ID format" }).optional(),
   name: z.string().min(2, "Brand name must be at least 2 characters").max(50),
   description: z.string().max(500).optional(),
   status: BrandStatusSchema.default('draft'),

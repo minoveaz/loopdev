@@ -8,6 +8,31 @@ export const QuoteStatusSchema = z.enum(['draft', 'quoted', 'accepted', 'decline
 export const OnboardingStatusSchema = z.enum(['pending', 'in_progress', 'awaiting_documents', 'verified', 'submitted', 'completed', 'cancelled']);
 export const PolicyStatusSchema = z.enum(['pending', 'active', 'cancelled', 'expired', 'renewed']);
 export const EligibilityOutcomeSchema = z.enum(['eligible', 'ineligible', 'manual_review']);
+export const InsuranceCoverageTypeSchema = z.enum(['included', 'optional', 'excluded']);
+export const InsurancePartyRoleSchema = z.enum(['policyholder', 'insured', 'beneficiary']);
+
+export const InsuranceProviderSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  name: z.string().trim().min(1).max(200),
+  registrationId: z.string().trim().max(120).nullable().optional(),
+  status: InsuranceProductStatusSchema,
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type InsuranceProvider = z.infer<typeof InsuranceProviderSchema>;
+
+export const InsuranceCoverageSchema = z.object({
+  id: IdSchema,
+  productId: IdSchema,
+  name: z.string().trim().min(1).max(200),
+  type: InsuranceCoverageTypeSchema,
+  description: z.string().trim().max(2_000).nullable().optional(),
+  limits: z.record(z.string(), z.unknown()).default({}),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+});
+export type InsuranceCoverage = z.infer<typeof InsuranceCoverageSchema>;
 
 export const InsuranceProductSchema = z.object({
   id: IdSchema,
@@ -49,6 +74,18 @@ export const QuoteSchema = z.object({
   updatedAt: TimestampSchema,
 });
 export type Quote = z.infer<typeof QuoteSchema>;
+
+export const InsurancePartySchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  quoteId: IdSchema.nullable().optional(),
+  policyId: IdSchema.nullable().optional(),
+  contactId: IdSchema.nullable().optional(),
+  relatedPersonId: IdSchema.nullable().optional(),
+  role: InsurancePartyRoleSchema,
+  createdAt: TimestampSchema,
+});
+export type InsuranceParty = z.infer<typeof InsurancePartySchema>;
 
 export const OnboardingSchema = z.object({
   id: IdSchema,

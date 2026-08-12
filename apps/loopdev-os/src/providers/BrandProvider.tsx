@@ -35,7 +35,7 @@ export function BrandProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       const { data, error } = await createClient()
         .from('brands')
-        .select('id, tenant_id, organization_id, name, description, status, logo_url, logos, typography, rules_engine, created_at, updated_at')
+        .select('id, organization_id, name, description, status, logo_url, logos, typography, rules_engine, created_at, updated_at')
         .eq('organization_id', activeOrganizationId)
         .order('updated_at', { ascending: false });
 
@@ -45,7 +45,7 @@ export function BrandProvider({ children }: { children: ReactNode }) {
         setBrands([]);
       } else {
         setBrands((data ?? []).map((row) => BrandSchema.safeParse({
-          id: row.id, organizationId: row.organization_id, tenantId: row.tenant_id,
+          id: row.id, organizationId: row.organization_id,
           name: row.name, description: row.description ?? undefined, status: row.status,
           logoUrl: row.logo_url, logos: row.logos ?? undefined, typography: row.typography ?? undefined,
           rulesEngine: row.rules_engine ?? undefined, createdAt: row.created_at, updatedAt: row.updated_at,

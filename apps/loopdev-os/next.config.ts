@@ -1,9 +1,13 @@
-import type { NextConfig } from "next";
+import path from 'node:path';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  transpilePackages: ["@loopdev/ui", "@loopdev/contracts"],
+  turbopack: {
+    root: path.join(__dirname, '../..'),
+  },
+  transpilePackages: ['@loopdev/ui', '@loopdev/contracts'],
   // Optimizaciones para ambientes con memoria limitada (Codespace 8GB)
   onDemandEntries: {
     maxInactiveAge: 25 * 1000, // Limpiar páginas no usadas más rápido
@@ -15,4 +19,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-

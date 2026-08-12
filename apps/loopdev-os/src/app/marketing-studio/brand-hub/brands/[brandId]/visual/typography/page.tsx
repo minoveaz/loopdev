@@ -2,27 +2,29 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Heading, LpdText, Skeleton } from '@loopdev/ui';
+import { Heading, LpdText, Skeleton, EmptyState, Icon } from '@loopdev/ui';
 import { useBrandHub } from '@/suites/marketing-studio/brand-hub/context';
-import { useActiveBrand } from '@/hooks/brand-hub/useActiveBrand';
+import { useBrandContextSnapshot } from '@/hooks/marketing/useBrandContextSnapshot';
 
 // Industrial Components
+import { TypographySystemSchema } from '@loopdev/contracts';
 import { TypefaceCard } from '@/suites/marketing-studio/brand-hub/components/TypefaceCard';
 import { TypeScaleTable } from '@/suites/marketing-studio/brand-hub/components/TypeScaleTable';
 
 /**
  * @page BrandTypographyPage
  * @description The operational console for managing the brand's typographic system.
- * Fetches real-time configuration from Supabase via useActiveBrand hook.
+ * Fetches the published brand context consumed by downstream marketing modules.
  */
 export default function BrandTypographyPage() {
   const params = useParams();
   const brandId = params.brandId as string;
   const { setSelectedEntity, setInspectorOpen } = useBrandHub();
-  
+
   // Data Acquisition (The Spine connection)
-  const { data: brand, isLoading } = useActiveBrand(brandId);
-  const system = brand?.typography;
+  const { data: brandContext, isLoading } = useBrandContextSnapshot(brandId);
+  const parsedTypography = TypographySystemSchema.safeParse(brandContext?.brand.typography);
+  const system = parsedTypography.success ? parsedTypography.data : undefined;
 
   const handleFontClick = (type: 'primary' | 'secondary') => {
     if (!system) return;
@@ -32,7 +34,7 @@ export default function BrandTypographyPage() {
     setSelectedEntity({
       type: 'brand.typeface',
       id: `font-${type}`,
-      name: `${font.family} (${type})`
+      name: `${font.family} (${type})`,
     });
     setInspectorOpen(true);
   };
@@ -52,33 +54,39 @@ export default function BrandTypographyPage() {
 
   if (!system) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-center opacity-40">
-        <LpdText size="sm" className="font-mono uppercase tracking-widest border border-dashed border-border-technical p-12 rounded-3xl">
-          {'// typography_system_not_initialized'}
-        </LpdText>
-      </div>
+      <EmptyState
+        title="Typography system unavailable"
+        description="Approved font families and scales will appear after the brand system is configured."
+        icon="text_fields"
+        variant="ghost"
+      />
     );
   }
 
   return (
     <div className="flex flex-col gap-12 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32">
-      
       {/* HEADER SECTION (Standardized) */}
       <header className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <Heading as="h1" size="2xl" weight="bold" className="text-text-main tracking-tight uppercase">
+            <Heading
+              as="h1"
+              size="2xl"
+              weight="bold"
+              className="text-text-main tracking-tight uppercase"
+            >
               Visual System _TYPOGRAPHY
             </Heading>
             {system.aiOptimized && (
               <div className="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[12px]">auto_awesome</span>
+                <Icon name="auto_awesome" size="sm" />
                 AI Optimized
               </div>
             )}
           </div>
           <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-            The typographic system is built for clarity and scalability. These definitions are consumed by AI agents to generate readable layouts automatically.
+            The typographic system is built for clarity and scalability. These definitions are
+            consumed by AI agents to generate readable layouts automatically.
           </LpdText>
         </div>
       </header>
@@ -86,30 +94,32 @@ export default function BrandTypographyPage() {
       {/* SECTION 1: Typeface Definition (The Cards) */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
-          <Heading as="h2" size="lg" weight="bold" className="text-text-main tracking-tight">Active Typefaces</Heading>
+          <Heading as="h2" size="lg" weight="bold" className="text-text-main tracking-tight">
+            Active Typefaces
+          </Heading>
           <div className="flex gap-2">
-             <span className="px-2 py-1 rounded bg-background-subtle border border-border-technical text-[10px] font-mono text-text-muted">
-               Ratio: {system.scaleRatio} (Calculated)
-             </span>
+            <span className="px-2 py-1 rounded bg-background-subtle border border-border-technical text-[10px] font-mono text-text-muted">
+              Ratio: {system.scaleRatio} (Calculated)
+            </span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-8">
           {/* Primary Font */}
           <div>
-             <TypefaceCard 
-               font={system.primary} 
-               variant="brand" 
-               onClick={() => handleFontClick('primary')}
-             />
+            <TypefaceCard
+              font={system.primary}
+              variant="brand"
+              onClick={() => handleFontClick('primary')}
+            />
           </div>
 
           {/* Secondary (Code/Technical) */}
           {system.secondary && (
             <div>
-              <TypefaceCard 
-                font={system.secondary} 
-                variant="technical" 
+              <TypefaceCard
+                font={system.secondary}
+                variant="technical"
                 onClick={() => handleFontClick('secondary')}
               />
             </div>
@@ -120,19 +130,20 @@ export default function BrandTypographyPage() {
       {/* SECTION 2: Hierarchy (The Math) */}
       <section className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
-          <LpdText size="lg" weight="bold" className="text-text-main tracking-tight">Typographic Hierarchy</LpdText>
+          <Heading as="h2" size="lg" weight="bold" className="text-text-main tracking-tight">
+            Typographic Hierarchy
+          </Heading>
           <LpdText size="sm" className="text-text-muted">
             Calculated dynamically based on base size ({system.baseSize}px) and scale ratio.
           </LpdText>
         </div>
 
-        <TypeScaleTable 
+        <TypeScaleTable
           baseSize={system.baseSize}
           scaleRatio={system.scaleRatio}
           primaryFont={system.primary.family}
         />
       </section>
-
     </div>
   );
 }

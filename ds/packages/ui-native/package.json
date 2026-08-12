@@ -1,0 +1,23 @@
+{
+  "name": "@loopdev/ui-native",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.tsx",
+  "types": "src/index.tsx",
+  "scripts": {
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@loopdev/design-contracts": "workspace:*",
+    "@loopdev/tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-native": ">=0.86.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.5.0"
+  }
+}
