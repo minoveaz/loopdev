@@ -61,3 +61,14 @@ test('rejects multiple changed visual intent files', () => {
 
   assert.ok(result.errors.includes('only one changed config/visual-contract-intents/*.json file is allowed'));
 });
+
+test('rejects an intent file outside the changed file convention', () => {
+  const result = validateVisualChange(
+    ['e2e/login-snapshots/login-light.png', 'config/visual-contract-intents/login.json'],
+    validIntent,
+    ['config/visual-contract-intents/login.json'],
+    'config/visual-contract-intent.example.json',
+  );
+
+  assert.ok(result.errors.includes('intent file must be the single changed config/visual-contract-intents/*.json file'));
+});

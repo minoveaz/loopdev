@@ -149,7 +149,7 @@ function buildValidationPlan(files) {
 }
 
 function changedFilesFromGit() {
-  const base = process.env.BASE_SHA ?? 'HEAD^';
+  const base = process.env.BASE_SHA ?? 'origin/develop';
   const head = process.env.HEAD_SHA ?? 'HEAD';
   return execFileSync('git', ['diff', '--name-only', `${base}...${head}`], { encoding: 'utf8' })
     .split(/\r?\n/)

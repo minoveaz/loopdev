@@ -28,13 +28,13 @@ function isVisualIntentFile(file) {
   return /^config\/visual-contract-intents\/[^/]+\.json$/.test(file);
 }
 
-function validateVisualChange(files, intent, intentFiles = []) {
+function validateVisualChange(files, intent, intentFiles = [], selectedIntentFile) {
   const snapshotFiles = files.filter(isVisualSnapshot);
   if (snapshotFiles.length === 0) {
     return { required: false, snapshotFiles, errors: [] };
   }
 
-  if (!intent && intentFiles.length !== 1) {
+  if (intentFiles.length !== 1) {
     return {
       required: true,
       snapshotFiles,
@@ -43,6 +43,14 @@ function validateVisualChange(files, intent, intentFiles = []) {
           ? 'exactly one changed config/visual-contract-intents/*.json file is required'
           : 'only one changed config/visual-contract-intents/*.json file is allowed',
       ],
+    };
+  }
+
+  if (selectedIntentFile && selectedIntentFile !== intentFiles[0]) {
+    return {
+      required: true,
+      snapshotFiles,
+      errors: ['intent file must be the single changed config/visual-contract-intents/*.json file'],
     };
   }
 
@@ -59,7 +67,7 @@ function main() {
   const changedIntentFiles = files.filter(isVisualIntentFile);
   const selectedIntentFile = intentFile || changedIntentFiles[0];
   const intent = selectedIntentFile ? JSON.parse(readFileSync(selectedIntentFile, 'utf8')) : undefined;
-  const result = validateVisualChange(files, intent, changedIntentFiles);
+  const result = validateVisualChange(files, intent, changedIntentFiles, selectedIntentFile);
 
   if (!result.required) {
     console.log('Visual contract intent not required: no snapshot files changed.');
