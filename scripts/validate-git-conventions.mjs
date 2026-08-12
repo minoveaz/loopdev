@@ -52,7 +52,7 @@ if (commitMessageFile) {
 }
 
 if (range) {
-  const commits = runGit(['log', '--format=%H%x09%s', range])
+  const commits = runGit(['log', '--first-parent', '--format=%H%x09%s', range])
     .split('\n')
     .filter(Boolean)
     .map((line) => line.split('\t', 2));
