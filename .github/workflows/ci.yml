@@ -60,6 +60,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
       - name: Detect frontend changes
         id: filter
         uses: dorny/paths-filter@v3
