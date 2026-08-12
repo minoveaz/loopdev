@@ -1,12 +1,12 @@
 ---
 id: package-lifecycle
 title: Package lifecycle and release readiness
-status: planned
+status: active
 created: 2026-08-12
 updated: 2026-08-12
 owner: platform
 lead: null
-branch: null
+branch: chore/platform-package-inventory
 branches: []
 phase: 0
 pull_requests: []
@@ -229,12 +229,12 @@ complete.
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-12.
-- **Rama de continuación:** chore/platform-package-lifecycle.
+- **Rama de continuación:** chore/platform-package-inventory.
 - **Commit de partida:** c75457d.
-- **Estado alcanzado:** Planned track created with phase 0 focused on package inventory and policy readiness.
+- **Estado alcanzado:** Phase 0 activated on the package inventory branch; package inventory and policy readiness are now in execution.
 - **Decisiones, bloqueos y riesgos:** Packages remain internal; Changesets, registry, and publication are deferred until distribution need is approved.
-- **Validación ejecutada:** Pending.
-- **Siguiente acción concreta:** Validate the track and review the package inventory against workspace and Turbo configuration.
+- **Validación ejecutada:** Track transition validation pending.
+- **Siguiente acción concreta:** Complete the package inventory and review consumers against workspace and Turbo configuration.
 
 ## Cierre
 

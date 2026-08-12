@@ -8,10 +8,6 @@
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
 
-### Platform
-
-- [Package lifecycle and release readiness](./planned/platform/2026-08-12-package-lifecycle.md) · fase 0
-
 ### Governance
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 0
@@ -29,6 +25,7 @@
 
 - [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./active/platform/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
 - [Estandarización del shell de LoopDev OS](./active/platform/2026-08-10-shell-standardization.md) · fase 4
+- [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-inventory` · fase 0
 
 ### Governance
 
