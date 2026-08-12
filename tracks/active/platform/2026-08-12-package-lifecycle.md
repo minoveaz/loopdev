@@ -9,7 +9,7 @@ lead: null
 branch: chore/platform-package-readiness
 branches: []
 phase: 0
-pull_requests: [52]
+pull_requests: [52, 54]
 issues: []
 packages: ["@loopdev/contracts", "@loopdev/ui", "@loopdev/ui-native", "@loopdev/design-contracts", "@loopdev/tokens", "@loopdev/tailwind-config", "@loopdev/eslint-config", "@loopdev/tsconfig"]
 release: not-required
