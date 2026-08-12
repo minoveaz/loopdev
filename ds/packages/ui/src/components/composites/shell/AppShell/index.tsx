@@ -48,12 +48,13 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
     scrollbarClass,
     activeOverlay,
   } = useAppShell(props);
+  const isTopHeader = props.config?.headerPlacement === 'top';
   const isMobileNavVisible = isViewportReady && isMobileViewport && isMobileNavOpen;
 
   return (
     <div
       style={styleTokens as React.CSSProperties}
-      className={`flex h-screen w-full bg-shell-canvas text-slate-900 dark:text-white overflow-hidden font-sans @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
+      className={`flex h-screen w-full bg-shell-canvas text-slate-900 dark:text-white overflow-hidden font-sans text-lpd-sm leading-normal @container transition-colors duration-300 relative ${isNavOpen || isContextOpen ? 'shell-overlay-active' : ''}`}
     >
       {/* Accesibilidad: Primer elemento del DOM para navegación por teclado */}
       <a
@@ -91,13 +92,15 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
             flex-shrink-0 border-r border-black/5 dark:border-white/5 bg-white dark:bg-background-dark transition-all duration-300 
             overflow-hidden
             ${navigationMode === 'hover' ? '@lg:overflow-visible' : ''}
-            fixed inset-y-0 left-0 shadow-2xl z-[100]
+            fixed left-0 shadow-2xl z-[100]
             ${isMobileNavVisible ? 'translate-x-0' : '-translate-x-full'}
-            @lg:relative @lg:translate-x-0 @lg:shadow-none @lg:z-10
+            ${isTopHeader ? 'bottom-0' : 'inset-y-0'}
+            ${isTopHeader ? '@lg:translate-x-0 @lg:shadow-none' : '@lg:relative @lg:translate-x-0 @lg:shadow-none'}
             ${navMode === 'rail' || navigationMode === 'hover' ? 'select-none' : ''}
           `}
           style={{
             width: isMobileViewport ? 'min(82vw, 320px)' : 'var(--app-shell-nav-width)',
+            top: isTopHeader ? 'var(--app-shell-header-height)' : '0px',
             zIndex: isMobileViewport ? 'var(--app-shell-z-context)' : undefined,
           }}
         >
@@ -124,13 +127,19 @@ export const AppShell: React.FC<AppShellProps> = (props) => {
       )}
 
       {/* 2. RIGHT SECTION */}
-      <div className="flex flex-col flex-1 min-w-0 relative">
+      <div
+        className={`flex flex-col flex-1 min-w-0 relative ${isTopHeader ? 'w-full' : ''}`}
+        style={{
+          paddingLeft: isTopHeader && !isMobileViewport ? 'var(--app-shell-nav-width)' : undefined,
+          paddingTop: isTopHeader ? 'var(--app-shell-header-height)' : undefined,
+        }}
+      >
         {bannerSlot && <div className="w-full shrink-0 z-30">{bannerSlot}</div>}
 
         <header
           role="banner"
           style={{ height: 'var(--app-shell-header-height)' }}
-          className="w-full shrink-0 relative z-[var(--app-shell-z-header)] select-none"
+          className={`w-full shrink-0 z-[var(--app-shell-z-header)] select-none ${isTopHeader ? 'fixed left-0 right-0 top-0' : 'relative'}`}
         >
           {navSlot && onToggleLeftSidebar && !mobileBottomSlot && (
             <button

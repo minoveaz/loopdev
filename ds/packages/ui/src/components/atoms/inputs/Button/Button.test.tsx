@@ -5,7 +5,6 @@ import { Button } from './index';
 import { axe } from 'vitest-axe';
 
 describe('Button Primitive', () => {
-  
   it('renders correctly with default props', () => {
     render(<Button>Click me</Button>);
     const button = screen.getByRole('button', { name: /click me/i });
@@ -18,13 +17,25 @@ describe('Button Primitive', () => {
     expect(button.className).toContain('bg-accent');
   });
 
+  it('uses the accent interaction state for primary and outline actions', () => {
+    const { rerender } = render(<Button>Filter</Button>);
+    expect(screen.getByRole('button')).toHaveClass(
+      'text-primary-foreground',
+      'hover:bg-accent',
+      'hover:text-text-main',
+    );
+
+    rerender(<Button variant="outline">Export</Button>);
+    expect(screen.getByRole('button')).toHaveClass('hover:border-accent', 'hover:text-accent');
+  });
+
   it('shows loading state and disables interaction', () => {
     render(<Button isLoading>Saving...</Button>);
     const button = screen.getByRole('button');
-    
+
     // Ahora sí debería estar deshabilitado gracias a la corrección en useButton
     expect(button).toBeDisabled();
-    
+
     // Buscamos el spinner por su clase de animación
     // Nota: El spinner usa Icon(progress_activity) -> span.material-symbols-outlined + animate-spin
     // Pero en useButton el spinner se renderiza condicionalmente en index.tsx
@@ -34,8 +45,12 @@ describe('Button Primitive', () => {
   });
 
   it('renders start and end icons (Material Symbols)', () => {
-    render(<Button startIcon="add" endIcon="arrow_forward">Icon Button</Button>);
-    
+    render(
+      <Button startIcon="add" endIcon="arrow_forward">
+        Icon Button
+      </Button>,
+    );
+
     // En Material Symbols, los iconos son texto dentro de un span
     expect(screen.getByText('add')).toBeInTheDocument();
     expect(screen.getByText('arrow_forward')).toBeInTheDocument();
@@ -48,7 +63,11 @@ describe('Button Primitive', () => {
   });
 
   it('maintains structure when both icons and loading state are active', () => {
-    render(<Button startIcon="add" endIcon="check" isLoading>Text</Button>);
+    render(
+      <Button startIcon="add" endIcon="check" isLoading>
+        Text
+      </Button>,
+    );
     // El startIcon debe desaparecer para dar lugar al spinner
     expect(screen.queryByText('add')).not.toBeInTheDocument();
     // El spinner debe estar presente
@@ -69,5 +88,4 @@ describe('Button Primitive', () => {
 
     expect(await axe(container)).toHaveNoViolations();
   });
-
 });

@@ -5,6 +5,8 @@ import { AppShell } from '../AppShell';
 import { MobileSuiteNav } from '../../navigation/MobileSuiteNav';
 import { PlatformHeader } from '../PlatformHeader';
 import { SuiteSidebar } from '../SuiteSidebar';
+import { ContextPanel } from '../ModuleContextSidebar';
+import { ModuleContextPanel } from '../ModuleContextPanel';
 import type { SuiteShellProps } from './types';
 
 export const SuiteShell: React.FC<SuiteShellProps> = ({
@@ -18,6 +20,14 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
   centerSlot,
   rightSlot,
   profileSlot,
+  moduleContextSlot,
+  moduleContextFooterSlot,
+  moduleContextLabel = 'Module context',
+  moduleContextWidth = 'standard',
+  moduleContextPanelSlot,
+  moduleContextPanelFooterSlot,
+  moduleContextPanelLabel = 'ModuleContextPanel',
+  moduleContextPanelWidth = 'standard',
   platformHeaderProps,
   mobileNavigation,
   onNavigate,
@@ -41,6 +51,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
       {...appShellProps}
       config={{
         ...appShellProps?.config,
+        headerPlacement: 'top',
         isLeftSidebarOpen: navMode === 'expanded',
         navigationMode: navMode === 'hover' ? 'hover' : navMode === 'rail' ? 'rail' : 'expanded',
         navBehavior: navMode === 'hidden' ? 'hidden' : 'auto',
@@ -88,7 +99,27 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
           : undefined
       }
     >
-      {children}
+      <div className="flex min-h-0 flex-1 overflow-hidden max-lg:flex-col lg:h-full">
+        {moduleContextSlot ? (
+          <ContextPanel
+            label={moduleContextLabel}
+            width={moduleContextWidth}
+            footer={moduleContextFooterSlot}
+          >
+            {moduleContextSlot}
+          </ContextPanel>
+        ) : null}
+        <div className="min-h-0 min-w-0 flex-1">{children}</div>
+        {moduleContextPanelSlot ? (
+          <ModuleContextPanel
+            label={moduleContextPanelLabel}
+            width={moduleContextPanelWidth}
+            footer={moduleContextPanelFooterSlot}
+          >
+            {moduleContextPanelSlot}
+          </ModuleContextPanel>
+        ) : null}
+      </div>
     </AppShell>
   );
 };

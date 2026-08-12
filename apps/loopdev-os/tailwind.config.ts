@@ -14,6 +14,7 @@ const config: Config = {
       colors: {
         primary: {
           DEFAULT: 'var(--lpd-color-brand-primary, #135bec)',
+          foreground: 'var(--lpd-color-text-on-primary, #ffffff)',
           dark: '#0b46be',
           light: '#4f85f0',
         },
@@ -23,7 +24,7 @@ const config: Config = {
         },
         surface: {
           light: '#ffffff',
-          dark: 'var(--lpd-color-brand-surface, #181b21)', 
+          dark: 'var(--lpd-color-brand-surface, #181b21)',
           elevated: 'var(--lpd-color-bg-surface-elevated, #181b21)',
           glass: 'rgba(255, 255, 255, 0.03)',
         },
@@ -63,8 +64,8 @@ const config: Config = {
         micro: 'var(--lpd-font-size-micro, 9px)',
       },
       // fontSize: Heredado del preset @loopdev/tailwind-config (Single Source of Truth)
-    }
-  }
+    },
+  },
 };
 
 export default config;

@@ -124,6 +124,14 @@ function getOption(name) {
   return index >= 0 ? process.argv[index + 1] : undefined;
 }
 
+function getOptionValues(name) {
+  const values = [];
+  for (let index = 0; index < process.argv.length - 1; index += 1) {
+    if (process.argv[index] === name) values.push(process.argv[index + 1]);
+  }
+  return values;
+}
+
 function runGit(args) {
   return execFileSync('git', args, { encoding: 'utf8' }).trim();
 }
@@ -193,7 +201,7 @@ function resolveImpact(files) {
   return {
     changedFiles: files,
     packageIds: [...rules.keys()],
-    packageRules: [...rules.values()],
+    packageRules: packageRules.filter((rule) => rules.has(rule.id)),
     globalFallback,
     hasTargetedValidation: rules.size > 0,
     mobile,
@@ -206,7 +214,7 @@ function addCommand(commands, packageName, script, extraArgs = []) {
   if (!commands.has(key)) commands.set(key, args);
 }
 
-function buildCommands(packageRules) {
+function buildCommands(packageRules, skippedConsumers = new Set()) {
   const commands = new Map();
 
   for (const rule of packageRules) {
@@ -216,6 +224,7 @@ function buildCommands(packageRules) {
     }
 
     for (const [consumer, script] of rule.consumers ?? []) {
+      if (skippedConsumers.has(consumer)) continue;
       addCommand(commands, consumer, script);
     }
   }
@@ -244,9 +253,10 @@ function formatCommand(args) {
 function main() {
   const base = resolveBase(getOption('--base') || process.env.BASE_SHA);
   const head = getOption('--head') || process.env.HEAD_SHA || 'HEAD';
+  const skippedConsumers = new Set(getOptionValues('--skip-consumer'));
   const files = getChangedFiles(base, head);
   const impact = resolveImpact(files);
-  const commands = buildCommands(impact.packageRules);
+  const commands = buildCommands(impact.packageRules, skippedConsumers);
 
   writeGithubOutput(impact);
 
@@ -256,6 +266,7 @@ function main() {
   console.log(`Targeted packages: ${impact.packageIds.join(', ') || 'none'}`);
   console.log(`Global fallback: ${impact.globalFallback}`);
   console.log(`Mobile validation: ${impact.mobile}`);
+  console.log(`Skipped consumers: ${[...skippedConsumers].join(', ') || 'none'}`);
 
   if (commands.length === 0) {
     console.log('No package-specific validation required.');

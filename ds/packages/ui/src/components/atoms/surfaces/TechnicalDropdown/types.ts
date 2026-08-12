@@ -31,6 +31,8 @@ export interface TechnicalDropdownItemProps {
   children: ReactNode;
   /** Acción disparada al seleccionar */
   onClick?: () => void;
+  /** Acción disparada por la selección semántica de Radix */
+  onSelect?: () => void;
   /** Indica si el ítem está deshabilitado */
   disabled?: boolean;
   /** Indica si es el ítem activo */
