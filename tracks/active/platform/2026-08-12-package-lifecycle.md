@@ -200,6 +200,7 @@ complete.
 
 | Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
 | --- | --- | --- | --- | --- |
+| 2026-08-12 | Make the global quality job conditional for pull requests | Documentation-only changes should not wait for lint, typecheck, tests, and build; executable/configuration changes and protected-branch pushes retain full quality validation | Phase 0 PR validation becomes faster without reducing executable-change coverage | User |
 
 ## Riesgos y bloqueos
 
