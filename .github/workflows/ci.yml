@@ -130,6 +130,9 @@ jobs:
     if: needs.changes.outputs.package_validation == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
     steps:
       - name: Checkout
@@ -335,3 +338,11 @@ jobs:
       - name: Run Shell Showcase mobile visual contract
         if: needs.changes.outputs.shell == 'true'
         run: pnpm exec playwright test e2e/shell.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Upload Playwright diagnostics
+        if: always() && needs.changes.outputs.shell == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: shell-playwright-diagnostics-${{ github.sha }}
+          path: test-results/
+          if-no-files-found: ignore
