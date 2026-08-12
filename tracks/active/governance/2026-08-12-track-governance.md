@@ -12,7 +12,7 @@ blocked_by: []
 supersedes: []
 lead: null
 branches: []
-phase: 0
+phase: 1
 pull_requests: []
 issues: []
 packages: []
@@ -46,15 +46,15 @@ The legacy `conductor/tracks` structure mixed folders and standalone files, used
 
 ## Decisiones aprobadas
 
-| Fecha | Decisión | Motivo | Impacto | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-12 | One Markdown file per track | Preserve a readable, versioned system of record | Legacy folder documents are consolidated | User |
-| 2026-08-12 | Use `tracks/{planned,active,closed}` | Make lifecycle visible without Jira-like overhead | Directory and metadata status must agree | User |
-| 2026-08-12 | Close ambiguous legacy tracks during migration | User-approved historical classification policy | Closure is recorded as migration policy, not fresh execution evidence | User |
-| 2026-08-12 | Require explicit approval for future closures | Keep closure accountable and evidence-based | Skill never auto-closes a current track | User |
-| 2026-08-12 | Organize planned and active tracks by canonical domain; closed tracks by year | Make work visible by product/technical ownership while keeping history chronological | `owner` is a canonical domain and controls the active/planned path | User |
-| 2026-08-12 | Require a branch strategy for active tracks | Connect specification, implementation, PRs and CI without inventing a single branch for transversal programs | Normal tracks use `branch`; transversal programs document `branches` and strategy | User |
-| 2026-08-12 | Keep track automation portable across macOS and Windows | Contributors and agents work on both platforms | Node.js scripts use repository-relative paths only | User |
+| Fecha      | Decisión                                                                      | Motivo                                                                                                       | Impacto                                                                           | Aprobado por |
+| ---------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- | ------------ |
+| 2026-08-12 | One Markdown file per track                                                   | Preserve a readable, versioned system of record                                                              | Legacy folder documents are consolidated                                          | User         |
+| 2026-08-12 | Use `tracks/{planned,active,closed}`                                          | Make lifecycle visible without Jira-like overhead                                                            | Directory and metadata status must agree                                          | User         |
+| 2026-08-12 | Close ambiguous legacy tracks during migration                                | User-approved historical classification policy                                                               | Closure is recorded as migration policy, not fresh execution evidence             | User         |
+| 2026-08-12 | Require explicit approval for future closures                                 | Keep closure accountable and evidence-based                                                                  | Skill never auto-closes a current track                                           | User         |
+| 2026-08-12 | Organize planned and active tracks by canonical domain; closed tracks by year | Make work visible by product/technical ownership while keeping history chronological                         | `owner` is a canonical domain and controls the active/planned path                | User         |
+| 2026-08-12 | Require a branch strategy for active tracks                                   | Connect specification, implementation, PRs and CI without inventing a single branch for transversal programs | Normal tracks use `branch`; transversal programs document `branches` and strategy | User         |
+| 2026-08-12 | Keep track automation portable across macOS and Windows                       | Contributors and agents work on both platforms                                                               | Node.js scripts use repository-relative paths only                                | User         |
 
 ## Arquitectura y contratos
 
@@ -76,15 +76,18 @@ tracks/{planned,active,closed}
 **Objetivo:** definir el lifecycle, plantilla, skill, prompts, validation and generated dashboard.
 
 **Definition of Ready**
+
 - [x] Lifecycle, naming, ownership, and closure policies approved.
 - [x] Legacy migration policy approved.
 
 **Entregables**
+
 - [x] `track-governance` skill and template.
 - [x] Slash prompts for create, update, review, and close.
 - [x] Validation and dashboard generation scripts.
 
 **Validación**
+
 - [x] Script syntax validation.
 - [x] Track validation against the migrated inventory.
 
@@ -97,17 +100,23 @@ tracks/{planned,active,closed}
 **Objetivo:** consolidate tracks, remove legacy structure, and establish the new system as the operating record.
 
 **Entregables**
+
 - [x] 27 legacy/current tracks consolidated into `tracks/`.
 - [x] Legacy `conductor/tracks` and manual index removed.
 - [x] Generated dashboard created.
 - [x] Tracks organized by canonical domain and closure year.
 - [x] Metadata and validation extended for owner, lead, branch strategy, phase, packages and release impact.
+- [x] GitHub Actions validate tracks in pull requests and synchronize a track status comment and labels.
 - [ ] Integrate this governance track and AI Platform track after branch reconciliation.
 - [ ] Review active tracks using `/review-track` and formalize their remaining closure criteria.
 
 **Validación**
+
 - [x] Metadata/directory/filename validation passed after migration.
 - [x] Domain/year organization and generated dashboard validation passed.
+- [x] Workflow YAML formatted and local track validation passed.
+- [x] Track PR metadata, lifecycle paths, labels, blocking state, and status comment covered by local tests.
+- [ ] Confirm the first workflow execution in a pull request.
 - [ ] Confirm branch reconciliation and review the active tracks.
 
 **Evidencia:** `tracks/README.md` is generated from the 27 normalized track files.
@@ -116,16 +125,16 @@ tracks/{planned,active,closed}
 
 ## Registro de cambios de enfoque
 
-| Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-12 | Migrate all legacy tracks in one initiative | User selected full migration | Added consolidation script and migration phase | User |
+| Fecha      | Cambio                                      | Motivo                       | Impacto en alcance/fases                       | Aprobado por |
+| ---------- | ------------------------------------------- | ---------------------------- | ---------------------------------------------- | ------------ |
+| 2026-08-12 | Migrate all legacy tracks in one initiative | User selected full migration | Added consolidation script and migration phase | User         |
 
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
-| --- | --- | --- | --- | --- |
-| Active tracks retain legacy section shapes | Their closure criteria need future formalization | Review each active track before closure | governance | open |
-| AI Platform track is isolated on another branch | It is not yet part of the normalized inventory | Reconcile branches, then move it into `tracks/active` | platform | open |
+| Riesgo o bloqueo                                | Impacto                                          | Mitigación                                            | Responsable | Estado |
+| ----------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- | ----------- | ------ |
+| Active tracks retain legacy section shapes      | Their closure criteria need future formalization | Review each active track before closure               | governance  | open   |
+| AI Platform track is isolated on another branch | It is not yet part of the normalized inventory   | Reconcile branches, then move it into `tracks/active` | platform    | open   |
 
 ## Criterios de cierre
 
@@ -138,12 +147,15 @@ tracks/{planned,active,closed}
 
 ## Evidencia de validación
 
-| Fecha | Validación | Resultado | Referencia |
-| --- | --- | --- | --- |
-| 2026-08-12 | `node --check scripts/tracks/*.mjs` | Correcta | Scripts de tracks |
-| 2026-08-12 | `node scripts/tracks/migrate-legacy-tracks.mjs` | Correcta | 27 tracks consolidados |
-| 2026-08-12 | `node scripts/tracks/validate-tracks.mjs` | Correcta | Metadata y estructura |
-| 2026-08-12 | `node scripts/tracks/generate-tracks-index.mjs` | Correcta | `tracks/README.md` |
+| Fecha      | Validación                                                                                                | Resultado | Referencia                               |
+| ---------- | --------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------- |
+| 2026-08-12 | `node --check scripts/tracks/*.mjs`                                                                       | Correcta  | Scripts de tracks                        |
+| 2026-08-12 | `node scripts/tracks/migrate-legacy-tracks.mjs`                                                           | Correcta  | 27 tracks consolidados                   |
+| 2026-08-12 | `node scripts/tracks/validate-tracks.mjs`                                                                 | Correcta  | Metadata y estructura                    |
+| 2026-08-12 | `node scripts/tracks/generate-tracks-index.mjs`                                                           | Correcta  | `tracks/README.md`                       |
+| 2026-08-12 | `pnpm exec prettier --check .github/workflows/track-validation.yml .github/workflows/track-pr-status.yml` | Correcta  | Workflows de validación y estado en PR   |
+| 2026-08-12 | `node scripts/tracks/validate-tracks.mjs`                                                                 | Correcta  | Inventario de tracks tras añadir Actions |
+| 2026-08-12 | `node --test scripts/tracks/pr-status.test.mjs`                                                           | Correcta  | 5 casos de metadata, labels y comentario |
 
 ## Cierre
 

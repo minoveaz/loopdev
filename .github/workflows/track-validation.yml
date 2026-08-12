@@ -1,0 +1,26 @@
+name: Track validation
+
+on:
+  pull_request:
+    paths:
+      - 'tracks/**'
+      - 'scripts/tracks/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate track inventory
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate tracks
+        run: node scripts/tracks/validate-tracks.mjs
