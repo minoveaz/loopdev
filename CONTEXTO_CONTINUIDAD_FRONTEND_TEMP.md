@@ -132,7 +132,7 @@ Estos documentos contienen la arquitectura normativa:
 - `docs/02-frontend/DESIGN_TOKENS_USAGE.md`
 - `docs/02-frontend/COMPONENT_COMPOSITION_PROTOCOL.md`
 - `docs/04-governance/FRONTEND_AUDIT_BASELINE_2026-08-08.md`
-- `conductor/tracks/2026-08-08-loopdev-frontend-quality-system.md`
+- `tracks/active/2026-08-08-loopdev-frontend-quality-system.md`
 
 `MODULE_WORKSPACE.md` y `SHELL_ARCHITECTURE.md` documentan explícitamente:
 
