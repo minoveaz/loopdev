@@ -14,6 +14,7 @@ import {
   MARKETING_STUDIO_SCHEMA,
   SuiteRuntime,
   Button,
+  Heading,
   ModuleHeader,
   ModuleToolbar,
   type GlobalContextPanelMode,
@@ -140,9 +141,9 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{DataFixture}'}
             </p>
-            <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
               Resource directory
-            </h2>
+            </Heading>
           </div>
           <span className="border-border-technical bg-shell-canvas text-text-muted text-lpd-xs rounded-md border px-3 py-1.5 leading-tight">
             128 records
@@ -152,7 +153,7 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
           <div className="bg-shell-canvas text-text-muted text-lpd-sm min-w-44 rounded-md border px-3 py-2 leading-normal">
             Search resources
           </div>
-          <Button size="sm">Filter</Button>
+          <Button variant="primary" size="sm">Filter</Button>
           <Button variant="outline" size="sm">
             Export
           </Button>
@@ -191,13 +192,13 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
   if (mode === 'workspace') {
     return (
       <div className="text-lpd-sm flex min-h-full flex-col font-sans leading-normal">
-        <div className="border-border-technical flex items-center gap-1 overflow-x-auto border-b px-3 pt-2">
+          <div className="border-border-technical flex items-center gap-1 overflow-x-auto px-3 pt-2">
           {['Untitled query', 'Resource audit', 'New document'].map((tab, index) => (
             <Button
               key={tab}
               variant="ghost"
               size="sm"
-              className={`whitespace-nowrap !rounded-none border-b-2 px-4 ${index === 0 ? 'border-primary bg-background text-text-main' : 'text-text-muted border-transparent'}`}
+              className={`whitespace-nowrap !rounded-none border-b-[2px] px-4 ${index === 0 ? 'border-primary bg-background text-text-main' : 'text-text-muted border-transparent'}`}
             >
               {tab}
             </Button>
@@ -217,11 +218,11 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
               <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
                 {'{WorkspaceFixture}'}
               </p>
-              <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+              <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
                 Document workspace
-              </h2>
+              </Heading>
             </div>
-            <Button size="sm">Run action</Button>
+            <Button variant="primary" size="sm">Run action</Button>
           </div>
           <div className="border-border-technical bg-background text-lpd-sm flex min-h-48 flex-1 items-center justify-center rounded-lg border font-mono leading-normal">
             <span className="text-text-muted">{'// Main workspace content'}</span>
@@ -230,14 +231,14 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <Button
               variant="ghost"
               size="sm"
-              className="border-primary text-primary !rounded-none border-b-2 pb-2"
+              className="border-primary text-primary !rounded-none border-b-[2px] pb-2"
             >
               Results
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="text-text-muted !rounded-none border-b-2 border-transparent pb-2"
+              className="text-text-muted !rounded-none border-b-[2px] border-transparent pb-2"
             >
               Chart
             </Button>
@@ -259,11 +260,11 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{BoardFixture}'}
             </p>
-            <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
               Work queue
-            </h2>
+            </Heading>
           </div>
-          <Button size="sm">Add card</Button>
+          <Button variant="primary" size="sm">Add card</Button>
         </div>
         <div className="flex min-w-0 gap-4 overflow-x-auto pb-2">
           {[
@@ -275,7 +276,7 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
               key={column as string}
               className="border-border-technical bg-background min-w-64 flex-1 rounded-lg border p-3"
             >
-              <h2 className="text-text-main text-lpd-sm font-semibold leading-normal">{column}</h2>
+              <Heading as="h2" size="sm" weight="semibold" className="text-text-main leading-normal">{column}</Heading>
               <div className="mt-3 space-y-2">
                 {(cards as string[]).map((card) => (
                   <div
@@ -299,15 +300,15 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
   if (mode === 'full-bleed') {
     return (
       <div className="bg-shell-canvas text-lpd-sm relative min-h-full overflow-hidden font-sans leading-normal">
-        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,hsl(var(--border-technical)/0.35)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border-technical)/0.35)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,var(--lpd-color-border-technical)_1px,transparent_1px),linear-gradient(to_bottom,var(--lpd-color-border-technical)_1px,transparent_1px)] [background-size:32px_32px]" />
         <div className="relative flex min-h-[28rem] flex-col justify-between p-4 sm:p-6 lg:p-8">
           <div>
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{FullBleedFixture}'}
             </p>
-            <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
               Immersive canvas
-            </h2>
+            </Heading>
           </div>
           <div className="flex flex-wrap gap-2">
             {['Zoom in', 'Zoom out', 'Reset view'].map((action) => (
@@ -327,9 +328,9 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
         <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
           {'{OverviewFixture}'}
         </p>
-        <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">
+        <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
           SuiteHome canvas
-        </h2>
+        </Heading>
         <p className="text-text-muted text-lpd-sm mt-2 max-w-2xl leading-normal">
           A neutral overview surface for summary blocks, activity and suite actions.
         </p>
@@ -405,7 +406,7 @@ function ModuleContextPanelFooterFixture() {
   return (
     <div className="flex flex-col gap-2">
       <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Footer}'}</p>
-      <Button size="sm" className="w-full justify-start">
+      <Button variant="primary" size="sm" className="w-full justify-start">
         Apply changes
       </Button>
     </div>
@@ -418,7 +419,7 @@ function SplitModuleFixture() {
           <p className="text-primary text-lpd-xs font-semibold leading-tight tracking-[0.18em]">
             {'{SuiteCanvas}'}
           </p>
-          <h2 className="text-text-main text-lpd-xl mt-1 font-semibold leading-tight">Users</h2>
+          <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">Users</Heading>
           <div className="border-border-technical mt-5 overflow-hidden rounded-lg border">
             <div className="border-border-technical text-text-muted grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-xs font-semibold uppercase tracking-wide">
               <span aria-label="Select" />
@@ -493,7 +494,7 @@ function SplitModuleToolbar() {
           </Button>
         </div>
       }
-      right={<Button size="sm">Add user</Button>}
+      right={<Button variant="primary" size="sm">Add user</Button>}
     />
   );
 }
