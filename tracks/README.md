@@ -25,7 +25,7 @@
 
 - [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./active/platform/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
 - [Estandarización del shell de LoopDev OS](./active/platform/2026-08-10-shell-standardization.md) · fase 4
-- [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-validation` · fase 1
+- [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-impact-validation` · fase 1
 
 ### Governance
 
