@@ -8,7 +8,7 @@ owner: governance
 lead: null
 branch: chore/ci-validation-scope-track
 branches: []
-phase: 0
+phase: 3
 pull_requests: []
 issues: []
 packages: []
@@ -190,7 +190,28 @@ reviewers without turning the signal into an additional blocking validation rule
 - [ ] A PR changing only product code receives a successful job with no warning.
 - [ ] The alert cannot alter the selected validation plan or bypass required checks.
 
-**Estado:** pendiente
+#### Matriz mínima de validación
+
+| Caso | Cambio de prueba | Resultado esperado del alert | Resultado esperado del routing | Evidencia mínima |
+| ---- | ---------------- | ---------------------------- | ------------------------------ | ----------------- |
+| A | Solo código de producto | Job verde, sin warning | Plan de validación normal | URL del job y resumen sin alerta |
+| B | Test unitario o de integración | Job verde, warning y ruta exacta | El plan existente no cambia | URL del job y archivo listado |
+| C | Test E2E o snapshot | Job verde, warning y ruta exacta | Se mantienen los checks E2E/visuales aplicables | URL del job y archivo listado |
+| D | Track o validador de tracks | Job verde, warning y ruta exacta | La validación de tracks continúa ejecutándose | URL del job y resultado del validador |
+| E | Workflow o configuración de testing | Job verde, warning y ruta exacta | Se conserva el fallback completo correspondiente | URL del job y resumen de routing |
+| F | Cambio mixto de producto y tests | Job verde, warning con todos los archivos vigilados | No se omiten superficies seleccionadas por el plan | URL del job y lista completa |
+
+#### Registro de evidencias
+
+| Fecha | Caso | PR | Resultado observado | URL del job/resumen | Estado |
+| ----- | ---- | -- | ------------------- | ------------------ | ------ |
+| 2026-08-13 | Implementación inicial del alert | #60 | Job inicialmente falló por forwarding de argumentos; corregido en `4a0b3a1` | PR #60 | pendiente de repetir como caso B/D |
+
+La matriz es deliberadamente pequeña: valida la señal informativa y confirma que no altera el
+routing, pero no intenta demostrar por sí sola que cada test de producto detecta todos los defectos.
+La revisión puede continuar cuando haya PRs reales que cubran los casos A-F.
+
+**Estado:** en revisión/validación
 
 ## Registro de cambios de enfoque
 
