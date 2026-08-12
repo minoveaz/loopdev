@@ -1,0 +1,11 @@
+{
+  "kind": "visual-contract-change",
+  "surfaces": ["apps/loopdev-os/src/app/login", "e2e/responsive.visual.spec.mjs"],
+  "userIntent": "Align the login experience with the approved compact mobile direction.",
+  "evidence": {
+    "functional": "The login submission and validation tests remain green.",
+    "accessibility": "Desktop and mobile Axe checks remain green.",
+    "visual": "Updated mobile light and dark snapshots were reviewed against the intended change."
+  },
+  "approvedBy": "design-system"
+}
