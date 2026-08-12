@@ -45,6 +45,9 @@ const rules = {
   tokenUsage: 'Design token usage review',
   shellArchitecture: 'Shell architecture review',
 };
+const designContracts = JSON.parse(
+  fs.readFileSync(path.resolve('config/design-contract-registry.json'), 'utf8'),
+).rules;
 
 function addFinding(file, line, rule, message, snippet) {
   const relativeFile = path.relative(process.cwd(), file);
@@ -59,6 +62,8 @@ function addFinding(file, line, rule, message, snippet) {
     file: relativeFile,
     line,
     rule,
+    contractKind: designContracts[rule]?.kind ?? 'unclassified',
+    primaryRisk: designContracts[rule]?.risk ?? 'unclassified design risk',
     message,
     snippet: snippet.trim().slice(0, 180),
   });
@@ -524,9 +529,10 @@ if (outputJson) {
     console.log(`${label}: ${counts[rule]}`);
   }
   console.log('');
-  findings.forEach(({ file, line, rule, message, snippet }) => {
-    console.log(`[${rule}] ${file}:${line}`);
+  findings.forEach(({ file, line, rule, contractKind, primaryRisk, message, snippet }) => {
+    console.log(`[${rule}][${contractKind}] ${file}:${line}`);
     console.log(`  ${message}`);
+    console.log(`  Primary risk: ${primaryRisk}`);
     console.log(`  ${snippet}`);
   });
   if (findingsByFile.length > 0) {

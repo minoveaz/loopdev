@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "checks": [
+    {
+      "id": "git-conventions",
+      "domain": "governance",
+      "layer": "repository",
+      "environment": "local",
+      "risk": "delivery traceability",
+      "owner": "governance",
+      "command": "pnpm validate:git-conventions",
+      "cost": "low",
+      "modes": ["changed", "domain"]
+    },
+    {
+      "id": "branch-base",
+      "domain": "governance",
+      "layer": "repository",
+      "environment": "local-ci",
+      "risk": "stale branch integration",
+      "owner": "governance",
+      "command": "pnpm validate:branch-base",
+      "cost": "low",
+      "modes": ["changed", "domain", "experience", "full"]
+    },
+    {
+      "id": "package-impact-plan",
+      "domain": "packages",
+      "layer": "routing",
+      "environment": "local-ci",
+      "risk": "wrong validation scope",
+      "owner": "platform",
+      "command": "pnpm validate:plan",
+      "cost": "low",
+      "modes": []
+    },
+    {
+      "id": "shell-contract",
+      "domain": "shell",
+      "layer": "component-contract",
+      "environment": "local-ci",
+      "risk": "navigation and shell behavior",
+      "owner": "design-system",
+      "command": "pnpm test:shell:changed",
+      "cost": "low",
+      "modes": ["changed", "domain", "experience"]
+    },
+    {
+      "id": "package-impact",
+      "domain": "packages",
+      "layer": "routing",
+      "environment": "local-ci",
+      "risk": "shared package consumers are not validated",
+      "owner": "platform",
+      "command": "pnpm validate:package-impact",
+      "cost": "medium",
+      "modes": ["changed", "domain"]
+    },
+    {
+      "id": "frontend-static",
+      "domain": "web",
+      "layer": "static",
+      "environment": "local-ci",
+      "risk": "frontend quality invariants",
+      "owner": "web",
+      "command": "pnpm front:check",
+      "cost": "medium",
+      "modes": ["domain"]
+    },
+    {
+      "id": "unit-contracts",
+      "domain": "web",
+      "layer": "functional",
+      "environment": "local-ci",
+      "risk": "application behavior",
+      "owner": "web",
+      "command": "pnpm test",
+      "cost": "medium",
+      "modes": ["domain"]
+    },
+    {
+      "id": "browser-experience",
+      "domain": "web",
+      "layer": "experience",
+      "environment": "browser",
+      "risk": "user flow and accessibility",
+      "owner": "web",
+      "command": "pnpm e2e:desktop",
+      "cost": "high",
+      "modes": ["experience"]
+    },
+    {
+      "id": "visual-contract-intent",
+      "domain": "web",
+      "layer": "experience",
+      "environment": "local-ci",
+      "risk": "unreviewed visual contract change",
+      "owner": "design-system",
+      "command": "pnpm design:visual:changed",
+      "cost": "low",
+      "modes": ["changed", "domain"]
+    },
+    {
+      "id": "database-contract",
+      "domain": "data",
+      "layer": "database",
+      "environment": "supabase",
+      "risk": "schema and tenant security",
+      "owner": "data",
+      "command": "pnpm exec supabase test db --local supabase/tests/database",
+      "cost": "high",
+      "modes": ["domain"]
+    },
+    {
+      "id": "full-certification",
+      "domain": "repository",
+      "layer": "certification",
+      "environment": "ci",
+      "risk": "cross-domain regression",
+      "owner": "platform",
+      "command": "pnpm validate:ci",
+      "cost": "high",
+      "modes": ["full"]
+    },
+    {
+      "id": "mobile-functional",
+      "domain": "mobile",
+      "layer": "functional",
+      "environment": "local-ci",
+      "risk": "mobile application behavior",
+      "owner": "mobile",
+      "command": "pnpm --filter loopdev-mobile test",
+      "cost": "high",
+      "modes": ["domain"]
+    }
+  ]
+}

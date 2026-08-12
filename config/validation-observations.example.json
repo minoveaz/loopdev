@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "observations": [
+    {
+      "id": "pr-example-web-source",
+      "representativeClass": "web-source-change",
+      "source": "PR number or CI run reference",
+      "durationSeconds": 420,
+      "outcome": "passed",
+      "selectedControls": ["visual-contract-intent"],
+      "skippedControls": [
+        {
+          "id": "database-contract",
+          "reason": "not affected"
+        }
+      ],
+      "falseSkip": false,
+      "falseRun": false,
+      "duplicateRisks": []
+    }
+  ]
+}

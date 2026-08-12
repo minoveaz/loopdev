@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "rules": {
+    "duplicateImportBinding": { "kind": "immutable", "risk": "runtime and compilation correctness" },
+    "shellArchitecture": { "kind": "immutable", "risk": "navigation architecture drift" },
+    "sidebarRoutePolicy": { "kind": "immutable", "risk": "inconsistent route navigation" },
+    "themeIsolation": { "kind": "immutable", "risk": "cross-tenant theme leakage" },
+    "tokenUsage": { "kind": "immutable", "risk": "uncontrolled design token usage" },
+    "typography": { "kind": "evolving", "risk": "approved typography direction" },
+    "hardcodedColor": { "kind": "evolving", "risk": "approved visual color direction" },
+    "forcedTheme": { "kind": "evolving", "risk": "approved theme behavior" },
+    "iconography": { "kind": "evolving", "risk": "approved icon language" },
+    "emojiIconography": { "kind": "evolving", "risk": "approved icon language" },
+    "filterPrimitiveConsistency": { "kind": "evolving", "risk": "approved interaction primitive" },
+    "approvedInteractivePrimitive": { "kind": "evolving", "risk": "approved interaction primitive" },
+    "tabUnderlineCollision": { "kind": "immutable", "risk": "visual interaction collision" },
+    "lowContrastOutlineAction": { "kind": "immutable", "risk": "action discoverability and contrast" },
+    "tabControlConsistency": { "kind": "evolving", "risk": "approved tab interaction language" },
+    "timelineConsistency": { "kind": "evolving", "risk": "approved information hierarchy" },
+    "implicitButtonVariant": { "kind": "immutable", "risk": "action semantics and theme safety" },
+    "lightModeActionContrast": { "kind": "immutable", "risk": "action readability" },
+    "iconColorConsistency": { "kind": "evolving", "risk": "approved icon emphasis" }
+  }
+}
