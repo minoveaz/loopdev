@@ -18,6 +18,25 @@ test('selects the full fallback for workflow changes', () => {
   assert.match(plan.fallbackReason, /workflow configuration/);
 });
 
+test('keeps cross-domain shell changes on full certification', () => {
+  const plan = buildValidationPlan([
+    '.github/workflows/ci.yml',
+    'apps/loopdev-mobile/package.json',
+    'apps/loopdev-mobile/__tests__/App.test.tsx',
+    'apps/loopdev-os/src/app/shell-showcase/page.tsx',
+    'ds/packages/ui/src/components/composites/shell/SuiteCanvas.tsx',
+    'e2e/shell.visual.spec.mjs',
+    'packages/contracts/src/platform/shell.ts',
+    'pnpm-lock.yaml',
+  ]);
+
+  assert.equal(plan.fullFallback, true);
+  for (const domain of ['mobile', 'shell', 'web', 'packages']) {
+    assert.ok(plan.selected.some((check) => check.id === domain), domain);
+    assert.ok(!plan.skipped.some((check) => check.id === domain), domain);
+  }
+});
+
 test('keeps documentation-only changes explainable without executable checks', () => {
   const plan = buildValidationPlan(['docs/testing-guide.md']);
 

@@ -49,26 +49,19 @@ const fullFallbackFiles = [
   'tsconfig.json',
 ];
 
-const validationScope = process.env.LOOPDEV_VALIDATION_SCOPE ?? 'default';
-const isShellShowcaseScope = validationScope === 'shell-showcase';
-
 function matchesPath(file, path) {
   return file === path || file.startsWith(path);
 }
 
 function isDocumentationOnly(file) {
-  return file.startsWith('docs/') || file.startsWith('conductor/') || /\.(md|mdx|txt)$/i.test(file);
+  return (
+    file.startsWith('docs/') ||
+    file.startsWith('conductor/') ||
+    /\.(md|mdx|txt)$/i.test(file)
+  );
 }
 
 function buildExperiencePlan(files) {
-  if (isShellShowcaseScope) {
-    return {
-      desktop: false,
-      mobile: false,
-      visual: files.some((file) => file.endsWith('.visual.spec.mjs')),
-    };
-  }
-
   const hasWebApplicationChange = files.some(
     (file) => file.startsWith('apps/loopdev-os/') || file.startsWith('ds/packages/ui/'),
   );
@@ -131,18 +124,6 @@ function buildValidationPlan(files) {
   }
   if (packageImpact.hasTargetedValidation) changedDomains.add('packages');
 
-  if (isShellShowcaseScope) {
-    const shellChanged = changedFiles.some((file) =>
-      checks.shell.paths.some((path) => matchesPath(file, path)),
-    );
-
-    changedDomains.clear();
-    if (shellChanged) changedDomains.add('shell');
-    if (packageImpact.hasTargetedValidation) changedDomains.add('packages');
-    fullFallback = false;
-    reasons.length = 0;
-  }
-
   if (changedDomains.size === 0 && changedFiles.length > 0 && !fullFallback) {
     reasons.push('no registered executable surface was affected');
   }
@@ -156,7 +137,6 @@ function buildValidationPlan(files) {
   }));
 
   return {
-    scope: validationScope,
     changedFiles,
     experiences: buildExperiencePlan(changedFiles),
     selected,
@@ -165,11 +145,7 @@ function buildValidationPlan(files) {
     note: fullFallback ? null : reasons.join('; ') || null,
     skipped: Object.entries(checks)
       .filter(([domain]) => !changedDomains.has(domain))
-      .map(([domain, check]) => ({
-        id: domain,
-        label: check.label,
-        reason: isShellShowcaseScope ? 'outside shell-showcase scope' : 'not affected',
-      })),
+      .map(([domain, check]) => ({ id: domain, label: check.label, reason: 'not affected' })),
   };
 }
 
@@ -183,7 +159,6 @@ function changedFilesFromGit() {
 
 function printPlan(plan) {
   console.log('Validation plan');
-  console.log(`Scope: ${plan.scope}`);
   console.log(`Changed files: ${plan.changedFiles.length}`);
   console.log(`Full fallback: ${plan.fullFallback ? 'yes' : 'no'}`);
   if (plan.fallbackReason) console.log(`Fallback reason: ${plan.fallbackReason}`);
@@ -205,7 +180,6 @@ function renderGithubSummary(plan) {
   return [
     '## Validation plan',
     '',
-    `Scope: **${plan.scope}**`,
     `Changed files: **${plan.changedFiles.length}**`,
     `Full certification fallback: **${plan.fullFallback ? 'yes' : 'no'}**`,
     plan.fallbackReason ? `Fallback reason: ${plan.fallbackReason}` : '',
@@ -218,9 +192,7 @@ function renderGithubSummary(plan) {
     '',
     '_This report explains derived validation scope; it does not provide a skip override._',
     '',
-  ]
-    .filter((line) => line !== '')
-    .join('\n');
+  ].filter((line) => line !== '').join('\n');
 }
 
 function writeGithubSummary(plan) {
@@ -231,7 +203,6 @@ function writeGithubSummary(plan) {
 
 function buildGithubOutputs(plan) {
   return [
-    `scope=${plan.scope}`,
     `full_fallback=${plan.fullFallback}`,
     `selected_domains=${plan.selected.map(({ id }) => id).join(',')}`,
     `fallback_reason=${plan.fallbackReason ?? ''}`,

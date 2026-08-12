@@ -49,7 +49,6 @@ jobs:
       contents: read
       pull-requests: read
     outputs:
-      shell_track: ${{ steps.scope.outputs.shell_track }}
       frontend: ${{ steps.filter.outputs.frontend }}
       shell: ${{ steps.filter.outputs.shell }}
       quality: ${{ steps.plan.outputs.full_fallback }}
@@ -102,19 +101,6 @@ jobs:
               - 'vitest.config.ts'
               - 'package.json'
 
-      - name: Resolve track scope
-        id: scope
-        env:
-          HEAD_BRANCH: ${{ github.head_ref }}
-        run: |
-          if [ "$HEAD_BRANCH" = "feature/suiteshell-composition" ]; then
-            echo "shell_track=true" >> "$GITHUB_OUTPUT"
-            echo "scope=shell-showcase" >> "$GITHUB_OUTPUT"
-          else
-            echo "shell_track=false" >> "$GITHUB_OUTPUT"
-            echo "scope=default" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Resolve package impact
         id: impact
         env:
@@ -130,7 +116,6 @@ jobs:
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-          LOOPDEV_VALIDATION_SCOPE: ${{ steps.scope.outputs.scope }}
         run: pnpm validate:plan
 
       - name: Validate visual contract intent
@@ -139,9 +124,33 @@ jobs:
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: pnpm design:visual:changed
 
+  dependency-preflight:
+    name: Dependency lockfile preflight
+    needs: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Validate frozen dependency graph
+        run: pnpm install --frozen-lockfile
+
   package-validation:
     name: Shared package contracts and consumers
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: needs.changes.outputs.package_validation == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -173,17 +182,12 @@ jobs:
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-        run: |
-          if [ "${{ needs.changes.outputs.shell_track }}" = "true" ]; then
-            pnpm validate:package-impact --base "$BASE_SHA" --head "$HEAD_SHA" --skip-consumer @loopdev/ui-native --skip-consumer loopdev-mobile
-          else
-            pnpm validate:package-impact --base "$BASE_SHA" --head "$HEAD_SHA"
-          fi
+        run: pnpm validate:package-impact --base "$BASE_SHA" --head "$HEAD_SHA"
 
   mobile-validation:
     name: Mobile contracts and behavior
-    needs: changes
-    if: needs.changes.outputs.mobile == 'true' && needs.changes.outputs.shell_track != 'true'
+    needs: [changes, dependency-preflight]
+    if: needs.changes.outputs.mobile == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
@@ -216,7 +220,7 @@ jobs:
 
   shell-validation:
     name: Shell navigation, accessibility and geometry
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: needs.changes.outputs.shell == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -247,10 +251,8 @@ jobs:
 
   quality:
     name: Lint, typecheck, tests and build
-    needs: changes
-    if: >-
-      (github.event_name != 'pull_request' || needs.changes.outputs.quality == 'true') &&
-      needs.changes.outputs.shell_track != 'true'
+    needs: [changes, dependency-preflight]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.quality == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -289,7 +291,7 @@ jobs:
 
   frontend-e2e:
     name: Web flows, accessibility and visual behavior
-    needs: changes
+    needs: [changes, dependency-preflight]
     if: >-
       needs.changes.outputs.frontend == 'true' &&
       (needs.changes.outputs.browser_desktop == 'true' ||
@@ -334,27 +336,27 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run desktop checks
-        if: needs.changes.outputs.browser_desktop == 'true' && needs.changes.outputs.shell_track != 'true'
-        run: pnpm exec playwright test --project=desktop --grep-invert shell-showcase --workers=1 --reporter=line
+        if: needs.changes.outputs.browser_desktop == 'true'
+        run: pnpm exec playwright test --project=desktop --workers=1 --reporter=line
 
       - name: Run Shell Showcase desktop contract
         if: needs.changes.outputs.shell == 'true'
         run: pnpm exec playwright test e2e/shell-showcase.contract.spec.mjs e2e/shell.visual.spec.mjs --project=desktop --workers=1 --reporter=line
 
       - name: Run authenticated Mobile Web checks
-        if: needs.changes.outputs.browser_mobile == 'true' && needs.changes.outputs.shell_track != 'true'
+        if: needs.changes.outputs.browser_mobile == 'true'
         run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile --workers=1 --reporter=line
 
       - name: Run authenticated Mobile Compact checks
-        if: needs.changes.outputs.browser_mobile == 'true' && needs.changes.outputs.shell_track != 'true'
+        if: needs.changes.outputs.browser_mobile == 'true'
         run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile-compact --workers=1 --reporter=line
 
       - name: Run Mobile Web visual checks
-        if: needs.changes.outputs.browser_visual == 'true' && needs.changes.outputs.shell_track != 'true'
+        if: needs.changes.outputs.browser_visual == 'true'
         run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile --workers=1 --reporter=line
 
       - name: Run Mobile Compact visual checks
-        if: needs.changes.outputs.browser_visual == 'true' && needs.changes.outputs.shell_track != 'true'
+        if: needs.changes.outputs.browser_visual == 'true'
         run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile-compact --workers=1 --reporter=line
 
       - name: Run Shell Showcase mobile visual contract
