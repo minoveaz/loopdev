@@ -72,7 +72,6 @@ jobs:
               - 'playwright.config.mjs'
               - 'package.json'
               - 'pnpm-lock.yaml'
-              - '.github/workflows/ci.yml'
             shell:
               - 'apps/loopdev-os/src/app/globals.css'
               - 'apps/loopdev-os/src/app/layout.tsx'
