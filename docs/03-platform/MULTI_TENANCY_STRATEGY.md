@@ -1,17 +1,19 @@
-# 🔐 Estrategia de Multi-Tenancy & Segregación de Datos (v1.0)
+# 🔐 Estrategia de Organizations & Segregación de Datos (v1.0)
 
 > **Estado:** Autoridad Técnica / Definición Arquitectónica
 > **Alcance:** Toda la plataforma LoopDev OS
-> **Objetivo:** Definir cómo el sistema gestiona múltiples clientes (Tenants) en una única instancia, garantizando aislamiento absoluto de datos y flexibilidad operativa.
+> **Objetivo:** Definir cómo el sistema gestiona múltiples organizaciones en una
+> única instancia, garantizando aislamiento absoluto de datos y flexibilidad
+> operativa.
 
 ---
 
 ## 1. El Desafío de Negocio
 
-LoopDev OS debe servir a dos arquetipos de clientes radicalmente diferentes con el mismo código base:
+LoopDev OS debe servir a dos arquetipos de organizaciones radicalmente diferentes con el mismo código base:
 
-*   **Caso A (Single-Brand Tenant):** Empresas como *LoopDev* o una Startup. Tienen 1 sola marca. Su "universo" es simple.
-*   **Caso B (Multi-Brand Holding):** Empresas como *Estar Protegidos* o *Unilever*. Tienen N marcas, subsidiarias y unidades de negocio bajo un mismo paraguas corporativo.
+*   **Caso A (Single-Brand Organization):** Empresas como *LoopDev* o una Startup. Tienen 1 sola marca. Su "universo" es simple.
+*   **Caso B (Multi-Brand Holding):** Organizaciones como *Estar Protegidos* o *Unilever*. Tienen N marcas, subsidiarias y unidades de negocio bajo un mismo paraguas corporativo.
 
 El sistema no puede asumir `1 Usuario = 1 Marca`.
 
@@ -22,20 +24,21 @@ El sistema no puede asumir `1 Usuario = 1 Marca`.
 En lugar de crear bases de datos separadas por cliente (Silo), utilizamos una **Pool Architecture** con segregación lógica reforzada a nivel de motor de base de datos (PostgreSQL RLS).
 
 ### Principios Rectores
-1.  **Shared Schema:** Todos los tenants viven en las mismas tablas.
-2.  **Row Level Security (RLS):** Es imposible hacer una consulta SQL que devuelva datos de otro tenant, incluso si el desarrollador olvida el `WHERE`.
-3.  **Tenant Context:** El `tenant_id` se inyecta en cada petición a nivel de sesión/JWT.
+1.  **Shared Schema:** Todas las organizaciones viven en las mismas tablas.
+2.  **Row Level Security (RLS):** Es imposible hacer una consulta SQL que devuelva datos de otra organización, incluso si el desarrollador olvida el `WHERE`.
+3.  **Organization Context:** El `organization_id` se resuelve en cada petición
+    a nivel de sesión/JWT.
 
 ---
 
-## 3. Modelo de Datos (The Tenant Spine)
+## 3. Modelo de Datos (The Organization Spine)
 
 La jerarquía de propiedad es estricta:
 
 ```mermaid
 erDiagram
     Users ||--|{ Memberships : has
-    Organizations ||--|{ Memberships : grants_access
+    Organizations ||--|{ OrganizationMemberships : grants_access
     Organizations ||--|{ Brands : owns
     Brands ||--|{ Assets : contains
     Brands ||--|{ Campaigns : contains
@@ -43,19 +46,19 @@ erDiagram
 
 ### Tablas Clave
 
-1.  **`public.organizations` (Tenants)**
+1.  **`public.organizations` (Canonical organization boundary)**
     *   `id`: UUID (Primary Key)
     *   `name`: "Estar Protegidos Group"
     *   `plan`: "Enterprise"
 
-2.  **`public.memberships` (La tabla de vinculación)**
+2.  **`public.organization_memberships` (La tabla de vinculación)**
     *   `user_id`: UUID (FK auth.users)
     *   `organization_id`: UUID (FK organizations)
     *   `role`: 'owner' | 'editor' | 'viewer'
 
 3.  **`public.brands` (Recursos)**
     *   `id`: UUID
-    *   `tenant_id`: UUID (FK organizations) **<-- CRÍTICO**
+    *   `organization_id`: UUID (FK organizations) **<-- CRÍTICO**
     *   `name`: "Marca A"
 
 ---
@@ -68,12 +71,12 @@ La seguridad no vive en el Frontend (React) ni en el Middleware (Next.js), vive 
 
 ```sql
 -- Política: Un usuario solo ve marcas de su organización
-CREATE POLICY "Tenant Isolation" ON public.brands
+CREATE POLICY "Organization Isolation" ON public.brands
 FOR ALL
 USING (
-  tenant_id IN (
-    SELECT organization_id 
-    FROM public.memberships 
+  organization_id IN (
+    SELECT organization_id
+    FROM public.organization_memberships
     WHERE user_id = auth.uid()
   )
 );
@@ -87,7 +90,7 @@ USING (
 
 ## 5. Impacto en Experiencia de Usuario (UX)
 
-La interfaz debe ser "Tenant-Aware" y adaptarse a la cardinalidad de los datos.
+La interfaz debe ser "Organization-Aware" y adaptarse a la cardinalidad de los datos.
 
 ### 5.1 Patrón de "Smart Redirection"
 Para evitar clics innecesarios en clientes pequeños:
@@ -108,11 +111,15 @@ Para evitar clics innecesarios en clientes pequeños:
 
 ## 6. Hoja de Ruta de Implementación
 
-1.  [x] **Fase 1:** Agregar columna `tenant_id` a recursos clave (`brands`).
-2.  [ ] **Fase 2:** Crear tablas `organizations` y `memberships`.
+1.  [x] **Fase 1:** Agregar columna `organization_id` a recursos clave (`brands`).
+2.  [x] **Fase 2:** Crear tablas `organizations` y `organization_memberships`.
 3.  [ ] **Fase 3:** Implementar triggers para crear organización automática al registrarse (Sign-up).
-4.  [ ] **Fase 4:** Migrar políticas RLS de "abiertas" a "basadas en membership".
+4.  [x] **Fase 4:** Migrar políticas RLS de "abiertas" a "basadas en organization membership".
 5.  [ ] **Fase 5:** Implementar "Smart Redirection" en el frontend.
 
 ---
+`tenants` y `tenant_id` son nombres legacy conservados temporalmente para
+compatibilidad y mapeados mediante `organizations.legacy_tenant_id`. No deben
+usarse en nuevos contratos ni nuevas políticas.
+
 *Documento de Estrategia - LoopDev Engineering*

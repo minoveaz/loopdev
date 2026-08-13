@@ -1,17 +1,22 @@
 # Database Security & RLS Policy
 
 ## 🎯 Propósito
-Garantizar el aislamiento absoluto de datos entre Tenants mediante el uso de **Row Level Security (RLS)** en Postgres. Ninguna aplicación o usuario podrá acceder a datos que no pertenezcan a su `tenant_id`.
+Garantizar el aislamiento absoluto de datos entre organizaciones mediante el uso
+de **Row Level Security (RLS)** en Postgres. Ninguna aplicación o usuario podrá
+acceder a datos que no pertenezcan a su `organization_id`.
 
 ---
 
 ## 🛡️ El Muro de Seguridad (RLS)
 
 ### 1. Regla de Oro
-**Toda tabla** que contenga información de negocio debe tener activado RLS y poseer una columna `tenant_id`.
+**Toda tabla** que contenga información de negocio debe tener activado RLS y
+poseer una columna `organization_id`.
 
 ### 2. Resolución de Identidad
-El backend no confía en el cliente. El `tenant_id` se resuelve cruzando el `auth.uid()` del usuario con su membresía en la tabla `memberships`.
+El backend no confía en el cliente. El `organization_id` se resuelve cruzando el
+`auth.uid()` del usuario con su membresía en la tabla
+`organization_memberships`.
 
 ---
 
@@ -19,24 +24,30 @@ El backend no confía en el cliente. El `tenant_id` se resuelve cruzando el `aut
 
 ### Política de Lectura (SELECT)
 ```sql
-CREATE POLICY "Users can only view their tenant data" ON "public"."table_name"
+CREATE POLICY "Users can only view their organization data" ON "public"."table_name"
 FOR SELECT USING (
-  tenant_id IN (
-    SELECT tenant_id FROM memberships WHERE user_id = auth.uid()
+  organization_id IN (
+    SELECT organization_id
+    FROM organization_memberships
+    WHERE user_id = auth.uid()
   )
 );
 ```
 
 ### Política de Escritura (INSERT/UPDATE)
 ```sql
-CREATE POLICY "Users can only modify their tenant data" ON "public"."table_name"
+CREATE POLICY "Users can only modify their organization data" ON "public"."table_name"
 FOR ALL USING (
-  tenant_id IN (
-    SELECT tenant_id FROM memberships WHERE user_id = auth.uid() AND role IN ('admin', 'owner')
+  organization_id IN (
+    SELECT organization_id
+    FROM organization_memberships
+    WHERE user_id = auth.uid() AND role IN ('admin', 'owner')
   )
 ) WITH CHECK (
-  tenant_id IN (
-    SELECT tenant_id FROM memberships WHERE user_id = auth.uid() AND role IN ('admin', 'owner')
+  organization_id IN (
+    SELECT organization_id
+    FROM organization_memberships
+    WHERE user_id = auth.uid() AND role IN ('admin', 'owner')
   )
 );
 ```
@@ -45,9 +56,14 @@ FOR ALL USING (
 
 ## 🧪 Pruebas de Aislamiento
 Todo cambio en la base de datos debe pasar por un **Isolation Test**:
-1. Crear Usuario A en Tenant 1.
-2. Crear Usuario B en Tenant 2.
-3. Validar que Usuario A reciba un error 403 o array vacío al intentar leer IDs del Tenant 2.
+1. Crear Usuario A en Organization 1.
+2. Crear Usuario B en Organization 2.
+3. Validar que Usuario A reciba un error 403 o array vacío al intentar leer IDs
+   de Organization 2.
 
 ---
+`tenants` y `tenant_id` solo se conservan como compatibilidad legacy durante la
+migración. Las nuevas tablas, políticas y pruebas deben usar
+`organizations` y `organization_id`.
+
 *Gobernanza de Plataforma - LoopDev Engineering*

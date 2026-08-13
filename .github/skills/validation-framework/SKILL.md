@@ -1,6 +1,6 @@
 ---
 name: validation-framework
-description: "Use when choosing, explaining, reviewing, or running LoopDev validation checks; covers validate:plan, changed, domain, experience, and full certification."
+description: "Use when choosing, explaining, reviewing, or running LoopDev validation checks for code, components, registries, and user experiences."
 ---
 
 # Validation Framework
@@ -21,6 +21,39 @@ Use the smallest validation scope that protects the risk changed. The plan is re
 
 `validate:changed`, `validate:domain`, and `validate:experience` execute registered controls. Use `--dry-run` on the underlying Node runner when reviewing scope without starting a suite.
 
+## Component validation
+
+Use this routing for changes governed by `component-development`:
+
+| Changed surface | Minimum validation |
+| --- | --- |
+| Shared atom or composite | `pnpm validate:changed`, focused unit/accessibility tests, `pnpm registries:check` |
+| Suite entity, feature, or widget | `pnpm validate:changed`, focused tests, applicable `validate:domain` |
+| Responsive, visual, keyboard, or interaction contract | Add `pnpm validate:experience -- <experience>` and Playwright evidence |
+| Shell or workspace component | `pnpm test:shell:changed`, focused tests, and the `platform-shell` workflow |
+| Shared public contract or export | Add consumer validation and `pnpm contracts:ownership:check` |
+| Component scaffolding generator | `pnpm test:component-generator` and `pnpm validate:changed` |
+
+Component certification requires evidence for the applicable states,
+accessibility, responsive behavior, registry entry, and track decision. Do not
+claim promotion to `@loopdev/ui` from a passing unit test alone.
+
+## Registry validation
+
+Use this routing for changes governed by `registry-governance`:
+
+| Registry change | Minimum validation |
+| --- | --- |
+| Entry metadata or evidence | `pnpm registries:check`, `pnpm docs:links:check`, `git diff --check` |
+| New or changed implementation mapping | Add `pnpm validate:changed` and the affected domain validation |
+| Schema or common-field change | `pnpm registries:generate`, `pnpm registries:check`, `pnpm validate:full` |
+| Legacy registry migration | Unique-ID and required-field checks, link validation, catalog check, and track evidence |
+| Generated catalog change | Regenerate with the repository command; never hand-edit; run the check afterward |
+
+Registry validation confirms structural integrity, not implementation
+correctness. Pair it with component, domain, security, or experience validation
+when the registered resource changes behavior.
+
 ## Reading A Plan
 
 - **Selected protections** are the primary risks touched by the change.
@@ -36,5 +69,7 @@ Use the smallest validation scope that protects the risk changed. The plan is re
 4. Add consumer validation when a shared package contract changes.
 5. Use experience validation for geometry, accessibility, and visual behavior; do not turn snapshots into a substitute for functional tests.
 6. Use full certification for protected branches, releases, shared contracts, dependency changes, root configuration, workflows, or ambiguous changes.
+7. For component and registry work, apply the smallest table entry above and
+   escalate when ownership, consumers, schema, or scope is ambiguous.
 
 When a check is skipped, the report must say which domain and layer were skipped and why. Do not hide skips by silently running an unrelated broad suite.

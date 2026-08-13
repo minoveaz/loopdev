@@ -1,12 +1,19 @@
 # Component Lifecycle & Agile Workflow v1.5
 
 ## Propósito
-Este documento define el proceso de ingeniería E2E. Implementamos la **colocación de requerimientos** mediante archivos `userHistories.md` y garantizamos la **integridad visual** mediante el cumplimiento del Bloque 0.
+Este documento define el proceso de ingeniería E2E. Los requisitos y el estado de
+ejecución se gobiernan mediante los tracks, y la integridad visual se garantiza
+mediante el cumplimiento del Bloque 0.
+
+> **Ámbito:** Este documento describe la ejecución diaria de un componente.
+> `docs/04-governance/COMPONENT_LIFECYCLE.md` es la autoridad para los estados
+> de certificación y sus gates; no se deben crear fases alternativas aquí.
 
 ---
 
 ## 🏗️ Fase 1: Ideación & Contrato (DoR)
-- **User Histories:** Creación de `userHistories.md` en la carpeta del componente.
+- **Track:** Crear o actualizar el track correspondiente con el alcance,
+  decisiones, evidencia y fase de ejecución.
   
   ### 🧬 Bloque 0: ADN de Composición (OBLIGATORIO)
   *Todo componente de LoopDev debe integrar estos 4 pilares:*
@@ -23,30 +30,32 @@ Este documento define el proceso de ingeniería E2E. Implementamos la **colocaci
     - **Contraste Extremo (NUEVO):** Validación de legibilidad sobre el fondo más oscuro y más claro permitido.
   - **Multitenancy:** Adaptabilidad a 100+ clientes (Tokens dinámicos).
 
-- **Blueprint Validated:** Diseño aprobado visualmente en `labdev`.
+- **Blueprint Validated:** Diseño aprobado visualmente en el entorno de
+  validación del proyecto.
 - **Session Entry:** Registro de inicio de tarea en `ENGINEERING_LOG.md`.
 
 ---
 
 ### 🟢 Fase 2: Blindaje y Calidad (The Shield)
 1. **Unit Testing:** Cobertura de todos los estados en Vitest.
-2. **A11y Audit:** Pasar Axe-core en Storybook (0 violaciones).
-3. **Visual Review:** Publicar historias en Chromatic y aceptar baseline.
+2. **A11y Audit:** Pasar Axe-core en las pruebas Playwright (0 violaciones).
+3. **Visual Review:** Ejecutar las pruebas visuales de Playwright y revisar
+   explícitamente cualquier diff de snapshots.
 4. **Integration Test:** Smoke test del componente en su app real mediante Playwright.
 
 ### 🔵 Fase 3: Promoción y Registro
 1. **Pull Request:** Debe incluir el reporte de QA automático en verde.
 2. **Changeset:** Crear el archivo de changeset para el versionado.
-3. **Registry:** Actualizar `COMPONENT_REGISTRY.json` con el sello de certificación.
+3. **Registry:** Actualizar `docs/registries/frontend-components.json` con el sello de certificación.
 
 ---
 
 ## 🗄️ Fase 4: Persistencia & Certificación (DoD)
 
-> ⚠️ **REGLA DE ORO:** El sello `LOOPDEV.LAB` (`CertificationStamp`) y el `InfraStamp` solo pueden ser inyectados en el código de producción **tras el cierre exitoso de la Fase 3 (Auditoría)** y la corrección de todos sus hallazgos. Cualquier componente con sellos pero sin auditoría registrada será rechazado automáticamente.
+> La certificación se demuestra con evidencia de track, registry y validaciones;
+> no se inyectan sellos de branding en el código de producción.
 
-- [ ] **Registry Sync:** Registro en `COMPONENT_REGISTRY.json`.
-- [ ] **Seal Applied:** Sello `Loopdev.lab` en Storybook arriba a la izquierda.
+- [ ] **Registry Sync:** Registro en `docs/registries/frontend-components.json`.
 - [ ] **Audit Log Updated:** Registro del hito en `ENGINEERING_LOG.md`.
 - [ ] **Zero Errors:** `tsc` y `vitest` en 100% verde.
 

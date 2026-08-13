@@ -1,0 +1,154 @@
+{
+  "registry_version": "1.0",
+  "domain": "product",
+  "status": "ready",
+  "schema": "docs/registries/REGISTRY_SCHEMA.md",
+  "entry_schema_version": "1.0",
+  "last_updated": "2026-08-13",
+  "entries": [
+    {
+      "id": "sales-crm",
+      "name": "Sales CRM",
+      "domain": "product",
+      "owner": "crm",
+      "type": "product-module",
+      "category": "commercial-operations",
+      "status": "active",
+      "phase": 6,
+      "dependencies": [
+        "shared-domain-contracts",
+        "multi-tenancy"
+      ],
+      "contracts": [
+        "packages/contracts/src/crm/crm.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/app/sales-crm",
+      "tests": [],
+      "documentation": [
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "apps/loopdev-os/src/app/sales-crm",
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+      ]
+    },
+    {
+      "id": "marketing-studio",
+      "name": "Marketing Studio",
+      "domain": "product",
+      "owner": "marketing-studio",
+      "type": "product-module",
+      "category": "marketing",
+      "status": "active",
+      "phase": null,
+      "dependencies": [
+        "marketing-domain-contracts",
+        "multi-tenancy"
+      ],
+      "contracts": [
+        "packages/contracts/src/marketing/marketing.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/app/marketing-studio",
+      "tests": [],
+      "documentation": [],
+      "certification": {},
+      "evidence_gaps": [
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "apps/loopdev-os/src/app/marketing-studio"
+      ]
+    },
+    {
+      "id": "health-os",
+      "name": "Health OS",
+      "domain": "product",
+      "owner": "health",
+      "type": "product-module",
+      "category": "health-operations",
+      "status": "active",
+      "phase": null,
+      "dependencies": [
+        "multi-tenancy"
+      ],
+      "contracts": [],
+      "implementation": "apps/loopdev-os/src/app/health-os",
+      "tests": [],
+      "documentation": [
+        "docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "contracts",
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "apps/loopdev-os/src/app/health-os",
+        "docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md"
+      ]
+    },
+    {
+      "id": "quant-ops",
+      "name": "Quant Ops",
+      "domain": "product",
+      "owner": "quant",
+      "type": "product-module",
+      "category": "trading-operations",
+      "status": "experimental",
+      "phase": null,
+      "dependencies": [
+        "multi-tenancy"
+      ],
+      "contracts": [
+        "packages/contracts/src/trading/trading.schema.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/app/quant-ops",
+      "tests": [],
+      "documentation": [],
+      "certification": {},
+      "evidence_gaps": [
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "apps/loopdev-os/src/app/quant-ops"
+      ]
+    },
+    {
+      "id": "loopdev-mobile",
+      "name": "LoopDev Mobile",
+      "domain": "product",
+      "owner": "mobile",
+      "type": "application",
+      "category": "mobile-platform",
+      "status": "active",
+      "phase": null,
+      "dependencies": [
+        "multi-tenancy"
+      ],
+      "contracts": [],
+      "implementation": "apps/loopdev-mobile",
+      "tests": [],
+      "documentation": [
+        "tracks/active/mobile/2026-08-09-mobile-app-foundation.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "contracts",
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "apps/loopdev-mobile",
+        "tracks/active/mobile/2026-08-09-mobile-app-foundation.md"
+      ]
+    }
+  ]
+}

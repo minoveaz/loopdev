@@ -4,6 +4,10 @@
 
 ## Planificados
 
+### CRM
+
+- [CRM component inventory and reuse architecture](./planned/crm/2026-08-13-crm-component-inventory.md) · fase 0
+
 ### Marketing Studio
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
@@ -56,3 +60,4 @@
 - [Order Flow Integration](./closed/2026/2026-04-11-order-flow-integration.md) · fase 0
 - [Health OS Occupational Health Suite](./closed/2026/2026-06-28-health-os-occupational.md) · fase 0
 - [Sales & CRM Suite Integration](./closed/2026/2026-07-18-sales-crm-integration.md) · fase 0
+- [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4

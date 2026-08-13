@@ -1,0 +1,158 @@
+{
+  "registry_version": "1.0",
+  "domain": "backend",
+  "status": "ready",
+  "schema": "docs/registries/REGISTRY_SCHEMA.md",
+  "entry_schema_version": "1.0",
+  "last_updated": "2026-08-13",
+  "entries": [
+    {
+      "id": "shared-domain-contracts",
+      "name": "Shared domain contracts",
+      "domain": "backend",
+      "owner": "platform",
+      "type": "contract-package",
+      "category": "shared",
+      "status": "stable",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "packages/contracts/src/index.ts"
+      ],
+      "implementation": "packages/contracts/src",
+      "tests": [
+        "packages/contracts/src/platform/__tests__/shell.test.ts",
+        "packages/contracts/src/platform/__tests__/tenancy.test.ts"
+      ],
+      "documentation": [
+        "docs/03-platform/API_STANDARDS.md",
+        "docs/01-foundations/ARCHITECTURAL_DECISIONS.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [],
+      "source_registry": null,
+      "source_evidence": [
+        "packages/contracts/src/index.ts",
+        "docs/03-platform/API_STANDARDS.md"
+      ]
+    },
+    {
+      "id": "crm-contracts",
+      "name": "CRM domain contracts",
+      "domain": "backend",
+      "owner": "crm",
+      "type": "contract-package",
+      "category": "crm",
+      "status": "active",
+      "phase": 6,
+      "dependencies": [
+        "shared-domain-contracts"
+      ],
+      "contracts": [
+        "packages/contracts/src/crm/crm.ts",
+        "packages/contracts/src/crm/customer-workspace.ts"
+      ],
+      "implementation": "packages/contracts/src/crm",
+      "tests": [
+        "packages/contracts/src/crm/__tests__/crm.test.ts"
+      ],
+      "documentation": [
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [],
+      "source_registry": null,
+      "source_evidence": [
+        "packages/contracts/src/crm",
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+      ]
+    },
+    {
+      "id": "communications-contracts",
+      "name": "Communications domain contracts",
+      "domain": "backend",
+      "owner": "crm",
+      "type": "contract-package",
+      "category": "communications",
+      "status": "active",
+      "phase": 6,
+      "dependencies": [
+        "shared-domain-contracts"
+      ],
+      "contracts": [
+        "packages/contracts/src/communications/communications.ts"
+      ],
+      "implementation": "packages/contracts/src/communications",
+      "tests": [
+        "packages/contracts/src/communications/__tests__/communications.test.ts"
+      ],
+      "documentation": [
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [],
+      "source_registry": null,
+      "source_evidence": [
+        "packages/contracts/src/communications",
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+      ]
+    },
+    {
+      "id": "marketing-domain-contracts",
+      "name": "Marketing domain contracts",
+      "domain": "backend",
+      "owner": "marketing-studio",
+      "type": "contract-package",
+      "category": "marketing",
+      "status": "active",
+      "phase": null,
+      "dependencies": [
+        "shared-domain-contracts"
+      ],
+      "contracts": [
+        "packages/contracts/src/marketing/marketing.ts"
+      ],
+      "implementation": "packages/contracts/src/marketing",
+      "tests": [
+        "packages/contracts/src/marketing/__tests__/marketing.test.ts"
+      ],
+      "documentation": [],
+      "certification": {},
+      "evidence_gaps": [],
+      "source_registry": null,
+      "source_evidence": [
+        "packages/contracts/src/marketing"
+      ]
+    },
+    {
+      "id": "whatsapp-webhook",
+      "name": "WhatsApp webhook",
+      "domain": "backend",
+      "owner": "crm",
+      "type": "edge-function",
+      "category": "communications",
+      "status": "active",
+      "phase": 6,
+      "dependencies": [
+        "communications-contracts"
+      ],
+      "contracts": [],
+      "implementation": "supabase/functions/loopdev-whatsapp-webhook/index.ts",
+      "tests": [],
+      "documentation": [
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md",
+        "docs/03-platform/API_STANDARDS.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "contracts",
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "supabase/functions/loopdev-whatsapp-webhook/index.ts",
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+      ]
+    }
+  ]
+}

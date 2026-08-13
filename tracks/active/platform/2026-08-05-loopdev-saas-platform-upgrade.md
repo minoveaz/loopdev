@@ -565,11 +565,11 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 - [x] Confirmar que LoopDev es el repositorio base del SaaS.
 - [x] Confirmar que VitaBlue y Protege tu Salud son marcas de Estar Protegidos.
 - [x] Confirmar que Zona Médica usará únicamente Health OS en la primera etapa.
-- [x] Inventariar rutas, módulos, tablas, funciones y secretos existentes en LoopDev; ver `conductor/inventory-loopdev.md`.
+- [x] Inventariar rutas, módulos, tablas, funciones y secretos existentes en LoopDev; ver `docs/04-governance/audits/2026-08-06-inventory-loopdev.md`.
 - [x] Inventariar las capacidades que deben migrarse desde VitaBlue; las capacidades conocidas y los módulos aún desconocidos están clasificados en la matriz de capacidades.
-- [x] Identificar datos demo, tablas Quant Ops y migraciones experimentales; los límites y riesgos quedan documentados en `conductor/inventory-loopdev.md`.
+- [x] Identificar datos demo, tablas Quant Ops y migraciones experimentales; los límites y riesgos quedan documentados en `docs/04-governance/audits/2026-08-06-inventory-loopdev.md`.
 - [x] Definir qué partes de VitaBlue seguirán siendo web pública: landing, SEO, blog, formularios/wizard y captación permanecen en VitaBlue; el backoffice se traslada a LoopDev.
-- [x] Crear un registro de decisiones arquitectónicas y riesgos en este track y en `conductor/inventory-loopdev.md`.
+- [x] Crear un registro de decisiones arquitectónicas y riesgos en este track y en `docs/04-governance/audits/2026-08-06-inventory-loopdev.md`.
 
 **Salida:** mapa de capacidades, alcance aprobado, responsables y lista de riesgos.
 
@@ -592,7 +592,7 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 - [x] Separar datos mock de servicios de producción; los mocks restantes están localizados y no son fuente de verdad.
 - [x] Marcar componentes experimentales y rutas de Quant Ops como módulo independiente.
 - [x] Definir convenciones de nombres, carpetas y contratos.
-- [x] Documentar cualquier cambio necesario en `conductor/tech-stack.md`.
+- [x] Documentar cualquier cambio necesario en `docs/03-platform/` y `docs/01-foundations/`.
 
 **Criterio:** el repositorio tiene una línea base reproducible y las áreas problemáticas están enumeradas.
 
@@ -601,7 +601,7 @@ La configuración de infraestructura deberá vivir en `render.yaml` cuando la to
 - Las suites se mantienen aisladas por rutas y layouts; la reutilización compartida pasa por `components/layout`, `@loopdev/contracts` o `@loopdev/ui`.
 - Los datos demo/mock están identificados y no son fuente de verdad. La migración de CRM y Marketing a servicios Supabase queda planificada en las fases 5 y 6.
 - Quant Ops permanece como módulo independiente, con UI, contexto y `modules/mod-quant-core` separados.
-- `conductor/tech-stack.md` recoge los límites de arquitectura, convenciones y comandos de calidad.
+- `docs/03-platform/` y `docs/01-foundations/` recogen los límites de arquitectura, convenciones y comandos de calidad.
 
 ### Fase 1B — Calidad estática y buenas prácticas de codificación
 
@@ -624,7 +624,7 @@ Esta fase refuerza la línea base antes de modificar el modelo multiempresa. Las
 
 - Adoptar `dependency-cruiser` como primera herramienta de límites arquitectónicos cuando CI migre a Node 22+; con Node 20 queda diferido para no romper el entorno actual. No añadir `eslint-plugin-boundaries` en paralelo.
 - Añadir CodeQL y secret scanning en GitHub Actions antes de incorporar múltiples scanners locales. CodeQL queda configurado en `.github/workflows/codeql.yml` y Dependabot en `.github/dependabot.yml`.
-- Documentar contratos y límites de suites en `conductor/tech-stack.md` y `@loopdev/contracts`.
+- Documentar contratos y límites de suites en `docs/03-platform/`, `docs/01-foundations/` y `@loopdev/contracts`.
 - Mantener Storybook y Chromatic fuera del proyecto.
 
 ### Fase 1C — Retirada de Storybook y limpieza de deuda heredada
@@ -1561,7 +1561,7 @@ Esta fase es obligatoria antes de iniciar Platform Core. Su objetivo es que la d
 - [x] Formato, clases y auditoria estatica pasan en `quality:static`.
 - [x] jscpd queda en 24 clones despues de extraer las abstracciones semánticas de CRM, BotCard, layouts, tablas y payloads de bots. Los clones restantes son shells de suites, tablas con columnas distintas, indicadores visuales con modelos propios y scripts Python con flujos independientes.
 
-La Fase 1D queda cerrada: la matriz final de 24 excepciones técnicas está registrada en `conductor/jscpd-exceptions.md`; no quedan clones TypeScript consolidables sin revisar.
+La Fase 1D queda cerrada: la matriz final de 24 excepciones técnicas está registrada en `docs/04-governance/JSCPD_EXCEPTIONS.md`; no quedan clones TypeScript consolidables sin revisar.
 
 #### Clasificacion de clones jscpd (2026-08-06)
 

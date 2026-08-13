@@ -7,7 +7,8 @@ Evitar la acumulación de deuda técnica invisible al construir **organismos o p
 
 ## 🧠 Regla de Oro
 > ❌ **Un solo "NO" en los puntos críticos = El desarrollo NO empieza.** 
-> Se debe volver a la fase de Descubrimiento o Contrato (ver `OPERATIONAL_AI_TEMPLATES.md`).
+> Se debe volver a la fase de Descubrimiento o Contrato y registrar el ajuste
+> en el track correspondiente.
 
 ---
 
@@ -25,13 +26,15 @@ No basta con `loading/success`. ¿He definido la UI para:
 - [ ] **Estado Parcial:** Datos cargados pero con advertencias (ej. sync pendiente).
 
 ## 3️⃣ Validación de Infraestructura (Bloqueante)
-- [ ] **Descubrimiento Realizado:** Se ha ejecutado la Plantilla 1 de `OPERATIONAL_AI_TEMPLATES.md`.
+- [ ] **Descubrimiento Realizado:** El alcance y el contrato están registrados
+  en el track correspondiente.
 - [ ] **Preguntas Abiertas Cerradas:** Entiendo límites de paginación, filtros y ordenación del backend.
 - [ ] **Cero Suposiciones:** No estoy asumiendo lógica de servidor desde el frontend.
 
 ## 4️⃣ Contrato y Consumo (CRÍTICO)
 - [ ] **Contrato v0 Disponible:** Existe un esquema (Zod/TS) definido en `03-platform`.
-- [ ] **Aislamiento Multi-tenant:** El contrato incluye `tenant_id` y `scope`.
+- [ ] **Aislamiento Multi-tenant:** El contrato incluye `organization_id` y
+  `scope`; `tenant_id` solo aparece cuando se documenta compatibilidad legacy.
 - [ ] **Pattern de Consumo:** El componente consume datos vía hooks/props (Prohibido `fetch` directo).
 
 ## 5️⃣ Impacto en el Sistema (Gobernanza)

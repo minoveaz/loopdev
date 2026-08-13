@@ -28,6 +28,12 @@ Documentación técnica para el desarrollo frontend en el ecosistema LoopDev.
 | [COMPONENT_TESTING_PROTOCOL.md](./COMPONENT_TESTING_PROTOCOL.md) | Suite de pruebas con Vitest y RTL | ✅ Activo |
 | [UI_COMPLEX_READINESS_CHECKLIST.md](./UI_COMPLEX_READINESS_CHECKLIST.md) | Checklist de componentes complejos | ✅ Activo |
 
+### Registro canónico
+
+El registro global de componentes frontend se mantiene en
+[docs/registries/frontend-components.json](../registries/frontend-components.json).
+Este directorio ya no debe crear un registro paralelo.
+
 ---
 
 ## 🚦 Flujo de Trabajo: Nueva Página
@@ -116,21 +122,21 @@ pnpm typecheck
 pnpm test
 ```
 
-### Storybook (Design System)
+### Playwright and repository validation
 
 ```bash
-# Iniciar Storybook
-pnpm ds:dev
+# Ejecutar validación visual desktop
+pnpm e2e:desktop
 
-# Ver en: http://localhost:6006
+# Ejecutar validación del shell
+pnpm test:shell
 ```
 
 ---
 
 ## 🔗 Enlaces Externos
 
-- [Storybook Local](http://localhost:6006) - Explorar componentes
-- [Figma Design System](https://figma.com/loopdev) - Diseños fuente
+- Playwright (`playwright.config.ts`) - Validación visual y E2E
 - [GitHub Monorepo](https://github.com/minoveaz/loopdev)
 
 ---
