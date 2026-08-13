@@ -535,13 +535,13 @@ go-live o UAT privado.
 
 ## Handoff de sesion
 
-- **Fecha:** 2026-08-13.
-- **Rama de continuacion:** Pendiente; el programa aun no abre ramas de implementacion.
-- **Commit de partida:** Pendiente.
-- **Estado alcanzado:** Program track creado; el Project #3 contiene el alcance G0-G5 y UX-00 esta Ready.
-- **Decisiones, bloqueos y riesgos:** Track central del piloto creado y track CRM historico supersedido solo como plan operativo.
-- **Validacion ejecutada:** Pendiente.
-- **Siguiente accion concreta:** Completar UX-00 antes de activar G0.
+- **Fecha:** 2026-08-14.
+- **Rama de continuacion:** `feature/crm-pilot-security-foundation` (no creada todavía).
+- **Commit de partida:** `41f2553` en `docs/2026-execution-roadmap`; la rama documental debe sincronizarse en remoto antes de crear la rama de ejecución.
+- **Estado alcanzado:** Planificación CRM y G0/G1 documental aprobados; matriz de seguridad aprobada; Project #3 preparado; Issues G1 #70-#78 siguen `Backlog/Todo` hasta iniciar ejecución.
+- **Decisiones, bloqueos y riesgos:** User es owner operativo, Product Owner, Tech Lead y release owner. G1 debe empezar por reset/seed, integridad tenant-aware, RLS por verbo, kill switches, audit append-only, pgTAP, CI, checks reales y E2E Auth/RLS. No hay acceso a Supabase en este ordenador; la implementación requiere Supabase local o acceso a desarrollo/staging. No crear PR.
+- **Validacion ejecutada:** `validate-git-conventions.mjs`, `generate-tracks-index.mjs`, `validate-tracks.mjs` y `git diff --check` pasan en la rama documental.
+- **Siguiente accion concreta:** En una nueva sesión, verificar que `docs/2026-execution-roadmap` local y remoto apuntan al mismo commit; después crear desde `develop` actualizado `feature/crm-pilot-security-foundation` solo cuando exista Supabase local o acceso al entorno de desarrollo.
 
 ## Cierre
 
