@@ -996,21 +996,30 @@ importan rutas internas.
 
 ### 10.6 Relación con el shell
 
-El baseline integrado en `develop` se compone así:
+La composición estándar aprobada para las suites nuevas se compone así:
 
 ```text
-AppShell -> SuiteShell -> ModuleShell -> ModuleWorkspace -> domain composition
+AppShell -> SuiteRuntime -> SuiteCanvas -> domain composition
 ```
 
-El track `shell-standardization` propone en `feature/suiteshell-composition` una evolución con
-`SuiteConfig`, `SuiteRuntime` y `SuiteCanvas`, pero esa API todavía no forma parte del baseline de
-esta rama. El track de shell debe comparar, aprobar y fusionar la composición candidata antes de que
-este documento la convierta en obligación para CRM.
+`SuiteRuntime` y `SuiteCanvas` superseden conceptualmente la composición anterior para las suites
+nuevas. La adopción puede ser incremental y debe conservar compatibilidad explícita con el baseline
+existente mientras el track de shell completa su integración.
 
-FSD es independiente de ese resultado: organiza el contenido de dominio dentro de la superficie de
-módulo aprobada y nunca crea otro header, sidebar o shell. Hasta una decisión de supersesión, los
-módulos nuevos respetan el contrato integrado; después de una fusión aprobada podrán adoptar
-`SuiteRuntime`/`SuiteCanvas` de forma incremental y con compatibilidad explícita.
+`SuiteCanvas` es una frontera de composición visual, no una frontera de negocio. Puede seleccionar
+modos como `overview`, `data`, `workspace`, `split`, `board` o `full-bleed`, pero no conoce CRM,
+contactos, leads, Supabase, permisos de dominio ni mutaciones. La suite entrega configuración,
+navegación, acceso y contenido mediante contratos.
+
+FSD organiza el contenido dentro de cada Canvas:
+
+```text
+app route -> SuiteRuntime/SuiteCanvas -> widgets -> features -> entities -> shared
+```
+
+El shell no importa slices de negocio. Los widgets pueden componer features y entities, y las
+features ejecutan acciones de usuario mediante contratos y APIs de aplicación. No se crea una capa
+FSD paralela al App Router ni se permite que Canvas se convierta en un contenedor de lógica CRM.
 
 ### 10.7 Migración incremental de CRM
 
@@ -2091,6 +2100,8 @@ Antes de pasar de `proposed` a `approved`, se debe confirmar:
 - [ ] FSD se adopta incrementalmente y no mediante big bang.
 - [ ] El track de shell ha aprobado cuál es la composición estándar y ha documentado compatibilidad
       o supersesión entre el baseline y `SuiteRuntime`/`SuiteCanvas`.
+- [x] La composición estándar de suites nuevas es `SuiteRuntime + SuiteCanvas`, con FSD dentro de
+  cada Canvas y sin lógica de negocio en Canvas.
 - [ ] Supabase con RLS es el modelo estándar de tenancy.
 - [ ] AI Platform y capacidades cross-suite tienen ownership independiente.
 - [ ] El roadmap por horizontes reemplaza la priorización histórica contradictoria.
