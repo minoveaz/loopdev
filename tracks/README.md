@@ -7,14 +7,20 @@
 ### CRM
 
 - [CRM component inventory and reuse architecture](./planned/crm/2026-08-13-crm-component-inventory.md) · fase 0
+- [CRM Pilot Execution](./planned/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
 
 ### Marketing Studio
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
 
+### Platform
+
+- [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
+
 ### Governance
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
+- [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
 ## En curso
 
 ### CRM
