@@ -69,10 +69,32 @@ La definicion de nuevos modulos sigue `.github/skills/module-definition`. Leads 
 mismo paquete de cinco documentos antes de crear su rama de implementacion.
 
 Pipeline/Opportunities se define en `docs/06-product/crm/pipeline/` mediante el mismo paquete de
-cinco documentos y el Issue #96. El paquete permanece propuesto hasta revisar UX, componentes,
+cinco documentos y el Issue #85. El paquete permanece propuesto hasta revisar UX, componentes,
 contrato e impacto con Product Owner y Tech Lead. Su alcance documental inicial usa `board` como
 vista principal, `data` para tabla, `split` para previsualizacion, `record` para detalle y `focus`
 para creacion manual.
+
+La estandarizacion de tarjetas CRM aprobada para Pipeline incluye actividad reciente, salud de
+actividad, indicadores con tooltip, estados de drag and drop, menu contextual accesible, view models
+por entidad y theming por tokens. IA, PDFs/presupuestos, cotizaciones, documentos e integraciones
+externas quedan fuera del piloto y se planifican para la siguiente fase.
+
+El board de Pipeline queda aprobado con filtros, movimientos autorizados server-side, alternativa
+accesible a drag and drop, estados UX y adaptacion responsive mobile. La reapertura de etapas
+terminales requiere accion explicita, permiso elevado, motivo y auditoria.
+
+La tabla de Opportunities queda aprobada con columnas, filtros, acciones, ordenacion, paginacion por
+cursor y acciones masivas limitadas.
+
+El detalle `record` de Opportunity queda aprobado con relaciones a Contact y Lead, historial de
+etapas, timeline, tareas, notas y reapertura terminal con permiso elevado, motivo y auditoria.
+
+La creacion manual de Opportunity queda aprobada en `focus`, con Contact obligatorio, `origin=manual`,
+Lead nulo, producto/interes, etapa abierta, validaciones de tenant/permisos, idempotencia y estados
+UX responsive.
+
+El contrato y el impact assessment de Pipeline quedan aprobados por User el 2026-08-13. Pipeline
+queda Ready documental en el Issue #85; la implementacion sigue sin iniciar.
 
 El paquete de Leads esta organizado en `docs/06-product/crm/leads/`: UX spec, component audit,
 contract, impact assessment e implementation handoff. UX, component audit, contract e impact

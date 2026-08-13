@@ -1,12 +1,12 @@
 ---
 title: CRM Pipeline and Opportunities UX Specification
-status: proposed
+status: approved
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
 owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
-issue: https://github.com/minoveaz/loopdev/issues/96
+issue: https://github.com/minoveaz/loopdev/issues/85
 ---
 
 # Especificacion UX/UI de Pipeline y Opportunities
@@ -65,8 +65,9 @@ referenciar otro tenant.
 
 Campos obligatorios: nombre, Contact, producto/interes, etapa inicial y responsable cuando la politica
 lo exija. Campos opcionales: importe, moneda, probabilidad, fecha estimada de cierre y nota inicial.
-La etapa inicial configurable por regla, por defecto `qualified` cuando proceda; el ID estable nunca
-se sustituye por el nombre visible.
+La conversion desde Lead siempre inicia en `qualified`; la creacion manual usa la etapa abierta por
+defecto configurada para el workspace. Si no existe una etapa abierta por defecto, la creacion falla.
+El ID estable nunca se sustituye por el nombre visible.
 
 ## 6. Opportunity derivada de Lead
 
@@ -80,7 +81,9 @@ cambia por si solo el estado del Lead.
 
 Cada etapa tiene ID estable, nombre visible, orden, activo y tipo terminal (`open`, `won`, `lost`).
 Admin puede cambiar nombre y orden sin cambiar IDs ni historico. Mover una Opportunity registra actor,
-etapa anterior, etapa nueva, fecha y motivo cuando la regla lo exija.
+etapa anterior, etapa nueva, fecha, origen del cambio (`board`, `record`, `system`, `conversion` o
+`reopen`) y motivo cuando la regla lo exija. La reapertura de `won` o `lost` usa una accion explicita,
+etapa abierta destino, permiso elevado y motivo obligatorio.
 
 ## 8. Estados UX y responsive
 
@@ -124,9 +127,43 @@ IA, documentos, integraciones externas y paridad mobile completa.
 | Detalle `record` | `ModuleHeader`, `Tabs`, `ContextBar`, `Badge`, `Button`, `IconButton`, timeline si existe | `OpportunityRecordView`, `OpportunitySummary`, `RelatedContact`, `RelatedLead`, `OpportunityTimeline` |
 | Crear `focus` | `ModuleHeader`, `Input`, `Select`, `Button`, `Dialog/drawer`, estados UX | `OpportunityForm`, `ContactSelector`, `ProductField`, `StageSelector`, `OpportunityFormActions` |
 
-## 12. Aprobacion
+## 12. Estandarizacion aprobada de tarjetas CRM
 
-- [ ] Product Owner aprueba rutas, Canvas, board, tabla y detalle.
+El board estandariza para Opportunities y futuras tarjetas CRM estos patrones:
+
+- `EntityCardActivityFooter` con ultima actividad, actor, tipo y fecha.
+- `ActivityHealthIndicator` para actividad reciente, estancada, vencida o desconocida.
+- `EntityCardIndicators` con icono, tooltip, etiqueta y tono semantico.
+- Estados declarativos de tarjeta: `idle`, `dragging`, `drop-pending`, `drop-success`, `drop-error`,
+  `locked` y `stale`.
+- Menu contextual de acciones con alternativa accesible a drag and drop.
+- Theming mediante tokens de marca, sin nombres de marcas ni colores hardcodeados en la tarjeta.
+- View model especifico de Opportunity, separado de Lead y de la logica de repositorio.
+
+Estos patrones deben respetar permisos, tenant/workspace y auditoria. La tarjeta no ejecuta mutaciones
+ni calcula reglas de negocio localmente.
+
+## 13. Fases y alcance diferido
+
+El piloto excluye temporalmente IA, PDFs/presupuestos, cotizaciones, productos detallados, descuentos,
+documentos e integraciones externas. Estas capacidades se mantienen como alcance de la siguiente
+fase y no forman parte de los componentes ni contratos del piloto actual.
+
+## 14. Aprobacion
+
+- [x] Product Owner aprueba rutas, Canvas, board, tabla y detalle.
+- [x] La composición aprobada usa `board` como vista principal, `data` para tabla, `split` para previsualización, `record` para detalle y `focus` para creación manual.
+- [x] Product Owner aprueba columnas configurables, tarjetas operativas, filtros, movimiento validado por servidor, alternativa accesible a drag and drop, estados UX y adaptación responsive a móvil.
+- [x] Reabrir etapas terminales requiere acción explícita, permiso elevado, motivo y auditoría.
+- [x] Product Owner aprueba la tabla de Opportunities, sus columnas, filtros, acciones, ordenación, paginación por cursor y acciones masivas limitadas.
+- [x] Product Owner aprueba el detalle `record` de Opportunity, sus relaciones con Contact y Lead, historial de etapas, timeline, tareas, notas y reglas de reapertura terminal.
+- [x] Product Owner aprueba la creación manual de Opportunity en `focus`, con Contact obligatorio, `origin=manual`, Lead nulo, producto/interés, etapa abierta, validaciones de tenant/permisos, idempotencia y estados UX responsive.
 - [ ] Product Owner aprueba campos y reglas de origen.
 - [ ] Tech Lead aprueba etapas, comandos, RLS e idempotencia.
+- [ ] Contrato e impact assessment reflejan actividad autoritativa, reapertura, idempotencia manual,
+  productKey estable y read model paginado del board.
 - [ ] Se confirma que no se inicia implementacion en esta rama documental.
+- [x] Product Owner aprueba la estandarizacion de actividades, indicadores, estados de tarjeta,
+	acciones accesibles y theming por tokens.
+- [x] Product Owner confirma que IA, PDFs, cotizaciones y funcionalidades diferidas pasan a la
+	siguiente fase, fuera del piloto actual.

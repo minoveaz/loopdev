@@ -1,26 +1,26 @@
 ---
 title: CRM Pipeline and Opportunities Impact Assessment
-status: proposed
+status: approved
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
 owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
-issue: https://github.com/minoveaz/loopdev/issues/96
+issue: https://github.com/minoveaz/loopdev/issues/85
 ---
 
 # Impact assessment de Pipeline
 
 | Area | Classification | Impact | Evidence required |
 | --- | --- | --- | --- |
-| Contracts | required | Opportunity, stage, board, commands, errors and Lead conversion | Typecheck, compatibility and contract tests |
-| Schema | required | Opportunities, stages, origins, product key, version and unique conversion constraint | Migration review and rollback |
+| Contracts | required | Opportunity, activity summary, stage history, board columns, commands, errors, reopening and Lead conversion | Typecheck, compatibility and contract tests |
+| Schema | required | Opportunities, stages, origins, product key, version, activity/timeline references and unique conversion constraint | Migration review and rollback |
 | RLS | required | Per-verb tenant/workspace/brand/contact/lead/stage scope | pgTAP and cross-tenant tests |
 | Storage | none | No documents or attachments in pilot | No storage paths |
-| Secrets/providers | none | Manual and simulated origins; no live provider | No browser secrets |
+| Secrets/providers | none | Manual Opportunities and Lead-derived Opportunities; no live provider | No browser secrets |
 | AI | none | No scoring or automated decisions | Explicit exclusion |
 | Billing/entitlements | planned | Only existing CRM entitlement gates | Permission evidence |
-| Observability | required | Stage moves, creates, conversions, conflicts and idempotency | Redacted audit/log evidence |
+| Observability | required | Stage moves, reopening reasons, creates, conversions, activity, conflicts and idempotency | Redacted audit/log evidence |
 | Rollout/rollback | required | Additive migrations, seed stages, reversible deployment | Staging rollback and restore evidence |
 
 ## Data sensitivity
@@ -52,3 +52,6 @@ responsive checks and staging evidence. No production data in development or tes
 - Manual Pipeline creation changes Lead status without an explicit conversion.
 - Board drag and drop bypasses server authorization or audit.
 - Rollback leaves orphaned Opportunity/Lead relationships.
+- Activity or stage history is reconstructed only from client state or loses historical stage labels.
+- Board aggregates or pagination expose data outside the active tenant/workspace scope.
+- A manual idempotency key is reused with a different payload without a conflict.

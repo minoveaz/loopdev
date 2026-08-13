@@ -1,12 +1,12 @@
 ---
 title: CRM Pipeline and Opportunities Component Audit
-status: proposed
+status: approved
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
 owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
-issue: https://github.com/minoveaz/loopdev/issues/96
+issue: https://github.com/minoveaz/loopdev/issues/85
 ux_spec: docs/06-product/crm/pipeline/CRM_PIPELINE_UX_SPEC.md
 ---
 
@@ -69,6 +69,19 @@ SuiteCanvas mode=focus
 | `PipelineStage` | Entity CRM | Formalizar ID estable, nombre, orden y terminalidad |
 | `OpportunityOrigin` | Entity CRM | Formalizar `manual` y `lead_conversion` |
 
+## Patrones estandarizados aprobados
+
+- `EntityCardActivityFooter`.
+- `ActivityHealthIndicator`.
+- `EntityCardIndicators` con tooltip y tono semantico.
+- Estados `idle`, `dragging`, `drop-pending`, `drop-success`, `drop-error`, `locked` y `stale`.
+- Menu contextual como alternativa accesible al drag and drop.
+- Theming por tokens, sin colores ni marcas hardcodeadas.
+- View models de tarjeta por entidad, sin mutaciones ni reglas de repositorio dentro de la tarjeta.
+
+IA, PDFs, presupuestos, cotizaciones, documentos e integraciones externas quedan fuera del audit del
+piloto y se reservan para la siguiente fase.
+
 ## Promocion a shared
 
 No promover componentes al design system por un solo consumidor. `KanbanBoard` y primitives existentes
@@ -76,8 +89,13 @@ se reutilizan; cualquier nuevo componente compartido exige segundo consumidor re
 
 ## Definition of Ready
 
-- [ ] UX, contract e impact assessment aprobados.
+- [x] UX, contract e impact assessment aprobados.
 - [ ] Board, data, split, record y focus tienen owner.
 - [ ] Todas las superficies distinguen reutilizacion y desarrollo CRM.
 - [ ] Etapas estables y origenes estan definidos.
 - [ ] Prototipos anteriores no son fuente autoritativa.
+- [x] Board aprobado con filtros, movimiento server-side, alternativa accesible, estados UX y responsive mobile.
+- [x] Reapertura de etapas terminales aprobada con permiso elevado, motivo y auditoría.
+- [x] Tabla de Opportunities aprobada con componentes reutilizables, filtros, paginación y acciones masivas limitadas.
+- [x] Detalle `record` aprobado con relaciones, historial, actividad, tareas, notas y reapertura auditada.
+- [x] Creación manual `focus` aprobada con ContactSelector, campos comerciales, StageSelector y estados de mutación.

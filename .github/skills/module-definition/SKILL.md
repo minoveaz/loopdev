@@ -9,6 +9,33 @@ user-invocable: true
 Use this workflow before implementing any new product module or suite block. The goal is to produce
 one repeatable definition package, not to start product code.
 
+## Mandatory branch guard
+
+This skill may be used to create or modify module-definition documentation only on:
+
+```text
+docs/2026-execution-roadmap
+```
+
+Before reading for implementation or creating any file, run:
+
+```bash
+git branch --show-current
+```
+
+If the result is not exactly `docs/2026-execution-roadmap`, stop immediately and warn:
+
+> Module Definition solo puede ejecutarse en la rama `docs/2026-execution-roadmap`. No se creara ni
+> modificara documentacion en la rama actual.
+
+Do not create, edit, move, delete, stage or commit module-definition documentation when this guard
+fails. Do not switch branches automatically; ask the user to switch to the required documentation
+branch and then rerun the workflow. This guard applies to all five module documents, related CRM
+README/index updates, track references and module-definition evidence created by this skill.
+
+The branch check must be repeated before the first edit if the workflow has involved any branch or
+Git operation, and a failed check always takes precedence over the rest of this skill.
+
 ## When to use
 
 Use for phrases such as:

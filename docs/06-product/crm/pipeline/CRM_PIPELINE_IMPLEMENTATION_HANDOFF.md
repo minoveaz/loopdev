@@ -1,12 +1,12 @@
 ---
 title: CRM Pipeline and Opportunities Implementation Handoff
-status: proposed
+status: approved-for-handoff
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
 owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
-issue: https://github.com/minoveaz/loopdev/issues/96
+issue: https://github.com/minoveaz/loopdev/issues/85
 ---
 
 # Handoff de implementacion de Pipeline
@@ -24,7 +24,7 @@ issue: https://github.com/minoveaz/loopdev/issues/96
 
 Este paquete se prepara en `docs/2026-execution-roadmap`. La rama de implementacion futura sera
 `feature/crm-pilot-pipeline-implementation`, creada desde `develop` actualizado solo despues de que
-el Issue #96 confirme Definition of Ready. Commits incluyen `(#96)` y el PR usa `Closes #96`.
+el Issue #85 confirme Definition of Ready. Commits incluyen `(#85)` y el PR usa `Closes #85`.
 
 ## Outcome
 
@@ -49,7 +49,7 @@ campos personalizados y paridad mobile completa.
 ## Definition of Ready
 
 - [ ] UX spec, component audit, contract e impact assessment aprobados por Product Owner/Tech Lead.
-- [ ] Issue #96 y Project CRM Pilot G0-G5 enlazados con evidencia.
+- [ ] Issue #85 y Project CRM Pilot G0-G5 enlazados con evidencia.
 - [ ] Contact/Lead contracts y dependencias RLS confirmados.
 - [ ] Etapas, IDs estables, origenes y producto definidos.
 - [ ] Unicidad `(tenant, lead, productKey, origin=lead_conversion)` definida en schema.
@@ -61,5 +61,5 @@ campos personalizados y paridad mobile completa.
 Required: contract/typecheck, schema/RLS review, pgTAP, unit/integration/E2E, accessibility,
 responsive, concurrency/idempotency evidence, staging readiness review and PR link.
 
-La implementacion confirma readiness en el Issue #96 antes de crear la rama. Esta rama documental no
+La implementacion confirma readiness en el Issue #85 antes de crear la rama. Esta rama documental no
 inicia codigo ni cambia el estado a `In progress`.
