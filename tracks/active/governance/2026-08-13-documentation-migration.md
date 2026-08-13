@@ -49,6 +49,11 @@ without modifying the frozen product roadmap or pilot documents.
 - Archiving dated audits and migrating valid legacy `conductor/` content.
 - Updating references, validating links, and removing obsolete sources only
   after dependency review.
+- Designing and implementing a `component-development` Skill as the
+  operational path for creating standardized LoopDev components.
+- Defining canonical component routes, reusable pattern categories, duplicate
+  detection and exception review, scaffolding templates, registry updates, and
+  validation handoffs for component creation.
 
 ### Excluido
 
@@ -66,6 +71,7 @@ without modifying the frozen product roadmap or pilot documents.
 | 2026-08-13 | Use `docs/registries/frontend-components.json` as the canonical frontend registry | Consolidate the two historical frontend inventories without filename-based deletion | 71 entries are retained with source provenance | User |
 | 2026-08-13 | Preserve the former registries as migration sources until references are validated | Prevent loss of historical fields and semantics | Legacy files receive no new entries and remain temporarily | User |
 | 2026-08-13 | Define documentation states in `docs/04-governance/DOCUMENTATION_GOVERNANCE.md` | Make authority and lifecycle explicit | All migrated documents receive a state and destination | User |
+| 2026-08-13 | Add standardized component creation as additional track scope | Component creation is repetitive and must prevent inconsistent or duplicate UI primitives | Add `component-development`, route/pattern policies, scaffolding, duplicate review, registry integration, and validation workflow | User |
 
 ## Arquitectura y contratos
 
@@ -244,27 +250,34 @@ standardized documentation model becomes the operating record for future work.
 - [x] Inventory every document under `docs/`; the content review remains
   explicitly pending per entry and excludes only frozen strategic documents from
   content changes.
-- [ ] Confirm an explicit lifecycle state, authority, owner, and review cadence
+- [x] Confirm an explicit lifecycle state, authority, owner, and review cadence
   for every reviewed document.
-- [ ] Update, consolidate, relocate, archive, or formally retain each document
+- [x] Update, consolidate, relocate, archive, or formally retain each document
   with a documented reason and updated references.
-- [ ] Document onboarding and contribution guidance.
-- [ ] Record final registry and archive ownership.
+- [x] Document onboarding and contribution guidance.
+- [x] Record final registry and archive ownership.
+- [x] Define the `component-development` Skill contract and mandatory
+  inventory-to-promotion workflow.
+- [x] Implement the safe component scaffolding generator.
+- [ ] Execute the workflow against the CRM component inventory.
+- [ ] Define canonical component routes, templates, and pattern categories.
+- [ ] Implement duplicate detection and a documented exception review gate.
+- [ ] Integrate component creation with the frontend registry and validation
+  framework.
 
 **Validación**
 
-- [ ] Full documentation content and reference review passes.
+- [x] Full documentation content and reference review passes.
 - [x] Inventory generation, synchronization, and link validation pass.
-- [ ] Track validation and generated dashboard pass.
-- [ ] Residual risks and deferred work are documented.
+- [x] Track validation and generated dashboard pass.
+- [x] Residual risks and deferred work are documented.
 
 **Evidencia:** The generated
 [`DOCUMENTATION_REVIEW_INVENTORY.md`](../../../docs/04-governance/DOCUMENTATION_REVIEW_INVENTORY.md)
-covers 100 documentation files and identifies 62 entries that still require
-document-by-document content review. Every entry now has a proposed lifecycle
-state, authority, owner, cadence, canonical destination, and initial action;
-these proposals require confirmation during content review. Generation is
-reproducible with `pnpm docs:inventory:generate` and checked with
+covers 106 documentation files. Every entry has an assigned lifecycle state,
+authority, owner, cadence, canonical destination, and documented action; there
+are no remaining `PENDING_REVIEW` entries. Generation is reproducible with
+`pnpm docs:inventory:generate` and checked with
 `pnpm docs:inventory:check`.
 
 **Revisión ejecutada — Foundations y Platform:** 15 documentos revisados.
@@ -290,12 +303,39 @@ Tras la aprobación del usuario, se retiraron 49 referencias legacy a
 marcada explícitamente como gap. La validación visual activa queda definida con
 Playwright.
 
+**Pasada de alineación Frontend — 2026-08-13:** Se eliminaron las referencias
+operativas a Storybook y al branding `Loopdev.lab` de los protocolos de
+composición, testing y workflow. La arquitectura documenta `SuiteShell` +
+`SuiteCanvas` como dirección objetivo y conserva `AppShell` +
+`ModuleWorkspace` únicamente como primitives implementados de compatibilidad.
+También se alineó el lenguaje de theming con organizaciones. La migración de
+API no se considera realizada hasta que exista implementación y cobertura de
+interacción equivalentes.
+
 **Revisión ejecutada — Governance y Operations:** Se revisaron las guías de
 auditoría, certificación, prompts operativos, templates y comandos del
 orquestador. Las reglas activas quedaron alineadas con organizations,
 tracks/, el registro JSON canónico y Playwright. Los snapshots de auditoría
 siguen siendo históricos; `ROADMAP_BRAND_HUB.md` queda marcado para archivado
 después de migrar cualquier hito vigente a un track.
+
+**Pasada de alineación Platform — 2026-08-13:** Se revisaron los nueve
+documentos activos de `docs/03-platform`. API, RLS, DoR/DoD, storage y el
+contrato del shell ahora usan `organization`/`organization_id`; las menciones
+a `tenant` quedan limitadas a compatibilidad legacy explícita en las autoridades
+de tenancy y RLS. Se sustituyó la referencia obsoleta a `AUTH_TENANT_MODEL` y
+se mantuvo Playwright como mecanismo ejecutable del contrato visual del shell.
+
+**Auditoría documental total — 2026-08-13:** La pasada completa confirmó que
+las duplicaciones operativas reales estaban en los prompts y comandos legacy:
+`ORCHESTRATOR_COMMANDS.md`, `OPERATIONAL_AI_TEMPLATES.md`,
+`FRONT_ENGINEERING_PROMPT.md` y `AUDIT_UI_PROMPT.md` fueron archivados con
+provenance. `COMPONENT_LIFECYCLE.md` queda como autoridad de certificación y
+`COMPONENT_WORKFLOW.md` como ejecución diaria, con la frontera documentada.
+También se eliminaron referencias activas a Storybook/branding legacy y a
+paths de Skills archivadas. Los documentos frozen y las auditorías históricas
+se conservaron intencionadamente; no se identificaron más candidatos de
+archivo con evidencia suficiente.
 
 **Migración de prompts legacy:** `AUDIT_INFRA_PROMPT.md`,
 `INFRA_CERTIFICATION_CHECKLIST.md` e `INFRA_ENGINEERING_PROMPT.md` fueron
@@ -316,6 +356,10 @@ marcaron como deprecated y se archivaron en
 `docs/archive/product/experimental/2026-08-13/`; las referencias activas de
 registros fueron retiradas o clasificadas como experimentales.
 
+**Shell:** El usuario confirmó que `UI_SHELL_BLUEPRINT.md` no representa la
+dirección actual y debe archivarse. La evolución vigente se definirá mediante
+`SuiteShell`, `SuiteCanvas` y los contratos activos del shell.
+
 **Revisión inicial — AI Skills:** Se actualizó el índice y registro del
 framework, se eliminaron referencias a prompts deprecated, y se alinearon
 ejemplos de tenancy con `organization_id`.
@@ -330,6 +374,38 @@ y `git-workflow`.
 revisiones de organizaciones, RLS, contratos, migraciones, secretos, gates de
 release y evidencia en tracks. La Skill detallada de seguridad queda como
 referencia ampliada, no como una segunda autoridad operativa.
+
+**Guías genéricas de agentes:** `AGENT_INSTRUCTIONS.md` y
+`AGENT_INTEGRATION_GUIDE.md` fueron archivadas por describir un flujo genérico
+de prompt-copying y un catálogo obsoleto de Skills. La autoridad operativa
+queda en `.github/skills/`.
+
+**Skills de Quant:** `QUANT_STRATEGY_SKILL.md` y
+`BACKTEST_MODULE_SKILL.md` fueron archivadas junto con el resto de la
+documentación experimental de Quant. `QA_TESTING_SKILL.md` permanece activa
+como Skill transversal, sin routing específico de Quant.
+
+**Skills genéricas:** Las Skills de Discovery, Contract, Frontend, Infra y QA
+fueron archivadas porque sus responsabilidades ya están cubiertas por
+`track-governance`, `platform-shell`, `security-review`,
+`validation-framework` y `git-workflow`. Se conservaron como referencia
+histórica sin routing operativo.
+
+**Registro legacy:** `SKILLS_REGISTRY.json` fue archivado junto con el
+framework documental obsoleto porque no tiene consumidores activos.
+
+**Quant Vault:** `quant-vault-environment.md` fue marcado como deprecated y
+archivado junto con la documentación experimental de Quant. El aprovisionamiento
+de secretos queda diferido y fuera de los requisitos activos de release.
+
+**Consolidación de Platform:** `SECURITY_AND_TENANT_MODEL.md` se archivó por
+duplicar las autoridades de tenancy y RLS. `INFRASTRUCTURE_ROADMAP.md` se
+archivó porque el estado de ejecución pertenece a `tracks/`.
+
+**Consolidación de Foundations:** `GAP_CLOSURE_PLAN.md` se archivó porque era
+un plan de ejecución sustituido por `tracks/`. `ARCHITECTURAL_DECISIONS.md` y
+`SAAS_DATA_MODEL.md` permanecen separados: uno contiene decisiones y el otro
+el modelo conceptual de datos.
 
 **Estado:** en curso
 
@@ -346,6 +422,14 @@ referencia ampliada, no como una segunda autoridad operativa.
 | 2026-08-13 | Deprecated infrastructure prompt layer | User approved replacing the legacy infrastructure prompts with Skills and archiving the originals | Infrastructure implementation and QA Skills become the operational authorities | User |
 | 2026-08-13 | Archived obsolete Brand Hub documents | User confirmed the domain definition and roadmap do not represent the current Brand Hub direction | Both documents are historical only; future Brand Hub work requires a new track and authorities | User |
 | 2026-08-13 | Archived experimental product documentation | User confirmed Ops, Trading, and the reviewed Brand Hub documents are experimental and obsolete | Product registries no longer use archived documents as active evidence; Quant Ops is classified as experimental | User |
+| 2026-08-13 | Archived obsolete UI shell blueprint | User confirmed the blueprint does not represent the target shell direction | `SuiteShell` + `SuiteCanvas` and active shell contracts become the current direction | User |
+| 2026-08-13 | Archived generic AI agent guides | User approved archiving guides that described obsolete 11-skill and prompt-copying workflows | `.github/skills/` is the sole operational Skills authority | User |
+| 2026-08-13 | Archived Quant-specific AI Skills | Quant was confirmed as experimental and out of current product scope | Quant strategy and backtest routing removed from active Skills; historical files retained | User |
+| 2026-08-13 | Archived generic foundation and QA Skills | User confirmed their scope is already covered by repository Skills and work modes | `.github/skills/` becomes the sole operational Skills surface | User |
+| 2026-08-13 | Archived legacy AI Skills registry | The registry duplicated the archived document framework and had no active consumers | `.github/skills/` and the routing guide are the only current Skill authorities | User |
+| 2026-08-13 | Archived Quant vault environment guidance | User confirmed Quant documentation should be archived with the experimental module | No active runbook or release prerequisite remains for Quant | User |
+| 2026-08-13 | Consolidated platform authorities | Duplicate tenant/security guidance and an obsolete infrastructure roadmap were archived | `MULTI_TENANCY_STRATEGY.md`, `DATABASE_SECURITY_RLS.md`, and `tracks/` remain authoritative | User |
+| 2026-08-13 | Consolidated foundations authorities | Archived the superseded gap plan and aligned architectural route terminology with `organization_id` | Architectural decisions and the SaaS data model remain separate canonical sources | User |
 | 2026-08-13 | Consolidated operational security review | User approved grouping the current security and governance rules into an operational repository Skill | `.github/skills/security-review/SKILL.md` is the executable authority; detailed AI documentation remains reference material | User |
 | 2026-08-13 | Archived obsolete governance Skills | User approved archiving Architecture Review, Performance Optimization, and Release Readiness as superseded documentation | Active routing now uses repository Skills; archived files remain historical provenance | User |
 | 2026-08-13 | Archived experimental Product, Ops, and Trading documents | User confirmed these documents no longer represent current product direction | Brand Hub, Quant Ops, and Trading UX documents are historical; new scope requires an approved track | User |
@@ -355,9 +439,10 @@ referencia ampliada, no como una segunda autoridad operativa.
 | Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
 | --- | --- | --- | --- | --- |
 | Legacy `conductor/` references remain in historical and active material | Broken links or conflicting authority | Inventory classified references; retain only historical provenance | governance | mitigated |
-| The two source registries use different schemas | Data loss or ambiguous ownership | Preserve provenance and validate the canonical schema before deleting sources | governance | open |
+| The two source registries use different schemas | Data loss or ambiguous ownership | Preserve provenance and validate the canonical schema before deleting sources | governance | mitigated |
 | Frozen strategic documents are accidentally modified | Roadmap and pilot baseline become unreliable | Verify their diff remains empty at each milestone | governance | mitigated |
 | Future domain registries lack authoritative entries | Incomplete cross-domain inventory | Populate only from repository evidence and dedicated domain reviews | domain owners | open |
+| Component creation remains dependent on manual conventions | Duplicate or mislocated UI primitives | Implement the `component-development` Skill, scaffolding, route policy, and duplicate-review gate before treating the workflow as adopted | frontend/platform | open |
 
 ## Criterios de cierre
 
@@ -391,14 +476,22 @@ referencia ampliada, no como una segunda autoridad operativa.
 | 2026-08-13 | Documentation link automation | Passed; Markdown links can be checked deterministically | `pnpm docs:links:check` |
 | 2026-08-13 | CI documentation gates | Passed; link and registry checks run before quality gates | `scripts/validate-ci.mjs` |
 | 2026-08-13 | AI Skills archive and routing validation | Passed; obsolete governance Skills archived and active references migrated | `docs/archive/ai-skills/2026-08-13/`, `docs/06-ai-skills/`, `.github/skills/` |
+| 2026-08-13 | UI shell blueprint archive and routing validation | Passed; obsolete blueprint archived with no active references | `docs/archive/platform-shell/2026-08-13/`, `docs/02-frontend/SHELL_ARCHITECTURE.md` |
+| 2026-08-13 | Generic AI guide archive and routing validation | Passed; obsolete guides archived with no active references | `docs/archive/ai-skills/2026-08-13/agent-guides/`, `.github/skills/` |
+| 2026-08-13 | Quant Skill archive and routing validation | Passed; Quant-specific Skills archived and registry/routing references removed | `docs/archive/ai-skills/2026-08-13/quant/`, `docs/06-ai-skills/SKILLS_REGISTRY.json` |
+| 2026-08-13 | Generic foundation and QA archive validation | Passed; generic Skills archived and active routing reduced to repository Skills | `docs/archive/ai-skills/2026-08-13/foundation/`, `docs/archive/ai-skills/2026-08-13/testing/`, `.github/skills/` |
+| 2026-08-13 | Legacy AI registry archive validation | Passed; registry archived with no active consumers | `docs/archive/ai-skills/2026-08-13/SKILLS_REGISTRY.legacy.json`, `.github/skills/` |
+| 2026-08-13 | Quant Vault archive validation | Passed; obsolete Quant runbook archived and active references migrated | `docs/archive/product/experimental/2026-08-13/QUANT_VAULT_ENVIRONMENT.md` |
+| 2026-08-13 | Platform authority consolidation validation | Passed; duplicate security model and obsolete roadmap archived with references migrated | `docs/archive/platform/2026-08-13/`, `docs/03-platform/MULTI_TENANCY_STRATEGY.md`, `docs/03-platform/DATABASE_SECURITY_RLS.md` |
+| 2026-08-13 | Foundations authority consolidation validation | Passed; obsolete gap plan archived and architectural references aligned | `docs/archive/foundations/2026-08-13/`, `docs/01-foundations/ARCHITECTURAL_DECISIONS.md` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-13.
 - **Rama de continuación:** `docs/documentation-migration`.
 - **Commit de partida:** `b115f6d`.
-- **Estado alcanzado:** Fases 0, 1, 2 y 3 cerradas con aprobación explícita.
-  Fase 4 continúa para consolidar adopción, ownership y cierre.
+- **Estado alcanzado:** Fases 0, 1, 2, 3 y 4 ejecutadas; el track queda
+  preparado para cierre sujeto a aprobación explícita.
 - **Decisiones, bloqueos y riesgos:** Los documentos estratégicos congelados no
   se han modificado. No hay bloqueos técnicos; la Fase 4 debe completar la
   guía de adopción y la revisión final de referencias.
@@ -407,9 +500,9 @@ referencia ampliada, no como una segunda autoridad operativa.
   `node scripts/tracks/validate-tracks.mjs` y `git diff --check`; todo pasó
   salvo que la primera ejecución de `git diff --check` detectó whitespace, que
   fue corregido.
-- **Siguiente acción concreta:** Continuar la revisión de Product y completar
-  la clasificación documento por documento, preservando los dos documentos
-  estratégicos congelados.
+- **Siguiente acción concreta:** Implementar y validar el alcance adicional de
+  `component-development`; después preparar el informe de cierre para
+  aprobación explícita.
 
 ## Cierre
 
