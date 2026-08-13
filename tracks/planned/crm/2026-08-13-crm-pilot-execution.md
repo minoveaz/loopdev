@@ -161,6 +161,11 @@ La matriz de seguridad y aislamiento queda aprobada por User el 2026-08-13 como 
 evidencia documental de G1. La ejecucion de policies, pgTAP, E2E, kill switches y auditoria sigue
 pendiente y no se considera certificada por esta aprobacion.
 
+User aprueba la secuencia de G1 y sus condiciones de salida el 2026-08-14. La secuencia es:
+reset/seed, integridad tenant-aware, RLS por verbo, kill switches, auditoria append-only, pgTAP,
+required CI gate, checks reales, E2E con Auth/RLS y validacion del gate G1. Los Issues #70-#78
+permanecen Backlog/Todo hasta iniciar ejecucion; no se inicia implementacion desde esta rama.
+
 **Owner operativo:** User. User coordina G0, los tres carriles y las decisiones de Product Owner, Tech
 Lead y release owner hasta nueva delegacion.
 delivery y el Issue #86 como coordinacion UX de G3. Daily Operation no se crea como modulo separado
@@ -291,6 +296,7 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Sacar Dashboard e import dry-run del piloto | El piloto debe validar primero el flujo CRM critico y reducir complejidad operativa | Dashboard e import dry-run pasan al sprint posterior, despues de validar Contacts, Leads, Pipeline, Tasks y Customer 360 | User |
 | 2026-08-13 | Aprobar alcance final y tres carriles del piloto | Un mes exige limitar el producto a la jornada CRM critica y separar responsabilidades de ejecucion | El piloto excluye Dashboard/import dry-run y capacidades diferidas; G0 puede pasar a preparar owners, dependencias y evidencias | User |
 | 2026-08-13 | Aprobar plantilla de readiness del piloto | Las pruebas deben demostrar lo que la candidate realmente entrega, con casos, cobertura y evidencia | `CRM_PILOT_READINESS_REVIEW.md` queda como gate obligatorio antes de cada ciclo de pruebas/UAT | User |
+| 2026-08-14 | Aprobar secuencia y salida de G1 | La matriz aprobada necesita un orden operativo y evidencia verificable antes de ejecutar CRM | G1 sigue bloqueado por ejecucion pendiente; solo se aprueba la secuencia y sus condiciones de salida | User |
 
 ## Arquitectura y contratos
 
