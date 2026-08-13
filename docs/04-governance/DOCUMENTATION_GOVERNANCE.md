@@ -41,7 +41,7 @@ execution plans belong in the relevant files under `tracks/`.
 | Governance and certification | `docs/04-governance/` |
 | Operations and engineering history | `docs/05-operations/` |
 | Suite product documentation | `docs/06-product/` |
-| AI skills and agent behavior | `docs/06-ai-skills/` |
+| AI skills and agent behavior | `.github/skills/` |
 | Delivery execution and phase status | `tracks/` |
 
 Point-in-time quality and inventory evidence is archived under
@@ -99,6 +99,7 @@ Before merging documentation changes, run:
 
 ```bash
 pnpm docs:links:check
+pnpm docs:inventory:check
 pnpm registries:check
 ```
 

@@ -1,4 +1,7 @@
-# Configuración de entorno del vault de Quant
+# DEPRECATED: Configuración de entorno del vault de Quant
+
+> Quant is experimental and currently out of product scope. Retained for
+> historical security provenance only.
 
 El vault de exchanges de Quant solo puede activarse cuando estas variables existan en el entorno **server-side** de LoopDev OS. Nunca se añaden al navegador, a `NEXT_PUBLIC_*`, a un archivo versionado ni a logs.
 

@@ -31,10 +31,10 @@ Para soportar el modelo SaaS, el sistema gestiona tres niveles de jerarquía:
    - Ruta: `/admin/*`
    - Función: Gestión global de Tenants e Infraestructura.
 2. **Nivel 2: Tenant Admin (Client Ops)**
-   - Ruta: `/:tenantId/settings`
+   - Ruta: `/:organizationId/settings`
    - Función: Gestión de usuarios del cliente y facturación.
 3. **Nivel 3: App Admin (Module Specialist)**
-   - Ruta: `/:tenantId/:moduleId/admin`
+   - Ruta: `/:organizationId/:moduleId/admin`
    - Función: Configuración específica de la herramienta (ej. flujos del CRM).
 
 ---
@@ -112,4 +112,5 @@ Antes de escribir cualquier lógica de UI o Endpoint:
 ### 4. Design System (`/ds`)
 - `packages/ui/`: Librería `@loopdev/ui`.
 - `packages/tokens/`: `@loopdev/tokens`.
-- `apps/docs/`: Storybook oficial.
+- Las validaciones visuales se ejecutan mediante Playwright y los checks del
+  repositorio; no existe una aplicación `apps/docs` activa.

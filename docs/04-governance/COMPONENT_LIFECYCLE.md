@@ -23,10 +23,10 @@
 1. **Promoción:** Migración del código al Design System oficial.
 2. **Arquitectura:** Aplicación del patrón Brain/Body (`useX.ts` / `index.tsx`).
 3. **[TEST] Unitario (Vitest):** Validación 1:1 de cada historia de usuario.
-4. **[TEST] Accesibilidad (Axe-core):** Gate de 0 violaciones en Storybook.
+4. **[TEST] Accesibilidad (Axe-core):** Gate de 0 violaciones en Playwright.
 5. **[TEST] Regresión Visual (Playwright):** Revisión y aprobación de los
    snapshots visuales.
-6. **Auditoría UI:** Ejecución del `AUDIT_UI_PROMPT`.
+6. **Auditoría UI:** Revisión según `FRONT_CERTIFICATION_CHECKLIST.md`.
 **Hito: Front_Certified 🔵**
 
 ### 🛡️ FASE 4: Certificación Infraestructura (contracts/apps)

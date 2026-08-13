@@ -67,7 +67,7 @@ We restrict usage to a simplified subset of HTTP codes to reduce cognitive load.
 | **400** | Bad Request | Validation failed (Zod error). |
 | **401** | Unauthorized | User is not logged in (Missing/Invalid Token). |
 | **403** | Forbidden | User logged in but lacks Permission (RBAC). |
-| **404** | Not Found | Resource does not exist (or tenant mismatch). |
+| **404** | Not Found | Resource does not exist (or organization mismatch). |
 | **409** | Conflict | Domain rule violation (e.g., Duplicate Email). |
 | **429** | Too Many Requests | Rate limit hit. |
 | **500** | Internal Error | Unhandled exception (Bug). |
@@ -98,7 +98,7 @@ We default to **Offset-based** pagination for admin tables.
 | Error Code | Status | Description |
 | :--- | :--- | :--- |
 | `VALIDATION_ERROR` | 400 | Zod schema validation failed. Returns `details` array. |
-| `TENANT_MISMATCH` | 403 | Attempting to access data from another tenant. |
+| `ORGANIZATION_MISMATCH` | 403 | Attempting to access data from another organization. |
 | `INSUFFICIENT_PERMISSIONS` | 403 | User role does not allow this action. |
 | `RESOURCE_NOT_FOUND` | 404 | ID does not exist or was deleted. |
 | `INTERNAL_SERVER_ERROR` | 500 | Something exploded. Check logs with `traceId`. |

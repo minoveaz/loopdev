@@ -1,4 +1,7 @@
-# Plan de Cierre de Gaps — LoopDev SaaS
+# DEPRECATED: Plan de Cierre de Gaps — LoopDev SaaS
+
+> Execution status is governed by `tracks/`; this historical plan is retained
+> for audit provenance only.
 
 > **Objetivo:** Cerrar los huecos críticos detectados en la auditoría global para llevar LoopDev a un estándar **SaaS multi-tenant enterprise-grade**.
 

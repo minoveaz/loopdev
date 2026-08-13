@@ -1,7 +1,9 @@
 # Front Certification Checklist — LoopDev UI/UX
 
 ## 🎯 Propósito
-Esta checklist define los criterios de certificación para cualquier componente, organismo o layout del frontend de LoopDev. Un sistema certificado es visualmente impecable, técnicamente indestructible, accesible y plenamente reactivo a los datos de marca. Esta certificación otorga el derecho a lucir el sello visual `Loopdev.lab`.
+Esta checklist define los criterios de certificación para cualquier componente,
+organismo o layout del frontend de LoopDev. La certificación requiere evidencia
+de track, registry, pruebas y validación visual reproducible.
 
 ---
 
@@ -19,10 +21,10 @@ Esta checklist define los criterios de certificación para cualquier componente,
 ## ✅ Criterios de Certificación (Front_Certified)
 
 ### 1️⃣ The Quality Shield (Automatización Obligatoria)
-- [ ] **Axe Pass:** El reporte de accesibilidad en Storybook tiene 0 violaciones.
+- [ ] **Axe Pass:** Las pruebas Playwright de accesibilidad tienen 0 violaciones.
 - [ ] **Playwright Visual:** Los snapshots visuales han sido revisados y no hay regresiones de píxeles.
 - [ ] **Playwright Flow:** El componente ha superado el Smoke Test funcional en la app.
-- [ ] **QA Matrix:** El componente `QualityShield` es visible y está en verde en Storybook.
+- [ ] **QA Matrix:** La matriz de calidad del componente está en verde.
 - [ ] **Changeset:** Se ha creado el archivo de versión para el monorepo.
 
 ### 2️⃣ Arquitectura & ADN Visual
@@ -31,7 +33,7 @@ Esta checklist define los criterios de certificación para cualquier componente,
 - [ ] **Dynamic Theming:** Reacciona correctamente al `DynamicThemeProvider`.
 - [ ] **Modo Oscuro:** 100% legible y funcional.
 
-### 3️⃣ Resiliencia & Estrés (Storybook)
+### 3️⃣ Resiliencia & Estrés (Playwright)
 - [ ] **Extreme Content:** Probado con textos masivos y traducciones largas sin romper el layout.
 - [ ] **Layout Pressure:** Probado en contenedores estrechos (w-64) y fluidos.
 - [ ] **Mirror Scenarios:** Cada caso de estrés definido en el track tiene una
@@ -46,7 +48,7 @@ Esta checklist define los criterios de certificación para cualquier componente,
 ### 5️⃣ SaaS & Dynamic Theming (Data Ready)
 - [ ] **Theme Awareness:** El componente reacciona instantáneamente al `DynamicThemeProvider`.
 - [ ] **Registry Sync:** Registrado en `docs/registries/frontend-components.json` con sus capacidades.
-- [ ] **Tenant Isolation:** No depende de contextos globales ocultos fuera de los proveedores oficiales.
+- [ ] **Organization Isolation:** No depende de contextos globales ocultos fuera de los proveedores oficiales.
 
 ### 6️⃣ Accesibilidad (A11y - Bloqueante)
 - [ ] **Keyboard Ready:** Navegación completa por teclado y `focus-visible` impecable.
@@ -68,14 +70,14 @@ Esta checklist define los criterios de certificación para cualquier componente,
 - 📌 **Si no está documentado -> No está certificado.**
 
 ### 🔍 10️⃣ Audit-ready (Certificación Visual)
-- [ ] El sello `Loopdev.lab` está visible en la esquina superior izquierda de Storybook.
+- [ ] La evidencia visual de Playwright está revisada y vinculada al track.
 - [ ] El código es limpio, tipado estrictamente y libre de comentarios "TODO".
 
 ---
 
 ## 🟥 Condiciones que INVALIDAN la certificación
 - ❌ Uso de colores HEX o píxeles hardcodeados.
-- ❌ Ausencia de historias de estrés en Storybook.
+- ❌ Ausencia de escenarios de estrés en Playwright.
 - ❌ Fallos en la suite de Vitest.
 - ❌ Falta de soporte para Modo Claro (Light Mode).
 

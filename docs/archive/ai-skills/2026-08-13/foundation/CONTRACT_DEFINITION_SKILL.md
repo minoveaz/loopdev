@@ -1,4 +1,6 @@
-# 📋 CONTRACT DEFINITION SKILL v1.0
+# DEPRECATED: CONTRACT DEFINITION SKILL v1.0
+
+> Superseded by active repository Skills and validation workflows.
 
 > **Authority:** Platform Engineering
 > **Status:** ✅ Published
@@ -58,22 +60,22 @@ Proporciona SIEMPRE:
 ### Ejemplo Input:
 
 ```markdown
-## Feature: Backtest Results Storage
+## Feature: Report Results Storage
 
 ## Requirements
-- Store backtest results with trades, metrics, equity curve
+- Store report results with records and metrics
 - Result must be queryable after completion
-- Users can compare multiple backtests
-- Only owner can see their backtests
+- Users can compare multiple reports
+- Only authorized organization members can see their reports
 
 ## Data That Flows
-Input (API request): strategy_id, start_date, end_date, organization_id
-Processing: Execute strategy, generate trades list, calculate metrics
-Output (API response): BacktestResult with all data
-Storage: Save to backtests table
+Input (API request): report_type, start_date, end_date, organization_id
+Processing: Query records and calculate metrics
+Output (API response): ReportResult with all data
+Storage: Save to reports table
 
 ## Multi-Tenancy
-Belongs to tenant. Each user only sees own backtests. RLS enforced.
+Belongs to an organization. Members only see authorized reports. RLS enforced.
 ```
 
 ---
@@ -85,27 +87,26 @@ Entregar SIEMPRE un archivo TypeScript con:
 ### 1. 📝 REQUEST SCHEMAS
 
 ```typescript
-// In @loopdev/contracts/src/quant/backtest.ts
+// In @loopdev/contracts/src/example/report.ts
 
 // Input validation
-export const BacktestRequestSchema = z.object({
-  strategy_id: z.string().uuid("Invalid strategy ID"),
+export const ReportRequestSchema = z.object({
+  report_type: z.string().min(1),
   start_date: z.string().datetime("Invalid date format"),
   end_date: z.string().datetime("Invalid date format"),
   organization_id: z.string().uuid("organization_id required for multi-tenancy"),
   
   // Optional filters
-  max_trades: z.number().int().positive().optional(),
-  include_equity_curve: z.boolean().default(true),
+  include_details: z.boolean().default(true),
 }).strict(); // No unknown fields
 
-export type BacktestRequest = z.infer<typeof BacktestRequestSchema>;
+export type ReportRequest = z.infer<typeof ReportRequestSchema>;
 ```
 
 ### 2. 📊 DATA SCHEMAS
 
 ```typescript
-// Domain objects in @loopdev/contracts/src/quant/
+// Domain objects in @loopdev/contracts/src/example/
 
 export const TradeSchema = z.object({
   id: z.string().uuid(),
@@ -235,8 +236,8 @@ export const PaginationMetaSchema = z.object({
   traceId: z.string(),
 });
 
-export const BacktestListResponseSchema = z.object({
-  data: z.array(BacktestResultSchema),
+export const ReportListResponseSchema = z.object({
+  data: z.array(ReportResultSchema),
   meta: PaginationMetaSchema,
 });
 ```
@@ -244,15 +245,15 @@ export const BacktestListResponseSchema = z.object({
 ### 7. 🔄 FULL CONTRACT FILE STRUCTURE
 
 ```typescript
-// @loopdev/contracts/src/quant/index.ts
+// @loopdev/contracts/src/example/index.ts
 
 import { z } from 'zod';
 
 // ============= REQUESTS =============
-export const BacktestRequestSchema = z.object({
+export const ReportRequestSchema = z.object({
   // ... request fields
 });
-export type BacktestRequest = z.infer<typeof BacktestRequestSchema>;
+export type ReportRequest = z.infer<typeof ReportRequestSchema>;
 
 // ============= RESPONSES =============
 export const BacktestResultSchema = z.object({
@@ -317,7 +318,7 @@ export type BacktestContract = z.infer<typeof BacktestContractSchema>;
 ### Pattern 1: SIMPLE API (Request → Response)
 
 ```typescript
-// Simple backtest request
+// Simple report request
 export const SimpleBacktestSchema = z.object({
   strategy_id: z.string().uuid(),
   start_date: z.string().datetime(),
@@ -459,11 +460,9 @@ contracts/
 │   │   ├── api.ts           (Response envelope)
 │   │   ├── common.ts        (UUID, date, money formats)
 │   │   └── error.ts         (Error shapes)
-│   └── quant/
+│   └── example/
 │       ├── index.ts
-│       ├── backtest.ts      ← Your contract here
-│       ├── signal.ts
-│       └── strategy.ts
+│       └── report.ts        ← Your contract here
 ```
 
 ---

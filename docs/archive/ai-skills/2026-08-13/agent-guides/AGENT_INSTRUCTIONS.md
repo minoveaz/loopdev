@@ -1,4 +1,7 @@
-# System Instructions for AI Agents
+# DEPRECATED: System Instructions for AI Agents
+
+> Historical generic prompt. Use the repository Skills under `.github/skills/`
+> instead.
 
 > Copy this into your AI agent's system prompt (Copilot, Gemini, Claude, etc)
 

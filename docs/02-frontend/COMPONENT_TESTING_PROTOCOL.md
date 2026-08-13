@@ -22,7 +22,8 @@ Button/
 Verificar que el componente se monta sin explotar y muestra el contenido esperado.
 
 ### 2. Accesibilidad (Axe-core Audit)
-**Obligatorio para v1.** El componente debe pasar el check de Axe-core en Storybook con 0 violaciones graves.
+**Obligatorio para v1.** El componente debe pasar el check de Axe-core en las
+pruebas Playwright con 0 violaciones graves.
 
 ### 3. Lógica de Variantes (Prop Mapping)
 Validar que las clases CSS esperadas estén presentes en `className`.

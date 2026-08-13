@@ -1,4 +1,6 @@
-# Security & Tenant Model v1.1
+# DEPRECATED: Security & Tenant Model v1.1
+
+> Superseded by `MULTI_TENANCY_STRATEGY.md` and `DATABASE_SECURITY_RLS.md`.
 
 ## 🎯 Propósito
 Establecer las reglas de ciberseguridad, resolución de identidad y aislamiento multi-tenant para garantizar que LoopDev sea una plataforma de grado industrial blindada contra fugas de datos y accesos indebidos.

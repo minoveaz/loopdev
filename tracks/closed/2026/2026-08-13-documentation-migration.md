@@ -1,9 +1,10 @@
 ---
 id: documentation-migration
 title: Documentation migration and registry standardization
-status: active
+status: closed
 created: 2026-08-13
 updated: 2026-08-13
+closed: 2026-08-14
 owner: governance
 lead: null
 branch: docs/documentation-migration
@@ -258,12 +259,26 @@ standardized documentation model becomes the operating record for future work.
 - [x] Record final registry and archive ownership.
 - [x] Define the `component-development` Skill contract and mandatory
   inventory-to-promotion workflow.
+- [x] Create the `documentation-governance` Skill for repeatable corpus review,
+  authority resolution, consolidation, archiving, and validation.
+- [x] Create the `registry-governance` Skill for registry identity, ownership,
+  evidence, migration, generation, and validation.
+- [x] Expand `validation-framework` with component and registry validation
+  routing.
 - [x] Implement the safe component scaffolding generator.
-- [ ] Execute the workflow against the CRM component inventory.
-- [ ] Define canonical component routes, templates, and pattern categories.
-- [ ] Implement duplicate detection and a documented exception review gate.
-- [ ] Integrate component creation with the frontend registry and validation
+- [x] Add regression tests for duplicate blocking, dry-run safety, and path
+  containment.
+- [x] Transfer CRM component inventory execution to the dedicated
+  `crm-component-inventory` track.
+- [x] Define canonical component routes, templates, and pattern categories.
+- [x] Implement duplicate detection and a documented exception review gate.
+- [x] Integrate component creation with the frontend registry and validation
   framework.
+
+These capabilities are implemented as reusable `component-development` Skill
+assets and the safe `pnpm component:new` generator. Their CRM-specific
+application remains in the separate `crm-component-inventory` track and is not
+part of this migration.
 
 **Validación**
 
@@ -442,15 +457,15 @@ el modelo conceptual de datos.
 | The two source registries use different schemas | Data loss or ambiguous ownership | Preserve provenance and validate the canonical schema before deleting sources | governance | mitigated |
 | Frozen strategic documents are accidentally modified | Roadmap and pilot baseline become unreliable | Verify their diff remains empty at each milestone | governance | mitigated |
 | Future domain registries lack authoritative entries | Incomplete cross-domain inventory | Populate only from repository evidence and dedicated domain reviews | domain owners | open |
-| Component creation remains dependent on manual conventions | Duplicate or mislocated UI primitives | Implement the `component-development` Skill, scaffolding, route policy, and duplicate-review gate before treating the workflow as adopted | frontend/platform | open |
+| Component creation remains dependent on manual conventions | Duplicate or mislocated UI primitives | Implemented `component-development`, scaffolding, route policy, and duplicate-review gate; CRM-specific application is deferred to its dedicated track | frontend/platform | mitigated |
 
 ## Criterios de cierre
 
-- [ ] Outcome verificable cumplido.
-- [ ] Fases requeridas cerradas o diferidas explícitamente.
-- [ ] Validaciones ejecutadas con evidencia.
-- [ ] Riesgos residuales documentados.
-- [ ] Cierre aprobado explícitamente por el usuario.
+- [x] Outcome verificable cumplido.
+- [x] Fases requeridas cerradas o diferidas explícitamente.
+- [x] Validaciones ejecutadas con evidencia.
+- [x] Riesgos residuales documentados.
+- [x] Cierre aprobado explícitamente por el usuario el 2026-08-14.
 
 ## Evidencia de validación
 
@@ -484,6 +499,7 @@ el modelo conceptual de datos.
 | 2026-08-13 | Quant Vault archive validation | Passed; obsolete Quant runbook archived and active references migrated | `docs/archive/product/experimental/2026-08-13/QUANT_VAULT_ENVIRONMENT.md` |
 | 2026-08-13 | Platform authority consolidation validation | Passed; duplicate security model and obsolete roadmap archived with references migrated | `docs/archive/platform/2026-08-13/`, `docs/03-platform/MULTI_TENANCY_STRATEGY.md`, `docs/03-platform/DATABASE_SECURITY_RLS.md` |
 | 2026-08-13 | Foundations authority consolidation validation | Passed; obsolete gap plan archived and architectural references aligned | `docs/archive/foundations/2026-08-13/`, `docs/01-foundations/ARCHITECTURAL_DECISIONS.md` |
+| 2026-08-14 | Component workflow validation | Passed; generator tests, registry synchronization, track validation, and whitespace checks | `scripts/components/create-component.test.mjs`, `pnpm registries:check`, `node scripts/tracks/validate-tracks.mjs` |
 
 ## Handoff de sesión
 
@@ -500,10 +516,15 @@ el modelo conceptual de datos.
   `node scripts/tracks/validate-tracks.mjs` y `git diff --check`; todo pasó
   salvo que la primera ejecución de `git diff --check` detectó whitespace, que
   fue corregido.
-- **Siguiente acción concreta:** Implementar y validar el alcance adicional de
-  `component-development`; después preparar el informe de cierre para
-  aprobación explícita.
+- **Siguiente acción concreta:** Completar la revisión final de este track;
+  el inventario detallado de CRM continúa en
+  `tracks/planned/crm/2026-08-13-crm-component-inventory.md`.
 
 ## Cierre
 
-Pendiente de aprobación explícita.
+- **Estado:** closed.
+- **Aprobación:** Usuario aprobó explícitamente el cierre el 2026-08-14.
+- **Resultado:** Documentation governance, registry governance, validation
+  routing, and component-development workflow are established and validated.
+- **Trabajo diferido:** CRM-specific component inventory and application of the
+  component workflow continue in `crm-component-inventory`.

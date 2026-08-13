@@ -7,7 +7,8 @@ Evitar la acumulación de deuda técnica invisible al construir **organismos o p
 
 ## 🧠 Regla de Oro
 > ❌ **Un solo "NO" en los puntos críticos = El desarrollo NO empieza.** 
-> Se debe volver a la fase de Descubrimiento o Contrato (ver `OPERATIONAL_AI_TEMPLATES.md`).
+> Se debe volver a la fase de Descubrimiento o Contrato y registrar el ajuste
+> en el track correspondiente.
 
 ---
 
@@ -25,7 +26,8 @@ No basta con `loading/success`. ¿He definido la UI para:
 - [ ] **Estado Parcial:** Datos cargados pero con advertencias (ej. sync pendiente).
 
 ## 3️⃣ Validación de Infraestructura (Bloqueante)
-- [ ] **Descubrimiento Realizado:** Se ha ejecutado la Plantilla 1 de `OPERATIONAL_AI_TEMPLATES.md`.
+- [ ] **Descubrimiento Realizado:** El alcance y el contrato están registrados
+  en el track correspondiente.
 - [ ] **Preguntas Abiertas Cerradas:** Entiendo límites de paginación, filtros y ordenación del backend.
 - [ ] **Cero Suposiciones:** No estoy asumiendo lógica de servidor desde el frontend.
 

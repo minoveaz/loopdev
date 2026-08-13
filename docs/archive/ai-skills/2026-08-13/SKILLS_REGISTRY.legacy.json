@@ -1,0 +1,169 @@
+{
+  "framework": "LoopDev AI Skills Framework",
+  "version": "1.0.0",
+  "last_updated": "2026-03-21",
+  "total_skills": 1,
+  "status": "production",
+  "description": "Complete skill registry for AI agents (Copilot, Gemini, Claude). Use this to discover available skills and route conversations.",
+  "tiers": {
+    "tier_1": {
+      "name": "Foundation",
+      "description": "Required for all feature development",
+      "skills": []
+    },
+    "tier_2": {
+      "name": "Domain-Specific",
+      "description": "Specialized by domain (trading, testing, certification)",
+      "skills": []
+    },
+    "tier_3": {
+      "name": "Governance",
+      "description": "Required before production release",
+      "skills": [
+        "skill-security-audit"
+      ]
+    }
+  },
+  "skills": [
+    {
+      "id": "skill-security-audit",
+      "name": "Security Audit Skill",
+      "tier": 3,
+      "category": "governance",
+      "path": "tier-3-governance/SECURITY_AUDIT_SKILL.md",
+      "short_description": "OWASP compliance, RLS, secrets scanning",
+      "when_to_use": "After feature complete, before QA sign-off",
+      "typical_duration_hours": 2,
+      "output_types": [
+        "security_report",
+        "vulnerability_patches",
+        "remediation_plan"
+      ],
+      "keywords": [
+        "security",
+        "owasp",
+        "rls",
+        "secrets",
+        "vulnerability",
+        "audit",
+        "compliance",
+        "injection"
+      ],
+      "for_agents": [
+        "copilot-cli",
+        "copilot-ide",
+        "gemini",
+        "claude"
+      ],
+      "prerequisites": [],
+      "typically_followed_by": [],
+      "checklist_items_count": 50,
+      "authority": "Security Lead, VP Engineering"
+    }
+  ],
+  "workflows": {
+    "build_trading_strategy": {
+      "name": "Build a Trading Strategy",
+      "description": "Complete workflow for building a new trading strategy",
+      "phase_1_discovery": [],
+      "phase_2_contracts": [],
+      "phase_3_implementation": [],
+      "phase_4_testing": [],
+      "phase_5_governance": [
+        "skill-security-audit"
+      ],
+      "total_duration_hours": 16,
+      "total_skills": 4
+    },
+    "build_ui_component": {
+      "name": "Build a UI Component",
+      "description": "Complete workflow for building a new UI component",
+      "phase_1_discovery": [],
+      "phase_2_contracts": [],
+      "phase_3_implementation": [],
+      "phase_4_testing": [],
+      "phase_5_governance": [
+        "skill-security-audit"
+      ],
+      "total_duration_hours": 11,
+      "total_skills": 5
+    },
+    "build_api_endpoint": {
+      "name": "Build an API Endpoint",
+      "description": "Complete workflow for building a new API endpoint",
+      "phase_1_discovery": [],
+      "phase_2_contracts": [],
+      "phase_3_implementation": [],
+      "phase_4_testing": [],
+      "phase_5_governance": [
+        "skill-security-audit"
+      ],
+      "total_duration_hours": 13,
+      "total_skills": 5
+    },
+    "quick_review": {
+      "name": "Quick Code Review",
+      "description": "Review existing code without full workflow",
+      "skills": [
+        "skill-security-audit"
+      ],
+      "total_duration_hours": 6,
+      "total_skills": 1
+    },
+    "prepare_release": {
+      "name": "Prepare for Release",
+      "description": "Final preparation before going to production",
+      "skills": [],
+      "total_duration_hours": 2,
+      "total_skills": 0
+    }
+  },
+  "skill_dependencies": {
+    "skill-security-audit": []
+  },
+  "quick_lookup": {
+    "by_duration": {
+      "1_hour": [],
+      "2_hours": [
+        "skill-security-audit"
+      ],
+      "3_4_hours": [],
+      "5_6_hours": [],
+      "1_2_hours": []
+    },
+    "by_keyword": {
+      "trading": [],
+      "ui": [],
+      "api": [],
+      "testing": [],
+      "security": [
+        "skill-security-audit"
+      ],
+      "performance": [],
+      "deployment": [],
+      "design": []
+    },
+    "by_phase": {
+      "design": [],
+      "contract": [],
+      "implementation": [],
+      "testing": [],
+      "governance": [
+        "skill-security-audit"
+      ]
+    }
+  },
+  "agent_usage": {
+    "how_to_use": "Agents should use SKILL_ROUTING_GUIDE.md to determine which skill to recommend. Load this registry to get metadata about each skill.",
+    "example_agent_flow": {
+      "step_1": "User says: 'Build a trading strategy'",
+      "step_2": "Agent loads SKILLS_REGISTRY.json",
+      "step_3": "Agent consults SKILL_ROUTING_GUIDE.md for workflow",
+      "step_4": "Agent recommends: skill-discovery first",
+      "step_5": "Agent shows skill path, duration, output",
+      "step_6": "Agent walks through skill checklist",
+      "step_7": "Agent proposes next skill from dependencies",
+      "step_8": "Repeat until all skills complete"
+    }
+  }
+}

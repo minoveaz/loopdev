@@ -1,4 +1,7 @@
-# 📈 QUANT STRATEGY SKILL v1.0
+# DEPRECATED: QUANT STRATEGY SKILL v1.0
+
+> Quant is experimental and currently out of product scope. Retained for
+> historical provenance only.
 
 > **Authority:** Quant Engineering
 > **Status:** ✅ Published

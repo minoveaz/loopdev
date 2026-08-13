@@ -1,4 +1,6 @@
-# 🔧 INFRA IMPLEMENTATION SKILL v1.0
+# DEPRECATED: INFRA IMPLEMENTATION SKILL v1.0
+
+> Superseded by security-review and active validation workflows.
 
 > **Authority:** Platform Engineering
 > **Status:** ✅ Published authority
@@ -42,7 +44,7 @@ Result:
 
 ```markdown
 ## Endpoint Name
-[What API are we building - POST /api/quant/backtest]
+[What API are we building - e.g. POST /api/example]
 
 ## Contract/Types
 [Link to Zod schema or TypeScript interface]
@@ -61,7 +63,7 @@ Result:
 Complete API implementation with:
 
 ```
-api/quant/
+api/example/
 ├── route.ts                   (API handler - POST, GET, etc)
 ├── service.ts                 (Business logic)
 ├── db.ts                      (Database queries)

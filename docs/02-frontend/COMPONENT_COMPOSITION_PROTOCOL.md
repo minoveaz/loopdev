@@ -62,8 +62,8 @@ Todo componente debe pertenecer a **una única categoría** dentro de su tipo (�
 *   **navigation/** — NavGroup, NavSidebarItem.
 
 ### Composites (`components/composites/`)
-*   **shell/** — AppShell, SuiteSidebar, SuiteHeader, SuiteSwitcher.
-*   **workspace/** — ModuleWorkspace, ModuleHeader, ModuleToolbar, InspectorPanel.
+*   **shell/** — AppShell compatibility layer and shared suite shell contracts.
+*   **workspace/** — ModuleWorkspace compatibility layer and canvas contracts.
 *   **navigation/** — ContextPath, UserMenu.
 *   **utilities/** — NotificationCenter, QuickActionMenu, SuiteCard.
 
@@ -75,7 +75,7 @@ Todo componente debe pertenecer a **una única categoría** dentro de su tipo (�
 * Arquitectura **Brain vs Body (MVVM)**.
 * Soporte nativo para **Dark / Light mode**.
 * Cero HEX hardcodeados.
-* Historias de Storybook demostrando todos los estados.
+* Estados cubiertos por pruebas Playwright y contratos de componentes.
 
 ### 4.2 Fase Q1 — Calidad (Quality Guard)
 * **Unit Tests:** Cobertura de renderizado y lógica de variantes con Vitest.
@@ -198,7 +198,7 @@ Este script verifica que todos los tokens estén sincronizados entre:
 ### 7.4 Multitenancy & Dynamic Theming
 
 * Los componentes deben usar variables CSS de componente (`--comp-*`) que hereden de los tokens globales (`--lpd-*`).
-* Integración con `DynamicThemeProvider` para personalización por tenant.
+* Integración con `DynamicThemeProvider` para personalización por organización.
 * Prohibido realizar cálculos geométricos en JS. Usar propiedades CSS como `aspect-ratio`.
 
 ---
@@ -265,7 +265,7 @@ Cualquier excepción requiere comentario en código con razón + alternativa int
 Un componente está **Done** si y solo si:
 * [ ] **Assembly:** cumple B1 + demo + fixtures + README.
 * [ ] **SaaS-ready:** B1 + C1 + tests + versionado.
-* [ ] **Certification:** Sello `Loopdev.lab` visible en Storybook.
+* [ ] **Certification:** Evidencia de Playwright y del registro de componentes.
 * [ ] **Stable:** adopción real + cero violaciones + docs maduras.
 
 ---

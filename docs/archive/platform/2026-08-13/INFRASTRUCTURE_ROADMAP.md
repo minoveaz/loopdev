@@ -1,4 +1,6 @@
-# LoopDev Infrastructure Roadmap
+# DEPRECATED: LoopDev Infrastructure Roadmap
+
+> Execution status is governed by `tracks/`; this roadmap is historical.
 
 Este documento define la hoja de ruta para la evolución de los servicios de backend, persistencia y tiempo real de LoopDev OS.
 

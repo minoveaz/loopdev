@@ -10,6 +10,11 @@
 > vivir en un layout hijo de módulo o compartirse desde el layout de suite cuando la composición
 > operativa sea común.
 
+> **Compatibilidad:** `ModuleWorkspace` es el primitive implementado actualmente para el
+> contrato objetivo `SuiteCanvas`. No se deben crear nuevos wrappers ni presentar este
+> nombre como una segunda arquitectura de shell; cualquier migración de API debe mantener
+> los mismos slots, navegación y pruebas de interacción.
+
 ---
 
 ## 0️⃣ Concepto: The 4-Pane Operating System

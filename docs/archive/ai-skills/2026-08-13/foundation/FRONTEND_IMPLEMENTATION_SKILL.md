@@ -1,4 +1,6 @@
-# 🎨 FRONTEND IMPLEMENTATION SKILL v1.0
+# DEPRECATED: FRONTEND IMPLEMENTATION SKILL v1.0
+
+> Superseded by platform-shell and active validation workflows.
 
 > **Authority:** Design System + Frontend Engineering
 > **Status:** ✅ Published (Existing in FRONT_ENGINEERING_PROMPT.md)

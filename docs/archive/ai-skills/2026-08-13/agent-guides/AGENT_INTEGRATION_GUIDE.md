@@ -1,4 +1,7 @@
-# How to Integrate Skills with AI Agents
+# DEPRECATED: How to Integrate Skills with AI Agents
+
+> Historical integration guide. Current routing and behavior are defined by
+> repository Skills under `.github/skills/`.
 
 > Quick start guide for connecting Copilot, Gemini, Claude, and other AI agents to your skill framework.
 

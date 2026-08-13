@@ -1,4 +1,6 @@
-# 🔍 DISCOVERY ANALYSIS SKILL v1.0
+# DEPRECATED: DISCOVERY ANALYSIS SKILL v1.0
+
+> Superseded by track-governance and active repository workflows.
 
 > **Authority:** Platform Engineering
 > **Status:** ✅ Published
@@ -56,22 +58,22 @@ Proporciona SIEMPRE:
 ### Ejemplo Input:
 
 ```markdown
-## Feature: Strategy Backtesting Module
+## Feature: Reporting Module
 
 ## What We're Building
-A backtesting dashboard where traders can:
-- Upload historical data
-- Run strategies against it
-- See results (trades, metrics, equity curve)
-- Compare multiple strategies
+A reporting dashboard where users can:
+- Import historical records
+- Run filtered reports
+- See results and metrics
+- Compare reporting periods
 
 ## Business Context
-Currently strategies are deployed live without validation. This causes "0 signals" 
-issues. We need validation before going live.
+Currently operational results are difficult to compare consistently. We need
+reliable reporting before making product decisions.
 
 ## Initial Scope
 - UI component showing results
-- API to run backtests
+- API to run reports
 - Store results in DB
 ```
 
@@ -112,10 +114,10 @@ Qué partes del sistema son afectadas:
 Decisiones que NO pueden tomar en implementación:
 
 ```
-Decision 1: ¿Cómo se almacenan los resultados del backtest?
+Decision 1: ¿Cómo se almacenan los resultados del reporte?
   Option A: En BD (queryable después)
   Option B: Solo en caché/memory (rápido, pero se pierde)
-  Recommendation: A (porque necesitas comparar múltiples backtests)
+  Recommendation: A (porque necesitas comparar múltiples reportes)
 
 Decision 2: ¿Qué nivel de granularidad de datos?
   Option A: Todas las trades individuales
@@ -126,11 +128,11 @@ Decision 2: ¿Qué nivel de granularidad de datos?
 ### 5. 📋 HIDDEN REQUIREMENTS
 Cosas que el usuario NO mencionó pero deben considerarse:
 
-- [ ] Multi-tenant isolation (¿El backtest es por tenant?)
-- [ ] Audit trail (¿Quién corrió qué backtest cuándo?)
-- [ ] Performance baseline (¿Cuántos backtests concurrentes?)
+- [ ] Organization isolation (¿El reporte está limitado a una organización?)
+- [ ] Audit trail (¿Quién generó qué reporte cuándo?)
+- [ ] Performance baseline (¿Cuántos reportes concurrentes?)
 - [ ] Data retention (¿Cuánto tiempo guardar resultados?)
-- [ ] Error handling (¿Qué si el backtest falla?)
+- [ ] Error handling (¿Qué si el reporte falla?)
 - [ ] Notifications (¿Alertar al usuario cuando termina?)
 
 ### 6. 🎨 RECOMMENDED PATTERNS
@@ -260,14 +262,14 @@ to define the data shapes."
 - Pattern: ModuleWorkspace 4-pane layout
 
 ### Example 3: Complex Feature (Full Stack)
-**Feature:** Multi-strategy backtesting comparison
+**Feature:** Multi-period reporting comparison
 
 **Discovery Output:**
 - High architectural impact (40-60 hours)
 - Needs BacktestResult, BacktestComparison tables
-- Needs async job queue (backtesting is slow)
+- Needs async job queue (report generation may be slow)
 - Needs WebSocket for progress updates
-- Security: Can user see others' backtests? (NO)
+- Security: Can user see others' reports? (NO)
 - Performance: How many strategies to compare? (Max 5)
 - Pattern: Async job + real-time updates
 
@@ -289,7 +291,7 @@ RIGHT: "Decision: Where do we store results? In DB or cache?"
 
 ❌ **DON'T:** Ignore multi-tenancy
 ```
-WRONG: "Anyone can see all backtests"
+WRONG: "Anyone can see all reports"
 RIGHT: "RISK: Data isolation if RLS not enforced on queries"
 ```
 

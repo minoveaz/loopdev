@@ -21,17 +21,16 @@ Their status and change policy are defined in
 | --- | --- |
 | [architecture/](./architecture/) | Frozen strategic references and architecture blueprints |
 | [01-foundations/](./01-foundations/) | Architectural decisions, models, and foundational principles |
-| [02-frontend/](./02-frontend/) | Frontend architecture, design system, components, and UI validation |
-| [03-platform/](./03-platform/) | APIs, infrastructure, security, tenancy, storage, and Git workflow |
+| [02-frontend/](./02-frontend/) | Frontend architecture, design system, SuiteShell/SuiteCanvas direction, and UI validation |
+| [03-platform/](./03-platform/) | APIs, infrastructure, security, organization isolation, storage, and Git workflow |
 | [04-governance/](./04-governance/) | Governance, certification, audits, and validation policies |
 | [05-operations/](./05-operations/) | Operational runbooks, engineering logs, and execution commands |
 | [06-product/](./06-product/) | Product and domain documentation organized by suite |
 | [06-ai-skills/](./06-ai-skills/) | AI skills, agent instructions, routing, and skill contracts |
 | [registries/](./registries/) | Domain registries and the global registry index |
 
-The unnumbered [quant-vault-environment.md](./quant-vault-environment.md) is
-an operational reference and should be reviewed for relocation under
-`05-operations/` in a later migration.
+Quant vault environment guidance is archived with the experimental Quant
+documentation and is not an active operational runbook.
 
 ## Canonical documentation rules
 
@@ -49,10 +48,17 @@ The canonical frontend component registry is
 [registries/frontend-components.json](./registries/frontend-components.json).
 The domain registry index is [registries/index.json](./registries/index.json).
 
+The current shell composition is documented in
+[02-frontend/SHELL_ARCHITECTURE.md](./02-frontend/SHELL_ARCHITECTURE.md).
+`SuiteShell` and `SuiteCanvas` are the target public direction; `AppShell` and
+`ModuleWorkspace` remain the implemented compatibility primitives until their
+API migration is completed.
+
 ## Lifecycle states
 
 The lifecycle states, ownership rules, and migration procedure are defined in
 [DOCUMENTATION_GOVERNANCE.md](./04-governance/DOCUMENTATION_GOVERNANCE.md).
 
 Documentation links and generated registries are validated with
-`pnpm docs:links:check` and `pnpm registries:check`.
+`pnpm docs:links:check`, `pnpm docs:inventory:check`, and
+`pnpm registries:check`.

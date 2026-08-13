@@ -92,6 +92,38 @@ function ownershipFor(relativePath, proposedState) {
 }
 
 const reviewedOverrides = {
+  '04-governance/DOCUMENTATION_GOVERNANCE.md': {
+    proposedState: 'CANONICAL',
+    rationale: 'Defines the repository documentation lifecycle and authority policy',
+    authority: 'Documentation governance',
+    owner: 'Governance',
+    cadence: 'Each policy or authority change',
+    action: 'KEEP_AS_CANONICAL',
+  },
+  '04-governance/DOCUMENTATION_REVIEW_INVENTORY.md': {
+    proposedState: 'NAVIGATION',
+    rationale: 'Generated inventory of documentation lifecycle decisions',
+    authority: 'Documentation governance',
+    owner: 'Governance',
+    cadence: 'Each documentation review cycle',
+    action: 'GENERATED_AND_VALIDATED',
+  },
+  '06-ai-skills/SKILL_ROUTING_GUIDE.md': {
+    proposedState: 'ACTIVE',
+    rationale: 'Current high-level routing to repository Skills',
+    authority: 'Repository Skills',
+    owner: 'AI Platform',
+    cadence: 'Each Skill routing change',
+    action: 'KEEP_ALIGNED_WITH_GITHUB_SKILLS',
+  },
+  '06-ai-skills/SKILLS_REGISTRY.json': {
+    proposedState: 'HISTORICAL',
+    rationale: 'Legacy registry retained for the detailed security reference; .github/skills is authoritative',
+    authority: 'Repository Skills',
+    owner: 'AI Platform',
+    cadence: 'No new content',
+    action: 'ARCHIVE_AFTER_REFERENCE_REVIEW',
+  },
   '01-foundations/ARCHITECTURAL_DECISIONS.md': {
     proposedState: 'CANONICAL',
     rationale: 'Architecture decision source; references require alignment with the current monorepo layout',
@@ -100,13 +132,13 @@ const reviewedOverrides = {
     cadence: 'Each architecture or contract change',
     action: 'UPDATE_AND_ALIGN',
   },
-  '01-foundations/GAP_CLOSURE_PLAN.md': {
-    proposedState: 'DEPRECATED',
-    rationale: 'Superseded execution plan with stale dates and references; migrate outstanding gaps to tracks',
+  'archive/foundations/2026-08-13/GAP_CLOSURE_PLAN.md': {
+    proposedState: 'HISTORICAL',
+    rationale: 'Superseded execution plan retained for audit provenance',
     authority: 'Delivery execution and phase status',
     owner: 'Governance',
     cadence: 'No new content',
-    action: 'ARCHIVE_AFTER_REFERENCE_REVIEW',
+    action: 'ARCHIVE_WITHOUT_MIGRATING_MILESTONES',
   },
   '01-foundations/SAAS_DATA_MODEL.md': {
     proposedState: 'CANONICAL',
@@ -172,13 +204,13 @@ const reviewedOverrides = {
     cadence: 'Each architecture or contract change',
     action: 'REVIEW_AND_LINK_VALIDATION',
   },
-  '03-platform/INFRASTRUCTURE_ROADMAP.md': {
-    proposedState: 'DEPRECATED',
-    rationale: 'Execution roadmap superseded by tracks and contains stale implementation claims',
+  'archive/platform/2026-08-13/INFRASTRUCTURE_ROADMAP.md': {
+    proposedState: 'HISTORICAL',
+    rationale: 'Execution roadmap superseded by tracks and retained for provenance',
     authority: 'Delivery execution and phase status',
     owner: 'Governance',
     cadence: 'No new content',
-    action: 'ARCHIVE_AFTER_MIGRATING_OPEN_ITEMS',
+    action: 'ARCHIVE_WITHOUT_MIGRATING_MILESTONES',
   },
   '03-platform/MULTI_TENANCY_STRATEGY.md': {
     proposedState: 'CANONICAL',
@@ -188,13 +220,13 @@ const reviewedOverrides = {
     cadence: 'Each architecture or contract change',
     action: 'UPDATE_AND_ALIGN',
   },
-  '03-platform/SECURITY_AND_TENANT_MODEL.md': {
-    proposedState: 'DUPLICATE',
-    rationale: 'Overlaps the tenancy and RLS authorities; consolidate security rules into the canonical tenancy model',
+  'archive/platform/2026-08-13/SECURITY_AND_TENANT_MODEL.md': {
+    proposedState: 'HISTORICAL',
+    rationale: 'Duplicate security and tenancy guidance retained for provenance',
     authority: 'Platform, APIs, security, and tenancy',
     owner: 'Platform',
     cadence: 'No new content',
-    action: 'MERGE_AND_ARCHIVE',
+    action: 'ARCHIVE_WITHOUT_MIGRATING_MILESTONES',
   },
   '03-platform/SHELL_SHOWCASE_CONTRACT.md': {
     proposedState: 'CANONICAL',

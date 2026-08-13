@@ -51,8 +51,7 @@
       "implementation": "apps/loopdev-os/src/lib/supabase",
       "tests": [],
       "documentation": [
-        "docs/03-platform/ENVIRONMENTS.md",
-        "docs/03-platform/SECURITY_AND_TENANT_MODEL.md"
+        "docs/03-platform/ENVIRONMENTS.md"
       ],
       "certification": {},
       "evidence_gaps": [
@@ -83,8 +82,7 @@
         "supabase/tests"
       ],
       "documentation": [
-        "docs/03-platform/DATABASE_SECURITY_RLS.md",
-        "docs/03-platform/SECURITY_AND_TENANT_MODEL.md"
+        "docs/03-platform/DATABASE_SECURITY_RLS.md"
       ],
       "certification": {},
       "evidence_gaps": [
@@ -116,8 +114,7 @@
         "packages/contracts/src/platform/__tests__/tenancy.test.ts"
       ],
       "documentation": [
-        "docs/03-platform/MULTI_TENANCY_STRATEGY.md",
-        "docs/03-platform/SECURITY_AND_TENANT_MODEL.md"
+        "docs/03-platform/MULTI_TENANCY_STRATEGY.md"
       ],
       "certification": {},
       "evidence_gaps": [],

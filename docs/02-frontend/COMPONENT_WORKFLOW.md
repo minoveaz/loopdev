@@ -5,6 +5,10 @@ Este documento define el proceso de ingeniería E2E. Los requisitos y el estado 
 ejecución se gobiernan mediante los tracks, y la integridad visual se garantiza
 mediante el cumplimiento del Bloque 0.
 
+> **Ámbito:** Este documento describe la ejecución diaria de un componente.
+> `docs/04-governance/COMPONENT_LIFECYCLE.md` es la autoridad para los estados
+> de certificación y sus gates; no se deben crear fases alternativas aquí.
+
 ---
 
 ## 🏗️ Fase 1: Ideación & Contrato (DoR)
@@ -34,7 +38,7 @@ mediante el cumplimiento del Bloque 0.
 
 ### 🟢 Fase 2: Blindaje y Calidad (The Shield)
 1. **Unit Testing:** Cobertura de todos los estados en Vitest.
-2. **A11y Audit:** Pasar Axe-core en Storybook (0 violaciones).
+2. **A11y Audit:** Pasar Axe-core en las pruebas Playwright (0 violaciones).
 3. **Visual Review:** Ejecutar las pruebas visuales de Playwright y revisar
    explícitamente cualquier diff de snapshots.
 4. **Integration Test:** Smoke test del componente en su app real mediante Playwright.
@@ -48,10 +52,10 @@ mediante el cumplimiento del Bloque 0.
 
 ## 🗄️ Fase 4: Persistencia & Certificación (DoD)
 
-> ⚠️ **REGLA DE ORO:** El sello `LOOPDEV.LAB` (`CertificationStamp`) y el `InfraStamp` solo pueden ser inyectados en el código de producción **tras el cierre exitoso de la Fase 3 (Auditoría)** y la corrección de todos sus hallazgos. Cualquier componente con sellos pero sin auditoría registrada será rechazado automáticamente.
+> La certificación se demuestra con evidencia de track, registry y validaciones;
+> no se inyectan sellos de branding en el código de producción.
 
 - [ ] **Registry Sync:** Registro en `docs/registries/frontend-components.json`.
-- [ ] **Seal Applied:** Sello `Loopdev.lab` en Storybook arriba a la izquierda.
 - [ ] **Audit Log Updated:** Registro del hito en `ENGINEERING_LOG.md`.
 - [ ] **Zero Errors:** `tsc` y `vitest` en 100% verde.
 

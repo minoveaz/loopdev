@@ -1,4 +1,6 @@
-# ✅ QA & TESTING PROTOCOL SKILL v1.0
+# DEPRECATED: QA & TESTING PROTOCOL SKILL v1.0
+
+> Superseded by validation-framework and repository test workflows.
 
 > **Authority:** QA Engineering + Platform
 > **Status:** ✅ Published
@@ -24,7 +26,6 @@ Eres un **Senior QA Engineer** especializado en crear test suites exhaustivas qu
 ✅ **USA esta skill después de:**
 - skill-frontend-impl (for UI component)
 - skill-infra-impl (for API)
-- skill-quant-strategy (for trading logic)
 
 **Result:** Code ready for Phase 3 Frontend Cert or Phase 4 Infra Cert
 

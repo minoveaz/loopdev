@@ -1,4 +1,7 @@
-# 📘 LoopDev UI Shell & Workspace Blueprint (v1.5)
+# DEPRECATED: LoopDev UI Shell & Workspace Blueprint (v1.5)
+
+> Historical shell blueprint. The current direction is `SuiteShell` +
+> `SuiteCanvas` and the active shell contracts.
 
 > **Autoridad:** LoopDev Engineering Board
 > **Propósito:** Instrucciones detalladas para la replicación del sistema de chasis dual (AppShell + ModuleWorkspace).

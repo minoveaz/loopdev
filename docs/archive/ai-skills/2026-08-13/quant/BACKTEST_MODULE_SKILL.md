@@ -1,4 +1,7 @@
-# 📊 BACKTEST MODULE CERTIFICATION SKILL v1.0
+# DEPRECATED: BACKTEST MODULE CERTIFICATION SKILL v1.0
+
+> Quant is experimental and currently out of product scope. Retained for
+> historical provenance only.
 
 > **Authority:** Platform Engineering
 > **Status:** ✅ Published

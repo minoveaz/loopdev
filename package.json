@@ -54,7 +54,8 @@
     "ds:dev": "pnpm --filter @loopdev/ui dev",
     "ds:build": "pnpm --filter @loopdev/ui build",
     "validate:tokens": "node scripts/validate-tokens-sync.js",
-    "component:new": "node scripts/components/create-component.mjs"
+    "component:new": "node scripts/components/create-component.mjs",
+    "test:component-generator": "node --test scripts/components/create-component.test.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",

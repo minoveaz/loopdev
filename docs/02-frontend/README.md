@@ -122,21 +122,21 @@ pnpm typecheck
 pnpm test
 ```
 
-### Storybook (Design System)
+### Playwright and repository validation
 
 ```bash
-# Iniciar Storybook
-pnpm ds:dev
+# Ejecutar validación visual desktop
+pnpm e2e:desktop
 
-# Ver en: http://localhost:6006
+# Ejecutar validación del shell
+pnpm test:shell
 ```
 
 ---
 
 ## 🔗 Enlaces Externos
 
-- [Storybook Local](http://localhost:6006) - Explorar componentes
-- [Figma Design System](https://figma.com/loopdev) - Diseños fuente
+- Playwright (`playwright.config.ts`) - Validación visual y E2E
 - [GitHub Monorepo](https://github.com/minoveaz/loopdev)
 
 ---

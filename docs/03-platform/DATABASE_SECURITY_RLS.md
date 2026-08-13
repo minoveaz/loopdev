@@ -24,7 +24,7 @@ El backend no confía en el cliente. El `organization_id` se resuelve cruzando e
 
 ### Política de Lectura (SELECT)
 ```sql
-CREATE POLICY "Users can only view their tenant data" ON "public"."table_name"
+CREATE POLICY "Users can only view their organization data" ON "public"."table_name"
 FOR SELECT USING (
   organization_id IN (
     SELECT organization_id
@@ -36,7 +36,7 @@ FOR SELECT USING (
 
 ### Política de Escritura (INSERT/UPDATE)
 ```sql
-CREATE POLICY "Users can only modify their tenant data" ON "public"."table_name"
+CREATE POLICY "Users can only modify their organization data" ON "public"."table_name"
 FOR ALL USING (
   organization_id IN (
     SELECT organization_id

@@ -150,6 +150,10 @@ This performs inventory and route checks without writing files. Re-run with
 `--write` only after reference discovery, duplicate review, and approval. An
 existing target or registry candidate blocks generation.
 
+Run `pnpm test:component-generator` when changing the generator. It must remain
+safe against existing targets, accidental writes in dry-run mode, and paths
+outside the repository.
+
 ### 7. Implement
 
 Implement the approved contract using semantic tokens and existing primitives.
