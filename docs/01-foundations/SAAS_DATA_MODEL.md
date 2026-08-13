@@ -7,8 +7,9 @@ Proporcionar una visión de alto nivel del esquema relacional que sostiene el ec
 
 ## 1. Tablas Core (Foundation)
 
-### `tenants`
-El corazón del sistema. Cada cliente es un registro único.
+### `organizations`
+El límite canónico de propiedad y autorización. Cada cliente es una
+organización única.
 - `id` (uuid)
 - `name` (string)
 - `subdomain` (string)
@@ -20,10 +21,11 @@ Identidades globales del sistema.
 - `email` (string)
 - `full_name` (string)
 
-### `memberships`
-La tabla de unión que define qué usuario tiene acceso a qué tenant y con qué rol.
+### `organization_memberships`
+La tabla de unión que define qué usuario tiene acceso a qué organización y con
+qué rol.
 - `user_id` (uuid)
-- `tenant_id` (uuid)
+- `organization_id` (uuid)
 - `role` (enum: owner, admin, member, viewer)
 
 ---
@@ -31,9 +33,9 @@ La tabla de unión que define qué usuario tiene acceso a qué tenant y con qué
 ## 2. Tablas de Módulo (Brand Hub)
 
 ### `brands`
-Definición de marcas dentro de un tenant.
+Definición de marcas dentro de una organización.
 - `id` (uuid)
-- `tenant_id` (fkey)
+- `organization_id` (fkey)
 - `name` (string)
 
 ### `brand_assets`
@@ -50,10 +52,14 @@ Archivos asociados a una marca.
 ### `audit_log`
 Bitácora de mutaciones en la base de datos.
 - `id` (uuid)
-- `tenant_id` (fkey)
+- `organization_id` (fkey)
 - `user_id` (fkey)
 - `action` (string)
 - `metadata` (jsonb)
 
 ---
+`tenants` y `tenant_id` solo se conservan como compatibilidad legacy durante la
+migración de datos. Las nuevas tablas, políticas y contratos deben usar
+`organizations` y `organization_id`.
+
 *Fundamentos de Plataforma - LoopDev Engineering*

@@ -20,8 +20,10 @@ Short operational rules for daily frontend work. The design system and shell arc
 
 ## Composition
 
-- Suite layouts own `AppShell`.
-- Operational module layouts compose `ModuleWorkspace` directly.
+- Suite layouts compose the shared `SuiteShell` contract; until the migration lands,
+  the implementation entry point is `AppShell`.
+- Operational module layouts compose the shared `SuiteCanvas` contract directly; until
+  the migration lands, the implementation entry point is `ModuleWorkspace`.
 - `SuiteContentFrame` and other unregistered shell wrappers are not allowed.
 - Business actions belong in the active module toolbar, not the global shell header.
 - Providers may supply state but must not replace the canonical shell geometry.

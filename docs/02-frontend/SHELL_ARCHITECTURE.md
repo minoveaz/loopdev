@@ -1,6 +1,6 @@
 # 🏗️ Shell Architecture — LoopDev OS (v1.2)
 
-> **Estado:** Activo / Fuente normativa v1.3
+> **Estado:** Activo / Fuente normativa v1.4
 > **Tipo:** Estándar de Composición de Plataforma
 > **Alcance:** Apps · Suites · Módulos Operativos
 > **Objetivo:** Garantizar una experiencia de usuario inmutable y escalable mediante la estandarización de los contenedores y piezas de navegación.
@@ -10,14 +10,21 @@
 > describe cómo se verifica. Los blueprints, diagramas y logs son material complementario y
 > no pueden establecer una composición distinta.
 
+> **Dirección objetivo:** La composición pública se está convergiendo hacia
+> `SuiteShell` + `SuiteCanvas`. En el código actual, `AppShell` y `ModuleWorkspace`
+> siguen siendo los primitives implementados y se mantienen como capa de compatibilidad
+> hasta que exista una migración funcional con contratos y pruebas equivalentes.
+
 ---
 
 ## 0️⃣ Concepto: El Chasis Dual
 
 LoopDev OS no se construye como una colección de páginas web, sino como un **Sistema Operativo Empresarial**. Para evitar la sobrecarga cognitiva, implementamos una arquitectura de **doble capa** (Mirror Architecture):
 
-1.  **Suite Level (Global):** El entorno de la aplicación contratada (ej: Marketing Studio). Gestionado por el `AppShell`.
-2.  **Workspace Level (Operativo):** El taller de trabajo que ocupa el canvas actual. Gestionado por el `ModuleWorkspace`.
+1.  **Suite Level (Global):** El entorno de la aplicación contratada (ej: Marketing Studio). La
+    dirección pública es `SuiteShell`; actualmente lo implementa `AppShell`.
+2.  **Workspace Level (Operativo):** El taller de trabajo que ocupa el canvas actual. La
+    dirección pública es `SuiteCanvas`; actualmente lo implementa `ModuleWorkspace`.
 
 La unidad de routing y la unidad visual no tienen que coincidir. Una suite puede montar un único
 `ModuleWorkspace` compartido si sus módulos usan el mismo chrome operativo. Un módulo puede
@@ -94,10 +101,10 @@ export default function SuiteLayout({ children }) {
 4.  **Skip-Link de Accesibilidad:** El primer elemento del DOM en el `AppShell` debe ser el link oculto "Skip to content" apuntando al ID `#main-content`.
 5.  **Política de Sidebar:** La raíz de cada suite debe usar `expanded`; los módulos operativos profundos pueden usar `rail`; al salir de esos prefijos se debe restaurar `expanded`.
 6.  **Fuente única de transición:** Los layouts deben usar `getSuiteNavMode` desde `components/layout/suiteNavMode.ts` y declarar sus prefijos operativos explícitamente. No se permite inferir `rail` solo por profundidad de URL.
-7.  **Responsive:** En desktop `expanded` y `rail` son estados persistentes de navegación; en tablet/mobile el `AppShell` los presenta como overlay temporal y el cierre no debe cambiar la política de ruta.
-8.  **Composición canónica:** Los layouts de suite componen `AppShell`; el contenido operativo compone `ModuleWorkspace` directamente. `SuiteContentFrame` no es un primitive permitido.
+7.  **Responsive:** En desktop `expanded` y `rail` son estados persistentes de navegación; en tablet/mobile el shell los presenta como overlay temporal y el cierre no debe cambiar la política de ruta.
+8.  **Composición canónica:** Los layouts de suite componen el shell compartido; el contenido operativo compone el canvas compartido directamente. `SuiteContentFrame` no es un primitive permitido.
 9.  **Workspace compartido:** No se crean layouts hijos por módulo por defecto. Solo se extraen cuando exista una diferencia funcional o visual real que requiera slots o estado propios.
-10. **Providers:** Los providers de tenant, layout y toast pueden envolver el workspace, pero no pueden sustituirlo ni decidir su estructura visual.
+10. **Providers:** Los providers de organización, layout y toast pueden envolver el canvas, pero no pueden sustituirlo ni decidir su estructura visual.
 
 ---
 *Arquitectura de Shell - LoopDev Engineering Board*

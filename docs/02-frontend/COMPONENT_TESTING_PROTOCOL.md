@@ -22,7 +22,8 @@ Button/
 Verificar que el componente se monta sin explotar y muestra el contenido esperado.
 
 ### 2. Accesibilidad (Axe-core Audit)
-**Obligatorio para v1.** El componente debe pasar el check de Axe-core en Storybook con 0 violaciones graves.
+**Obligatorio para v1.** El componente debe pasar el check de Axe-core en las
+pruebas Playwright con 0 violaciones graves.
 
 ### 3. Lógica de Variantes (Prop Mapping)
 Validar que las clases CSS esperadas estén presentes en `className`.
@@ -30,8 +31,9 @@ Validar que las clases CSS esperadas estén presentes en `className`.
 ### 4. Estados de Interacción (Flow Shield)
 Probar estados dinámicos. Para flujos complejos entre páginas, usar **Playwright** para simular el comportamiento real del navegador.
 
-### 5. Integridad de Marca (Chromatic Visual QA)
-Uso de Chromatic para detectar regresiones visuales de píxeles antes de cualquier merge.
+### 5. Integridad de Marca (Playwright Visual QA)
+Uso de Playwright para detectar regresiones visuales de píxeles antes de
+cualquier merge.
 
 ---
 
@@ -59,17 +61,19 @@ const renderWithProviders = (ui: React.ReactElement) => {
 ## ⚠️ Advertencias Técnicas (Layout Blindness)
 **Importante:** Vitest y JSDOM simulan el DOM pero **no tienen motor de renderizado (layout engine)**.
 - **No detectan:** Desbordamientos (overflow), colisiones flexbox, fallos de `z-index` visual o problemas de `aspect-ratio`.
-- **Mitigación:** Estos casos deben validarse mediante **Historias de Estrés** en Storybook y, en el futuro, con **Visual Regression Testing** (Playwright/Chromatic).
+- **Mitigación:** Estos casos deben validarse mediante **Historias de Estrés**
+  y pruebas de regresión visual con Playwright.
 
-### 5. Integridad de Marca (Chromatic Visual QA)
-Uso de Chromatic para detectar regresiones visuales de píxeles antes de cualquier merge.
+### 5. Integridad de Marca (Playwright Visual QA)
+Las pruebas visuales de Playwright deben cubrir los viewports, temas y estados
+interactivos relevantes antes de cualquier merge.
 
 ---
 
 ## 🧱 Infraestructura de Layouts
 Los layouts tienen un protocolo de prueba extendido debido a su rol estructural. Consultar **`02-frontend/LAYOUT_SYSTEM.md`** para detalles sobre los 4 Jueces Especializados:
 1. **Composición de Slots** (Vitest).
-2. **Resiliencia de Contenedor** (Chromatic).
+2. **Resiliencia de Contenedor** (Playwright visual).
 3. **Adaptabilidad Responsive** (Playwright).
 4. **Integridad de Superficie** (Axe-core).
 

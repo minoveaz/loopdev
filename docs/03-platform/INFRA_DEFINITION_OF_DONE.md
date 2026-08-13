@@ -18,13 +18,13 @@ Este documento define cuándo un trabajo de infraestructura o backend se conside
 - [ ] Los errores siguen el esquema estándar (Code, Message, TraceId).
 - [ ] **Regla:** Si el frontend no sabe qué esperar, NO está Done.
 
-### 3️⃣ Multi-tenancy Aplicado (Bloqueante)
-- [ ] Toda entidad persistente está asociada a un `tenant_id`.
-- [ ] El backend resuelve el contexto del tenant de forma explícita (no confía en el cliente).
-- [ ] ❌ Falta de validación de tenant = **CRITICAL FAIL**.
+### 3️⃣ Aislamiento por organización aplicado (Bloqueante)
+- [ ] Toda entidad persistente está asociada a un `organization_id`.
+- [ ] El backend resuelve el contexto de la organización de forma explícita (no confía en el cliente).
+- [ ] ❌ Falta de validación de organización = **CRITICAL FAIL**.
 
 ### 4️⃣ Seguridad & Permisos (RBAC v1)
-- [ ] El endpoint valida identidad (Auth) y pertenencia al tenant.
+- [ ] El endpoint valida identidad (Auth) y pertenencia a la organización.
 - [ ] El endpoint valida rol/capacidad mínima.
 - [ ] Accesos denegados devuelven error semántico (403).
 
@@ -39,9 +39,9 @@ Este documento define cuándo un trabajo de infraestructura o backend se conside
 - [ ] Permite que la UI use **Skeletons, Toasts y ErrorStates** correctamente según el Sistema Visual v3.8.
 
 ### 7️⃣ Observabilidad & Calidad
-- [ ] Logs estructurados (incluyen `requestId`, `tenantId`).
+- [ ] Logs estructurados (incluyen `requestId`, `organizationId`).
 - [ ] Smoke test del endpoint (Happy Path) funcionando.
-- [ ] Test de aislamiento multi-tenant verificado.
+- [ ] Test de aislamiento entre organizaciones verificado.
 
 ### 8️⃣ Documentación Actualizada
 - [ ] README del servicio actualizado.
@@ -50,7 +50,7 @@ Este documento define cuándo un trabajo de infraestructura o backend se conside
 ---
 
 ## 🔴 Casos que BLOQUEAN el "Done"
-- ❌ No hay validación de tenant.
+- ❌ No hay validación de organización.
 - ❌ No hay contrato claro (Zod/TS).
 - ❌ No hay migraciones reproducibles.
 - ❌ No hay documentación mínima.

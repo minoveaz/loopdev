@@ -1,0 +1,36 @@
+{
+  "registry_version": "1.0",
+  "last_updated": "2026-08-13",
+  "schema": "docs/registries/REGISTRY_SCHEMA.md",
+  "catalog": "docs/registries/REGISTRY_CATALOG.md",
+  "registries": [
+    {
+      "id": "frontend-components",
+      "path": "docs/registries/frontend-components.json",
+      "domain": "frontend",
+      "status": "canonical"
+    },
+    {
+      "id": "backend-capabilities",
+      "path": "docs/registries/backend-capabilities.json",
+      "domain": "backend",
+      "status": "ready"
+    },
+    {
+      "id": "infrastructure-capabilities",
+      "path": "docs/registries/infrastructure-capabilities.json",
+      "domain": "infrastructure",
+      "status": "ready"
+    },
+    {
+      "id": "product-modules",
+      "path": "docs/registries/product-modules.json",
+      "domain": "product",
+      "status": "ready"
+    }
+  ],
+  "archived_sources": [
+    "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+    "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json"
+  ]
+}

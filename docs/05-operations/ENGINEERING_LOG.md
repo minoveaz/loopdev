@@ -51,7 +51,7 @@
 
 #### ✅ Progress Summary:
 - **Toast System (v2.4.1):** First component to achieve Double Certification (Front + Infra). Includes multi-tenant isolation and 100% Vitest coverage.
-- **Security Infrastructure:** Consolidated cyber-security protocols in `SECURITY_AND_TENANT_MODEL.md` and activated RLS policies.
+- **Security Infrastructure:** Historical consolidation; current authority is `docs/03-platform/MULTI_TENANCY_STRATEGY.md` and `docs/03-platform/DATABASE_SECURITY_RLS.md`.
 - **Architecture:** Complete documentation reorganization into Foundations, Frontend, Platform, Governance, and Operations.
 
 ---

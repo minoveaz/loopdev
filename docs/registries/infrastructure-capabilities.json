@@ -1,0 +1,158 @@
+{
+  "registry_version": "1.0",
+  "domain": "infrastructure",
+  "status": "ready",
+  "schema": "docs/registries/REGISTRY_SCHEMA.md",
+  "entry_schema_version": "1.0",
+  "last_updated": "2026-08-13",
+  "entries": [
+    {
+      "id": "supabase-database",
+      "name": "Supabase database",
+      "domain": "infrastructure",
+      "owner": "platform",
+      "type": "database",
+      "category": "persistence",
+      "status": "stable",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "supabase",
+      "tests": [
+        "supabase/tests"
+      ],
+      "documentation": [
+        "docs/03-platform/ENVIRONMENTS.md",
+        "docs/03-platform/STORAGE_CONVENTIONS.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "contracts"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "supabase",
+        "docs/03-platform/ENVIRONMENTS.md"
+      ]
+    },
+    {
+      "id": "supabase-auth",
+      "name": "Supabase authentication clients",
+      "domain": "infrastructure",
+      "owner": "platform",
+      "type": "auth-provider",
+      "category": "identity",
+      "status": "stable",
+      "phase": 1,
+      "dependencies": [
+        "supabase-database"
+      ],
+      "contracts": [],
+      "implementation": "apps/loopdev-os/src/lib/supabase",
+      "tests": [],
+      "documentation": [
+        "docs/03-platform/ENVIRONMENTS.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "contracts",
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "apps/loopdev-os/src/lib/supabase",
+        "docs/03-platform/ENVIRONMENTS.md"
+      ]
+    },
+    {
+      "id": "row-level-security",
+      "name": "Row-level security",
+      "domain": "infrastructure",
+      "owner": "platform",
+      "type": "security-control",
+      "category": "tenant-isolation",
+      "status": "stable",
+      "phase": 1,
+      "dependencies": [
+        "supabase-database"
+      ],
+      "contracts": [],
+      "implementation": "supabase/migrations",
+      "tests": [
+        "supabase/tests"
+      ],
+      "documentation": [
+        "docs/03-platform/DATABASE_SECURITY_RLS.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "contracts"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "supabase/migrations",
+        "docs/03-platform/DATABASE_SECURITY_RLS.md"
+      ]
+    },
+    {
+      "id": "multi-tenancy",
+      "name": "Multi-tenancy foundation",
+      "domain": "infrastructure",
+      "owner": "platform",
+      "type": "platform-capability",
+      "category": "tenant-isolation",
+      "status": "stable",
+      "phase": 1,
+      "dependencies": [
+        "row-level-security"
+      ],
+      "contracts": [
+        "packages/contracts/src/platform/tenancy.ts"
+      ],
+      "implementation": "packages/contracts/src/platform/tenancy.ts",
+      "tests": [
+        "packages/contracts/src/platform/__tests__/tenancy.test.ts"
+      ],
+      "documentation": [
+        "docs/03-platform/MULTI_TENANCY_STRATEGY.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [],
+      "source_registry": null,
+      "source_evidence": [
+        "packages/contracts/src/platform/tenancy.ts",
+        "docs/03-platform/MULTI_TENANCY_STRATEGY.md"
+      ]
+    },
+    {
+      "id": "supabase-edge-functions",
+      "name": "Supabase Edge Functions",
+      "domain": "infrastructure",
+      "owner": "platform",
+      "type": "runtime",
+      "category": "serverless",
+      "status": "active",
+      "phase": null,
+      "dependencies": [
+        "supabase-database"
+      ],
+      "contracts": [],
+      "implementation": "supabase/functions",
+      "tests": [],
+      "documentation": [
+        "docs/03-platform/API_STANDARDS.md",
+        "docs/03-platform/ENVIRONMENTS.md"
+      ],
+      "certification": {},
+      "evidence_gaps": [
+        "contracts",
+        "tests"
+      ],
+      "source_registry": null,
+      "source_evidence": [
+        "supabase/functions",
+        "docs/03-platform/API_STANDARDS.md"
+      ]
+    }
+  ]
+}

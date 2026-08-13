@@ -9,7 +9,8 @@
 
 ### 🟢 FASE 1: Descubrimiento & Contrato
 1. **Análisis de Requisitos:** Alineación con el Roadmap y Dominios de Negocio.
-2. **Definición de Historias:** Creación de `userHistories.md`.
+2. **Definición de Historias:** Alcance, decisiones y evidencia en el track
+   correspondiente.
 3. **El Contrato:** Creación de `types.ts` (Interfaces de Props y Estados).
 4. **Validación:** Aprobación del Root Admin sobre el alcance definido.
 
@@ -22,21 +23,23 @@
 1. **Promoción:** Migración del código al Design System oficial.
 2. **Arquitectura:** Aplicación del patrón Brain/Body (`useX.ts` / `index.tsx`).
 3. **[TEST] Unitario (Vitest):** Validación 1:1 de cada historia de usuario.
-4. **[TEST] Accesibilidad (Axe-core):** Gate de 0 violaciones en Storybook.
-5. **[TEST] Regresión Visual (Chromatic):** Aprobación de baseline visual en la nube.
-6. **Auditoría UI:** Ejecución del `AUDIT_UI_PROMPT`.
+4. **[TEST] Accesibilidad (Axe-core):** Gate de 0 violaciones en Playwright.
+5. **[TEST] Regresión Visual (Playwright):** Revisión y aprobación de los
+   snapshots visuales.
+6. **Auditoría UI:** Revisión según `FRONT_CERTIFICATION_CHECKLIST.md`.
 **Hito: Front_Certified 🔵**
 
 ### 🛡️ FASE 4: Certificación Infraestructura (contracts/apps)
 1. **Data Sync:** Sincronización de esquemas en `@loopdev/contracts`.
 2. **[TEST] Seguridad (Snyk):** Escaneo de vulnerabilidades y secretos.
 3. **[TEST] Funcional E2E (Playwright):** Validación del componente en el flujo real de la app.
-4. **Auditoría Infra:** Ejecución del `AUDIT_INFRA_PROMPT`.
+4. **Auditoría Infra:** Ejecución de `skill-qa-testing` sobre los gates de
+   infraestructura.
 **Hito: Infra_Certified 🔵**
 
 ### 📜 FASE 5: Gobernanza & Release
 1. **Versionado (Changesets):** Creación del acta de cambio para el release.
-2. **Registro:** Inscripción en `COMPONENT_REGISTRY.json`.
+2. **Registro:** Inscripción en `docs/registries/frontend-components.json`.
 3. **Audit Trail:** Registro en `ENGINEERING_LOG.md`.
 
 ---
@@ -47,7 +50,7 @@
 | :--- | :--- | :--- | :--- |
 | **F3.3** | **Vitest** | Lógica y Props | Bloqueante |
 | **F3.4** | **Axe-core** | Accesibilidad (WCAG) | Bloqueante |
-| **F3.5** | **Chromatic** | Píxeles y Diseño | Review Humano |
+| **F3.5** | **Playwright** | Píxeles y Diseño | Review Humano |
 | **F4.2** | **Snyk** | Seguridad y Deps | Bloqueante |
 | **F4.3** | **Playwright** | Flujo de Negocio | Bloqueante |
 

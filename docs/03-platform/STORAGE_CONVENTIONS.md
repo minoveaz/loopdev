@@ -1,18 +1,18 @@
 # Storage Conventions v1.1
 
 ## 🎯 Propósito
-Estandarizar la gestión de archivos y activos en Supabase Storage para garantizar la privacidad de los datos por tenant y facilitar el escalado industrial.
+Estandarizar la gestión de archivos y activos en Supabase Storage para garantizar la privacidad de los datos por organización y facilitar el escalado industrial.
 
 ---
 
 ## 1. Estructura de Directorios (Buckets)
-Los archivos se organizarán por `tenant_id` en la raíz del bucket para permitir políticas de seguridad (RLS) granulares y eficientes.
+Los archivos se organizarán por `organization_id` en la raíz del bucket para permitir políticas de seguridad (RLS) granulares y eficientes.
 
 **Patrón recomendado:**
-`tenants/{tenant_id}/{module_name}/{category}/{asset_id}/{filename}`
+`organizations/{organization_id}/{module_name}/{category}/{asset_id}/{filename}`
 
 **Ejemplo para Brand Hub:**
-`tenants/t-123/brand-hub/logos/logo-primary.svg`
+`organizations/org-123/brand-hub/logos/logo-primary.svg`
 
 ---
 

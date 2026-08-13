@@ -287,20 +287,21 @@ Focus Ring:
 
 ---
 
-## 20. Sello de Certificación (Engineering Seal)
+## 20. Evidencia de madurez visual
 
-El sistema utiliza una autoridad visual denominada **`Loopdev.lab`** para comunicar la madurez técnica de cada componente dentro de la documentación oficial y el Storybook.
+La madurez visual se comunica mediante evidencia verificable en el track, el
+registro canónico y las pruebas Playwright. No se requiere un sello de branding
+en Storybook o en el código de producción.
 
-### 20.1 Anatomía del Sello
-*   **Fondo:** Micro-grilla técnica de 4px (Blueprint style).
-*   **Identidad:** Bloque sólido azul (`primary`) con texto "LOOPDEV.LAB".
-*   **Versión:** Encapsulada en brackets amarillos `{ vX.X.X }`.
-*   **Posicionamiento:** Esquina superior izquierda del lienzo de documentación.
+### 20.1 Evidencia requerida
+*   **Track:** Alcance, decisiones, riesgos y validaciones.
+*   **Registry:** Capacidades y estado del componente.
+*   **Playwright:** Flujo, accesibilidad y regresión visual revisados.
 
 ### 20.2 Semántica de Estados
-*   **🔵 Azul Primary (Certified_Ready):** Componente 100% verificado. Cumple DoD, tiene Tests Vitest y pasó auditoría de estrés.
-*   **🟡 Amarillo Energy (Engineering_Audit):** Componente funcional pero en proceso de blindaje técnico (tests o stress-testing pendientes).
-*   **🟣 Morado Innovation (Lab_Blueprint):** Prototipo inicial o componente experimental del laboratorio.
+*   **Certified:** Componente verificado y respaldado por la evidencia requerida.
+*   **Audit:** Componente funcional con deuda técnica o visual pendiente.
+*   **Experimental:** Prototipo fuera del camino de producción.
 
 ---
 
@@ -310,7 +311,7 @@ El sistema utiliza una autoridad visual denominada **`Loopdev.lab`** para comuni
 2. Contraste AA
 3. Empty state definido
 4. Legible en Deep Space
-5. **Sello de Certificación correcto y visible.**
+5. **Evidencia de validación vinculada al track.**
 
 ---
 
@@ -321,8 +322,7 @@ El sistema utiliza una autoridad visual denominada **`Loopdev.lab`** para comuni
 * Prohibido inline styles productivos
 * Tokens semánticos obligatorios
 * Brain vs Body obligatorio
-* Example.tsx obligatorio
-* **Sello de Estado en Storybook obligatorio.**
+* La evidencia visual debe ser reproducible con Playwright.
 
 ---
 

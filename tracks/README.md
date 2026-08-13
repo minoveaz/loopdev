@@ -6,7 +6,7 @@
 
 ### CRM
 
-- [CRM Pilot Execution](./planned/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
+- [CRM component inventory and reuse architecture](./planned/crm/2026-08-13-crm-component-inventory.md) · fase 0
 
 ### Marketing Studio
 
@@ -15,7 +15,6 @@
 ### Governance
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
-- [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
 ## En curso
 
 ### CRM
@@ -61,3 +60,4 @@
 - [Order Flow Integration](./closed/2026/2026-04-11-order-flow-integration.md) · fase 0
 - [Health OS Occupational Health Suite](./closed/2026/2026-06-28-health-os-occupational.md) · fase 0
 - [Sales & CRM Suite Integration](./closed/2026/2026-07-18-sales-crm-integration.md) · fase 0
+- [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4

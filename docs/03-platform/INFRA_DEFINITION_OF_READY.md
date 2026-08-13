@@ -18,7 +18,7 @@ Garantizar que ningún trabajo de infraestructura o backend comienza sin intenci
 
 ### 3️⃣ Decisiones explícitas
 - [ ] Definida la ubicación del código (`/apps/api`, `/packages/contracts`, etc.).
-- [ ] Qué estándar sigue (API_STANDARDS, AUTH_TENANT_MODEL, etc.).
+- [ ] Qué estándar sigue (API_STANDARDS, MULTI_TENANCY_STRATEGY, etc.).
 - [ ] Definido qué **NO** se va a resolver en este sprint.
 
 ### 4️⃣ Contratos definidos
@@ -31,8 +31,8 @@ Garantizar que ningún trabajo de infraestructura o backend comienza sin intenci
 - [ ] Estados UI pensados (loading, error, empty, success).
 - [ ] No se rompe el modelo Brain/Body ni se introduce lógica de negocio en UI.
 
-### 6️⃣ Seguridad y Multi-tenant
-- [ ] Pensado el `tenant_id` y aislamiento de datos.
+### 6️⃣ Seguridad y aislamiento por organización
+- [ ] Pensado el `organization_id` y aislamiento de datos.
 - [ ] Permisos mínimos (RBAC v1) considerados.
 
 ---

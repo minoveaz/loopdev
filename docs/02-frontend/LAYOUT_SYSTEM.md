@@ -34,7 +34,7 @@ Para alcanzar el estatus **Certified v1 — Full**, un Layout debe superar los 5
 - **Validación:** El layout debe renderizar correctamente sus huecos dinámicos (Header Slot, Sidebar Slot, Content Slot).
 - **Regla:** Los slots no deben romperse si se les pasa contenido nulo o vacío.
 
-### 2. Test de Resiliencia de Contenedor — [Chromatic]
+### 2. Test de Resiliencia de Contenedor — [Playwright visual]
 - **Validación:** El comportamiento del scroll y las áreas fijas debe ser infalible.
 - **Escenario de Estrés:** Validar historias con "Contenido Infinito" para asegurar que el Header/Sidebar permanecen estables.
 

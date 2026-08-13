@@ -1,7 +1,7 @@
 # Shell Showcase Contract
 
 `/shell-showcase` is the executable reference for the LoopDev OS shell. It defines the approved
-composition, navigation model, responsive geometry, tenant theme behavior, and selected states that
+composition, navigation model, responsive geometry, organization theme behavior, and selected states that
 the product shell must preserve.
 
 The contract has two enforcement layers:

@@ -1,0 +1,1981 @@
+{
+  "registry_version": "1.0",
+  "domain": "frontend",
+  "status": "canonical",
+  "last_updated": "2026-08-13",
+  "migration_sources": [
+    "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+    "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json"
+  ],
+  "entries": [
+    {
+      "id": "typography-v1",
+      "name": "Typography",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "foundations",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/foundations/Typography/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/foundations/Typography",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/foundations/Typography/Typography.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/foundations/Typography/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "blueprint-background-v1",
+      "name": "BlueprintBackground",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "foundations",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/foundations/BlueprintBackground/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/foundations/BlueprintBackground",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/foundations/BlueprintBackground/BlueprintBackground.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/foundations/BlueprintBackground/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-canvas-v1",
+      "name": "TechnicalCanvas",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "foundations",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/foundations/TechnicalCanvas/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/foundations/TechnicalCanvas",
+      "tests": [],
+      "documentation": [],
+      "evidence_gaps": [
+        "tests",
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "motion-v1",
+      "name": "Motion",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "foundations",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/foundations/Motion",
+      "tests": [],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/foundations/Motion/README.md"
+      ],
+      "evidence_gaps": [
+        "contracts",
+        "tests"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "z-index-v1",
+      "name": "ZIndex",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "foundations",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/foundations/ZIndex",
+      "tests": [],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/foundations/ZIndex/README.md"
+      ],
+      "evidence_gaps": [
+        "contracts",
+        "tests"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "badge-v1",
+      "name": "Badge",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/Badge",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/Badge/Badge.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "contracts",
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "status-pulse-v1",
+      "name": "StatusPulse",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/StatusPulse/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/StatusPulse",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/StatusPulse/StatusPulse.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/indicators/StatusPulse/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "spinner-v1",
+      "name": "Spinner",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/Spinner/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/Spinner",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/Spinner/Spinner.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "logo-spinner-v1",
+      "name": "LogoSpinner",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/LogoSpinner/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/LogoSpinner",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/LogoSpinner/LogoSpinner.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/indicators/LogoSpinner/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "ai-loader-v1",
+      "name": "AILoader",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/AILoader/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/AILoader",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/AILoader/AILoader.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/indicators/AILoader/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "certification-stamp-v1",
+      "name": "CertificationStamp",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/CertificationStamp/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/CertificationStamp",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/CertificationStamp/CertificationStamp.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "quality-shield-v1",
+      "name": "QualityShield",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/QualityShield/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/QualityShield",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/QualityShield/QualityShield.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "engineering-seal-v1",
+      "name": "EngineeringSeal",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/EngineeringSeal.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "infra-stamp-v1",
+      "name": "InfraStamp",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/InfraStamp",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/InfraStamp/InfraStamp.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "contracts",
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "system-status-v1",
+      "name": "SystemStatus",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/SystemStatus/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/SystemStatus",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/SystemStatus/SystemStatus.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/indicators/SystemStatus/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-isotype-v1",
+      "name": "TechnicalIsotype",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/TechnicalIsotype/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/TechnicalIsotype",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/TechnicalIsotype/TechnicalIsotype.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-status-badge-v1",
+      "name": "TechnicalStatusBadge",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "indicators",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge/TechnicalStatusBadge.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "button-v2",
+      "name": "Button",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "inputs",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified",
+        "infra": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/Button",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx",
+        "ds/packages/ui/src/components/atoms/inputs/Button/ButtonRBAC.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/inputs/Button/README.md"
+      ],
+      "evidence_gaps": [
+        "contracts"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "icon-button-v1",
+      "name": "IconButton",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "inputs",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/IconButton",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/inputs/IconButton/README.md"
+      ],
+      "evidence_gaps": [
+        "contracts"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "input-v1",
+      "name": "Input",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "inputs",
+      "status": "stable",
+      "phase": 3,
+      "certification": {
+        "front": "certified",
+        "infra": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/inputs/Input/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/Input",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/inputs/Input/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "theme-toggle-v1",
+      "name": "ThemeToggle",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "inputs",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/inputs/ThemeToggle/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/ThemeToggle",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/inputs/ThemeToggle/ThemeToggle.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/inputs/ThemeToggle/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-surface-v1",
+      "name": "TechnicalSurface",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/TechnicalSurface.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "divider-v1",
+      "name": "Divider",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/Divider/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/Divider",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/Divider/Divider.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "scroll-area-v1",
+      "name": "ScrollArea",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/ScrollArea/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/ScrollArea",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/ScrollArea/ScrollArea.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-tooltip-v1",
+      "name": "TechnicalTooltip",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/TechnicalTooltip.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-label-v1",
+      "name": "TechnicalLabel",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/TechnicalLabel.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "brand-logo-v1",
+      "name": "BrandLogo",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/BrandLogo/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/BrandLogo",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/BrandLogo/BrandLogo.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/BrandLogo/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-dropdown-v1",
+      "name": "TechnicalDropdown",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/TechnicalDropdown.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-menu-item-v1",
+      "name": "TechnicalMenuItem",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/TechnicalMenuItem.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "command-bar-trigger-v1",
+      "name": "CommandBarTrigger",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/CommandBarTrigger.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "label-v1",
+      "name": "Label",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/Label",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/Label/Label.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "contracts",
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "icon-v1",
+      "name": "Icon",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/Icon",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/Icon/Icon.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/Icon/README.md"
+      ],
+      "evidence_gaps": [
+        "contracts"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "user-avatar-v1",
+      "name": "UserAvatar",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/UserAvatar/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/UserAvatar",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/UserAvatar/UserAvatar.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/UserAvatar/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "illustrations-v1",
+      "name": "Illustrations",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/Illustrations",
+      "tests": [],
+      "documentation": [],
+      "evidence_gaps": [
+        "contracts",
+        "tests",
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "identity-bar-v1",
+      "name": "IdentityBar",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/IdentityBar/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/IdentityBar",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/IdentityBar/IdentityBar.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/IdentityBar/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "exit-hatch-v1",
+      "name": "ExitHatch",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/ExitHatch/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/ExitHatch",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/ExitHatch/ExitHatch.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/ExitHatch/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "technical-card-v1",
+      "name": "TechnicalCard",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "surfaces",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalCard/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalCard",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/surfaces/TechnicalCard/TechnicalCard.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "nav-group-v1",
+      "name": "NavGroup",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "navigation",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/navigation/NavGroup/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/navigation/NavGroup",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/navigation/NavGroup/NavGroup.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "nav-sidebar-item-v1",
+      "name": "NavSidebarItem",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "navigation",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/NavSidebarItem.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "skeleton-v1",
+      "name": "Skeleton",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "feedback",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/feedback/Skeleton/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/feedback/Skeleton",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/feedback/Skeleton/Skeleton.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "empty-state-v1",
+      "name": "EmptyState",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "feedback",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/feedback/EmptyState/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/feedback/EmptyState",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/feedback/EmptyState/EmptyState.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/feedback/EmptyState/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "toast-v2",
+      "name": "Toast",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "feedback",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified",
+        "infra": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/feedback/Toast/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/feedback/Toast",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/feedback/Toast/Toast.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "app-shell-v1.1",
+      "name": "AppShell",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "shell",
+      "status": "stable",
+      "phase": 4,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/shell/AppShell/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/shell/AppShell",
+      "tests": [
+        "ds/packages/ui/src/components/composites/shell/AppShell/AppShell.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/shell/AppShell/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "suite-sidebar-v1",
+      "name": "SuiteSidebar",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "shell",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/shell/SuiteSidebar/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/shell/SuiteSidebar",
+      "tests": [
+        "ds/packages/ui/src/components/composites/shell/SuiteSidebar/SuiteSidebar.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/shell/SuiteSidebar/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "suite-header-v1",
+      "name": "SuiteHeader",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "shell",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/shell/SuiteHeader/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/shell/SuiteHeader",
+      "tests": [
+        "ds/packages/ui/src/components/composites/shell/SuiteHeader/SuiteHeader.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/shell/SuiteHeader/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "suite-switcher-v1",
+      "name": "SuiteSwitcher",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "shell",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/shell/SuiteSwitcher/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/shell/SuiteSwitcher",
+      "tests": [
+        "ds/packages/ui/src/components/composites/shell/SuiteSwitcher/SuiteSwitcher.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/shell/SuiteSwitcher/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "sidebar-footer-v1",
+      "name": "SidebarFooter",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "shell",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/shell/SidebarFooter/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/shell/SidebarFooter",
+      "tests": [
+        "ds/packages/ui/src/components/composites/shell/SidebarFooter/SidebarFooter.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/shell/SidebarFooter/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "sidebar-identity-v1",
+      "name": "SidebarIdentity",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "shell",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/shell/SidebarIdentity/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/shell/SidebarIdentity",
+      "tests": [
+        "ds/packages/ui/src/components/composites/shell/SidebarIdentity/SidebarIdentity.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/shell/SidebarIdentity/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "module-workspace-v1.4",
+      "name": "ModuleWorkspace",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "workspace",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace",
+      "tests": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace/ModuleWorkspace.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace/README.md",
+        "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace/spec.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "module-header-v1",
+      "name": "ModuleHeader",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "workspace",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleHeader/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleHeader",
+      "tests": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "module-toolbar-v1",
+      "name": "ModuleToolbar",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "workspace",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleToolbar",
+      "tests": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "module-sidebar-v1",
+      "name": "ModuleSidebar",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "workspace",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleSidebar/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleSidebar",
+      "tests": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleSidebar/ModuleSidebar.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "inspector-panel-v1",
+      "name": "InspectorPanel",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "workspace",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/workspace/InspectorPanel/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/workspace/InspectorPanel",
+      "tests": [
+        "ds/packages/ui/src/components/composites/workspace/InspectorPanel/InspectorPanel.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "suite-home-layout-v1",
+      "name": "SuiteHomeLayout",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "workspace",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/workspace/SuiteHomeLayout/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/workspace/SuiteHomeLayout",
+      "tests": [
+        "ds/packages/ui/src/components/composites/workspace/SuiteHomeLayout/SuiteHomeLayout.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "module-card-v1",
+      "name": "ModuleCard",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "workspace",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleCard/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleCard",
+      "tests": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleCard/ModuleCard.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "context-path-v1",
+      "name": "ContextPath",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "navigation",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/navigation/ContextPath/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/navigation/ContextPath",
+      "tests": [
+        "ds/packages/ui/src/components/composites/navigation/ContextPath/ContextPath.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/navigation/ContextPath/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "user-menu-v1",
+      "name": "UserMenu",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "navigation",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/navigation/UserMenu/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/navigation/UserMenu",
+      "tests": [
+        "ds/packages/ui/src/components/composites/navigation/UserMenu/UserMenu.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/navigation/UserMenu/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "notification-center-v1",
+      "name": "NotificationCenter",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "utilities",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/utilities/NotificationCenter/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/utilities/NotificationCenter",
+      "tests": [
+        "ds/packages/ui/src/components/composites/utilities/NotificationCenter/NotificationCenter.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/utilities/NotificationCenter/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "quick-action-menu-v1",
+      "name": "QuickActionMenu",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "utilities",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/utilities/QuickActionMenu/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/utilities/QuickActionMenu",
+      "tests": [
+        "ds/packages/ui/src/components/composites/utilities/QuickActionMenu/QuickActionMenu.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/utilities/QuickActionMenu/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "suite-card-v1",
+      "name": "SuiteCard",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "utilities",
+      "status": "stable",
+      "phase": 1,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/utilities/SuiteCard/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/utilities/SuiteCard",
+      "tests": [
+        "ds/packages/ui/src/components/composites/utilities/SuiteCard/SuiteCard.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/utilities/SuiteCard/README.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "activity-feed-v1",
+      "name": "ActivityFeed",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "utilities",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/utilities/ActivityFeed/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/utilities/ActivityFeed",
+      "tests": [
+        "ds/packages/ui/src/components/composites/utilities/ActivityFeed/ActivityFeed.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "system-notice-rail-v1",
+      "name": "SystemNoticeRail",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "utilities",
+      "status": "stable",
+      "phase": 2,
+      "certification": {
+        "front": "certified"
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/utilities/SystemNoticeRail/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/utilities/SystemNoticeRail",
+      "tests": [
+        "ds/packages/ui/src/components/composites/utilities/SystemNoticeRail/SystemNoticeRail.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "s-tr-uc-tu-re-dt-ex-tf-ie-ld",
+      "name": "StructuredTextField",
+      "domain": "frontend",
+      "type": "molecule",
+      "category": "molecule",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/StructuredTextField/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/StructuredTextField",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/StructuredTextField/StructuredTextField.test.tsx"
+      ],
+      "documentation": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/StructuredTextField/spec.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "t-on-ep-ro-fi-le-ca-rd",
+      "name": "ToneProfileCard",
+      "domain": "frontend",
+      "type": "molecule",
+      "category": "molecule",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ToneProfileCard/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ToneProfileCard",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ToneProfileCard/ToneProfileCard.test.tsx"
+      ],
+      "documentation": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ToneProfileCard/spec.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "c-la-im-li-st",
+      "name": "ClaimList",
+      "domain": "frontend",
+      "type": "molecule",
+      "category": "molecule",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimList/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimList",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimList/ClaimList.test.tsx"
+      ],
+      "documentation": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimList/spec.md"
+      ],
+      "evidence_gaps": [],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "n-ar-ra-ti-ve-bl-oc-k",
+      "name": "NarrativeBlock",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "composite",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/NarrativeBlock/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/NarrativeBlock",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/NarrativeBlock/NarrativeBlock.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "v-oi-ce-to-ne-bl-oc-k",
+      "name": "VoiceToneBlock",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "composite",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/VoiceToneBlock/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/VoiceToneBlock",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/VoiceToneBlock/VoiceToneBlock.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "c-la-im-sg-ov-er-na-nc-eb-lo-ck",
+      "name": "ClaimsGovernanceBlock",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "composite",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimsGovernanceBlock/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimsGovernanceBlock",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimsGovernanceBlock/ClaimsGovernanceBlock.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "c-ol-or-to-ke-nc-ar-d",
+      "name": "ColorTokenCard",
+      "domain": "frontend",
+      "type": "molecule",
+      "category": "molecule",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorTokenCard/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorTokenCard",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorTokenCard/ColorTokenCard.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "t-ok-en-gr-ou-ps-ec-ti-on",
+      "name": "TokenGroupSection",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "composite",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/TokenGroupSection/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/TokenGroupSection",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/TokenGroupSection/TokenGroupSection.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "c-ol-or-co-nt-ex-tb-ar",
+      "name": "ColorContextBar",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "composite",
+      "status": "stable",
+      "suite": "brand-hub",
+      "certified_version": "1.0.0",
+      "certification": {
+        "frontend": "certified"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.frontend.legacy.json",
+      "owner": "marketing-studio",
+      "phase": null,
+      "dependencies": [],
+      "contracts": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorContextBar/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorContextBar",
+      "tests": [
+        "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorContextBar/ColorContextBar.test.tsx"
+      ],
+      "documentation": [],
+      "evidence_gaps": [
+        "documentation"
+      ],
+      "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    }
+  ],
+  "schema": "docs/registries/REGISTRY_SCHEMA.md",
+  "entry_schema_version": "1.0",
+  "evidence_summary": {
+    "entries": 71,
+    "implementation_mapped": 71,
+    "contracts_mapped": 62,
+    "documentation_mapped": 55,
+    "tests_mapped": 67,
+    "policy": "Gaps are recorded for future work; this migration does not create missing evidence."
+  }
+}

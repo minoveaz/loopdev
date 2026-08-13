@@ -1,7 +1,7 @@
 # 🎨 Guía de Uso de Design Tokens — loop.dev
 
 > **Versión:** 1.0 (Lab Standard)
-> **Objetivo:** Estandarizar el consumo de tokens visuales para garantizar coherencia multi-tenant y soporte total de temas (Light/Dark).
+> **Objetivo:** Estandarizar el consumo de tokens visuales para garantizar coherencia entre organizaciones y soporte total de temas (Light/Dark).
 
 ---
 
