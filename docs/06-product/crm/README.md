@@ -23,6 +23,14 @@ Documentacion funcional y de preparacion del piloto CRM de Estar Protegidos.
 - [Impact assessment](pipeline/CRM_PIPELINE_IMPACT_ASSESSMENT.md)
 - [Handoff de implementacion](pipeline/CRM_PIPELINE_IMPLEMENTATION_HANDOFF.md)
 
+### Tasks, Notes y Timeline
+
+- [Especificacion UX](tasks/CRM_TASKS_UX_SPEC.md)
+- [Auditoria de componentes](tasks/CRM_TASKS_COMPONENT_AUDIT.md)
+- [Contrato](tasks/CRM_TASKS_CONTRACT.md)
+- [Impact assessment](tasks/CRM_TASKS_IMPACT_ASSESSMENT.md)
+- [Handoff de implementacion](tasks/CRM_TASKS_IMPLEMENTATION_HANDOFF.md)
+
 ### Shared del piloto
 
 - [UX general del piloto](shared/CRM_PILOT_UX_SPEC.md)

@@ -96,6 +96,38 @@ UX responsive.
 El contrato y el impact assessment de Pipeline quedan aprobados por User el 2026-08-13. Pipeline
 queda Ready documental en el Issue #85; la implementacion sigue sin iniciar.
 
+Tasks se definira como modulo mediante `.github/skills/module-definition`, usando el Issue #87 como
+delivery y el Issue #86 como coordinacion UX de G3. Daily Operation no se crea como modulo separado
+en esta fase: se tratara como resultado transversal de G3 compuesto por Contacts, Leads, Pipeline,
+Tasks, notas, timeline y Customer 360. El paquete de Tasks definira los contratos compartidos
+`Task`, `Note`, `TimelineEvent` y `ActivityItem`.
+
+El paquete de Tasks se organiza en `docs/06-product/crm/tasks/` y permanece `proposed` hasta la
+revision punto por punto. Usa #86 como coordinacion UX de G3 y #87 como delivery Issue. Su futuro
+handoff define `feature/crm-pilot-tasks-implementation`, pero esta rama documental no inicia codigo.
+
+El Punto 1 de Tasks queda aprobado por User: vistas, rutas, modos Canvas y composicion de componentes.
+
+El Punto 2 de Tasks queda aprobado por User: bandeja y Mi dia con columnas, estados, prioridades,
+filtros, acciones, grupos, estados UX y responsive.
+
+El Punto 3 de Tasks queda aprobado por User: detalle, creacion, edicion, relaciones con Contact/Lead/
+Opportunity, ciclo de vida, permisos, validaciones y responsive. La entidad relacionada queda fijada
+despues de crear la Task durante el piloto.
+
+El Punto 4 de Tasks queda aprobado por User: Notes y Timeline como capacidades compartidas, Timeline
+append-only, Notes protegidas por permisos, `ActivityItem` comun y agregacion sin duplicados en
+Customer 360.
+
+El paquete de Tasks queda aprobado por User el 2026-08-13: UX spec, component audit, contract e
+impact assessment aprobados, y implementation handoff aprobado para handoff. Tasks queda Ready
+documental en el Issue #87; Daily Operation permanece como resultado transversal de G3 y la
+implementacion no inicia en esta rama.
+delivery y el Issue #86 como coordinacion UX de G3. Daily Operation no se crea como modulo separado
+en esta fase: se tratara como resultado transversal de G3 compuesto por Contacts, Leads, Pipeline,
+Tasks, notas, timeline y Customer 360. El paquete de Tasks definira los contratos compartidos
+`Task`, `Note`, `TimelineEvent` y `ActivityItem`.
+
 El paquete de Leads esta organizado en `docs/06-product/crm/leads/`: UX spec, component audit,
 contract, impact assessment e implementation handoff. UX, component audit, contract e impact
 assessment estan aprobados por User el 2026-08-13; el handoff queda listo para confirmacion en el
@@ -214,6 +246,7 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Aprobar auditoria de componentes de Contactos | La vista debe construirse con limites claros entre shell, FSD y dominio CRM | `CRM-01` puede prepararse con ContactTable, ContactForm, ContactDetailPanel y sus features/entities | User |
 | 2026-08-13 | Aprobar contrato de Contact e impact assessment de CRM-01 | La implementacion necesita un acuerdo comun de datos y una matriz de impactos antes de tocar codigo | `CRM-01` pasa Definition of Ready; el desarrollo aun no se inicia | User |
 | 2026-08-13 | Aprobar paquete UX de Leads y reglas de conversion por producto | Un Lead puede interesarse por varios seguros sin duplicar la misma Opportunity; la unicidad debe proteger reintentos y concurrencia | Leads queda Ready documental; primera conversion mueve a `convertido`, conversiones posteriores usan `product_key` distinto y Pipeline distingue `manual` de `lead_conversion` | User |
+| 2026-08-13 | Definir Tasks como modulo y Daily Operation como resultado transversal de G3 | Tasks es una entidad reutilizable; Daily Operation depende de Contacts, Leads, Pipeline, notas, timeline y Customer 360 | Se crea el paquete de cinco documentos para Tasks bajo `docs/06-product/crm/tasks/`; no se crea un modulo separado de Daily Operation | User |
 
 ## Arquitectura y contratos
 
