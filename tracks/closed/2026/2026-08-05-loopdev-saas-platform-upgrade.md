@@ -1,9 +1,10 @@
 ---
 id: loopdev-saas-platform-upgrade
 title: Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad
-status: active
+status: closed
 created: 2026-08-05
 updated: 2026-08-12
+closed: 2026-08-14
 owner: platform
 branch: null
 areas: []
@@ -36,8 +37,14 @@ Las fases, checkpoints y tareas existentes se preservan en la especificación mi
 
 ## Criterios de cierre
 
-- [ ] Formalizar criterios de cierre verificables durante la próxima actualización.
-- [ ] Obtener aprobación explícita del usuario antes de mover el track a `closed`.
+- [x] Reemplazado como autoridad operativa por la arquitectura canónica.
+- [x] Conservado como histórico para preservar decisiones y contexto migrado.
+- [x] Cierre aprobado explícitamente por el usuario el 2026-08-14.
+
+**Motivo del cierre:** Este track queda superseded como plan operativo por
+`docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md` y
+`docs/architecture/LOOPDEV_PILOT.md`. Su contenido se conserva únicamente como
+histórico migrado.
 
 ## Especificación migrada
 
@@ -687,7 +694,10 @@ Este cierre no migra todavía las tablas Quant que conservan `tenant_id`; esa ev
 - [x] Mover la gestión de `quant_exchanges` a rutas server-side protegidas: el navegador ya no consulta ni escribe la tabla y solo recibe metadatos saneados; `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` permanecen exclusivamente en servidor.
 - [ ] Configurar `SUPABASE_SERVICE_ROLE_KEY` y `QUANT_CORE_URL` en staging/Render antes de activar el vault en usuarios reales (Fase 10).
 
-Runbook preparado en `docs/quant-vault-environment.md`; el pendiente se cierra únicamente después de cargar y verificar los secretos en los entornos correspondientes.
+Runbook histórico archivado en
+`docs/archive/product/experimental/2026-08-13/QUANT_VAULT_ENVIRONMENT.md`;
+Quant remains deferred and the secret provisioning work is not an active
+release prerequisite.
 
 **Criterio:** ningún usuario puede consultar o modificar datos de otra organización aunque manipule la request.
 

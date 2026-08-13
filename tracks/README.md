@@ -27,7 +27,6 @@
 
 ### Platform
 
-- [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./active/platform/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
 - [Estandarización del shell de LoopDev OS](./active/platform/2026-08-10-shell-standardization.md) · fase 4
 - [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-impact-validation` · fase 1
 
@@ -60,4 +59,5 @@
 - [Order Flow Integration](./closed/2026/2026-04-11-order-flow-integration.md) · fase 0
 - [Health OS Occupational Health Suite](./closed/2026/2026-06-28-health-os-occupational.md) · fase 0
 - [Sales & CRM Suite Integration](./closed/2026/2026-07-18-sales-crm-integration.md) · fase 0
+- [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./closed/2026/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
 - [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4
