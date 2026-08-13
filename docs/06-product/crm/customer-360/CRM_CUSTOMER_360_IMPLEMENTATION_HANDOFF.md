@@ -1,6 +1,6 @@
 ---
 title: CRM Customer 360 Implementation Handoff
-status: proposed
+status: approved-for-handoff
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
@@ -48,12 +48,12 @@ forecast y dashboard financiero.
 
 ## Definition of Ready
 
-- [ ] UX, component audit, contract e impact assessment aprobados.
-- [ ] Issue #88 y Project CRM Pilot G0-G5 enlazados.
-- [ ] Contact, Lead, Opportunity y Task contracts confirmados.
-- [ ] ActivitySource, deduplicación y permisos de Notes definidos.
-- [ ] RLS y límites de agregación definidos.
-- [ ] Daily Operation se mantiene como resultado transversal de G3.
+- [x] UX, component audit, contract e impact assessment aprobados.
+- [x] Issue #88 y Project CRM Pilot G0-G5 enlazados.
+- [x] Contact, Lead, Opportunity y Task contracts confirmados.
+- [x] ActivitySource, deduplicación y permisos de Notes definidos.
+- [x] RLS y límites de agregación definidos.
+- [x] Daily Operation se mantiene como resultado transversal de G3.
 - [ ] No hay cambios ajenos en el primer commit.
 
 ## Evidence and validation

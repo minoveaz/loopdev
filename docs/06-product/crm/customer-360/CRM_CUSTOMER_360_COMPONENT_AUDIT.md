@@ -1,6 +1,6 @@
 ---
 title: CRM Customer 360 Component Audit
-status: proposed
+status: approved
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
@@ -63,10 +63,11 @@ compatibilidad demostrada.
 
 ## Definition of Ready
 
-- [ ] UX, contract e impact assessment aprobados.
+- [x] UX, contract e impact assessment aprobados.
 - [x] Vistas `record`, `split` y `overview`, junto con sus componentes y owners iniciales, aprobadas.
 - [x] Secciones autorizadas, estados parciales y agregación deduplicada aprobadas.
-- [ ] Record, split y overview tienen owners.
-- [ ] Relaciones y permisos están definidos.
-- [ ] Deduplicación ActivitySource está definida.
-- [ ] Customer 360 no se convierte en entidad paralela.
+- [x] Contrato de Customer 360 aprobado.
+- [x] Record, split y overview tienen owners.
+- [x] Relaciones y permisos están definidos.
+- [x] Deduplicación ActivitySource está definida.
+- [x] Customer 360 no se convierte en entidad paralela.

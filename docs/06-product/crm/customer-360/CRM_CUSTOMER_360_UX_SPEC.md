@@ -1,6 +1,6 @@
 ---
 title: CRM Customer 360 UX Specification
-status: proposed
+status: approved
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
@@ -76,8 +76,8 @@ forecast y dashboard financiero.
 
 ## 9. Aprobacion
 
-- [ ] Product Owner aprueba alcance, vistas y secciones.
+- [x] Product Owner aprueba alcance, vistas y secciones.
 - [x] Product Owner aprueba alcance, vistas `record`, `split` y `overview`, secciones y composición de componentes.
 - [x] Product Owner aprueba secciones, permisos por sección, carga parcial y deduplicación mediante `ActivitySource`.
-- [ ] Tech Lead aprueba agregación, permisos, deduplicación y contratos.
-- [ ] Se confirma Customer 360 dentro de Contact, no como módulo de navegación independiente.
+- [x] Tech Lead aprueba agregación, permisos, deduplicación y contratos.
+- [x] Se confirma Customer 360 dentro de Contact, no como módulo de navegación independiente.

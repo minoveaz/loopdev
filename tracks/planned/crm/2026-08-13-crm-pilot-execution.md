@@ -130,6 +130,13 @@ agregadas, componentes reutilizables y componentes especificos.
 El Punto 2 de Customer 360 queda aprobado por User: secciones, permisos por seccion, carga parcial y
 deduplicacion mediante `ActivitySource`.
 
+El contrato de Customer 360 queda aprobado por User el 2026-08-13. El impact assessment permanece
+pendiente de revision y aprobacion separada.
+
+Customer 360 queda aprobado por User el 2026-08-13: UX spec, component audit, contract e impact
+assessment aprobados, y implementation handoff aprobado para handoff. El bloque queda Ready
+documental en el Issue #88; Daily Operation sigue siendo resultado transversal de G3.
+
 El paquete de Tasks queda aprobado por User el 2026-08-13: UX spec, component audit, contract e
 impact assessment aprobados, y implementation handoff aprobado para handoff. Tasks queda Ready
 documental en el Issue #87; Daily Operation permanece como resultado transversal de G3 y la
@@ -187,7 +194,8 @@ Las decisiones UX/UI confirmadas para UX-00 son:
   documentos, cotizaciones, seguros y comunicaciones.
 - Una tarea puede asociarse a contacto, lead u oportunidad, pero aparece una sola vez en Customer
   360.
-- El dashboard se oculta hasta que existan agregados reales.
+- Dashboard e import dry-run quedan fuera del piloto inicial y se planifican para el sprint posterior,
+  una vez validado el flujo CRM completo.
 - UAT funcional en escritorio y tablet; mobile web conserva responsive basico sin paridad funcional.
 
 La composicion frontend del piloto sigue el ADR
@@ -208,8 +216,8 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 - G1: Contacts, seguridad RLS por verbo, integridad tenant-aware, kill switches, audit append-only,
   reset/seed/types, pgTAP, CI requerido y primer slice persistente.
 - G2: captura de lead transaccional e idempotente, detalle/edicion de lead y pipeline persistente.
-- G3: notas, tareas, timeline, Customer 360 minimo, dashboard real u oculto, import dry-run,
-  staging, observabilidad y primer UAT.
+- G3: notas, tareas, timeline, Customer 360 minimo, staging, observabilidad y primer UAT. Dashboard e
+  import dry-run quedan fuera del piloto y pasan al sprint posterior.
 - G4-G5: remediacion P0/P1, accesibilidad, rendimiento, restore drill, runbooks, canary y decision
   de activar un anillo nominal o continuar como UAT privado.
 
@@ -252,12 +260,13 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Confirmar dos carriles de ingenieria | El piloto necesita separar producto/frontend de plataforma/datos aunque la ejecucion pueda ser secuencial | Carril CRM/Frontend y carril Datos/Seguridad/Operaciones; no implica dos personas disponibles | User |
 | 2026-08-13 | Adoptar `SuiteRuntime + SuiteCanvas` como composicion del piloto y aplicar FSD dentro del Canvas | El CRM parte de una composicion de suite flexible y modos de visualizacion ya demostrados en Shell Showcase | CRM usara Canvas sin logica de negocio; el contenido se organiza por widgets/features/entities | User |
 | 2026-08-13 | Crear dataset sintetico inicial | Se necesita una base determinista para contratos, deduplicacion, importacion y pruebas | `crm-pilot-contacts.csv` queda como fixture de referencia; debe ampliarse con leads, oportunidades y tareas antes de UAT | User |
-| 2026-08-13 | Usar fechas tentativas ligadas a gates para UAT | Las sesiones no deben bloquear G0 ni fingir disponibilidad antes de staging | UAT 1 se planifica tentativamente en G3; UAT 2 en G4; las fechas se fijan cuando staging y funcionalidades esten Ready | User |
+| 2026-08-13 | Usar fechas tentativas ligadas a gates para UAT | Las sesiones no deben bloquear G0 ni fingir disponibilidad antes de staging | UAT 1: 2026-09-04; UAT 2: 2026-09-11. Son fechas tentativas y se confirman cuando staging y funcionalidades esten Ready | User |
 | 2026-08-13 | Crear plantilla de revision de readiness | Las pruebas deben comparar producto realmente entregado, casos esperados y cobertura antes de ejecutarse | `CRM_PILOT_READINESS_REVIEW.md` bloquea interpretaciones de cobertura sin candidate en staging | User |
 | 2026-08-13 | Aprobar auditoria de componentes de Contactos | La vista debe construirse con limites claros entre shell, FSD y dominio CRM | `CRM-01` puede prepararse con ContactTable, ContactForm, ContactDetailPanel y sus features/entities | User |
 | 2026-08-13 | Aprobar contrato de Contact e impact assessment de CRM-01 | La implementacion necesita un acuerdo comun de datos y una matriz de impactos antes de tocar codigo | `CRM-01` pasa Definition of Ready; el desarrollo aun no se inicia | User |
 | 2026-08-13 | Aprobar paquete UX de Leads y reglas de conversion por producto | Un Lead puede interesarse por varios seguros sin duplicar la misma Opportunity; la unicidad debe proteger reintentos y concurrencia | Leads queda Ready documental; primera conversion mueve a `convertido`, conversiones posteriores usan `product_key` distinto y Pipeline distingue `manual` de `lead_conversion` | User |
 | 2026-08-13 | Definir Tasks como modulo y Daily Operation como resultado transversal de G3 | Tasks es una entidad reutilizable; Daily Operation depende de Contacts, Leads, Pipeline, notas, timeline y Customer 360 | Se crea el paquete de cinco documentos para Tasks bajo `docs/06-product/crm/tasks/`; no se crea un modulo separado de Daily Operation | User |
+| 2026-08-13 | Sacar Dashboard e import dry-run del piloto | El piloto debe validar primero el flujo CRM critico y reducir complejidad operativa | Dashboard e import dry-run pasan al sprint posterior, despues de validar Contacts, Leads, Pipeline, Tasks y Customer 360 | User |
 
 ## Arquitectura y contratos
 
@@ -308,6 +317,10 @@ programa y no autoriza implementacion del piloto.
 **Evidencia:** `docs/06-product/crm/shared/CRM_PILOT_UX_SPEC.md` v1.1, aprobado el 2026-08-13 por User.
 
 **Estado:** pendiente.
+
+**Calendario tentativo:** UAT 1 el 2026-09-04 para validacion funcional en staging; UAT 2 el
+2026-09-11 para regresion, hardening y readiness de release. Las fechas no son compromiso definitivo:
+se confirman tras G1/G2, despliegue reproducible y revision de readiness.
 
 ### Fase 1: G1 - Security and first persistent slice
 
@@ -361,8 +374,8 @@ aislamiento verificable.
 
 **Entregables**
 - [ ] Notas, tareas, completado y timeline.
-- [ ] Customer 360 minimo y dashboard real u oculto.
-- [ ] Import dry-run, staging reproducible, health, logs, Sentry y UAT 1.
+- [ ] Customer 360 minimo.
+- [ ] Staging reproducible, health, logs, Sentry y UAT 1.
 
 **Validacion**
 - [ ] Un agente completa el flujo diario critico con datos autorizados.
@@ -371,6 +384,8 @@ aislamiento verificable.
 **Evidencia:** Pendiente.
 
 **Estado:** bloqueada por Fase 2.
+
+**Fuera del piloto:** Dashboard CRM e import dry-run se planifican en el sprint posterior al piloto.
 
 ### Fase 4: G4-G5 - Hardening and release decision
 

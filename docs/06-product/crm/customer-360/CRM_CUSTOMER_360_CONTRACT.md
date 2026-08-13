@@ -1,6 +1,6 @@
 ---
 title: CRM Customer 360 Domain Contract
-status: proposed
+status: approved
 version: 1.0
 created: 2026-08-13
 updated: 2026-08-13
