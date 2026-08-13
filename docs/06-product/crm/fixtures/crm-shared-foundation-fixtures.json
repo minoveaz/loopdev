@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "scope": {
+    "organizationId": "org-crm-fixture",
+    "workspaceId": "workspace-crm-fixture",
+    "authorizedUserId": "user-authorized",
+    "forbiddenUserId": "user-forbidden"
+  },
+  "lookup": {
+    "query": "Ana",
+    "items": [
+      { "id": "contact-1", "entityType": "contact", "label": "Ana García", "subtitle": "ana@example.test" }
+    ],
+    "nextCursor": null
+  },
+  "activity": {
+    "sourceKey": "task:task-1",
+    "sourceType": "task",
+    "sourceId": "task-1",
+    "type": "task_completed",
+    "occurredAt": "2026-08-14T00:00:00.000Z",
+    "summary": "Task completed",
+    "appendOnly": true
+  },
+  "notes": {
+    "authorized": {
+      "id": "note-1",
+      "entityType": "contact",
+      "entityId": "contact-1",
+      "visibility": "team",
+      "body": "Follow up tomorrow"
+    },
+    "redacted": {
+      "id": "note-1",
+      "entityType": "contact",
+      "entityId": "contact-1",
+      "visibility": "private",
+      "body": null
+    }
+  },
+  "negativeCases": [
+    "organization-mismatch",
+    "workspace-mismatch",
+    "inactive-membership",
+    "forbidden-relation",
+    "duplicate-source-key",
+    "activity-update",
+    "unbounded-lookup"
+  ]
+}

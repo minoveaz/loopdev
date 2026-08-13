@@ -1,12 +1,12 @@
 ---
 id: crm-shared-foundation
 title: CRM shared foundation implementation
-status: planned
+status: active
 created: 2026-08-14
 updated: 2026-08-14
 owner: crm
 lead: null
-branch: null
+branch: feature/crm-shared-foundation
 branches: []
 phase: 0
 pull_requests: []
@@ -65,8 +65,8 @@ cursor-backed and cannot reveal cross-organization records.
 
 ## Branch strategy
 
-Create `feature/crm-shared-foundation` from the current `develop` baseline
-before implementation begins.
+Implementation uses `feature/crm-shared-foundation`, created from the
+synchronized `origin/develop` baseline.
 
 ## Fases
 
@@ -75,22 +75,25 @@ before implementation begins.
 **Objetivo:** Reconcile contracts and establish testable implementation gates.
 
 **Definition of Ready**
-- [ ] `develop` baseline is synchronized with `origin/develop`.
-- [ ] `feature/crm-shared-foundation` is created from that baseline.
-- [ ] Shared contracts and existing schemas are reconciled.
-- [ ] Capability, RLS and redaction matrices are approved.
+- [x] `develop` baseline is synchronized with `origin/develop`.
+- [x] `feature/crm-shared-foundation` is created from that baseline.
+- [x] Shared contracts and existing schemas are reconciled.
+- [x] Capability, RLS and redaction matrices are approved.
 
 **Entregables**
-- [ ] Shared contract specification and fixtures.
-- [ ] Implementation plan with migrations, tests and rollback boundaries.
+- [x] `docs/06-product/crm/CRM_SHARED_FOUNDATION_READINESS.md`.
+- [x] `docs/06-product/crm/fixtures/crm-shared-foundation-fixtures.json`.
+- [x] Implementation plan with migrations, tests and rollback boundaries.
 
 **Validación**
-- [ ] Track validator passes.
-- [ ] Contract and RLS test plan is reviewed.
+- [x] Track validator passes.
+- [x] Contract and RLS test plan is reviewed.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Existing CRM schemas were reviewed against the approved shared
+boundaries. Readiness findings, capability/redaction rules, rollback boundaries
+and negative cases are recorded in the readiness document and fixtures.
 
-**Estado:** pendiente
+**Estado:** completada el 2026-08-14. Implementation can begin.
 
 ## Riesgos y bloqueos
 
@@ -115,14 +118,15 @@ before implementation begins.
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-14.
-- **Rama de continuación:** `feature/crm-shared-foundation` por crear.
-- **Commit de partida:** Pendiente de sincronizar `develop`.
-- **Estado alcanzado:** Track creado después del cierre del inventario CRM.
+- **Rama de continuación:** `feature/crm-shared-foundation`.
+- **Commit de partida:** `22483b9` (`origin/develop` baseline).
+- **Estado alcanzado:** Phase 0 readiness completed; shared contract implementation
+  is unblocked.
 - **Decisiones, bloqueos y riesgos:** Shared foundation is the first slice;
   schema reconciliation is the readiness gate.
-- **Validación ejecutada:** Track validator pendiente tras creación.
-- **Siguiente acción concreta:** Synchronize `develop`, create the feature
-  branch, and execute Phase 0.
+- **Validación ejecutada:** Contract/schema review and fixture coverage recorded;
+  track validator pending after the lifecycle move.
+- **Siguiente acción concreta:** Implement shared schemas and contract tests.
 
 ## Cierre
 

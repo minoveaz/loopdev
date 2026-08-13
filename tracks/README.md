@@ -7,7 +7,6 @@
 ### CRM
 
 - [CRM Pilot Execution](./planned/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
-- [CRM shared foundation implementation](./planned/crm/2026-08-14-crm-shared-foundation.md) · fase 0
 
 ### Marketing Studio
 
@@ -22,6 +21,7 @@
 ### CRM
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
+- [CRM shared foundation implementation](./active/crm/2026-08-14-crm-shared-foundation.md) · `feature/crm-shared-foundation` · fase 0
 
 ### Mobile
 
