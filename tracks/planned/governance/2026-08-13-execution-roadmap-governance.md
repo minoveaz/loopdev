@@ -51,6 +51,8 @@ the initial H0/H1 ambiguity into the G0-G5 pilot release train and leaves H2-H5 
   and release quality/operations.
 - Create one GitHub Project that represents the operational execution of the G0-G5 pilot.
 - Create `CRM Pilot Execution` as the central CRM program track for the G0-G5 pilot.
+- Publish and protect `docs/2026-execution-roadmap` as the durable planning branch after the CRM
+  pilot planning package is complete.
 - Convert accepted pilot gates, P0 risks, and dependencies into small execution tracks after
   roadmap approval.
 - Keep the architecture roadmap and CTO evaluation as linked source records.
@@ -74,6 +76,7 @@ the initial H0/H1 ambiguity into the G0-G5 pilot release train and leaves H2-H5 
 | 2026-08-13 | Crear un unico GitHub Project operativo para el piloto | Se necesita una vista diaria para seguir el plan, priorizar bloqueos y evitar trabajo improvisado | El Project representa G0-G5; el roadmap y los tracks conservan direccion y evidencia | User |
 | 2026-08-13 | Crear `CRM Pilot Execution` como program track central | El piloto necesita un documento operativo distinto del roadmap anual y del mega-track historico | El track CRM historico queda supersedido solo como plan operativo; su evidencia se conserva | User |
 | 2026-08-13 | Aprobar el execution roadmap anual en terminos generales | La direccion, secuencia, riesgos y limites del piloto son suficientes para gobernar G0-G5 | El roadmap pasa a `approved`; se permiten ajustes menores no materiales y cambios materiales requieren decision aprobada | User |
+| 2026-08-13 | Proteger la rama remota `docs/2026-execution-roadmap` al finalizar la planificacion CRM | La rama concentra el contexto durable que guiara el desarrollo del piloto y del ano | Se publicara, etiquetara y protegera contra borrado y force-push; cambios posteriores entraran por Pull Request | User |
 
 ## Arquitectura y contratos
 
@@ -140,12 +143,14 @@ ajustes necesarios antes de abrir ejecucion.
 - [ ] GitHub Project `CRM Pilot G0-G5` creado con campos, vistas y items iniciales G0.
 - [x] Program track `CRM Pilot Execution` creado y enlazado a las secciones 8.1, 11, 16-19 del roadmap de arquitectura.
 - [ ] Primeros tracks de entrega creados solo para los P0 aceptados de G1.
+- [ ] Baseline documental final aprobado y rama `docs/2026-execution-roadmap` publicada y protegida.
 
 **Validacion**
 - [ ] Validar el track y regenerar el dashboard de tracks.
 - [ ] Confirmar que cada item de G0-G5 tiene owner, dependencia, gate y evidencia esperada.
 - [ ] Confirmar que el Project enlaza los tracks y la evidencia, sin duplicar decisiones o criterios.
 - [ ] Confirmar que no se declara produccion controlada sin cumplir las condiciones no-go.
+- [ ] Confirmar tag `roadmap-2026-approved`, proteccion contra borrado/force-push y PR obligatorio.
 
 **Evidencia:** `docs/architecture/LOOPDEV_2026_EXECUTION_ROADMAP.md`, commit `6c1d971`.
 
@@ -179,6 +184,22 @@ ajustes necesarios antes de abrir ejecucion.
 | Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
 | --- | --- | --- | --- | --- |
 
+## Proteccion de la rama documental
+
+Al completar la planificacion del piloto CRM se ejecutara este cierre documental:
+
+1. Confirmar que el baseline contiene roadmap, tracks, UX, contratos, ADRs, fixtures y handoffs,
+  y que no contiene codigo de producto ni artefactos ajenos.
+2. Publicar `docs/2026-execution-roadmap` en `origin`.
+3. Crear el tag `roadmap-2026-approved` sobre el commit baseline.
+4. Configurar proteccion remota contra borrado y force-push; los cambios posteriores entran por
+  Pull Request con revision de governance/Product Owner.
+5. Mantener la rama como referencia documental durante el ciclo de desarrollo. No se despliega y no
+  se mezcla con ramas de implementacion.
+
+La rama no se retirara ni eliminara hasta que termine el desarrollo anual asociado y exista una
+decision explicita de archivado o retiro.
+
 ## Riesgos y bloqueos
 
 | Riesgo o bloqueo | Impacto | Mitigacion | Responsable | Estado |
@@ -190,6 +211,7 @@ ajustes necesarios antes de abrir ejecucion.
 | Un P1 o stretch goal desplaza un P0 | El piloto no supera sus gates de seguridad y persistencia | Revisar gates G0-G5 antes de aceptar cada nuevo track | governance | abierto |
 | Se procesan datos sensibles antes de la aprobacion correspondiente | Riesgo legal, de privacidad y de seguridad | Mantener datos de salud fuera del piloto y exigir decision documentada | crm | abierto |
 | Las fuentes vuelven a divergir | Nuevas decisiones usan direccion obsoleta | Enlazar este roadmap desde tracks futuros y registrar cambios aprobados | governance | abierto |
+| La rama documental se elimina o recibe cambios directos no revisados | Se pierde contexto o cambia la direccion sin trazabilidad | Protegerla al finalizar la planificacion y exigir PR/revision | governance | abierto |
 
 ## Criterios de cierre
 
