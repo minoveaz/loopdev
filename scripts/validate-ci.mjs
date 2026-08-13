@@ -3,6 +3,8 @@ import { spawnSync } from 'node:child_process';
 const isWindows = process.platform === 'win32';
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
 const steps = [
+  ['Documentation links', ['docs:links:check']],
+  ['Registry catalog synchronization', ['registries:check']],
   ['Lint', ['lint']],
   ['Frontend quality gate', ['front:check']],
   ['Build shared contracts', ['--filter', '@loopdev/contracts', 'build']],

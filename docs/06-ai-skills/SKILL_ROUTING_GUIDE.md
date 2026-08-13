@@ -12,9 +12,9 @@ USER SAYS...                      → YOU RECOMMEND...
 "Build a trading strategy"        → skill-discovery → contract → quant-strategy → qa → backtest → tier3
 "Build a UI component"            → skill-discovery → contract → frontend → qa → tier3
 "Build an API"                    → skill-discovery → contract → infra → qa → tier3
-"Review my code"                  → skill-architecture-review → security → performance
-"I'm ready to deploy"             → skill-release-readiness
-"My strategy is too slow"         → skill-performance-optimization
+"Review my code"                  → validation-framework → security-review
+"I'm ready to deploy"             → track-governance → git-workflow
+"My strategy is too slow"         → validation-framework
 "Is my code secure?"              → skill-security-audit
 "How do I test this?"             → skill-qa-testing
 ```
@@ -134,85 +134,75 @@ USER SAYS...                      → YOU RECOMMEND...
 
 **You should**:
 ```
-Not yet! We need to run 4 governance checks.
-These happen in parallel and take ~2 hours each.
+Not yet! We need to select the applicable governance checks.
+Use the operational repository Skills and the validation framework.
 
 After these, your code is production-ready.
 
 Would you like to proceed? [yes/no]
 ```
 
-#### Phase 4a: Architecture Review
+#### Architecture and release routing
 
 ```
-Skill: Architecture Review Skill
-Path: tier-3-governance/ARCHITECTURE_REVIEW_SKILL.md
-Time: 2 hours
-Goal: Validate ADRs, DAG, type safety
-Output: Architecture report + violations
+Skill: track-governance + validation-framework
+Path: .github/skills/track-governance/SKILL.md
+Goal: Validate scope, decisions, evidence, and required repository gates
+Output: Track evidence and selected validation commands
 
 Checks:
-✅ ADRs valid (ADR-001 through ADR-004)
-✅ DAG acyclic (no circular dependencies)
-✅ Type safety (all Zod schemas)
-✅ Design patterns match LoopDev
+✅ Applicable architecture authority identified
+✅ Contracts and dependencies reviewed
+✅ Narrowest validation selected
 
 Ready? [yes/no]
 ```
 
-#### Phase 4b: Security Audit
+#### Security Audit
 
 ```
 Skill: Security Audit Skill
-Path: tier-3-governance/SECURITY_AUDIT_SKILL.md
-Time: 2 hours
+Path: .github/skills/security-review/SKILL.md
 Goal: Validate security
 Output: Security report + fixes
 
 Checks:
-✅ OWASP Top 10 (all 10 categories)
-✅ RLS enforcement (multi-tenant safe)
+✅ Organization isolation and RLS enforcement
 ✅ Secrets not hardcoded
-✅ Dependencies have no critical vulns
+✅ Required repository security gates
 
 This is critical. Even if boring, must pass.
 
 Ready? [yes/no]
 ```
 
-#### Phase 4c: Performance Optimization
+#### Performance and experience validation
 
 ```
-Skill: Performance Optimization Skill
-Path: tier-3-governance/PERFORMANCE_OPTIMIZATION_SKILL.md
-Time: 2 hours
-Goal: Optimize code
-Output: Performance report + optimizations
+Skill: validation-framework
+Path: .github/skills/validation-framework/SKILL.md
+Goal: Select targeted performance and experience validation
+Output: Validation report and residual risks
 
 Checks:
-✅ Bundle size <2MB
-✅ Lighthouse >90
-✅ No N+1 queries
-✅ Cache hit rate >80%
+✅ Relevant domain or experience checks selected
+✅ Measurements are evidence-based
 
 Ready? [yes/no]
 ```
 
-#### Phase 4d: Release Readiness
+#### Release Readiness
 
 ```
-Skill: Release Readiness Skill
-Path: tier-3-governance/RELEASE_READINESS_SKILL.md
-Time: 2 hours
-Goal: Prepare deployment
-Output: Deployment plan + runbooks
+Skill: git-workflow + track-governance + validation-framework
+Path: .github/skills/git-workflow/SKILL.md
+Goal: Prepare and validate the release change
+Output: Reviewed diff, track evidence, and required checks
 
 Checks:
-✅ Monitoring live
-✅ Runbooks written
-✅ Backup verified
-✅ Team coordinated
-✅ Rollback tested
+✅ Branch and PR conventions pass
+✅ Required validation scope passes
+✅ Rollback and residual risks are documented when applicable
 
 This is the final gate. After this, ready to ship!
 
@@ -252,9 +242,8 @@ Ready? [yes/no]
 
 **You should**:
 ```
-Skill: Performance Optimization Skill
-Path: tier-3-governance/PERFORMANCE_OPTIMIZATION_SKILL.md
-Time: 2 hours
+Skill: validation-framework
+Path: .github/skills/validation-framework/SKILL.md
 Goal: Identify and fix bottlenecks
 Output: Optimizations + recommendations
 
@@ -323,7 +312,7 @@ The Contract Definition Skill teaches you how to:
    - Automatic runtime validation
 
 3. Enforce multi-tenancy
-   - Every object has tenant_id
+   - Every object has organization_id
    - Prevents data leaks
    - RLS ready
 

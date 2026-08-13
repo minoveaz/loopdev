@@ -1,5 +1,10 @@
 # Security Audit Skill
 
+> The repository-operational security procedure is
+> [`.github/skills/security-review/SKILL.md`](../../../.github/skills/security-review/SKILL.md).
+> This document remains the detailed reference and examples; the repository
+> Skill is the executable authority for current reviews.
+
 **Tier**: 3 (Governance)  
 **Role**: Security Champion, Backend Engineer  
 **When to Use**: After code is complete, before QA sign-off  
@@ -63,14 +68,14 @@ Security Context:
 ```typescript
 // ✅ CORRECT: Check user can access
 export const getStrategy = async (req: Request, { params }: { params: { id: string } }) => {
-  const { userId, tenantId } = await getCurrentUser(req);
+  const { userId, organizationId } = await getCurrentUser(req);
   
   const strategy = await db.strategy.findUnique({
     where: { id: params.id }
   });
   
   // Verify ownership
-  if (strategy.tenant_id !== tenantId) {
+  if (strategy.organization_id !== organizationId) {
     return Response.json({ error: 'Unauthorized' }, { status: 403 });
   }
   
@@ -85,7 +90,7 @@ export const getStrategy = async (req: Request, { params }: { params: { id: stri
   return Response.json(strategy);  // Anyone can read ANY strategy!
 };
 
-// ❌ WRONG: Only checking user_id, not tenant_id
+// ❌ WRONG: Only checking user_id, not organization_id
 if (strategy.user_id !== userId) {
   return Response.json({ error: 'Unauthorized' }, { status: 403 });
 }
@@ -94,7 +99,7 @@ if (strategy.user_id !== userId) {
 
 **Checklist**:
 - [ ] All endpoints verify user owns the resource
-- [ ] Verification includes tenant_id (multi-tenant safety)
+- [ ] Verification includes organization_id (multi-tenant safety)
 - [ ] Return 403 Forbidden for unauthorized access
 - [ ] No object references in URLs that bypass checks (e.g., `/strategy/1` vs `/user/123/strategy/456`)
 - [ ] Admin actions require explicit admin role
@@ -102,7 +107,7 @@ if (strategy.user_id !== userId) {
 **Tools**:
 ```bash
 # Check for missing auth checks
-grep -r "findUnique\|findMany" src/ | grep -v tenant_id
+grep -r "findUnique\|findMany" src/ | grep -v organization_id
 ```
 
 ---
@@ -200,7 +205,7 @@ grep -r "MD5\|SHA1\|crypto.createHash" src/
 const strategy = await db.strategy.findMany({
   where: {
     name: strategyName,  // Parameter, not string concat
-    tenant_id: tenantId
+    organization_id: organizationId
   }
 });
 
@@ -214,7 +219,7 @@ const { query } = SearchSchema.parse(req.body);
 const results = await db.strategy.findMany({
   where: {
     name: { contains: query },
-    tenant_id: tenantId
+    organization_id: organizationId
   }
 });
 
@@ -259,10 +264,10 @@ grep -r "req.body\|req.query\|req.params" src/ | grep -v "Schema.parse\|validate
 
 ```typescript
 // ✅ CORRECT: Security by design
-// Every module has tenant_id from the start
+// Every module has organization_id from the start
 const StrategySchema = z.object({
   id: z.string().uuid(),
-  tenant_id: z.string().uuid(),  // ← In schema from day 1
+  organization_id: z.string().uuid(),  // ← In schema from day 1
   user_id: z.string().uuid(),
   name: z.string(),
 });
@@ -273,11 +278,11 @@ const StrategySchema = z.object({
 // ✅ CORRECT: Audit logging built-in
 export const updateStrategy = async (
   strategyId: string,
-  tenantId: string,
+  organizationId: string,
   updates: Partial<Strategy>
 ) => {
   // Verify ownership
-  if (!(await ownsStrategy(strategyId, tenantId))) {
+  if (!(await ownsStrategy(strategyId, organizationId))) {
     throw new Error('Unauthorized');
   }
   
@@ -289,7 +294,7 @@ export const updateStrategy = async (
   
   // Log the change
   await auditLog.create({
-    tenant_id: tenantId,
+    organization_id: organizationId,
     action: 'STRATEGY_UPDATE',
     resource_id: strategyId,
     changes: updates,
@@ -300,15 +305,15 @@ export const updateStrategy = async (
 };
 
 // ❌ WRONG: Security added as afterthought
-// No tenant_id in schema originally
+// No organization_id in schema originally
 type Strategy = {
   id: string;
   user_id: string;
   name: string;
 };
 
-// Later, someone adds tenant_id check:
-if (req.user.tenantId !== strategy.tenantId) { ... }
+// Later, someone adds organization_id check:
+if (req.user.organizationId !== strategy.organizationId) { ... }
 // But maybe they forgot one endpoint!
 
 // ❌ WRONG: No audit logging
@@ -353,13 +358,13 @@ export const getCurrentUser = async (req: Request) => {
     });
     
     // Verify token structure
-    if (!payload.userId || !payload.tenantId) {
+    if (!payload.userId || !payload.organizationId) {
       throw new Error('Invalid token');
     }
     
     return {
       userId: payload.userId as string,
-      tenantId: payload.tenantId as string
+      organizationId: payload.organizationId as string
     };
   } catch (error) {
     throw new Error('Invalid token');
@@ -490,13 +495,13 @@ export const getStrategyById = async (
   req: Request,
   { params }: { params: { id: string } }
 ) => {
-  const { userId, tenantId } = await getCurrentUser(req);
+  const { userId, organizationId } = await getCurrentUser(req);
   
   const strategy = await db.strategy.findUnique({
     where: { id: params.id }
   });
   
-  if (!strategy || strategy.tenant_id !== tenantId) {
+  if (!strategy || strategy.organization_id !== organizationId) {
     return Response.json({ error: 'Not found' }, { status: 404 });
   }
   
@@ -670,26 +675,26 @@ export const proxyRequest = async (path: string) => {
 
 ### 2. RLS (Row-Level Security) Enforcement
 
-**What to check**: Every multi-tenant query includes tenant_id
+**What to check**: Every multi-tenant query includes organization_id
 
 ```typescript
-// ✅ CORRECT: All queries filter by tenant_id
+// ✅ CORRECT: All queries filter by organization_id
 // Database schema
 CREATE TABLE strategy (
   id UUID PRIMARY KEY,
-  tenant_id UUID NOT NULL,
+  organization_id UUID NOT NULL,
   user_id UUID NOT NULL,
   name VARCHAR(100),
-  CONSTRAINT fk_tenant FOREIGN KEY (tenant_id) REFERENCES tenant(id),
+  CONSTRAINT fk_tenant FOREIGN KEY (organization_id) REFERENCES organizations(id),
   CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "user"(id)
 );
 
 // API query
-export const getUserStrategies = async (userId: string, tenantId: string) => {
+export const getUserStrategies = async (userId: string, organizationId: string) => {
   return await db.strategy.findMany({
     where: {
       user_id: userId,
-      tenant_id: tenantId  // ← ALWAYS include
+      organization_id: organizationId  // ← ALWAYS include
     }
   });
 };
@@ -698,26 +703,26 @@ export const getUserStrategies = async (userId: string, tenantId: string) => {
 ALTER TABLE strategy ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY strategy_isolation ON strategy
-  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  USING (organization_id = current_setting('app.current_organization_id')::uuid);
 
-// ❌ WRONG: No tenant_id filter
+// ❌ WRONG: No organization_id filter
 export const getAllStrategies = async () => {
   return await db.strategy.findMany();  // LEAKS ALL TENANTS!
 };
 
-// ❌ WRONG: Tenant_id only checked in code, not DB
+// ❌ WRONG: organization_id only checked in code, not DB
 // What if someone updates DB directly?
 // What if there's a SQL injection?
 // Must also have DB-level RLS!
 ```
 
 **Checklist**:
-- [ ] Every table has tenant_id column
-- [ ] tenant_id is NOT NULL
-- [ ] Every query includes WHERE tenant_id = X
+- [ ] Every table has organization_id column
+- [ ] organization_id is NOT NULL
+- [ ] Every query includes WHERE organization_id = X
 - [ ] Database has RLS policy (if PostgreSQL)
 - [ ] Test: Can one tenant see another's data? (Must be NO)
-- [ ] Find violations: `grep -r "findMany\|findOne" src/ | grep -v tenant_id`
+- [ ] Find violations: `grep -r "findMany\|findOne" src/ | grep -v organization_id`
 
 **Test RLS**:
 ```bash
@@ -826,7 +831,7 @@ npm audit
 ```bash
 npm audit
 npm outdated  # See what's old but not flagged
-npx snyk test  # Snyk can catch more than npm audit
+pnpm audit --audit-level high
 ```
 
 ---
@@ -852,7 +857,7 @@ npx snyk test  # Snyk can catch more than npm audit
 
 Details:
 - All endpoints verify user owns resource
-- tenant_id check present
+- organization_id check present
 - 403 returned for unauthorized access
 - No object reference issues found
 
@@ -901,7 +906,7 @@ const strategies = await db.strategy.findMany({
 ✅ PASS - Security built-in from design
 
 Details:
-- Multi-tenant model includes tenant_id
+- Multi-tenant model includes organization_id
 - Audit logging implemented
 - Rate limiting configured
 - Error messages don't leak info
@@ -972,13 +977,13 @@ Severity: CRITICAL - User can delete others' strategies
 Fix:
 ```typescript
 export const DELETE = async (req: Request, { params }) => {
-  const { userId, tenantId } = await getCurrentUser(req);
+  const { userId, organizationId } = await getCurrentUser(req);
   
   const strategy = await db.strategy.findUnique({
     where: { id: params.id }
   });
   
-  if (!strategy || strategy.tenant_id !== tenantId) {
+  if (!strategy || strategy.organization_id !== organizationId) {
     return Response.json({ error: 'Not found' }, { status: 404 });
   }
   
@@ -1020,7 +1025,7 @@ Details:
 ## RLS (Row-Level Security) Validation
 
 ### Tenant Isolation
-⚠️ ISSUE FOUND - Missing tenant_id in one query
+⚠️ ISSUE FOUND - Missing organization_id in one query
 
 Location: backtestService.ts, line 78
 
@@ -1029,7 +1034,7 @@ const results = await db.backtest.findMany({
   where: {
     strategy_id: strategyId
   }
-  // ❌ Missing tenant_id filter!
+  // ❌ Missing organization_id filter!
 });
 ```
 
@@ -1040,7 +1045,7 @@ Fix:
 const results = await db.backtest.findMany({
   where: {
     strategy_id: strategyId,
-    tenant_id: tenantId
+    organization_id: organizationId
   }
 });
 ```
@@ -1081,7 +1086,7 @@ Details:
 found 0 vulnerabilities
 ```
 
-### Snyk Scan
+### Dependency Security Scan
 ✅ PASS - 0 high/critical
 
 ```
@@ -1102,7 +1107,7 @@ found 0 vulnerabilities
 3. **A07: Missing ownership verification** (CRITICAL)
    - Resolution: 1 hour
 
-4. **RLS: Missing tenant_id** (CRITICAL)
+4. **RLS: Missing organization_id** (CRITICAL)
    - Resolution: 30 min
 
 5. **A09: Admin logging missing** (MEDIUM)
@@ -1129,7 +1134,7 @@ Status: Return for fixes
 2. Re-run security checks:
    - [ ] npm audit
    - [ ] secrets scan
-   - [ ] tenant_id in all queries
+   - [ ] organization_id in all queries
    - [ ] input validation present
    - [ ] sensitive data removed
 3. Reply with: "All security fixes applied, ready for re-audit"
@@ -1145,7 +1150,7 @@ Use this when auditing:
 ```
 OWASP A01: Broken Access Control
 - [ ] All endpoints verify ownership
-- [ ] tenant_id checked in code
+- [ ] organization_id checked in code
 - [ ] 403/404 returned for unauthorized
 - [ ] No parameter tampering vulnerability
 
@@ -1202,8 +1207,8 @@ OWASP A10: SSRF
 - [ ] No internal endpoints exposed
 
 RLS Validation
-- [ ] Every table has tenant_id
-- [ ] tenant_id in every query
+- [ ] Every table has organization_id
+- [ ] organization_id in every query
 - [ ] Database RLS policy (if PostgreSQL)
 - [ ] Test: Can't see other tenants
 
@@ -1224,11 +1229,11 @@ OVERALL
 
 ## Common Issues & Fixes
 
-### Issue: Missing tenant_id in Query
+### Issue: Missing organization_id in Query
 
 **Symptom**: Users can see other tenants' data
 
-**Root Cause**: WHERE clause missing tenant_id filter
+**Root Cause**: WHERE clause missing organization_id filter
 
 **Fix**:
 ```typescript
@@ -1239,7 +1244,7 @@ const data = await db.strategy.findMany({
 
 // After
 const data = await db.strategy.findMany({
-  where: { user_id: userId, tenant_id: tenantId }
+  where: { user_id: userId, organization_id: organizationId }
 });
 ```
 
@@ -1311,4 +1316,5 @@ Questions? Contact your Security Lead or review OWASP Top 10 guide.
 
 **Next Skill**: Performance Optimization Skill  
 **When**: After security fixes are done  
-**Read**: `PERFORMANCE_OPTIMIZATION_SKILL.md`
+Use the operational validation and release Skills in `.github/skills/` for
+performance, release, and evidence routing.

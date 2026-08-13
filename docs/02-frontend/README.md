@@ -28,6 +28,12 @@ Documentación técnica para el desarrollo frontend en el ecosistema LoopDev.
 | [COMPONENT_TESTING_PROTOCOL.md](./COMPONENT_TESTING_PROTOCOL.md) | Suite de pruebas con Vitest y RTL | ✅ Activo |
 | [UI_COMPLEX_READINESS_CHECKLIST.md](./UI_COMPLEX_READINESS_CHECKLIST.md) | Checklist de componentes complejos | ✅ Activo |
 
+### Registro canónico
+
+El registro global de componentes frontend se mantiene en
+[docs/registries/frontend-components.json](../registries/frontend-components.json).
+Este directorio ya no debe crear un registro paralelo.
+
 ---
 
 ## 🚦 Flujo de Trabajo: Nueva Página

@@ -31,7 +31,8 @@ No basta con `loading/success`. ¿He definido la UI para:
 
 ## 4️⃣ Contrato y Consumo (CRÍTICO)
 - [ ] **Contrato v0 Disponible:** Existe un esquema (Zod/TS) definido en `03-platform`.
-- [ ] **Aislamiento Multi-tenant:** El contrato incluye `tenant_id` y `scope`.
+- [ ] **Aislamiento Multi-tenant:** El contrato incluye `organization_id` y
+  `scope`; `tenant_id` solo aparece cuando se documenta compatibilidad legacy.
 - [ ] **Pattern de Consumo:** El componente consume datos vía hooks/props (Prohibido `fetch` directo).
 
 ## 5️⃣ Impacto en el Sistema (Gobernanza)

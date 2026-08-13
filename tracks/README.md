@@ -31,6 +31,7 @@
 
 - [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
+- [Documentation migration and registry standardization](./active/governance/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4
 ## Cerrados
 
 ### 2026

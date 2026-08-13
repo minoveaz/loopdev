@@ -13,7 +13,7 @@ Este documento define **las 3 plantillas oficiales** para orquestar el desarroll
 
 **Prompt (Humano → IA):**
 ```text
-Usa el INFRA_ENGINEERING_PROMPT (Platform Authority).
+Usa `INFRA_IMPLEMENTATION_SKILL` (Platform Authority).
 
 NO quiero que implementes código. 
 
@@ -50,7 +50,7 @@ Entrega esperada:
 
 **Prompt (Humano → IA):**
 ```text
-Usa el INFRA_ENGINEERING_PROMPT (Platform Authority).
+Usa `INFRA_IMPLEMENTATION_SKILL` (Platform Authority).
 
 Basándote en el análisis de descubrimiento previo, quiero definir un CONTRATO MÍNIMO v0 que soporte la siguiente pieza:
 
@@ -93,7 +93,7 @@ Contexto LoopDev:
 
 Entrega esperada:
 - Estructura completa (Brain, Body, Types, Fixtures, README).
-- Archivo userHistories.md local con casos de estrés.
+- Escenarios de estrés y evidencia registrados en el track correspondiente.
 - Suite de tests unitarios (Vitest) en verde.
 - Historias de Storybook (incluyendo variantes 'Stress' y Sello de Certificación).
 - *Nota: Si es producción, no incluir Example.tsx.*

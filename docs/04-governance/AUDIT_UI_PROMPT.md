@@ -25,14 +25,16 @@ Debes auditar basándote exclusivamente en:
 
 ### 2. Arquitectura & Calidad
 - [ ] **MVVM LoopDev:** ¿Existe separación física y lógica entre el Brain (`useX.ts`) y el Body (`index.tsx`)?
-- [ ] **Trazabilidad de Tests:** ¿Existe paridad 1:1 entre `userHistories.md` y la suite `.test.tsx`? (Validar IDs de Story).
+- [ ] **Trazabilidad de Tests:** ¿Existe paridad 1:1 entre los escenarios del
+  track y la suite `.test.tsx`? (Validar IDs de escenario).
 - [ ] **Resiliencia:** ¿El componente sobrevive a los tests de estrés (textos masivos, contenedores micro)?
 
 ### 3. Storybook & Certificación
 - [ ] **The QA Matrix:** ¿Es visible el componente `QualityShield` en las historias? ¿Muestra todos los gates en verde (`Unit`, `A11y`, `Visual`)?
 - [ ] **Regla de Espejo:** ¿Cada caso de estrés técnico tiene su historia visual `Stress` en Storybook?
 - [ ] **Validación de Contraste (CRÍTICO):** ¿El reporte de Axe-core en Storybook muestra 0 violaciones? 
-- [ ] **Visual Registry:** ¿Se ha revisado y aceptado el baseline en **Chromatic**?
+- [ ] **Visual Registry:** ¿Se han revisado y aceptado los snapshots de
+  **Playwright**?
 - [ ] **Flow Shield:** ¿El componente ha superado el smoke test de **Playwright** en su aplicación de destino?
 - [ ] **Sello de Calidad:** ¿Aparece el `CertificationStamp` arriba a la izquierda con el estado real de madurez?
 - [ ] **Modos de Color:** ¿Es 100% funcional y legible en Light y Dark Mode?

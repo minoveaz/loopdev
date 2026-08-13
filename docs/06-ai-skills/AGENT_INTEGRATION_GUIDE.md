@@ -47,7 +47,7 @@ copilot "Build a Bitcoin RSI strategy"
 3. Copilot loads SKILL_ROUTING_GUIDE.md to find the right workflow
 4. Copilot loads SKILLS_REGISTRY.json for metadata
 5. Copilot recommends first skill
-6. Copilot walks user through 11 skills sequentially
+6. Copilot routes the applicable 8 active skills
 7. Output: Production-ready code ✅
 
 ---
@@ -303,7 +303,7 @@ After integrating, verify:
 ### ✅ Agent Knows Skills Exist
 ```
 You: "What skills are available?"
-Agent: "I have 11 skills organized in 3 tiers..."
+Agent: "I have 8 active skills organized in 3 tiers..."
 ```
 
 ### ✅ Agent Recommends Skills in Order
@@ -348,7 +348,7 @@ Agent: "Phase 1 complete! Ready for Phase 2?
 
 ```
 # Check that instructions are loaded
-Agent should mention "11 skills" or "3 tiers" in first response
+Agent should mention "8 active skills" or "3 tiers" in first response
 ```
 
 ### Problem: Agent recommends skills out of order

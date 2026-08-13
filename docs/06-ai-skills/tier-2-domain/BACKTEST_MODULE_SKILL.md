@@ -59,7 +59,7 @@ Tu responsabilidad: Verificar que CADA fase cumple sus gates antes de pasar a la
 [ ] All props typed (no `any`)
 [ ] Unit tests ≥80% coverage (Vitest)
 [ ] Accessibility 0 violations (Axe)
-[ ] Visual regression baseline (Chromatic)
+[ ] Visual regression baseline (Playwright)
 [ ] Storybook stories complete (all variants)
 [ ] README with component API
 [ ] No hardcoding, all props/state clean
@@ -75,7 +75,7 @@ Tu responsabilidad: Verificar que CADA fase cumple sus gates antes de pasar a la
 ```
 [ ] Schema in @loopdev/contracts
 [ ] API endpoint fully implemented
-[ ] Security scan 0 critical (Snyk)
+[ ] Repository dependency and security validation passes
 [ ] E2E tests passing (Playwright)
 [ ] Multi-tenant verified (RLS working)
 [ ] Rate limiting / error handling complete
@@ -83,7 +83,8 @@ Tu responsabilidad: Verificar que CADA fase cumple sus gates antes de pasar a la
 [ ] Performance baseline established
 ```
 
-**Gate:** Auditor review via AUDIT_INFRA_PROMPT
+**Gate:** QA skill review against the infrastructure gates and the applicable
+track evidence.
 **Result:** 🔵 Infra_Certified marker
 **Duration:** 1-2 hours for audit
 
@@ -134,8 +135,10 @@ Week 4 (Phase 5):
 **Phase 1:** skill-discovery
 **Phase 2:** skill-frontend-impl + skill-infra-impl  
 **Phase 3:** skill-qa-testing → AUDIT_UI_PROMPT → skill-backtest-module (this skill) for verification
-**Phase 4:** skill-qa-testing → AUDIT_INFRA_PROMPT → skill-backtest-module (this skill) for verification
-**Phase 5:** skill-architecture-review (final compliance check)
+**Phase 4:** skill-qa-testing → applicable infrastructure gates →
+skill-backtest-module (this skill) for verification
+**Phase 5:** Apply the relevant architecture and validation checks through the
+repository Skills and active track evidence.
 
 ---
 
@@ -158,5 +161,4 @@ This skill DOES:
 **For full certification gates, see:**
 - `/docs/04-governance/COMPONENT_LIFECYCLE.md`
 - `/docs/04-governance/AUDIT_UI_PROMPT.md`
-- `/docs/04-governance/AUDIT_INFRA_PROMPT.md`
-
+- `docs/06-ai-skills/tier-2-domain/QA_TESTING_SKILL.md`

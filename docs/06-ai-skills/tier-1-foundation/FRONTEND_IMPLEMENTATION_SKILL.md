@@ -13,7 +13,7 @@ This skill tells you how to build **production-grade UI components** following L
 
 ✅ **Brain/Body Pattern:** Separate logic (hooks) from presentation (components)
 ✅ **Type Safety:** 100% TypeScript, no `any` types
-✅ **Testing:** Unit tests (Vitest), accessibility (Axe), visual (Chromatic)
+✅ **Testing:** Unit tests (Vitest), accessibility (Axe), visual (Playwright)
 ✅ **Theming:** Dynamic theme support (light/dark)
 ✅ **Accessibility:** WCAG AA compliant, keyboard navigable
 ✅ **Documentation:** Storybook stories for all variants
@@ -91,7 +91,7 @@ Before marking ready:
 
 - [x] Unit tests ≥80% coverage (Vitest)
 - [x] Accessibility 0 violations (Axe)
-- [x] Visual regression baseline (Chromatic)
+- [x] Visual regression baseline (Playwright)
 - [x] Props typed (no `any`)
 - [x] Storybook stories complete
 - [x] Theme-aware (dark/light)

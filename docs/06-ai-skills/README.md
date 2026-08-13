@@ -2,14 +2,15 @@
 
 > **Location:** `/docs/06-ai-skills/`
 > **Status:** ✅ Active
-> **Last Updated:** 2026-03-21
+> **Last Updated:** 2026-08-13
 > **Authority:** Platform Engineering
 
 ---
 
 ## 🎯 WHAT IS THIS?
 
-This folder contains **10 reusable skills** that ensure ALL AI agents (Copilot, Gemini, etc.) generate code matching LoopDev architecture and standards.
+This folder contains **12 reusable skills** that ensure ALL AI agents generate
+code matching LoopDev architecture and standards.
 
 A **Skill** is an instruction manual that tells an AI agent:
 - ✅ WHAT to build
@@ -19,7 +20,7 @@ A **Skill** is an instruction manual that tells an AI agent:
 
 ---
 
-## 📚 THE 10 SKILLS ORGANIZED IN 3 TIERS
+## 📚 THE 8 ACTIVE SKILLS ORGANIZED IN 3 TIERS
 
 ### ✅ TIER 1: FOUNDATION (4 skills)
 **Use FIRST - these are core to all development**
@@ -48,14 +49,14 @@ Located: `/tier-2-domain/`
 
 ---
 
-### 🏛️ TIER 3: GOVERNANCE (1 skill)
-**Use BEFORE RELEASE - ensure architecture compliance**
+### 🏛️ TIER 3: GOVERNANCE (1 reference skill)
+**Use BEFORE RELEASE - select the applicable repository Skills and checks**
 
 Located: `/tier-3-governance/`
 
-8. **ARCHITECTURE_REVIEW_SKILL.md** (coming soon) - Validate ADRs + DAG
+8. **SECURITY_AUDIT_SKILL.md** - Detailed security and tenancy reference
 
-[→ Read Tier 3 README](./tier-3-governance/README.md) (coming soon)
+[→ Read Tier 3 README](./tier-3-governance/README.md)
 
 ---
 
@@ -171,8 +172,8 @@ Located: `/tier-3-governance/`
 │   └── BACKTEST_MODULE_SKILL.md
 │
 └── tier-3-governance/
-    ├── README.md (coming soon)
-    └── ARCHITECTURE_REVIEW_SKILL.md (coming soon)
+    ├── README.md
+    └── SECURITY_AUDIT_SKILL.md
 ```
 
 ---
@@ -239,7 +240,7 @@ You get:
 ### This month:
 - [ ] Try skill-quant-strategy for trading strategies
 - [ ] Use skill-backtest-module for phase gates
-- [ ] Use skill-architecture-review before release
+- [ ] Select the applicable governance and validation Skills before release
 
 ### Ongoing:
 - [ ] Reference skills during development
@@ -283,11 +284,10 @@ Once skills are in use:
 | **2** | ✅ Published | 3/3 | ✅ YES |
 | **3** | 🟡 In Progress | 0/1 | ⏳ SOON |
 
-**Total: 7/8 skills ready. Tier 3 coming Week 4.**
+**Total: 8 active skills documented and routed through the current repository Skills.**
 
 ---
 
 **Skills Framework Status:** ✅ Active and ready to use
 **Next Update:** 2026-03-28 (Tier 3 complete)
 **Questions?** Reference the individual skill files
-

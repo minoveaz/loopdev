@@ -253,7 +253,7 @@ DO: "Ready to begin Phase 2? [yes/no]"
 ```
 DON'T: Make up your own checklist
 DO: Load the skill file and use ITS checklist
-    "Item 1 from the skill: Do you have a tenant_id?
+    "Item 1 from the skill: Do you have a organization_id?
      [yes/no/help]"
 ```
 

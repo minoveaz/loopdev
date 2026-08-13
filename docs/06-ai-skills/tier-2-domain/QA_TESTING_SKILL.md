@@ -45,13 +45,14 @@ Eres un **Senior QA Engineer** especializado en crear test suites exhaustivas qu
 ## 📋 FULL AUTHORITY DOCUMENT
 
 For complete details, patterns, examples, and checklist:
-**→ See:** `/docs/04-governance/QA_TESTING_PROTOCOL.md` (coming soon)
+**→ See:** the applicable validation guidance under
+`docs/04-governance/` and the active track.
 
 Or reference:
 - Vitest patterns: `npm test` framework
 - Axe patterns: Accessibility testing
 - Playwright patterns: E2E automation
-- Chromatic patterns: Visual regression
+- Playwright patterns: Visual regression
 
 ---
 
@@ -76,13 +77,11 @@ Before marking code as tested:
 - [ ] Happy path works
 - [ ] Error states handled
 - [ ] Form validation works
-- [ ] Multi-tenant isolation verified
+- [ ] Organization isolation verified
 
-**Security (Snyk):**
-- [ ] 0 critical vulnerabilities
-- [ ] Dependencies updated
+**Repository security:**
+- [ ] Repository security and type validation gates pass
 
 ---
 
 **Full authority document in progress. Use this as quick reference.**
-

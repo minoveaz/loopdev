@@ -24,7 +24,7 @@ These are **specialized skills** for specific domains and phases.
 ### 2️⃣ ✅ QA_TESTING_SKILL.md
 **When:** Code is written, ready to test
 **Depends on:** skill-frontend-impl OR skill-infra-impl OR skill-quant-strategy
-**Output:** Complete test suite (Vitest, Axe, Playwright, Snyk)
+**Output:** Complete test suite (Vitest, Axe, Playwright, repository security gates)
 **Duration:** 3-6 hours per component
 **Next:** skill-backtest-module (for certification)
 
@@ -37,7 +37,8 @@ These are **specialized skills** for specific domains and phases.
 **Depends on:** skill-qa-testing (already passing tests)
 **Output:** Verification that gates are met
 **Duration:** 1-2 hours per phase gate
-**Next:** skill-architecture-review (before release)
+**Next:** Select the applicable governance checks through the repository Skills
+before release.
 
 [→ Read BACKTEST_MODULE_SKILL.md](./BACKTEST_MODULE_SKILL.md)
 
@@ -93,11 +94,11 @@ AUDIT_UI_PROMPT (auditor review)
   ↓
 skill-backtest-module (Phase 4 gate check)
   ↓
-AUDIT_INFRA_PROMPT (auditor review)
+skill-qa-testing (infrastructure auditor review)
   ↓
 🔵 Infra_Certified
   ↓
-skill-architecture-review (final compliance)
+track-governance + validation-framework (final evidence)
   ↓
 Release ✅
 ```
@@ -153,7 +154,7 @@ Once you've used Tier 1 + Tier 2, move to:
 → **Tier 3 Governance Skills**
 
 These ensure architecture compliance:
-- skill-architecture-review (ADR + DAG validation)
+- track-governance + validation-framework (scope and validation evidence)
 
 See `/tier-3-governance/` folder.
 
@@ -161,4 +162,3 @@ See `/tier-3-governance/` folder.
 
 **Tier 2 Status:** ✅ All 3 skills available
 **Next Step:** Use skill-quant-strategy for trading strategies, or skill-qa-testing for testing
-

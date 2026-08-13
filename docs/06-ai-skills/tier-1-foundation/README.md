@@ -85,7 +85,7 @@ skill-contract (2h)
 skill-frontend-impl (12h) ──┐
                             ├─→ skill-qa-testing (10h)
 skill-infra-impl (12h) ─────┤
-                            ├─→ skill-architecture-review (2h)
+                            ├─→ track-governance + validation-framework
                             ├─→ skill-backtest-module (4h)
                             ↓
                         CERTIFIED 🔵
@@ -205,4 +205,3 @@ See `/tier-2-domain/` folder.
 
 **Tier 1 Status:** ✅ All 4 skills available
 **Next Step:** Choose a feature and start with skill-discovery
-

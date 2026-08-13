@@ -20,7 +20,7 @@ Esta checklist define los criterios de certificación para cualquier componente,
 
 ### 1️⃣ The Quality Shield (Automatización Obligatoria)
 - [ ] **Axe Pass:** El reporte de accesibilidad en Storybook tiene 0 violaciones.
-- [ ] **Chromatic Sync:** El baseline visual ha sido aceptado y no hay regresiones de píxeles.
+- [ ] **Playwright Visual:** Los snapshots visuales han sido revisados y no hay regresiones de píxeles.
 - [ ] **Playwright Flow:** El componente ha superado el Smoke Test funcional en la app.
 - [ ] **QA Matrix:** El componente `QualityShield` es visible y está en verde en Storybook.
 - [ ] **Changeset:** Se ha creado el archivo de versión para el monorepo.
@@ -34,16 +34,18 @@ Esta checklist define los criterios de certificación para cualquier componente,
 ### 3️⃣ Resiliencia & Estrés (Storybook)
 - [ ] **Extreme Content:** Probado con textos masivos y traducciones largas sin romper el layout.
 - [ ] **Layout Pressure:** Probado en contenedores estrechos (w-64) y fluidos.
-- [ ] **Mirror Stories:** Cada caso de estrés en `userHistories.md` tiene su historia `Stress` en Storybook.
+- [ ] **Mirror Scenarios:** Cada caso de estrés definido en el track tiene una
+  prueba visual `Stress` en Playwright.
 
 ### 4️⃣ Calidad Técnica (Vitest)
-- [ ] **Trazabilidad 1:1:** Existe un test unitario por cada historia de usuario definida.
+- [ ] **Trazabilidad 1:1:** Existe un test unitario por cada escenario definido
+  en el track.
 - [ ] **Nomenclatura:** Los bloques `it()` referencian el ID de la historia (ej: `Story 1`).
 - [ ] **Hardening:** Suite de pruebas cubre estados de carga, error y deshabilitado.
 
 ### 5️⃣ SaaS & Dynamic Theming (Data Ready)
 - [ ] **Theme Awareness:** El componente reacciona instantáneamente al `DynamicThemeProvider`.
-- [ ] **Registry Sync:** Registrado en `COMPONENT_REGISTRY.json` con sus capacidades.
+- [ ] **Registry Sync:** Registrado en `docs/registries/frontend-components.json` con sus capacidades.
 - [ ] **Tenant Isolation:** No depende de contextos globales ocultos fuera de los proveedores oficiales.
 
 ### 6️⃣ Accesibilidad (A11y - Bloqueante)
@@ -61,7 +63,8 @@ Esta checklist define los criterios de certificación para cualquier componente,
 
 ### 9️⃣ Documentación & Auditoría
 - [ ] **README Completo:** Incluye API, Matriz de decisión UX y contexto para IA.
-- [ ] **User Histories:** Archivo `userHistories.md` finalizado y firmado.
+- [ ] **Track Evidence:** El track contiene alcance, decisiones y evidencia
+  suficiente para certificar el componente.
 - 📌 **Si no está documentado -> No está certificado.**
 
 ### 🔍 10️⃣ Audit-ready (Certificación Visual)

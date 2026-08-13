@@ -9,7 +9,7 @@
 ### P0.1 Cierre de Deriva Documental (SSOT)
 **Estado:** 🟢 COMPLETADO
 - [x] Consolidación de protocolos en jerarquía de 5 niveles.
-- [x] Sincronización de referencias en `FRONT_ENGINEERING_PROMPT` e `INFRA_ENGINEERING_PROMPT`.
+- [x] Sincronización de referencias en frontend e infraestructura.
 - [x] Eliminación de documentos obsoletos (`visual_protocol`, `DAILY_STATUS`).
 
 ### P0.2 Registry = Fuente Única de Verdad

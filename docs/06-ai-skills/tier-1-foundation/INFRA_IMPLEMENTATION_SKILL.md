@@ -1,9 +1,10 @@
 # 🔧 INFRA IMPLEMENTATION SKILL v1.0
 
 > **Authority:** Platform Engineering
-> **Status:** ✅ Published (Existing in INFRA_ENGINEERING_PROMPT.md)
-> **Last Updated:** 2026-03-21
-> **Link to Full Authority:** `/docs/05-operations/INFRA_ENGINEERING_PROMPT.md`
+> **Status:** ✅ Published authority
+> **Last Updated:** 2026-08-13
+> **Authority:** This skill is self-contained; the former infrastructure
+> prompts are deprecated historical references.
 
 ---
 
@@ -13,10 +14,10 @@ This skill tells you how to build **production-grade backend APIs, services, and
 
 ✅ **Contract-First:** Request/response shapes from contracts
 ✅ **API Standards:** Response envelope pattern, error handling
-✅ **Multi-Tenancy:** RLS enforcement, tenant_id validation
+✅ **Organizations:** RLS enforcement, organization_id validation
 ✅ **Type Safety:** Zod validation on all inputs
 ✅ **Security:** No direct DB access from handlers
-✅ **Testing:** E2E tests (Playwright), security scan (Snyk)
+✅ **Testing:** E2E and visual tests (Playwright)
 
 ---
 
@@ -82,7 +83,7 @@ api/quant/
 
 ### Database (db.ts) - Contains:
 - Prisma queries or raw SQL
-- RLS enforcement (WHERE tenant_id = X)
+- RLS enforcement through organization membership and organization_id
 - No business logic
 
 ---
@@ -92,8 +93,8 @@ api/quant/
 Every endpoint MUST have:
 
 - [x] Input validation (Zod schema)
-- [x] tenant_id extraction from JWT
-- [x] RLS on all DB queries (WHERE tenant_id = X)
+- [x] organization_id resolved from the authenticated organization context
+- [x] RLS on all organization-owned queries
 - [x] Permission check (user owns resource)
 - [x] Error handling (no data leaks in messages)
 - [x] Rate limiting (if needed)
@@ -107,28 +108,23 @@ Before marking ready:
 
 - [x] Input validation comprehensive (Zod)
 - [x] RLS on every DB query
-- [x] No direct tenant access possible
+- [x] No cross-organization access possible
 - [x] Error handling standard (envelope)
 - [x] E2E tests passing (Playwright)
-- [x] Security scan 0 critical (Snyk)
+- [x] Repository security and type validation gates pass
 - [x] Response envelope correct
 - [x] README with API spec
 
 ---
 
-## 🔗 FULL AUTHORITY DOCUMENT
+## 🔗 AUTHORITATIVE REFERENCES
 
-For complete details, patterns, and examples:
-**→ Read `/docs/05-operations/INFRA_ENGINEERING_PROMPT.md`**
-
-That document covers:
-- API design patterns
-- Contract-first approach
-- Multi-tenancy enforcement
-- Error handling standard
-- Security best practices
-- Testing strategy (Playwright)
-- Certification gates
+- API patterns: `docs/03-platform/API_STANDARDS.md`
+- Organization and RLS rules: `docs/03-platform/MULTI_TENANCY_STRATEGY.md`
+  and `docs/03-platform/DATABASE_SECURITY_RLS.md`
+- Readiness and completion: `docs/03-platform/INFRA_DEFINITION_OF_READY.md`
+  and `docs/03-platform/INFRA_DEFINITION_OF_DONE.md`
+- Execution scope and evidence: the applicable track under `tracks/`
 
 ---
 
@@ -139,6 +135,5 @@ After infra implementation is complete:
 
 ---
 
-**Note:** This is a wrapper skill. The full authority is in INFRA_ENGINEERING_PROMPT.md
 **Status:** ✅ Ready to Use
 **Authority:** Platform Engineering

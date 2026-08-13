@@ -13,7 +13,7 @@
 
 Este protocolo **opera sobre** y **depende explícitamente de**:
 
-* **VISUAL_COMPOSITION_SYSTEM v3.8** (fundamentos visuales)
+* **VISUAL_COMPOSITION_SYSTEM v3.9** (fundamentos visuales)
 * **COMPONENT_TESTING_PROTOCOL v1.0** (estándares de calidad)
 * **COMPONENT_WORKFLOW v1.5** (gestión ágil y persistencia de datos)
 
@@ -33,7 +33,9 @@ Este documento define el protocolo único para construir componentes en LoopDev.
 * **Equipo C — Gobernanza:** Audita la integración con la base de datos y certifica el DoD.
 
 ### 1.2 El Ciclo de Vida (DoR & DoD)
-Nadie inicia un componente sin el **Definition of Readiness** (Blueprint validado + User Story). Nadie cierra un componente sin el **Definition of Done** (Tests en verde + Registry en Firestore).
+Nadie inicia un componente sin el **Definition of Readiness** (Blueprint validado
+y User Story). Nadie cierra un componente sin el **Definition of Done** (tests
+en verde + registro canónico en `docs/registries/frontend-components.json`).
 
 ---
 
@@ -95,10 +97,12 @@ src/components/[atoms|composites]/[category]/<ComponentName>/
 ├── fixtures.tsx        (Mocks para Stories/Tests)
 ├── <ComponentName>.test.tsx (Suite de pruebas obligatoria)
 ├── <ComponentName>.stories.tsx (Documentación visual)
-└── userHistories.md    (Historias de usuario y Bloque 0)
+└── track reference        (Alcance, decisiones y evidencia de ejecución)
 ```
 
-**Nota:** El archivo `Example.tsx` solo es obligatorio durante la fase de Laboratorio (`labdev`). En producción, la validación se realiza mediante Historias de Storybook.
+**Nota:** El archivo `Example.tsx` solo es obligatorio durante la fase de
+validación exploratoria. En producción, la evidencia se registra en el track y
+la validación visual se ejecuta con Playwright.
 
 ---
 

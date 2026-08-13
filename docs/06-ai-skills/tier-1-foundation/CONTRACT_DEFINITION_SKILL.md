@@ -52,7 +52,7 @@ Proporciona SIEMPRE:
 [Qué data entra, qué data sale, qué se guarda]
 
 ## Multi-Tenancy Context
-[Cómo se relaciona con tenant_id]
+[Cómo se relaciona con organization_id]
 ```
 
 ### Ejemplo Input:
@@ -67,7 +67,7 @@ Proporciona SIEMPRE:
 - Only owner can see their backtests
 
 ## Data That Flows
-Input (API request): strategy_id, start_date, end_date, tenant_id
+Input (API request): strategy_id, start_date, end_date, organization_id
 Processing: Execute strategy, generate trades list, calculate metrics
 Output (API response): BacktestResult with all data
 Storage: Save to backtests table
@@ -92,7 +92,7 @@ export const BacktestRequestSchema = z.object({
   strategy_id: z.string().uuid("Invalid strategy ID"),
   start_date: z.string().datetime("Invalid date format"),
   end_date: z.string().datetime("Invalid date format"),
-  tenant_id: z.string().uuid("tenant_id required for multi-tenancy"),
+  organization_id: z.string().uuid("organization_id required for multi-tenancy"),
   
   // Optional filters
   max_trades: z.number().int().positive().optional(),
@@ -138,7 +138,7 @@ export type Metrics = z.infer<typeof MetricsSchema>;
 
 export const BacktestResultSchema = z.object({
   id: z.string().uuid(),
-  tenant_id: z.string().uuid(),
+  organization_id: z.string().uuid(),
   strategy_id: z.string().uuid(),
   
   // Dates
@@ -193,20 +193,20 @@ export type BacktestErrorResponse = z.infer<typeof BacktestErrorResponseSchema>;
 
 ### 4. 🔐 MULTI-TENANCY ENFORCEMENT
 
-Siempre incluir tenant_id en TODOS los objetos:
+Siempre incluir organization_id en TODOS los objetos:
 
 ```typescript
-// ✅ CORRECT: tenant_id in every domain object
+// ✅ CORRECT: organization_id in every domain object
 export const ResourceSchema = z.object({
   id: z.string().uuid(),
-  tenant_id: z.string().uuid(), // ← REQUIRED
+  organization_id: z.string().uuid(), // ← REQUIRED
   // ... other fields
 });
 
-// ❌ WRONG: Missing tenant_id
+// ❌ WRONG: Missing organization_id
 export const BadResourceSchema = z.object({
   id: z.string().uuid(),
-  // ... other fields (no tenant_id = data leak risk!)
+  // ... other fields (no organization_id = data leak risk!)
 });
 ```
 
@@ -298,7 +298,7 @@ export type BacktestContract = z.infer<typeof BacktestContractSchema>;
 - [ ] Request schema validates ALL inputs
 - [ ] Data schema matches domain requirements
 - [ ] Response follows envelope pattern
-- [ ] tenant_id in every domain object
+- [ ] organization_id in every domain object
 - [ ] Error codes comprehensive
 - [ ] All fields have JSDoc comments
 
@@ -322,7 +322,7 @@ export const SimpleBacktestSchema = z.object({
   strategy_id: z.string().uuid(),
   start_date: z.string().datetime(),
   end_date: z.string().datetime(),
-  tenant_id: z.string().uuid(),
+  organization_id: z.string().uuid(),
 });
 
 // Simple response
@@ -340,7 +340,7 @@ export const SimpleBacktestResponseSchema = z.object({
 
 ```typescript
 export const ListBacktestsRequestSchema = z.object({
-  tenant_id: z.string().uuid(),
+  organization_id: z.string().uuid(),
   page: z.number().int().positive().default(1),
   limit: z.number().int().positive().max(100).default(10),
 });
@@ -363,7 +363,7 @@ export const AsyncBacktestRequestSchema = z.object({
   strategy_id: z.string().uuid(),
   start_date: z.string().datetime(),
   end_date: z.string().datetime(),
-  tenant_id: z.string().uuid(),
+  organization_id: z.string().uuid(),
 });
 
 export const AsyncBacktestResponseSchema = z.object({
@@ -397,19 +397,19 @@ export const RequestSchema = z.object({
 });
 ```
 
-❌ **DON'T:** Forget tenant_id for multi-tenancy
+❌ **DON'T:** Forget organization_id for multi-tenancy
 ```typescript
 WRONG:
 export const ResultSchema = z.object({
   id: z.string().uuid(),
   trades: z.array(TradeSchema),
-  // ❌ Missing tenant_id = data leak!
+  // ❌ Missing organization_id = data leak!
 });
 
 RIGHT:
 export const ResultSchema = z.object({
   id: z.string().uuid(),
-  tenant_id: z.string().uuid(), // ✅ Required
+  organization_id: z.string().uuid(), // ✅ Required
   trades: z.array(TradeSchema),
 });
 ```
@@ -438,7 +438,7 @@ Contract is complete when:
 1. ✅ Request schema validates all inputs
 2. ✅ Response follows envelope pattern
 3. ✅ All domain types defined with Zod
-4. ✅ tenant_id in every domain object
+4. ✅ organization_id in every domain object
 5. ✅ 0 `any` types
 6. ✅ All fields have constraints (min/max, positive, format)
 7. ✅ Error codes comprehensive
