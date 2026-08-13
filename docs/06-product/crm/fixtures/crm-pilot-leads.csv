@@ -9,10 +9,10 @@ estar-protegidos,commercial,vitablue,LEAD-007,EP-007,whatsapp_simulated,meta,wa-
 estar-protegidos,commercial,vitablue,LEAD-008,EP-008,manual,internal,manual-008,,, ,,comparar opciones,stalled,agente,Lead estancado para pruebas
 estar-protegidos,commercial,vitablue,LEAD-009,EP-009,whatsapp_simulated,meta,wa-msg-009,,,,,posible duplicado,pending,agente,Debe abrir revision de duplicado
 estar-protegidos,commercial,vitablue,LEAD-010,EP-010,campaign,meta,meta-lead-010,Campana Proteccion Mayo,facebook,paid,proteccion-mayo,proteccion familiar,qualified,manager,Debe conservar atribucion
-estar-protegidos,commercial,vitablue,LEAD-011,EP-011,manual,internal,manual-011,,, ,,seguimiento,nuevo,agente,Contacto nuevo
+estar-protegidos,commercial,vitablue,LEAD-011,EP-011,referral,internal,referral-011,,, ,,seguimiento,nuevo,agente,Fuente referral sintetizada
 estar-protegidos,commercial,vitablue,LEAD-012,EP-012,campaign,meta,meta-lead-012,Campana Salud Abril,instagram,paid,salud-abril,seguro salud,contacted,agente,Contacto realizado
-estar-protegidos,commercial,vitablue,LEAD-013,EP-013,manual,internal,manual-013,,, ,,solicitud de informacion,nuevo,agente,Sin proveedor
-estar-protegidos,commercial,vitablue,LEAD-014,EP-014,whatsapp_simulated,meta,wa-msg-014,,,,,consulta cobertura,contacted,manager,WhatsApp simulado
+estar-protegidos,commercial,vitablue,LEAD-013,EP-013,social,internal,social-013,,,instagram,organic,solicitud de informacion,nuevo,agente,Fuente social sintetizada
+estar-protegidos,commercial,vitablue,LEAD-014,EP-014,partner,internal,partner-014,,,,,consulta cobertura,contacted,manager,Fuente partner sintetizada
 estar-protegidos,commercial,vitablue,LEAD-015,EP-015,campaign,meta,meta-lead-015,Campana Proteccion Mayo,facebook,paid,proteccion-mayo,proteccion familiar,qualified,agente,Lead candidato a oportunidad
 tenant-b,commercial,tenantb,LEAD-B01,TB-001,manual,internal,manual-b001,,, ,,servicio general,nuevo,agente,Tenant B aislamiento
 tenant-b,commercial,tenantb,LEAD-B02,TB-002,campaign,meta,meta-lead-b002,Campana Tenant B,facebook,paid,tenantb-abril,producto demo,contacted,manager,Tenant B aislamiento

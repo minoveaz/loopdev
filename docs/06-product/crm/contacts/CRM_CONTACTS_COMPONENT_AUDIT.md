@@ -6,7 +6,7 @@ created: 2026-08-13
 updated: 2026-08-13
 owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
-ux_spec: docs/06-product/crm/CRM_PILOT_UX_SPEC.md
+ux_spec: docs/06-product/crm/shared/CRM_PILOT_UX_SPEC.md
 approver: User
 approved_at: 2026-08-13
 ---

@@ -43,7 +43,7 @@ Este track convierte esa secuencia en un programa ejecutable y en tracks pequeno
 abrir H2 ni capacidades diferidas.
 
 La especificacion propuesta para UX-00 vive en
-`docs/06-product/crm/CRM_PILOT_UX_SPEC.md`. Requiere aprobacion explicita de Product Owner y Tech Lead
+`docs/06-product/crm/shared/CRM_PILOT_UX_SPEC.md`. Requiere aprobacion explicita de Product Owner y Tech Lead
 antes de marcar UX-00 como completado o iniciar slices CRM.
 
 El dataset inicial esta versionado en
@@ -52,18 +52,44 @@ sinteticos y casos de deduplicacion. No contiene datos reales ni autoriza cargar
 entorno.
 
 La revision previa a pruebas esta definida en
-`docs/06-product/crm/CRM_PILOT_READINESS_REVIEW.md`. Es una plantilla pendiente: solo se ejecuta
+`docs/06-product/crm/shared/CRM_PILOT_READINESS_REVIEW.md`. Es una plantilla pendiente: solo se ejecuta
 cuando una release candidate este desplegada en staging y antes de cada ciclo de tests o UAT.
 
 La auditoria de componentes del primer slice esta en
-`docs/06-product/crm/CRM_CONTACTS_COMPONENT_AUDIT.md`. Clasifica primitives reutilizables, widgets,
+`docs/06-product/crm/contacts/CRM_CONTACTS_COMPONENT_AUDIT.md`. Clasifica primitives reutilizables, widgets,
 features y entities necesarios para Contactos y Customer 360 bajo `SuiteRuntime + SuiteCanvas + FSD`.
 La matriz fue aprobada por User el 2026-08-13 y desbloquea la preparacion de `CRM-01`.
 
 El handoff para el equipo implementador esta en
-`docs/06-product/crm/CRM_CONTACT_IMPLEMENTATION_HANDOFF.md`. El equipo debe leerlo y marcar su
+`docs/06-product/crm/contacts/CRM_CONTACT_IMPLEMENTATION_HANDOFF.md`. El equipo debe leerlo y marcar su
 Definition of Ready en el Issue #82 antes de crear
 `feature/crm-pilot-contacts-implementation` desde `develop` actualizado.
+
+La definicion de nuevos modulos sigue `.github/skills/module-definition`. Leads debe completar el
+mismo paquete de cinco documentos antes de crear su rama de implementacion.
+
+Pipeline/Opportunities se define en `docs/06-product/crm/pipeline/` mediante el mismo paquete de
+cinco documentos y el Issue #96. El paquete permanece propuesto hasta revisar UX, componentes,
+contrato e impacto con Product Owner y Tech Lead. Su alcance documental inicial usa `board` como
+vista principal, `data` para tabla, `split` para previsualizacion, `record` para detalle y `focus`
+para creacion manual.
+
+El paquete de Leads esta organizado en `docs/06-product/crm/leads/`: UX spec, component audit,
+contract, impact assessment e implementation handoff. UX, component audit, contract e impact
+assessment estan aprobados por User el 2026-08-13; el handoff queda listo para confirmacion en el
+Issue #84 antes de crear la rama de implementacion.
+
+Leads tiene seis fuentes activas en el contrato del piloto: `manual`, `campaign`,
+`whatsapp_simulated`, `referral`, `social` y `partner`. Las conexiones reales de proveedores siguen
+diferidas, pero el modelo de atribucion e idempotencia queda preparado.
+
+Cuando un Lead pasa a `cualificado`, el sistema puede crear una Opportunity de conversion por cada
+producto/interes normalizado en el ID estable de etapa `qualified`, inicialmente visible como
+`Cualificado`. La primera Opportunity `lead_conversion` mueve el Lead a `convertido`; productos
+distintos pueden crear Opportunities adicionales. Reintentos y concurrencia devuelven la misma
+Opportunity para la misma clave `tenant + lead + product_key + origin=lead_conversion`. Pipeline
+puede crear Opportunities manuales con `origin=manual`. El admin puede cambiar nombre visible u
+orden sin modificar IDs, contratos ni datos historicos.
 
 Las decisiones UX/UI confirmadas para UX-00 son:
 
@@ -103,11 +129,11 @@ La composicion frontend del piloto sigue el ADR
 `docs/architecture/ADR-2026-08-13-suite-runtime-suite-canvas-fsd.md`: `SuiteRuntime + SuiteCanvas`
 es la composicion estandar, y FSD organiza widgets, features y entities dentro de cada Canvas.
 `SuiteCanvas` no contiene logica CRM ni accede a datos.
-- Los leads pueden tener origen manual, campana de marketing o mensaje de WhatsApp. En el piloto se
-  implementa el contrato de origen y atribucion para los tres casos, con provider, identificador
-  externo, campana/UTM, marca y workspace cuando existan. Las conexiones reales de Marketing y
-  WhatsApp se mantienen desactivadas; H2 debe configurarlas como primera integracion posterior sin
-  cambiar el modelo de lead ni crear contactos duplicados.
+- Los leads pueden tener origen manual, campana de marketing, mensaje de WhatsApp simulado, referral,
+  social o partner. En el piloto se implementa el contrato de origen y atribucion para los seis casos,
+  con provider, identificador externo, campana/UTM, marca y workspace cuando existan. Las conexiones
+  reales de Marketing y WhatsApp se mantienen desactivadas; H2 debe configurarlas como primera
+  integracion posterior sin cambiar el modelo de lead ni crear contactos duplicados.
 
 ## Alcance
 
@@ -165,6 +191,7 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Crear plantilla de revision de readiness | Las pruebas deben comparar producto realmente entregado, casos esperados y cobertura antes de ejecutarse | `CRM_PILOT_READINESS_REVIEW.md` bloquea interpretaciones de cobertura sin candidate en staging | User |
 | 2026-08-13 | Aprobar auditoria de componentes de Contactos | La vista debe construirse con limites claros entre shell, FSD y dominio CRM | `CRM-01` puede prepararse con ContactTable, ContactForm, ContactDetailPanel y sus features/entities | User |
 | 2026-08-13 | Aprobar contrato de Contact e impact assessment de CRM-01 | La implementacion necesita un acuerdo comun de datos y una matriz de impactos antes de tocar codigo | `CRM-01` pasa Definition of Ready; el desarrollo aun no se inicia | User |
+| 2026-08-13 | Aprobar paquete UX de Leads y reglas de conversion por producto | Un Lead puede interesarse por varios seguros sin duplicar la misma Opportunity; la unicidad debe proteger reintentos y concurrencia | Leads queda Ready documental; primera conversion mueve a `convertido`, conversiones posteriores usan `product_key` distinto y Pipeline distingue `manual` de `lead_conversion` | User |
 
 ## Arquitectura y contratos
 
@@ -212,7 +239,7 @@ programa y no autoriza implementacion del piloto.
 - [ ] Ninguna vista CRM inicia implementacion sin UX-00.
 - [ ] Antes de cada ciclo de pruebas o UAT, existe una revision de readiness con funcionalidades entregadas, matriz de casos, cobertura existente, huecos y criterio de salida.
 
-**Evidencia:** `docs/06-product/crm/CRM_PILOT_UX_SPEC.md` v1.1, aprobado el 2026-08-13 por User.
+**Evidencia:** `docs/06-product/crm/shared/CRM_PILOT_UX_SPEC.md` v1.1, aprobado el 2026-08-13 por User.
 
 **Estado:** pendiente.
 

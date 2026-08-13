@@ -8,6 +8,8 @@ owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
 implementation_issue: https://github.com/minoveaz/loopdev/issues/82
 implementation_branch: feature/crm-pilot-contacts-implementation
+commit_convention: "feat(crm): implement <slice> (#82)"
+pull_request_closure: "Closes #82"
 ---
 
 # Handoff de implementacion: CRM Contact
@@ -27,13 +29,13 @@ prototipo CRM anterior.
 
 ## 2. Referencias obligatorias
 
-1. [CRM Pilot UX Specification](CRM_PILOT_UX_SPEC.md)
+1. [CRM Pilot UX Specification](../shared/CRM_PILOT_UX_SPEC.md)
 2. [CRM Contacts Component Audit](CRM_CONTACTS_COMPONENT_AUDIT.md)
 3. [CRM Contact Contract](CRM_CONTACT_CONTRACT.md)
 4. [CRM Contact Impact Assessment](CRM_CONTACT_IMPACT_ASSESSMENT.md)
-5. [CRM Pilot Readiness Review](CRM_PILOT_READINESS_REVIEW.md)
-6. [CRM Pilot Execution track](../../../tracks/planned/crm/2026-08-13-crm-pilot-execution.md)
-7. [Suite composition ADR](../../architecture/ADR-2026-08-13-suite-runtime-suite-canvas-fsd.md)
+5. [CRM Pilot Readiness Review](../shared/CRM_PILOT_READINESS_REVIEW.md)
+6. [CRM Pilot Execution track](../../../../tracks/planned/crm/2026-08-13-crm-pilot-execution.md)
+7. [Suite composition ADR](../../../architecture/ADR-2026-08-13-suite-runtime-suite-canvas-fsd.md)
 
 ## 3. Outcome de la entrega
 
@@ -109,7 +111,28 @@ No implementar en esta rama:
 - Billing, entitlements comerciales o mobile CRM.
 - Migracion global de FSD o refactor global del shell.
 
-## 7. Definition of Ready de la rama implementadora
+## 7. Flujo Issue, rama, commit y PR
+
+El equipo debe crear la rama desde `develop` actualizado, pero la evidencia durable de la rama no
+se mantiene en un campo manual del Project:
+
+```text
+Issue #82
+  -> feature/crm-pilot-contacts-implementation
+    -> commits con (#82)
+      -> PR con Closes #82
+```
+
+Primer commit de implementacion recomendado:
+
+```text
+feat(crm): scaffold contacts vertical slice (#82)
+```
+
+El PR debe incluir `Closes #82`. El Project conserva el Issue, gate, prioridad, carril y evidencia;
+la rama y sus cambios se obtienen del PR y de sus commits.
+
+## 8. Definition of Ready de la rama implementadora
 
 Antes del primer commit de codigo, el equipo debe confirmar en el Issue #82:
 
