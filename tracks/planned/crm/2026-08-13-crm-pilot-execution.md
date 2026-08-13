@@ -5,7 +5,7 @@ status: planned
 created: 2026-08-13
 updated: 2026-08-13
 owner: crm
-lead: null
+lead: User
 branch: null
 branches: []
 phase: 0
@@ -141,6 +141,28 @@ El paquete de Tasks queda aprobado por User el 2026-08-13: UX spec, component au
 impact assessment aprobados, y implementation handoff aprobado para handoff. Tasks queda Ready
 documental en el Issue #87; Daily Operation permanece como resultado transversal de G3 y la
 implementacion no inicia en esta rama.
+
+El alcance final del piloto queda aprobado por User el 2026-08-13. Incluye Auth, Contacts, Leads,
+Pipeline, Tasks, Notes, Timeline, Customer 360, RLS, aislamiento tenant, auditoria, staging y UAT.
+Quedan fuera Dashboard, import dry-run, IA, PDFs, cotizaciones, documentos, WhatsApp real, email,
+calendario externo y paridad mobile. Los carriles son CRM/Frontend, Datos/Seguridad y
+Calidad/Operaciones.
+
+La plantilla `docs/06-product/crm/shared/CRM_PILOT_READINESS_REVIEW.md` queda aprobada como proceso
+de entrada a cada ciclo de pruebas/UAT. Solo se ejecuta contra una release candidate identificable
+desplegada en staging; no certifica el estado actual ni se marca como completada por anticipado.
+
+La matriz de seguridad y aislamiento del piloto vive en
+`docs/06-product/crm/shared/CRM_PILOT_SECURITY_AND_ISOLATION_MATRIX.md`. Es evidencia documental de
+G1 y cubre roles, verbos, RLS, FKs tenant-aware, kill switches, auditoria y pruebas cross-tenant para
+los Issues #70, #71, #72, #73 y #74.
+
+La matriz de seguridad y aislamiento queda aprobada por User el 2026-08-13 como especificacion y
+evidencia documental de G1. La ejecucion de policies, pgTAP, E2E, kill switches y auditoria sigue
+pendiente y no se considera certificada por esta aprobacion.
+
+**Owner operativo:** User. User coordina G0, los tres carriles y las decisiones de Product Owner, Tech
+Lead y release owner hasta nueva delegacion.
 delivery y el Issue #86 como coordinacion UX de G3. Daily Operation no se crea como modulo separado
 en esta fase: se tratara como resultado transversal de G3 compuesto por Contacts, Leads, Pipeline,
 Tasks, notas, timeline y Customer 360. El paquete de Tasks definira los contratos compartidos
@@ -267,6 +289,8 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Aprobar paquete UX de Leads y reglas de conversion por producto | Un Lead puede interesarse por varios seguros sin duplicar la misma Opportunity; la unicidad debe proteger reintentos y concurrencia | Leads queda Ready documental; primera conversion mueve a `convertido`, conversiones posteriores usan `product_key` distinto y Pipeline distingue `manual` de `lead_conversion` | User |
 | 2026-08-13 | Definir Tasks como modulo y Daily Operation como resultado transversal de G3 | Tasks es una entidad reutilizable; Daily Operation depende de Contacts, Leads, Pipeline, notas, timeline y Customer 360 | Se crea el paquete de cinco documentos para Tasks bajo `docs/06-product/crm/tasks/`; no se crea un modulo separado de Daily Operation | User |
 | 2026-08-13 | Sacar Dashboard e import dry-run del piloto | El piloto debe validar primero el flujo CRM critico y reducir complejidad operativa | Dashboard e import dry-run pasan al sprint posterior, despues de validar Contacts, Leads, Pipeline, Tasks y Customer 360 | User |
+| 2026-08-13 | Aprobar alcance final y tres carriles del piloto | Un mes exige limitar el producto a la jornada CRM critica y separar responsabilidades de ejecucion | El piloto excluye Dashboard/import dry-run y capacidades diferidas; G0 puede pasar a preparar owners, dependencias y evidencias | User |
+| 2026-08-13 | Aprobar plantilla de readiness del piloto | Las pruebas deben demostrar lo que la candidate realmente entrega, con casos, cobertura y evidencia | `CRM_PILOT_READINESS_REVIEW.md` queda como gate obligatorio antes de cada ciclo de pruebas/UAT | User |
 
 ## Arquitectura y contratos
 
@@ -302,15 +326,16 @@ programa y no autoriza implementacion del piloto.
 - [x] User asume inicialmente Product Owner, Tech Lead y release owner.
 - [x] Dos carriles de ingenieria confirmados, aunque puedan ejecutarse secuencialmente.
 - [x] Dataset sintetico y estructura UAT aprobados.
-- [ ] Sesiones UAT calendarizadas con fechas concretas.
+- [x] Sesiones UAT calendarizadas con fechas concretas tentativas.
 
 **Entregables**
-- [ ] GitHub Project `CRM Pilot G0-G5` con campos, vistas e items G0.
-- [ ] Alcance firmado y reduccion de alcance definida para una sola persona ingeniera.
-- [ ] Tres delivery tracks criticos preparados sin superar el WIP acordado.
+- [x] GitHub Project `CRM Pilot G0-G5` con campos, vistas e items G0.
+- [x] Alcance firmado y reduccion de alcance definida para una sola persona ingeniera.
+- [x] Tres delivery tracks criticos preparados sin superar el WIP acordado.
 
 **Validacion**
-- [ ] Cada item G0 tiene owner, dependencia, gate y evidencia esperada.
+- [x] Owner operativo de G0 y carriles confirmado: User.
+- [x] Cada item G0 tiene owner, dependencia, gate y evidencia esperada.
 - [ ] Ninguna vista CRM inicia implementacion sin UX-00.
 - [ ] Antes de cada ciclo de pruebas o UAT, existe una revision de readiness con funcionalidades entregadas, matriz de casos, cobertura existente, huecos y criterio de salida.
 
@@ -321,6 +346,14 @@ programa y no autoriza implementacion del piloto.
 **Calendario tentativo:** UAT 1 el 2026-09-04 para validacion funcional en staging; UAT 2 el
 2026-09-11 para regresion, hardening y readiness de release. Las fechas no son compromiso definitivo:
 se confirman tras G1/G2, despliegue reproducible y revision de readiness.
+
+**Matriz operativa G0**
+
+| Issue | Owner | Dependencia | Gate | Evidencia |
+| --- | --- | --- | --- | --- |
+| #66 Campos y dataset | User | UX-00 y contratos CRM aprobados | G0 | `docs/06-product/crm/fixtures/` y paquetes CRM |
+| #67 Sesiones UAT | User | Fechas tentativas, staging y readiness review | G0/G3/G4 | Este track y `CRM_PILOT_READINESS_REVIEW.md` |
+| #68 Alcance y carriles | User | Roadmap, UX-00 y capacidad disponible | G0 | Alcance aprobado y tres carriles en este track |
 
 ### Fase 1: G1 - Security and first persistent slice
 

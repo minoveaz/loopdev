@@ -43,6 +43,7 @@ Documentacion funcional y de preparacion del piloto CRM de Estar Protegidos.
 
 - [UX general del piloto](shared/CRM_PILOT_UX_SPEC.md)
 - [Revision de readiness](shared/CRM_PILOT_READINESS_REVIEW.md)
+- [Matriz de seguridad y aislamiento](shared/CRM_PILOT_SECURITY_AND_ISOLATION_MATRIX.md)
 
 ### Datos sinteticos
 
