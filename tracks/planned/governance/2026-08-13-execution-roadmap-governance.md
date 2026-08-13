@@ -51,6 +51,7 @@ the initial H0/H1 ambiguity into the G0-G5 pilot release train and leaves H2-H5 
   and release quality/operations.
 - Create one GitHub Project that represents the operational execution of the G0-G5 pilot.
 - Create `CRM Pilot Execution` as the central CRM program track for the G0-G5 pilot.
+- Standardize module definition through `.github/skills/module-definition` before any new module or suite block is implemented.
 - Publish and protect `docs/2026-execution-roadmap` as the durable planning branch after the CRM
   pilot planning package is complete.
 - Convert accepted pilot gates, P0 risks, and dependencies into small execution tracks after
@@ -77,6 +78,7 @@ the initial H0/H1 ambiguity into the G0-G5 pilot release train and leaves H2-H5 
 | 2026-08-13 | Crear `CRM Pilot Execution` como program track central | El piloto necesita un documento operativo distinto del roadmap anual y del mega-track historico | El track CRM historico queda supersedido solo como plan operativo; su evidencia se conserva | User |
 | 2026-08-13 | Aprobar el execution roadmap anual en terminos generales | La direccion, secuencia, riesgos y limites del piloto son suficientes para gobernar G0-G5 | El roadmap pasa a `approved`; se permiten ajustes menores no materiales y cambios materiales requieren decision aprobada | User |
 | 2026-08-13 | Proteger la rama remota `docs/2026-execution-roadmap` al finalizar la planificacion CRM | La rama concentra el contexto durable que guiara el desarrollo del piloto y del ano | Se publicara, etiquetara y protegera contra borrado y force-push; cambios posteriores entraran por Pull Request | User |
+| 2026-08-13 | Crear la skill `module-definition` como flujo estandar de definicion | Contactos tiene paquete completo y Leads estaba incompleto; futuras suites necesitan el mismo proceso | Cada modulo requiere UX, component audit, contract, impact assessment y implementation handoff | User |
 
 ## Arquitectura y contratos
 
