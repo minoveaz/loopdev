@@ -306,6 +306,56 @@ Cada delivery track debe declarar Contracts, Schema, RLS, Storage, Secrets/provi
 Billing/entitlements, Observability y Rollout/rollback. El navegador no usa `service_role`; las
 mutaciones criticas usan contratos, autorizacion server-side, RLS y datos autoritativos.
 
+## Plan de ejecucion operativo
+
+### Orden y dependencias
+
+| Orden | Fase | Issues | Carril principal | Owner | Dependencia de entrada | Salida exigida |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | G0 Definition/readiness | #66, #67, #68 | Coordinacion | User | Alcance, UX y Project definidos | G0 firmado, owners/evidencia/dependencias completas |
+| 1 | G1 Security/first slice | #70-#78, #82 | Datos/Seguridad + CRM | User | G0 aprobado | RLS, seed, CI, pgTAP, E2E y Contacts persistente |
+| 2 | G2 Lead/Pipeline | #83, #84, #85 | CRM/Frontend | User | G1 validado | Leads y Opportunities persistentes, idempotencia y aislamiento |
+| 3 | G3 Daily Operation/staging | #86, #87, #88, #79, #80 | CRM + Operaciones | User | G2 validado | Tasks, Customer 360, staging, observabilidad y readiness UAT 1 |
+| 4 | G4 Hardening/UAT 2 | #90, #91, #92, #81 | Calidad/Operaciones | User | UAT 1 y G3 aceptados | P0/P1 resueltos, restore/rollback y readiness UAT 2 |
+| 5 | G5 Release decision | #94 | Calidad/Operaciones | User | UAT 2 aceptada | Smoke/canary y decisión UAT privado o anillo nominal |
+
+### Carriles y WIP
+
+| Carril | Responsabilidad | Issues iniciales | Regla WIP |
+| --- | --- | --- | --- |
+| CRM/Frontend | Contratos de ruta, vistas, estados UX e integración de módulos | #82, #84, #85, #87, #88 | Un slice activo por vez |
+| Datos/Seguridad | Schema, FKs, RLS, kill switches, audit, seed y pgTAP | #70-#75 | No avanzar sin evidencia de aislamiento |
+| Calidad/Operaciones | CI, E2E, staging, observabilidad, restore, UAT y release | #76-#81, #90-#94 | No ejecutar UAT sin readiness review |
+
+### Evidencia mínima por gate
+
+| Gate | Evidencia mínima | No-go |
+| --- | --- | --- |
+| G0 | Alcance aprobado, matriz de dependencias, Project actualizado, fechas UAT tentativas | Scope ambiguo o sin owner operativo |
+| G1 | RLS/pgTAP, seed reproducible, kill switches, audit append-only, CI y Contacts E2E | Cross-tenant, service_role browser o P0 de seguridad |
+| G2 | Routes/API reales, persistencia, conversiones idempotentes, pruebas de Leads/Pipeline | Duplicados, pérdida de relación o aislamiento fallido |
+| G3 | Candidate en staging, readiness review, Tasks/Customer 360 E2E, health/logs/Sentry | Candidate no reproducible o caso P0 sin cobertura |
+| G4 | Correcciones UAT 1, a11y, rendimiento básico, rollback y restore drill | P0/P1 abierto o restore no verificable |
+| G5 | UAT 2 aceptada, smoke/canary, runbooks y decisión explícita | Decisión sin evidencia o no-go sin remediación |
+
+### Calendario tentativo y checkpoints
+
+```text
+2026-08-13 -> planificación y G0 documental
+2026-08-14..2026-08-21 -> G0 final + G1 seguridad/primer slice
+2026-08-24..2026-09-02 -> G2 CRM persistente + G3 preparación staging
+2026-09-03 -> Readiness Review UAT 1
+2026-09-04 -> UAT 1
+2026-09-05..2026-09-09 -> remediación P0/P1 + regresión
+2026-09-10 -> Readiness Review UAT 2 + restore/rollback
+2026-09-11 -> UAT 2
+2026-09-12 -> decisión G5
+2026-09-13 -> objetivo del piloto, sujeto a evidencia y aprobación
+```
+
+Las fechas posteriores al 2026-08-13 son tentativas. Se mueven si G1, G2, staging o readiness no
+cumplen sus criterios de entrada. Dashboard e import dry-run quedan fuera de esta secuencia.
+
 ## Branch strategy
 
 Este program track no tiene una rama unica porque sus tres carriles de ejecucion requieren ramas de
