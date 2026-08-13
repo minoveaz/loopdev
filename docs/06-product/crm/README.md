@@ -31,6 +31,14 @@ Documentacion funcional y de preparacion del piloto CRM de Estar Protegidos.
 - [Impact assessment](tasks/CRM_TASKS_IMPACT_ASSESSMENT.md)
 - [Handoff de implementacion](tasks/CRM_TASKS_IMPLEMENTATION_HANDOFF.md)
 
+### Customer 360
+
+- [Especificacion UX](customer-360/CRM_CUSTOMER_360_UX_SPEC.md)
+- [Auditoria de componentes](customer-360/CRM_CUSTOMER_360_COMPONENT_AUDIT.md)
+- [Contrato](customer-360/CRM_CUSTOMER_360_CONTRACT.md)
+- [Impact assessment](customer-360/CRM_CUSTOMER_360_IMPACT_ASSESSMENT.md)
+- [Handoff de implementacion](customer-360/CRM_CUSTOMER_360_IMPLEMENTATION_HANDOFF.md)
+
 ### Shared del piloto
 
 - [UX general del piloto](shared/CRM_PILOT_UX_SPEC.md)

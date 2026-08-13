@@ -119,6 +119,17 @@ El Punto 4 de Tasks queda aprobado por User: Notes y Timeline como capacidades c
 append-only, Notes protegidas por permisos, `ActivityItem` comun y agregacion sin duplicados en
 Customer 360.
 
+Customer 360 se define ahora como la proyeccion agregada dentro del detalle de Contact, usando el
+Issue #88 y el paquete de cinco documentos en `docs/06-product/crm/customer-360/`. No es una entidad
+ni un modulo de navegacion independiente; consume Contacts, Leads, Pipeline y Tasks con
+`ActivitySource` y deduplicacion autorizada.
+
+El Punto 1 de Customer 360 queda aprobado por User: vistas `record`, `split` y `overview`, secciones
+agregadas, componentes reutilizables y componentes especificos.
+
+El Punto 2 de Customer 360 queda aprobado por User: secciones, permisos por seccion, carga parcial y
+deduplicacion mediante `ActivitySource`.
+
 El paquete de Tasks queda aprobado por User el 2026-08-13: UX spec, component audit, contract e
 impact assessment aprobados, y implementation handoff aprobado para handoff. Tasks queda Ready
 documental en el Issue #87; Daily Operation permanece como resultado transversal de G3 y la
