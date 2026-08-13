@@ -1,0 +1,13 @@
+organization_key,workspace_key,stage_key,stage_name,stage_order,active,terminal_type
+estar-protegidos,commercial,STG-001,Nuevo,1,true,open
+estar-protegidos,commercial,STG-002,Contactado,2,true,open
+estar-protegidos,commercial,STG-003,Cualificado,3,true,open
+estar-protegidos,commercial,STG-004,Propuesta,4,true,open
+estar-protegidos,commercial,STG-005,Negociacion,5,true,open
+estar-protegidos,commercial,STG-006,Ganado,6,true,won
+estar-protegidos,commercial,STG-007,Perdido,7,true,lost
+tenant-b,commercial,STG-B01,Nuevo,1,true,open
+tenant-b,commercial,STG-B02,Contactado,2,true,open
+tenant-b,commercial,STG-B03,Cualificado,3,true,open
+tenant-b,commercial,STG-B04,Ganado,4,true,won
+tenant-b,commercial,STG-B05,Perdido,5,true,lost

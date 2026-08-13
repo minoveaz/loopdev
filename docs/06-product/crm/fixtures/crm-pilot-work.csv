@@ -1,0 +1,11 @@
+organization_key,workspace_key,work_key,work_type,contact_external_case,lead_key,opportunity_key,title,assigned_role,status,priority,due_date
+estar-protegidos,commercial,TASK-001,task,EP-001,,,Confirmar datos de contacto,agente,open,high,2026-08-18
+estar-protegidos,commercial,TASK-002,task,EP-006,LEAD-006,OPP-001,Preparar resumen de propuesta,manager,open,high,2026-08-19
+estar-protegidos,commercial,TASK-003,task,EP-010,LEAD-010,OPP-002,Llamar para revisar propuesta,agente,completed,medium,2026-08-14
+estar-protegidos,commercial,TASK-004,task,EP-015,LEAD-015,OPP-003,Enviar informacion solicitada,agente,open,medium,2026-08-21
+estar-protegidos,commercial,TASK-005,task,EP-008,LEAD-008,OPP-005,Reactivar oportunidad estancada,manager,open,high,2026-08-17
+estar-protegidos,commercial,TASK-006,note,EP-006,LEAD-006,OPP-001,Cliente solicita llamada por la tarde,manager,recorded,low,2026-08-13
+estar-protegidos,commercial,TASK-007,note,EP-009,LEAD-009,,Posible duplicado pendiente de revision,agente,recorded,high,2026-08-16
+estar-protegidos,commercial,TASK-008,task,EP-004,LEAD-004,OPP-004,Validar origen de campana,agente,cancelled,low,2026-08-12
+tenant-b,commercial,TASK-B01,task,TB-002,LEAD-B02,OPP-B01,Revisar producto demo,manager,open,medium,2026-08-22
+tenant-b,commercial,TASK-B02,note,TB-005,LEAD-B05,OPP-B02,Nota de seguimiento tenant B,agente,recorded,low,2026-08-20

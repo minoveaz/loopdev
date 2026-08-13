@@ -1,13 +1,13 @@
 ---
 title: Roadmap de Ejecucion 2026 de LoopDev
-status: proposed
-version: 1.0
+status: approved
+version: 1.1
 created: 2026-08-13
 updated: 2026-08-13
 owner: platform
-approver: pending
-approved_at: null
-next_review: before-g0-execution
+approver: User
+approved_at: 2026-08-13
+next_review: at-g3-or-material-change
 source_documents:
   - docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md
   - docs/architecture/LOOPDEV_PILOT.md
@@ -28,6 +28,8 @@ Gobierna el orden del portfolio, los gates de entrada y salida, los riesgos prio
 5. Skills y guias de procedimiento.
 
 El roadmap de arquitectura fuente conserva la referencia del estado objetivo. La evaluacion del piloto conserva el registro de auditoria y la base de evidencia del primer release train. Ningun documento fuente se reescribe de forma silenciosa; los siguientes tracks y ADR deben enlazar a este roadmap.
+
+Se permiten ajustes menores de redaccion, claridad, evidencia y orden operativo cuando no cambien el outcome, el alcance incluido/excluido, los gates, los riesgos P0, los criterios de no-go ni la secuencia de producto. Todo cambio material requiere una decision aprobada en el track de governance y, cuando sea durable, un ADR.
 
 ## 2. Decision ejecutiva
 
@@ -60,10 +62,11 @@ El piloto es la primera fase de ejecucion de este roadmap. Sustituye la secuenci
 
 ### 4.1 Resultado del piloto
 
-Un agente autorizado de Estar Protegidos puede iniciar sesion, buscar o crear un contacto, captar o actualizar un lead, mover persistentemente una oportunidad por el pipeline, registrar notas y tareas, completar una tarea y revisar la historia minima de un cliente. El mismo flujo sobrevive a la recarga y al cambio de dispositivo. Un viewer no puede mutarlo y un segundo tenant no puede leerlo, mutarlo ni referenciarlo.
+Un agente autorizado de Estar Protegidos puede iniciar sesion, buscar o crear un contacto, captar o actualizar un lead, mover persistentemente una oportunidad por el pipeline, registrar notas y tareas, completar una tarea y revisar la historia minima de un cliente. El mismo flujo sobrevive a la recarga y al cambio de dispositivo. Un segundo tenant no puede leerlo, mutarlo ni referenciarlo.
 
 ### 4.2 Alcance incluido
 
+- Definicion UX/UI del piloto: mapa de navegacion, rutas, vistas, acciones, permisos, estados y criterios UAT de cada flujo CRM incluido.
 - Aprovisionamiento manual de usuarios, scope real de organizacion/workspace/marca y permisos reales.
 - Contactos y leads: listar, buscar, crear, editar y ver detalle; captura de lead incluida.
 - Oportunidades y transiciones persistentes de etapa.
@@ -89,7 +92,7 @@ WhatsApp entrante en modo solo lectura es un stretch goal unicamente despues de 
 
 | Gate | Objetivo | Entregables obligatorios | Decision |
 | --- | --- | --- | --- |
-| G0 | Ago 13-14 | Alcance firmado, Product Owner/Tech Lead/release owner nombrados, capacidad efectiva, UAT, campos reales y dataset sintetico acordados | Empezar o reducir alcance |
+| G0 | Ago 13-14 | Alcance firmado, Product Owner/Tech Lead/release owner nombrados, capacidad efectiva, UAT, campos reales y dataset sintetico acordados; mapa UX/UI aprobado de navegacion, rutas, vistas, acciones, permisos y estados del piloto | Empezar o reducir alcance |
 | G1 | Ago 17-21 | RLS CRM por verbo, FKs tenant-aware, kill switches, audit append-only, seed/types/reset, pgTAP, gate CI requerido y slice persistente de contacto | Seguridad y primera verdad persistente |
 | G2 | Ago 24-28 | Captura de lead transaccional/idempotente, detalle/edicion de lead, etapa de oportunidad persistente, estado de queries real y cobertura route/integracion/E2E | Contacto -> lead -> etapa sobrevive recarga y separacion de tenants |
 | G3 | Ago 31-Sep 4 | Notas/tareas/timeline, Customer 360 minimo, dashboard real u oculto, import dry-run, staging, health, logs, Sentry y primer UAT | Flujo diario del agente y despliegue reproducible |
@@ -101,6 +104,12 @@ Si G1 no se cumple, el entorno permanece como UAT privado. Si en G5 sigue abiert
 ### 4.5 Regla de capacidad
 
 El piloto completo requiere dos carriles efectivos: producto/full-stack CRM y datos/plataforma/calidad, ademas de decisiones diarias de producto y QA/UAT parcial. Con una sola persona ingeniera, el alcance se reduce inmediatamente a contactos, leads, pipeline y notas/tareas basicas. Customer 360 agregado, dashboard, importacion self-service y WhatsApp se eliminan antes de reducir seguridad, autorizacion, persistencia o gates de release.
+
+La definicion UX/UI es P0 y precede a la implementacion de los slices CRM. Debe especificar, como minimo, el mapa de navegacion, rutas, vistas de lista/detalle/creacion/edicion, acciones visibles por permiso, estados loading/empty/error/forbidden, comportamiento responsive y teclado, y los flujos UAT de contacto, lead, pipeline, tareas/notas y Customer 360. No se construye una vista de produccion a partir de fixtures o de una interpretacion implicita del flujo.
+
+El UAT funcional se certifica en escritorio y tablet. Mobile web conserva responsive basico, sin
+desbordamiento ni perdida de acciones criticas, pero no requiere paridad funcional ni certificacion
+completa de modulos CRM durante este piloto.
 
 ## 5. Secuencia de trabajo y WIP
 
@@ -114,10 +123,11 @@ Cada item de entrega debe caber en uno o dos dias y exponer un vertical slice us
 
 El orden inicial de ejecucion es:
 
-1. SEC-01 a SEC-04 y DB-01 a DB-02: RLS, integridad de tenant, kill switches, auditoria, evidencia de base de datos, reset reproducible, seed y tipos generados.
-2. CI-01 a CI-03 y OPS-01 a OPS-03: gate de release no omitible, checks web reales, E2E criticos con auth real, entornos reproducibles, observabilidad, restore y rollback.
-3. CRM-01 a CRM-04 y UX-01: sustituir fixtures y claims falsos por flujos reales de contacto, lead, pipeline, tarea, nota y timeline.
-4. CRM-05, CRM-06, UX-02 y GOV-01 solo despues de que el camino P0 este en verde.
+1. UX-00: definir y aprobar el mapa UX/UI del piloto antes de implementar vistas CRM.
+2. SEC-01 a SEC-04 y DB-01 a DB-02: RLS, integridad de tenant, kill switches, auditoria, evidencia de base de datos, reset reproducible, seed y tipos generados.
+3. CI-01 a CI-03 y OPS-01 a OPS-03: gate de release no omitible, checks web reales, E2E criticos con auth real, entornos reproducibles, observabilidad, restore y rollback.
+4. CRM-01 a CRM-04 y UX-01: sustituir fixtures y claims falsos por flujos reales de contacto, lead, pipeline, tarea, nota y timeline.
+5. CRM-05, CRM-06, UX-02 y GOV-01 solo despues de que el camino P0 este en verde.
 
 ## 6. Condiciones absolutas de no-go
 
@@ -142,6 +152,7 @@ El piloto no puede describirse como produccion controlada, ni pueden cargarse da
 | P0 | Pueden persistir referencias cross-tenant | Algunos enlaces de tenant no tienen constraints compuestos tenant-aware | Constraints unique/FK compuestos y pruebas negativas; owner Data |
 | P0 | Los kill switches no revocan todo el acceso | Los helpers no verifican consistentemente el estado activo de organizacion/workspace | Aplicar membership/org/workspace activos en UI, BFF y DB; owner Data/Backend |
 | P0 | La UI CRM tiene una segunda fuente de verdad | Fixtures, estado local y score IA aleatorio siguen siendo autoritativos | Sustituir slice por slice con APIs reales y retirar claims simulados; owner CRM |
+| P0 | Las vistas CRM no estan definidas antes del desarrollo | No existe un mapa aprobado de navegacion, rutas, acciones, permisos y estados por vista | Completar y aprobar UX-00 antes de abrir slices CRM; owner Product/Frontend |
 | P0 | Los journeys CRM estan incompletos o no son atomicos | CRUD/transiciones incompletos y captura multi-paso puede dejar datos huerfanos | Casos de uso BFF tipados, transacciones, idempotencia y pruebas de integracion; owner CRM/Backend |
 | P0 | CI puede producir falsos verdes | Checks estaticos, unitarios, de tipos y build pueden omitirse ante cambios web | Gate agregado requerido y typecheck web real; owner Platform |
 | P0 | El release no es recuperable ni observable | No hay topologia versionada de despliegue, restore drill ni runbooks | Render Blueprint, entornos separados, health, Sentry, alertas, rollback y evidencia de restore; owner Platform |
@@ -223,5 +234,6 @@ Reglas de gobernanza:
 | Version | Fecha | Estado | Aprobador | Alcance |
 | --- | --- | --- | --- | --- |
 | 1.0 | 2026-08-13 | proposed | Pendiente | Roadmap 2026 consolidado y release train del piloto CRM |
+| 1.1 | 2026-08-13 | approved | User | Direccion anual, secuencia G0-G5 y H2-H5, riesgos, no-go y alcance del piloto; se permiten solo ajustes menores no materiales |
 
-La aprobacion autoriza la creacion y reconciliacion de los tres tracks del camino critico. No autoriza reescrituras destructivas de migraciones, procesamiento de datos sensibles ni activacion de capacidades diferidas.
+La aprobacion autoriza la creacion y reconciliacion de los tres tracks del camino critico. No autoriza reescrituras destructivas de migraciones, procesamiento de datos sensibles ni activacion de capacidades diferidas. La aprobacion anual no completa G0: UX-00, responsables, capacidad, datos y UAT siguen siendo gates operativos pendientes.

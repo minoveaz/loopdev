@@ -1,0 +1,8 @@
+organization_key,workspace_key,opportunity_key,lead_key,contact_external_case,opportunity_name,stage_key,amount,currency,probability,expected_close_date,assigned_role
+estar-protegidos,commercial,OPP-001,LEAD-006,EP-006,Proteccion salud familiar,STG-003,1250.00,EUR,0.45,2026-09-15,manager
+estar-protegidos,commercial,OPP-002,LEAD-010,EP-010,Proteccion familiar premium,STG-004,2100.00,EUR,0.65,2026-09-20,agente
+estar-protegidos,commercial,OPP-003,LEAD-015,EP-015,Plan proteccion familiar,STG-002,980.00,EUR,0.25,2026-09-30,agente
+estar-protegidos,commercial,OPP-004,LEAD-004,EP-004,Consulta proteccion,STG-001,650.00,EUR,0.10,2026-10-05,agente
+estar-protegidos,commercial,OPP-005,LEAD-008,EP-008,Comparativa opciones,STG-005,1750.00,EUR,0.70,2026-09-10,manager
+tenant-b,commercial,OPP-B01,LEAD-B02,TB-002,Producto demo B,STG-B02,500.00,EUR,0.30,2026-10-10,manager
+tenant-b,commercial,OPP-B02,LEAD-B05,TB-005,Producto demo B premium,STG-B03,900.00,EUR,0.50,2026-10-20,agente
