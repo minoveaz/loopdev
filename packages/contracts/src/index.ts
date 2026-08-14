@@ -13,6 +13,7 @@ export * from './platform/tenancy';
 export * from './platform/home';
 export * from './platform/composition';
 export * from './platform/composition-registry';
+export * from './platform/composition-layout';
 
 // Export CRM contracts
 export * from './crm/crm';

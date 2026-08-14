@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ViewCompositionSchema } from '../composition';
 import { validateCompositionAgainstRegistry } from '../composition-registry';
+import { resolveCompositionLayout } from '../composition-layout';
 
 describe('Configurable composition contract', () => {
   it('accepts a bounded overview composition', () => {
@@ -46,6 +47,33 @@ describe('Configurable composition contract', () => {
     expect(validateCompositionAgainstRegistry(composition)).toEqual([
       { regionId: 'map', message: 'Slot "visual-canvas" is not allowed' },
       { regionId: 'map', message: 'Component "TechnicalCanvas" is not allowed' },
+    ]);
+  });
+
+  it('resolves responsive layout defaults without pixel coordinates', () => {
+    const composition = ViewCompositionSchema.parse({
+      recipe: 'SuiteOverview',
+      grid: { columns: 12, gap: 'md' },
+      regions: [
+        {
+          id: 'summary',
+          slot: 'summary',
+          component: 'StatusCardGroup',
+          colSpan: 7,
+          rowSpan: 2,
+          responsive: { mobile: 'full' },
+        },
+      ],
+    });
+
+    expect(resolveCompositionLayout(composition)).toEqual([
+      {
+        id: 'summary',
+        columnSpan: 7,
+        rowSpan: 2,
+        tabletClass: 'preserve',
+        mobileClass: 'full',
+      },
     ]);
   });
 });
