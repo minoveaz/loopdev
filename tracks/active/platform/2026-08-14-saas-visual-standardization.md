@@ -126,6 +126,9 @@ assigns the remaining duplication, accessibility, theming and exception work.
 
 **Objetivo:** Define tokens, primitives, recipes, states and view contracts.
 
+- [x] Reference composition patterns extracted from supplied screenshots.
+- [ ] Neutral showcase fixtures for all six initial recipes.
+
 **Estado:** pendiente
 
 ### Fase 2: Reference compositions
