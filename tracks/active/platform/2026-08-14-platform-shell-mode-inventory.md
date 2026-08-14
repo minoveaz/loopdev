@@ -110,10 +110,12 @@ gates without changing shell behavior.
   and `full-bleed`.
 - [x] CRM semantic mapping for `record` and `focus` to current contract modes.
 - [x] `docs/03-platform/PLATFORM_SHELL_COMPATIBILITY_MATRIX.md`.
+- [x] Align `AccessMap` with `forbidden` and `read-only` contract states.
 - [ ] Hover overlay, portal footer and permission fallback interaction tests.
 
 **Validación**
 - [x] `pnpm test:shell:changed` evaluated the changed-surface gate.
+- [ ] Contracts build and Vitest run in this worktree; dependencies are absent.
 - [ ] `@loopdev/ui` SuiteCanvas test runner passes in a dependency-complete environment.
 
 **Evidencia:** The current contract exposes six modes; focused render coverage

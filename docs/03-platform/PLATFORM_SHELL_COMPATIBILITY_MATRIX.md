@@ -37,9 +37,8 @@ is explicitly approved.
 
 ## Contract gaps requiring explicit decisions
 
-- `AccessMap` currently models `enabled`, `disabled`, `hidden` and
-  `coming-soon`, while `ShellAccessState` also defines `forbidden` and
-  `read-only`. The distinction must be formalized before regulated or
-  read-only suites depend on it.
+- `AccessMap` now accepts the full shared access contract:
+  `enabled`, `disabled`, `hidden`, `coming-soon`, `forbidden` and
+  `read-only`. Rendering behavior for the latter two remains a UI gate.
 - `SuiteCanvas` has no first-class semantic `record` or `focus` mode.
 - Cross-suite interaction tests are not yet present.

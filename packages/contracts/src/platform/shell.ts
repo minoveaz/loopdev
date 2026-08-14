@@ -134,7 +134,7 @@ export const SuiteConfigSchema = z
   .object({
     identity: z.custom<SuiteIdentity>(),
     navigation: z.custom<NavigationSchema>(),
-    accessMap: z.record(z.enum(['enabled', 'disabled', 'hidden', 'coming-soon'])),
+    accessMap: z.record(ShellAccessStateSchema),
     requiredPermissions: z.array(z.string().min(1)).optional(),
     themeId: z.string().min(1).optional(),
     navMode: z.enum(['expanded', 'rail', 'hover', 'hidden']).optional(),

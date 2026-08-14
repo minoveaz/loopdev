@@ -42,6 +42,18 @@ describe('Platform shell contracts', () => {
     expect(SuiteConfigSchema.safeParse(suiteConfig).success).toBe(true);
   });
 
+  it('accepts explicit forbidden and read-only module access states', () => {
+    expect(
+      SuiteConfigSchema.safeParse({
+        ...suiteConfig,
+        accessMap: {
+          overview: 'read-only',
+          billing: 'forbidden',
+        },
+      }).success,
+    ).toBe(true);
+  });
+
   it('rejects duplicate module IDs', () => {
     const result = SuiteConfigSchema.safeParse({
       ...suiteConfig,
