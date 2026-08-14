@@ -37,7 +37,7 @@ reviewed_at: 2026-08-14
 | --- | --- | --- | --- | --- | --- |
 | SuiteSidebar | Labels/groups visible in flow | Icons with accessible names | Expanded overlay over center | Not rendered | Center x-coordinate is stable in rail/hover |
 | SidebarFooter | Selector visible | Icon/label contract | Portal menu keeps expanded state | Not rendered | Pointer gap does not collapse menu |
-| SuiteCanvas | `overview`, `data`, `split`, `board`, `record`, `focus` | Same content contract | Same content contract | Route owns fallback | Mode changes restore focus and preserve route |
+| SuiteCanvas | `overview`, `data`, `workspace`, `split`, `board`, `full-bleed` | Same content contract | Same content contract | Route owns fallback | Mode changes restore focus and preserve route |
 | NavigationSchema | Full labels and groups | Same IDs and routes | Same access-filtered items | No hidden unauthorized items | Stable IDs, deterministic priorities |
 | GlobalContextPanel | Overlay available | Overlay independent | Overlay above shell surfaces | Closed | Does not change sidebar dimensions |
 
@@ -49,13 +49,15 @@ reviewed_at: 2026-08-14
 | `data` | Contacts, Leads, Tasks lists | Cursor pagination, filters and table semantics |
 | `split` | List/detail journeys | Selection, URL state and responsive fallback |
 | `board` | Pipeline | Keyboard/action alternative to drag-and-drop |
-| `record` | Contact, Opportunity, Customer 360, Task | Focus restoration, stale/conflict states |
-| `focus` | Single task or contextual workflow | Escape/back navigation and bounded actions |
+| `workspace` | Contact, Opportunity, Customer 360, Task | Focus restoration, stale/conflict states |
+| `full-bleed` | Pipeline board or immersive workflow | Escape/back navigation and bounded actions |
 
 ## Gaps and gates
 
-1. Existing shell tests cover contract helpers and components, but a complete
-   cross-mode matrix test is not present.
+1. The declared six Canvas modes now have focused render coverage, but CRM's
+   requested `record` and `focus` semantics are not current contract values;
+   route compositions must map them to `workspace` and `full-bleed` or obtain
+   an explicit contract change.
 2. Portalized footer behavior needs an interaction test that spans trigger,
    portal menu and delayed collapse.
 3. Hover overlay needs an invariant test proving the center content x-coordinate
