@@ -470,9 +470,12 @@ function SplitModuleHeader() {
       statusLabel="Active"
       statusSeverity="success"
       rightSlot={
-        <Button variant="outline" size="sm">
-          Module action
-        </Button>
+        <div className="flex items-center gap-3">
+          <span className="text-primary text-lpd-xs font-mono tracking-[0.16em]">{'{SuiteHeader}'}</span>
+          <Button variant="outline" size="sm">
+            Module action
+          </Button>
+        </div>
       }
     />
   );
@@ -488,7 +491,8 @@ function SplitModuleToolbar() {
         </div>
       }
       center={
-        <div className="text-text-muted flex items-center gap-2 text-xs">
+        <div className="text-text-muted flex items-center gap-3 text-xs">
+          <span className="text-primary font-mono text-[10px] tracking-[0.16em]">{'{SuiteToolbar}'}</span>
           <Button variant="ghost" size="sm">
             All columns
           </Button>
@@ -505,6 +509,7 @@ function SplitModuleToolbar() {
 function ShowcaseCanvas({ mode }: { mode: CanvasMode }) {
   return (
     <div className="bg-shell-canvas text-lpd-sm h-full min-h-full font-sans leading-normal">
+      <p className="text-primary px-4 pt-4 font-mono text-[10px] tracking-[0.16em]">{'{SuiteCanvas}'}</p>
       <CanvasFixture mode={mode} />
     </div>
   );
@@ -585,8 +590,8 @@ export default function ShellShowcasePage() {
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
         canvasProps={{
           mode: canvasMode,
-          header: canvasMode === 'split' ? <SplitModuleHeader /> : undefined,
-          toolbar: canvasMode === 'split' ? <SplitModuleToolbar /> : undefined,
+          header: <SplitModuleHeader />,
+          toolbar: <SplitModuleToolbar />,
         }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
