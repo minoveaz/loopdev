@@ -135,6 +135,51 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
   })),
 };
 
+function ShowcaseModuleHeader({ mode }: { mode: CanvasMode }) {
+  const label = CANVAS_MODES.find((item) => item.id === mode)?.label ?? mode;
+
+  return (
+    <ModuleHeader
+      segments={[
+        { id: 'suite', label: 'Shell Showcase' },
+        { id: 'mode', label, isActive: true },
+      ]}
+      statusLabel="Reference"
+      statusSeverity="success"
+      rightSlot={<Button variant="outline" size="sm">Module action</Button>}
+    />
+  );
+}
+
+function ShowcaseModuleToolbar({ mode }: { mode: CanvasMode }) {
+  const label = CANVAS_MODES.find((item) => item.id === mode)?.label ?? mode;
+
+  return (
+    <ModuleToolbar
+      left={
+        <div className="border-border-technical bg-background text-text-muted flex items-center gap-2 rounded-md border px-3 py-1.5">
+          <span aria-hidden="true">⌕</span>
+          <span>{label} controls</span>
+        </div>
+      }
+      center={<span className="text-text-muted text-xs">SuiteToolbar</span>}
+      right={<Button variant="primary" size="sm">Module action</Button>}
+    />
+  );
+}
+
+function ShowcaseContextZone({ zone }: { zone: 'sidebar' | 'panel' }) {
+  const label = zone === 'sidebar' ? 'ModuleContextSidebar' : 'ModuleContextPanel';
+
+  return (
+    <div className="flex h-full min-h-0 flex-col gap-3 p-4">
+      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">{label}</span>
+      <strong className="text-sm text-text-main">{zone === 'sidebar' ? 'Context region' : 'Detail region'}</strong>
+      <p className="text-xs leading-5 text-text-muted">Shell-owned zone visible for every canvas mode comparison.</p>
+    </div>
+  );
+}
+
 function CanvasFixture({ mode }: { mode: CanvasMode }) {
   if (mode === 'data') {
     return (
@@ -356,66 +401,6 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
   );
 }
 
-function ModuleContextFixture() {
-  return (
-    <div className="flex flex-col gap-4 p-4">
-      <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Content}'}</p>
-      <p className="text-text-muted text-lpd-sm leading-normal">
-        Context content for the active module.
-      </p>
-    </div>
-  );
-}
-
-function ModuleContextFooterFixture() {
-  return (
-    <div className="flex flex-col gap-2">
-      <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Footer}'}</p>
-      <Button variant="outline" size="sm" className="w-full justify-start">
-        View details
-      </Button>
-      <Button variant="outline" size="sm" className="w-full justify-start">
-        Manage access
-      </Button>
-    </div>
-  );
-}
-
-function ModuleContextPanelFixture() {
-  return (
-    <div className="flex flex-col gap-4 p-4 text-xs">
-      <div>
-        <p className="text-text-muted uppercase tracking-wide">Selected user</p>
-        <p className="text-text-main mt-2 text-sm font-semibold">admin@localhost.com</p>
-      </div>
-      <dl className="border-border-technical divide-border-technical divide-y rounded-md border">
-        {[
-          ['User ID', '07b3b75e-58d8-4d8c-900b-8be98150375f'],
-          ['Created at', '04 Aug 2026 12:23'],
-          ['Updated at', '12 Aug 2026 00:29'],
-          ['Last signed in', '07 Aug 2026 09:15'],
-        ].map(([label, value]) => (
-          <div key={label} className="px-3 py-2">
-            <dt className="text-text-muted">{label}</dt>
-            <dd className="text-text-main mt-1 break-all">{value}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
-  );
-}
-
-function ModuleContextPanelFooterFixture() {
-  return (
-    <div className="flex flex-col gap-2">
-      <p className="text-primary text-lpd-xs leading-tight tracking-[0.18em]">{'{Footer}'}</p>
-      <Button variant="primary" size="sm" className="w-full justify-start">
-        Apply changes
-      </Button>
-    </div>
-  );
-}
-
 function SplitModuleFixture() {
   return (
     <div className="bg-background min-h-full min-w-0 overflow-auto p-4 sm:p-6">
@@ -457,48 +442,6 @@ function SplitModuleFixture() {
             ))}
           </div>
     </div>
-  );
-}
-
-function SplitModuleHeader() {
-  return (
-    <ModuleHeader
-      segments={[
-        { id: 'suite', label: 'Shell Showcase' },
-        { id: 'module', label: 'Users', isActive: true },
-      ]}
-      statusLabel="Active"
-      statusSeverity="success"
-      rightSlot={
-        <Button variant="outline" size="sm">
-          Module action
-        </Button>
-      }
-    />
-  );
-}
-
-function SplitModuleToolbar() {
-  return (
-    <ModuleToolbar
-      left={
-        <div className="border-border-technical bg-background text-text-muted flex items-center gap-2 rounded-md border px-3 py-1.5">
-          <span aria-hidden="true">⌕</span>
-          <span>Search users</span>
-        </div>
-      }
-      center={
-        <div className="text-text-muted flex items-center gap-2 text-xs">
-          <Button variant="ghost" size="sm">
-            All columns
-          </Button>
-          <Button variant="ghost" size="sm">
-            Sorted by user ID
-          </Button>
-        </div>
-      }
-      right={<Button variant="primary" size="sm">Add user</Button>}
-    />
   );
 }
 
@@ -566,27 +509,25 @@ export default function ShellShowcasePage() {
     <div className={`${activeOrganization?.theme ?? ''} h-full`}>
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
-        activeModuleId={canvasMode === 'overview' ? undefined : canvasMode}
+        activeModuleId={canvasMode}
         moduleRenderers={Object.fromEntries(
           CANVAS_MODES.map((mode) => [mode.id, () => <ShowcaseCanvas mode={mode.id} />]),
         )}
-        moduleContextRenderers={{ split: () => <ModuleContextFixture /> }}
-        moduleContextFooterRenderers={{ split: () => <ModuleContextFooterFixture /> }}
-        moduleContextLabels={{ split: 'ModuleContextSidebar' }}
-        moduleContextWidths={{ split: 'standard' }}
-        moduleContextPanelRenderers={{
-          split: () => (isSplitPanelOpen ? <ModuleContextPanelFixture /> : null),
-        }}
-        moduleContextPanelFooterRenderers={{
-          split: () => (isSplitPanelOpen ? <ModuleContextPanelFooterFixture /> : null),
-        }}
-        moduleContextPanelLabels={{ split: 'ModuleContextPanel' }}
-        moduleContextPanelWidths={{ split: 'extra-wide' }}
+        moduleContextRenderers={Object.fromEntries(
+          CANVAS_MODES.map((mode) => [mode.id, () => <ShowcaseContextZone zone="sidebar" />]),
+        )}
+        moduleContextLabels={Object.fromEntries(CANVAS_MODES.map((mode) => [mode.id, 'ModuleContextSidebar']))}
+        moduleContextWidths={Object.fromEntries(CANVAS_MODES.map((mode) => [mode.id, 'standard']))}
+        moduleContextPanelRenderers={Object.fromEntries(
+          CANVAS_MODES.map((mode) => [mode.id, () => (isSplitPanelOpen ? <ShowcaseContextZone zone="panel" /> : null)]),
+        )}
+        moduleContextPanelLabels={Object.fromEntries(CANVAS_MODES.map((mode) => [mode.id, 'ModuleContextPanel']))}
+        moduleContextPanelWidths={Object.fromEntries(CANVAS_MODES.map((mode) => [mode.id, 'extra-wide']))}
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
         canvasProps={{
           mode: canvasMode,
-          header: canvasMode === 'split' ? <SplitModuleHeader /> : undefined,
-          toolbar: canvasMode === 'split' ? <SplitModuleToolbar /> : undefined,
+          header: <ShowcaseModuleHeader mode={canvasMode} />,
+          toolbar: <ShowcaseModuleToolbar mode={canvasMode} />,
         }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
