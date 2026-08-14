@@ -264,7 +264,7 @@ export default function CompositionShowcasePage() {
         appShellProps={{ config: { activeOverlay: contextMode ? 'context' : null } }}
       >
         <main className="min-h-full bg-shell-canvas p-3 text-text-main sm:p-5">
-          <section className="mx-auto max-w-7xl rounded-xl border border-border-technical bg-surface-dark/20 p-3 sm:p-5">
+          <section className="mx-auto max-w-7xl">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h1 className="font-mono text-xs uppercase tracking-[0.16em]">{composition.recipe}</h1>
