@@ -14,6 +14,7 @@
 
 ### Platform
 
+- [SaaS visual system and experience standardization](./planned/platform/2026-08-14-saas-visual-standardization.md) · fase 0
 - [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
 
 ### Governance
