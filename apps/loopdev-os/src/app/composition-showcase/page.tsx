@@ -263,56 +263,36 @@ export default function CompositionShowcasePage() {
         }
         appShellProps={{ config: { activeOverlay: contextMode ? 'context' : null } }}
       >
-        <main className="min-h-full bg-shell-canvas p-4 text-text-main sm:p-6">
-      <header className="mx-auto mb-6 max-w-7xl">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">LoopDev composition showcase</p>
-        <h1 className="mt-2 text-3xl font-semibold">Recipe reference fixtures</h1>
-        <p className="mt-2 max-w-3xl text-sm text-text-muted">
-          Neutral compositions for platform and design review. These fixtures demonstrate structure, slots and
-          bounded spans; they are not product screens.
-        </p>
-        <nav className="mt-5 flex flex-wrap gap-2" aria-label="Composition recipes">
-          {Object.keys(FIXTURES).map((fixtureName) => (
-            <button
-              key={fixtureName}
-              type="button"
-              onClick={() => setRecipe(fixtureName)}
-              className={`rounded-md border px-3 py-2 text-xs ${
-                recipe === fixtureName ? 'border-primary bg-primary text-white' : 'border-border-technical'
-              }`}
-            >
-              {fixtureName}
-            </button>
-          ))}
-        </nav>
-        <nav className="mt-3 flex flex-wrap gap-2" aria-label="Showcase states">
-          {STATES.map((nextState) => (
-            <button
-              key={nextState}
-              type="button"
-              onClick={() => setState(nextState)}
-              className={`rounded-md border px-3 py-2 text-xs capitalize ${
-                state === nextState ? 'border-primary bg-primary text-white' : 'border-border-technical'
-              }`}
-            >
-              {nextState}
-            </button>
-          ))}
-        </nav>
-      </header>
-      <section className="mx-auto max-w-7xl rounded-xl border border-border-technical bg-surface-dark/20 p-3 sm:p-5">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-mono text-xs uppercase tracking-[0.16em]">{composition.recipe}</h2>
-          <span className="text-xs text-text-muted">
-            {composition.grid.columns} columns / {composition.grid.gap} gap / {state}
-          </span>
-        </div>
+        <main className="min-h-full bg-shell-canvas p-3 text-text-main sm:p-5">
+          <section className="mx-auto max-w-7xl rounded-xl border border-border-technical bg-surface-dark/20 p-3 sm:p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h1 className="font-mono text-xs uppercase tracking-[0.16em]">{composition.recipe}</h1>
+                <span className="text-xs text-text-muted">
+                  {composition.grid.columns} columns / {composition.grid.gap} gap
+                </span>
+              </div>
+              <label className="flex items-center gap-2 text-xs text-text-muted">
+                <span>Review state</span>
+                <select
+                  value={state}
+                  onChange={(event) => setState(event.target.value as ShowcaseState)}
+                  className="rounded-md border border-border-technical bg-shell-canvas px-2 py-1.5 text-text-main"
+                >
+                  {STATES.map((nextState) => (
+                    <option key={nextState} value={nextState}>
+                      {nextState}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
         <div className="overflow-x-auto">
           <div className="min-w-[20rem] sm:min-w-0">
             <CompositionGrid composition={composition} regions={regions} />
           </div>
         </div>
-      </section>
+          </section>
         </main>
       </SuiteRuntime>
       {contextMode && (
