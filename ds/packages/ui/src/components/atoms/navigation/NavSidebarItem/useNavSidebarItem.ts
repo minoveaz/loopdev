@@ -17,7 +17,7 @@ export const useNavSidebarItem = (props: NavSidebarItemProps) => {
     actionId,
   } = props;
 
-  const isDisabled = status === 'disabled';
+  const isDisabled = status === 'disabled' || status === 'forbidden';
   const isComingSoon = status === 'coming-soon';
   const isInert = isDisabled || isComingSoon;
 
@@ -58,6 +58,7 @@ export const useNavSidebarItem = (props: NavSidebarItemProps) => {
     isActive,
     isDisabled,
     isComingSoon,
+    isForbidden: status === 'forbidden',
     isInert,
     containerClasses,
     contentClasses,
