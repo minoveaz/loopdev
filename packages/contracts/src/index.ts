@@ -11,6 +11,7 @@ export * from './platform/navigation';
 export * from './platform/shell';
 export * from './platform/tenancy';
 export * from './platform/home';
+export * from './platform/composition';
 
 // Export CRM contracts
 export * from './crm/crm';
