@@ -12,7 +12,7 @@ describe('ModuleContextSidebar', () => {
 
     expect(screen.getByRole('complementary', { name: 'Table Editor' })).toBeInTheDocument();
     expect(screen.getByText('Schema resources')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '{Table Editor}' })).toHaveClass('text-primary');
+    expect(screen.getByRole('heading', { name: 'Table Editor' })).toHaveClass('text-primary');
   });
 
   it('uses the requested structural width without rounded corners', () => {

@@ -40,7 +40,7 @@ export interface SuiteShellProps {
     onOpenNavigation?: () => void;
   };
   onNavigate: (route: NavRouteRef) => void;
-  contextualSidebarAction?: ReactNode;
+  contextualSidebarAction?: ReactNode | ((isRail: boolean) => ReactNode);
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   isHeaderInert?: boolean;
   appShellProps?: Pick<

@@ -188,14 +188,14 @@ discovered for the first time.
 | DataWorkspace | Reference reviewed for filters, table, pagination and density | pending |
 | RecordWorkspace | Reference reviewed for record, tabs, activity and inspector behavior | pending |
 | BoardWorkspace | Reference reviewed for board density, cards, metrics and horizontal flow | pending |
-| Functional states | Loading, empty, error, forbidden, read-only, offline, stale and conflict fixtures | pending |
+| Functional states | Loading, empty, error, forbidden, read-only, offline, stale and conflict fixtures | reference coverage |
 | Responsive | Desktop, tablet, mobile, touch and sidebar/panel transformations | pending |
 | Accessibility | Keyboard path, focus restoration, semantics, contrast and reduced motion | pending |
 | Typography | Font families, sizes, weights, line-height and text expansion use tokens | pending |
 | Color and surfaces | Semantic canvas, surface, elevated, overlay, accent and attention tokens | pending |
 | Permissions | Hidden, disabled, forbidden, read-only and active-route fallback behavior | pending |
 | Data density | Table, filters, pagination, sorting, selection, formatting and large-data rules | pending |
-| Performance | List, grid, animation, canvas and interaction budgets | pending |
+| Performance | List, grid, animation, canvas and interaction budgets | pending browser evidence |
 | Observability | Navigation, context, state, errors, permission and latency events without sensitive data | pending |
 | Exceptions | Owner, rationale, approval, scope, review date and removal plan | partially ready |
 
@@ -213,6 +213,12 @@ Before creating the first CRM screen composition:
 - [ ] Performance and observability budgets are recorded.
 - [ ] Any exception has an owner and explicit approval evidence.
 - [ ] The first CRM view has a completed SaaS view specification.
+
+Automated evidence already available:
+
+- [x] Full Vitest suite passes: 139 files and 557 tests.
+- [x] `loopdev-os` production build compiles TypeScript and generates all pages.
+- [x] Track and Markdown link validation pass.
 
 ### Exit criteria
 
@@ -261,6 +267,7 @@ gates for all new SaaS views.
 | 2026-08-14 | Showcase runtime | `/composition-showcase` respondió HTTP 200 en desarrollo | `http://localhost:3000/composition-showcase` |
 | 2026-08-14 | Enlaces y formato | Sin errores de formato; enlaces Markdown válidos | `git diff --check`, `pnpm docs:links:check` |
 | 2026-08-14 | CreativeEditor layout contract | Regions now declare rows, placement, sizing and overflow; shell zones remain separate | `packages/contracts/src/platform/composition.ts`, `CompositionGrid/fixtures.ts` |
+| 2026-08-14 | Automated readiness validation | 139 test files and 557 tests passed; LoopDev OS production build passed; browser review requires an authenticated session | `pnpm test`, `pnpm --filter loopdev-os build`, `/composition-showcase` |
 
 ## Handoff de sesión
 

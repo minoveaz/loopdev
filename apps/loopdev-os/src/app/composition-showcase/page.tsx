@@ -57,7 +57,7 @@ const regionClass = (component: string, recipe?: RecipeName) =>
       ? 'h-full min-h-0'
       : 'min-h-[5rem]';
 
-const STATES = ['ready', 'loading', 'empty', 'error', 'read-only', 'forbidden'] as const;
+const STATES = ['ready', 'loading', 'empty', 'error', 'forbidden', 'read-only', 'offline', 'stale', 'conflict'] as const;
 type ShowcaseState = (typeof STATES)[number];
 
 type RecipeName = keyof typeof FIXTURES;
@@ -214,8 +214,14 @@ const SplitRecipeToolbar = () => (
   />
 );
 
-const SuiteOverviewCanvas = () => (
+const SuiteOverviewCanvas = ({ state }: { state: ShowcaseState }) => (
   <div className="grid min-h-full grid-cols-1 gap-4 p-4 font-sans sm:grid-cols-12 sm:p-6">
+    {state !== 'ready' ? (
+      <div className="border-border-technical bg-surface-dark text-text-muted sm:col-span-12 rounded-md border px-4 py-3 text-xs" role="status">
+        <strong className="text-text-main capitalize">{state}</strong>
+        <span className="ml-2">Overview reference state</span>
+      </div>
+    ) : null}
     <section className="border-border-technical bg-background rounded-lg border p-5 sm:col-span-7">
       <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">Portfolio health</p>
       <div className="mt-4 grid grid-cols-2 gap-3">
@@ -545,7 +551,7 @@ export default function CompositionShowcasePage() {
             {recipe === 'CreativeEditor' ? (
               <CreativeEditorCanvas regions={regions} />
             ) : recipe === 'SuiteOverview' ? (
-              <SuiteOverviewCanvas />
+              <SuiteOverviewCanvas state={state} />
             ) : (
               <div className="overflow-x-auto">
                 <div className="min-w-[20rem] sm:min-w-0">

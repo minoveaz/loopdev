@@ -35,7 +35,7 @@ export interface SuiteRuntimeProps {
   profileSlot?: ReactNode;
   platformHeaderProps?: SuiteShellProps['platformHeaderProps'];
   onNavigate: (route: NavRouteRef) => void;
-  contextualSidebarAction?: ReactNode;
+  contextualSidebarAction?: ReactNode | ((isRail: boolean) => ReactNode);
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   appShellProps?: SuiteShellProps['appShellProps'];
   canvasProps?: Omit<SuiteCanvasProps, 'children'>;
