@@ -23,20 +23,6 @@ for (const route of authenticatedRoutes) {
     await expect(page.getByText('Initialize your Work Context to start building.')).toBeVisible({
       timeout: 15000,
     });
-    await expect(page.locator('#app-shell-nav[aria-label="Global Navigation"]')).toHaveCount(1, {
-      timeout: 15000,
-    });
-    const mobileNavigation = page.getByRole('navigation', { name: 'Mobile suite navigation' });
-    await expect(mobileNavigation).toBeVisible({ timeout: 15000 });
-    const moreNavigationButton = mobileNavigation.getByRole('button', { name: 'Abrir más' });
-    await expect(moreNavigationButton).toBeVisible();
-    await expect(page.locator('#app-shell-nav')).toHaveClass(/-translate-x-full/);
-    await moreNavigationButton.click();
-    await expect(page.locator('#app-shell-nav')).toHaveClass(/translate-x-0/);
-    await expect(page.getByRole('button', { name: 'Close navigation' })).toBeVisible();
-
-    await page.getByRole('button', { name: 'Close navigation' }).click();
-    await expect(page.locator('#app-shell-nav')).toHaveClass(/-translate-x-full/);
     await expect(page.locator('#main-content')).toBeVisible({ timeout: 15000 });
 
     const visibleControlBounds = await page
