@@ -16,6 +16,7 @@
 ### Platform
 
 - [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
+- [Reinicio de suites y limpieza de superficies heredadas](./planned/platform/2026-08-14-suite-reset.md) · `chore/platform-shell-deprecation` · fase 0
 
 ### Governance
 
