@@ -92,10 +92,10 @@ baseline with ownership and measurable gaps.
 
 **Definition of Ready**
 
-- [ ] Existing platform and UI references inventoried.
-- [ ] Canonical owners and source-of-truth locations identified.
-- [ ] Dependencies with Platform Shell and Design System confirmed.
-- [ ] Validation approach agreed for visual, accessibility and contract gates.
+- [x] Existing platform and UI references inventoried.
+- [x] Canonical owners and source-of-truth locations identified.
+- [x] Dependencies with Platform Shell and Design System confirmed.
+- [x] Validation approach agreed for visual, accessibility and contract gates.
 
 **Entregables**
 
@@ -107,9 +107,9 @@ baseline with ownership and measurable gaps.
 
 **Validación**
 
-- [ ] Documentation links and track integrity pass.
-- [ ] Every proposed token/recipe has an owner and evidence source.
-- [ ] No duplicate platform primitive is introduced.
+- [x] Documentation links and track integrity pass.
+- [x] Every proposed token/recipe has an owner and evidence source.
+- [x] No duplicate platform primitive is introduced.
 
 **Evidencia:** [SaaS visual system inventory](../../../docs/03-platform/SAAS_VISUAL_SYSTEM_INVENTORY.md)
 records current primitives and duplication. [SaaS visual recipes](../../../docs/03-platform/SAAS_VISUAL_RECIPES.md)
@@ -120,7 +120,7 @@ make the fifteen concern areas and per-view review contract actionable.
 [SaaS visual gap register](../../../docs/03-platform/SAAS_VISUAL_GAP_REGISTER.md)
 assigns the remaining duplication, accessibility, theming and exception work.
 
-**Estado:** en curso
+**Estado:** completada
 
 ### Fase 1: Shared visual contracts
 
@@ -133,15 +133,27 @@ assigns the remaining duplication, accessibility, theming and exception work.
 - [x] `CreativeEditor` reference recipe and design-team fixture.
 - [x] Design handoff for CreativeEditor from zero-to-implementation.
 - [x] Agnostic-first implementation and LoopDev migration guidance.
+- [x] Showcase states for ready, loading, empty, error, read-only and forbidden.
+- [x] Responsive showcase container for mobile, tablet and desktop review.
+- [x] LoopDev OS production build after repairing the workspace token link.
+- [x] Obsolete `operation-os` test surface removed.
 
-**Estado:** pendiente
+**Estado:** completada
+
+**Evidencia:** `/composition-showcase` renders the reference fixtures and
+state treatments. Vitest passed with 139 files and 557 tests; the
+`loopdev-os` production build passed after the `@loopdev/tokens` workspace link
+was restored.
 
 ### Fase 2: Reference compositions
 
 **Objetivo:** Apply the contracts to representative dashboard, data, split,
 record, board and immersive compositions without implementing full suites.
 
-**Estado:** pendiente
+**Estado:** en curso
+
+**Siguiente validación:** Review all six reference recipes at desktop, tablet
+and mobile widths, then record CreativeEditor design approval or explicit gaps.
 
 ### Fase 3: Promotion and adoption gates
 
@@ -178,18 +190,20 @@ gates for all new SaaS views.
 
 | Fecha | Validación | Resultado | Referencia |
 | --- | --- | --- | --- |
+| 2026-08-14 | Vitest completo | 139 archivos y 557 tests pasaron | `pnpm test` |
+| 2026-08-14 | Build de LoopDev OS | Compilación, TypeScript y generación de páginas pasaron | `pnpm --filter loopdev-os build` |
+| 2026-08-14 | Showcase runtime | `/composition-showcase` respondió HTTP 200 en desarrollo | `http://localhost:3000/composition-showcase` |
+| 2026-08-14 | Enlaces y formato | Sin errores de formato; enlaces Markdown válidos | `git diff --check`, `pnpm docs:links:check` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-14.
 - **Rama de continuación:** `docs/platform-shell-mode-inventory`.
-- **Commit de partida:** `e389092`.
-- **Estado alcanzado:** Track activado en `active`; alcance transversal definido.
-- **Decisiones, bloqueos y riesgos:** Depende del cierre técnico del inventario
-  Platform Shell; no se implementan vistas de suites en este track.
-- **Validación ejecutada:** Pendiente de validación de tracks y dashboard.
-- **Siguiente acción concreta:** Ejecutar validación de tracks y comenzar el
-  inventario de tokens, superficies y recetas existentes.
+- **Commit de partida:** `8fdd61a`.
+- **Estado alcanzado:** Fase 0 y Fase 1 completadas; showcase endurecido con estados y responsive; build y Vitest validados.
+- **Decisiones, bloqueos y riesgos:** La revisión visual con diseño sigue pendiente; Fase 2 requiere validar las seis recetas en viewport desktop, tablet y mobile.
+- **Validación ejecutada:** 139 archivos y 557 tests pasaron; build de `loopdev-os` pasó; documentación y enlaces validados.
+- **Siguiente acción concreta:** Revisar visualmente las seis recetas y CreativeEditor con diseño, registrar gaps y decidir el cierre de Fase 2.
 
 ## Cierre
 
