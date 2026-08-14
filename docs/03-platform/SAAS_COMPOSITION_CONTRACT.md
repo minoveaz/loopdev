@@ -16,7 +16,7 @@ pixel positioning.
 ```ts
 type ViewComposition = {
   recipe: 'SuiteOverview' | 'DataWorkspace' | 'SplitWorkspace' |
-    'RecordWorkspace' | 'BoardWorkspace' | 'ImmersiveWorkflow';
+    'RecordWorkspace' | 'BoardWorkspace' | 'ImmersiveWorkflow' | 'CreativeEditor';
   grid: {
     columns: 12 | 8 | 4;
     gap: 'sm' | 'md' | 'lg';
@@ -83,6 +83,7 @@ const overview: ViewComposition = {
 | `RecordWorkspace` | 12 | bounded tabs/inspector | no |
 | `BoardWorkspace` | 12 | registered board items | bounded canvas only |
 | `ImmersiveWorkflow` | 12 | registered workflow regions | bounded canvas only |
+| `CreativeEditor` | 12 | toolbar, assets, stage, timeline, inspector | bounded editor canvas |
 
 ## Ownership
 

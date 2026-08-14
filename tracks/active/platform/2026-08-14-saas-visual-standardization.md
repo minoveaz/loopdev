@@ -130,6 +130,7 @@ assigns the remaining duplication, accessibility, theming and exception work.
 - [x] Declarative composition contract with grid, slots, spans and breakpoints.
 - [x] Initial `CompositionGrid` renderer consuming the shared contract.
 - [x] Neutral showcase fixtures for all six initial recipes.
+- [x] `CreativeEditor` reference recipe and design-team fixture.
 
 **Estado:** pendiente
 

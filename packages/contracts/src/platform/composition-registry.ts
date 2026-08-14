@@ -37,6 +37,11 @@ export const COMPOSITION_RECIPE_REGISTRY: Record<CompositionRecipe, CompositionR
     allowedComponents: ['WorkflowPanel', 'ActionBar', 'StatusCard'],
     maxRowSpan: 4,
   },
+  CreativeEditor: {
+    allowedSlots: ['header', 'asset-sidebar', 'stage', 'timeline', 'inspector', 'transport'],
+    allowedComponents: ['EditorToolbar', 'AssetBrowser', 'VideoStage', 'Timeline', 'InspectorPanel', 'TransportControls'],
+    maxRowSpan: 4,
+  },
 };
 
 export interface CompositionValidationIssue {

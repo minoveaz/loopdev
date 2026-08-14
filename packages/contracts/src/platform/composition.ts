@@ -7,6 +7,7 @@ export const CompositionRecipeSchema = z.enum([
   'RecordWorkspace',
   'BoardWorkspace',
   'ImmersiveWorkflow',
+  'CreativeEditor',
 ]);
 
 export type CompositionRecipe = z.infer<typeof CompositionRecipeSchema>;

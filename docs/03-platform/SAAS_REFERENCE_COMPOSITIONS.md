@@ -102,6 +102,7 @@ fixtures, not domain screens:
 - `RecordWorkspace`;
 - `BoardWorkspace`;
 - `ImmersiveWorkflow`.
+- `CreativeEditor` for creative tools with assets, stage, timeline and inspector.
 
 Each fixture should demonstrate optional regions, all required states and
 responsive transformations before CRM adopts the recipe.

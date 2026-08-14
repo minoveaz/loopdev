@@ -77,3 +77,22 @@ export const IMMERSIVE_WORKFLOW_COMPOSITION = createFixture({
     { id: 'status', slot: 'status', component: 'StatusCard', colSpan: 3 },
   ],
 });
+
+export const CREATIVE_EDITOR_COMPOSITION = createFixture({
+  recipe: 'CreativeEditor',
+  grid: { columns: 12, gap: 'md' },
+  regions: [
+    { id: 'toolbar', slot: 'header', component: 'EditorToolbar', colSpan: 12 },
+    { id: 'assets', slot: 'asset-sidebar', component: 'AssetBrowser', colSpan: 2, rowSpan: 3 },
+    { id: 'stage', slot: 'stage', component: 'VideoStage', colSpan: 10, rowSpan: 2 },
+    { id: 'transport', slot: 'transport', component: 'TransportControls', colSpan: 10 },
+    { id: 'timeline', slot: 'timeline', component: 'Timeline', colSpan: 10, rowSpan: 2 },
+    {
+      id: 'inspector',
+      slot: 'inspector',
+      component: 'InspectorPanel',
+      colSpan: 2,
+      responsive: { mobile: 'hidden' },
+    },
+  ],
+});

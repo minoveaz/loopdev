@@ -76,4 +76,19 @@ describe('Configurable composition contract', () => {
       },
     ]);
   });
+
+  it('accepts the CreativeEditor recipe with stage and timeline regions', () => {
+    expect(
+      ViewCompositionSchema.safeParse({
+        recipe: 'CreativeEditor',
+        grid: { columns: 12, gap: 'md' },
+        regions: [
+          { id: 'toolbar', slot: 'header', component: 'EditorToolbar', colSpan: 12 },
+          { id: 'assets', slot: 'asset-sidebar', component: 'AssetBrowser', colSpan: 2, rowSpan: 3 },
+          { id: 'stage', slot: 'stage', component: 'VideoStage', colSpan: 10, rowSpan: 2 },
+          { id: 'timeline', slot: 'timeline', component: 'Timeline', colSpan: 10 },
+        ],
+      }).success,
+    ).toBe(true);
+  });
 });
