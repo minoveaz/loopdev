@@ -111,18 +111,20 @@ gates without changing shell behavior.
 - [x] CRM semantic mapping for `record` and `focus` to current contract modes.
 - [x] `docs/03-platform/PLATFORM_SHELL_COMPATIBILITY_MATRIX.md`.
 - [x] Align `AccessMap` with `forbidden` and `read-only` contract states.
-- [ ] Hover overlay, portal footer and permission fallback interaction tests.
+- [ ] Hover overlay and portal footer interaction tests.
+- [x] Permission fallback interaction test for inaccessible active modules.
 
 **Validación**
 - [x] `pnpm test:shell:changed` evaluated the changed-surface gate.
 - [ ] Contracts build and Vitest run in this worktree; dependencies are absent.
-- [ ] `@loopdev/ui` SuiteCanvas test runner passes in a dependency-complete environment.
+- [ ] `@loopdev/ui` SuiteCanvas and sidebar test runners pass in a dependency-complete environment.
 
 **Evidencia:** The current contract exposes six modes; focused render coverage
 was added for all six. `record` and `focus` are documented as semantic
 requirements, not silently added as unsupported enum values. The local UI
 worktree has no dependencies installed, so the direct Vitest run is deferred
-to CI or a clean install.
+to CI or a clean install. Inaccessible active modules now fall back to the
+suite dashboard indicator.
 
 **Estado:** en curso
 
