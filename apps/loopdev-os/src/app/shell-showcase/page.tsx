@@ -610,6 +610,9 @@ export default function ShellShowcasePage() {
             return;
           }
 
+          if (new URL(route.routeId, window.location.origin).pathname === '/shell-showcase') {
+            setCanvasMode('overview');
+          }
           router.push(route.routeId);
         }}
         leftSlot={
