@@ -56,4 +56,21 @@ describe('SuiteCanvas', () => {
       'overview',
     );
   });
+
+  it.each(['overview', 'data', 'workspace', 'split', 'board', 'full-bleed'] as const)(
+    'supports the declared %s mode without changing ownership of content',
+    (mode) => {
+      render(
+        <SuiteCanvas mode={mode}>
+          <div>{mode} content</div>
+        </SuiteCanvas>,
+      );
+
+      expect(screen.getByRole('region', { name: 'SuiteCanvas' })).toHaveAttribute(
+        'data-canvas-mode',
+        mode,
+      );
+      expect(screen.getByText(`${mode} content`)).toBeInTheDocument();
+    },
+  );
 });

@@ -1,5 +1,204 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-08",
-  "findings": []
+  "generatedAt": "2026-08-15",
+  "findings": [
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 358,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main mt-1 text-lg font-semibold\">What needs attention</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 545,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main mt-2 text-xl font-semibold\">Northstar Labs</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 646,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h3 className=\"text-text-main mt-1 text-lg font-semibold\">Recent account work</h3>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 695,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main mt-1 text-lg font-semibold\">Customer success workflow</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 842,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main mt-1 text-lg font-semibold\">Accounts</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 910,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main mt-2 text-xl font-semibold\">Northstar Labs</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 958,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main mt-2 text-2xl font-semibold\">Launch campaign pipeline</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\composition-showcase\\page.tsx",
+      "line": 1525,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h1 className=\"font-mono text-xs uppercase tracking-[0.16em]\">"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\shell-showcase\\page.tsx",
+      "line": 669,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 40,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main font-semibold\">{name}</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 104,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main font-semibold\">Nesting and contrast combinations</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 167,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<div className=\"mt-5\"><span className=\"text-accent font-mono text-xs uppercase\">{state}</span><h2 className=\"text-text-main mt-2 text-xl font-semibold\">{activeState.title}</h2><p c"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 172,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "{stateItems.map((item) => <button key={item} type=\"button\" title={`Show ${item} state`} aria-pressed={state === item} onClick={() => onStateChange(item)} className={`rounded-md bor"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 192,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<div className=\"flex items-center justify-between gap-3\"><h2 className=\"text-text-main font-semibold\">{viewport}</h2><span className=\"text-accent text-xs\">Review target</span></div"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 222,
+      "rule": "forcedTheme",
+      "contractKind": "evolving",
+      "primaryRisk": "approved theme behavior",
+      "message": "Theme ownership belongs to the official theme provider, not a suite route.",
+      "snippet": "root.classList.add('dark');"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 222,
+      "rule": "themeIsolation",
+      "contractKind": "immutable",
+      "primaryRisk": "cross-tenant theme leakage",
+      "message": "Suite code must not mutate global theme classes or LoopDev color variables.",
+      "snippet": "root.classList.add('dark');"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 223,
+      "rule": "forcedTheme",
+      "contractKind": "evolving",
+      "primaryRisk": "approved theme behavior",
+      "message": "Theme ownership belongs to the official theme provider, not a suite route.",
+      "snippet": "root.classList.remove('light');"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 223,
+      "rule": "themeIsolation",
+      "contractKind": "immutable",
+      "primaryRisk": "cross-tenant theme leakage",
+      "message": "Suite code must not mutate global theme classes or LoopDev color variables.",
+      "snippet": "root.classList.remove('light');"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\app\\visual-system-showcase\\page.tsx",
+      "line": 230,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<header className=\"mb-6 flex flex-wrap items-start justify-between gap-4\"><div><p className=\"text-text-muted font-mono text-xs uppercase tracking-[0.18em]\">LoopDev visual certifica"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\suites\\showcase\\zoneRenderers.tsx",
+      "line": 32,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Media Library</h2>"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\suites\\showcase\\zoneRenderers.tsx",
+      "line": 43,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps\\loopdev-os\\src\\suites\\showcase\\zoneRenderers.tsx",
+      "line": 74,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Media Details</h2>"
+    }
+  ]
 }

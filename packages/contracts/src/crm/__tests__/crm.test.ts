@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CrmActivitySchema, CrmAuditEventSchema, CrmCaptureLeadCommandSchema, CrmContactConsentSchema, CrmCompanySchema, CrmContactSchema, CrmCreateLeadCommandSchema, CrmLeadSchema, CrmLeadAttributionSchema, CrmNoteSchema, CrmRelatedPersonSchema, CrmTaskSchema } from '../crm';
+import { CrmActivityReadSchema, CrmActivitySchema, CrmAuditEventSchema, CrmCaptureLeadCommandSchema, CrmContactConsentSchema, CrmCompanySchema, CrmContactSchema, CrmCreateLeadCommandSchema, CrmEntityLookupPageSchema, CrmLeadSchema, CrmLeadAttributionSchema, CrmNoteReadSchema, CrmNoteSchema, CrmRelatedPersonSchema, CrmTaskSchema } from '../crm';
 
 const ids = { organizationId: '00000000-0000-4000-9000-000000000001', contactId: '00000000-0000-4000-9000-000000000002', leadId: '00000000-0000-4000-9000-000000000003', id: '00000000-0000-4000-9000-000000000004' };
 const timestamp = '2026-08-07T00:00:00.000Z';
@@ -30,6 +30,43 @@ describe('CRM contracts', () => {
     expect(CrmNoteSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, leadId: ids.leadId, authorUserId: ids.id, body: 'Follow up tomorrow', visibility: 'team', createdAt: timestamp, updatedAt: timestamp }).success).toBe(true);
     expect(CrmNoteSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, authorUserId: ids.id, body: 'Orphan note', createdAt: timestamp, updatedAt: timestamp }).success).toBe(false);
     expect(CrmAuditEventSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, entityType: 'lead', entityId: ids.leadId, action: 'stage_changed', createdAt: timestamp }).success).toBe(true);
+  });
+
+  it('enforces shared activity deduplication and append-only shape', () => {
+    const activity = {
+      id: ids.id,
+      organizationId: ids.organizationId,
+      workspaceId: ids.organizationId,
+      leadId: ids.leadId,
+      type: 'task_completed',
+      sourceType: 'task',
+      sourceId: ids.id,
+      sourceKey: `task:${ids.id}`,
+      summary: 'Task completed',
+      occurredAt: timestamp,
+      createdAt: timestamp,
+    };
+    expect(CrmActivityReadSchema.safeParse(activity).success).toBe(true);
+    expect(CrmActivityReadSchema.safeParse({ ...activity, sourceKey: `task:${ids.leadId}` }).success).toBe(false);
+    expect(CrmActivityReadSchema.safeParse({ ...activity, details: 'private details' }).success).toBe(false);
+  });
+
+  it('redacts unauthorized note bodies and bounds lookup pages', () => {
+    const note = {
+      id: ids.id,
+      organizationId: ids.organizationId,
+      workspaceId: ids.organizationId,
+      leadId: ids.leadId,
+      authorUserId: ids.id,
+      body: null,
+      canReadBody: false,
+      visibility: 'private',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+    expect(CrmNoteReadSchema.safeParse(note).success).toBe(true);
+    expect(CrmNoteReadSchema.safeParse({ ...note, body: 'leaked' }).success).toBe(false);
+    expect(CrmEntityLookupPageSchema.safeParse({ items: [], nextCursor: null, hasMore: false }).success).toBe(true);
   });
 
   it('preserves source attribution for captured leads', () => {

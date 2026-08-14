@@ -78,6 +78,14 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
           />
         </div>
 
+        {props.contextualAction ? (
+          <div className={`shrink-0 px-4 pb-3 ${renderAsRail ? 'flex justify-center' : ''}`}>
+            {typeof props.contextualAction === 'function'
+              ? props.contextualAction(renderAsRail)
+              : props.contextualAction}
+          </div>
+        ) : null}
+
         <div className="mx-4 h-[0.5px] shrink-0 bg-black/5 dark:bg-white/10" />
 
         {/* Navigation groups (scrollable) */}

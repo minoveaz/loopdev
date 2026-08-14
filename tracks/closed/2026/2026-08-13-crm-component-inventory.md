@@ -1,14 +1,25 @@
 ---
 id: crm-component-inventory
 title: CRM component inventory and reuse architecture
+<<<<<<<< HEAD:tracks/planned/crm/2026-08-13-crm-component-inventory.md
 status: planned
 created: 2026-08-13
 updated: 2026-08-13
+========
+status: closed
+created: 2026-08-13
+updated: 2026-08-14
+closed: 2026-08-14
+>>>>>>>> 27e93e3 (docs(crm): close inventory and define foundation track):tracks/closed/2026/2026-08-13-crm-component-inventory.md
 owner: crm
 lead: null
 branch: null
 branches: []
+<<<<<<<< HEAD:tracks/planned/crm/2026-08-13-crm-component-inventory.md
 phase: 0
+========
+phase: 3
+>>>>>>>> 27e93e3 (docs(crm): close inventory and define foundation track):tracks/closed/2026/2026-08-13-crm-component-inventory.md
 pull_requests: []
 issues: []
 packages: []
@@ -76,6 +87,11 @@ filters, and pagination.
 | --- | --- | --- | --- | --- |
 | 2026-08-13 | Separate CRM component inventory into its own track | The inventory requires detailed module analysis and must not make the documentation migration indefinite | CRM receives independent phases, evidence, risks, and approval while reusing the component-development method | User |
 | 2026-08-13 | Reuse before creation; promote shared components only with a second real consumer | Prevent suite-specific duplication in the shared design system | Every creation and promotion requires explicit evidence | User |
+<<<<<<<< HEAD:tracks/planned/crm/2026-08-13-crm-component-inventory.md
+========
+| 2026-08-14 | Start Phase 0 with functional, data, and interaction evidence, not visual inventory alone | Component boundaries depend on data contracts, state, permissions, actions, and real consumers | Every catalog entry must capture UI, data, behavior, state, access, and evidence before route or implementation decisions | User |
+| 2026-08-14 | Resolve reuse and duplicate decisions before implementation | Prevent semantic duplicates and premature shared promotion | Every catalog boundary has a decision, owner, collision group, and create-review gate | User |
+>>>>>>>> 27e93e3 (docs(crm): close inventory and define foundation track):tracks/closed/2026/2026-08-13-crm-component-inventory.md
 
 ## Arquitectura y contratos
 
@@ -153,11 +169,21 @@ semantic collisions.
 
 **Entregables**
 
-- [ ] `crm-component-decision-matrix.json`.
-- [ ] `crm-component-gaps.md`.
-- [ ] Duplicate-review records for every `create` decision.
+- [x] `docs/06-product/crm/crm-component-decision-matrix.json`.
+- [x] `docs/06-product/crm/crm-component-gaps.md`.
+- [x] Duplicate-review records for every `create` decision.
 
-**Estado:** pendiente
+**Evidencia:** The 64 normalized catalog boundaries were compared with
+repository implementation and registry evidence. The matrix assigns 6
+`reuse`, 1 `variant`, 38 `compose`, and 19 `create` decisions. Collision groups
+for headers, actions, data surfaces, previews, activity, notes, forms, lookup,
+and related records are resolved in the gaps document. Every `create` decision
+has a duplicate-review identifier and implementation gate.
+
+**Validación:** JSON parsing, catalog identifier coverage, track validation,
+and generated dashboard validation must pass before this phase is accepted.
+
+**Estado:** completada el 2026-08-14. Fase 3 puede comenzar.
 
 ### Fase 3: Contract and route approval
 
@@ -166,11 +192,18 @@ promotion eligibility without implementing components.
 
 **Entregables**
 
-- [ ] Approved contracts and states for definitive components.
-- [ ] Shared versus suite ownership decisions.
-- [ ] Implementation backlog grouped by dependency.
+- [x] `docs/06-product/crm/CRM_COMPONENT_CONTRACTS.md`.
+- [x] Approved route compositions, states, ownership and promotion gates.
+- [x] `docs/06-product/crm/CRM_COMPONENT_IMPLEMENTATION_BACKLOG.md`.
 
-**Estado:** pendiente
+**Evidencia:** Route compositions are approved for Contacts, Leads, Pipeline,
+Customer 360, Tasks and My Day. Ownership is assigned to `@loopdev/ui`,
+`crm-shared`, or the narrowest CRM module. The implementation backlog is
+dependency-ordered and explicitly does not authorize UI, migration or registry
+changes.
+
+**Estado:** completada el 2026-08-14. The inventory is ready for explicit
+closure approval; implementation requires separate tracks.
 
 ## Registro de cambios de enfoque
 
@@ -187,14 +220,14 @@ promotion eligibility without implementing components.
 
 ## Criterios de cierre
 
-- [ ] Every CRM component suggestion is extracted and normalized.
-- [ ] Every suggestion has a reuse, variant, compose, or create decision.
-- [ ] Semantic duplicate groups are resolved.
-- [ ] Missing component capabilities are documented.
-- [ ] Routes, consumers, states, and ownership are defined for definitive components.
-- [ ] Validation passes with repository evidence.
-- [ ] Residual risks and deferred implementation work are documented.
-- [ ] Cierre aprobado explícitamente por el usuario.
+- [x] Every CRM component suggestion is extracted and normalized.
+- [x] Every suggestion has a reuse, variant, compose, or create decision.
+- [x] Semantic duplicate groups are resolved.
+- [x] Missing component capabilities are documented.
+- [x] Routes, consumers, states, and ownership are defined for definitive components.
+- [x] Validation passes with repository evidence.
+- [x] Residual risks and deferred implementation work are documented.
+- [x] Cierre aprobado explícitamente por el usuario el 2026-08-14.
 
 ## Evidencia de validación
 
@@ -218,4 +251,6 @@ promotion eligibility without implementing components.
 
 ## Cierre
 
-Pendiente de aprobación explícita.
+Track cerrado el 2026-08-14 con aprobación explícita del usuario. El inventario
+queda como autoridad de planificación; la implementación continúa en tracks
+separados.

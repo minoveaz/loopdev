@@ -30,6 +30,19 @@ describe('TechnicalSurface', () => {
     expect(container.innerHTML).toContain('blur-[60px]');
   });
 
+  it('applies semantic radius, border tone and border width', () => {
+    const { container } = render(
+      <TechnicalSurface radius="sm" border="strong" borderWidth="medium">
+        <span>Styled surface</span>
+      </TechnicalSurface>,
+    );
+
+    const root = container.firstElementChild;
+    expect(root).toHaveClass('rounded-sm');
+    expect(root).toHaveClass('border-slate-400');
+    expect(root).toHaveClass('border-2');
+  });
+
   it('calls onClick handler when surface is interactive', () => {
     const onClick = vi.fn();
     render(

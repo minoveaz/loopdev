@@ -32,6 +32,35 @@ describe('NavSidebarItem Atom', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
+  it('no debe disparar navegación si el estado es forbidden', () => {
+    const mockNavigate = vi.fn();
+    render(
+      <NavSidebarItem label="Forbidden" icon="Lock" status="forbidden" onNavigate={mockNavigate} />,
+    );
+
+    const item = screen.getByRole('menuitem');
+    fireEvent.click(item);
+    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(item).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('mantiene la navegación disponible en modo read-only', () => {
+    const mockNavigate = vi.fn();
+    const testRoute = { routeId: '/read-only' };
+    render(
+      <NavSidebarItem
+        label="Read only"
+        icon="Eye"
+        status="read-only"
+        onNavigate={mockNavigate}
+        route={testRoute}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('menuitem'));
+    expect(mockNavigate).toHaveBeenCalledWith(testRoute);
+  });
+
   it('debe ocultar el texto en modo Rail', () => {
     render(<NavSidebarItem label="Hidden Text" icon="LibraryBig" isRail={true} />);
     expect(screen.queryByText('Hidden Text')).not.toBeInTheDocument();

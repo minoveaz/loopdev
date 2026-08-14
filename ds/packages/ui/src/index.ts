@@ -13,5 +13,6 @@ export * from './components/composites/workspace/ModuleWorkspace/fixtures';
 export * from './components/composites/workspace/ModuleHeader/fixtures';
 export * from './components/composites/workspace/ModuleToolbar/fixtures';
 export * from './components/composites/workspace/ModuleSidebar/fixtures';export * from './components/composites/inspector/blocks';
+export * from './components/composites/workspace/CompositionGrid/fixtures';
 export * from './types/inspector';
 export { cn } from './helpers/cn';

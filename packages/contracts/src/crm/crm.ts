@@ -194,6 +194,44 @@ export const CrmActivitySchema = z.object({
 });
 export type CrmActivity = z.infer<typeof CrmActivitySchema>;
 
+export const CrmActivitySourceTypeSchema = z.enum(['contact', 'lead', 'opportunity', 'task', 'note', 'assignment', 'stage']);
+export const CrmActivityReadSchema = CrmActivitySchema.extend({
+  workspaceId: IdSchema,
+  sourceType: CrmActivitySourceTypeSchema,
+  sourceId: IdSchema,
+  sourceKey: z.string().regex(/^[a-z_]+:[0-9a-f-]+$/),
+  details: z.never().optional(),
+}).refine((activity) => activity.sourceKey === `${activity.sourceType}:${activity.sourceId}`, {
+  message: 'sourceKey must match sourceType:sourceId',
+  path: ['sourceKey'],
+});
+export type CrmActivityRead = z.infer<typeof CrmActivityReadSchema>;
+
+export const CrmCreateActivityCommandSchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.nullable().optional(),
+  leadId: IdSchema,
+  actorUserId: IdSchema.nullable().optional(),
+  type: CrmActivityTypeSchema,
+  summary: z.string().trim().min(1).max(500),
+  metadata: z.record(z.string(), z.unknown()).default({}),
+  occurredAt: TimestampSchema.optional(),
+});
+export type CrmCreateActivityCommand = z.infer<typeof CrmCreateActivityCommandSchema>;
+
+export const CrmActivityPageSchema = z.object({
+  items: z.array(CrmActivityReadSchema).max(100),
+  nextCursor: z.string().trim().min(1).nullable(),
+  hasMore: z.boolean(),
+});
+export type CrmActivityPage = z.infer<typeof CrmActivityPageSchema>;
+export const CrmActivityQuerySchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.optional(),
+  cursor: z.string().trim().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+});
+
 export const CrmNoteVisibilitySchema = z.enum(['private', 'team', 'organization']);
 
 export const CrmNoteSchema = z.object({
@@ -212,6 +250,62 @@ export const CrmNoteSchema = z.object({
   { message: 'A note must belong to a contact, lead, or opportunity' },
 );
 export type CrmNote = z.infer<typeof CrmNoteSchema>;
+
+export const CrmNoteReadSchema = z.object({
+  id: IdSchema,
+  organizationId: IdSchema,
+  workspaceId: IdSchema,
+  contactId: IdSchema.nullable().optional(),
+  leadId: IdSchema.nullable().optional(),
+  opportunityId: IdSchema.nullable().optional(),
+  authorUserId: IdSchema,
+  visibility: CrmNoteVisibilitySchema.default('team'),
+  createdAt: TimestampSchema,
+  updatedAt: TimestampSchema,
+  body: z.string().max(20_000).nullable(),
+  canReadBody: z.boolean(),
+}).refine((note) => Boolean(note.contactId || note.leadId || note.opportunityId), {
+  message: 'A note must belong to a contact, lead, or opportunity',
+}).refine((note) => note.canReadBody || note.body === null, {
+  message: 'Unauthorized note bodies must be redacted',
+  path: ['body'],
+});
+export type CrmNoteRead = z.infer<typeof CrmNoteReadSchema>;
+
+export const CrmCreateNoteCommandSchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.nullable().optional(),
+  contactId: IdSchema.nullable().optional(),
+  leadId: IdSchema.nullable().optional(),
+  opportunityId: IdSchema.nullable().optional(),
+  authorUserId: IdSchema,
+  body: z.string().trim().min(1).max(20_000),
+  visibility: CrmNoteVisibilitySchema.default('team'),
+}).refine((note) => Boolean(note.contactId || note.leadId || note.opportunityId), {
+  message: 'A note must belong to a contact, lead, or opportunity',
+});
+export type CrmCreateNoteCommand = z.infer<typeof CrmCreateNoteCommandSchema>;
+
+export const CrmEntityLookupItemSchema = z.object({
+  id: IdSchema,
+  entityType: z.enum(['contact', 'lead', 'opportunity', 'task']),
+  label: z.string().trim().min(1).max(240),
+  subtitle: z.string().trim().max(240).nullable(),
+});
+export const CrmEntityLookupPageSchema = z.object({
+  items: z.array(CrmEntityLookupItemSchema).max(50),
+  nextCursor: z.string().trim().min(1).nullable(),
+  hasMore: z.boolean(),
+});
+export type CrmEntityLookupPage = z.infer<typeof CrmEntityLookupPageSchema>;
+export const CrmEntityLookupQuerySchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.optional(),
+  query: z.string().trim().min(1).max(100),
+  cursor: z.string().trim().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(50).default(20),
+});
+export const CrmNoteQuerySchema = CrmActivityQuerySchema;
 
 export const CrmAuditActionSchema = z.enum(['created', 'updated', 'deleted', 'assigned', 'stage_changed', 'exported', 'consent_changed']);
 
