@@ -172,6 +172,55 @@ and SuiteOverview both pass layout, state, responsive and accessibility review.
 **Siguiente validación:** Complete SuiteOverview with the declarative layout
 contract, then review both references at desktop, tablet and mobile widths.
 
+## CRM readiness gate
+
+CRM screen composition must not begin until this gate is reviewed. The gate
+turns the fifteen cross-SaaS concerns into evidence requirements for the first
+CRM screen and prevents CRM from becoming the place where platform behavior is
+discovered for the first time.
+
+| Area | Required evidence | Status |
+| --- | --- | --- |
+| Shell zones | Mandatory and optional zone contract consumed by a module definition | ready |
+| Declarative composition | Recipe, canvas mode, rows, columns, placement, sizing and overflow are declared | ready for references |
+| CreativeEditor | Full-bleed reference with contextual zones, preview, transport and timeline | ready |
+| SuiteOverview | Reference fixture consumes the same contract | in progress |
+| DataWorkspace | Reference reviewed for filters, table, pagination and density | pending |
+| RecordWorkspace | Reference reviewed for record, tabs, activity and inspector behavior | pending |
+| BoardWorkspace | Reference reviewed for board density, cards, metrics and horizontal flow | pending |
+| Functional states | Loading, empty, error, forbidden, read-only, offline, stale and conflict fixtures | pending |
+| Responsive | Desktop, tablet, mobile, touch and sidebar/panel transformations | pending |
+| Accessibility | Keyboard path, focus restoration, semantics, contrast and reduced motion | pending |
+| Typography | Font families, sizes, weights, line-height and text expansion use tokens | pending |
+| Color and surfaces | Semantic canvas, surface, elevated, overlay, accent and attention tokens | pending |
+| Permissions | Hidden, disabled, forbidden, read-only and active-route fallback behavior | pending |
+| Data density | Table, filters, pagination, sorting, selection, formatting and large-data rules | pending |
+| Performance | List, grid, animation, canvas and interaction budgets | pending |
+| Observability | Navigation, context, state, errors, permission and latency events without sensitive data | pending |
+| Exceptions | Owner, rationale, approval, scope, review date and removal plan | partially ready |
+
+### Entry criteria
+
+Before creating the first CRM screen composition:
+
+- [ ] `CreativeEditor` and `SuiteOverview` pass visual and responsive review.
+- [ ] `DataWorkspace`, `RecordWorkspace` and `BoardWorkspace` have reference fixtures or an approved deferral.
+- [ ] All required functional states have reusable fixtures and validation plans.
+- [ ] Mandatory and optional shell zones are resolved declaratively.
+- [ ] Typography, color, surface and density rules point to canonical tokens.
+- [ ] Permission and active-route fallback behavior is documented.
+- [ ] Keyboard, focus, contrast and reduced-motion checks are defined.
+- [ ] Performance and observability budgets are recorded.
+- [ ] Any exception has an owner and explicit approval evidence.
+- [ ] The first CRM view has a completed SaaS view specification.
+
+### Exit criteria
+
+CRM may proceed only when every entry criterion is checked or explicitly
+deferred in an approved track decision with owner, risk, evidence and review
+date. The first CRM view must then be validated against the standardization
+matrix before additional CRM screens are created.
+
 ### Fase 3: Promotion and adoption gates
 
 **Objetivo:** Establish component promotion, exception review and validation

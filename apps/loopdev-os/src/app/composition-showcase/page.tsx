@@ -214,6 +214,50 @@ const SplitRecipeToolbar = () => (
   />
 );
 
+const SuiteOverviewCanvas = () => (
+  <div className="grid min-h-full grid-cols-1 gap-4 p-4 font-sans sm:grid-cols-12 sm:p-6">
+    <section className="border-border-technical bg-background rounded-lg border p-5 sm:col-span-7">
+      <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">Portfolio health</p>
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        {[
+          ['Active workspaces', '24'],
+          ['Open opportunities', '86'],
+          ['Tasks due today', '12'],
+          ['Team activity', '+18%'],
+        ].map(([label, value]) => (
+          <div key={label} className="border-border-technical bg-surface-dark rounded-md border p-4">
+            <span className="text-text-muted text-xs">{label}</span>
+            <strong className="text-text-main mt-2 block text-2xl font-semibold">{value}</strong>
+          </div>
+        ))}
+      </div>
+    </section>
+    <section className="border-border-technical bg-surface-dark rounded-lg border p-5 sm:col-span-5">
+      <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">Workspace map</p>
+      <div className="mt-4 flex min-h-40 items-center justify-center rounded-md border border-dashed border-primary/40 bg-primary/5">
+        <span className="text-primary text-xs font-medium">TechnicalCanvas</span>
+      </div>
+    </section>
+    <section className="border-border-technical bg-background rounded-lg border p-5 sm:col-span-12">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">Recent activity</p>
+          <h2 className="text-text-main mt-1 text-lg font-semibold">What needs attention</h2>
+        </div>
+        <Button variant="outline" size="sm">View all activity</Button>
+      </div>
+      <div className="mt-4 space-y-2">
+        {['Northstar workspace updated', 'New opportunity moved to review', 'Three tasks assigned to your team'].map((item) => (
+          <div key={item} className="border-border-technical flex items-center justify-between gap-3 rounded-md border px-3 py-3 text-sm">
+            <span className="text-text-main">{item}</span>
+            <span className="text-text-muted text-xs">Today</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+);
+
 const CreativeEditorCanvas = ({ regions }: { regions: Record<string, ReactNode> }) => (
   <div className="flex h-full min-h-0 flex-col overflow-hidden bg-shell-canvas p-3">
     <section className="relative min-h-0 flex-1 overflow-hidden bg-surface-dark">
@@ -500,6 +544,8 @@ export default function CompositionShowcasePage() {
             ) : null}
             {recipe === 'CreativeEditor' ? (
               <CreativeEditorCanvas regions={regions} />
+            ) : recipe === 'SuiteOverview' ? (
+              <SuiteOverviewCanvas />
             ) : (
               <div className="overflow-x-auto">
                 <div className="min-w-[20rem] sm:min-w-0">
