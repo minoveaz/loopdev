@@ -20,7 +20,7 @@ for (const route of authenticatedRoutes) {
     await expect(page.getByText('Checking your secure workspace access...')).toHaveCount(0, {
       timeout: 15000,
     });
-    await expect(page.getByText('Initialize your Work Context to start building.')).toHaveCount(0, {
+    await expect(page.getByText('Initialize your Work Context to start building.')).toBeVisible({
       timeout: 15000,
     });
     await expect(page.locator('header')).not.toHaveCount(0, { timeout: 15000 });
