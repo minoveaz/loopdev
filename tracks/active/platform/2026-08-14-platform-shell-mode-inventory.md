@@ -1,12 +1,12 @@
 ---
 id: platform-shell-mode-inventory
 title: Platform Shell and SuiteCanvas mode inventory
-status: planned
+status: active
 created: 2026-08-14
 updated: 2026-08-14
 owner: platform
 lead: null
-branch: null
+branch: docs/platform-shell-mode-inventory
 branches: []
 phase: 0
 pull_requests: []
@@ -79,23 +79,26 @@ created from synchronized `origin/develop` before execution.
 **Objetivo:** Fix sources, owners, mode vocabulary and validation matrix.
 
 **Definition of Ready**
-- [ ] Shell architecture, suite composition, interaction and testing guidance reviewed.
-- [ ] All shell implementations and neighboring tests identified.
-- [ ] Mode matrix fields and acceptance invariants agreed.
-- [ ] Dedicated documentation branch created from `origin/develop`.
+- [x] Shell architecture, suite composition, interaction and testing guidance reviewed.
+- [x] All shell implementations and neighboring tests identified.
+- [x] Mode matrix fields and acceptance invariants agreed.
+- [x] Dedicated documentation branch created from synchronized baseline.
 
 **Entregables**
-- [ ] Source and implementation inventory.
-- [ ] Shell/SuiteCanvas mode compatibility matrix.
-- [ ] Evidence and gap extraction rules.
+- [x] `docs/03-platform/PLATFORM_SHELL_MODE_INVENTORY.md`.
+- [x] Shell/SuiteCanvas mode compatibility matrix.
+- [x] Evidence and gap extraction rules.
 
 **Validación**
-- [ ] `pnpm test:shell:changed` passes for affected shell tests.
-- [ ] Track validator and generated dashboard pass.
+- [x] Existing shell contract sources and neighboring tests identified.
+- [x] Track validator and generated dashboard pass.
 
-**Evidencia:** Pendiente.
+**Evidencia:** The inventory records all primary shell boundaries, six Canvas
+modes, four sidebar modes, ownership constraints, acceptance invariants and
+five implementation gates. No shell behavior was changed.
 
-**Estado:** pendiente
+**Estado:** completada el 2026-08-14. Phase 1 can define and execute focused
+shell mode tests.
 
 ## Riesgos y bloqueos
 
@@ -120,12 +123,14 @@ created from synchronized `origin/develop` before execution.
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-14.
-- **Rama de continuación:** Pendiente de crear.
-- **Commit de partida:** `origin/develop` pendiente de fijar.
-- **Estado alcanzado:** Track created from shell architecture guidance.
-- **Decisiones, bloqueos y riesgos:** Inventory only; no shell behavior changes.
-- **Validación ejecutada:** Pending.
-- **Siguiente acción concreta:** Create the documentation branch and execute Phase 0.
+- **Rama de continuación:** `docs/platform-shell-mode-inventory`.
+- **Commit de partida:** `f0b6390` (branch baseline with CRM separation).
+- **Estado alcanzado:** Phase 0 inventory completed; no shell behavior changed.
+- **Decisiones, bloqueos y riesgos:** Portal/hover and cross-mode tests remain
+  implementation gates.
+- **Validación ejecutada:** Track validator and generated dashboard pass.
+- **Siguiente acción concreta:** Add focused shell mode tests for hover overlay,
+  portal footer tolerance, Canvas mode transitions and access fallback.
 
 ## Cierre
 
