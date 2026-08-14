@@ -109,6 +109,7 @@ gates without changing shell behavior.
 - [x] Render coverage for `overview`, `data`, `workspace`, `split`, `board`,
   and `full-bleed`.
 - [x] CRM semantic mapping for `record` and `focus` to current contract modes.
+- [x] `docs/03-platform/PLATFORM_SHELL_COMPATIBILITY_MATRIX.md`.
 - [ ] Hover overlay, portal footer and permission fallback interaction tests.
 
 **Validación**
