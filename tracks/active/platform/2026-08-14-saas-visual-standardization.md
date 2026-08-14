@@ -150,10 +150,27 @@ was restored.
 **Objetivo:** Apply the contracts to representative dashboard, data, split,
 record, board and immersive compositions without implementing full suites.
 
+**Standardization decision:** Composition regions declare semantic layout
+intent (`rows`, `placement`, `sizing` and `overflow`) instead of relying on
+page-specific pixel fixes. `CreativeEditor` is the first full-bleed reference;
+`SuiteOverview` is the next reference before CRM screens are defined.
+
+**Entregables**
+
+- [x] CreativeEditor full-bleed canvas with preview, stage tools, transport and timeline zones.
+- [x] Declarative region layout contract for rows, placement, sizing and overflow.
+- [x] Shell-owned Media Library and Media Details zones separated from canvas regions.
+- [ ] SuiteOverview reference composition using the same declarative contract.
+- [ ] Reference component fixtures for summary, metrics, activity and visual canvas.
+- [ ] Desktop, tablet and mobile review for both reference compositions.
+
+**Validation gate:** Do not begin CRM screen composition until CreativeEditor
+and SuiteOverview both pass layout, state, responsive and accessibility review.
+
 **Estado:** en curso
 
-**Siguiente validación:** Review all six reference recipes at desktop, tablet
-and mobile widths, then record CreativeEditor design approval or explicit gaps.
+**Siguiente validación:** Complete SuiteOverview with the declarative layout
+contract, then review both references at desktop, tablet and mobile widths.
 
 ### Fase 3: Promotion and adoption gates
 
@@ -194,16 +211,17 @@ gates for all new SaaS views.
 | 2026-08-14 | Build de LoopDev OS | Compilación, TypeScript y generación de páginas pasaron | `pnpm --filter loopdev-os build` |
 | 2026-08-14 | Showcase runtime | `/composition-showcase` respondió HTTP 200 en desarrollo | `http://localhost:3000/composition-showcase` |
 | 2026-08-14 | Enlaces y formato | Sin errores de formato; enlaces Markdown válidos | `git diff --check`, `pnpm docs:links:check` |
+| 2026-08-14 | CreativeEditor layout contract | Regions now declare rows, placement, sizing and overflow; shell zones remain separate | `packages/contracts/src/platform/composition.ts`, `CompositionGrid/fixtures.ts` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-14.
 - **Rama de continuación:** `docs/platform-shell-mode-inventory`.
-- **Commit de partida:** `8fdd61a`.
-- **Estado alcanzado:** Fase 0 y Fase 1 completadas; showcase endurecido con estados y responsive; build y Vitest validados.
-- **Decisiones, bloqueos y riesgos:** La revisión visual con diseño sigue pendiente; Fase 2 requiere validar las seis recetas en viewport desktop, tablet y mobile.
+- **Commit de partida:** `38818fd`.
+- **Estado alcanzado:** Fase 0 y Fase 1 completadas; CreativeEditor establecido como primera composición declarativa de referencia.
+- **Decisiones, bloqueos y riesgos:** SuiteOverview debe validar el mismo contrato antes de iniciar pantallas CRM; revisión visual responsive sigue pendiente.
 - **Validación ejecutada:** 139 archivos y 557 tests pasaron; build de `loopdev-os` pasó; documentación y enlaces validados.
-- **Siguiente acción concreta:** Revisar visualmente las seis recetas y CreativeEditor con diseño, registrar gaps y decidir el cierre de Fase 2.
+- **Siguiente acción concreta:** Construir la referencia SuiteOverview y validar CreativeEditor + SuiteOverview antes de CRM.
 
 ## Cierre
 

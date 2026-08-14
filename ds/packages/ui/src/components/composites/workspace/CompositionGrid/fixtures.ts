@@ -80,18 +80,10 @@ export const IMMERSIVE_WORKFLOW_COMPOSITION = createFixture({
 
 export const CREATIVE_EDITOR_COMPOSITION = createFixture({
   recipe: 'CreativeEditor',
-  grid: { columns: 12, gap: 'md' },
+  grid: { columns: 12, rows: 30, gap: 'md' },
   regions: [
-    { id: 'assets', slot: 'asset-sidebar', component: 'ModuleContextSidebar', colSpan: 2, rowSpan: 3 },
-    { id: 'stage', slot: 'stage', component: 'VideoStage', colSpan: 10, rowSpan: 2 },
-    { id: 'transport', slot: 'transport', component: 'TransportControls', colSpan: 10 },
-    { id: 'timeline', slot: 'timeline', component: 'Timeline', colSpan: 10, rowSpan: 2 },
-    {
-      id: 'inspector',
-      slot: 'inspector',
-      component: 'InspectorPanel',
-      colSpan: 2,
-      responsive: { mobile: 'hidden' },
-    },
+    { id: 'stage', slot: 'stage', component: 'VideoStage', colSpan: 10, rowSpan: 26, sizing: 'fill', overflow: 'hidden' },
+    { id: 'transport', slot: 'transport', component: 'TransportControls', colSpan: 10, placement: 'overlay-bottom', sizing: 'content', overflow: 'auto-x' },
+    { id: 'timeline', slot: 'timeline', component: 'Timeline', colSpan: 12, rowSpan: 4, placement: 'fixed-bottom', overflow: 'auto-both' },
   ],
 });

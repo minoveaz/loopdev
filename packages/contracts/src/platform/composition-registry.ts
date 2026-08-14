@@ -38,9 +38,9 @@ export const COMPOSITION_RECIPE_REGISTRY: Record<CompositionRecipe, CompositionR
     maxRowSpan: 4,
   },
   CreativeEditor: {
-    allowedSlots: ['header', 'asset-sidebar', 'stage', 'timeline', 'inspector', 'transport'],
-    allowedComponents: ['ModuleHeader', 'ModuleContextSidebar', 'VideoStage', 'Timeline', 'InspectorPanel', 'TransportControls'],
-    maxRowSpan: 4,
+    allowedSlots: ['stage', 'timeline', 'transport'],
+    allowedComponents: ['VideoStage', 'Timeline', 'TransportControls'],
+    maxRowSpan: 64,
   },
 };
 

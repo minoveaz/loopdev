@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import {
   AVAILABLE_SUITES_FIXTURES,
   BOARD_WORKSPACE_COMPOSITION,
@@ -48,10 +48,14 @@ const FIXTURES: Record<string, ViewComposition> = {
   CreativeEditor: CREATIVE_EDITOR_COMPOSITION,
 };
 
-const regionClass = (component: string) =>
+const regionClass = (component: string, recipe?: RecipeName) =>
   component === 'VideoStage' || component === 'TechnicalCanvas'
-    ? 'min-h-[18rem]'
-    : 'min-h-[5rem]';
+    ? recipe === 'CreativeEditor'
+      ? 'h-full min-h-0'
+      : 'min-h-[18rem]'
+    : recipe === 'CreativeEditor' && component === 'Timeline'
+      ? 'h-full min-h-0'
+      : 'min-h-[5rem]';
 
 const STATES = ['ready', 'loading', 'empty', 'error', 'read-only', 'forbidden'] as const;
 type ShowcaseState = (typeof STATES)[number];
@@ -210,6 +214,57 @@ const SplitRecipeToolbar = () => (
   />
 );
 
+const CreativeEditorCanvas = ({ regions }: { regions: Record<string, ReactNode> }) => (
+  <div className="flex h-full min-h-0 flex-col overflow-hidden bg-shell-canvas p-3">
+    <section className="relative min-h-0 flex-1 overflow-hidden bg-surface-dark">
+      <div className="border-border-technical flex min-h-12 items-center gap-2 overflow-x-auto border-b bg-surface-elevated px-3 py-2">
+        <span className="text-primary shrink-0 font-mono text-[10px] uppercase tracking-[0.16em]">StageToolBar</span>
+        <span className="bg-border-technical h-4 w-px shrink-0" aria-hidden="true" />
+        {['Edit', 'Crop', 'Remove background', 'Audio', 'Subtitles', 'Speed', 'Color', 'Rotate', 'Animate', 'Position'].map(
+          (tool) => (
+            <button
+              key={tool}
+              type="button"
+              className="text-text-muted hover:bg-primary hover:text-white shrink-0 rounded-md px-2 py-1.5 text-xs font-medium transition-colors"
+            >
+              {tool}
+            </button>
+          ),
+        )}
+      </div>
+      <div className="flex min-h-0 flex-1 items-center justify-center p-2 sm:p-3">
+        <div className="relative aspect-video h-full max-h-full w-full max-w-7xl overflow-hidden border-2 border-primary/60 bg-black/30 shadow-inner">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center">
+            <span className="text-primary font-mono text-[10px] uppercase tracking-[0.18em]">VideoStage</span>
+            <strong className="text-sm font-semibold text-text-main">Preview frame</strong>
+            <span className="text-xs text-text-muted">Module-owned renderer insertion point</span>
+            <span className="text-[10px] text-text-muted">16:9 reference / zoom controlled by module</span>
+          </div>
+        </div>
+      </div>
+      <div className="absolute inset-x-4 bottom-4 z-10">{regions.transport}</div>
+    </section>
+    <section className="mt-3 h-[clamp(10rem,22vh,18rem)] min-h-40 shrink-0 overflow-auto border-t border-border-technical bg-surface-dark">
+      <div className="border-border-technical bg-surface-dark sticky top-0 z-10 flex min-h-10 items-center justify-between gap-3 border-b px-3 py-2 text-xs text-text-muted">
+        <div className="flex shrink-0 items-center gap-2">
+          <button type="button" className="hover:bg-primary hover:text-white rounded-md px-2 py-1.5 font-medium">
+            Play
+          </button>
+          <span>0:11 / 0:38</span>
+        </div>
+        <div className="flex shrink-0 items-center gap-3">
+          <span>Timeline</span>
+          <span>44%</span>
+          <button type="button" className="hover:bg-primary hover:text-white rounded-md px-2 py-1.5">
+            Expand
+          </button>
+        </div>
+      </div>
+      {regions.timeline}
+    </section>
+  </div>
+);
+
 export default function CompositionShowcasePage() {
   const [recipe, setRecipe] = useState<RecipeName>(() => {
     if (typeof window === 'undefined') return 'SuiteOverview';
@@ -267,9 +322,17 @@ export default function CompositionShowcasePage() {
           region.id,
           <TechnicalSurface
             key={region.id}
-            variant="surface"
+            variant={recipe === 'CreativeEditor' ? 'canvas' : 'surface'}
             depth="flat"
-            className={`${regionClass(region.component)} ${state === 'forbidden' ? 'opacity-60' : ''}`}
+            className={`${regionClass(region.component, recipe)} ${
+              recipe === 'CreativeEditor'
+                ? region.id === 'transport'
+                  ? 'border-border-technical bg-surface-dark/80 rounded-md border px-3 py-2'
+                  : region.id === 'timeline'
+                    ? 'border-border-technical bg-surface-dark rounded-none border-0 border-t px-4 py-3'
+                    : 'border-0 bg-transparent rounded-none'
+                : ''
+            } ${state === 'forbidden' ? 'opacity-60' : ''}`}
           >
             <div className="flex h-full min-h-[inherit] flex-col justify-between p-4">
               <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
@@ -409,8 +472,8 @@ export default function CompositionShowcasePage() {
         }
         appShellProps={{ config: { activeOverlay: contextMode ? 'context' : null } }}
       >
-        <main className={`min-h-full bg-shell-canvas text-text-main ${recipe === 'CreativeEditor' ? '' : 'p-3 sm:p-5'}`}>
-          <section className={recipe === 'CreativeEditor' ? 'h-full' : 'mx-auto max-w-7xl'}>
+        <main className={`h-full min-h-0 overflow-hidden bg-shell-canvas text-text-main ${recipe === 'CreativeEditor' ? '' : 'p-3 sm:p-5'}`}>
+          <section className={recipe === 'CreativeEditor' ? 'h-full min-h-0' : 'mx-auto max-w-7xl'}>
             {recipe !== 'CreativeEditor' ? (
               <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <div>
@@ -435,11 +498,15 @@ export default function CompositionShowcasePage() {
                 </label>
               </div>
             ) : null}
-        <div className="overflow-x-auto">
-          <div className="min-w-[20rem] sm:min-w-0">
-            <CompositionGrid composition={composition} regions={regions} />
-          </div>
-        </div>
+            {recipe === 'CreativeEditor' ? (
+              <CreativeEditorCanvas regions={regions} />
+            ) : (
+              <div className="overflow-x-auto">
+                <div className="min-w-[20rem] sm:min-w-0">
+                  <CompositionGrid composition={composition} regions={regions} />
+                </div>
+              </div>
+            )}
           </section>
         </main>
       </SuiteRuntime>
