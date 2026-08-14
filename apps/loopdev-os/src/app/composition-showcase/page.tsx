@@ -112,9 +112,27 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
     label: name,
     route: `/composition-showcase?recipe=${name}`,
     breadcrumbs: ['Composition Showcase', name],
-    capabilities: ['sidebar'],
+    capabilities: name === 'SplitWorkspace' ? ['sidebar', 'toolbar'] : ['sidebar'],
   })),
 };
+
+const SplitContextSidebar = () => (
+  <div className="flex h-full min-h-0 flex-col gap-3 p-4">
+    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">context sidebar</span>
+    <strong className="text-sm text-text-main">Selection context</strong>
+    <p className="text-xs leading-5 text-text-muted">The shell-owned context region stays outside the recipe grid.</p>
+  </div>
+);
+
+const SplitContextPanel = () => (
+  <div className="flex h-full min-h-0 flex-col gap-3 p-4">
+    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">context panel</span>
+    <strong className="text-sm text-text-main">Record details</strong>
+    <div className="border-border-technical bg-background rounded-md border p-3 text-xs leading-5 text-text-muted">
+      The shell-owned detail panel complements the recipe&apos;s list and detail slots.
+    </div>
+  </div>
+);
 
 export default function CompositionShowcasePage() {
   const [recipe, setRecipe] = useState<RecipeName>(() => {
@@ -197,6 +215,12 @@ export default function CompositionShowcasePage() {
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
         activeModuleId={recipe}
+        moduleContextRenderers={{ SplitWorkspace: () => <SplitContextSidebar /> }}
+        moduleContextLabels={{ SplitWorkspace: 'ModuleContextSidebar' }}
+        moduleContextWidths={{ SplitWorkspace: 'standard' }}
+        moduleContextPanelRenderers={{ SplitWorkspace: () => <SplitContextPanel /> }}
+        moduleContextPanelLabels={{ SplitWorkspace: 'ModuleContextPanel' }}
+        moduleContextPanelWidths={{ SplitWorkspace: 'extra-wide' }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
           const selectedRecipe = new URL(route.routeId, window.location.origin).searchParams.get('recipe');
