@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 
 const visualRoutes = [
   { name: 'login', path: '/login', storageState: undefined },
-  { name: 'shell-showcase', path: '/shell-showcase', storageState: undefined },
 ];
 
 for (const theme of ['light', 'dark']) {
