@@ -101,8 +101,8 @@ baseline with ownership and measurable gaps.
 
 - [x] Surface and background inventory.
 - [x] Visual recipe catalog.
-- [ ] Cross-SaaS standardization matrix covering the 15 concern areas.
-- [ ] View specification template.
+- [x] Cross-SaaS standardization matrix covering the 15 concern areas.
+- [x] View specification template.
 - [ ] Gap, duplication and exception register.
 
 **Validación**
@@ -114,6 +114,9 @@ baseline with ownership and measurable gaps.
 **Evidencia:** [SaaS visual system inventory](../../../docs/03-platform/SAAS_VISUAL_SYSTEM_INVENTORY.md)
 records current primitives and duplication. [SaaS visual recipes](../../../docs/03-platform/SAAS_VISUAL_RECIPES.md)
 defines the proposed surface taxonomy and initial mode-to-recipe mapping.
+[SaaS standardization matrix](../../../docs/03-platform/SAAS_STANDARDIZATION_MATRIX.md)
+and [view specification template](../../../docs/03-platform/SAAS_VIEW_SPECIFICATION_TEMPLATE.md)
+make the fifteen concern areas and per-view review contract actionable.
 
 **Estado:** en curso
 
