@@ -87,6 +87,30 @@ export const ShellExceptionsSchema = z
 
 export type ShellExceptions = z.infer<typeof ShellExceptionsSchema>;
 
+export type ModuleShellZoneWidth = 'narrow' | 'standard' | 'wide' | 'extra-wide';
+export type ModuleShellZoneIcon = 'menu' | 'panel-left-close' | 'panel-left-open';
+
+export interface ModuleShellZoneUsage {
+  label?: string;
+  contentKey?: string;
+  footer?: {
+    contentKey: string;
+  };
+  width?: ModuleShellZoneWidth;
+  collapsible?: boolean;
+  defaultCollapsed?: boolean;
+  collapseIcon?: ModuleShellZoneIcon;
+  expandIcon?: ModuleShellZoneIcon;
+}
+
+export interface ModuleShellUsage {
+  canvasMode: 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed';
+  suiteHeader?: ModuleShellZoneUsage;
+  suiteToolbar?: ModuleShellZoneUsage;
+  moduleContextSidebar?: ModuleShellZoneUsage;
+  moduleContextPanel?: ModuleShellZoneUsage;
+}
+
 export interface ModuleConfig {
   moduleId: string;
   label: string;
@@ -100,6 +124,7 @@ export interface ModuleConfig {
   capabilities: WorkspaceCapabilities;
   initialState?: ShellState;
   exceptions?: ShellExceptions;
+  shell?: ModuleShellUsage;
 }
 
 export interface SuiteConfig {
@@ -128,6 +153,59 @@ export const ModuleConfigSchema = z.object({
   capabilities: WorkspaceCapabilitiesSchema,
   initialState: ShellStateSchema.optional(),
   exceptions: ShellExceptionsSchema.optional(),
+  shell: z
+    .object({
+      canvasMode: z.enum(['overview', 'data', 'workspace', 'split', 'board', 'full-bleed']),
+      suiteHeader: z
+        .object({
+          label: z.string().min(1).optional(),
+          contentKey: z.string().min(1).optional(),
+          footer: z.object({ contentKey: z.string().min(1) }).optional(),
+          width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
+          collapsible: z.boolean().optional(),
+          defaultCollapsed: z.boolean().optional(),
+          collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+          expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+        })
+        .optional(),
+      suiteToolbar: z
+        .object({
+          label: z.string().min(1).optional(),
+          contentKey: z.string().min(1).optional(),
+          footer: z.object({ contentKey: z.string().min(1) }).optional(),
+          width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
+          collapsible: z.boolean().optional(),
+          defaultCollapsed: z.boolean().optional(),
+          collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+          expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+        })
+        .optional(),
+      moduleContextSidebar: z
+        .object({
+          label: z.string().min(1).optional(),
+          contentKey: z.string().min(1).optional(),
+          footer: z.object({ contentKey: z.string().min(1) }).optional(),
+          width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
+          collapsible: z.boolean().optional(),
+          defaultCollapsed: z.boolean().optional(),
+          collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+          expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+        })
+        .optional(),
+      moduleContextPanel: z
+        .object({
+          label: z.string().min(1).optional(),
+          contentKey: z.string().min(1).optional(),
+          footer: z.object({ contentKey: z.string().min(1) }).optional(),
+          width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
+          collapsible: z.boolean().optional(),
+          defaultCollapsed: z.boolean().optional(),
+          collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+          expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 export const SuiteConfigSchema = z

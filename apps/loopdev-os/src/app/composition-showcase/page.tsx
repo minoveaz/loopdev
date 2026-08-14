@@ -27,9 +27,14 @@ import {
   type GlobalContextPanelMode,
 } from '@loopdev/ui';
 import type { ViewComposition } from '@loopdev/contracts';
-import type { NavigationSchema, SuiteConfig } from '@loopdev/contracts';
+import type { ModuleShellUsage, NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
+import {
+  resolveShowcaseZonePanelRenderer,
+  resolveShowcaseZoneFooterRenderer,
+  resolveShowcaseZoneRenderer,
+} from '@/suites/showcase/zoneRenderers';
 import { useRouter } from 'next/navigation';
 
 const FIXTURES: Record<string, ViewComposition> = {
@@ -84,6 +89,41 @@ const SHOWCASE_ORGANIZATIONS = [
   { id: 'northstar-labs', name: 'Northstar Labs', planLabel: 'FREE', theme: themes.estarProtegidos },
 ];
 
+const RECIPE_SHELL_USAGE: Partial<Record<RecipeName, ModuleShellUsage>> = {
+  SplitWorkspace: {
+    canvasMode: 'split',
+    suiteHeader: { label: 'SplitWorkspace', contentKey: 'split.header' },
+    suiteToolbar: { label: 'Records', contentKey: 'split.toolbar' },
+    moduleContextSidebar: {
+      label: 'ModuleContextSidebar',
+      contentKey: 'split.context-sidebar',
+      width: 'standard',
+      collapsible: true,
+      collapseIcon: 'menu',
+      expandIcon: 'menu',
+      footer: { contentKey: 'split.context-sidebar-footer' },
+    },
+    moduleContextPanel: {
+      label: 'ModuleContextPanel',
+      contentKey: 'split.context-panel',
+      width: 'extra-wide',
+      footer: { contentKey: 'split.context-panel-footer' },
+    },
+  },
+  CreativeEditor: {
+    canvasMode: 'full-bleed',
+    moduleContextSidebar: {
+      label: 'Media Library',
+      contentKey: 'creative-editor.media-library',
+      width: 'standard',
+      collapsible: true,
+      collapseIcon: 'menu',
+      expandIcon: 'menu',
+      footer: { contentKey: 'creative-editor.media-library-footer' },
+    },
+  },
+};
+
 const SHOWCASE_NAVIGATION: NavigationSchema = {
   version: '1.0',
   suite: MARKETING_STUDIO_SCHEMA.suite,
@@ -116,6 +156,7 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
     route: `/composition-showcase?recipe=${name}`,
     breadcrumbs: ['Composition Showcase', name],
     capabilities: name === 'SplitWorkspace' ? ['sidebar', 'toolbar'] : ['sidebar'],
+    shell: RECIPE_SHELL_USAGE[name],
   })),
 };
 
@@ -128,24 +169,6 @@ const RECIPE_CANVAS_MODES: Record<RecipeName, 'overview' | 'data' | 'workspace' 
   ImmersiveWorkflow: 'full-bleed',
   CreativeEditor: 'full-bleed',
 };
-
-const SplitContextSidebar = () => (
-  <div className="flex h-full min-h-0 flex-col gap-3 p-4">
-    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">context sidebar</span>
-    <strong className="text-sm text-text-main">Selection context</strong>
-    <p className="text-xs leading-5 text-text-muted">The shell-owned context region stays outside the recipe grid.</p>
-  </div>
-);
-
-const SplitContextPanel = () => (
-  <div className="flex h-full min-h-0 flex-col gap-3 p-4">
-    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">context panel</span>
-    <strong className="text-sm text-text-main">Record details</strong>
-    <div className="border-border-technical bg-background rounded-md border p-3 text-xs leading-5 text-text-muted">
-      The shell-owned detail panel complements the recipe&apos;s list and detail slots.
-    </div>
-  </div>
-);
 
 const SplitRecipeHeader = () => (
   <ModuleHeader
@@ -222,7 +245,13 @@ export default function CompositionShowcasePage() {
   const regions = useMemo(
     () =>
       Object.fromEntries(
-        composition.regions.filter((region) => !(recipe === 'SplitWorkspace' && region.slot === 'toolbar')).map((region) => [
+        composition.regions
+          .filter(
+            (region) =>
+              !(recipe === 'SplitWorkspace' && region.slot === 'toolbar') &&
+              !(recipe === 'CreativeEditor' && region.slot === 'asset-sidebar'),
+          )
+          .map((region) => [
           region.id,
           <TechnicalSurface
             key={region.id}
@@ -248,7 +277,7 @@ export default function CompositionShowcasePage() {
               {state === 'read-only' && <span className="text-xs text-text-muted">Read-only view</span>}
             </div>
           </TechnicalSurface>,
-        ]),
+          ]),
       ),
     [composition, recipe, state],
   );
@@ -258,12 +287,20 @@ export default function CompositionShowcasePage() {
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
         activeModuleId={recipe}
-        moduleContextRenderers={{ SplitWorkspace: () => <SplitContextSidebar /> }}
-        moduleContextLabels={{ SplitWorkspace: 'ModuleContextSidebar' }}
-        moduleContextWidths={{ SplitWorkspace: 'standard' }}
-        moduleContextPanelRenderers={{ SplitWorkspace: () => <SplitContextPanel /> }}
-        moduleContextPanelLabels={{ SplitWorkspace: 'ModuleContextPanel' }}
-        moduleContextPanelWidths={{ SplitWorkspace: 'extra-wide' }}
+        moduleContextRenderers={{
+          SplitWorkspace: () => resolveShowcaseZoneRenderer(RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextSidebar?.contentKey)?.(),
+          CreativeEditor: () => resolveShowcaseZoneRenderer(RECIPE_SHELL_USAGE.CreativeEditor?.moduleContextSidebar?.contentKey)?.(),
+        }}
+        moduleContextFooterRenderers={{
+          SplitWorkspace: () => resolveShowcaseZoneFooterRenderer(RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextSidebar?.footer?.contentKey)?.(),
+          CreativeEditor: () => resolveShowcaseZoneFooterRenderer(RECIPE_SHELL_USAGE.CreativeEditor?.moduleContextSidebar?.footer?.contentKey)?.(),
+        }}
+        moduleContextPanelRenderers={{
+          SplitWorkspace: () => resolveShowcaseZonePanelRenderer(RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextPanel?.contentKey)?.(),
+        }}
+        moduleContextPanelFooterRenderers={{
+          SplitWorkspace: () => resolveShowcaseZoneFooterRenderer(RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextPanel?.footer?.contentKey)?.(),
+        }}
         canvasProps={{
           mode: RECIPE_CANVAS_MODES[recipe],
           header: recipe === 'SplitWorkspace' ? <SplitRecipeHeader /> : undefined,

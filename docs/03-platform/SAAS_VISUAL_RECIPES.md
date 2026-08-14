@@ -61,6 +61,24 @@ Every consumer must declare:
 - localization and data-formatting needs;
 - telemetry and performance constraints.
 
+## Production content versus showcase labels
+
+Architectural markers such as `{PlatformHeader}`, `{SuiteCanvas}` and
+`{ModuleContextSidebar}` are inspection aids for `shell-showcase` only. They
+must not appear in production module views or user-facing recipe content.
+
+Production views use functional labels and semantic design tokens:
+
+- Use the real content name, such as `Media Library`, as the visible heading.
+- Use semantic typography and color utilities from the platform token system.
+- Do not introduce local font scales, arbitrary color values or technical zone
+  names as user-facing copy.
+- Keep zone ownership in the shell configuration and keep content ownership in
+  the module or recipe.
+
+The showcase may display an architectural marker beside a functional label so
+design and platform reviews can map the rendered area back to its contract.
+
 ## Governance
 
 - A new recipe requires a platform-owned contract and reference composition.

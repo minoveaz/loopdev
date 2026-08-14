@@ -139,6 +139,21 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
     route: `/shell-showcase?canvasMode=${mode.id}`,
     breadcrumbs: ['Shell Showcase', mode.label],
     capabilities: mode.id === 'data' ? ['sidebar', 'toolbar'] : ['sidebar'],
+    shell:
+      mode.id === 'split'
+        ? {
+            canvasMode: 'split',
+            moduleContextSidebar: {
+              label: 'ModuleContextSidebar',
+              collapsible: true,
+              collapseIcon: 'menu',
+              expandIcon: 'menu',
+            },
+            moduleContextPanel: {
+              label: 'ModuleContextPanel',
+            },
+          }
+        : undefined,
   })),
 };
 
