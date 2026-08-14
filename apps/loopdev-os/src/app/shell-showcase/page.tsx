@@ -514,6 +514,7 @@ function SplitModuleToolbar() {
 }
 
 function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
+  if (mode === 'full-bleed') return undefined;
   if (mode === 'split') return <SplitModuleHeader />;
 
   const fixtures: Record<Exclude<CanvasMode, 'split'>, { label: string; action: string }> = {
@@ -539,6 +540,7 @@ function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
 }
 
 function ModeModuleToolbar({ mode }: { mode: CanvasMode }) {
+  if (mode === 'full-bleed') return undefined;
   if (mode === 'split') return <SplitModuleToolbar />;
 
   const fixtures: Record<Exclude<CanvasMode, 'split'>, { left: string; center: string; action: string }> = {
