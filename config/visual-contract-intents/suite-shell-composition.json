@@ -6,11 +6,11 @@
     "e2e/shell.visual.spec.mjs",
     "docs/03-platform/SHELL_SHOWCASE_CONTRACT.md"
   ],
-  "userIntent": "Establish the SuiteShell composition and preserve its responsive light and dark visual contract across the shell showcase and login experience.",
+  "userIntent": "Preserve the SuiteShell composition after the suite reset and refresh the light and dark shell-showcase desktop baselines without changing the responsive shell contract.",
   "evidence": {
     "functional": "Shell navigation and selected states are covered by the shell showcase contract tests.",
     "accessibility": "The shell contract keeps accessible navigation semantics and responsive interaction coverage.",
-    "visual": "Updated light and dark snapshots were reviewed for desktop, mobile, and compact mobile shell states and the shared login surface."
+    "visual": "Updated light and dark shell-showcase desktop snapshots were reviewed after removing duplicate overview rendering; existing mobile and compact mobile baselines remain unchanged."
   },
   "approvedBy": "design-system"
 }
