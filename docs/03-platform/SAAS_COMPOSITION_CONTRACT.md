@@ -83,7 +83,7 @@ const overview: ViewComposition = {
 | `RecordWorkspace` | 12 | bounded tabs/inspector | no |
 | `BoardWorkspace` | 12 | registered board items | bounded canvas only |
 | `ImmersiveWorkflow` | 12 | registered workflow regions | bounded canvas only |
-| `CreativeEditor` | 12 | toolbar, assets, stage, timeline, inspector | bounded editor canvas |
+| `CreativeEditor` | 12 | `ModuleHeader`, assets, stage, timeline, inspector | bounded editor canvas |
 
 ## Ownership
 

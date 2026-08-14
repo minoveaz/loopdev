@@ -44,7 +44,7 @@ legibility, replace a state treatment or carry meaning that is only visual.
 | `RecordWorkspace` | `workspace` | header, tabs, record, inspector | canvas → surface → elevated | plain | comfortable |
 | `BoardWorkspace` | `board` | header, toolbar, board | canvas → surface | technical-grid only when approved | comfortable |
 | `ImmersiveWorkflow` | `full-bleed` | bounded workflow, actions | canvas → surface/overlay | immersive | comfortable |
-| `CreativeEditor` | `full-bleed` | toolbar, assets, stage, timeline, inspector | canvas → surface/overlay | plain or immersive | comfortable |
+| `CreativeEditor` | `full-bleed` | `ModuleHeader`, context assets, stage, timeline, inspector | canvas → surface/overlay | plain or immersive | comfortable |
 
 ## Required recipe contract
 

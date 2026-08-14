@@ -82,8 +82,8 @@ export const CREATIVE_EDITOR_COMPOSITION = createFixture({
   recipe: 'CreativeEditor',
   grid: { columns: 12, gap: 'md' },
   regions: [
-    { id: 'toolbar', slot: 'header', component: 'EditorToolbar', colSpan: 12 },
-    { id: 'assets', slot: 'asset-sidebar', component: 'AssetBrowser', colSpan: 2, rowSpan: 3 },
+    { id: 'toolbar', slot: 'header', component: 'ModuleHeader', colSpan: 12 },
+    { id: 'assets', slot: 'asset-sidebar', component: 'ModuleContextSidebar', colSpan: 2, rowSpan: 3 },
     { id: 'stage', slot: 'stage', component: 'VideoStage', colSpan: 10, rowSpan: 2 },
     { id: 'transport', slot: 'transport', component: 'TransportControls', colSpan: 10 },
     { id: 'timeline', slot: 'timeline', component: 'Timeline', colSpan: 10, rowSpan: 2 },

@@ -104,5 +104,10 @@ fixtures, not domain screens:
 - `ImmersiveWorkflow`.
 - `CreativeEditor` for creative tools with assets, stage, timeline and inspector.
 
+`CreativeEditor` keeps `PlatformHeader` and `SuiteSidebar` from the shared
+shell. Its header slot uses the existing `ModuleHeader`; the asset browser is
+rendered inside `ModuleContextSidebar`, so opening it changes the editor
+workspace width without changing the platform sidebar.
+
 Each fixture should demonstrate optional regions, all required states and
 responsive transformations before CRM adopts the recipe.
