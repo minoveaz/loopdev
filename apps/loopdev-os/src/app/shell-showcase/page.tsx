@@ -9,7 +9,7 @@ import {
   OrganizationSwitcher,
   SuiteSwitcher,
   UserMenu,
-  AVAILABLE_SUITES_FIXTURES,
+  SHELL_SHOWCASE_SUITES_FIXTURES,
   GlobalContextPanel,
   MARKETING_STUDIO_SCHEMA,
   SuiteRuntime,
@@ -518,8 +518,8 @@ export default function ShellShowcasePage() {
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const currentSuite =
-    AVAILABLE_SUITES_FIXTURES.find((suite) => suite.suiteId === 'salesCRM') ??
-    AVAILABLE_SUITES_FIXTURES[0];
+    SHELL_SHOWCASE_SUITES_FIXTURES.find((suite) => suite.suiteId === 'salesCRM') ??
+    SHELL_SHOWCASE_SUITES_FIXTURES[0];
   const activeOrganization = SHOWCASE_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
 
   useEffect(() => {
@@ -623,7 +623,7 @@ export default function ShellShowcasePage() {
               </span>
               <SuiteSwitcher
                 currentSuite={currentSuite}
-                availableSuites={AVAILABLE_SUITES_FIXTURES}
+                availableSuites={SHELL_SHOWCASE_SUITES_FIXTURES}
                 showIcon={false}
                 onSuiteChange={(suiteId) => {
                   if (suiteId === 'os.home') {
@@ -631,7 +631,7 @@ export default function ShellShowcasePage() {
                     return;
                   }
 
-                  const suite = AVAILABLE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
+                  const suite = SHELL_SHOWCASE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
                   router.push(suite?.route?.routeId ?? '/launchpad');
                 }}
               />
