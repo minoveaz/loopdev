@@ -99,7 +99,7 @@ baseline with ownership and measurable gaps.
 
 **Entregables**
 
-- [ ] Surface and background inventory.
+- [x] Surface and background inventory.
 - [ ] Visual recipe catalog.
 - [ ] Cross-SaaS standardization matrix covering the 15 concern areas.
 - [ ] View specification template.
@@ -111,7 +111,9 @@ baseline with ownership and measurable gaps.
 - [ ] Every proposed token/recipe has an owner and evidence source.
 - [ ] No duplicate platform primitive is introduced.
 
-**Evidencia:** Pendiente.
+**Evidencia:** [SaaS visual system inventory](../../../docs/03-platform/SAAS_VISUAL_SYSTEM_INVENTORY.md)
+records current primitives, duplication and the decisions required before
+promoting new recipes.
 
 **Estado:** en curso
 
