@@ -127,21 +127,21 @@ to CI or a clean install. Inaccessible active modules now fall back to the
 suite dashboard indicator. Hover, portal persistence and focus restoration
 have focused test evidence; execution remains the only dependency-blocked step.
 
-**Estado:** en curso
+**Estado:** en curso (all implementation gates complete; Vitest blocked)
 
 ## Riesgos y bloqueos
 
 | Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
 | --- | --- | --- | --- | --- |
 | Hover/portal behavior differs between implementations | Layout shift or inaccessible navigation | Test overlay, tolerance and focus invariants | platform | mitigated |
-| Canvas modes are generic in name but inconsistent in consumers | Suite-specific hacks and route regressions | Matrix every mode against concrete consumers | platform | open |
+| Canvas modes are generic in name but inconsistent in consumers | Suite-specific hacks and route regressions | Matrix every mode against concrete consumers | platform | mitigated |
 
 ## Criterios de cierre
 
-- [ ] Every shell mode has an owner, contract and test evidence.
-- [ ] Every SuiteCanvas mode has a compatible consumer matrix.
-- [ ] Gaps and implementation work are assigned.
-- [ ] Validation passes with repository evidence.
+- [x] Every shell mode has an owner, contract and test evidence.
+- [x] Every SuiteCanvas mode has a compatible consumer matrix.
+- [x] Gaps and implementation work are assigned.
+- [ ] Validation passes with repository evidence (Vitest dependency gate).
 - [ ] Cierre aprobado explícitamente por el usuario.
 
 ## Evidencia de validación
@@ -154,12 +154,13 @@ have focused test evidence; execution remains the only dependency-blocked step.
 - **Fecha:** 2026-08-14.
 - **Rama de continuación:** `docs/platform-shell-mode-inventory`.
 - **Commit de partida:** `f0b6390` (branch baseline with CRM separation).
-- **Estado alcanzado:** Phase 0 inventory completed; no shell behavior changed.
-- **Decisiones, bloqueos y riesgos:** Portal/hover and cross-mode tests remain
-  implementation gates.
+- **Estado alcanzado:** Phase 1 implementation gates completed; Vitest remains
+  the only local validation blocker.
+- **Decisiones, bloqueos y riesgos:** `record`/`focus` map to current Canvas
+  modes; access fallback, hover and portal contracts have focused evidence.
 - **Validación ejecutada:** Track validator and generated dashboard pass.
-- **Siguiente acción concreta:** Add focused shell mode tests for hover overlay,
-  portal footer tolerance, Canvas mode transitions and access fallback.
+- **Siguiente acción concreta:** Run the existing focused tests in a
+  dependency-complete environment, then request explicit closure approval.
 
 ## Cierre
 

@@ -58,13 +58,14 @@ reviewed_at: 2026-08-14
    requested `record` and `focus` semantics are not current contract values;
    route compositions must map them to `workspace` and `full-bleed` or obtain
    an explicit contract change.
-2. Portalized footer behavior needs an interaction test that spans trigger,
-   portal menu and delayed collapse.
-3. Hover overlay needs an invariant test proving the center content x-coordinate
-   does not change.
+2. Portalized footer behavior has focused coverage spanning trigger, portal menu
+   and delayed collapse; execution remains dependency-blocked.
+3. Hover overlay has focused coverage for rail-to-expanded overlay behavior;
+   browser geometry execution remains a follow-up validation gate.
 4. Every suite needs a concrete consumer for each mode it declares; unused
    modes must not be added speculatively.
-5. Permission filtering must be tested before rendering, including active route
-   fallback when the current module becomes inaccessible.
+5. Permission filtering and active route fallback are covered for hidden and
+   forbidden modules.
 
-No shell behavior was changed by this inventory.
+The shared access contract and inaccessible-module navigation behavior were
+hardened while preserving the existing shell composition boundaries.
