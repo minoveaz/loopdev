@@ -50,7 +50,7 @@ const designContracts = JSON.parse(
 ).rules;
 
 function addFinding(file, line, rule, message, snippet) {
-  const relativeFile = path.relative(process.cwd(), file);
+  const relativeFile = path.relative(process.cwd(), file).replaceAll('\\', '/');
   if (fileFilter && !relativeFile.includes(fileFilter)) return;
   if (ruleFilter && rule !== ruleFilter) return;
 

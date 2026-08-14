@@ -12,7 +12,7 @@ describe('ModuleContextSidebar', () => {
 
     expect(screen.getByRole('complementary', { name: 'Table Editor' })).toBeInTheDocument();
     expect(screen.getByText('Schema resources')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '{Table Editor}' })).toHaveClass('text-primary');
+    expect(screen.getByRole('heading', { name: 'Table Editor' })).toHaveClass('text-primary');
   });
 
   it('uses the requested structural width without rounded corners', () => {
@@ -37,5 +37,25 @@ describe('ModuleContextSidebar', () => {
     expect(screen.getByText('Content region')).toBeInTheDocument();
     expect(screen.getByText('Footer actions')).toBeInTheDocument();
     expect(screen.getByText('Footer actions').parentElement).toHaveClass('border-t');
+  });
+
+  it('hides the collapsed rail when the reopen action is delegated to the suite sidebar', () => {
+    render(
+      <ModuleContextSidebar label="Selection context" collapsed showCollapsedTrigger={false}>
+        <div>Selection content</div>
+      </ModuleContextSidebar>,
+    );
+
+    expect(screen.getByTestId('module-context-sidebar')).toHaveClass('hidden');
+  });
+
+  it('keeps the collapsed rail when the module owns its reopen trigger', () => {
+    render(
+      <ModuleContextSidebar label="Selection context" collapsed showCollapsedTrigger>
+        <div>Selection content</div>
+      </ModuleContextSidebar>,
+    );
+
+    expect(screen.getByTestId('module-context-sidebar')).toHaveClass('w-14');
   });
 });

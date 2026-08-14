@@ -32,6 +32,28 @@ export async function createCrmActivity(input: {
   return data;
 }
 
+export async function listCrmActivities(input: {
+  organizationId: string;
+  workspaceId?: string;
+  cursor?: string;
+  limit: number;
+}) {
+  const supabase = await createServerSupabaseClient();
+  let query = supabase
+    .from('crm_activities')
+    .select('*')
+    .eq('organization_id', input.organizationId)
+    .order('occurred_at', { ascending: false })
+    .order('id', { ascending: false })
+    .limit(input.limit + 1);
+  if (input.workspaceId) query = query.eq('workspace_id', input.workspaceId);
+  if (input.cursor) query = query.lt('id', input.cursor);
+  const { data, error } = await query;
+  if (error) throw new Error('Unable to list CRM activities');
+  const items = data.slice(0, input.limit);
+  return { items, nextCursor: data.length > input.limit ? items.at(-1)?.id ?? null : null, hasMore: data.length > input.limit };
+}
+
 export async function createCrmTask(input: {
   organizationId: string;
   leadId: string;
@@ -86,6 +108,59 @@ export async function createCrmNote(input: {
     .single();
   if (error) throw new Error('Unable to create CRM note');
   return data;
+}
+
+export async function listCrmNotes(input: {
+  organizationId: string;
+  workspaceId?: string;
+  cursor?: string;
+  limit: number;
+}) {
+  const supabase = await createServerSupabaseClient();
+  let query = supabase
+    .from('crm_notes')
+    .select('*')
+    .eq('organization_id', input.organizationId)
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
+    .limit(input.limit + 1);
+  if (input.workspaceId) query = query.eq('workspace_id', input.workspaceId);
+  if (input.cursor) query = query.lt('id', input.cursor);
+  const { data, error } = await query;
+  if (error) throw new Error('Unable to list CRM notes');
+  const items = data.slice(0, input.limit).map((note) => ({
+    ...note,
+    body: note.visibility === 'private' ? null : note.body,
+    can_read_body: note.visibility !== 'private',
+  }));
+  return { items, nextCursor: data.length > input.limit ? items.at(-1)?.id ?? null : null, hasMore: data.length > input.limit };
+}
+
+export async function lookupCrmEntities(input: {
+  organizationId: string;
+  workspaceId?: string;
+  query: string;
+  cursor?: string;
+  limit: number;
+}) {
+  const supabase = await createServerSupabaseClient();
+  let contacts = supabase
+    .from('crm_contacts')
+    .select('id, first_name, last_name, email')
+    .eq('organization_id', input.organizationId)
+    .or(`first_name.ilike.%${input.query}%,last_name.ilike.%${input.query}%,email.ilike.%${input.query}%`)
+    .order('id')
+    .limit(input.limit + 1);
+  if (input.cursor) contacts = contacts.gt('id', input.cursor);
+  const { data, error } = await contacts;
+  if (error) throw new Error('Unable to lookup CRM entities');
+  const items = data.slice(0, input.limit).map((contact) => ({
+    id: contact.id,
+    entityType: 'contact' as const,
+    label: `${contact.first_name}${contact.last_name ? ` ${contact.last_name}` : ''}`,
+    subtitle: contact.email ?? null,
+  }));
+  return { items, nextCursor: data.length > input.limit ? items.at(-1)?.id ?? null : null, hasMore: data.length > input.limit };
 }
 
 export async function recordCrmAuditEvent(input: {

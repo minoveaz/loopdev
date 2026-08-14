@@ -16,7 +16,7 @@ export const TechnicalSurface: React.FC<TechnicalSurfaceProps & { withHoverAura?
   const { surfaceClasses, handleOnClick } = useTechnicalSurface(props);
 
   return (
-    <div className={surfaceClasses} onClick={handleOnClick} onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
+    <div className={surfaceClasses} style={props.style} onClick={handleOnClick} onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
       {/* 1. Blueprint Grid Texture */}
       {withGrid && (
         <div 

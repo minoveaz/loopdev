@@ -8,6 +8,9 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
   const { 
     variant = 'surface', 
     depth = 'flat', 
+    radius = 'xl',
+    border = 'subtle',
+    borderWidth = 'thin',
     overflow = 'hidden',
     className = '',
     onClick 
@@ -22,9 +25,28 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
 
   // 2. Mapeo de Profundidad (Bordes y Sombras)
   const depthMap = {
-    flat: 'border-black/5 dark:border-white/5 shadow-none',
-    raised: 'border-black/5 dark:border-white/10 shadow-xl',
-    overlay: 'border-black/10 dark:border-white/20 shadow-2xl',
+    flat: 'shadow-none',
+    raised: 'shadow-xl',
+    overlay: 'shadow-2xl',
+  };
+
+  const radiusMap = {
+    none: 'rounded-none',
+    sm: 'rounded-sm',
+    md: 'rounded-md',
+    lg: 'rounded-lg',
+    xl: 'rounded-xl',
+  };
+
+  const borderMap = {
+    subtle: 'border-border-subtle dark:border-border-subtle',
+    technical: 'border-border-technical dark:border-border-technical',
+    strong: 'border-slate-400 dark:border-white/25',
+  };
+
+  const borderWidthMap = {
+    thin: 'border',
+    medium: 'border-2',
   };
 
   // 3. Mapeo de Overflow
@@ -36,9 +58,12 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
 
   // 4. Composición de clases indestructible
   const surfaceClasses = `
-    relative rounded-xl border transition-all duration-300
+    relative transition-all duration-300
     ${variantMap[variant]}
     ${depthMap[depth]}
+    ${radiusMap[radius]}
+    ${borderMap[border]}
+    ${borderWidthMap[borderWidth]}
     ${overflowMap[overflow]}
     ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''}
     ${className}

@@ -23,6 +23,7 @@ import type { NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { useRouter } from 'next/navigation';
+import { Menu } from 'lucide-react';
 
 type ShowcaseNavMode = 'expanded' | 'rail' | 'hover';
 type CanvasMode = 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed';
@@ -89,9 +90,16 @@ const SHOWCASE_ORGANIZATIONS = [
   },
 ];
 
+const SHOWCASE_SUITE = {
+  ...MARKETING_STUDIO_SCHEMA.suite,
+  suiteId: 'shell-showcase',
+  suiteName: 'Shell Showcase',
+  route: { routeId: '/shell-showcase' },
+};
+
 const SHOWCASE_NAVIGATION: NavigationSchema = {
   version: '1.0',
-  suite: MARKETING_STUDIO_SCHEMA.suite,
+  suite: SHOWCASE_SUITE,
   exitHatch: MARKETING_STUDIO_SCHEMA.exitHatch,
   groups: [
     {
@@ -123,7 +131,7 @@ const SHOWCASE_NAVIGATION: NavigationSchema = {
 };
 
 const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
-  identity: MARKETING_STUDIO_SCHEMA.suite,
+  identity: SHOWCASE_SUITE,
   navigation: SHOWCASE_NAVIGATION,
   accessMap: {},
   modules: CANVAS_MODES.map((mode) => ({
@@ -132,6 +140,22 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
     route: `/shell-showcase?canvasMode=${mode.id}`,
     breadcrumbs: ['Shell Showcase', mode.label],
     capabilities: mode.id === 'data' ? ['sidebar', 'toolbar'] : ['sidebar'],
+    shell:
+      mode.id === 'split'
+        ? {
+            canvasMode: 'split',
+            moduleContextSidebar: {
+              label: 'ModuleContextSidebar',
+              collapsible: true,
+              collapsedPresentation: 'trigger',
+              collapseIcon: 'menu',
+              expandIcon: 'menu',
+            },
+            moduleContextPanel: {
+              label: 'ModuleContextPanel',
+            },
+          }
+        : undefined,
   })),
 };
 
@@ -144,7 +168,12 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{DataFixture}'}
             </p>
-            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+            <Heading
+              as="h2"
+              size="xl"
+              weight="semibold"
+              className="text-text-main mt-1 leading-tight"
+            >
               Resource directory
             </Heading>
           </div>
@@ -156,7 +185,9 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
           <div className="bg-shell-canvas text-text-muted text-lpd-sm min-w-44 rounded-md border px-3 py-2 leading-normal">
             Search resources
           </div>
-          <Button variant="primary" size="sm">Filter</Button>
+          <Button variant="primary" size="sm">
+            Filter
+          </Button>
           <Button variant="outline" size="sm">
             Export
           </Button>
@@ -195,7 +226,7 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
   if (mode === 'workspace') {
     return (
       <div className="text-lpd-sm flex min-h-full flex-col font-sans leading-normal">
-          <div className="border-border-technical flex items-center gap-1 overflow-x-auto px-3 pt-2">
+        <div className="border-border-technical flex items-center gap-1 overflow-x-auto px-3 pt-2">
           {['Untitled query', 'Resource audit', 'New document'].map((tab, index) => (
             <Button
               key={tab}
@@ -221,11 +252,18 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
               <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
                 {'{WorkspaceFixture}'}
               </p>
-              <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+              <Heading
+                as="h2"
+                size="xl"
+                weight="semibold"
+                className="text-text-main mt-1 leading-tight"
+              >
                 Document workspace
               </Heading>
             </div>
-            <Button variant="primary" size="sm">Run action</Button>
+            <Button variant="primary" size="sm">
+              Run action
+            </Button>
           </div>
           <div className="border-border-technical bg-background text-lpd-sm flex min-h-48 flex-1 items-center justify-center rounded-lg border font-mono leading-normal">
             <span className="text-text-muted">{'// Main workspace content'}</span>
@@ -263,11 +301,18 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{BoardFixture}'}
             </p>
-            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+            <Heading
+              as="h2"
+              size="xl"
+              weight="semibold"
+              className="text-text-main mt-1 leading-tight"
+            >
               Work queue
             </Heading>
           </div>
-          <Button variant="primary" size="sm">Add card</Button>
+          <Button variant="primary" size="sm">
+            Add card
+          </Button>
         </div>
         <div className="flex min-w-0 gap-4 overflow-x-auto pb-2">
           {[
@@ -279,7 +324,14 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
               key={column as string}
               className="border-border-technical bg-background min-w-64 flex-1 rounded-lg border p-3"
             >
-              <Heading as="h2" size="sm" weight="semibold" className="text-text-main leading-normal">{column}</Heading>
+              <Heading
+                as="h2"
+                size="sm"
+                weight="semibold"
+                className="text-text-main leading-normal"
+              >
+                {column}
+              </Heading>
               <div className="mt-3 space-y-2">
                 {(cards as string[]).map((card) => (
                   <div
@@ -309,7 +361,12 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{FullBleedFixture}'}
             </p>
-            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+            <Heading
+              as="h2"
+              size="xl"
+              weight="semibold"
+              className="text-text-main mt-1 leading-tight"
+            >
               Immersive canvas
             </Heading>
           </div>
@@ -419,43 +476,45 @@ function ModuleContextPanelFooterFixture() {
 function SplitModuleFixture() {
   return (
     <div className="bg-background min-h-full min-w-0 overflow-auto p-4 sm:p-6">
-          <p className="text-primary text-lpd-xs font-semibold leading-tight tracking-[0.18em]">
-            {'{SuiteCanvas}'}
-          </p>
-          <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">Users</Heading>
-          <div className="border-border-technical mt-5 overflow-hidden rounded-lg border">
-            <div className="border-border-technical text-text-muted grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-xs font-semibold uppercase tracking-wide">
-              <span aria-label="Select" />
-              <span>Email</span>
-              <span>UID</span>
-              <span>Display name</span>
-              <span>Phone</span>
-              <span>Role</span>
-              <span>Last sign in</span>
-            </div>
-            {[
-              'admin@localhost.com',
-              'editor@localhost.com',
-              'minoveaz@hotmail.com',
-              'superdev@loopdev.io',
-              'test@loopdev.dev',
-              'test2@test.com',
-              'viewer@localhost.com',
-            ].map((email) => (
-                <div
-                  key={email}
-                  className="border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0"
-                >
-                  <span className="text-text-muted">□</span>
-                  <span>{email}</span>
-                  <span className="text-text-muted">07b3b75e...</span>
-                  <span className="text-text-muted">-</span>
-                  <span className="text-text-muted">-</span>
-                  <span className="text-text-muted">Member</span>
-                  <span className="text-text-muted">Today</span>
-                </div>
-            ))}
+      <p className="text-primary text-lpd-xs font-semibold leading-tight tracking-[0.18em]">
+        {'{SuiteCanvas}'}
+      </p>
+      <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+        Users
+      </Heading>
+      <div className="border-border-technical mt-5 overflow-hidden rounded-lg border">
+        <div className="border-border-technical text-text-muted grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-xs font-semibold uppercase tracking-wide">
+          <span aria-label="Select" />
+          <span>Email</span>
+          <span>UID</span>
+          <span>Display name</span>
+          <span>Phone</span>
+          <span>Role</span>
+          <span>Last sign in</span>
+        </div>
+        {[
+          'admin@localhost.com',
+          'editor@localhost.com',
+          'minoveaz@hotmail.com',
+          'superdev@loopdev.io',
+          'test@loopdev.dev',
+          'test2@test.com',
+          'viewer@localhost.com',
+        ].map((email) => (
+          <div
+            key={email}
+            className="border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0"
+          >
+            <span className="text-text-muted">□</span>
+            <span>{email}</span>
+            <span className="text-text-muted">07b3b75e...</span>
+            <span className="text-text-muted">-</span>
+            <span className="text-text-muted">-</span>
+            <span className="text-text-muted">Member</span>
+            <span className="text-text-muted">Today</span>
           </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -470,9 +529,14 @@ function SplitModuleHeader() {
       statusLabel="Active"
       statusSeverity="success"
       rightSlot={
-        <Button variant="outline" size="sm">
-          Module action
-        </Button>
+        <div className="flex items-center gap-3">
+          <span className="text-primary text-lpd-xs font-mono tracking-[0.16em]">
+            {'{SuiteHeader}'}
+          </span>
+          <Button variant="outline" size="sm">
+            Module action
+          </Button>
+        </div>
       }
     />
   );
@@ -488,7 +552,10 @@ function SplitModuleToolbar() {
         </div>
       }
       center={
-        <div className="text-text-muted flex items-center gap-2 text-xs">
+        <div className="text-text-muted flex items-center gap-3 text-xs">
+          <span className="text-primary font-mono text-[10px] tracking-[0.16em]">
+            {'{SuiteToolbar}'}
+          </span>
           <Button variant="ghost" size="sm">
             All columns
           </Button>
@@ -497,7 +564,74 @@ function SplitModuleToolbar() {
           </Button>
         </div>
       }
-      right={<Button variant="primary" size="sm">Add user</Button>}
+      right={
+        <Button variant="primary" size="sm">
+          Add user
+        </Button>
+      }
+    />
+  );
+}
+
+function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
+  if (mode === 'full-bleed') return undefined;
+  if (mode === 'split') return <SplitModuleHeader />;
+
+  const fixtures: Record<Exclude<CanvasMode, 'split'>, { label: string; action: string }> = {
+    overview: { label: 'Overview', action: 'Customize overview' },
+    data: { label: 'Resource directory', action: 'Export data' },
+    workspace: { label: 'Document workspace', action: 'Run action' },
+    board: { label: 'Operations board', action: 'Add card' },
+    'full-bleed': { label: 'Immersive workflow', action: 'Start workflow' },
+  };
+  const fixture = fixtures[mode];
+
+  return (
+    <ModuleHeader
+      segments={[
+        { id: 'suite', label: 'Shell Showcase' },
+        { id: 'mode', label: fixture.label, isActive: true },
+      ]}
+      statusLabel="Reference"
+      statusSeverity="success"
+      rightSlot={
+        <Button variant="outline" size="sm">
+          {fixture.action}
+        </Button>
+      }
+    />
+  );
+}
+
+function ModeModuleToolbar({ mode }: { mode: CanvasMode }) {
+  if (mode === 'full-bleed') return undefined;
+  if (mode === 'split') return <SplitModuleToolbar />;
+
+  const fixtures: Record<
+    Exclude<CanvasMode, 'split'>,
+    { left: string; center: string; action: string }
+  > = {
+    overview: { left: 'Period: This week', center: 'Dashboard filters', action: 'Refresh' },
+    data: { left: 'Search resources', center: 'All columns', action: 'Filter' },
+    workspace: { left: 'Active document', center: 'Results / Chart', action: 'Save' },
+    board: { left: 'All stages', center: 'Group by status', action: 'New card' },
+    'full-bleed': { left: 'Workflow: Draft', center: 'Timeline controls', action: 'Preview' },
+  };
+  const fixture = fixtures[mode];
+
+  return (
+    <ModuleToolbar
+      left={
+        <span className="border-border-technical bg-background text-text-muted rounded-md border px-3 py-1.5 text-xs">
+          {fixture.left}
+        </span>
+      }
+      center={<span className="text-text-muted text-xs">{fixture.center}</span>}
+      right={
+        <Button variant="primary" size="sm">
+          {fixture.action}
+        </Button>
+      }
     />
   );
 }
@@ -505,6 +639,9 @@ function SplitModuleToolbar() {
 function ShowcaseCanvas({ mode }: { mode: CanvasMode }) {
   return (
     <div className="bg-shell-canvas text-lpd-sm h-full min-h-full font-sans leading-normal">
+      <p className="text-primary px-4 pt-4 font-mono text-[10px] tracking-[0.16em]">
+        {'{SuiteCanvas}'}
+      </p>
       <CanvasFixture mode={mode} />
     </div>
   );
@@ -515,6 +652,7 @@ export default function ShellShowcasePage() {
   const [navMode, setNavMode] = useState<ShowcaseNavMode>('expanded');
   const [canvasMode, setCanvasMode] = useState<CanvasMode>('overview');
   const [isSplitPanelOpen, setIsSplitPanelOpen] = useState(true);
+  const [isSplitContextOpen, setIsSplitContextOpen] = useState(true);
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const currentSuite =
@@ -583,10 +721,26 @@ export default function ShellShowcasePage() {
         moduleContextPanelLabels={{ split: 'ModuleContextPanel' }}
         moduleContextPanelWidths={{ split: 'extra-wide' }}
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
+        moduleContextSidebarCollapsed={canvasMode === 'split' ? !isSplitContextOpen : undefined}
+        moduleContextSidebarShowCollapsedTrigger={canvasMode !== 'split'}
+        moduleContextSidebarOnCollapsedChange={(collapsed) => setIsSplitContextOpen(!collapsed)}
+        contextualSidebarAction={(isRail) =>
+          canvasMode === 'split' && !isSplitContextOpen ? (
+            <button
+              type="button"
+              aria-label="Open module context"
+              onClick={() => setIsSplitContextOpen(true)}
+              className="text-accent border-accent/30 bg-accent/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+            >
+              <Menu aria-hidden="true" size={18} className="shrink-0" />
+              {!isRail ? <span className="truncate">Open module context</span> : null}
+            </button>
+          ) : null
+        }
         canvasProps={{
           mode: canvasMode,
-          header: canvasMode === 'split' ? <SplitModuleHeader /> : undefined,
-          toolbar: canvasMode === 'split' ? <SplitModuleToolbar /> : undefined,
+          header: <ModeModuleHeader mode={canvasMode} />,
+          toolbar: <ModeModuleToolbar mode={canvasMode} />,
         }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
@@ -599,6 +753,9 @@ export default function ShellShowcasePage() {
             return;
           }
 
+          if (new URL(route.routeId, window.location.origin).pathname === '/shell-showcase') {
+            setCanvasMode('overview');
+          }
           router.push(route.routeId);
         }}
         leftSlot={
@@ -631,7 +788,9 @@ export default function ShellShowcasePage() {
                     return;
                   }
 
-                  const suite = SHELL_SHOWCASE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
+                  const suite = SHELL_SHOWCASE_SUITES_FIXTURES.find(
+                    (item) => item.suiteId === suiteId,
+                  );
                   router.push(suite?.route?.routeId ?? '/launchpad');
                 }}
               />
@@ -668,7 +827,7 @@ export default function ShellShowcasePage() {
           config: { activeOverlay: contextMode ? 'context' : null },
         }}
       >
-        <ShowcaseCanvas mode="overview" />
+        {canvasMode === 'overview' ? <ShowcaseCanvas mode="overview" /> : null}
       </SuiteRuntime>
       {contextMode && (
         <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">

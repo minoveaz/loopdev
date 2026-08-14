@@ -37,6 +37,7 @@ export default defineConfig({
         '**/*.smoke.spec.mjs',
         '**/*.accessibility.spec.mjs',
         '**/*.visual.spec.mjs',
+        '**/composition-showcase.interaction.spec.mjs',
         '**/shell-showcase.contract.spec.mjs',
         '**/authenticated.application.spec.mjs',
         '**/phase5.certification.spec.mjs',
