@@ -100,7 +100,7 @@ baseline with ownership and measurable gaps.
 **Entregables**
 
 - [x] Surface and background inventory.
-- [ ] Visual recipe catalog.
+- [x] Visual recipe catalog.
 - [ ] Cross-SaaS standardization matrix covering the 15 concern areas.
 - [ ] View specification template.
 - [ ] Gap, duplication and exception register.
@@ -112,8 +112,8 @@ baseline with ownership and measurable gaps.
 - [ ] No duplicate platform primitive is introduced.
 
 **Evidencia:** [SaaS visual system inventory](../../../docs/03-platform/SAAS_VISUAL_SYSTEM_INVENTORY.md)
-records current primitives, duplication and the decisions required before
-promoting new recipes.
+records current primitives and duplication. [SaaS visual recipes](../../../docs/03-platform/SAAS_VISUAL_RECIPES.md)
+defines the proposed surface taxonomy and initial mode-to-recipe mapping.
 
 **Estado:** en curso
 
