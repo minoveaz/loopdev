@@ -513,6 +513,52 @@ function SplitModuleToolbar() {
   );
 }
 
+function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
+  if (mode === 'split') return <SplitModuleHeader />;
+
+  const fixtures: Record<Exclude<CanvasMode, 'split'>, { label: string; action: string }> = {
+    overview: { label: 'Overview', action: 'Customize overview' },
+    data: { label: 'Resource directory', action: 'Export data' },
+    workspace: { label: 'Document workspace', action: 'Run action' },
+    board: { label: 'Operations board', action: 'Add card' },
+    'full-bleed': { label: 'Immersive workflow', action: 'Start workflow' },
+  };
+  const fixture = fixtures[mode];
+
+  return (
+    <ModuleHeader
+      segments={[
+        { id: 'suite', label: 'Shell Showcase' },
+        { id: 'mode', label: fixture.label, isActive: true },
+      ]}
+      statusLabel="Reference"
+      statusSeverity="success"
+      rightSlot={<Button variant="outline" size="sm">{fixture.action}</Button>}
+    />
+  );
+}
+
+function ModeModuleToolbar({ mode }: { mode: CanvasMode }) {
+  if (mode === 'split') return <SplitModuleToolbar />;
+
+  const fixtures: Record<Exclude<CanvasMode, 'split'>, { left: string; center: string; action: string }> = {
+    overview: { left: 'Period: This week', center: 'Dashboard filters', action: 'Refresh' },
+    data: { left: 'Search resources', center: 'All columns', action: 'Filter' },
+    workspace: { left: 'Active document', center: 'Results / Chart', action: 'Save' },
+    board: { left: 'All stages', center: 'Group by status', action: 'New card' },
+    'full-bleed': { left: 'Workflow: Draft', center: 'Timeline controls', action: 'Preview' },
+  };
+  const fixture = fixtures[mode];
+
+  return (
+    <ModuleToolbar
+      left={<span className="border-border-technical bg-background text-text-muted rounded-md border px-3 py-1.5 text-xs">{fixture.left}</span>}
+      center={<span className="text-text-muted text-xs">{fixture.center}</span>}
+      right={<Button variant="primary" size="sm">{fixture.action}</Button>}
+    />
+  );
+}
+
 function ShowcaseCanvas({ mode }: { mode: CanvasMode }) {
   return (
     <div className="bg-shell-canvas text-lpd-sm h-full min-h-full font-sans leading-normal">
@@ -596,8 +642,8 @@ export default function ShellShowcasePage() {
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
         canvasProps={{
           mode: canvasMode,
-          header: <SplitModuleHeader />,
-          toolbar: <SplitModuleToolbar />,
+          header: <ModeModuleHeader mode={canvasMode} />,
+          toolbar: <ModeModuleToolbar mode={canvasMode} />,
         }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
