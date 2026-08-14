@@ -129,7 +129,7 @@ assigns the remaining duplication, accessibility, theming and exception work.
 - [x] Reference composition patterns extracted from supplied screenshots.
 - [x] Declarative composition contract with grid, slots, spans and breakpoints.
 - [x] Initial `CompositionGrid` renderer consuming the shared contract.
-- [ ] Neutral showcase fixtures for all six initial recipes.
+- [x] Neutral showcase fixtures for all six initial recipes.
 
 **Estado:** pendiente
 
