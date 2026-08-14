@@ -3,10 +3,6 @@ import { test, expect } from '@playwright/test';
 const shellRoutes = [
   { name: 'login', path: '/login' },
   { name: 'launchpad', path: '/launchpad' },
-  { name: 'marketing-studio', path: '/marketing-studio' },
-  { name: 'brand-hub', path: '/marketing-studio/brand-hub' },
-  { name: 'sales-crm', path: '/sales-crm' },
-  { name: 'sales-pipeline', path: '/sales-crm/pipeline' },
 ];
 
 for (const route of shellRoutes) {

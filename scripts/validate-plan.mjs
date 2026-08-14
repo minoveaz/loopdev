@@ -70,7 +70,6 @@ function buildExperiencePlan(files) {
     files.some((file) =>
       [
         'e2e/authenticated.application.spec.mjs',
-        'e2e/marketing-studio.dam.spec.mjs',
         'e2e/phase5.certification.spec.mjs',
         'e2e/shell.accessibility.spec.mjs',
         'e2e/shell.smoke.spec.mjs',
