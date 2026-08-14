@@ -94,6 +94,17 @@ describe('SuiteSidebar', () => {
 
       expect(onNavModeChange).toHaveBeenCalledWith('rail');
     });
+
+    it('restaura el foco al control tras cerrar el menú portalizado', async () => {
+      const user = userEvent.setup();
+      renderSidebar('expanded');
+      const control = screen.getByRole('button', { name: 'Sidebar control' });
+
+      await user.click(control);
+      await user.click(screen.getByRole('menuitem', { name: 'Collapsed' }));
+
+      expect(control).toHaveFocus();
+    });
   });
 
   describe('permisos y navegación', () => {

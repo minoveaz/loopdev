@@ -111,20 +111,21 @@ gates without changing shell behavior.
 - [x] CRM semantic mapping for `record` and `focus` to current contract modes.
 - [x] `docs/03-platform/PLATFORM_SHELL_COMPATIBILITY_MATRIX.md`.
 - [x] Align `AccessMap` with `forbidden` and `read-only` contract states.
-- [ ] Hover overlay and portal footer interaction tests.
+- [x] Hover overlay and portal footer interaction tests.
+- [x] Focus restoration after closing the portal footer menu.
 - [x] Permission fallback interaction test for inaccessible active modules.
 
 **Validación**
 - [x] `pnpm test:shell:changed` evaluated the changed-surface gate.
 - [ ] Contracts build and Vitest run in this worktree; dependencies are absent.
-- [ ] `@loopdev/ui` SuiteCanvas and sidebar test runners pass in a dependency-complete environment.
 
 **Evidencia:** The current contract exposes six modes; focused render coverage
 was added for all six. `record` and `focus` are documented as semantic
 requirements, not silently added as unsupported enum values. The local UI
 worktree has no dependencies installed, so the direct Vitest run is deferred
 to CI or a clean install. Inaccessible active modules now fall back to the
-suite dashboard indicator.
+suite dashboard indicator. Hover, portal persistence and focus restoration
+have focused test evidence; execution remains the only dependency-blocked step.
 
 **Estado:** en curso
 
@@ -132,7 +133,7 @@ suite dashboard indicator.
 
 | Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
 | --- | --- | --- | --- | --- |
-| Hover/portal behavior differs between implementations | Layout shift or inaccessible navigation | Test overlay, tolerance and focus invariants | platform | open |
+| Hover/portal behavior differs between implementations | Layout shift or inaccessible navigation | Test overlay, tolerance and focus invariants | platform | mitigated |
 | Canvas modes are generic in name but inconsistent in consumers | Suite-specific hacks and route regressions | Matrix every mode against concrete consumers | platform | open |
 
 ## Criterios de cierre
