@@ -8,7 +8,7 @@ owner: platform
 lead: null
 branch: docs/platform-shell-mode-inventory
 branches: []
-phase: 0
+phase: 1
 pull_requests: []
 issues: []
 packages: []
@@ -99,6 +99,29 @@ five implementation gates. No shell behavior was changed.
 
 **Estado:** completada el 2026-08-14. Phase 1 can define and execute focused
 shell mode tests.
+
+### Fase 1: Mode compatibility validation
+
+**Objetivo:** Verify declared SuiteCanvas modes and record shell interaction
+gates without changing shell behavior.
+
+**Entregables**
+- [x] Render coverage for `overview`, `data`, `workspace`, `split`, `board`,
+  and `full-bleed`.
+- [x] CRM semantic mapping for `record` and `focus` to current contract modes.
+- [ ] Hover overlay, portal footer and permission fallback interaction tests.
+
+**Validación**
+- [x] `pnpm test:shell:changed` evaluated the changed-surface gate.
+- [ ] `@loopdev/ui` SuiteCanvas test runner passes in a dependency-complete environment.
+
+**Evidencia:** The current contract exposes six modes; focused render coverage
+was added for all six. `record` and `focus` are documented as semantic
+requirements, not silently added as unsupported enum values. The local UI
+worktree has no dependencies installed, so the direct Vitest run is deferred
+to CI or a clean install.
+
+**Estado:** en curso
 
 ## Riesgos y bloqueos
 
