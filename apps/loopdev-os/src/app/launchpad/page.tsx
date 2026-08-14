@@ -139,9 +139,9 @@ export default function LaunchpadPage() {
                 title="Marketing Studio"
                 description="High-performance identity governance and generative content engine for modern teams."
                 illustration={<UIKitIllustration />}
-                href="/marketing-studio"
+                href="#"
                 version="1.0.4"
-                isLocked={isLocked('marketing.read', 'marketing')}
+                isLocked
               />
             )}
             {shouldShowSuite('crm') && (
@@ -149,9 +149,9 @@ export default function LaunchpadPage() {
                 title="Sales & CRM"
                 description="Pipeline intelligence and relationship management powered by predictive neural models."
                 illustration={<Icon name="groups" size="md" />}
-                href="/sales-crm"
+                href="#"
                 version="0.8.2"
-                isLocked={isLocked('crm.read', 'crm')}
+                isLocked
               />
             )}
             {isPlatformScope && (
@@ -171,6 +171,7 @@ export default function LaunchpadPage() {
                 illustration={<Icon name="trending_up" size="md" />}
                 href="/quant-ops"
                 version="0.0.1"
+                status="lab"
                 isLocked={isLocked('quant.read', 'quant')}
               />
             )}
@@ -179,9 +180,9 @@ export default function LaunchpadPage() {
                 title="Health OS"
                 description="Industrial-grade clinical care, electronic health records (HCE), and medical agenda for IPS providers."
                 illustration={<Icon name="medical_services" size="md" />}
-                href="/health-os"
+                href="#"
                 version="0.1.0"
-                isLocked={isLocked('health.read', 'health')}
+                isLocked
               />
             )}
           </div>

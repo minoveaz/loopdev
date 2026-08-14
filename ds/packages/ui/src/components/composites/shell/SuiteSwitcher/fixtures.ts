@@ -2,20 +2,6 @@ import { SuiteIdentity } from '@loopdev/contracts';
 
 export const AVAILABLE_SUITES_FIXTURES: SuiteIdentity[] = [
   {
-    suiteId: 'marketing-studio',
-    suiteName: 'Marketing Studio',
-    suiteIcon: 'Megaphone',
-    surfaceVariant: 'canvas',
-    route: { routeId: '/marketing-studio' }
-  },
-  {
-    suiteId: 'salesCRM',
-    suiteName: 'Sales & CRM',
-    suiteIcon: 'Users',
-    surfaceVariant: 'canvas',
-    route: { routeId: '/sales-crm' }
-  },
-  {
     suiteId: 'financialOps',
     suiteName: 'Financial Ops',
     suiteIcon: 'Banknote',
