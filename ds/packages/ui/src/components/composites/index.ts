@@ -20,6 +20,7 @@ export * from './workspace/ModuleSidebar';
 export * from './workspace/InspectorPanel';
 export * from './workspace/SuiteHomeLayout';
 export * from './workspace/SuiteCanvas';
+export * from './workspace/CompositionGrid';
 export * from './workspace/SuiteLaunchpad';
 export * from './workspace/ModuleCard';
 export * from './workspace/KanbanBoard';
