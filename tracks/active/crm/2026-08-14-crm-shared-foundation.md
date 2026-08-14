@@ -54,6 +54,7 @@ the approved shared boundaries and does not promote them to `@loopdev/ui`.
 | Fecha | Decisión | Motivo | Impacto | Aprobado por |
 | --- | --- | --- | --- | --- |
 | 2026-08-14 | Start with shared CRM foundation | Shared activity, notes and lookup are dependencies for every module | Module tracks wait for these contracts and fixtures | User |
+| 2026-08-14 | Keep Platform Shell inventory separate from CRM implementation | SuiteCanvas and shell modes are shared platform contracts, not CRM-owned behavior | CRM consumes the validated shell contract; shell work gets its own track | User |
 
 ## Arquitectura y contratos
 
@@ -120,13 +121,16 @@ and negative cases are recorded in the readiness document and fixtures.
 - **Fecha:** 2026-08-14.
 - **Rama de continuación:** `feature/crm-shared-foundation`.
 - **Commit de partida:** `22483b9` (`origin/develop` baseline).
-- **Estado alcanzado:** Phase 0 readiness completed; shared contract implementation
-  is unblocked.
-- **Decisiones, bloqueos y riesgos:** Shared foundation is the first slice;
-  schema reconciliation is the readiness gate.
-- **Validación ejecutada:** Contract/schema review and fixture coverage recorded;
-  track validator pending after the lifecycle move.
-- **Siguiente acción concreta:** Implement shared schemas and contract tests.
+- **Estado alcanzado:** Shared schemas, migration, write/read APIs and mocked
+  route tests are committed and pushed through `607873b`.
+- **Decisiones, bloqueos y riesgos:** Supabase local is unavailable; RLS
+  integration remains a CI/remote-environment gate. Vitest dependency
+  installation is corrupted locally but outside Git.
+- **Validación ejecutada:** Contract build, smoke checks, track validation and
+  `git diff --check` pass. Vitest execution is pending in a clean environment.
+- **Siguiente acción concreta:** Run RLS and Vitest validation in CI, then start
+  the Contacts consumer after the Platform Shell inventory confirms mode
+  contracts.
 
 ## Cierre
 

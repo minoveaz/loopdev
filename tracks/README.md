@@ -14,6 +14,7 @@
 
 ### Platform
 
+- [Platform Shell and SuiteCanvas mode inventory](./planned/platform/2026-08-14-platform-shell-mode-inventory.md) · fase 0
 - [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
 
 ### Governance
