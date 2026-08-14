@@ -89,9 +89,16 @@ const SHOWCASE_ORGANIZATIONS = [
   },
 ];
 
+const SHOWCASE_SUITE = {
+  ...MARKETING_STUDIO_SCHEMA.suite,
+  suiteId: 'shell-showcase',
+  suiteName: 'Shell Showcase',
+  route: { routeId: '/shell-showcase' },
+};
+
 const SHOWCASE_NAVIGATION: NavigationSchema = {
   version: '1.0',
-  suite: MARKETING_STUDIO_SCHEMA.suite,
+  suite: SHOWCASE_SUITE,
   exitHatch: MARKETING_STUDIO_SCHEMA.exitHatch,
   groups: [
     {
@@ -123,7 +130,7 @@ const SHOWCASE_NAVIGATION: NavigationSchema = {
 };
 
 const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
-  identity: MARKETING_STUDIO_SCHEMA.suite,
+  identity: SHOWCASE_SUITE,
   navigation: SHOWCASE_NAVIGATION,
   accessMap: {},
   modules: CANVAS_MODES.map((mode) => ({
@@ -523,8 +530,7 @@ export default function ShellShowcasePage() {
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const currentSuite =
-    AVAILABLE_SUITES_FIXTURES.find((suite) => suite.suiteId === 'salesCRM') ??
-    AVAILABLE_SUITES_FIXTURES[0];
+    SHOWCASE_SUITE;
   const activeOrganization = SHOWCASE_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
 
   useEffect(() => {
