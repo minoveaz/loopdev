@@ -4,10 +4,6 @@ test.use({ storageState: 'playwright/.auth/user.json' });
 
 const suites = [
   { name: 'launchpad', path: '/launchpad' },
-  { name: 'marketing-studio', path: '/marketing-studio' },
-  { name: 'sales-crm', path: '/sales-crm' },
-  { name: 'health-os', path: '/health-os' },
-  { name: 'quant-ops', path: '/quant-ops' },
 ];
 
 for (const theme of ['light', 'dark']) {

@@ -118,11 +118,11 @@ view for navigation, audits, and cross-domain discovery.
 
 | ID | Name | Owner | Type | Status | Evidence gaps |
 | --- | --- | --- | --- | --- | --- |
-| `health-os` | Health OS | health | product-module | active | contracts, tests |
+| `health-os` | Health OS | health | product-module | deprecated | contracts, tests |
 | `loopdev-mobile` | LoopDev Mobile | mobile | application | active | contracts, tests |
-| `marketing-studio` | Marketing Studio | marketing-studio | product-module | active | tests |
+| `marketing-studio` | Marketing Studio | marketing-studio | product-module | deprecated | tests |
 | `quant-ops` | Quant Ops | quant | product-module | experimental | tests |
-| `sales-crm` | Sales CRM | crm | product-module | active | tests |
+| `sales-crm` | Sales CRM | crm | product-module | deprecated | tests |
 
 ## Source registries
 
