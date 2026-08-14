@@ -303,6 +303,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
+
       - name: CI validation
         run: pnpm validate:ci
 
