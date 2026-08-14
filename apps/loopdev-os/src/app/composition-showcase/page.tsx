@@ -119,6 +119,16 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
   })),
 };
 
+const RECIPE_CANVAS_MODES: Record<RecipeName, 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed'> = {
+  SuiteOverview: 'overview',
+  DataWorkspace: 'data',
+  SplitWorkspace: 'split',
+  RecordWorkspace: 'workspace',
+  BoardWorkspace: 'board',
+  ImmersiveWorkflow: 'full-bleed',
+  CreativeEditor: 'full-bleed',
+};
+
 const SplitContextSidebar = () => (
   <div className="flex h-full min-h-0 flex-col gap-3 p-4">
     <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">context sidebar</span>
@@ -255,7 +265,7 @@ export default function CompositionShowcasePage() {
         moduleContextPanelLabels={{ SplitWorkspace: 'ModuleContextPanel' }}
         moduleContextPanelWidths={{ SplitWorkspace: 'extra-wide' }}
         canvasProps={{
-          mode: recipe === 'SplitWorkspace' ? 'split' : 'overview',
+          mode: RECIPE_CANVAS_MODES[recipe],
           header: recipe === 'SplitWorkspace' ? <SplitRecipeHeader /> : undefined,
           toolbar: recipe === 'SplitWorkspace' ? <SplitRecipeToolbar /> : undefined,
         }}
@@ -325,8 +335,8 @@ export default function CompositionShowcasePage() {
         }
         appShellProps={{ config: { activeOverlay: contextMode ? 'context' : null } }}
       >
-        <main className="min-h-full bg-shell-canvas p-3 text-text-main sm:p-5">
-          <section className="mx-auto max-w-7xl">
+        <main className={`min-h-full bg-shell-canvas text-text-main ${recipe === 'CreativeEditor' ? '' : 'p-3 sm:p-5'}`}>
+          <section className={recipe === 'CreativeEditor' ? 'h-full' : 'mx-auto max-w-7xl'}>
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h1 className="font-mono text-xs uppercase tracking-[0.16em]">{composition.recipe}</h1>
