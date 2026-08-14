@@ -225,6 +225,12 @@ export const CrmActivityPageSchema = z.object({
   hasMore: z.boolean(),
 });
 export type CrmActivityPage = z.infer<typeof CrmActivityPageSchema>;
+export const CrmActivityQuerySchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.optional(),
+  cursor: z.string().trim().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+});
 
 export const CrmNoteVisibilitySchema = z.enum(['private', 'team', 'organization']);
 
@@ -292,6 +298,14 @@ export const CrmEntityLookupPageSchema = z.object({
   hasMore: z.boolean(),
 });
 export type CrmEntityLookupPage = z.infer<typeof CrmEntityLookupPageSchema>;
+export const CrmEntityLookupQuerySchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.optional(),
+  query: z.string().trim().min(1).max(100),
+  cursor: z.string().trim().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(50).default(20),
+});
+export const CrmNoteQuerySchema = CrmActivityQuerySchema;
 
 export const CrmAuditActionSchema = z.enum(['created', 'updated', 'deleted', 'assigned', 'stage_changed', 'exported', 'consent_changed']);
 
