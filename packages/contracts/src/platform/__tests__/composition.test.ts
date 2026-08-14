@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ViewCompositionSchema } from '../composition';
+import { validateCompositionAgainstRegistry } from '../composition-registry';
 
 describe('Configurable composition contract', () => {
   it('accepts a bounded overview composition', () => {
@@ -33,5 +34,18 @@ describe('Configurable composition contract', () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it('rejects slots and components outside the recipe registry', () => {
+    const composition = ViewCompositionSchema.parse({
+      recipe: 'DataWorkspace',
+      grid: { columns: 12, gap: 'md' },
+      regions: [{ id: 'map', slot: 'visual-canvas', component: 'TechnicalCanvas', colSpan: 12 }],
+    });
+
+    expect(validateCompositionAgainstRegistry(composition)).toEqual([
+      { regionId: 'map', message: 'Slot "visual-canvas" is not allowed' },
+      { regionId: 'map', message: 'Component "TechnicalCanvas" is not allowed' },
+    ]);
   });
 });
