@@ -68,6 +68,28 @@ const CreativeEditorAssetSidebar = () => (
   </div>
 );
 
+const CreativeEditorMediaDetails = () => (
+  <div className="flex h-full min-h-0 flex-col gap-4 p-4">
+    <div>
+      <h2 className="text-sm font-semibold text-text-main">Media Details</h2>
+      <p className="mt-1 text-xs leading-5 text-text-muted">Properties for the selected canvas asset.</p>
+    </div>
+    <dl className="border-border-technical divide-border-technical divide-y rounded-md border text-xs">
+      {[
+        ['Asset', 'Product launch.mp4'],
+        ['Duration', '00:12.40'],
+        ['Format', 'MP4 / 1080p'],
+        ['Status', 'Ready to edit'],
+      ].map(([label, value]) => (
+        <div key={label} className="px-3 py-2">
+          <dt className="text-text-muted">{label}</dt>
+          <dd className="mt-1 text-text-main">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+);
+
 export const SHOWCASE_ZONE_RENDERERS: Record<string, () => ReactNode> = {
   'split.context-sidebar': () => <SplitContextSidebar />,
   'creative-editor.media-library': () => <CreativeEditorAssetSidebar />,
@@ -75,6 +97,7 @@ export const SHOWCASE_ZONE_RENDERERS: Record<string, () => ReactNode> = {
 
 export const SHOWCASE_ZONE_PANEL_RENDERERS: Record<string, () => ReactNode> = {
   'split.context-panel': () => <SplitContextPanel />,
+  'creative-editor.media-details': () => <CreativeEditorMediaDetails />,
 };
 
 export const SHOWCASE_ZONE_FOOTER_RENDERERS: Record<string, () => ReactNode> = {
@@ -97,6 +120,16 @@ export const SHOWCASE_ZONE_FOOTER_RENDERERS: Record<string, () => ReactNode> = {
     <Button variant="primary" size="sm" className="w-full justify-start">
       Apply changes
     </Button>
+  ),
+  'creative-editor.media-details-footer': () => (
+    <div className="flex flex-col gap-2">
+      <Button variant="primary" size="sm" className="w-full justify-start">
+        Apply changes
+      </Button>
+      <Button variant="outline" size="sm" className="w-full justify-start">
+        Reset properties
+      </Button>
+    </div>
   ),
 };
 

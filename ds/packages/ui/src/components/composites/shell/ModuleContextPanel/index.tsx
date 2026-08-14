@@ -25,7 +25,7 @@ export const ModuleContextPanel: React.FC<ModuleContextPanelProps> = ({
     className={`border-border-technical bg-shell-canvas z-20 flex h-full min-h-0 shrink-0 self-stretch flex-col overflow-hidden border-l max-lg:max-h-64 max-lg:h-auto max-lg:w-full max-lg:border-b max-lg:border-l-0 ${widthClasses[width]} ${className}`}
   >
     <div className="border-border-technical flex min-h-12 shrink-0 items-center justify-between gap-3 border-b px-4">
-      <h2 className="text-primary text-lpd-lg font-semibold leading-tight">{'{' + label + '}'}</h2>
+      <h2 className="text-primary text-lpd-lg font-semibold leading-tight">{label}</h2>
       {onClose ? (
         <button
           type="button"

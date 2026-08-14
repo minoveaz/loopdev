@@ -23,6 +23,7 @@ import type { NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { useRouter } from 'next/navigation';
+import { Menu } from 'lucide-react';
 
 type ShowcaseNavMode = 'expanded' | 'rail' | 'hover';
 type CanvasMode = 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed';
@@ -146,6 +147,7 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
             moduleContextSidebar: {
               label: 'ModuleContextSidebar',
               collapsible: true,
+              collapsedPresentation: 'trigger',
               collapseIcon: 'menu',
               expandIcon: 'menu',
             },
@@ -590,6 +592,7 @@ export default function ShellShowcasePage() {
   const [navMode, setNavMode] = useState<ShowcaseNavMode>('expanded');
   const [canvasMode, setCanvasMode] = useState<CanvasMode>('overview');
   const [isSplitPanelOpen, setIsSplitPanelOpen] = useState(true);
+  const [isSplitContextOpen, setIsSplitContextOpen] = useState(true);
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const currentSuite =
@@ -657,6 +660,22 @@ export default function ShellShowcasePage() {
         moduleContextPanelLabels={{ split: 'ModuleContextPanel' }}
         moduleContextPanelWidths={{ split: 'extra-wide' }}
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
+        moduleContextSidebarCollapsed={canvasMode === 'split' ? !isSplitContextOpen : undefined}
+        moduleContextSidebarShowCollapsedTrigger={canvasMode !== 'split'}
+        moduleContextSidebarOnCollapsedChange={(collapsed) => setIsSplitContextOpen(!collapsed)}
+        contextualSidebarAction={(isRail) =>
+          canvasMode === 'split' && !isSplitContextOpen ? (
+            <button
+              type="button"
+              aria-label="Open module context"
+              onClick={() => setIsSplitContextOpen(true)}
+              className="text-accent border-accent/30 bg-accent/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+            >
+              <Menu aria-hidden="true" size={18} className="shrink-0" />
+              {!isRail ? <span className="truncate">Open module context</span> : null}
+            </button>
+          ) : null
+        }
         canvasProps={{
           mode: canvasMode,
           header: <ModeModuleHeader mode={canvasMode} />,

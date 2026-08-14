@@ -31,6 +31,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
   platformHeaderProps,
   mobileNavigation,
   onNavigate,
+  contextualSidebarAction,
   onNavModeChange,
   isHeaderInert = false,
   appShellProps,
@@ -67,6 +68,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
           accessMap={accessMap}
           telemetry={telemetry}
           onNavigate={onNavigate}
+          contextualAction={contextualSidebarAction}
           onNavModeChange={onNavModeChange}
         />
       }

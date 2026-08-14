@@ -105,6 +105,45 @@ The canvas may be an immersive, borderless surface with no `SuiteHeader`,
 should belong to the composition canvas unless a separate context zone is
 explicitly required.
 
+## Suite Contextual Action
+
+`Suite Contextual Action` is the standard pattern for opening a module-owned
+context zone without leaving a second persistent rail. When a module context
+sidebar is collapsed, the shell renders one action beneath `Suite Dashboard`
+inside `SuiteSidebar`:
+
+```text
+expanded:  Suite Dashboard
+           Open Media Library
+
+rail:      dashboard icon
+           context action icon
+```
+
+The action belongs to the active module, not to the global platform header. Its
+declarative definition contains a functional label, a registered icon name and
+an optional semantic tone:
+
+```ts
+contextualAction: {
+  label: 'Open Media Library',
+  icon: 'menu',
+  tone: 'accent',
+}
+```
+
+Use semantic token classes for `tone`; never hardcode yellow or another raw
+color in the module. `accent` means available but not active; `primary` is the
+active or hover treatment; `attention` is reserved for action requiring review.
+The action opens the module context sidebar as a drawer or overlay according to
+its declared collapsed presentation.
+
+Use this pattern when the contextual zone is important and frequently opened,
+but a permanent second rail would reduce canvas space. Do not use it for global
+actions, actions already present in a toolbar, or duplicate module navigation.
+The expanded label must be functional and semibold; the rail form must retain
+an accessible name and tooltip even when only the icon is visible.
+
 ## Declarative module usage
 
 A suite or module should declare optional zone usage through its shell composition

@@ -25,6 +25,9 @@ export interface SuiteRuntimeProps {
   moduleContextPanelLabels?: Partial<Record<string, string>>;
   moduleContextPanelWidths?: Partial<Record<string, ModuleContextPanelWidth>>;
   moduleContextPanelOnClose?: () => void;
+  moduleContextSidebarCollapsed?: boolean;
+  moduleContextSidebarShowCollapsedTrigger?: boolean;
+  moduleContextSidebarOnCollapsedChange?: (collapsed: boolean) => void;
   children?: ReactNode;
   leftSlot: ReactNode;
   centerSlot: ReactNode;
@@ -32,6 +35,7 @@ export interface SuiteRuntimeProps {
   profileSlot?: ReactNode;
   platformHeaderProps?: SuiteShellProps['platformHeaderProps'];
   onNavigate: (route: NavRouteRef) => void;
+  contextualSidebarAction?: ReactNode;
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   appShellProps?: SuiteShellProps['appShellProps'];
   canvasProps?: Omit<SuiteCanvasProps, 'children'>;

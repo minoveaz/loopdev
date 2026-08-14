@@ -25,10 +25,12 @@ Keep the platform shell and module-specific suite content separate. A suite shou
 2. Read the platform shell zone contract and the local implementation with its neighboring tests before editing.
 3. Preserve the public contracts in `@loopdev/contracts` unless the task explicitly changes them.
 4. Keep `PlatformHeader`, `SuiteSidebar`, `PlatformContextPanel` and `SuiteCanvas` mandatory; treat `SuiteHeader`, `SuiteToolbar`, `ModuleContextSidebar` and `ModuleContextPanel` as module-declared optional zones.
-5. Make the smallest composition or behavior change that satisfies the request.
-6. Run `pnpm test:shell:changed` during development.
-7. Run `pnpm test:shell` before an important commit.
-8. Run `pnpm validate:ci` before opening or updating a pull request.
+5. When a module context sidebar collapses, use a declared contextual action inside `SuiteSidebar`; never leave a second persistent rail or place module context controls in `PlatformHeader`.
+6. Use the `Suite Contextual Action` pattern for module-owned contextual zones: semantic `accent` when available, `primary` when active or hovered, semibold functional labels, registered icons, and accessible names in rail mode.
+6. Make the smallest composition or behavior change that satisfies the request.
+7. Run `pnpm test:shell:changed` during development.
+8. Run `pnpm test:shell` before an important commit.
+9. Run `pnpm validate:ci` before opening or updating a pull request.
 
 ## Non-negotiable Rules
 

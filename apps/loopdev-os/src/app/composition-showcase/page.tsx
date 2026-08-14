@@ -26,6 +26,7 @@ import {
   UserMenu,
   type GlobalContextPanelMode,
 } from '@loopdev/ui';
+import { Menu } from 'lucide-react';
 import type { ViewComposition } from '@loopdev/contracts';
 import type { ModuleShellUsage, NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
@@ -112,14 +113,23 @@ const RECIPE_SHELL_USAGE: Partial<Record<RecipeName, ModuleShellUsage>> = {
   },
   CreativeEditor: {
     canvasMode: 'full-bleed',
+    contextualAction: { label: 'Open Media Library', icon: 'menu', tone: 'accent' },
     moduleContextSidebar: {
       label: 'Media Library',
       contentKey: 'creative-editor.media-library',
       width: 'standard',
       collapsible: true,
+      collapsedPresentation: 'trigger',
+      defaultCollapsed: true,
       collapseIcon: 'menu',
       expandIcon: 'menu',
       footer: { contentKey: 'creative-editor.media-library-footer' },
+    },
+    moduleContextPanel: {
+      label: 'Media Details',
+      contentKey: 'creative-editor.media-details',
+      width: 'standard',
+      footer: { contentKey: 'creative-editor.media-details-footer' },
     },
   },
 };
@@ -209,6 +219,8 @@ export default function CompositionShowcasePage() {
   const [state, setState] = useState<ShowcaseState>('ready');
   const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<'expanded' | 'rail' | 'hover'>('expanded');
+  const [isModuleContextPanelOpen, setIsModuleContextPanelOpen] = useState(true);
+  const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const composition = FIXTURES[recipe];
@@ -249,7 +261,7 @@ export default function CompositionShowcasePage() {
           .filter(
             (region) =>
               !(recipe === 'SplitWorkspace' && region.slot === 'toolbar') &&
-              !(recipe === 'CreativeEditor' && region.slot === 'asset-sidebar'),
+              !(recipe === 'CreativeEditor' && ['asset-sidebar', 'inspector'].includes(region.slot)),
           )
           .map((region) => [
           region.id,
@@ -296,11 +308,36 @@ export default function CompositionShowcasePage() {
           CreativeEditor: () => resolveShowcaseZoneFooterRenderer(RECIPE_SHELL_USAGE.CreativeEditor?.moduleContextSidebar?.footer?.contentKey)?.(),
         }}
         moduleContextPanelRenderers={{
-          SplitWorkspace: () => resolveShowcaseZonePanelRenderer(RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextPanel?.contentKey)?.(),
+          SplitWorkspace: () =>
+            isModuleContextPanelOpen
+              ? resolveShowcaseZonePanelRenderer(RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextPanel?.contentKey)?.()
+              : null,
+          CreativeEditor: () =>
+            isModuleContextPanelOpen
+              ? resolveShowcaseZonePanelRenderer(RECIPE_SHELL_USAGE.CreativeEditor?.moduleContextPanel?.contentKey)?.()
+              : null,
         }}
         moduleContextPanelFooterRenderers={{
           SplitWorkspace: () => resolveShowcaseZoneFooterRenderer(RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextPanel?.footer?.contentKey)?.(),
+          CreativeEditor: () => resolveShowcaseZoneFooterRenderer(RECIPE_SHELL_USAGE.CreativeEditor?.moduleContextPanel?.footer?.contentKey)?.(),
         }}
+        moduleContextPanelOnClose={() => setIsModuleContextPanelOpen(false)}
+        moduleContextSidebarCollapsed={recipe === 'CreativeEditor' ? !isMediaLibraryOpen : undefined}
+        moduleContextSidebarShowCollapsedTrigger={recipe !== 'CreativeEditor'}
+        moduleContextSidebarOnCollapsedChange={(collapsed) => setIsMediaLibraryOpen(!collapsed)}
+        contextualSidebarAction={(isRail) =>
+          recipe === 'CreativeEditor' && !isMediaLibraryOpen ? (
+            <button
+              type="button"
+              aria-label="Open Media Library"
+              onClick={() => setIsMediaLibraryOpen(true)}
+              className="text-accent border-accent/30 bg-accent/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+            >
+              <Menu aria-hidden="true" size={18} className="shrink-0" />
+              {!isRail ? <span className="truncate">{RECIPE_SHELL_USAGE.CreativeEditor?.contextualAction?.label}</span> : null}
+            </button>
+          ) : null
+        }
         canvasProps={{
           mode: RECIPE_CANVAS_MODES[recipe],
           header: recipe === 'SplitWorkspace' ? <SplitRecipeHeader /> : undefined,
@@ -374,28 +411,30 @@ export default function CompositionShowcasePage() {
       >
         <main className={`min-h-full bg-shell-canvas text-text-main ${recipe === 'CreativeEditor' ? '' : 'p-3 sm:p-5'}`}>
           <section className={recipe === 'CreativeEditor' ? 'h-full' : 'mx-auto max-w-7xl'}>
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h1 className="font-mono text-xs uppercase tracking-[0.16em]">{composition.recipe}</h1>
-                <span className="text-xs text-text-muted">
-                  {composition.grid.columns} columns / {composition.grid.gap} gap
-                </span>
+            {recipe !== 'CreativeEditor' ? (
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h1 className="font-mono text-xs uppercase tracking-[0.16em]">{composition.recipe}</h1>
+                  <span className="text-xs text-text-muted">
+                    {composition.grid.columns} columns / {composition.grid.gap} gap
+                  </span>
+                </div>
+                <label className="flex items-center gap-2 text-xs text-text-muted">
+                  <span>Review state</span>
+                  <select
+                    value={state}
+                    onChange={(event) => setState(event.target.value as ShowcaseState)}
+                    className="rounded-md border border-border-technical bg-shell-canvas px-2 py-1.5 text-text-main"
+                  >
+                    {STATES.map((nextState) => (
+                      <option key={nextState} value={nextState}>
+                        {nextState}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
-              <label className="flex items-center gap-2 text-xs text-text-muted">
-                <span>Review state</span>
-                <select
-                  value={state}
-                  onChange={(event) => setState(event.target.value as ShowcaseState)}
-                  className="rounded-md border border-border-technical bg-shell-canvas px-2 py-1.5 text-text-main"
-                >
-                  {STATES.map((nextState) => (
-                    <option key={nextState} value={nextState}>
-                      {nextState}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+            ) : null}
         <div className="overflow-x-auto">
           <div className="min-w-[20rem] sm:min-w-0">
             <CompositionGrid composition={composition} regions={regions} />

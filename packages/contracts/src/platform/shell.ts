@@ -89,6 +89,8 @@ export type ShellExceptions = z.infer<typeof ShellExceptionsSchema>;
 
 export type ModuleShellZoneWidth = 'narrow' | 'standard' | 'wide' | 'extra-wide';
 export type ModuleShellZoneIcon = 'menu' | 'panel-left-close' | 'panel-left-open';
+export type ModuleShellCollapsedPresentation = 'rail' | 'trigger' | 'drawer';
+export type ModuleShellContextActionTone = 'neutral' | 'accent' | 'attention';
 
 export interface ModuleShellZoneUsage {
   label?: string;
@@ -99,12 +101,18 @@ export interface ModuleShellZoneUsage {
   width?: ModuleShellZoneWidth;
   collapsible?: boolean;
   defaultCollapsed?: boolean;
+  collapsedPresentation?: ModuleShellCollapsedPresentation;
   collapseIcon?: ModuleShellZoneIcon;
   expandIcon?: ModuleShellZoneIcon;
 }
 
 export interface ModuleShellUsage {
   canvasMode: 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed';
+  contextualAction?: {
+    label: string;
+    icon: ModuleShellZoneIcon;
+    tone?: ModuleShellContextActionTone;
+  };
   suiteHeader?: ModuleShellZoneUsage;
   suiteToolbar?: ModuleShellZoneUsage;
   moduleContextSidebar?: ModuleShellZoneUsage;
@@ -156,6 +164,13 @@ export const ModuleConfigSchema = z.object({
   shell: z
     .object({
       canvasMode: z.enum(['overview', 'data', 'workspace', 'split', 'board', 'full-bleed']),
+      contextualAction: z
+        .object({
+          label: z.string().min(1),
+          icon: z.enum(['menu', 'panel-left-close', 'panel-left-open']),
+          tone: z.enum(['neutral', 'accent', 'attention']).optional(),
+        })
+        .optional(),
       suiteHeader: z
         .object({
           label: z.string().min(1).optional(),
@@ -164,6 +179,7 @@ export const ModuleConfigSchema = z.object({
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),
           defaultCollapsed: z.boolean().optional(),
+          collapsedPresentation: z.enum(['rail', 'trigger', 'drawer']).optional(),
           collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
           expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
         })
@@ -176,6 +192,7 @@ export const ModuleConfigSchema = z.object({
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),
           defaultCollapsed: z.boolean().optional(),
+          collapsedPresentation: z.enum(['rail', 'trigger', 'drawer']).optional(),
           collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
           expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
         })
@@ -188,6 +205,7 @@ export const ModuleConfigSchema = z.object({
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),
           defaultCollapsed: z.boolean().optional(),
+          collapsedPresentation: z.enum(['rail', 'trigger', 'drawer']).optional(),
           collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
           expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
         })
@@ -200,6 +218,7 @@ export const ModuleConfigSchema = z.object({
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),
           defaultCollapsed: z.boolean().optional(),
+          collapsedPresentation: z.enum(['rail', 'trigger', 'drawer']).optional(),
           collapseIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
           expandIcon: z.enum(['menu', 'panel-left-close', 'panel-left-open']).optional(),
         })

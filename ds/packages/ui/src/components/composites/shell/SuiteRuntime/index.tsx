@@ -32,6 +32,9 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   moduleContextPanelLabels,
   moduleContextPanelWidths,
   moduleContextPanelOnClose,
+  moduleContextSidebarCollapsed,
+  moduleContextSidebarShowCollapsedTrigger,
+  moduleContextSidebarOnCollapsedChange,
   children,
   leftSlot,
   centerSlot,
@@ -39,6 +42,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   profileSlot,
   platformHeaderProps,
   onNavigate,
+  contextualSidebarAction,
   onNavModeChange,
   appShellProps,
   canvasProps,
@@ -54,6 +58,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
     : undefined;
   const moduleContextCollapsible = activeModule?.shell?.moduleContextSidebar?.collapsible ?? false;
   const moduleContextDefaultCollapsed = activeModule?.shell?.moduleContextSidebar?.defaultCollapsed ?? false;
+  const moduleContextCollapsedPresentation = activeModule?.shell?.moduleContextSidebar?.collapsedPresentation ?? 'rail';
   const moduleContextCollapseIcon = resolveShellZoneIcon(activeModule?.shell?.moduleContextSidebar?.collapseIcon);
   const moduleContextExpandIcon = resolveShellZoneIcon(activeModule?.shell?.moduleContextSidebar?.expandIcon);
   const moduleContextPanelLabel = activeModule
@@ -90,6 +95,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
       profileSlot={profileSlot}
       platformHeaderProps={platformHeaderProps}
       onNavigate={onNavigate}
+      contextualSidebarAction={contextualSidebarAction}
       onNavModeChange={onNavModeChange}
       appShellProps={appShellProps}
     >
@@ -102,6 +108,10 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
               label={moduleContextLabel}
               width={moduleContextWidth}
               collapsible={moduleContextCollapsible}
+              collapsed={moduleContextSidebarCollapsed}
+              showCollapsedTrigger={moduleContextSidebarShowCollapsedTrigger}
+              collapsedPresentation={moduleContextCollapsedPresentation}
+              onCollapsedChange={moduleContextSidebarOnCollapsedChange}
               defaultCollapsed={moduleContextDefaultCollapsed}
               collapseIcon={moduleContextCollapseIcon}
               expandIcon={moduleContextExpandIcon}
