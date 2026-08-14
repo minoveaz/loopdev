@@ -4,7 +4,7 @@
   "status": "ready",
   "schema": "docs/registries/REGISTRY_SCHEMA.md",
   "entry_schema_version": "1.0",
-  "last_updated": "2026-08-13",
+  "last_updated": "2026-08-14",
   "entries": [
     {
       "id": "sales-crm",
@@ -13,7 +13,7 @@
       "owner": "crm",
       "type": "product-module",
       "category": "commercial-operations",
-      "status": "active",
+      "status": "deprecated",
       "phase": 6,
       "dependencies": [
         "shared-domain-contracts",
@@ -22,10 +22,11 @@
       "contracts": [
         "packages/contracts/src/crm/crm.ts"
       ],
-      "implementation": "apps/loopdev-os/src/app/sales-crm",
+      "implementation": "apps/loopdev-os/archived-suites/sales-crm",
       "tests": [],
       "documentation": [
-        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
+        "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md",
+        "docs/06-product/SUITE_RESET_HISTORY.md"
       ],
       "certification": {},
       "evidence_gaps": [
@@ -33,7 +34,7 @@
       ],
       "source_registry": null,
       "source_evidence": [
-        "apps/loopdev-os/src/app/sales-crm",
+        "apps/loopdev-os/archived-suites/sales-crm",
         "tracks/active/crm/2026-08-08-estar-protegidos-crm-platform.md"
       ]
     },
@@ -44,7 +45,7 @@
       "owner": "marketing-studio",
       "type": "product-module",
       "category": "marketing",
-      "status": "active",
+      "status": "deprecated",
       "phase": null,
       "dependencies": [
         "marketing-domain-contracts",
@@ -53,16 +54,18 @@
       "contracts": [
         "packages/contracts/src/marketing/marketing.ts"
       ],
-      "implementation": "apps/loopdev-os/src/app/marketing-studio",
+      "implementation": "apps/loopdev-os/archived-suites/marketing-studio",
       "tests": [],
-      "documentation": [],
+      "documentation": [
+        "docs/06-product/SUITE_RESET_HISTORY.md"
+      ],
       "certification": {},
       "evidence_gaps": [
         "tests"
       ],
       "source_registry": null,
       "source_evidence": [
-        "apps/loopdev-os/src/app/marketing-studio"
+        "apps/loopdev-os/archived-suites/marketing-studio"
       ]
     },
     {
@@ -72,16 +75,17 @@
       "owner": "health",
       "type": "product-module",
       "category": "health-operations",
-      "status": "active",
+      "status": "deprecated",
       "phase": null,
       "dependencies": [
         "multi-tenancy"
       ],
       "contracts": [],
-      "implementation": "apps/loopdev-os/src/app/health-os",
+      "implementation": "apps/loopdev-os/archived-suites/health-os",
       "tests": [],
       "documentation": [
-        "docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md"
+        "docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md",
+        "docs/06-product/SUITE_RESET_HISTORY.md"
       ],
       "certification": {},
       "evidence_gaps": [
@@ -90,7 +94,7 @@
       ],
       "source_registry": null,
       "source_evidence": [
-        "apps/loopdev-os/src/app/health-os",
+        "apps/loopdev-os/archived-suites/health-os",
         "docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md"
       ]
     },

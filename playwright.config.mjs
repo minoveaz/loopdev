@@ -41,7 +41,6 @@ export default defineConfig({
         '**/shell-showcase.contract.spec.mjs',
         '**/authenticated.application.spec.mjs',
         '**/phase5.certification.spec.mjs',
-        '**/marketing-studio.dam.spec.mjs',
       ],
       testIgnore: ['**/responsive.visual.spec.mjs'],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
