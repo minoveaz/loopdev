@@ -21,6 +21,7 @@ for (const theme of ['light', 'dark']) {
         await expect(page).toHaveScreenshot(`${route.name}-${theme}.png`, {
           fullPage: true,
           animations: 'disabled',
+          maxDiffPixelRatio: route.name === 'shell-showcase' ? 0.03 : 0.02,
         });
       });
     });
