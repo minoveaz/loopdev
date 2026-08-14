@@ -147,6 +147,27 @@ describe('SuiteSidebar', () => {
         'page',
       );
     });
+
+    it('recupera el indicador al dashboard si el módulo activo queda forbidden', () => {
+      render(
+        <SuiteSidebar
+          schema={MARKETING_STUDIO_SCHEMA}
+          navMode="expanded"
+          activeModuleId="brand-hub"
+          accessMap={{ 'brand-hub': 'forbidden' }}
+          onNavigate={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('menuitem', { name: 'Suite Dashboard' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+      expect(screen.getByRole('menuitem', { name: 'Brand Hub' })).not.toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    });
   });
 
   describe('accesibilidad', () => {
