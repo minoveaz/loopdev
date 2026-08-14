@@ -132,6 +132,7 @@ assigns the remaining duplication, accessibility, theming and exception work.
 - [x] Neutral showcase fixtures for all six initial recipes.
 - [x] `CreativeEditor` reference recipe and design-team fixture.
 - [x] Design handoff for CreativeEditor from zero-to-implementation.
+- [x] Agnostic-first implementation and LoopDev migration guidance.
 
 **Estado:** pendiente
 

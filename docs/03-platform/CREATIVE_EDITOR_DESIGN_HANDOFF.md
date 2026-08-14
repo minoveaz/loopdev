@@ -11,6 +11,77 @@ This document is the starting point for the design team implementing a
 Canva-like social video editor inside LoopDev. It describes the platform
 composition contract, not the editor's domain feature set.
 
+## 0. Two-step implementation strategy
+
+The team may first implement the editor agnostically inside its own product or
+prototype environment. This is intentional: the editor should be validated
+with real content, interaction and workflow constraints before being migrated
+into LoopDev.
+
+### Step A: agnostic implementation
+
+The team has freedom to:
+
+- use its own framework adapters, routing and state management;
+- adapt the shell geometry so the editor is usable in its product;
+- choose temporary component names and local mock data;
+- implement asset browsing, stage rendering and timeline behavior independently;
+- use a local visual theme while testing the product.
+
+During this step, keep the following boundaries stable:
+
+- preserve the conceptual regions: header, assets, stage, transport, timeline
+  and optional inspector;
+- keep the global shell, editor context and editor content conceptually
+  separate;
+- avoid coupling domain components to absolute viewport coordinates;
+- keep state transitions and keyboard behavior explicit;
+- record any temporary shell adaptation and its reason.
+
+### Step B: LoopDev migration
+
+Before migration, map the agnostic implementation to:
+
+| Agnostic concern | LoopDev target |
+| --- | --- |
+| Global product shell | `PlatformHeader` + `SuiteShell` |
+| Suite navigation | `SuiteSidebar` |
+| Editor project context | `ModuleHeader` |
+| Asset navigation | `ModuleContextSidebar` |
+| Editor layout | `SuiteCanvas` + `CreativeEditor` |
+| Region placement | `ViewComposition` + `CompositionGrid` |
+| Panels/surfaces | `TechnicalSurface` and shared surface taxonomy |
+| Project permissions | `ShellAccessState` and server-side authorization |
+| Loading/error/empty states | Shared state recipes |
+| Theme/accent | LoopDev tokens and approved suite/tenant accents |
+
+The migration should be an adapter/composition exercise, not a rewrite of the
+editor's domain logic.
+
+### Migration rules
+
+- Keep domain components independent from `PlatformHeader` and `SuiteSidebar`.
+- Expose editor-local actions through `ModuleHeader.rightSlot`.
+- Treat the asset panel as contextual; do not ship a second suite sidebar.
+- Replace local pixel positioning with registered slots and bounded spans.
+- Replace local colors, borders and backgrounds with LoopDev tokens.
+- Map local states to the shared state taxonomy.
+- Map local permissions to `enabled`, `disabled`, `hidden`, `forbidden` and
+  `read-only`.
+- Preserve keyboard alternatives, focus restoration and responsive behavior.
+- Keep a migration map for every temporary component and dependency.
+
+### Migration checklist
+
+- [ ] Region map completed against `CreativeEditor`.
+- [ ] Local shell responsibilities mapped or removed.
+- [ ] Local tokens mapped to LoopDev tokens.
+- [ ] Local surfaces mapped to shared recipes.
+- [ ] Routes and permissions mapped to LoopDev contracts.
+- [ ] State and accessibility behavior retained.
+- [ ] Temporary adapters isolated and scheduled for removal.
+- [ ] Fixture still validates against the LoopDev composition registry.
+
 ## 1. Start here
 
 Read these authorities in order:
