@@ -1,13 +1,13 @@
 ---
 id: saas-visual-standardization
 title: SaaS visual system and experience standardization
-status: planned
+status: active
 created: 2026-08-14
 updated: 2026-08-14
 owner: platform
 lead: null
 branch: null
-branches: []
+branches: [docs/platform-shell-mode-inventory]
 phase: 0
 pull_requests: []
 issues: []
@@ -113,7 +113,7 @@ baseline with ownership and measurable gaps.
 
 **Evidencia:** Pendiente.
 
-**Estado:** pendiente
+**Estado:** en curso
 
 ### Fase 1: Shared visual contracts
 
@@ -169,7 +169,7 @@ gates for all new SaaS views.
 - **Fecha:** 2026-08-14.
 - **Rama de continuación:** `docs/platform-shell-mode-inventory`.
 - **Commit de partida:** `e389092`.
-- **Estado alcanzado:** Track creado en `planned`; alcance transversal definido.
+- **Estado alcanzado:** Track activado en `active`; alcance transversal definido.
 - **Decisiones, bloqueos y riesgos:** Depende del cierre técnico del inventario
   Platform Shell; no se implementan vistas de suites en este track.
 - **Validación ejecutada:** Pendiente de validación de tracks y dashboard.
