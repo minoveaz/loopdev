@@ -5,6 +5,7 @@ import {
   AVAILABLE_SUITES_FIXTURES,
   BOARD_WORKSPACE_COMPOSITION,
   BrandLogo,
+  Button,
   CommandBarTrigger,
   CompositionGrid,
   CREATIVE_EDITOR_COMPOSITION,
@@ -12,6 +13,8 @@ import {
   GlobalContextPanel,
   IMMERSIVE_WORKFLOW_COMPOSITION,
   MARKETING_STUDIO_SCHEMA,
+  ModuleHeader,
+  ModuleToolbar,
   NOTIFICATION_CENTER_FIXTURES,
   OrganizationSwitcher,
   RECORD_WORKSPACE_COMPOSITION,
@@ -134,6 +137,36 @@ const SplitContextPanel = () => (
   </div>
 );
 
+const SplitRecipeHeader = () => (
+  <ModuleHeader
+    segments={[
+      { id: 'suite', label: 'Composition Showcase' },
+      { id: 'recipe', label: 'SplitWorkspace', isActive: true },
+    ]}
+    statusLabel="Reference"
+    statusSeverity="success"
+    rightSlot={<Button variant="outline" size="sm">Recipe action</Button>}
+  />
+);
+
+const SplitRecipeToolbar = () => (
+  <ModuleToolbar
+    left={
+      <div className="border-border-technical bg-background text-text-muted flex items-center gap-2 rounded-md border px-3 py-1.5">
+        <span aria-hidden="true">⌕</span>
+        <span>Search records</span>
+      </div>
+    }
+    center={
+      <div className="text-text-muted flex items-center gap-2 text-xs">
+        <Button variant="ghost" size="sm">All fields</Button>
+        <Button variant="ghost" size="sm">Sorted by relevance</Button>
+      </div>
+    }
+    right={<Button variant="primary" size="sm">Create record</Button>}
+  />
+);
+
 export default function CompositionShowcasePage() {
   const [recipe, setRecipe] = useState<RecipeName>(() => {
     if (typeof window === 'undefined') return 'SuiteOverview';
@@ -179,7 +212,7 @@ export default function CompositionShowcasePage() {
   const regions = useMemo(
     () =>
       Object.fromEntries(
-        composition.regions.map((region) => [
+        composition.regions.filter((region) => !(recipe === 'SplitWorkspace' && region.slot === 'toolbar')).map((region) => [
           region.id,
           <TechnicalSurface
             key={region.id}
@@ -207,7 +240,7 @@ export default function CompositionShowcasePage() {
           </TechnicalSurface>,
         ]),
       ),
-    [composition, state],
+    [composition, recipe, state],
   );
 
   return (
@@ -221,6 +254,11 @@ export default function CompositionShowcasePage() {
         moduleContextPanelRenderers={{ SplitWorkspace: () => <SplitContextPanel /> }}
         moduleContextPanelLabels={{ SplitWorkspace: 'ModuleContextPanel' }}
         moduleContextPanelWidths={{ SplitWorkspace: 'extra-wide' }}
+        canvasProps={{
+          mode: recipe === 'SplitWorkspace' ? 'split' : 'overview',
+          header: recipe === 'SplitWorkspace' ? <SplitRecipeHeader /> : undefined,
+          toolbar: recipe === 'SplitWorkspace' ? <SplitRecipeToolbar /> : undefined,
+        }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
           const selectedRecipe = new URL(route.routeId, window.location.origin).searchParams.get('recipe');
