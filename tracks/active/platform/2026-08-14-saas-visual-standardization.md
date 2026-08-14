@@ -103,7 +103,7 @@ baseline with ownership and measurable gaps.
 - [x] Visual recipe catalog.
 - [x] Cross-SaaS standardization matrix covering the 15 concern areas.
 - [x] View specification template.
-- [ ] Gap, duplication and exception register.
+- [x] Gap, duplication and exception register.
 
 **Validación**
 
@@ -117,6 +117,8 @@ defines the proposed surface taxonomy and initial mode-to-recipe mapping.
 [SaaS standardization matrix](../../../docs/03-platform/SAAS_STANDARDIZATION_MATRIX.md)
 and [view specification template](../../../docs/03-platform/SAAS_VIEW_SPECIFICATION_TEMPLATE.md)
 make the fifteen concern areas and per-view review contract actionable.
+[SaaS visual gap register](../../../docs/03-platform/SAAS_VISUAL_GAP_REGISTER.md)
+assigns the remaining duplication, accessibility, theming and exception work.
 
 **Estado:** en curso
 
