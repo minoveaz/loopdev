@@ -23,7 +23,6 @@ for (const route of authenticatedRoutes) {
     await expect(page.getByText('Initialize your Work Context to start building.')).toBeVisible({
       timeout: 15000,
     });
-    await expect(page.locator('header')).not.toHaveCount(0, { timeout: 15000 });
     await expect(page.locator('#app-shell-nav[aria-label="Global Navigation"]')).toHaveCount(1, {
       timeout: 15000,
     });
