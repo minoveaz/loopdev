@@ -22,11 +22,15 @@ export const IconButton: React.FC<IconButtonProps> = (props) => {
   const { finalClassName, icon, children, size, isLoading, tooltip, ariaLabel, disabled, ...rest } = useIconButton(props);
 
   return (
-    <button 
+    <button
       type="button"
-      className={finalClassName} 
+      className={finalClassName}
+      data-control="icon-button"
+      data-control-variant={props.variant ?? 'neutral'}
+      data-control-size={size}
       title={tooltip}
       aria-label={ariaLabel || tooltip || (typeof icon === 'string' ? icon.replace(/_/g, ' ') : 'Icon button')}
+      aria-busy={isLoading || undefined}
       disabled={disabled}
       {...rest}
     >
@@ -35,7 +39,6 @@ export const IconButton: React.FC<IconButtonProps> = (props) => {
           icon={icon ?? 'help'}
           size={size}
           isLoading={isLoading}
-          ariaLabel={ariaLabel || tooltip}
         />
       )}
     </button>

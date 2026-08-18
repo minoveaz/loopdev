@@ -16,6 +16,7 @@ export * from './shell/SidebarIdentity';
 export * from './workspace/ModuleWorkspace';
 export * from './workspace/ModuleHeader';
 export * from './workspace/ModuleToolbar';
+export * from './workspace/ModuleSearch';
 export * from './workspace/ModuleSidebar';
 export * from './workspace/InspectorPanel';
 export * from './workspace/SuiteHomeLayout';
@@ -31,6 +32,7 @@ export * from './content/SectionHeader';
 export * from './content/PageHeader';
 export * from './content/ContextBar';
 export * from './content/ResponsiveTable';
+export * from './content/DataTable';
 export * from './navigation/UserMenu';
 export * from './navigation/SidebarFlyout';
 export * from './navigation/MobileSuiteNav';
@@ -39,7 +41,7 @@ export * from './navigation/OrganizationSwitcher';
 // utilities
 
 export * from './utilities/NotificationCenter';
-export * from './utilities/GlobalContextPanel';
+export * from './utilities/PlatformContextPanel';
 
 export * from './utilities/QuickActionMenu';
 
@@ -50,6 +52,7 @@ export * from './utilities/ActivityFeed';
 export * from './utilities/SystemNoticeRail';
 
 export * from './utilities/TechnicalDialog';
+export * from './utilities/CommandDialog';
 
 export * from './inspector/UnifiedInspector';
 

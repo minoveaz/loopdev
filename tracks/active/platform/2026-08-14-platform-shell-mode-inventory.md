@@ -3,7 +3,7 @@ id: platform-shell-mode-inventory
 title: Platform Shell and SuiteCanvas mode inventory
 status: active
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-18
 owner: platform
 lead: null
 branch: docs/platform-shell-mode-inventory
@@ -40,7 +40,7 @@ platform must verify them centrally before module-specific implementation.
 ### Incluido
 
 - Inventory of AppShell, SuiteShell, PlatformHeader, SuiteSidebar,
-  GlobalContextPanel, SuiteRuntime and SuiteCanvas.
+  PlatformContextPanel, SuiteRuntime and SuiteCanvas.
 - Mode/state matrix for desktop, keyboard, portal dropdown, tooltip, focus
   restoration and permission-filtered navigation.
 - Contract review for NavigationSchema, AccessMap, active route and Canvas
@@ -127,7 +127,8 @@ to CI or a clean install. Inaccessible active modules now fall back to the
 suite dashboard indicator. Hover, portal persistence and focus restoration
 have focused test evidence; execution remains the only dependency-blocked step.
 
-**Estado:** en curso (all implementation gates complete; Vitest blocked)
+**Estado:** cerrada y certificada el 2026-08-18 (focused tests and browser
+geometry matrix pass; global typecheck retains unrelated pre-existing errors)
 
 ## Riesgos y bloqueos
 
@@ -141,27 +142,31 @@ have focused test evidence; execution remains the only dependency-blocked step.
 - [x] Every shell mode has an owner, contract and test evidence.
 - [x] Every SuiteCanvas mode has a compatible consumer matrix.
 - [x] Gaps and implementation work are assigned.
-- [ ] Validation passes with repository evidence (Vitest dependency gate).
-- [ ] Cierre aprobado explícitamente por el usuario.
+- [x] Validation passes with repository evidence (focused Vitest and Playwright
+  gates).
+- [x] Cierre aprobado explícitamente por el usuario el 2026-08-18.
 
 ## Evidencia de validación
 
 | Fecha | Validación | Resultado | Referencia |
 | --- | --- | --- | --- |
+| 2026-08-18 | Focused shell component tests | 92/92 passed | Shell composites and `PlatformContextPanel` |
+| 2026-08-18 | `scripts/check-shell.mjs` functional gate | 39/39 passed | Functional shell regression suite |
+| 2026-08-18 | Playwright responsive shell/composition matrix | 19/19 passed | desktop, mobile and mobile-compact |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-14.
 - **Rama de continuación:** `docs/platform-shell-mode-inventory`.
 - **Commit de partida:** `f0b6390` (branch baseline with CRM separation).
-- **Estado alcanzado:** Phase 1 implementation gates completed; Vitest remains
-  the only local validation blocker.
+- **Estado alcanzado:** Phase 1 shell mode compatibility and responsive geometry
+  certified; remaining global TypeScript errors are pre-existing and outside
+  this phase.
 - **Decisiones, bloqueos y riesgos:** `record`/`focus` map to current Canvas
   modes; access fallback, hover and portal contracts have focused evidence.
 - **Validación ejecutada:** Track validator and generated dashboard pass.
-- **Siguiente acción concreta:** Run the existing focused tests in a
-  dependency-complete environment, then request explicit closure approval.
+- **Siguiente acción concreta:** None for this phase.
 
 ## Cierre
 
-Pendiente de aprobación explícita.
+Fase cerrada y certificada el 2026-08-18.

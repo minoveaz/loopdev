@@ -5,7 +5,7 @@ import React from 'react';
 
 describe('CommandBarTrigger Atom', () => {
   it('debe mostrar el placeholder y el atajo en modo "full"', () => {
-    render(<CommandBarTrigger onOpen={() => {}} />);
+    render(<CommandBarTrigger placeholder="Search or type a command..." onOpen={() => {}} />);
     expect(screen.getByText('Search or type a command...')).toBeInTheDocument();
     expect(screen.getByText('⌘K')).toBeInTheDocument();
   });
@@ -22,6 +22,14 @@ describe('CommandBarTrigger Atom', () => {
     
     fireEvent.click(screen.getByRole('button'));
     expect(mockOpen).toHaveBeenCalledTimes(1);
+  });
+
+  it('debe conservar el contrato nativo del boton', () => {
+    render(<CommandBarTrigger onOpen={() => {}} disabled aria-describedby="hint" />);
+
+    expect(screen.getByRole('button')).toBeDisabled();
+    expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
+    expect(screen.getByRole('button')).toHaveAttribute('aria-describedby', 'hint');
   });
 
   it('debe tener siempre el icono de búsqueda', () => {

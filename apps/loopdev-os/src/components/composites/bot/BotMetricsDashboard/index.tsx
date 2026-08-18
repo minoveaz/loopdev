@@ -13,7 +13,7 @@
 'use client';
 
 import React from 'react';
-import { Button, Heading } from '@loopdev/ui';
+import { Button, Heading, TechnicalSurface } from '@loopdev/ui';
 
 function PositionPreview({
   side,
@@ -142,7 +142,12 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* RSI Gauge (full height) */}
         <div className="lg:col-span-1">
-          <div className="border border-border-technical rounded-lg backdrop-blur-sm bg-surface-dark bg-opacity-50 p-4 h-full flex items-center justify-center">
+          <TechnicalSurface
+            variant="surface"
+            radius="md"
+            border="technical"
+            className="flex h-full items-center justify-center p-4"
+          >
             <MetricGauge
               value={metrics.rsi.value}
               label="RSI"
@@ -152,7 +157,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
               status={metrics.rsi.status}
               size="lg"
             />
-          </div>
+          </TechnicalSurface>
         </div>
 
         {/* Right column: Cards */}
@@ -206,7 +211,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       </div>
 
       {/* Signal Analysis Section */}
-      <div className="border border-border-technical rounded-lg backdrop-blur-sm bg-surface-dark bg-opacity-50 p-4 space-y-3">
+      <TechnicalSurface variant="surface" radius="md" border="technical" className="space-y-3 p-4">
         <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Entry Signals</Heading>
 
         <div className="grid grid-cols-2 gap-4">
@@ -223,11 +228,11 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
             gradient="from-innovation-purple to-innovation-purple"
           />
         </div>
-      </div>
+      </TechnicalSurface>
 
       {/* Position Preview Section */}
       {showExtended && (
-        <div className="border border-border-technical rounded-lg backdrop-blur-sm bg-surface-dark bg-opacity-50 p-4 space-y-3">
+        <TechnicalSurface variant="surface" radius="md" border="technical" className="space-y-3 p-4">
           <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Position Preview</Heading>
 
           <div className="grid grid-cols-2 gap-4">
@@ -244,7 +249,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
               stopLoss={metrics.preview.short_sl}
             />
           </div>
-        </div>
+        </TechnicalSurface>
       )}
 
       {/* Refresh button */}

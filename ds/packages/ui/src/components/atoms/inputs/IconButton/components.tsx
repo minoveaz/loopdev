@@ -5,7 +5,6 @@ interface IconButtonContentProps {
   icon: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   isLoading?: boolean;
-  ariaLabel?: string;
   color?: string;
 }
 
@@ -13,7 +12,6 @@ export const IconButtonContent: React.FC<IconButtonContentProps> = ({
   icon, 
   size, 
   isLoading, 
-  ariaLabel,
   color = 'currentColor'
 }) => (
   <>

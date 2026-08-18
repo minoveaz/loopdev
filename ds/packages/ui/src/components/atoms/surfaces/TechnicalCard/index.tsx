@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { cn } from '../../../../helpers/cn';
+import { TechnicalSurface } from '../TechnicalSurface';
 import { TechnicalCardProps } from './types';
 
 /**
@@ -15,21 +15,21 @@ export const TechnicalCard: React.FC<TechnicalCardProps> = ({
   className,
   ...props
 }) => {
-  const baseClasses = "group rounded-2xl border border-border-technical transition-all duration-300";
-  
-  const variantClasses = {
-    flat: "bg-surface-elevated overflow-hidden",
-    interactive: "bg-surface-elevated cursor-pointer hover:border-primary/40 hover:shadow-[0_0_20px_rgba(19,91,236,0.15)] hover:scale-[1.01] active:scale-[0.99]",
-    warning: "bg-surface-elevated border-energy-yellow/30 shadow-[0_0_15px_rgba(250,204,21,0.05)] overflow-hidden",
-    disabled: "bg-surface-elevated opacity-50 grayscale cursor-not-allowed pointer-events-none overflow-hidden"
-  };
+  const isInteractive = variant === 'interactive';
+  const isDisabled = variant === 'disabled';
 
   return (
-    <div 
-      className={cn(baseClasses, variantClasses[variant], className)}
+    <TechnicalSurface
       {...props}
+      className={`${isDisabled ? 'opacity-60' : ''} ${className ?? ''}`.trim()}
+      depth={isInteractive ? 'raised' : 'flat'}
+      interaction={isInteractive ? 'interactive' : 'static'}
+      radius="xl"
+      aria-disabled={isDisabled ? true : props['aria-disabled']}
+      data-card-variant={variant}
+      data-card-disabled={isDisabled || undefined}
     >
       {children}
-    </div>
+    </TechnicalSurface>
   );
 };

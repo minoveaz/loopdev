@@ -30,8 +30,11 @@ export const Button: React.FC<ButtonProps> = (props) => {
   const { finalClassName, children, isLoading, startIcon, endIcon, ...rest } = useButton(props);
 
   return (
-    <button 
-      className={finalClassName} 
+    <button
+      className={finalClassName}
+      data-control="button"
+      data-control-variant={props.variant ?? 'primary'}
+      data-control-size={props.size ?? 'md'}
       aria-busy={isLoading}
       {...rest}
     >

@@ -1,10 +1,9 @@
 'use client';
 
-'use client';
-
 import { useMemo } from 'react';
+import type { IconButtonProps } from './index';
 
-export const useIconButton = (props: any) => {
+export const useIconButton = (props: IconButtonProps) => {
   const {
     icon,
     children,
@@ -37,6 +36,8 @@ export const useIconButton = (props: any) => {
         return 'text-status-success hover:text-status-teal hover:bg-green-50 dark:hover:bg-green-900/20';
       case 'ghost':
         return 'text-text-muted hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/15';
+      case 'energy':
+        return 'text-energy-yellow hover:text-energy-yellow hover:bg-energy-yellow/10 dark:hover:bg-energy-yellow/15';
       case 'neutral': // Default
       default:
         return 'text-text-muted hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/15';

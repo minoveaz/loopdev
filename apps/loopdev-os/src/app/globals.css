@@ -11,6 +11,40 @@ body {
   font-size: var(--lpd-font-size-base);
 }
 
+.responsive-table-row:hover {
+  background-color: color-mix(in srgb, var(--lpd-color-brand-primary) 20%, transparent);
+}
+
+.responsive-table-row-selected {
+  background-color: color-mix(in srgb, var(--lpd-color-brand-primary) 10%, transparent);
+  box-shadow: inset 4px 0 0 var(--lpd-color-brand-primary);
+}
+
+.responsive-table-row-active {
+  outline: 2px solid color-mix(in srgb, var(--lpd-color-brand-primary) 55%, transparent);
+  outline-offset: -2px;
+}
+
+.responsive-table-scroll {
+  touch-action: pan-x pan-y;
+  overscroll-behavior-x: contain;
+  scrollbar-width: auto;
+  scrollbar-color: var(--lpd-color-brand-primary) var(--background-subtle);
+}
+
+.responsive-table-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.responsive-table-scroll::-webkit-scrollbar-track {
+  background: var(--background-subtle);
+}
+
+.responsive-table-scroll::-webkit-scrollbar-thumb {
+  background: var(--lpd-color-brand-primary);
+  border: 2px solid var(--background-subtle);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

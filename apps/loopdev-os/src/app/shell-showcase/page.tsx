@@ -8,22 +8,26 @@ import {
   NOTIFICATION_CENTER_FIXTURES,
   OrganizationSwitcher,
   SuiteSwitcher,
-  UserMenu,
   SHELL_SHOWCASE_SUITES_FIXTURES,
-  GlobalContextPanel,
   MARKETING_STUDIO_SCHEMA,
   SuiteRuntime,
   Button,
   Heading,
+  Icon,
+  Input,
   ModuleHeader,
   ModuleToolbar,
-  type GlobalContextPanelMode,
+  ModuleSearch,
+  UserMenu,
+  type PlatformContextPanelMode,
+  ThemeToggle,
 } from '@loopdev/ui';
 import type { NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
-import { useRouter } from 'next/navigation';
-import { Menu } from 'lucide-react';
+import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
+import { usePathname, useRouter } from 'next/navigation';
+import { CircleHelp, Menu } from 'lucide-react';
 
 type ShowcaseNavMode = 'expanded' | 'rail' | 'hover';
 type CanvasMode = 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed';
@@ -473,7 +477,7 @@ function ModuleContextPanelFooterFixture() {
   );
 }
 
-function SplitModuleFixture() {
+function SplitModuleFixture({ onOpenPanel }: { onOpenPanel?: () => void }) {
   return (
     <div className="bg-background min-h-full min-w-0 overflow-auto p-4 sm:p-6">
       <p className="text-primary text-lpd-xs font-semibold leading-tight tracking-[0.18em]">
@@ -503,7 +507,16 @@ function SplitModuleFixture() {
         ].map((email) => (
           <div
             key={email}
-            className="border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0"
+            role={onOpenPanel ? 'button' : undefined}
+            tabIndex={onOpenPanel ? 0 : undefined}
+            onClick={onOpenPanel}
+            onKeyDown={onOpenPanel ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onOpenPanel();
+              }
+            } : undefined}
+            className={`border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0 ${onOpenPanel ? 'cursor-pointer hover:bg-primary/5 focus-visible:bg-primary/5 focus-visible:outline-primary focus-visible:outline-2' : ''}`}
           >
             <span className="text-text-muted">□</span>
             <span>{email}</span>
@@ -521,61 +534,84 @@ function SplitModuleFixture() {
 
 function SplitModuleHeader() {
   return (
-    <ModuleHeader
-      segments={[
-        { id: 'suite', label: 'Shell Showcase' },
-        { id: 'module', label: 'Users', isActive: true },
-      ]}
-      statusLabel="Active"
-      statusSeverity="success"
-      rightSlot={
-        <div className="flex items-center gap-3">
-          <span className="text-primary text-lpd-xs font-mono tracking-[0.16em]">
-            {'{SuiteHeader}'}
-          </span>
-          <Button variant="outline" size="sm">
-            Module action
-          </Button>
-        </div>
-      }
-    />
+    <>
+      <ModuleHeader
+        visibleOnMobile={false}
+        visibleOnDesktop={true}
+        segments={[
+          { id: 'suite', label: 'Shell Showcase' },
+          { id: 'module', label: 'Users', isActive: true },
+        ]}
+        statusLabel="Active"
+        statusSeverity="success"
+        rightSlot={null}
+      />
+    </>
   );
 }
 
-function SplitModuleToolbar() {
+function SplitModuleToolbar({
+  onToggleContext,
+  isContextOpen = false,
+}: {
+  onToggleContext?: () => void;
+  isContextOpen?: boolean;
+}) {
   return (
-    <ModuleToolbar
-      left={
-        <div className="border-border-technical bg-background text-text-muted flex items-center gap-2 rounded-md border px-3 py-1.5">
-          <span aria-hidden="true">⌕</span>
-          <span>Search users</span>
-        </div>
-      }
-      center={
-        <div className="text-text-muted flex items-center gap-3 text-xs">
-          <span className="text-primary font-mono text-[10px] tracking-[0.16em]">
-            {'{SuiteToolbar}'}
-          </span>
-          <Button variant="ghost" size="sm">
-            All columns
-          </Button>
-          <Button variant="ghost" size="sm">
-            Sorted by user ID
-          </Button>
-        </div>
-      }
-      right={
-        <Button variant="primary" size="sm">
-          Add user
-        </Button>
-      }
-    />
+    <>
+      <ModuleToolbar
+        visibleOnMobile={true}
+        visibleOnDesktop={false}
+        className="px-3"
+        leftSlot={
+          <div className="flex min-w-0 w-full items-center gap-2">
+            {onToggleContext ? (
+              <button
+                type="button"
+                aria-label={isContextOpen ? 'Close module context' : 'Open module context'}
+                aria-expanded={isContextOpen}
+                aria-controls="module-context-sidebar"
+                onClick={onToggleContext}
+                className="text-text-muted hover:bg-shell-surface hover:text-text-main flex size-8 shrink-0 items-center justify-center rounded-md"
+              >
+                <Menu aria-hidden="true" size={18} />
+              </button>
+            ) : null}
+            <Input
+              aria-label="Start icon input"
+              placeholder="Search users"
+              startIcon={<Icon name="search" size="sm" />}
+              variant="ghost"
+              size="sm"
+              className="min-w-0 w-full"
+            />
+          </div>
+        }
+        rightSlot={<Button variant="primary" size="sm">Add</Button>}
+      />
+      <ModuleToolbar
+        visibleOnMobile={false}
+        visibleOnDesktop={true}
+        leftSlot={
+          <ModuleSearch placeholder="Search contacts" />
+        }
+        centerSlot={
+          <div className="text-text-muted flex items-center gap-3 text-xs">
+            <Button variant="ghost" size="sm">All columns</Button>
+            <Button variant="ghost" size="sm">Sorted by user ID</Button>
+          </div>
+        }
+        rightSlot={<Button variant="primary" size="sm">Add user</Button>}
+      />
+    </>
   );
 }
 
 function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
   if (mode === 'full-bleed') return undefined;
-  if (mode === 'split') return <SplitModuleHeader />;
+  if (mode === 'split') {
+    return <SplitModuleHeader />;
+  }
 
   const fixtures: Record<Exclude<CanvasMode, 'split'>, { label: string; action: string }> = {
     overview: { label: 'Overview', action: 'Customize overview' },
@@ -588,6 +624,7 @@ function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
 
   return (
     <ModuleHeader
+      visibleOnMobile={false}
       segments={[
         { id: 'suite', label: 'Shell Showcase' },
         { id: 'mode', label: fixture.label, isActive: true },
@@ -603,9 +640,19 @@ function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
   );
 }
 
-function ModeModuleToolbar({ mode }: { mode: CanvasMode }) {
+function ModeModuleToolbar({
+  mode,
+  onToggleContext,
+  isContextOpen,
+}: {
+  mode: CanvasMode;
+  onToggleContext?: () => void;
+  isContextOpen?: boolean;
+}) {
   if (mode === 'full-bleed') return undefined;
-  if (mode === 'split') return <SplitModuleToolbar />;
+  if (mode === 'split') {
+    return <SplitModuleToolbar onToggleContext={onToggleContext} isContextOpen={isContextOpen} />;
+  }
 
   const fixtures: Record<
     Exclude<CanvasMode, 'split'>,
@@ -621,13 +668,14 @@ function ModeModuleToolbar({ mode }: { mode: CanvasMode }) {
 
   return (
     <ModuleToolbar
-      left={
+      visibleOnMobile={false}
+      leftSlot={
         <span className="border-border-technical bg-background text-text-muted rounded-md border px-3 py-1.5 text-xs">
           {fixture.left}
         </span>
       }
-      center={<span className="text-text-muted text-xs">{fixture.center}</span>}
-      right={
+      centerSlot={<span className="text-text-muted text-xs">{fixture.center}</span>}
+      rightSlot={
         <Button variant="primary" size="sm">
           {fixture.action}
         </Button>
@@ -648,11 +696,12 @@ function ShowcaseCanvas({ mode }: { mode: CanvasMode }) {
 }
 
 export default function ShellShowcasePage() {
-  const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
+  const pathname = usePathname();
+  const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<ShowcaseNavMode>('expanded');
   const [canvasMode, setCanvasMode] = useState<CanvasMode>('overview');
-  const [isSplitPanelOpen, setIsSplitPanelOpen] = useState(true);
-  const [isSplitContextOpen, setIsSplitContextOpen] = useState(true);
+  const [isSplitPanelOpen, setIsSplitPanelOpen] = useState(false);
+  const [isSplitContextOpen, setIsSplitContextOpen] = useState(false);
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const currentSuite =
@@ -704,14 +753,19 @@ export default function ShellShowcasePage() {
     <div className={`${activeOrganization?.theme ?? ''} h-full`}>
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
+        scrollResetKey={pathname}
         activeModuleId={canvasMode === 'overview' ? undefined : canvasMode}
         moduleRenderers={Object.fromEntries(
-          CANVAS_MODES.map((mode) => [mode.id, () => <ShowcaseCanvas mode={mode.id} />]),
+          CANVAS_MODES.map((mode) => [
+            mode.id,
+            () => mode.id === 'split'
+              ? <SplitModuleFixture onOpenPanel={() => setIsSplitPanelOpen(true)} />
+              : <ShowcaseCanvas mode={mode.id} />,
+          ]),
         )}
         moduleContextRenderers={{ split: () => <ModuleContextFixture /> }}
         moduleContextFooterRenderers={{ split: () => <ModuleContextFooterFixture /> }}
         moduleContextLabels={{ split: 'ModuleContextSidebar' }}
-        moduleContextWidths={{ split: 'standard' }}
         moduleContextPanelRenderers={{
           split: () => (isSplitPanelOpen ? <ModuleContextPanelFixture /> : null),
         }}
@@ -719,8 +773,27 @@ export default function ShellShowcasePage() {
           split: () => (isSplitPanelOpen ? <ModuleContextPanelFooterFixture /> : null),
         }}
         moduleContextPanelLabels={{ split: 'ModuleContextPanel' }}
-        moduleContextPanelWidths={{ split: 'extra-wide' }}
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
+        mobileSidebarActions={
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
+            <div className="flex min-h-10 items-center">
+              <ThemeToggle
+                variant="technical"
+                size="md"
+                className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
+              />
+            </div>
+            <button
+              type="button"
+              aria-label="Open help center"
+              className="border-border-technical text-text-main hover:bg-primary/10 hover:text-primary flex min-h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition-colors"
+              onClick={() => setContextMode('help')}
+            >
+              <CircleHelp size={20} aria-hidden="true" />
+              <span>Help</span>
+            </button>
+          </div>
+        }
         moduleContextSidebarCollapsed={canvasMode === 'split' ? !isSplitContextOpen : undefined}
         moduleContextSidebarShowCollapsedTrigger={canvasMode !== 'split'}
         moduleContextSidebarOnCollapsedChange={(collapsed) => setIsSplitContextOpen(!collapsed)}
@@ -730,7 +803,7 @@ export default function ShellShowcasePage() {
               type="button"
               aria-label="Open module context"
               onClick={() => setIsSplitContextOpen(true)}
-              className="text-accent border-accent/30 bg-accent/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
             >
               <Menu aria-hidden="true" size={18} className="shrink-0" />
               {!isRail ? <span className="truncate">Open module context</span> : null}
@@ -740,7 +813,13 @@ export default function ShellShowcasePage() {
         canvasProps={{
           mode: canvasMode,
           header: <ModeModuleHeader mode={canvasMode} />,
-          toolbar: <ModeModuleToolbar mode={canvasMode} />,
+          toolbar: (
+            <ModeModuleToolbar
+              mode={canvasMode}
+              isContextOpen={isSplitContextOpen}
+              onToggleContext={canvasMode === 'split' ? () => setIsSplitContextOpen((open) => !open) : undefined}
+            />
+          ),
         }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
@@ -763,7 +842,7 @@ export default function ShellShowcasePage() {
             <BrandLogo variant="isotype" size="sm" className="shrink-0" />
           </div>
         }
-        centerSlot={<CommandBarTrigger className="w-full" onOpen={() => undefined} />}
+        centerSlot={<CommandBarTrigger className="w-full" placeholder="Search or type a command..." onOpen={() => undefined} />}
         platformHeaderProps={{
           contextSlot: (
             <div className="flex min-w-0 items-center gap-2">
@@ -814,31 +893,31 @@ export default function ShellShowcasePage() {
             userRole="Tenant_Admin"
             tenantName="Showcase Workspace"
             userSrc="https://i.pravatar.cc/64?img=12"
-            timezoneOptions={[
-              { label: 'Auto detect', isActive: true },
-              { label: '(UTC) Coordinated Universal Time' },
-              { label: '(UTC-05:00) Eastern Time' },
-            ]}
-            onOpenChange={() => undefined}
+            timezoneOptions={[{ label: 'Auto detect', isActive: true }]}
+            onOpenChange={(open) => {
+              if (open) setContextMode(null);
+            }}
+            onAvatarClick={() => setContextMode('profile')}
+            onProfileClick={() => setContextMode('profile')}
             onLogout={() => undefined}
           />
         }
         appShellProps={{
+          onToggleLeftSidebar: () => setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
+          onRequestCloseContext: () => setContextMode(null),
           config: { activeOverlay: contextMode ? 'context' : null },
+          contextSlot: contextMode ? (
+            <ContextPanelHost
+              mode={contextMode}
+              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+              onClose={() => setContextMode(null)}
+            />
+          ) : undefined,
         }}
       >
         {canvasMode === 'overview' ? <ShowcaseCanvas mode="overview" /> : null}
       </SuiteRuntime>
-      {contextMode && (
-        <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
-          <GlobalContextPanel
-            mode={contextMode}
-            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-            onClose={() => setContextMode(null)}
-          />
-        </div>
-      )}
     </div>
   );
 }

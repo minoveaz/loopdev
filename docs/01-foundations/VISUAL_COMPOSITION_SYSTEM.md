@@ -326,4 +326,4 @@ en Storybook o en el código de producción.
 
 ---
 
-**Fin del documento — VISUAL_COMPOSITION_SYSTEM v3.8**
+**Fin del documento — VISUAL_COMPOSITION_SYSTEM v3.9**

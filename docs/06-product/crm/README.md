@@ -2,6 +2,17 @@
 
 Documentacion funcional y de preparacion del piloto CRM de Estar Protegidos.
 
+## Arquitectura de UI
+
+CRM se monta sobre la arquitectura de UI de LoopDev: el Shell y las recetas de
+`SuiteCanvas` son propiedad de Platform; los componentes CRM viven dentro de
+una capa orientada al dominio. Consulta la [guia de arquitectura de UI de
+LoopDev](../../architecture/LOOPDEV_UI_ARCHITECTURE.md) antes de crear o
+auditar componentes CRM.
+
+El protocolo concreto para clasificar, diseñar, crear, probar y promover
+componentes CRM está en [CRM UI component protocol](CRM_UI_COMPONENT_PROTOCOL.md).
+
 ## Bloques
 
 ### Contactos

@@ -14,7 +14,7 @@ export function AssetManagerToolbar() {
 
   return (
     <ModuleToolbar
-      left={
+      leftSlot={
         <div className="flex min-w-max flex-1 flex-nowrap items-center gap-2">
           <Input
             value={search}
@@ -35,10 +35,10 @@ export function AssetManagerToolbar() {
           </Select>
         </div>
       }
-      center={
+      centerSlot={
         <IconButton icon="grid_view" size="sm" variant="primary" aria-label="Grid view" />
       }
-      right={
+      rightSlot={
         <div className="flex items-center gap-2">
           <Button type="button" variant="primary" size="sm" startIcon="cloud_upload" disabled>
             Upload asset

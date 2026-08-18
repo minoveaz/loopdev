@@ -79,7 +79,6 @@ export const useButton = (props: any) => {
     children,
     disabled: isDisabled,
     title,
-    'data-permission': permission, // Telemetría
     'aria-disabled': isDisabled,
     ...rest,
   };

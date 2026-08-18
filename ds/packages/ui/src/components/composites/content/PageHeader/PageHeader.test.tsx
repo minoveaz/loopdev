@@ -23,6 +23,19 @@ describe('PageHeader', () => {
     expect(screen.getByRole('button', { name: 'Create brand' })).toBeInTheDocument();
   });
 
+  it('keeps the action slot usable with long supporting content', () => {
+    render(
+      <PageHeader
+        title="Contacts"
+        description="Review relationship history, ownership and next actions for the selected account."
+        actions={<button type="button">Create contact</button>}
+      />,
+    );
+
+    expect(screen.getByRole('heading', { name: 'Contacts' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Create contact' })).toBeInTheDocument();
+  });
+
   it('has no accessibility violations', async () => {
     const { container } = render(<PageHeader title="Brands" />);
 

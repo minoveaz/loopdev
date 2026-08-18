@@ -39,8 +39,6 @@
     "pretty-format": "^30.0.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-is-18": "npm:react-is@18.3.1",
-    "react-is-19": "npm:react-is@19.2.7",
     "react-native": "0.86.2",
     "react-native-web": "^0.21.2",
     "react-refresh": "^0.18.0",

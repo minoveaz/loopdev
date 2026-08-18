@@ -1,0 +1,16 @@
+{
+  "kind": "visual-contract-change",
+  "surfaces": [
+    "apps/loopdev-os/src/components/composites/data-tables",
+    "ds/packages/ui/src/components/composites/data-tables",
+    "e2e/dense-operational-table.visual.spec.mjs",
+    "e2e/entity-table-golden.visual.spec.mjs"
+  ],
+  "userIntent": "Certify responsive dense and entity table layouts across desktop, mobile, and compact mobile surfaces without changing their approved information hierarchy.",
+  "evidence": {
+    "functional": "Table certification suites cover sorting, selection, responsive rendering, and semantic interaction behavior.",
+    "accessibility": "The table contracts preserve semantic roles, keyboard interaction, and Axe coverage across responsive projects.",
+    "visual": "Updated desktop, mobile, and compact mobile snapshots were reviewed for dense operational and entity table compositions."
+  },
+  "approvedBy": "design-system"
+}

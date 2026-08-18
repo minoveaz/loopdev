@@ -8,6 +8,8 @@ import React from 'react';
 type EmptyStateSize = 'sm' | 'md' | 'lg';
 
 export interface EmptyStateProps {
+  /** Semantic state used to style the feedback boundary. */
+  status?: 'default' | 'error';
   /** Nombre del icono de Material Symbols */
   icon?: string;
   /** Título principal */

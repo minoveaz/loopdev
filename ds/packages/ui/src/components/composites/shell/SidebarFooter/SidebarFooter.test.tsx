@@ -4,10 +4,10 @@ import { SidebarFooter } from './index';
 import React from 'react';
 
 describe('SidebarFooter Composite', () => {
-  it('no debe duplicar la identidad del usuario en el sidebar', () => {
-    render(<SidebarFooter isRail navMode="hover" onNavModeChange={() => {}} />);
-    expect(screen.queryByText(/miller/i)).not.toBeInTheDocument();
-    expect(document.querySelector('.rounded-full')).not.toBeInTheDocument();
+  it('mantiene el footer desktop libre de identidad y acciones globales', () => {
+    render(<SidebarFooter navMode="expanded" onNavModeChange={() => {}} />);
+    expect(screen.queryByText('Alex Morgan')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Help center' })).not.toBeInTheDocument();
   });
 
   it('debe mostrar solo el selector de comportamiento', () => {

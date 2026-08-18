@@ -33,8 +33,10 @@ test.describe('shell-showcase canonical contract', () => {
     await expect(suiteMenu.getByRole('menuitem', { name: 'Marketing Studio' })).toBeVisible();
     await expect(suiteMenu.getByRole('menuitem', { name: 'Volver al Launchpad' })).toBeVisible();
 
-    await suiteMenu.getByRole('menuitem', { name: 'Volver al Launchpad' }).click();
-    await expect(page).toHaveURL(/\/launchpad$/);
+    await Promise.all([
+      page.waitForURL(/\/launchpad$/, { timeout: 10000 }),
+      suiteMenu.getByRole('menuitem', { name: 'Volver al Launchpad' }).click(),
+    ]);
   });
 
   test('hydrates canvas modes from the URL and preserves browser history', async ({ page }) => {

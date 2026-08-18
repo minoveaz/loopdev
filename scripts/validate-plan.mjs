@@ -28,7 +28,7 @@ const checks = {
       'apps/loopdev-os/src/app/shell-showcase/',
       'apps/loopdev-os/src/app/launchpad/',
       'ds/packages/ui/src/components/composites/shell/',
-      'ds/packages/ui/src/components/composites/utilities/GlobalContextPanel/',
+      'ds/packages/ui/src/components/composites/utilities/PlatformContextPanel/',
       'scripts/check-shell.mjs',
     ],
   },

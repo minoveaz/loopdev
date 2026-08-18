@@ -66,7 +66,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           disabled={disabled}
           className={inputClasses}
           aria-invalid={!!error}
-          aria-describedby={error ? errorId : helperId}
+          aria-describedby={error || helperText ? (error ? errorId : helperId) : undefined}
           onFocus={(e) => {
             setIsFocused(true);
             onFocus?.(e);

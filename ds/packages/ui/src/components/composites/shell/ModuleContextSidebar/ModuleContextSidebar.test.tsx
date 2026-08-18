@@ -27,6 +27,32 @@ describe('ModuleContextSidebar', () => {
     expect(sidebar.className).not.toMatch(/rounded/);
   });
 
+  it('contains long header labels without creating horizontal overflow', () => {
+    render(
+      <ModuleContextSidebar label="ModuleContextSidebar">
+        <div>Content</div>
+      </ModuleContextSidebar>,
+    );
+
+    const sidebar = screen.getByTestId('module-context-sidebar');
+    const heading = screen.getByRole('heading', { name: 'ModuleContextSidebar' });
+
+    expect(sidebar.querySelector('div')).toHaveClass('overflow-hidden');
+    expect(heading).toHaveClass('min-w-0', 'truncate');
+  });
+
+  it('keeps vertical scrolling opt-in at the content zone', () => {
+    render(
+      <ModuleContextSidebar label="Selection context" contentScrollable={false}>
+        <div>Content</div>
+      </ModuleContextSidebar>,
+    );
+
+    const sidebar = screen.getByTestId('module-context-sidebar');
+    expect(sidebar).toHaveAttribute('data-content-scrollable', 'false');
+    expect(sidebar.querySelector('.overflow-y-hidden')).toBeInTheDocument();
+  });
+
   it('renders an optional footer below the scrollable content', () => {
     render(
       <ModuleContextSidebar label="ModuleContextSidebar" footer={<div>Footer actions</div>}>

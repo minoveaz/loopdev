@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useSyncExternalStore, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useAuth } from '@/hooks/useAuth';
@@ -8,6 +8,11 @@ import { canAccessOrganizationRoute, resolveAccessState } from '@/core/access/ac
 import { AccessStatePanel } from './AccessStatePanel';
 
 export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
+  const hasMounted = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
   const pathname = usePathname();
   const router = useRouter();
   const { activeOrganizationId, isLoading: isOrganizationLoading } = useOrganization();
@@ -35,7 +40,7 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
     if (isBlocked && accessState !== 'session-expired') router.replace('/launchpad');
   }, [accessState, isBlocked, router]);
 
-  if (requiresOrganization && accessState === 'loading') {
+  if (requiresOrganization && (!hasMounted || accessState === 'loading')) {
     return (
       <main className="bg-shell-canvas flex min-h-screen items-center justify-center p-6 text-sm text-slate-500">
         Checking your secure workspace access…

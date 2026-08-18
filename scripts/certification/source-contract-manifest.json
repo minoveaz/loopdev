@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "policy": "zero-hardcode-v1",
+  "components": [
+    {
+      "id": "command-dialog-v1",
+      "name": "CommandDialog",
+      "implementation": "ds/packages/ui/src/components/composites/utilities/CommandDialog/index.tsx",
+      "sourceFiles": [
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/types.ts"
+      ],
+      "fixturePaths": [
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/certification/fixture.tsx"
+      ],
+      "forbiddenPatterns": [
+        "raw-palette-class",
+        "domain-copy",
+        "default-visible-copy",
+        "hardcoded-data-array",
+        "raw-z-index",
+        "inline-visual-style"
+      ]
+    },
+    {
+      "id": "entity-table-v1",
+      "name": "EntityTable",
+      "implementation": "apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx",
+      "sourceFiles": [
+        "apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx",
+        "apps/loopdev-os/src/components/composites/data-tables/EntityTable.test.tsx"
+      ],
+      "fixturePaths": [
+        "apps/loopdev-os/src/app/composition-showcase/entity-table.fixture.tsx"
+      ],
+      "forbiddenPatterns": ["raw-palette-class", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "select-v1",
+      "name": "Select",
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/Select/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/atoms/inputs/Select/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "checkbox-v1",
+      "name": "Checkbox",
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/Checkbox/index.tsx",
+      "sourceFiles": [],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "badge-v1",
+      "name": "Badge",
+      "implementation": "ds/packages/ui/src/components/atoms/indicators/Badge/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/atoms/indicators/Badge/components.tsx"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "empty-state-v1",
+      "name": "EmptyState",
+      "implementation": "ds/packages/ui/src/components/atoms/feedback/EmptyState/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/atoms/feedback/EmptyState/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "loading-state-v1",
+      "name": "LoadingState",
+      "implementation": "ds/packages/ui/src/components/atoms/feedback/LoadingState/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/atoms/feedback/LoadingState/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "skeleton-v1",
+      "name": "Skeleton",
+      "implementation": "ds/packages/ui/src/components/atoms/feedback/Skeleton/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "page-header-v1",
+      "name": "PageHeader",
+      "implementation": "ds/packages/ui/src/components/composites/content/PageHeader/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/composites/content/PageHeader/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "section-header-v1",
+      "name": "SectionHeader",
+      "implementation": "ds/packages/ui/src/components/composites/content/SectionHeader/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/composites/content/SectionHeader/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "user-avatar-v1",
+      "name": "UserAvatar",
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/UserAvatar/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/atoms/surfaces/UserAvatar/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    },
+    {
+      "id": "command-bar-trigger-v1",
+      "name": "CommandBarTrigger",
+      "implementation": "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/index.tsx",
+      "sourceFiles": ["ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/types.ts"],
+      "fixturePaths": [],
+      "forbiddenPatterns": ["raw-palette-class", "domain-copy", "default-visible-copy", "hardcoded-data-array", "raw-z-index", "inline-visual-style"]
+    }
+  ]
+}
