@@ -56,14 +56,14 @@ the approved shared boundaries and does not promote them to `@loopdev/ui`.
 
 ## Decisiones aprobadas
 
-| Fecha      | Decisión                                                       | Motivo                                                                            | Impacto                                                                  | Aprobado por |
-| ---------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------ |
-| 2026-08-14 | Start with shared CRM foundation                               | Shared activity, notes and lookup are dependencies for every module               | Module tracks wait for these contracts and fixtures                      | User         |
-| 2026-08-14 | Keep Platform Shell inventory separate from CRM implementation | SuiteCanvas and shell modes are shared platform contracts, not CRM-owned behavior | CRM consumes the validated shell contract; shell work gets its own track | User         |
-| 2026-08-18 | Execute G0 from a clean branch based on current `develop` | The historical CRM branch contains mixed history and no effective diff against `develop` | All new implementation and validation commits target `feature/crm-g0-shared-foundation`; the old branch is reference-only | User |
-| 2026-08-18 | Treat Supabase/RLS hardening as part of CRM G0 | The shared CRM foundation cannot close without real tenant, workspace and verb-level authorization evidence | CRM policies, cross-organization constraints, seed/reset and pgTAP become blocking G0 deliverables | User |
-| 2026-08-18 | Reuse one organization-aware hardening pattern for CRM and Communications | Both foundations had broad mutation policies and relationship paths that could bypass organization ownership | A versioned migration splits policies by verb, tightens grants, adds composite FKs and makes append-only records immutable; Communications is included only for the same identified risk | User |
-| 2026-08-18 | Make migration governance a CI gate and provide shared readiness artifacts | Security properties must be checked before a database reset is available | Changed migrations are statically checked for ownership, RLS, verb policies, grants and scoped relationships; pgTAP helpers and a DoR/DoD checklist become reusable inputs for new suites | User |
+| Fecha      | Decisión                                                                   | Motivo                                                                                                       | Impacto                                                                                                                                                                                   | Aprobado por |
+| ---------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 2026-08-14 | Start with shared CRM foundation                                           | Shared activity, notes and lookup are dependencies for every module                                          | Module tracks wait for these contracts and fixtures                                                                                                                                       | User         |
+| 2026-08-14 | Keep Platform Shell inventory separate from CRM implementation             | SuiteCanvas and shell modes are shared platform contracts, not CRM-owned behavior                            | CRM consumes the validated shell contract; shell work gets its own track                                                                                                                  | User         |
+| 2026-08-18 | Execute G0 from a clean branch based on current `develop`                  | The historical CRM branch contains mixed history and no effective diff against `develop`                     | All new implementation and validation commits target `feature/crm-g0-shared-foundation`; the old branch is reference-only                                                                 | User         |
+| 2026-08-18 | Treat Supabase/RLS hardening as part of CRM G0                             | The shared CRM foundation cannot close without real tenant, workspace and verb-level authorization evidence  | CRM policies, cross-organization constraints, seed/reset and pgTAP become blocking G0 deliverables                                                                                        | User         |
+| 2026-08-18 | Reuse one organization-aware hardening pattern for CRM and Communications  | Both foundations had broad mutation policies and relationship paths that could bypass organization ownership | A versioned migration splits policies by verb, tightens grants, adds composite FKs and makes append-only records immutable; Communications is included only for the same identified risk  | User         |
+| 2026-08-18 | Make migration governance a CI gate and provide shared readiness artifacts | Security properties must be checked before a database reset is available                                     | Changed migrations are statically checked for ownership, RLS, verb policies, grants and scoped relationships; pgTAP helpers and a DoR/DoD checklist become reusable inputs for new suites | User         |
 
 ## Arquitectura y contratos
 
@@ -171,53 +171,55 @@ después de cerrar las condiciones de G1.
 
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo                                           | Impacto                                       | Mitigación                                     | Responsable  | Estado |
-| ---------------------------------------------------------- | --------------------------------------------- | ---------------------------------------------- | ------------ | ------ |
-| Existing CRM schemas may conflict with roadmap read models | Unsafe generated contracts or migration drift | Reconcile before implementation                | crm/platform | open   |
-| Activity and audit semantics may be conflated              | Incorrect retention or disclosure             | Approve separate event boundaries and fixtures | crm          | open   |
-| CRM and Communications policies use broad `FOR ALL` access | Read permissions may authorize mutation or deletion | Split policies by SQL verb and validate negative cases with pgTAP | crm/platform | mitigated; runtime evidence pending |
-| CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints | crm/platform | mitigated; reset evidence pending |
-| Local Supabase reset is not reproducible | CI and developer evidence can diverge from migration state | Align `supabase/config.toml` with the canonical seed and certify reset | platform | mitigated; canonical seed path and organization scope now pass locally |
-| Static checks could drift from the migration contract | A future suite may reintroduce an unsafe table or grant | Keep the changed-migration governance gate and reusable checklist in CI | platform | mitigated; CI evidence pending |
+| Riesgo o bloqueo                                                     | Impacto                                                     | Mitigación                                                              | Responsable  | Estado                                                                 |
+| -------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------- |
+| Existing CRM schemas may conflict with roadmap read models           | Unsafe generated contracts or migration drift               | Reconcile before implementation                                         | crm/platform | open                                                                   |
+| Activity and audit semantics may be conflated                        | Incorrect retention or disclosure                           | Approve separate event boundaries and fixtures                          | crm          | open                                                                   |
+| CRM and Communications policies use broad `FOR ALL` access           | Read permissions may authorize mutation or deletion         | Split policies by SQL verb and validate negative cases with pgTAP       | crm/platform | mitigated; local runtime evidence green                                |
+| CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints           | crm/platform | mitigated; local reset evidence green                                  |
+| Local Supabase reset is not reproducible                             | CI and developer evidence can diverge from migration state  | Align `supabase/config.toml` with the canonical seed and certify reset  | platform     | mitigated; canonical seed path and organization scope now pass locally |
+| Static checks could drift from the migration contract                | A future suite may reintroduce an unsafe table or grant     | Keep the changed-migration governance gate and reusable checklist in CI | platform     | mitigated; CI evidence pending                                         |
 
 ## Criterios de cierre
 
-- [ ] Shared contracts and fixtures are approved.
-- [ ] RLS, state, accessibility and contract tests pass.
+- [x] Shared contracts and fixtures are approved.
+- [x] RLS, state and contract tests pass; accessibility is not applicable to this backend-only phase.
 - [ ] Module tracks can consume the foundation without duplicating it.
-- [ ] Risks and deferred work are documented.
+- [x] Risks and deferred work are documented.
 - [ ] Cierre aprobado explícitamente por el usuario.
 
 ## Evidencia de validación
 
-| Fecha | Validación | Resultado | Referencia |
-| ----- | ---------- | --------- | ---------- |
-| 2026-08-18 | `supabase db reset` + `supabase db lint --local` + pgTAP database suite | Pass: 128 tests | Local Docker/Supabase; canonical `seed_loopdev.sql` |
-| 2026-08-18 | Supabase TypeScript type generation + LoopDev OS typecheck | Pass; generated types include CRM/Communications hardening constraints | CLI 2.114.0 with local `supabase_admin` database URL |
-| 2026-08-18 | `pnpm test:supabase-governance` | Pass (4 tests) | `scripts/validate-supabase-governance.test.mjs` |
-| 2026-08-18 | `pnpm validate:full` | Bloqueado por 2 enlaces Markdown preexistentes fuera de este cambio | `docs/06-product/crm/{contacts,leads}/*IMPLEMENTATION_HANDOFF.md` |
-| 2026-08-18 | `pnpm registries:check` | Pass | Generated registry catalog |
-| 2026-08-18 | `git diff --check` | Pass | Working tree |
-| 2026-08-18 | Supabase reset/lint/pgTAP | Bloqueado: Docker local apagado/no disponible | `.github/workflows/supabase.yml` remains the CI gate |
+| Fecha      | Validación                                                              | Resultado                                                                     | Referencia                                                        |
+| ---------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 2026-08-18 | `supabase db reset` + `supabase db lint --local` + pgTAP database suite | Pass: 128 tests                                                               | Local Docker/Supabase; canonical `seed_loopdev.sql`               |
+| 2026-08-18 | Supabase TypeScript type generation + LoopDev OS typecheck              | Pass; generated types include CRM/Communications hardening constraints        | CLI 2.114.0 with local `supabase_admin` database URL              |
+| 2026-08-18 | `pnpm test:supabase-governance`                                         | Pass (4 tests)                                                                | `scripts/validate-supabase-governance.test.mjs`                   |
+| 2026-08-18 | `pnpm validate:full`                                                    | Pass with local Supabase URL and anon key; CRM links and full build green    | `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`        |
+| 2026-08-18 | `pnpm registries:check`                                                 | Pass                                                                          | Generated registry catalog                                        |
+| 2026-08-18 | `git diff --check`                                                      | Pass                                                                          | Working tree                                                      |
+| 2026-08-18 | LoopDev OS production build                                             | Pass con `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` locales | `pnpm --filter loopdev-os build`                                  |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-18.
 - **Rama de continuación:** `feature/crm-g0-shared-foundation`.
-- **Commit de partida:** `5df63e8` (`feature/crm-g0-shared-foundation` before
-  this implementation slice).
-- **Estado alcanzado:** G0 hardening, static migration governance, reusable
-  pgTAP helpers, focused CRM isolation tests and the table/suite checklist are
-  implemented without commit/push.
+- **Commit de partida:** `da5e319` (`feature/crm-g0-shared-foundation`); pending
+  implementation changes are the next commit on this branch.
+- **Estado alcanzado:** G0 hardening, migration governance, reusable pgTAP
+  helpers, CRM isolation tests, canonical seed, generated database types and
+  API-level idempotency/redaction tests are implemented locally; Docker/Supabase
+  is available and the branch is ready for commit and push.
 - **Decisiones, bloqueos y riesgos:** Communications was hardened only for the
-  same broad-policy and cross-organization relationship risk. Docker is
-  unavailable locally, so reset/lint/pgTAP evidence remains a CI gate.
-- **Validación ejecutada:** Migration governance unit tests and `git diff
-  --check` pass. The changed-file gate is wired in CI; local database execution
-  is pending.
-- **Siguiente acción concreta:** Run the Supabase workflow (reset, lint and
-  `005_crm_security.sql`) in an environment with Docker, then reconcile the
-  evidence before closing G0 and starting Contacts.
+  same identified broad-policy and cross-organization risk. Residual work is
+  CI evidence and verification by the first consuming module; no production
+  Supabase credentials or data are used locally.
+- **Validación ejecutada:** Local reset/lint/128 pgTAP tests, governance tests,
+  CRM contract/API tests (15), contracts build, LoopDev OS typecheck and
+  production build with local Supabase variables pass.
+- **Siguiente acción concreta:** Commit and push the validated implementation,
+  then open the G0 PR for review; do not close the track until CI and consumer
+  evidence are green.
 
 ## Cierre
 
