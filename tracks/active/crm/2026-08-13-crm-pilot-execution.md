@@ -31,17 +31,29 @@ la existencia de un track no implica que tenga autorizacion para iniciar impleme
 | --- | --- | --- | --- |
 | `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | G0 completado y aprobado |
 | `crm-shared-foundation` | cerrado tras Contacts backend-first | Mantener como foundation reutilizable; no reabrirlo para nuevos módulos | PRs #111, #114, #116 y cierre #118 |
-| `crm-leads-backend-foundation` | backend-first implementado en workspace local (sin PR ni commit todavia) | Implementar Leads backend-first sobre la foundation certificada | PR con Closes #84; migracion y pgTAP en CI; validacion end-to-end con Supabase real |
+| `crm-leads-backend-foundation` | backend-first mergeado en `develop` mediante PR #119 | Mantenerlo como dependencia de Pipeline y completar evidencia operativa | Validacion end-to-end con Supabase real y cierre operativo de #84 |
 | `crm-ui-foundation` | pausado para nuevos slices | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0 |
 | `estar-protegidos-crm-platform` | historico, fuera del WIP | No usarlo para planificar entregas; el piloto central lo supersede operativamente | Migracion o cierre documental posterior |
 
 ### Regla de trabajo
 
-G0/#68 y la validación del primer consumidor Contacts (#82) están cerrados. Se habilita ahora un
-único frente de implementación CRM: `crm-leads-backend-foundation` para el Issue #84. Pipeline
-(#85), Tasks (#87), Customer 360 (#88) y los tracks de G1 permanecen en espera hasta que Leads
-aporte su evidencia de ciclo de vida. La UI y las primitives compartidas siguen coordinadas por
-sus tracks transversales y no autorizan crear componentes CRM paralelos.
+G0/#68 y la validación del primer consumidor Contacts (#82) están cerrados. Leads (#84) ya está
+mergeado en `develop`, pero su cierre operativo aún requiere evidencia end-to-end y de aislamiento
+remoto. Se autoriza únicamente la preparación de Pipeline (#85): rama limpia, reconciliación de
+evidencia y diseño técnico. La implementación funcional de Pipeline, Tasks (#87) y Customer 360
+(#88) permanece bloqueada hasta completar G1 y validar Leads. La UI y las primitives compartidas
+siguen coordinadas por sus tracks transversales y no autorizan crear componentes CRM paralelos.
+
+### Readiness preparatorio de Pipeline (#85)
+
+- [x] Rama de preparación creada desde `origin/develop`: `feature/crm-pipeline-readiness`.
+- [x] Contrato, impacto, auditoría de componentes, UX y handoff revisados.
+- [x] Dependencias de Contacts y Leads presentes en `origin/develop`.
+- [ ] Tech Lead aprueba etapas estables, comandos, RLS e idempotencia.
+- [ ] Se reconcilia la evidencia de Leads con el PR #119 y el cierre operativo de #84.
+- [ ] G1 valida RLS, FKs tenant-aware, aislamiento cross-tenant y kill switches.
+- [ ] Se ejecuta E2E contra la aplicación y Supabase realmente entregados.
+- [ ] Se autoriza la rama funcional `feature/crm-pilot-pipeline-implementation`.
 
 ## Outcome
 
@@ -587,12 +599,13 @@ go-live o UAT privado.
 | 2026-08-13 | Inicializacion del Project del piloto                | Correcta                                                                                 | Project #3 contiene paquetes P0 G0-G5; UX-00 es el unico item Ready                                                  |
 | 2026-08-13 | Conversion del Project a Issues reales               | Correcta                                                                                 | Project #3 contiene 31 Issues, sin borradores ni titulos duplicados; #93 y #95 cerrados como duplicados de #92 y #94 |
 | 2026-08-18 | CRM UI foundation                                    | Parcial: gate visual y responsive certificado; persistencia, RLS y UAT siguen pendientes | PR #108 mergeado en `develop` mediante `76e9a340`; Issues #70-#78 y #82-#88 siguen abiertos                          |
-| 2026-08-18 | Leads backend-first (#84): contratos, schema, servicio, rutas | Correcta en local: `pnpm --filter @loopdev/contracts build`, `tsc --noEmit` en `loopdev-os`, `eslint` sin hallazgos, `vitest run` (719/719, incl. 46 CRM), `supabase db reset` y `supabase test db` (140 aserciones pgTAP, archivo `005_crm_security.sql` en `ok`) | Sin commit ni PR todavia; ver detalle en Fase 2 y en el resumen de sesion |
+| 2026-08-18 | Leads backend-first (#84): contratos, schema, servicio, rutas | Correcta en local: `pnpm --filter @loopdev/contracts build`, `tsc --noEmit` en `loopdev-os`, `eslint` sin hallazgos, `vitest run` (719/719, incl. 46 CRM), `supabase db reset` y `supabase test db` (140 aserciones pgTAP, archivo `005_crm_security.sql` en `ok`) | PR #119 mergeado en `develop`; falta E2E remoto/staging y cierre operativo de #84 |
+| 2026-08-18 | Readiness preparatorio de Pipeline (#85) | Correcta: rama limpia `feature/crm-pipeline-readiness` basada en `origin/develop`; documentos de Pipeline y playbook revisados | Implementación funcional bloqueada hasta Tech Lead, G1, E2E y cierre operativo de Leads |
 
 ## Handoff de sesion
 
 - **Fecha:** 2026-08-18 (sesion Leads backend-first).
-- **Rama:** `feature/crm-leads-backend-foundation` (workspace local, sin commit).
+- **Rama:** `feature/crm-leads-backend-foundation` (implementación mergeada en `develop` mediante PR #119).
 - **Estado alcanzado:** Implementado el slice backend-first de Leads (Issue #84) sobre la foundation
   de Contacts: contratos Zod (`CrmLeadSchema`, `CrmLeadSourceSchema`, comandos de captura/actualizacion/
   estado/conversion, `LeadErrorCodeSchema`), migracion aditiva
@@ -619,14 +632,13 @@ go-live o UAT privado.
   compilan, `tsc --noEmit` limpio, `eslint` sin hallazgos, 719/719 tests de `vitest` (incluye 46 de
   CRM), `supabase db reset` aplica la migracion y el seed sin errores, `supabase test db` pasa 140
   aserciones pgTAP (incluye 7 nuevas para el contrato de Lead).
-- **Riesgos y brechas pendientes:** sin PR ni commit (por instruccion explicita de esta sesion); sin
-  prueba E2E real contra un servidor Next levantado; Pipeline, Customer 360 y Daily Operation siguen
-  diferidos; el catalogo de etapas de Opportunity (`crm_pipeline_stages`) no se conecta todavia a la
-  conversion.
-- **Siguiente accion concreta:** revisar y aprobar los contratos/decisiones anteriores, luego abrir
-  PR con `Closes #84` siguiendo `commit_convention: 'feat(crm): implement <slice> (#84)'` del
-  handoff de Leads; ejecutar `pnpm test:shell:changed`/`pnpm test:shell` si un cambio de shell se
-  suma antes del commit importante.
+- **Riesgos y brechas pendientes:** falta prueba E2E real contra un servidor Next levantado,
+  validación remota/staging de RLS y cierre operativo de #84; Pipeline, Customer 360 y Daily
+  Operation siguen diferidos; el catálogo de etapas de Opportunity (`crm_pipeline_stages`) no se
+  conecta todavía a la conversión.
+- **Siguiente acción concreta:** completar el checklist de readiness preparatorio de Pipeline,
+  obtener aprobación de Tech Lead y ejecutar G1/E2E antes de crear
+  `feature/crm-pilot-pipeline-implementation`.
 
 ## Cierre
 
