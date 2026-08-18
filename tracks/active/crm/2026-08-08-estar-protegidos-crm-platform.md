@@ -1,7 +1,7 @@
 ---
 id: estar-protegidos-crm-platform
 title: CRM multi-tenant y comunicaciones de Estar Protegidos
-status: superseded
+status: active
 created: 2026-08-08
 updated: 2026-08-12
 owner: crm
