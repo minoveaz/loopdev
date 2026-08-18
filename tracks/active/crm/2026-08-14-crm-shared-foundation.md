@@ -6,7 +6,7 @@ created: 2026-08-14
 updated: 2026-08-18
 owner: crm
 lead: null
-branch: feature/crm-g0-shared-foundation
+branch: feature/crm-contacts-backend-foundation
 branches: []
 phase: 1
 pull_requests: [111]
@@ -64,6 +64,7 @@ the approved shared boundaries and does not promote them to `@loopdev/ui`.
 | 2026-08-18 | Treat Supabase/RLS hardening as part of CRM G0                             | The shared CRM foundation cannot close without real tenant, workspace and verb-level authorization evidence  | CRM policies, cross-organization constraints, seed/reset and pgTAP become blocking G0 deliverables                                                                                        | User         |
 | 2026-08-18 | Reuse one organization-aware hardening pattern for CRM and Communications  | Both foundations had broad mutation policies and relationship paths that could bypass organization ownership | A versioned migration splits policies by verb, tightens grants, adds composite FKs and makes append-only records immutable; Communications is included only for the same identified risk  | User         |
 | 2026-08-18 | Make migration governance a CI gate and provide shared readiness artifacts | Security properties must be checked before a database reset is available                                     | Changed migrations are statically checked for ownership, RLS, verb policies, grants and scoped relationships; pgTAP helpers and a DoR/DoD checklist become reusable inputs for new suites | User         |
+| 2026-08-18 | Prepare Contacts backend-first without waiting for the frontend            | The frontend is being delivered by another team and needs stable backend wiring                              | Contacts is the first foundation consumer; its contracts, API, RLS, fixtures and tests are delivered independently and documented for later UI integration                                | User         |
 
 ## Arquitectura y contratos
 
@@ -171,6 +172,30 @@ CI verde. El track permanece activo para validar el primer consumidor, Contacts
 (#82), sin duplicación de la foundation y para recibir aprobación explícita de
 cierre.
 
+## Siguiente slice: Contacts backend-first
+
+Contacts se implementará sin front-end en esta fase, con la rama
+`feature/crm-contacts-backend-foundation`, creada desde el `develop` que contiene
+el PR #111 y la actualización documental posterior. El equipo frontend recibirá
+contratos y fixtures estables para cablear sus componentes después.
+
+El trabajo seguirá estos cinco puntos:
+
+1. **Mantener la foundation estable:** consumir contratos, helpers, policies y
+   operaciones compartidas sin duplicar lógica CRM.
+2. **Preparar el backend de Contacts:** definir entidades, migraciones, relaciones,
+   RLS, permisos, API, errores, paginación, filtros, auditoría e idempotencia.
+3. **Definir el contrato de integración:** documentar read models, commands,
+   queries, envelopes, estados, forbidden/error cases y compatibilidad para UI.
+4. **Validar con evidencia:** añadir fixtures y tests de schema, RLS, API,
+   autorización, aislamiento y regresión sin depender del navegador.
+5. **Dejar el flujo reusable:** registrar una plantilla para repetir
+   definición → contrato → schema/RLS → API → tests → handoff frontend en Leads,
+   Pipeline, Tasks y Customer 360.
+
+Los siguientes módulos CRM no se implementan en este slice; reutilizarán este
+flujo y sus artefactos después de que Contacts esté certificado.
+
 ## Riesgos y bloqueos
 
 | Riesgo o bloqueo                                                     | Impacto                                                     | Mitigación                                                              | Responsable  | Estado                                                                 |
@@ -206,9 +231,9 @@ cierre.
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-18.
-- **Rama de continuación:** `feature/crm-g0-shared-foundation`.
-- **Commit de partida:** `d19bc44` (`feature/crm-g0-shared-foundation`), último
-  commit de la rama antes del merge del PR #111.
+- **Rama de continuación:** `feature/crm-contacts-backend-foundation`.
+- **Commit de partida:** `b89a812` (`origin/develop`), con PR #111 y la
+  actualización documental ya integrados.
 - **Estado alcanzado:** G0 hardening, migration governance, reusable pgTAP
   helpers, CRM isolation tests, canonical seed, generated database types,
   API-level idempotency/redaction tests and CI validation are integrated into
@@ -221,9 +246,9 @@ cierre.
   CRM contract/API tests (15), contracts build, LoopDev OS typecheck and
   production build with local Supabase variables pass; PR #111 GitHub Actions
   passed.
-- **Siguiente acción concreta:** Certify Contacts (#82) against the shared
-  contracts and persistence foundation; do not close the track until that
-  evidence and explicit user approval are recorded.
+- **Siguiente acción concreta:** definir y validar el contrato backend de Contacts
+  en la rama de continuación; no cerrar el track hasta certificar Contacts y
+  registrar aprobación explícita.
 
 ## Cierre
 
