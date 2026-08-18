@@ -9,8 +9,8 @@ lead: User
 branch: feature/crm-ui-foundation
 branches: []
 phase: 1
-pull_requests: []
-issues: []
+pull_requests: [108]
+issues: [69]
 packages: []
 release: not-required
 areas: [crm, platform]
@@ -70,6 +70,11 @@ navegación, modos de canvas, panel contextual, foco y estados de composición.
 La fase de geometría del Shell queda certificada; este track CRM no se marca
 completo porque conserva trabajo de estandarización profunda de
 `ActivityTable` y composiciones posteriores.
+
+**Cierre de la entrega publicada:** PR #108 fue mergeado en `develop` el
+2026-08-18 mediante `76e9a340`. Este merge certifica la foundation UI y la
+superficie responsive; no certifica persistencia CRM, RLS, aislamiento tenant,
+staging ni UAT. El track permanece activo para las composiciones posteriores.
 
 ## Outcome
 

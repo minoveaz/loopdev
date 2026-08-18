@@ -3,14 +3,14 @@ id: crm-pilot-execution
 title: CRM Pilot Execution
 status: planned
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-18
 owner: crm
 lead: User
 branch: null
 branches: []
 phase: 0
-pull_requests: []
-issues: []
+pull_requests: [108]
+issues: [68, 70, 71, 72, 73, 74, 75, 76, 77, 78, 82, 84, 85, 87, 88, 92, 94]
 packages: []
 release: pilot
 areas: [crm, platform, governance]
@@ -219,8 +219,7 @@ Las decisiones UX/UI confirmadas para UX-00 son:
   de logs y analytics.
 - Customer 360 minimo: perfil, leads, oportunidades, notas, tareas y timeline. Quedan fuera familia,
   documentos, cotizaciones, seguros y comunicaciones.
-- Una tarea puede asociarse a contacto, lead u oportunidad, pero aparece una sola vez en Customer
-  360.
+- Una tarea puede asociarse a contacto, lead u oportunidad, pero aparece una sola vez en Customer 360.
 - Dashboard e import dry-run quedan fuera del piloto inicial y se planifican para el sprint posterior,
   una vez validado el flujo CRM completo.
 - UAT funcional en escritorio y tablet; mobile web conserva responsive basico sin paridad funcional.
@@ -229,6 +228,7 @@ La composicion frontend del piloto sigue el ADR
 `docs/architecture/ADR-2026-08-13-suite-runtime-suite-canvas-fsd.md`: `SuiteRuntime + SuiteCanvas`
 es la composicion estandar, y FSD organiza widgets, features y entities dentro de cada Canvas.
 `SuiteCanvas` no contiene logica CRM ni accede a datos.
+
 - Los leads pueden tener origen manual, campana de marketing, mensaje de WhatsApp simulado, referral,
   social o partner. En el piloto se implementa el contrato de origen y atribucion para los seis casos,
   con provider, identificador externo, campana/UTM, marca y workspace cuando existan. Las conexiones
@@ -259,44 +259,44 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 
 ## Referencias de arquitectura obligatorias
 
-| Fuente | Parte que este track cumple | Aplicacion en el piloto |
-| --- | --- | --- |
+| Fuente                                                                           | Parte que este track cumple                                                                                                | Aplicacion en el piloto                                                                                                |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `docs/architecture/LOOPDEV_PRODUCT_ARCHITECTURE_AND_ROADMAP.md`, seccion 8.1 CRM | Core de contactos/empresas, leads, pipeline, actividades, tareas, notas, Customer 360, busqueda, permisos, RLS y auditoria | Entregar solo el core necesario para el flujo critico; inbox, automatizaciones, catalogo, documentos e IA siguen fuera |
-| Mismo documento, secciones 11.1-11.4 | Jerarquia organization/workspace/brand, membership, permisos, entitlement, invariantes RLS y caminos privilegiados | Probar aislamiento de dos tenants, FKs tenant-aware, kill switches y prohibir service role en requests de usuario |
-| Mismo documento, secciones 16.1 y 16.4-16.5 | Staging con datos sinteticos/pseudonimizados, produccion aislada, migraciones, tipos, smoke y restore | Preparar staging y solo abrir un anillo productivo tras G5; Dev o Staging no se presentan como produccion |
-| Mismo documento, secciones 17.1-17.4 | Seguridad, rate limits, logs, error tracking, health/readiness, alertas y runbooks | Hacer operable y reversible el piloto antes de datos reales |
-| Mismo documento, secciones 18.1-18.3 | Gates por frontend, database, contracts y Render; DoR y DoD de vertical slices | Cada delivery track declara contratos, schema/RLS, estados UX, rollout, rollback, pruebas y evidencia |
-| Mismo documento, seccion 19 H0-H1 | Foundation y CRM Pilot: ruta CRM estandar, staging reproducible, flujo critico y cero fallos cross-tenant P0/P1 | G0-G5 operacionaliza H0/H1; H2 solo se abre con evidencia de salida del piloto |
+| Mismo documento, secciones 11.1-11.4                                             | Jerarquia organization/workspace/brand, membership, permisos, entitlement, invariantes RLS y caminos privilegiados         | Probar aislamiento de dos tenants, FKs tenant-aware, kill switches y prohibir service role en requests de usuario      |
+| Mismo documento, secciones 16.1 y 16.4-16.5                                      | Staging con datos sinteticos/pseudonimizados, produccion aislada, migraciones, tipos, smoke y restore                      | Preparar staging y solo abrir un anillo productivo tras G5; Dev o Staging no se presentan como produccion              |
+| Mismo documento, secciones 17.1-17.4                                             | Seguridad, rate limits, logs, error tracking, health/readiness, alertas y runbooks                                         | Hacer operable y reversible el piloto antes de datos reales                                                            |
+| Mismo documento, secciones 18.1-18.3                                             | Gates por frontend, database, contracts y Render; DoR y DoD de vertical slices                                             | Cada delivery track declara contratos, schema/RLS, estados UX, rollout, rollback, pruebas y evidencia                  |
+| Mismo documento, seccion 19 H0-H1                                                | Foundation y CRM Pilot: ruta CRM estandar, staging reproducible, flujo critico y cero fallos cross-tenant P0/P1            | G0-G5 operacionaliza H0/H1; H2 solo se abre con evidencia de salida del piloto                                         |
 
 ## Decisiones aprobadas
 
-| Fecha | Decision | Motivo | Impacto | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-13 | Crear `CRM Pilot Execution` como program track central | El track CRM historico mezcla dominios y fases que exceden el piloto controlado | G0-G5, delivery tracks y GitHub Project se coordinan desde este documento | User |
-| 2026-08-13 | Superseder el track CRM historico solo como plan operativo del piloto | Preservar evidencia previa sin usar un mega-track como control diario | `estar-protegidos-crm-platform` permanece como antecedente; no se cierra ni elimina | User |
-| 2026-08-13 | Definir roles, navegacion, pipeline configurable y alcance UX del piloto | UX-00 necesita decisiones de producto antes de implementar vistas CRM | Sin viewer; Customer 360 dentro de contacto; superdev auditado; UAT funcional en escritorio/tablet; dashboard y capacidades simuladas se excluyen | User |
-| 2026-08-13 | Limitar la configuracion de campos a mostrar, ocultar y marcar obligatorios | Crear campos personalizados altera schema, busqueda, exportacion, contratos y RLS | El piloto configura solo campos existentes; campos personalizados se difieren | User |
-| 2026-08-13 | Incluir identificacion, fecha de nacimiento, genero y estado civil en Contactos | Estar Protegidos necesita esos datos personales para operar el CRM del piloto | Se aplican proposito, permisos, retencion, audit y exclusion de logs; no habilita datos de salud ni Insurance Pack | User |
-| 2026-08-13 | Crear contacto y solicitar revision ante duplicado ambiguo | Una persona puede usar numeros distintos y no se debe bloquear la operacion ni fusionar automaticamente | El agente aprueba el merge auditado; coincidencias seguras reutilizan contacto | User |
-| 2026-08-13 | Preparar atribucion de leads para Marketing y WhatsApp sin activar conexiones | Los futuros leads vendran de campanas o mensajes y H2 debe integrarlos sin rehacer el modelo | Lead conserva origen, provider, identificador externo, campana/UTM, marca y workspace cuando existan | User |
-| 2026-08-13 | Mantener los cuatro campos personales como opcionales en Contactos | La captacion CRM no debe bloquearse por datos necesarios mas adelante en cotizacion o solicitud de poliza | DNI/NIE/pasaporte sera obligatorio solo al iniciar esos flujos diferidos; fecha de nacimiento, genero y estado civil permanecen opcionales | User |
-| 2026-08-13 | Aprobar UX-00 y asumir inicialmente Product Owner, Tech Lead y release owner | El piloto requiere una autoridad de producto, arquitectura y promocion aunque una sola persona cubra los roles | `CRM_PILOT_UX_SPEC.md` pasa a approved; User asume las tres responsabilidades hasta nueva delegacion | User |
-| 2026-08-13 | Aprobar el enfoque de dataset sintetico y UAT por dos sesiones | El piloto necesita datos representativos y aceptacion progresiva sin datos reales prematuros | Se prepara CSV con dos tenants y casos de deduplicacion; UAT 1 valida journeys y UAT 2 confirma correcciones | User |
-| 2026-08-13 | Exigir revision de estado y cobertura antes de iniciar pruebas | No se debe ejecutar una suite sin saber que comportamiento entregado debe demostrar | Cada ciclo de test/UAT inventaria funcionalidades reales, casos esperados, cobertura existente, huecos y criterio de salida | User |
-| 2026-08-13 | Confirmar que User asume los tres roles del piloto | Actualmente no hay responsables adicionales disponibles | User actua como Product Owner, Tech Lead y release owner hasta nueva delegacion | User |
-| 2026-08-13 | Confirmar dos carriles de ingenieria | El piloto necesita separar producto/frontend de plataforma/datos aunque la ejecucion pueda ser secuencial | Carril CRM/Frontend y carril Datos/Seguridad/Operaciones; no implica dos personas disponibles | User |
-| 2026-08-13 | Adoptar `SuiteRuntime + SuiteCanvas` como composicion del piloto y aplicar FSD dentro del Canvas | El CRM parte de una composicion de suite flexible y modos de visualizacion ya demostrados en Shell Showcase | CRM usara Canvas sin logica de negocio; el contenido se organiza por widgets/features/entities | User |
-| 2026-08-13 | Crear dataset sintetico inicial | Se necesita una base determinista para contratos, deduplicacion, importacion y pruebas | `crm-pilot-contacts.csv` queda como fixture de referencia; debe ampliarse con leads, oportunidades y tareas antes de UAT | User |
-| 2026-08-13 | Usar fechas tentativas ligadas a gates para UAT | Las sesiones no deben bloquear G0 ni fingir disponibilidad antes de staging | UAT 1: 2026-09-04; UAT 2: 2026-09-11. Son fechas tentativas y se confirman cuando staging y funcionalidades esten Ready | User |
-| 2026-08-13 | Crear plantilla de revision de readiness | Las pruebas deben comparar producto realmente entregado, casos esperados y cobertura antes de ejecutarse | `CRM_PILOT_READINESS_REVIEW.md` bloquea interpretaciones de cobertura sin candidate en staging | User |
-| 2026-08-13 | Aprobar auditoria de componentes de Contactos | La vista debe construirse con limites claros entre shell, FSD y dominio CRM | `CRM-01` puede prepararse con ContactTable, ContactForm, ContactDetailPanel y sus features/entities | User |
-| 2026-08-13 | Aprobar contrato de Contact e impact assessment de CRM-01 | La implementacion necesita un acuerdo comun de datos y una matriz de impactos antes de tocar codigo | `CRM-01` pasa Definition of Ready; el desarrollo aun no se inicia | User |
-| 2026-08-13 | Aprobar paquete UX de Leads y reglas de conversion por producto | Un Lead puede interesarse por varios seguros sin duplicar la misma Opportunity; la unicidad debe proteger reintentos y concurrencia | Leads queda Ready documental; primera conversion mueve a `convertido`, conversiones posteriores usan `product_key` distinto y Pipeline distingue `manual` de `lead_conversion` | User |
-| 2026-08-13 | Definir Tasks como modulo y Daily Operation como resultado transversal de G3 | Tasks es una entidad reutilizable; Daily Operation depende de Contacts, Leads, Pipeline, notas, timeline y Customer 360 | Se crea el paquete de cinco documentos para Tasks bajo `docs/06-product/crm/tasks/`; no se crea un modulo separado de Daily Operation | User |
-| 2026-08-13 | Sacar Dashboard e import dry-run del piloto | El piloto debe validar primero el flujo CRM critico y reducir complejidad operativa | Dashboard e import dry-run pasan al sprint posterior, despues de validar Contacts, Leads, Pipeline, Tasks y Customer 360 | User |
-| 2026-08-13 | Aprobar alcance final y tres carriles del piloto | Un mes exige limitar el producto a la jornada CRM critica y separar responsabilidades de ejecucion | El piloto excluye Dashboard/import dry-run y capacidades diferidas; G0 puede pasar a preparar owners, dependencias y evidencias | User |
-| 2026-08-13 | Aprobar plantilla de readiness del piloto | Las pruebas deben demostrar lo que la candidate realmente entrega, con casos, cobertura y evidencia | `CRM_PILOT_READINESS_REVIEW.md` queda como gate obligatorio antes de cada ciclo de pruebas/UAT | User |
-| 2026-08-14 | Aprobar secuencia y salida de G1 | La matriz aprobada necesita un orden operativo y evidencia verificable antes de ejecutar CRM | G1 sigue bloqueado por ejecucion pendiente; solo se aprueba la secuencia y sus condiciones de salida | User |
+| Fecha      | Decision                                                                                         | Motivo                                                                                                                              | Impacto                                                                                                                                                                        | Aprobado por |
+| ---------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
+| 2026-08-13 | Crear `CRM Pilot Execution` como program track central                                           | El track CRM historico mezcla dominios y fases que exceden el piloto controlado                                                     | G0-G5, delivery tracks y GitHub Project se coordinan desde este documento                                                                                                      | User         |
+| 2026-08-13 | Superseder el track CRM historico solo como plan operativo del piloto                            | Preservar evidencia previa sin usar un mega-track como control diario                                                               | `estar-protegidos-crm-platform` permanece como antecedente; no se cierra ni elimina                                                                                            | User         |
+| 2026-08-13 | Definir roles, navegacion, pipeline configurable y alcance UX del piloto                         | UX-00 necesita decisiones de producto antes de implementar vistas CRM                                                               | Sin viewer; Customer 360 dentro de contacto; superdev auditado; UAT funcional en escritorio/tablet; dashboard y capacidades simuladas se excluyen                              | User         |
+| 2026-08-13 | Limitar la configuracion de campos a mostrar, ocultar y marcar obligatorios                      | Crear campos personalizados altera schema, busqueda, exportacion, contratos y RLS                                                   | El piloto configura solo campos existentes; campos personalizados se difieren                                                                                                  | User         |
+| 2026-08-13 | Incluir identificacion, fecha de nacimiento, genero y estado civil en Contactos                  | Estar Protegidos necesita esos datos personales para operar el CRM del piloto                                                       | Se aplican proposito, permisos, retencion, audit y exclusion de logs; no habilita datos de salud ni Insurance Pack                                                             | User         |
+| 2026-08-13 | Crear contacto y solicitar revision ante duplicado ambiguo                                       | Una persona puede usar numeros distintos y no se debe bloquear la operacion ni fusionar automaticamente                             | El agente aprueba el merge auditado; coincidencias seguras reutilizan contacto                                                                                                 | User         |
+| 2026-08-13 | Preparar atribucion de leads para Marketing y WhatsApp sin activar conexiones                    | Los futuros leads vendran de campanas o mensajes y H2 debe integrarlos sin rehacer el modelo                                        | Lead conserva origen, provider, identificador externo, campana/UTM, marca y workspace cuando existan                                                                           | User         |
+| 2026-08-13 | Mantener los cuatro campos personales como opcionales en Contactos                               | La captacion CRM no debe bloquearse por datos necesarios mas adelante en cotizacion o solicitud de poliza                           | DNI/NIE/pasaporte sera obligatorio solo al iniciar esos flujos diferidos; fecha de nacimiento, genero y estado civil permanecen opcionales                                     | User         |
+| 2026-08-13 | Aprobar UX-00 y asumir inicialmente Product Owner, Tech Lead y release owner                     | El piloto requiere una autoridad de producto, arquitectura y promocion aunque una sola persona cubra los roles                      | `CRM_PILOT_UX_SPEC.md` pasa a approved; User asume las tres responsabilidades hasta nueva delegacion                                                                           | User         |
+| 2026-08-13 | Aprobar el enfoque de dataset sintetico y UAT por dos sesiones                                   | El piloto necesita datos representativos y aceptacion progresiva sin datos reales prematuros                                        | Se prepara CSV con dos tenants y casos de deduplicacion; UAT 1 valida journeys y UAT 2 confirma correcciones                                                                   | User         |
+| 2026-08-13 | Exigir revision de estado y cobertura antes de iniciar pruebas                                   | No se debe ejecutar una suite sin saber que comportamiento entregado debe demostrar                                                 | Cada ciclo de test/UAT inventaria funcionalidades reales, casos esperados, cobertura existente, huecos y criterio de salida                                                    | User         |
+| 2026-08-13 | Confirmar que User asume los tres roles del piloto                                               | Actualmente no hay responsables adicionales disponibles                                                                             | User actua como Product Owner, Tech Lead y release owner hasta nueva delegacion                                                                                                | User         |
+| 2026-08-13 | Confirmar dos carriles de ingenieria                                                             | El piloto necesita separar producto/frontend de plataforma/datos aunque la ejecucion pueda ser secuencial                           | Carril CRM/Frontend y carril Datos/Seguridad/Operaciones; no implica dos personas disponibles                                                                                  | User         |
+| 2026-08-13 | Adoptar `SuiteRuntime + SuiteCanvas` como composicion del piloto y aplicar FSD dentro del Canvas | El CRM parte de una composicion de suite flexible y modos de visualizacion ya demostrados en Shell Showcase                         | CRM usara Canvas sin logica de negocio; el contenido se organiza por widgets/features/entities                                                                                 | User         |
+| 2026-08-13 | Crear dataset sintetico inicial                                                                  | Se necesita una base determinista para contratos, deduplicacion, importacion y pruebas                                              | `crm-pilot-contacts.csv` queda como fixture de referencia; debe ampliarse con leads, oportunidades y tareas antes de UAT                                                       | User         |
+| 2026-08-13 | Usar fechas tentativas ligadas a gates para UAT                                                  | Las sesiones no deben bloquear G0 ni fingir disponibilidad antes de staging                                                         | UAT 1: 2026-09-04; UAT 2: 2026-09-11. Son fechas tentativas y se confirman cuando staging y funcionalidades esten Ready                                                        | User         |
+| 2026-08-13 | Crear plantilla de revision de readiness                                                         | Las pruebas deben comparar producto realmente entregado, casos esperados y cobertura antes de ejecutarse                            | `CRM_PILOT_READINESS_REVIEW.md` bloquea interpretaciones de cobertura sin candidate en staging                                                                                 | User         |
+| 2026-08-13 | Aprobar auditoria de componentes de Contactos                                                    | La vista debe construirse con limites claros entre shell, FSD y dominio CRM                                                         | `CRM-01` puede prepararse con ContactTable, ContactForm, ContactDetailPanel y sus features/entities                                                                            | User         |
+| 2026-08-13 | Aprobar contrato de Contact e impact assessment de CRM-01                                        | La implementacion necesita un acuerdo comun de datos y una matriz de impactos antes de tocar codigo                                 | `CRM-01` pasa Definition of Ready; el desarrollo aun no se inicia                                                                                                              | User         |
+| 2026-08-13 | Aprobar paquete UX de Leads y reglas de conversion por producto                                  | Un Lead puede interesarse por varios seguros sin duplicar la misma Opportunity; la unicidad debe proteger reintentos y concurrencia | Leads queda Ready documental; primera conversion mueve a `convertido`, conversiones posteriores usan `product_key` distinto y Pipeline distingue `manual` de `lead_conversion` | User         |
+| 2026-08-13 | Definir Tasks como modulo y Daily Operation como resultado transversal de G3                     | Tasks es una entidad reutilizable; Daily Operation depende de Contacts, Leads, Pipeline, notas, timeline y Customer 360             | Se crea el paquete de cinco documentos para Tasks bajo `docs/06-product/crm/tasks/`; no se crea un modulo separado de Daily Operation                                          | User         |
+| 2026-08-13 | Sacar Dashboard e import dry-run del piloto                                                      | El piloto debe validar primero el flujo CRM critico y reducir complejidad operativa                                                 | Dashboard e import dry-run pasan al sprint posterior, despues de validar Contacts, Leads, Pipeline, Tasks y Customer 360                                                       | User         |
+| 2026-08-13 | Aprobar alcance final y tres carriles del piloto                                                 | Un mes exige limitar el producto a la jornada CRM critica y separar responsabilidades de ejecucion                                  | El piloto excluye Dashboard/import dry-run y capacidades diferidas; G0 puede pasar a preparar owners, dependencias y evidencias                                                | User         |
+| 2026-08-13 | Aprobar plantilla de readiness del piloto                                                        | Las pruebas deben demostrar lo que la candidate realmente entrega, con casos, cobertura y evidencia                                 | `CRM_PILOT_READINESS_REVIEW.md` queda como gate obligatorio antes de cada ciclo de pruebas/UAT                                                                                 | User         |
+| 2026-08-14 | Aprobar secuencia y salida de G1                                                                 | La matriz aprobada necesita un orden operativo y evidencia verificable antes de ejecutar CRM                                        | G1 sigue bloqueado por ejecucion pendiente; solo se aprueba la secuencia y sus condiciones de salida                                                                           | User         |
 
 ## Arquitectura y contratos
 
@@ -316,33 +316,33 @@ mutaciones criticas usan contratos, autorizacion server-side, RLS y datos autori
 
 ### Orden y dependencias
 
-| Orden | Fase | Issues | Carril principal | Owner | Dependencia de entrada | Salida exigida |
-| --- | --- | --- | --- | --- | --- | --- |
-| 0 | G0 Definition/readiness | #66, #67, #68 | Coordinacion | User | Alcance, UX y Project definidos | G0 firmado, owners/evidencia/dependencias completas |
-| 1 | G1 Security/first slice | #70-#78, #82 | Datos/Seguridad + CRM | User | G0 aprobado | RLS, seed, CI, pgTAP, E2E y Contacts persistente |
-| 2 | G2 Lead/Pipeline | #83, #84, #85 | CRM/Frontend | User | G1 validado | Leads y Opportunities persistentes, idempotencia y aislamiento |
-| 3 | G3 Daily Operation/staging | #86, #87, #88, #79, #80 | CRM + Operaciones | User | G2 validado | Tasks, Customer 360, staging, observabilidad y readiness UAT 1 |
-| 4 | G4 Hardening/UAT 2 | #90, #91, #92, #81 | Calidad/Operaciones | User | UAT 1 y G3 aceptados | P0/P1 resueltos, restore/rollback y readiness UAT 2 |
-| 5 | G5 Release decision | #94 | Calidad/Operaciones | User | UAT 2 aceptada | Smoke/canary y decisión UAT privado o anillo nominal |
+| Orden | Fase                       | Issues                  | Carril principal      | Owner | Dependencia de entrada          | Salida exigida                                                 |
+| ----- | -------------------------- | ----------------------- | --------------------- | ----- | ------------------------------- | -------------------------------------------------------------- |
+| 0     | G0 Definition/readiness    | #66, #67, #68           | Coordinacion          | User  | Alcance, UX y Project definidos | G0 firmado, owners/evidencia/dependencias completas            |
+| 1     | G1 Security/first slice    | #70-#78, #82            | Datos/Seguridad + CRM | User  | G0 aprobado                     | RLS, seed, CI, pgTAP, E2E y Contacts persistente               |
+| 2     | G2 Lead/Pipeline           | #83, #84, #85           | CRM/Frontend          | User  | G1 validado                     | Leads y Opportunities persistentes, idempotencia y aislamiento |
+| 3     | G3 Daily Operation/staging | #86, #87, #88, #79, #80 | CRM + Operaciones     | User  | G2 validado                     | Tasks, Customer 360, staging, observabilidad y readiness UAT 1 |
+| 4     | G4 Hardening/UAT 2         | #90, #91, #92, #81      | Calidad/Operaciones   | User  | UAT 1 y G3 aceptados            | P0/P1 resueltos, restore/rollback y readiness UAT 2            |
+| 5     | G5 Release decision        | #94                     | Calidad/Operaciones   | User  | UAT 2 aceptada                  | Smoke/canary y decisión UAT privado o anillo nominal           |
 
 ### Carriles y WIP
 
-| Carril | Responsabilidad | Issues iniciales | Regla WIP |
-| --- | --- | --- | --- |
-| CRM/Frontend | Contratos de ruta, vistas, estados UX e integración de módulos | #82, #84, #85, #87, #88 | Un slice activo por vez |
-| Datos/Seguridad | Schema, FKs, RLS, kill switches, audit, seed y pgTAP | #70-#75 | No avanzar sin evidencia de aislamiento |
-| Calidad/Operaciones | CI, E2E, staging, observabilidad, restore, UAT y release | #76-#81, #90-#94 | No ejecutar UAT sin readiness review |
+| Carril              | Responsabilidad                                                | Issues iniciales        | Regla WIP                               |
+| ------------------- | -------------------------------------------------------------- | ----------------------- | --------------------------------------- |
+| CRM/Frontend        | Contratos de ruta, vistas, estados UX e integración de módulos | #82, #84, #85, #87, #88 | Un slice activo por vez                 |
+| Datos/Seguridad     | Schema, FKs, RLS, kill switches, audit, seed y pgTAP           | #70-#75                 | No avanzar sin evidencia de aislamiento |
+| Calidad/Operaciones | CI, E2E, staging, observabilidad, restore, UAT y release       | #76-#81, #90-#94        | No ejecutar UAT sin readiness review    |
 
 ### Evidencia mínima por gate
 
-| Gate | Evidencia mínima | No-go |
-| --- | --- | --- |
-| G0 | Alcance aprobado, matriz de dependencias, Project actualizado, fechas UAT tentativas | Scope ambiguo o sin owner operativo |
-| G1 | RLS/pgTAP, seed reproducible, kill switches, audit append-only, CI y Contacts E2E | Cross-tenant, service_role browser o P0 de seguridad |
-| G2 | Routes/API reales, persistencia, conversiones idempotentes, pruebas de Leads/Pipeline | Duplicados, pérdida de relación o aislamiento fallido |
-| G3 | Candidate en staging, readiness review, Tasks/Customer 360 E2E, health/logs/Sentry | Candidate no reproducible o caso P0 sin cobertura |
-| G4 | Correcciones UAT 1, a11y, rendimiento básico, rollback y restore drill | P0/P1 abierto o restore no verificable |
-| G5 | UAT 2 aceptada, smoke/canary, runbooks y decisión explícita | Decisión sin evidencia o no-go sin remediación |
+| Gate | Evidencia mínima                                                                      | No-go                                                 |
+| ---- | ------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| G0   | Alcance aprobado, matriz de dependencias, Project actualizado, fechas UAT tentativas  | Scope ambiguo o sin owner operativo                   |
+| G1   | RLS/pgTAP, seed reproducible, kill switches, audit append-only, CI y Contacts E2E     | Cross-tenant, service_role browser o P0 de seguridad  |
+| G2   | Routes/API reales, persistencia, conversiones idempotentes, pruebas de Leads/Pipeline | Duplicados, pérdida de relación o aislamiento fallido |
+| G3   | Candidate en staging, readiness review, Tasks/Customer 360 E2E, health/logs/Sentry    | Candidate no reproducible o caso P0 sin cobertura     |
+| G4   | Correcciones UAT 1, a11y, rendimiento básico, rollback y restore drill                | P0/P1 abierto o restore no verificable                |
+| G5   | UAT 2 aceptada, smoke/canary, runbooks y decisión explícita                           | Decisión sin evidencia o no-go sin remediación        |
 
 ### Calendario tentativo y checkpoints
 
@@ -376,6 +376,7 @@ programa y no autoriza implementacion del piloto.
 **Objetivo:** aprobar el alcance ejecutable del piloto antes de implementar vistas o slices CRM.
 
 **Definition of Ready**
+
 - [x] Execution roadmap aprobado.
 - [x] UX-00 aprobado: navegacion, rutas, vistas, acciones, permisos, estados y flujos UAT.
 - [x] Roles, navegacion visible, ubicacion de Customer 360, alcance excluido y plataformas UAT definidos.
@@ -385,11 +386,13 @@ programa y no autoriza implementacion del piloto.
 - [x] Sesiones UAT calendarizadas con fechas concretas tentativas.
 
 **Entregables**
+
 - [x] GitHub Project `CRM Pilot G0-G5` con campos, vistas e items G0.
 - [x] Alcance firmado y reduccion de alcance definida para una sola persona ingeniera.
 - [x] Tres delivery tracks criticos preparados sin superar el WIP acordado.
 
 **Validacion**
+
 - [x] Owner operativo de G0 y carriles confirmado: User.
 - [x] Cada item G0 tiene owner, dependencia, gate y evidencia esperada.
 - [ ] Ninguna vista CRM inicia implementacion sin UX-00.
@@ -405,11 +408,11 @@ se confirman tras G1/G2, despliegue reproducible y revision de readiness.
 
 **Matriz operativa G0**
 
-| Issue | Owner | Dependencia | Gate | Evidencia |
-| --- | --- | --- | --- | --- |
-| #66 Campos y dataset | User | UX-00 y contratos CRM aprobados | G0 | `docs/06-product/crm/fixtures/` y paquetes CRM |
-| #67 Sesiones UAT | User | Fechas tentativas, staging y readiness review | G0/G3/G4 | Este track y `CRM_PILOT_READINESS_REVIEW.md` |
-| #68 Alcance y carriles | User | Roadmap, UX-00 y capacidad disponible | G0 | Alcance aprobado y tres carriles en este track |
+| Issue                  | Owner | Dependencia                                   | Gate     | Evidencia                                      |
+| ---------------------- | ----- | --------------------------------------------- | -------- | ---------------------------------------------- |
+| #66 Campos y dataset   | User  | UX-00 y contratos CRM aprobados               | G0       | `docs/06-product/crm/fixtures/` y paquetes CRM |
+| #67 Sesiones UAT       | User  | Fechas tentativas, staging y readiness review | G0/G3/G4 | Este track y `CRM_PILOT_READINESS_REVIEW.md`   |
+| #68 Alcance y carriles | User  | Roadmap, UX-00 y capacidad disponible         | G0       | Alcance aprobado y tres carriles en este track |
 
 ### Fase 1: G1 - Security and first persistent slice
 
@@ -417,15 +420,18 @@ se confirman tras G1/G2, despliegue reproducible y revision de readiness.
 entorno controlado.
 
 **Definition of Ready**
+
 - [ ] G0 aprobado.
 - [ ] Delivery tracks de datos/seguridad, calidad/operaciones y CRM preparados.
 
 **Entregables**
+
 - [ ] RLS por verbo, FKs tenant-aware, kill switches y audit append-only.
 - [ ] Reset, seed sintetico, tipos generados, pgTAP y gate CI requerido.
 - [ ] Lista, busqueda, creacion y detalle de contacto con API, autorizacion y persistencia real.
 
 **Validacion**
+
 - [ ] Viewer no muta y tenant B no accede ni referencia datos de tenant A.
 - [ ] Reset/lint/pgTAP y el E2E del contacto pasan.
 
@@ -439,14 +445,17 @@ entorno controlado.
 aislamiento verificable.
 
 **Definition of Ready**
+
 - [ ] Fase 1 validada.
 
 **Entregables**
+
 - [ ] Captura de lead transaccional/idempotente y normalizacion unica.
 - [ ] Listado, detalle y edicion de lead; transicion persistente de etapa.
 - [ ] Estado de servidor CRM real, contratos de route y pruebas de integracion/E2E.
 
 **Validacion**
+
 - [ ] El flujo sobrevive recarga y cambio de dispositivo.
 - [ ] Tenant B no puede leer, mutar ni referenciar el flujo de tenant A.
 
@@ -459,14 +468,17 @@ aislamiento verificable.
 **Objetivo:** permitir la jornada critica de un agente en staging y obtener el primer UAT.
 
 **Definition of Ready**
+
 - [ ] Fase 2 validada.
 
 **Entregables**
+
 - [ ] Notas, tareas, completado y timeline.
 - [ ] Customer 360 minimo.
 - [ ] Staging reproducible, health, logs, Sentry y UAT 1.
 
 **Validacion**
+
 - [ ] Un agente completa el flujo diario critico con datos autorizados.
 - [ ] Deploy y rollback de aplicacion son reproducibles.
 
@@ -482,13 +494,16 @@ aislamiento verificable.
 go-live o UAT privado.
 
 **Definition of Ready**
+
 - [ ] Fase 3 validada y UAT inicial completado.
 
 **Entregables**
+
 - [ ] Remediacion de P0/P1, accesibilidad, rendimiento, rate limits, secrets y runbooks.
 - [ ] Restore drill, rollback, usuarios nominales, smoke checks y plan de hypercare.
 
 **Validacion**
+
 - [ ] Se cumplen todas las condiciones de salida G4-G5 y ninguna condicion absoluta de no-go.
 - [ ] Tech Lead, Product Owner y representante de Estar Protegidos toman la decision G5.
 
@@ -498,24 +513,24 @@ go-live o UAT privado.
 
 ## Registro de cambios de enfoque
 
-| Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-13 | Separar el piloto del mega-track CRM historico | El piloto requiere gates fechados, WIP limitado y evidencias operativas | CRM Pilot Execution coordina G0-G5; el historico se preserva como antecedente | User |
+| Fecha      | Cambio                                         | Motivo                                                                  | Impacto en alcance/fases                                                      | Aprobado por |
+| ---------- | ---------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------ |
+| 2026-08-13 | Separar el piloto del mega-track CRM historico | El piloto requiere gates fechados, WIP limitado y evidencias operativas | CRM Pilot Execution coordina G0-G5; el historico se preserva como antecedente | User         |
 
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo | Impacto | Mitigacion | Responsable | Estado |
-| --- | --- | --- | --- | --- |
-| UX-00 no aprobado | No existe una base coherente para vistas CRM | Bloquear implementacion de vistas y slices hasta definir UX/UI | crm | abierto |
-| Deduplicacion une personas distintas o duplica una persona con varios numeros | Corrupcion de contactos o perdida de contexto comercial | Coincidencias deterministas seguras; candidatos ambiguos requieren revision humana | crm | abierto |
-| Campos personales aparecen en logs, analytics o exportaciones sin control | Exposicion de PII y riesgo de cumplimiento | Clasificacion confidencial, minimizacion, proposito, permisos, audit y redaccion de logs | crm | abierto |
-| Futuros adaptadores de campana o WhatsApp crean contactos/leads inconsistentes | Atribucion perdida o contactos duplicados al activar H2 | Contrato de origen e idempotencia preparado desde el piloto; pruebas de adapters al activarlos | crm | abierto |
-| Pruebas ejecutadas contra una superficie distinta de la entregada | Falsos verdes o casos de negocio sin cobertura | Revision de readiness y matriz de cobertura antes de cada ciclo de test/UAT | qa | abierto |
-| El roadmap/G0 no tiene aprobacion explicita | No se puede activar ejecucion ni evaluar gates | Mantener el track planned y obtener decision formal | governance | abierto |
-| Mas de tres carriles activos | Capacidad diluida y P0 retrasados | Limitar el piloto a CRM, datos/seguridad y calidad/operaciones | crm | abierto |
-| RLS, FKs o kill switches incompletos | Riesgo de acceso cross-tenant o perdida de datos | Delivery track dedicado, pgTAP y E2E con dos tenants | platform | abierto |
-| Se introducen Insurance, WhatsApp saliente, IA o billing | Scope creep y retraso del flujo core | Aplicar exclusiones; aceptar cambios solo con trade-off escrito | crm | abierto |
-| Sin restore/rollback y observabilidad | No es posible operar datos reales de forma segura | Delivery track de operaciones y no-go en G5 | platform | abierto |
+| Riesgo o bloqueo                                                               | Impacto                                                 | Mitigacion                                                                                     | Responsable | Estado  |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- | ------- |
+| UX-00 no aprobado                                                              | No existe una base coherente para vistas CRM            | Bloquear implementacion de vistas y slices hasta definir UX/UI                                 | crm         | abierto |
+| Deduplicacion une personas distintas o duplica una persona con varios numeros  | Corrupcion de contactos o perdida de contexto comercial | Coincidencias deterministas seguras; candidatos ambiguos requieren revision humana             | crm         | abierto |
+| Campos personales aparecen en logs, analytics o exportaciones sin control      | Exposicion de PII y riesgo de cumplimiento              | Clasificacion confidencial, minimizacion, proposito, permisos, audit y redaccion de logs       | crm         | abierto |
+| Futuros adaptadores de campana o WhatsApp crean contactos/leads inconsistentes | Atribucion perdida o contactos duplicados al activar H2 | Contrato de origen e idempotencia preparado desde el piloto; pruebas de adapters al activarlos | crm         | abierto |
+| Pruebas ejecutadas contra una superficie distinta de la entregada              | Falsos verdes o casos de negocio sin cobertura          | Revision de readiness y matriz de cobertura antes de cada ciclo de test/UAT                    | qa          | abierto |
+| El roadmap/G0 no tiene aprobacion explicita                                    | No se puede activar ejecucion ni evaluar gates          | Mantener el track planned y obtener decision formal                                            | governance  | abierto |
+| Mas de tres carriles activos                                                   | Capacidad diluida y P0 retrasados                       | Limitar el piloto a CRM, datos/seguridad y calidad/operaciones                                 | crm         | abierto |
+| RLS, FKs o kill switches incompletos                                           | Riesgo de acceso cross-tenant o perdida de datos        | Delivery track dedicado, pgTAP y E2E con dos tenants                                           | platform    | abierto |
+| Se introducen Insurance, WhatsApp saliente, IA o billing                       | Scope creep y retraso del flujo core                    | Aplicar exclusiones; aceptar cambios solo con trade-off escrito                                | crm         | abierto |
+| Sin restore/rollback y observabilidad                                          | No es posible operar datos reales de forma segura       | Delivery track de operaciones y no-go en G5                                                    | platform    | abierto |
 
 ## Criterios de cierre
 
@@ -527,21 +542,22 @@ go-live o UAT privado.
 
 ## Evidencia de validacion
 
-| Fecha | Validacion | Resultado | Referencia |
-| --- | --- | --- | --- |
-| 2026-08-13 | Reconciliacion de tracks frente al execution roadmap | Pendiente de aprobacion operativa | Se detectaron tracks activos historicos que exceden el WIP de tres carriles |
-| 2026-08-13 | Inicializacion del Project del piloto | Correcta | Project #3 contiene paquetes P0 G0-G5; UX-00 es el unico item Ready |
-| 2026-08-13 | Conversion del Project a Issues reales | Correcta | Project #3 contiene 31 Issues, sin borradores ni titulos duplicados; #93 y #95 cerrados como duplicados de #92 y #94 |
+| Fecha      | Validacion                                           | Resultado                                                                                | Referencia                                                                                                           |
+| ---------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| 2026-08-13 | Reconciliacion de tracks frente al execution roadmap | Pendiente de aprobacion operativa                                                        | Se detectaron tracks activos historicos que exceden el WIP de tres carriles                                          |
+| 2026-08-13 | Inicializacion del Project del piloto                | Correcta                                                                                 | Project #3 contiene paquetes P0 G0-G5; UX-00 es el unico item Ready                                                  |
+| 2026-08-13 | Conversion del Project a Issues reales               | Correcta                                                                                 | Project #3 contiene 31 Issues, sin borradores ni titulos duplicados; #93 y #95 cerrados como duplicados de #92 y #94 |
+| 2026-08-18 | CRM UI foundation                                    | Parcial: gate visual y responsive certificado; persistencia, RLS y UAT siguen pendientes | PR #108 mergeado en `develop` mediante `76e9a340`; Issues #70-#78 y #82-#88 siguen abiertos                          |
 
 ## Handoff de sesion
 
 - **Fecha:** 2026-08-14.
 - **Rama de continuacion:** `feature/crm-pilot-security-foundation` (no creada todavía).
 - **Commit de partida:** `41f2553` en `docs/2026-execution-roadmap`; la rama documental debe sincronizarse en remoto antes de crear la rama de ejecución.
-- **Estado alcanzado:** Planificación CRM y G0/G1 documental aprobados; matriz de seguridad aprobada; Project #3 preparado; Issues G1 #70-#78 siguen `Backlog/Todo` hasta iniciar ejecución.
+- **Estado alcanzado:** Planificación CRM y G0/G1 documental aprobados; matriz de seguridad aprobada; la foundation UI fue certificada en PR #108 y mergeada a `develop`; Issues G1 #70-#78 y los delivery issues #82-#88 siguen abiertos hasta ejecutar los gates reales.
 - **Decisiones, bloqueos y riesgos:** User es owner operativo, Product Owner, Tech Lead y release owner. G1 debe empezar por reset/seed, integridad tenant-aware, RLS por verbo, kill switches, audit append-only, pgTAP, CI, checks reales y E2E Auth/RLS. No hay acceso a Supabase en este ordenador; la implementación requiere Supabase local o acceso a desarrollo/staging. No crear PR.
 - **Validacion ejecutada:** `validate-git-conventions.mjs`, `generate-tracks-index.mjs`, `validate-tracks.mjs` y `git diff --check` pasan en la rama documental.
-- **Siguiente accion concreta:** En una nueva sesión, verificar que `docs/2026-execution-roadmap` local y remoto apuntan al mismo commit; después crear desde `develop` actualizado `feature/crm-pilot-security-foundation` solo cuando exista Supabase local o acceso al entorno de desarrollo.
+- **Siguiente accion concreta:** Reconciliar G0 (#68) y comenzar G1 por #70-#75 con Supabase local o acceso al entorno de desarrollo; después ejecutar #76-#78 antes de abrir el slice persistente de Contacts (#82). No iniciar G4/G5 todavía.
 
 ## Cierre
 

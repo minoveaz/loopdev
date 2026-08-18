@@ -3,14 +3,14 @@ id: crm-shared-foundation
 title: CRM shared foundation implementation
 status: active
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-18
 owner: crm
 lead: null
 branch: feature/crm-shared-foundation
 branches: []
 phase: 0
 pull_requests: []
-issues: []
+issues: [70, 71, 72, 73, 74, 75, 82]
 packages: []
 release: not-required
 areas: [crm, platform]
@@ -51,10 +51,10 @@ the approved shared boundaries and does not promote them to `@loopdev/ui`.
 
 ## Decisiones aprobadas
 
-| Fecha | Decisión | Motivo | Impacto | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-14 | Start with shared CRM foundation | Shared activity, notes and lookup are dependencies for every module | Module tracks wait for these contracts and fixtures | User |
-| 2026-08-14 | Keep Platform Shell inventory separate from CRM implementation | SuiteCanvas and shell modes are shared platform contracts, not CRM-owned behavior | CRM consumes the validated shell contract; shell work gets its own track | User |
+| Fecha      | Decisión                                                       | Motivo                                                                            | Impacto                                                                  | Aprobado por |
+| ---------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------ |
+| 2026-08-14 | Start with shared CRM foundation                               | Shared activity, notes and lookup are dependencies for every module               | Module tracks wait for these contracts and fixtures                      | User         |
+| 2026-08-14 | Keep Platform Shell inventory separate from CRM implementation | SuiteCanvas and shell modes are shared platform contracts, not CRM-owned behavior | CRM consumes the validated shell contract; shell work gets its own track | User         |
 
 ## Arquitectura y contratos
 
@@ -76,17 +76,20 @@ synchronized `origin/develop` baseline.
 **Objetivo:** Reconcile contracts and establish testable implementation gates.
 
 **Definition of Ready**
+
 - [x] `develop` baseline is synchronized with `origin/develop`.
 - [x] `feature/crm-shared-foundation` is created from that baseline.
 - [x] Shared contracts and existing schemas are reconciled.
 - [x] Capability, RLS and redaction matrices are approved.
 
 **Entregables**
+
 - [x] `docs/06-product/crm/CRM_SHARED_FOUNDATION_READINESS.md`.
 - [x] `docs/06-product/crm/fixtures/crm-shared-foundation-fixtures.json`.
 - [x] Implementation plan with migrations, tests and rollback boundaries.
 
 **Validación**
+
 - [x] Track validator passes.
 - [x] Contract and RLS test plan is reviewed.
 
@@ -96,12 +99,18 @@ and negative cases are recorded in the readiness document and fixtures.
 
 **Estado:** completada el 2026-08-14. Implementation can begin.
 
+## Estado actualizado 2026-08-18
+
+La rama `feature/crm-shared-foundation` sigue publicada en remoto, pero no existe un PR asociado ni evidencia de merge en `develop`. La foundation UI del PR #108 ya está mergeada, pero no sustituye la validación de contratos, RLS, seed/reset ni pruebas de aislamiento de este track.
+
+El track permanece activo y bloqueado para cierre hasta ejecutar la validación remota de Supabase/RLS y completar los checks contractuales. Su siguiente consumidor previsto es Contacts (#82), después de cerrar las condiciones de G1.
+
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
-| --- | --- | --- | --- | --- |
-| Existing CRM schemas may conflict with roadmap read models | Unsafe generated contracts or migration drift | Reconcile before implementation | crm/platform | open |
-| Activity and audit semantics may be conflated | Incorrect retention or disclosure | Approve separate event boundaries and fixtures | crm | open |
+| Riesgo o bloqueo                                           | Impacto                                       | Mitigación                                     | Responsable  | Estado |
+| ---------------------------------------------------------- | --------------------------------------------- | ---------------------------------------------- | ------------ | ------ |
+| Existing CRM schemas may conflict with roadmap read models | Unsafe generated contracts or migration drift | Reconcile before implementation                | crm/platform | open   |
+| Activity and audit semantics may be conflated              | Incorrect retention or disclosure             | Approve separate event boundaries and fixtures | crm          | open   |
 
 ## Criterios de cierre
 
@@ -114,7 +123,7 @@ and negative cases are recorded in the readiness document and fixtures.
 ## Evidencia de validación
 
 | Fecha | Validación | Resultado | Referencia |
-| --- | --- | --- | --- |
+| ----- | ---------- | --------- | ---------- |
 
 ## Handoff de sesión
 
