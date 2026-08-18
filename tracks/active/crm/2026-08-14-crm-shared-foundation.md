@@ -177,7 +177,7 @@ después de cerrar las condiciones de G1.
 | Activity and audit semantics may be conflated              | Incorrect retention or disclosure             | Approve separate event boundaries and fixtures | crm          | open   |
 | CRM and Communications policies use broad `FOR ALL` access | Read permissions may authorize mutation or deletion | Split policies by SQL verb and validate negative cases with pgTAP | crm/platform | mitigated; runtime evidence pending |
 | CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints | crm/platform | mitigated; reset evidence pending |
-| Local Supabase reset is not reproducible | CI and developer evidence can diverge from migration state | Align `supabase/config.toml` with the canonical seed and certify reset | platform | open; config seed path still needs correction |
+| Local Supabase reset is not reproducible | CI and developer evidence can diverge from migration state | Align `supabase/config.toml` with the canonical seed and certify reset | platform | mitigated; canonical seed path and organization scope now pass locally |
 | Static checks could drift from the migration contract | A future suite may reintroduce an unsafe table or grant | Keep the changed-migration governance gate and reusable checklist in CI | platform | mitigated; CI evidence pending |
 
 ## Criterios de cierre
@@ -192,6 +192,7 @@ después de cerrar las condiciones de G1.
 
 | Fecha | Validación | Resultado | Referencia |
 | ----- | ---------- | --------- | ---------- |
+| 2026-08-18 | `supabase db reset` + `supabase db lint --local` + pgTAP database suite | Pass: 128 tests | Local Docker/Supabase; canonical `seed_loopdev.sql` |
 | 2026-08-18 | `pnpm test:supabase-governance` | Pass (4 tests) | `scripts/validate-supabase-governance.test.mjs` |
 | 2026-08-18 | `pnpm validate:full` | Bloqueado por 2 enlaces Markdown preexistentes fuera de este cambio | `docs/06-product/crm/{contacts,leads}/*IMPLEMENTATION_HANDOFF.md` |
 | 2026-08-18 | `pnpm registries:check` | Pass | Generated registry catalog |
