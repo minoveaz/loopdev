@@ -71,6 +71,48 @@ export const CrmContactSchema = z.object({
 });
 export type CrmContact = z.infer<typeof CrmContactSchema>;
 
+export const CrmContactPageSchema = z.object({
+  items: z.array(CrmContactSchema).max(100),
+  nextCursor: IdSchema.nullable(),
+  hasMore: z.boolean(),
+});
+export type CrmContactPage = z.infer<typeof CrmContactPageSchema>;
+
+export const CrmContactQuerySchema = z.object({
+  organizationId: IdSchema,
+  query: z.string().trim().min(1).max(120).optional(),
+  cursor: IdSchema.optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+});
+export type CrmContactQuery = z.infer<typeof CrmContactQuerySchema>;
+
+export const CrmCreateContactCommandSchema = z
+  .object({
+    organizationId: IdSchema,
+    firstName: z.string().trim().min(1).max(120),
+    lastName: z.string().trim().max(120).nullable().optional(),
+    email: NullableEmailSchema,
+    phone: NullablePhoneSchema,
+    companyName: z.string().trim().max(160).nullable().optional(),
+  })
+  .refine((contact) => Boolean(contact.email || contact.phone), {
+    message: 'At least one contact channel is required',
+    path: ['email'],
+  });
+export type CrmCreateContactCommand = z.infer<typeof CrmCreateContactCommandSchema>;
+
+export const CrmUpdateContactCommandSchema = z.object({
+  organizationId: IdSchema,
+  contactId: IdSchema,
+  firstName: z.string().trim().min(1).max(120).optional(),
+  lastName: z.string().trim().max(120).nullable().optional(),
+  email: NullableEmailSchema,
+  phone: NullablePhoneSchema,
+  companyName: z.string().trim().max(160).nullable().optional(),
+  expectedUpdatedAt: TimestampSchema,
+});
+export type CrmUpdateContactCommand = z.infer<typeof CrmUpdateContactCommandSchema>;
+
 export const CrmCompanySchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,

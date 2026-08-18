@@ -2,7 +2,7 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(21);
+select plan(26);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
@@ -48,6 +48,8 @@ select ok(pg_temp.has_policy_for('crm_contacts', 'select'), 'CRM contacts expose
 select ok(pg_temp.has_policy_for('crm_contacts', 'insert'), 'CRM contacts expose an INSERT policy');
 select ok(pg_temp.has_policy_for('crm_contacts', 'update'), 'CRM contacts expose an UPDATE policy');
 select ok(pg_temp.has_policy_for('crm_contacts', 'delete'), 'CRM contacts expose a DELETE policy');
+select ok(pg_temp.has_scoped_fk('crm_leads', 'crm_contacts'), 'CRM leads enforce contact organization ownership');
+select ok(pg_temp.has_scoped_fk('crm_contact_companies', 'crm_contacts'), 'contact companies enforce contact organization ownership');
 select ok(pg_temp.has_policy_for('crm_audit_events', 'select'), 'CRM audit events expose a SELECT policy');
 select ok(pg_temp.has_policy_for('crm_audit_events', 'insert'), 'CRM audit events expose an INSERT policy');
 select ok(not pg_temp.has_policy_for('crm_audit_events', 'update'), 'CRM audit events have no UPDATE policy');
@@ -57,7 +59,6 @@ select is(
   0,
   'CRM policies are declared per SQL verb'
 );
-select ok(pg_temp.has_scoped_fk('crm_leads', 'crm_contacts'), 'CRM leads enforce contact organization ownership');
 select ok(pg_temp.has_scoped_fk('crm_activities', 'crm_leads'), 'CRM activities enforce lead organization ownership');
 
 set local role authenticated;
@@ -65,10 +66,28 @@ select pg_temp.set_authenticated_user('00000000-0000-4000-8700-000000000001');
 
 select is((select count(*)::integer from public.crm_contacts), 1, 'organization member reads own contacts');
 select is((select count(*)::integer from public.crm_activities), 1, 'organization member reads own workspace activity');
+select ok(
+  not exists (select 1 from public.crm_contacts where organization_id = '00000000-0000-4000-9700-000000000002'),
+  'organization member cannot read another organization contacts'
+);
+select lives_ok(
+  $$ update public.crm_contacts set first_name = 'Updated A' where id = '00000000-0000-4000-9a00-000000000001' $$,
+  'organization owner can update a contact'
+);
+select throws_ok(
+  $$ insert into public.crm_contacts (organization_id, first_name, email) values ('00000000-0000-4000-9700-000000000001', 'Duplicate', 'a@crm-security.test') $$,
+  'duplicate key value violates unique constraint "crm_contacts_organization_id_email_normalized_key"',
+  'duplicate contact insert is rejected by the scoped unique key'
+);
 select throws_ok(
   $$ insert into public.crm_contacts (organization_id, first_name) values ('00000000-0000-4000-9700-000000000002', 'Cross organization') $$,
   'new row violates row-level security policy for table "crm_contacts"',
   'organization member cannot insert another organization contact'
+);
+select throws_ok(
+  $$ insert into public.crm_contacts (organization_id, first_name, email) values ('00000000-0000-4000-9700-000000000002', 'Cross organization', 'cross@crm-security.test') $$,
+  'new row violates row-level security policy for table "crm_contacts"',
+  'organization member cannot create another organization contact'
 );
 select throws_ok(
   $$ insert into public.crm_leads (organization_id, contact_id, workspace_id, stage, source)

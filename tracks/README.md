@@ -23,7 +23,7 @@
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
-- [CRM shared foundation implementation](./active/crm/2026-08-14-crm-shared-foundation.md) · `feature/crm-g0-shared-foundation` · fase 1
+- [CRM shared foundation implementation](./active/crm/2026-08-14-crm-shared-foundation.md) · `feature/crm-contacts-backend-foundation` · fase 1
 
 ### Mobile
 

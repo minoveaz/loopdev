@@ -3,7 +3,7 @@ title: CRM Contact Contract
 status: approved
 version: 1.1
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-18
 owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
 issue: https://github.com/minoveaz/loopdev/issues/82
@@ -18,7 +18,9 @@ approved_at: 2026-08-13
 Define el contrato compartido que usaran la UI CRM, el BFF, los casos de uso y los repositorios
 para listar, buscar, crear, editar, consultar y revisar posibles duplicados de contactos.
 
-No implementa schema, RLS ni endpoints. Es la especificacion previa de `CRM-01`.
+Este contrato se implementa primero como backend-first en
+`feature/crm-contacts-backend-foundation`. La integracion visual queda fuera de
+este slice y consumira estos mismos tipos y envelopes.
 
 ## 2. Modelo de lectura
 
@@ -75,16 +77,16 @@ type ContactSource = {
 
 ## 3. Commands and queries
 
-| Operation | Input | Result |
-| --- | --- | --- |
-| `listContacts` | organization, workspace, filters, cursor, limit, sort | Paginated contacts and next cursor |
-| `getContact` | contactId and authorized scope | Contact with permitted Customer 360 summary |
-| `searchContacts` | query, scope, filters, cursor, limit | Paginated authorized matches |
-| `createContact` | create input, idempotency key | Created contact and duplicate review state when applicable |
-| `updateContact` | contactId, patch, expected version | Updated contact or `CONFLICT` |
-| `findPotentialDuplicates` | candidate contact data and scope | Ranked candidates with reason, never automatic merge |
-| `approveContactMerge` | survivorId, duplicateId, reason, expected versions | Merge result, references preserved and audit event |
-| `dismissDuplicateReview` | reviewId, reason | Dismissed review and audit event |
+| Operation                 | Input                                                 | Result                                                     |
+| ------------------------- | ----------------------------------------------------- | ---------------------------------------------------------- |
+| `listContacts`            | organization, workspace, filters, cursor, limit, sort | Paginated contacts and next cursor                         |
+| `getContact`              | contactId and authorized scope                        | Contact with permitted Customer 360 summary                |
+| `searchContacts`          | query, scope, filters, cursor, limit                  | Paginated authorized matches                               |
+| `createContact`           | create input, idempotency key                         | Created contact and duplicate review state when applicable |
+| `updateContact`           | contactId, patch, expected version                    | Updated contact or `CONFLICT`                              |
+| `findPotentialDuplicates` | candidate contact data and scope                      | Ranked candidates with reason, never automatic merge       |
+| `approveContactMerge`     | survivorId, duplicateId, reason, expected versions    | Merge result, references preserved and audit event         |
+| `dismissDuplicateReview`  | reviewId, reason                                      | Dismissed review and audit event                           |
 
 ## 4. Create and update input
 
@@ -168,3 +170,19 @@ returning secrets or full sensitive payloads.
 Contrato aprobado el 2026-08-13 por User para preparar `CRM-01`. La aprobacion no autoriza por si
 sola una migracion destructiva ni el inicio de implementacion sin respetar las dependencias del
 impact assessment.
+
+## 11. Backend-first delivery
+
+The first implementation slice exposes:
+
+- `GET /api/crm/contacts` for authorized list/search with cursor pagination.
+- `POST /api/crm/contacts` for validated creation with organization-scoped
+  duplicate reuse.
+- `PATCH /api/crm/contacts` for optimistic-concurrency updates using
+  `expectedUpdatedAt`.
+
+The route adapters remain thin. Authorization is resolved server-side through
+the CRM permission helper, and the frontend must not access CRM tables directly.
+Contacts are organization-scoped in this first slice; workspace assignment and
+explicit idempotency keys remain planned extensions and are not accepted by the
+current API.

@@ -6,7 +6,7 @@ created: 2026-08-14
 updated: 2026-08-18
 owner: crm
 lead: null
-branch: feature/crm-g0-shared-foundation
+branch: feature/crm-contacts-backend-foundation
 branches: []
 phase: 1
 pull_requests: [111]
@@ -64,6 +64,7 @@ the approved shared boundaries and does not promote them to `@loopdev/ui`.
 | 2026-08-18 | Treat Supabase/RLS hardening as part of CRM G0                             | The shared CRM foundation cannot close without real tenant, workspace and verb-level authorization evidence  | CRM policies, cross-organization constraints, seed/reset and pgTAP become blocking G0 deliverables                                                                                        | User         |
 | 2026-08-18 | Reuse one organization-aware hardening pattern for CRM and Communications  | Both foundations had broad mutation policies and relationship paths that could bypass organization ownership | A versioned migration splits policies by verb, tightens grants, adds composite FKs and makes append-only records immutable; Communications is included only for the same identified risk  | User         |
 | 2026-08-18 | Make migration governance a CI gate and provide shared readiness artifacts | Security properties must be checked before a database reset is available                                     | Changed migrations are statically checked for ownership, RLS, verb policies, grants and scoped relationships; pgTAP helpers and a DoR/DoD checklist become reusable inputs for new suites | User         |
+| 2026-08-18 | Prepare Contacts backend-first without waiting for the frontend            | The frontend is being delivered by another team and needs stable backend wiring                              | Contacts is the first foundation consumer; its contracts, API, RLS, fixtures and tests are delivered independently and documented for later UI integration                                | User         |
 
 ## Arquitectura y contratos
 
@@ -82,8 +83,8 @@ organization, workspace and append-only negative cases.
 
 ## Branch strategy
 
-Implementation uses `feature/crm-g0-shared-foundation`, created from the current
-synchronized `develop` baseline after PR #110. The historical
+Implementation uses `feature/crm-contacts-backend-foundation`, created from the current
+synchronized `develop` baseline after PR #113. The historical
 `origin/feature/crm-shared-foundation` branch is reference-only and must not be
 used for new work.
 
@@ -171,12 +172,44 @@ CI verde. El track permanece activo para validar el primer consumidor, Contacts
 (#82), sin duplicación de la foundation y para recibir aprobación explícita de
 cierre.
 
+## Siguiente slice: Contacts backend-first
+
+Contacts se implementará sin front-end en esta fase, con la rama
+`feature/crm-contacts-backend-foundation`, creada desde el `develop` que contiene
+el PR #111 y la actualización documental posterior. El equipo frontend recibirá
+contratos y fixtures estables para cablear sus componentes después.
+
+El trabajo seguirá estos cinco puntos:
+
+1. **Mantener la foundation estable:** consumir contratos, helpers, policies y
+   operaciones compartidas sin duplicar lógica CRM.
+2. **Preparar el backend de Contacts:** definir entidades, migraciones, relaciones,
+   RLS, permisos, API, errores, paginación, filtros, auditoría e idempotencia.
+3. **Definir el contrato de integración:** documentar read models, commands,
+   queries, envelopes, estados, forbidden/error cases y compatibilidad para UI.
+4. **Validar con evidencia:** añadir fixtures y tests de schema, RLS, API,
+   autorización, aislamiento y regresión sin depender del navegador.
+5. **Dejar el flujo reusable:** registrar una plantilla para repetir
+   definición → contrato → schema/RLS → API → tests → handoff frontend en Leads,
+   Pipeline, Tasks y Customer 360.
+
+Los siguientes módulos CRM no se implementan en este slice; reutilizarán este
+flujo y sus artefactos después de que Contacts esté certificado.
+
+### Estado de implementación Contacts
+
+El contrato backend-first ya está cableado en `packages/contracts/src/crm/crm.ts`
+y la API del slice en `apps/loopdev-os/src/app/api/crm/contacts/route.ts`.
+La primera entrega cubre listado/búsqueda autorizados con cursor, creación
+validada y actualización con control optimista mediante `expectedUpdatedAt`.
+La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
+
 ## Riesgos y bloqueos
 
 | Riesgo o bloqueo                                                     | Impacto                                                     | Mitigación                                                              | Responsable  | Estado                                                                 |
 | -------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------- |
-| Existing CRM schemas may conflict with roadmap read models           | Unsafe generated contracts or migration drift               | Reconcile before implementation                                         | crm/platform | open                                                                   |
-| Activity and audit semantics may be conflated                        | Incorrect retention or disclosure                           | Approve separate event boundaries and fixtures                          | crm          | open                                                                   |
+| Existing CRM schemas may conflict with roadmap read models           | Unsafe generated contracts or migration drift               | Reconcile before implementation                                         | crm/platform | mitigated; Contacts contract maps only the approved current schema       |
+| Activity and audit semantics may be conflated                        | Incorrect retention or disclosure                           | Approve separate event boundaries and fixtures                          | crm          | mitigated; separate append-only tables and pilot timeline fixtures       |
 | CRM and Communications policies use broad `FOR ALL` access           | Read permissions may authorize mutation or deletion         | Split policies by SQL verb and validate negative cases with pgTAP       | crm/platform | mitigated; local runtime evidence green                                |
 | CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints           | crm/platform | mitigated; local reset evidence green                                  |
 | Local Supabase reset is not reproducible                             | CI and developer evidence can diverge from migration state  | Align `supabase/config.toml` with the canonical seed and certify reset  | platform     | mitigated; canonical seed path and organization scope now pass locally |
@@ -186,7 +219,8 @@ cierre.
 
 - [x] Shared contracts and fixtures are approved.
 - [x] RLS, state and contract tests pass; accessibility is not applicable to this backend-only phase.
-- [ ] Module tracks can consume the foundation without duplicating it.
+- [x] Contacts can consume the foundation without duplicating it; its backend
+      contract, API, RLS evidence and deterministic pilot fixtures are present.
 - [x] Risks and deferred work are documented.
 - [ ] Cierre aprobado explícitamente por el usuario.
 
@@ -202,13 +236,17 @@ cierre.
 | 2026-08-18 | `pnpm registries:check`                                                 | Pass                                                                          | Generated registry catalog                                   |
 | 2026-08-18 | `git diff --check`                                                      | Pass                                                                          | Working tree                                                 |
 | 2026-08-18 | LoopDev OS production build                                             | Pass con `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` locales | `pnpm --filter loopdev-os build`                             |
+| 2026-08-18 | Contacts API route tests                                                | Pass; 7 tests                                                        | `apps/loopdev-os/src/app/api/crm/contacts/route.test.ts`     |
+| 2026-08-18 | Top-level Supabase database suites                                      | Pass; 133 tests                                                      | `supabase test db --local` con suites 001-005                |
+| 2026-08-18 | `pnpm validate:full`                                                     | Pass con variables locales de Supabase                               | Full repository validation                                   |
+| 2026-08-18 | `pnpm docs:links:check` + `pnpm registries:check`                       | Pass                                                                  | Documentation and generated catalog                          |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-18.
-- **Rama de continuación:** `feature/crm-g0-shared-foundation`.
-- **Commit de partida:** `d19bc44` (`feature/crm-g0-shared-foundation`), último
-  commit de la rama antes del merge del PR #111.
+- **Rama de continuación:** `feature/crm-contacts-backend-foundation`.
+- **Commit de partida:** `b89a812` (`origin/develop`), con PR #111 y la
+  actualización documental ya integrados.
 - **Estado alcanzado:** G0 hardening, migration governance, reusable pgTAP
   helpers, CRM isolation tests, canonical seed, generated database types,
   API-level idempotency/redaction tests and CI validation are integrated into
@@ -220,10 +258,20 @@ cierre.
 - **Validación ejecutada:** Local reset/lint/128 pgTAP tests, governance tests,
   CRM contract/API tests (15), contracts build, LoopDev OS typecheck and
   production build with local Supabase variables pass; PR #111 GitHub Actions
-  passed.
-- **Siguiente acción concreta:** Certify Contacts (#82) against the shared
-  contracts and persistence foundation; do not close the track until that
-  evidence and explicit user approval are recorded.
+  passed. Contacts backend contract/API tests: 12 route tests, 8 contract
+  tests and repository typecheck pass. Contacts RLS/integrity coverage now adds
+  organization isolation, scoped foreign keys and duplicate protection; all
+  database suites pass with 133 tests.
+- **Fixtures CRM piloto:** `supabase/seed_crm_pilot.sql` se ejecuta después del
+  seed base mediante `supabase/config.toml`. Es determinista, sintético y
+  reproducible, e incluye escenarios de lead ganado, perdido, seguimiento
+  pendiente, revisión de duplicados, tareas, notas y timeline de actividades.
+  Los usuarios de prueba usan exclusivamente `example.test`.
+- **Validación adicional:** `supabase db reset --local --yes` pasa cargando el
+  seed base y el pack piloto sin errores.
+- **Siguiente acción concreta:** publicar la certificación de Contacts en su PR,
+  confirmar el handoff con el equipo frontend y solicitar aprobación explícita
+  para cerrar este track.
 
 ## Cierre
 
