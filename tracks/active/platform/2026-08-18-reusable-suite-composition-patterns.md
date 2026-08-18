@@ -172,8 +172,9 @@ salidas, en este orden:
 1. **A1 completado:** conservar tokens, superficies y tipografía compartida
   como baseline certificada.
 2. **A2 activo:** consolidar primero el contrato de `Input` y después alinear
-  `Select`, `FilterDropdown`, `Textarea`, `Checkbox`, `RadioGroup`, `Switch` y
-  selección múltiple.
+  `Select`, `FilterDropdown` y `Checkbox`. El inventario físico actual no
+  contiene `Textarea`, `RadioGroup` ni `Switch`; no se crearán sustitutos hasta
+  confirmar una implementación existente o una decisión explícita de alcance.
 3. Auditar estados para evitar solapamiento entre `EmptyState`, `LoadingState`,
   `Skeleton`, error y forbidden.
 4. Definir la taxonomía semántica de identidad, status y severidad.

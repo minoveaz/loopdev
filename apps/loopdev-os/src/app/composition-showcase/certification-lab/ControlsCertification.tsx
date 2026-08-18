@@ -1,6 +1,6 @@
 'use client';
 
-import { FilterDropdown, Input, TechnicalCard } from '@loopdev/ui';
+import { Checkbox, FilterDropdown, Input, Select, TechnicalCard } from '@loopdev/ui';
 import { useState } from 'react';
 
 const FILTER_OPTIONS = ['Active', 'Paused', 'Prospect'];
@@ -8,6 +8,7 @@ const FILTER_OPTIONS = ['Active', 'Paused', 'Prospect'];
 export function ControlsCertification() {
   const [query, setQuery] = useState('Acme');
   const [selectedFilters, setSelectedFilters] = useState<string[]>(['Active']);
+  const [includeArchived, setIncludeArchived] = useState(false);
 
   const toggleFilter = (value: string) => {
     setSelectedFilters((current) => current.includes(value)
@@ -40,6 +41,15 @@ export function ControlsCertification() {
             selected={selectedFilters}
             onToggle={toggleFilter}
             onClear={() => setSelectedFilters([])}
+          />
+          <Select label="Workspace" defaultValue="crm">
+            <option value="crm">CRM</option>
+            <option value="marketing">Marketing Studio</option>
+          </Select>
+          <Checkbox
+            label="Include archived records"
+            checked={includeArchived}
+            onChange={(event) => setIncludeArchived(event.target.checked)}
           />
           <FilterDropdown
             icon="sort"
