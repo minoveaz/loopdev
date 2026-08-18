@@ -103,3 +103,70 @@ and command navigation have different semantics from text search.
 CRM consumes this track as a shared frontend capability. It does not replace `crm-shared-foundation`
 and does not unblock G0, G1 or module implementation. CRM-specific data, permissions and query
 behavior remain owned by the CRM tracks.
+
+## Plan de bloques reutilizables
+
+El programa se organiza en doce bloques compartidos para CRM y futuras suites.
+Cada bloque debe conservar contratos domain-neutral, evidencia responsive y de
+accesibilidad, y reutilizar componentes existentes antes de introducir nuevos.
+
+### Fase A: base operativa compartida
+
+1. **Fundaciones y superficies**: `TechnicalSurface`, `TechnicalCard`,
+  `LpdText`, `Heading`, `Divider`, `ScrollArea`, `TechnicalTooltip` y
+  `CompositionGrid`.
+2. **Controles de entrada y selección**: `Input`, `Select`, `FilterDropdown`,
+  `Textarea`, `Checkbox`, `RadioGroup`, `Switch` y selección múltiple.
+3. **Estados de contenido**: `EmptyState`, `LoadingState`, error, forbidden,
+  read-only, conflicto, datos obsoletos y guardado exitoso.
+4. **Identidad y estados semánticos**: `UserAvatar`, `Badge`, `TechnicalLabel`,
+  `StatusBadge` y la taxonomía común de severidades y lifecycle states.
+5. **Orientación y navegación interna**: `PageHeader`, `SectionHeader`,
+  `ContextPath`, breadcrumbs, tabs y navegación local de módulo.
+
+**Estado:** iniciada. La primera tarea de Fase A es auditar y consolidar los
+contratos de fundaciones, controles, estados, identidad y orientación. No se
+crearán duplicados de `DataTable`, feedback global ni navegación del Shell.
+
+### Fase B: flujo operativo común
+
+6. **Consulta y toolbar**: `SearchInput`, `FilterBar`, `QueryToolbar`,
+  filtros activos, reset, orden, vista y `Pagination`.
+7. **Datos y listados**: `ResponsiveTable`, selección de filas, acciones
+  masivas, estados responsive y composición `DataWorkspace`.
+8. **Workspace y detalle de registros**: `SuiteCanvas`, `InspectorPanel`,
+  split view, list-detail, `RecordWorkspace`, focus restoration y dirty state.
+
+### Fase C: operaciones avanzadas y plataforma
+
+9. **Acciones operativas**: `Button`, `IconButton`, menús de acción, bulk
+  actions, confirmaciones, export/import, retry y undo.
+10. **Dashboards y resumen**: métricas, actividad, quick actions, próximos
+   pasos, progreso y resúmenes de calendario.
+11. **Tableros y visualizaciones**: `KanbanBoard`, timeline, activity stream,
+   progreso y vistas board/list con alternativa de teclado.
+12. **Feedback y contexto global**: `Toast`, `CommandDialog`,
+   `TechnicalDialog`, `PlatformHeader` con bombillo, `ContextPanelHost` y
+   `PlatformContextPanel` para notificaciones, ayuda, asistente y perfil.
+
+**Evidencia existente:** el bloque 12 y los patrones principales del bloque 6
+ya cuentan con certificación en `Loopdev components`. Se conservan como base y
+no se repiten; las fases siguientes deben consumirlos.
+
+## Entrega inicial de la Fase A
+
+La Fase A comienza por una matriz de contratos y reutilización con estas
+salidas, en este orden:
+
+1. Consolidar tokens, superficies y tipografía compartida.
+2. Auditar estados para evitar solapamiento entre `EmptyState`, `LoadingState`,
+  `Skeleton`, error y forbidden.
+3. Definir la taxonomía semántica de identidad, status y severidad.
+4. Resolver `ContextPath` frente a `IndustrialBreadcrumbs` y separar
+  orientación interna de navegación del Shell.
+5. Crear una fixture común de Fase A y añadir evidencia focused de teclado,
+  Axe y responsive.
+
+La Fase A no abre módulos CRM ni introduce persistencia, autorización, queries
+de negocio o contratos de entidades. Su cierre requiere contratos públicos,
+tests focused, fixture visual y documentación sincronizada.
