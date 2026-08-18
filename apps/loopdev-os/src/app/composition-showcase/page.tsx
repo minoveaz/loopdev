@@ -1,46 +1,61 @@
 'use client';
 
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { startTransition, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { CircleHelp } from 'lucide-react';
 import {
   AVAILABLE_SUITES_FIXTURES,
   BOARD_WORKSPACE_COMPOSITION,
   BrandLogo,
   Button,
+  Badge,
   CommandBarTrigger,
   CompositionGrid,
   CREATIVE_EDITOR_COMPOSITION,
   DATA_WORKSPACE_COMPOSITION,
-  GlobalContextPanel,
-  IconButton,
-  ICON_REGISTRY,
   EmptyState,
   LoadingState,
   IMMERSIVE_WORKFLOW_COMPOSITION,
   MARKETING_STUDIO_SCHEMA,
   ModuleHeader,
+  ModuleSearch,
   ModuleToolbar,
   NOTIFICATION_CENTER_FIXTURES,
+  NavSidebarItem,
   OrganizationSwitcher,
+  PageHeader,
   RECORD_WORKSPACE_COMPOSITION,
+  DataTable,
+  SectionHeader,
   SPLIT_WORKSPACE_COMPOSITION,
   SUITE_OVERVIEW_COMPOSITION,
   SuiteRuntime,
   SuiteSwitcher,
   TechnicalCanvas,
+  TechnicalCard,
   TechnicalSurface,
+  ThemeToggle,
   UserMenu,
-  type GlobalContextPanelMode,
+  UserAvatar,
+  SUITE_CANVAS_GEOMETRY_CLASSES,
+  type PlatformContextPanelMode,
 } from '@loopdev/ui';
 import type { ViewComposition } from '@loopdev/contracts';
 import type { ModuleShellUsage, NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
+import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
 import {
   resolveShowcaseZonePanelRenderer,
   resolveShowcaseZoneFooterRenderer,
   resolveShowcaseZoneRenderer,
 } from '@/suites/showcase/zoneRenderers';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { TechnicalCanvasCertification } from './certification-lab/TechnicalCanvasCertification';
+import { TechnicalSurfaceCertification } from './certification-lab/TechnicalSurfaceCertification';
+import { TechnicalCardCertification } from './certification-lab/TechnicalCardCertification';
+import { CRMPrimitivesCatalog } from './CRMPrimitivesCatalog';
+import { DataTablesCatalog } from './DataTablesCatalog';
+import type { ActivityRow } from '@/components/composites/data-tables/ActivityTable';
 
 const FIXTURES: Record<string, ViewComposition> = {
   SuiteOverview: SUITE_OVERVIEW_COMPOSITION,
@@ -50,6 +65,7 @@ const FIXTURES: Record<string, ViewComposition> = {
   BoardWorkspace: BOARD_WORKSPACE_COMPOSITION,
   ImmersiveWorkflow: IMMERSIVE_WORKFLOW_COMPOSITION,
   CreativeEditor: CREATIVE_EDITOR_COMPOSITION,
+  CertificationLab: SPLIT_WORKSPACE_COMPOSITION,
 };
 
 const regionClass = (component: string, recipe?: RecipeName) =>
@@ -73,6 +89,19 @@ const STATES = [
   'conflict',
 ] as const;
 type ShowcaseState = (typeof STATES)[number];
+type ShowcaseDataset =
+  'default' | 'crm-contacts' | 'crm-leads' | 'crm-pipeline' | 'crm-customer-360';
+
+const DATASET_LABELS: Record<ShowcaseDataset, string> = {
+  default: 'Platform reference fixture',
+  'crm-contacts': 'CRM fixture · Contacts',
+  'crm-leads': 'CRM fixture · Leads',
+  'crm-pipeline': 'CRM fixture · Pipeline',
+  'crm-customer-360': 'CRM fixture · Customer 360',
+};
+
+const isShowcaseDataset = (value: string | null): value is ShowcaseDataset =>
+  value !== null && value in DATASET_LABELS;
 
 type RecipeName = keyof typeof FIXTURES;
 
@@ -85,6 +114,7 @@ const RECIPE_ICONS: Record<RecipeName, string> = {
   BoardWorkspace: 'KanbanSquare',
   ImmersiveWorkflow: 'Maximize2',
   CreativeEditor: 'Clapperboard',
+  CertificationLab: 'BadgeCheck',
 };
 
 const SHOWCASE_THEME_VARIABLES = [
@@ -102,7 +132,6 @@ const SHOWCASE_THEME_VARIABLES = [
   '--accent',
   '--ring',
 ];
-
 const SHOWCASE_ORGANIZATIONS = [
   { id: 'showcase-workspace', name: 'Showcase Workspace', planLabel: 'PRO', theme: '' },
   {
@@ -112,15 +141,26 @@ const SHOWCASE_ORGANIZATIONS = [
     theme: themes.estarProtegidos,
   },
 ];
-
-type ShowcaseTheme = 'light' | 'dark';
-
 const emitShowcaseEvent = (name: string, detail: Record<string, string | number | boolean>) => {
   if (typeof window === 'undefined') return;
   window.dispatchEvent(new CustomEvent(`loopdev:showcase:${name}`, { detail }));
 };
 
 const RECIPE_SHELL_USAGE: Partial<Record<RecipeName, ModuleShellUsage>> = {
+  CertificationLab: {
+    canvasMode: 'split',
+    suiteHeader: { label: 'Component Certification Lab', contentKey: 'certification.header' },
+    suiteToolbar: { label: 'Evidence', contentKey: 'certification.toolbar' },
+    moduleContextSidebar: {
+      label: 'Components',
+      contentKey: 'certification.sidebar',
+      width: 'standard',
+      collapsible: true,
+      collapseIcon: 'menu',
+      expandIcon: 'menu',
+    },
+    moduleContextPanel: { label: 'Evidence', contentKey: 'certification.panel', width: 'standard' },
+  },
   SplitWorkspace: {
     canvasMode: 'split',
     suiteHeader: { label: 'SplitWorkspace', contentKey: 'split.header' },
@@ -183,6 +223,22 @@ const SHOWCASE_NAVIGATION: NavigationSchema = {
         route: { routeId: `/composition-showcase?recipe=${name}` },
       })),
     },
+    {
+      id: 'crm-fixtures',
+      label: 'CRM fixtures',
+      priority: 2,
+      items: [
+        {
+          id: 'composition.crm-contacts',
+          kind: 'module' as const,
+          moduleId: 'crm-contacts',
+          label: 'Contacts fixture',
+          icon: RECIPE_ICONS.SuiteOverview,
+          priority: 1,
+          route: { routeId: '/composition-showcase?recipe=SuiteOverview&dataset=crm-contacts' },
+        },
+      ],
+    },
   ],
 };
 
@@ -190,14 +246,26 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
   identity: MARKETING_STUDIO_SCHEMA.suite,
   navigation: SHOWCASE_NAVIGATION,
   accessMap: {},
-  modules: RECIPE_NAMES.map((name) => ({
-    moduleId: name,
-    label: name,
-    route: `/composition-showcase?recipe=${name}`,
-    breadcrumbs: ['Composition Showcase', name],
-    capabilities: name === 'SplitWorkspace' ? ['sidebar', 'toolbar'] : ['sidebar'],
-    shell: RECIPE_SHELL_USAGE[name],
-  })),
+  modules: [
+    ...RECIPE_NAMES.map((name) => ({
+      moduleId: name,
+      label: name,
+      route: `/composition-showcase?recipe=${name}`,
+      breadcrumbs: ['Composition Showcase', name],
+      capabilities: (name === 'SplitWorkspace' ? ['sidebar', 'toolbar'] : ['sidebar']) as (
+        'sidebar' | 'toolbar'
+      )[],
+      shell: RECIPE_SHELL_USAGE[name],
+    })),
+    {
+      moduleId: 'crm-contacts',
+      label: 'Contacts fixture',
+      route: '/composition-showcase?recipe=SuiteOverview&dataset=crm-contacts',
+      breadcrumbs: ['Composition Showcase', 'Contacts fixture'],
+      capabilities: ['sidebar'] as 'sidebar'[],
+      shell: undefined,
+    },
+  ],
 };
 
 const RECIPE_CANVAS_MODES: Record<
@@ -211,6 +279,18 @@ const RECIPE_CANVAS_MODES: Record<
   BoardWorkspace: 'board',
   ImmersiveWorkflow: 'full-bleed',
   CreativeEditor: 'full-bleed',
+  CertificationLab: 'split',
+};
+
+const RECIPE_CANVAS_GEOMETRY: Record<RecipeName, 'bounded' | 'split' | 'wide' | 'full-bleed'> = {
+  SuiteOverview: 'bounded',
+  DataWorkspace: 'wide',
+  SplitWorkspace: 'split',
+  RecordWorkspace: 'bounded',
+  BoardWorkspace: 'wide',
+  ImmersiveWorkflow: 'full-bleed',
+  CreativeEditor: 'full-bleed',
+  CertificationLab: 'split',
 };
 
 const SplitRecipeHeader = () => (
@@ -231,23 +311,8 @@ const SplitRecipeHeader = () => (
 
 const SplitRecipeToolbar = () => (
   <ModuleToolbar
-    left={
-      <TechnicalSurface
-        variant="surface"
-        radius="md"
-        border="technical"
-        className="text-text-muted flex items-center gap-2 px-3 py-1.5"
-      >
-        <IconButton
-          icon={ICON_REGISTRY.actions.search}
-          ariaLabel="Search records"
-          tooltip="Search records"
-          size="sm"
-        />
-        <span>Search records</span>
-      </TechnicalSurface>
-    }
-    center={
+    leftSlot={<ModuleSearch placeholder="Search records" />}
+    centerSlot={
       <div className="text-text-muted flex items-center gap-2 text-xs">
         <Button variant="ghost" size="sm">
           All fields
@@ -257,9 +322,54 @@ const SplitRecipeToolbar = () => (
         </Button>
       </div>
     }
-    right={
+    rightSlot={
       <Button variant="primary" size="sm">
         Create record
+      </Button>
+    }
+  />
+);
+
+const CertificationLabHeader = () => (
+  <ModuleHeader
+    visibleOnMobile={false}
+    segments={[
+      { id: 'suite', label: 'Shell Showcase' },
+      { id: 'module', label: 'Resource directory', isActive: true },
+    ]}
+    statusLabel="Reference"
+    statusSeverity="success"
+    rightSlot={
+      <Button variant="outline" size="sm">
+        Export data
+      </Button>
+    }
+  />
+);
+
+const CertificationLabToolbar = ({ onOpenComponents }: { onOpenComponents: () => void }) => (
+  <ModuleToolbar
+    visibleOnMobile={true}
+    visibleOnDesktop={true}
+    className="px-3"
+    contextSlot={
+      <Button
+        variant="ghost"
+        size="sm"
+        startIcon="Menu"
+        aria-label="Open components"
+        onClick={onOpenComponents}
+      />
+    }
+    leftSlot={
+      <div className="flex min-w-0 w-full items-center gap-2">
+        <ModuleSearch placeholder="Search resources" className="max-w-none" />
+      </div>
+    }
+    centerSlot={<span className="text-text-muted text-xs">All columns</span>}
+    rightSlot={
+      <Button variant="primary" size="sm">
+        Filter
       </Button>
     }
   />
@@ -268,11 +378,14 @@ const SplitRecipeToolbar = () => (
 const SuiteOverviewCanvas = ({
   state,
   composition,
+  dataset,
 }: {
   state: ShowcaseState;
   composition: ViewComposition;
+  dataset: ShowcaseDataset;
 }) => {
   const blockedState = ['empty', 'error', 'forbidden'].includes(state);
+  const isContactsFixture = dataset === 'crm-contacts';
   const regions: Record<string, ReactNode> = {
     summary: (
       <TechnicalSurface
@@ -282,14 +395,23 @@ const SuiteOverviewCanvas = ({
         className={`h-full p-5 ${blockedState ? 'opacity-50' : ''}`}
       >
         <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
-          Portfolio health
+          {isContactsFixture ? 'Contact health' : 'Portfolio health'}
         </p>
         <div className="mt-4 grid grid-cols-2 gap-3">
           {[
-            ['Active workspaces', '24'],
-            ['Open opportunities', '86'],
-            ['Tasks due today', '12'],
-            ['Team activity', '+18%'],
+            ...(isContactsFixture
+              ? [
+                  ['Total contacts', '248'],
+                  ['Active relationships', '184'],
+                  ['Follow-ups due', '17'],
+                  ['New this month', '+32'],
+                ]
+              : [
+                  ['Active workspaces', '24'],
+                  ['Open opportunities', '86'],
+                  ['Tasks due today', '12'],
+                  ['Team activity', '+18%'],
+                ]),
           ].map(([label, value]) => (
             <TechnicalSurface
               key={label}
@@ -308,11 +430,13 @@ const SuiteOverviewCanvas = ({
     'visual-canvas': (
       <TechnicalSurface variant="canvas" radius="sm" border="technical" className="h-full p-5">
         <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
-          Workspace map
+          {isContactsFixture ? 'Relationship map' : 'Workspace map'}
         </p>
         <div className="relative mt-4 flex min-h-40 items-center justify-center overflow-hidden rounded-md border border-dashed border-primary/40 bg-primary/5">
           <TechnicalCanvas variant="blueprint" intensity="medium" size={40} showSubgrid />
-          <span className="text-primary relative z-10 text-xs font-medium">Workspace map</span>
+          <span className="text-primary relative z-10 text-xs font-medium">
+            {isContactsFixture ? 'Relationship map' : 'Workspace map'}
+          </span>
         </div>
       </TechnicalSurface>
     ),
@@ -343,30 +467,39 @@ const SuiteOverviewCanvas = ({
         ) : null}
         {!['loading', 'empty', 'error', 'forbidden'].includes(state) ? (
           <span className="text-text-muted text-sm">
-            Metrics remain available for the current review state.
+            {isContactsFixture
+              ? 'Contact activity remains available for the current review state.'
+              : 'Metrics remain available for the current review state.'}
           </span>
         ) : null}
       </TechnicalSurface>
     ),
     activity: (
       <TechnicalSurface variant="surface" radius="md" border="technical" className="p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
-              Recent activity
-            </p>
-            <h2 className="text-text-main mt-1 text-lg font-semibold">What needs attention</h2>
-          </div>
-          <Button variant="outline" size="sm">
-            View all activity
-          </Button>
-        </div>
+        <SectionHeader
+          title={isContactsFixture ? 'Contact activity' : 'Recent activity'}
+          action={
+            <Button variant="outline" size="sm">
+              {isContactsFixture ? 'View all contacts' : 'View all activity'}
+            </Button>
+          }
+        />
+        <h2 className="text-text-main mt-3 text-lg font-semibold">
+          {isContactsFixture ? 'Who needs attention' : 'What needs attention'}
+        </h2>
         <div className="mt-4 space-y-2">
-          {[
-            'Northstar workspace updated',
-            'New opportunity moved to review',
-            'Three tasks assigned to your team',
-          ].map((item) => (
+          {(isContactsFixture
+            ? [
+                'Marta Ruiz requested a follow-up',
+                'Northstar Labs contact updated',
+                'Leo Martín added a new note',
+              ]
+            : [
+                'Northstar workspace updated',
+                'New opportunity moved to review',
+                'Three tasks assigned to your team',
+              ]
+          ).map((item) => (
             <TechnicalSurface
               key={item}
               variant="surface"
@@ -374,8 +507,10 @@ const SuiteOverviewCanvas = ({
               border="subtle"
               className="flex items-center justify-between gap-3 px-3 py-3 text-sm"
             >
-              <span className="text-text-main">{item}</span>
-              <span className="text-text-muted text-xs">Today</span>
+              <span className="min-w-0 flex-1 text-text-main">{item}</span>
+              <span className="ml-3 min-w-[3rem] shrink-0 text-right text-text-muted text-xs">
+                Today
+              </span>
             </TechnicalSurface>
           ))}
         </div>
@@ -384,55 +519,193 @@ const SuiteOverviewCanvas = ({
   };
 
   return (
-    <div className="p-4 font-sans sm:p-6">
+    <div className="font-sans">
+      <PageHeader
+        eyebrow="CRM foundation fixture"
+        title={isContactsFixture ? 'Contacts overview' : 'Suite overview'}
+        description={
+          isContactsFixture
+            ? 'Review relationship health and recent contact activity in the selected fixture.'
+            : 'Reference composition for validating the overview recipe.'
+        }
+        actions={
+          isContactsFixture ? (
+            <Button variant="outline" size="sm">
+              Add contact
+            </Button>
+          ) : undefined
+        }
+        className="mb-5"
+      />
       <CompositionGrid composition={composition} regions={regions} />
     </div>
   );
 };
 
-const DataWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
-  const rows = [
-    ['Northstar Labs', 'Enterprise', 'Active', '24 users', 'Today'],
-    ['Estar Protegidos', 'Growth', 'Review', '12 users', 'Yesterday'],
-    ['Helio Systems', 'Starter', 'Active', '8 users', 'Aug 12'],
-    ['Monument Health', 'Enterprise', 'Paused', '41 users', 'Aug 11'],
-  ];
+const DATA_WORKSPACE_ROWS = [
+  {
+    workspace: 'Northstar Labs',
+    plan: 'Enterprise',
+    status: 'Active',
+    members: '24 users',
+    updated: 'Today',
+  },
+  {
+    workspace: 'Estar Protegidos',
+    plan: 'Growth',
+    status: 'Review',
+    members: '12 users',
+    updated: 'Yesterday',
+  },
+  {
+    workspace: 'Helio Systems',
+    plan: 'Starter',
+    status: 'Active',
+    members: '8 users',
+    updated: 'Aug 12',
+  },
+  {
+    workspace: 'Monument Health',
+    plan: 'Enterprise',
+    status: 'Paused',
+    members: '41 users',
+    updated: 'Aug 11',
+  },
+  {
+    workspace: 'Asteria Group',
+    plan: 'Growth',
+    status: 'Active',
+    members: '19 users',
+    updated: 'Aug 10',
+  },
+  {
+    workspace: 'Blueforge Labs',
+    plan: 'Starter',
+    status: 'Review',
+    members: '6 users',
+    updated: 'Aug 09',
+  },
+  {
+    workspace: 'Cobalt Retail',
+    plan: 'Enterprise',
+    status: 'Active',
+    members: '58 users',
+    updated: 'Aug 08',
+  },
+  {
+    workspace: 'Delta Civic',
+    plan: 'Growth',
+    status: 'Paused',
+    members: '27 users',
+    updated: 'Aug 07',
+  },
+  {
+    workspace: 'Evergreen Care',
+    plan: 'Enterprise',
+    status: 'Active',
+    members: '73 users',
+    updated: 'Aug 06',
+  },
+  {
+    workspace: 'Faro Mobility',
+    plan: 'Starter',
+    status: 'Review',
+    members: '4 users',
+    updated: 'Aug 05',
+  },
+  {
+    workspace: 'Granite Works',
+    plan: 'Growth',
+    status: 'Active',
+    members: '31 users',
+    updated: 'Aug 04',
+  },
+  {
+    workspace: 'Horizon Public',
+    plan: 'Enterprise',
+    status: 'Paused',
+    members: '46 users',
+    updated: 'Aug 03',
+  },
+  {
+    workspace: 'Iris Education',
+    plan: 'Starter',
+    status: 'Active',
+    members: '11 users',
+    updated: 'Aug 02',
+  },
+  {
+    workspace: 'Juniper Finance',
+    plan: 'Growth',
+    status: 'Review',
+    members: '22 users',
+    updated: 'Aug 01',
+  },
+  {
+    workspace: 'Kite Commerce',
+    plan: 'Enterprise',
+    status: 'Active',
+    members: '64 users',
+    updated: 'Jul 31',
+  },
+  {
+    workspace: 'Lumen Health',
+    plan: 'Starter',
+    status: 'Paused',
+    members: '9 users',
+    updated: 'Jul 30',
+  },
+  {
+    workspace: 'Meridian Foods',
+    plan: 'Growth',
+    status: 'Active',
+    members: '36 users',
+    updated: 'Jul 29',
+  },
+  {
+    workspace: 'Nexa Transit',
+    plan: 'Enterprise',
+    status: 'Review',
+    members: '52 users',
+    updated: 'Jul 28',
+  },
+  {
+    workspace: 'Orion Civic',
+    plan: 'Starter',
+    status: 'Active',
+    members: '7 users',
+    updated: 'Jul 27',
+  },
+  {
+    workspace: 'Pioneer Studio',
+    plan: 'Growth',
+    status: 'Paused',
+    members: '15 users',
+    updated: 'Jul 26',
+  },
+  {
+    workspace: 'Quartz Security',
+    plan: 'Enterprise',
+    status: 'Active',
+    members: '88 users',
+    updated: 'Jul 25',
+  },
+] as const;
+
+const DataWorkspaceCanvas = ({
+  state,
+  selectedWorkspace,
+  onSelectWorkspace,
+}: {
+  state: ShowcaseState;
+  selectedWorkspace: string | null;
+  onSelectWorkspace: (workspace: string) => void;
+}) => {
+  const [selectedWorkspaces, setSelectedWorkspaces] = useState<string[]>([]);
   const blockedState = ['empty', 'error', 'forbidden'].includes(state);
 
   return (
     <div className="space-y-4 p-4 font-sans sm:p-6">
-      <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <TechnicalSurface
-            variant="canvas"
-            radius="sm"
-            border="subtle"
-            className="flex min-w-[12rem] flex-1 items-center gap-2 px-3 py-2 text-sm"
-          >
-            <IconButton
-              icon={ICON_REGISTRY.actions.search}
-              ariaLabel="Search workspaces"
-              tooltip="Search workspaces"
-              size="sm"
-            />
-            <span className="text-text-muted">Search workspaces</span>
-          </TechnicalSurface>
-          <Button variant="outline" size="sm">
-            Status: All
-          </Button>
-          <Button variant="outline" size="sm">
-            Plan: All
-          </Button>
-          <Button variant="ghost" size="sm">
-            Reset
-          </Button>
-        </div>
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-text-muted">
-          <span>24 workspaces</span>
-          <span>Last synced today at 09:42</span>
-        </div>
-      </TechnicalSurface>
-
       {state === 'loading' ? (
         <TechnicalSurface variant="surface" radius="md" border="technical" className="p-5">
           <LoadingState label="Loading workspaces" lines={5} />
@@ -463,56 +736,73 @@ const DataWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
         </TechnicalSurface>
       ) : null}
 
-      <TechnicalSurface
-        variant="surface"
-        radius="md"
-        border="technical"
-        className={blockedState || state === 'loading' ? 'opacity-50' : ''}
-      >
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[42rem] border-collapse text-left text-sm">
-            <thead className="border-b border-border-technical text-xs uppercase tracking-[0.12em] text-text-muted">
-              <tr>
-                {['Workspace', 'Plan', 'Status', 'Members', 'Updated'].map((heading) => (
-                  <th key={heading} className="px-4 py-3 font-semibold">
-                    {heading}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(([workspace, plan, status, members, updated]) => (
-                <tr
-                  key={workspace}
-                  className="border-b border-border-subtle last:border-0 hover:bg-primary/5"
-                >
-                  <td className="px-4 py-3 font-medium text-text-main">{workspace}</td>
-                  <td className="px-4 py-3 text-text-muted">{plan}</td>
-                  <td className="px-4 py-3">
-                    <span className="rounded border border-brand-cyan/40 bg-brand-cyan/10 px-2 py-1 text-xs text-text-main">
-                      {status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-text-muted">{members}</td>
-                  <td className="px-4 py-3 text-text-muted">{updated}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="border-t border-border-technical flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-xs text-text-muted">
-          <span>Showing 1-4 of 24</span>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm">
-              Previous
+      <div className={blockedState || state === 'loading' ? 'opacity-50' : ''}>
+        <DataTable
+          caption="Workspaces"
+          rows={[...DATA_WORKSPACE_ROWS]}
+          getRowKey={(row) => row.workspace}
+          search={{ placeholder: 'Search workspaces', fields: ['workspace', 'plan', 'status'] }}
+          filters={[
+            {
+              key: 'status',
+              label: 'Status',
+              options: ['Active', 'Review', 'Paused'].map((value) => ({ value, label: value })),
+            },
+            {
+              key: 'plan',
+              label: 'Plan',
+              options: ['Enterprise', 'Growth', 'Starter'].map((value) => ({
+                value,
+                label: value,
+              })),
+            },
+          ]}
+          columns={[
+            {
+              key: 'workspace',
+              header: 'Workspace',
+              sortable: true,
+              className: 'max-w-[18rem] truncate',
+              render: (row) => <span title={row.workspace}>{row.workspace}</span>,
+            },
+            { key: 'plan', header: 'Plan', sortable: true, className: 'whitespace-nowrap' },
+            {
+              key: 'status',
+              header: 'Status',
+              sortable: true,
+              className: 'whitespace-nowrap',
+              render: (row) => (
+                <span className="rounded border border-brand-cyan/40 bg-brand-cyan/10 px-2 py-1 text-xs text-text-main">
+                  {row.status}
+                </span>
+              ),
+            },
+            { key: 'members', header: 'Members', sortable: true, className: 'whitespace-nowrap' },
+            { key: 'updated', header: 'Updated', sortable: true, className: 'whitespace-nowrap' },
+          ]}
+          selectable
+          selectedRowKeys={selectedWorkspaces}
+          onSelectedRowKeysChange={(keys) => {
+            const nextKeys = keys.map(String);
+            setSelectedWorkspaces(nextKeys);
+            if (nextKeys[0]) onSelectWorkspace(nextKeys[0]);
+          }}
+          selectedRowKey={selectedWorkspace ?? undefined}
+          onRowClick={(row) => onSelectWorkspace(row.workspace)}
+          bulkActions={
+            <Button variant="outline" size="sm" onClick={() => setSelectedWorkspaces([])}>
+              Clear selection
             </Button>
-            <span>Page 1 of 6</span>
-            <Button variant="outline" size="sm">
-              Next
-            </Button>
-          </div>
-        </div>
-      </TechnicalSurface>
+          }
+          emptyState="No workspaces match the current filters."
+          loading={state === 'loading'}
+          loadingState="Loading workspaces"
+          errorState={state === 'error' ? 'Workspaces unavailable' : undefined}
+          forbidden={state === 'forbidden'}
+          forbiddenState="Workspace access restricted"
+          pageSizeOptions={[5, 10, 20]}
+        />
+      </div>
     </div>
   );
 };
@@ -942,101 +1232,96 @@ const SplitWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
 
 const ImmersiveWorkflowCanvas = ({ state }: { state: ShowcaseState }) => {
   const blockedState = ['empty', 'error', 'forbidden'].includes(state);
+  const regions = {
+    workflow: (
+      <TechnicalSurface variant="surface" radius="md" border="technical" className="h-full p-5">
+        <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
+          Workflow execution
+        </p>
+        <h2 className="text-text-main mt-2 text-2xl font-semibold">Launch campaign pipeline</h2>
+        <div className="mt-6 space-y-3">
+          {['Brief approved', 'Assets prepared', 'Audience reviewed', 'Ready to publish'].map(
+            (step, index) => (
+              <div key={step} className="flex items-center gap-3">
+                <span
+                  className={`flex size-7 items-center justify-center rounded-full border text-xs ${index < 2 ? 'border-brand-cyan/50 bg-brand-cyan/10 text-text-main' : 'border-border-technical text-text-muted'}`}
+                >
+                  {index + 1}
+                </span>
+                <div className="flex-1">
+                  <span className="text-text-main block text-sm font-medium">{step}</span>
+                  <div className="mt-2 h-1 overflow-hidden rounded bg-border-technical">
+                    <span
+                      className={`block h-full ${index < 2 ? 'w-full bg-brand-cyan' : 'w-1/3 bg-primary'}`}
+                    />
+                  </div>
+                </div>
+              </div>
+            ),
+          )}
+        </div>
+      </TechnicalSurface>
+    ),
+    actions: (
+      <TechnicalSurface
+        variant="surface"
+        depth="raised"
+        radius="md"
+        border="technical"
+        className="h-full p-4"
+      >
+        <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">Actions</p>
+        {blockedState ? (
+          <div className="mt-3">
+            <EmptyState
+              icon={state === 'error' ? 'error' : state === 'forbidden' ? 'lock' : 'inbox'}
+              title={
+                state === 'empty'
+                  ? 'No workflow'
+                  : state === 'error'
+                    ? 'Workflow paused'
+                    : 'Access restricted'
+              }
+              description="Resolve the workflow state before acting."
+              action={
+                <Button variant={state === 'error' ? 'danger' : 'outline'} size="sm">
+                  {state === 'error' ? 'Retry' : 'Request access'}
+                </Button>
+              }
+            />
+          </div>
+        ) : (
+          <div className="mt-3 flex flex-col gap-2">
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={state === 'read-only' || state === 'stale'}
+            >
+              Continue workflow
+            </Button>
+            <Button variant="outline" size="sm">
+              Save checkpoint
+            </Button>
+          </div>
+        )}
+      </TechnicalSurface>
+    ),
+    status: (
+      <TechnicalSurface variant="surface" radius="md" border="technical" className="h-full p-4">
+        <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">Status</p>
+        <strong className="text-text-main mt-3 block text-lg">
+          {state === 'offline' ? 'Offline cache' : state === 'stale' ? 'Needs refresh' : 'On track'}
+        </strong>
+        <span className="text-text-muted mt-1 block text-sm">4 of 6 steps complete</span>
+      </TechnicalSurface>
+    ),
+  };
+
   return (
     <div className="relative min-h-full overflow-hidden bg-shell-canvas p-4 font-sans sm:p-6">
       <TechnicalCanvas variant="blueprint" intensity="low" size={48} showSubgrid />
-      <div className="relative z-10 grid min-h-[32rem] grid-cols-1 gap-4 lg:grid-cols-12">
-        <TechnicalSurface
-          variant="surface"
-          radius="md"
-          border="technical"
-          className="lg:col-span-9 p-5"
-        >
-          <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
-            Workflow execution
-          </p>
-          <h2 className="text-text-main mt-2 text-2xl font-semibold">Launch campaign pipeline</h2>
-          <div className="mt-6 space-y-3">
-            {['Brief approved', 'Assets prepared', 'Audience reviewed', 'Ready to publish'].map(
-              (step, index) => (
-                <div key={step} className="flex items-center gap-3">
-                  <span
-                    className={`flex size-7 items-center justify-center rounded-full border text-xs ${index < 2 ? 'border-brand-cyan/50 bg-brand-cyan/10 text-text-main' : 'border-border-technical text-text-muted'}`}
-                  >
-                    {index + 1}
-                  </span>
-                  <div className="flex-1">
-                    <span className="text-text-main block text-sm font-medium">{step}</span>
-                    <div className="mt-2 h-1 overflow-hidden rounded bg-border-technical">
-                      <span
-                        className={`block h-full ${index < 2 ? 'w-full bg-brand-cyan' : 'w-1/3 bg-primary'}`}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ),
-            )}
-          </div>
-        </TechnicalSurface>
-        <div className="flex flex-col gap-4 lg:col-span-3">
-          <TechnicalSurface
-            variant="surface"
-            depth="raised"
-            radius="md"
-            border="technical"
-            className="p-4"
-          >
-            <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
-              Actions
-            </p>
-            {blockedState ? (
-              <div className="mt-3">
-                <EmptyState
-                  icon={state === 'error' ? 'error' : state === 'forbidden' ? 'lock' : 'inbox'}
-                  title={
-                    state === 'empty'
-                      ? 'No workflow'
-                      : state === 'error'
-                        ? 'Workflow paused'
-                        : 'Access restricted'
-                  }
-                  description="Resolve the workflow state before acting."
-                  action={
-                    <Button variant={state === 'error' ? 'danger' : 'outline'} size="sm">
-                      {state === 'error' ? 'Retry' : 'Request access'}
-                    </Button>
-                  }
-                />
-              </div>
-            ) : (
-              <div className="mt-3 flex flex-col gap-2">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  disabled={state === 'read-only' || state === 'stale'}
-                >
-                  Continue workflow
-                </Button>
-                <Button variant="outline" size="sm">
-                  Save checkpoint
-                </Button>
-              </div>
-            )}
-          </TechnicalSurface>
-          <TechnicalSurface variant="surface" radius="md" border="technical" className="flex-1 p-4">
-            <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
-              Status
-            </p>
-            <strong className="text-text-main mt-3 block text-lg">
-              {state === 'offline'
-                ? 'Offline cache'
-                : state === 'stale'
-                  ? 'Needs refresh'
-                  : 'On track'}
-            </strong>
-            <span className="text-text-muted mt-1 block text-sm">4 of 6 steps complete</span>
-          </TechnicalSurface>
-        </div>
+      <div className="relative z-10 min-h-[32rem]">
+        <CompositionGrid composition={IMMERSIVE_WORKFLOW_COMPOSITION} regions={regions} />
       </div>
     </div>
   );
@@ -1049,7 +1334,7 @@ const CreativeEditorCanvas = ({
   regions: Record<string, ReactNode>;
   state: ShowcaseState;
 }) => (
-  <div className="flex h-full min-h-0 flex-col overflow-hidden bg-shell-canvas p-3">
+  <div className="flex h-full min-h-0 flex-col overflow-hidden bg-shell-canvas">
     <section className="relative min-h-0 flex-1 overflow-hidden bg-surface-dark">
       <div className="border-border-technical flex min-h-12 items-center gap-2 overflow-x-auto border-b bg-surface-elevated px-3 py-2">
         <span className="text-primary shrink-0 font-mono text-[10px] uppercase tracking-[0.16em]">
@@ -1096,10 +1381,10 @@ const CreativeEditorCanvas = ({
     </section>
     <TechnicalSurface
       variant="surface"
-      depth="raised"
-      radius="md"
+      depth="flat"
+      radius="none"
       border="technical"
-      className="flex min-h-12 shrink-0 items-center justify-between gap-3 px-4 py-2"
+      className="flex min-h-12 shrink-0 items-center justify-between gap-3 border-x-0 px-4 py-2"
     >
       <span className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
         Transport
@@ -1117,8 +1402,8 @@ const CreativeEditorCanvas = ({
       </div>
       <span className="text-text-muted text-xs">100%</span>
     </TechnicalSurface>
-    <section className="mt-3 h-[clamp(10rem,22vh,18rem)] min-h-40 shrink-0 overflow-auto border-t border-border-technical bg-surface-dark">
-      <div className="border-border-technical bg-surface-dark sticky top-0 z-10 flex min-h-10 items-center justify-between gap-3 border-b px-3 py-2 text-xs text-text-muted">
+    <section className="h-[clamp(10rem,22vh,18rem)] min-h-40 shrink-0 overflow-auto border-x-0 border-t border-border-technical bg-surface-dark">
+      <div className="border-border-technical bg-surface-dark sticky top-0 z-10 flex min-h-10 items-center justify-between gap-3 border-x-0 border-b px-3 py-2 text-xs text-text-muted">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="ghost" size="sm">
             Play
@@ -1144,43 +1429,449 @@ const CreativeEditorCanvas = ({
   </div>
 );
 
+const CERTIFICATION_COMPONENTS = [
+  {
+    id: 'TechnicalCanvas',
+    label: 'TechnicalCanvas',
+    status: 'partial',
+    statusTone: 'warning',
+    action: 'Canonical grid primitive',
+  },
+  {
+    id: 'TechnicalSurface',
+    label: 'TechnicalSurface',
+    status: 'partial',
+    statusTone: 'warning',
+    action: 'Surface contract',
+  },
+  {
+    id: 'TechnicalCard',
+    label: 'TechnicalCard',
+    status: 'pending',
+    statusTone: 'neutral',
+    action: 'Thin surface composition',
+  },
+  {
+    id: 'SharedFoundation',
+    label: 'Shared foundation',
+    status: 'partial',
+    statusTone: 'warning',
+    action: 'Headers and shared states',
+  },
+  {
+    id: 'FiltersActions',
+    label: 'Filters and actions',
+    status: 'partial',
+    statusTone: 'warning',
+    action: 'Controlled filter and action composition',
+  },
+  {
+    id: 'CRMPrimitives',
+    label: 'CRM primitives',
+    status: 'certified',
+    statusTone: 'neutral',
+    action: 'Certified CRM component inventory',
+  },
+] as const;
+
+type CertificationComponent = (typeof CERTIFICATION_COMPONENTS)[number]['id'];
+
+const CERTIFICATION_GROUPS = [
+  {
+    id: 'ui-foundation',
+    label: 'UI Foundation',
+    description: 'Shared layout, surfaces and interaction contracts',
+    status: 'partial',
+    statusTone: 'warning',
+    entryComponent: 'TechnicalCanvas',
+    componentIds: ['TechnicalCanvas', 'TechnicalSurface', 'TechnicalCard'],
+  },
+  {
+    id: 'data-tables-filters',
+    label: 'Data tables and filters',
+    description: 'Data presentation, filtering and controlled actions',
+    status: 'partial',
+    statusTone: 'warning',
+    entryComponent: 'FiltersActions',
+    componentIds: ['FiltersActions'],
+  },
+  {
+    id: 'crm-primitives',
+    label: 'CRM Primitives',
+    description: 'Certified CRM component inventory',
+    status: 'certified',
+    statusTone: 'neutral',
+    entryComponent: 'CRMPrimitives',
+    componentIds: ['CRMPrimitives'],
+  },
+] as const satisfies ReadonlyArray<{
+  id: string;
+  label: string;
+  description: string;
+  status: string;
+  statusTone: string;
+  entryComponent: CertificationComponent;
+  componentIds: readonly CertificationComponent[];
+}>;
+
+const CertificationSidebar = ({
+  selected,
+  onSelect,
+}: {
+  selected: CertificationComponent;
+  onSelect: (component: CertificationComponent) => void;
+}) => (
+  <div className="flex h-full min-h-0 flex-col gap-4 p-4">
+    <div>
+      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+        Component inventory
+      </p>
+      <h2 className="mt-2 text-lg font-semibold text-text-main">Certification Lab</h2>
+    </div>
+    <nav aria-label="Certification groups" className="space-y-3">
+      {CERTIFICATION_GROUPS.map((group) => (
+        <button
+          key={group.id}
+          type="button"
+          aria-current={
+            (group.componentIds as readonly CertificationComponent[]).includes(selected)
+              ? 'true'
+              : undefined
+          }
+          onClick={() => onSelect(group.entryComponent as CertificationComponent)}
+          className={`w-full border px-3 py-4 text-left transition-colors ${(group.componentIds as readonly CertificationComponent[]).includes(selected) ? 'border-primary bg-primary/10' : 'border-border-subtle hover:border-border-technical'}`}
+        >
+          <span className="block font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+            {group.label}
+          </span>
+          <span className="mt-2 block text-[11px] leading-4 text-text-muted">
+            {group.description}
+          </span>
+          <span
+            className={`mt-3 inline-block border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] ${group.statusTone === 'warning' ? 'border-warning/40 bg-warning/10 text-warning' : 'border-border-technical bg-shell-surface text-text-muted'}`}
+          >
+            {group.status}
+          </span>
+        </button>
+      ))}
+    </nav>
+  </div>
+);
+
+const CertificationPanel = ({ selected }: { selected: CertificationComponent }) => {
+  const component = CERTIFICATION_COMPONENTS.find((item) => item.id === selected);
+  return (
+    <div className="space-y-5 p-4">
+      <div>
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+          Evidence record
+        </p>
+        <h2 className="mt-2 text-lg font-semibold text-text-main">{component?.label}</h2>
+        <p className="mt-1 text-sm text-text-muted">{component?.action}</p>
+      </div>
+      <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
+        {[
+          ['Contract', selected === 'TechnicalCanvas' ? 'verified' : 'partial'],
+          ['Tests', selected === 'TechnicalCanvas' ? 'verified' : 'pending'],
+          ['Visual', 'pending'],
+          ['Responsive', 'pending'],
+          ['Registry', 'deferred'],
+        ].map(([label, value]) => (
+          <div key={label} className="flex items-center justify-between gap-4 py-3">
+            <dt className="text-text-muted">{label}</dt>
+            <dd className="font-mono text-xs uppercase text-text-main">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="text-xs leading-5 text-text-muted">
+        Certification is contextual. This panel records evidence; it does not certify a component by
+        itself.
+      </p>
+    </div>
+  );
+};
+
+const CertificationFoundationCatalog = () => (
+  <div className="space-y-5">
+    <div>
+      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+        Certification section
+      </p>
+      <h1 className="mt-2 text-2xl font-semibold text-text-main">UI Foundation</h1>
+      <p className="mt-1 text-sm text-text-muted">
+        Shared layout, surfaces and interaction contracts
+      </p>
+    </div>
+    <section className="space-y-3" aria-labelledby="technical-canvas-examples">
+      <div>
+        <h2 id="technical-canvas-examples" className="text-lg font-semibold text-text-main">
+          TechnicalCanvas
+        </h2>
+        <p className="text-sm text-text-muted">Canonical grid primitive · all variants</p>
+      </div>
+      <TechnicalCanvasCertification />
+    </section>
+    <section className="space-y-3" aria-labelledby="technical-surface-examples">
+      <div>
+        <h2 id="technical-surface-examples" className="text-lg font-semibold text-text-main">
+          TechnicalSurface
+        </h2>
+        <p className="text-sm text-text-muted">Surface contract · all variants</p>
+      </div>
+      <TechnicalSurfaceCertification />
+    </section>
+    <section className="space-y-3" aria-labelledby="technical-card-examples">
+      <div>
+        <h2 id="technical-card-examples" className="text-lg font-semibold text-text-main">
+          TechnicalCard
+        </h2>
+        <p className="text-sm text-text-muted">Thin surface composition · all states</p>
+      </div>
+      <TechnicalCardCertification />
+    </section>
+  </div>
+);
+
+const CertificationLabCanvas = ({
+  selected,
+  selectedActivityId,
+  onActivitySelect,
+}: {
+  selected: CertificationComponent;
+  selectedActivityId?: string;
+  onActivitySelect?: (row: ActivityRow) => void;
+}) => {
+  if (selected === 'TechnicalCanvas') {
+    return <CertificationFoundationCatalog />;
+  }
+  if (selected === 'FiltersActions') {
+    return (
+      <DataTablesCatalog
+        selectedActivityId={selectedActivityId}
+        onActivitySelect={onActivitySelect}
+      />
+    );
+  }
+  if (selected === 'CRMPrimitives') {
+    return <CRMPrimitivesCatalog />;
+  }
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+            Component Certification Lab
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold text-text-main">{selected}</h1>
+        </div>
+        <span className="border border-warning/40 bg-warning/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-warning">
+          Evidence pending
+        </span>
+      </div>
+      {selected === 'SharedFoundation' ? (
+        <div className="space-y-4">
+          <PageHeader
+            eyebrow="Shared foundation fixture"
+            title="Customer workspace"
+            description="Page context and actions remain owned by the consuming composition."
+            actions={
+              <Button variant="primary" size="sm">
+                Create customer
+              </Button>
+            }
+          />
+          <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
+            <SectionHeader
+              title="Customer activity"
+              action={
+                <Button variant="outline" size="sm">
+                  Refresh
+                </Button>
+              }
+            />
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
+                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">
+                  Loading
+                </p>
+                <LoadingState label="Loading customer activity" lines={3} />
+              </TechnicalSurface>
+              <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
+                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">
+                  Empty
+                </p>
+                <EmptyState
+                  variant="ghost"
+                  size="sm"
+                  icon="inbox"
+                  title="No activity yet"
+                  description="New activity will appear here when the customer engages."
+                  action={
+                    <Button variant="outline" size="sm">
+                      Add activity
+                    </Button>
+                  }
+                />
+              </TechnicalSurface>
+              <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
+                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-warning">
+                  Error
+                </p>
+                <EmptyState
+                  variant="ghost"
+                  status="error"
+                  size="sm"
+                  icon="error_outline"
+                  title="Activity unavailable"
+                  description="The activity feed could not be loaded."
+                  action={
+                    <Button variant="danger" size="sm">
+                      Try again
+                    </Button>
+                  }
+                />
+              </TechnicalSurface>
+              <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
+                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">
+                  Forbidden / read-only
+                </p>
+                <EmptyState
+                  variant="ghost"
+                  size="sm"
+                  icon="lock"
+                  title="Activity access is restricted"
+                  description="You can view the workspace, but you cannot add or change activity."
+                />
+              </TechnicalSurface>
+            </div>
+          </TechnicalSurface>
+        </div>
+      ) : selected === 'TechnicalSurface' ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          {(['surface', 'glass', 'canvas'] as const).map((variant) => (
+            <TechnicalSurface
+              key={variant}
+              variant={variant}
+              depth={variant === 'glass' ? 'raised' : 'flat'}
+              radius="md"
+              border="technical"
+              className="min-h-32 p-4"
+            >
+              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+                {variant} surface
+              </span>
+            </TechnicalSurface>
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2">
+          <TechnicalCard className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+            <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+              flat card
+            </span>
+          </TechnicalCard>
+          <TechnicalCard variant="interactive" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+            <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+              interactive card
+            </span>
+          </TechnicalCard>
+          <TechnicalCard variant="warning" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+            <div className="flex h-full flex-col justify-between gap-2">
+              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+                warning card
+              </span>
+              <span className="text-xs text-warning">
+                Warning semantics belong to the consuming state.
+              </span>
+            </div>
+          </TechnicalCard>
+          <TechnicalCard variant="disabled" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+            <div className="flex h-full flex-col justify-between gap-2">
+              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+                disabled card
+              </span>
+              <span className="text-xs text-text-muted">Unavailable for interaction.</span>
+            </div>
+          </TechnicalCard>
+          <TechnicalCard data-read-only="true" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+            <div className="flex h-full flex-col justify-between gap-2">
+              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+                read-only card
+              </span>
+              <span className="text-xs text-text-muted">Readable; mutations are disabled.</span>
+            </div>
+          </TechnicalCard>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function CompositionShowcasePage() {
-  const [recipe, setRecipe] = useState<RecipeName>(() => {
-    if (typeof window === 'undefined') return 'SuiteOverview';
-    const requestedRecipe = new URLSearchParams(window.location.search).get('recipe');
-    return requestedRecipe && requestedRecipe in FIXTURES
-      ? (requestedRecipe as RecipeName)
-      : 'SuiteOverview';
-  });
+  const pathname = usePathname();
+  const [recipe, setRecipe] = useState<RecipeName>('SuiteOverview');
   const [state, setState] = useState<ShowcaseState>('ready');
-  const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
+  const [selectedWorkspace, setSelectedWorkspace] = useState<string | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<ActivityRow | null>(null);
+  const [dataset, setDataset] = useState<ShowcaseDataset>('default');
+  const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<'expanded' | 'rail' | 'hover'>('expanded');
-  const [isModuleContextPanelOpen, setIsModuleContextPanelOpen] = useState(true);
-  const [isSplitContextSidebarOpen, setIsSplitContextSidebarOpen] = useState(true);
+  const [isModuleContextPanelOpen, setIsModuleContextPanelOpen] = useState(false);
+  const [isSplitContextSidebarOpen, setIsSplitContextSidebarOpen] = useState(false);
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
+  const [selectedCertificationComponent, setSelectedCertificationComponent] =
+    useState<CertificationComponent>('TechnicalCanvas');
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
-  const [themeMode, setThemeMode] = useState<ShowcaseTheme>(() => {
-    if (typeof window === 'undefined') return 'light';
-    return window.localStorage.getItem('showcase-theme') === 'dark' ? 'dark' : 'light';
-  });
   const router = useRouter();
   const composition = FIXTURES[recipe];
+  const canvasGeometry = RECIPE_CANVAS_GEOMETRY[recipe];
   const activeOrganization = SHOWCASE_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
 
   useEffect(() => {
-    window.localStorage.setItem('showcase-theme', themeMode);
-    emitShowcaseEvent('theme', { theme: themeMode });
-  }, [themeMode]);
+    const certificationPath = window.location.pathname;
+    const isUiFoundationRoute =
+      certificationPath === '/composition-showcase/certification-lab/UI-foundation';
+    const isCrmPrimitivesRoute =
+      certificationPath === '/composition-showcase/certification-lab/CRMPrimitives';
+    const isDataTablesRoute =
+      certificationPath === '/composition-showcase/certification-lab/data-tables';
+    const params = new URLSearchParams(window.location.search);
+    const requestedRecipe = params.get('recipe');
+    const requestedDataset = params.get('dataset');
+    const requestedComponent = params.get('component');
+
+    startTransition(() => {
+      setRecipe(
+        isCrmPrimitivesRoute || isUiFoundationRoute || isDataTablesRoute
+          ? 'CertificationLab'
+          : requestedRecipe && requestedRecipe in FIXTURES
+            ? (requestedRecipe as RecipeName)
+            : 'SuiteOverview',
+      );
+      setDataset(isShowcaseDataset(requestedDataset) ? requestedDataset : 'default');
+      setSelectedCertificationComponent(
+        isCrmPrimitivesRoute
+          ? 'CRMPrimitives'
+          : isUiFoundationRoute
+            ? 'TechnicalCanvas'
+            : isDataTablesRoute
+              ? 'FiltersActions'
+              : CERTIFICATION_COMPONENTS.some((component) => component.id === requestedComponent)
+                ? (requestedComponent as CertificationComponent)
+                : 'TechnicalCanvas',
+      );
+    });
+  }, []);
 
   useEffect(() => {
     const mark = `composition-showcase:${recipe}`;
     performance.mark(`${mark}:start`);
-    emitShowcaseEvent('view', { recipe, state });
+    emitShowcaseEvent('view', { recipe, state, dataset });
     return () => {
       performance.mark(`${mark}:end`);
       performance.measure(mark, `${mark}:start`, `${mark}:end`);
     };
-  }, [recipe, state]);
+  }, [recipe, state, dataset]);
 
   useEffect(() => {
     const themeClass = activeOrganization?.theme;
@@ -1245,9 +1936,9 @@ export default function CompositionShowcasePage() {
               className={`${regionClass(region.component, recipe)} ${
                 recipe === 'CreativeEditor'
                   ? region.id === 'transport'
-                    ? 'px-3 py-2'
+                    ? 'border-x-0 px-3 py-2'
                     : region.id === 'timeline'
-                      ? 'border-t px-4 py-3'
+                      ? 'border-x-0 border-t px-4 py-3'
                       : 'border-0 bg-transparent'
                   : ''
               } ${state === 'forbidden' ? 'opacity-60' : ''}`}
@@ -1337,14 +2028,29 @@ export default function CompositionShowcasePage() {
   );
 
   return (
-    <div
-      className={`${activeOrganization?.theme ?? ''} ${themeMode === 'dark' ? 'dark' : ''} h-full`}
-      data-showcase-theme={themeMode}
-    >
+    <div className={`${activeOrganization?.theme ?? ''} h-full`}>
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
-        activeModuleId={recipe}
+        scrollResetKey={pathname}
+        activeModuleId={dataset === 'crm-contacts' ? 'crm-contacts' : recipe}
         moduleContextRenderers={{
+          CertificationLab: () => (
+            <CertificationSidebar
+              selected={selectedCertificationComponent}
+              onSelect={(component) => {
+                setIsSplitContextSidebarOpen(false);
+                setIsModuleContextPanelOpen(false);
+                setSelectedCertificationComponent(component);
+                if (component === 'CRMPrimitives') {
+                  router.push('/composition-showcase/certification-lab/CRMPrimitives');
+                } else if (component === 'FiltersActions') {
+                  router.push('/composition-showcase/certification-lab/data-tables');
+                } else {
+                  router.push('/composition-showcase/certification-lab/UI-foundation');
+                }
+              }}
+            />
+          ),
           SplitWorkspace: () =>
             resolveShowcaseZoneRenderer(
               RECIPE_SHELL_USAGE.SplitWorkspace?.moduleContextSidebar?.contentKey,
@@ -1365,6 +2071,96 @@ export default function CompositionShowcasePage() {
             )?.(),
         }}
         moduleContextPanelRenderers={{
+          CertificationLab: () =>
+            isModuleContextPanelOpen ? (
+              selectedActivity ? (
+                <div className="space-y-4 p-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
+                      Activity detail
+                    </p>
+                    <h2 className="mt-2 text-lg font-semibold text-text-main">
+                      {selectedActivity.event}
+                    </h2>
+                  </div>
+                  <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
+                    <div className="flex items-center justify-between gap-4 py-3">
+                      <dt className="text-text-muted">Actor</dt>
+                      <dd className="flex items-center gap-2 font-medium text-text-main">
+                        <UserAvatar name={selectedActivity.actor} size="sm" />
+                        {selectedActivity.actor}
+                      </dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 py-3">
+                      <dt className="text-text-muted">Date</dt>
+                      <dd className="font-mono text-xs text-text-main">{selectedActivity.date}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 py-3">
+                      <dt className="text-text-muted">Status</dt>
+                      <dd>
+                        <Badge
+                          status={
+                            selectedActivity.status === 'Done'
+                              ? 'success'
+                              : selectedActivity.status === 'Review'
+                                ? 'energy'
+                                : 'primary'
+                          }
+                        >
+                          {selectedActivity.status}
+                        </Badge>
+                      </dd>
+                    </div>
+                  </dl>
+                  <Button variant="outline" size="sm" onClick={() => setSelectedActivity(null)}>
+                    Back to certification
+                  </Button>
+                </div>
+              ) : (
+                <CertificationPanel selected={selectedCertificationComponent} />
+              )
+            ) : null,
+          DataWorkspace: () =>
+            isModuleContextPanelOpen && selectedWorkspace ? (
+              <div className="space-y-4 p-4">
+                <div>
+                  <p className="text-text-muted text-xs uppercase tracking-[0.16em]">
+                    Workspace detail
+                  </p>
+                  <h2 className="mt-2 text-lg font-semibold text-text-main">{selectedWorkspace}</h2>
+                </div>
+                {(() => {
+                  const selectedRow = DATA_WORKSPACE_ROWS.find(
+                    ({ workspace }) => workspace === selectedWorkspace,
+                  );
+                  if (!selectedRow) return null;
+                  return (
+                    <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
+                      {[
+                        ['Plan', selectedRow.plan],
+                        ['Status', selectedRow.status],
+                        ['Members', selectedRow.members],
+                        ['Updated', selectedRow.updated],
+                      ].map(([label, value]) => (
+                        <div key={label} className="flex items-center justify-between gap-4 py-3">
+                          <dt className="text-text-muted">{label}</dt>
+                          <dd className="font-medium text-text-main">{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  );
+                })()}
+                <p className="text-sm text-text-muted">Selected from the workspace table.</p>
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="primary" size="sm">
+                    Open workspace
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setSelectedWorkspace(null)}>
+                    Clear selection
+                  </Button>
+                </div>
+              </div>
+            ) : null,
           SplitWorkspace: () =>
             isModuleContextPanelOpen
               ? resolveShowcaseZonePanelRenderer(
@@ -1388,60 +2184,103 @@ export default function CompositionShowcasePage() {
               RECIPE_SHELL_USAGE.CreativeEditor?.moduleContextPanel?.footer?.contentKey,
             )?.(),
         }}
-        moduleContextPanelOnClose={() => setIsModuleContextPanelOpen(false)}
+        moduleContextPanelOnClose={() => {
+          setIsModuleContextPanelOpen(false);
+          setSelectedWorkspace(null);
+          setSelectedActivity(null);
+        }}
         moduleContextSidebarCollapsed={
-          recipe === 'CreativeEditor'
-            ? !isMediaLibraryOpen
-            : recipe === 'SplitWorkspace'
-              ? !isSplitContextSidebarOpen
-              : undefined
+          recipe === 'CertificationLab'
+            ? !isSplitContextSidebarOpen
+            : recipe === 'CreativeEditor'
+              ? !isMediaLibraryOpen
+              : recipe === 'SplitWorkspace'
+                ? !isSplitContextSidebarOpen
+                : undefined
         }
         moduleContextSidebarShowCollapsedTrigger={
-          recipe !== 'CreativeEditor' && recipe !== 'SplitWorkspace'
+          recipe !== 'CreativeEditor' &&
+          recipe !== 'SplitWorkspace' &&
+          recipe !== 'CertificationLab'
         }
+        moduleContextSidebarMobileVisibility="visible"
         moduleContextSidebarOnCollapsedChange={(collapsed) => {
+          if (recipe === 'CertificationLab') setIsSplitContextSidebarOpen(!collapsed);
           if (recipe === 'CreativeEditor') setIsMediaLibraryOpen(!collapsed);
           if (recipe === 'SplitWorkspace') setIsSplitContextSidebarOpen(!collapsed);
         }}
-        contextualSidebarAction={(isRail) =>
-          (recipe === 'CreativeEditor' && !isMediaLibraryOpen) ||
-          (recipe === 'SplitWorkspace' && !isSplitContextSidebarOpen) ? (
-            <Button
-              variant="energy"
-              size="sm"
-              startIcon="menu"
-              aria-label={
-                recipe === 'CreativeEditor' ? 'Open Media Library' : 'Open selection context'
+        contextualSidebarAction={
+          recipe === 'CertificationLab' && !isSplitContextSidebarOpen
+            ? {
+                type: 'contextual-action',
+                icon: 'Menu',
+                label: 'Open components',
+                actionId: 'open-components',
+                onAction: () => setIsSplitContextSidebarOpen(true),
               }
-              onClick={() => {
-                if (recipe === 'CreativeEditor') setIsMediaLibraryOpen(true);
-                if (recipe === 'SplitWorkspace') setIsSplitContextSidebarOpen(true);
-              }}
-              className="min-w-0 hover:bg-primary hover:text-white"
-            >
-              {!isRail ? (
-                <span className="truncate">
-                  {recipe === 'CreativeEditor'
-                    ? RECIPE_SHELL_USAGE.CreativeEditor?.contextualAction?.label
-                    : 'Open selection context'}
-                </span>
-              ) : null}
-            </Button>
-          ) : null
+            : (isRail) =>
+                (recipe === 'CreativeEditor' && !isMediaLibraryOpen) ||
+                (recipe === 'SplitWorkspace' && !isSplitContextSidebarOpen) ? (
+                  <NavSidebarItem
+                    icon="Menu"
+                    label={
+                      recipe === 'CreativeEditor' ? 'Open Media Library' : 'Open selection context'
+                    }
+                    isRail={isRail}
+                    revealOnHover={false}
+                    variant="contextual-action"
+                    role="button"
+                    onAction={() => {
+                      if (recipe === 'CreativeEditor') setIsMediaLibraryOpen(true);
+                      if (recipe === 'SplitWorkspace') setIsSplitContextSidebarOpen(true);
+                    }}
+                    actionId={
+                      recipe === 'CreativeEditor' ? 'open-media-library' : 'open-selection-context'
+                    }
+                  />
+                ) : null
         }
         canvasProps={{
           mode: RECIPE_CANVAS_MODES[recipe],
-          header: recipe === 'SplitWorkspace' ? <SplitRecipeHeader /> : undefined,
-          toolbar: recipe === 'SplitWorkspace' ? <SplitRecipeToolbar /> : undefined,
+          className:
+            recipe === 'CertificationLab'
+              ? 'max-lg:h-auto max-lg:min-h-[calc(100vh-8rem)]'
+              : undefined,
+          contentClassName:
+            recipe === 'CertificationLab'
+              ? selectedCertificationComponent === 'CRMPrimitives'
+                ? 'p-4 sm:p-5 max-lg:overflow-x-hidden max-lg:overflow-y-auto'
+                : 'p-4 sm:p-5 max-lg:overflow-x-hidden max-lg:overflow-y-auto'
+              : undefined,
+          header:
+            recipe === 'SplitWorkspace' ? (
+              <SplitRecipeHeader />
+            ) : recipe === 'CertificationLab' ? (
+              <CertificationLabHeader />
+            ) : undefined,
+          toolbar:
+            recipe === 'SplitWorkspace' ? (
+              <SplitRecipeToolbar />
+            ) : recipe === 'CertificationLab' ? (
+              <CertificationLabToolbar
+                onOpenComponents={() => setIsSplitContextSidebarOpen(true)}
+              />
+            ) : undefined,
         }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
-          const selectedRecipe = new URL(route.routeId, window.location.origin).searchParams.get(
-            'recipe',
-          );
+          const destination = new URL(route.routeId, window.location.origin);
+          const selectedRecipe = destination.searchParams.get('recipe');
+          const selectedDataset = destination.searchParams.get('dataset');
           if (selectedRecipe && selectedRecipe in FIXTURES) {
-            emitShowcaseEvent('navigation', { recipe: selectedRecipe, fallback: false });
+            const nextDataset = isShowcaseDataset(selectedDataset) ? selectedDataset : 'default';
+            emitShowcaseEvent('navigation', {
+              recipe: selectedRecipe,
+              dataset: nextDataset,
+              fallback: false,
+            });
             setRecipe(selectedRecipe);
+            setDataset(nextDataset);
             router.push(route.routeId);
             return;
           }
@@ -1454,7 +2293,13 @@ export default function CompositionShowcasePage() {
             <BrandLogo variant="isotype" size="sm" className="shrink-0" />
           </div>
         }
-        centerSlot={<CommandBarTrigger className="w-full" onOpen={() => undefined} />}
+        centerSlot={
+          <CommandBarTrigger
+            className="w-full"
+            placeholder="Search or type a command..."
+            onOpen={() => undefined}
+          />
+        }
         platformHeaderProps={{
           contextSlot: (
             <div className="flex min-w-0 items-center gap-2">
@@ -1483,14 +2328,6 @@ export default function CompositionShowcasePage() {
         }}
         rightSlot={
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-label={`Switch to ${themeMode === 'dark' ? 'light' : 'dark'} theme`}
-              onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
-            >
-              {themeMode === 'dark' ? 'Light' : 'Dark'}
-            </Button>
             <PlatformHeaderControls
               notifications={NOTIFICATION_CENTER_FIXTURES.recent}
               unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
@@ -1501,6 +2338,26 @@ export default function CompositionShowcasePage() {
             />
           </div>
         }
+        mobileSidebarActions={
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
+            <div className="flex min-h-10 items-center">
+              <ThemeToggle
+                variant="technical"
+                size="md"
+                className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
+              />
+            </div>
+            <button
+              type="button"
+              aria-label="Open help center"
+              className="border-border-technical text-text-main hover:bg-primary/10 hover:text-primary flex min-h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition-colors"
+              onClick={() => setContextMode('help')}
+            >
+              <CircleHelp size={20} aria-hidden="true" />
+              <span>Help</span>
+            </button>
+          </div>
+        }
         profileSlot={
           <UserMenu
             userName="Alex Morgan"
@@ -1509,29 +2366,53 @@ export default function CompositionShowcasePage() {
             tenantName="Showcase Workspace"
             userSrc="https://i.pravatar.cc/64?img=12"
             timezoneOptions={[{ label: 'Auto detect', isActive: true }]}
-            onOpenChange={() => undefined}
+            onOpenChange={(open) => {
+              if (open) setContextMode(null);
+            }}
+            onAvatarClick={() => setContextMode('profile')}
+            onProfileClick={() => setContextMode('profile')}
             onLogout={() => undefined}
           />
         }
-        appShellProps={{ config: { activeOverlay: contextMode ? 'context' : null } }}
+        appShellProps={{
+          onToggleLeftSidebar: () =>
+            setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
+          config: { activeOverlay: contextMode ? 'context' : null },
+          contextSlot: contextMode ? (
+            <ContextPanelHost
+              mode={contextMode}
+              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+              onClose={() => setContextMode(null)}
+            />
+          ) : undefined,
+        }}
       >
         <main
-          className={`h-full min-h-0 ${recipe === 'CreativeEditor' ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden'} bg-shell-canvas text-text-main ${recipe === 'CreativeEditor' ? '' : 'p-3 sm:p-5'}`}
+          data-showcase-state={state}
+          className={`${recipe === 'CreativeEditor' ? 'h-full min-h-0 overflow-hidden' : 'min-h-full'} bg-shell-canvas text-text-main`}
         >
-          <section className={recipe === 'CreativeEditor' ? 'h-full min-h-0' : 'mx-auto max-w-7xl'}>
-            {recipe !== 'CreativeEditor' ? (
+          <section
+            className={`min-w-0 max-w-full ${SUITE_CANVAS_GEOMETRY_CLASSES[canvasGeometry]} ${recipe === 'DataWorkspace' ? 'min-h-full' : ''}`}
+          >
+            {
               <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h1 className="font-mono text-xs uppercase tracking-[0.16em]">
-                    {composition.recipe}
-                  </h1>
-                  <span className="text-xs text-text-muted">
-                    {composition.grid.columns} columns / {composition.grid.gap} gap
-                  </span>
+                  {dataset === 'default' ? (
+                    <>
+                      <h1 className="font-mono text-xs uppercase tracking-[0.16em]">
+                        {composition.recipe}
+                      </h1>
+                      <span className="text-xs text-text-muted">
+                        {composition.grid.columns} columns / {composition.grid.gap} gap
+                      </span>
+                    </>
+                  ) : null}
                 </div>
                 <label className="flex items-center gap-2 text-xs text-text-muted">
                   <span>Review state</span>
                   <select
+                    aria-label="Review state"
                     value={state}
                     onChange={(event) => setState(event.target.value as ShowcaseState)}
                     className="rounded-md border border-border-technical bg-shell-canvas px-2 py-1.5 text-text-main"
@@ -1543,14 +2424,37 @@ export default function CompositionShowcasePage() {
                     ))}
                   </select>
                 </label>
+                <span
+                  aria-live="polite"
+                  data-testid="showcase-state-status"
+                  className="text-xs text-text-muted"
+                >
+                  State: {state}
+                </span>
               </div>
-            ) : null}
-            {recipe === 'CreativeEditor' ? (
+            }
+            {recipe === 'CertificationLab' ? (
+              <CertificationLabCanvas
+                selected={selectedCertificationComponent}
+                selectedActivityId={selectedActivity?.id}
+                onActivitySelect={(row) => {
+                  setSelectedActivity(row);
+                  setIsModuleContextPanelOpen(true);
+                }}
+              />
+            ) : recipe === 'CreativeEditor' ? (
               <CreativeEditorCanvas regions={regions} state={state} />
             ) : recipe === 'SuiteOverview' ? (
-              <SuiteOverviewCanvas state={state} composition={composition} />
+              <SuiteOverviewCanvas state={state} composition={composition} dataset={dataset} />
             ) : recipe === 'DataWorkspace' ? (
-              <DataWorkspaceCanvas state={state} />
+              <DataWorkspaceCanvas
+                state={state}
+                selectedWorkspace={selectedWorkspace}
+                onSelectWorkspace={(workspace) => {
+                  setSelectedWorkspace(workspace);
+                  setIsModuleContextPanelOpen(true);
+                }}
+              />
             ) : recipe === 'RecordWorkspace' ? (
               <RecordWorkspaceCanvas state={state} />
             ) : recipe === 'BoardWorkspace' ? (
@@ -1569,16 +2473,6 @@ export default function CompositionShowcasePage() {
           </section>
         </main>
       </SuiteRuntime>
-      {contextMode && (
-        <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
-          <GlobalContextPanel
-            mode={contextMode}
-            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-            onClose={() => setContextMode(null)}
-          />
-        </div>
-      )}
     </div>
   );
 }

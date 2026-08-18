@@ -55,6 +55,71 @@ Frontend entries may additionally contain:
 - `compliance.blocks_0_compliance`;
 - frontend and infrastructure certification fields.
 
+### Total certification extension
+
+New or migrated frontend entries may represent certification as a structured
+technical profile while preserving the existing certification fields during
+migration:
+
+```json
+{
+	"certification": {
+		"ui_ux": { "status": "certified", "evidence": [] },
+		"technical": { "status": "certified", "evidence": [] },
+		"security": { "applicability": "required", "status": "passed", "evidence": [] },
+		"data_state": { "applicability": "required", "status": "passed", "evidence": [] },
+		"performance": { "applicability": "required", "status": "passed", "evidence": [] },
+		"resilience": { "applicability": "not-applicable", "status": "not-applicable", "evidence": [] },
+		"maintainability_testing": { "applicability": "required", "status": "passed", "evidence": [] },
+		"overall": "certified"
+	}
+}
+```
+
+The five technical dimensions are `security`, `data_state`, `performance`,
+`resilience` and `maintainability_testing`. A required dimension must be
+`passed` for `overall: certified`; `not-applicable` must include a reason in
+the active track or component specification. This extension is additive: old
+entries are not silently upgraded or marked certified without migration
+evidence.
+
+### Source-contract certification
+
+Frontend components being newly certified or promoted must have an entry in
+`scripts/certification/source-contract-manifest.json` and pass
+`pnpm certification:source-contracts`. The gate inspects the actual
+implementation and public types for domain data, default visible copy,
+fixture arrays, raw palette values, literal z-indexes and inline visual styles.
+Fixtures remain external and consumer-owned. Existing certified entries are
+migrated through the same gate before their next certification or promotion.
+
+## Frontend consumption policy
+
+The canonical frontend registry is the source of truth for component
+consumption approval. Registration alone means that an implementation is
+known; it does not mean that the component is certified or approved for every
+consumer.
+
+For a new shared, suite or CRM consumer, the component must:
+
+1. have a unique entry in `frontend-components.json`;
+2. have `status: stable` or an explicitly approved `experimental` status;
+3. have `certification` for the applicable surface and consumer context;
+4. have no unresolved evidence gap that covers the requested behavior;
+5. have an implementation, contract, documentation and validation evidence
+	matching the entry.
+
+An entry with `status: deprecated`, missing certification or relevant
+`evidence_gaps` may remain in the registry for migration and provenance, but
+must not be selected as a new shared precedent. Existing consumers may be
+grandfathered only when the active track records the exception, owner and
+migration destination.
+
+Certification is contextual. A component certified for one consumer or
+contract is not automatically certified for a new suite, state, interaction or
+responsibility. A new consumer reopens the applicable audit and
+post-implementation re-audit gates.
+
 The canonical frontend registry is
 [frontend-components.json](./frontend-components.json). Future backend,
 infrastructure, and product entries must use the common fields and add only

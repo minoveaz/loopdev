@@ -1,102 +1,122 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { cn } from '../../../../helpers/cn';
 import { Icon } from '../../surfaces/Icon';
 import { FilterDropdownProps } from './types';
 
-/**
- * @component FilterDropdown
- * @description Componente de filtrado multi-selección estandarizado de LoopDev OS.
- * Diseñado para barras de herramientas técnicas de baja densidad.
- */
-export const FilterDropdown: React.FC<FilterDropdownProps> = ({ 
-  icon, 
-  label, 
-  options, 
-  selected, 
+/** Collision-aware, portalized multi-select filter control. */
+export const FilterDropdown: React.FC<FilterDropdownProps> = ({
+  icon,
+  label,
+  options,
+  selected,
+  multiple = true,
   onToggle,
-  className
+  onClear,
+  className,
+  disabled = false,
+  readOnly = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   const hasSelection = selected.length > 0;
 
   return (
-    <div className={cn("relative w-full", className)} ref={dropdownRef}>
-      {/* Trigger */}
-      <div 
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "relative flex items-center rounded-lg transition-all duration-200 cursor-pointer",
-          "bg-surface-light dark:bg-surface-dark border",
-          hasSelection 
-            ? 'border-primary/40 ring-1 ring-primary/10' 
-            : 'border-border-subtle hover:border-primary/40',
-          "px-3 h-[30px] text-xs text-text-muted"
-        )}
-      >
-        <div className="flex items-center gap-2 w-full pr-4 overflow-hidden">
-          <Icon name={icon as any} size="sm" className="opacity-60 flex-shrink-0" />
-          <span className="truncate">{label}</span>
-          {hasSelection && (
-            <span className="bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-[9px] font-bold ml-auto flex-shrink-0 animate-in zoom-in duration-200">
-              {selected.length}
-            </span>
+    <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenu.Trigger asChild>
+        <button
+          type="button"
+          disabled={disabled}
+          aria-disabled={disabled || readOnly}
+          aria-label={label}
+          className={cn(
+            'relative flex h-8 w-full cursor-pointer items-center rounded-lg border text-xs text-text-muted outline-none transition-all duration-200 focus:outline-none',
+            'bg-surface-light dark:bg-surface-dark',
+            'focus-visible:ring-2 focus-visible:ring-primary/20',
+            hasSelection
+              ? 'border-primary ring-1 ring-primary/10'
+              : 'border-border-subtle hover:border-primary/40',
+            className,
           )}
-        </div>
-        <Icon 
-          name={isOpen ? "expand_less" : "expand_more"} 
-          size="sm" 
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none opacity-60" 
-        />
-      </div>
+        >
+          <span className="flex w-full items-center gap-2 overflow-hidden px-3 pr-8">
+            <Icon name={icon} size="sm" className="shrink-0 opacity-60" />
+            <span className="truncate">{label}</span>
+            {hasSelection && (
+              <span className="ml-auto mr-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
+                {selected.length}
+              </span>
+            )}
+          </span>
+          <Icon
+            name={isOpen ? 'expand_less' : 'expand_more'}
+            size="sm"
+            className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted opacity-60"
+          />
+        </button>
+      </DropdownMenu.Trigger>
 
-      {/* Dropdown panel */}
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-1.5 z-[100] w-full min-w-[200px] bg-surface-light dark:bg-surface-dark border border-border-subtle rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="p-1.5 flex flex-col gap-0.5 max-h-[240px] overflow-y-auto">
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="start"
+          side="bottom"
+          sideOffset={6}
+          avoidCollisions
+          className="z-[1000] w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] overflow-hidden rounded-xl border border-border-subtle bg-surface-light shadow-xl dark:bg-surface-dark"
+        >
+          <div className="flex max-h-[240px] flex-col gap-0.5 overflow-y-auto p-1.5">
             {options.map((option) => {
               const isSelected = selected.includes(option);
               return (
-                <button
+                <DropdownMenu.CheckboxItem
                   key={option}
-                  onClick={() => onToggle(option)}
+                  checked={isSelected}
+                  disabled={readOnly}
+                  onSelect={(event) => {
+                    if (multiple) event.preventDefault();
+                  }}
+                  onCheckedChange={() => {
+                    if (readOnly) return;
+                    onToggle(option);
+                    if (!multiple) setIsOpen(false);
+                  }}
                   className={cn(
-                    "flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-all duration-150 w-full text-left cursor-pointer",
-                    isSelected 
-                      ? 'bg-primary/10 text-primary font-semibold' 
-                      : 'text-text-muted hover:bg-surface-light dark:hover:bg-surface-dark hover:text-text-main'
+                    'flex min-h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs outline-none transition-all duration-150',
+                    'data-[highlighted]:bg-surface-light dark:data-[highlighted]:bg-surface-dark',
+                    isSelected
+                      ? 'bg-primary/10 font-semibold text-primary'
+                      : 'text-text-muted',
+                    readOnly && 'cursor-not-allowed opacity-50',
                   )}
                 >
-                  <div className={cn(
-                    "w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all",
-                    isSelected 
-                      ? 'bg-primary border-primary' 
-                      : 'border-border-subtle'
-                  )}>
-                    {isSelected && (
-                      <Icon name="check" size="sm" className="text-white" />
+                  <span
+                    className={cn(
+                      'flex h-4 w-4 shrink-0 items-center justify-center rounded border-2',
+                      isSelected ? 'border-primary bg-primary' : 'border-border-subtle',
                     )}
-                  </div>
+                  >
+                    {isSelected && <Icon name="check" size="sm" className="text-white" />}
+                  </span>
                   <span>{option}</span>
-                </button>
+                </DropdownMenu.CheckboxItem>
               );
             })}
+            {multiple && hasSelection && (
+              <DropdownMenu.Item
+                disabled={readOnly || !onClear}
+                onSelect={(event) => {
+                  event.preventDefault();
+                  if (!readOnly) onClear?.();
+                }}
+                className="mt-1 flex min-h-9 w-full cursor-pointer items-center rounded-lg border-t border-border-subtle px-3 pt-2 text-left text-xs text-text-muted outline-none transition-colors data-[highlighted]:text-primary disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Clear selection
+              </DropdownMenu.Item>
+            )}
           </div>
-        </div>
-      )}
-    </div>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 };

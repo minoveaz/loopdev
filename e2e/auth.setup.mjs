@@ -1,6 +1,7 @@
 import { chromium } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+import { runE2EPreflight } from '../scripts/e2e/preflight.mjs';
 
 const authDirectory = path.resolve('playwright/.auth');
 const storageStatePath = path.join(authDirectory, 'user.json');
@@ -10,6 +11,7 @@ export default async function globalSetup() {
     process.loadEnvFile('.env.local');
   }
   fs.mkdirSync(authDirectory, { recursive: true });
+  await runE2EPreflight();
 
   if (process.env.PLAYWRIGHT_E2E_AUTH_BYPASS === 'true') {
     fs.writeFileSync(storageStatePath, JSON.stringify({ cookies: [], origins: [] }));
@@ -25,7 +27,7 @@ export default async function globalSetup() {
 
   const browser = await chromium.launch();
   const contextOptions = {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3001',
   };
 
   if (fs.existsSync(storageStatePath)) {

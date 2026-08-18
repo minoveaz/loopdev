@@ -109,12 +109,21 @@ describe('NavSidebarItem Atom', () => {
     render(<NavSidebarItem label="Active" icon="LibraryBig" isActive={true} />);
     const item = screen.getByRole('menuitem');
     expect(item).toHaveAttribute('aria-current', 'page');
-    expect(item).toHaveClass('bg-primary', 'text-white');
+    expect(item).toHaveClass(
+      'border-l-4',
+      'border-l-[var(--lpd-color-brand-primary)]',
+      'bg-[var(--lpd-color-bg-primary-subtle)]',
+      'text-slate-800',
+    );
   });
 
-  it('debe usar el acento amarillo para hover en estados interactivos', () => {
+  it('debe usar una superficie sutil y texto principal para hover en estados interactivos', () => {
     render(<NavSidebarItem label="Hoverable" icon="LibraryBig" />);
-    expect(screen.getByRole('menuitem')).toHaveClass('hover:bg-accent/10', 'hover:!text-accent');
+    expect(screen.getByRole('menuitem')).toHaveClass(
+      'hover:border-primary/20',
+      'hover:bg-surface-elevated',
+      'hover:!text-text-main',
+    );
   });
 
   it('has no accessibility violations in the active navigation state', async () => {

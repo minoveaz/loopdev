@@ -22,6 +22,12 @@ describe('Badge', () => {
     expect(container.querySelector('.animate-badge-pulse')).toBeInTheDocument();
   });
 
+  it.each(['success', 'energy'] as const)('renders the status dot for %s badges', (status) => {
+    const { container } = render(<Badge status={status}>Status</Badge>);
+
+    expect(container.querySelector('[class*="h-1.5"][class*="w-1.5"]')).toBeInTheDocument();
+  });
+
   it('has no accessibility violations', async () => {
     const { container } = render(<Badge status="primary">Primary</Badge>);
     expect(await axe(container)).toHaveNoViolations();

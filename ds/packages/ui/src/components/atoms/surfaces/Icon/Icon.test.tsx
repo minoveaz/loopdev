@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { axe } from 'vitest-axe';
@@ -9,7 +8,7 @@ describe('Icon', () => {
     render(<Icon name="settings" />);
     const glyph = screen.getByText('settings');
     expect(glyph).toHaveClass('material-symbols-outlined');
-    expect(glyph).toHaveClass('text-[16px]');
+    expect(glyph).toHaveClass('!text-[16px]');
   });
 
   it('renders boxed variant with container and custom color', () => {
@@ -24,6 +23,7 @@ describe('Icon', () => {
 
   it('has no accessibility violations', async () => {
     const { container } = render(<Icon name="target" />);
-    expect(await axe(container)).toHaveNoViolations();
+    const results = await axe(container);
+    expect(results.violations).toHaveLength(0);
   });
 });

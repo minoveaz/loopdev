@@ -95,6 +95,11 @@ export type ModuleShellContextActionTone = 'neutral' | 'accent' | 'attention';
 export interface ModuleShellZoneUsage {
   label?: string;
   contentKey?: string;
+  visible?: boolean;
+  headerRows?: 1 | 2 | 3;
+  showFooter?: boolean;
+  footerRows?: 1 | 2 | 3;
+  contentScrollable?: boolean;
   footer?: {
     contentKey: string;
   };
@@ -175,6 +180,7 @@ export const ModuleConfigSchema = z.object({
         .object({
           label: z.string().min(1).optional(),
           contentKey: z.string().min(1).optional(),
+          visible: z.boolean().optional(),
           footer: z.object({ contentKey: z.string().min(1) }).optional(),
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),
@@ -188,6 +194,7 @@ export const ModuleConfigSchema = z.object({
         .object({
           label: z.string().min(1).optional(),
           contentKey: z.string().min(1).optional(),
+          visible: z.boolean().optional(),
           footer: z.object({ contentKey: z.string().min(1) }).optional(),
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),
@@ -201,6 +208,11 @@ export const ModuleConfigSchema = z.object({
         .object({
           label: z.string().min(1).optional(),
           contentKey: z.string().min(1).optional(),
+          visible: z.boolean().optional(),
+          headerRows: z.union([z.literal(1), z.literal(2), z.literal(3)]).optional(),
+          showFooter: z.boolean().optional(),
+          footerRows: z.union([z.literal(1), z.literal(2), z.literal(3)]).optional(),
+          contentScrollable: z.boolean().optional(),
           footer: z.object({ contentKey: z.string().min(1) }).optional(),
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),
@@ -214,6 +226,11 @@ export const ModuleConfigSchema = z.object({
         .object({
           label: z.string().min(1).optional(),
           contentKey: z.string().min(1).optional(),
+          visible: z.boolean().optional(),
+          headerRows: z.union([z.literal(1), z.literal(2), z.literal(3)]).optional(),
+          showFooter: z.boolean().optional(),
+          footerRows: z.union([z.literal(1), z.literal(2), z.literal(3)]).optional(),
+          contentScrollable: z.boolean().optional(),
           footer: z.object({ contentKey: z.string().min(1) }).optional(),
           width: z.enum(['narrow', 'standard', 'wide', 'extra-wide']).optional(),
           collapsible: z.boolean().optional(),

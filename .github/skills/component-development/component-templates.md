@@ -24,6 +24,8 @@ ds/packages/ui/src/components/composites/<category>/<ComponentName>/
 ├── index.tsx
 ├── types.ts
 ├── <ComponentName>.test.tsx
+├── certification/
+│   └── source-contract.md
 └── README.md
 ```
 
@@ -76,6 +78,18 @@ to `@loopdev/ui` without a second real consumer and promotion evidence.
 - `interaction-contract.ts`: shell/workspace interaction guarantees only.
 - `README.md`: non-obvious composition, ownership, and usage constraints.
 - `fixtures.ts`: deterministic examples for tests or registered visual checks.
+- `certification/source-contract.md`: required manifest ownership and zero-hardcode
+    contract before technical or UI/UX certification.
+
+## Source-contract certification
+
+Every component that can become certified must be registered in
+`scripts/certification/source-contract-manifest.json`. The shared gate checks
+the actual implementation and public types for product copy, fixture data,
+raw palette values, literal z-indexes and inline visual styles. Test and
+showcase fixtures may contain representative data, but production component
+source may not. A missing manifest entry or missing fixture path blocks
+certification.
 
 Do not add `stories`, `Example.tsx`, or speculative files unless an active
 repository contract explicitly requires them.

@@ -27,7 +27,7 @@ reviewed_at: 2026-08-14
 | PlatformHeader | Identity, organization, suite context and global actions | Suite navigation replacement |
 | SuiteSidebar | Navigation modes, access filtering and active navigation | Canvas content or tenant business rules |
 | SidebarFooter | Mode selector and portal menu relationship | Layout width mutation |
-| GlobalContextPanel | Notifications, help and assistant overlays | Sidebar or suite content |
+| PlatformContextPanel | Profile, notifications, help and assistant overlays | Sidebar or suite content; page-owned profile markup |
 | SuiteRuntime | Suite context and navigation callbacks | CRM queries or mutations |
 | SuiteCanvas | Generic surface mode composition | Domain-specific data contracts |
 
@@ -39,7 +39,7 @@ reviewed_at: 2026-08-14
 | SidebarFooter | Selector visible | Icon/label contract | Portal menu keeps expanded state | Not rendered | Pointer gap does not collapse menu |
 | SuiteCanvas | `overview`, `data`, `workspace`, `split`, `board`, `full-bleed` | Same content contract | Same content contract | Route owns fallback | Mode changes restore focus and preserve route |
 | NavigationSchema | Full labels and groups | Same IDs and routes | Same access-filtered items | No hidden unauthorized items | Stable IDs, deterministic priorities |
-| GlobalContextPanel | Overlay available | Overlay independent | Overlay above shell surfaces | Closed | Does not change sidebar dimensions |
+| PlatformContextPanel | Overlay available | Overlay independent | Overlay above shell surfaces | Closed | Does not change sidebar dimensions |
 
 ## Canvas consumer contract
 
@@ -66,6 +66,13 @@ reviewed_at: 2026-08-14
    modes must not be added speculatively.
 5. Permission filtering and active route fallback are covered for hidden and
    forbidden modules.
+6. Profile is a platform context mode. The avatar must open `PlatformContextPanel`
+   directly in desktop and mobile; it must not open a page-owned dropdown.
+7. `SidebarFooter` owns only the navigation mode selector. Theme, help and
+   profile actions belong to the mobile drawer or global header contracts, not
+   to the desktop footer.
+8. `shell-showcase` and `composition-showcase` must consume the same
+   `ContextPanelHost`; neither page may define profile panel markup locally.
 
 The shared access contract and inaccessible-module navigation behavior were
 hardened while preserving the existing shell composition boundaries.

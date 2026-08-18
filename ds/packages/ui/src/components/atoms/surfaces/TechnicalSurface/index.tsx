@@ -3,6 +3,7 @@
 import React from 'react';
 import { TechnicalSurfaceProps } from './types';
 import { useTechnicalSurface } from './useTechnicalSurface';
+import { TechnicalCanvas } from '../../foundations/TechnicalCanvas';
 
 /**
  * @component TechnicalSurface
@@ -12,21 +13,38 @@ import { useTechnicalSurface } from './useTechnicalSurface';
  * @phase 1
  */
 export const TechnicalSurface: React.FC<TechnicalSurfaceProps & { withHoverAura?: boolean }> = (props) => {
-  const { children, withGrid = false, withHoverAura = false } = props;
+  const {
+    children,
+    withGrid = false,
+    withHoverAura = false,
+    variant = 'surface',
+    depth = 'flat',
+    radius = 'xl',
+    border = 'subtle',
+    borderWidth = 'thin',
+    interaction,
+    overflow = 'hidden',
+    className: _className,
+    style: _style,
+    ...domProps
+  } = props;
   const { surfaceClasses, handleOnClick } = useTechnicalSurface(props);
 
   return (
-    <div className={surfaceClasses} style={props.style} onClick={handleOnClick} onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
+    <div
+      {...domProps}
+      className={surfaceClasses}
+      onClick={handleOnClick}
+      data-surface-variant={variant}
+      data-surface-depth={depth}
+      data-surface-radius={radius}
+      data-surface-border={border}
+      data-surface-border-width={borderWidth}
+      data-surface-overflow={overflow}
+      data-surface-interaction={interaction ?? (props.onClick ? 'interactive' : 'static')}
+    >
       {/* 1. Blueprint Grid Texture */}
-      {withGrid && (
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.03] text-slate-900 dark:text-white"
-          style={{ 
-            backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
-            backgroundSize: '20px 20px'
-          }}
-        />
-      )}
+      {withGrid && <TechnicalCanvas size={20} showSubgrid={false} intensity="low" />}
 
       {/* 2. Interactive Aura Effect */}
       {withHoverAura && (

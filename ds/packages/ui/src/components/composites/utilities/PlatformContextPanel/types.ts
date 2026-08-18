@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import type { NotificationItem } from '../NotificationCenter/types';
 
-export type GlobalContextPanelMode = 'notifications' | 'assistant' | 'help';
+export type PlatformContextPanelMode = 'notifications' | 'assistant' | 'help' | 'profile';
 
-export interface GlobalContextPanelProps {
-  mode: GlobalContextPanelMode;
+export interface PlatformContextPanelProps {
+  mode: PlatformContextPanelMode;
   notifications?: NotificationItem[];
   unreadCount?: number;
   onClose: () => void;

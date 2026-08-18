@@ -89,12 +89,57 @@ El workspace no es estático; reacciona a la intención del usuario:
 Ancla de contexto. Muestra breadcrumbs (`Suite / Module / Entity`) y estatus global (`LIVE`, `DRAFT`).
 *   **Altura:** 56px.
 *   **Responsabilidad:** "Dónde estoy".
+*   **Slots obligatorios de composición:** `leftSlot`, `centerSlot`, `rightSlot`.
+*   **Filas:** `rows={1}` por defecto; `rows={2}` solo cuando el contexto necesite envolver contenido.
+
+Contrato:
+
+```tsx
+<ModuleHeader
+  leftSlot={/* breadcrumbs y contexto */}
+  centerSlot={/* estado o información contextual */}
+  rightSlot={/* acciones propias del módulo */}
+  rows={1}
+/>
+```
+
+El componente mantiene `segments`, `statusLabel` y `rightSlot` como compatibilidad semántica con consumidores existentes: `segments` alimenta el slot izquierdo y `statusLabel` el central cuando no se proporciona el slot correspondiente.
 
 ### 3.2 ModuleToolbar
 Plano de intención. Muestra acciones contextuales (`Create`, `Save`, `Impact`).
 *   **Altura:** 44px.
 *   **Responsabilidad:** "Qué quiero hacer".
 *   **Regla de Oro:** Solo propone acciones; la confirmación vive en el Inspector.
+*   **Slots obligatorios de composición:** `left`, `center`, `right`.
+*   **Filas:** `rows={1}` por defecto; `rows={2}` permite composición en dos líneas y altura automática.
+
+Contrato:
+
+```tsx
+<ModuleToolbar
+  leftSlot={/* búsqueda y filtros primarios */}
+  centerSlot={/* columnas, orden, agrupación o vista */}
+  rightSlot={/* acción principal y acciones bulk */}
+  rows={1}
+/>
+```
+
+### 3.3 Reglas comunes de ModuleHeader y ModuleToolbar
+
+- Los slots reciben `ReactNode`; el composite no conoce la entidad ni inventa acciones.
+- `ModuleHeader` responde **"¿Dónde estoy?"**. `ModuleToolbar` responde **"¿Qué puedo hacer con esta vista?"**.
+- `ModuleHeader` no contiene búsqueda, filtros, tabs, vistas ni acciones CRUD de colecciones.
+- `ModuleToolbar` no duplica breadcrumbs, identidad de suite ni contexto de navegación.
+- Se usan primitives de `@loopdev/ui`: `Button`, `IconButton`, `Input`, `Select`, `FilterDropdown`, `Icon`, `Badge` y `TechnicalStatusBadge` según el caso.
+- Los iconos se resuelven mediante `Icon`/`IconButton` y nombres del registro de iconos de LoopDev; no se dibujan SVGs locales ni símbolos Unicode.
+- Los colores, fondos, bordes, focus y estados usan tokens semánticos; no se añaden hexadecimales en consumidores.
+- Las acciones sin callback o sin comportamiento real no se renderizan.
+- Una vista debe tener una sola acción primaria visible; las acciones de registros pertenecen al `right` del toolbar.
+- En móvil se conserva la misma responsabilidad, reduciendo contenido dentro de los slots; no se crea una segunda arquitectura.
+- `ModuleHeader` puede ocultarse en móvil (`visibleOnMobile={false}`) cuando el `PlatformHeader` ya proporciona orientación suficiente y el toolbar es la única franja operativa necesaria.
+- Si se oculta el `ModuleHeader` en móvil, el `ModuleToolbar` no debe asumir breadcrumbs ni estado: sigue limitado a búsqueda, filtros, vista y acciones de la vista.
+- En móvil, la composición normativa del `ModuleToolbar` usa `leftSlot` y `rightSlot`; `centerSlot` se reserva para desktop salvo que sus controles sean esenciales para la tarea primaria.
+- El `leftSlot` móvil debe ser flexible (`min-width: 0`) y el control de búsqueda debe usar un tamaño compacto para compartir la fila con una única acción primaria en `rightSlot`.
 
 ### 3.3 ModuleSidebar
 Espina dorsal de navegación. Soporta dos modos:

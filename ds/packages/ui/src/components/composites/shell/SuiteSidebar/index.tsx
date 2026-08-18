@@ -1,10 +1,16 @@
 import React, { useRef, useState } from 'react';
+import * as LucideIcons from 'lucide-react';
 import { TechnicalSurface, ScrollArea } from '../../../atoms';
 import { SidebarFooter } from '../SidebarFooter';
-import { SuiteSidebarProps } from './types';
+import { SuiteSidebarContextualAction, SuiteSidebarProps } from './types';
 import { useSuiteSidebar } from './useSuiteSidebar';
 import { NavSidebarGroup } from './components';
 import { NavSidebarItem } from '../../../atoms';
+
+const isSuiteSidebarContextualAction = (
+  action: SuiteSidebarProps['contextualAction'],
+): action is SuiteSidebarContextualAction =>
+  typeof action === 'object' && action !== null && 'type' in action && action.type === 'contextual-action';
 
 /**
  * @component SuiteSidebar (Context Controller v1.0)
@@ -23,6 +29,27 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
   const { isRail, visibleGroups, containerClasses, suite, activeModuleId } = useSuiteSidebar(props);
   const shouldExpandOnHover = props.navMode === 'hover' && !props.mobileMode;
   const renderAsRail = isRail && !(shouldExpandOnHover && (isHoverExpanded || isControlMenuOpen));
+  const ContextualActionIcon = isSuiteSidebarContextualAction(props.contextualAction)
+    ? (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; className?: string; 'aria-hidden'?: boolean }>>)[
+        props.contextualAction.icon
+      ] ?? LucideIcons.HelpCircle
+    : null;
+  const contextualAction =
+    typeof props.contextualAction === 'function'
+      ? props.contextualAction(renderAsRail)
+      : isSuiteSidebarContextualAction(props.contextualAction)
+        ? (
+            <button
+              type="button"
+              aria-label={props.contextualAction.label}
+              onClick={props.contextualAction.onAction}
+              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+            >
+              {ContextualActionIcon ? <ContextualActionIcon aria-hidden={true} size={18} className="shrink-0" /> : null}
+              {!renderAsRail ? <span className="truncate">{props.contextualAction.label}</span> : null}
+            </button>
+          )
+        : props.contextualAction;
   const clearHoverCollapse = () => {
     if (hoverCollapseTimer.current) {
       clearTimeout(hoverCollapseTimer.current);
@@ -61,6 +88,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
             }
           : undefined
       }
+      border="none"
       className={`${containerClasses} ${shouldExpandOnHover ? `sidebar-hover-surface ${isHoverExpanded || isControlMenuOpen ? '!w-56' : '!w-16'}` : ''} border-border-technical bg-shell-canvas h-full !rounded-none border-r`}
     >
       <div className="flex h-full flex-col">
@@ -78,11 +106,13 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
           />
         </div>
 
-        {props.contextualAction ? (
-          <div className={`shrink-0 px-4 pb-3 ${renderAsRail ? 'flex justify-center' : ''}`}>
-            {typeof props.contextualAction === 'function'
-              ? props.contextualAction(renderAsRail)
-              : props.contextualAction}
+        {contextualAction ? (
+          <div
+            className={`shrink-0 pb-3 ${
+              renderAsRail ? 'flex w-full items-center justify-center overflow-visible px-0' : 'px-4'
+            }`}
+          >
+            {contextualAction}
           </div>
         ) : null}
 
@@ -107,8 +137,15 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
           </nav>
         </ScrollArea>
 
+        {props.mobileMode && props.mobileActions ? (
+          <div className="border-t border-border-technical px-4 py-3">
+            {props.mobileActions}
+          </div>
+        ) : null}
+
         {/* Sidebar behavior selector */}
-        <SidebarFooter
+        <div className="hidden lg:block">
+          <SidebarFooter
           isRail={renderAsRail}
           navMode={props.navMode === 'hover' ? 'hover' : isRail ? 'rail' : 'expanded'}
           onMenuTrigger={() => {
@@ -131,7 +168,8 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
             }
           }}
           onNavModeChange={onNavModeChange}
-        />
+          />
+        </div>
       </div>
     </TechnicalSurface>
   );

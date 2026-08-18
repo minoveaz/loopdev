@@ -1,19 +1,91 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-15",
+  "generatedAt": "2026-08-18",
   "findings": [
     {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 358,
+      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
+      "line": 195,
+      "rule": "implicitButtonVariant",
+      "contractKind": "immutable",
+      "primaryRisk": "action semantics and theme safety",
+      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
+      "snippet": "<Button key={id} size={size}>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
+      "line": 202,
+      "rule": "implicitButtonVariant",
+      "contractKind": "immutable",
+      "primaryRisk": "action semantics and theme safety",
+      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
+      "snippet": "<Button startIcon=\"add\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
+      "line": 204,
+      "rule": "implicitButtonVariant",
+      "contractKind": "immutable",
+      "primaryRisk": "action semantics and theme safety",
+      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
+      "snippet": "<Button isLoading>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
+      "line": 205,
+      "rule": "implicitButtonVariant",
+      "contractKind": "immutable",
+      "primaryRisk": "action semantics and theme safety",
+      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
+      "snippet": "<Button disabled>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
+      "line": 257,
+      "rule": "implicitButtonVariant",
+      "contractKind": "immutable",
+      "primaryRisk": "action semantics and theme safety",
+      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
+      "snippet": "<Button size=\"sm\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
+      "line": 288,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
       "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main mt-1 text-lg font-semibold\">What needs attention</h2>"
+      "snippet": "<div><h3 className=\"font-mono text-sm uppercase tracking-[0.12em]\">{item.name}</h3><p className=\"mt-1 text-xs text-text-muted\">{item.usage}</p></div>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/DataTablesCatalog.tsx",
+      "line": 20,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 id={`${title.replaceAll(' ', '-').toLowerCase()}-heading`} className=\"text-lg font-semibold text-text-main\">{title}</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/DataTablesCatalog.tsx",
+      "line": 34,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h1 className=\"mt-2 text-2xl font-semibold text-text-main\">Data tables and filters</h1>"
     },
     {
       "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 545,
+      "line": 487,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-text-main mt-3 text-lg font-semibold\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 835,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
@@ -22,7 +94,7 @@
     },
     {
       "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 646,
+      "line": 936,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
@@ -31,7 +103,7 @@
     },
     {
       "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 695,
+      "line": 985,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
@@ -40,7 +112,7 @@
     },
     {
       "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 842,
+      "line": 1132,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
@@ -49,7 +121,7 @@
     },
     {
       "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 910,
+      "line": 1200,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
@@ -58,7 +130,7 @@
     },
     {
       "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 958,
+      "line": 1241,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
@@ -67,7 +139,106 @@
     },
     {
       "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1525,
+      "line": 1529,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">Certification Lab</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 1533,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 1569,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">{component?.label}</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 1600,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h1 className=\"mt-2 text-2xl font-semibold text-text-main\">UI Foundation</h1>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 1607,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 id=\"technical-canvas-examples\" className=\"text-lg font-semibold text-text-main\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 1616,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 id=\"technical-surface-examples\" className=\"text-lg font-semibold text-text-main\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 1625,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 id=\"technical-card-examples\" className=\"text-lg font-semibold text-text-main\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 1665,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h1 className=\"mt-2 text-2xl font-semibold text-text-main\">{selected}</h1>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 2082,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 2130,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">{selectedWorkspace}</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 2350,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
+      "line": 2403,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
@@ -76,7 +247,25 @@
     },
     {
       "file": "apps/loopdev-os/src/app/shell-showcase/page.tsx",
-      "line": 729,
+      "line": 569,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/shell-showcase/page.tsx",
+      "line": 786,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/shell-showcase/page.tsx",
+      "line": 802,
       "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
       "primaryRisk": "approved interaction primitive",
@@ -172,6 +361,78 @@
       "primaryRisk": "approved typography direction",
       "message": "Heading uses local typography styling; review Heading primitive usage.",
       "snippet": "<header className=\"mb-6 flex flex-wrap items-start justify-between gap-4\"><div><p className=\"text-text-muted font-mono text-xs uppercase tracking-[0.18em]\">LoopDev visual certifica"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx",
+      "line": 186,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx",
+      "line": 387,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.tsx",
+      "line": 89,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx",
+      "line": 103,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button type=\"button\" className=\"min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary\" onClick={() => { if ("
+    },
+    {
+      "file": "apps/loopdev-os/src/components/composites/data-tables/SelectionTable.tsx",
+      "line": 100,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "actions={<><Button variant=\"ghost\" size=\"sm\" onClick={() => setIsAssignOwnerOpen(false)}>Cancel</Button><Button variant=\"primary\" size=\"sm\" disabled={!nextOwner} className=\"disable"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/layout/ContextPanelHost.tsx",
+      "line": 27,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button key={item} type=\"button\" className=\"border-border-technical text-text-main rounded-md border px-3 py-3 text-left hover:bg-primary/10 hover:text-primary\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/layout/ContextPanelHost.tsx",
+      "line": 34,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button key={timezone} type=\"button\" className=\"text-text-main block w-full rounded px-3 py-2 text-left text-sm hover:bg-primary/10 hover:text-primary\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/layout/ContextPanelHost.tsx",
+      "line": 39,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button type=\"button\" className=\"text-danger border-border-technical border-t pt-3 text-left\">Sign Out</button>"
     },
     {
       "file": "apps/loopdev-os/src/suites/showcase/zoneRenderers.tsx",

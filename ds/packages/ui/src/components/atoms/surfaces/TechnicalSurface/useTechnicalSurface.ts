@@ -13,13 +13,14 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
     borderWidth = 'thin',
     overflow = 'hidden',
     className = '',
-    onClick 
+    onClick,
+    interaction = onClick ? 'interactive' : 'static',
   } = props;
 
   // 1. Mapeo de Variantes (Backgrounds)
   const variantMap = {
     surface: 'bg-white dark:bg-surface-dark',
-    glass: 'bg-white/80 dark:bg-surface-dark/60 backdrop-blur-md',
+    glass: 'bg-white/80 dark:bg-surface-dark backdrop-blur-md',
     canvas: 'bg-shell-canvas',
   };
 
@@ -39,6 +40,7 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
   };
 
   const borderMap = {
+    none: 'border-0',
     subtle: 'border-border-subtle dark:border-border-subtle',
     technical: 'border-border-technical dark:border-border-technical',
     strong: 'border-slate-400 dark:border-white/25',
@@ -63,9 +65,9 @@ export const useTechnicalSurface = (props: TechnicalSurfaceProps) => {
     ${depthMap[depth]}
     ${radiusMap[radius]}
     ${borderMap[border]}
-    ${borderWidthMap[borderWidth]}
+    ${border === 'none' ? 'border-0' : borderWidthMap[borderWidth]}
     ${overflowMap[overflow]}
-    ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''}
+    ${interaction === 'interactive' ? 'cursor-pointer active:scale-[0.98]' : ''}
     ${className}
   `.replace(/\s+/g, ' ').trim();
 

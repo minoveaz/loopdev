@@ -27,6 +27,7 @@
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM shared foundation implementation](./active/crm/2026-08-14-crm-shared-foundation.md) · `feature/crm-shared-foundation` · fase 0
+- [CRM UI foundation and composition](./active/crm/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
 
 ### Mobile
 
@@ -37,7 +38,7 @@
 - [Estandarización del shell de LoopDev OS](./active/platform/2026-08-10-shell-standardization.md) · fase 4
 - [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-impact-validation` · fase 1
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
-- [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 0
+- [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
 
 ### Governance
 
@@ -68,6 +69,6 @@
 - [Order Flow Integration](./closed/2026/2026-04-11-order-flow-integration.md) · fase 0
 - [Health OS Occupational Health Suite](./closed/2026/2026-06-28-health-os-occupational.md) · fase 0
 - [Sales & CRM Suite Integration](./closed/2026/2026-07-18-sales-crm-integration.md) · fase 0
-- [CRM component inventory and reuse architecture](./closed/2026/2026-08-13-crm-component-inventory.md) · fase 3
 - [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./closed/2026/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
+- [CRM component inventory and reuse architecture](./closed/2026/2026-08-13-crm-component-inventory.md) · fase 3
 - [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4

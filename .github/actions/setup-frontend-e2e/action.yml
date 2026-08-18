@@ -1,0 +1,52 @@
+name: Setup frontend E2E
+
+description: Install frontend dependencies, build shared packages, and cache Playwright Chromium.
+
+inputs:
+  build-application:
+    description: Build the loopdev-os application before running Playwright.
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9.0.0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: Cache Playwright browsers
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          playwright-chromium-${{ runner.os }}-
+
+    - name: Install Playwright browser
+      shell: bash
+      run: pnpm exec playwright install --with-deps chromium
+
+    - name: Build shared contracts
+      shell: bash
+      run: pnpm --filter @loopdev/contracts build
+
+    - name: Build shared UI
+      shell: bash
+      run: pnpm --filter @loopdev/ui build
+
+    - name: Build application
+      if: inputs.build-application == 'true'
+      shell: bash
+      run: pnpm --filter loopdev-os build

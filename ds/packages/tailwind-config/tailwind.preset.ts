@@ -6,6 +6,8 @@ const preset: Config = {
   theme: {
     extend: {
       colors: {
+        'status-warning': 'var(--lpd-color-status-warning, #ffd025)',
+        'overlay-backdrop': 'var(--lpd-color-overlay-backdrop)',
         lpd: {
           brand: {
             primary: 'var(--lpd-color-brand-primary)',
@@ -42,7 +44,7 @@ const preset: Config = {
           },
           yellow: {
             400: 'var(--lpd-color-yellow-400)',
-          }
+          },
         },
       },
       spacing: {
@@ -85,13 +87,14 @@ const preset: Config = {
       zIndex: {
         'lpd-modal': 'var(--lpd-z-modal)',
         'lpd-overlay': 'var(--lpd-z-overlay)',
+        'lpd-command-dialog': 'var(--lpd-z-command-dialog)',
         'lpd-toast': 'var(--lpd-z-toast)',
       },
       aspectRatio: {
         'lpd-video': 'var(--lpd-ratio-video)',
         'lpd-square': 'var(--lpd-ratio-square)',
         'lpd-mobile': 'var(--lpd-ratio-mobile-video)',
-      }
+      },
     },
   },
   plugins: [],

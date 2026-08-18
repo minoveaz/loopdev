@@ -1,20 +1,21 @@
 'use client';
 
 import React from 'react';
-import { Bot, CircleHelp, Inbox, X } from 'lucide-react';
+import { Bot, CircleHelp, Inbox, User, X } from 'lucide-react';
 import { LpdText } from '../../../atoms';
 import { GlobalAIAssistantPanel } from './GlobalAIAssistantPanel';
 import { GlobalHelpPanel } from './GlobalHelpPanel';
 import { GlobalNotificationsPanel } from './GlobalNotificationsPanel';
-import type { GlobalContextPanelMode, GlobalContextPanelProps } from './types';
+import type { PlatformContextPanelMode, PlatformContextPanelProps } from './types';
 
-const MODE_LABELS: Record<GlobalContextPanelMode, string> = {
+const MODE_LABELS: Record<PlatformContextPanelMode, string> = {
   notifications: 'Notifications',
   assistant: 'AI Assistant',
   help: 'Help & Support',
+  profile: 'Profile',
 };
 
-export const GlobalContextPanel: React.FC<GlobalContextPanelProps> = ({
+export const PlatformContextPanel: React.FC<PlatformContextPanelProps> = ({
   mode,
   notifications = [],
   unreadCount = 0,
@@ -35,6 +36,7 @@ export const GlobalContextPanel: React.FC<GlobalContextPanelProps> = ({
           {mode === 'notifications' && <Inbox size={16} className="text-primary" aria-hidden="true" />}
           {mode === 'assistant' && <Bot size={16} className="text-primary" aria-hidden="true" />}
           {mode === 'help' && <CircleHelp size={16} className="text-primary" aria-hidden="true" />}
+          {mode === 'profile' && <User size={16} className="text-primary" aria-hidden="true" />}
           <LpdText size="sm" weight="bold" className="text-text-main truncate dark:text-white">
             {MODE_LABELS[mode]}
           </LpdText>
@@ -66,11 +68,13 @@ export const GlobalContextPanel: React.FC<GlobalContextPanelProps> = ({
       {mode === 'help' && (
         <GlobalHelpPanel>{children}</GlobalHelpPanel>
       )}
+
+      {mode === 'profile' && children}
     </aside>
   );
 };
 
-export type { GlobalContextPanelMode, GlobalContextPanelProps } from './types';
+export type { PlatformContextPanelMode, PlatformContextPanelProps } from './types';
 export { GlobalAIAssistantPanel } from './GlobalAIAssistantPanel';
 export type { GlobalAIAssistantPanelProps } from './GlobalAIAssistantPanel';
 export { GlobalHelpPanel } from './GlobalHelpPanel';

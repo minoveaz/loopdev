@@ -1,17 +1,18 @@
-import { CSSProperties, ReactNode } from 'react';
+import React from 'react';
 
 /**
  * @file types.ts
  * @description Contratos de tipado para el átomo de superficie técnica.
  */
 
-type SurfaceVariant = 'surface' | 'glass' | 'canvas';
-type SurfaceDepth = 'flat' | 'raised' | 'overlay';
-type SurfaceRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl';
-type SurfaceBorder = 'subtle' | 'technical' | 'strong';
-type SurfaceBorderWidth = 'thin' | 'medium';
+export type SurfaceVariant = 'surface' | 'glass' | 'canvas';
+export type SurfaceDepth = 'flat' | 'raised' | 'overlay';
+export type SurfaceRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl';
+export type SurfaceBorder = 'none' | 'subtle' | 'technical' | 'strong';
+export type SurfaceBorderWidth = 'thin' | 'medium';
+export type SurfaceInteraction = 'static' | 'interactive';
 
-export interface TechnicalSurfaceProps {
+export interface TechnicalSurfaceProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Variación estética del fondo */
   variant?: SurfaceVariant;
   /** Nivel de elevación y sombra */
@@ -22,18 +23,10 @@ export interface TechnicalSurfaceProps {
   border?: SurfaceBorder;
   /** Grosor del borde */
   borderWidth?: SurfaceBorderWidth;
+  /** Define si la superficie expone affordance de interacción */
+  interaction?: SurfaceInteraction;
   /** Control de desbordamiento de contenido */
   overflow?: 'hidden' | 'visible' | 'auto';
   /** Habilitar micro-grilla técnica interna */
   withGrid?: boolean;
-  /** Clase CSS adicional para paddings o dimensiones */
-  className?: string;
-  /** Estilos de layout calculados por una composición declarativa */
-  style?: CSSProperties;
-  /** Contenido del contenedor */
-  children?: ReactNode;
-  /** Propagar eventos de clic si es necesario */
-  onClick?: () => void;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
 }

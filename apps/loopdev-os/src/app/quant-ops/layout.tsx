@@ -134,7 +134,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
                 />
               </div>
             }
-            centerSlot={<CommandBarTrigger onOpen={() => {}} />}
+            centerSlot={<CommandBarTrigger placeholder="Search or type a command..." onOpen={() => {}} />}
             rightSlot={
               <SuiteHeaderRight
                 userName={user?.email || 'Quant User'}

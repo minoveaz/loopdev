@@ -49,10 +49,10 @@ jobs:
       contents: read
       pull-requests: read
     outputs:
-      frontend: ${{ steps.filter.outputs.frontend }}
       shell: ${{ steps.filter.outputs.shell }}
       quality: ${{ steps.plan.outputs.full_fallback }}
       package_validation: ${{ steps.impact.outputs.has_targeted_validation }}
+      frontend: ${{ steps.impact.outputs.frontend == 'true' || steps.filter.outputs.frontend == 'true' }}
       mobile: ${{ steps.impact.outputs.mobile }}
       browser_desktop: ${{ steps.plan.outputs.browser_desktop }}
       browser_mobile: ${{ steps.plan.outputs.browser_mobile }}
@@ -234,6 +234,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
+
       - name: Validate mobile lint
         run: pnpm --filter loopdev-mobile lint
 
@@ -317,19 +320,13 @@ jobs:
           path: coverage/
           if-no-files-found: ignore
 
-  frontend-e2e:
-    name: Web flows, accessibility and visual behavior
+  frontend-validation:
+    name: Frontend lint, tests and build
     needs: [changes, dependency-preflight]
-    if: >-
-      needs.changes.outputs.frontend == 'true' &&
-      (needs.changes.outputs.browser_desktop == 'true' ||
-      needs.changes.outputs.browser_mobile == 'true' ||
-      needs.changes.outputs.browser_visual == 'true')
+    if: github.event_name == 'pull_request' && needs.changes.outputs.frontend == 'true' && needs.changes.outputs.quality != 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
     env:
-      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
-      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
@@ -351,42 +348,128 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build shared contracts
-        run: pnpm --filter @loopdev/contracts build
+      - name: Validate frontend surface
+        run: pnpm validate:frontend-ci
 
-      - name: Build shared UI
-        run: pnpm --filter @loopdev/ui build
+  frontend-e2e-functional:
+    name: Frontend E2E functional and accessibility
+    needs: [changes, dependency-preflight]
+    if: >-
+      needs.changes.outputs.frontend == 'true' &&
+      needs.changes.outputs.browser_desktop == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Build application
-        run: pnpm --filter loopdev-os build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install Playwright browser
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Setup frontend E2E environment
+        uses: ./.github/actions/setup-frontend-e2e
 
-      - name: Run desktop checks
+      - name: Run desktop functional and accessibility checks
         if: needs.changes.outputs.browser_desktop == 'true'
-        run: pnpm exec playwright test --project=desktop --workers=1 --reporter=line
+        run: >-
+          pnpm exec playwright test
+          e2e/*.smoke.spec.mjs
+          e2e/*.accessibility.spec.mjs
+          e2e/*certification.spec.mjs
+          --project=desktop --workers=1 --reporter=line
 
-      - name: Run Shell Showcase desktop contract
-        if: needs.changes.outputs.shell == 'true'
-        run: pnpm exec playwright test e2e/shell-showcase.contract.spec.mjs e2e/shell.visual.spec.mjs --project=desktop --workers=1 --reporter=line
+  frontend-e2e-visual:
+    name: Frontend E2E visual behavior
+    needs: [changes, dependency-preflight]
+    if: >-
+      needs.changes.outputs.frontend == 'true' &&
+      needs.changes.outputs.browser_visual == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: shell
+            runner: ubuntu-latest
+          - suite: tables
+            runner: macos-latest
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Run authenticated Mobile Web checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup frontend E2E environment
+        uses: ./.github/actions/setup-frontend-e2e
+
+      - name: Run shell and composition visual checks
+        if: matrix.suite == 'shell'
+        run: >-
+          pnpm exec playwright test
+          e2e/composition-showcase.visual.spec.mjs
+          e2e/quantitative-table.visual.spec.mjs
+          e2e/shell-showcase.visual.spec.mjs
+          e2e/shell.visual.spec.mjs
+          --project=desktop --workers=1 --reporter=line
+
+      - name: Run table visual checks
+        if: matrix.suite == 'tables'
+        run: >-
+          pnpm exec playwright test
+          e2e/dense-operational-table.visual.spec.mjs
+          e2e/entity-table-golden.visual.spec.mjs
+          --project=desktop --workers=1 --reporter=line
+
+  frontend-e2e-mobile:
+    name: Frontend E2E mobile behavior
+    needs: [changes, dependency-preflight]
+    if: >-
+      needs.changes.outputs.frontend == 'true' &&
+      (needs.changes.outputs.browser_mobile == 'true' ||
+      needs.changes.outputs.browser_visual == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup frontend E2E environment
+        uses: ./.github/actions/setup-frontend-e2e
+
+      - name: Run authenticated mobile checks
         if: needs.changes.outputs.browser_mobile == 'true'
-        run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile --workers=1 --reporter=line
+        run: >-
+          pnpm exec playwright test
+          e2e/authenticated.mobile.spec.mjs
+          e2e/input.certification.spec.mjs
+          e2e/button.certification.spec.mjs
+          e2e/icon-button.certification.spec.mjs
+          e2e/filter-dropdown.certification.spec.mjs
+          e2e/crm-primitives.certification.spec.mjs
+          e2e/entity-table.certification.spec.mjs
+          e2e/activity-table.certification.spec.mjs
+          e2e/selection-table.certification.spec.mjs
+          e2e/command-dialog.certification.spec.mjs
+          --project=mobile --project=mobile-compact --workers=1 --reporter=line
 
-      - name: Run authenticated Mobile Compact checks
-        if: needs.changes.outputs.browser_mobile == 'true'
-        run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile-compact --workers=1 --reporter=line
-
-      - name: Run Mobile Web visual checks
+      - name: Run mobile visual checks
         if: needs.changes.outputs.browser_visual == 'true'
-        run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile --workers=1 --reporter=line
-
-      - name: Run Mobile Compact visual checks
-        if: needs.changes.outputs.browser_visual == 'true'
-        run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile-compact --workers=1 --reporter=line
-
-      - name: Run Shell Showcase mobile visual contract
-        if: needs.changes.outputs.shell == 'true'
-        run: pnpm exec playwright test e2e/shell.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1 --reporter=line
+        run: >-
+          pnpm exec playwright test
+          e2e/responsive.visual.spec.mjs
+          e2e/shell.visual.spec.mjs
+          --project=mobile --project=mobile-compact --workers=1 --reporter=line

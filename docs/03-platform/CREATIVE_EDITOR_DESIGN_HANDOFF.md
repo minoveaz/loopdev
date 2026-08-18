@@ -242,9 +242,9 @@ Design and implement explicit states for:
 - Desktop: persistent shell, bounded asset sidebar, stage and timeline.
 - Tablet: asset sidebar collapses; stage remains primary; timeline may reduce
   controls but remains accessible.
-- Mobile: shell navigation becomes its mobile mode; asset panel becomes a
-  drawer; stage, transport and timeline stack; inspector becomes a sheet.
-- No desktop hover behavior may be required for mobile operation.
+- Mobile: `CreativeEditor` is out of scope for the current product phase. Do
+  not render the editor or force a stacked video-editing experience into the
+  mobile shell. A future mobile editor requires a dedicated product contract.
 
 ## 11. Design deliverables
 
@@ -253,7 +253,7 @@ Provide:
 1. Desktop composition with asset sidebar closed and open.
 2. Desktop composition with inspector open.
 3. Tablet drawer composition.
-4. Mobile stacked composition.
+4. Mobile scope decision and explicit exclusion from the editor composition.
 5. Empty, saving, error, read-only and forbidden states.
 6. Focus/keyboard annotations.
 7. Component-to-slot mapping.

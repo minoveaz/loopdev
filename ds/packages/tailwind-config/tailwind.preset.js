@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const preset = {
   darkMode: 'class',
-  content: [], 
+  content: [],
   // Safelist: Garantiza que las clases dinámicas del DS nunca sean eliminadas por purge
   safelist: [
     // Typography scale - usado dinámicamente por useTypography
@@ -21,6 +21,7 @@ const preset = {
   theme: {
     extend: {
       colors: {
+        'status-warning': 'var(--lpd-color-status-warning, #ffd025)',
         lpd: {
           brand: {
             primary: 'var(--lpd-color-brand-primary)',
@@ -38,7 +39,7 @@ const preset = {
           },
           blue: { 600: 'var(--lpd-color-blue-600)' },
           yellow: { 400: 'var(--lpd-color-yellow-400)' },
-          slate: { 100: 'var(--lpd-color-slate-100)', 800: 'var(--lpd-color-slate-800)' }
+          slate: { 100: 'var(--lpd-color-slate-100)', 800: 'var(--lpd-color-slate-800)' },
         },
       },
       spacing: {
@@ -78,13 +79,10 @@ const preset = {
       boxShadow: {
         'lpd-sm': 'var(--lpd-shadow-sm)',
         'lpd-md': 'var(--lpd-shadow-md)',
-      }
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/container-queries'),
-    require('tailwind-scrollbar-hide'),
-  ],
+  plugins: [require('@tailwindcss/container-queries'), require('tailwind-scrollbar-hide')],
 };
 
 module.exports = preset;

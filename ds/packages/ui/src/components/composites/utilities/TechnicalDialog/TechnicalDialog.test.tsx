@@ -27,16 +27,17 @@ describe('TechnicalDialog Composite', () => {
     expect(screen.getByText('This operation is irreversible')).toBeInTheDocument();
     expect(screen.getByText('Dialog body')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Confirm Delete' })).toBeInTheDocument();
+    expect(document.body.querySelector('.lpd-technical-dialog-backdrop')).toBeVisible();
   });
 
   it('invokes onClose from backdrop click', async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-    const { container } = render(
+    render(
       <TechnicalDialog isOpen onClose={onClose} title="Close me" />,
     );
 
-    const backdrop = container.querySelector('.fixed > div.absolute') as HTMLElement;
+    const backdrop = document.body.querySelector('.lpd-technical-dialog-backdrop') as HTMLElement;
     await user.click(backdrop);
     expect(onClose).toHaveBeenCalledTimes(1);
   });

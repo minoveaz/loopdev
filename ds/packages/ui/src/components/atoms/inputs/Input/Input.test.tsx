@@ -15,6 +15,11 @@ describe('Input Industrial Certification (Front_Certified 🔵)', () => {
     expect(screen.getByText('Enter sensor ID')).toHaveAttribute('id', input.getAttribute('aria-describedby'));
   });
 
+  it('does not reference missing descriptive content', () => {
+    render(<Input aria-label="Contact search" />);
+    expect(screen.getByRole('textbox', { name: 'Contact search' })).not.toHaveAttribute('aria-describedby');
+  });
+
   // US-02: Estados de Feedback
   it('US-02: handles loading, error and disabled states', () => {
     const { rerender } = render(<Input label="Status" isLoading />);
@@ -46,6 +51,17 @@ describe('Input Industrial Certification (Front_Certified 🔵)', () => {
     const toggle = screen.getByRole('button');
     fireEvent.click(toggle);
     expect(input.type).toBe('text');
+  });
+
+  it('keeps the password toggle keyboard reachable', () => {
+    render(<Input label="Password" type="password" />);
+    expect(screen.getByRole('button', { name: 'Mostrar contraseña' })).not.toHaveAttribute('tabindex', '-1');
+  });
+
+  it('renders error messages without exposing technical error codes', () => {
+    render(<Input label="Contact search" error={{ message: 'Search failed', code: 'CRM_17' }} />);
+    expect(screen.getByText('Search failed')).toBeInTheDocument();
+    expect(screen.queryByText('CRM_17')).not.toBeInTheDocument();
   });
 
   // US-04: Variantes SaaS

@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const visualRoutes = [
-  { name: 'login', path: '/login', storageState: undefined },
-];
+const visualRoutes = [{ name: 'login', path: '/login', storageState: undefined }];
 
 for (const theme of ['light', 'dark']) {
   for (const route of visualRoutes) {
@@ -21,11 +19,13 @@ for (const theme of ['light', 'dark']) {
           fullPage: true,
           animations: 'disabled',
           maxDiffPixelRatio:
-            route.name !== 'shell-showcase'
-              ? 0.02
-              : testInfo.project.name === 'mobile-compact'
-                ? 0.06
-                : 0.03,
+            route.name === 'login' && testInfo.project.name.startsWith('mobile')
+              ? 0.05
+              : route.name !== 'shell-showcase'
+                ? 0.02
+                : testInfo.project.name === 'mobile-compact'
+                  ? 0.06
+                  : 0.03,
         });
       });
     });

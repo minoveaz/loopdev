@@ -29,6 +29,9 @@ modules/mod-quant-core/keys.txt
 .env.*.local
 *.env
 playwright/.auth/
+test-results/
+playwright-report/
+apps/loopdev-os/.next-e2e/
 
 # Monorepo / Tooling
 .turbo/

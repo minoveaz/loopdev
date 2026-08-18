@@ -15,11 +15,13 @@ export const useNavSidebarItem = (props: NavSidebarItemProps) => {
     onAction,
     route,
     actionId,
+    variant = 'default',
   } = props;
 
   const isDisabled = status === 'disabled' || status === 'forbidden';
   const isComingSoon = status === 'coming-soon';
   const isInert = isDisabled || isComingSoon;
+  const isContextualAction = variant === 'contextual-action';
 
   // 1. Lógica de Interacción (Handlers)
   const handleClick = () => {
@@ -31,13 +33,15 @@ export const useNavSidebarItem = (props: NavSidebarItemProps) => {
   // 2. Composición de Clases del Contenedor (Zero Hardcoding)
   const containerClasses = `
     group relative flex items-center rounded-md border border-transparent transition-colors duration-200
-    ${isRail ? 'mx-auto size-10 justify-center' : 'w-full gap-3 px-3 py-2.5'}
+    ${isContextualAction ? 'min-w-0 gap-3 rounded-md border border-primary/30 bg-primary/10 p-2 text-left text-xs font-semibold text-primary hover:bg-primary hover:text-white' : isRail ? 'mx-auto size-10 justify-center' : 'w-full gap-3 px-3 py-2.5'}
     ${
-      isActive
-        ? 'bg-primary text-white dark:bg-primary dark:text-white'
+      isContextualAction
+        ? ''
+        : isActive
+        ? 'border-l-4 border-l-[var(--lpd-color-brand-primary)] bg-[var(--lpd-color-bg-primary-subtle)] text-slate-800 dark:text-white shadow-[inset_4px_0_0_var(--lpd-color-brand-primary)]'
         : isInert
           ? 'grayscale opacity-40 cursor-not-allowed border-transparent'
-          : 'text-text-muted cursor-pointer hover:bg-accent/10 hover:!text-accent dark:hover:bg-accent/15 dark:hover:!text-accent'
+          : 'text-text-muted cursor-pointer hover:border-primary/20 hover:bg-surface-elevated hover:!text-text-main dark:hover:border-primary/30 dark:hover:bg-surface-dark dark:hover:!text-text-main'
     }
     ${className}
   `
@@ -46,7 +50,7 @@ export const useNavSidebarItem = (props: NavSidebarItemProps) => {
 
   // 3. Clases del Texto e Icono
   const contentClasses = `transition-colors duration-300 ${
-    isActive ? 'text-white font-bold' : 'font-medium group-hover:!text-accent'
+    isActive ? 'text-slate-800 font-semibold dark:text-white' : 'font-medium group-hover:!text-text-main'
   }`;
 
   // 4. Formateo del Tooltip Técnico (Historia 8)

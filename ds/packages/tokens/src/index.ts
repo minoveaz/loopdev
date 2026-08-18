@@ -12,3 +12,4 @@ export const themes = {
 } as const;
 
 export * from './semantic';
+export * from './foundations/breakpoints';

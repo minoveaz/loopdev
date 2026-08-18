@@ -72,4 +72,12 @@ describe('EmptyState Primitive', () => {
 
     expect(await axe(container)).toHaveNoViolations();
   });
+
+  it('uses the semantic warning boundary for error state', () => {
+    const { container } = render(
+      <EmptyState variant="ghost" status="error" title="Unavailable" description="Try again." />,
+    );
+
+    expect(container.firstElementChild).toHaveClass('border-status-warning');
+  });
 });

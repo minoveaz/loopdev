@@ -169,11 +169,20 @@ function resolveImpact(files) {
   const rules = new Map();
   let globalFallback = false;
   let mobile = false;
+  let frontend = false;
 
   for (const file of files) {
     if (file.startsWith('supabase/')) continue;
 
-    if (file.startsWith('apps/loopdev-mobile/')) mobile = true;
+    if (file.startsWith('apps/loopdev-mobile/')) {
+      mobile = true;
+      continue;
+    }
+
+    if (file.startsWith('apps/loopdev-os/') || file.startsWith('e2e/')) {
+      frontend = true;
+      continue;
+    }
 
     if (isDocumentation(file)) continue;
 
@@ -205,6 +214,7 @@ function resolveImpact(files) {
     globalFallback,
     hasTargetedValidation: rules.size > 0,
     mobile,
+    frontend,
   };
 }
 
@@ -241,6 +251,7 @@ function writeGithubOutput(impact) {
       `global_fallback=${impact.globalFallback}`,
       `has_targeted_validation=${impact.hasTargetedValidation}`,
       `mobile=${impact.mobile}`,
+      `frontend=${impact.frontend}`,
       `package_ids=${impact.packageIds.join(',')}`,
     ].join('\n') + '\n',
   );

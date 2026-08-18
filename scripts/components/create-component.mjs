@@ -100,6 +100,7 @@ if (!name || !type || !category) {
       'index.tsx': `import type { ${name}Props } from './types';\n\nexport function ${name}(_props: ${name}Props) {\n  return null;\n}\n\nexport type { ${name}Props } from './types';\n`,
       'types.ts': `export interface ${name}Props {\n  // Define the approved public contract.\n}\n`,
       [`${name}.test.tsx`]: `import { describe, expect, it } from 'vitest';\n\nimport { ${name} } from './index';\n\ndescribe('${name}', () => {\n  it('has an implementation contract', () => {\n    expect(${name}).toBeDefined();\n  });\n});\n`,
+      'certification/source-contract.md': `# Source contract: ${name}\n\n- Manifest entry: add this component to \\`scripts/certification/source-contract-manifest.json\\` before certification.\n- Implementation rule: consumer-owned data, copy, tokens and actions only.\n- Fixtures: keep representative data outside the implementation file.\n`,
     };
     fs.mkdirSync(base, { recursive: true });
     for (const [file, content] of Object.entries(files)) fs.writeFileSync(path.join(base, file), content);
