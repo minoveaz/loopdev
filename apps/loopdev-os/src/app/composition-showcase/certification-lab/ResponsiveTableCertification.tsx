@@ -46,6 +46,18 @@ export function ResponsiveTableCertification() {
           { key: 'segment', header: 'Segment', sortable: true },
           { key: 'status', header: 'Status', render: (row) => <StatusBadge label={row.status} severity={row.status === 'Active' ? 'success' : 'warning'} /> },
         ]}
+        renderMobileRow={(row) => (
+          <article className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 border-b border-border-subtle bg-surface-light px-3 py-3 dark:bg-surface-dark">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-text-main dark:text-white">{row.name}</p>
+              <p className="mt-1 truncate text-xs text-text-muted">{row.segment}</p>
+            </div>
+            <StatusBadge label={row.status} severity={row.status === 'Active' ? 'success' : 'warning'} />
+            <button type="button" className="min-h-9 rounded border border-border-subtle px-2 text-xs text-text-main dark:text-white" aria-label={`Open ${row.name}`}>
+              Open
+            </button>
+          </article>
+        )}
         getRowKey={(row) => row.id}
         selectable
         selectedRowKeys={selectedRowKeys}
