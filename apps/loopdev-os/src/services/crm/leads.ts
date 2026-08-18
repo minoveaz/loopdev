@@ -66,6 +66,26 @@ const opportunityColumns =
 // moveLeadStatus never sets or clears it directly (CRM_LEAD_CONTRACT.md).
 const MANUAL_TARGET_STATUSES = new Set(['nuevo', 'contactado', 'cualificado', 'estancado', 'inactivo']);
 
+function mapLeadStatus(status: string): CrmLead['status'] {
+  if (status === 'active') return 'nuevo';
+  if (status === 'inactive') return 'inactivo';
+  if (status === 'stalled') return 'estancado';
+  return status as CrmLead['status'];
+}
+
+function mapLeadSource(source: string): CrmLead['source']['kind'] {
+  if (source === 'whatsapp') return 'whatsapp_simulated';
+  if (source === 'website' || source === 'instagram' || source === 'email' || source === 'other') {
+    return 'manual';
+  }
+  return source as CrmLead['source']['kind'];
+}
+
+function normalizeTimestamp(value: string) {
+  const normalized = value.includes('T') ? value : value.replace(' ', 'T');
+  return normalized.replace(/\+00:00$/, 'Z').replace(/\+0000$/, 'Z');
+}
+
 function mapLead(row: LeadRow): CrmLead {
   return CrmLeadSchema.parse({
     id: row.id,
@@ -73,11 +93,11 @@ function mapLead(row: LeadRow): CrmLead {
     workspaceId: row.workspace_id,
     brandId: row.brand_id,
     contactId: row.contact_id,
-    status: row.status,
+    status: mapLeadStatus(row.status),
     interest: row.interest,
     assignedUserId: row.assigned_to_user_id,
     source: {
-      kind: row.source,
+      kind: mapLeadSource(row.source),
       provider: row.source_provider,
       externalId: row.external_lead_id,
       campaign: row.campaign,
@@ -86,8 +106,8 @@ function mapLead(row: LeadRow): CrmLead {
     // Duplicate review is prepared in the Contact contract only; this slice
     // never links a review from the Lead read model yet.
     duplicateReviewId: null,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    createdAt: normalizeTimestamp(row.created_at),
+    updatedAt: normalizeTimestamp(row.updated_at),
   });
 }
 
@@ -105,8 +125,8 @@ function mapOpportunity(row: OpportunityRow): CrmOpportunity {
     currency: row.currency,
     probability: row.probability,
     expectedCloseAt: row.expected_close_at,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    createdAt: normalizeTimestamp(row.created_at),
+    updatedAt: normalizeTimestamp(row.updated_at),
   });
 }
 
