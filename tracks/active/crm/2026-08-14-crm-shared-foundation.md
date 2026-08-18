@@ -6,7 +6,7 @@ created: 2026-08-14
 updated: 2026-08-18
 owner: crm
 lead: null
-branch: feature/crm-shared-foundation
+branch: feature/crm-g0-shared-foundation
 branches: []
 phase: 0
 pull_requests: []
@@ -55,6 +55,8 @@ the approved shared boundaries and does not promote them to `@loopdev/ui`.
 | ---------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------ |
 | 2026-08-14 | Start with shared CRM foundation                               | Shared activity, notes and lookup are dependencies for every module               | Module tracks wait for these contracts and fixtures                      | User         |
 | 2026-08-14 | Keep Platform Shell inventory separate from CRM implementation | SuiteCanvas and shell modes are shared platform contracts, not CRM-owned behavior | CRM consumes the validated shell contract; shell work gets its own track | User         |
+| 2026-08-18 | Execute G0 from a clean branch based on current `develop` | The historical CRM branch contains mixed history and no effective diff against `develop` | All new implementation and validation commits target `feature/crm-g0-shared-foundation`; the old branch is reference-only | User |
+| 2026-08-18 | Treat Supabase/RLS hardening as part of CRM G0 | The shared CRM foundation cannot close without real tenant, workspace and verb-level authorization evidence | CRM policies, cross-organization constraints, seed/reset and pgTAP become blocking G0 deliverables | User |
 
 ## Arquitectura y contratos
 
@@ -66,8 +68,10 @@ cursor-backed and cannot reveal cross-organization records.
 
 ## Branch strategy
 
-Implementation uses `feature/crm-shared-foundation`, created from the
-synchronized `origin/develop` baseline.
+Implementation uses `feature/crm-g0-shared-foundation`, created from the current
+synchronized `develop` baseline after PR #110. The historical
+`origin/feature/crm-shared-foundation` branch is reference-only and must not be
+used for new work.
 
 ## Fases
 
@@ -78,7 +82,7 @@ synchronized `origin/develop` baseline.
 **Definition of Ready**
 
 - [x] `develop` baseline is synchronized with `origin/develop`.
-- [x] `feature/crm-shared-foundation` is created from that baseline.
+- [x] `feature/crm-g0-shared-foundation` is created from that baseline.
 - [x] Shared contracts and existing schemas are reconciled.
 - [x] Capability, RLS and redaction matrices are approved.
 
@@ -101,9 +105,18 @@ and negative cases are recorded in the readiness document and fixtures.
 
 ## Estado actualizado 2026-08-18
 
-La rama `feature/crm-shared-foundation` sigue publicada en remoto, pero no existe un PR asociado ni evidencia de merge en `develop`. La foundation UI del PR #108 ya está mergeada, pero no sustituye la validación de contratos, RLS, seed/reset ni pruebas de aislamiento de este track.
+La rama histórica `feature/crm-shared-foundation` sigue publicada en remoto,
+pero contiene historial mezclado y no aporta diferencias frente a `develop`. La
+rama de trabajo vigente es `feature/crm-g0-shared-foundation`, creada limpia
+desde el `develop` posterior al merge del PR #110. La foundation UI del PR #108
+ya está mergeada, pero no sustituye la validación de contratos, RLS, seed/reset
+ni pruebas de aislamiento de este track.
 
-El track permanece activo y bloqueado para cierre hasta ejecutar la validación remota de Supabase/RLS y completar los checks contractuales. Su siguiente consumidor previsto es Contacts (#82), después de cerrar las condiciones de G1.
+El track permanece activo y bloqueado para cierre hasta completar G0:
+hardening de policies por verbo, aislamiento cross-tenant y cross-workspace,
+auditoría append-only, seed/reset reproducible, idempotencia y validación real
+de Supabase/RLS y Vitest. Su siguiente consumidor previsto es Contacts (#82),
+después de cerrar las condiciones de G1.
 
 ## Riesgos y bloqueos
 
@@ -111,6 +124,9 @@ El track permanece activo y bloqueado para cierre hasta ejecutar la validación 
 | ---------------------------------------------------------- | --------------------------------------------- | ---------------------------------------------- | ------------ | ------ |
 | Existing CRM schemas may conflict with roadmap read models | Unsafe generated contracts or migration drift | Reconcile before implementation                | crm/platform | open   |
 | Activity and audit semantics may be conflated              | Incorrect retention or disclosure             | Approve separate event boundaries and fixtures | crm          | open   |
+| CRM and Communications policies use broad `FOR ALL` access | Read permissions may authorize mutation or deletion | Split policies by SQL verb and validate negative cases with pgTAP | crm/platform | open |
+| CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints | crm/platform | open |
+| Local Supabase reset is not reproducible | CI and developer evidence can diverge from migration state | Align `supabase/config.toml` with the canonical seed and certify reset | platform | open |
 
 ## Criterios de cierre
 
@@ -128,7 +144,7 @@ El track permanece activo y bloqueado para cierre hasta ejecutar la validación 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-14.
-- **Rama de continuación:** `feature/crm-shared-foundation`.
+- **Rama de continuación:** `feature/crm-g0-shared-foundation`.
 - **Commit de partida:** `22483b9` (`origin/develop` baseline).
 - **Estado alcanzado:** Shared schemas, migration, write/read APIs and mocked
   route tests are committed and pushed through `607873b`.
