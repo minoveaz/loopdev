@@ -183,3 +183,6 @@ The first implementation slice exposes:
 
 The route adapters remain thin. Authorization is resolved server-side through
 the CRM permission helper, and the frontend must not access CRM tables directly.
+Contacts are organization-scoped in this first slice; workspace assignment and
+explicit idempotency keys remain planned extensions and are not accepted by the
+current API.

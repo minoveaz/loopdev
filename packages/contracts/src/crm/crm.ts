@@ -80,7 +80,6 @@ export type CrmContactPage = z.infer<typeof CrmContactPageSchema>;
 
 export const CrmContactQuerySchema = z.object({
   organizationId: IdSchema,
-  workspaceId: IdSchema.optional(),
   query: z.string().trim().min(1).max(120).optional(),
   cursor: IdSchema.optional(),
   limit: z.coerce.number().int().min(1).max(100).default(50),
@@ -95,7 +94,6 @@ export const CrmCreateContactCommandSchema = z
     email: NullableEmailSchema,
     phone: NullablePhoneSchema,
     companyName: z.string().trim().max(160).nullable().optional(),
-    idempotencyKey: z.string().trim().min(1).max(160).optional(),
   })
   .refine((contact) => Boolean(contact.email || contact.phone), {
     message: 'At least one contact channel is required',
