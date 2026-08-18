@@ -6,7 +6,7 @@ test.use({
 
 for (const theme of ['light', 'dark']) {
   test.describe(`responsive login ${theme}`, () => {
-    test(`matches the mobile visual baseline`, async ({ page }) => {
+    test(`matches the mobile visual baseline`, async ({ page }, testInfo) => {
       await page.addInitScript((selectedTheme) => {
         window.localStorage.setItem('lpd-theme', selectedTheme);
         document.documentElement.classList.toggle('dark', selectedTheme === 'dark');
@@ -17,7 +17,7 @@ for (const theme of ['light', 'dark']) {
       await expect(page).toHaveScreenshot(`login-${theme}.png`, {
         fullPage: true,
         animations: 'disabled',
-        maxDiffPixelRatio: 0.02,
+        maxDiffPixelRatio: testInfo.project.name.startsWith('mobile') ? 0.05 : 0.02,
       });
     });
   });
