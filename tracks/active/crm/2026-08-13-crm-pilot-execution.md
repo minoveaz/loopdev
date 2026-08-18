@@ -601,6 +601,8 @@ go-live o UAT privado.
 | 2026-08-18 | CRM UI foundation                                    | Parcial: gate visual y responsive certificado; persistencia, RLS y UAT siguen pendientes | PR #108 mergeado en `develop` mediante `76e9a340`; Issues #70-#78 y #82-#88 siguen abiertos                          |
 | 2026-08-18 | Leads backend-first (#84): contratos, schema, servicio, rutas | Correcta en local: `pnpm --filter @loopdev/contracts build`, `tsc --noEmit` en `loopdev-os`, `eslint` sin hallazgos, `vitest run` (719/719, incl. 46 CRM), `supabase db reset` y `supabase test db` (140 aserciones pgTAP, archivo `005_crm_security.sql` en `ok`) | PR #119 mergeado en `develop`; falta E2E remoto/staging y cierre operativo de #84 |
 | 2026-08-18 | Readiness preparatorio de Pipeline (#85) | Correcta: rama limpia `feature/crm-pipeline-readiness` basada en `origin/develop`; documentos de Pipeline y playbook revisados | Implementación funcional bloqueada hasta Tech Lead, G1, E2E y cierre operativo de Leads |
+| 2026-08-19 | Aislamiento Quant experimental y repetición de G1 | Correcta: migración `20260819010000_isolate_experimental_quant_tables.sql`, reset reproducible, 5 suites pgTAP top-level (140 aserciones) y governance (4/4) | Quant queda fuera del runtime; el E2E autenticado de Leads sigue bloqueado por un error 500 en `GET /api/crm/leads` |
+| 2026-08-19 | E2E HTTP autenticado de Leads | Fallida: login y autorización CRM funcionan, pero `GET /api/crm/leads` responde 500 contra Supabase local; las mutaciones no se certifican | Investigar el error de servicio/consulta antes de cerrar #84 o avanzar a la aprobación funcional de Pipeline |
 
 ## Handoff de sesion
 
