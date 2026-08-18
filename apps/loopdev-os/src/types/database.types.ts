@@ -2428,8 +2428,10 @@ export type Database = {
           created_at: string
           external_lead_id: string | null
           id: string
+          interest: string | null
           organization_id: string
           source: string
+          source_provider: string | null
           stage: string
           status: string
           updated_at: string
@@ -2443,8 +2445,10 @@ export type Database = {
           created_at?: string
           external_lead_id?: string | null
           id?: string
+          interest?: string | null
           organization_id: string
           source?: string
+          source_provider?: string | null
           stage?: string
           status?: string
           updated_at?: string
@@ -2458,8 +2462,10 @@ export type Database = {
           created_at?: string
           external_lead_id?: string | null
           id?: string
+          interest?: string | null
           organization_id?: string
           source?: string
+          source_provider?: string | null
           stage?: string
           status?: string
           updated_at?: string
@@ -2612,7 +2618,9 @@ export type Database = {
           lead_id: string
           name: string
           organization_id: string
+          origin: string
           probability: number | null
+          product_key: string | null
           stage: string
           updated_at: string
           workspace_id: string | null
@@ -2626,7 +2634,9 @@ export type Database = {
           lead_id: string
           name: string
           organization_id: string
+          origin?: string
           probability?: number | null
+          product_key?: string | null
           stage?: string
           updated_at?: string
           workspace_id?: string | null
@@ -2640,7 +2650,9 @@ export type Database = {
           lead_id?: string
           name?: string
           organization_id?: string
+          origin?: string
           probability?: number | null
+          product_key?: string | null
           stage?: string
           updated_at?: string
           workspace_id?: string | null

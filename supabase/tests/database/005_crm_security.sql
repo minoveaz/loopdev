@@ -2,7 +2,7 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(26);
+select plan(33);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
@@ -101,6 +101,48 @@ select ok(has_table_privilege('authenticated', 'public.crm_audit_events', 'delet
 select lives_ok(
   $$ insert into public.crm_audit_events (organization_id, entity_type, entity_id, action) values ('00000000-0000-4000-9700-000000000001', 'contact', '00000000-0000-4000-9a00-000000000001', 'created') $$,
   'authorized CRM command can append an audit event'
+);
+
+-- CRM_LEAD_CONTRACT.md: widened status/source vocabulary stays additive and
+-- the conversion Opportunity tuple (tenant, lead, product_key, lead_conversion)
+-- is unique regardless of insert order or origin.
+select lives_ok(
+  $$ update public.crm_leads set status = 'cualificado' where id = '00000000-0000-4000-9b00-000000000001' $$,
+  'crm_leads accepts the CRM_LEAD_CONTRACT.md approved status vocabulary'
+);
+select lives_ok(
+  $$ insert into public.crm_leads (organization_id, contact_id, workspace_id, stage, source)
+     values ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-9a00-000000000001', '00000000-0000-4000-9900-000000000001', 'lead', 'whatsapp_simulated') $$,
+  'crm_leads accepts the CRM_LEAD_CONTRACT.md approved source kind vocabulary'
+);
+select lives_ok(
+  $$ insert into public.crm_opportunities (organization_id, lead_id, workspace_id, name, origin, product_key)
+     values ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-9b00-000000000001', '00000000-0000-4000-9900-000000000001', 'Proteccion salud', 'lead_conversion', 'health') $$,
+  'a qualified lead can convert into an Opportunity for a product key'
+);
+select throws_ok(
+  $$ insert into public.crm_opportunities (organization_id, lead_id, workspace_id, name, origin, product_key)
+     values ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-9b00-000000000001', '00000000-0000-4000-9900-000000000001', 'Proteccion salud duplicada', 'lead_conversion', 'health') $$,
+  'duplicate key value violates unique constraint "crm_opportunities_lead_conversion_key"',
+  'repeating a lead+product conversion is rejected instead of duplicating the Opportunity'
+);
+select lives_ok(
+  $$ insert into public.crm_opportunities (organization_id, lead_id, workspace_id, name, origin, product_key)
+     values ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-9b00-000000000001', '00000000-0000-4000-9900-000000000001', 'Proteccion hogar', 'lead_conversion', 'home') $$,
+  'the same lead can convert a distinct product key into another Opportunity'
+);
+select lives_ok(
+  $$ insert into public.crm_opportunities (organization_id, lead_id, workspace_id, name, origin, product_key)
+     values ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-9b00-000000000001', '00000000-0000-4000-9900-000000000001', 'Proteccion salud manual', 'manual', 'health') $$,
+  'a manual Opportunity for the same product key does not collide with the conversion uniqueness rule'
+);
+
+select pg_temp.set_authenticated_user('00000000-0000-4000-8700-000000000002');
+select throws_ok(
+  $$ insert into public.crm_leads (organization_id, contact_id, workspace_id, stage, source)
+     values ('00000000-0000-4000-9700-000000000002', '00000000-0000-4000-9a00-000000000002', '00000000-0000-4000-9900-000000000002', 'lead', 'manual') $$,
+  'new row violates row-level security policy for table "crm_leads"',
+  'a viewer without crm.manage cannot create a lead in their own organization'
 );
 
 reset role;

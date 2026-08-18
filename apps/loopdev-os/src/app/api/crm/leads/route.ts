@@ -1,23 +1,48 @@
 import { NextResponse } from 'next/server';
-import { CrmCreateLeadCommandSchema } from '@loopdev/contracts';
+import { CrmLeadQuerySchema, CrmUpdateLeadCommandSchema } from '@loopdev/contracts';
 import { authorizeCrm } from '../_lib/access';
-import { createLead, listLeads } from '@/services/crm/core';
+import { leadServiceErrorResponse } from '../_lib/leadErrors';
+import { listLeads, updateLead } from '@/services/crm/leads';
 
 export async function GET(request: Request) {
-  const params = new URL(request.url).searchParams;
-  const organizationId = params.get('organizationId');
-  if (!organizationId) return NextResponse.json({ error: 'organizationId is required' }, { status: 400 });
-  const access = await authorizeCrm(organizationId, 'crm.read');
-  if (!access.allowed) return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
-  try { return NextResponse.json(await listLeads(organizationId, params.get('workspaceId') ?? undefined)); }
-  catch { return NextResponse.json({ error: 'Unable to load CRM leads' }, { status: 500 }); }
+  const parsed = CrmLeadQuerySchema.safeParse(
+    Object.fromEntries(new URL(request.url).searchParams),
+  );
+  if (!parsed.success)
+    return NextResponse.json(
+      { error: 'Invalid CRM lead query', code: 'VALIDATION_ERROR', details: parsed.error.flatten() },
+      { status: 400 },
+    );
+  const access = await authorizeCrm(parsed.data.organizationId, 'crm.read');
+  if (!access.allowed)
+    return NextResponse.json(
+      { error: 'Unauthorized', code: access.status === 401 ? 'UNAUTHENTICATED' : 'FORBIDDEN' },
+      { status: access.status },
+    );
+  try {
+    return NextResponse.json(await listLeads(parsed.data));
+  } catch (error) {
+    return leadServiceErrorResponse(error, 'Unable to list CRM leads');
+  }
 }
 
-export async function POST(request: Request) {
-  const parsed = CrmCreateLeadCommandSchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: 'Invalid CRM lead payload', details: parsed.error.flatten() }, { status: 400 });
+export async function PATCH(request: Request) {
+  const body = await request.json().catch(() => null);
+  const parsed = CrmUpdateLeadCommandSchema.safeParse(body);
+  if (!parsed.success)
+    return NextResponse.json(
+      { error: 'Invalid CRM lead update', code: 'VALIDATION_ERROR', details: parsed.error.flatten() },
+      { status: 400 },
+    );
   const access = await authorizeCrm(parsed.data.organizationId, 'crm.manage');
-  if (!access.allowed) return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
-  try { return NextResponse.json(await createLead(parsed.data, access.userId), { status: 201 }); }
-  catch { return NextResponse.json({ error: 'Unable to create CRM lead' }, { status: 500 }); }
+  if (!access.allowed)
+    return NextResponse.json(
+      { error: 'Unauthorized', code: access.status === 401 ? 'UNAUTHENTICATED' : 'FORBIDDEN' },
+      { status: access.status },
+    );
+  try {
+    return NextResponse.json(await updateLead(parsed.data));
+  } catch (error) {
+    return leadServiceErrorResponse(error, 'Unable to update CRM lead');
+  }
 }
