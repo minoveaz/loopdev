@@ -16,6 +16,7 @@
 
 - [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
 - [Reinicio de suites y limpieza de superficies heredadas](./planned/platform/2026-08-14-suite-reset.md) · `chore/platform-shell-deprecation` · fase 0
+- [SaaS backend and infrastructure foundation](./planned/platform/2026-08-18-saas-backend-infrastructure.md) · fase 0
 
 ### Governance
 
@@ -68,6 +69,6 @@
 - [Order Flow Integration](./closed/2026/2026-04-11-order-flow-integration.md) · fase 0
 - [Health OS Occupational Health Suite](./closed/2026/2026-06-28-health-os-occupational.md) · fase 0
 - [Sales & CRM Suite Integration](./closed/2026/2026-07-18-sales-crm-integration.md) · fase 0
-- [CRM component inventory and reuse architecture](./closed/2026/2026-08-13-crm-component-inventory.md) · fase 3
 - [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./closed/2026/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
+- [CRM component inventory and reuse architecture](./closed/2026/2026-08-13-crm-component-inventory.md) · fase 3
 - [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4
