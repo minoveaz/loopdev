@@ -4,6 +4,7 @@ import { Button, EmptyState, FilterBar, LoadingState, Pagination, QueryToolbar, 
 import { useState } from 'react';
 import { ResponsiveTableCertification } from './ResponsiveTableCertification';
 import { InteractionFeedbackCertification } from './InteractionFeedbackCertification';
+import { ControlsCertification } from './ControlsCertification';
 
 export function LoopdevComponentsCatalog() {
   const [query, setQuery] = useState('');
@@ -26,6 +27,7 @@ export function LoopdevComponentsCatalog() {
       </div>
 
       <div className="space-y-4">
+        <ControlsCertification />
         <TechnicalCard className="space-y-4 p-4">
           <InteractionFeedbackCertification />
         </TechnicalCard>
