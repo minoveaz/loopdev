@@ -7,11 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.1"
-  }
   graphql_public: {
     Tables: {
       [_ in never]: never
@@ -262,11 +257,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "catalog_price_entries_price_book_org_fkey"
+            columns: ["price_book_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_price_books"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "catalog_price_entries_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "catalog_products"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_price_entries_product_org_fkey"
+            columns: ["product_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id", "organization_id"]
           },
         ]
       }
@@ -333,6 +342,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_products_parent_org_fkey"
+            columns: ["parent_product_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "catalog_products_parent_product_id_fkey"
@@ -443,11 +459,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "communication_channels_account_org_fkey"
+            columns: ["account_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "communication_accounts"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "communication_channels_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "crm_contacts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_channels_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "communication_channels_organization_id_fkey"
@@ -513,6 +543,13 @@ export type Database = {
             referencedColumns: ["id", "organization_id"]
           },
           {
+            foreignKeyName: "communication_conversations_brand_org_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "communication_conversations_channel_id_fkey"
             columns: ["channel_id"]
             isOneToOne: false
@@ -520,11 +557,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "communication_conversations_channel_org_fkey"
+            columns: ["channel_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "communication_channels"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "communication_conversations_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "crm_contacts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_conversations_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "communication_conversations_organization_id_fkey"
@@ -535,6 +586,13 @@ export type Database = {
           },
           {
             foreignKeyName: "communication_conversations_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "communication_conversations_workspace_org_fkey"
             columns: ["workspace_id", "organization_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
@@ -609,6 +667,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "communication_internal_notes_conversation_org_fkey"
+            columns: ["conversation_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "communication_conversations"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "communication_internal_notes_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
@@ -649,6 +714,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "communication_messages"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_message_statuses_message_org_fkey"
+            columns: ["message_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "communication_messages"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "communication_message_statuses_organization_id_fkey"
@@ -717,6 +789,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "communication_messages_conversation_org_fkey"
+            columns: ["conversation_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "communication_conversations"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "communication_messages_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
@@ -729,6 +808,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "communication_templates"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_messages_template_org_fkey"
+            columns: ["template_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "communication_templates"
+            referencedColumns: ["id", "organization_id"]
           },
         ]
       }
@@ -830,6 +916,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "communication_accounts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_webhook_events_account_org_fkey"
+            columns: ["account_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "communication_accounts"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "communication_webhook_events_organization_id_fkey"
@@ -1927,8 +2020,12 @@ export type Database = {
           metadata: Json
           occurred_at: string
           organization_id: string
+          source_id: string | null
+          source_key: string | null
+          source_type: string | null
           summary: string
           type: string
+          workspace_id: string | null
         }
         Insert: {
           actor_user_id?: string | null
@@ -1939,8 +2036,12 @@ export type Database = {
           metadata?: Json
           occurred_at?: string
           organization_id: string
+          source_id?: string | null
+          source_key?: string | null
+          source_type?: string | null
           summary: string
           type: string
+          workspace_id?: string | null
         }
         Update: {
           actor_user_id?: string | null
@@ -1951,8 +2052,12 @@ export type Database = {
           metadata?: Json
           occurred_at?: string
           organization_id?: string
+          source_id?: string | null
+          source_key?: string | null
+          source_type?: string | null
           summary?: string
           type?: string
+          workspace_id?: string | null
         }
         Relationships: [
           {
@@ -1963,11 +2068,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_activities_lead_org_fkey"
+            columns: ["lead_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_activities_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_activities_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
           },
         ]
       }
@@ -2099,11 +2218,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_contact_companies_company_org_fkey"
+            columns: ["company_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_companies"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_contact_companies_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "crm_contacts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_contact_companies_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "crm_contact_companies_organization_id_fkey"
@@ -2161,6 +2294,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_contacts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_contact_consents_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "crm_contact_consents_organization_id_fkey"
@@ -2264,6 +2404,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_lead_attributions_lead_org_fkey"
+            columns: ["lead_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_lead_attributions_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
@@ -2334,6 +2481,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_leads_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_leads_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
@@ -2361,6 +2515,7 @@ export type Database = {
           organization_id: string
           updated_at: string
           visibility: string
+          workspace_id: string | null
         }
         Insert: {
           author_user_id: string
@@ -2373,6 +2528,7 @@ export type Database = {
           organization_id: string
           updated_at?: string
           visibility?: string
+          workspace_id?: string | null
         }
         Update: {
           author_user_id?: string
@@ -2385,6 +2541,7 @@ export type Database = {
           organization_id?: string
           updated_at?: string
           visibility?: string
+          workspace_id?: string | null
         }
         Relationships: [
           {
@@ -2395,11 +2552,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_notes_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_notes_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_notes_lead_org_fkey"
+            columns: ["lead_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "crm_notes_opportunity_id_fkey"
@@ -2409,11 +2580,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_notes_opportunity_org_fkey"
+            columns: ["opportunity_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_opportunities"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_notes_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_notes_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
           },
         ]
       }
@@ -2467,6 +2652,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_opportunities_lead_org_fkey"
+            columns: ["lead_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "crm_opportunities_organization_id_fkey"
@@ -2539,6 +2731,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_opportunity_products_opportunity_org_fkey"
+            columns: ["opportunity_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_opportunities"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_opportunity_products_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
@@ -2553,11 +2752,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_opportunity_products_price_entry_org_fkey"
+            columns: ["price_entry_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_price_entries"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_opportunity_products_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "catalog_products"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_opportunity_products_product_org_fkey"
+            columns: ["product_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id", "organization_id"]
           },
         ]
       }
@@ -2658,6 +2871,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_related_people_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
             foreignKeyName: "crm_related_people_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
@@ -2716,6 +2936,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_leads"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_tasks_lead_org_fkey"
+            columns: ["lead_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id", "organization_id"]
           },
           {
             foreignKeyName: "crm_tasks_organization_id_fkey"

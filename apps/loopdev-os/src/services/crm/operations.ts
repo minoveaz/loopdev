@@ -7,7 +7,10 @@ function toJson(value: Record<string, unknown> | null | undefined): Json | null 
 
 export async function createCrmActivity(input: {
   organizationId: string;
+  workspaceId?: string | null;
   leadId: string;
+  sourceType?: string;
+  sourceId?: string;
   actorUserId?: string | null;
   type: string;
   summary: string;
@@ -15,19 +18,28 @@ export async function createCrmActivity(input: {
   metadata?: Record<string, unknown>;
 }) {
   const supabase = await createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('crm_activities')
-    .insert({
-      organization_id: input.organizationId,
-      lead_id: input.leadId,
-      actor_user_id: input.actorUserId ?? null,
-      type: input.type,
-      summary: input.summary,
-      details: input.details ?? null,
-      metadata: toJson(input.metadata) ?? {},
-    })
-    .select()
-    .single();
+  const sourceKey =
+    input.sourceType && input.sourceId ? `${input.sourceType}:${input.sourceId}` : null;
+  const payload = {
+    organization_id: input.organizationId,
+    workspace_id: input.workspaceId ?? null,
+    lead_id: input.leadId,
+    source_type: input.sourceType ?? null,
+    source_id: input.sourceId ?? null,
+    source_key: sourceKey,
+    actor_user_id: input.actorUserId ?? null,
+    type: input.type,
+    summary: input.summary,
+    details: input.details ?? null,
+    metadata: toJson(input.metadata) ?? {},
+  };
+  const query = sourceKey
+    ? supabase.from('crm_activities').upsert(payload, {
+        onConflict: 'organization_id,source_key',
+        ignoreDuplicates: false,
+      })
+    : supabase.from('crm_activities').insert(payload);
+  const { data, error } = await query.select().single();
   if (error) throw new Error('Unable to create CRM activity');
   return data;
 }
@@ -51,7 +63,11 @@ export async function listCrmActivities(input: {
   const { data, error } = await query;
   if (error) throw new Error('Unable to list CRM activities');
   const items = data.slice(0, input.limit);
-  return { items, nextCursor: data.length > input.limit ? items.at(-1)?.id ?? null : null, hasMore: data.length > input.limit };
+  return {
+    items,
+    nextCursor: data.length > input.limit ? (items.at(-1)?.id ?? null) : null,
+    hasMore: data.length > input.limit,
+  };
 }
 
 export async function createCrmTask(input: {
@@ -133,7 +149,11 @@ export async function listCrmNotes(input: {
     body: note.visibility === 'private' ? null : note.body,
     can_read_body: note.visibility !== 'private',
   }));
-  return { items, nextCursor: data.length > input.limit ? items.at(-1)?.id ?? null : null, hasMore: data.length > input.limit };
+  return {
+    items,
+    nextCursor: data.length > input.limit ? (items.at(-1)?.id ?? null) : null,
+    hasMore: data.length > input.limit,
+  };
 }
 
 export async function lookupCrmEntities(input: {
@@ -148,7 +168,9 @@ export async function lookupCrmEntities(input: {
     .from('crm_contacts')
     .select('id, first_name, last_name, email')
     .eq('organization_id', input.organizationId)
-    .or(`first_name.ilike.%${input.query}%,last_name.ilike.%${input.query}%,email.ilike.%${input.query}%`)
+    .or(
+      `first_name.ilike.%${input.query}%,last_name.ilike.%${input.query}%,email.ilike.%${input.query}%`,
+    )
     .order('id')
     .limit(input.limit + 1);
   if (input.cursor) contacts = contacts.gt('id', input.cursor);
@@ -160,7 +182,11 @@ export async function lookupCrmEntities(input: {
     label: `${contact.first_name}${contact.last_name ? ` ${contact.last_name}` : ''}`,
     subtitle: contact.email ?? null,
   }));
-  return { items, nextCursor: data.length > input.limit ? items.at(-1)?.id ?? null : null, hasMore: data.length > input.limit };
+  return {
+    items,
+    nextCursor: data.length > input.limit ? (items.at(-1)?.id ?? null) : null,
+    hasMore: data.length > input.limit,
+  };
 }
 
 export async function recordCrmAuditEvent(input: {

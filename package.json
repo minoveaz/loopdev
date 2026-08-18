@@ -55,6 +55,8 @@
     "test:package-impact": "node --test scripts/validate-package-impact.test.mjs",
     "validate:track-integrity": "node scripts/validate-track-integrity.mjs",
     "test:track-integrity": "node --test scripts/validate-track-integrity.test.mjs",
+    "validate:supabase-governance": "node scripts/validate-supabase-governance.mjs",
+    "test:supabase-governance": "node --test scripts/validate-supabase-governance.test.mjs",
     "registries:generate": "node scripts/registries/generate-registry-catalog.mjs",
     "registries:check": "node scripts/registries/generate-registry-catalog.mjs --check",
     "docs:links:check": "node scripts/docs/check-markdown-links.mjs",
