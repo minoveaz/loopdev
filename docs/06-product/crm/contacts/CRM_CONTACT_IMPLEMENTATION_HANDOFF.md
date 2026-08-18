@@ -8,8 +8,8 @@ owner: crm
 program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
 implementation_issue: https://github.com/minoveaz/loopdev/issues/82
 implementation_branch: feature/crm-pilot-contacts-implementation
-commit_convention: "feat(crm): implement <slice> (#82)"
-pull_request_closure: "Closes #82"
+commit_convention: 'feat(crm): implement <slice> (#82)'
+pull_request_closure: 'Closes #82'
 ---
 
 # Handoff de implementacion: CRM Contact
@@ -34,7 +34,7 @@ prototipo CRM anterior.
 3. [CRM Contact Contract](CRM_CONTACT_CONTRACT.md)
 4. [CRM Contact Impact Assessment](CRM_CONTACT_IMPACT_ASSESSMENT.md)
 5. [CRM Pilot Readiness Review](../shared/CRM_PILOT_READINESS_REVIEW.md)
-6. [CRM Pilot Execution track](../../../../tracks/planned/crm/2026-08-13-crm-pilot-execution.md)
+6. [CRM Pilot Execution track](../../../../tracks/active/crm/2026-08-13-crm-pilot-execution.md)
 7. [Suite composition ADR](../../../architecture/ADR-2026-08-13-suite-runtime-suite-canvas-fsd.md)
 
 ## 3. Outcome de la entrega
