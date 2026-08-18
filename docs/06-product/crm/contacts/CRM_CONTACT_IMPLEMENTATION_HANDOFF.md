@@ -135,7 +135,17 @@ feat(crm): scaffold contacts vertical slice (#82)
 El PR debe incluir `Closes #82`. El Project conserva el Issue, gate, prioridad, carril y evidencia;
 la rama y sus cambios se obtienen del PR y de sus commits.
 
-## 8. Definition of Ready de la rama implementadora
+## 8. Estado de certificacion backend-first
+
+La rama implemento y certifico el slice backend-first con contratos Zod,
+autorizacion server-side, RLS por organizacion, aislamiento cross-tenant,
+creacion idempotente por email/telefono normalizado y actualizacion optimista.
+Los adapters convierten conflictos de concurrencia o recurso ausente en `409`
+sin exponer errores internos. El pack reproducible
+`supabase/seed_crm_pilot.sql` cubre los caminos del piloto y queda disponible
+para la integracion UI.
+
+## 9. Definition of Ready de la rama implementadora
 
 Antes del primer commit de codigo, el equipo debe confirmar en el Issue #82:
 
@@ -147,7 +157,7 @@ Antes del primer commit de codigo, el equipo debe confirmar en el Issue #82:
 - [ ] Ha identificado dependencias SEC/DB y su orden de trabajo.
 - [ ] Ha acordado no incluir cambios ajenos ni fixtures autoritativos.
 
-## 8. Evidencia esperada
+## 10. Evidencia esperada
 
 - PR enlazado al Issue #82.
 - Contratos y mappers validados.

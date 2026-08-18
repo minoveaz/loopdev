@@ -83,8 +83,8 @@ organization, workspace and append-only negative cases.
 
 ## Branch strategy
 
-Implementation uses `feature/crm-g0-shared-foundation`, created from the current
-synchronized `develop` baseline after PR #110. The historical
+Implementation uses `feature/crm-contacts-backend-foundation`, created from the current
+synchronized `develop` baseline after PR #113. The historical
 `origin/feature/crm-shared-foundation` branch is reference-only and must not be
 used for new work.
 
@@ -208,8 +208,8 @@ La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
 
 | Riesgo o bloqueo                                                     | Impacto                                                     | Mitigación                                                              | Responsable  | Estado                                                                 |
 | -------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------- |
-| Existing CRM schemas may conflict with roadmap read models           | Unsafe generated contracts or migration drift               | Reconcile before implementation                                         | crm/platform | open                                                                   |
-| Activity and audit semantics may be conflated                        | Incorrect retention or disclosure                           | Approve separate event boundaries and fixtures                          | crm          | open                                                                   |
+| Existing CRM schemas may conflict with roadmap read models           | Unsafe generated contracts or migration drift               | Reconcile before implementation                                         | crm/platform | mitigated; Contacts contract maps only the approved current schema       |
+| Activity and audit semantics may be conflated                        | Incorrect retention or disclosure                           | Approve separate event boundaries and fixtures                          | crm          | mitigated; separate append-only tables and pilot timeline fixtures       |
 | CRM and Communications policies use broad `FOR ALL` access           | Read permissions may authorize mutation or deletion         | Split policies by SQL verb and validate negative cases with pgTAP       | crm/platform | mitigated; local runtime evidence green                                |
 | CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints           | crm/platform | mitigated; local reset evidence green                                  |
 | Local Supabase reset is not reproducible                             | CI and developer evidence can diverge from migration state  | Align `supabase/config.toml` with the canonical seed and certify reset  | platform     | mitigated; canonical seed path and organization scope now pass locally |
@@ -219,7 +219,8 @@ La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
 
 - [x] Shared contracts and fixtures are approved.
 - [x] RLS, state and contract tests pass; accessibility is not applicable to this backend-only phase.
-- [ ] Module tracks can consume the foundation without duplicating it.
+- [x] Contacts can consume the foundation without duplicating it; its backend
+      contract, API, RLS evidence and deterministic pilot fixtures are present.
 - [x] Risks and deferred work are documented.
 - [ ] Cierre aprobado explícitamente por el usuario.
 
@@ -235,6 +236,10 @@ La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
 | 2026-08-18 | `pnpm registries:check`                                                 | Pass                                                                          | Generated registry catalog                                   |
 | 2026-08-18 | `git diff --check`                                                      | Pass                                                                          | Working tree                                                 |
 | 2026-08-18 | LoopDev OS production build                                             | Pass con `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` locales | `pnpm --filter loopdev-os build`                             |
+| 2026-08-18 | Contacts API route tests                                                | Pass; 7 tests                                                        | `apps/loopdev-os/src/app/api/crm/contacts/route.test.ts`     |
+| 2026-08-18 | Top-level Supabase database suites                                      | Pass; 133 tests                                                      | `supabase test db --local` con suites 001-005                |
+| 2026-08-18 | `pnpm validate:full`                                                     | Pass con variables locales de Supabase                               | Full repository validation                                   |
+| 2026-08-18 | `pnpm docs:links:check` + `pnpm registries:check`                       | Pass                                                                  | Documentation and generated catalog                          |
 
 ## Handoff de sesión
 
@@ -257,10 +262,16 @@ La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
   tests and repository typecheck pass. Contacts RLS/integrity coverage now adds
   organization isolation, scoped foreign keys and duplicate protection; all
   database suites pass with 133 tests.
-- **Siguiente acción concreta:** añadir fixtures y pruebas de aislamiento
-  específicas de Contacts, revisar la matriz RLS/API y preparar el handoff para
-  el equipo frontend; no cerrar el track hasta certificar Contacts y registrar
-  aprobación explícita.
+- **Fixtures CRM piloto:** `supabase/seed_crm_pilot.sql` se ejecuta después del
+  seed base mediante `supabase/config.toml`. Es determinista, sintético y
+  reproducible, e incluye escenarios de lead ganado, perdido, seguimiento
+  pendiente, revisión de duplicados, tareas, notas y timeline de actividades.
+  Los usuarios de prueba usan exclusivamente `example.test`.
+- **Validación adicional:** `supabase db reset --local --yes` pasa cargando el
+  seed base y el pack piloto sin errores.
+- **Siguiente acción concreta:** publicar la certificación de Contacts en su PR,
+  confirmar el handoff con el equipo frontend y solicitar aprobación explícita
+  para cerrar este track.
 
 ## Cierre
 

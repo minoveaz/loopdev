@@ -40,6 +40,15 @@ describe('CRM contacts API', () => {
     });
   });
 
+  it('returns the authorization status without calling the service', async () => {
+    authorizeCrm.mockResolvedValue({ allowed: false, status: 403 });
+    const response = await GET(
+      new Request(`http://localhost/api/crm/contacts?organizationId=${organizationId}`),
+    );
+    expect(response.status).toBe(403);
+    expect(listContacts).not.toHaveBeenCalled();
+  });
+
   it('rejects contact creation without a channel', async () => {
     const response = await POST(
       new Request('http://localhost/api/crm/contacts', {
@@ -104,5 +113,22 @@ describe('CRM contacts API', () => {
       firstName: 'Updated',
       expectedUpdatedAt: timestamp,
     });
+  });
+
+  it('returns a conflict when the contact changed or no longer exists', async () => {
+    updateContact.mockRejectedValue(new Error('CRM contact update conflict or not found'));
+    const response = await PATCH(
+      new Request('http://localhost/api/crm/contacts', {
+        method: 'PATCH',
+        body: JSON.stringify({
+          organizationId,
+          contactId,
+          firstName: 'Updated',
+          expectedUpdatedAt: timestamp,
+        }),
+      }),
+    );
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({ error: 'Contact not found or has changed' });
   });
 });
