@@ -14,6 +14,9 @@ implementation_branch: feature/crm-pilot-leads-implementation
 
 ## Instruccion
 
+Use the repeatable [CRM backend-first module playbook](../shared/CRM_BACKEND_MODULE_PLAYBOOK.md)
+before starting implementation.
+
 Leer este documento y sus cuatro referencias antes de crear la rama de implementacion desde `develop`
 actualizado:
 

@@ -200,6 +200,12 @@ contract, impact assessment e implementation handoff. UX, component audit, contr
 assessment estan aprobados por User el 2026-08-13; el handoff queda listo para confirmacion en el
 Issue #84 antes de crear la rama de implementacion.
 
+Contacts y Leads han validado el mismo flujo backend-first. El procedimiento reusable queda
+centralizado en `docs/06-product/crm/shared/CRM_BACKEND_MODULE_PLAYBOOK.md` y debe ser la entrada
+obligatoria para Pipeline (#85), Tasks (#87) y cualquier modulo CRM posterior. El playbook fija el
+orden contract -> schema/RLS -> service/API -> fixtures -> tests -> handoff, los gates de validacion
+y las reglas para reutilizar helpers sin duplicar arquitectura.
+
 Leads tiene seis fuentes activas en el contrato del piloto: `manual`, `campaign`,
 `whatsapp_simulated`, `referral`, `social` y `partner`. Las conexiones reales de proveedores siguen
 diferidas, pero el modelo de atribucion e idempotencia queda preparado.
