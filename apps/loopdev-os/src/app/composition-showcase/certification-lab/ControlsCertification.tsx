@@ -24,17 +24,25 @@ export function ControlsCertification() {
         <p className="mt-1 text-xs text-text-muted">A2 reference controls: input states and filter selection contracts.</p>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <div className="space-y-3">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">Input</h3>
-          <Input label="Contact name" value={query} onChange={(event) => setQuery(event.target.value)} helperText="Controlled text input." />
-          <Input label="Error state" value="Unavailable" error="Could not validate this value." readOnly />
-          <Input label="Loading state" value="Searching records" isLoading readOnly />
-          <Input label="Disabled state" value="Read only value" disabled />
-        </div>
+      <div className="grid gap-4 xl:grid-cols-2">
+        <section className="space-y-4 rounded-lg border border-border-subtle bg-surface-light/40 p-4 dark:bg-surface-dark/40" aria-labelledby="controls-inputs">
+          <div className="border-b border-border-subtle pb-3">
+            <h3 id="controls-inputs" className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main">Text input states</h3>
+            <p className="mt-1 text-xs text-text-muted">Input contract and supported feedback states.</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-1">
+            <Input label="Contact name" value={query} onChange={(event) => setQuery(event.target.value)} helperText="Controlled text input." />
+            <Input label="Error state" value="Unavailable" error="Could not validate this value." readOnly />
+            <Input label="Loading state" value="Searching records" isLoading readOnly />
+            <Input label="Disabled state" value="Read only value" disabled />
+          </div>
+        </section>
 
-        <div className="space-y-4">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">FilterDropdown</h3>
+        <section className="space-y-4 rounded-lg border border-border-subtle bg-surface-light/40 p-4 dark:bg-surface-dark/40" aria-labelledby="controls-filters">
+          <div className="border-b border-border-subtle pb-3">
+            <h3 id="controls-filters" className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main">Selection controls</h3>
+            <p className="mt-1 text-xs text-text-muted">Single, multiple, disabled and read-only selection.</p>
+          </div>
           <FilterDropdown
             icon="filter_alt"
             label="Status"
@@ -47,6 +55,40 @@ export function ControlsCertification() {
             <option value="crm">CRM</option>
             <option value="marketing">Marketing Studio</option>
           </Select>
+          <FilterDropdown
+            icon="sort"
+            label="Sort order"
+            options={['Most recent', 'Name']}
+            selected={['Most recent']}
+            multiple={false}
+            onToggle={() => undefined}
+          />
+          <div className="grid gap-4 md:grid-cols-2">
+            <FilterDropdown
+              icon="lock"
+              label="Disabled filter"
+              options={FILTER_OPTIONS}
+              selected={[]}
+              onToggle={() => undefined}
+              disabled
+            />
+            <FilterDropdown
+              icon="visibility"
+              label="Read-only filter"
+              options={FILTER_OPTIONS}
+              selected={['Active']}
+              onToggle={() => undefined}
+              readOnly
+            />
+          </div>
+          <p className="text-xs text-text-muted" aria-live="polite">Active filters: {selectedFilters.join(', ') || 'none'}</p>
+        </section>
+
+        <section className="space-y-4 rounded-lg border border-border-subtle bg-surface-light/40 p-4 dark:bg-surface-dark/40" aria-labelledby="controls-composed">
+          <div className="border-b border-border-subtle pb-3">
+            <h3 id="controls-composed" className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main">Text and binary controls</h3>
+            <p className="mt-1 text-xs text-text-muted">Multiline input, binary preference and mutually exclusive options.</p>
+          </div>
           <Checkbox
             label="Include archived records"
             checked={includeArchived}
@@ -62,32 +104,7 @@ export function ControlsCertification() {
             orientation="horizontal"
             options={[{ value: 'table', label: 'Table' }, { value: 'cards', label: 'Cards' }]}
           />
-          <FilterDropdown
-            icon="sort"
-            label="Sort order"
-            options={['Most recent', 'Name']}
-            selected={['Most recent']}
-            multiple={false}
-            onToggle={() => undefined}
-          />
-          <FilterDropdown
-            icon="lock"
-            label="Disabled filter"
-            options={FILTER_OPTIONS}
-            selected={[]}
-            onToggle={() => undefined}
-            disabled
-          />
-          <FilterDropdown
-            icon="visibility"
-            label="Read-only filter"
-            options={FILTER_OPTIONS}
-            selected={['Active']}
-            onToggle={() => undefined}
-            readOnly
-          />
-          <p className="text-xs text-text-muted" aria-live="polite">Active filters: {selectedFilters.join(', ') || 'none'}</p>
-        </div>
+        </section>
       </div>
     </TechnicalCard>
   );
