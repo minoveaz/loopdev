@@ -1,15 +1,17 @@
 ---
 id: crm-shared-foundation
 title: CRM shared foundation implementation
-status: active
+status: closed
 created: 2026-08-14
 updated: 2026-08-18
+closed: 2026-08-18
+closure_approved_by: User
 owner: crm
 lead: null
 branch: feature/crm-contacts-backend-foundation
 branches: []
 phase: 1
-pull_requests: [111]
+pull_requests: [111, 114, 116]
 issues: [70, 71, 72, 73, 74, 75, 82]
 packages: []
 release: not-required
@@ -238,7 +240,7 @@ contratos visuales y no crear primitives CRM paralelos.
 - [x] Contacts can consume the foundation without duplicating it; its backend
       contract, API, RLS evidence and deterministic pilot fixtures are present.
 - [x] Risks and deferred work are documented.
-- [ ] Cierre aprobado explícitamente por el usuario.
+- [x] Cierre aprobado explícitamente por el usuario.
 
 ## Evidencia de validación
 
@@ -285,10 +287,13 @@ contratos visuales y no crear primitives CRM paralelos.
   Los usuarios de prueba usan exclusivamente `example.test`.
 - **Validación adicional:** `supabase db reset --local --yes` pasa cargando el
   seed base y el pack piloto sin errores.
-- **Siguiente acción concreta:** cerrar formalmente este track tras la aprobación
-  explícita y abrir el slice backend-first de Leads; la integración visual
-  quedará coordinada con los tracks de primitives y shell compartidos.
+- **Siguiente acción concreta:** abrir el slice backend-first de Leads desde el
+  `develop` actualizado; la integración visual quedará coordinada con los
+  tracks de primitives y shell compartidos.
 
 ## Cierre
 
-Pendiente de aprobación explícita.
+Track cerrado el 2026-08-18 con aprobación explícita del usuario. Contacts
+queda certificado como primer consumidor backend-first de la CRM foundation.
+La estandarización de primitives y composición compartida continúa en
+`feature/reusable-suite-composition-patterns` y no forma parte de este cierre.
