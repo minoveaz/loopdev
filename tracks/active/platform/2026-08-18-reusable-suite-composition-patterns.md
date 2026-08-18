@@ -124,9 +124,20 @@ accesibilidad, y reutilizar componentes existentes antes de introducir nuevos.
 5. **Orientación y navegación interna**: `PageHeader`, `SectionHeader`,
   `ContextPath`, breadcrumbs, tabs y navegación local de módulo.
 
-**Estado:** iniciada. La primera tarea de Fase A es auditar y consolidar los
-contratos de fundaciones, controles, estados, identidad y orientación. No se
-crearán duplicados de `DataTable`, feedback global ni navegación del Shell.
+**Estado:** iniciada. A1 queda reconocido como baseline existente y certificado;
+no se repite su implementación ni su certificación visual. El frente activo es
+A2, controles de entrada y selección. No se crearán duplicados de `DataTable`,
+feedback global ni navegación del Shell.
+
+### Estado de ejecución de Fase A
+
+- [x] **A1 Fundaciones y superficies:** reutilización y certificación existentes.
+- [ ] **A2 Controles de entrada y selección:** bloque activo; `Input` es el
+  primer control de referencia y `FilterDropdown` el primer control de
+  selección a alinear.
+- [ ] **A3 Estados de contenido.**
+- [ ] **A4 Identidad y estados semánticos.**
+- [ ] **A5 Orientación y navegación interna.**
 
 ### Fase B: flujo operativo común
 
@@ -155,16 +166,20 @@ no se repiten; las fases siguientes deben consumirlos.
 
 ## Entrega inicial de la Fase A
 
-La Fase A comienza por una matriz de contratos y reutilización con estas
+La Fase A continúa con una matriz de contratos y reutilización con estas
 salidas, en este orden:
 
-1. Consolidar tokens, superficies y tipografía compartida.
-2. Auditar estados para evitar solapamiento entre `EmptyState`, `LoadingState`,
+1. **A1 completado:** conservar tokens, superficies y tipografía compartida
+  como baseline certificada.
+2. **A2 activo:** consolidar primero el contrato de `Input` y después alinear
+  `Select`, `FilterDropdown`, `Textarea`, `Checkbox`, `RadioGroup`, `Switch` y
+  selección múltiple.
+3. Auditar estados para evitar solapamiento entre `EmptyState`, `LoadingState`,
   `Skeleton`, error y forbidden.
-3. Definir la taxonomía semántica de identidad, status y severidad.
-4. Resolver `ContextPath` frente a `IndustrialBreadcrumbs` y separar
+4. Definir la taxonomía semántica de identidad, status y severidad.
+5. Resolver `ContextPath` frente a `IndustrialBreadcrumbs` y separar
   orientación interna de navegación del Shell.
-5. Crear una fixture común de Fase A y añadir evidencia focused de teclado,
+6. Crear una fixture común de Fase A y añadir evidencia focused de teclado,
   Axe y responsive.
 
 La Fase A no abre módulos CRM ni introduce persistencia, autorización, queries
