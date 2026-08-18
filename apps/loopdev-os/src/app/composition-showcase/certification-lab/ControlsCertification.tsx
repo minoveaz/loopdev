@@ -1,6 +1,6 @@
 'use client';
 
-import { Checkbox, FilterDropdown, Input, Select, TechnicalCard } from '@loopdev/ui';
+import { Checkbox, FilterDropdown, Input, RadioGroup, Select, Switch, TechnicalCard, Textarea } from '@loopdev/ui';
 import { useState } from 'react';
 
 const FILTER_OPTIONS = ['Active', 'Paused', 'Prospect'];
@@ -9,6 +9,7 @@ export function ControlsCertification() {
   const [query, setQuery] = useState('Acme');
   const [selectedFilters, setSelectedFilters] = useState<string[]>(['Active']);
   const [includeArchived, setIncludeArchived] = useState(false);
+  const [view, setView] = useState('table');
 
   const toggleFilter = (value: string) => {
     setSelectedFilters((current) => current.includes(value)
@@ -50,6 +51,16 @@ export function ControlsCertification() {
             label="Include archived records"
             checked={includeArchived}
             onChange={(event) => setIncludeArchived(event.target.checked)}
+          />
+          <Textarea label="Notes" defaultValue="Reusable control notes" helperText="Consumer-owned multiline value." />
+          <Switch label="Enable automation" defaultChecked />
+          <RadioGroup
+            label="View mode"
+            name="control-view-mode"
+            value={view}
+            onValueChange={setView}
+            orientation="horizontal"
+            options={[{ value: 'table', label: 'Table' }, { value: 'cards', label: 'Cards' }]}
           />
           <FilterDropdown
             icon="sort"

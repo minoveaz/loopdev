@@ -36,6 +36,9 @@ export * from './inputs/Select';
 export * from './inputs/Select/types';
 export * from './inputs/Checkbox';
 export * from './inputs/FilterDropdown';
+export * from './inputs/Textarea';
+export * from './inputs/Switch';
+export * from './inputs/RadioGroup';
 
 // surfaces
 export * from './surfaces/TechnicalSurface';

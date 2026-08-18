@@ -132,9 +132,9 @@ feedback global ni navegación del Shell.
 ### Estado de ejecución de Fase A
 
 - [x] **A1 Fundaciones y superficies:** reutilización y certificación existentes.
-- [ ] **A2 Controles de entrada y selección:** bloque activo; `Input` es el
-  primer control de referencia y `FilterDropdown` el primer control de
-  selección a alinear.
+- [ ] **A2 Controles de entrada y selección:** implementación promovida;
+  pendiente evidencia visual responsive. `Input` y `FilterDropdown` fueron las
+  referencias de contrato.
 - [ ] **A3 Estados de contenido.**
 - [ ] **A4 Identidad y estados semánticos.**
 - [ ] **A5 Orientación y navegación interna.**
@@ -171,10 +171,10 @@ salidas, en este orden:
 
 1. **A1 completado:** conservar tokens, superficies y tipografía compartida
   como baseline certificada.
-2. **A2 activo:** consolidar primero el contrato de `Input` y después alinear
-  `Select`, `FilterDropdown` y `Checkbox`. El inventario físico actual no
-  contiene `Textarea`, `RadioGroup` ni `Switch`; no se crearán sustitutos hasta
-  confirmar una implementación existente o una decisión explícita de alcance.
+2. **A2 activo:** consolidar `Input`, `Select`, `FilterDropdown`, `Checkbox`,
+  `Textarea`, `RadioGroup` y `Switch` con contratos públicos, estados nativos,
+  accesibilidad y evidencia responsive. Los tres últimos se crearon porque
+  forman parte del alcance aprobado y no existían en el inventario físico.
 3. Auditar estados para evitar solapamiento entre `EmptyState`, `LoadingState`,
   `Skeleton`, error y forbidden.
 4. Definir la taxonomía semántica de identidad, status y severidad.
