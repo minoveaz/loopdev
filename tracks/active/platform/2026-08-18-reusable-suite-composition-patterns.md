@@ -135,9 +135,12 @@ feedback global ni navegación del Shell.
 - [ ] **A2 Controles de entrada y selección:** implementación promovida;
   pendiente evidencia visual responsive. `Input` y `FilterDropdown` fueron las
   referencias de contrato.
-- [ ] **A3 Estados de contenido.**
-- [ ] **A4 Identidad y estados semánticos.**
-- [ ] **A5 Orientación y navegación interna.**
+- [ ] **A3 Estados de contenido:** implementación promovida; pendiente
+  revisión visual conjunta.
+- [ ] **A4 Identidad y estados semánticos:** implementación promovida;
+  pendiente revisión visual conjunta.
+- [ ] **A5 Orientación y navegación interna:** implementación promovida;
+  pendiente revisión visual conjunta.
 
 ### Fase B: flujo operativo común
 
@@ -183,6 +186,8 @@ salidas, en este orden:
 6. Crear una fixture común de Fase A y añadir evidencia focused de teclado,
   Axe y responsive.
 
-La Fase A no abre módulos CRM ni introduce persistencia, autorización, queries
-de negocio o contratos de entidades. Su cierre requiere contratos públicos,
-tests focused, fixture visual y documentación sincronizada.
+La implementación de A1-A5 está disponible en `Loopdev components`. La Fase A
+no abre módulos CRM ni introduce persistencia, autorización, queries de negocio
+o contratos de entidades. Su cierre requiere una revisión visual conjunta en
+desktop/mobile, contratos públicos, tests focused, Axe y documentación
+sincronizada.

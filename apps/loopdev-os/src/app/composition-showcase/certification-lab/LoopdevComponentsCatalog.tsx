@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { ResponsiveTableCertification } from './ResponsiveTableCertification';
 import { InteractionFeedbackCertification } from './InteractionFeedbackCertification';
 import { ControlsCertification } from './ControlsCertification';
+import { StatesCertification } from './StatesCertification';
+import { IdentityOrientationCertification } from './IdentityOrientationCertification';
 
 export function LoopdevComponentsCatalog() {
   const [query, setQuery] = useState('');
@@ -28,6 +30,8 @@ export function LoopdevComponentsCatalog() {
 
       <div className="space-y-4">
         <ControlsCertification />
+        <StatesCertification />
+        <IdentityOrientationCertification />
         <TechnicalCard className="space-y-4 p-4">
           <InteractionFeedbackCertification />
         </TechnicalCard>
