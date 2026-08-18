@@ -196,6 +196,14 @@ El trabajo seguirá estos cinco puntos:
 Los siguientes módulos CRM no se implementan en este slice; reutilizarán este
 flujo y sus artefactos después de que Contacts esté certificado.
 
+### Estado de implementación Contacts
+
+El contrato backend-first ya está cableado en `packages/contracts/src/crm/crm.ts`
+y la API del slice en `apps/loopdev-os/src/app/api/crm/contacts/route.ts`.
+La primera entrega cubre listado/búsqueda autorizados con cursor, creación
+validada y actualización con control optimista mediante `expectedUpdatedAt`.
+La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
+
 ## Riesgos y bloqueos
 
 | Riesgo o bloqueo                                                     | Impacto                                                     | Mitigación                                                              | Responsable  | Estado                                                                 |
@@ -245,10 +253,12 @@ flujo y sus artefactos después de que Contacts esté certificado.
 - **Validación ejecutada:** Local reset/lint/128 pgTAP tests, governance tests,
   CRM contract/API tests (15), contracts build, LoopDev OS typecheck and
   production build with local Supabase variables pass; PR #111 GitHub Actions
-  passed.
-- **Siguiente acción concreta:** definir y validar el contrato backend de Contacts
-  en la rama de continuación; no cerrar el track hasta certificar Contacts y
-  registrar aprobación explícita.
+  passed. Contacts backend contract/API tests: 12 route tests, 8 contract
+  tests and repository typecheck pass.
+- **Siguiente acción concreta:** añadir fixtures y pruebas de aislamiento
+  específicas de Contacts, revisar la matriz RLS/API y preparar el handoff para
+  el equipo frontend; no cerrar el track hasta certificar Contacts y registrar
+  aprobación explícita.
 
 ## Cierre
 

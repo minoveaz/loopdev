@@ -1,11 +1,25 @@
 import {
   CrmCaptureLeadCommandSchema,
   CrmContactSchema,
+  CrmContactPageSchema,
+  CrmContactQuerySchema,
+  CrmCreateContactCommandSchema,
   CrmCreateLeadCommandSchema,
   CrmLeadSchema,
   CrmOpportunitySchema,
+  CrmUpdateContactCommandSchema,
 } from '@loopdev/contracts';
-import type { CrmCaptureLeadCommand, CrmContact, CrmCreateLeadCommand, CrmLead, CrmOpportunity } from '@loopdev/contracts';
+import type {
+  CrmCaptureLeadCommand,
+  CrmContact,
+  CrmContactPage,
+  CrmContactQuery,
+  CrmCreateContactCommand,
+  CrmCreateLeadCommand,
+  CrmLead,
+  CrmOpportunity,
+  CrmUpdateContactCommand,
+} from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 type ContactRow = {
@@ -163,6 +177,72 @@ export async function findOrCreateContact(input: UpsertContactInput): Promise<Cr
   return mapContact(data as unknown as ContactRow);
 }
 
+export async function listContacts(input: CrmContactQuery): Promise<CrmContactPage> {
+  const parsed = CrmContactQuerySchema.parse(input);
+  const supabase = await createServerSupabaseClient();
+  let query = supabase
+    .from('crm_contacts')
+    .select(contactColumns)
+    .eq('organization_id', parsed.organizationId)
+    .order('id', { ascending: true })
+    .limit(parsed.limit + 1);
+
+  if (parsed.cursor) query = query.gt('id', parsed.cursor);
+  if (parsed.query) {
+    const term = parsed.query.replaceAll(',', ' ');
+    query = query.or(
+      `first_name.ilike.%${term}%,last_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%`,
+    );
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error('Unable to list CRM contacts');
+  const rows = (data ?? []) as unknown as ContactRow[];
+  const hasMore = rows.length > parsed.limit;
+  const items = rows.slice(0, parsed.limit).map(mapContact);
+  return CrmContactPageSchema.parse({
+    items,
+    nextCursor: hasMore ? (items.at(-1)?.id ?? null) : null,
+    hasMore,
+  });
+}
+
+export async function createContact(input: CrmCreateContactCommand): Promise<CrmContact> {
+  const parsed = CrmCreateContactCommandSchema.parse(input);
+  return findOrCreateContact({
+    organizationId: parsed.organizationId,
+    firstName: parsed.firstName,
+    lastName: parsed.lastName,
+    email: parsed.email,
+    phone: parsed.phone,
+    companyName: parsed.companyName,
+  });
+}
+
+export async function updateContact(input: CrmUpdateContactCommand): Promise<CrmContact> {
+  const parsed = CrmUpdateContactCommandSchema.parse(input);
+  const supabase = await createServerSupabaseClient();
+  const changes = {
+    ...(parsed.firstName !== undefined ? { first_name: parsed.firstName } : {}),
+    ...(parsed.lastName !== undefined ? { last_name: parsed.lastName } : {}),
+    ...(parsed.email !== undefined ? { email: normalizeEmail(parsed.email) } : {}),
+    ...(parsed.phone !== undefined ? { phone: normalizePhone(parsed.phone) } : {}),
+    ...(parsed.companyName !== undefined ? { company_name: parsed.companyName } : {}),
+    updated_at: new Date().toISOString(),
+  };
+  const { data, error } = await supabase
+    .from('crm_contacts')
+    .update(changes)
+    .eq('id', parsed.contactId)
+    .eq('organization_id', parsed.organizationId)
+    .eq('updated_at', parsed.expectedUpdatedAt)
+    .select(contactColumns)
+    .maybeSingle();
+  if (error) throw new Error('Unable to update CRM contact');
+  if (!data) throw new Error('CRM contact update conflict or not found');
+  return mapContact(data as unknown as ContactRow);
+}
+
 export async function createLead(input: CrmCreateLeadCommand, userId: string): Promise<CrmLead> {
   const parsed = CrmCreateLeadCommandSchema.parse(input);
   const supabase = await createServerSupabaseClient();
@@ -204,14 +284,53 @@ export async function captureLead(input: CrmCaptureLeadCommand, userId: string) 
         .eq('organization_id', parsed.organizationId)
         .single();
       if (existingContact.error) throw new Error('Unable to resolve existing CRM contact');
-      return { contact: mapContact(existingContact.data as unknown as ContactRow), lead: mapLead(existingLead as unknown as LeadRow), attribution: null };
+      return {
+        contact: mapContact(existingContact.data as unknown as ContactRow),
+        lead: mapLead(existingLead as unknown as LeadRow),
+        attribution: null,
+      };
     }
   }
-  const contact = await findOrCreateContact({ organizationId: parsed.organizationId, firstName: parsed.firstName, lastName: parsed.lastName, email: parsed.email, phone: parsed.phone, companyName: parsed.companyName });
-  const lead = await createLead({ organizationId: parsed.organizationId, contactId: contact.id, brandId: parsed.brandId, workspaceId: parsed.workspaceId, source: parsed.source, externalLeadId: parsed.externalLeadId, campaign: parsed.campaign, utm: {} }, userId);
-  const { data: attribution, error } = await supabase.from('crm_lead_attributions').insert({ organization_id: parsed.organizationId, lead_id: lead.id, source: parsed.source, campaign: parsed.utm.campaign ?? parsed.campaign ?? null, medium: parsed.utm.medium ?? null, content: parsed.utm.content ?? null, term: parsed.utm.term ?? null }).select().single();
+  const contact = await findOrCreateContact({
+    organizationId: parsed.organizationId,
+    firstName: parsed.firstName,
+    lastName: parsed.lastName,
+    email: parsed.email,
+    phone: parsed.phone,
+    companyName: parsed.companyName,
+  });
+  const lead = await createLead(
+    {
+      organizationId: parsed.organizationId,
+      contactId: contact.id,
+      brandId: parsed.brandId,
+      workspaceId: parsed.workspaceId,
+      source: parsed.source,
+      externalLeadId: parsed.externalLeadId,
+      campaign: parsed.campaign,
+      utm: {},
+    },
+    userId,
+  );
+  const { data: attribution, error } = await supabase
+    .from('crm_lead_attributions')
+    .insert({
+      organization_id: parsed.organizationId,
+      lead_id: lead.id,
+      source: parsed.source,
+      campaign: parsed.utm.campaign ?? parsed.campaign ?? null,
+      medium: parsed.utm.medium ?? null,
+      content: parsed.utm.content ?? null,
+      term: parsed.utm.term ?? null,
+    })
+    .select()
+    .single();
   if (error) {
-    await supabase.from('crm_leads').delete().eq('id', lead.id).eq('organization_id', parsed.organizationId);
+    await supabase
+      .from('crm_leads')
+      .delete()
+      .eq('id', lead.id)
+      .eq('organization_id', parsed.organizationId);
     throw new Error('Unable to persist CRM lead attribution');
   }
   return { contact, lead, attribution };
