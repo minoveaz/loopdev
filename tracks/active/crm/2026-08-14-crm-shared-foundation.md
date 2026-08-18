@@ -193,6 +193,7 @@ después de cerrar las condiciones de G1.
 | Fecha | Validación | Resultado | Referencia |
 | ----- | ---------- | --------- | ---------- |
 | 2026-08-18 | `supabase db reset` + `supabase db lint --local` + pgTAP database suite | Pass: 128 tests | Local Docker/Supabase; canonical `seed_loopdev.sql` |
+| 2026-08-18 | Supabase TypeScript type generation + LoopDev OS typecheck | Pass; generated types include CRM/Communications hardening constraints | CLI 2.114.0 with local `supabase_admin` database URL |
 | 2026-08-18 | `pnpm test:supabase-governance` | Pass (4 tests) | `scripts/validate-supabase-governance.test.mjs` |
 | 2026-08-18 | `pnpm validate:full` | Bloqueado por 2 enlaces Markdown preexistentes fuera de este cambio | `docs/06-product/crm/{contacts,leads}/*IMPLEMENTATION_HANDOFF.md` |
 | 2026-08-18 | `pnpm registries:check` | Pass | Generated registry catalog |
