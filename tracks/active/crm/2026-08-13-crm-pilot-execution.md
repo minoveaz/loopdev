@@ -30,16 +30,18 @@ la existencia de un track no implica que tenga autorizacion para iniciar impleme
 | Track | Estado operativo | Decisión | Siguiente evidencia |
 | --- | --- | --- | --- |
 | `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | G0 completado y aprobado |
-| `crm-shared-foundation` | activo, unico frente de implementacion | Avanzar solo con la validacion remota de Supabase/RLS, seed/reset y checks contractuales | PR de G0 con checks reproducibles |
+| `crm-shared-foundation` | cerrado tras Contacts backend-first | Mantener como foundation reutilizable; no reabrirlo para nuevos módulos | PRs #111, #114, #116 y cierre #118 |
+| `crm-leads-backend-foundation` | siguiente frente habilitado | Implementar Leads backend-first sobre la foundation certificada | Issue #84, contrato y handoff aprobados |
 | `crm-ui-foundation` | pausado para nuevos slices | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0 |
 | `estar-protegidos-crm-platform` | historico, fuera del WIP | No usarlo para planificar entregas; el piloto central lo supersede operativamente | Migracion o cierre documental posterior |
 
 ### Regla de trabajo
 
-Hasta cerrar G0/#68 solo se mantiene un track CRM de implementación activo: `crm-shared-foundation`.
-Contacts (#82), Leads (#84), Pipeline (#85), Tasks (#87), Customer 360 (#88) y los tracks de G1
-permanecen bloqueados o en espera. La UI certificada por #108 no reabre trabajo de producto ni
-autoriza iniciar G1. Cualquier nuevo slice requiere actualizar primero este checkpoint y el Project.
+G0/#68 y la validación del primer consumidor Contacts (#82) están cerrados. Se habilita ahora un
+único frente de implementación CRM: `crm-leads-backend-foundation` para el Issue #84. Pipeline
+(#85), Tasks (#87), Customer 360 (#88) y los tracks de G1 permanecen en espera hasta que Leads
+aporte su evidencia de ciclo de vida. La UI y las primitives compartidas siguen coordinadas por
+sus tracks transversales y no autorizan crear componentes CRM paralelos.
 
 ## Outcome
 
