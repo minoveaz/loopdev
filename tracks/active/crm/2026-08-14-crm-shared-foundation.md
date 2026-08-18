@@ -9,7 +9,7 @@ lead: null
 branch: feature/crm-g0-shared-foundation
 branches: []
 phase: 1
-pull_requests: []
+pull_requests: [111]
 issues: [70, 71, 72, 73, 74, 75, 82]
 packages: []
 release: not-required
@@ -163,11 +163,13 @@ desde el `develop` posterior al merge del PR #110. La foundation UI del PR #108
 ya está mergeada, pero no sustituye la validación de contratos, RLS, seed/reset
 ni pruebas de aislamiento de este track.
 
-El track permanece activo y bloqueado para cierre hasta completar G0:
-hardening de policies por verbo, aislamiento cross-tenant y cross-workspace,
-auditoría append-only, seed/reset reproducible, idempotencia y validación real
-de Supabase/RLS y Vitest. Su siguiente consumidor previsto es Contacts (#82),
-después de cerrar las condiciones de G1.
+El PR #111 (`feat(crm): enforce G0 shared foundation controls`) fue mergeado en
+`develop` el 2026-08-18. G0 queda integrado con hardening de policies por verbo,
+aislamiento cross-tenant y cross-workspace, auditoría append-only, seed/reset
+reproducible, idempotencia, redacción API, gobernanza de migraciones y evidencia
+CI verde. El track permanece activo para validar el primer consumidor, Contacts
+(#82), sin duplicación de la foundation y para recibir aprobación explícita de
+cierre.
 
 ## Riesgos y bloqueos
 
@@ -178,7 +180,7 @@ después de cerrar las condiciones de G1.
 | CRM and Communications policies use broad `FOR ALL` access           | Read permissions may authorize mutation or deletion         | Split policies by SQL verb and validate negative cases with pgTAP       | crm/platform | mitigated; local runtime evidence green                                |
 | CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints           | crm/platform | mitigated; local reset evidence green                                  |
 | Local Supabase reset is not reproducible                             | CI and developer evidence can diverge from migration state  | Align `supabase/config.toml` with the canonical seed and certify reset  | platform     | mitigated; canonical seed path and organization scope now pass locally |
-| Static checks could drift from the migration contract                | A future suite may reintroduce an unsafe table or grant     | Keep the changed-migration governance gate and reusable checklist in CI | platform     | mitigated; CI evidence pending                                         |
+| Static checks could drift from the migration contract                | A future suite may reintroduce an unsafe table or grant     | Keep the changed-migration governance gate and reusable checklist in CI | platform     | mitigated; PR #111 CI evidence green                                   |
 
 ## Criterios de cierre
 
@@ -190,36 +192,38 @@ después de cerrar las condiciones de G1.
 
 ## Evidencia de validación
 
-| Fecha      | Validación                                                              | Resultado                                                                     | Referencia                                                        |
-| ---------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| 2026-08-18 | `supabase db reset` + `supabase db lint --local` + pgTAP database suite | Pass: 128 tests                                                               | Local Docker/Supabase; canonical `seed_loopdev.sql`               |
-| 2026-08-18 | Supabase TypeScript type generation + LoopDev OS typecheck              | Pass; generated types include CRM/Communications hardening constraints        | CLI 2.114.0 with local `supabase_admin` database URL              |
-| 2026-08-18 | `pnpm test:supabase-governance`                                         | Pass (4 tests)                                                                | `scripts/validate-supabase-governance.test.mjs`                   |
-| 2026-08-18 | `pnpm validate:full`                                                    | Pass with local Supabase URL and anon key; CRM links and full build green    | `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`        |
-| 2026-08-18 | `pnpm registries:check`                                                 | Pass                                                                          | Generated registry catalog                                        |
-| 2026-08-18 | `git diff --check`                                                      | Pass                                                                          | Working tree                                                      |
-| 2026-08-18 | LoopDev OS production build                                             | Pass con `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` locales | `pnpm --filter loopdev-os build`                                  |
+| Fecha      | Validación                                                              | Resultado                                                                     | Referencia                                                   |
+| ---------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 2026-08-18 | `supabase db reset` + `supabase db lint --local` + pgTAP database suite | Pass: 128 tests                                                               | Local Docker/Supabase; canonical `seed_loopdev.sql`          |
+| 2026-08-18 | Supabase TypeScript type generation + LoopDev OS typecheck              | Pass; generated types include CRM/Communications hardening constraints        | CLI 2.114.0 with local `supabase_admin` database URL         |
+| 2026-08-18 | `pnpm test:supabase-governance`                                         | Pass (4 tests)                                                                | `scripts/validate-supabase-governance.test.mjs`              |
+| 2026-08-18 | `pnpm validate:full`                                                    | Pass with local Supabase URL and anon key; CRM links and full build green     | `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
+| 2026-08-18 | PR #111 GitHub Actions                                                  | Pass; Supabase governance, reset, lint, pgTAP and repository CI green         | `github.com/minoveaz/loopdev/pull/111`                       |
+| 2026-08-18 | `pnpm registries:check`                                                 | Pass                                                                          | Generated registry catalog                                   |
+| 2026-08-18 | `git diff --check`                                                      | Pass                                                                          | Working tree                                                 |
+| 2026-08-18 | LoopDev OS production build                                             | Pass con `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` locales | `pnpm --filter loopdev-os build`                             |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-18.
 - **Rama de continuación:** `feature/crm-g0-shared-foundation`.
-- **Commit de partida:** `da5e319` (`feature/crm-g0-shared-foundation`); pending
-  implementation changes are the next commit on this branch.
+- **Commit de partida:** `d19bc44` (`feature/crm-g0-shared-foundation`), último
+  commit de la rama antes del merge del PR #111.
 - **Estado alcanzado:** G0 hardening, migration governance, reusable pgTAP
-  helpers, CRM isolation tests, canonical seed, generated database types and
-  API-level idempotency/redaction tests are implemented locally; Docker/Supabase
-  is available and the branch is ready for commit and push.
+  helpers, CRM isolation tests, canonical seed, generated database types,
+  API-level idempotency/redaction tests and CI validation are integrated into
+  `develop` through PR #111.
 - **Decisiones, bloqueos y riesgos:** Communications was hardened only for the
   same identified broad-policy and cross-organization risk. Residual work is
-  CI evidence and verification by the first consuming module; no production
-  Supabase credentials or data are used locally.
+  verification by the first consuming module and explicit closure approval; no
+  production Supabase credentials or data are used locally.
 - **Validación ejecutada:** Local reset/lint/128 pgTAP tests, governance tests,
   CRM contract/API tests (15), contracts build, LoopDev OS typecheck and
-  production build with local Supabase variables pass.
-- **Siguiente acción concreta:** Commit and push the validated implementation,
-  then open the G0 PR for review; do not close the track until CI and consumer
-  evidence are green.
+  production build with local Supabase variables pass; PR #111 GitHub Actions
+  passed.
+- **Siguiente acción concreta:** Certify Contacts (#82) against the shared
+  contracts and persistence foundation; do not close the track until that
+  evidence and explicit user approval are recorded.
 
 ## Cierre
 
