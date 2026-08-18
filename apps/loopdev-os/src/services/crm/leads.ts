@@ -43,16 +43,21 @@ type LeadRow = {
 type OpportunityRow = {
   id: string;
   organization_id: string;
-  lead_id: string;
+  lead_id: string | null;
   workspace_id: string | null;
+  brand_id: string | null;
+  contact_id: string;
   name: string;
   stage: string;
+  stage_key: string;
   origin: string;
-  product_key: string | null;
+  product_key: string;
   amount: number | null;
   currency: string;
   probability: number | null;
   expected_close_at: string | null;
+  assigned_to_user_id: string | null;
+  version: number;
   created_at: string;
   updated_at: string;
 };
@@ -60,7 +65,7 @@ type OpportunityRow = {
 const leadColumns =
   'id, organization_id, contact_id, brand_id, workspace_id, status, source, source_provider, external_lead_id, campaign, interest, assigned_to_user_id, created_at, updated_at';
 const opportunityColumns =
-  'id, organization_id, lead_id, workspace_id, name, stage, origin, product_key, amount, currency, probability, expected_close_at, created_at, updated_at';
+  'id, organization_id, lead_id, workspace_id, brand_id, contact_id, name, stage, stage_key, origin, product_key, amount, currency, probability, expected_close_at, assigned_to_user_id, version, created_at, updated_at';
 
 // Leads that already produced a conversion Opportunity keep that status;
 // moveLeadStatus never sets or clears it directly (CRM_LEAD_CONTRACT.md).
@@ -116,15 +121,22 @@ function mapOpportunity(row: OpportunityRow): CrmOpportunity {
     id: row.id,
     organizationId: row.organization_id,
     leadId: row.lead_id,
+    brandId: row.brand_id,
+    contactId: row.contact_id,
     workspaceId: row.workspace_id,
     name: row.name,
-    stage: row.stage,
+    stage: row.stage as CrmOpportunity['stage'],
+    stageKey: row.stage_key ?? row.stage,
     origin: row.origin,
     productKey: row.product_key,
     amount: row.amount,
     currency: row.currency,
     probability: row.probability,
     expectedCloseAt: row.expected_close_at,
+    assignedUserId: row.assigned_to_user_id,
+    version: row.version ?? 1,
+    activityHealth: 'unknown',
+    lastActivity: null,
     createdAt: normalizeTimestamp(row.created_at),
     updatedAt: normalizeTimestamp(row.updated_at),
   });
@@ -372,9 +384,12 @@ export async function createOpportunityFromLead(
     .insert({
       organization_id: parsed.organizationId,
       lead_id: parsed.leadId,
+      contact_id: lead.contactId,
+      brand_id: lead.brandId,
       workspace_id: lead.workspaceId ?? null,
       name: parsed.name,
       stage: 'qualified',
+      stage_key: 'qualified',
       origin: 'lead_conversion',
       product_key: productKey,
       amount: parsed.amount ?? null,
@@ -427,15 +442,22 @@ export async function createOpportunity(input: {
   probability?: number | null;
   expectedCloseAt?: string | null;
 }): Promise<CrmOpportunity> {
+  const lead = await getLead(input.organizationId, input.leadId);
+  if (!lead) throw new Error('CRM lead not found');
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from('crm_opportunities')
     .insert({
       organization_id: input.organizationId,
       lead_id: input.leadId,
+      contact_id: lead.contactId,
+      brand_id: lead.brandId,
       workspace_id: input.workspaceId ?? null,
       name: input.name,
+      stage: 'lead',
+      stage_key: 'lead',
       origin: 'manual',
+      product_key: normalizeProductKey(input.name),
       amount: input.amount ?? null,
       currency: input.currency ?? 'EUR',
       probability: input.probability ?? null,

@@ -2,7 +2,7 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(33);
+select plan(41);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
@@ -60,6 +60,14 @@ select is(
   'CRM policies are declared per SQL verb'
 );
 select ok(pg_temp.has_scoped_fk('crm_activities', 'crm_leads'), 'CRM activities enforce lead organization ownership');
+select ok(pg_temp.has_policy_for('crm_pipeline_stages', 'select'), 'Pipeline stages expose a SELECT policy');
+select ok(pg_temp.has_policy_for('crm_pipeline_stages', 'insert'), 'Pipeline stages expose an INSERT policy');
+select ok(pg_temp.has_policy_for('crm_pipeline_stages', 'update'), 'Pipeline stages expose an UPDATE policy');
+select ok(pg_temp.has_policy_for('crm_pipeline_stages', 'delete'), 'Pipeline stages expose a DELETE policy');
+select ok(pg_temp.has_scoped_fk('crm_opportunities', 'crm_contacts'), 'Opportunities enforce contact organization ownership');
+select ok(pg_temp.has_scoped_fk('crm_opportunities', 'crm_pipeline_stages'), 'Opportunities enforce stage organization ownership');
+select ok(pg_temp.has_scoped_fk('crm_opportunity_stage_history', 'crm_opportunities'), 'Stage history enforces opportunity organization ownership');
+select ok(not pg_temp.has_policy_for('crm_opportunity_stage_history', 'update'), 'Stage history has no UPDATE policy');
 
 set local role authenticated;
 select pg_temp.set_authenticated_user('00000000-0000-4000-8700-000000000001');

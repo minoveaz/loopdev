@@ -315,18 +315,45 @@ export const LeadErrorCodeSchema = z.enum([
 ]);
 export type LeadErrorCode = z.infer<typeof LeadErrorCodeSchema>;
 
-export const CrmPipelineStageSchema = z.object({
+export const StageTerminalTypeSchema = z.enum(['open', 'won', 'lost']);
+export type StageTerminalType = z.infer<typeof StageTerminalTypeSchema>;
+export const StageChangeOriginSchema = z.enum([
+  'board',
+  'record',
+  'system',
+  'conversion',
+  'reopen',
+]);
+export type StageChangeOrigin = z.infer<typeof StageChangeOriginSchema>;
+
+const PipelineStageShape = {
   id: IdSchema,
   organizationId: IdSchema,
+  // tenantId is retained as a read-only contract alias for consumers that use
+  // the product contract terminology; persistence is organization-scoped.
+  tenantId: IdSchema.optional(),
   workspaceId: IdSchema.nullable().optional(),
-  key: CrmLeadStageSchema,
-  label: z.string().trim().min(1).max(80),
-  position: z.number().int().nonnegative(),
-  isTerminal: z.boolean().default(false),
+  key: z.string().trim().min(1).max(80).regex(/^[a-z0-9][a-z0-9_-]*$/),
+  name: z.string().trim().min(1).max(80).optional(),
+  label: z.string().trim().min(1).max(80).optional(),
+  stageOrder: z.number().int().nonnegative().optional(),
+  position: z.number().int().nonnegative().optional(),
+  active: z.boolean().default(true),
+  terminalType: StageTerminalTypeSchema.default('open'),
+  isTerminal: z.boolean().optional(),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
-});
-export type CrmPipelineStage = z.infer<typeof CrmPipelineStageSchema>;
+};
+
+export const PipelineStageSchema = z
+  .object(PipelineStageShape)
+  .refine((stage) => Boolean(stage.name || stage.label), {
+    message: 'A pipeline stage requires a name',
+    path: ['name'],
+  });
+export type PipelineStage = z.infer<typeof PipelineStageSchema>;
+export const CrmPipelineStageSchema = PipelineStageSchema;
+export type CrmPipelineStage = PipelineStage;
 
 export const CrmOpportunityOriginSchema = z.enum(['manual', 'lead_conversion']);
 export type CrmOpportunityOrigin = z.infer<typeof CrmOpportunityOriginSchema>;
@@ -334,14 +361,18 @@ export type CrmOpportunityOrigin = z.infer<typeof CrmOpportunityOriginSchema>;
 export const CrmOpportunitySchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
-  leadId: IdSchema,
+  tenantId: IdSchema.optional(),
   workspaceId: IdSchema.nullable().optional(),
+  brandId: IdSchema.nullable().optional(),
+  contactId: IdSchema,
+  leadId: IdSchema.nullable().optional(),
+  productKey: z.string().trim().min(1).max(160),
+  stageKey: z.string().trim().min(1).max(80),
+  stageId: IdSchema.nullable().optional(),
   name: z.string().trim().min(1).max(160),
-  stage: CrmLeadStageSchema,
+  // stage is the legacy lead-shaped field and is kept for conversion clients.
+  stage: CrmLeadStageSchema.optional(),
   origin: CrmOpportunityOriginSchema.default('manual'),
-  // Normalized product/interest key; required for origin='lead_conversion',
-  // where the tuple (organization, lead, productKey) is unique.
-  productKey: z.string().trim().max(160).nullable().optional(),
   amount: z.number().nonnegative().nullable().optional(),
   currency: z
     .string()
@@ -349,10 +380,25 @@ export const CrmOpportunitySchema = z.object({
     .default('EUR'),
   probability: z.number().int().min(0).max(100).nullable().optional(),
   expectedCloseAt: TimestampSchema.nullable().optional(),
+  expectedCloseDate: z.string().date().nullable().optional(),
+  assignedUserId: IdSchema.nullable().optional(),
+  lastActivity: z
+    .object({
+      at: TimestampSchema,
+      type: z.string().trim().min(1).max(40),
+      actorId: IdSchema.nullable(),
+      actorName: z.string().trim().max(160).nullable(),
+    })
+    .nullable()
+    .optional(),
+  activityHealth: z.enum(['fresh', 'stale', 'overdue', 'unknown']).default('unknown'),
+  version: z.number().int().positive().default(1),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
 });
 export type CrmOpportunity = z.infer<typeof CrmOpportunitySchema>;
+export const OpportunitySchema = CrmOpportunitySchema;
+export type Opportunity = CrmOpportunity;
 
 // CRM_LEAD_CONTRACT.md createOpportunityFromLead: converts a qualified Lead
 // into (or reuses) the conversion Opportunity for one normalized product key.
@@ -372,6 +418,130 @@ export const CrmCreateOpportunityFromLeadCommandSchema = z.object({
 export type CrmCreateOpportunityFromLeadCommand = z.infer<
   typeof CrmCreateOpportunityFromLeadCommandSchema
 >;
+
+export const OpportunityErrorCodeSchema = z.enum([
+  'UNAUTHENTICATED',
+  'FORBIDDEN',
+  'NOT_FOUND',
+  'VALIDATION_ERROR',
+  'CONFLICT',
+  'IDEMPOTENCY_CONFLICT',
+  'CONTACT_REQUIRED',
+  'LEAD_REQUIRED',
+  'INVALID_STAGE',
+  'STAGE_TRANSITION_FORBIDDEN',
+  'INVALID_STAGE_CONFIGURATION',
+  'REOPEN_FORBIDDEN',
+  'REOPEN_REASON_REQUIRED',
+  'CROSS_TENANT_REFERENCE',
+]);
+export type OpportunityErrorCode = z.infer<typeof OpportunityErrorCodeSchema>;
+
+export const CrmOpportunityQuerySchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.optional(),
+  brandId: IdSchema.optional(),
+  contactId: IdSchema.optional(),
+  stageKey: z.string().trim().min(1).max(80).optional(),
+  origin: CrmOpportunityOriginSchema.optional(),
+  cursor: IdSchema.optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+});
+export type CrmOpportunityQuery = z.infer<typeof CrmOpportunityQuerySchema>;
+export const CrmListOpportunitiesQuerySchema = CrmOpportunityQuerySchema;
+export type CrmListOpportunitiesQuery = CrmOpportunityQuery;
+
+export const CrmGetOpportunityQuerySchema = z.object({
+  organizationId: IdSchema,
+  opportunityId: IdSchema,
+});
+export type CrmGetOpportunityQuery = z.infer<typeof CrmGetOpportunityQuerySchema>;
+
+export const CrmCreateManualOpportunityCommandSchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.nullable().optional(),
+  brandId: IdSchema.nullable().optional(),
+  contactId: IdSchema,
+  productKey: z.string().trim().min(1).max(160),
+  name: z.string().trim().min(1).max(160),
+  amount: z.number().nonnegative().nullable().optional(),
+  currency: z.string().regex(/^[A-Z]{3}$/).default('EUR'),
+  probability: z.number().int().min(0).max(100).nullable().optional(),
+  expectedCloseDate: z.string().date().nullable().optional(),
+  expectedCloseAt: TimestampSchema.nullable().optional(),
+  assignedUserId: IdSchema.nullable().optional(),
+  idempotencyKey: z.string().trim().min(8).max(160),
+});
+export type CrmCreateManualOpportunityCommand = z.infer<
+  typeof CrmCreateManualOpportunityCommandSchema
+>;
+
+export const CrmMoveOpportunityStageCommandSchema = z.object({
+  organizationId: IdSchema,
+  opportunityId: IdSchema,
+  stageKey: z.string().trim().min(1).max(80),
+  expectedVersion: z.number().int().positive(),
+  reason: z.string().trim().max(500).nullable().optional(),
+  origin: StageChangeOriginSchema.default('record'),
+  actorUserId: IdSchema.nullable().optional(),
+});
+export type CrmMoveOpportunityStageCommand = z.infer<
+  typeof CrmMoveOpportunityStageCommandSchema
+>;
+
+export const CrmReopenOpportunityCommandSchema = z.object({
+  organizationId: IdSchema,
+  opportunityId: IdSchema,
+  targetStageKey: z.string().trim().min(1).max(80),
+  expectedVersion: z.number().int().positive(),
+  reason: z.string().trim().min(1).max(500),
+  actorUserId: IdSchema.nullable().optional(),
+});
+export type CrmReopenOpportunityCommand = z.infer<
+  typeof CrmReopenOpportunityCommandSchema
+>;
+
+export const CrmUpdateOpportunityCommandSchema = z.object({
+  organizationId: IdSchema,
+  opportunityId: IdSchema,
+  name: z.string().trim().min(1).max(160).optional(),
+  brandId: IdSchema.nullable().optional(),
+  productKey: z.string().trim().min(1).max(160).optional(),
+  amount: z.number().nonnegative().nullable().optional(),
+  currency: z.string().regex(/^[A-Z]{3}$/).optional(),
+  probability: z.number().int().min(0).max(100).nullable().optional(),
+  expectedCloseDate: z.string().date().nullable().optional(),
+  expectedCloseAt: TimestampSchema.nullable().optional(),
+  assignedUserId: IdSchema.nullable().optional(),
+  expectedVersion: z.number().int().positive(),
+});
+export type CrmUpdateOpportunityCommand = z.infer<
+  typeof CrmUpdateOpportunityCommandSchema
+>;
+
+export const CrmConfigurePipelineStageCommandSchema = z.object({
+  organizationId: IdSchema,
+  stageId: IdSchema.optional(),
+  workspaceId: IdSchema.nullable().optional(),
+  key: z.string().trim().min(1).max(80).regex(/^[a-z0-9][a-z0-9_-]*$/),
+  name: z.string().trim().min(1).max(80),
+  stageOrder: z.number().int().nonnegative(),
+  active: z.boolean().default(true),
+  terminalType: StageTerminalTypeSchema.default('open'),
+  expectedUpdatedAt: TimestampSchema.optional(),
+});
+export type CrmConfigurePipelineStageCommand = z.infer<
+  typeof CrmConfigurePipelineStageCommandSchema
+>;
+
+export const CrmOpportunityCommandEnvelopeSchema = <T extends z.ZodTypeAny>(data: T) =>
+  z.object({
+    data: data.nullable(),
+    error: z
+      .object({ code: OpportunityErrorCodeSchema, message: z.string() })
+      .nullable(),
+    requestId: z.string().min(1),
+  });
 
 export const CrmActivitySchema = z.object({
   id: IdSchema,

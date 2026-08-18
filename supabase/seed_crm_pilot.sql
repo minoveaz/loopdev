@@ -92,15 +92,28 @@ begin
      'lead', 'active', 'referral', agent_id)
   on conflict (id) do nothing;
 
+  insert into public.crm_pipeline_stages
+    (id, organization_id, workspace_id, key, stage_key, label, position, active, terminal_type)
+  values
+    ('00000000-0000-4000-a310-000000000001', target_organization_id, target_workspace_id,
+     'qualified', 'qualified', 'Qualified', 0, true, 'open'),
+    ('00000000-0000-4000-a310-000000000002', target_organization_id, target_workspace_id,
+     'won', 'won', 'Won', 1, true, 'won'),
+    ('00000000-0000-4000-a310-000000000003', target_organization_id, target_workspace_id,
+     'lost', 'lost', 'Lost', 2, true, 'lost')
+  on conflict (id) do nothing;
+
   insert into public.crm_opportunities
-    (id, organization_id, lead_id, workspace_id, name, stage, amount, currency, probability)
+    (id, organization_id, lead_id, contact_id, brand_id, workspace_id, name, stage, stage_key, product_key, amount, currency, probability)
   values
     ('00000000-0000-4000-a300-000000000001', target_organization_id,
-     '00000000-0000-4000-a200-000000000001', target_workspace_id,
-     'Proteccion salud familiar', 'won', 1250.00, 'EUR', 100),
+     '00000000-0000-4000-a200-000000000001',
+     '00000000-0000-4000-a100-000000000001', target_brand_id, target_workspace_id,
+     'Proteccion salud familiar', 'won', 'won', 'salud-familiar', 1250.00, 'EUR', 100),
     ('00000000-0000-4000-a300-000000000002', target_organization_id,
-     '00000000-0000-4000-a200-000000000002', target_workspace_id,
-     'Proteccion no convertida', 'lost', 850.00, 'EUR', 0)
+     '00000000-0000-4000-a200-000000000002',
+     '00000000-0000-4000-a100-000000000002', target_brand_id, target_workspace_id,
+     'Proteccion no convertida', 'lost', 'lost', 'proteccion-no-convertida', 850.00, 'EUR', 0)
   on conflict (id) do nothing;
 
   insert into public.crm_tasks
@@ -247,11 +260,12 @@ begin
      'convertido', 'campaign', 'seguro salud', owner_id)
   on conflict (id) do nothing;
   insert into public.crm_opportunities
-    (id, organization_id, lead_id, workspace_id, name, stage, origin, product_key, amount, currency, probability)
+    (id, organization_id, lead_id, contact_id, brand_id, workspace_id, name, stage, stage_key, origin, product_key, amount, currency, probability)
   values
     ('00000000-0000-4000-a900-000000000002', target_organization_id,
-     converted_lead_id, target_workspace_id,
-     'Proteccion salud familiar', 'qualified', 'lead_conversion', 'health', 1250.00, 'EUR', 45)
+     converted_lead_id,
+     '00000000-0000-4000-a700-000000000005', target_brand_id, target_workspace_id,
+     'Proteccion salud familiar', 'qualified', 'qualified', 'lead_conversion', 'health', 1250.00, 'EUR', 45)
   on conflict (id) do nothing;
 end;
 $$;

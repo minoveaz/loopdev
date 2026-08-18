@@ -3,7 +3,7 @@ id: crm-pilot-execution
 title: CRM Pilot Execution
 status: active
 created: 2026-08-13
-updated: 2026-08-18
+updated: 2026-08-19
 owner: crm
 lead: User
 branch: null
@@ -603,6 +603,7 @@ go-live o UAT privado.
 | 2026-08-18 | Readiness preparatorio de Pipeline (#85) | Correcta: rama limpia `feature/crm-pipeline-readiness` basada en `origin/develop`; documentos de Pipeline y playbook revisados | Implementación funcional bloqueada hasta Tech Lead, G1, E2E y cierre operativo de Leads |
 | 2026-08-19 | Aislamiento Quant experimental y repetición de G1 | Correcta: migración `20260819010000_isolate_experimental_quant_tables.sql`, reset reproducible, 5 suites pgTAP top-level (140 aserciones) y governance (4/4) | Quant queda fuera del runtime; el E2E autenticado de Leads sigue bloqueado por un error 500 en `GET /api/crm/leads` |
 | 2026-08-19 | E2E HTTP autenticado de Leads | Correcta tras normalizar vocabulario legacy y timestamps Supabase: lectura 200, cambio de estado 200, conversión 201 y reintento idempotente 200 con la misma Opportunity | Se corrige `apps/loopdev-os/src/services/crm/leads.ts`; cerrar la evidencia operativa de #84 y continuar con la aprobación técnica de Pipeline |
+| 2026-08-19 | Pipeline backend (#85): reset, contratos, typecheck y CRM tests | Reset local correcto: migraciones hasta `20260904000000_crm_pipeline_contract.sql` y seed aplicados; contratos build, typecheck completo (11/11), tests CRM focalizados (12/12) y governance Supabase correctos. `005_crm_security.sql` ahora cubre políticas/FKs de Pipeline y las 5 suites top-level pasan 148 aserciones. | El runner global sigue incluyendo `helpers/rls_helpers.sql` como suite independiente y termina con parse error de plan; falta E2E HTTP de Opportunities porque el servidor local requiere `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` explícitos |
 
 ## Handoff de sesion
 
