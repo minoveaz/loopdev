@@ -142,19 +142,17 @@ make the same controls enforceable for future tables and suites.
 
 - [x] Governance validator unit tests pass.
 - [x] SQL patch passes `git diff --check`.
-- [ ] Local Supabase reset, lint and pgTAP execution.
+- [x] Local Supabase reset, lint and pgTAP execution.
 
 **Evidencia:** The implementation is present in
 `supabase/migrations/20260902000000_crm_security_hardening.sql`,
 `scripts/validate-supabase-governance.mjs`,
 `supabase/tests/database/005_crm_security.sql`,
 `supabase/tests/helpers/rls_helpers.sql` and
-`docs/03-platform/DATABASE_TABLE_SUITE_READINESS_CHECKLIST.md`. Local
-database execution remains pending because Docker is not available in this
-environment.
+`docs/03-platform/DATABASE_TABLE_SUITE_READINESS_CHECKLIST.md`. Local Supabase
+reset, lint and pgTAP now pass with Docker Desktop running.
 
-**Estado:** en progreso; implementación completada y certificación local
-bloqueada por Docker.
+**Estado:** en progreso; implementación y certificación local completadas.
 
 ## Estado actualizado 2026-08-18
 
@@ -179,7 +177,7 @@ después de cerrar las condiciones de G1.
 | Activity and audit semantics may be conflated              | Incorrect retention or disclosure             | Approve separate event boundaries and fixtures | crm          | open   |
 | CRM and Communications policies use broad `FOR ALL` access | Read permissions may authorize mutation or deletion | Split policies by SQL verb and validate negative cases with pgTAP | crm/platform | mitigated; runtime evidence pending |
 | CRM relationships do not consistently enforce organization ownership | Cross-organization references may bypass intended isolation | Add composite organization-aware foreign keys and constraints | crm/platform | mitigated; reset evidence pending |
-| Local Supabase reset is not reproducible | CI and developer evidence can diverge from migration state | Align `supabase/config.toml` with the canonical seed and certify reset | platform | open |
+| Local Supabase reset is not reproducible | CI and developer evidence can diverge from migration state | Align `supabase/config.toml` with the canonical seed and certify reset | platform | open; config seed path still needs correction |
 | Static checks could drift from the migration contract | A future suite may reintroduce an unsafe table or grant | Keep the changed-migration governance gate and reusable checklist in CI | platform | mitigated; CI evidence pending |
 
 ## Criterios de cierre

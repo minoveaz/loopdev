@@ -1,6 +1,6 @@
 begin;
 
-\ir ../helpers/rls_helpers.sql
+\ir helpers/rls_helpers.sql
 
 select plan(21);
 
@@ -98,7 +98,7 @@ select throws_ok(
 select throws_ok(
   $$ insert into public.crm_leads (organization_id, contact_id, workspace_id, stage, source)
      values ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-9a00-000000000002', '00000000-0000-4000-9900-000000000001', 'lead', 'manual') $$,
-  '23503',
+  'insert or update on table "crm_leads" violates foreign key constraint "crm_leads_contact_org_fkey"',
   'composite CRM foreign keys reject cross-organization links'
 );
 

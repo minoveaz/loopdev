@@ -67,7 +67,7 @@ jobs:
         run: supabase db lint --local
 
       - name: Run database contract tests
-        run: supabase test db --local supabase/tests/database
+        run: supabase test db --local supabase/tests/database/*.sql
 
       - name: Stop local Supabase
         if: always()
