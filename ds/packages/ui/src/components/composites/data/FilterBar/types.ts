@@ -24,6 +24,7 @@ export interface FilterBarProps {
   loading?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
+  showClear?: boolean;
   colors?: SemanticComponentColors;
   className?: string;
 }

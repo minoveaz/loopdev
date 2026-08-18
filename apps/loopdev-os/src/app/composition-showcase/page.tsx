@@ -56,6 +56,9 @@ import { TechnicalCardCertification } from './certification-lab/TechnicalCardCer
 import { SearchInputCertification } from './certification-lab/SearchInputCertification';
 import { LoopdevComponentsCatalog } from './certification-lab/LoopdevComponentsCatalog';
 import { ResponsiveTableCertification } from './certification-lab/ResponsiveTableCertification';
+import { SuiteCompositionPatternsCertification } from './certification-lab/SuiteCompositionPatternsCertification';
+import { OperationalActionsCertification } from './certification-lab/OperationalActionsCertification';
+import { DashboardSummaryCertification } from './certification-lab/DashboardSummaryCertification';
 import { CRMPrimitivesCatalog } from './CRMPrimitivesCatalog';
 import { DataTablesCatalog } from './DataTablesCatalog';
 import type { ActivityRow } from '@/components/composites/data-tables/ActivityTable';
@@ -1489,6 +1492,27 @@ const CERTIFICATION_COMPONENTS = [
     statusTone: 'warning',
     action: 'Reusable component contracts for future suites',
   },
+  {
+    id: 'SuiteCompositionPatterns',
+    label: 'Suite composition patterns',
+    status: 'experimental',
+    statusTone: 'warning',
+    action: 'Phase B6-B8 operational flow composition',
+  },
+  {
+    id: 'OperationalActions',
+    label: 'Operational actions',
+    status: 'experimental',
+    statusTone: 'warning',
+    action: 'Phase C9 actions, confirmation and recovery patterns',
+  },
+  {
+    id: 'DashboardSummary',
+    label: 'Dashboard and summary',
+    status: 'experimental',
+    statusTone: 'warning',
+    action: 'Phase C10 metrics, activity and summary composition',
+  },
 ] as const;
 
 type CertificationComponent = (typeof CERTIFICATION_COMPONENTS)[number]['id'];
@@ -1539,6 +1563,24 @@ const CERTIFICATION_GROUPS = [
     entryComponent: 'LoopdevComponents',
     componentIds: ['LoopdevComponents'],
   },
+  {
+    id: 'suite-composition-patterns',
+    label: 'Suite composition patterns',
+    description: 'B6-B8 query, data and list-detail workspace flow',
+    status: 'experimental',
+    statusTone: 'warning',
+    entryComponent: 'SuiteCompositionPatterns',
+    componentIds: ['SuiteCompositionPatterns'],
+  },
+  {
+    id: 'phase-c-operations',
+    label: 'Phase C',
+    description: 'Reusable actions, summaries and advanced suite patterns',
+    status: 'experimental',
+    statusTone: 'warning',
+    entryComponent: 'OperationalActions',
+    componentIds: ['OperationalActions', 'DashboardSummary'],
+  },
 ] as const satisfies ReadonlyArray<{
   id: string;
   label: string;
@@ -1564,31 +1606,55 @@ const CertificationSidebar = ({
       <h2 className="mt-2 text-lg font-semibold text-text-main">Certification Lab</h2>
     </div>
     <nav aria-label="Certification groups" className="space-y-3">
-      {CERTIFICATION_GROUPS.map((group) => (
-        <button
-          key={group.id}
-          type="button"
-          aria-current={
-            (group.componentIds as readonly CertificationComponent[]).includes(selected)
-              ? 'true'
-              : undefined
-          }
-          onClick={() => onSelect(group.entryComponent as CertificationComponent)}
-          className={`w-full border px-3 py-4 text-left transition-colors ${(group.componentIds as readonly CertificationComponent[]).includes(selected) ? 'border-primary bg-primary/10' : 'border-border-subtle hover:border-border-technical'}`}
-        >
-          <span className="block font-mono text-xs uppercase tracking-[0.14em] text-text-main">
-            {group.label}
-          </span>
-          <span className="mt-2 block text-[11px] leading-4 text-text-muted">
-            {group.description}
-          </span>
-          <span
-            className={`mt-3 inline-block border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] ${group.statusTone === 'warning' ? 'border-warning/40 bg-warning/10 text-warning' : 'border-border-technical bg-shell-surface text-text-muted'}`}
-          >
-            {group.status}
-          </span>
-        </button>
-      ))}
+      {CERTIFICATION_GROUPS.map((group) => {
+        const isGroupSelected = (group.componentIds as readonly CertificationComponent[]).includes(
+          selected,
+        );
+        const childComponents = group.componentIds
+          .map((id) => CERTIFICATION_COMPONENTS.find((item) => item.id === id))
+          .filter((item): item is (typeof CERTIFICATION_COMPONENTS)[number] => Boolean(item));
+
+        return (
+          <div key={group.id} className="space-y-1">
+            <button
+              type="button"
+              aria-current={isGroupSelected ? 'true' : undefined}
+              onClick={() => onSelect(group.entryComponent as CertificationComponent)}
+              className={`w-full border px-3 py-4 text-left transition-colors ${isGroupSelected ? 'border-primary bg-primary/10' : 'border-border-subtle hover:border-border-technical'}`}
+            >
+              <span className="block font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+                {group.label}
+              </span>
+              <span className="mt-2 block text-[11px] leading-4 text-text-muted">
+                {group.description}
+              </span>
+              <span
+                className={`mt-3 inline-block border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] ${group.statusTone === 'warning' ? 'border-warning/40 bg-warning/10 text-warning' : 'border-border-technical bg-shell-surface text-text-muted'}`}
+              >
+                {group.status}
+              </span>
+            </button>
+            {childComponents.length > 1 && (
+              <div
+                className="ml-3 border-l border-border-subtle pl-2"
+                aria-label={`${group.label} components`}
+              >
+                {childComponents.map((component) => (
+                  <button
+                    key={component.id}
+                    type="button"
+                    aria-current={selected === component.id ? 'true' : undefined}
+                    onClick={() => onSelect(component.id)}
+                    className={`block w-full border-b px-2 py-2 text-left text-[11px] transition-colors last:border-b-0 ${selected === component.id ? 'border-primary text-primary' : 'border-border-subtle text-text-muted hover:text-text-main'}`}
+                  >
+                    {component.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </nav>
   </div>
 );
@@ -1695,6 +1761,15 @@ const CertificationLabCanvas = ({
   }
   if (selected === 'LoopdevComponents') {
     return <LoopdevComponentsCatalog />;
+  }
+  if (selected === 'SuiteCompositionPatterns') {
+    return <SuiteCompositionPatternsCertification />;
+  }
+  if (selected === 'OperationalActions') {
+    return <OperationalActionsCertification />;
+  }
+  if (selected === 'DashboardSummary') {
+    return <DashboardSummaryCertification />;
   }
   return (
     <div className="space-y-5">
@@ -1888,10 +1963,10 @@ export default function CompositionShowcasePage() {
     startTransition(() => {
       setRecipe(
         isCrmPrimitivesRoute ||
-        isUiFoundationRoute ||
-        isDataTablesRoute ||
-        isSuitePatternsRoute ||
-        isLoopdevComponentsRoute
+          isUiFoundationRoute ||
+          isDataTablesRoute ||
+          isSuitePatternsRoute ||
+          isLoopdevComponentsRoute
           ? 'CertificationLab'
           : requestedRecipe && requestedRecipe in FIXTURES
             ? (requestedRecipe as RecipeName)
@@ -1905,13 +1980,15 @@ export default function CompositionShowcasePage() {
             ? 'TechnicalCanvas'
             : isDataTablesRoute
               ? 'FiltersActions'
-                : isSuitePatternsRoute
-                  ? 'SearchInput'
-                  : isLoopdevComponentsRoute
-                    ? 'LoopdevComponents'
-              : CERTIFICATION_COMPONENTS.some((component) => component.id === requestedComponent)
-                ? (requestedComponent as CertificationComponent)
-                : 'TechnicalCanvas',
+              : isSuitePatternsRoute
+                ? 'SearchInput'
+                : isLoopdevComponentsRoute
+                  ? 'LoopdevComponents'
+                  : CERTIFICATION_COMPONENTS.some(
+                        (component) => component.id === requestedComponent,
+                      )
+                    ? (requestedComponent as CertificationComponent)
+                    : 'TechnicalCanvas',
       );
     });
   }, []);

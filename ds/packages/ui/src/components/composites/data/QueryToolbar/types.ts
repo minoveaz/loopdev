@@ -25,6 +25,7 @@ export interface QueryToolbarProps {
     options: QueryToolbarOption[];
     onChange: (value: string) => void;
     label?: string;
+    control?: React.ReactNode;
   };
   view?: {
     value: string;
@@ -32,10 +33,12 @@ export interface QueryToolbarProps {
     onChange: (value: string) => void;
     label?: string;
   };
+  pagination?: React.ReactNode;
   actions?: React.ReactNode;
   loading?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
+  showClear?: boolean;
   colors?: SemanticComponentColors;
   className?: string;
 }

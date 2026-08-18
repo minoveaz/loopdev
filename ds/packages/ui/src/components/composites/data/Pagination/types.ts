@@ -12,4 +12,6 @@ export interface PaginationProps {
   disabled?: boolean;
   colors?: SemanticComponentColors;
   className?: string;
+  showSummary?: boolean;
+  compact?: boolean;
 }

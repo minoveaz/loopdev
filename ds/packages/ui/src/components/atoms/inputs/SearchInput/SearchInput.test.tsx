@@ -4,11 +4,22 @@ import { axe } from 'vitest-axe';
 import { SearchInput } from './index';
 
 describe('SearchInput', () => {
+  it('renders the contextual placeholder', () => {
+    render(
+      <SearchInput
+        value=""
+        onValueChange={vi.fn()}
+        placeholder="Search records by name, ID or owner..."
+      />,
+    );
+
+    expect(
+      screen.getByPlaceholderText('Search records by name, ID or owner...'),
+    ).toBeInTheDocument();
+  });
   it('keeps value controlled and clears through the public contract', () => {
     const onValueChange = vi.fn();
-    render(
-      <SearchInput value="Acme" onValueChange={onValueChange} aria-label="Search records" />,
-    );
+    render(<SearchInput value="Acme" onValueChange={onValueChange} aria-label="Search records" />);
 
     fireEvent.change(screen.getByRole('textbox', { name: 'Search records' }), {
       target: { value: 'Acme Labs' },

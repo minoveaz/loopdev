@@ -17,10 +17,12 @@ export function FilterBar({
   loading = false,
   disabled = false,
   readOnly = false,
+  showClear = true,
   colors,
   className,
 }: FilterBarProps) {
-  const hasActiveFilters = Boolean(search?.value) || Object.values(filterValues).some((values) => values.length > 0);
+  const hasActiveFilters =
+    Boolean(search?.value) || Object.values(filterValues).some((values) => values.length > 0);
   const isDisabled = disabled || loading;
   const clearAll = () => {
     search?.onChange('');
@@ -34,11 +36,13 @@ export function FilterBar({
       aria-label="Filters and actions"
       aria-busy={loading || undefined}
       className={cn('flex min-w-0 flex-wrap items-center gap-2', className)}
-      style={{
-        ...(colors?.surface ? { '--filterbar-surface': colors.surface } : {}),
-        ...(colors?.border ? { '--filterbar-border': colors.border } : {}),
-        ...(colors?.text ? { '--filterbar-text': colors.text } : {}),
-      } as React.CSSProperties}
+      style={
+        {
+          ...(colors?.surface ? { '--filterbar-surface': colors.surface } : {}),
+          ...(colors?.border ? { '--filterbar-border': colors.border } : {}),
+          ...(colors?.text ? { '--filterbar-text': colors.text } : {}),
+        } as React.CSSProperties
+      }
     >
       {search ? (
         <div className="min-w-full flex-1 lg:min-w-[14rem]">
@@ -59,7 +63,11 @@ export function FilterBar({
           <FilterDropdown
             key={filter.id}
             icon={filter.icon ?? 'filter_alt'}
-            label={selected.length && !filter.multiple ? `${filter.label} · ${selected[0]}` : filter.label}
+            label={
+              selected.length && !filter.multiple
+                ? `${filter.label} · ${selected[0]}`
+                : filter.label
+            }
             options={filter.options}
             selected={selected}
             multiple={filter.multiple}
@@ -78,12 +86,20 @@ export function FilterBar({
           />
         );
       })}
-      {hasActiveFilters ? (
-        <Button type="button" size="sm" variant="ghost" onClick={clearAll} disabled={isDisabled || readOnly}>
+      {showClear && hasActiveFilters ? (
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          onClick={clearAll}
+          disabled={isDisabled || readOnly}
+        >
           Clear filters
         </Button>
       ) : null}
-      {actions ? <div className="flex w-full items-center gap-2 lg:ml-auto lg:w-auto">{actions}</div> : null}
+      {actions ? (
+        <div className="flex w-full items-center gap-2 lg:ml-auto lg:w-auto">{actions}</div>
+      ) : null}
     </div>
   );
 }

@@ -17,6 +17,8 @@ export interface FilterDropdownProps {
   disabled?: boolean;
   /** Allows inspecting options without changing selection. */
   readOnly?: boolean;
+  /** Shows the selected-item count badge in the trigger. */
+  showSelectionCount?: boolean;
   /** Clase CSS adicional para el contenedor */
   className?: string;
 }

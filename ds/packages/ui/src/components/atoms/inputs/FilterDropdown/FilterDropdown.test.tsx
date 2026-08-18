@@ -42,6 +42,22 @@ describe('FilterDropdown', () => {
     expect(screen.getByRole('menuitemcheckbox', { name: 'Alpha' })).toBeInTheDocument();
   });
 
+  it('can hide the selection count for single-property controls', () => {
+    render(
+      <FilterDropdown
+        icon="sort"
+        label="Name (A-Z)"
+        options={['Name (A-Z)', 'Name (Z-A)']}
+        selected={['Name (A-Z)']}
+        showSelectionCount={false}
+        onToggle={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Name (A-Z)' })).toBeInTheDocument();
+    expect(screen.queryByText('1')).not.toBeInTheDocument();
+  });
+
   it('clears all selected values in multi-select mode', async () => {
     const onClear = vi.fn();
     render(

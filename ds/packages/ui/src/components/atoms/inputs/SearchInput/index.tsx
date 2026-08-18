@@ -61,25 +61,40 @@ export function SearchInput({
       data-tone={tone}
     >
       {loading ? (
-        <Loader2 className="size-4 shrink-0 animate-spin text-[var(--search-accent,var(--color-primary))]" aria-hidden="true" />
+        <Loader2
+          className="size-4 shrink-0 animate-spin text-[var(--search-accent,var(--color-primary))]"
+          aria-hidden="true"
+        />
       ) : (
-        <Search className="size-4 shrink-0 text-[var(--search-accent,var(--color-primary))]" aria-hidden="true" />
+        <Search
+          className="size-4 shrink-0 text-[var(--search-accent,var(--color-primary))]"
+          aria-hidden="true"
+        />
       )}
       <input
         {...inputProps}
         id={inputId}
         value={value}
+        placeholder={placeholder}
         disabled={disabled || loading}
         onChange={(event) => onValueChange(event.target.value)}
         onKeyDown={handleKeyDown}
         aria-label={ariaLabel ?? 'Search'}
         aria-busy={loading || undefined}
-        className="min-w-0 flex-1 bg-transparent text-sm text-[var(--search-text,var(--color-text-main))] outline-none placeholder:text-[var(--search-placeholder,var(--color-text-muted))]"
-        style={{ backgroundColor: 'var(--search-surface,transparent)', borderColor: 'var(--search-border,transparent)' }}
+        className="min-w-0 flex-1 bg-transparent text-sm text-[var(--search-text,var(--color-text-main))] outline-none placeholder:text-text-muted placeholder:opacity-100"
+        style={{
+          backgroundColor: 'var(--search-surface,transparent)',
+          borderColor: 'var(--search-border,transparent)',
+        }}
       />
       {loading ? <span className="sr-only">{loadingLabel}</span> : null}
       {value && !loading ? (
-        <button type="button" className="shrink-0 text-text-muted hover:text-text-main" onClick={clear} aria-label={clearLabel}>
+        <button
+          type="button"
+          className="shrink-0 text-text-muted hover:text-text-main"
+          onClick={clear}
+          aria-label={clearLabel}
+        >
           <X className="size-4" aria-hidden="true" />
         </button>
       ) : null}
