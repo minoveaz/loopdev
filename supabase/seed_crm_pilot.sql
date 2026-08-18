@@ -139,3 +139,119 @@ begin
   on conflict (id) do nothing;
 end;
 $$;
+
+-- CRM_LEAD_CONTRACT.md scenarios (Issue #84): source vocabulary, idempotent
+-- external identifiers, qualification and product-scoped conversion.
+do $$
+declare
+  target_organization_id uuid;
+  target_workspace_id uuid;
+  target_brand_id uuid;
+  owner_id uuid := '00000000-0000-4000-a000-000000000001';
+  agent_id uuid := '00000000-0000-4000-a000-000000000002';
+  qualified_lead_id uuid := '00000000-0000-4000-a800-000000000004';
+  converted_lead_id uuid := '00000000-0000-4000-a800-000000000005';
+begin
+  select id into strict target_organization_id from public.organizations where slug = 'estar-protegidos';
+  select id into strict target_workspace_id
+  from public.workspaces
+  where workspaces.organization_id = target_organization_id and suite_key = 'crm' and slug = 'sales-crm';
+  select id into strict target_brand_id
+  from public.brands
+  where brands.organization_id = target_organization_id and name = 'VitaBlue';
+
+  -- L1: manual capture, nuevo, no external attribution.
+  insert into public.crm_contacts (id, organization_id, first_name, last_name, email, phone)
+  values ('00000000-0000-4000-a700-000000000001', target_organization_id, 'Diego', 'Navarro',
+          'diego.navarro.lead@example.test', '+34611000001')
+  on conflict (id) do nothing;
+  insert into public.crm_leads
+    (id, organization_id, contact_id, brand_id, workspace_id, status, source, interest, assigned_to_user_id)
+  values
+    ('00000000-0000-4000-a800-000000000001', target_organization_id,
+     '00000000-0000-4000-a700-000000000001', target_brand_id, target_workspace_id,
+     'nuevo', 'manual', 'seguimiento comercial', agent_id)
+  on conflict (id) do nothing;
+
+  -- L2: campaign capture with provider/externalId idempotency and UTM.
+  insert into public.crm_contacts (id, organization_id, first_name, last_name, email, phone)
+  values ('00000000-0000-4000-a700-000000000002', target_organization_id, 'Sofia', 'Molina',
+          'sofia.molina.lead@example.test', '+34611000002')
+  on conflict (id) do nothing;
+  insert into public.crm_leads
+    (id, organization_id, contact_id, brand_id, workspace_id, status, source, source_provider,
+     external_lead_id, campaign, interest, assigned_to_user_id)
+  values
+    ('00000000-0000-4000-a800-000000000002', target_organization_id,
+     '00000000-0000-4000-a700-000000000002', target_brand_id, target_workspace_id,
+     'contactado', 'campaign', 'meta', 'meta-lead-seed-002', 'Campana Salud Abril',
+     'seguro salud', agent_id)
+  on conflict (id) do nothing;
+  insert into public.crm_lead_attributions
+    (id, organization_id, lead_id, source, provider, campaign, medium)
+  values
+    ('00000000-0000-4000-a900-000000000001', target_organization_id,
+     '00000000-0000-4000-a800-000000000002', 'campaign', 'meta', 'Campana Salud Abril', 'paid_social')
+  on conflict (id) do nothing;
+
+  -- L3: whatsapp_simulated, referral, social and partner sources (pilot
+  -- catalog beyond manual/campaign; no real provider is activated).
+  insert into public.crm_contacts (id, organization_id, first_name, last_name, email, phone)
+  values
+    ('00000000-0000-4000-a700-000000000003', target_organization_id, 'Marta', 'Ortega',
+     'marta.ortega.lead@example.test', '+34611000003'),
+    ('00000000-0000-4000-a700-000000000006', target_organization_id, 'Raul', 'Iglesias',
+     'raul.iglesias.lead@example.test', '+34611000006'),
+    ('00000000-0000-4000-a700-000000000007', target_organization_id, 'Laura', 'Blanco',
+     'laura.blanco.lead@example.test', '+34611000007')
+  on conflict (id) do nothing;
+  insert into public.crm_leads
+    (id, organization_id, contact_id, brand_id, workspace_id, status, source, source_provider,
+     external_lead_id, interest, assigned_to_user_id)
+  values
+    ('00000000-0000-4000-a800-000000000003', target_organization_id,
+     '00000000-0000-4000-a700-000000000003', target_brand_id, target_workspace_id,
+     'nuevo', 'whatsapp_simulated', 'meta', 'wa-msg-seed-003', 'consulta inicial', agent_id),
+    ('00000000-0000-4000-a800-000000000006', target_organization_id,
+     '00000000-0000-4000-a700-000000000006', target_brand_id, target_workspace_id,
+     'nuevo', 'referral', null, null, 'seguimiento', agent_id),
+    ('00000000-0000-4000-a800-000000000007', target_organization_id,
+     '00000000-0000-4000-a700-000000000007', target_brand_id, target_workspace_id,
+     'nuevo', 'partner', null, null, 'consulta cobertura', owner_id)
+  on conflict (id) do nothing;
+
+  -- L4: cualificado, ready for conversion but not converted yet.
+  insert into public.crm_contacts (id, organization_id, first_name, last_name, email, phone)
+  values ('00000000-0000-4000-a700-000000000004', target_organization_id, 'Pablo', 'Castro',
+          'pablo.castro.lead@example.test', '+34611000004')
+  on conflict (id) do nothing;
+  insert into public.crm_leads
+    (id, organization_id, contact_id, brand_id, workspace_id, status, source, interest, assigned_to_user_id)
+  values
+    (qualified_lead_id, target_organization_id,
+     '00000000-0000-4000-a700-000000000004', target_brand_id, target_workspace_id,
+     'cualificado', 'campaign', 'seguro hogar', owner_id)
+  on conflict (id) do nothing;
+
+  -- L5: convertido, already produced one lead_conversion Opportunity; stays
+  -- convertido and can still convert a distinct product key later.
+  insert into public.crm_contacts (id, organization_id, first_name, last_name, email, phone)
+  values ('00000000-0000-4000-a700-000000000005', target_organization_id, 'Elena', 'Suarez',
+          'elena.suarez.lead@example.test', '+34611000005')
+  on conflict (id) do nothing;
+  insert into public.crm_leads
+    (id, organization_id, contact_id, brand_id, workspace_id, status, source, interest, assigned_to_user_id)
+  values
+    (converted_lead_id, target_organization_id,
+     '00000000-0000-4000-a700-000000000005', target_brand_id, target_workspace_id,
+     'convertido', 'campaign', 'seguro salud', owner_id)
+  on conflict (id) do nothing;
+  insert into public.crm_opportunities
+    (id, organization_id, lead_id, workspace_id, name, stage, origin, product_key, amount, currency, probability)
+  values
+    ('00000000-0000-4000-a900-000000000002', target_organization_id,
+     converted_lead_id, target_workspace_id,
+     'Proteccion salud familiar', 'qualified', 'lead_conversion', 'health', 1250.00, 'EUR', 45)
+  on conflict (id) do nothing;
+end;
+$$;

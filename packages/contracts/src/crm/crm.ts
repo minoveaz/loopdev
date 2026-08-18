@@ -12,8 +12,18 @@ export const CrmLeadStageSchema = z.enum([
   'lost',
   'rejected',
   'discarded',
+  // CRM_LEAD_CONTRACT.md stable conversion stage id: the visible label/order
+  // may change without changing this id, the contract, or historical rows.
+  'qualified',
 ]);
-export const CrmLeadStatusSchema = z.enum(['active', 'inactive', 'stalled']);
+export const CrmLeadStatusSchema = z.enum([
+  'nuevo',
+  'contactado',
+  'cualificado',
+  'estancado',
+  'inactivo',
+  'convertido',
+]);
 export const CrmActivityTypeSchema = z.enum([
   'note',
   'call',
@@ -43,17 +53,26 @@ export const CrmConsentChannelSchema = z.enum([
   'phone',
 ]);
 export const CrmConsentStatusSchema = z.enum(['granted', 'withdrawn', 'not_requested']);
-export const CrmLeadSourceSchema = z.enum([
+export const CrmLeadSourceKindSchema = z.enum([
   'manual',
-  'website',
-  'facebook',
-  'instagram',
-  'whatsapp',
-  'email',
-  'referral',
   'campaign',
-  'other',
+  'whatsapp_simulated',
+  'referral',
+  'social',
+  'partner',
 ]);
+
+// CRM_LEAD_CONTRACT.md LeadSource: kind plus reserved provider/attribution
+// fields prepared for the future Marketing/WhatsApp integrations (H2), which
+// are not activated in this pilot slice.
+export const CrmLeadSourceSchema = z.object({
+  kind: CrmLeadSourceKindSchema,
+  provider: z.string().trim().max(120).nullable().optional(),
+  externalId: z.string().trim().max(240).nullable().optional(),
+  campaign: z.string().trim().max(160).nullable().optional(),
+  utm: z.record(z.string(), z.string().max(500)).default({}),
+});
+export type CrmLeadSource = z.infer<typeof CrmLeadSourceSchema>;
 
 const NullableEmailSchema = z.string().email().nullable().optional();
 const NullablePhoneSchema = z.string().trim().min(3).max(32).nullable().optional();
@@ -177,39 +196,77 @@ export type CrmContactConsent = z.infer<typeof CrmContactConsentSchema>;
 export const CrmLeadSchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
-  contactId: IdSchema,
-  brandId: IdSchema.nullable().optional(),
   workspaceId: IdSchema.nullable().optional(),
-  stage: CrmLeadStageSchema.default('lead'),
-  status: CrmLeadStatusSchema.default('active'),
-  source: CrmLeadSourceSchema.default('manual'),
-  externalLeadId: z.string().trim().max(240).nullable().optional(),
-  campaign: z.string().trim().max(160).nullable().optional(),
-  assignedToUserId: IdSchema.nullable().optional(),
+  brandId: IdSchema.nullable().optional(),
+  contactId: IdSchema,
+  status: CrmLeadStatusSchema.default('nuevo'),
+  interest: z.string().trim().max(240).nullable().optional(),
+  assignedUserId: IdSchema.nullable().optional(),
+  source: CrmLeadSourceSchema,
+  // Reserved for the Contact duplicate-review workflow; always null until
+  // that workflow is implemented (see CRM_CONTACT_CONTRACT.md duplicate review).
+  duplicateReviewId: IdSchema.nullable().optional(),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
 });
 export type CrmLead = z.infer<typeof CrmLeadSchema>;
 
+export const CrmLeadPageSchema = z.object({
+  items: z.array(CrmLeadSchema).max(100),
+  nextCursor: IdSchema.nullable(),
+  hasMore: z.boolean(),
+});
+export type CrmLeadPage = z.infer<typeof CrmLeadPageSchema>;
+
+export const CrmLeadQuerySchema = z.object({
+  organizationId: IdSchema,
+  workspaceId: IdSchema.optional(),
+  status: CrmLeadStatusSchema.optional(),
+  source: CrmLeadSourceKindSchema.optional(),
+  assignedUserId: IdSchema.optional(),
+  cursor: IdSchema.optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+});
+export type CrmLeadQuery = z.infer<typeof CrmLeadQuerySchema>;
+
+// Internal command used once a Contact is already resolved (id known).
 export const CrmCreateLeadCommandSchema = z.object({
   organizationId: IdSchema,
   contactId: IdSchema,
   brandId: IdSchema.nullable().optional(),
   workspaceId: IdSchema.nullable().optional(),
-  source: CrmLeadSourceSchema.default('manual'),
-  externalLeadId: z.string().trim().max(240).nullable().optional(),
-  campaign: z.string().trim().max(160).nullable().optional(),
-  utm: z.record(z.string(), z.string().max(500)).default({}),
   interest: z.string().trim().max(240).nullable().optional(),
+  assignedUserId: IdSchema.nullable().optional(),
+  source: CrmLeadSourceSchema,
 });
 export type CrmCreateLeadCommand = z.infer<typeof CrmCreateLeadCommandSchema>;
+
+export const CrmUpdateLeadCommandSchema = z.object({
+  organizationId: IdSchema,
+  leadId: IdSchema,
+  interest: z.string().trim().max(240).nullable().optional(),
+  assignedUserId: IdSchema.nullable().optional(),
+  brandId: IdSchema.nullable().optional(),
+  workspaceId: IdSchema.nullable().optional(),
+  expectedUpdatedAt: TimestampSchema,
+});
+export type CrmUpdateLeadCommand = z.infer<typeof CrmUpdateLeadCommandSchema>;
+
+export const CrmMoveLeadStatusCommandSchema = z.object({
+  organizationId: IdSchema,
+  leadId: IdSchema,
+  status: CrmLeadStatusSchema,
+  expectedUpdatedAt: TimestampSchema,
+});
+export type CrmMoveLeadStatusCommand = z.infer<typeof CrmMoveLeadStatusCommandSchema>;
 
 export const CrmLeadAttributionSchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
   leadId: IdSchema,
-  source: CrmLeadSourceSchema,
-  externalLeadId: z.string().trim().max(240).nullable().optional(),
+  source: CrmLeadSourceKindSchema,
+  provider: z.string().trim().max(120).nullable().optional(),
+  externalId: z.string().trim().max(240).nullable().optional(),
   campaign: z.string().trim().max(160).nullable().optional(),
   medium: z.string().trim().max(120).nullable().optional(),
   content: z.string().trim().max(240).nullable().optional(),
@@ -218,29 +275,45 @@ export const CrmLeadAttributionSchema = z.object({
 });
 export type CrmLeadAttribution = z.infer<typeof CrmLeadAttributionSchema>;
 
-export const CrmCaptureLeadCommandSchema = z.object({
-  organizationId: IdSchema,
-  brandId: IdSchema.nullable().optional(),
-  workspaceId: IdSchema.nullable().optional(),
-  firstName: z.string().trim().min(1).max(120),
-  lastName: z.string().trim().max(120).nullable().optional(),
-  email: z.string().email().nullable().optional(),
-  phone: z.string().trim().min(3).max(32).nullable().optional(),
-  companyName: z.string().trim().max(160).nullable().optional(),
-  source: CrmLeadSourceSchema,
-  externalLeadId: z.string().trim().max(240).nullable().optional(),
-  campaign: z.string().trim().max(160).nullable().optional(),
-  utm: z
-    .object({
-      source: z.string().trim().max(120).nullable().optional(),
-      medium: z.string().trim().max(120).nullable().optional(),
-      campaign: z.string().trim().max(160).nullable().optional(),
-      content: z.string().trim().max(240).nullable().optional(),
-      term: z.string().trim().max(240).nullable().optional(),
-    })
-    .default({}),
-});
+// CRM_LEAD_CONTRACT.md createLead: accepts an existing contactId or the
+// input to create a new Contact through the approved Contact contract, plus
+// source, assignment and idempotent external identifiers.
+export const CrmCaptureLeadCommandSchema = z
+  .object({
+    organizationId: IdSchema,
+    brandId: IdSchema.nullable().optional(),
+    workspaceId: IdSchema.nullable().optional(),
+    contactId: IdSchema.optional(),
+    firstName: z.string().trim().min(1).max(120).optional(),
+    lastName: z.string().trim().max(120).nullable().optional(),
+    email: z.string().email().nullable().optional(),
+    phone: z.string().trim().min(3).max(32).nullable().optional(),
+    companyName: z.string().trim().max(160).nullable().optional(),
+    interest: z.string().trim().min(1).max(240),
+    assignedUserId: IdSchema.nullable().optional(),
+    source: CrmLeadSourceSchema,
+  })
+  .refine((lead) => Boolean(lead.contactId) || Boolean(lead.firstName), {
+    message: 'contactId or a new contact firstName is required',
+    path: ['contactId'],
+  })
+  .refine((lead) => Boolean(lead.contactId) || Boolean(lead.email || lead.phone), {
+    message: 'A new contact requires at least one contact channel',
+    path: ['email'],
+  });
 export type CrmCaptureLeadCommand = z.infer<typeof CrmCaptureLeadCommandSchema>;
+
+export const LeadErrorCodeSchema = z.enum([
+  'UNAUTHENTICATED',
+  'FORBIDDEN',
+  'NOT_FOUND',
+  'CONFLICT',
+  'VALIDATION_ERROR',
+  'IDEMPOTENCY_CONFLICT',
+  'INVALID_STATUS_TRANSITION',
+  'CONTACT_REQUIRED',
+]);
+export type LeadErrorCode = z.infer<typeof LeadErrorCodeSchema>;
 
 export const CrmPipelineStageSchema = z.object({
   id: IdSchema,
@@ -255,6 +328,9 @@ export const CrmPipelineStageSchema = z.object({
 });
 export type CrmPipelineStage = z.infer<typeof CrmPipelineStageSchema>;
 
+export const CrmOpportunityOriginSchema = z.enum(['manual', 'lead_conversion']);
+export type CrmOpportunityOrigin = z.infer<typeof CrmOpportunityOriginSchema>;
+
 export const CrmOpportunitySchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
@@ -262,6 +338,10 @@ export const CrmOpportunitySchema = z.object({
   workspaceId: IdSchema.nullable().optional(),
   name: z.string().trim().min(1).max(160),
   stage: CrmLeadStageSchema,
+  origin: CrmOpportunityOriginSchema.default('manual'),
+  // Normalized product/interest key; required for origin='lead_conversion',
+  // where the tuple (organization, lead, productKey) is unique.
+  productKey: z.string().trim().max(160).nullable().optional(),
   amount: z.number().nonnegative().nullable().optional(),
   currency: z
     .string()
@@ -273,6 +353,25 @@ export const CrmOpportunitySchema = z.object({
   updatedAt: TimestampSchema,
 });
 export type CrmOpportunity = z.infer<typeof CrmOpportunitySchema>;
+
+// CRM_LEAD_CONTRACT.md createOpportunityFromLead: converts a qualified Lead
+// into (or reuses) the conversion Opportunity for one normalized product key.
+export const CrmCreateOpportunityFromLeadCommandSchema = z.object({
+  organizationId: IdSchema,
+  leadId: IdSchema,
+  productKey: z.string().trim().min(1).max(160),
+  name: z.string().trim().min(1).max(160),
+  amount: z.number().nonnegative().nullable().optional(),
+  currency: z
+    .string()
+    .regex(/^[A-Z]{3}$/)
+    .optional(),
+  probability: z.number().int().min(0).max(100).nullable().optional(),
+  expectedCloseAt: TimestampSchema.nullable().optional(),
+});
+export type CrmCreateOpportunityFromLeadCommand = z.infer<
+  typeof CrmCreateOpportunityFromLeadCommandSchema
+>;
 
 export const CrmActivitySchema = z.object({
   id: IdSchema,

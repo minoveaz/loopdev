@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { authorizeCrm } from '../_lib/access';
-import { createOpportunity } from '@/services/crm/core';
+import { createOpportunity } from '@/services/crm/leads';
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);

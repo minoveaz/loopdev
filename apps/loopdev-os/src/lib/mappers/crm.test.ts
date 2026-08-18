@@ -9,7 +9,17 @@ describe('CRM database mappers', () => {
     expect(mapCrmContactRow({ id: ids.contact, organization_id: ids.organization, first_name: 'Ana', last_name: null, email: null, phone: null, company_name: null, created_at: timestamp, updated_at: timestamp }).organizationId).toBe(ids.organization);
   });
 
+  it('maps database snake_case to the validated lead contract, including nested source', () => {
+    const lead = mapCrmLeadRow({
+      id: ids.id, organization_id: ids.organization, contact_id: ids.contact, brand_id: null, workspace_id: null,
+      status: 'nuevo', source: 'manual', source_provider: null, external_lead_id: null, campaign: null,
+      interest: 'seguro de salud', assigned_to_user_id: null, created_at: timestamp, updated_at: timestamp,
+    });
+    expect(lead.status).toBe('nuevo');
+    expect(lead.source).toEqual({ kind: 'manual', provider: null, externalId: null, campaign: null, utm: {} });
+  });
+
   it('rejects invalid database lead values at the boundary', () => {
-    expect(() => mapCrmLeadRow({ id: ids.id, organization_id: ids.organization, contact_id: ids.contact, brand_id: null, workspace_id: null, stage: 'unknown', status: 'active', source: null, campaign: null, assigned_to_user_id: null, created_at: timestamp, updated_at: timestamp })).toThrow();
+    expect(() => mapCrmLeadRow({ id: ids.id, organization_id: ids.organization, contact_id: ids.contact, brand_id: null, workspace_id: null, status: 'unknown', source: 'manual', source_provider: null, external_lead_id: null, campaign: null, interest: null, assigned_to_user_id: null, created_at: timestamp, updated_at: timestamp })).toThrow();
   });
 });
