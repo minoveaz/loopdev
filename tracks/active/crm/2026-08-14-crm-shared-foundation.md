@@ -254,7 +254,9 @@ La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
   CRM contract/API tests (15), contracts build, LoopDev OS typecheck and
   production build with local Supabase variables pass; PR #111 GitHub Actions
   passed. Contacts backend contract/API tests: 12 route tests, 8 contract
-  tests and repository typecheck pass.
+  tests and repository typecheck pass. Contacts RLS/integrity coverage now adds
+  organization isolation, scoped foreign keys and duplicate protection; all
+  database suites pass with 133 tests.
 - **Siguiente acción concreta:** añadir fixtures y pruebas de aislamiento
   específicas de Contacts, revisar la matriz RLS/API y preparar el handoff para
   el equipo frontend; no cerrar el track hasta certificar Contacts y registrar
