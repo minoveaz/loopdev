@@ -53,6 +53,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { TechnicalCanvasCertification } from './certification-lab/TechnicalCanvasCertification';
 import { TechnicalSurfaceCertification } from './certification-lab/TechnicalSurfaceCertification';
 import { TechnicalCardCertification } from './certification-lab/TechnicalCardCertification';
+import { SearchInputCertification } from './certification-lab/SearchInputCertification';
+import { LoopdevComponentsCatalog } from './certification-lab/LoopdevComponentsCatalog';
+import { ResponsiveTableCertification } from './certification-lab/ResponsiveTableCertification';
 import { CRMPrimitivesCatalog } from './CRMPrimitivesCatalog';
 import { DataTablesCatalog } from './DataTablesCatalog';
 import type { ActivityRow } from '@/components/composites/data-tables/ActivityTable';
@@ -1466,11 +1469,25 @@ const CERTIFICATION_COMPONENTS = [
     action: 'Controlled filter and action composition',
   },
   {
+    id: 'SearchInput',
+    label: 'SearchInput',
+    status: 'experimental',
+    statusTone: 'warning',
+    action: 'Reusable controlled search pattern',
+  },
+  {
     id: 'CRMPrimitives',
     label: 'CRM primitives',
     status: 'certified',
     statusTone: 'neutral',
     action: 'Certified CRM component inventory',
+  },
+  {
+    id: 'LoopdevComponents',
+    label: 'Loopdev components',
+    status: 'experimental',
+    statusTone: 'warning',
+    action: 'Reusable component contracts for future suites',
   },
 ] as const;
 
@@ -1496,6 +1513,15 @@ const CERTIFICATION_GROUPS = [
     componentIds: ['FiltersActions'],
   },
   {
+    id: 'suite-patterns',
+    label: 'Suite patterns',
+    description: 'Reusable interaction patterns for CRM and future suites',
+    status: 'experimental',
+    statusTone: 'warning',
+    entryComponent: 'SearchInput',
+    componentIds: ['SearchInput'],
+  },
+  {
     id: 'crm-primitives',
     label: 'CRM Primitives',
     description: 'Certified CRM component inventory',
@@ -1503,6 +1529,15 @@ const CERTIFICATION_GROUPS = [
     statusTone: 'neutral',
     entryComponent: 'CRMPrimitives',
     componentIds: ['CRMPrimitives'],
+  },
+  {
+    id: 'loopdev-components',
+    label: 'Loopdev components',
+    description: 'Reusable components with explicit suite contracts',
+    status: 'experimental',
+    statusTone: 'warning',
+    entryComponent: 'LoopdevComponents',
+    componentIds: ['LoopdevComponents'],
   },
 ] as const satisfies ReadonlyArray<{
   id: string;
@@ -1652,8 +1687,14 @@ const CertificationLabCanvas = ({
       />
     );
   }
+  if (selected === 'SearchInput') {
+    return <SearchInputCertification />;
+  }
   if (selected === 'CRMPrimitives') {
     return <CRMPrimitivesCatalog />;
+  }
+  if (selected === 'LoopdevComponents') {
+    return <LoopdevComponentsCatalog />;
   }
   return (
     <div className="space-y-5">
@@ -1835,6 +1876,10 @@ export default function CompositionShowcasePage() {
       certificationPath === '/composition-showcase/certification-lab/CRMPrimitives';
     const isDataTablesRoute =
       certificationPath === '/composition-showcase/certification-lab/data-tables';
+    const isSuitePatternsRoute =
+      certificationPath === '/composition-showcase/certification-lab/suite-patterns';
+    const isLoopdevComponentsRoute =
+      certificationPath === '/composition-showcase/certification-lab/loopdev-components';
     const params = new URLSearchParams(window.location.search);
     const requestedRecipe = params.get('recipe');
     const requestedDataset = params.get('dataset');
@@ -1842,7 +1887,11 @@ export default function CompositionShowcasePage() {
 
     startTransition(() => {
       setRecipe(
-        isCrmPrimitivesRoute || isUiFoundationRoute || isDataTablesRoute
+        isCrmPrimitivesRoute ||
+        isUiFoundationRoute ||
+        isDataTablesRoute ||
+        isSuitePatternsRoute ||
+        isLoopdevComponentsRoute
           ? 'CertificationLab'
           : requestedRecipe && requestedRecipe in FIXTURES
             ? (requestedRecipe as RecipeName)
@@ -1856,6 +1905,10 @@ export default function CompositionShowcasePage() {
             ? 'TechnicalCanvas'
             : isDataTablesRoute
               ? 'FiltersActions'
+                : isSuitePatternsRoute
+                  ? 'SearchInput'
+                  : isLoopdevComponentsRoute
+                    ? 'LoopdevComponents'
               : CERTIFICATION_COMPONENTS.some((component) => component.id === requestedComponent)
                 ? (requestedComponent as CertificationComponent)
                 : 'TechnicalCanvas',
@@ -2045,6 +2098,10 @@ export default function CompositionShowcasePage() {
                   router.push('/composition-showcase/certification-lab/CRMPrimitives');
                 } else if (component === 'FiltersActions') {
                   router.push('/composition-showcase/certification-lab/data-tables');
+                } else if (component === 'SearchInput') {
+                  router.push('/composition-showcase/certification-lab/suite-patterns');
+                } else if (component === 'LoopdevComponents') {
+                  router.push('/composition-showcase/certification-lab/loopdev-components');
                 } else {
                   router.push('/composition-showcase/certification-lab/UI-foundation');
                 }

@@ -32,6 +32,7 @@ la existencia de un track no implica que tenga autorizacion para iniciar impleme
 | `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | G0 completado y aprobado |
 | `crm-shared-foundation` | activo, unico frente de implementacion | Avanzar solo con la validacion remota de Supabase/RLS, seed/reset y checks contractuales | PR de G0 con checks reproducibles |
 | `crm-ui-foundation` | pausado para nuevos slices | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0 |
+| `reusable-suite-composition-patterns` | activo, plataforma paralela | Preparar patrones frontend reutilizables sin tocar G0 ni contratos CRM | Contrato y evidencia de `SearchInput`, `FilterBar` y `QueryToolbar` |
 | `estar-protegidos-crm-platform` | historico, fuera del WIP | No usarlo para planificar entregas; el piloto central lo supersede operativamente | Migracion o cierre documental posterior |
 
 ### Regla de trabajo

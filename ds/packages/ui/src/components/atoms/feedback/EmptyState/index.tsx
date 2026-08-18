@@ -22,12 +22,21 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
     iconBadge,
     isLoading = false,
     loadingMessages = ['Analyzing system components...', 'Optimizing structure...']
+    , colors
   } = props;
 
   const { containerClasses, iconSize, isAI } = useEmptyState(props);
 
   return (
-    <div className={containerClasses} role="status">
+    <div
+      className={containerClasses}
+      role="status"
+      style={{
+        ...(colors?.surface ? { '--empty-surface': colors.surface } : {}),
+        ...(colors?.border ? { '--empty-border': colors.border } : {}),
+        ...(colors?.text ? { '--empty-text': colors.text } : {}),
+      } as React.CSSProperties}
+    >
       
       {/* 1. Dynamic Background Patterns */}
       {isAI ? (

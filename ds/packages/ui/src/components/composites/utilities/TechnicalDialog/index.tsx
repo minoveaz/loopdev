@@ -108,6 +108,11 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
                   </LpdText>
                 </Dialog.Description>
               )}
+              {!description && (
+                <Dialog.Description className="sr-only">
+                  Dialog content
+                </Dialog.Description>
+              )}
             </div>
           </div>
           <Dialog.Close asChild>

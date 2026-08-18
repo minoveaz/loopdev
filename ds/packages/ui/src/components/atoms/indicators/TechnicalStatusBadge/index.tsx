@@ -17,7 +17,8 @@ export const TechnicalStatusBadge: React.FC<TechnicalStatusBadgeProps> = ({
   bracketColor,
   variant = 'glass',
   withPulse = false,
-  className
+  className,
+  colors,
 }) => {
   
   // 1. Mapeo de colores para los Brackets { }
@@ -54,7 +55,15 @@ export const TechnicalStatusBadge: React.FC<TechnicalStatusBadgeProps> = ({
   );
 
   return (
-    <div className={containerClasses}>
+    <div
+      className={containerClasses}
+      style={{
+        ...(colors?.surface ? { '--badge-surface': colors.surface } : {}),
+        ...(colors?.border ? { '--badge-border': colors.border } : {}),
+        ...(colors?.text ? { '--badge-text': colors.text } : {}),
+        ...(colors?.accent ? { '--badge-accent': colors.accent } : {}),
+      } as React.CSSProperties}
+    >
       {/* Efecto Shimmer sutil (ADN Lab) */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
 
@@ -88,3 +97,6 @@ export const TechnicalStatusBadge: React.FC<TechnicalStatusBadgeProps> = ({
     </div>
   );
 };
+
+export const StatusBadge = TechnicalStatusBadge;
+export type StatusBadgeProps = TechnicalStatusBadgeProps;
