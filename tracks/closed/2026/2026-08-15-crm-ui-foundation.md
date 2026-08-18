@@ -1,9 +1,10 @@
 ---
 id: crm-ui-foundation
 title: CRM UI foundation and composition
-status: active
+status: closed
 created: 2026-08-15
 updated: 2026-08-18
+closed: 2026-08-18
 owner: crm
 lead: User
 branch: feature/crm-ui-foundation
@@ -23,17 +24,17 @@ supersedes: []
 
 ## Estado actual del track
 
-**Fase activa:** `Phase 1 — reusable UI foundation`
-**Estado:** `active / shell geometry gate certified; CRM foundation remains open`
+**Fase cerrada:** `Phase 1 — reusable UI foundation`
+**Estado:** `closed / visual, responsive and accessibility gates certified`
 **Último cierre:** certificación de las cinco composiciones CRM de datos
 (`EntityTable`, `DenseOperationalTable`, `QuantitativeTable`, `ActivityTable` y
 `SelectionTable`).
 **Siguiente gate:** completar las brechas CRM explícitas antes de la entrada en
 Phase 2; el contrato de navegación móvil y geometría del Shell ya está cerrado.
 
-La certificación de tablas no implica que el track completo esté cerrado:
-las composiciones posteriores de CRM y la entrada en Phase 2 siguen siendo
-trabajo pendiente del track.
+La certificación de tablas y de las composiciones responsive cierra el alcance de este track.
+Las composiciones posteriores de CRM y la entrada en Phase 2 pertenecen a los tracks de módulos y
+siguen bloqueadas por G0; no forman parte de esta foundation.
 
 ### Actualización 2026-08-18: shell y panel contextual de plataforma
 
@@ -1892,7 +1893,7 @@ The UX/UI contract is ready for implementation only when:
 
 **Audit date:** `2026-08-16`
 **Batch status:** `closed / certified`
-**Track status:** `active` pending mobile shell navigation follow-up
+**Track status:** `closed`
 
 The following short CRM primitive batch is closed and certified:
 
@@ -2004,6 +2005,18 @@ pagination, responsive transformation, status semantics or the shared table
 primitive reopen the applicable evidence gates.
 
 The data-table certification slice is closed for the reviewed contracts.
+
+## Cierre del track
+
+**Fecha de cierre:** `2026-08-18`
+
+El track queda cerrado con la certificación visual, responsive y de accesibilidad de las cinco
+composiciones de datos y de la superficie Shell consumida por CRM. La matriz Playwright del Shell y
+las composiciones `shell-showcase` y `composition-showcase` pasan en desktop, mobile y
+mobile-compact; los checks focales y Axe registrados en este documento también están en verde.
+
+El cierre no habilita Phase 2 ni sustituye G0: Contacts, Leads, Pipeline, Tasks y Customer 360
+requieren primero la foundation compartida, persistencia, RLS y validación de aislamiento tenant.
 
 ## SelectionTable certification closure
 

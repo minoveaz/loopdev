@@ -1,7 +1,7 @@
 ---
 id: crm-pilot-execution
 title: CRM Pilot Execution
-status: planned
+status: active
 created: 2026-08-13
 updated: 2026-08-18
 owner: crm
@@ -20,6 +20,26 @@ supersedes: [estar-protegidos-crm-platform]
 ---
 
 # CRM Pilot Execution
+
+## Checkpoint operativo 2026-08-18
+
+El programa se mantiene como el unico frente de coordinacion del piloto CRM. Para reducir el
+trabajo en curso, los tracks se clasifican por su capacidad real de producir el siguiente gate;
+la existencia de un track no implica que tenga autorizacion para iniciar implementacion.
+
+| Track | Estado operativo | Decisión | Siguiente evidencia |
+| --- | --- | --- | --- |
+| `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | G0 completado y aprobado |
+| `crm-shared-foundation` | activo, unico frente de implementacion | Avanzar solo con la validacion remota de Supabase/RLS, seed/reset y checks contractuales | PR de G0 con checks reproducibles |
+| `crm-ui-foundation` | pausado para nuevos slices | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0 |
+| `estar-protegidos-crm-platform` | historico, fuera del WIP | No usarlo para planificar entregas; el piloto central lo supersede operativamente | Migracion o cierre documental posterior |
+
+### Regla de trabajo
+
+Hasta cerrar G0/#68 solo se mantiene un track CRM de implementación activo: `crm-shared-foundation`.
+Contacts (#82), Leads (#84), Pipeline (#85), Tasks (#87), Customer 360 (#88) y los tracks de G1
+permanecen bloqueados o en espera. La UI certificada por #108 no reabre trabajo de producto ni
+autoriza iniciar G1. Cualquier nuevo slice requiere actualizar primero este checkpoint y el Project.
 
 ## Outcome
 
