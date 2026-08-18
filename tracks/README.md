@@ -4,10 +4,6 @@
 
 ## Planificados
 
-### CRM
-
-- [CRM Pilot Execution](./planned/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
-
 ### Marketing Studio
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
@@ -26,8 +22,8 @@
 ### CRM
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
-- [CRM shared foundation implementation](./active/crm/2026-08-14-crm-shared-foundation.md) · `feature/crm-shared-foundation` · fase 0
-- [CRM UI foundation and composition](./active/crm/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
+- [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
+- [CRM shared foundation implementation](./active/crm/2026-08-14-crm-shared-foundation.md) · `feature/crm-g0-shared-foundation` · fase 1
 
 ### Mobile
 
@@ -72,3 +68,4 @@
 - [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./closed/2026/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
 - [CRM component inventory and reuse architecture](./closed/2026/2026-08-13-crm-component-inventory.md) · fase 3
 - [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4
+- [CRM UI foundation and composition](./closed/2026/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
