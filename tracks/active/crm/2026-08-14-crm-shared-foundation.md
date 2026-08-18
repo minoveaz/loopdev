@@ -204,6 +204,22 @@ La primera entrega cubre listado/búsqueda autorizados con cursor, creación
 validada y actualización con control optimista mediante `expectedUpdatedAt`.
 La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
 
+### Relación con la estandarización de primitives compartidos
+
+La experiencia visual transversal de CRM y del resto de suites se gobierna fuera
+de este track por los tracks activos `saas-visual-standardization`,
+`platform-shell-mode-inventory`, `shell-standardization` y
+`loopdev-frontend-quality-system`. Esos tracks definen tokens, recipes,
+`SuiteCanvas`, `SuiteShell`, `ModuleShell`, estados, responsive y los gates
+visuales; el inventario específico de componentes CRM ya fue cerrado como
+`crm-component-inventory`.
+
+Esta dependencia afecta exclusivamente a la integración frontend y no bloquea
+los slices backend-first. Contacts entrega contratos, API, autorización, RLS y
+fixtures para que la UI consuma los primitives certificados cuando el equipo
+frontend continúe la integración. Los módulos siguientes deben reutilizar esos
+contratos visuales y no crear primitives CRM paralelos.
+
 ## Riesgos y bloqueos
 
 | Riesgo o bloqueo                                                     | Impacto                                                     | Mitigación                                                              | Responsable  | Estado                                                                 |
@@ -269,9 +285,9 @@ La UI, Customer 360 visual y merge humano quedan fuera de esta iteración.
   Los usuarios de prueba usan exclusivamente `example.test`.
 - **Validación adicional:** `supabase db reset --local --yes` pasa cargando el
   seed base y el pack piloto sin errores.
-- **Siguiente acción concreta:** publicar la certificación de Contacts en su PR,
-  confirmar el handoff con el equipo frontend y solicitar aprobación explícita
-  para cerrar este track.
+- **Siguiente acción concreta:** cerrar formalmente este track tras la aprobación
+  explícita y abrir el slice backend-first de Leads; la integración visual
+  quedará coordinada con los tracks de primitives y shell compartidos.
 
 ## Cierre
 
