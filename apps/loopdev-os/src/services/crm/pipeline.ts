@@ -19,6 +19,7 @@ import type {
   PipelineStage,
 } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import type { Database } from '@/types/database.types';
 import { recordCrmAuditEvent } from './operations';
 import { normalizeProductKey } from './leads';
 
@@ -276,9 +277,7 @@ export async function createManualOpportunity(input: CrmCreateManualOpportunityC
 
   const stage = await loadDefaultStage(parsed.organizationId, parsed.workspaceId);
   if (!stage) throw new OpportunityServiceError('CRM pipeline has no active open stage', 'INVALID_STAGE');
-  const { data, error } = await supabase
-    .from('crm_opportunities')
-    .insert({
+  const opportunityInsert: Database['public']['Tables']['crm_opportunities']['Insert'] = {
       organization_id: parsed.organizationId,
       workspace_id: parsed.workspaceId ?? null,
       brand_id: parsed.brandId ?? null,
@@ -286,8 +285,8 @@ export async function createManualOpportunity(input: CrmCreateManualOpportunityC
       lead_id: null,
       name: parsed.name,
       product_key: productKey,
-      stage: stage.stage_key,
-      stage_key: stage.stage_key,
+      stage: String(stage.stage_key),
+      stage_key: String(stage.stage_key),
       origin: 'manual',
       amount: parsed.amount ?? null,
       currency: parsed.currency,
@@ -297,7 +296,10 @@ export async function createManualOpportunity(input: CrmCreateManualOpportunityC
       version: 1,
       idempotency_key: parsed.idempotencyKey,
       idempotency_fingerprint: expectedFingerprint,
-    })
+    };
+  const { data, error } = await supabase
+    .from('crm_opportunities')
+    .insert(opportunityInsert)
     .select(opportunityColumns)
     .single();
   if (error) {
