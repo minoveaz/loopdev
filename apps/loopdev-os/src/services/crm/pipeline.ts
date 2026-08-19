@@ -43,9 +43,6 @@ export class OpportunityServiceError extends Error {
 }
 
 type DbRow = Record<string, unknown>;
-type SupabaseLike = {
-  from: (table: string) => any;
-};
 
 const opportunityColumns =
   'id, organization_id, workspace_id, brand_id, contact_id, lead_id, name, product_key, stage, stage_key, origin, amount, currency, probability, expected_close_at, assigned_to_user_id, version, idempotency_key, idempotency_fingerprint, created_at, updated_at';
@@ -53,7 +50,7 @@ const stageColumns =
   'id, organization_id, workspace_id, key, stage_key, label, position, active, terminal_type, created_at, updated_at';
 
 async function getDb() {
-  return (await createServerSupabaseClient()) as unknown as SupabaseLike;
+  return createServerSupabaseClient();
 }
 
 function timestamp(value: unknown): string {
