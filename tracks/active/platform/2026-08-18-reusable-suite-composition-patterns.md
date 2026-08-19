@@ -34,6 +34,14 @@ compositions are available. The next reusable boundary is the pattern layer betw
 module pages. This track provides stable contracts for repeated operational workflows while keeping
 business logic in the consuming suite.
 
+## Decisiones aprobadas para C11
+
+| Fecha | Decisión | Motivo | Impacto | Aprobado por |
+| --- | --- | --- | --- | --- |
+| 2026-08-19 | C11 se implementa en este track como una certificación visual y contractual pequeña del Kanban genérico. | Validar la composición reutilizable sin mezclar Pipeline CRM, persistencia o permisos en el DS. | Se usa `KanbanBoard` existente; no se instala `dnd-kit` ni se implementa drag and drop de producto. | User |
+| 2026-08-19 | Los bloques Kanban admiten tonos semánticos controlados por etapa. | Permitir estados visuales como oportunidades perdidas sin hardcodear lógica CRM ni colores de tenant. | El contrato usa `neutral`, `primary`, `success`, `warning` y `danger`; la suite decide el significado. | User |
+| 2026-08-19 | Las capacidades avanzadas quedan documentadas para un futuro track específico de Kanban. | Mantener C11 pequeño y estable sin perder el backlog de evolución. | El futuro track cubrirá interacción, accesibilidad avanzada, vistas, selección y estados operativos. | User |
+
 ## Alcance inicial
 
 ### Incluido
@@ -54,6 +62,8 @@ business logic in the consuming suite.
 - New Shell, SuiteRuntime or SuiteCanvas contracts.
 - Route implementation for Contacts, Leads, Pipeline, Tasks or Customer 360.
 - Promotion of a pattern without a reviewed contract and focused evidence.
+- Implementation of product-specific drag and drop for Pipeline CRM or adoption
+      of an external drag and drop dependency.
 
 ## Primer slice
 
@@ -202,14 +212,113 @@ variantes de tabla.
 aprobadas visualmente en modo claro y oscuro, en desktop y mobile. Esta
 aprobación no sustituye los gates técnicos globales pendientes.
 
+**Revisión visual C10 (2026-08-19):** La composición de dashboards y resumen
+(`DashboardSummaryCertification`) fue revisada y aprobada en móvil y desktop,
+en modo claro y oscuro. La revisión cubre métricas, actividad, acciones rápidas,
+próximos pasos, progreso y resumen de calendario. El layout móvil se mantiene
+sin overflow visible mediante composición responsive sobre componentes DS
+existentes. No se crean nuevos componentes de calendario, progreso o resumen en
+esta iteración; la necesidad de extraerlos queda pendiente de consumidores
+reales y del track de evaluación de dependencias externas.
+
+**Evidencia técnica C10:** La fixture consume `MetricCard`, `ActivityStream`,
+`QuickActionMenu`, `TechnicalSurface`, `Button` e `Icon` desde `@loopdev/ui`.
+El ajuste responsive de `ActivityStream` evita overflow en móvil sin alterar el
+layout de desktop. No se promovió la fixture como componente compartido ni se
+añadió una entrada de registry, porque representa una composición de
+certificación y no una responsabilidad reutilizable independiente.
+
+Validación ejecutada el 2026-08-19: test focalizado de `ActivityStream` (3/3,
+incluida accesibilidad base), typecheck de `@loopdev/ui`, Prettier y
+`git diff --check`.
+
 ### Fase C: operaciones avanzadas y plataforma
 
 9. **Acciones operativas**: `Button`, `IconButton`, menús de acción, bulk
    actions, confirmaciones, export/import, retry y undo.
-10. **Dashboards y resumen**: métricas, actividad, quick actions, próximos
-    pasos, progreso y resúmenes de calendario.
-11. **Tableros y visualizaciones**: `KanbanBoard`, timeline, activity stream,
-    progreso y vistas board/list con alternativa de teclado.
+10. [x] **Dashboards y resumen:** métricas, actividad, quick actions, próximos
+      pasos, progreso y resúmenes de calendario; composición responsive aprobada
+      en móvil y desktop, claro y oscuro.
+11. [x] **Tableros y visualizaciones:** `KanbanBoard`, timeline, activity stream,
+    progreso y vistas board/list con alternativa de teclado. En este track se
+    limita a contrato y certificación visual del patrón; la implementación real
+    de drag and drop, incluyendo `dnd-kit`, queda reservada al Pipeline CRM.
+      Las columnas deben admitir tonos semánticos controlados (`neutral`,
+      `primary`, `success`, `warning`, `danger`) para representar etapas como
+      oportunidades perdidas sin introducir colores de tenant ni lógica CRM en
+      el componente compartido.
+
+### C11: alcance de esta iteración
+
+**Objetivo:** certificar un Kanban genérico que cualquier suite pueda componer
+cuando necesite una vista de etapas, sin convertirlo en un motor de workflow.
+
+**Incluido en C11**
+
+- Fixture domain-neutral con cuatro o cinco columnas.
+- Columnas con ancho estable, scroll horizontal controlado y scroll vertical
+      interno para tarjetas.
+- Tonos semánticos de columna: `neutral`, `primary`, `success`, `warning` y
+      `danger`.
+- Contadores y métricas opcionales por columna.
+- Tarjetas custom mediante `renderCard`.
+- Estados visuales normal, hover, focus, selected, read-only y disabled.
+- Loading, empty board, empty column y contenido largo.
+- Acciones de tarjeta y columna mediante slots o callbacks.
+- Revisión responsive en desktop, tablet y mobile, en claro y oscuro.
+- Alternativa visual reservada para `Move to...`, sin implementar todavía la
+      mutación de Pipeline.
+
+**Excluido de C11**
+
+- `dnd-kit` y drag and drop de producto.
+- Persistencia, optimistic updates, rollback y auditoría.
+- Permisos CRM y reglas de transición entre etapas.
+- Datos, fetching y contratos de entidades CRM.
+- Swimlanes, timeline, dependencias y automatizaciones.
+- Bulk selection completa y acciones masivas de dominio.
+
+**Estado:** certificado visualmente y contractualmente el 2026-08-19.
+
+**Evidencia de C11:** La fixture `KanbanBoardCertification` consume el
+`KanbanBoard` y `ResponsiveTable` existentes desde `@loopdev/ui`, con datos
+domain-neutral, cinco columnas, tonos semánticos, métricas, búsqueda, filtros,
+ordenación y selector Board/List. La vista List usa la superficie estándar de
+`ResponsiveTable`; en mobile utiliza su contrato `renderMobileRow` para
+transformarse en una lista legible, sin crear una tabla paralela.
+
+La revisión visual fue aprobada en claro y oscuro, desktop y mobile. Se
+verificaron superficie, contraste, overflow horizontal del board, touch targets,
+acciones, estado vacío y comportamiento responsive de la lista. No se instala
+`dnd-kit` ni se implementa mutación de Pipeline en C11.
+
+**Validación técnica ejecutada:** Prettier, TypeScript de `loopdev-os`, tests
+focalizados de `ResponsiveTable` (12/12) y `git diff --check`.
+
+**Handoff:** C11 queda cerrado en este track. La interacción avanzada de
+Kanban, incluyendo drag and drop con mouse, touch y teclado, ordenación,
+rollback, persistencia, permisos y adapter de `dnd-kit`, queda reservada para
+el futuro track específico de Pipeline CRM.
+
+**Backlog para un futuro track específico de Kanban**
+
+- Drag and drop con mouse, touch y teclado; `dnd-kit` se evaluará e
+      implementará en el Pipeline CRM mediante un adapter LoopDev.
+- Ordenamiento dentro de columnas y movimiento entre columnas.
+- Drag overlay, colisiones, restricciones y cancelación.
+- Anuncios accesibles, focus restoration y alternativa completa de `Move to...`.
+- Capacidad por columna y estados por encima del límite.
+- Filtros, búsqueda y estado `filtered empty` integrados con `QueryToolbar`.
+- Selección múltiple, bulk actions y acciones contextuales avanzadas.
+- Columnas colapsables, swimlanes y agrupación por responsable o prioridad.
+- Vistas board/list y transformación específica para mobile.
+- Offline/stale state, errores por tarjeta y recuperación de mutaciones.
+- Contratos de rendimiento, bundle, SSR, Axe y evidencia Playwright.
+
+**Criterio de no duplicación:** C11 debe componer `KanbanBoard`, `TechnicalSurface`,
+`StatusBadge`, `QueryToolbar` y primitives existentes siempre que cubran la
+responsabilidad. No se crearán `PipelineCard`, `KanbanColumnHeader` u otros
+componentes CRM dentro de `@loopdev/ui` durante esta iteración.
 12. **Feedback y contexto global**: `Toast`, `CommandDialog`,
     `TechnicalDialog`, `PlatformHeader` con bombillo, `ContextPanelHost` y
     `PlatformContextPanel` para notificaciones, ayuda, asistente y perfil.

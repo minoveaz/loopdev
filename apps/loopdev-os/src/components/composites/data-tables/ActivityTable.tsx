@@ -119,6 +119,7 @@ export function ActivityTable({
   return (
     <TechnicalSurface variant="surface" radius="md" border="subtle" className="w-full min-w-0">
       <ResponsiveTable
+        surface={false}
         className="[&_thead_tr]:bg-background-subtle [&_tbody_td]:py-3 [&_tbody_tr:hover]:bg-background-subtle"
         caption="Activity events"
         rows={rows}
