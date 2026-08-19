@@ -173,8 +173,9 @@ documental en el Issue #88; Daily Operation sigue siendo resultado transversal d
 
 El paquete de Tasks queda aprobado por User el 2026-08-13: UX spec, component audit, contract e
 impact assessment aprobados, y implementation handoff aprobado para handoff. Tasks queda Ready
-documental en el Issue #87; Daily Operation permanece como resultado transversal de G3 y la
-implementacion no inicia en esta rama.
+documental en el Issue #87; Daily Operation permanece como resultado transversal de G3. La
+implementacion backend-first de Tasks se ejecuta ahora en `feature/crm-pilot-pipeline-implementation`;
+la UI y staging/UAT siguen fuera de este slice.
 
 El alcance final del piloto queda aprobado por User el 2026-08-13. Incluye Auth, Contacts, Leads,
 Pipeline, Tasks, Notes, Timeline, Customer 360, RLS, aislamiento tenant, auditoria, staging y UAT.
@@ -528,7 +529,8 @@ de los delivery tracks.
 
 **Entregables**
 
-- [ ] Notas, tareas, completado y timeline.
+- [x] Notas, tareas, completado y timeline en backend-first: contratos, schema/RLS, servicio, API,
+  fixtures y pruebas locales; la integración de producto queda pendiente.
 - [ ] Customer 360 minimo.
 - [ ] Staging reproducible, health, logs, Sentry y UAT 1.
 
@@ -610,6 +612,7 @@ go-live o UAT privado.
 | 2026-08-19 | Pipeline backend (#85): reset, contratos, typecheck y CRM tests | Reset local correcto: migraciones hasta `20260904000000_crm_pipeline_contract.sql` y seed aplicados; contratos build, typecheck completo (11/11), tests CRM focalizados (12/12) y governance Supabase correctos. `005_crm_security.sql` ahora cubre políticas/FKs de Pipeline y las 5 suites top-level pasan 148 aserciones. | El runner global sigue incluyendo `helpers/rls_helpers.sql` como suite independiente y termina con parse error de plan; falta E2E HTTP de Opportunities porque el servidor local requiere `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` explícitos |
 | 2026-08-19 | Pipeline backend y matriz CI (#85) | Correcta: PR #121 mergeado en `develop` mediante `f577f045`; 148 aserciones pgTAP, matriz HTTP autenticada owner/viewer, tests CRM focalizados, typecheck, build, CodeQL y CI backend pasan. E2E frontend queda omitido por routing backend-only. | G2 backend implementado; permanecen la validación integral de G1, staging/UAT y el cierre explícito del gate |
 | 2026-08-19 | UAT técnico backend de Pipeline | Correcta: flujo HTTP autenticado owner/viewer verificado para stages, creación, listado, retry idempotente, movimiento, reapertura, actualización, conflicto `409` y autorización `403`; pgTAP confirma RLS, FKs e historial. | UAT visual, drag-and-drop, responsive y accesibilidad frontend quedan pendientes hasta implementar la UI |
+| 2026-08-19 | Tasks backend-first (#87): contratos, schema/RLS, servicio, API, fixtures y pruebas | Correcta en local: `supabase db reset --local`, `006_crm_tasks_contract.sql` (18/18), `@loopdev/contracts` build, typecheck explícito de `loopdev-os`, tests CRM/API focalizados (49/49), governance Supabase y ownership de contratos. | Se implementan Task/Note/TimelineEvent, relaciones Contact/Lead/Opportunity, lifecycle, versionado optimista, idempotencia y timeline transaccional append-only; faltan E2E autenticado, staging/UAT y validación de concurrencia HTTP |
 
 ## Handoff de sesion
 

@@ -2512,40 +2512,55 @@ export type Database = {
       crm_notes: {
         Row: {
           author_user_id: string
+          brand_id: string | null
           body: string
           contact_id: string | null
           created_at: string
           id: string
+          idempotency_fingerprint: string | null
           lead_id: string | null
           opportunity_id: string | null
           organization_id: string
+          relation_id: string
+          relation_type: string
           updated_at: string
+          version: number
           visibility: string
           workspace_id: string | null
         }
         Insert: {
           author_user_id: string
+          brand_id?: string | null
           body: string
           contact_id?: string | null
           created_at?: string
           id?: string
+          idempotency_fingerprint?: string | null
           lead_id?: string | null
           opportunity_id?: string | null
           organization_id: string
+          relation_id?: string
+          relation_type?: string
           updated_at?: string
+          version?: number
           visibility?: string
           workspace_id?: string | null
         }
         Update: {
           author_user_id?: string
+          brand_id?: string | null
           body?: string
           contact_id?: string | null
           created_at?: string
           id?: string
+          idempotency_fingerprint?: string | null
           lead_id?: string | null
           opportunity_id?: string | null
           organization_id?: string
+          relation_id?: string
+          relation_type?: string
           updated_at?: string
+          version?: number
           visibility?: string
           workspace_id?: string | null
         }
@@ -3010,48 +3025,147 @@ export type Database = {
           },
         ]
       }
+      crm_timeline_events: {
+        Row: {
+          actor_id: string | null
+          actor_type: string
+          brand_id: string | null
+          id: string
+          metadata: Json
+          occurred_at: string
+          operation_fingerprint: string | null
+          operation_key: string | null
+          organization_id: string
+          origin: string
+          relation_id: string
+          relation_type: string
+          source_id: string
+          source_type: string
+          summary: string
+          type: string
+          workspace_id: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_type: string
+          brand_id?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          operation_fingerprint?: string | null
+          operation_key?: string | null
+          organization_id: string
+          origin: string
+          relation_id: string
+          relation_type: string
+          source_id: string
+          source_type: string
+          summary: string
+          type: string
+          workspace_id?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          actor_type?: string
+          brand_id?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          operation_fingerprint?: string | null
+          operation_key?: string | null
+          organization_id?: string
+          origin?: string
+          relation_id?: string
+          relation_type?: string
+          source_id?: string
+          source_type?: string
+          summary?: string
+          type?: string
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_timeline_events_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "crm_timeline_events_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
       crm_tasks: {
         Row: {
           assigned_to_user_id: string | null
+          brand_id: string | null
           completed_at: string | null
           created_at: string
+          created_by_user_id: string | null
           description: string | null
           due_at: string | null
           id: string
-          lead_id: string
+          idempotency_fingerprint: string | null
+          lead_id: string | null
           organization_id: string
           priority: string
+          relation_id: string
+          relation_type: string
           status: string
           title: string
+          type: string | null
           updated_at: string
+          version: number
+          workspace_id: string | null
         }
         Insert: {
           assigned_to_user_id?: string | null
+          brand_id?: string | null
           completed_at?: string | null
           created_at?: string
+          created_by_user_id?: string | null
           description?: string | null
           due_at?: string | null
           id?: string
-          lead_id: string
+          idempotency_fingerprint?: string | null
+          lead_id?: string | null
           organization_id: string
           priority?: string
+          relation_id?: string
+          relation_type?: string
           status?: string
           title: string
+          type?: string | null
           updated_at?: string
+          version?: number
+          workspace_id?: string | null
         }
         Update: {
           assigned_to_user_id?: string | null
+          brand_id?: string | null
           completed_at?: string | null
           created_at?: string
+          created_by_user_id?: string | null
           description?: string | null
           due_at?: string | null
           id?: string
+          idempotency_fingerprint?: string | null
           lead_id?: string
           organization_id?: string
           priority?: string
+          relation_id?: string
+          relation_type?: string
           status?: string
           title?: string
+          type?: string | null
           updated_at?: string
+          version?: number
+          workspace_id?: string | null
         }
         Relationships: [
           {
