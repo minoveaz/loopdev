@@ -24,7 +24,12 @@ describe('CRM lead status API', () => {
     const response = await POST(
       new Request('http://localhost/api/crm/leads/status', {
         method: 'POST',
-        body: JSON.stringify({ organizationId, leadId, status: 'unknown', expectedUpdatedAt: timestamp }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          status: 'unknown',
+          expectedUpdatedAt: timestamp,
+        }),
       }),
     );
     expect(response.status).toBe(400);
@@ -36,11 +41,19 @@ describe('CRM lead status API', () => {
     const response = await POST(
       new Request('http://localhost/api/crm/leads/status', {
         method: 'POST',
-        body: JSON.stringify({ organizationId, leadId, status: 'cualificado', expectedUpdatedAt: timestamp }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          status: 'cualificado',
+          expectedUpdatedAt: timestamp,
+        }),
       }),
     );
     expect(response.status).toBe(200);
-    expect(moveLeadStatus).toHaveBeenCalledWith({ organizationId, leadId, status: 'cualificado', expectedUpdatedAt: timestamp });
+    expect(moveLeadStatus).toHaveBeenCalledWith(
+      { organizationId, leadId, status: 'cualificado', expectedUpdatedAt: timestamp },
+      'user-1',
+    );
   });
 
   it('rejects moving a lead into convertido directly', async () => {
@@ -48,13 +61,21 @@ describe('CRM lead status API', () => {
     const response = await POST(
       new Request('http://localhost/api/crm/leads/status', {
         method: 'POST',
-        body: JSON.stringify({ organizationId, leadId, status: 'convertido', expectedUpdatedAt: timestamp }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          status: 'convertido',
+          expectedUpdatedAt: timestamp,
+        }),
       }),
     );
     expect(response.status).toBe(409);
     expect(await response.json()).toEqual({
-      error: 'CRM lead status transition is not allowed',
-      code: 'INVALID_STATUS_TRANSITION',
+      error: {
+        code: 'INVALID_STATUS_TRANSITION',
+        message: 'CRM lead status transition is not allowed',
+        traceId: expect.any(String),
+      },
     });
   });
 });

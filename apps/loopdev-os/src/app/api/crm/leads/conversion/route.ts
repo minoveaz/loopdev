@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       { status: access.status },
     );
   try {
-    const { opportunity, created } = await createOpportunityFromLead(parsed.data);
+    const { opportunity, created } = await createOpportunityFromLead(parsed.data, access.userId);
     return NextResponse.json(opportunity, { status: created ? 201 : 200 });
   } catch (error) {
     return leadServiceErrorResponse(error, 'Unable to convert CRM lead to opportunity');

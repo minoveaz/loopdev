@@ -11,17 +11,17 @@ issue: https://github.com/minoveaz/loopdev/issues/87
 
 # Impact assessment de Tasks
 
-| Area | Classification | Impact | Evidence required |
-| --- | --- | --- | --- |
-| Contracts | required | Task lifecycle, Note permissions/edit policy, ActivitySource, TimelineEvent actor/origin, ActivityItem, My Day pagination and commands | Typecheck and contract tests |
-| Schema | required | Tasks, notes, append-only events, polymorphic relation integrity, versions and deduplication keys | Migration review and rollback |
-| RLS | required | Per-verb tenant/workspace/brand and relation scope | pgTAP and cross-tenant tests |
-| Storage | none | No attachments or documents in pilot | No storage paths |
-| Secrets/providers | none | No external calendar, email or messaging provider | No browser secrets |
-| AI | none | No automated task generation or scoring | Explicit exclusion |
-| Billing/entitlements | planned | Existing CRM entitlement gates only | Permission evidence |
-| Observability | required | Create, assign, complete, reopen, updateNote/moderation, actor type, event origin and timeline audit | Redacted evidence without note bodies |
-| Rollout/rollback | required | Additive schema, append-only compatibility and reversible deployment | Staging rollback and restore evidence |
+| Area                 | Classification | Impact                                                                                                                                        | Evidence required                     |
+| -------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| Contracts            | required       | Task lifecycle, Note permissions/edit policy, ActivitySource, TimelineEvent actor/origin, ActivityItem, My Day pagination and commands        | Typecheck and contract tests          |
+| Schema               | required       | Tasks, notes, append-only events, polymorphic relation integrity, versions and deduplication keys                                             | Migration review and rollback         |
+| RLS                  | required       | Per-verb organization/workspace and relation scope; `brand_id` is an organization-scoped CRM identifier, not an independent security boundary | pgTAP and cross-tenant tests          |
+| Storage              | none           | No attachments or documents in pilot                                                                                                          | No storage paths                      |
+| Secrets/providers    | none           | No external calendar, email or messaging provider                                                                                             | No browser secrets                    |
+| AI                   | none           | No automated task generation or scoring                                                                                                       | Explicit exclusion                    |
+| Billing/entitlements | planned        | Existing CRM entitlement gates only                                                                                                           | Permission evidence                   |
+| Observability        | required       | Create, assign, complete, reopen, updateNote/moderation, actor type, event origin and timeline audit                                          | Redacted evidence without note bodies |
+| Rollout/rollback     | required       | Additive schema, append-only compatibility and reversible deployment                                                                          | Staging rollback and restore evidence |
 
 ## Data sensitivity
 
@@ -31,6 +31,7 @@ permission checks, minimised logs and exclusion from analytics/screenshots/error
 ## Dependencies
 
 - Contacts, Leads and Pipeline contracts/RLS.
+- `brand_id` must not receive independent RLS isolation; organization/workspace authorization remains authoritative.
 - Tenant/workspace/brand membership and kill switches.
 - Customer 360 relation read models.
 - `SuiteRuntime`, `SuiteCanvas`, table, tabs and state primitives.

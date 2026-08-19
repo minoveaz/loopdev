@@ -395,7 +395,7 @@ async function loadNotes(
   const supabase = await createServerSupabaseClient();
   let query = scopeQuery(
     supabase
-      .from('crm_notes')
+      .from('crm_notes_visible' as never)
       .select(noteColumns)
       .or(relationFilter(scope.contactId, relationIds.leadIds, relationIds.opportunityIds))
       .order('created_at', { ascending: false })

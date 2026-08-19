@@ -76,6 +76,7 @@ jobs:
           supabase/tests/database/003_marketing_rls.sql
           supabase/tests/database/004_content_engine_rls.sql
           supabase/tests/database/005_crm_security.sql
+          supabase/tests/database/006_crm_tasks_contract.sql
       - name: Prepare authenticated CRM integration fixture
         run: |
           eval "$(supabase status -o env)"

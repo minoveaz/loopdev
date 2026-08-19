@@ -1,6 +1,8 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import type { Json } from '@/types/database.types';
 
+type NoteRow = { id: string; [key: string]: unknown };
+
 function toJson(value: Record<string, unknown> | null | undefined): Json | null {
   return value == null ? null : (JSON.parse(JSON.stringify(value)) as Json);
 }
@@ -62,10 +64,10 @@ export async function listCrmActivities(input: {
   if (input.cursor) query = query.lt('id', input.cursor);
   const { data, error } = await query;
   if (error) throw new Error('Unable to list CRM activities');
-  const items = data.slice(0, input.limit);
+  const items = (data as unknown as NoteRow[]).slice(0, input.limit);
   return {
     items,
-    nextCursor: data.length > input.limit ? (items.at(-1)?.id ?? null) : null,
+    nextCursor: data.length > input.limit ? (items[items.length - 1]?.id ?? null) : null,
     hasMore: data.length > input.limit,
   };
 }
@@ -120,10 +122,17 @@ export async function createCrmNote(input: {
       body: input.body,
       visibility: input.visibility ?? 'team',
     })
-    .select()
+    .select('id')
     .single();
   if (error) throw new Error('Unable to create CRM note');
-  return data;
+  const { data: visibleNote, error: visibleError } = await supabase
+    .from('crm_notes_visible' as never)
+    .select('*')
+    .eq('id', (data as unknown as NoteRow).id)
+    .eq('organization_id', input.organizationId)
+    .single();
+  if (visibleError || !visibleNote) throw new Error('Unable to load CRM note');
+  return visibleNote as unknown as NoteRow;
 }
 
 export async function listCrmNotes(input: {
@@ -134,7 +143,7 @@ export async function listCrmNotes(input: {
 }) {
   const supabase = await createServerSupabaseClient();
   let query = supabase
-    .from('crm_notes')
+    .from('crm_notes_visible' as never)
     .select('*')
     .eq('organization_id', input.organizationId)
     .order('created_at', { ascending: false })
@@ -144,14 +153,10 @@ export async function listCrmNotes(input: {
   if (input.cursor) query = query.lt('id', input.cursor);
   const { data, error } = await query;
   if (error) throw new Error('Unable to list CRM notes');
-  const items = data.slice(0, input.limit).map((note) => ({
-    ...note,
-    body: note.visibility === 'private' ? null : note.body,
-    can_read_body: note.visibility !== 'private',
-  }));
+  const items = (data as unknown as NoteRow[]).slice(0, input.limit);
   return {
     items,
-    nextCursor: data.length > input.limit ? (items.at(-1)?.id ?? null) : null,
+    nextCursor: data.length > input.limit ? (items[items.length - 1]?.id ?? null) : null,
     hasMore: data.length > input.limit,
   };
 }

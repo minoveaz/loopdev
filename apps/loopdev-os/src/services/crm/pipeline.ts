@@ -264,7 +264,10 @@ export async function getOpportunity(organizationId: string, opportunityId: stri
   return row ? mapOpportunity(row) : null;
 }
 
-export async function createManualOpportunity(input: CrmCreateManualOpportunityCommand) {
+export async function createManualOpportunity(
+  input: CrmCreateManualOpportunityCommand,
+  actorUserId: string,
+) {
   const parsed = CrmCreateManualOpportunityCommandSchema.parse(input);
   const productKey = normalizeProductKey(parsed.productKey);
   const expectedFingerprint = fingerprint(parsed);
@@ -348,7 +351,7 @@ export async function createManualOpportunity(input: CrmCreateManualOpportunityC
   );
   await recordCrmAuditEvent({
     organizationId: parsed.organizationId,
-    actorUserId: parsed.assignedUserId,
+    actorUserId,
     entityType: 'opportunity',
     entityId: opportunity.id,
     action: 'created',
@@ -477,7 +480,7 @@ export async function reopenOpportunity(input: CrmReopenOpportunityCommand) {
   });
 }
 
-export async function updateOpportunity(input: CrmUpdateOpportunityCommand) {
+export async function updateOpportunity(input: CrmUpdateOpportunityCommand, actorUserId: string) {
   const parsed = CrmUpdateOpportunityCommandSchema.parse(input);
   const current = await loadOpportunity(parsed.organizationId, parsed.opportunityId);
   if (!current) throw new OpportunityServiceError('CRM opportunity not found', 'NOT_FOUND');
@@ -518,6 +521,7 @@ export async function updateOpportunity(input: CrmUpdateOpportunityCommand) {
   const opportunity = mapOpportunity(data as DbRow);
   await recordCrmAuditEvent({
     organizationId: parsed.organizationId,
+    actorUserId,
     entityType: 'opportunity',
     entityId: opportunity.id,
     action: 'updated',

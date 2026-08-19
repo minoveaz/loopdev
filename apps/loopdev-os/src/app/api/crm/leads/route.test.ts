@@ -25,7 +25,9 @@ describe('CRM leads API', () => {
 
   it('lists leads with an authorized bounded query', async () => {
     const response = await GET(
-      new Request(`http://localhost/api/crm/leads?organizationId=${organizationId}&status=nuevo&limit=20`),
+      new Request(
+        `http://localhost/api/crm/leads?organizationId=${organizationId}&status=nuevo&limit=20`,
+      ),
     );
     expect(response.status).toBe(200);
     expect(authorizeCrm).toHaveBeenCalledWith(organizationId, 'crm.read');
@@ -33,14 +35,18 @@ describe('CRM leads API', () => {
   });
 
   it('rejects an invalid query before calling the service', async () => {
-    const response = await GET(new Request('http://localhost/api/crm/leads?organizationId=not-a-uuid'));
+    const response = await GET(
+      new Request('http://localhost/api/crm/leads?organizationId=not-a-uuid'),
+    );
     expect(response.status).toBe(400);
     expect(listLeads).not.toHaveBeenCalled();
   });
 
   it('returns the authorization status without calling the service', async () => {
     authorizeCrm.mockResolvedValue({ allowed: false, status: 403 });
-    const response = await GET(new Request(`http://localhost/api/crm/leads?organizationId=${organizationId}`));
+    const response = await GET(
+      new Request(`http://localhost/api/crm/leads?organizationId=${organizationId}`),
+    );
     expect(response.status).toBe(403);
     expect(listLeads).not.toHaveBeenCalled();
   });
@@ -60,7 +66,12 @@ describe('CRM leads API', () => {
     const response = await PATCH(
       new Request('http://localhost/api/crm/leads', {
         method: 'PATCH',
-        body: JSON.stringify({ organizationId, leadId, interest: 'seguro de hogar', expectedUpdatedAt: timestamp }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          interest: 'seguro de hogar',
+          expectedUpdatedAt: timestamp,
+        }),
       }),
     );
     expect(response.status).toBe(200);
@@ -77,10 +88,21 @@ describe('CRM leads API', () => {
     const response = await PATCH(
       new Request('http://localhost/api/crm/leads', {
         method: 'PATCH',
-        body: JSON.stringify({ organizationId, leadId, interest: 'seguro de hogar', expectedUpdatedAt: timestamp }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          interest: 'seguro de hogar',
+          expectedUpdatedAt: timestamp,
+        }),
       }),
     );
     expect(response.status).toBe(409);
-    expect(await response.json()).toEqual({ error: 'CRM lead update conflict or not found', code: 'CONFLICT' });
+    expect(await response.json()).toEqual({
+      error: {
+        code: 'CONFLICT',
+        message: 'CRM lead update conflict or not found',
+        traceId: expect.any(String),
+      },
+    });
   });
 });

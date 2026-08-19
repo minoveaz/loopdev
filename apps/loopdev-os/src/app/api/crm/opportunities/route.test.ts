@@ -21,12 +21,17 @@ describe('CRM opportunities API', () => {
     vi.clearAllMocks();
     authorizeCrm.mockResolvedValue({ allowed: true, status: 200, userId: 'user-1' });
     listOpportunities.mockResolvedValue({ items: [], nextCursor: null, hasMore: false });
-    createManualOpportunity.mockResolvedValue({ opportunity: { id: 'opportunity-1' }, created: true });
+    createManualOpportunity.mockResolvedValue({
+      opportunity: { id: 'opportunity-1' },
+      created: true,
+    });
   });
 
   it('lists opportunities through the bounded CRM query', async () => {
     const response = await GET(
-      new Request(`http://localhost/api/crm/opportunities?organizationId=${organizationId}&workspaceId=${workspaceId}&limit=20`),
+      new Request(
+        `http://localhost/api/crm/opportunities?organizationId=${organizationId}&workspaceId=${workspaceId}&limit=20`,
+      ),
     );
     expect(response.status).toBe(200);
     expect(authorizeCrm).toHaveBeenCalledWith(organizationId, 'crm.read');
@@ -65,15 +70,18 @@ describe('CRM opportunities API', () => {
       }),
     );
     expect(response.status).toBe(201);
-    expect(createManualOpportunity).toHaveBeenCalledWith({
-      organizationId,
-      workspaceId,
-      contactId,
-      productKey: 'health',
-      name: 'Health opportunity',
-      currency: 'EUR',
-      idempotencyKey: 'opportunity-test-1',
-    });
+    expect(createManualOpportunity).toHaveBeenCalledWith(
+      {
+        organizationId,
+        workspaceId,
+        contactId,
+        productKey: 'health',
+        name: 'Health opportunity',
+        currency: 'EUR',
+        idempotencyKey: 'opportunity-test-1',
+      },
+      'user-1',
+    );
   });
 
   it('returns authorization failures without touching the service', async () => {
