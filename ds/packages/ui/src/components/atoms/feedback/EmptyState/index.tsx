@@ -21,23 +21,13 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
     action,
     iconBadge,
     isLoading = false,
-    loadingMessages = ['Analyzing system components...', 'Optimizing structure...']
-    , colors
+    loadingMessages = ['Analyzing system components...', 'Optimizing structure...'],
   } = props;
 
   const { containerClasses, iconSize, isAI } = useEmptyState(props);
 
   return (
-    <div
-      className={containerClasses}
-      role="status"
-      style={{
-        ...(colors?.surface ? { '--empty-surface': colors.surface } : {}),
-        ...(colors?.border ? { '--empty-border': colors.border } : {}),
-        ...(colors?.text ? { '--empty-text': colors.text } : {}),
-      } as React.CSSProperties}
-    >
-      
+    <div className={containerClasses} role="status">
       {/* 1. Dynamic Background Patterns */}
       {isAI ? (
         // IA Pattern: Subtle purple dots (Neural feel)
@@ -62,7 +52,7 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
           <EmptyStateVisual size={props.size}>
             <Icon name={icon} size={iconSize} />
           </EmptyStateVisual>
-          
+
           {iconBadge && (
             <span className="absolute -top-1 -right-1 bg-energy text-text-base text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-surface-elevated shadow-lg animate-bounce z-20">
               {iconBadge}
@@ -73,33 +63,30 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
 
       {/* 3. Narrative Section */}
       <div className="relative z-10 max-w-sm space-y-3">
-        <Heading 
-          as="h3" 
+        <Heading
+          as="h3"
           size={props.size === 'sm' ? 'xs' : 'base'}
           className={isAI ? 'text-innovation-purple' : ''}
         >
           {title}
         </Heading>
-        
+
         {isLoading ? (
           <div className="py-4">
             <AILoader messages={loadingMessages} speed="fast" />
           </div>
         ) : (
-                    <LpdText 
-                      size="sm" 
-                      className="max-w-xs mx-auto mb-10 leading-relaxed text-center text-text-muted"
-                    >
-                      {description}
-                    </LpdText>        )}
+          <LpdText
+            size="sm"
+            className="max-w-xs mx-auto mb-10 leading-relaxed text-center text-text-muted"
+          >
+            {description}
+          </LpdText>
+        )}
       </div>
 
       {/* 4. Functional Section */}
-      {action && !isLoading && (
-        <div className="relative z-10 mt-10">
-          {action}
-        </div>
-      )}
+      {action && !isLoading && <div className="relative z-10 mt-10">{action}</div>}
     </div>
   );
 };
