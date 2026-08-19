@@ -29,7 +29,7 @@ la existencia de un track no implica que tenga autorizacion para iniciar impleme
 
 | Track | Estado operativo | Decisión | Siguiente evidencia |
 | --- | --- | --- | --- |
-| `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | G2 backend implementado; falta validar salida integral del gate |
+| `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | Tasks mergeado; Customer 360 es el siguiente bloque |
 | `crm-shared-foundation` | cerrado tras Contacts backend-first | Mantener como foundation reutilizable; no reabrirlo para nuevos módulos | PRs #111, #114, #116 y cierre #118 |
 | `crm-leads-backend-foundation` | backend-first mergeado en `develop` mediante PR #119 | Mantenerlo como dependencia de Pipeline y completar evidencia operativa | Validacion end-to-end con Supabase real y cierre operativo de #84 |
 | `crm-ui-foundation` | pausado para nuevos slices | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0 |
@@ -39,9 +39,9 @@ la existencia de un track no implica que tenga autorizacion para iniciar impleme
 
 G0/#68 y la validación del primer consumidor Contacts (#82) están cerrados. Leads (#84) ya está
 mergeado en `develop`, pero su cierre operativo aún requiere evidencia end-to-end y de aislamiento
-remoto. Se autoriza únicamente la preparación de Pipeline (#85): rama limpia, reconciliación de
-evidencia y diseño técnico. La implementación funcional de Pipeline, Tasks (#87) y Customer 360
-(#88) permanece bloqueada hasta completar G1 y validar Leads. La UI y las primitives compartidas
+remoto. Pipeline (#85) y Tasks (#87) ya completaron sus deliveries backend-first. Se autoriza ahora
+la implementación funcional de Customer 360 (#88), que consume esas capacidades sin crear una entidad
+ni navegación independiente. Daily Operation continúa como resultado transversal de G3. La UI y las primitives compartidas
 siguen coordinadas por sus tracks transversales y no autorizan crear componentes CRM paralelos.
 
 ### Readiness preparatorio de Pipeline (#85)
@@ -515,9 +515,9 @@ aislamiento verificable.
 
 **Evidencia:** Ver fila 2026-08-19 en "Evidencia de validacion" mas abajo.
 
-**Estado:** Backend de Leads y Pipeline mergeado en `develop` mediante PRs #119 y #121. La salida
-integral de G2 sigue pendiente de reconciliar la validación de G1, staging/UAT y el cierre operativo
-de los delivery tracks.
+**Estado:** Backend de Leads y Pipeline mergeado en `develop` mediante PRs #119 y #121; Tasks queda
+mergeado mediante PR #126. Customer 360 es el siguiente delivery autorizado. La salida integral de G2
+y la certificación de G3 siguen pendientes de staging/UAT y del cierre operativo de los delivery tracks.
 
 ### Fase 3: G3 - Daily operation and staging UAT
 
@@ -525,13 +525,14 @@ de los delivery tracks.
 
 **Definition of Ready**
 
-- [ ] Fase 2 validada.
+- [ ] Fase 2 validada integralmente en staging; los deliveries backend-first de Leads, Pipeline y Tasks
+  están implementados y validados localmente/CI.
 
 **Entregables**
 
 - [x] Notas, tareas, completado y timeline en backend-first: contratos, schema/RLS, servicio, API,
   fixtures y pruebas locales; la integración de producto queda pendiente.
-- [ ] Customer 360 minimo.
+- [ ] Customer 360 minimo como proyección agregada dentro del detalle de Contact.
 - [ ] Staging reproducible, health, logs, Sentry y UAT 1.
 
 **Validacion**
@@ -573,6 +574,7 @@ go-live o UAT privado.
 | Fecha      | Cambio                                         | Motivo                                                                  | Impacto en alcance/fases                                                      | Aprobado por |
 | ---------- | ---------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------ |
 | 2026-08-13 | Separar el piloto del mega-track CRM historico | El piloto requiere gates fechados, WIP limitado y evidencias operativas | CRM Pilot Execution coordina G0-G5; el historico se preserva como antecedente | User         |
+| 2026-08-19 | Autorizar Customer 360 después de Tasks | Contacts, Leads, Pipeline y Tasks backend-first ya están implementados; Customer 360 consume sus contratos y no crea un módulo independiente | Customer 360 (#88) es el siguiente delivery; Daily Operation sigue transversal; staging/UAT se mantiene posterior | User |
 
 ## Riesgos y bloqueos
 
@@ -613,22 +615,23 @@ go-live o UAT privado.
 | 2026-08-19 | Pipeline backend y matriz CI (#85) | Correcta: PR #121 mergeado en `develop` mediante `f577f045`; 148 aserciones pgTAP, matriz HTTP autenticada owner/viewer, tests CRM focalizados, typecheck, build, CodeQL y CI backend pasan. E2E frontend queda omitido por routing backend-only. | G2 backend implementado; permanecen la validación integral de G1, staging/UAT y el cierre explícito del gate |
 | 2026-08-19 | UAT técnico backend de Pipeline | Correcta: flujo HTTP autenticado owner/viewer verificado para stages, creación, listado, retry idempotente, movimiento, reapertura, actualización, conflicto `409` y autorización `403`; pgTAP confirma RLS, FKs e historial. | UAT visual, drag-and-drop, responsive y accesibilidad frontend quedan pendientes hasta implementar la UI |
 | 2026-08-19 | Tasks backend-first (#87): contratos, schema/RLS, servicio, API, fixtures y pruebas | Correcta en local: `supabase db reset --local`, `006_crm_tasks_contract.sql` (18/18), `@loopdev/contracts` build, typecheck explícito de `loopdev-os`, tests CRM/API focalizados (49/49), governance Supabase y ownership de contratos. | Se implementan Task/Note/TimelineEvent, relaciones Contact/Lead/Opportunity, lifecycle, versionado optimista, idempotencia y timeline transaccional append-only; faltan E2E autenticado, staging/UAT y validación de concurrencia HTTP |
+| 2026-08-19 | Reconciliación de secuencia hacia Customer 360 (#88) | Tasks queda mergeado mediante PR #126 y sus contratos compartidos están disponibles para la proyección agregada | Se autoriza iniciar Customer 360; no se crea navegación independiente ni se declara cerrado G2/G3; staging/UAT siguen pendientes |
 
 ## Handoff de sesion
 
 - **Fecha:** 2026-08-19.
 - **Rama de continuación:** `develop` (PR #121 mergeado con `f577f045`).
 - **Commit de partida:** `f577f04536a3889b8371c9a702dbe6c9b44a349b`.
-- **Estado alcanzado:** Leads y Pipeline backend-first implementados y protegidos por contratos,
-  migraciones, RLS, servicios, API, fixtures y validación CI. Pipeline incluye stages tenant-aware,
-  idempotencia, versionado optimista, historial append-only y autorización owner/viewer.
-- **Decisiones, bloqueos y riesgos:** no se marca el cierre de G2 todavía; faltan la validación
-  integral de G1, staging/UAT y el cierre operativo de los delivery tracks. E2E frontend no aplica
-  a cambios backend-only y queda omitido por routing explícito de CI.
-- **Validación ejecutada:** PR #121 verde; 148 pgTAP, HTTP autenticado owner/viewer, CRM unit tests,
-  typecheck, build, CodeQL y CI backend.
-- **Siguiente acción concreta:** reconciliar la evidencia de G1 y ejecutar el checklist de salida de
-  G2 antes de solicitar aprobación explícita de cierre.
+- **Estado alcanzado:** Leads, Pipeline y Tasks backend-first implementados y mergeados en `develop`,
+  protegidos por contratos, migraciones, RLS, servicios, API, fixtures y validación CI. Customer 360
+  queda como siguiente delivery autorizado y se mantiene como proyección dentro del detalle de Contact.
+- **Decisiones, bloqueos y riesgos:** no se marca el cierre de G2/G3 todavía; faltan staging/UAT,
+  validación integral de G1 y el cierre operativo de los delivery tracks. E2E frontend no aplica a
+  estos cambios backend-only y queda omitido por routing explícito de CI.
+- **Validación ejecutada:** PR #121 y PR #126 verdes; Pipeline 148 pgTAP; Tasks 18 pgTAP, tests
+  CRM/API focalizados, typecheck, build, governance Supabase y CI backend.
+- **Siguiente acción concreta:** iniciar la implementación backend-first de Customer 360 (#88) y
+  después preparar staging para certificar Daily Operation y el piloto completo.
 
 ## Cierre
 
