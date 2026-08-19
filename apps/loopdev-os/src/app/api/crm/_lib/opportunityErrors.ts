@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import type { OpportunityErrorCode } from '@loopdev/contracts';
+import { crmErrorResponse } from './crmErrors';
 
 const known: Record<string, { status: number; code: OpportunityErrorCode }> = {
   'CRM opportunity not found': { status: 404, code: 'NOT_FOUND' },
@@ -17,9 +17,5 @@ const known: Record<string, { status: number; code: OpportunityErrorCode }> = {
 };
 
 export function opportunityServiceErrorResponse(error: unknown, fallback: string) {
-  if (error instanceof Error && known[error.message]) {
-    const item = known[error.message];
-    return NextResponse.json({ error: error.message, code: item.code }, { status: item.status });
-  }
-  return NextResponse.json({ error: fallback }, { status: 500 });
+  return crmErrorResponse(error, fallback, known);
 }

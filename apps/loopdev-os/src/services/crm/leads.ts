@@ -69,7 +69,13 @@ const opportunityColumns =
 
 // Leads that already produced a conversion Opportunity keep that status;
 // moveLeadStatus never sets or clears it directly (CRM_LEAD_CONTRACT.md).
-const MANUAL_TARGET_STATUSES = new Set(['nuevo', 'contactado', 'cualificado', 'estancado', 'inactivo']);
+const MANUAL_TARGET_STATUSES = new Set([
+  'nuevo',
+  'contactado',
+  'cualificado',
+  'estancado',
+  'inactivo',
+]);
 
 function mapLeadStatus(status: string): CrmLead['status'] {
   if (status === 'active') return 'nuevo';
@@ -321,7 +327,10 @@ export async function updateLead(input: CrmUpdateLeadCommand): Promise<CrmLead> 
  * `createOpportunityFromLead`); it can never be a manual target here, and a
  * Lead already `convertido` cannot be moved away from it through this path.
  */
-export async function moveLeadStatus(input: CrmMoveLeadStatusCommand): Promise<CrmLead> {
+export async function moveLeadStatus(
+  input: CrmMoveLeadStatusCommand,
+  _actorUserId: string,
+): Promise<CrmLead> {
   const parsed = CrmMoveLeadStatusCommandSchema.parse(input);
   if (!MANUAL_TARGET_STATUSES.has(parsed.status)) {
     throw new Error('CRM lead status transition is not allowed');
@@ -355,81 +364,46 @@ export async function moveLeadStatus(input: CrmMoveLeadStatusCommand): Promise<C
  */
 export async function createOpportunityFromLead(
   input: CrmCreateOpportunityFromLeadCommand,
+  _actorUserId: string,
 ): Promise<{ opportunity: CrmOpportunity; created: boolean }> {
   const parsed = CrmCreateOpportunityFromLeadCommandSchema.parse(input);
   const productKey = normalizeProductKey(parsed.productKey);
   const supabase = await createServerSupabaseClient();
-
-  const lead = await getLead(parsed.organizationId, parsed.leadId);
-  if (!lead) throw new Error('CRM lead not found');
-  if (lead.status !== 'cualificado' && lead.status !== 'convertido') {
-    throw new Error('CRM lead is not qualified for conversion');
+  const rpc = supabase.rpc as unknown as (
+    functionName: string,
+    args: Record<string, unknown>,
+  ) => Promise<{ data: unknown; error: { message: string } | null }>;
+  const { data, error } = await rpc('crm_convert_lead', {
+    target_organization_id: parsed.organizationId,
+    target_lead_id: parsed.leadId,
+    target_product_key: productKey,
+    target_name: parsed.name,
+    target_amount: parsed.amount ?? null,
+    target_currency: parsed.currency ?? 'EUR',
+    target_probability: parsed.probability ?? null,
+    target_expected_close_at: parsed.expectedCloseAt ?? null,
+  });
+  if (error) {
+    if (error.message.includes('not qualified')) {
+      throw new Error('CRM lead is not qualified for conversion');
+    }
+    if (error.message.includes('not found')) throw new Error('CRM lead not found');
+    throw new Error('Unable to convert CRM lead to opportunity');
   }
-
-  const { data: existing, error: existingError } = await supabase
+  const result = data as { opportunityId?: string; created?: boolean } | null;
+  if (!result?.opportunityId) throw new Error('Unable to resolve CRM opportunity conversion');
+  const { data: opportunity, error: opportunityError } = await supabase
     .from('crm_opportunities')
     .select(opportunityColumns)
     .eq('organization_id', parsed.organizationId)
-    .eq('lead_id', parsed.leadId)
-    .eq('product_key', productKey)
-    .eq('origin', 'lead_conversion')
-    .maybeSingle();
-  if (existingError) throw new Error('Unable to resolve existing CRM opportunity');
-  if (existing) {
-    return { opportunity: mapOpportunity(existing as unknown as OpportunityRow), created: false };
-  }
-
-  const { data: inserted, error: insertError } = await supabase
-    .from('crm_opportunities')
-    .insert({
-      organization_id: parsed.organizationId,
-      lead_id: parsed.leadId,
-      contact_id: lead.contactId,
-      brand_id: lead.brandId,
-      workspace_id: lead.workspaceId ?? null,
-      name: parsed.name,
-      stage: 'qualified',
-      stage_key: 'qualified',
-      origin: 'lead_conversion',
-      product_key: productKey,
-      amount: parsed.amount ?? null,
-      currency: parsed.currency ?? 'EUR',
-      probability: parsed.probability ?? null,
-      expected_close_at: parsed.expectedCloseAt ?? null,
-    })
-    .select(opportunityColumns)
-    .maybeSingle();
-
-  if (insertError) {
-    // Another concurrent request won the unique (organization, lead,
-    // product_key) race; fetch and return its Opportunity instead of failing.
-    if (insertError.code === '23505') {
-      const { data: raced, error: racedError } = await supabase
-        .from('crm_opportunities')
-        .select(opportunityColumns)
-        .eq('organization_id', parsed.organizationId)
-        .eq('lead_id', parsed.leadId)
-        .eq('product_key', productKey)
-        .eq('origin', 'lead_conversion')
-        .single();
-      if (racedError) throw new Error('Unable to resolve concurrent CRM opportunity conversion');
-      return { opportunity: mapOpportunity(raced as unknown as OpportunityRow), created: false };
-    }
-    throw new Error('Unable to create CRM opportunity');
-  }
-
-  if (lead.status === 'cualificado') {
-    // Best-effort follow-up: it only flips a status flag and is itself
-    // idempotent, so a failure here never invalidates the Opportunity above.
-    await supabase
-      .from('crm_leads')
-      .update({ status: 'convertido', updated_at: new Date().toISOString() })
-      .eq('id', parsed.leadId)
-      .eq('organization_id', parsed.organizationId)
-      .eq('status', 'cualificado');
-  }
-
-  return { opportunity: mapOpportunity(inserted as unknown as OpportunityRow), created: true };
+    .eq('id', result.opportunityId)
+    .single();
+  if (opportunityError || !opportunity)
+    throw new Error('Unable to resolve CRM opportunity conversion');
+  return {
+    opportunity: mapOpportunity(opportunity as unknown as OpportunityRow),
+    created: result.created === true,
+  };
 }
 
 export async function createOpportunity(input: {

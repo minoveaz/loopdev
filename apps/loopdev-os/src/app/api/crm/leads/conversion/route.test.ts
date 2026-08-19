@@ -32,39 +32,65 @@ describe('CRM lead conversion API', () => {
   });
 
   it('returns 201 when a new conversion opportunity is created', async () => {
-    createOpportunityFromLead.mockResolvedValue({ opportunity: { id: opportunityId }, created: true });
+    createOpportunityFromLead.mockResolvedValue({
+      opportunity: { id: opportunityId },
+      created: true,
+    });
     const response = await POST(
       new Request('http://localhost/api/crm/leads/conversion', {
         method: 'POST',
-        body: JSON.stringify({ organizationId, leadId, productKey: 'health', name: 'Proteccion salud' }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          productKey: 'health',
+          name: 'Proteccion salud',
+        }),
       }),
     );
     expect(response.status).toBe(201);
   });
 
   it('returns 200 and the existing opportunity for a repeated conversion', async () => {
-    createOpportunityFromLead.mockResolvedValue({ opportunity: { id: opportunityId }, created: false });
+    createOpportunityFromLead.mockResolvedValue({
+      opportunity: { id: opportunityId },
+      created: false,
+    });
     const response = await POST(
       new Request('http://localhost/api/crm/leads/conversion', {
         method: 'POST',
-        body: JSON.stringify({ organizationId, leadId, productKey: 'health', name: 'Proteccion salud' }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          productKey: 'health',
+          name: 'Proteccion salud',
+        }),
       }),
     );
     expect(response.status).toBe(200);
   });
 
   it('returns a conflict when the lead is not qualified for conversion', async () => {
-    createOpportunityFromLead.mockRejectedValue(new Error('CRM lead is not qualified for conversion'));
+    createOpportunityFromLead.mockRejectedValue(
+      new Error('CRM lead is not qualified for conversion'),
+    );
     const response = await POST(
       new Request('http://localhost/api/crm/leads/conversion', {
         method: 'POST',
-        body: JSON.stringify({ organizationId, leadId, productKey: 'health', name: 'Proteccion salud' }),
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          productKey: 'health',
+          name: 'Proteccion salud',
+        }),
       }),
     );
     expect(response.status).toBe(409);
     expect(await response.json()).toEqual({
-      error: 'CRM lead is not qualified for conversion',
-      code: 'INVALID_STATUS_TRANSITION',
+      error: {
+        code: 'INVALID_STATUS_TRANSITION',
+        message: 'CRM lead is not qualified for conversion',
+        traceId: expect.any(String),
+      },
     });
   });
 });

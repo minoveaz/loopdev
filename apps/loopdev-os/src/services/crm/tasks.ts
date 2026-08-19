@@ -162,7 +162,7 @@ async function loadTask(organizationId: string, taskId: string) {
 async function loadNote(organizationId: string, noteId: string) {
   const supabase = await getDb();
   const { data, error } = await supabase
-    .from('crm_notes')
+    .from('crm_notes_visible' as never)
     .select(noteColumns)
     .eq('organization_id', organizationId)
     .eq('id', noteId)
@@ -177,12 +177,16 @@ async function loadRelationScope(
   relationId: string,
 ) {
   const supabase = await getDb();
-  const table = relationType === 'contact'
-    ? 'crm_contacts'
-    : relationType === 'lead'
-      ? 'crm_leads'
-      : 'crm_opportunities';
-  const columns = relationType === 'contact' ? 'id, organization_id' : 'id, organization_id, workspace_id, brand_id';
+  const table =
+    relationType === 'contact'
+      ? 'crm_contacts'
+      : relationType === 'lead'
+        ? 'crm_leads'
+        : 'crm_opportunities';
+  const columns =
+    relationType === 'contact'
+      ? 'id, organization_id'
+      : 'id, organization_id, workspace_id, brand_id';
   const { data, error } = await supabase
     .from(table)
     .select(columns)
@@ -198,16 +202,24 @@ function scopedRelation(
   input: { workspaceId?: string | null; brandId?: string | null },
   relation: DbRow,
 ) {
-  const workspaceId = (relation.workspace_id as string | null | undefined) ?? input.workspaceId ?? null;
+  const workspaceId =
+    (relation.workspace_id as string | null | undefined) ?? input.workspaceId ?? null;
   const brandId = (relation.brand_id as string | null | undefined) ?? input.brandId ?? null;
   if (relation.workspace_id && input.workspaceId && relation.workspace_id !== input.workspaceId)
-    throw new TaskServiceError('CRM relation is outside the workspace scope', 'CROSS_TENANT_REFERENCE');
+    throw new TaskServiceError(
+      'CRM relation is outside the workspace scope',
+      'CROSS_TENANT_REFERENCE',
+    );
   if (relation.brand_id && input.brandId && relation.brand_id !== input.brandId)
     throw new TaskServiceError('CRM relation is outside the brand scope', 'CROSS_TENANT_REFERENCE');
   return { workspaceId, brandId };
 }
 
-async function existingOperation(organizationId: string, operationKey: string, operationFingerprint: string) {
+async function existingOperation(
+  organizationId: string,
+  operationKey: string,
+  operationFingerprint: string,
+) {
   const supabase = await getDb();
   const { data, error } = await supabase
     .from('crm_timeline_events')
@@ -247,10 +259,7 @@ async function isModerator(organizationId: string, userId: string) {
   return Boolean(data && ['owner', 'admin'].includes(String(data.role)));
 }
 
-function operationReplay(
-  operation: DbRow | null,
-  expectedSourceType: 'task' | 'note',
-) {
+function operationReplay(operation: DbRow | null, expectedSourceType: 'task' | 'note') {
   if (!operation) return null;
   if (operation.source_type !== expectedSourceType)
     throw new TaskServiceError('CRM operation idempotency key was reused', 'IDEMPOTENCY_CONFLICT');
@@ -259,7 +268,11 @@ function operationReplay(
 
 export async function createTask(input: CreateTaskCommand & ActorInput) {
   const parsed = CreateTaskCommandSchema.parse(input);
-  const relation = await loadRelationScope(parsed.organizationId, parsed.relationType, parsed.relationId);
+  const relation = await loadRelationScope(
+    parsed.organizationId,
+    parsed.relationType,
+    parsed.relationId,
+  );
   const scope = scopedRelation(parsed, relation);
   if (!(await assignedUserAllowed(parsed.organizationId, parsed.assignedUserId)))
     throw new TaskServiceError('Task assignee is not allowed', 'ASSIGNMENT_FORBIDDEN');
@@ -296,8 +309,11 @@ export async function createTask(input: CreateTaskCommand & ActorInput) {
     .maybeSingle();
   if (existingError) throw new Error('Unable to resolve CRM task idempotency');
   if (existing) {
-    if (existing.idempotency_fingerprint !== operationFingerprint)
-      throw new TaskServiceError('CRM operation idempotency key was reused', 'IDEMPOTENCY_CONFLICT');
+    if ((existing as unknown as DbRow).idempotency_fingerprint !== operationFingerprint)
+      throw new TaskServiceError(
+        'CRM operation idempotency key was reused',
+        'IDEMPOTENCY_CONFLICT',
+      );
     return { task: mapTask(existing as DbRow), created: false };
   }
 
@@ -345,17 +361,17 @@ export async function createTask(input: CreateTaskCommand & ActorInput) {
 }
 
 async function mutateTask(
-  command:
-    | UpdateTaskCommand
-    | CompleteTaskCommand
-    | ReopenTaskCommand
-    | AssignTaskCommand,
+  command: UpdateTaskCommand | CompleteTaskCommand | ReopenTaskCommand | AssignTaskCommand,
   actorUserId: string,
   action: 'update' | 'complete' | 'reopen' | 'assign',
 ) {
   const parsed = command;
   const operationFingerprint = fingerprint({ action, ...parsed });
-  const operation = await existingOperation(parsed.organizationId, parsed.idempotencyKey, operationFingerprint);
+  const operation = await existingOperation(
+    parsed.organizationId,
+    parsed.idempotencyKey,
+    operationFingerprint,
+  );
   const replayId = operationReplay(operation, 'task');
   if (replayId) {
     const replay = await loadTask(parsed.organizationId, replayId);
@@ -386,12 +402,18 @@ async function mutateTask(
     });
   } else if (action === 'complete') {
     if (!['open', 'in_progress'].includes(String(current.status)))
-      throw new TaskServiceError('CRM task status transition is not allowed', 'INVALID_STATUS_TRANSITION');
+      throw new TaskServiceError(
+        'CRM task status transition is not allowed',
+        'INVALID_STATUS_TRANSITION',
+      );
     changes.status = 'completed';
   } else if (action === 'reopen') {
     const reopen = ReopenTaskCommandSchema.parse(command);
     if (!['completed', 'cancelled'].includes(String(current.status)))
-      throw new TaskServiceError('CRM task status transition is not allowed', 'INVALID_STATUS_TRANSITION');
+      throw new TaskServiceError(
+        'CRM task status transition is not allowed',
+        'INVALID_STATUS_TRANSITION',
+      );
     changes.status = 'open';
     changes.reopen_reason = reopen.reason;
   } else {
@@ -412,14 +434,22 @@ async function mutateTask(
     .maybeSingle();
   if (error) {
     if (error.code === '23505') {
-      const raced = await existingOperation(parsed.organizationId, parsed.idempotencyKey, operationFingerprint);
+      const raced = await existingOperation(
+        parsed.organizationId,
+        parsed.idempotencyKey,
+        operationFingerprint,
+      );
       const racedId = operationReplay(raced, 'task');
       if (racedId) {
         const replay = await loadTask(parsed.organizationId, racedId);
         if (replay) return mapTask(replay);
       }
     }
-    if (error.code === '23514') throw new TaskServiceError('CRM task status transition is not allowed', 'INVALID_STATUS_TRANSITION');
+    if (error.code === '23514')
+      throw new TaskServiceError(
+        'CRM task status transition is not allowed',
+        'INVALID_STATUS_TRANSITION',
+      );
     throw new Error('Unable to update CRM task');
   }
   if (!data) throw new TaskServiceError('CRM task update conflict', 'CONFLICT');
@@ -446,7 +476,9 @@ export function assignTask(input: AssignTaskCommand & ActorInput) {
   return mutateTask(parsed, input.actorUserId, 'assign');
 }
 
-export async function listTasks(input: TaskQuery): Promise<ReturnType<typeof TaskPageSchema.parse>> {
+export async function listTasks(
+  input: TaskQuery,
+): Promise<ReturnType<typeof TaskPageSchema.parse>> {
   const parsed = TaskQuerySchema.parse(input);
   const supabase = await getDb();
   let query = supabase
@@ -468,7 +500,7 @@ export async function listTasks(input: TaskQuery): Promise<ReturnType<typeof Tas
   const items = rows.slice(0, parsed.limit).map(mapTask);
   return TaskPageSchema.parse({
     items,
-    nextCursor: rows.length > parsed.limit ? items.at(-1)?.id ?? null : null,
+    nextCursor: rows.length > parsed.limit ? (items.at(-1)?.id ?? null) : null,
     hasMore: rows.length > parsed.limit,
   });
 }
@@ -480,7 +512,11 @@ export async function getTask(organizationId: string, taskId: string) {
 
 export async function createNote(input: CreateNoteCommand & ActorInput) {
   const parsed = CreateNoteCommandSchema.parse(input);
-  const relation = await loadRelationScope(parsed.organizationId, parsed.relationType, parsed.relationId);
+  const relation = await loadRelationScope(
+    parsed.organizationId,
+    parsed.relationType,
+    parsed.relationId,
+  );
   const scope = scopedRelation(parsed, relation);
   const operationFingerprint = fingerprint({
     relationType: parsed.relationType,
@@ -491,16 +527,27 @@ export async function createNote(input: CreateNoteCommand & ActorInput) {
   });
   const supabase = await getDb();
   const { data: existing, error: existingError } = await supabase
-    .from('crm_notes')
+    .from('crm_notes_visible' as never)
     .select(noteColumns)
     .eq('organization_id', parsed.organizationId)
     .eq('idempotency_key', parsed.idempotencyKey)
     .maybeSingle();
   if (existingError) throw new Error('Unable to resolve CRM note idempotency');
   if (existing) {
-    if (existing.idempotency_fingerprint !== operationFingerprint)
-      throw new TaskServiceError('CRM operation idempotency key was reused', 'IDEMPOTENCY_CONFLICT');
-    return { note: mapNote(existing as DbRow, input.actorUserId, await isModerator(parsed.organizationId, input.actorUserId), false), created: false };
+    if ((existing as unknown as DbRow).idempotency_fingerprint !== operationFingerprint)
+      throw new TaskServiceError(
+        'CRM operation idempotency key was reused',
+        'IDEMPOTENCY_CONFLICT',
+      );
+    return {
+      note: mapNote(
+        existing as DbRow,
+        input.actorUserId,
+        await isModerator(parsed.organizationId, input.actorUserId),
+        false,
+      ),
+      created: false,
+    };
   }
 
   const payload = {
@@ -525,7 +572,7 @@ export async function createNote(input: CreateNoteCommand & ActorInput) {
   const { data, error } = await supabase
     .from('crm_notes')
     .insert(payload as never)
-    .select(noteColumns)
+    .select('id')
     .single();
   if (error) {
     if (error.code === '23505') {
@@ -552,8 +599,14 @@ export async function createNote(input: CreateNoteCommand & ActorInput) {
     }
     throw new Error('Unable to create CRM note');
   }
+  const createdNote = await loadNote(parsed.organizationId, String((data as DbRow).id));
+  if (!createdNote) throw new TaskServiceError('CRM note was not found', 'NOT_FOUND');
   return {
-    note: mapNote(data as DbRow, input.actorUserId, await isModerator(parsed.organizationId, input.actorUserId), false),
+    note: mapNote(
+      createdNote,
+      input.actorUserId,
+      await isModerator(parsed.organizationId, input.actorUserId),
+    ),
     created: true,
   };
 }
@@ -561,7 +614,11 @@ export async function createNote(input: CreateNoteCommand & ActorInput) {
 export async function updateNote(input: UpdateNoteCommand & ActorInput) {
   const parsed = UpdateNoteCommandSchema.parse(input);
   const operationFingerprint = fingerprint(parsed);
-  const operation = await existingOperation(parsed.organizationId, parsed.idempotencyKey, operationFingerprint);
+  const operation = await existingOperation(
+    parsed.organizationId,
+    parsed.idempotencyKey,
+    operationFingerprint,
+  );
   const replayId = operationReplay(operation, 'note');
   const moderator = await isModerator(parsed.organizationId, input.actorUserId);
   if (replayId) {
@@ -591,11 +648,13 @@ export async function updateNote(input: UpdateNoteCommand & ActorInput) {
     .eq('organization_id', parsed.organizationId)
     .eq('id', parsed.noteId)
     .eq('version', parsed.expectedVersion)
-    .select(noteColumns)
+    .select('id')
     .maybeSingle();
   if (error) throw new Error('Unable to update CRM note');
   if (!data) throw new TaskServiceError('CRM note update conflict', 'CONFLICT');
-  return mapNote(data as DbRow, input.actorUserId, moderator, false);
+  const updatedNote = await loadNote(parsed.organizationId, String((data as DbRow).id));
+  if (!updatedNote) throw new TaskServiceError('CRM note was not found', 'NOT_FOUND');
+  return mapNote(updatedNote, input.actorUserId, moderator);
 }
 
 export async function listNotes(
@@ -605,7 +664,7 @@ export async function listNotes(
 ) {
   const supabase = await getDb();
   let query = supabase
-    .from('crm_notes')
+    .from('crm_notes_visible' as never)
     .select(noteColumns)
     .eq('organization_id', organizationId)
     .order('created_at', { ascending: false })
@@ -618,7 +677,11 @@ export async function listNotes(
   const moderator = await isModerator(organizationId, actorUserId);
   const rows = (data ?? []) as DbRow[];
   const items = rows.slice(0, input.limit).map((row) => mapNote(row, actorUserId, moderator));
-  return { items, nextCursor: rows.length > input.limit ? items.at(-1)?.id ?? null : null, hasMore: rows.length > input.limit };
+  return {
+    items,
+    nextCursor: rows.length > input.limit ? (items.at(-1)?.id ?? null) : null,
+    hasMore: rows.length > input.limit,
+  };
 }
 
 export async function listTimeline(input: TimelineQuery) {
@@ -642,7 +705,7 @@ export async function listTimeline(input: TimelineQuery) {
   const items = rows.slice(0, parsed.limit).map(mapTimeline);
   return TimelinePageSchema.parse({
     items,
-    nextCursor: rows.length > parsed.limit ? items.at(-1)?.id ?? null : null,
+    nextCursor: rows.length > parsed.limit ? (items.at(-1)?.id ?? null) : null,
     hasMore: rows.length > parsed.limit,
   });
 }

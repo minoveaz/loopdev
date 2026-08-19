@@ -2,12 +2,13 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(18);
+select plan(28);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
   ('00000000-0000-4100-8700-000000000001', 'authenticated', 'authenticated', 'tasks-a@example.test', '', now()),
-  ('00000000-0000-4100-8700-000000000002', 'authenticated', 'authenticated', 'tasks-b@example.test', '', now());
+  ('00000000-0000-4100-8700-000000000002', 'authenticated', 'authenticated', 'tasks-b@example.test', '', now()),
+  ('00000000-0000-4100-8700-000000000003', 'authenticated', 'authenticated', 'tasks-viewer@example.test', '', now());
 
 insert into public.organizations (id, name, slug)
 values
@@ -17,6 +18,8 @@ values
 insert into public.organization_memberships (organization_id, user_id, role)
 values
   ('00000000-0000-4100-9700-000000000001', '00000000-0000-4100-8700-000000000001', 'owner'),
+  ('00000000-0000-4100-9700-000000000001', '00000000-0000-4100-8700-000000000002', 'admin'),
+  ('00000000-0000-4100-9700-000000000001', '00000000-0000-4100-8700-000000000003', 'viewer'),
   ('00000000-0000-4100-9700-000000000002', '00000000-0000-4100-8700-000000000002', 'owner');
 
 insert into public.brands (id, organization_id, name)
@@ -34,10 +37,10 @@ values
   ('00000000-0000-4100-9a00-000000000001', '00000000-0000-4100-9700-000000000001', 'Contact A'),
   ('00000000-0000-4100-9a00-000000000002', '00000000-0000-4100-9700-000000000002', 'Contact B');
 
-insert into public.crm_leads (id, organization_id, contact_id, workspace_id, brand_id, stage, source)
+insert into public.crm_leads (id, organization_id, contact_id, workspace_id, brand_id, stage, status, source)
 values
-  ('00000000-0000-4100-9b00-000000000001', '00000000-0000-4100-9700-000000000001', '00000000-0000-4100-9a00-000000000001', '00000000-0000-4100-9900-000000000001', '00000000-0000-4100-9800-000000000001', 'lead', 'manual'),
-  ('00000000-0000-4100-9b00-000000000002', '00000000-0000-4100-9700-000000000002', '00000000-0000-4100-9a00-000000000002', '00000000-0000-4100-9900-000000000002', '00000000-0000-4100-9800-000000000002', 'lead', 'manual');
+  ('00000000-0000-4100-9b00-000000000001', '00000000-0000-4100-9700-000000000001', '00000000-0000-4100-9a00-000000000001', '00000000-0000-4100-9900-000000000001', '00000000-0000-4100-9800-000000000001', 'lead', 'cualificado', 'manual'),
+  ('00000000-0000-4100-9b00-000000000002', '00000000-0000-4100-9700-000000000002', '00000000-0000-4100-9a00-000000000002', '00000000-0000-4100-9900-000000000002', '00000000-0000-4100-9800-000000000002', 'lead', 'cualificado', 'manual');
 
 select ok(pg_temp.has_policy_for('crm_tasks', 'select'), 'Tasks expose a SELECT policy');
 select ok(pg_temp.has_policy_for('crm_tasks', 'insert'), 'Tasks expose an INSERT policy');
@@ -64,8 +67,8 @@ select lives_ok($$
     'lead', '00000000-0000-4100-9b00-000000000001',
     '00000000-0000-4100-9b00-000000000001',
     'Call customer', 'open', 'normal',
-    '00000000-0000-4100-8700-000000000001',
-    '00000000-0000-4100-8700-000000000001',
+    '00000000-0000-4100-8700-000000000002',
+    '00000000-0000-4100-8700-000000000002',
     'tasks-create-001', 'fingerprint-001', 'tasks-create-001', 'fingerprint-001'
   )
 $$, 'authorized task creation succeeds');
@@ -124,8 +127,8 @@ select lives_ok($$
     '00000000-0000-4100-9800-000000000001',
     'lead', '00000000-0000-4100-9b00-000000000001',
     '00000000-0000-4100-9b00-000000000001',
-    '00000000-0000-4100-8700-000000000001',
-    'Confidential note body', 'team', 'notes-create-001',
+    '00000000-0000-4100-8700-000000000002',
+    'Confidential note body', 'private', 'notes-create-001',
     'note-fingerprint-001', 'notes-create-001', 'note-fingerprint-001'
   )
 $$, 'authorized note creation succeeds');
@@ -137,6 +140,80 @@ select is(
    )),
   1,
   'note creation appends one timeline event'
+);
+
+select ok(
+  has_column_privilege('authenticated', 'public.crm_notes', 'body', 'select') = false,
+  'authenticated clients cannot directly select private note bodies'
+);
+
+select is(
+  (select body from public.crm_notes_visible where id = (select id from public.crm_notes where idempotency_key = 'notes-create-001')),
+  'Confidential note body',
+  'note author can read private body through secure view'
+);
+
+select is(
+  (select author_user_id from public.crm_notes where idempotency_key = 'notes-create-001'),
+  '00000000-0000-4100-8700-000000000001'::uuid,
+  'authenticated actor overrides spoofed note author'
+);
+
+reset role;
+select pg_temp.set_authenticated_user('00000000-0000-4100-8700-000000000002');
+set local role authenticated;
+select is(
+  (select body from public.crm_notes_visible where id = (select id from public.crm_notes where idempotency_key = 'notes-create-001')),
+  'Confidential note body',
+  'organization moderator can read private body'
+);
+
+reset role;
+select pg_temp.set_authenticated_user('00000000-0000-4100-8700-000000000003');
+set local role authenticated;
+select is(
+  (select body from public.crm_notes_visible where id = (select id from public.crm_notes where idempotency_key = 'notes-create-001')),
+  null,
+  'non-author non-moderator cannot read private body'
+);
+
+reset role;
+set local role authenticated;
+select throws_ok($$
+  select body from public.crm_notes where id = (select id from public.crm_notes where idempotency_key = 'notes-create-001')
+$$, 'permission denied for table crm_notes', 'base note table body read is denied');
+
+reset role;
+select pg_temp.set_authenticated_user('00000000-0000-4100-8700-000000000001');
+set local role authenticated;
+select lives_ok($$
+  select public.crm_convert_lead(
+    '00000000-0000-4100-9700-000000000001',
+    '00000000-0000-4100-9b00-000000000001',
+    'Core Product',
+    'Converted Lead'
+  )
+$$, 'lead conversion succeeds atomically');
+select is(
+  (select status from public.crm_leads where id = '00000000-0000-4100-9b00-000000000001'),
+  'convertido',
+  'lead status reconciles with conversion'
+);
+select is(
+  (select count(*)::integer from public.crm_opportunities
+   where lead_id = '00000000-0000-4100-9b00-000000000001' and origin = 'lead_conversion'),
+  1,
+  'conversion creates one opportunity'
+);
+select is(
+  (public.crm_convert_lead(
+    '00000000-0000-4100-9700-000000000001',
+    '00000000-0000-4100-9b00-000000000001',
+    'Core Product',
+    'Converted Lead'
+  )->>'created'),
+  'false',
+  'conversion retry reconciles without duplicate opportunity'
 );
 
 select is(

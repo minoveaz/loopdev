@@ -95,7 +95,7 @@ the PR:
 ```bash
 pnpm exec vitest run --config vitest.config.ts <changed CRM tests>
 supabase db reset --local --yes
-supabase test db --local <top-level database suites 001-005>
+supabase test db --local <top-level database suites 001-006; do not pass helpers/rls_helpers.sql as a standalone suite>
 pnpm test:supabase-governance
 pnpm docs:links:check
 pnpm registries:check
@@ -113,15 +113,15 @@ independent pgTAP suite; execute only top-level suites.
 
 Each module track and PR must record:
 
-| Area | Evidence |
-| --- | --- |
-| Contract | Schemas, envelopes, errors and contract tests |
-| Schema/RLS | Migration, grants, policies, scoped FKs and pgTAP |
-| Backend | Service/API tests and authorization cases |
-| Fixtures | Reset output and scenario coverage |
-| Regression | Predecessor module tests still pass |
+| Area       | Evidence                                                           |
+| ---------- | ------------------------------------------------------------------ |
+| Contract   | Schemas, envelopes, errors and contract tests                      |
+| Schema/RLS | Migration, grants, policies, scoped FKs and pgTAP                  |
+| Backend    | Service/API tests and authorization cases                          |
+| Fixtures   | Reset output and scenario coverage                                 |
+| Regression | Predecessor module tests still pass                                |
 | Repository | Governance, links, registries, typecheck/build and full validation |
-| Handoff | Branch, Issue, PR, out-of-scope items and frontend dependency |
+| Handoff    | Branch, Issue, PR, out-of-scope items and frontend dependency      |
 
 ## 6. Token-saving rules
 

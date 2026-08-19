@@ -13,11 +13,21 @@ export async function PATCH(request: Request, context: Context) {
     opportunityId,
   });
   if (!parsed.success)
-    return NextResponse.json({ error: 'Invalid CRM stage move', code: 'VALIDATION_ERROR', details: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json(
+      {
+        error: 'Invalid CRM stage move',
+        code: 'VALIDATION_ERROR',
+        details: parsed.error.flatten(),
+      },
+      { status: 400 },
+    );
   const access = await authorizeCrm(parsed.data.organizationId, 'crm.manage');
-  if (!access.allowed) return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
+  if (!access.allowed)
+    return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
   try {
-    return NextResponse.json(await moveOpportunityStage(parsed.data));
+    return NextResponse.json(
+      await moveOpportunityStage({ ...parsed.data, actorUserId: access.userId }),
+    );
   } catch (error) {
     return opportunityServiceErrorResponse(error, 'Unable to move CRM opportunity stage');
   }
