@@ -29,6 +29,10 @@ type ContactRow = {
 const contactColumns =
   'id, organization_id, first_name, last_name, email, phone, company_name, created_at, updated_at';
 
+function timestamp(value: string): string {
+  return new Date(value).toISOString();
+}
+
 export function normalizeEmail(value: string | null | undefined) {
   const normalized = value?.trim().toLowerCase();
   return normalized || null;
@@ -48,8 +52,8 @@ function mapContact(row: ContactRow): CrmContact {
     email: row.email,
     phone: row.phone,
     companyName: row.company_name,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    createdAt: timestamp(row.created_at),
+    updatedAt: timestamp(row.updated_at),
   });
 }
 
