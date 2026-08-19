@@ -59,6 +59,8 @@ import { ResponsiveTableCertification } from './certification-lab/ResponsiveTabl
 import { SuiteCompositionPatternsCertification } from './certification-lab/SuiteCompositionPatternsCertification';
 import { OperationalActionsCertification } from './certification-lab/OperationalActionsCertification';
 import { DashboardSummaryCertification } from './certification-lab/DashboardSummaryCertification';
+import { KanbanBoardCertification } from './certification-lab/KanbanBoardCertification';
+import { InteractionFeedbackCertification } from './certification-lab/InteractionFeedbackCertification';
 import { CRMPrimitivesCatalog } from './CRMPrimitivesCatalog';
 import { DataTablesCatalog } from './DataTablesCatalog';
 import type { ActivityRow } from '@/components/composites/data-tables/ActivityTable';
@@ -1513,6 +1515,20 @@ const CERTIFICATION_COMPONENTS = [
     statusTone: 'warning',
     action: 'Phase C10 metrics, activity and summary composition',
   },
+  {
+    id: 'KanbanBoard',
+    label: 'Generic Kanban board',
+    status: 'experimental',
+    statusTone: 'warning',
+    action: 'Phase C11 visual and contract composition',
+  },
+  {
+    id: 'InteractionFeedback',
+    label: 'Feedback and global context',
+    status: 'experimental',
+    statusTone: 'warning',
+    action: 'Phase C12 confirmation, recovery and command composition',
+  },
 ] as const;
 
 type CertificationComponent = (typeof CERTIFICATION_COMPONENTS)[number]['id'];
@@ -1580,6 +1596,24 @@ const CERTIFICATION_GROUPS = [
     statusTone: 'warning',
     entryComponent: 'OperationalActions',
     componentIds: ['OperationalActions', 'DashboardSummary'],
+  },
+  {
+    id: 'phase-c11-kanban',
+    label: 'Phase C11',
+    description: 'Visual contract for a domain-neutral Kanban board',
+    status: 'experimental',
+    statusTone: 'warning',
+    entryComponent: 'KanbanBoard',
+    componentIds: ['KanbanBoard'],
+  },
+  {
+    id: 'phase-c12-feedback',
+    label: 'Phase C12',
+    description: 'Confirmation, recovery and global context feedback patterns',
+    status: 'experimental',
+    statusTone: 'warning',
+    entryComponent: 'InteractionFeedback',
+    componentIds: ['InteractionFeedback'],
   },
 ] as const satisfies ReadonlyArray<{
   id: string;
@@ -1770,6 +1804,12 @@ const CertificationLabCanvas = ({
   }
   if (selected === 'DashboardSummary') {
     return <DashboardSummaryCertification />;
+  }
+  if (selected === 'KanbanBoard') {
+    return <KanbanBoardCertification />;
+  }
+  if (selected === 'InteractionFeedback') {
+    return <InteractionFeedbackCertification />;
   }
   return (
     <div className="space-y-5">

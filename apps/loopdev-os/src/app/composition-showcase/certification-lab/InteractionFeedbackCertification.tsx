@@ -1,128 +1,168 @@
 'use client';
 
-import {
-  Button,
-  CommandDialog,
-  PlatformContextPanel,
-  TechnicalDialog,
-  ToastItem,
-  type NotificationItem,
-} from '@loopdev/ui';
+import { Button, CommandDialog, TechnicalDialog, TechnicalSurface, ToastItem } from '@loopdev/ui';
 import { useState } from 'react';
-import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
-
-const INITIAL_NOTIFICATIONS: NotificationItem[] = [
-  { id: 'sync', title: 'Sync completed', description: 'Contact records are up to date.', timestamp: '2m ago', type: 'success', read: false },
-  { id: 'review', title: 'Review required', description: 'Three records need attention.', timestamp: '18m ago', type: 'warning', read: false },
-];
 
 export function InteractionFeedbackCertification() {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
-  const [toastVisible, setToastVisible] = useState(true);
-  const [contextPanelOpen, setContextPanelOpen] = useState(false);
-  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
+  const [toast, setToast] = useState<'success' | 'error' | null>('success');
+  const [archived, setArchived] = useState(false);
 
-  const markAsRead = (id: string) => setNotifications((items) => items.map((item) => item.id === id ? { ...item, read: true } : item));
-  const unreadCount = notifications.filter((item) => !item.read).length;
+  const archiveItem = () => {
+    setConfirmOpen(false);
+    setArchived(true);
+    setToast('success');
+  };
+
+  const restoreItem = () => {
+    setArchived(false);
+    setToast(null);
+  };
 
   return (
-    <section className="space-y-4" aria-labelledby="interaction-feedback-examples">
+    <section className="space-y-4" aria-labelledby="interaction-feedback-heading">
       <div>
-        <h2 id="interaction-feedback-examples" className="text-lg font-semibold text-text-main">Interaction and feedback</h2>
-        <p className="text-sm text-text-muted">Existing global components, mounted together for visual and keyboard review.</p>
+        <h2
+          id="interaction-feedback-heading"
+          className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+        >
+          C12 · Feedback and global context
+        </h2>
+        <p className="mt-1 max-w-2xl text-xs text-text-muted">
+          Reusable confirmation, recovery, notification and command patterns for operational flows.
+        </p>
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="space-y-3 border border-border-subtle p-4">
-          <div>
-            <h3 className="font-mono text-sm uppercase tracking-[0.14em] text-text-main">Toast</h3>
-            <p className="mt-1 text-xs text-text-muted">Variants are rendered by the existing ToastItem contract.</p>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.72fr)]">
+        <TechnicalSurface variant="surface" radius="md" border="subtle" className="space-y-4 p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border-subtle pb-3">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+                Operational record
+              </p>
+              <h3 className="mt-1 text-base font-semibold text-text-main">
+                {archived ? 'Workspace review · archived' : 'Workspace review'}
+              </h3>
+              <p className="mt-1 text-xs text-text-muted">
+                A representative action flow with confirmation, success and recovery states.
+              </p>
+            </div>
+            <span className="rounded border border-border-subtle px-2 py-1 text-xs text-text-muted">
+              {archived ? 'Archived' : 'Active'}
+            </span>
           </div>
-          {toastVisible ? (
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setConfirmOpen(true)}
+              disabled={archived}
+            >
+              Archive item
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setToast('error')}>
+              Simulate error
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setCommandOpen(true)}>
+              Open commands
+            </Button>
+          </div>
+          <TechnicalDialog
+            isOpen={confirmOpen}
+            onClose={() => setConfirmOpen(false)}
+            title="Archive workspace review?"
+            description="This changes the item state and can be reversed from the recovery action."
+            variant="warning"
+            actions={
+              <>
+                <Button variant="ghost" size="sm" onClick={() => setConfirmOpen(false)}>
+                  Cancel
+                </Button>
+                <Button variant="primary" size="sm" onClick={archiveItem}>
+                  Archive
+                </Button>
+              </>
+            }
+          >
+            <p className="text-sm text-text-muted">
+              The item will leave the active workspace view until it is restored.
+            </p>
+          </TechnicalDialog>
+        </TechnicalSurface>
+
+        <TechnicalSurface variant="surface" radius="md" border="subtle" className="space-y-4 p-4">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+              Feedback states
+            </p>
+            <h3 className="mt-1 text-base font-semibold text-text-main">Status and recovery</h3>
+          </div>
+          {toast ? (
             <ToastItem
-              id="certification-toast"
-              title="Contact saved"
-              description="The contact was updated successfully."
-              variant="success"
-              metadata="CRM"
-              onDismiss={() => setToastVisible(false)}
-              action={{ label: 'View contact', onClick: () => undefined }}
+              id="c12-feedback-toast"
+              title={toast === 'success' ? 'Item archived' : 'Archive failed'}
+              description={
+                toast === 'success'
+                  ? 'The item was removed from the active workspace.'
+                  : 'The operation could not be completed. Try again.'
+              }
+              variant={toast}
+              onDismiss={() => setToast(null)}
+              action={
+                toast === 'success'
+                  ? { label: 'Undo', onClick: restoreItem }
+                  : { label: 'Retry', onClick: () => setToast('success') }
+              }
             />
           ) : (
-            <Button size="sm" variant="outline" onClick={() => setToastVisible(true)}>Show toast</Button>
+            <Button variant="outline" size="sm" onClick={() => setToast('success')}>
+              Show success feedback
+            </Button>
           )}
-        </div>
-
-        <div className="space-y-3 border border-border-subtle p-4">
-          <div>
-            <h3 className="font-mono text-sm uppercase tracking-[0.14em] text-text-main">TechnicalDialog</h3>
-            <p className="mt-1 text-xs text-text-muted">Controlled open/close, semantic variant and actions.</p>
+          <div className="border-t border-border-subtle pt-3 text-xs text-text-muted">
+            <p>Success offers Undo. Error offers Retry. Dismiss keeps the workflow unobstructed.</p>
           </div>
-          <Button size="sm" variant="outline" onClick={() => setDialogOpen(true)}>Open dialog</Button>
-          <TechnicalDialog
-            isOpen={dialogOpen}
-            onClose={() => setDialogOpen(false)}
-            title="Archive contact"
-            description="This action changes the contact lifecycle state."
-            variant="warning"
-            actions={<><Button size="sm" variant="ghost" onClick={() => setDialogOpen(false)}>Cancel</Button><Button size="sm" variant="primary" onClick={() => setDialogOpen(false)}>Archive</Button></>}
-          >
-            <p className="text-sm text-text-muted">The contact can be restored later from the archived records view.</p>
-          </TechnicalDialog>
-        </div>
-
-        <div className="space-y-3 border border-border-subtle p-4">
-          <div>
-            <h3 className="font-mono text-sm uppercase tracking-[0.14em] text-text-main">CommandDialog</h3>
-            <p className="mt-1 text-xs text-text-muted">Existing command palette with groups, disabled command and keyboard close.</p>
-          </div>
-          <Button size="sm" variant="outline" onClick={() => setCommandOpen(true)}>Open command palette</Button>
-          <CommandDialog
-            open={commandOpen}
-            onOpenChange={setCommandOpen}
-            title="Command palette"
-            description="Search and run an available command."
-            placeholder="Run a command or search..."
-            emptyMessage="No commands found."
-            closeLabel="Close command palette"
-            closeOnSelect
-            commands={[
-              { id: 'create', label: 'Create contact', description: 'Add a new CRM contact', shortcut: 'Cmd+N' },
-              { id: 'disabled', label: 'Restricted action', disabled: true },
-            ]}
-            groups={[{ id: 'navigation', label: 'Navigation', commands: [{ id: 'settings', label: 'Open settings' }] }]}
-          />
-        </div>
-
-        <div className="space-y-3 border border-border-subtle p-4">
-          <div>
-            <h3 className="font-mono text-sm uppercase tracking-[0.14em] text-text-main">PlatformContextPanel</h3>
-            <p className="mt-1 text-xs text-text-muted">Notifications live inside the platform context panel boundary.</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <PlatformHeaderControls
-              notifications={notifications}
-              unreadCount={unreadCount}
-              activeContext={contextPanelOpen ? 'notifications' : null}
-              onOpenNotifications={() => setContextPanelOpen((open) => !open)}
-            />
-            <span className="text-xs text-text-muted">{unreadCount} unread</span>
-          </div>
-          {contextPanelOpen && (
-            <div className="h-80 overflow-hidden border border-border-technical">
-              <PlatformContextPanel
-                mode="notifications"
-              notifications={notifications}
-              unreadCount={unreadCount}
-                onClose={() => setContextPanelOpen(false)}
-              onMarkAsRead={markAsRead}
-              onMarkAllRead={() => setNotifications((items) => items.map((item) => ({ ...item, read: true })))}
-                onRemoveNotification={(id) => setNotifications((items) => items.filter((item) => item.id !== id))}
-              />
-            </div>
-          )}
-        </div>
+        </TechnicalSurface>
       </div>
+
+      <CommandDialog
+        open={commandOpen}
+        onOpenChange={setCommandOpen}
+        title="Workspace commands"
+        description="Search and run an available operation."
+        placeholder="Search commands..."
+        emptyMessage="No commands found."
+        closeLabel="Close workspace commands"
+        closeOnSelect
+        commands={[
+          {
+            id: 'archive',
+            label: 'Archive current item',
+            description: 'Move the item out of the active workspace',
+            onSelect: () => setConfirmOpen(true),
+          },
+          {
+            id: 'restore',
+            label: 'Restore archived item',
+            description: 'Return the item to the active workspace',
+            onSelect: restoreItem,
+          },
+        ]}
+        groups={[
+          {
+            id: 'navigation',
+            label: 'Navigation',
+            commands: [
+              {
+                id: 'activity',
+                label: 'Open activity history',
+                onSelect: () => setToast('success'),
+              },
+            ],
+          },
+        ]}
+      />
     </section>
   );
 }

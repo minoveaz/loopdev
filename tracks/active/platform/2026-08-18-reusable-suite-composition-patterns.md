@@ -36,11 +36,11 @@ business logic in the consuming suite.
 
 ## Decisiones aprobadas para C11
 
-| Fecha | Decisión | Motivo | Impacto | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-19 | C11 se implementa en este track como una certificación visual y contractual pequeña del Kanban genérico. | Validar la composición reutilizable sin mezclar Pipeline CRM, persistencia o permisos en el DS. | Se usa `KanbanBoard` existente; no se instala `dnd-kit` ni se implementa drag and drop de producto. | User |
-| 2026-08-19 | Los bloques Kanban admiten tonos semánticos controlados por etapa. | Permitir estados visuales como oportunidades perdidas sin hardcodear lógica CRM ni colores de tenant. | El contrato usa `neutral`, `primary`, `success`, `warning` y `danger`; la suite decide el significado. | User |
-| 2026-08-19 | Las capacidades avanzadas quedan documentadas para un futuro track específico de Kanban. | Mantener C11 pequeño y estable sin perder el backlog de evolución. | El futuro track cubrirá interacción, accesibilidad avanzada, vistas, selección y estados operativos. | User |
+| Fecha      | Decisión                                                                                                 | Motivo                                                                                                | Impacto                                                                                                | Aprobado por |
+| ---------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------ |
+| 2026-08-19 | C11 se implementa en este track como una certificación visual y contractual pequeña del Kanban genérico. | Validar la composición reutilizable sin mezclar Pipeline CRM, persistencia o permisos en el DS.       | Se usa `KanbanBoard` existente; no se instala `dnd-kit` ni se implementa drag and drop de producto.    | User         |
+| 2026-08-19 | Los bloques Kanban admiten tonos semánticos controlados por etapa.                                       | Permitir estados visuales como oportunidades perdidas sin hardcodear lógica CRM ni colores de tenant. | El contrato usa `neutral`, `primary`, `success`, `warning` y `danger`; la suite decide el significado. | User         |
+| 2026-08-19 | Las capacidades avanzadas quedan documentadas para un futuro track específico de Kanban.                 | Mantener C11 pequeño y estable sin perder el backlog de evolución.                                    | El futuro track cubrirá interacción, accesibilidad avanzada, vistas, selección y estados operativos.   | User         |
 
 ## Alcance inicial
 
@@ -63,7 +63,7 @@ business logic in the consuming suite.
 - Route implementation for Contacts, Leads, Pipeline, Tasks or Customer 360.
 - Promotion of a pattern without a reviewed contract and focused evidence.
 - Implementation of product-specific drag and drop for Pipeline CRM or adoption
-      of an external drag and drop dependency.
+  of an external drag and drop dependency.
 
 ## Primer slice
 
@@ -237,16 +237,16 @@ incluida accesibilidad base), typecheck de `@loopdev/ui`, Prettier y
 9. **Acciones operativas**: `Button`, `IconButton`, menús de acción, bulk
    actions, confirmaciones, export/import, retry y undo.
 10. [x] **Dashboards y resumen:** métricas, actividad, quick actions, próximos
-      pasos, progreso y resúmenes de calendario; composición responsive aprobada
-      en móvil y desktop, claro y oscuro.
+        pasos, progreso y resúmenes de calendario; composición responsive aprobada
+        en móvil y desktop, claro y oscuro.
 11. [x] **Tableros y visualizaciones:** `KanbanBoard`, timeline, activity stream,
-    progreso y vistas board/list con alternativa de teclado. En este track se
-    limita a contrato y certificación visual del patrón; la implementación real
-    de drag and drop, incluyendo `dnd-kit`, queda reservada al Pipeline CRM.
-      Las columnas deben admitir tonos semánticos controlados (`neutral`,
-      `primary`, `success`, `warning`, `danger`) para representar etapas como
-      oportunidades perdidas sin introducir colores de tenant ni lógica CRM en
-      el componente compartido.
+        progreso y vistas board/list con alternativa de teclado. En este track se
+        limita a contrato y certificación visual del patrón; la implementación real
+        de drag and drop, incluyendo `dnd-kit`, queda reservada al Pipeline CRM.
+        Las columnas deben admitir tonos semánticos controlados (`neutral`,
+        `primary`, `success`, `warning`, `danger`) para representar etapas como
+        oportunidades perdidas sin introducir colores de tenant ni lógica CRM en
+        el componente compartido.
 
 ### C11: alcance de esta iteración
 
@@ -257,9 +257,9 @@ cuando necesite una vista de etapas, sin convertirlo en un motor de workflow.
 
 - Fixture domain-neutral con cuatro o cinco columnas.
 - Columnas con ancho estable, scroll horizontal controlado y scroll vertical
-      interno para tarjetas.
+  interno para tarjetas.
 - Tonos semánticos de columna: `neutral`, `primary`, `success`, `warning` y
-      `danger`.
+  `danger`.
 - Contadores y métricas opcionales por columna.
 - Tarjetas custom mediante `renderCard`.
 - Estados visuales normal, hover, focus, selected, read-only y disabled.
@@ -267,7 +267,7 @@ cuando necesite una vista de etapas, sin convertirlo en un motor de workflow.
 - Acciones de tarjeta y columna mediante slots o callbacks.
 - Revisión responsive en desktop, tablet y mobile, en claro y oscuro.
 - Alternativa visual reservada para `Move to...`, sin implementar todavía la
-      mutación de Pipeline.
+  mutación de Pipeline.
 
 **Excluido de C11**
 
@@ -303,7 +303,7 @@ el futuro track específico de Pipeline CRM.
 **Backlog para un futuro track específico de Kanban**
 
 - Drag and drop con mouse, touch y teclado; `dnd-kit` se evaluará e
-      implementará en el Pipeline CRM mediante un adapter LoopDev.
+  implementará en el Pipeline CRM mediante un adapter LoopDev.
 - Ordenamiento dentro de columnas y movimiento entre columnas.
 - Drag overlay, colisiones, restricciones y cancelación.
 - Anuncios accesibles, focus restoration y alternativa completa de `Move to...`.
@@ -319,6 +319,31 @@ el futuro track específico de Pipeline CRM.
 `StatusBadge`, `QueryToolbar` y primitives existentes siempre que cubran la
 responsabilidad. No se crearán `PipelineCard`, `KanbanColumnHeader` u otros
 componentes CRM dentro de `@loopdev/ui` durante esta iteración.
+
+### C12: feedback y contexto global
+
+**Estado:** certificado visualmente y contractualmente el 2026-08-19.
+
+**Evidencia de C12:** La fixture `InteractionFeedbackCertification` compone los
+contratos existentes `TechnicalDialog`, `ToastItem` y `CommandDialog` desde
+`@loopdev/ui`. El flujo domain-neutral cubre confirmación de archivado,
+feedback de éxito con `Undo`, error con `Retry`, dismiss, restauración y
+comandos accionables para archivar, restaurar y abrir actividad.
+
+La revisión visual fue aprobada en claro y oscuro, desktop y mobile. Se
+verificó que `CommandDialog` se centra en el viewport móvil, mantiene búsqueda,
+grupos y navegación por teclado, y que sus comandos ejecutan acciones reales de
+la fixture mediante `onSelect`. No se creó una command palette paralela ni se
+introdujo lógica CRM o persistencia.
+
+**Validación técnica ejecutada:** Prettier, TypeScript de `loopdev-os`, tests
+focalizados de `CommandDialog` (5/5) y `git diff --check`.
+
+**Handoff:** C12 queda cerrado en este track. Las operaciones de negocio,
+persistencia, permisos y recuperación remota pertenecen a los consumidores de
+suite; este bloque certifica únicamente la composición y los contratos de
+feedback/contexto.
+
 12. **Feedback y contexto global**: `Toast`, `CommandDialog`,
     `TechnicalDialog`, `PlatformHeader` con bombillo, `ContextPanelHost` y
     `PlatformContextPanel` para notificaciones, ayuda, asistente y perfil.
