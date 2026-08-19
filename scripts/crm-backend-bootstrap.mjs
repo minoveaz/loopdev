@@ -6,9 +6,11 @@ import { writeFileSync } from 'node:fs';
 
 const apiUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321';
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const dbUrl = process.env.SUPABASE_DB_URL ?? process.env.DB_URL;
 const outputPath =
   process.env.CRM_BACKEND_BOOTSTRAP_OUTPUT ?? '/tmp/loopdev-crm-backend-bootstrap.json';
+const emailDomain = process.env.CRM_BACKEND_TEST_EMAIL_DOMAIN ?? 'example.test';
 
 if (!anonKey || !dbUrl) {
   throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY and SUPABASE_DB_URL are required');
@@ -37,19 +39,29 @@ function runPsql(args, options = {}) {
 }
 
 const suffix = `${Date.now()}-${randomBytes(6).toString('hex')}`;
-const email = `crm-backend-${suffix}@example.test`;
-const viewerEmail = `crm-backend-viewer-${suffix}@example.test`;
+const email = `crm-backend-${suffix}@${emailDomain}`;
+const viewerEmail = `crm-backend-viewer-${suffix}@${emailDomain}`;
 const password = `CrmBackend!${suffix}`;
 const headers = { apikey: anonKey, 'Content-Type': 'application/json' };
 
 async function createSession(userEmail) {
-  const signupResponse = await fetch(`${apiUrl}/auth/v1/signup`, {
+  const signupResponse = await fetch(
+    serviceRoleKey ? `${apiUrl}/auth/v1/admin/users` : `${apiUrl}/auth/v1/signup`,
+    {
     method: 'POST',
-    headers,
-    body: JSON.stringify({ email: userEmail, password }),
-  });
+      headers: serviceRoleKey
+        ? { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}`, ...headers }
+        : headers,
+      body: JSON.stringify(
+        serviceRoleKey
+          ? { email: userEmail, password, email_confirm: true }
+          : { email: userEmail, password },
+      ),
+    },
+  );
   const signup = await signupResponse.json();
-  if (!signupResponse.ok || !signup.user?.id) {
+  const userId = signup.user?.id ?? signup.id;
+  if (!signupResponse.ok || !userId) {
     throw new Error(`Unable to create CRM integration user: ${JSON.stringify(signup)}`);
   }
   const tokenResponse = await fetch(`${apiUrl}/auth/v1/token?grant_type=password`, {
@@ -61,7 +73,7 @@ async function createSession(userEmail) {
   if (!tokenResponse.ok || !token.access_token) {
     throw new Error(`Unable to authenticate CRM integration user: ${JSON.stringify(token)}`);
   }
-  return { userId: signup.user.id, token };
+  return { userId, token };
 }
 
 const owner = await createSession(email);
