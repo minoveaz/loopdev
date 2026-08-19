@@ -44,7 +44,7 @@ select ok(pg_temp.has_policy_for('crm_tasks', 'insert'), 'Tasks expose an INSERT
 select ok(pg_temp.has_policy_for('crm_tasks', 'update'), 'Tasks expose an UPDATE policy');
 select ok(pg_temp.has_policy_for('crm_notes', 'update'), 'Notes expose an UPDATE policy');
 select ok(pg_temp.has_policy_for('crm_timeline_events', 'select'), 'Timeline exposes a SELECT policy');
-select ok(not pg_temp.has_policy_for('crm_timeline_events', 'insert'), 'Timeline has no client INSERT policy');
+select ok(pg_temp.has_policy_for('crm_timeline_events', 'insert'), 'Timeline exposes an explicit deny INSERT policy');
 select ok(pg_temp.has_scoped_fk('crm_tasks', 'crm_leads'), 'Legacy task lead relation remains scoped');
 select ok(has_table_privilege('authenticated', 'public.crm_timeline_events', 'insert') = false, 'Timeline INSERT privilege is revoked');
 
