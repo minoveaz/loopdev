@@ -273,12 +273,23 @@ drop policy if exists crm_opportunity_stage_history_crm_read
   on public.crm_opportunity_stage_history;
 drop policy if exists crm_opportunity_stage_history_crm_insert
   on public.crm_opportunity_stage_history;
+drop policy if exists crm_opportunity_stage_history_no_update
+  on public.crm_opportunity_stage_history;
+drop policy if exists crm_opportunity_stage_history_no_delete
+  on public.crm_opportunity_stage_history;
 create policy crm_opportunity_stage_history_crm_read
   on public.crm_opportunity_stage_history for select to authenticated
   using (public.has_organization_permission(organization_id, 'crm.read'));
 create policy crm_opportunity_stage_history_crm_insert
   on public.crm_opportunity_stage_history for insert to authenticated
   with check (public.has_organization_permission(organization_id, 'crm.manage'));
+create policy crm_opportunity_stage_history_no_update
+  on public.crm_opportunity_stage_history for update to authenticated
+  using (false)
+  with check (false);
+create policy crm_opportunity_stage_history_no_delete
+  on public.crm_opportunity_stage_history for delete to authenticated
+  using (false);
 
 revoke all on table public.crm_opportunity_stage_history from authenticated;
 grant select, insert on table public.crm_opportunity_stage_history to authenticated;
