@@ -69,7 +69,16 @@ jobs:
         run: supabase db lint --local
 
       - name: Run database contract tests
-        run: supabase test db --local supabase/tests/database/*.sql
+        run: supabase test db --local 'supabase/tests/database/[0-9]*.sql'
+      - name: Prepare authenticated CRM integration fixture
+        run: |
+          eval "$(supabase status -o env)"
+          supabase status -o env >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY" >> "$GITHUB_ENV"
+          echo "SUPABASE_DB_URL=$DB_URL" >> "$GITHUB_ENV"
+      - name: Verify CRM backend bootstrap
+        run: pnpm test:crm:bootstrap
 
       - name: Stop local Supabase
         if: always()

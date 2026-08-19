@@ -53,6 +53,7 @@ jobs:
       quality: ${{ steps.plan.outputs.full_fallback }}
       package_validation: ${{ steps.impact.outputs.has_targeted_validation }}
       frontend: ${{ steps.impact.outputs.frontend == 'true' || steps.filter.outputs.frontend == 'true' }}
+      backend: ${{ steps.filter.outputs.backend == 'true' }}
       mobile: ${{ steps.impact.outputs.mobile }}
       browser_desktop: ${{ steps.plan.outputs.browser_desktop }}
       browser_mobile: ${{ steps.plan.outputs.browser_mobile }}
@@ -74,13 +75,25 @@ jobs:
         with:
           filters: |
             frontend:
-              - 'apps/loopdev-os/**'
+              - 'apps/loopdev-os/src/components/**'
+              - 'apps/loopdev-os/src/suites/**'
+              - 'apps/loopdev-os/src/app/**'
+              - '!apps/loopdev-os/src/app/api/**'
+              - '!apps/loopdev-os/src/services/**'
               - 'ds/packages/ui/**'
               - 'packages/contracts/**'
               - 'e2e/**'
               - 'playwright.config.mjs'
               - 'package.json'
               - 'pnpm-lock.yaml'
+            backend:
+              - 'apps/loopdev-os/src/app/api/**'
+              - 'apps/loopdev-os/src/services/**'
+              - 'apps/loopdev-os/src/types/**'
+              - 'packages/contracts/**'
+              - 'supabase/**'
+              - 'scripts/crm-backend-*.mjs'
+              - '.github/workflows/**'
             shell:
               - 'apps/loopdev-os/src/app/globals.css'
               - 'apps/loopdev-os/src/app/layout.tsx'
@@ -319,6 +332,59 @@ jobs:
           name: coverage-${{ github.sha }}
           path: coverage/
           if-no-files-found: ignore
+
+  backend-validation:
+    name: Backend contract and API tests
+    needs: [changes, dependency-preflight]
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build contracts
+        run: pnpm --filter @loopdev/contracts build
+      - name: Run CRM API contract tests
+        run: pnpm vitest run apps/loopdev-os/src/app/api/crm
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: 2.114.0
+      - name: Start and reset local Supabase
+        run: |
+          supabase start
+          supabase db reset
+          eval "$(supabase status -o env)"
+          echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY" >> "$GITHUB_ENV"
+          echo "SUPABASE_DB_URL=$DB_URL" >> "$GITHUB_ENV"
+      - name: Bootstrap authenticated CRM fixture
+        run: pnpm test:crm:bootstrap
+      - name: Start Next API
+        run: |
+          PORT=3001 pnpm --filter loopdev-os dev > /tmp/loopdev-os.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:3001/login >/dev/null && break
+            sleep 1
+          done
+      - name: Run authenticated CRM HTTP checks
+        env:
+          CRM_BACKEND_BASE_URL: http://127.0.0.1:3001
+        run: pnpm test:crm:backend-http
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop
 
   frontend-validation:
     name: Frontend lint, tests and build

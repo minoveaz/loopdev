@@ -56,7 +56,9 @@ async function getDb() {
 
 function timestamp(value: unknown): string {
   const raw = String(value);
-  return raw.includes('T') ? raw.replace(/\+00:00$/, 'Z') : raw.replace(' ', 'T').replace(/\+00:00$/, 'Z');
+  return raw.includes('T')
+    ? raw.replace(/\+00:00$/, 'Z')
+    : raw.replace(' ', 'T').replace(/\+00:00$/, 'Z');
 }
 
 function mapStage(row: DbRow): PipelineStage {
@@ -80,7 +82,17 @@ function mapStage(row: DbRow): PipelineStage {
 
 function mapOpportunity(row: DbRow): CrmOpportunity {
   const stageKey = String(row.stage_key ?? row.stage);
-  const legacyStage = ['lead', 'contacted', 'proposal', 'negotiation', 'won', 'lost', 'rejected', 'discarded', 'qualified'].includes(stageKey)
+  const legacyStage = [
+    'lead',
+    'contacted',
+    'proposal',
+    'negotiation',
+    'won',
+    'lost',
+    'rejected',
+    'discarded',
+    'qualified',
+  ].includes(stageKey)
     ? stageKey
     : undefined;
   return CrmOpportunitySchema.parse({
@@ -126,7 +138,10 @@ function fingerprint(input: CrmCreateManualOpportunityCommand) {
   });
 }
 
-async function loadOpportunity(organizationId: string, opportunityId: string): Promise<DbRow | null> {
+async function loadOpportunity(
+  organizationId: string,
+  opportunityId: string,
+): Promise<DbRow | null> {
   const supabase = await getDb();
   const { data, error } = await supabase
     .from('crm_opportunities')
@@ -211,7 +226,8 @@ export async function listPipelineStages(input: {
     .select(stageColumns)
     .eq('organization_id', input.organizationId)
     .order('position', { ascending: true });
-  if (input.workspaceId) query = query.or(`workspace_id.eq.${input.workspaceId},workspace_id.is.null`);
+  if (input.workspaceId)
+    query = query.or(`workspace_id.eq.${input.workspaceId},workspace_id.is.null`);
   const { data, error } = await query;
   if (error) throw new Error('Unable to list CRM pipeline stages');
   return ((data ?? []) as DbRow[]).map(mapStage);
@@ -238,7 +254,7 @@ export async function listOpportunities(input: CrmOpportunityQuery) {
   const items = rows.slice(0, parsed.limit).map(mapOpportunity);
   return {
     items,
-    nextCursor: rows.length > parsed.limit ? items.at(-1)?.id ?? null : null,
+    nextCursor: rows.length > parsed.limit ? (items.at(-1)?.id ?? null) : null,
     hasMore: rows.length > parsed.limit,
   };
 }
@@ -262,7 +278,10 @@ export async function createManualOpportunity(input: CrmCreateManualOpportunityC
   if (existingError) throw new Error('Unable to resolve CRM opportunity idempotency');
   if (existing) {
     if ((existing as DbRow).idempotency_fingerprint !== expectedFingerprint)
-      throw new OpportunityServiceError('CRM opportunity idempotency key was reused', 'IDEMPOTENCY_CONFLICT');
+      throw new OpportunityServiceError(
+        'CRM opportunity idempotency key was reused',
+        'IDEMPOTENCY_CONFLICT',
+      );
     return { opportunity: mapOpportunity(existing as DbRow), created: false };
   }
 
@@ -276,27 +295,30 @@ export async function createManualOpportunity(input: CrmCreateManualOpportunityC
   if (!contact) throw new OpportunityServiceError('CRM contact is required', 'CONTACT_REQUIRED');
 
   const stage = await loadDefaultStage(parsed.organizationId, parsed.workspaceId);
-  if (!stage) throw new OpportunityServiceError('CRM pipeline has no active open stage', 'INVALID_STAGE');
+  if (!stage)
+    throw new OpportunityServiceError('CRM pipeline has no active open stage', 'INVALID_STAGE');
   const opportunityInsert: Database['public']['Tables']['crm_opportunities']['Insert'] = {
-      organization_id: parsed.organizationId,
-      workspace_id: parsed.workspaceId ?? null,
-      brand_id: parsed.brandId ?? null,
-      contact_id: parsed.contactId,
-      lead_id: null,
-      name: parsed.name,
-      product_key: productKey,
-      stage: String(stage.stage_key),
-      stage_key: String(stage.stage_key),
-      origin: 'manual',
-      amount: parsed.amount ?? null,
-      currency: parsed.currency,
-      probability: parsed.probability ?? null,
-      expected_close_at: parsed.expectedCloseAt ?? (parsed.expectedCloseDate ? `${parsed.expectedCloseDate}T00:00:00.000Z` : null),
-      assigned_to_user_id: parsed.assignedUserId ?? null,
-      version: 1,
-      idempotency_key: parsed.idempotencyKey,
-      idempotency_fingerprint: expectedFingerprint,
-    };
+    organization_id: parsed.organizationId,
+    workspace_id: parsed.workspaceId ?? null,
+    brand_id: parsed.brandId ?? null,
+    contact_id: parsed.contactId,
+    lead_id: null,
+    name: parsed.name,
+    product_key: productKey,
+    stage: String(stage.stage_key),
+    stage_key: String(stage.stage_key),
+    origin: 'manual',
+    amount: parsed.amount ?? null,
+    currency: parsed.currency,
+    probability: parsed.probability ?? null,
+    expected_close_at:
+      parsed.expectedCloseAt ??
+      (parsed.expectedCloseDate ? `${parsed.expectedCloseDate}T00:00:00.000Z` : null),
+    assigned_to_user_id: parsed.assignedUserId ?? null,
+    version: 1,
+    idempotency_key: parsed.idempotencyKey,
+    idempotency_fingerprint: expectedFingerprint,
+  };
   const { data, error } = await supabase
     .from('crm_opportunities')
     .insert(opportunityInsert)
@@ -304,14 +326,26 @@ export async function createManualOpportunity(input: CrmCreateManualOpportunityC
     .single();
   if (error) {
     if (error.code === '23505') {
-      const raced = await loadOpportunityByIdempotency(parsed.organizationId, parsed.idempotencyKey);
+      const raced = await loadOpportunityByIdempotency(
+        parsed.organizationId,
+        parsed.idempotencyKey,
+      );
       if (raced && raced.idempotency_fingerprint === expectedFingerprint)
         return { opportunity: mapOpportunity(raced), created: false };
     }
     throw new Error('Unable to create CRM opportunity');
   }
   const opportunity = mapOpportunity(data as DbRow);
-  await appendStageHistory(parsed.organizationId, opportunity.id, null, String(stage.stage_key), 1, 'system', null, null);
+  await appendStageHistory(
+    parsed.organizationId,
+    opportunity.id,
+    null,
+    String(stage.stage_key),
+    1,
+    'system',
+    null,
+    null,
+  );
   await recordCrmAuditEvent({
     organizationId: parsed.organizationId,
     actorUserId: parsed.assignedUserId,
@@ -340,17 +374,38 @@ export async function moveOpportunityStage(input: CrmMoveOpportunityStageCommand
   if (!current) throw new OpportunityServiceError('CRM opportunity not found', 'NOT_FOUND');
   if (Number(current.version) !== parsed.expectedVersion)
     throw new OpportunityServiceError('CRM opportunity update conflict', 'CONFLICT');
-  const currentStage = await loadStage(parsed.organizationId, String(current.stage_key), current.workspace_id as string | null, false);
-  const targetStage = await loadStage(parsed.organizationId, parsed.stageKey, current.workspace_id as string | null);
-  if (!targetStage) throw new OpportunityServiceError('CRM stage is invalid or inactive', 'INVALID_STAGE');
-  if (currentStage?.terminal_type !== 'open')
-    throw new OpportunityServiceError('Terminal opportunities require reopen', 'STAGE_TRANSITION_FORBIDDEN');
+  const currentStage = await loadStage(
+    parsed.organizationId,
+    String(current.stage_key),
+    current.workspace_id as string | null,
+    false,
+  );
+  const targetStage = await loadStage(
+    parsed.organizationId,
+    parsed.stageKey,
+    current.workspace_id as string | null,
+  );
+  if (!targetStage)
+    throw new OpportunityServiceError('CRM stage is invalid or inactive', 'INVALID_STAGE');
+  if (currentStage?.terminal_type !== 'open' && parsed.origin !== 'reopen')
+    throw new OpportunityServiceError(
+      'Terminal opportunities require reopen',
+      'STAGE_TRANSITION_FORBIDDEN',
+    );
   if (String(current.stage_key) === parsed.stageKey)
-    throw new OpportunityServiceError('CRM opportunity is already in this stage', 'STAGE_TRANSITION_FORBIDDEN');
+    throw new OpportunityServiceError(
+      'CRM opportunity is already in this stage',
+      'STAGE_TRANSITION_FORBIDDEN',
+    );
   const supabase = await getDb();
   const { data, error } = await supabase
     .from('crm_opportunities')
-    .update({ stage: parsed.stageKey, stage_key: parsed.stageKey, version: parsed.expectedVersion + 1, updated_at: new Date().toISOString() })
+    .update({
+      stage: parsed.stageKey,
+      stage_key: parsed.stageKey,
+      version: parsed.expectedVersion + 1,
+      updated_at: new Date().toISOString(),
+    })
     .eq('organization_id', parsed.organizationId)
     .eq('id', parsed.opportunityId)
     .eq('version', parsed.expectedVersion)
@@ -359,7 +414,16 @@ export async function moveOpportunityStage(input: CrmMoveOpportunityStageCommand
   if (error) throw new Error('Unable to move CRM opportunity stage');
   if (!data) throw new OpportunityServiceError('CRM opportunity update conflict', 'CONFLICT');
   const opportunity = mapOpportunity(data as DbRow);
-  await appendStageHistory(parsed.organizationId, opportunity.id, String(current.stage_key), parsed.stageKey, opportunity.version, parsed.origin, parsed.reason, parsed.actorUserId);
+  await appendStageHistory(
+    parsed.organizationId,
+    opportunity.id,
+    String(current.stage_key),
+    parsed.stageKey,
+    opportunity.version,
+    parsed.origin,
+    parsed.reason,
+    parsed.actorUserId,
+  );
   await recordCrmAuditEvent({
     organizationId: parsed.organizationId,
     actorUserId: parsed.actorUserId,
@@ -377,15 +441,31 @@ export async function reopenOpportunity(input: CrmReopenOpportunityCommand) {
   const parsed = CrmReopenOpportunityCommandSchema.parse(input);
   const current = await loadOpportunity(parsed.organizationId, parsed.opportunityId);
   if (!current) throw new OpportunityServiceError('CRM opportunity not found', 'NOT_FOUND');
-  if (!parsed.reason.trim()) throw new OpportunityServiceError('A reopen reason is required', 'REOPEN_REASON_REQUIRED');
-  const currentStage = await loadStage(parsed.organizationId, String(current.stage_key), current.workspace_id as string | null, false);
+  if (!parsed.reason.trim())
+    throw new OpportunityServiceError('A reopen reason is required', 'REOPEN_REASON_REQUIRED');
+  const currentStage = await loadStage(
+    parsed.organizationId,
+    String(current.stage_key),
+    current.workspace_id as string | null,
+    false,
+  );
   if (!currentStage || currentStage.terminal_type === 'open')
-    throw new OpportunityServiceError('Only won or lost opportunities can be reopened', 'REOPEN_FORBIDDEN');
+    throw new OpportunityServiceError(
+      'Only won or lost opportunities can be reopened',
+      'REOPEN_FORBIDDEN',
+    );
   if (Number(current.version) !== parsed.expectedVersion)
     throw new OpportunityServiceError('CRM opportunity update conflict', 'CONFLICT');
-  const targetStage = await loadStage(parsed.organizationId, parsed.targetStageKey, current.workspace_id as string | null);
+  const targetStage = await loadStage(
+    parsed.organizationId,
+    parsed.targetStageKey,
+    current.workspace_id as string | null,
+  );
   if (!targetStage || targetStage.terminal_type !== 'open')
-    throw new OpportunityServiceError('Reopen target must be an active open stage', 'INVALID_STAGE');
+    throw new OpportunityServiceError(
+      'Reopen target must be an active open stage',
+      'INVALID_STAGE',
+    );
   return moveOpportunityStage({
     organizationId: parsed.organizationId,
     opportunityId: parsed.opportunityId,
@@ -407,12 +487,20 @@ export async function updateOpportunity(input: CrmUpdateOpportunityCommand) {
   const changes = {
     ...(parsed.name !== undefined ? { name: parsed.name } : {}),
     ...(parsed.brandId !== undefined ? { brand_id: parsed.brandId } : {}),
-    ...(parsed.productKey !== undefined ? { product_key: normalizeProductKey(parsed.productKey) } : {}),
+    ...(parsed.productKey !== undefined
+      ? { product_key: normalizeProductKey(parsed.productKey) }
+      : {}),
     ...(parsed.amount !== undefined ? { amount: parsed.amount } : {}),
     ...(parsed.currency !== undefined ? { currency: parsed.currency } : {}),
     ...(parsed.probability !== undefined ? { probability: parsed.probability } : {}),
     ...(parsed.expectedCloseAt !== undefined ? { expected_close_at: parsed.expectedCloseAt } : {}),
-    ...(parsed.expectedCloseDate !== undefined ? { expected_close_at: parsed.expectedCloseDate ? `${parsed.expectedCloseDate}T00:00:00.000Z` : null } : {}),
+    ...(parsed.expectedCloseDate !== undefined
+      ? {
+          expected_close_at: parsed.expectedCloseDate
+            ? `${parsed.expectedCloseDate}T00:00:00.000Z`
+            : null,
+        }
+      : {}),
     ...(parsed.assignedUserId !== undefined ? { assigned_to_user_id: parsed.assignedUserId } : {}),
     version: parsed.expectedVersion + 1,
     updated_at: new Date().toISOString(),
@@ -463,7 +551,11 @@ export async function configurePipelineStage(input: CrmConfigurePipelineStageCom
     : supabase.from('crm_pipeline_stages').insert(values);
   const { data, error } = await query.select(stageColumns).maybeSingle();
   if (error) {
-    if (error.code === '23505') throw new OpportunityServiceError('CRM stage configuration conflicts', 'INVALID_STAGE_CONFIGURATION');
+    if (error.code === '23505')
+      throw new OpportunityServiceError(
+        'CRM stage configuration conflicts',
+        'INVALID_STAGE_CONFIGURATION',
+      );
     throw new Error('Unable to configure CRM pipeline stage');
   }
   if (!data) throw new OpportunityServiceError('CRM stage configuration conflicts', 'CONFLICT');
