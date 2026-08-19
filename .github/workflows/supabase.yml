@@ -69,7 +69,13 @@ jobs:
         run: supabase db lint --local
 
       - name: Run database contract tests
-        run: supabase test db --local 'supabase/tests/database/[0-9]*.sql'
+        run: >-
+          supabase test db --local
+          supabase/tests/database/001_platform_core.sql
+          supabase/tests/database/002_platform_core_rls.sql
+          supabase/tests/database/003_marketing_rls.sql
+          supabase/tests/database/004_content_engine_rls.sql
+          supabase/tests/database/005_crm_security.sql
       - name: Prepare authenticated CRM integration fixture
         run: |
           eval "$(supabase status -o env)"
