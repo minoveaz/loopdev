@@ -29,7 +29,7 @@ la existencia de un track no implica que tenga autorizacion para iniciar impleme
 
 | Track | Estado operativo | Decisión | Siguiente evidencia |
 | --- | --- | --- | --- |
-| `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | G2 backend implementado; falta validar salida integral del gate |
+| `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | Pipeline backend cerrado como delivery; Tasks es el siguiente bloque |
 | `crm-shared-foundation` | cerrado tras Contacts backend-first | Mantener como foundation reutilizable; no reabrirlo para nuevos módulos | PRs #111, #114, #116 y cierre #118 |
 | `crm-leads-backend-foundation` | backend-first mergeado en `develop` mediante PR #119 | Mantenerlo como dependencia de Pipeline y completar evidencia operativa | Validacion end-to-end con Supabase real y cierre operativo de #84 |
 | `crm-ui-foundation` | pausado para nuevos slices | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0 |
@@ -39,9 +39,9 @@ la existencia de un track no implica que tenga autorizacion para iniciar impleme
 
 G0/#68 y la validación del primer consumidor Contacts (#82) están cerrados. Leads (#84) ya está
 mergeado en `develop`, pero su cierre operativo aún requiere evidencia end-to-end y de aislamiento
-remoto. Se autoriza únicamente la preparación de Pipeline (#85): rama limpia, reconciliación de
-evidencia y diseño técnico. La implementación funcional de Pipeline, Tasks (#87) y Customer 360
-(#88) permanece bloqueada hasta completar G1 y validar Leads. La UI y las primitives compartidas
+remoto. Pipeline (#85) ya completó su delivery backend. Se autoriza ahora la implementación
+funcional de Tasks (#87); Customer 360 (#88) queda posterior y Daily Operation continúa como
+resultado transversal de G3. La UI y las primitives compartidas
 siguen coordinadas por sus tracks transversales y no autorizan crear componentes CRM paralelos.
 
 ### Readiness preparatorio de Pipeline (#85)
@@ -514,9 +514,9 @@ aislamiento verificable.
 
 **Evidencia:** Ver fila 2026-08-18 en "Evidencia de validacion" mas abajo.
 
-**Estado:** Backend de Leads y Pipeline mergeado en `develop` mediante PRs #119 y #121. La salida
-integral de G2 sigue pendiente de reconciliar la validación de G1, staging/UAT y el cierre operativo
-de los delivery tracks.
+**Estado:** Backend de Leads y Pipeline mergeado en `develop` mediante PRs #119 y #121. El delivery
+backend de Pipeline queda cerrado con su evidencia técnica; la salida integral de G2 sigue pendiente
+de reconciliar la validación de G1, staging/UAT y el cierre operativo de los delivery tracks.
 
 ### Fase 3: G3 - Daily operation and staging UAT
 
@@ -571,6 +571,7 @@ go-live o UAT privado.
 | Fecha      | Cambio                                         | Motivo                                                                  | Impacto en alcance/fases                                                      | Aprobado por |
 | ---------- | ---------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------ |
 | 2026-08-13 | Separar el piloto del mega-track CRM historico | El piloto requiere gates fechados, WIP limitado y evidencias operativas | CRM Pilot Execution coordina G0-G5; el historico se preserva como antecedente | User         |
+| 2026-08-19 | Continuar con Tasks antes de crear staging     | Contacts, Leads y Pipeline ya tienen delivery backend; staging se crea una vez para certificar el conjunto | Tasks es el siguiente delivery; Daily Operation sigue transversal; Customer 360 se completa después; staging queda posterior a estos bloques | User |
 
 ## Riesgos y bloqueos
 
@@ -619,13 +620,15 @@ go-live o UAT privado.
 - **Estado alcanzado:** Leads y Pipeline backend-first implementados y protegidos por contratos,
   migraciones, RLS, servicios, API, fixtures y validación CI. Pipeline incluye stages tenant-aware,
   idempotencia, versionado optimista, historial append-only y autorización owner/viewer.
-- **Decisiones, bloqueos y riesgos:** no se marca el cierre de G2 todavía; faltan la validación
-  integral de G1, staging/UAT y el cierre operativo de los delivery tracks. E2E frontend no aplica
-  a cambios backend-only y queda omitido por routing explícito de CI.
+- **Decisiones, bloqueos y riesgos:** el delivery backend de Pipeline queda cerrado, pero no el cierre
+  integral de G2; faltan la validación de G1, Tasks, Customer 360, staging/UAT y el cierre operativo
+  de los delivery tracks. E2E frontend no aplica a cambios backend-only y queda omitido por routing
+  explícito de CI.
 - **Validación ejecutada:** PR #121 verde; 148 pgTAP, HTTP autenticado owner/viewer, CRM unit tests,
   typecheck, build, CodeQL y CI backend.
-- **Siguiente acción concreta:** reconciliar la evidencia de G1 y ejecutar el checklist de salida de
-  G2 antes de solicitar aprobación explícita de cierre.
+- **Siguiente acción concreta:** iniciar la implementación backend-first de Tasks (#87), reutilizando el
+  playbook CRM y los contratos compartidos de Notes, Timeline y ActivityItem; después completar
+  Customer 360/Daily Operation y crear staging para la certificación integral.
 
 ## Cierre
 
