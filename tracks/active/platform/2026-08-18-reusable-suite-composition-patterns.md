@@ -1,7 +1,7 @@
 ---
 id: reusable-suite-composition-patterns
 title: Reusable suite composition patterns
-status: active
+status: closed
 created: 2026-08-18
 updated: 2026-08-19
 owner: platform
@@ -108,25 +108,37 @@ and command navigation have different semantics from text search.
 - [x] B7 cerrado como handoff sin duplicar la certificación de
       `ResponsiveTable`.
 - [x] Tests focalizados, TypeScript, Prettier y `git diff --check` pasan.
-- [ ] `pnpm front:check`: bloqueado por hallazgos preexistentes de estilo
-      inline en `EmptyState` y `LoadingState`; no atribuibles a A/B.
-- [ ] Promoción completa en registry y documentación pública de
+- [x] `pnpm certification:source-contracts` pasa después de retirar estilos
+      inline no consumidos de `EmptyState` y `LoadingState`.
+- [x] Promoción completa en registry y documentación pública de
       `SearchInput`, `FilterBar`, `QueryToolbar` y `Pagination`.
+- [ ] `pnpm front:check` completo: el gate alcanza `front:audit`, pero queda
+      bloqueado por 43 hallazgos globales nuevos de tipografía y primitivas
+      interactivas en showcases, fuera del alcance de C10-C12.
 
 **Decisión:** las Fases A y B quedan cerradas en implementación, composición,
-revisión visual y evidencia focalizada. La promoción formal de los patrones y
-el gate global quedan como deuda de plataforma separada; no bloquean el inicio
-del inventario de Fase C, pero sí deben resolverse antes de declarar el track
-completamente promovido.
+revisión visual y evidencia focalizada. C10, C11 y C12 quedan cerrados dentro
+del alcance de este track. El gate global `front:audit` queda como deuda de
+plataforma separada; no se añade a la baseline ni se considera resuelto por
+esta certificación.
 
 ## Criterios de cierre
 
-- [ ] No duplicate shared component is introduced.
-- [ ] Public contracts do not contain CRM entity or persistence semantics.
-- [ ] All supported states and responsive transformations have evidence.
-- [ ] At least one real or representative suite composition consumes the slice.
-- [ ] Registry, tests, fixtures and documentation are synchronized.
-- [ ] Closure is approved explicitly by the user.
+- [x] No duplicate shared component is introduced.
+- [x] Public contracts do not contain CRM entity or persistence semantics.
+- [x] All supported states and responsive transformations have evidence.
+- [x] At least one real or representative suite composition consumes the slice.
+- [x] Registry, tests, fixtures and documentation are synchronized.
+- [x] Closure is approved explicitly by the user.
+
+### Deuda global posterior al cierre
+
+`pnpm front:check` ya supera formato, clases duplicadas, ownership de contratos
+y source-contracts. `front:audit --fail-on-new-findings` todavía reporta 43
+hallazgos globales, principalmente revisiones de tipografía y uso de botones
+nativos en páginas de showcase. Estos hallazgos deben resolverse en un frente
+de calidad frontend independiente, agrupando cambios por regla y consumidor;
+no deben incorporarse a la baseline sin revisión ni atribuirse a C10-C12.
 
 ## Relacion con CRM
 
