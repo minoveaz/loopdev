@@ -84,7 +84,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
+      },
       brands: {
         Row: {
           created_at: string
@@ -2611,50 +2611,71 @@ export type Database = {
       crm_opportunities: {
         Row: {
           amount: number | null
+          assigned_to_user_id: string | null
+          brand_id: string | null
+          contact_id: string
           created_at: string
           currency: string
           expected_close_at: string | null
           id: string
-          lead_id: string
+          idempotency_fingerprint: string | null
+          idempotency_key: string | null
+          lead_id: string | null
           name: string
           organization_id: string
           origin: string
           probability: number | null
-          product_key: string | null
+          product_key: string
           stage: string
+          stage_key: string
           updated_at: string
+          version: number
           workspace_id: string | null
         }
         Insert: {
           amount?: number | null
+          assigned_to_user_id?: string | null
+          brand_id?: string | null
+          contact_id: string
           created_at?: string
           currency?: string
           expected_close_at?: string | null
           id?: string
-          lead_id: string
+          idempotency_fingerprint?: string | null
+          idempotency_key?: string | null
+          lead_id?: string | null
           name: string
           organization_id: string
           origin?: string
           probability?: number | null
-          product_key?: string | null
+          product_key: string
           stage?: string
+          stage_key: string
           updated_at?: string
+          version?: number
           workspace_id?: string | null
         }
         Update: {
           amount?: number | null
+          assigned_to_user_id?: string | null
+          brand_id?: string | null
+          contact_id?: string
           created_at?: string
           currency?: string
           expected_close_at?: string | null
           id?: string
-          lead_id?: string
+          idempotency_fingerprint?: string | null
+          idempotency_key?: string | null
+          lead_id?: string | null
           name?: string
           organization_id?: string
           origin?: string
           probability?: number | null
-          product_key?: string | null
+          product_key?: string
           stage?: string
+          stage_key?: string
           updated_at?: string
+          version?: number
           workspace_id?: string | null
         }
         Relationships: [
@@ -2671,6 +2692,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_leads"
             referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "crm_opportunities_contact_org_fkey"
+            columns: ["contact_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "crm_opportunities_brand_org_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "crm_opportunities_stage_org_fkey"
+            columns: ["organization_id", "stage_key"]
+            isOneToOne: false
+            referencedRelation: "crm_pipeline_stages"
+            referencedColumns: ["organization_id", "stage_key"]
           },
           {
             foreignKeyName: "crm_opportunities_organization_id_fkey"
@@ -2786,8 +2828,70 @@ export type Database = {
           },
         ]
       }
+      crm_opportunity_stage_history: {
+        Row: {
+          actor_user_id: string | null
+          created_at: string
+          from_stage_key: string | null
+          id: string
+          opportunity_id: string
+          opportunity_version: number
+          organization_id: string
+          origin: string
+          reason: string | null
+          to_stage_key: string
+        }
+        Insert: {
+          actor_user_id?: string | null
+          created_at?: string
+          from_stage_key?: string | null
+          id?: string
+          opportunity_id: string
+          opportunity_version: number
+          organization_id: string
+          origin: string
+          reason?: string | null
+          to_stage_key: string
+        }
+        Update: {
+          actor_user_id?: string | null
+          created_at?: string
+          from_stage_key?: string | null
+          id?: string
+          opportunity_id?: string
+          opportunity_version?: number
+          organization_id?: string
+          origin?: string
+          reason?: string | null
+          to_stage_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_opportunity_stage_history_opportunity_org_fkey"
+            columns: ["opportunity_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "crm_opportunities"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "crm_opportunity_stage_history_from_stage_org_fkey"
+            columns: ["organization_id", "from_stage_key"]
+            isOneToOne: false
+            referencedRelation: "crm_pipeline_stages"
+            referencedColumns: ["organization_id", "stage_key"]
+          },
+          {
+            foreignKeyName: "crm_opportunity_stage_history_to_stage_org_fkey"
+            columns: ["organization_id", "to_stage_key"]
+            isOneToOne: false
+            referencedRelation: "crm_pipeline_stages"
+            referencedColumns: ["organization_id", "stage_key"]
+          },
+        ]
+      }
       crm_pipeline_stages: {
         Row: {
+          active: boolean
           created_at: string
           id: string
           is_terminal: boolean
@@ -2795,10 +2899,13 @@ export type Database = {
           label: string
           organization_id: string
           position: number
+          stage_key: string
+          terminal_type: string
           updated_at: string
           workspace_id: string | null
         }
         Insert: {
+          active?: boolean
           created_at?: string
           id?: string
           is_terminal?: boolean
@@ -2806,10 +2913,13 @@ export type Database = {
           label: string
           organization_id: string
           position: number
+          stage_key?: string
+          terminal_type?: string
           updated_at?: string
           workspace_id?: string | null
         }
         Update: {
+          active?: boolean
           created_at?: string
           id?: string
           is_terminal?: boolean
@@ -2817,6 +2927,8 @@ export type Database = {
           label?: string
           organization_id?: string
           position?: number
+          stage_key?: string
+          terminal_type?: string
           updated_at?: string
           workspace_id?: string | null
         }

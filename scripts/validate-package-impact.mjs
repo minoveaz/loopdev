@@ -165,6 +165,14 @@ function isPackageManifest(file) {
   return file.endsWith('/package.json') || file === 'package.json';
 }
 
+function isBackendOnlyWebFile(file) {
+  return (
+    file.startsWith('apps/loopdev-os/src/app/api/') ||
+    file.startsWith('apps/loopdev-os/src/services/') ||
+    file.startsWith('apps/loopdev-os/src/types/')
+  );
+}
+
 function resolveImpact(files) {
   const rules = new Map();
   let globalFallback = false;
@@ -179,7 +187,10 @@ function resolveImpact(files) {
       continue;
     }
 
-    if (file.startsWith('apps/loopdev-os/') || file.startsWith('e2e/')) {
+    if (
+      (file.startsWith('apps/loopdev-os/') && !isBackendOnlyWebFile(file)) ||
+      file.startsWith('e2e/')
+    ) {
       frontend = true;
       continue;
     }
@@ -306,7 +317,7 @@ function main() {
   }
 }
 
-export { buildCommands, resolveImpact };
+export { buildCommands, isBackendOnlyWebFile, resolveImpact };
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main();

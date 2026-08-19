@@ -91,6 +91,17 @@ test('leaves Supabase-only changes to its specialized workflow', () => {
   assert.equal(impact.mobile, false);
 });
 
+test('keeps backend-only web changes out of frontend validation', () => {
+  const impact = resolveImpact([
+    'apps/loopdev-os/src/app/api/crm/opportunities/route.ts',
+    'apps/loopdev-os/src/services/crm/pipeline.ts',
+    'packages/contracts/src/crm/crm.ts',
+  ]);
+
+  assert.equal(impact.frontend, false);
+  assert.equal(impact.mobile, false);
+});
+
 test('uses global fallback for root, shared configuration, and unknown changes', () => {
   for (const file of ['pnpm-lock.yaml', 'ds/packages/eslint-config/src/index.js', 'unknown.ts']) {
     const impact = resolveImpact([file]);

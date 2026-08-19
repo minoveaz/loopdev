@@ -57,6 +57,8 @@
     "test:track-integrity": "node --test scripts/validate-track-integrity.test.mjs",
     "validate:supabase-governance": "node scripts/validate-supabase-governance.mjs",
     "test:supabase-governance": "node --test scripts/validate-supabase-governance.test.mjs",
+    "test:crm:bootstrap": "node scripts/crm-backend-bootstrap.mjs",
+    "test:crm:backend-http": "node scripts/test-crm-backend-http.mjs",
     "registries:generate": "node scripts/registries/generate-registry-catalog.mjs",
     "registries:check": "node scripts/registries/generate-registry-catalog.mjs --check",
     "docs:links:check": "node scripts/docs/check-markdown-links.mjs",
