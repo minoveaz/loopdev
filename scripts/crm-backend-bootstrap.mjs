@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
 
 const apiUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321';
@@ -35,7 +36,7 @@ function runPsql(args, options = {}) {
   }
 }
 
-const suffix = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+const suffix = `${Date.now()}-${randomBytes(6).toString('hex')}`;
 const email = `crm-backend-${suffix}@example.test`;
 const viewerEmail = `crm-backend-viewer-${suffix}@example.test`;
 const password = `CrmBackend!${suffix}`;
