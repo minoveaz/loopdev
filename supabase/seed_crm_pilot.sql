@@ -121,10 +121,10 @@ begin
   values
     ('00000000-0000-4000-a400-000000000001', target_organization_id,
      '00000000-0000-4000-a200-000000000003', agent_id,
-     'Llamar para confirmar necesidades', 'pending', 'high', '2026-08-22T10:00:00Z'),
+     'Llamar para confirmar necesidades', 'open', 'high', '2026-08-22T10:00:00Z'),
     ('00000000-0000-4000-a400-000000000002', target_organization_id,
      '00000000-0000-4000-a200-000000000002', agent_id,
-     'Registrar motivo de perdida', 'completed', 'medium', '2026-08-15T10:00:00Z')
+     'Registrar motivo de perdida', 'completed', 'normal', '2026-08-15T10:00:00Z')
   on conflict (id) do nothing;
 
   insert into public.crm_notes
