@@ -506,11 +506,13 @@ aislamiento verificable.
 
 - [x] El flujo HTTP autenticado sobrevive reintentos y valida owner/viewer, idempotencia, reapertura,
   actualización y conflicto de versión; la validación staging/UAT de producto sigue pendiente.
+- [x] UAT técnico backend completado con owner/viewer, persistencia, autorización, aislamiento,
+  auditoría y conflictos de concurrencia; el UAT visual y de interacción frontend queda pendiente.
 - [x] Aislamiento cross-tenant verificado por pgTAP para las columnas y la unicidad nuevas
   (`supabase test db`, `supabase/tests/database/005_crm_security.sql`, 148 aserciones, archivo en
   `ok`).
 
-**Evidencia:** Ver fila 2026-08-18 en "Evidencia de validacion" mas abajo.
+**Evidencia:** Ver fila 2026-08-19 en "Evidencia de validacion" mas abajo.
 
 **Estado:** Backend de Leads y Pipeline mergeado en `develop` mediante PRs #119 y #121. La salida
 integral de G2 sigue pendiente de reconciliar la validación de G1, staging/UAT y el cierre operativo
@@ -607,6 +609,7 @@ go-live o UAT privado.
 | 2026-08-19 | E2E HTTP autenticado de Leads | Correcta tras normalizar vocabulario legacy y timestamps Supabase: lectura 200, cambio de estado 200, conversión 201 y reintento idempotente 200 con la misma Opportunity | Se corrige `apps/loopdev-os/src/services/crm/leads.ts`; cerrar la evidencia operativa de #84 y continuar con la aprobación técnica de Pipeline |
 | 2026-08-19 | Pipeline backend (#85): reset, contratos, typecheck y CRM tests | Reset local correcto: migraciones hasta `20260904000000_crm_pipeline_contract.sql` y seed aplicados; contratos build, typecheck completo (11/11), tests CRM focalizados (12/12) y governance Supabase correctos. `005_crm_security.sql` ahora cubre políticas/FKs de Pipeline y las 5 suites top-level pasan 148 aserciones. | El runner global sigue incluyendo `helpers/rls_helpers.sql` como suite independiente y termina con parse error de plan; falta E2E HTTP de Opportunities porque el servidor local requiere `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` explícitos |
 | 2026-08-19 | Pipeline backend y matriz CI (#85) | Correcta: PR #121 mergeado en `develop` mediante `f577f045`; 148 aserciones pgTAP, matriz HTTP autenticada owner/viewer, tests CRM focalizados, typecheck, build, CodeQL y CI backend pasan. E2E frontend queda omitido por routing backend-only. | G2 backend implementado; permanecen la validación integral de G1, staging/UAT y el cierre explícito del gate |
+| 2026-08-19 | UAT técnico backend de Pipeline | Correcta: flujo HTTP autenticado owner/viewer verificado para stages, creación, listado, retry idempotente, movimiento, reapertura, actualización, conflicto `409` y autorización `403`; pgTAP confirma RLS, FKs e historial. | UAT visual, drag-and-drop, responsive y accesibilidad frontend quedan pendientes hasta implementar la UI |
 
 ## Handoff de sesion
 
