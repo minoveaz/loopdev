@@ -376,11 +376,6 @@ create trigger crm_tasks_validate_transition
 before update on public.crm_tasks
 for each row execute function public.crm_validate_task_transition();
 
-create table if not exists public.crm_timeline_events_guard (
-  id integer primary key default 1,
-  constraint crm_timeline_events_guard_singleton check (id = 1)
-);
-
 create or replace function public.prevent_crm_timeline_event_mutation()
 returns trigger
 language plpgsql
@@ -547,6 +542,16 @@ create policy crm_timeline_events_read on public.crm_timeline_events
     public.has_organization_permission(organization_id, 'crm.read')
     and (workspace_id is null or public.can_access_workspace(workspace_id))
   );
+create policy crm_timeline_events_insert on public.crm_timeline_events
+  for insert to authenticated
+  with check (false);
+create policy crm_timeline_events_update on public.crm_timeline_events
+  for update to authenticated
+  using (false)
+  with check (false);
+create policy crm_timeline_events_delete on public.crm_timeline_events
+  for delete to authenticated
+  using (false);
 
 revoke all on table public.crm_timeline_events from authenticated;
 grant select on table public.crm_timeline_events to authenticated;
