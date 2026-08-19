@@ -61,14 +61,14 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({
             events.map((event) => (
               <div
                 key={event.id}
-                className="flex items-center gap-4 md:gap-8 p-4 text-[10px] hover:bg-background-subtle/50 transition-colors group"
+                className="grid grid-cols-[3.25rem_auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 p-4 text-[10px] transition-colors hover:bg-background-subtle/50 group md:flex md:gap-8"
               >
                 {/* 1. Time & Type */}
-                <span className="text-text-muted shrink-0 w-14">{event.time}</span>
+                <span className="shrink-0 text-text-muted md:w-14">{event.time}</span>
 
                 <span
                   className={cn(
-                    'font-black w-14 px-1.5 py-0.5 rounded text-center border transition-colors',
+                    'w-auto min-w-0 rounded border px-1.5 py-0.5 text-center font-black transition-colors md:w-14',
                     event.type === 'BUY' &&
                       'bg-emerald-500/5 border-emerald-500/20 text-emerald-500',
                     event.type === 'SELL' && 'bg-amber-500/5 border-amber-500/20 text-amber-500',
@@ -83,7 +83,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({
                 </span>
 
                 {/* 2. Pair / Strategy Context */}
-                <div className="flex flex-col w-24 shrink-0">
+                <div className="col-span-2 flex min-w-0 flex-col md:w-24 md:shrink-0">
                   <span className="font-bold text-text-main truncate">
                     {event.pair || 'SYSTEM'}
                   </span>
@@ -95,7 +95,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({
                 </div>
 
                 {/* 3. Operational Data / Message */}
-                <span className="flex-1 opacity-70 truncate">
+                <span className="col-span-2 min-w-0 whitespace-normal break-words opacity-70 md:flex-1 md:truncate">
                   {event.message ? (
                     <span>{event.message}</span>
                   ) : (
@@ -108,7 +108,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({
                 {/* 4. Status Badge */}
                 <div
                   className={cn(
-                    'px-2 py-0.5 rounded-md border text-[8px] font-black uppercase shrink-0 transition-all',
+                    'shrink-0 rounded-md border px-2 py-0.5 text-[8px] font-black uppercase transition-all',
                     event.status === 'filled' || event.status === 'success'
                       ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-600'
                       : event.status === 'rejected' || event.status === 'canceled'

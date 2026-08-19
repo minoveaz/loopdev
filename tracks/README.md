@@ -4,10 +4,6 @@
 
 ## Planificados
 
-### CRM
-
-- [CRM Pilot Execution](./planned/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
-
 ### Marketing Studio
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
@@ -16,18 +12,20 @@
 
 - [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
 - [Reinicio de suites y limpieza de superficies heredadas](./planned/platform/2026-08-14-suite-reset.md) · `chore/platform-shell-deprecation` · fase 0
+- [Evaluacion de dependencias externas para CRM y suites](./planned/platform/2026-08-19-external-dependency-evaluation.md) · fase 0
 
 ### Governance
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
+
 ## En curso
 
 ### CRM
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
+- [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 0 · bloqueado
 - [CRM shared foundation implementation](./active/crm/2026-08-14-crm-shared-foundation.md) · `feature/crm-shared-foundation` · fase 0
-- [CRM UI foundation and composition](./active/crm/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
 
 ### Mobile
 
@@ -39,11 +37,13 @@
 - [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-impact-validation` · fase 1
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
+- [Reusable suite composition patterns](./active/platform/2026-08-18-reusable-suite-composition-patterns.md) · `feature/reusable-suite-composition-patterns` · fase 2
 
 ### Governance
 
 - [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
+
 ## Cerrados
 
 ### 2026
@@ -72,3 +72,4 @@
 - [Evolución de LoopDev hacia una plataforma SaaS multiempresa de alta calidad](./closed/2026/2026-08-05-loopdev-saas-platform-upgrade.md) · fase 6
 - [CRM component inventory and reuse architecture](./closed/2026/2026-08-13-crm-component-inventory.md) · fase 3
 - [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4
+- [CRM UI foundation and composition](./closed/2026/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1

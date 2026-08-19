@@ -59,8 +59,8 @@ export function DashboardSummaryCertification() {
       </div>
 
       <div className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle pb-4">
-          <div>
+        <div className="flex flex-col gap-3 border-b border-border-subtle pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-text-muted">
               Workspace pulse
             </p>
@@ -68,8 +68,8 @@ export function DashboardSummaryCertification() {
               A compact operational pulse for the current suite
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button size="sm" variant="primary">
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
+            <Button size="sm" variant="primary" className="min-w-0 flex-1 sm:flex-none">
               Open workspace
             </Button>
             <QuickActionMenu
@@ -124,7 +124,7 @@ export function DashboardSummaryCertification() {
               border="technical"
               className="p-4"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-start justify-between gap-2">
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
                   Next steps
                 </p>
@@ -182,7 +182,7 @@ export function DashboardSummaryCertification() {
               border="technical"
               className="p-4"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
                   Calendar
                 </p>
@@ -192,15 +192,17 @@ export function DashboardSummaryCertification() {
               </div>
               <Button
                 variant="ghost"
-                className="mt-3 flex h-auto w-full items-start justify-start gap-3 p-2 text-left"
+                className="mt-3 flex h-auto w-full flex-wrap items-start justify-start gap-3 p-2 text-left"
                 aria-label="Open weekly operations review"
               >
                 <div className="rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-center">
                   <p className="text-[10px] uppercase text-primary">Aug</p>
                   <p className="text-xl font-bold text-primary">19</p>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-text-main">Weekly operations review</p>
+                <div className="min-w-0 flex-1">
+                  <p className="break-words text-sm font-medium text-text-main">
+                    Weekly operations review
+                  </p>
                   <p className="mt-1 text-xs text-text-muted">Today · 14:00 · 5 attendees</p>
                 </div>
               </Button>
