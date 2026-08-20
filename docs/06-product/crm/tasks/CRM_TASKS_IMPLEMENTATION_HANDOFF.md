@@ -35,7 +35,7 @@ Timeline persistentes, autorizados y relacionados con Contact, Lead y Opportunit
 ## Composicion obligatoria
 
 ```text
-App Router -> SuiteRuntime -> SuiteCanvas mode=data/overview/split/record/focus
+App Router -> SuiteRuntime -> SuiteCanvas mode=data/overview/split/workspace/full-bleed
   -> widgets -> features -> entities -> shared
 ```
 

@@ -74,6 +74,9 @@ export const SALES_CRM_SUITE_CONFIG: SuiteConfig = {
       route: '/sales-crm/contacts',
       breadcrumbs: ['Sales & CRM', 'Contacts'],
       capabilities: ['mobile-navigation'],
+      shell: {
+        canvasMode: 'data',
+      },
     },
     {
       moduleId: 'leads',

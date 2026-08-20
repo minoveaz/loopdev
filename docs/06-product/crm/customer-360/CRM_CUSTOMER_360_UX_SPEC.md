@@ -21,7 +21,7 @@ contexto transversal de G3.
 
 | Superficie | Ruta | Canvas | Objetivo |
 | --- | --- | --- | --- |
-| Customer 360 desde Contact | `/sales-crm/contacts/:contactId` | `record` | Ver el perfil y actividad agregada |
+| Customer 360 desde Contact | `/sales-crm/contacts/:contactId` | `workspace` | Ver el perfil y actividad agregada |
 | Previsualizacion contextual | Desde Leads/Pipeline/Tasks | `split` | Consultar resumen sin abandonar el contexto |
 | Resumen operativo | Desde CRM | `overview` | Mostrar salud y actividad autorizada |
 
@@ -77,7 +77,7 @@ forecast y dashboard financiero.
 ## 9. Aprobacion
 
 - [x] Product Owner aprueba alcance, vistas y secciones.
-- [x] Product Owner aprueba alcance, vistas `record`, `split` y `overview`, secciones y composición de componentes.
+- [x] Product Owner aprueba alcance, vistas `workspace`, `split` y `overview`, secciones y composición de componentes.
 - [x] Product Owner aprueba secciones, permisos por sección, carga parcial y deduplicación mediante `ActivitySource`.
 - [x] Tech Lead aprueba agregación, permisos, deduplicación y contratos.
 - [x] Se confirma Customer 360 dentro de Contact, no como módulo de navegación independiente.

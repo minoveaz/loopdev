@@ -19,10 +19,10 @@ ux_spec: docs/06-product/crm/leads/CRM_LEADS_UX_SPEC.md
 | --- | --- | --- |
 | `data` | Lista de Leads | Comparacion, filtros, orden y acciones masivas |
 | `split` | Lista + detalle rapido | Conserva el contexto de la lista |
-| `record` | Detalle directo | Ficha completa de una entidad operativa |
-| `focus` | Captura completa o tarea transaccional | Una tarea principal con validacion y contexto controlado |
+| `workspace` | Detalle directo | Ficha completa de una entidad operativa |
+| `full-bleed` | Captura completa o tarea transaccional | Una tarea principal con validacion y contexto controlado |
 
-`record` y `focus` son modos genericos del Canvas, no modos llamados `lead-detail` o `lead-create`.
+`workspace` y `full-bleed` son modos genericos del Canvas, no modos llamados `lead-detail` o `lead-create`.
 El dominio CRM se expresa en los widgets y features que se montan dentro del Canvas.
 
 ## Composicion
@@ -38,7 +38,7 @@ SuiteCanvas mode=split
   -> LeadListWidget
   -> LeadRecordPreview
 
-SuiteCanvas mode=record
+SuiteCanvas mode=workspace
   -> LeadRecordView
     -> LeadIdentityHeader
     -> LeadAttributionPanel
@@ -47,7 +47,7 @@ SuiteCanvas mode=record
     -> LeadTimeline
     -> LeadWorkPanel
 
-SuiteCanvas mode=focus
+SuiteCanvas mode=full-bleed
   -> LeadCaptureWorkspace
     -> ContactSelector
     -> LeadAttributionFields
@@ -79,8 +79,8 @@ SuiteCanvas mode=focus
 | LeadStatus | Entity CRM | Parcial | Formalizar estados configurables |
 | LeadListWidget | Widget CRM | No existe aprobado | Desarrollar para la ruta `data` |
 | LeadRecordPreview | Widget CRM | No existe | Desarrollar para la ruta `split` |
-| LeadRecordView | Widget CRM | No existe | Desarrollar para la ruta `record` |
-| LeadCaptureWorkspace | Widget CRM | No existe | Desarrollar para la ruta `focus` |
+| LeadRecordView | Widget CRM | No existe | Desarrollar para la ruta `workspace` |
+| LeadCaptureWorkspace | Widget CRM | No existe | Desarrollar para la ruta `full-bleed` |
 | QuickLeadCapture | Feature CRM | No existe | Desarrollar como dialog/drawer de captura rapida |
 | ContactLookupField | Feature CRM | Parcial en Contactos | Reutilizar contrato de Contact y desarrollar adaptador de Leads |
 | CreateContactFromLead | Feature CRM | No existe aprobado | Desarrollar sobre flujo de Contactos, sin duplicacion silenciosa |
@@ -108,6 +108,6 @@ layout estable en escritorio/tablet y responsive básico en mobile web.
 - [x] Contrato e impact assessment aprobados.
 - [x] Todos los componentes tienen capa y owner.
 - [x] Origen manual/campaña/WhatsApp simulado/referral/social/partner e idempotencia están definidos.
-- [x] `data`, `split`, `record` y `focus` tienen una composicion y owner explicitos.
+- [x] `data`, `split`, `workspace` y `full-bleed` tienen una composicion y owner explicitos.
 - [x] Cada vista diferencia componentes reutilizados de componentes CRM nuevos.
 - [x] Se confirma que el prototipo anterior no es fuente autoritativa.

@@ -37,7 +37,7 @@ conversion idempotente por producto.
 ## Composicion obligatoria
 
 ```text
-App Router -> SuiteRuntime -> SuiteCanvas mode=board/data/split/record/focus
+App Router -> SuiteRuntime -> SuiteCanvas mode=board/data/split/workspace/full-bleed
   -> widgets -> features -> entities -> shared
 ```
 

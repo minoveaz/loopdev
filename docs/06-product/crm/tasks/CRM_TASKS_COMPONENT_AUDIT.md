@@ -31,13 +31,13 @@ SuiteCanvas mode=overview
   -> MyDayWidget
     -> TaskGroup
 
-SuiteCanvas mode=record
+SuiteCanvas mode=workspace
   -> TaskRecordView
     -> TaskStatusBar
     -> TaskActivityPanel
     -> RelatedEntitySummary
 
-SuiteCanvas mode=focus
+SuiteCanvas mode=full-bleed
   -> TaskForm
     -> TaskAssignmentField
     -> TaskDueDateField
@@ -81,10 +81,10 @@ un segundo consumidor real (Contacts, Leads, Pipeline o Customer 360) y evidenci
 
 - [x] Vistas, rutas, modos Canvas y composicion inicial de Tasks aprobados.
 - [x] Bandeja de Tasks y Mi dia aprobados con filtros, agrupaciones, acciones y estados UX.
-- [x] Detalle `record`, creacion `focus`, edicion, relaciones y ciclo de vida de Task aprobados.
+- [x] Detalle `workspace`, creacion `full-bleed`, edicion, relaciones y ciclo de vida de Task aprobados.
 - [x] Notes, Timeline, `ActivityItem` y agregacion de Customer 360 aprobados como capacidades compartidas.
 - [x] UX, contract e impact assessment aprobados.
-- [x] Vistas `data`, `overview`, `split`, `record` y `focus` tienen owner.
+- [x] Vistas `data`, `overview`, `split`, `workspace` y `full-bleed` tienen owner.
 - [x] Task, Note, TimelineEvent y ActivityItem tienen contratos coherentes.
 - [x] Relaciones Contact/Lead/Opportunity y tenant scope están definidos.
 - [x] Prototipos anteriores no son fuente autoritativa.

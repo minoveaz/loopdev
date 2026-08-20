@@ -31,9 +31,9 @@ Este documento permanece propuesto y no autoriza implementacion.
 | Bandeja de tareas | `/sales-crm/tasks` | `data` | Buscar, filtrar, ordenar y completar tareas autorizadas |
 | Mi dia | `/sales-crm/tasks/today` | `overview` | Priorizar vencidas, de hoy y proximas |
 | Tareas de una entidad | Desde Contact, Lead u Opportunity | `split` | Consultar y operar tareas conservando contexto |
-| Detalle de tarea | `/sales-crm/tasks/:taskId` | `record` | Consultar y editar una Task |
-| Crear tarea | `/sales-crm/tasks/new` o contexto entidad | `focus` | Crear y asignar una Task |
-| Timeline | Dentro de `record` y Customer 360 | `record` | Ver actividad cronologica autoritativa |
+| Detalle de tarea | `/sales-crm/tasks/:taskId` | `workspace` | Consultar y editar una Task |
+| Crear tarea | `/sales-crm/tasks/new` o contexto entidad | `full-bleed` | Crear y asignar una Task |
+| Timeline | Dentro de `workspace` y Customer 360 | `workspace` | Ver actividad cronologica autoritativa |
 
 `SuiteCanvas` permanece generico. Tasks, Notes y Timeline viven en widgets/features/entities bajo FSD.
 
@@ -65,7 +65,7 @@ El orden por defecto prioriza estado vencido, vencimiento mas cercano y priorida
 
 ## 5. Crear y editar Task
 
-La creacion usa `focus` y exige:
+La creacion usa `full-bleed` y exige:
 
 - Titulo.
 - Responsable.
@@ -103,7 +103,7 @@ El contenido de Notes es PII potencial: no aparece en logs, analytics ni errores
 
 Bandeja, Mi dia, detalle, editor y timeline cubren `loading`, `empty`, `error`, `forbidden`, `success`,
 `stale`, `action pending` y `conflict`. Desktop usa tabla y paneles; tablet apila; mobile usa una
-columna, filtros en sheet y detalle `record`.
+columna, filtros en sheet y detalle `workspace`.
 
 ## 8. Journeys UAT
 
@@ -138,14 +138,14 @@ dependencias complejas, gestión de proyectos, documentos y paridad mobile compl
 | Bandeja `data` | `ModuleHeader`, `ModuleToolbar`, `ResponsiveTable`, `Input`, `Select`, `Badge`, estados UX | `TaskListWidget`, `TaskFilters`, `TaskRowActions` |
 | Mi dia `overview` | `ModuleHeader`, `ContextBar`, `Tabs`, `Badge`, `EmptyState`, estados UX | `MyDayWidget`, `TaskGroup`, `TaskPrioritySummary` |
 | Contexto `split` | `ContextBar`, `Button`, `IconButton`, `Badge`, `Tabs` | `RelatedTaskPanel`, `TaskQuickActions` |
-| Detalle `record` | `ModuleHeader`, `Tabs`, `ContextBar`, `Badge`, `Button`, timeline compartida | `TaskRecordView`, `TaskStatusBar`, `TaskActivityPanel`, `RelatedEntitySummary` |
-| Crear `focus` | `ModuleHeader`, `Input`, `Select`, `Button`, dialog/drawer, estados UX | `TaskForm`, `TaskAssignmentField`, `TaskDueDateField`, `TaskRelationSelector` |
+| Detalle `workspace` | `ModuleHeader`, `Tabs`, `ContextBar`, `Badge`, `Button`, timeline compartida | `TaskRecordView`, `TaskStatusBar`, `TaskActivityPanel`, `RelatedEntitySummary` |
+| Crear `full-bleed` | `ModuleHeader`, `Input`, `Select`, `Button`, dialog/drawer, estados UX | `TaskForm`, `TaskAssignmentField`, `TaskDueDateField`, `TaskRelationSelector` |
 | Timeline | `Tabs`, `EmptyState`, `LoadingState` | `ActivityTimeline`, `TimelineEventItem`, `NoteComposer`, `NoteItem` |
 
 ## 11. Aprobacion
 
 - [x] Product Owner aprueba vistas, rutas, modos Canvas y composicion de componentes de Tasks.
-- [x] La composicion aprobada usa `data` para bandeja, `overview` para Mi dia, `split` para contexto, `record` para detalle y `focus` para creacion.
+- [x] La composicion aprobada usa `data` para bandeja, `overview` para Mi dia, `split` para contexto, `workspace` para detalle y `full-bleed` para creacion.
 - [x] Product Owner aprueba la bandeja de Tasks y Mi dia con columnas, estados, prioridades, filtros, acciones, grupos, estados UX y comportamiento responsive.
 - [x] Product Owner aprueba detalle, creacion y edicion de Task, relaciones con Contact/Lead/Opportunity, ciclo de vida, permisos, validaciones, estados UX y responsive.
 - [x] La entidad relacionada queda fijada despues de crear la Task en el piloto; no se permite cambiarla silenciosamente.
