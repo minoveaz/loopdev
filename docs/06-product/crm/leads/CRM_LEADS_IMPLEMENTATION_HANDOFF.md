@@ -14,6 +14,9 @@ implementation_branch: feature/crm-pilot-leads-implementation
 
 ## Instruccion
 
+Use the repeatable [CRM backend-first module playbook](../shared/CRM_BACKEND_MODULE_PLAYBOOK.md)
+before starting implementation.
+
 Leer este documento y sus cuatro referencias antes de crear la rama de implementacion desde `develop`
 actualizado:
 
@@ -31,7 +34,7 @@ Confirmar la Definition of Ready en el Issue #84 antes del primer commit. La ram
 3. [Lead contract](CRM_LEAD_CONTRACT.md)
 4. [Lead impact assessment](CRM_LEAD_IMPACT_ASSESSMENT.md)
 5. [Contact implementation handoff](../contacts/CRM_CONTACT_IMPLEMENTATION_HANDOFF.md)
-6. [CRM Pilot Execution](../../../../tracks/planned/crm/2026-08-13-crm-pilot-execution.md)
+6. [CRM Pilot Execution](../../../../tracks/active/crm/2026-08-13-crm-pilot-execution.md)
 
 ## Outcome
 

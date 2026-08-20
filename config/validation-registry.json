@@ -108,7 +108,7 @@
       "environment": "supabase",
       "risk": "schema and tenant security",
       "owner": "data",
-      "command": "pnpm exec supabase test db --local supabase/tests/database",
+      "command": "pnpm exec supabase test db --local supabase/tests/database/001_platform_core.sql supabase/tests/database/002_platform_core_rls.sql supabase/tests/database/003_marketing_rls.sql supabase/tests/database/004_content_engine_rls.sql supabase/tests/database/005_crm_security.sql supabase/tests/database/006_crm_tasks_contract.sql",
       "cost": "high",
       "modes": ["domain"]
     },

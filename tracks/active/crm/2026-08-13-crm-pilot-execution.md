@@ -3,13 +3,13 @@ id: crm-pilot-execution
 title: CRM Pilot Execution
 status: active
 created: 2026-08-13
-updated: 2026-08-18
+updated: 2026-09-06
 owner: crm
 lead: User
 branch: null
 branches: []
 phase: 0
-pull_requests: [108]
+pull_requests: [108, 121]
 issues: [68, 70, 71, 72, 73, 74, 75, 76, 77, 78, 82, 84, 85, 87, 88, 92, 94]
 packages: []
 release: pilot
@@ -27,20 +27,33 @@ El programa se mantiene como el unico frente de coordinacion del piloto CRM. Par
 trabajo en curso, los tracks se clasifican por su capacidad real de producir el siguiente gate;
 la existencia de un track no implica que tenga autorizacion para iniciar implementacion.
 
-| Track | Estado operativo | Decisión | Siguiente evidencia |
-| --- | --- | --- | --- |
-| `crm-pilot-execution` | activo, coordinacion | Mantener como fuente de verdad del roadmap y del Project | G0 completado y aprobado |
-| `crm-shared-foundation` | activo, unico frente de implementacion | Avanzar solo con la validacion remota de Supabase/RLS, seed/reset y checks contractuales | PR de G0 con checks reproducibles |
-| `crm-ui-foundation` | pausado para nuevos slices | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0 |
-| `reusable-suite-composition-patterns` | activo, plataforma paralela | Preparar patrones frontend reutilizables sin tocar G0 ni contratos CRM | Contrato y evidencia de `SearchInput`, `FilterBar` y `QueryToolbar` |
-| `estar-protegidos-crm-platform` | historico, fuera del WIP | No usarlo para planificar entregas; el piloto central lo supersede operativamente | Migracion o cierre documental posterior |
+| Track                           | Estado operativo                                     | Decisión                                                                                        | Siguiente evidencia                                                  |
+| ------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `crm-pilot-execution`           | activo, coordinacion                                 | Mantener como fuente de verdad del roadmap y del Project                                        | Pipeline backend cerrado como delivery; Tasks es el siguiente bloque |
+| `crm-shared-foundation`         | cerrado tras Contacts backend-first                  | Mantener como foundation reutilizable; no reabrirlo para nuevos módulos                         | PRs #111, #114, #116 y cierre #118                                   |
+| `crm-leads-backend-foundation`  | backend-first mergeado en `develop` mediante PR #119 | Mantenerlo como dependencia de Pipeline y completar evidencia operativa                         | Validacion end-to-end con Supabase real y cierre operativo de #84    |
+| `crm-ui-foundation`             | pausado para nuevos slices                           | Conservar la certificacion de #108; no abrir composiciones posteriores mientras G0 este abierto | Brechas de UI priorizadas despues de G0                              |
+| `estar-protegidos-crm-platform` | historico, fuera del WIP                             | No usarlo para planificar entregas; el piloto central lo supersede operativamente               | Migracion o cierre documental posterior                              |
 
 ### Regla de trabajo
 
-Hasta cerrar G0/#68 solo se mantiene un track CRM de implementación activo: `crm-shared-foundation`.
-Contacts (#82), Leads (#84), Pipeline (#85), Tasks (#87), Customer 360 (#88) y los tracks de G1
-permanecen bloqueados o en espera. La UI certificada por #108 no reabre trabajo de producto ni
-autoriza iniciar G1. Cualquier nuevo slice requiere actualizar primero este checkpoint y el Project.
+G0/#68 y la validación del primer consumidor Contacts (#82) están cerrados. Leads (#84) ya está
+mergeado en `develop`, pero su cierre operativo aún requiere evidencia end-to-end y de aislamiento
+remoto. Pipeline (#85) ya completó su delivery backend. Se autoriza ahora la implementación
+funcional de Tasks (#87); Customer 360 (#88) queda posterior y Daily Operation continúa como
+resultado transversal de G3. La UI y las primitives compartidas
+siguen coordinadas por sus tracks transversales y no autorizan crear componentes CRM paralelos.
+
+### Readiness preparatorio de Pipeline (#85)
+
+- [x] Rama de preparación creada desde `origin/develop`: `feature/crm-pipeline-readiness`.
+- [x] Contrato, impacto, auditoría de componentes, UX y handoff revisados.
+- [x] Dependencias de Contacts y Leads presentes en `origin/develop`.
+- [x] Tech Lead aprueba etapas estables, comandos, RLS e idempotencia.
+- [ ] Se reconcilia la evidencia de Leads con el PR #119 y el cierre operativo de #84.
+- [ ] G1 valida RLS, FKs tenant-aware, aislamiento cross-tenant y kill switches.
+- [ ] Se ejecuta E2E contra la aplicación y Supabase realmente entregados.
+- [x] Se autoriza la rama funcional `feature/crm-pilot-pipeline-implementation`.
 
 ## Outcome
 
@@ -160,8 +173,9 @@ documental en el Issue #88; Daily Operation sigue siendo resultado transversal d
 
 El paquete de Tasks queda aprobado por User el 2026-08-13: UX spec, component audit, contract e
 impact assessment aprobados, y implementation handoff aprobado para handoff. Tasks queda Ready
-documental en el Issue #87; Daily Operation permanece como resultado transversal de G3 y la
-implementacion no inicia en esta rama.
+documental en el Issue #87; Daily Operation permanece como resultado transversal de G3. La
+implementacion backend-first de Tasks se ejecuta ahora en `feature/crm-pilot-pipeline-implementation`;
+la UI y staging/UAT siguen fuera de este slice.
 
 El alcance final del piloto queda aprobado por User el 2026-08-13. Incluye Auth, Contacts, Leads,
 Pipeline, Tasks, Notes, Timeline, Customer 360, RLS, aislamiento tenant, auditoria, staging y UAT.
@@ -198,6 +212,12 @@ El paquete de Leads esta organizado en `docs/06-product/crm/leads/`: UX spec, co
 contract, impact assessment e implementation handoff. UX, component audit, contract e impact
 assessment estan aprobados por User el 2026-08-13; el handoff queda listo para confirmacion en el
 Issue #84 antes de crear la rama de implementacion.
+
+Contacts y Leads han validado el mismo flujo backend-first. El procedimiento reusable queda
+centralizado en `docs/06-product/crm/shared/CRM_BACKEND_MODULE_PLAYBOOK.md` y debe ser la entrada
+obligatoria para Pipeline (#85), Tasks (#87) y cualquier modulo CRM posterior. El playbook fija el
+orden contract -> schema/RLS -> service/API -> fixtures -> tests -> handoff, los gates de validacion
+y las reglas para reutilizar helpers sin duplicar arquitectura.
 
 Leads tiene seis fuentes activas en el contrato del piloto: `manual`, `campaign`,
 `whatsapp_simulated`, `referral`, `social` y `partner`. Las conexiones reales de proveedores siguen
@@ -313,6 +333,7 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Aprobar auditoria de componentes de Contactos                                                    | La vista debe construirse con limites claros entre shell, FSD y dominio CRM                                                         | `CRM-01` puede prepararse con ContactTable, ContactForm, ContactDetailPanel y sus features/entities                                                                            | User         |
 | 2026-08-13 | Aprobar contrato de Contact e impact assessment de CRM-01                                        | La implementacion necesita un acuerdo comun de datos y una matriz de impactos antes de tocar codigo                                 | `CRM-01` pasa Definition of Ready; el desarrollo aun no se inicia                                                                                                              | User         |
 | 2026-08-13 | Aprobar paquete UX de Leads y reglas de conversion por producto                                  | Un Lead puede interesarse por varios seguros sin duplicar la misma Opportunity; la unicidad debe proteger reintentos y concurrencia | Leads queda Ready documental; primera conversion mueve a `convertido`, conversiones posteriores usan `product_key` distinto y Pipeline distingue `manual` de `lead_conversion` | User         |
+| 2026-09-06 | Confirmar que `brand_id` no es una frontera de seguridad CRM independiente                       | La marca identifica el CRM dentro de la organización, pero no debe crear un segundo aislamiento ni una vía para evadir el tenant    | Organización y workspace siguen siendo los límites autoritativos de RLS, FKs, RPCs y APIs; se prohíbe añadir RLS aislada por marca                                             | User         |
 | 2026-08-13 | Definir Tasks como modulo y Daily Operation como resultado transversal de G3                     | Tasks es una entidad reutilizable; Daily Operation depende de Contacts, Leads, Pipeline, notas, timeline y Customer 360             | Se crea el paquete de cinco documentos para Tasks bajo `docs/06-product/crm/tasks/`; no se crea un modulo separado de Daily Operation                                          | User         |
 | 2026-08-13 | Sacar Dashboard e import dry-run del piloto                                                      | El piloto debe validar primero el flujo CRM critico y reducir complejidad operativa                                                 | Dashboard e import dry-run pasan al sprint posterior, despues de validar Contacts, Leads, Pipeline, Tasks y Customer 360                                                       | User         |
 | 2026-08-13 | Aprobar alcance final y tres carriles del piloto                                                 | Un mes exige limitar el producto a la jornada CRM critica y separar responsabilidades de ejecucion                                  | El piloto excluye Dashboard/import dry-run y capacidades diferidas; G0 puede pasar a preparar owners, dependencias y evidencias                                                | User         |
@@ -471,18 +492,33 @@ aislamiento verificable.
 
 **Entregables**
 
-- [ ] Captura de lead transaccional/idempotente y normalizacion unica.
-- [ ] Listado, detalle y edicion de lead; transicion persistente de etapa.
-- [ ] Estado de servidor CRM real, contratos de route y pruebas de integracion/E2E.
+- [x] Captura de lead transaccional/idempotente y normalizacion unica (`captureLead`, idempotencia
+      por `organization_id + source + external_lead_id`, unicidad de conversion por
+      `organization_id + lead_id + product_key` con `origin=lead_conversion`).
+- [x] Listado, edicion y transicion de estado de Lead persistentes (`GET/PATCH /api/crm/leads`,
+      `POST /api/crm/leads/status`). Detalle de Lead (`getLead`) existe como helper interno; no se
+      expone todavia como ruta propia (fuera de las cinco rutas pedidas para este slice).
+- [x] Estado de servidor CRM real para Leads: contratos Zod, rutas delgadas y pruebas de
+      ruta/servicio/contrato (46 tests). Pendiente pruebas E2E de Playwright (fuera de alcance de este
+      slice backend-first, igual que en Contacts).
+- [x] Pipeline como modulo (#85) implementado en backend: catalogo de etapas por organizacion/workspace,
+      Opportunities persistentes, historial append-only, idempotencia y versionado optimista.
 
 **Validacion**
 
-- [ ] El flujo sobrevive recarga y cambio de dispositivo.
-- [ ] Tenant B no puede leer, mutar ni referenciar el flujo de tenant A.
+- [x] El flujo HTTP autenticado sobrevive reintentos y valida owner/viewer, idempotencia, reapertura,
+      actualización y conflicto de versión; la validación staging/UAT de producto sigue pendiente.
+- [x] UAT técnico backend completado con owner/viewer, persistencia, autorización, aislamiento,
+      auditoría y conflictos de concurrencia; el UAT visual y de interacción frontend queda pendiente.
+- [x] Aislamiento cross-tenant verificado por pgTAP para las columnas y la unicidad nuevas
+      (`supabase test db`, `supabase/tests/database/005_crm_security.sql`, 148 aserciones, archivo en
+      `ok`).
 
-**Evidencia:** Pendiente.
+**Evidencia:** Ver fila 2026-08-18 en "Evidencia de validacion" mas abajo.
 
-**Estado:** bloqueada por Fase 1.
+**Estado:** Backend de Leads y Pipeline mergeado en `develop` mediante PRs #119 y #121. El delivery
+backend de Pipeline queda cerrado con su evidencia técnica; la salida integral de G2 sigue pendiente
+de reconciliar la validación de G1, staging/UAT y el cierre operativo de los delivery tracks.
 
 ### Fase 3: G3 - Daily operation and staging UAT
 
@@ -494,8 +530,11 @@ aislamiento verificable.
 
 **Entregables**
 
-- [ ] Notas, tareas, completado y timeline.
-- [ ] Customer 360 minimo.
+- [x] Notas, tareas, completado y timeline en backend-first: contratos, schema/RLS, servicio, API,
+      fixtures y pruebas locales; la integración de producto queda pendiente.
+- [x] Customer 360 backend-first (#88): proyección autorizada dentro de Contact, contratos de
+      record/split/overview, secciones independientes, deduplicación por ActivitySource, rutas de lectura
+      y comandos contextuales; la integración de producto, E2E y staging quedan pendientes.
 - [ ] Staging reproducible, health, logs, Sentry y UAT 1.
 
 **Validacion**
@@ -534,9 +573,10 @@ go-live o UAT privado.
 
 ## Registro de cambios de enfoque
 
-| Fecha      | Cambio                                         | Motivo                                                                  | Impacto en alcance/fases                                                      | Aprobado por |
-| ---------- | ---------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------ |
-| 2026-08-13 | Separar el piloto del mega-track CRM historico | El piloto requiere gates fechados, WIP limitado y evidencias operativas | CRM Pilot Execution coordina G0-G5; el historico se preserva como antecedente | User         |
+| Fecha      | Cambio                                         | Motivo                                                                                                     | Impacto en alcance/fases                                                                                                                     | Aprobado por |
+| ---------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 2026-08-13 | Separar el piloto del mega-track CRM historico | El piloto requiere gates fechados, WIP limitado y evidencias operativas                                    | CRM Pilot Execution coordina G0-G5; el historico se preserva como antecedente                                                                | User         |
+| 2026-08-19 | Continuar con Tasks antes de crear staging     | Contacts, Leads y Pipeline ya tienen delivery backend; staging se crea una vez para certificar el conjunto | Tasks es el siguiente delivery; Daily Operation sigue transversal; Customer 360 se completa después; staging queda posterior a estos bloques | User         |
 
 ## Riesgos y bloqueos
 
@@ -563,22 +603,41 @@ go-live o UAT privado.
 
 ## Evidencia de validacion
 
-| Fecha      | Validacion                                           | Resultado                                                                                | Referencia                                                                                                           |
-| ---------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| 2026-08-13 | Reconciliacion de tracks frente al execution roadmap | Pendiente de aprobacion operativa                                                        | Se detectaron tracks activos historicos que exceden el WIP de tres carriles                                          |
-| 2026-08-13 | Inicializacion del Project del piloto                | Correcta                                                                                 | Project #3 contiene paquetes P0 G0-G5; UX-00 es el unico item Ready                                                  |
-| 2026-08-13 | Conversion del Project a Issues reales               | Correcta                                                                                 | Project #3 contiene 31 Issues, sin borradores ni titulos duplicados; #93 y #95 cerrados como duplicados de #92 y #94 |
-| 2026-08-18 | CRM UI foundation                                    | Parcial: gate visual y responsive certificado; persistencia, RLS y UAT siguen pendientes | PR #108 mergeado en `develop` mediante `76e9a340`; Issues #70-#78 y #82-#88 siguen abiertos                          |
+| Fecha      | Validacion                                                                          | Resultado                                                                                                                                                                                                                                                                                                                    | Referencia                                                                                                                                                                                                                                                                                                     |
+| ---------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-08-13 | Reconciliacion de tracks frente al execution roadmap                                | Pendiente de aprobacion operativa                                                                                                                                                                                                                                                                                            | Se detectaron tracks activos historicos que exceden el WIP de tres carriles                                                                                                                                                                                                                                    |
+| 2026-08-13 | Inicializacion del Project del piloto                                               | Correcta                                                                                                                                                                                                                                                                                                                     | Project #3 contiene paquetes P0 G0-G5; UX-00 es el unico item Ready                                                                                                                                                                                                                                            |
+| 2026-08-13 | Conversion del Project a Issues reales                                              | Correcta                                                                                                                                                                                                                                                                                                                     | Project #3 contiene 31 Issues, sin borradores ni titulos duplicados; #93 y #95 cerrados como duplicados de #92 y #94                                                                                                                                                                                           |
+| 2026-08-18 | CRM UI foundation                                                                   | Parcial: gate visual y responsive certificado; persistencia, RLS y UAT siguen pendientes                                                                                                                                                                                                                                     | PR #108 mergeado en `develop` mediante `76e9a340`; Issues #70-#78 y #82-#88 siguen abiertos                                                                                                                                                                                                                    |
+| 2026-08-18 | Leads backend-first (#84): contratos, schema, servicio, rutas                       | Correcta en local: `pnpm --filter @loopdev/contracts build`, `tsc --noEmit` en `loopdev-os`, `eslint` sin hallazgos, `vitest run` (719/719, incl. 46 CRM), `supabase db reset` y `supabase test db` (140 aserciones pgTAP, archivo `005_crm_security.sql` en `ok`)                                                           | PR #119 mergeado en `develop`; falta E2E remoto/staging y cierre operativo de #84                                                                                                                                                                                                                              |
+| 2026-08-18 | Readiness preparatorio de Pipeline (#85)                                            | Correcta: rama limpia `feature/crm-pipeline-readiness` basada en `origin/develop`; documentos de Pipeline y playbook revisados                                                                                                                                                                                               | Implementación funcional bloqueada hasta Tech Lead, G1, E2E y cierre operativo de Leads                                                                                                                                                                                                                        |
+| 2026-08-19 | Aislamiento Quant experimental y repetición de G1                                   | Correcta: migración `20260819010000_isolate_experimental_quant_tables.sql`, reset reproducible, 5 suites pgTAP top-level (140 aserciones) y governance (4/4)                                                                                                                                                                 | Quant queda fuera del runtime; el E2E autenticado de Leads sigue bloqueado por un error 500 en `GET /api/crm/leads`                                                                                                                                                                                            |
+| 2026-08-19 | E2E HTTP autenticado de Leads                                                       | Correcta tras normalizar vocabulario legacy y timestamps Supabase: lectura 200, cambio de estado 200, conversión 201 y reintento idempotente 200 con la misma Opportunity                                                                                                                                                    | Se corrige `apps/loopdev-os/src/services/crm/leads.ts`; cerrar la evidencia operativa de #84 y continuar con la aprobación técnica de Pipeline                                                                                                                                                                 |
+| 2026-08-19 | Pipeline backend (#85): reset, contratos, typecheck y CRM tests                     | Reset local correcto: migraciones hasta `20260904000000_crm_pipeline_contract.sql` y seed aplicados; contratos build, typecheck completo (11/11), tests CRM focalizados (12/12) y governance Supabase correctos. `005_crm_security.sql` ahora cubre políticas/FKs de Pipeline y las 5 suites top-level pasan 148 aserciones. | El runner global sigue incluyendo `helpers/rls_helpers.sql` como suite independiente y termina con parse error de plan; falta E2E HTTP de Opportunities porque el servidor local requiere `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` explícitos                                              |
+| 2026-08-19 | Pipeline backend y matriz CI (#85)                                                  | Correcta: PR #121 mergeado en `develop` mediante `f577f045`; 148 aserciones pgTAP, matriz HTTP autenticada owner/viewer, tests CRM focalizados, typecheck, build, CodeQL y CI backend pasan. E2E frontend queda omitido por routing backend-only.                                                                            | G2 backend implementado; permanecen la validación integral de G1, staging/UAT y el cierre explícito del gate                                                                                                                                                                                                   |
+| 2026-08-19 | UAT técnico backend de Pipeline                                                     | Correcta: flujo HTTP autenticado owner/viewer verificado para stages, creación, listado, retry idempotente, movimiento, reapertura, actualización, conflicto `409` y autorización `403`; pgTAP confirma RLS, FKs e historial.                                                                                                | UAT visual, drag-and-drop, responsive y accesibilidad frontend quedan pendientes hasta implementar la UI                                                                                                                                                                                                       |
+| 2026-08-19 | Tasks backend-first (#87): contratos, schema/RLS, servicio, API, fixtures y pruebas | Correcta en local: `supabase db reset --local`, `006_crm_tasks_contract.sql` (18/18), `@loopdev/contracts` build, typecheck explícito de `loopdev-os`, tests CRM/API focalizados (49/49), governance Supabase y ownership de contratos.                                                                                      | Se implementan Task/Note/TimelineEvent, relaciones Contact/Lead/Opportunity, lifecycle, versionado optimista, idempotencia y timeline transaccional append-only; faltan E2E autenticado, staging/UAT y validación de concurrencia HTTP                                                                         |
+| 2026-08-19 | Customer 360 backend-first (#88): contratos, proyección, API y pruebas              | Correcta en local: contratos build/typecheck, typecheck de `loopdev-os`, tests focalizados Customer 360/API (8/8) y `git diff --check`; no se añadió entidad ni migración.                                                                                                                                                   | Se entregan lecturas `record`/`split`/`overview`, paginación por sección, aislamiento tenant/workspace/brand, redacción de Notes, deduplicación `sourceType:sourceId` y comandos contextuales; Supabase governance y suite global conservan fallos preexistentes de Tasks, y staging/E2E/UAT quedan pendientes |
+| 2026-09-06 | Daily Operation backend audit corrective work                                       | Correcta en local: reset Supabase, suites top-level 001-006 (176 aserciones), suite 006 aislada (28/28), typecheck de `loopdev-os`, contratos build, 11 suites CRM/API (41/41), governance, links, registries y diff check                                                                                                   | Private note body queda detrás de `crm_notes_visible`; actores autenticados se fuerzan en DB; conversión Lead es transaccional/idempotente; CI y registry incluyen 006 sin ejecutar `helpers/rls_helpers.sql`; `brand_id` no es frontera independiente                                                         |
+| 2026-08-19 | Daily Operation HTTP authenticated matrix                                           | Correcta en local: Opportunities stages/create/list/retry/stage/reopen/update/version conflict/owner-viewer (`scripts/test-crm-backend-http.mjs`); Customer 360 record read, Tasks/Notes retry idempotency, activity read and viewer `403`; targeted CRM API tests 19/19                                                     | Customer 360 contact timestamp normalization fixed in `apps/loopdev-os/src/services/crm/core.ts`; staging, cross-tenant remote E2E and visual UAT remain pending                                                                                                                                               |
 
 ## Handoff de sesion
 
-- **Fecha:** 2026-08-14.
-- **Rama de continuacion:** `feature/crm-pilot-security-foundation` (no creada todavía).
-- **Commit de partida:** `41f2553` en `docs/2026-execution-roadmap`; la rama documental debe sincronizarse en remoto antes de crear la rama de ejecución.
-- **Estado alcanzado:** Planificación CRM y G0/G1 documental aprobados; matriz de seguridad aprobada; la foundation UI fue certificada en PR #108 y mergeada a `develop`; Issues G1 #70-#78 y los delivery issues #82-#88 siguen abiertos hasta ejecutar los gates reales.
-- **Decisiones, bloqueos y riesgos:** User es owner operativo, Product Owner, Tech Lead y release owner. G1 debe empezar por reset/seed, integridad tenant-aware, RLS por verbo, kill switches, audit append-only, pgTAP, CI, checks reales y E2E Auth/RLS. No hay acceso a Supabase en este ordenador; la implementación requiere Supabase local o acceso a desarrollo/staging. No crear PR.
-- **Validacion ejecutada:** `validate-git-conventions.mjs`, `generate-tracks-index.mjs`, `validate-tracks.mjs` y `git diff --check` pasan en la rama documental.
-- **Siguiente accion concreta:** Reconciliar G0 (#68) y comenzar G1 por #70-#75 con Supabase local o acceso al entorno de desarrollo; después ejecutar #76-#78 antes de abrir el slice persistente de Contacts (#82). No iniciar G4/G5 todavía.
+- **Fecha:** 2026-08-19.
+- **Rama de continuación:** `feature/crm-pilot-pipeline-implementation`.
+- **Commit de partida:** `a8dc5a8` (Tasks backend-first ya presente en el worktree).
+- **Estado alcanzado:** Leads, Pipeline, Tasks y Customer 360 backend-first implementados con
+  contratos, servicios y API. Customer 360 permanece como proyección dentro de Contact, sin entidad ni
+  navegación propia, con aislamiento y deduplicación autorizada.
+- **Decisiones, bloqueos y riesgos:** G2 y los delivery backend están documentados, pero el cierre
+  integral de G1/G2/G3 sigue pendiente; no se presenta staging/UAT como completado. La suite Supabase
+  global y governance mantienen fallos ya existentes del contrato Tasks; E2E frontend no aplica a este
+  slice backend-only.
+- **Validación ejecutada:** contratos Customer 360 build/typecheck, typecheck explícito de
+  `loopdev-os`, tests focalizados Customer 360/API (8/8), `git diff --check`; `supabase test db --local`
+  ejecutado con el fallo conocido de `006_crm_tasks_contract.sql` y el helper sin plan.
+- **Siguiente acción concreta:** completar la remediación/validación de Tasks en Supabase y después
+  preparar staging reproducible para la certificación integral de Daily Operation, Customer 360 y UAT.
 
 ## Cierre
 

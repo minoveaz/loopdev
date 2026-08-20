@@ -13,6 +13,8 @@ issue: https://github.com/minoveaz/loopdev/issues/85
 
 ## Leer primero
 
+0. `../shared/CRM_BACKEND_MODULE_PLAYBOOK.md`.
+
 1. `CRM_PIPELINE_UX_SPEC.md`.
 2. `CRM_PIPELINE_COMPONENT_AUDIT.md`.
 3. `CRM_PIPELINE_CONTRACT.md`.

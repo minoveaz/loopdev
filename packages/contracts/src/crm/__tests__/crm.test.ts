@@ -3,11 +3,13 @@ import { CrmActivityReadSchema, CrmActivitySchema, CrmAuditEventSchema, CrmCaptu
 
 const ids = { organizationId: '00000000-0000-4000-9000-000000000001', contactId: '00000000-0000-4000-9000-000000000002', leadId: '00000000-0000-4000-9000-000000000003', id: '00000000-0000-4000-9000-000000000004' };
 const timestamp = '2026-08-07T00:00:00.000Z';
+const manualSource = { kind: 'manual' as const };
 
 describe('CRM contracts', () => {
   it('requires an organization boundary for contacts and leads', () => {
     expect(CrmContactSchema.safeParse({ id: ids.id, firstName: 'Ana', createdAt: timestamp, updatedAt: timestamp }).success).toBe(false);
-    expect(CrmLeadSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, contactId: ids.contactId, createdAt: timestamp, updatedAt: timestamp }).success).toBe(true);
+    expect(CrmLeadSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, contactId: ids.contactId, source: manualSource, createdAt: timestamp, updatedAt: timestamp }).success).toBe(true);
+    expect(CrmLeadSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, contactId: ids.contactId, createdAt: timestamp, updatedAt: timestamp }).success).toBe(false);
   });
 
   it('validates auditable activities and tasks', () => {
@@ -23,7 +25,8 @@ describe('CRM contracts', () => {
 
   it('requires channel consent and a source for lead commands', () => {
     expect(CrmContactConsentSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, contactId: ids.contactId, channel: 'whatsapp', purpose: 'customer support', status: 'granted', createdAt: timestamp, updatedAt: timestamp }).success).toBe(true);
-    expect(CrmCreateLeadCommandSchema.safeParse({ organizationId: ids.organizationId, contactId: ids.contactId, source: 'facebook' }).success).toBe(true);
+    expect(CrmCreateLeadCommandSchema.safeParse({ organizationId: ids.organizationId, contactId: ids.contactId, source: manualSource }).success).toBe(true);
+    expect(CrmCreateLeadCommandSchema.safeParse({ organizationId: ids.organizationId, contactId: ids.contactId, source: { kind: 'facebook' } }).success).toBe(false);
   });
 
   it('keeps notes scoped and auditable', () => {
@@ -70,7 +73,22 @@ describe('CRM contracts', () => {
   });
 
   it('preserves source attribution for captured leads', () => {
-    expect(CrmCaptureLeadCommandSchema.safeParse({ organizationId: ids.organizationId, firstName: 'Ana', source: 'facebook', campaign: 'health', utm: { medium: 'paid_social' } }).success).toBe(true);
-    expect(CrmLeadAttributionSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, leadId: ids.leadId, source: 'facebook', capturedAt: timestamp }).success).toBe(true);
+    expect(
+      CrmCaptureLeadCommandSchema.safeParse({
+        organizationId: ids.organizationId,
+        firstName: 'Ana',
+        email: 'ana@example.test',
+        interest: 'seguro de salud',
+        source: { kind: 'campaign', campaign: 'health', utm: { medium: 'paid_social' } },
+      }).success,
+    ).toBe(true);
+    expect(
+      CrmCaptureLeadCommandSchema.safeParse({
+        organizationId: ids.organizationId,
+        interest: 'seguro de salud',
+        source: { kind: 'manual' },
+      }).success,
+    ).toBe(false);
+    expect(CrmLeadAttributionSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, leadId: ids.leadId, source: 'campaign', capturedAt: timestamp }).success).toBe(true);
   });
 });

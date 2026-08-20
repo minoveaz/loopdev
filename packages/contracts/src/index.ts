@@ -18,6 +18,8 @@ export * from './platform/composition-layout';
 // Export CRM contracts
 export * from './crm/crm';
 export * from './crm/customer-workspace';
+export * from './crm/tasks';
+export * from './crm/customer-360';
 export * from './communications/communications';
 export * from './documents/documents';
 export * from './ai/assistant';
