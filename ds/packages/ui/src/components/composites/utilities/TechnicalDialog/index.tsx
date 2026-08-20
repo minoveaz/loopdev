@@ -20,7 +20,9 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
   actions,
   variant = 'default',
   size = 'md',
-  className
+  className,
+  presentation = variant === 'form' ? 'form' : 'technical',
+  closeLabel = 'Cerrar diálogo',
 }) => {
   
   if (!isOpen) return null;
@@ -56,6 +58,13 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
           iconColor: 'text-emerald-500',
           iconBg: 'bg-emerald-500/10 border-emerald-500/20'
         };
+      case 'form':
+        return {
+          border: 'border-border-technical',
+          icon: '',
+          iconColor: 'text-primary',
+          iconBg: '',
+        };
       default:
         return {
           border: 'border-border-technical',
@@ -85,19 +94,26 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
               'relative z-10 flex w-full flex-col overflow-hidden shadow-2xl data-[state=open]:animate-in data-[state=open]:zoom-in-95',
               sizeClasses[size],
               styles.border,
+              presentation === 'form' && 'dark:bg-[#20252d]',
             )}
           >
         {/* Header */}
         <header className="p-6 border-b border-border-technical/30 flex items-start justify-between bg-background-subtle/30 shrink-0">
-          <div className="flex items-center gap-4">
-            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border shrink-0", styles.iconBg)}>
-              <span className={cn("material-symbols-outlined text-xl font-bold", styles.iconColor)}>
-                {styles.icon}
-              </span>
-            </div>
+          <div className="flex min-w-0 items-center gap-4">
+            {presentation === 'technical' && (
+              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border shrink-0", styles.iconBg)}>
+                <span className={cn("material-symbols-outlined text-xl font-bold", styles.iconColor)}>
+                  {styles.icon}
+                </span>
+              </div>
+            )}
             <div className="flex flex-col gap-1">
               <Dialog.Title asChild>
-                <Heading size="xs" weight="bold" className="uppercase tracking-tight leading-none">
+                <Heading
+                  size={presentation === 'form' ? 'lg' : 'xs'}
+                  weight="bold"
+                  className={presentation === 'form' ? 'text-text-main leading-tight' : 'uppercase tracking-tight leading-none'}
+                >
                 {title}
                 </Heading>
               </Dialog.Title>
@@ -116,7 +132,13 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
             </div>
           </div>
           <Dialog.Close asChild>
-            <IconButton icon="close" size="sm" className="shrink-0 -mr-2 -mt-2" />
+            <IconButton
+              icon="close"
+              variant="ghost"
+              size="sm"
+              ariaLabel={closeLabel}
+              className="size-8 shrink-0 -mr-2 -mt-2"
+            />
           </Dialog.Close>
         </header>
 

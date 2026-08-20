@@ -18,23 +18,25 @@ import type { NavMode, NavRouteRef } from '@loopdev/contracts';
 import { CircleHelp } from 'lucide-react';
 
 import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
+import { useOrganization } from '@/hooks/useOrganization';
 import {
   PlatformHeaderActionButton,
   PlatformHeaderControls,
 } from '@/components/layout/PlatformHeaderControls';
 import { SALES_CRM_SUITE_CONFIG } from './config';
 
-const CRM_ORGANIZATIONS = [
-  { id: 'sales-crm-workspace', name: 'CRM Workspace', planLabel: 'PRO', theme: '' },
-];
-
 export function SalesCrmShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
-  const [activeOrganizationId, setActiveOrganizationId] = useState(CRM_ORGANIZATIONS[0].id);
   const [navMode, setNavMode] = useState<Exclude<NavMode, 'hidden'>>('expanded');
-  const activeOrganization = CRM_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
+  const {
+    organizations,
+    activeOrganization,
+    activeOrganizationId,
+    setActiveOrganizationId,
+    isLoading: isLoadingOrganizations,
+  } = useOrganization();
   const activeModuleId = SALES_CRM_SUITE_CONFIG.modules.find(
     (module) => module.route === pathname,
   )?.moduleId;
@@ -61,8 +63,9 @@ export function SalesCrmShell({ children }: { children: ReactNode }) {
         contextSlot: (
           <div className="flex min-w-0 items-center gap-2">
             <OrganizationSwitcher
-              organizations={CRM_ORGANIZATIONS}
-              activeOrganizationId={activeOrganization?.id}
+              organizations={organizations.map(({ id, name }) => ({ id, name, planLabel: 'PRO' }))}
+              activeOrganizationId={activeOrganizationId}
+              isLoading={isLoadingOrganizations}
               onOrganizationNavigate={() => router.push('/launchpad')}
               onOrganizationChange={setActiveOrganizationId}
               onAllOrganizations={() => router.push('/launchpad')}
@@ -107,7 +110,7 @@ export function SalesCrmShell({ children }: { children: ReactNode }) {
           </PlatformHeaderActionButton>
         </div>
       }
-      canvasProps={{ mode: 'overview' }}
+      canvasProps={{ mode: 'data' }}
       onNavModeChange={setNavMode}
       appShellProps={{
         onToggleLeftSidebar: () =>

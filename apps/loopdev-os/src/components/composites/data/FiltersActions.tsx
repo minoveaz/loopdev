@@ -66,12 +66,14 @@ export interface FiltersActionsProps<Row extends Record<string, unknown>> {
   selectedRowKey?: React.Key;
   selectOnRowClick?: boolean;
   showAllColumnsOnMobile?: boolean;
+  showMobileHeader?: boolean;
   onRowClick?: (row: Row, index: number) => void;
   renderMobileRow?: (row: Row, index: number) => React.ReactNode;
   rowActions?: (row: Row, index: number) => React.ReactNode;
   activeRowKey?: React.Key;
   onClearFilters?: () => void;
   className?: string;
+  showSectionHeader?: boolean;
 }
 
 export function FiltersActions<Row extends Record<string, unknown>>({
@@ -98,12 +100,14 @@ export function FiltersActions<Row extends Record<string, unknown>>({
   selectedRowKey,
   selectOnRowClick = false,
   showAllColumnsOnMobile = false,
+  showMobileHeader = true,
   onRowClick,
   renderMobileRow,
   rowActions,
   activeRowKey,
   onClearFilters,
   className = '',
+  showSectionHeader = true,
 }: FiltersActionsProps<Row>) {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [uncontrolledSelectedRows, setUncontrolledSelectedRows] = useState<React.Key[]>([]);
@@ -163,24 +167,34 @@ export function FiltersActions<Row extends Record<string, unknown>>({
         border="technical"
         className="w-full min-w-0 p-4"
       >
-        <SectionHeader
-          title={labels.title}
-          action={
-            <div className="flex items-center gap-3">
-              <span
-                className="text-xs text-text-muted"
-                aria-label={labels.resultCount(rows.length)}
-              >
-                {labels.resultCount(rows.length)}
-              </span>
-              {pageAction}
-            </div>
-          }
-        />
+        {showSectionHeader ? (
+          <SectionHeader
+            title={labels.title}
+            action={
+              <div className="flex items-center gap-3">
+                <span
+                  className="text-xs text-text-muted"
+                  aria-label={labels.resultCount(rows.length)}
+                >
+                  {labels.resultCount(rows.length)}
+                </span>
+                {pageAction}
+              </div>
+            }
+          />
+        ) : null}
         <div
           role="toolbar"
           aria-label={labels.title}
-          className="mt-4 grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(3,minmax(9rem,auto))_auto_auto]"
+          className={
+            showSectionHeader
+              ? hasActiveFilters
+                ? 'mt-4 grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(2,minmax(9rem,auto))_auto_auto]'
+                : 'mt-4 grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(2,minmax(9rem,auto))_auto]'
+              : hasActiveFilters
+                ? 'grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(2,minmax(9rem,auto))_auto_auto]'
+                : 'grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(2,minmax(9rem,auto))_auto]'
+          }
         >
           {search ? (
             <div className="min-w-0 w-full">
@@ -378,6 +392,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
             selectedRowKey={selectedRowKey}
             selectOnRowClick={selectOnRowClick}
             showAllColumnsOnMobile={showAllColumnsOnMobile}
+            showMobileHeader={showMobileHeader}
             activeRowKey={activeRowKey}
             onRowClick={onRowClick}
             renderMobileRow={renderMobileRow}

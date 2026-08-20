@@ -37,6 +37,7 @@ prototipo CRM anterior.
 5. [CRM Pilot Readiness Review](../shared/CRM_PILOT_READINESS_REVIEW.md)
 6. [CRM Pilot Execution track](../../../../tracks/active/crm/2026-08-13-crm-pilot-execution.md)
 7. [Suite composition ADR](../../../architecture/ADR-2026-08-13-suite-runtime-suite-canvas-fsd.md)
+8. [CRM Contacts UI Implementation Plan](CRM_CONTACTS_UI_IMPLEMENTATION_PLAN.md)
 
 ## 3. Outcome de la entrega
 
@@ -51,6 +52,12 @@ Entregar el primer slice backend real de Contactos:
 
 Customer 360, merge humano y composición visual quedan preparados en contrato
 pero fuera del primer slice backend.
+
+La implementación frontend posterior debe seguir el plan aprobado en
+`CRM_CONTACTS_UI_IMPLEMENTATION_PLAN.md`. Ese documento separa el alcance UI-1
+basado en el API actual de las fases de creación, enriquecimiento y Customer 360;
+no se deben inventar columnas, segmentos, exportación ni acciones masivas que aún
+no tengan contrato, capability y endpoint.
 
 ## 4. Composicion frontend posterior
 
