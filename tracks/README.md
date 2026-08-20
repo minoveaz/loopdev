@@ -37,7 +37,6 @@
 - [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-impact-validation` · fase 1
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
-- [Reusable suite composition patterns](./active/platform/2026-08-18-reusable-suite-composition-patterns.md) · `feature/reusable-suite-composition-patterns` · fase 2
 
 ### Governance
 
@@ -73,3 +72,4 @@
 - [CRM component inventory and reuse architecture](./closed/2026/2026-08-13-crm-component-inventory.md) · fase 3
 - [Documentation migration and registry standardization](./closed/2026/2026-08-13-documentation-migration.md) · `docs/documentation-migration` · fase 4
 - [CRM UI foundation and composition](./closed/2026/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
+- [Reusable suite composition patterns](./closed/2026/platform/2026-08-18-reusable-suite-composition-patterns.md) · `feature/reusable-suite-composition-patterns` · fase 2

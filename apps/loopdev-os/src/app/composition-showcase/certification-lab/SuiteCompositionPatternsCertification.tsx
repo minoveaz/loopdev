@@ -3,6 +3,7 @@
 import {
   Button,
   FilterDropdown,
+  Heading,
   InspectorPanel,
   PageHeader,
   Pagination,
@@ -297,9 +298,9 @@ export function SuiteCompositionPatternsCertification() {
                   <p className="text-xs uppercase tracking-[0.14em] text-text-muted">
                     Selected record
                   </p>
-                  <h3 className="mt-1 text-lg font-semibold text-text-main">
+                  <Heading as="h3" size="lg" weight="bold" className="mt-1 text-text-main">
                     {selectedContact?.name ?? 'No contact selected'}
-                  </h3>
+                  </Heading>
                 </div>
                 {dirty ? (
                   <div className="flex items-center gap-2">
@@ -321,18 +322,15 @@ export function SuiteCompositionPatternsCertification() {
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {filteredContacts.map((contact) => (
-                    <button
+                    <Button
                       key={contact.id}
                       type="button"
-                      className={`rounded-md border px-2 py-1 text-xs ${
-                        contact.id === selectedContactId
-                          ? 'border-primary bg-primary/10 text-primary'
-                          : 'border-border-subtle text-text-muted hover:border-primary/50'
-                      }`}
+                      variant={contact.id === selectedContactId ? 'primary' : 'outline'}
+                      size="sm"
                       onClick={() => setSelectedContactId(contact.id)}
                     >
                       {contact.name}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>

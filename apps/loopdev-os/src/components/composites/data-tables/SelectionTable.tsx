@@ -162,7 +162,7 @@ export function SelectionTable({
               variant="primary"
               size="sm"
               disabled={!nextOwner}
-              className="disabled:bg-slate-200 disabled:text-slate-400 disabled:opacity-100"
+              className="disabled:bg-background-subtle disabled:text-text-muted disabled:opacity-100"
               onClick={assignOwner}
             >
               Assign owner

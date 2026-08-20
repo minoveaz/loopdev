@@ -3,6 +3,7 @@
 import {
   Badge,
   ContextPath,
+  Heading,
   IndustrialBreadcrumbs,
   PageHeader,
   SectionHeader,
@@ -21,9 +22,14 @@ export function IdentityOrientationCertification() {
   return (
     <TechnicalCard className="space-y-5 p-4">
       <div>
-        <h2 className="font-mono text-sm uppercase tracking-[0.14em] text-text-main">
+        <Heading
+          as="h2"
+          size="sm"
+          weight="bold"
+          className="font-mono uppercase tracking-[0.14em] text-text-main"
+        >
           Identity and orientation
-        </h2>
+        </Heading>
         <p className="mt-1 text-xs text-text-muted">
           A4 semantic identity and A5 internal navigation boundaries.
         </p>

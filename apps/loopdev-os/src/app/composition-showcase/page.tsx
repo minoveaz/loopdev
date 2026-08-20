@@ -13,6 +13,7 @@ import {
   CREATIVE_EDITOR_COMPOSITION,
   DATA_WORKSPACE_COMPOSITION,
   EmptyState,
+  Heading,
   LoadingState,
   IMMERSIVE_WORKFLOW_COMPOSITION,
   MARKETING_STUDIO_SCHEMA,
@@ -492,9 +493,9 @@ const SuiteOverviewCanvas = ({
             </Button>
           }
         />
-        <h2 className="text-text-main mt-3 text-lg font-semibold">
+        <Heading as="h2" size="lg" weight="bold" className="text-text-main mt-3">
           {isContactsFixture ? 'Who needs attention' : 'What needs attention'}
-        </h2>
+        </Heading>
         <div className="mt-4 space-y-2">
           {(isContactsFixture
             ? [
@@ -840,7 +841,9 @@ const RecordWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
                   <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
                     Customer record
                   </p>
-                  <h2 className="text-text-main mt-2 text-xl font-semibold">Northstar Labs</h2>
+                  <Heading as="h2" size="xl" weight="bold" className="text-text-main mt-2">
+                    Northstar Labs
+                  </Heading>
                   <p className="text-text-muted mt-1 text-sm">
                     Enterprise workspace · Account owner Maya Chen
                   </p>
@@ -941,7 +944,9 @@ const RecordWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
                   <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
                     Activity
                   </p>
-                  <h3 className="text-text-main mt-1 text-lg font-semibold">Recent account work</h3>
+                  <Heading as="h3" size="lg" weight="bold" className="text-text-main mt-1">
+                    Recent account work
+                  </Heading>
                 </div>
                 <Button variant="outline" size="sm">
                   Add activity
@@ -990,7 +995,9 @@ const BoardWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
           <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
             Pipeline board
           </p>
-          <h2 className="text-text-main mt-1 text-lg font-semibold">Customer success workflow</h2>
+          <Heading as="h2" size="lg" weight="bold" className="text-text-main mt-1">
+            Customer success workflow
+          </Heading>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm">
@@ -1137,7 +1144,9 @@ const SplitWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
                   <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
                     Records
                   </p>
-                  <h2 className="text-text-main mt-1 text-lg font-semibold">Accounts</h2>
+                  <Heading as="h2" size="lg" weight="bold" className="text-text-main mt-1">
+                    Accounts
+                  </Heading>
                 </div>
                 <Button
                   variant="outline"
@@ -1205,7 +1214,9 @@ const SplitWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
               ) : null}
               {!['loading', 'empty', 'error', 'forbidden'].includes(state) ? (
                 <>
-                  <h2 className="text-text-main mt-2 text-xl font-semibold">Northstar Labs</h2>
+                  <Heading as="h2" size="xl" weight="bold" className="text-text-main mt-2">
+                    Northstar Labs
+                  </Heading>
                   <p className="text-text-muted mt-1 text-sm">
                     Enterprise account · selected from Accounts
                   </p>
@@ -1246,7 +1257,9 @@ const ImmersiveWorkflowCanvas = ({ state }: { state: ShowcaseState }) => {
         <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
           Workflow execution
         </p>
-        <h2 className="text-text-main mt-2 text-2xl font-semibold">Launch campaign pipeline</h2>
+        <Heading as="h2" size="2xl" weight="bold" className="text-text-main mt-2">
+          Launch campaign pipeline
+        </Heading>
         <div className="mt-6 space-y-3">
           {['Brief approved', 'Assets prepared', 'Audience reviewed', 'Ready to publish'].map(
             (step, index) => (
@@ -1637,7 +1650,9 @@ const CertificationSidebar = ({
       <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
         Component inventory
       </p>
-      <h2 className="mt-2 text-lg font-semibold text-text-main">Certification Lab</h2>
+      <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
+        Certification Lab
+      </Heading>
     </div>
     <nav aria-label="Certification groups" className="space-y-3">
       {CERTIFICATION_GROUPS.map((group) => {
@@ -1650,11 +1665,12 @@ const CertificationSidebar = ({
 
         return (
           <div key={group.id} className="space-y-1">
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              className={`w-full justify-start border px-3 py-4 text-left ${isGroupSelected ? 'border-primary bg-primary/10' : 'border-border-subtle hover:border-border-technical'}`}
               aria-current={isGroupSelected ? 'true' : undefined}
               onClick={() => onSelect(group.entryComponent as CertificationComponent)}
-              className={`w-full border px-3 py-4 text-left transition-colors ${isGroupSelected ? 'border-primary bg-primary/10' : 'border-border-subtle hover:border-border-technical'}`}
             >
               <span className="block font-mono text-xs uppercase tracking-[0.14em] text-text-main">
                 {group.label}
@@ -1667,22 +1683,24 @@ const CertificationSidebar = ({
               >
                 {group.status}
               </span>
-            </button>
+            </Button>
             {childComponents.length > 1 && (
               <div
                 className="ml-3 border-l border-border-subtle pl-2"
                 aria-label={`${group.label} components`}
               >
                 {childComponents.map((component) => (
-                  <button
+                  <Button
                     key={component.id}
                     type="button"
+                    variant="ghost"
+                    size="sm"
+                    className={`block w-full justify-start border-b px-2 py-2 text-left text-[11px] ${selected === component.id ? 'border-primary text-primary' : 'border-border-subtle text-text-muted hover:text-text-main'}`}
                     aria-current={selected === component.id ? 'true' : undefined}
                     onClick={() => onSelect(component.id)}
-                    className={`block w-full border-b px-2 py-2 text-left text-[11px] transition-colors last:border-b-0 ${selected === component.id ? 'border-primary text-primary' : 'border-border-subtle text-text-muted hover:text-text-main'}`}
                   >
                     {component.label}
-                  </button>
+                  </Button>
                 ))}
               </div>
             )}
@@ -1701,7 +1719,9 @@ const CertificationPanel = ({ selected }: { selected: CertificationComponent }) 
         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
           Evidence record
         </p>
-        <h2 className="mt-2 text-lg font-semibold text-text-main">{component?.label}</h2>
+        <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
+          {component?.label}
+        </Heading>
         <p className="mt-1 text-sm text-text-muted">{component?.action}</p>
       </div>
       <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
@@ -1732,34 +1752,54 @@ const CertificationFoundationCatalog = () => (
       <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
         Certification section
       </p>
-      <h1 className="mt-2 text-2xl font-semibold text-text-main">UI Foundation</h1>
+      <Heading as="h1" size="2xl" weight="bold" className="mt-2 text-text-main">
+        UI Foundation
+      </Heading>
       <p className="mt-1 text-sm text-text-muted">
         Shared layout, surfaces and interaction contracts
       </p>
     </div>
     <section className="space-y-3" aria-labelledby="technical-canvas-examples">
       <div>
-        <h2 id="technical-canvas-examples" className="text-lg font-semibold text-text-main">
+        <Heading
+          as="h2"
+          id="technical-canvas-examples"
+          size="lg"
+          weight="bold"
+          className="text-text-main"
+        >
           TechnicalCanvas
-        </h2>
+        </Heading>
         <p className="text-sm text-text-muted">Canonical grid primitive · all variants</p>
       </div>
       <TechnicalCanvasCertification />
     </section>
     <section className="space-y-3" aria-labelledby="technical-surface-examples">
       <div>
-        <h2 id="technical-surface-examples" className="text-lg font-semibold text-text-main">
+        <Heading
+          as="h2"
+          id="technical-surface-examples"
+          size="lg"
+          weight="bold"
+          className="text-text-main"
+        >
           TechnicalSurface
-        </h2>
+        </Heading>
         <p className="text-sm text-text-muted">Surface contract · all variants</p>
       </div>
       <TechnicalSurfaceCertification />
     </section>
     <section className="space-y-3" aria-labelledby="technical-card-examples">
       <div>
-        <h2 id="technical-card-examples" className="text-lg font-semibold text-text-main">
+        <Heading
+          as="h2"
+          id="technical-card-examples"
+          size="lg"
+          weight="bold"
+          className="text-text-main"
+        >
           TechnicalCard
-        </h2>
+        </Heading>
         <p className="text-sm text-text-muted">Thin surface composition · all states</p>
       </div>
       <TechnicalCardCertification />
@@ -1818,7 +1858,9 @@ const CertificationLabCanvas = ({
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
             Component Certification Lab
           </p>
-          <h1 className="mt-2 text-2xl font-semibold text-text-main">{selected}</h1>
+          <Heading as="h1" size="2xl" weight="bold" className="mt-2 text-text-main">
+            {selected}
+          </Heading>
         </div>
         <span className="border border-warning/40 bg-warning/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-warning">
           Evidence pending
@@ -2253,9 +2295,9 @@ export default function CompositionShowcasePage() {
                     <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
                       Activity detail
                     </p>
-                    <h2 className="mt-2 text-lg font-semibold text-text-main">
+                    <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
                       {selectedActivity.event}
-                    </h2>
+                    </Heading>
                   </div>
                   <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
                     <div className="flex items-center justify-between gap-4 py-3">
@@ -2301,7 +2343,9 @@ export default function CompositionShowcasePage() {
                   <p className="text-text-muted text-xs uppercase tracking-[0.16em]">
                     Workspace detail
                   </p>
-                  <h2 className="mt-2 text-lg font-semibold text-text-main">{selectedWorkspace}</h2>
+                  <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
+                    {selectedWorkspace}
+                  </Heading>
                 </div>
                 {(() => {
                   const selectedRow = DATA_WORKSPACE_ROWS.find(
@@ -2521,15 +2565,17 @@ export default function CompositionShowcasePage() {
                 className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
               />
             </div>
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="md"
               aria-label="Open help center"
-              className="border-border-technical text-text-main hover:bg-primary/10 hover:text-primary flex min-h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition-colors"
+              className="min-h-10"
               onClick={() => setContextMode('help')}
             >
               <CircleHelp size={20} aria-hidden="true" />
               <span>Help</span>
-            </button>
+            </Button>
           </div>
         }
         profileSlot={
@@ -2574,9 +2620,14 @@ export default function CompositionShowcasePage() {
                 <div>
                   {dataset === 'default' ? (
                     <>
-                      <h1 className="font-mono text-xs uppercase tracking-[0.16em]">
+                      <Heading
+                        as="h1"
+                        size="xs"
+                        weight="bold"
+                        className="font-mono uppercase tracking-[0.16em]"
+                      >
                         {composition.recipe}
-                      </h1>
+                      </Heading>
                       <span className="text-xs text-text-muted">
                         {composition.grid.columns} columns / {composition.grid.gap} gap
                       </span>

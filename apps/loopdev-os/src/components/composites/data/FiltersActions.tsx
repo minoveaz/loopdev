@@ -6,6 +6,7 @@ import { Search, X } from 'lucide-react';
 import {
   Button,
   FilterDropdown,
+  IconButton,
   Input,
   ResponsiveTable,
   SectionHeader,
@@ -191,13 +192,13 @@ export function FiltersActions<Row extends Record<string, unknown>>({
                 startIcon={<Search size={14} aria-hidden="true" />}
                 endIcon={
                   search.value ? (
-                    <button
-                      type="button"
+                    <IconButton
+                      icon="close"
+                      variant="ghost"
+                      size="sm"
                       aria-label={labels.clearSearch}
                       onClick={() => search.onChange('')}
-                    >
-                      <X size={14} aria-hidden="true" />
-                    </button>
+                    />
                   ) : undefined
                 }
                 size="sm"
@@ -399,13 +400,15 @@ function FilterChip({
   disabled?: boolean;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="sm"
       disabled={disabled}
       onClick={onRemove}
-      className="border border-primary/30 bg-primary/5 px-2 py-1 text-xs text-text-main disabled:cursor-not-allowed disabled:opacity-50"
+      className="text-xs"
     >
       {label} <X className="ml-1 inline" size={12} aria-hidden="true" />
-    </button>
+    </Button>
   );
 }

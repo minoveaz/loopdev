@@ -9,6 +9,7 @@ import {
   Switch,
   TechnicalCard,
   Textarea,
+  Heading,
 } from '@loopdev/ui';
 import { useState } from 'react';
 
@@ -29,7 +30,14 @@ export function ControlsCertification() {
   return (
     <TechnicalCard className="space-y-5 p-4">
       <div>
-        <h2 className="font-mono text-sm uppercase tracking-[0.14em] text-text-main">Controls</h2>
+        <Heading
+          as="h2"
+          size="sm"
+          weight="bold"
+          className="font-mono uppercase tracking-[0.14em] text-text-main"
+        >
+          Controls
+        </Heading>
         <p className="mt-1 text-xs text-text-muted">
           A2 reference controls: input states and filter selection contracts.
         </p>

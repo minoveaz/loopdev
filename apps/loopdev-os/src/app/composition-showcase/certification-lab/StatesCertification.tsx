@@ -1,14 +1,19 @@
 'use client';
 
-import { Button, EmptyState, LoadingState, TechnicalCard } from '@loopdev/ui';
+import { Button, EmptyState, Heading, LoadingState, TechnicalCard } from '@loopdev/ui';
 
 export function StatesCertification() {
   return (
     <TechnicalCard className="space-y-5 p-4">
       <div>
-        <h2 className="font-mono text-sm uppercase tracking-[0.14em] text-text-main">
+        <Heading
+          as="h2"
+          size="sm"
+          weight="bold"
+          className="font-mono uppercase tracking-[0.14em] text-text-main"
+        >
           Content states
-        </h2>
+        </Heading>
         <p className="mt-1 text-xs text-text-muted">
           A3 shared states for loading, empty, error, forbidden and read-only boundaries.
         </p>

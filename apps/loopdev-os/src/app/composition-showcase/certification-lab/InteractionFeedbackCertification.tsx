@@ -1,6 +1,13 @@
 'use client';
 
-import { Button, CommandDialog, TechnicalDialog, TechnicalSurface, ToastItem } from '@loopdev/ui';
+import {
+  Button,
+  CommandDialog,
+  Heading,
+  TechnicalDialog,
+  TechnicalSurface,
+  ToastItem,
+} from '@loopdev/ui';
 import { useState } from 'react';
 
 export function InteractionFeedbackCertification() {
@@ -41,9 +48,9 @@ export function InteractionFeedbackCertification() {
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
                 Operational record
               </p>
-              <h3 className="mt-1 text-base font-semibold text-text-main">
+              <Heading as="h3" size="sm" weight="bold" className="mt-1 text-text-main">
                 {archived ? 'Workspace review · archived' : 'Workspace review'}
-              </h3>
+              </Heading>
               <p className="mt-1 text-xs text-text-muted">
                 A representative action flow with confirmation, success and recovery states.
               </p>
@@ -96,7 +103,9 @@ export function InteractionFeedbackCertification() {
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
               Feedback states
             </p>
-            <h3 className="mt-1 text-base font-semibold text-text-main">Status and recovery</h3>
+            <Heading as="h3" size="sm" weight="bold" className="mt-1 text-text-main">
+              Status and recovery
+            </Heading>
           </div>
           {toast ? (
             <ToastItem

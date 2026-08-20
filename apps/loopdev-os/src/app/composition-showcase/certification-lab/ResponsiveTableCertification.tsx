@@ -1,6 +1,13 @@
 'use client';
 
-import { EmptyState, LoadingState, ResponsiveTable, StatusBadge } from '@loopdev/ui';
+import {
+  Button,
+  EmptyState,
+  Heading,
+  LoadingState,
+  ResponsiveTable,
+  StatusBadge,
+} from '@loopdev/ui';
 import { useState } from 'react';
 
 type ContactRow = { id: string; name: string; segment: string; status: 'Active' | 'Paused' };
@@ -20,24 +27,31 @@ export function ResponsiveTableCertification() {
   return (
     <section className="space-y-4" aria-labelledby="responsive-table-examples">
       <div>
-        <h2 id="responsive-table-examples" className="text-lg font-semibold text-text-main">
+        <Heading
+          as="h2"
+          id="responsive-table-examples"
+          size="lg"
+          weight="bold"
+          className="text-text-main"
+        >
           ResponsiveTable
-        </h2>
+        </Heading>
         <p className="text-sm text-text-muted">
           Standard table contract for desktop, mobile, states, selection, density and pagination.
         </p>
       </div>
       <div className="flex flex-wrap items-center gap-2 border-y border-border-subtle py-3">
         {(['ready', 'loading', 'empty', 'error'] as const).map((value) => (
-          <button
+          <Button
             key={value}
             type="button"
-            className="border border-border-technical px-2 py-1 text-xs text-text-main"
+            variant={state === value ? 'primary' : 'outline'}
+            size="sm"
             onClick={() => setState(value)}
             aria-pressed={state === value}
           >
             {value}
-          </button>
+          </Button>
         ))}
         <label className="ml-auto flex items-center gap-2 text-xs text-text-muted">
           Density
@@ -81,13 +95,9 @@ export function ResponsiveTableCertification() {
               label={row.status}
               severity={row.status === 'Active' ? 'success' : 'warning'}
             />
-            <button
-              type="button"
-              className="min-h-9 rounded border border-border-subtle px-2 text-xs text-text-main dark:text-white"
-              aria-label={`Open ${row.name}`}
-            >
+            <Button type="button" variant="outline" size="sm" aria-label={`Open ${row.name}`}>
               Open
-            </button>
+            </Button>
           </article>
         )}
         getRowKey={(row) => row.id}

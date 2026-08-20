@@ -4,6 +4,7 @@ title: Reusable suite composition patterns
 status: closed
 created: 2026-08-18
 updated: 2026-08-19
+closed: 2026-08-19
 owner: platform
 lead: User
 branch: feature/reusable-suite-composition-patterns
@@ -112,9 +113,9 @@ and command navigation have different semantics from text search.
       inline no consumidos de `EmptyState` y `LoadingState`.
 - [x] Promoción completa en registry y documentación pública de
       `SearchInput`, `FilterBar`, `QueryToolbar` y `Pagination`.
-- [ ] `pnpm front:check` completo: el gate alcanza `front:audit`, pero queda
-      bloqueado por 43 hallazgos globales nuevos de tipografía y primitivas
-      interactivas en showcases, fuera del alcance de C10-C12.
+- [x] `pnpm front:check` completo: formato, clases duplicadas, ownership de
+      contratos, source-contracts, `front:audit`, duplicación y Knip completan
+      el gate con código de salida 0 el 2026-08-19.
 
 **Decisión:** las Fases A y B quedan cerradas en implementación, composición,
 revisión visual y evidencia focalizada. C10, C11 y C12 quedan cerrados dentro
@@ -133,12 +134,10 @@ esta certificación.
 
 ### Deuda global posterior al cierre
 
-`pnpm front:check` ya supera formato, clases duplicadas, ownership de contratos
-y source-contracts. `front:audit --fail-on-new-findings` todavía reporta 43
-hallazgos globales, principalmente revisiones de tipografía y uso de botones
-nativos en páginas de showcase. Estos hallazgos deben resolverse en un frente
-de calidad frontend independiente, agrupando cambios por regla y consumidor;
-no deben incorporarse a la baseline sin revisión ni atribuirse a C10-C12.
+El trabajo de calidad frontend posterior se resolvió en la misma rama sin
+modificar la baseline: `front:audit` reporta 0 hallazgos y `pnpm front:check`
+completa el gate con código de salida 0. La deuda restante de Knip son avisos
+informativos de exports no usados o duplicados y no bloquea el cierre.
 
 ## Relacion con CRM
 

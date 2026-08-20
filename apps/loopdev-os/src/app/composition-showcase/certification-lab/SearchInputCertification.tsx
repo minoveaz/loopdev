@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { SearchInput } from '@loopdev/ui';
+import { Button, Heading, SearchInput } from '@loopdev/ui';
 
 export function SearchInputCertification() {
   const [query, setQuery] = useState('');
@@ -12,9 +12,15 @@ export function SearchInputCertification() {
   return (
     <section className="space-y-4" aria-labelledby="search-input-examples">
       <div>
-        <h2 id="search-input-examples" className="text-lg font-semibold text-text-main">
+        <Heading
+          as="h2"
+          id="search-input-examples"
+          size="lg"
+          weight="bold"
+          className="text-text-main"
+        >
           SearchInput
-        </h2>
+        </Heading>
         <p className="text-sm text-text-muted">
           Controlled query entry with semantic tenant colors, clear, submit and loading states.
         </p>
@@ -68,13 +74,14 @@ export function SearchInputCertification() {
             aria-label="Search while loading"
             placeholder="Press the button to simulate loading"
           />
-          <button
+          <Button
             type="button"
-            className="border border-border-technical px-3 py-2 text-xs text-text-main"
+            variant="outline"
+            size="sm"
             onClick={() => setLoading((current) => !current)}
           >
             {loading ? 'Stop loading' : 'Simulate loading'}
-          </button>
+          </Button>
         </div>
       </div>
     </section>
