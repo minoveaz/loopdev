@@ -73,8 +73,12 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
           onNavModeChange={onNavModeChange}
           mobileActions={
             mobileSidebarActions || profileSlot ? (
-              <div className="flex min-w-0 flex-col items-start gap-2">
-                {mobileSidebarActions ? <div className="flex min-w-0 items-center justify-start gap-2">{mobileSidebarActions}</div> : null}
+              <div className="flex w-full min-w-0 flex-col items-start gap-2">
+                {mobileSidebarActions ? (
+                  <div className="flex w-full min-w-0 items-center justify-start gap-2">
+                    {mobileSidebarActions}
+                  </div>
+                ) : null}
                 {profileSlot ? (
                   <div className="border-border-technical flex w-full items-center justify-start border-t pt-2">
                     {profileSlot}

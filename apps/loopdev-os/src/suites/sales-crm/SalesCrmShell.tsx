@@ -1,0 +1,131 @@
+'use client';
+
+import type { ReactNode } from 'react';
+import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import {
+  BrandLogo,
+  CommandBarTrigger,
+  NOTIFICATION_CENTER_FIXTURES,
+  OrganizationSwitcher,
+  SuiteRuntime,
+  SuiteSwitcher,
+  ThemeToggle,
+  UserMenu,
+  type PlatformContextPanelMode,
+} from '@loopdev/ui';
+import type { NavMode, NavRouteRef } from '@loopdev/contracts';
+import { CircleHelp } from 'lucide-react';
+
+import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
+import {
+  PlatformHeaderActionButton,
+  PlatformHeaderControls,
+} from '@/components/layout/PlatformHeaderControls';
+import { SALES_CRM_SUITE_CONFIG } from './config';
+
+const CRM_ORGANIZATIONS = [
+  { id: 'sales-crm-workspace', name: 'CRM Workspace', planLabel: 'PRO', theme: '' },
+];
+
+export function SalesCrmShell({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
+  const [activeOrganizationId, setActiveOrganizationId] = useState(CRM_ORGANIZATIONS[0].id);
+  const [navMode, setNavMode] = useState<Exclude<NavMode, 'hidden'>>('expanded');
+  const activeOrganization = CRM_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
+  const activeModuleId = SALES_CRM_SUITE_CONFIG.modules.find(
+    (module) => module.route === pathname,
+  )?.moduleId;
+
+  return (
+    <SuiteRuntime
+      config={{ ...SALES_CRM_SUITE_CONFIG, navMode }}
+      activeModuleId={activeModuleId}
+      leftSlot={<BrandLogo variant="isotype" size="sm" className="shrink-0" />}
+      centerSlot={
+        <CommandBarTrigger className="w-full" placeholder="Search CRM" onOpen={() => undefined} />
+      }
+      rightSlot={
+        <PlatformHeaderControls
+          notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+          unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+          activeContext={contextMode}
+          onOpenNotifications={() => setContextMode('notifications')}
+          onOpenHelp={() => setContextMode('help')}
+          onOpenAI={() => setContextMode('assistant')}
+        />
+      }
+      platformHeaderProps={{
+        contextSlot: (
+          <div className="flex min-w-0 items-center gap-2">
+            <OrganizationSwitcher
+              organizations={CRM_ORGANIZATIONS}
+              activeOrganizationId={activeOrganization?.id}
+              onOrganizationNavigate={() => router.push('/launchpad')}
+              onOrganizationChange={setActiveOrganizationId}
+              onAllOrganizations={() => router.push('/launchpad')}
+              onCreateOrganization={() => undefined}
+            />
+            <span className="text-primary px-1 text-xs" aria-hidden="true">
+              |
+            </span>
+            <SuiteSwitcher
+              currentSuite={SALES_CRM_SUITE_CONFIG.identity}
+              availableSuites={[SALES_CRM_SUITE_CONFIG.identity]}
+              showIcon={false}
+              onSuiteChange={() => router.push('/sales-crm')}
+            />
+          </div>
+        ),
+      }}
+      profileSlot={
+        <UserMenu
+          userName="CRM User"
+          userEmail="crm@loopdev.local"
+          userRole="CRM Member"
+          tenantName={activeOrganization?.name}
+          onOpenChange={(open) => {
+            if (open) setContextMode(null);
+          }}
+          onAvatarClick={() => setContextMode('profile')}
+          onProfileClick={() => setContextMode('profile')}
+          onLogout={() => undefined}
+        />
+      }
+      mobileSidebarActions={
+        <div className="flex min-w-0 items-center gap-1">
+          <ThemeToggle variant="technical" size="md" />
+          <PlatformHeaderActionButton
+            label="Open help center"
+            title="Help center"
+            active={contextMode === 'help'}
+            onClick={() => setContextMode('help')}
+          >
+            <CircleHelp size={16} aria-hidden="true" />
+          </PlatformHeaderActionButton>
+        </div>
+      }
+      canvasProps={{ mode: 'overview' }}
+      onNavModeChange={setNavMode}
+      appShellProps={{
+        onToggleLeftSidebar: () =>
+          setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
+        onRequestCloseContext: () => setContextMode(null),
+        config: { activeOverlay: contextMode ? 'context' : null },
+        contextSlot: contextMode ? (
+          <ContextPanelHost
+            mode={contextMode}
+            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+            onClose={() => setContextMode(null)}
+          />
+        ) : undefined,
+      }}
+      onNavigate={(route: NavRouteRef) => router.push(route.routeId)}
+    >
+      {children}
+    </SuiteRuntime>
+  );
+}
