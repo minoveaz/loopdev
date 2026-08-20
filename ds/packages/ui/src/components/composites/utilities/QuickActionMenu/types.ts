@@ -36,4 +36,8 @@ export interface QuickActionMenuProps {
   onOpenChange?: (open: boolean) => void;
   /** Clase CSS adicional para el disparador */
   className?: string;
+  /** Visible label for the overflow trigger. */
+  triggerLabel?: string;
+  /** Icon name used by the trigger. Defaults to the creation plus icon. */
+  triggerIcon?: 'add' | 'more_vert';
 }

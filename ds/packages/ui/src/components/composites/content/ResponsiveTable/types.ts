@@ -33,6 +33,7 @@ export interface ResponsiveTableLabels {
 }
 
 export interface ResponsiveTableProps<Row> extends React.HTMLAttributes<HTMLDivElement> {
+  surface?: boolean;
   columns: ResponsiveTableColumn<Row>[];
   rows: Row[];
   getRowKey?: (row: Row, index: number) => React.Key;
@@ -57,8 +58,11 @@ export interface ResponsiveTableProps<Row> extends React.HTMLAttributes<HTMLDivE
   clearSelectionLabel?: string;
   renderMobileRow?: (row: Row, index: number) => React.ReactNode;
   showAllColumnsOnMobile?: boolean;
+  showMobileHeader?: boolean;
   mobileHeaders?: Partial<ResponsiveTableLabels['mobileHeader']>;
-  labels?: Partial<ResponsiveTableLabels> & { mobileHeader?: Partial<ResponsiveTableLabels['mobileHeader']> };
+  labels?: Partial<ResponsiveTableLabels> & {
+    mobileHeader?: Partial<ResponsiveTableLabels['mobileHeader']>;
+  };
   rowActions?: (row: Row, index: number) => React.ReactNode;
   onRowClick?: (row: Row, index: number) => void;
   selectOnRowClick?: boolean;

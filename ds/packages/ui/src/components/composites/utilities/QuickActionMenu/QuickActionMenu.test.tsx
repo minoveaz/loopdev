@@ -11,7 +11,7 @@ describe('QuickActionMenu Component & Hook', () => {
   // Test del Brain (Hook)
   it('el hook debe gestionar el estado de apertura correctamente', () => {
     const { result } = renderHook(() => useQuickActionMenu({ groups }));
-    
+
     expect(result.current.isOpen).toBe(false);
     expect(result.current.triggerClasses).not.toContain('rotate-45');
 
@@ -29,10 +29,15 @@ describe('QuickActionMenu Component & Hook', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
+  it('expone un nombre accesible configurable para el menu secundario', () => {
+    render(<QuickActionMenu groups={groups} triggerLabel="More actions" triggerIcon="more_vert" />);
+    expect(screen.getByRole('button', { name: 'More actions' })).toBeInTheDocument();
+  });
+
   it('debe mostrar el contenido cuando la prop open es true', () => {
     // Al usar TechnicalDropdown, podemos pasarle props de Radix
     render(<QuickActionMenu groups={groups} />);
-    // Nota: Como QuickActionMenu controla su propio estado interno, 
+    // Nota: Como QuickActionMenu controla su propio estado interno,
     // en este test verificamos solo el render base.
     expect(screen.getByRole('button')).toBeInTheDocument();
   });

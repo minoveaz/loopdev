@@ -2,10 +2,26 @@
 
 import React from 'react';
 import { cn } from '../../../../helpers/cn';
-import { Heading, LpdText } from '../../../atoms/foundations/Typography';
+import { Badge, Heading } from '../../../atoms';
 import { Skeleton } from '../../../atoms/feedback/Skeleton';
 import { KanbanBoardProps } from './types';
 import { useKanbanBoard } from './useKanbanBoard';
+
+const COLUMN_TONE_CLASSES = {
+  neutral: 'bg-shell-surface border-border-subtle',
+  primary: 'bg-shell-surface border-border-subtle',
+  success: 'bg-shell-surface border-border-subtle',
+  warning: 'bg-shell-surface border-border-subtle',
+  danger: 'bg-shell-surface border-border-subtle',
+} as const;
+
+const COLUMN_TONE_DOT_CLASSES = {
+  neutral: 'bg-text-muted',
+  primary: 'bg-primary',
+  success: 'bg-emerald-500',
+  warning: 'bg-amber-500',
+  danger: 'bg-rose-500',
+} as const;
 
 /**
  * @component KanbanBoard
@@ -41,7 +57,7 @@ export function KanbanBoard<T>({
         role="region"
         aria-label="Tablero Kanban"
         tabIndex={0}
-        className="flex flex-row overflow-x-auto gap-4 h-full min-h-[400px] p-1 select-none custom-scrollbar"
+        className="flex flex-row snap-x snap-mandatory overflow-x-auto gap-4 h-full min-h-[400px] px-1 pb-1 pr-6 select-none custom-scrollbar"
       >
         {columns.map((col) => (
           <div
@@ -73,15 +89,15 @@ export function KanbanBoard<T>({
       role="region"
       aria-label="Tablero Kanban"
       tabIndex={0}
-      className="flex flex-row overflow-x-auto gap-4 h-full min-h-[400px] p-1 select-none custom-scrollbar"
+      className="flex flex-row snap-x snap-mandatory overflow-x-auto gap-4 h-full min-h-[400px] px-1 pb-1 pr-6 select-none custom-scrollbar"
     >
       {columns.map((col) => {
         const columnItems = items.filter((item) => getColumnId(item) === col.id);
-        
+
         // Calculate Metrics
         let count = columnItems.length;
         let valueLabel: string | undefined = undefined;
-        
+
         if (getColumnMetrics) {
           const metrics = getColumnMetrics(col.id, items);
           count = metrics.count;
@@ -97,29 +113,49 @@ export function KanbanBoard<T>({
             onDragEnter={(e) => handleDragEnter(e, col.id)}
             onDrop={(e) => handleDrop(e, col.id)}
             className={cn(
-              "flex flex-col w-72 shrink-0 rounded-3xl p-5 transition-all duration-300 flex-grow min-h-[300px]",
-              col.bgClass || "bg-shell-surface border border-border-technical/60 shadow-sm",
-              isDraggedOver && "border-primary/40 bg-shell-surface/90 shadow-lg"
+              'flex flex-col w-72 shrink-0 snap-start rounded-3xl p-5 transition-all duration-300 flex-grow min-h-[300px]',
+              col.bgClass || `${COLUMN_TONE_CLASSES[col.tone ?? 'neutral']} border shadow-sm`,
+              isDraggedOver && 'border-primary/40 bg-shell-surface/90 shadow-lg',
             )}
           >
             {/* Column Header */}
-            <div className={cn(
-              "flex items-center justify-between mb-4 border-b border-border-technical pb-3",
-              col.headerClass
-            )}>
-              <Heading size="xs" weight="black" className="text-text-main uppercase tracking-wider truncate max-w-[150px]" title={col.title}>
-                {col.title}
-              </Heading>
-              
-              <div className="flex items-center gap-1.5 font-mono select-none">
-                {/* Syntax { } for values */}
-                <LpdText size="nano" weight="bold" className="text-primary tracking-widest font-mono">
-                  {`{${count}}`}
-                </LpdText>
+            <div
+              className={cn(
+                'flex items-center justify-between mb-4 border-b border-border-subtle pb-3',
+                col.headerClass,
+              )}
+            >
+              <div className="flex min-w-0 items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    'h-2 w-2 shrink-0 rounded-full',
+                    COLUMN_TONE_DOT_CLASSES[col.tone ?? 'neutral'],
+                  )}
+                />
+                <Heading
+                  size="xs"
+                  weight="black"
+                  className="min-w-0 truncate text-text-main uppercase tracking-wider"
+                  title={col.title}
+                >
+                  {col.title}
+                </Heading>
+              </div>
+
+              <div className="flex items-center gap-1.5 select-none">
+                <Badge variant="outline" showDot={false} className="px-1.5 py-0.5 text-[10px]">
+                  {count}
+                </Badge>
                 {valueLabel !== undefined && (
-                  <LpdText size="nano" weight="bold" className="text-emerald-500 tracking-wider font-mono">
-                    {`{${valueLabel}}`}
-                  </LpdText>
+                  <Badge
+                    variant="outline"
+                    status="success"
+                    showDot={false}
+                    className="px-1.5 py-0.5 text-[10px]"
+                  >
+                    {valueLabel}
+                  </Badge>
                 )}
               </div>
             </div>
@@ -137,8 +173,9 @@ export function KanbanBoard<T>({
                     onDragStart={(e) => handleDragStart(e, itemId)}
                     onDragEnd={handleDragEnd}
                     className={cn(
-                      "transition-all duration-200 cursor-grab active:cursor-grabbing",
-                      isDragging && "opacity-40 scale-95 border-2 border-dashed border-accent/30 rounded-xl"
+                      'transition-all duration-200 cursor-grab active:cursor-grabbing',
+                      isDragging &&
+                        'opacity-40 scale-95 border-2 border-dashed border-accent/30 rounded-xl',
                     )}
                   >
                     {renderCard(item)}
@@ -147,8 +184,9 @@ export function KanbanBoard<T>({
               })}
 
               {columnItems.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-12 text-center text-text-muted opacity-30 select-none italic text-micro font-mono">
-                  // EMPTY_COLUMN
+                <div className="flex flex-col items-center justify-center gap-3 py-10 text-center text-sm text-text-muted">
+                  <span>No items in this stage</span>
+                  {emptyStateSlot}
                 </div>
               )}
             </div>

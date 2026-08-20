@@ -7,7 +7,6 @@ import { Icon } from '../..';
 import { LogoSpinner } from '../..';
 import { Button } from '../..';
 import { LpdText } from '../..';
-import { toast } from './toastStore';
 
 /**
  * @component ToastItem
@@ -21,17 +20,17 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
   const isAI = variant === 'loading';
 
   // Sincronización de clases con el laboratorio (labdev)
-  const iconBgClasses = isWarning ? 'bg-slate-950/10' : (visualConfig.iconBg || '');
+  const iconBgClasses = isWarning ? 'bg-slate-950/10' : visualConfig.iconBg || '';
   const titleColorClass = visualConfig.titleColor || '';
   const accentColorClass = visualConfig.accentColor || '';
 
   return (
-    <div 
+    <div
       id={id}
       role={variant === 'error' || variant === 'warning' ? 'alert' : 'status'}
       className={`
         relative overflow-hidden w-full max-w-[420px] pointer-events-auto
-        ${isWarning ? 'bg-accent' : 'bg-white/95 dark:bg-lpd-bg-dark/90 backdrop-blur-xl'}
+        ${isWarning ? 'bg-accent' : 'bg-surface-elevated/95 backdrop-blur-xl'}
         border-l-4 ${visualConfig.borderColor} 
         border-y border-r ${isWarning ? 'border-y-slate-900/10 border-r-slate-900/10' : 'border-y-slate-200/50 border-r-slate-200/50 dark:border-y-white/10 dark:border-r-white/10'}
         rounded-xl shadow-2xl flex gap-4 p-4 group animate-in slide-in-from-right-full duration-300
@@ -42,11 +41,21 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
     >
       {/* 1. Dynamic Grid Texture - Sincronización Lab */}
       {visualConfig.gridType === 'blueprint' ? (
-        <div className={`absolute inset-0 ${isWarning ? 'opacity-[0.1]' : 'opacity-[0.04] dark:opacity-[0.08]'} pointer-events-none`} 
-             style={{ backgroundImage: `linear-gradient(var(--lpd-color-brand-primary) 1px, transparent 1px), linear-gradient(to bottom, var(--lpd-color-brand-primary) 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
+        <div
+          className={`absolute inset-0 ${isWarning ? 'opacity-[0.1]' : 'opacity-[0.04] dark:opacity-[0.08]'} pointer-events-none`}
+          style={{
+            backgroundImage: `linear-gradient(var(--lpd-color-brand-primary) 1px, transparent 1px), linear-gradient(to bottom, var(--lpd-color-brand-primary) 1px, transparent 1px)`,
+            backgroundSize: '24px 24px',
+          }}
+        />
       ) : (
-        <div className="absolute inset-0 opacity-[0.12] dark:opacity-[0.08] pointer-events-none" 
-             style={{ backgroundImage: `radial-gradient(var(--lpd-color-innovation-purple) 0.8px, transparent 0.8px)`, backgroundSize: '16px 16px' }} />
+        <div
+          className="absolute inset-0 opacity-[0.12] dark:opacity-[0.08] pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(var(--lpd-color-innovation-purple) 0.8px, transparent 0.8px)`,
+            backgroundSize: '16px 16px',
+          }}
+        />
       )}
 
       {/* 2. Boxed Icon Section */}
@@ -56,11 +65,17 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
             <LogoSpinner size={32} />
           </div>
         ) : (
-          <div className={`w-10 h-10 flex items-center justify-center ${iconBgClasses} rounded-lg border border-current/10`}>
-            <Icon 
-              name={visualConfig.iconName} 
-              size="md" 
-              className={isWarning ? 'text-slate-900' : visualConfig.borderColor.replace('border-l-', 'text-')}
+          <div
+            className={`w-10 h-10 flex items-center justify-center ${iconBgClasses} rounded-lg border border-current/10`}
+          >
+            <Icon
+              name={visualConfig.iconName}
+              size="md"
+              className={
+                isWarning
+                  ? 'text-slate-900'
+                  : visualConfig.borderColor.replace('border-l-', 'text-')
+              }
             />
           </div>
         )}
@@ -74,16 +89,21 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
           </LpdText>
           {/* Metadata Brackets */}
           {metadata && (
-            <span className={`font-mono text-[10px] font-bold shrink-0 ${accentColorClass} flex items-center gap-1 px-1.5 py-0.5 rounded border ${visualConfig.metaBg}`}>
-              <span className="text-xs font-black opacity-80">{"{"}</span> 
-              <span className="tracking-widest uppercase">{metadata}</span> 
-              <span className="text-xs font-black opacity-80">{"}"}</span>
+            <span
+              className={`font-mono text-[10px] font-bold shrink-0 ${accentColorClass} flex items-center gap-1 px-1.5 py-0.5 rounded border ${visualConfig.metaBg}`}
+            >
+              <span className="text-xs font-black opacity-80">{'{'}</span>
+              <span className="tracking-widest uppercase">{metadata}</span>
+              <span className="text-xs font-black opacity-80">{'}'}</span>
             </span>
           )}
         </div>
-        
+
         {description && (
-          <LpdText size="sm" className={`leading-relaxed line-clamp-2 ${isWarning ? 'text-slate-800' : 'dark:text-slate-400'}`}>
+          <LpdText
+            size="sm"
+            className={`leading-relaxed line-clamp-2 ${isWarning ? 'text-slate-800' : 'text-text-muted'}`}
+          >
             {description}
           </LpdText>
         )}
@@ -91,9 +111,9 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
         {/* 4. Action Section */}
         {action && (
           <div className="pt-3">
-            <Button 
-              variant={visualConfig.buttonVariant} 
-              size="sm" 
+            <Button
+              variant={visualConfig.buttonVariant}
+              size="sm"
               onClick={action.onClick}
               className={`h-8 font-black uppercase text-[9px] tracking-widest ${isWarning ? 'bg-slate-950 text-white hover:bg-slate-900 border-none' : ''}`}
             >
@@ -104,11 +124,11 @@ export const ToastItem: React.FC<ToastProps> = (props) => {
       </div>
 
       {/* 5. Close Control */}
-      <button 
+      <button
         onClick={(e) => {
           e.stopPropagation();
-          toast.dismiss(id);
-        }} 
+          props.onDismiss(id);
+        }}
         className={`relative z-20 shrink-0 h-fit p-1 ${isWarning ? 'text-slate-800 hover:text-slate-950' : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'} transition-colors`}
         aria-label="Dismiss notification"
       >

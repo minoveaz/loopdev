@@ -7,6 +7,8 @@ import React from 'react';
 export interface KanbanColumn {
   id: string;
   title: string;
+  /** Semantic surface tone owned by the consuming suite. */
+  tone?: 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
   bgClass?: string;
   headerClass?: string;
 }

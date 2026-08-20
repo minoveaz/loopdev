@@ -30,11 +30,15 @@ export * from './indicators/NextEvalTimer';
 export * from './inputs/Button';
 export * from './inputs/IconButton';
 export * from './inputs/Input';
+export * from './inputs/SearchInput';
 export * from './inputs/ThemeToggle';
 export * from './inputs/Select';
 export * from './inputs/Select/types';
 export * from './inputs/Checkbox';
 export * from './inputs/FilterDropdown';
+export * from './inputs/Textarea';
+export * from './inputs/Switch';
+export * from './inputs/RadioGroup';
 
 // surfaces
 export * from './surfaces/TechnicalSurface';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, UserAvatar, ResponsiveTable, TechnicalSurface } from '@loopdev/ui';
+import { Badge, Button, UserAvatar, ResponsiveTable, TechnicalSurface } from '@loopdev/ui';
 import type { ResponsiveTableColumn, ResponsiveTableProps } from '@loopdev/ui';
 
 type ActivityStatus = 'Open' | 'Done' | 'Review';
@@ -86,9 +86,10 @@ const renderMobileRow = (
 ): NonNullable<ResponsiveTableProps<ActivityRow>['renderMobileRow']> => {
   function ActivityTableMobileRow(row: ActivityRow, index: number) {
     return (
-      <button
+      <Button
         type="button"
-        className="flex w-full items-center justify-between gap-3 border-b border-border-subtle px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+        variant="ghost"
+        className="h-auto w-full justify-between border-b px-4 py-3 text-left"
         onClick={() => onRowClick?.(row, index)}
       >
         <div className="min-w-0">
@@ -101,7 +102,7 @@ const renderMobileRow = (
           </span>
         </div>
         <Badge status={statusConfig[row.status].status}>{row.status}</Badge>
-      </button>
+      </Button>
     );
   }
 
@@ -119,6 +120,7 @@ export function ActivityTable({
   return (
     <TechnicalSurface variant="surface" radius="md" border="subtle" className="w-full min-w-0">
       <ResponsiveTable
+        surface={false}
         className="[&_thead_tr]:bg-background-subtle [&_tbody_td]:py-3 [&_tbody_tr:hover]:bg-background-subtle"
         caption="Activity events"
         rows={rows}

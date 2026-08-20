@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SemanticComponentColors } from '../../../shared/types';
 
 /**
  * @file types.ts
@@ -30,4 +31,5 @@ export interface EmptyStateProps {
   loadingMessages?: string[];
   /** Clase CSS adicional */
   className?: string;
+  colors?: SemanticComponentColors;
 }

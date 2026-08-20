@@ -6,6 +6,7 @@ import { Search, X } from 'lucide-react';
 import {
   Button,
   FilterDropdown,
+  IconButton,
   Input,
   ResponsiveTable,
   SectionHeader,
@@ -156,114 +157,61 @@ export function FiltersActions<Row extends Record<string, unknown>>({
 
   return (
     <div className={`min-w-0 max-w-full space-y-4 ${className}`}>
-      <TechnicalSurface variant="surface" radius="md" border="technical" className="w-full min-w-0 p-4">
-      <SectionHeader
-        title={labels.title}
-        action={
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-text-muted" aria-label={labels.resultCount(rows.length)}>
-              {labels.resultCount(rows.length)}
-            </span>
-            {pageAction}
-          </div>
-        }
-      />
-      <div
-        role="toolbar"
-        aria-label={labels.title}
-            className="mt-4 grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(3,minmax(9rem,auto))_auto_auto]"
+      <TechnicalSurface
+        variant="surface"
+        radius="md"
+        border="technical"
+        className="w-full min-w-0 p-4"
       >
-        {search ? (
-          <div className="min-w-0 w-full">
-            <Input
-              aria-label={labels.searchLabel}
-              placeholder={labels.searchPlaceholder}
-              value={search.value}
-              onChange={(event) => search.onChange(event.target.value)}
-              startIcon={<Search size={14} aria-hidden="true" />}
-              endIcon={
-                search.value ? (
-                  <button
-                    type="button"
-                    aria-label={labels.clearSearch}
-                    onClick={() => search.onChange('')}
-                  >
-                    <X size={14} aria-hidden="true" />
-                  </button>
-                ) : undefined
-              }
-              size="sm"
-              fullWidth
-              disabled={effectiveDisabled}
-              className="min-w-0"
-            />
-          </div>
-        ) : null}
-        {primaryFilters.map((filter) => {
-          const selected = filterValues[filter.id] ?? [];
-          return (
-            <div className="min-w-0 w-full" key={filter.id}>
-              <FilterDropdown
-                icon="filter_alt"
-                label={
-                  selected.length
-                    ? filter.multiple
-                      ? filter.label
-                      : `${filter.label} · ${selected[0]}`
-                    : filter.label
+        <SectionHeader
+          title={labels.title}
+          action={
+            <div className="flex items-center gap-3">
+              <span
+                className="text-xs text-text-muted"
+                aria-label={labels.resultCount(rows.length)}
+              >
+                {labels.resultCount(rows.length)}
+              </span>
+              {pageAction}
+            </div>
+          }
+        />
+        <div
+          role="toolbar"
+          aria-label={labels.title}
+          className="mt-4 grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(3,minmax(9rem,auto))_auto_auto]"
+        >
+          {search ? (
+            <div className="min-w-0 w-full">
+              <Input
+                aria-label={labels.searchLabel}
+                placeholder={labels.searchPlaceholder}
+                value={search.value}
+                onChange={(event) => search.onChange(event.target.value)}
+                startIcon={<Search size={14} aria-hidden="true" />}
+                endIcon={
+                  search.value ? (
+                    <IconButton
+                      icon="close"
+                      variant="ghost"
+                      size="sm"
+                      aria-label={labels.clearSearch}
+                      onClick={() => search.onChange('')}
+                    />
+                  ) : undefined
                 }
-                options={filter.options}
-                selected={selected}
-                multiple={filter.multiple}
-                onClear={() => onFilterValuesChange?.(filter.id, [])}
-                onToggle={(value) =>
-                  onFilterValuesChange?.(
-                    filter.id,
-                    filter.multiple
-                      ? selected.includes(value)
-                        ? selected.filter((item) => item !== value)
-                        : [...selected, value]
-                      : selected.includes(value)
-                        ? []
-                        : [value],
-                    )
-                  }
+                size="sm"
+                fullWidth
                 disabled={effectiveDisabled}
-                readOnly={effectiveReadOnly}
+                className="min-w-0"
               />
             </div>
-          );
-        })}
-        {advancedFilters.length > 0 ? (
-          <Button
-            id="filters-actions-trigger"
-            variant="outline"
-            className="w-full sm:w-auto"
-            size="sm"
-            disabled={effectiveDisabled}
-            aria-expanded={showAdvancedFilters}
-            aria-controls="filters-actions-advanced"
-            onClick={() => setShowAdvancedFilters((open) => !open)}
-          >
-            {labels.moreFilters}
-          </Button>
-        ) : null}
-        {hasActiveFilters ? (
-          <Button variant="ghost" size="sm" disabled={effectiveDisabled} onClick={clearAll}>
-            {labels.clearFilters}
-          </Button>
-        ) : null}
-      </div>
-      {showAdvancedFilters ? (
-        <div
-          id="filters-actions-advanced"
-          className="mt-3 flex flex-wrap items-end gap-2 border border-border-subtle bg-background-subtle p-3"
-          aria-label={labels.moreFilters}
-        >
-          {advancedFilters.map((filter) => {
+          ) : null}
+          {primaryFilters.map((filter) => {
             const selected = filterValues[filter.id] ?? [];
             return (
-              <div className="min-w-40" key={filter.id}>
+              <div className="min-w-0 w-full" key={filter.id}>
                 <FilterDropdown
                   icon="filter_alt"
                   label={
@@ -295,80 +243,148 @@ export function FiltersActions<Row extends Record<string, unknown>>({
               </div>
             );
           })}
+          {advancedFilters.length > 0 ? (
+            <Button
+              id="filters-actions-trigger"
+              variant="outline"
+              className="w-full sm:w-auto"
+              size="sm"
+              disabled={effectiveDisabled}
+              aria-expanded={showAdvancedFilters}
+              aria-controls="filters-actions-advanced"
+              onClick={() => setShowAdvancedFilters((open) => !open)}
+            >
+              {labels.moreFilters}
+            </Button>
+          ) : null}
+          {hasActiveFilters ? (
+            <Button variant="ghost" size="sm" disabled={effectiveDisabled} onClick={clearAll}>
+              {labels.clearFilters}
+            </Button>
+          ) : null}
         </div>
-      ) : null}
-      {hasActiveFilters ? (
-        <div
-          className="mt-3 flex flex-wrap items-center gap-2"
-          role="group"
-          aria-label={labels.activeFilters}
-        >
-          <span className="text-xs font-medium text-text-muted">{labels.activeFilters}:</span>
-          {Object.entries(filterValues).flatMap(([id, values]) =>
-            values
-              .filter((value) => value !== 'all')
-              .map((value) => (
-                <FilterChip
-                  key={`${id}-${value}`}
-                  label={`${(filtersById.get(id)?.label ?? id).replace(/\s*(All|Any)\s*$/, '')}: ${value}`}
-                  onRemove={() =>
-                    onFilterValuesChange?.(
-                      id,
-                      values.filter((item) => item !== value),
-                    )
-                  }
-                  disabled={effectiveDisabled || effectiveReadOnly}
-                />
-              )),
-          )}
-        </div>
-      ) : null}
+        {showAdvancedFilters ? (
+          <div
+            id="filters-actions-advanced"
+            className="mt-3 flex flex-wrap items-end gap-2 border border-border-subtle bg-background-subtle p-3"
+            aria-label={labels.moreFilters}
+          >
+            {advancedFilters.map((filter) => {
+              const selected = filterValues[filter.id] ?? [];
+              return (
+                <div className="min-w-40" key={filter.id}>
+                  <FilterDropdown
+                    icon="filter_alt"
+                    label={
+                      selected.length
+                        ? filter.multiple
+                          ? filter.label
+                          : `${filter.label} · ${selected[0]}`
+                        : filter.label
+                    }
+                    options={filter.options}
+                    selected={selected}
+                    multiple={filter.multiple}
+                    onClear={() => onFilterValuesChange?.(filter.id, [])}
+                    onToggle={(value) =>
+                      onFilterValuesChange?.(
+                        filter.id,
+                        filter.multiple
+                          ? selected.includes(value)
+                            ? selected.filter((item) => item !== value)
+                            : [...selected, value]
+                          : selected.includes(value)
+                            ? []
+                            : [value],
+                      )
+                    }
+                    disabled={effectiveDisabled}
+                    readOnly={effectiveReadOnly}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+        {hasActiveFilters ? (
+          <div
+            className="mt-3 flex flex-wrap items-center gap-2"
+            role="group"
+            aria-label={labels.activeFilters}
+          >
+            <span className="text-xs font-medium text-text-muted">{labels.activeFilters}:</span>
+            {Object.entries(filterValues).flatMap(([id, values]) =>
+              values
+                .filter((value) => value !== 'all')
+                .map((value) => (
+                  <FilterChip
+                    key={`${id}-${value}`}
+                    label={`${(filtersById.get(id)?.label ?? id).replace(/\s*(All|Any)\s*$/, '')}: ${value}`}
+                    onRemove={() =>
+                      onFilterValuesChange?.(
+                        id,
+                        values.filter((item) => item !== value),
+                      )
+                    }
+                    disabled={effectiveDisabled || effectiveReadOnly}
+                  />
+                )),
+            )}
+          </div>
+        ) : null}
       </TechnicalSurface>
-      <TechnicalSurface variant="surface" radius="md" border="technical" overflow="visible" className="w-full min-w-0 max-w-full p-4">
-      <div className="w-full min-w-0 max-w-full">
-        <ResponsiveTable
-          caption={labels.title}
-          columns={columns}
-          rows={rows}
-          getRowKey={getRowKey}
-          selectable={!effectiveReadOnly}
-          readOnly={effectiveReadOnly}
-          loading={state === 'loading' || state === 'skeleton'}
-          loadingState={state === 'skeleton' ? labels.skeleton : labels.loading}
-          disabled={effectiveDisabled}
-          pageSize={pageSize}
-          paginationVariant={paginationVariant}
-          hidePageSizeSelector={hidePageSizeSelector}
-          disabledState={labels.error}
-          forbidden={state === 'forbidden'}
-          forbiddenState={labels.forbidden}
-          errorState={
-            state === 'error' ? (
-              <>
-                {labels.error} {errorAction}
-              </>
-            ) : undefined
-          }
-          emptyState={stateMessage}
-          selectedRowKeys={selectedRows}
-          onSelectedRowKeysChange={(keys) => {
+      <TechnicalSurface
+        variant="surface"
+        radius="md"
+        border="technical"
+        overflow="visible"
+        className="w-full min-w-0 max-w-full p-4"
+      >
+        <div className="w-full min-w-0 max-w-full">
+          <ResponsiveTable
+            surface={false}
+            caption={labels.title}
+            columns={columns}
+            rows={rows}
+            getRowKey={getRowKey}
+            selectable={!effectiveReadOnly}
+            readOnly={effectiveReadOnly}
+            loading={state === 'loading' || state === 'skeleton'}
+            loadingState={state === 'skeleton' ? labels.skeleton : labels.loading}
+            disabled={effectiveDisabled}
+            pageSize={pageSize}
+            paginationVariant={paginationVariant}
+            hidePageSizeSelector={hidePageSizeSelector}
+            disabledState={labels.error}
+            forbidden={state === 'forbidden'}
+            forbiddenState={labels.forbidden}
+            errorState={
+              state === 'error' ? (
+                <>
+                  {labels.error} {errorAction}
+                </>
+              ) : undefined
+            }
+            emptyState={stateMessage}
+            selectedRowKeys={selectedRows}
+            onSelectedRowKeysChange={(keys) => {
               onSelectedRowKeysChange?.(keys);
-            if (controlledSelectedRows === undefined) setUncontrolledSelectedRows(keys);
-          }}
-          bulkActions={bulkActions}
-          onClearSelection={clearSelection}
-          clearSelectionLabel="Clear selection"
-          resetPageKey={`${search?.value ?? ''}|${JSON.stringify(filterValues)}`}
-          selectedRowKey={selectedRowKey}
-          selectOnRowClick={selectOnRowClick}
-          showAllColumnsOnMobile={showAllColumnsOnMobile}
-          activeRowKey={activeRowKey}
-          onRowClick={onRowClick}
-          renderMobileRow={renderMobileRow}
-          rowActions={rowActions}
-          className="min-w-0 max-w-full"
-        />
-      </div>
+              if (controlledSelectedRows === undefined) setUncontrolledSelectedRows(keys);
+            }}
+            bulkActions={bulkActions}
+            onClearSelection={clearSelection}
+            clearSelectionLabel="Clear selection"
+            resetPageKey={`${search?.value ?? ''}|${JSON.stringify(filterValues)}`}
+            selectedRowKey={selectedRowKey}
+            selectOnRowClick={selectOnRowClick}
+            showAllColumnsOnMobile={showAllColumnsOnMobile}
+            activeRowKey={activeRowKey}
+            onRowClick={onRowClick}
+            renderMobileRow={renderMobileRow}
+            rowActions={rowActions}
+            className="min-w-0 max-w-full"
+          />
+        </div>
       </TechnicalSurface>
     </div>
   );
@@ -384,13 +400,15 @@ function FilterChip({
   disabled?: boolean;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="sm"
       disabled={disabled}
       onClick={onRemove}
-      className="border border-primary/30 bg-primary/5 px-2 py-1 text-xs text-text-main disabled:cursor-not-allowed disabled:opacity-50"
+      className="text-xs"
     >
       {label} <X className="ml-1 inline" size={12} aria-hidden="true" />
-    </button>
+    </Button>
   );
 }

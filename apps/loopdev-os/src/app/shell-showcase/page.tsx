@@ -14,6 +14,7 @@ import {
   Button,
   Heading,
   Icon,
+  IconButton,
   Input,
   ModuleHeader,
   ModuleToolbar,
@@ -510,12 +511,16 @@ function SplitModuleFixture({ onOpenPanel }: { onOpenPanel?: () => void }) {
             role={onOpenPanel ? 'button' : undefined}
             tabIndex={onOpenPanel ? 0 : undefined}
             onClick={onOpenPanel}
-            onKeyDown={onOpenPanel ? (event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                onOpenPanel();
-              }
-            } : undefined}
+            onKeyDown={
+              onOpenPanel
+                ? (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      onOpenPanel();
+                    }
+                  }
+                : undefined
+            }
             className={`border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0 ${onOpenPanel ? 'cursor-pointer hover:bg-primary/5 focus-visible:bg-primary/5 focus-visible:outline-primary focus-visible:outline-2' : ''}`}
           >
             <span className="text-text-muted">□</span>
@@ -566,16 +571,16 @@ function SplitModuleToolbar({
         leftSlot={
           <div className="flex min-w-0 w-full items-center gap-2">
             {onToggleContext ? (
-              <button
-                type="button"
+              <IconButton
+                icon="menu"
+                variant="ghost"
+                size="sm"
                 aria-label={isContextOpen ? 'Close module context' : 'Open module context'}
                 aria-expanded={isContextOpen}
                 aria-controls="module-context-sidebar"
                 onClick={onToggleContext}
                 className="text-text-muted hover:bg-shell-surface hover:text-text-main flex size-8 shrink-0 items-center justify-center rounded-md"
-              >
-                <Menu aria-hidden="true" size={18} />
-              </button>
+              />
             ) : null}
             <Input
               aria-label="Start icon input"
@@ -587,21 +592,31 @@ function SplitModuleToolbar({
             />
           </div>
         }
-        rightSlot={<Button variant="primary" size="sm">Add</Button>}
+        rightSlot={
+          <Button variant="primary" size="sm">
+            Add
+          </Button>
+        }
       />
       <ModuleToolbar
         visibleOnMobile={false}
         visibleOnDesktop={true}
-        leftSlot={
-          <ModuleSearch placeholder="Search contacts" />
-        }
+        leftSlot={<ModuleSearch placeholder="Search contacts" />}
         centerSlot={
           <div className="text-text-muted flex items-center gap-3 text-xs">
-            <Button variant="ghost" size="sm">All columns</Button>
-            <Button variant="ghost" size="sm">Sorted by user ID</Button>
+            <Button variant="ghost" size="sm">
+              All columns
+            </Button>
+            <Button variant="ghost" size="sm">
+              Sorted by user ID
+            </Button>
           </div>
         }
-        rightSlot={<Button variant="primary" size="sm">Add user</Button>}
+        rightSlot={
+          <Button variant="primary" size="sm">
+            Add user
+          </Button>
+        }
       />
     </>
   );
@@ -758,9 +773,12 @@ export default function ShellShowcasePage() {
         moduleRenderers={Object.fromEntries(
           CANVAS_MODES.map((mode) => [
             mode.id,
-            () => mode.id === 'split'
-              ? <SplitModuleFixture onOpenPanel={() => setIsSplitPanelOpen(true)} />
-              : <ShowcaseCanvas mode={mode.id} />,
+            () =>
+              mode.id === 'split' ? (
+                <SplitModuleFixture onOpenPanel={() => setIsSplitPanelOpen(true)} />
+              ) : (
+                <ShowcaseCanvas mode={mode.id} />
+              ),
           ]),
         )}
         moduleContextRenderers={{ split: () => <ModuleContextFixture /> }}
@@ -783,15 +801,17 @@ export default function ShellShowcasePage() {
                 className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
               />
             </div>
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="md"
               aria-label="Open help center"
               className="border-border-technical text-text-main hover:bg-primary/10 hover:text-primary flex min-h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition-colors"
               onClick={() => setContextMode('help')}
             >
               <CircleHelp size={20} aria-hidden="true" />
               <span>Help</span>
-            </button>
+            </Button>
           </div>
         }
         moduleContextSidebarCollapsed={canvasMode === 'split' ? !isSplitContextOpen : undefined}
@@ -799,15 +819,17 @@ export default function ShellShowcasePage() {
         moduleContextSidebarOnCollapsedChange={(collapsed) => setIsSplitContextOpen(!collapsed)}
         contextualSidebarAction={(isRail) =>
           canvasMode === 'split' && !isSplitContextOpen ? (
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               aria-label="Open module context"
               onClick={() => setIsSplitContextOpen(true)}
               className="text-primary border-primary/30 bg-primary/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
             >
               <Menu aria-hidden="true" size={18} className="shrink-0" />
               {!isRail ? <span className="truncate">Open module context</span> : null}
-            </button>
+            </Button>
           ) : null
         }
         canvasProps={{
@@ -817,7 +839,9 @@ export default function ShellShowcasePage() {
             <ModeModuleToolbar
               mode={canvasMode}
               isContextOpen={isSplitContextOpen}
-              onToggleContext={canvasMode === 'split' ? () => setIsSplitContextOpen((open) => !open) : undefined}
+              onToggleContext={
+                canvasMode === 'split' ? () => setIsSplitContextOpen((open) => !open) : undefined
+              }
             />
           ),
         }}
@@ -842,7 +866,13 @@ export default function ShellShowcasePage() {
             <BrandLogo variant="isotype" size="sm" className="shrink-0" />
           </div>
         }
-        centerSlot={<CommandBarTrigger className="w-full" placeholder="Search or type a command..." onOpen={() => undefined} />}
+        centerSlot={
+          <CommandBarTrigger
+            className="w-full"
+            placeholder="Search or type a command..."
+            onOpen={() => undefined}
+          />
+        }
         platformHeaderProps={{
           contextSlot: (
             <div className="flex min-w-0 items-center gap-2">
@@ -903,7 +933,8 @@ export default function ShellShowcasePage() {
           />
         }
         appShellProps={{
-          onToggleLeftSidebar: () => setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
+          onToggleLeftSidebar: () =>
+            setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
           onRequestCloseContext: () => setContextMode(null),
           config: { activeOverlay: contextMode ? 'context' : null },
           contextSlot: contextMode ? (

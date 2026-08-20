@@ -16,9 +16,30 @@
       "domain": "frontend",
       "type": "atom",
       "category": "inputs",
-      "status": "stable",
+      "status": "deprecated",
       "phase": 3,
-      "certification": { "front": "certified", "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Select/UI_UX_SPEC.md", "e2e/crm-primitives.certification.spec.mjs"] }, "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Select/Select.test.tsx"] }, "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Select/UI_UX_SPEC.md",
+            "e2e/crm-primitives.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Select/Select.test.tsx"]
+        },
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -36,7 +57,28 @@
       "category": "inputs",
       "status": "stable",
       "phase": 3,
-      "certification": { "front": "certified", "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Checkbox/UI_UX_SPEC.md", "e2e/crm-primitives.certification.spec.mjs"] }, "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Checkbox/Checkbox.test.tsx"] }, "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Checkbox/UI_UX_SPEC.md",
+            "e2e/crm-primitives.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Checkbox/Checkbox.test.tsx"]
+        },
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -179,7 +221,28 @@
       "category": "indicators",
       "status": "stable",
       "phase": 1,
-      "certification": { "front": "certified", "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md", "e2e/crm-primitives.certification.spec.mjs"] }, "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/indicators/Badge/Badge.test.tsx"] }, "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md",
+            "e2e/crm-primitives.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": ["ds/packages/ui/src/components/atoms/indicators/Badge/Badge.test.tsx"]
+        },
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -398,13 +461,51 @@
       "certification": {
         "front": "certified",
         "infra": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/IconButton/UI_UX_SPEC.md", "e2e/icon-button.certification.spec.mjs"] },
-        "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/IconButton/UI_UX_SPEC.md", "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"] },
-        "security": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"] },
-        "data_state": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/IconButton/index.tsx", "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"] },
-        "performance": { "applicability": "required", "status": "passed", "evidence": ["e2e/icon-button.certification.spec.mjs"] },
-        "resilience": { "applicability": "not-applicable", "status": "not-applicable", "justification": "IconButton owns no I/O, persistence or mutation lifecycle." },
-        "maintainability_testing": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx", "e2e/icon-button.certification.spec.mjs"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/IconButton/UI_UX_SPEC.md",
+            "e2e/icon-button.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/IconButton/UI_UX_SPEC.md",
+            "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"
+          ]
+        },
+        "security": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"]
+        },
+        "data_state": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/IconButton/index.tsx",
+            "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"
+          ]
+        },
+        "performance": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": ["e2e/icon-button.certification.spec.mjs"]
+        },
+        "resilience": {
+          "applicability": "not-applicable",
+          "status": "not-applicable",
+          "justification": "IconButton owns no I/O, persistence or mutation lifecycle."
+        },
+        "maintainability_testing": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx",
+            "e2e/icon-button.certification.spec.mjs"
+          ]
+        },
         "overall": "certified"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
@@ -427,7 +528,23 @@
       "category": "indicators",
       "status": "stable",
       "phase": 2,
-      "certification": { "front": "certified", "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md", "e2e/crm-primitives.certification.spec.mjs"] }, "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge/TechnicalStatusBadge.test.tsx"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md",
+            "e2e/crm-primitives.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge/TechnicalStatusBadge.test.tsx"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -451,13 +568,55 @@
       "certification": {
         "front": "certified",
         "infra": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Button/UI_UX_SPEC.md", "e2e/button.certification.spec.mjs"] },
-        "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Button/UI_UX_SPEC.md", "ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx", "ds/packages/ui/src/components/atoms/inputs/Button/ButtonRBAC.test.tsx"] },
-        "security": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Button/ButtonRBAC.test.tsx", "ds/packages/ui/src/components/atoms/inputs/Button/useButton.ts"] },
-        "data_state": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Button/index.tsx", "ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx"] },
-        "performance": { "applicability": "required", "status": "passed", "evidence": ["e2e/button.certification.spec.mjs"] },
-        "resilience": { "applicability": "not-applicable", "status": "not-applicable", "justification": "Button owns no I/O, persistence or mutation lifecycle." },
-        "maintainability_testing": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx", "e2e/button.certification.spec.mjs"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Button/UI_UX_SPEC.md",
+            "e2e/button.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Button/UI_UX_SPEC.md",
+            "ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx",
+            "ds/packages/ui/src/components/atoms/inputs/Button/ButtonRBAC.test.tsx"
+          ]
+        },
+        "security": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Button/ButtonRBAC.test.tsx",
+            "ds/packages/ui/src/components/atoms/inputs/Button/useButton.ts"
+          ]
+        },
+        "data_state": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Button/index.tsx",
+            "ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx"
+          ]
+        },
+        "performance": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": ["e2e/button.certification.spec.mjs"]
+        },
+        "resilience": {
+          "applicability": "not-applicable",
+          "status": "not-applicable",
+          "justification": "Button owns no I/O, persistence or mutation lifecycle."
+        },
+        "maintainability_testing": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx",
+            "e2e/button.certification.spec.mjs"
+          ]
+        },
         "overall": "certified"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
@@ -505,13 +664,48 @@
       "certification": {
         "front": "certified",
         "infra": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md", "e2e/input.certification.spec.mjs"] },
-        "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md", "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"] },
-        "security": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"] },
-        "data_state": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/types.ts", "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"] },
-        "performance": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md"] },
-        "resilience": { "applicability": "not-applicable", "status": "not-applicable", "evidence": [] },
-        "maintainability_testing": { "applicability": "required", "status": "passed", "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md",
+            "e2e/input.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md",
+            "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"
+          ]
+        },
+        "security": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"]
+        },
+        "data_state": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/Input/types.ts",
+            "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"
+          ]
+        },
+        "performance": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md"]
+        },
+        "resilience": {
+          "applicability": "not-applicable",
+          "status": "not-applicable",
+          "evidence": []
+        },
+        "maintainability_testing": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"]
+        },
         "overall": "certified"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
@@ -537,11 +731,34 @@
       "phase": 4,
       "certification": {
         "front": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/UI_UX_SPEC.md", "e2e/filter-dropdown.certification.spec.mjs"] },
-        "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/FilterDropdown.test.tsx", "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/types.ts"] },
-        "accessibility": { "status": "verified", "evidence": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/FilterDropdown.test.tsx"] },
-        "responsive": { "status": "verified", "evidence": ["e2e/filter-dropdown.certification.spec.mjs"] },
-        "theme": { "status": "verified", "evidence": ["e2e/filter-dropdown.certification.spec.mjs"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/UI_UX_SPEC.md",
+            "e2e/filter-dropdown.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/FilterDropdown.test.tsx",
+            "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/types.ts"
+          ]
+        },
+        "accessibility": {
+          "status": "verified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/FilterDropdown.test.tsx"
+          ]
+        },
+        "responsive": {
+          "status": "verified",
+          "evidence": ["e2e/filter-dropdown.certification.spec.mjs"]
+        },
+        "theme": {
+          "status": "verified",
+          "evidence": ["e2e/filter-dropdown.certification.spec.mjs"]
+        },
         "overall": "certified"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
@@ -549,7 +766,9 @@
       "dependencies": [],
       "contracts": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/FilterDropdown",
-      "tests": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/FilterDropdown.test.tsx"],
+      "tests": [
+        "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/FilterDropdown.test.tsx"
+      ],
       "documentation": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/UI_UX_SPEC.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
@@ -772,7 +991,30 @@
       "category": "surfaces",
       "status": "stable",
       "phase": 1,
-      "certification": { "front": "certified", "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/UI_UX_SPEC.md", "e2e/crm-primitives.certification.spec.mjs"] }, "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/CommandBarTrigger.test.tsx"] }, "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/UI_UX_SPEC.md",
+            "e2e/crm-primitives.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/CommandBarTrigger.test.tsx"
+          ]
+        },
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -781,7 +1023,10 @@
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/CommandBarTrigger.test.tsx"
       ],
-      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/README.md", "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/UI_UX_SPEC.md"],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/README.md",
+        "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/UI_UX_SPEC.md"
+      ],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -795,20 +1040,50 @@
       "phase": 1,
       "certification": {
         "front": "certified",
-        "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] },
-        "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/composites/utilities/CommandDialog/UI_UX_SPEC.md", "e2e/command-dialog.certification.spec.mjs"] },
-        "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/composites/utilities/CommandDialog/CommandDialog.test.tsx", "e2e/command-dialog.certification.spec.mjs"] },
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/utilities/CommandDialog/UI_UX_SPEC.md",
+            "e2e/command-dialog.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/utilities/CommandDialog/CommandDialog.test.tsx",
+            "e2e/command-dialog.certification.spec.mjs"
+          ]
+        },
         "overall": "certified"
       },
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "dependencies": ["command-bar-trigger-v1"],
-      "contracts": ["ds/packages/ui/src/components/composites/utilities/CommandDialog/types.ts", "ds/packages/ui/src/components/composites/utilities/CommandDialog/UI_UX_SPEC.md"],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/types.ts",
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/UI_UX_SPEC.md"
+      ],
       "implementation": "ds/packages/ui/src/components/composites/utilities/CommandDialog",
-      "tests": ["ds/packages/ui/src/components/composites/utilities/CommandDialog/CommandDialog.test.tsx", "e2e/command-dialog.certification.spec.mjs"],
-      "documentation": ["ds/packages/ui/src/components/composites/utilities/CommandDialog/UI_UX_SPEC.md", "ds/packages/ui/src/components/composites/utilities/CommandDialog/certification/source-contract.md"],
+      "tests": [
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/CommandDialog.test.tsx",
+        "e2e/command-dialog.certification.spec.mjs"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/UI_UX_SPEC.md",
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/certification/source-contract.md"
+      ],
       "evidence_gaps": [],
-      "source_evidence": ["ds/packages/ui/src/components/composites/utilities/CommandDialog/index.tsx", "scripts/certification/source-contract-manifest.json"]
+      "source_evidence": [
+        "ds/packages/ui/src/components/composites/utilities/CommandDialog/index.tsx",
+        "scripts/certification/source-contract-manifest.json"
+      ]
     },
     {
       "id": "label-v1",
@@ -860,7 +1135,17 @@
       "category": "surfaces",
       "status": "stable",
       "phase": 1,
-      "certification": { "front": "certified", "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -1022,9 +1307,24 @@
       "phase": 2,
       "certification": {
         "front": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/UI_UX_SPEC.md", "e2e/crm-primitives.certification.spec.mjs"] },
-        "technical": { "status": "certified", "evidence": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/Skeleton.test.tsx"] },
-        "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/feedback/Skeleton/UI_UX_SPEC.md",
+            "e2e/crm-primitives.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "certified",
+          "evidence": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/Skeleton.test.tsx"]
+        },
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
         "overall": "certified"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
@@ -1045,7 +1345,17 @@
       "category": "feedback",
       "status": "stable",
       "phase": 1,
-      "certification": { "front": "certified", "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -1067,7 +1377,17 @@
       "category": "content",
       "status": "stable",
       "phase": 1,
-      "certification": { "front": "certified", "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -1089,7 +1409,17 @@
       "category": "content",
       "status": "stable",
       "phase": 1,
-      "certification": { "front": "certified", "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -1113,7 +1443,17 @@
       "category": "feedback",
       "status": "stable",
       "phase": 2,
-      "certification": { "front": "certified", "source_contract": { "status": "certified", "evidence": ["scripts/certification/source-contract-manifest.json", "pnpm certification:source-contracts"] }, "overall": "certified" },
+      "certification": {
+        "front": "certified",
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "overall": "certified"
+      },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
@@ -1319,8 +1659,19 @@
       "phase": 2,
       "certification": {
         "front": "in-progress",
-        "ui_ux": { "status": "in-progress", "evidence": ["ds/packages/ui/src/components/composites/workspace/ModuleHeader/UI_UX_SPEC.md", "ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx"] },
-        "technical": { "status": "in-progress", "evidence": ["ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx"] }
+        "ui_ux": {
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/workspace/ModuleHeader/UI_UX_SPEC.md",
+            "ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx"
+          ]
+        },
+        "technical": {
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx"
+          ]
+        }
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
@@ -1330,7 +1681,9 @@
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx"
       ],
-      "documentation": ["ds/packages/ui/src/components/composites/workspace/ModuleHeader/UI_UX_SPEC.md"],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleHeader/UI_UX_SPEC.md"
+      ],
       "evidence_gaps": ["visual-review", "axe-browser-evidence"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1344,8 +1697,19 @@
       "phase": 2,
       "certification": {
         "front": "in-progress",
-        "ui_ux": { "status": "in-progress", "evidence": ["ds/packages/ui/src/components/composites/workspace/ModuleToolbar/UI_UX_SPEC.md", "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx"] },
-        "technical": { "status": "in-progress", "evidence": ["ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx"] }
+        "ui_ux": {
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/UI_UX_SPEC.md",
+            "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx"
+          ]
+        },
+        "technical": {
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx"
+          ]
+        }
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
@@ -1355,7 +1719,9 @@
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx"
       ],
-      "documentation": ["ds/packages/ui/src/components/composites/workspace/ModuleToolbar/UI_UX_SPEC.md"],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/UI_UX_SPEC.md"
+      ],
       "evidence_gaps": ["visual-review", "axe-browser-evidence"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1894,9 +2260,7 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "dependencies": ["empty-state-v1", "loading-state-v1"],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/content/ResponsiveTable/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/content/ResponsiveTable/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/content/ResponsiveTable",
       "tests": [
         "ds/packages/ui/src/components/composites/content/ResponsiveTable/ResponsiveTable.test.tsx"
@@ -1931,17 +2295,13 @@
       "owner": "frontend-platform",
       "phase": 1,
       "dependencies": ["responsive-table-v1", "filter-dropdown-v1", "section-header-v1"],
-      "contracts": [
-        "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx"
-      ],
+      "contracts": ["apps/loopdev-os/src/components/composites/data/FiltersActions.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx",
       "tests": [
         "apps/loopdev-os/src/components/composites/data/FiltersActions.test.tsx",
         "e2e/filters-actions.certification.spec.mjs"
       ],
-      "documentation": [
-        "apps/loopdev-os/src/components/composites/data/UI_UX_SPEC.md"
-      ],
+      "documentation": ["apps/loopdev-os/src/components/composites/data/UI_UX_SPEC.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/registries/frontend-components.json"
     },
@@ -1956,9 +2316,28 @@
       "certified_version": "1.0.0",
       "certification": {
         "frontend": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md", "e2e/entity-table.certification.spec.mjs", "docs/06-product/crm/shared/ENTITY_TABLE_CERTIFICATION_REPORT.md"] },
-        "technical": { "status": "verified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/EntityTable.test.tsx", "apps/loopdev-os/src/components/composites/data/FiltersActions.test.tsx"] },
-        "source_contract": { "status": "verified", "evidence": ["scripts/certification/source-contract-manifest.json", "apps/loopdev-os/src/app/composition-showcase/entity-table.fixture.tsx"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md",
+            "e2e/entity-table.certification.spec.mjs",
+            "docs/06-product/crm/shared/ENTITY_TABLE_CERTIFICATION_REPORT.md"
+          ]
+        },
+        "technical": {
+          "status": "verified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/EntityTable.test.tsx",
+            "apps/loopdev-os/src/components/composites/data/FiltersActions.test.tsx"
+          ]
+        },
+        "source_contract": {
+          "status": "verified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "apps/loopdev-os/src/app/composition-showcase/entity-table.fixture.tsx"
+          ]
+        },
         "overall": "certified"
       },
       "compliance": { "blocks_0_compliance": true },
@@ -1982,9 +2361,24 @@
       "suite": "loopdev-os",
       "certification": {
         "frontend": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md", "e2e/dense-operational-table.visual.spec.mjs"] },
-        "technical": { "status": "verified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.test.tsx", "e2e/dense-operational-table.visual.spec.mjs"] },
-        "source_contract": { "status": "verified", "evidence": ["scripts/certification/source-contract-manifest.json"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md",
+            "e2e/dense-operational-table.visual.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "verified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.test.tsx",
+            "e2e/dense-operational-table.visual.spec.mjs"
+          ]
+        },
+        "source_contract": {
+          "status": "verified",
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
+        },
         "overall": "certified"
       },
       "compliance": { "blocks_0_compliance": true },
@@ -1992,9 +2386,14 @@
       "owner": "frontend-platform",
       "phase": 1,
       "dependencies": ["responsive-table-v1"],
-      "contracts": ["apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.tsx"],
+      "contracts": [
+        "apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.tsx"
+      ],
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.tsx",
-      "tests": ["apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.test.tsx", "e2e/dense-operational-table.visual.spec.mjs"],
+      "tests": [
+        "apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.test.tsx",
+        "e2e/dense-operational-table.visual.spec.mjs"
+      ],
       "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
@@ -2008,9 +2407,24 @@
       "suite": "loopdev-os",
       "certification": {
         "frontend": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md", "e2e/quantitative-table.visual.spec.mjs"] },
-        "technical": { "status": "verified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.test.tsx", "e2e/quantitative-table.visual.spec.mjs"] },
-        "source_contract": { "status": "verified", "evidence": ["scripts/certification/source-contract-manifest.json"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md",
+            "e2e/quantitative-table.visual.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "verified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.test.tsx",
+            "e2e/quantitative-table.visual.spec.mjs"
+          ]
+        },
+        "source_contract": {
+          "status": "verified",
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
+        },
         "overall": "certified"
       },
       "compliance": { "blocks_0_compliance": true },
@@ -2020,7 +2434,10 @@
       "dependencies": ["responsive-table-v1"],
       "contracts": ["apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.tsx",
-      "tests": ["apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.test.tsx", "e2e/quantitative-table.visual.spec.mjs"],
+      "tests": [
+        "apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.test.tsx",
+        "e2e/quantitative-table.visual.spec.mjs"
+      ],
       "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
@@ -2035,9 +2452,24 @@
       "certified_version": "1.0.0",
       "certification": {
         "frontend": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md", "e2e/activity-table.certification.spec.mjs"] },
-        "technical": { "status": "verified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/ActivityTable.test.tsx", "e2e/activity-table.certification.spec.mjs"] },
-        "source_contract": { "status": "verified", "evidence": ["scripts/certification/source-contract-manifest.json"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md",
+            "e2e/activity-table.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "verified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.test.tsx",
+            "e2e/activity-table.certification.spec.mjs"
+          ]
+        },
+        "source_contract": {
+          "status": "verified",
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
+        },
         "overall": "certified"
       },
       "compliance": { "blocks_0_compliance": true },
@@ -2047,7 +2479,10 @@
       "dependencies": ["responsive-table-v1"],
       "contracts": ["apps/loopdev-os/src/components/composites/data-tables/ActivityTable.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.tsx",
-      "tests": ["apps/loopdev-os/src/components/composites/data-tables/ActivityTable.test.tsx", "e2e/activity-table.certification.spec.mjs"],
+      "tests": [
+        "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.test.tsx",
+        "e2e/activity-table.certification.spec.mjs"
+      ],
       "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
@@ -2061,9 +2496,24 @@
       "suite": "loopdev-os",
       "certification": {
         "frontend": "certified",
-        "ui_ux": { "status": "certified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md", "e2e/selection-table.certification.spec.mjs"] },
-        "technical": { "status": "verified", "evidence": ["apps/loopdev-os/src/components/composites/data-tables/SelectionTable.test.tsx", "e2e/selection-table.certification.spec.mjs"] },
-        "source_contract": { "status": "verified", "evidence": ["scripts/certification/source-contract-manifest.json"] },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md",
+            "e2e/selection-table.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "verified",
+          "evidence": [
+            "apps/loopdev-os/src/components/composites/data-tables/SelectionTable.test.tsx",
+            "e2e/selection-table.certification.spec.mjs"
+          ]
+        },
+        "source_contract": {
+          "status": "verified",
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
+        },
         "overall": "certified"
       },
       "compliance": { "blocks_0_compliance": true },
