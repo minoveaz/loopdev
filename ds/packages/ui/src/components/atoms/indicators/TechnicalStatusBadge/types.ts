@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SemanticComponentColors } from '../../../shared/types';
 
 export type BadgeSeverity = 'info' | 'warning' | 'danger' | 'success' | 'innovation' | 'neutral' | 'primary';
 export type BracketColor = 'blue' | 'yellow' | 'purple' | 'neutral';
@@ -16,4 +17,5 @@ export interface TechnicalStatusBadgeProps {
   withPulse?: boolean;
   /** Clase CSS adicional */
   className?: string;
+  colors?: SemanticComponentColors;
 }

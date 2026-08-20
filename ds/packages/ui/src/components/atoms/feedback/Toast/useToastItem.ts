@@ -5,6 +5,9 @@
 import { useMemo, useEffect, useRef, useCallback } from 'react';
 import { ToastProps, ToastVariant } from './types';
 import { toast } from './toastStore';
+import type { ButtonProps } from '../../inputs/Button';
+
+type ToastButtonVariant = NonNullable<ButtonProps['variant']>;
 
 /**
  * @hook useToastItem
@@ -47,38 +50,70 @@ export const useToastItem = (props: ToastProps) => {
 
   const visualConfig = useMemo(() => {
     const isAI = variant === 'loading';
-    
-    const statusMap: Record<ToastVariant, { border: string; icon: string; bg: string; text: string; buttonVariant: any; metaBg: string; titleColor: string; grid: 'blueprint' | 'neural' }> = {
-      success: { 
-        border: 'border-l-status-success', icon: 'check_circle', bg: 'bg-status-success/10', 
-        text: 'text-green-700 dark:text-status-success', buttonVariant: 'ghost',
-        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
-        titleColor: 'text-slate-900 dark:text-slate-200', grid: 'blueprint' 
-      },
-      error: { 
-        border: 'border-l-danger', icon: 'error', bg: 'bg-danger/10', 
-        text: 'text-red-700 dark:text-danger', buttonVariant: 'danger',
-        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
-        titleColor: 'text-slate-900 dark:text-slate-200', grid: 'blueprint' 
-      },
-      warning: { 
-        border: 'border-l-accent', icon: 'warning', bg: 'bg-accent', 
-        text: 'text-slate-950', buttonVariant: 'energy',
-        metaBg: 'bg-slate-950/10 border-slate-950/20',
-        titleColor: 'text-slate-950', grid: 'blueprint' 
-      },
-      info: { 
-        border: 'border-l-primary', icon: 'info', bg: 'bg-primary/10', 
-        text: 'text-blue-700 dark:text-primary', buttonVariant: 'primary',
-        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
-        titleColor: 'text-slate-900 dark:text-slate-200', grid: 'blueprint' 
-      },
-      loading: { 
-        border: 'border-l-innovation-purple', icon: 'auto_awesome', bg: 'bg-innovation-purple/10', 
-        text: 'text-innovation-purple dark:text-purple-400', buttonVariant: 'ghost',
-        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
-        titleColor: 'text-innovation-purple', grid: 'neural' 
+
+    const statusMap: Record<
+      ToastVariant,
+      {
+        border: string;
+        icon: string;
+        bg: string;
+        text: string;
+        buttonVariant: ToastButtonVariant;
+        metaBg: string;
+        titleColor: string;
+        grid: 'blueprint' | 'neural';
       }
+    > = {
+      success: {
+        border: 'border-l-status-success',
+        icon: 'check_circle',
+        bg: 'bg-status-success/10',
+        text: 'text-green-700 dark:text-status-success',
+        buttonVariant: 'ghost',
+        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
+        titleColor: 'text-slate-900 dark:text-slate-200',
+        grid: 'blueprint',
+      },
+      error: {
+        border: 'border-l-danger',
+        icon: 'error',
+        bg: 'bg-danger/10',
+        text: 'text-red-700 dark:text-danger',
+        buttonVariant: 'danger',
+        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
+        titleColor: 'text-slate-900 dark:text-slate-200',
+        grid: 'blueprint',
+      },
+      warning: {
+        border: 'border-l-accent',
+        icon: 'warning',
+        bg: 'bg-accent',
+        text: 'text-slate-950',
+        buttonVariant: 'energy',
+        metaBg: 'bg-slate-950/10 border-slate-950/20',
+        titleColor: 'text-slate-950',
+        grid: 'blueprint',
+      },
+      info: {
+        border: 'border-l-primary',
+        icon: 'info',
+        bg: 'bg-primary/10',
+        text: 'text-blue-700 dark:text-primary',
+        buttonVariant: 'primary',
+        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
+        titleColor: 'text-slate-900 dark:text-slate-200',
+        grid: 'blueprint',
+      },
+      loading: {
+        border: 'border-l-innovation-purple',
+        icon: 'auto_awesome',
+        bg: 'bg-innovation-purple/10',
+        text: 'text-innovation-purple dark:text-purple-400',
+        buttonVariant: 'ghost',
+        metaBg: 'bg-slate-50 border-slate-200 dark:bg-transparent dark:border-transparent',
+        titleColor: 'text-innovation-purple',
+        grid: 'neural',
+      },
     };
 
     const config = statusMap[variant];
@@ -92,13 +127,13 @@ export const useToastItem = (props: ToastProps) => {
       accentColor: config.text,
       buttonVariant: config.buttonVariant,
       metaBg: config.metaBg,
-      titleColor: config.titleColor
+      titleColor: config.titleColor,
     };
   }, [variant]);
 
   return {
     visualConfig,
     handleMouseEnter,
-    handleMouseLeave
+    handleMouseLeave,
   };
 };

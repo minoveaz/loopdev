@@ -15,13 +15,15 @@ export type { SuiteHomeLayoutProps } from './types';
 
 /**
  * @component SuiteHomeLayout
+ * @deprecated Legacy suite-home chassis. Use the declarative SuiteRuntime and
+ * SuiteCanvas composition patterns for new suite screens.
  * @description Chasis Maestro de Suite (v3.9).
  * Impone un orden industrial basado en un grid de 12 columnas con cabeceras unificadas.
  */
 export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string }> = (props) => {
-  const { 
-    title, 
-    subtitle, 
+  const {
+    title,
+    subtitle,
     contextLine,
     icon,
     tone,
@@ -85,10 +87,7 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
     <aside className={gridClasses}>
       <SectionHeader title="Recent Activity" />
       <TechnicalCard variant="interactive" className="p-6 shadow-sm">
-        <ActivityFeed 
-          items={activity as any} 
-          onViewAll={onViewActivityAll}
-        />
+        <ActivityFeed items={activity as any} onViewAll={onViewActivityAll} />
       </TechnicalCard>
     </aside>
   );
@@ -97,33 +96,38 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
     <div className={`relative flex flex-col w-full h-full bg-shell-canvas ${className}`}>
       {/* 0. ATMÓSFERA: Grilla Técnica de 40px */}
       <BlueprintBackground variant="monochrome" className="fixed inset-0" intensity="high" />
-      
+
       <div className="relative z-10 flex flex-col flex-1 min-h-0">
         {/* 1. ORIENTACIÓN: Hero & Gobernanza */}
         {suiteLaunchpad ? (
           <SuiteLaunchpad {...suiteLaunchpad}>
-            {suiteLaunchpad.showLegacySections !== false && <SystemNoticeRail
-              notices={notices}
-              className="mt-2"
-            />}
-            {suiteLaunchpad.showLegacySections !== false && <main className="flex-1 overflow-y-auto px-8 py-10 custom-scrollbar">
-              <div className="mx-auto flex max-w-[1600px] flex-col gap-16">
-                <section className="grid grid-cols-12 items-start gap-8">
-                  {renderActivationLayer()}
-                </section>
-                <section className="grid grid-cols-12 items-start gap-12">
-                  <div className="col-span-12 flex flex-col gap-10 xl:col-span-8">
-                    <div className="flex flex-col">
-                      <SectionHeader title={modulesTitle} />
-                      <SuiteHomeModules modules={modules} />
+            {suiteLaunchpad.showLegacySections !== false && (
+              <SystemNoticeRail notices={notices} className="mt-2" />
+            )}
+            {suiteLaunchpad.showLegacySections !== false && (
+              <main className="flex-1 overflow-y-auto px-8 py-10 custom-scrollbar">
+                <div className="mx-auto flex max-w-[1600px] flex-col gap-16">
+                  <section className="grid grid-cols-12 items-start gap-8">
+                    {renderActivationLayer()}
+                  </section>
+                  <section className="grid grid-cols-12 items-start gap-12">
+                    <div className="col-span-12 flex flex-col gap-10 xl:col-span-8">
+                      <div className="flex flex-col">
+                        <SectionHeader title={modulesTitle} />
+                        <SuiteHomeModules modules={modules} />
+                      </div>
+                      <div className="hidden lg:block xl:hidden">
+                        {renderActivityCard('col-span-12')}
+                      </div>
                     </div>
-                    <div className="hidden lg:block xl:hidden">{renderActivityCard("col-span-12")}</div>
-                  </div>
-                  {renderActivityCard("hidden xl:col-span-4 xl:block xl:sticky xl:top-8")}
-                  <div className="col-span-12 mt-8 lg:hidden">{renderActivityCard("col-span-12")}</div>
-                </section>
-              </div>
-            </main>}
+                    {renderActivityCard('hidden xl:col-span-4 xl:block xl:sticky xl:top-8')}
+                    <div className="col-span-12 mt-8 lg:hidden">
+                      {renderActivityCard('col-span-12')}
+                    </div>
+                  </section>
+                </div>
+              </main>
+            )}
           </SuiteLaunchpad>
         ) : (
           <SuiteHomeHero
@@ -135,49 +139,45 @@ export const SuiteHomeLayout: React.FC<SuiteHomeLayoutProps & { status?: string 
             status={status}
           />
         )}
-        
+
         {/* GOBERNANZA OPERATIVA (New SystemNoticeRail) */}
-        {!suiteLaunchpad && <SystemNoticeRail
-          notices={notices} 
-          className="mt-2"
-        />}
+        {!suiteLaunchpad && <SystemNoticeRail notices={notices} className="mt-2" />}
 
         {/* 2. CENTRO DE COMANDO (Área Principal) */}
-        {!suiteLaunchpad && <main className="flex-1 px-8 py-10 overflow-y-auto custom-scrollbar">
-          <div className="max-w-[1600px] mx-auto flex flex-col gap-16">
-            
-            {/* SECCIÓN A: ACTIVACIÓN (Métricas y Acciones) */}
-            <section className="grid grid-cols-12 gap-8 items-start">
-              {renderActivationLayer()}
-            </section>
+        {!suiteLaunchpad && (
+          <main className="flex-1 px-8 py-10 overflow-y-auto custom-scrollbar">
+            <div className="max-w-[1600px] mx-auto flex flex-col gap-16">
+              {/* SECCIÓN A: ACTIVACIÓN (Métricas y Acciones) */}
+              <section className="grid grid-cols-12 gap-8 items-start">
+                {renderActivationLayer()}
+              </section>
 
-            {/* SECCIÓN B: OPERACIÓN (Módulos y Memoria) */}
-            <section className="grid grid-cols-12 gap-12 items-start">
-              
-              {/* Bloque Izquierdo: Módulos (8 cols en XL) */}
-              <div className="col-span-12 xl:col-span-8 flex flex-col gap-10">
-                <div className="flex flex-col">
-                  <SectionHeader title={modulesTitle} />
-                  <SuiteHomeModules modules={modules} />
+              {/* SECCIÓN B: OPERACIÓN (Módulos y Memoria) */}
+              <section className="grid grid-cols-12 gap-12 items-start">
+                {/* Bloque Izquierdo: Módulos (8 cols en XL) */}
+                <div className="col-span-12 xl:col-span-8 flex flex-col gap-10">
+                  <div className="flex flex-col">
+                    <SectionHeader title={modulesTitle} />
+                    <SuiteHomeModules modules={modules} />
+                  </div>
+
+                  {/* MODO TABLET/LAPTOP: Timeline al final del bloque de módulos */}
+                  <div className="hidden lg:block xl:hidden">
+                    {renderActivityCard('col-span-12')}
+                  </div>
                 </div>
-                
-                {/* MODO TABLET/LAPTOP: Timeline al final del bloque de módulos */}
-                <div className="hidden lg:block xl:hidden">
-                  {renderActivityCard("col-span-12")}
+
+                {/* Bloque Derecho: Actividad (4 cols en XL) */}
+                {renderActivityCard('hidden xl:block xl:col-span-4 sticky top-8')}
+
+                {/* MODO MOBILE: Timeline al final de todo */}
+                <div className="col-span-12 lg:hidden mt-8">
+                  {renderActivityCard('col-span-12')}
                 </div>
-              </div>
-
-              {/* Bloque Derecho: Actividad (4 cols en XL) */}
-              {renderActivityCard("hidden xl:block xl:col-span-4 sticky top-8")}
-
-              {/* MODO MOBILE: Timeline al final de todo */}
-              <div className="col-span-12 lg:hidden mt-8">
-                {renderActivityCard("col-span-12")}
-              </div>
-            </section>
-
-          </div>
-        </main>}
+              </section>
+            </div>
+          </main>
+        )}
       </div>
     </div>
   );

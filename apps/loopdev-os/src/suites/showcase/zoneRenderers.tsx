@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Button } from '@loopdev/ui';
+import { Button, Heading } from '@loopdev/ui';
 
 const SplitContextSidebar = () => (
   <div className="flex h-full min-h-0 flex-col gap-3 p-4">
@@ -29,7 +29,9 @@ const CreativeEditorAssetSidebar = () => (
   <div className="flex h-full min-h-0 flex-col gap-4 p-4">
     <div className="border-border-technical flex items-start justify-between gap-3 border-b pb-3">
       <div>
-        <h2 className="text-sm font-semibold text-text-main">Media Library</h2>
+        <Heading as="h2" size="sm" weight="bold" className="text-text-main">
+          Media Library
+        </Heading>
         <p className="mt-1 text-xs text-text-muted">Assets for the editor canvas</p>
       </div>
     </div>
@@ -40,16 +42,17 @@ const CreativeEditorAssetSidebar = () => (
         ['Audio', 'Tracks'],
         ['Template', 'Layouts'],
       ].map(([type, label]) => (
-        <button
+        <Button
           key={type}
           type="button"
-          className="border-border-technical bg-background hover:border-primary rounded-md border p-3 text-left transition-colors"
+          variant="outline"
+          className="h-auto justify-start p-3 text-left"
         >
           <span className="text-primary block font-mono text-[10px] uppercase tracking-[0.14em]">
             {type}
           </span>
           <strong className="mt-2 block text-xs text-text-main">{label}</strong>
-        </button>
+        </Button>
       ))}
     </div>
     <div className="border-border-technical bg-background flex-1 rounded-md border p-3">
@@ -71,8 +74,12 @@ const CreativeEditorAssetSidebar = () => (
 const CreativeEditorMediaDetails = () => (
   <div className="flex h-full min-h-0 flex-col gap-4 p-4">
     <div>
-      <h2 className="text-sm font-semibold text-text-main">Media Details</h2>
-      <p className="mt-1 text-xs leading-5 text-text-muted">Properties for the selected canvas asset.</p>
+      <Heading as="h2" size="sm" weight="bold" className="text-text-main">
+        Media Details
+      </Heading>
+      <p className="mt-1 text-xs leading-5 text-text-muted">
+        Properties for the selected canvas asset.
+      </p>
     </div>
     <dl className="border-border-technical divide-border-technical divide-y rounded-md border text-xs">
       {[
