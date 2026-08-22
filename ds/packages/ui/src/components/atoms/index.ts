@@ -30,7 +30,6 @@ export * from './indicators/NextEvalTimer';
 export * from './inputs/Button';
 export * from './inputs/IconButton';
 export * from './inputs/Input';
-export * from './inputs/PhoneInput';
 export * from './inputs/SearchInput';
 export * from './inputs/ThemeToggle';
 export * from './inputs/Select';

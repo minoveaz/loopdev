@@ -25,10 +25,7 @@ import {
 } from '@loopdev/ui';
 import type { NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
-import {
-  PlatformHeaderActionButton,
-  PlatformHeaderControls,
-} from '@/components/layout/PlatformHeaderControls';
+import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
 import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
 import { usePathname, useRouter } from 'next/navigation';
 import { CircleHelp, Menu } from 'lucide-react';
@@ -796,16 +793,25 @@ export default function ShellShowcasePage() {
         moduleContextPanelLabels={{ split: 'ModuleContextPanel' }}
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
         mobileSidebarActions={
-          <div className="flex min-w-0 items-center gap-1">
-            <ThemeToggle variant="technical" size="md" />
-            <PlatformHeaderActionButton
-              label="Open help center"
-              title="Help center"
-              active={contextMode === 'help'}
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
+            <div className="flex min-h-10 items-center">
+              <ThemeToggle
+                variant="technical"
+                size="md"
+                className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              aria-label="Open help center"
+              className="border-border-technical text-text-main hover:bg-primary/10 hover:text-primary flex min-h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition-colors"
               onClick={() => setContextMode('help')}
             >
-              <CircleHelp size={16} aria-hidden="true" />
-            </PlatformHeaderActionButton>
+              <CircleHelp size={20} aria-hidden="true" />
+              <span>Help</span>
+            </Button>
           </div>
         }
         moduleContextSidebarCollapsed={canvasMode === 'split' ? !isSplitContextOpen : undefined}
