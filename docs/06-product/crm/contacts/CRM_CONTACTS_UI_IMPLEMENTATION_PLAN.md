@@ -1,16 +1,18 @@
 ---
 title: CRM Contacts UI Implementation Plan
-status: proposed-for-approval
+status: approved-for-implementation
 version: 1.0
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 owner: crm
-program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
+program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 related_issue: https://github.com/minoveaz/loopdev/issues/82
 backend_handoff: CRM_CONTACT_IMPLEMENTATION_HANDOFF.md
 component_audit: CRM_CONTACTS_COMPONENT_AUDIT.md
 contract: CRM_CONTACT_CONTRACT.md
 post_pilot_backlog: ../shared/CRM_POST_PILOT_BACKLOG.md
+approver: User
+approved_at: 2026-08-21
 ---
 
 # Plan de implementacion UI: Contactos CRM
@@ -201,17 +203,18 @@ son razones suficientes.
 
 La implementación global se hará en dos niveles:
 
-1. **Primera entrega de plataforma:** crear primitives agnósticos de campos y layout en `@loopdev/ui`
-  y cubrir accesibilidad con tests. Esta base ya está implementada como `Form`, `FormField`,
-  `FormActions` y `SubmitButton`, con integración controlada mediante `FormProvider`.
+1. **Primera entrega de plataforma:** extender los primitives agnósticos de campos y layout en
+  `@loopdev/ui` y cubrir accesibilidad con tests. La base usa `Form`, `FormField`, `FormSection`,
+  `FieldError`, `FormActions`, `SubmitButton` y la receta declarativa `CompactCreate`, con
+  integración controlada mediante `FormProvider`.
 2. **Motor de estado/validación:** `react-hook-form`, `@hookform/resolvers` y Zod ya están instalados
   en `@loopdev/ui`. La integración de cada dominio debe añadir schemas, resolver y reglas de negocio
   sin duplicar los primitives visuales.
 
-No hay actualmente `react-hook-form`, Formik, Final Form ni `@hookform/resolvers` instalados. Zod ya
-existe en contratos y aplicaciones, pero valida datos; no sustituye por sí solo los primitives de
-presentación ni el motor de estado. UI-2 debe ser el primer consumidor de la infraestructura de
-campos global, no crear estilos y accesibilidad de inputs de forma local.
+`react-hook-form`, `@hookform/resolvers` y Zod están disponibles. Zod valida datos, pero no sustituye
+los primitives de presentación ni el motor de estado. UI-2 Contacts es el primer consumidor de la
+infraestructura declarativa global: CRM conserva schema, permisos, copy, API y mutaciones, y no crea
+estilos o asociaciones accesibles de campos en paralelo.
 
 ## 5. Matriz de datos y dependencias
 

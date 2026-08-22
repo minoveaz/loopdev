@@ -83,7 +83,7 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
         <Dialog.Overlay className="lpd-technical-dialog-backdrop fixed inset-0 z-[5000] bg-slate-900/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in" />
         <Dialog.Content
           className={cn(
-            'fixed inset-0 z-[5000] flex items-center justify-center p-4 outline-none md:p-8',
+            'fixed inset-0 z-[5000] flex items-center justify-center p-4 outline-none max-md:p-0 md:p-8',
             className,
           )}
         >
@@ -91,7 +91,7 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
             variant="surface"
             depth="overlay"
             className={cn(
-              'relative z-10 flex w-full flex-col overflow-hidden shadow-2xl data-[state=open]:animate-in data-[state=open]:zoom-in-95',
+              'relative z-10 flex max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden shadow-2xl max-md:h-full max-md:max-h-none max-md:rounded-none data-[state=open]:animate-in data-[state=open]:zoom-in-95',
               sizeClasses[size],
               styles.border,
               presentation === 'form' && 'dark:bg-[#20252d]',
@@ -144,7 +144,7 @@ export const TechnicalDialog: React.FC<TechnicalDialogProps> = ({
 
         {/* Content */}
         {children && (
-          <div className="p-6 overflow-y-auto custom-scrollbar max-h-[60vh]">
+          <div className="min-h-0 min-w-0 flex-1 basis-0 overflow-x-hidden overflow-y-auto p-6 custom-scrollbar md:flex-none md:basis-auto">
             {children}
           </div>
         )}

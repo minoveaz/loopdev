@@ -42,6 +42,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     fullWidth,
     ...rest
   } = useInput(props);
+  const describedBy = rest['aria-describedby']
+    ?? (error || helperText ? (error ? errorId : helperId) : undefined);
+  const invalid = rest['aria-invalid'] ?? Boolean(error);
 
   return (
     <div className={containerClasses}>
@@ -65,8 +68,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           type={currentType}
           disabled={disabled}
           className={inputClasses}
-          aria-invalid={!!error}
-          aria-describedby={error || helperText ? (error ? errorId : helperId) : undefined}
+          aria-invalid={invalid}
+          aria-describedby={describedBy}
           onFocus={(e) => {
             setIsFocused(true);
             onFocus?.(e);
@@ -94,7 +97,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         </span>
       ) : (
         helperText && (
-          <span id={helperId} className="text-xs text-slate-400 dark:text-slate-500 ml-1">
+          <span id={helperId} className="ml-1 text-xs text-lpd-text-muted">
             {helperText}
           </span>
         )
