@@ -13,6 +13,7 @@ import {
   Input,
   PhoneInput,
   TechnicalDialog,
+  useFeedback,
 } from '@loopdev/ui';
 import type { FormSectionDefinition } from '@loopdev/ui';
 import type { CrmContact } from '@loopdev/contracts';
@@ -71,6 +72,7 @@ export function ContactFormDialog({
   onClose,
   onSuccess,
 }: ContactFormDialogProps) {
+  const feedback = useFeedback();
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -104,12 +106,14 @@ export function ContactFormDialog({
       } else {
         form.setError('root', { message: 'The contact could not be saved. Try again.' });
       }
+      feedback.error('The contact could not be saved. Review the form and try again.');
       return;
     }
 
     onSuccess((await response.json()) as CrmContact);
     form.reset();
     onClose();
+    feedback.success('Contact created successfully.');
   };
 
   const sections: readonly FormSectionDefinition<ContactFormValues>[] = [
