@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { FeedbackProvider } from '@loopdev/ui';
 import { ContactFormDialog } from './ContactFormDialog';
 
 const organizationId = '00000000-0000-4000-9000-000000000001';
@@ -21,20 +22,26 @@ const contact = {
   updatedAt: '2026-08-21T00:00:00.000Z',
 };
 
+function renderDialog(props: React.ComponentProps<typeof ContactFormDialog>) {
+  return render(
+    <FeedbackProvider>
+      <ContactFormDialog {...props} />
+    </FeedbackProvider>,
+  );
+}
+
 afterEach(() => {
   vi.unstubAllGlobals();
 });
 
 describe('ContactFormDialog', () => {
   it('uses the shared CompactCreate recipe with English section and field copy', () => {
-    render(
-      <ContactFormDialog
-        open
-        organizationId={organizationId}
-        onClose={vi.fn()}
-        onSuccess={vi.fn()}
-      />,
-    );
+    renderDialog({
+      open: true,
+      organizationId,
+      onClose: vi.fn(),
+      onSuccess: vi.fn(),
+    });
 
     expect(screen.getByRole('heading', { name: 'Create contact' })).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Identity' })).toBeInTheDocument();
@@ -54,14 +61,12 @@ describe('ContactFormDialog', () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 
-    render(
-      <ContactFormDialog
-        open
-        organizationId={organizationId}
-        onClose={vi.fn()}
-        onSuccess={vi.fn()}
-      />,
-    );
+    renderDialog({
+      open: true,
+      organizationId,
+      onClose: vi.fn(),
+      onSuccess: vi.fn(),
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'Create contact' }));
 
@@ -83,14 +88,7 @@ describe('ContactFormDialog', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
 
-    render(
-      <ContactFormDialog
-        open
-        organizationId={organizationId}
-        onClose={onClose}
-        onSuccess={onSuccess}
-      />,
-    );
+    renderDialog({ open: true, organizationId, onClose, onSuccess });
 
     fireEvent.change(screen.getByLabelText('First name *'), { target: { value: 'Ada' } });
     fireEvent.change(screen.getByLabelText('Last name'), { target: { value: 'Lovelace' } });
@@ -123,14 +121,12 @@ describe('ContactFormDialog', () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 
-    render(
-      <ContactFormDialog
-        open
-        organizationId={organizationId}
-        onClose={vi.fn()}
-        onSuccess={vi.fn()}
-      />,
-    );
+    renderDialog({
+      open: true,
+      organizationId,
+      onClose: vi.fn(),
+      onSuccess: vi.fn(),
+    });
 
     fireEvent.change(screen.getByLabelText('First name *'), { target: { value: 'Ada' } });
     fireEvent.change(screen.getByLabelText('Email address'), {

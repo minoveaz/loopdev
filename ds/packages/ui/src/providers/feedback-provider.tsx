@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 type FeedbackTone = 'success' | 'error' | 'warning' | 'info';
 type FeedbackMessage = { id: number; tone: FeedbackTone; message: string };
