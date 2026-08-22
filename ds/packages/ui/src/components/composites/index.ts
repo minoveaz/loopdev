@@ -43,6 +43,8 @@ export * from './navigation/OrganizationSwitcher';
 
 // utilities
 
+export * from './forms';
+
 export * from './utilities/NotificationCenter';
 export * from './utilities/PlatformContextPanel';
 

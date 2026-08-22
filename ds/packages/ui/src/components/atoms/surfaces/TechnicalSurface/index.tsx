@@ -52,7 +52,7 @@ export const TechnicalSurface: React.FC<TechnicalSurfaceProps & { withHoverAura?
       )}
 
       {/* 3. Content Layer */}
-      <div className="relative z-10 h-full w-full">
+      <div className="relative z-10 flex min-h-0 w-full min-w-0 flex-col max-md:h-full">
         {children}
       </div>
     </div>

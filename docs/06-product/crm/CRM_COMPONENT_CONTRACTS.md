@@ -7,6 +7,13 @@ reviewed_at: 2026-08-14
 
 # CRM component contracts and route approval
 
+## Canvas mode nomenclature
+
+CRM documentation uses "detail" or "record" as functional language for an entity ficha. The
+technical `SuiteCanvas` mode for that surface is `workspace`, and the corresponding visual recipe is
+`RecordWorkspace`. Guided or transactional flows use the technical mode `full-bleed`; `focus` is not
+a `SuiteCanvas` mode.
+
 ## Contract boundary
 
 Shared UI receives display data and callbacks. CRM features own queries,
@@ -24,15 +31,15 @@ Errors include a request id but never cross-organization existence or PII.
 | Route family | Canvas mode | Composition | Consumer |
 | --- | --- | --- | --- |
 | `/sales-crm/contacts` | data | context header + actions + contact table + cursor state | Contacts list |
-| `/sales-crm/contacts/:id` | record | contact detail + authorized notes + contact timeline | Contact record |
+| `/sales-crm/contacts/:id` | workspace | contact detail + authorized notes + contact timeline | Contact record |
 | `/sales-crm/leads` | data | lead list + filters + qualification/conversion commands | Leads list |
-| `/sales-crm/leads/:id` | record | lead detail + attribution + activity + conversion | Lead record |
+| `/sales-crm/leads/:id` | workspace | lead detail + attribution + activity + conversion | Lead record |
 | `/sales-crm/pipeline` | board | pipeline board + stage columns + opportunity cards | Opportunity board |
-| `/sales-crm/opportunities/:id` | record | opportunity record + related entities + activity | Opportunity record |
-| `/sales-crm/customers/:id` | record | Customer 360 sections + related records + notes/timeline | Customer 360 |
+| `/sales-crm/opportunities/:id` | workspace | opportunity record + related entities + activity | Opportunity record |
+| `/sales-crm/customers/:id` | workspace | Customer 360 sections + related records + notes/timeline | Customer 360 |
 | `/sales-crm/tasks` | data | task list + filters + row actions | Tasks list |
 | `/sales-crm/tasks/my-day` | overview | task groups + priority summary + completion | My Day |
-| `/sales-crm/tasks/:id` | record | task record + relation + assignment + activity | Task record |
+| `/sales-crm/tasks/:id` | workspace | task record + relation + assignment + activity | Task record |
 
 ## Definitive ownership
 

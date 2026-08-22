@@ -56,14 +56,17 @@ body {
   }
 }
 
-/* Chrome autofill must preserve the dark technical input surface. */
+/* Chrome autofill follows the active semantic theme instead of forcing a dark field. */
 .lpd-input:-webkit-autofill,
 .lpd-input:-webkit-autofill:hover,
-.lpd-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #f8fafc;
-  -webkit-box-shadow: 0 0 0 1000px #11151c inset;
-  box-shadow: 0 0 0 1000px #11151c inset;
-  caret-color: #f8fafc;
+.lpd-input:-webkit-autofill:focus,
+.lpd-phone-input .PhoneInputInput:-webkit-autofill,
+.lpd-phone-input .PhoneInputInput:-webkit-autofill:hover,
+.lpd-phone-input .PhoneInputInput:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--lpd-color-text-base);
+  -webkit-box-shadow: 0 0 0 1000px var(--lpd-color-bg-base) inset;
+  box-shadow: 0 0 0 1000px var(--lpd-color-bg-base) inset;
+  caret-color: var(--lpd-color-brand-primary);
   transition: background-color 9999s ease-out 0s;
 }
 

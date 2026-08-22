@@ -38,6 +38,30 @@
     z-index: calc(var(--lpd-z-command-dialog) + 1);
     background-color: var(--lpd-shell-surface);
   }
+
+  .lpd-phone-country-popover {
+    z-index: calc(var(--lpd-z-command-dialog) + 1);
+  }
+
+  .lpd-phone-country-popover .PhoneInputCountryIcon,
+  .lpd-phone-country-popover .PhoneInputCountryIcon--border,
+  .lpd-phone-country-popover .PhoneInputCountryIconImg,
+  .lpd-phone-input .PhoneInputCountryIcon,
+  .lpd-phone-input .PhoneInputCountryIcon--border,
+  .lpd-phone-input .PhoneInputCountryIconImg {
+    border: 0 !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+  }
+
+  .lpd-phone-country-list {
+    height: min(24rem, calc(100dvh - 12rem));
+    max-height: min(24rem, calc(100dvh - 12rem));
+    overflow-y: scroll !important;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 @layer base {

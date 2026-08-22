@@ -32,7 +32,20 @@ export const ICON_REGISTRY = {
     info: 'info',
     bolt: 'bolt',
     ai: 'auto_awesome'
+  },
+  forms: {
+    identity: 'badge',
+    person: 'person',
+    contactChannels: 'contact_phone',
+    email: 'mail',
+    phone: 'phone',
+    organization: 'domain',
+    company: 'business'
   }
 } as const;
 
-export type IconName = string; // Future: extract from ICON_REGISTRY keys
+type IconCategory = keyof typeof ICON_REGISTRY;
+export type IconName = {
+  [Category in IconCategory]:
+    (typeof ICON_REGISTRY)[Category][keyof (typeof ICON_REGISTRY)[Category]];
+}[IconCategory];

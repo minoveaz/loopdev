@@ -35,7 +35,7 @@ export const useButton = (props: any) => {
       case 'outline':
         return 'border border-primary text-primary hover:border-accent hover:bg-accent/10 hover:text-accent';
       case 'ghost':
-        return 'text-text-muted hover:bg-accent/10 hover:text-accent dark:hover:bg-accent/15';
+        return 'text-text-muted hover:bg-background-subtle hover:text-text-main dark:hover:bg-background-subtle/80';
       case 'energy':
         return 'bg-accent text-text-main hover:bg-accent-hover focus-visible:ring-energy';
       case 'danger':

@@ -44,10 +44,11 @@ export const useInput = (props: InputProps) => {
 
   const wrapperClasses = cn(
     "relative flex items-center transition-all duration-200 group border rounded-lg overflow-hidden",
-    // Variants - Usando tokens semánticos
-    variant === 'outline' && "bg-surface-light dark:bg-surface-dark border-border-subtle",
-    variant === 'filled' && "bg-background-subtle dark:bg-background-subtle-dark border-transparent",
-    variant === 'ghost' && "bg-transparent border-transparent hover:bg-surface-light/50 dark:hover:bg-surface-dark/50",
+    // Variants use paired semantic tokens so tenant themes don't inherit a
+    // dark surface with a light-theme foreground (or the reverse).
+    variant === 'outline' && "bg-lpd-bg-base border-border-subtle",
+    variant === 'filled' && "bg-primary/5 border-transparent",
+    variant === 'ghost' && "bg-transparent border-transparent hover:bg-primary/5",
     // States
     isFocused && "ring-2 ring-primary/20 border-primary",
     error && "border-danger ring-danger/10",
@@ -55,7 +56,7 @@ export const useInput = (props: InputProps) => {
   );
 
   const inputClasses = cn(
-    "lpd-input w-full bg-transparent border-none focus:ring-0 outline-none text-text-main dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80",
+    "lpd-input w-full border-none bg-transparent text-lpd-text-base caret-primary outline-none placeholder:text-lpd-text-muted focus:ring-0",
     // Sizes
     size === 'sm' && "px-3 py-1.5 text-xs",
     size === 'md' && "px-4 py-2.5 text-sm",

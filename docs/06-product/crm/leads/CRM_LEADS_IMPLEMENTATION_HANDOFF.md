@@ -45,7 +45,7 @@ WhatsApp simulado, referral, social y partner.
 ## Composicion obligatoria
 
 ```text
-App Router -> SuiteRuntime -> SuiteCanvas mode=data/split/record/focus
+App Router -> SuiteRuntime -> SuiteCanvas mode=data/split/workspace/full-bleed
   -> widgets -> features -> entities -> shared
 ```
 

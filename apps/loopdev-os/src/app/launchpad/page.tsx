@@ -84,7 +84,7 @@ export default function LaunchpadPage() {
       <TechnicalSurface
         variant="canvas"
         depth="flat"
-        className="relative z-10 p-8 border-b border-border-technical backdrop-blur-md"
+        className="relative z-10 p-4 sm:p-8 border-b border-border-technical backdrop-blur-md"
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-6">
@@ -149,9 +149,8 @@ export default function LaunchpadPage() {
                 title="Sales & CRM"
                 description="Pipeline intelligence and relationship management powered by predictive neural models."
                 illustration={<Icon name="groups" size="md" />}
-                href="#"
+                href="/sales-crm"
                 version="0.8.2"
-                isLocked
               />
             )}
             {isPlatformScope && (

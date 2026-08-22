@@ -32,14 +32,14 @@ SuiteCanvas mode=data
   -> OpportunityTable
     -> OpportunityFilters
 
-SuiteCanvas mode=record
+SuiteCanvas mode=workspace
   -> OpportunityRecordView
     -> OpportunitySummary
     -> RelatedContact
     -> RelatedLead
     -> OpportunityTimeline
 
-SuiteCanvas mode=focus
+SuiteCanvas mode=full-bleed
   -> OpportunityForm
     -> ContactSelector
     -> ProductField
@@ -97,5 +97,5 @@ se reutilizan; cualquier nuevo componente compartido exige segundo consumidor re
 - [x] Board aprobado con filtros, movimiento server-side, alternativa accesible, estados UX y responsive mobile.
 - [x] Reapertura de etapas terminales aprobada con permiso elevado, motivo y auditoría.
 - [x] Tabla de Opportunities aprobada con componentes reutilizables, filtros, paginación y acciones masivas limitadas.
-- [x] Detalle `record` aprobado con relaciones, historial, actividad, tareas, notas y reapertura auditada.
-- [x] Creación manual `focus` aprobada con ContactSelector, campos comerciales, StageSelector y estados de mutación.
+- [x] Detalle `workspace` aprobado con relaciones, historial, actividad, tareas, notas y reapertura auditada.
+- [x] Creación manual `full-bleed` aprobada con ContactSelector, campos comerciales, StageSelector y estados de mutación.

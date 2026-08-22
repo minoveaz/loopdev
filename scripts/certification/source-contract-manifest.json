@@ -22,6 +22,42 @@
       ]
     },
     {
+      "id": "form-system-v1",
+      "name": "FormSystem",
+      "implementation": "ds/packages/ui/src/components/composites/forms/Form.tsx",
+      "sourceFiles": [
+        "ds/packages/ui/src/components/composites/forms/types.ts"
+      ],
+      "fixturePaths": [
+        "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.tsx"
+      ],
+      "forbiddenPatterns": [
+        "raw-palette-class",
+        "domain-copy",
+        "default-visible-copy",
+        "hardcoded-data-array",
+        "raw-z-index",
+        "inline-visual-style"
+      ]
+    },
+    {
+      "id": "phone-input-v1",
+      "name": "PhoneInput",
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/PhoneInput/index.tsx",
+      "sourceFiles": [],
+      "fixturePaths": [
+        "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.tsx"
+      ],
+      "forbiddenPatterns": [
+        "raw-palette-class",
+        "domain-copy",
+        "default-visible-copy",
+        "hardcoded-data-array",
+        "raw-z-index",
+        "inline-visual-style"
+      ]
+    },
+    {
       "id": "entity-table-v1",
       "name": "EntityTable",
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx",

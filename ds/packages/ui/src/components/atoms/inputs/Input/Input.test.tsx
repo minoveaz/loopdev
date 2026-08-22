@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { Input } from './index';
 import { axe } from 'vitest-axe';
 
@@ -18,6 +18,28 @@ describe('Input Industrial Certification (Front_Certified 🔵)', () => {
   it('does not reference missing descriptive content', () => {
     render(<Input aria-label="Contact search" />);
     expect(screen.getByRole('textbox', { name: 'Contact search' })).not.toHaveAttribute('aria-describedby');
+  });
+
+  it('preserves consumer-provided accessibility relationships', () => {
+    render(
+      <>
+        <Input
+          aria-label="Contact search"
+          aria-describedby="external-help"
+          aria-invalid="true"
+        />
+        <span id="external-help">Search help</span>
+      </>,
+    );
+
+    expect(screen.getByRole('textbox', { name: 'Contact search' })).toHaveAttribute(
+      'aria-describedby',
+      'external-help',
+    );
+    expect(screen.getByRole('textbox', { name: 'Contact search' })).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
   });
 
   // US-02: Estados de Feedback
@@ -67,11 +89,25 @@ describe('Input Industrial Certification (Front_Certified 🔵)', () => {
   // US-04: Variantes SaaS
   it('US-04: applies correct classes for each variant', () => {
     const { container, rerender } = render(<Input variant="filled" />);
-    // Buscamos el wrapper del input (el que tiene la clase de fondo)
-    expect(container.querySelector('.bg-background-subtle')).toBeInTheDocument();
+    expect(container.querySelector('.bg-primary\\/5')).toBeInTheDocument();
 
     rerender(<Input variant="outline" />);
-    expect(container.querySelector('.bg-surface-light')).toBeInTheDocument();
+    expect(container.querySelector('.bg-lpd-bg-base')).toBeInTheDocument();
+  });
+
+  it('pairs semantic background, value, placeholder and caret tokens without theme overrides', () => {
+    render(<Input aria-label="Tenant portable field" placeholder="Enter a value" />);
+    const input = screen.getByRole('textbox', { name: 'Tenant portable field' });
+    const wrapper = input.parentElement;
+
+    expect(wrapper).toHaveClass('bg-lpd-bg-base');
+    expect(input).toHaveClass(
+      'text-lpd-text-base',
+      'placeholder:text-lpd-text-muted',
+      'caret-primary',
+    );
+    expect(input.className).not.toContain('dark:text-white');
+    expect(wrapper?.className).not.toContain('dark:bg-surface-dark');
   });
 
   // US-05: Multi-tenant Branding (Focus)

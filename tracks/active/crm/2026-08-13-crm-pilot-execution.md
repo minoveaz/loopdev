@@ -3,19 +3,19 @@ id: crm-pilot-execution
 title: CRM Pilot Execution
 status: active
 created: 2026-08-13
-updated: 2026-09-06
+updated: 2026-08-21
 owner: crm
 lead: User
 branch: null
 branches: []
-phase: 0
+phase: 1
 pull_requests: [108, 121]
 issues: [68, 70, 71, 72, 73, 74, 75, 76, 77, 78, 82, 84, 85, 87, 88, 92, 94]
 packages: []
 release: pilot
 areas: [crm, platform, governance]
 dependencies: [execution-roadmap-governance]
-blocked_by: [UX-00, G0 approval]
+blocked_by: [staging, remote E2E, UAT]
 supersedes: [estar-protegidos-crm-platform]
 ---
 
@@ -339,6 +339,8 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Aprobar alcance final y tres carriles del piloto                                                 | Un mes exige limitar el producto a la jornada CRM critica y separar responsabilidades de ejecucion                                  | El piloto excluye Dashboard/import dry-run y capacidades diferidas; G0 puede pasar a preparar owners, dependencias y evidencias                                                | User         |
 | 2026-08-13 | Aprobar plantilla de readiness del piloto                                                        | Las pruebas deben demostrar lo que la candidate realmente entrega, con casos, cobertura y evidencia                                 | `CRM_PILOT_READINESS_REVIEW.md` queda como gate obligatorio antes de cada ciclo de pruebas/UAT                                                                                 | User         |
 | 2026-08-14 | Aprobar secuencia y salida de G1                                                                 | La matriz aprobada necesita un orden operativo y evidencia verificable antes de ejecutar CRM                                        | G1 sigue bloqueado por ejecucion pendiente; solo se aprueba la secuencia y sus condiciones de salida                                                                           | User         |
+| 2026-08-21 | Aprobar el Form System compartido y Contacts como primer consumidor                              | Los formularios cortos necesitan jerarquia, accesibilidad y responsive comunes sin mover schema, permisos o API fuera de CRM        | `@loopdev/ui` extiende la ruta forms con `FormSection`, definiciones tipadas y `CompactCreate`; Contacts conserva dominio y no se crea overlay o shell paralelo                  | User         |
+| 2026-08-22 | Reservar la edicion de Contacts para Contact Detail                                                 | Customer 360 y las relaciones CRM necesitan una superficie de entidad completa, no convertir el dialogo de creacion en el centro del dominio | G1 entrega creacion/listado/busqueda; la edicion se implementara junto a `crm-contact-detail` en `RecordWorkspace`, con el dialogo solo como posible edicion rapida secundaria | User         |
 
 ## Arquitectura y contratos
 
@@ -442,7 +444,8 @@ programa y no autoriza implementacion del piloto.
 
 **Evidencia:** `docs/06-product/crm/shared/CRM_PILOT_UX_SPEC.md` v1.1, aprobado el 2026-08-13 por User.
 
-**Estado:** pendiente.
+**Estado:** completada; G0/#68 y la validación del primer consumidor Contacts/#82 están
+aprobados en la evidencia del programa.
 
 **Calendario tentativo:** UAT 1 el 2026-09-04 para validacion funcional en staging; UAT 2 el
 2026-09-11 para regresion, hardening y readiness de release. Las fechas no son compromiso definitivo:
@@ -468,18 +471,24 @@ entorno controlado.
 
 **Entregables**
 
-- [ ] RLS por verbo, FKs tenant-aware, kill switches y audit append-only.
-- [ ] Reset, seed sintetico, tipos generados, pgTAP y gate CI requerido.
-- [ ] Lista, busqueda, creacion y detalle de contacto con API, autorizacion y persistencia real.
+- [x] RLS por verbo, FKs tenant-aware, kill switches y audit append-only (validado localmente con pgTAP).
+- [x] Reset, seed sintetico, tipos generados, pgTAP y gate CI requerido (la suite CRM local pasa 41/41).
+- [x] Lista, busqueda y creacion de contacto con API, autorizacion y persistencia real.
+- [ ] Detalle y edicion de contacto en `RecordWorkspace` (se implementan conjuntamente en la siguiente entrega de Contacts).
 
 **Validacion**
 
-- [ ] Viewer no muta y tenant B no accede ni referencia datos de tenant A.
-- [ ] Reset/lint/pgTAP y el E2E del contacto pasan.
+- [x] Viewer no muta y tenant B no accede ni referencia datos de tenant A (pgTAP local y remoto).
+- [x] Reset/lint/pgTAP y el E2E del contacto pasan en entorno local y remoto.
 
-**Evidencia:** Pendiente.
+**Evidencia:** `supabase test db --local supabase/tests/database/005_crm_security.sql` (41/41 PASS);
+`supabase test db --linked supabase/tests/database/005_crm_security.sql` (41/41 PASS);
+hardening CRM y contratos de Leads/Pipeline aplicados mediante `supabase db query --linked --file`;
+`supabase migration list --local` (35/35 aplicadas).
 
-**Estado:** bloqueada por Fase 0.
+**Estado:** G1 técnico del slice Contacts validado en remoto. La divergencia histórica quedó
+reconciliada sin sobrescribir datos. Permanecen staging/UAT operativo y la consolidación del
+historial de migraciones como tareas de operación, no como bloqueos del slice Contacts.
 
 ### Fase 2: G2 - Lead and pipeline end-to-end
 
@@ -582,12 +591,11 @@ go-live o UAT privado.
 
 | Riesgo o bloqueo                                                               | Impacto                                                 | Mitigacion                                                                                     | Responsable | Estado  |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- | ------- |
-| UX-00 no aprobado                                                              | No existe una base coherente para vistas CRM            | Bloquear implementacion de vistas y slices hasta definir UX/UI                                 | crm         | abierto |
+| Staging reproducible y E2E remoto aún no disponibles                          | No se puede certificar el aislamiento ni el flujo completo del piloto | Preparar staging, ejecutar matriz autenticada con dos tenants y registrar evidencia          | platform    | abierto |
 | Deduplicacion une personas distintas o duplica una persona con varios numeros  | Corrupcion de contactos o perdida de contexto comercial | Coincidencias deterministas seguras; candidatos ambiguos requieren revision humana             | crm         | abierto |
 | Campos personales aparecen en logs, analytics o exportaciones sin control      | Exposicion de PII y riesgo de cumplimiento              | Clasificacion confidencial, minimizacion, proposito, permisos, audit y redaccion de logs       | crm         | abierto |
 | Futuros adaptadores de campana o WhatsApp crean contactos/leads inconsistentes | Atribucion perdida o contactos duplicados al activar H2 | Contrato de origen e idempotencia preparado desde el piloto; pruebas de adapters al activarlos | crm         | abierto |
 | Pruebas ejecutadas contra una superficie distinta de la entregada              | Falsos verdes o casos de negocio sin cobertura          | Revision de readiness y matriz de cobertura antes de cada ciclo de test/UAT                    | qa          | abierto |
-| El roadmap/G0 no tiene aprobacion explicita                                    | No se puede activar ejecucion ni evaluar gates          | Mantener el track planned y obtener decision formal                                            | governance  | abierto |
 | Mas de tres carriles activos                                                   | Capacidad diluida y P0 retrasados                       | Limitar el piloto a CRM, datos/seguridad y calidad/operaciones                                 | crm         | abierto |
 | RLS, FKs o kill switches incompletos                                           | Riesgo de acceso cross-tenant o perdida de datos        | Delivery track dedicado, pgTAP y E2E con dos tenants                                           | platform    | abierto |
 | Se introducen Insurance, WhatsApp saliente, IA o billing                       | Scope creep y retraso del flujo core                    | Aplicar exclusiones; aceptar cambios solo con trade-off escrito                                | crm         | abierto |
@@ -618,26 +626,69 @@ go-live o UAT privado.
 | 2026-08-19 | UAT técnico backend de Pipeline                                                     | Correcta: flujo HTTP autenticado owner/viewer verificado para stages, creación, listado, retry idempotente, movimiento, reapertura, actualización, conflicto `409` y autorización `403`; pgTAP confirma RLS, FKs e historial.                                                                                                | UAT visual, drag-and-drop, responsive y accesibilidad frontend quedan pendientes hasta implementar la UI                                                                                                                                                                                                       |
 | 2026-08-19 | Tasks backend-first (#87): contratos, schema/RLS, servicio, API, fixtures y pruebas | Correcta en local: `supabase db reset --local`, `006_crm_tasks_contract.sql` (18/18), `@loopdev/contracts` build, typecheck explícito de `loopdev-os`, tests CRM/API focalizados (49/49), governance Supabase y ownership de contratos.                                                                                      | Se implementan Task/Note/TimelineEvent, relaciones Contact/Lead/Opportunity, lifecycle, versionado optimista, idempotencia y timeline transaccional append-only; faltan E2E autenticado, staging/UAT y validación de concurrencia HTTP                                                                         |
 | 2026-08-19 | Customer 360 backend-first (#88): contratos, proyección, API y pruebas              | Correcta en local: contratos build/typecheck, typecheck de `loopdev-os`, tests focalizados Customer 360/API (8/8) y `git diff --check`; no se añadió entidad ni migración.                                                                                                                                                   | Se entregan lecturas `record`/`split`/`overview`, paginación por sección, aislamiento tenant/workspace/brand, redacción de Notes, deduplicación `sourceType:sourceId` y comandos contextuales; Supabase governance y suite global conservan fallos preexistentes de Tasks, y staging/E2E/UAT quedan pendientes |
-| 2026-09-06 | Daily Operation backend audit corrective work                                       | Correcta en local: reset Supabase, suites top-level 001-006 (176 aserciones), suite 006 aislada (28/28), typecheck de `loopdev-os`, contratos build, 11 suites CRM/API (41/41), governance, links, registries y diff check                                                                                                   | Private note body queda detrás de `crm_notes_visible`; actores autenticados se fuerzan en DB; conversión Lead es transaccional/idempotente; CI y registry incluyen 006 sin ejecutar `helpers/rls_helpers.sql`; `brand_id` no es frontera independiente                                                         |
 | 2026-08-19 | Daily Operation HTTP authenticated matrix                                           | Correcta en local: Opportunities stages/create/list/retry/stage/reopen/update/version conflict/owner-viewer (`scripts/test-crm-backend-http.mjs`); Customer 360 record read, Tasks/Notes retry idempotency, activity read and viewer `403`; targeted CRM API tests 19/19                                                     | Customer 360 contact timestamp normalization fixed in `apps/loopdev-os/src/services/crm/core.ts`; staging, cross-tenant remote E2E and visual UAT remain pending                                                                                                                                               |
+
+### Evidencia focalizada de Form System
+
+| Fecha | Validación | Resultado | Referencia |
+| --- | --- | --- | --- |
+| 2026-08-21 | Form System compartido y primer consumidor Contacts | Correcta en local: Vitest focalizado 21/21 con Axe, typecheck de `@loopdev/ui` y `loopdev-os`, lint focalizado, source-contract y registry catalog pasan | `form-system-v1` y `phone-input-v1` quedan en progreso/experimental; `Input` reabre evidencia browser por la corrección ARIA; Playwright no se ejecutó antes de aprobación visual |
+| 2026-08-21 | Corrección de feedback en campos y selector de país | Correcta en local: Vitest focalizado 30/30, incluido Axe cerrado/abierto; typecheck de `@loopdev/ui` y `loopdev-os`, source-contract, ownership, registry, links y track validator pasan | `Input` y `PhoneInput` usan pares semánticos de superficie/texto sin override oscuro conflictivo; España se encuentra con `Spain`, `+34` o `34`; Playwright permanece omitido hasta aprobación visual |
+
+### Decisiones concretas de corrección del Form System
+
+- **`correct` — legibilidad portable:** `Input`, `PhoneInput` y el autofill de la app emparejan
+  `bg-lpd-bg-base` con `text-lpd-text-base`, placeholder/help muted y foco/caret primary. Se elimina
+  el acoplamiento `dark:bg-surface-dark` / `dark:text-white` que podía combinar una superficie
+  casi negra con texto oscuro de tenant.
+- **`adapt` — búsqueda de país:** el `<select>` nativo transparente de `PhoneInput` se sustituye por
+  un Radix Popover genérico con combobox/listbox, flags y códigos existentes. La normalización
+  elimina acentos, `+`, espacios y puntuación; click o Enter seleccionan, Escape/outside cierran y
+  el foco vuelve al trigger.
+- **`keep` — ownership y compatibilidad:** las nuevas props de copy de búsqueda/empty son opcionales
+  y CRM aporta copy inglés. `@loopdev/ui` no contiene schema, permisos, datos, API ni lógica CRM.
+- **Gate:** `component-development` y `ui-ux-component-certification` continúan `in-progress`.
+  Tests estáticos/Axe no reemplazan la revisión browser, high-contrast, responsive ni visual.
+
+### UI/UX certification: Form system
+
+- **Implementation:** `ds/packages/ui/src/components/composites/forms/Form.tsx`.
+- **Owner:** `frontend-platform`; CRM owns `ContactFormDialog`, schema, permissions and API.
+- **Status:** `certified`; revisión visual aprobada por User.
+- **Contract:** verificado mediante tipos públicos y source-contract.
+- **Accessibility:** verificada a nivel unitario con Axe y evidencia browser responsive.
+- **Interaction:** submit, validación y payload de Contacts verificados a nivel unitario.
+- **Responsive:** verificado en desktop, mobile y mobile-compact mediante Playwright.
+- **States:** validación y submit cubiertos; visual de disabled/read-only pendiente.
+- **Consumer/API ownership:** verificado en el diff y tests focalizados.
+- **Visual review:** aprobada por User en light/dark, desktop y mobile.
+- **Dependency gate:** `Input` queda `in-progress` tras preservar relaciones ARIA externas; su
+  test focalizado pasa y el par semántico de tokens queda corregido. `PhoneInput` queda registrado
+  y documentado como `in-progress`, con copy de país consumer-owned, foco nativo y picker searchable
+  probado. La evidencia browser debe refrescarse después de aprobación visual.
+- **Evidence:** `ds/packages/ui/src/components/composites/forms/UI_UX_SPEC.md`,
+  `COMPONENT_DESIGN_AUDIT.md`, `Form.test.tsx`, `ContactFormDialog.test.tsx`,
+  `docs/registries/frontend-components.json`, source-contract manifest y
+  `e2e/contacts-form.certification.spec.mjs` (3/3 responsive).
+- **Reopen triggers:** nuevo recipe, consumidor, estado, control, plataforma nativa o cambio de
+  responsabilidad responsive.
 
 ## Handoff de sesion
 
-- **Fecha:** 2026-08-19.
-- **Rama de continuación:** `feature/crm-pilot-pipeline-implementation`.
-- **Commit de partida:** `a8dc5a8` (Tasks backend-first ya presente en el worktree).
-- **Estado alcanzado:** Leads, Pipeline, Tasks y Customer 360 backend-first implementados con
-  contratos, servicios y API. Customer 360 permanece como proyección dentro de Contact, sin entidad ni
-  navegación propia, con aislamiento y deduplicación autorizada.
-- **Decisiones, bloqueos y riesgos:** G2 y los delivery backend están documentados, pero el cierre
-  integral de G1/G2/G3 sigue pendiente; no se presenta staging/UAT como completado. La suite Supabase
-  global y governance mantienen fallos ya existentes del contrato Tasks; E2E frontend no aplica a este
-  slice backend-only.
-- **Validación ejecutada:** contratos Customer 360 build/typecheck, typecheck explícito de
-  `loopdev-os`, tests focalizados Customer 360/API (8/8), `git diff --check`; `supabase test db --local`
-  ejecutado con el fallo conocido de `006_crm_tasks_contract.sql` y el helper sin plan.
-- **Siguiente acción concreta:** completar la remediación/validación de Tasks en Supabase y después
-  preparar staging reproducible para la certificación integral de Daily Operation, Customer 360 y UAT.
+- **Fecha:** 2026-08-22.
+- **Rama de continuación:** `loopdev-io-crm-contacts-ui-design` (remota:
+  `feature/crm-contacts-ui-design`).
+- **Commit de partida:** `5863a2c` (`feat(crm): implement contacts creation flow`).
+- **Estado alcanzado:** Contacts está validado end-to-end con Form System compartido, persistencia
+  remota, contratos CRM, RLS por verbo, FKs tenant-aware, aislamiento cross-tenant y auditoría
+  append-only; pgTAP remoto pasa 41/41.
+- **Decisiones, bloqueos y riesgos:** G1 técnico de Contacts queda completado. Restan staging/UAT
+  operativo y normalizar el historial remoto de migraciones no CRM; no se deben marcar migraciones
+  como aplicadas sin verificar su esquema completo.
+- **Validación ejecutada:** tests CRM/API/form, typechecks, Playwright responsive, governance,
+  `supabase test db --local` 41/41 y `supabase test db --linked` 41/41.
+- **Siguiente acción concreta:** preparar G2 de Leads/Pipeline end-to-end, manteniendo staging/UAT
+  como requisito operativo del track.
 
 ## Cierre
 

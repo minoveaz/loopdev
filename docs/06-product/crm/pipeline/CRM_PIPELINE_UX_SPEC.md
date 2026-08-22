@@ -25,11 +25,11 @@ Este documento permanece propuesto y no autoriza implementacion.
 | --- | --- | --- | --- |
 | Pipeline principal | `/sales-crm/pipeline` | `board` | Ver Opportunities por etapa y moverlas mediante acciones autorizadas |
 | Tabla de Opportunities | `/sales-crm/pipeline/list` | `data` | Buscar, filtrar, ordenar y comparar registros |
-| Detalle de Opportunity | `/sales-crm/opportunities/:opportunityId` | `record` | Consultar y operar una ficha completa |
+| Detalle de Opportunity | `/sales-crm/opportunities/:opportunityId` | `workspace` | Consultar y operar una ficha completa |
 | Lista + previsualizacion | `/sales-crm/pipeline` | `split` | Mantener board o tabla y revisar una Opportunity |
-| Crear Opportunity | `/sales-crm/opportunities/new` | `focus` | Crear una Opportunity manual con Contact y producto |
+| Crear Opportunity | `/sales-crm/opportunities/new` | `full-bleed` | Crear una Opportunity manual con Contact y producto |
 
-`SuiteCanvas` permanece generico. `board`, `data`, `split`, `record` y `focus` son composiciones;
+`SuiteCanvas` permanece generico. `board`, `data`, `split`, `workspace` y `full-bleed` son composiciones;
 las reglas de Pipeline viven en widgets, features y entities bajo FSD.
 
 ## 3. Roles y acciones
@@ -59,7 +59,7 @@ abiertas/cerradas. Usa cursor pagination.
 
 ## 5. Crear Opportunity
 
-La creacion manual usa `focus`. Contact es obligatorio; puede seleccionarse un Contact existente o
+La creacion manual usa `full-bleed`. Contact es obligatorio; puede seleccionarse un Contact existente o
 abrirse el flujo autorizado de Contacts. Lead es opcional para Opportunities manuales y no puede
 referenciar otro tenant.
 
@@ -81,7 +81,7 @@ cambia por si solo el estado del Lead.
 
 Cada etapa tiene ID estable, nombre visible, orden, activo y tipo terminal (`open`, `won`, `lost`).
 Admin puede cambiar nombre y orden sin cambiar IDs ni historico. Mover una Opportunity registra actor,
-etapa anterior, etapa nueva, fecha, origen del cambio (`board`, `record`, `system`, `conversion` o
+etapa anterior, etapa nueva, fecha, origen del cambio (`board`, `workspace`, `system`, `conversion` o
 `reopen`) y motivo cuando la regla lo exija. La reapertura de `won` o `lost` usa una accion explicita,
 etapa abierta destino, permiso elevado y motivo obligatorio.
 
@@ -89,7 +89,7 @@ etapa abierta destino, permiso elevado y motivo obligatorio.
 
 Board, tabla, detalle y formularios cubren `loading`, `empty`, `error`, `forbidden`, `success`,
 `stale` y `action pending`. Escritorio muestra board completo; tablet reduce columnas y permite
-scroll controlado; mobile usa columnas secuenciales o lista, con detalle `record` y sheets para acciones.
+scroll controlado; mobile usa columnas secuenciales o lista, con detalle `workspace` y sheets para acciones.
 
 ## 9. Journeys UAT
 
@@ -124,8 +124,8 @@ IA, documentos, integraciones externas y paridad mobile completa.
 | --- | --- | --- |
 | Board `board` | `ModuleHeader`, `ModuleToolbar`, `ContextBar`, `Button`, `Badge`, `KanbanBoard`, estados UX | `PipelineBoardWidget`, `OpportunityCard`, `PipelineStageColumn`, `StageMoveMenu` |
 | Tabla `data` | `ResponsiveTable`, `Input`, `Select`, `Button`, `Badge`, paginacion, estados UX | `OpportunityTable`, `OpportunityFilters`, `OpportunityRowActions` |
-| Detalle `record` | `ModuleHeader`, `Tabs`, `ContextBar`, `Badge`, `Button`, `IconButton`, timeline si existe | `OpportunityRecordView`, `OpportunitySummary`, `RelatedContact`, `RelatedLead`, `OpportunityTimeline` |
-| Crear `focus` | `ModuleHeader`, `Input`, `Select`, `Button`, `Dialog/drawer`, estados UX | `OpportunityForm`, `ContactSelector`, `ProductField`, `StageSelector`, `OpportunityFormActions` |
+| Detalle `workspace` | `ModuleHeader`, `Tabs`, `ContextBar`, `Badge`, `Button`, `IconButton`, timeline si existe | `OpportunityRecordView`, `OpportunitySummary`, `RelatedContact`, `RelatedLead`, `OpportunityTimeline` |
+| Crear `full-bleed` | `ModuleHeader`, `Input`, `Select`, `Button`, `Dialog/drawer`, estados UX | `OpportunityForm`, `ContactSelector`, `ProductField`, `StageSelector`, `OpportunityFormActions` |
 
 ## 12. Estandarizacion aprobada de tarjetas CRM
 
@@ -152,12 +152,12 @@ fase y no forman parte de los componentes ni contratos del piloto actual.
 ## 14. Aprobacion
 
 - [x] Product Owner aprueba rutas, Canvas, board, tabla y detalle.
-- [x] La composición aprobada usa `board` como vista principal, `data` para tabla, `split` para previsualización, `record` para detalle y `focus` para creación manual.
+- [x] La composición aprobada usa `board` como vista principal, `data` para tabla, `split` para previsualización, `workspace` para detalle y `full-bleed` para creación manual.
 - [x] Product Owner aprueba columnas configurables, tarjetas operativas, filtros, movimiento validado por servidor, alternativa accesible a drag and drop, estados UX y adaptación responsive a móvil.
 - [x] Reabrir etapas terminales requiere acción explícita, permiso elevado, motivo y auditoría.
 - [x] Product Owner aprueba la tabla de Opportunities, sus columnas, filtros, acciones, ordenación, paginación por cursor y acciones masivas limitadas.
-- [x] Product Owner aprueba el detalle `record` de Opportunity, sus relaciones con Contact y Lead, historial de etapas, timeline, tareas, notas y reglas de reapertura terminal.
-- [x] Product Owner aprueba la creación manual de Opportunity en `focus`, con Contact obligatorio, `origin=manual`, Lead nulo, producto/interés, etapa abierta, validaciones de tenant/permisos, idempotencia y estados UX responsive.
+- [x] Product Owner aprueba el detalle `workspace` de Opportunity, sus relaciones con Contact y Lead, historial de etapas, timeline, tareas, notas y reglas de reapertura terminal.
+- [x] Product Owner aprueba la creación manual de Opportunity en `full-bleed`, con Contact obligatorio, `origin=manual`, Lead nulo, producto/interés, etapa abierta, validaciones de tenant/permisos, idempotencia y estados UX responsive.
 - [ ] Product Owner aprueba campos y reglas de origen.
 - [ ] Tech Lead aprueba etapas, comandos, RLS e idempotencia.
 - [ ] Contrato e impact assessment reflejan actividad autoritativa, reapertura, idempotencia manual,

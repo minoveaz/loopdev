@@ -5,8 +5,8 @@
 - Owner: shared atom / frontend-platform
 - Runtime: `client`
 - Directive: `'use client'`
-- Status: `certified`
-- Spec version: `1.0`
+- Status: `in-progress`
+- Spec version: `1.2`
 - Consumer baseline: CRM P0, Marketing Studio forms/search, Operations forms/search
 
 ## User outcome
@@ -20,7 +20,9 @@ without losing keyboard access.
 `Input` extends native `InputHTMLAttributes<HTMLInputElement>` and adds
 `label`, `helperText`, `error`, `startIcon`, `endIcon`, `isLoading`, `variant`,
 `size` and `fullWidth`. Domain data, submit behavior, permissions and mutation
-logic remain with the consumer.
+logic remain with the consumer. Consumer-provided `aria-describedby` and
+`aria-invalid` take precedence so a shared `FormField` can own external help
+and error presentation without duplicating it inside the control.
 
 ## Anatomy and ownership
 
@@ -57,8 +59,10 @@ submission, permissions and recovery actions.
 
 - Use native `<input>` semantics and an associated `<label>` when `label` is provided.
 - Consumers must provide an accessible name when no visible `label` exists.
-- `aria-invalid` is true only when `error` is present.
-- `aria-describedby` is emitted only when helper or error content exists.
+- `aria-invalid` reflects a consumer-provided native attribute when present,
+  otherwise it is true only when `error` is present.
+- `aria-describedby` preserves a consumer-provided relationship; otherwise it
+  is emitted only when local helper or error content exists.
 - Helper and error copy are consumer-provided; technical error codes are not rendered.
 - The password toggle is a native button, keyboard reachable, and has a stateful accessible name.
 - Focus-visible treatment belongs to the shared atom; focus order follows consumer reading order.
@@ -75,10 +79,14 @@ responsive form grids.
 
 ## Theme and tokens
 
-The implementation uses semantic surface, border, text, primary and danger
-tokens and supports light/dark themes. Tenant variation is `token-only`:
-branding may change semantic token values, not the component API or state
-meaning. High-contrast review remains an evidence item for certification.
+The implementation pairs `bg-lpd-bg-base` with `text-lpd-text-base`, uses
+`text-lpd-text-muted` for placeholders/help, and uses the semantic primary
+token for focus and caret. It intentionally avoids independent `dark:`
+foreground/background overrides, which can split the readable token pair when
+a tenant theme is nested under a different global mode. Tenant variation is
+`token-only`: branding may change semantic token values, not the component API
+or state meaning. High-contrast review remains an evidence item for
+certification.
 
 ## Approved usage
 
@@ -118,11 +126,12 @@ masking behavior or suite-specific data contract reopens this specification.
 
 ## Evidence and change impact
 
-- Unit/Axe: `Input.test.tsx` (`8/8` passing after keyboard and ARIA corrections)
+- Unit/Axe: `Input.test.tsx` passes `11/11`, including external ARIA and semantic token-pair coverage
 - Consumer: `CRMPrimitivesCatalog.tsx` and `FiltersActions`
 - Registry: `docs/registries/frontend-components.json` (`input-v1`)
 - Responsive: Playwright evidence passed at 390px, 320px, 1024px and 1440px; no horizontal overflow
-- Visual: Playwright evidence passed in light and dark CRM shell themes
+- Visual: prior light/dark evidence is stale after the token-pair correction;
+  refreshed browser/tenant visual review is pending and was not run in this slice
 - Performance/CLS: passed for the current atom contract; stable geometry and no heavy component-local dependency; loading state remains consumer composition evidence
 
 ## Technical certification pilot
@@ -137,7 +146,7 @@ evidence and do not replace the UI/UX review.
 | Data flow and state ownership | required | passed | `InputProps` extends native input props; value, validation, permissions and mutation behavior remain consumer-owned / frontend-platform |
 | Performance and runtime cost | required | passed | Client boundary and local state identified; Playwright geometry is stable without horizontal overflow; component-local dependencies are `clsx` and `tailwind-merge`; loading layout remains consumer-owned / frontend-platform |
 | Resilience and failure boundaries | not-applicable | not-applicable | The atom does not fetch, mutate, retry or own network failure state; consumer compositions own those states / CRM and suite consumers |
-| Maintainability and testing contract | required | passed | Typed public API, `Input.test.tsx` 9/9, focused Axe coverage, Playwright UX suite and adjacent spec / frontend-platform |
+| Maintainability and testing contract | required | in-progress | Typed public API and focused unit/Axe coverage; browser accessibility evidence must be refreshed after the external ARIA precedence correction / frontend-platform |
 
 ### Pilot findings and next evidence
 
@@ -175,3 +184,5 @@ Playwright measurement in the CRM primitive catalog:
 | Date | Version | Change | Status |
 | --- | --- | --- |
 | 2026-08-16 | 1.0 | Initial CRM primitive audit; fixed ARIA description references and keyboard password toggle | certified |
+| 2026-08-21 | 1.1 | Preserve consumer-provided ARIA relationships for shared FormField composition | in-progress; browser evidence pending |
+| 2026-08-21 | 1.2 | Pair value, placeholder, caret and surface semantic tokens; remove conflicting dark-mode overrides | in-progress; refreshed visual evidence pending |

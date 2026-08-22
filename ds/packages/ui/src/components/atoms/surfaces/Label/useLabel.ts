@@ -9,6 +9,7 @@ export const useLabel = (props: any) => {
     as = 'label',
     textSize = 'xs', // Default size 10px
     textWeight = 'bold', // Default weight 700
+    variant = 'technical',
     children,
     // Destructure and ignore the conflicting 'color' HTML attribute
     color,
@@ -17,7 +18,9 @@ export const useLabel = (props: any) => {
 
   const finalClassName = useMemo(() => {
     // VISUAL_COMPOSITION_SYSTEM v3.8 -> "UI Labels: weight 700, uppercase, 10px"
-    const baseStyles = 'uppercase tracking-widest text-slate-400';
+    const baseStyles = variant === 'form'
+      ? 'normal-case tracking-normal text-text-main'
+      : 'uppercase tracking-widest text-slate-400';
     return [baseStyles, className].join(' ').trim();
   }, [className]);
 
