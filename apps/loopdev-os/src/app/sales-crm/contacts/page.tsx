@@ -281,13 +281,11 @@ export default function ContactsPage() {
             setFilterValues((current) => ({ ...current, [id]: values }))
           }
           labels={filterLabels}
-          showSectionHeader={false}
           state={isLoading ? 'loading' : error ? 'error' : undefined}
           paginationVariant="compact"
           selectedRowKeys={selectedIds}
           onSelectedRowKeysChange={setSelectedIds}
           onClearFilters={() => setFilterValues({})}
-          showMobileHeader={false}
           renderMobileRow={(contact) => (
             <article className="space-y-2 rounded-lg border border-border-subtle bg-background px-3 py-3 shadow-sm">
               <p className="text-text-main truncate font-medium">{contactName(contact)}</p>
