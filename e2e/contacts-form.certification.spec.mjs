@@ -4,10 +4,15 @@ test.describe('Contacts table and create form', () => {
   test('renders fixture contacts and the responsive form contract', async ({ page }) => {
     await page.goto('/sales-crm/contacts', { waitUntil: 'domcontentloaded' });
 
-    await expect(page.getByRole('heading', { name: 'Contacts' })).toBeVisible();
-    const contactName = page.viewportSize().width < 768
-      ? page.getByLabel('Contacts mobile list').getByText('Ana Garcia')
-      : page.locator('tbody').getByText('Ana Garcia');
+    await expect(
+      page
+        .locator('[data-module-header="true"]')
+        .getByRole('heading', { name: 'Contacts', exact: true }),
+    ).toBeVisible();
+    const contactName =
+      page.viewportSize().width < 768
+        ? page.getByLabel('Contacts mobile list').getByText('Ana Garcia')
+        : page.locator('tbody').getByText('Ana Garcia');
     await expect(contactName).toBeVisible();
 
     await page.getByRole('button', { name: 'Create contact' }).click();
