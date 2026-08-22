@@ -247,7 +247,7 @@ export function ContactFormDialog({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" form="create-contact-form">Create contact</Button>
+          <Button type="submit" variant="primary" form="create-contact-form">Create contact</Button>
         </FormActions>
       }
     >
