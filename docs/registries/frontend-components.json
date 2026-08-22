@@ -2,7 +2,7 @@
   "registry_version": "1.0",
   "domain": "frontend",
   "status": "canonical",
-  "last_updated": "2026-08-16",
+  "last_updated": "2026-08-21",
   "alignment_status": "baseline-in-progress",
   "alignment_matrix": "docs/02-frontend/COMPONENT_ALIGNMENT_MATRIX.md",
   "migration_sources": [
@@ -665,14 +665,14 @@
         "front": "certified",
         "infra": "certified",
         "ui_ux": {
-          "status": "certified",
+          "status": "in-progress",
           "evidence": [
             "ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md",
             "e2e/input.certification.spec.mjs"
           ]
         },
         "technical": {
-          "status": "certified",
+          "status": "in-progress",
           "evidence": [
             "ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md",
             "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"
@@ -703,10 +703,10 @@
         },
         "maintainability_testing": {
           "applicability": "required",
-          "status": "passed",
+          "status": "in-progress",
           "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"]
         },
-        "overall": "certified"
+        "overall": "in-progress"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
@@ -718,8 +718,101 @@
         "ds/packages/ui/src/components/atoms/inputs/Input/README.md",
         "ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md"
       ],
-      "evidence_gaps": [],
+      "evidence_gaps": ["tests"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "phone-input-v1",
+      "name": "PhoneInput",
+      "domain": "frontend",
+      "type": "atom",
+      "category": "inputs",
+      "status": "experimental",
+      "phase": 1,
+      "certification": {
+        "front": "in-progress",
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/PhoneInput/UI_UX_SPEC.md",
+            "e2e/contacts-form.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/PhoneInput/PhoneInput.test.tsx",
+            "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.test.tsx",
+            "supabase/tests/database/005_crm_security.sql",
+            "supabase/migrations/20260827000000_crm_core_catalog_foundation.sql",
+            "supabase/migrations/20260902000000_crm_security_hardening.sql"
+          ]
+        },
+        "security": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/PhoneInput/UI_UX_SPEC.md"
+          ]
+        },
+        "data_state": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/PhoneInput/index.tsx"
+          ]
+        },
+        "performance": {
+          "applicability": "required",
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/PhoneInput/UI_UX_SPEC.md"
+          ]
+        },
+        "resilience": {
+          "applicability": "not-applicable",
+          "status": "not-applicable",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/PhoneInput/UI_UX_SPEC.md"
+          ]
+        },
+        "maintainability_testing": {
+          "applicability": "required",
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/atoms/inputs/PhoneInput/PhoneInput.test.tsx"
+          ]
+        },
+        "overall": "in-progress"
+      },
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "frontend-platform",
+      "dependencies": [],
+      "contracts": [
+        "ds/packages/ui/src/components/atoms/inputs/PhoneInput/index.tsx",
+        "ds/packages/ui/src/components/atoms/inputs/PhoneInput/UI_UX_SPEC.md"
+      ],
+      "implementation": "ds/packages/ui/src/components/atoms/inputs/PhoneInput",
+      "tests": [
+        "ds/packages/ui/src/components/atoms/inputs/PhoneInput/PhoneInput.test.tsx",
+        "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/atoms/inputs/PhoneInput/UI_UX_SPEC.md"
+      ],
+      "evidence_gaps": ["tests"],
+      "source_evidence": [
+        "ds/packages/ui/src/components/atoms/inputs/PhoneInput/index.tsx",
+        "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.tsx",
+        "scripts/certification/source-contract-manifest.json"
+      ]
     },
     {
       "id": "filter-dropdown-v1",
@@ -1082,6 +1175,103 @@
       "evidence_gaps": [],
       "source_evidence": [
         "ds/packages/ui/src/components/composites/utilities/CommandDialog/index.tsx",
+        "scripts/certification/source-contract-manifest.json"
+      ]
+    },
+    {
+      "id": "form-system-v1",
+      "name": "Form system",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "forms",
+      "status": "experimental",
+      "phase": 1,
+      "certification": {
+        "front": "in-progress",
+        "source_contract": {
+          "status": "certified",
+          "evidence": [
+            "scripts/certification/source-contract-manifest.json",
+            "pnpm certification:source-contracts"
+          ]
+        },
+        "ui_ux": {
+          "status": "certified",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/forms/UI_UX_SPEC.md",
+            "ds/packages/ui/src/components/composites/forms/COMPONENT_DESIGN_AUDIT.md",
+            "e2e/contacts-form.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/forms/Form.test.tsx",
+            "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.test.tsx",
+            "supabase/tests/database/005_crm_security.sql",
+            "supabase/migrations/20260827000000_crm_core_catalog_foundation.sql",
+            "supabase/migrations/20260902000000_crm_security_hardening.sql"
+          ]
+        },
+        "security": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/forms/UI_UX_SPEC.md"
+          ]
+        },
+        "data_state": {
+          "applicability": "required",
+          "status": "passed",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/forms/types.ts",
+            "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.tsx"
+          ]
+        },
+        "performance": {
+          "applicability": "required",
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/forms/UI_UX_SPEC.md"
+          ]
+        },
+        "resilience": {
+          "applicability": "not-applicable",
+          "status": "not-applicable",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/forms/UI_UX_SPEC.md"
+          ]
+        },
+        "maintainability_testing": {
+          "applicability": "required",
+          "status": "in-progress",
+          "evidence": [
+            "ds/packages/ui/src/components/composites/forms/Form.test.tsx",
+            "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.test.tsx"
+          ]
+        },
+        "overall": "in-progress"
+      },
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "frontend-platform",
+      "dependencies": ["button-v2", "icon-v1", "label-v1"],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/forms/types.ts",
+        "ds/packages/ui/src/components/composites/forms/UI_UX_SPEC.md"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/forms",
+      "tests": [
+        "ds/packages/ui/src/components/composites/forms/Form.test.tsx",
+        "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/forms/UI_UX_SPEC.md",
+        "ds/packages/ui/src/components/composites/forms/COMPONENT_DESIGN_AUDIT.md"
+      ],
+      "evidence_gaps": ["tests"],
+      "source_evidence": [
+        "ds/packages/ui/src/components/composites/forms/Form.tsx",
+        "apps/loopdev-os/src/app/sales-crm/contacts/ContactFormDialog.tsx",
         "scripts/certification/source-contract-manifest.json"
       ]
     },
