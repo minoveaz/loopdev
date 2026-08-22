@@ -340,6 +340,7 @@ es la composicion estandar, y FSD organiza widgets, features y entities dentro d
 | 2026-08-13 | Aprobar plantilla de readiness del piloto                                                        | Las pruebas deben demostrar lo que la candidate realmente entrega, con casos, cobertura y evidencia                                 | `CRM_PILOT_READINESS_REVIEW.md` queda como gate obligatorio antes de cada ciclo de pruebas/UAT                                                                                 | User         |
 | 2026-08-14 | Aprobar secuencia y salida de G1                                                                 | La matriz aprobada necesita un orden operativo y evidencia verificable antes de ejecutar CRM                                        | G1 sigue bloqueado por ejecucion pendiente; solo se aprueba la secuencia y sus condiciones de salida                                                                           | User         |
 | 2026-08-21 | Aprobar el Form System compartido y Contacts como primer consumidor                              | Los formularios cortos necesitan jerarquia, accesibilidad y responsive comunes sin mover schema, permisos o API fuera de CRM        | `@loopdev/ui` extiende la ruta forms con `FormSection`, definiciones tipadas y `CompactCreate`; Contacts conserva dominio y no se crea overlay o shell paralelo                  | User         |
+| 2026-08-22 | Reservar la edicion de Contacts para Contact Detail                                                 | Customer 360 y las relaciones CRM necesitan una superficie de entidad completa, no convertir el dialogo de creacion en el centro del dominio | G1 entrega creacion/listado/busqueda; la edicion se implementara junto a `crm-contact-detail` en `RecordWorkspace`, con el dialogo solo como posible edicion rapida secundaria | User         |
 
 ## Arquitectura y contratos
 
@@ -472,7 +473,8 @@ entorno controlado.
 
 - [x] RLS por verbo, FKs tenant-aware, kill switches y audit append-only (validado localmente con pgTAP).
 - [x] Reset, seed sintetico, tipos generados, pgTAP y gate CI requerido (la suite CRM local pasa 41/41).
-- [x] Lista, busqueda, creacion y detalle de contacto con API, autorizacion y persistencia real.
+- [x] Lista, busqueda y creacion de contacto con API, autorizacion y persistencia real.
+- [ ] Detalle y edicion de contacto en `RecordWorkspace` (se implementan conjuntamente en la siguiente entrega de Contacts).
 
 **Validacion**
 
