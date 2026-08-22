@@ -3,6 +3,7 @@ export * from './components/composites';
 export * from './providers/dynamic-theme-provider';
 export * from './providers/tenant-provider';
 export * from './providers/layout-provider';
+export * from './providers/feedback-provider';
 
 // Fixtures (Exportadas para desarrollo/pruebas)
 export * from './components/composites/shell/SuiteSidebar/fixtures';
