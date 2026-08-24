@@ -24,10 +24,25 @@ import {
   PlatformHeaderControls,
 } from '@/components/layout/PlatformHeaderControls';
 import { SALES_CRM_SUITE_CONFIG } from './config';
+import { LeadContextPanel, LeadsRuntimeProvider, useLeadsRuntime } from './leads';
+import {
+  resolveSalesCrmActiveModuleId,
+  resolveSalesCrmCanvasMode,
+  shouldShowLeadContextPanel,
+} from './shellRouting';
 
 export function SalesCrmShell({ children }: { children: ReactNode }) {
+  return (
+    <LeadsRuntimeProvider>
+      <SalesCrmRuntime>{children}</SalesCrmRuntime>
+    </LeadsRuntimeProvider>
+  );
+}
+
+function SalesCrmRuntime({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { selectedLead, clearSelectedLead } = useLeadsRuntime();
   const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<Exclude<NavMode, 'hidden'>>('expanded');
   const {
@@ -37,9 +52,8 @@ export function SalesCrmShell({ children }: { children: ReactNode }) {
     setActiveOrganizationId,
     isLoading: isLoadingOrganizations,
   } = useOrganization();
-  const activeModuleId = SALES_CRM_SUITE_CONFIG.modules.find(
-    (module) => module.route === pathname,
-  )?.moduleId;
+  const activeModuleId = resolveSalesCrmActiveModuleId(SALES_CRM_SUITE_CONFIG.modules, pathname);
+  const canvasMode = resolveSalesCrmCanvasMode(pathname);
 
   return (
     <SuiteRuntime
@@ -110,7 +124,13 @@ export function SalesCrmShell({ children }: { children: ReactNode }) {
           </PlatformHeaderActionButton>
         </div>
       }
-      canvasProps={{ mode: 'data' }}
+      canvasProps={{ mode: canvasMode }}
+      moduleContextPanelRenderers={{
+        leads: () =>
+          shouldShowLeadContextPanel(pathname) && selectedLead ? <LeadContextPanel /> : null,
+      }}
+      moduleContextPanelLabels={{ leads: 'Detalle del Lead' }}
+      moduleContextPanelOnClose={clearSelectedLead}
       onNavModeChange={setNavMode}
       appShellProps={{
         onToggleLeftSidebar: () =>

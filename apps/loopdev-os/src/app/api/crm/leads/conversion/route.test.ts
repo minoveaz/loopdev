@@ -31,6 +31,23 @@ describe('CRM lead conversion API', () => {
     expect(createOpportunityFromLead).not.toHaveBeenCalled();
   });
 
+  it('rejects an inherited contact override', async () => {
+    const response = await POST(
+      new Request('http://localhost/api/crm/leads/conversion', {
+        method: 'POST',
+        body: JSON.stringify({
+          organizationId,
+          leadId,
+          productKey: 'health',
+          name: 'Proteccion salud',
+          contactId: '00000000-0000-4000-9000-000000000004',
+        }),
+      }),
+    );
+    expect(response.status).toBe(400);
+    expect(createOpportunityFromLead).not.toHaveBeenCalled();
+  });
+
   it('returns 201 when a new conversion opportunity is created', async () => {
     createOpportunityFromLead.mockResolvedValue({
       opportunity: { id: opportunityId },

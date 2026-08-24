@@ -3,9 +3,9 @@ title: CRM Leads UX Specification
 status: approved
 version: 1.2
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-24
 owner: crm
-program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
+program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 ---
 
 # Especificacion UX/UI de Leads
@@ -21,14 +21,14 @@ su aprobacion y la posterior creacion del contrato e impact assessment.
 
 ## 2. Navegacion y Canvas
 
-| Superficie | Ruta | Canvas | Objetivo |
-| --- | --- | --- | --- |
-| Lista de Leads | `/sales-crm/leads` | `data` | Buscar, filtrar, ordenar y abrir leads autorizados |
-| Lista + previsualizacion | `/sales-crm/leads` | `split` | Mantener la tabla visible mientras se inspecciona un Lead |
-| Crear/capturar Lead | `/sales-crm/leads/new` | `full-bleed`; dialog/drawer para captura rapida | Seleccionar o crear contacto, origen y asignacion |
-| Detalle de Lead desde lista | `/sales-crm/leads/:leadId` | `split` | Inspeccionar el Lead conservando la lista como contexto |
-| Detalle directo de Lead | `/sales-crm/leads/:leadId` | `workspace` | Ver y operar la ficha completa del Lead |
-| Crear oportunidad | Desde detalle de Lead | panel transaccional; `full-bleed` si requiere mas datos | Convertir una intencion cualificada sin duplicar contacto ni Lead |
+| Superficie                  | Ruta                       | Canvas                                                  | Objetivo                                                          |
+| --------------------------- | -------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------- |
+| Lista de Leads              | `/sales-crm/leads`         | `split`                                                 | Buscar, filtrar, ordenar y abrir el panel contextual del Lead     |
+| Lista sin selección         | `/sales-crm/leads`         | `split`                                                 | Mantener la tabla visible con el panel contextual cerrado         |
+| Crear/capturar Lead         | `/sales-crm/leads/new`     | `full-bleed`; dialog/drawer para captura rapida         | Seleccionar o crear contacto, origen y asignacion                 |
+| Detalle de Lead desde lista | `/sales-crm/leads/:leadId` | `workspace`                                             | Inspeccionar el Lead conservando la lista como contexto           |
+| Detalle directo de Lead     | `/sales-crm/leads/:leadId` | `workspace`                                             | Ver y operar la ficha completa del Lead                           |
+| Crear oportunidad           | Desde detalle de Lead      | panel transaccional; `full-bleed` si requiere mas datos | Convertir una intencion cualificada sin duplicar contacto ni Lead |
 
 `SuiteCanvas` admite los modos genericos `overview`, `data`, `workspace`, `split`, `board`,
 `full-bleed` y `workspace`. `workspace` representa la ficha operativa de una entidad y `full-bleed`
@@ -38,16 +38,26 @@ representa una tarea guiada o transaccional. Ningun modo conoce Leads, Contacts 
 La ruta permanece delgada: `SuiteRuntime + SuiteCanvas` compone la superficie y FSD organiza
 widgets, features y entities dentro del Canvas.
 
+`LeadRecordPreview` recibe el Lead seleccionado, carga el detalle autorizado y compone estado,
+atribución, Contacto, Opportunities y Activity. El `ModuleContextPanel` mantiene scroll vertical
+independiente y el encabezado recibe foco al cambiar de selección. `LeadRecordView` usa el mismo
+contrato en `workspace`; el Contact 360 existente es la fuente de relaciones y no se crea una entidad
+paralela.
+
+Las acciones de edición, reasignación y cambio de estado requieren `crm.manage`. El backend actual
+expone `expectedUpdatedAt` (no `expectedVersion` numérico); la UI conserva ese token y presenta un
+conflicto `409` como estado `stale`, con refresh explícito antes de sustituir datos.
+
 ### Composicion por vista
 
-| Vista | Canvas | Componentes reutilizables | Componentes CRM a desarrollar |
-| --- | --- | --- | --- |
-| Lista de Leads | `data` | `ModuleHeader`, `ModuleToolbar`, `ContextBar`, `Input`, `Select`, `Button`, `IconButton`, `Badge`, `ResponsiveTable`, `EmptyState`, `LoadingState`, dialog accesible | `LeadListWidget`, `LeadToolbar`, `LeadTable`, `LeadFilters`, `LeadBulkActions` |
-| Captura rapida | dialog/drawer | `Dialog` o primitive equivalente, `Input`, `Select`, `Button`, `Badge`, `LoadingState`, `ErrorState` | `QuickLeadCapture`, `ContactLookupField`, `LeadSourceField`, `AssignmentField` |
-| Captura completa | `full-bleed` | `ModuleHeader`, `ContextBar`, `Input`, `Select`, `Button`, `IconButton`, `EmptyState`, `LoadingState` | `LeadCaptureWorkspace`, `ContactSelector`, `CreateContactFromLead`, `LeadAttributionFields`, `LeadForm` |
-| Lista + detalle | `split` | `ResponsiveTable`, `ModuleToolbar`, `Button`, `IconButton`, `Badge`, `ContextBar` | `LeadListWidget`, `LeadRecordPreview`, `LeadQuickActions` |
-| Detalle directo | `workspace` | `ModuleHeader`, `ContextBar`, `Tabs`, `Badge`, `Button`, `IconButton`, `EmptyState`, `LoadingState` | `LeadRecordView`, `LeadIdentityHeader`, `LeadAttributionPanel`, `RelatedContactSummary`, `RelatedOpportunityPanel`, `LeadTimeline`, `LeadWorkPanel` |
-| Crear Opportunity | panel transaccional o `full-bleed` | `Dialog`/drawer, `Input`, `Select`, `Button`, `LoadingState`, `ErrorState`, `SuccessState` | `CreateOpportunityFromLead`, `QualifiedLeadGuard`, `OpportunityResultPanel` |
+| Vista             | Canvas                             | Componentes reutilizables                                                                                                                                            | Componentes CRM a desarrollar                                                                                                                       |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lista de Leads    | `split`                            | `ModuleHeader`, `ModuleToolbar`, `ContextBar`, `Input`, `Select`, `Button`, `IconButton`, `Badge`, `ResponsiveTable`, `EmptyState`, `LoadingState`, dialog accesible | `LeadListWidget`, `LeadToolbar`, `LeadTable`, `LeadFilters`, `LeadBulkActions`, `LeadRecordPreview`                                                 |
+| Captura rapida    | dialog/drawer                      | `Dialog` o primitive equivalente, `Input`, `Select`, `Button`, `Badge`, `LoadingState`, `ErrorState`                                                                 | `QuickLeadCapture`, `ContactLookupField`, `LeadSourceField`, `AssignmentField`                                                                      |
+| Captura completa  | `full-bleed`                       | `ModuleHeader`, `ContextBar`, `Input`, `Select`, `Button`, `IconButton`, `EmptyState`, `LoadingState`                                                                | `LeadCaptureWorkspace`, `ContactSelector`, `CreateContactFromLead`, `LeadAttributionFields`, `LeadForm`                                             |
+| Lista + detalle   | `split`                            | `ResponsiveTable`, `ModuleToolbar`, `Button`, `IconButton`, `Badge`, `ContextBar`                                                                                    | `LeadListWidget`, `LeadRecordPreview`, `LeadQuickActions`                                                                                           |
+| Detalle directo   | `workspace`                        | `ModuleHeader`, `ContextBar`, `Tabs`, `Badge`, `Button`, `IconButton`, `EmptyState`, `LoadingState`                                                                  | `LeadRecordView`, `LeadIdentityHeader`, `LeadAttributionPanel`, `RelatedContactSummary`, `RelatedOpportunityPanel`, `LeadTimeline`, `LeadWorkPanel` |
+| Crear Opportunity | panel transaccional o `full-bleed` | `Dialog`/drawer, `Input`, `Select`, `Button`, `LoadingState`, `ErrorState`, `SuccessState`                                                                           | `CreateOpportunityFromLead`, `QualifiedLeadGuard`, `OpportunityResultPanel`                                                                         |
 
 Los componentes reutilizables se consumen desde `@loopdev/ui` cuando ya existen y se certifican
 para accesibilidad, responsive y estados. Los componentes de CRM permanecen dentro del suite y no
@@ -55,18 +65,27 @@ se promueven a UI compartida sin un segundo consumidor real.
 
 ## 3. Roles y acciones
 
-| Rol | Acciones |
-| --- | --- |
-| Agente comercial | Crear/capturar, editar, asignar cuando tenga permiso, cambiar estado, crear oportunidad y registrar nota/tarea |
-| Manager | Todas las del agente, reasignar, revisar duplicados y operar el pipeline del equipo |
-| Admin Estar Protegidos | Configurar estados y reglas operativas existentes; no crea campos personalizados en este piloto |
-| Superdev LoopDev | Soporte transversal privilegiado, separado, auditado y no expuesto como rol tenant |
+| Rol                    | Acciones                                                                                                       |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Agente comercial       | Crear/capturar, editar, asignar cuando tenga permiso, cambiar estado, crear oportunidad y registrar nota/tarea |
+| Manager                | Todas las del agente, reasignar, revisar duplicados y operar el pipeline del equipo                            |
+| Admin Estar Protegidos | Configurar estados y reglas operativas existentes; no crea campos personalizados en este piloto                |
+| Superdev LoopDev       | Soporte transversal privilegiado, separado, auditado y no expuesto como rol tenant                             |
 
 No existe `viewer` en el piloto.
 
+### Interacción de previsualización y detalle
+
+| Capacidad        | Pointer/touch             | Teclado/foco                               | Estados                       | Accesibilidad                                |
+| ---------------- | ------------------------- | ------------------------------------------ | ----------------------------- | -------------------------------------------- |
+| Abrir preview    | Seleccionar fila          | Acción de fila, foco en encabezado         | loading/ready/error/forbidden | Panel nombrado y scroll independiente        |
+| Editar/reasignar | Guardar cambios           | Orden de formulario y Escape para cancelar | saving/stale                  | Solo `crm.manage`; mensaje live de conflicto |
+| Cambiar estado   | Seleccionar estado manual | Select accesible                           | disabled/converted/conflict   | Estado no comunicado solo por color          |
+| Contact 360      | Abrir Contacto            | Botón con nombre funcional                 | ready/error                   | Reutiliza ruta/contrato de Contacts          |
+
 ## 4. Vista de tabla de Leads
 
-La tabla de Leads usa `SuiteCanvas mode=data` y muestra como minimo:
+La tabla de Leads usa `SuiteCanvas mode=split` desde la entrada al módulo y muestra como minimo:
 
 - Nombre del contacto y enlace a Contact 360.
 - Estado del lead.
@@ -96,8 +115,8 @@ revisar duplicado cuando exista alerta.
 Acciones masivas del piloto: cambiar responsable, cambiar estado y crear tarea. Borrado masivo,
 conversión masiva, merge automático y exportación masiva quedan fuera de alcance.
 
-La ruta inicia en `data`. En escritorio, el clic simple sobre una fila puede abrir una previsualización
-en `split` sin abandonar la tabla. La acción "Ver ficha" abre el detalle completo en `workspace`. En
+La ruta inicia en `data`. En escritorio, el clic simple sobre una fila abre el `ModuleContextPanel` en `split` sin abandonar la
+tabla. El panel permite operar el Lead y la acción "Ver ficha" abre el detalle completo en `workspace`. En
 mobile, la tabla navega al detalle y no mantiene dos columnas simultáneas.
 
 ## 5. Crear y capturar Lead
@@ -125,15 +144,16 @@ Campos:
 - Marca y workspace cuando corresponda.
 - Asignado a.
 - Interés/producto en texto libre.
-- Campaña, UTM source/medium/campaign/content/term cuando existan.
-- Provider e identificador externo para futuras integraciones.
+- Campaña, UTM medium/content/term cuando existan (UTM source queda diferido porque el API actual no
+  lo persiste).
+- Provider e identificador externo para futuras integraciones e idempotencia.
 - Nota inicial.
 
-Campos obligatorios: Contacto, origen, interés/producto y asignado a, salvo que una política
-aprobada permita asignación automática.
+Campos obligatorios: Contacto, origen e interés/producto. Asignado a acepta vacío porque la política
+del contrato aplica automáticamente el usuario autenticado; cuando se informa, debe ser un UUID
+autorizado.
 
-Campos opcionales: campaña, UTM source/medium/campaign/content/term, Provider, identificador
-externo y nota inicial.
+Campos opcionales: campaña, UTM medium/content/term, Provider, identificador externo y nota inicial.
 
 El selector permite buscar un Contact, ver un resumen, seleccionarlo o abrir el flujo de creación de
 Contactos. Al volver, el Contact creado queda seleccionado en el Lead.
@@ -210,8 +230,8 @@ UAT funcional: escritorio y tablet. Mobile web: responsive básico, sin paridad 
 ### Journey L3: cualificación
 
 1. El agente o manager cambia el estado a `cualificado`.
-2. El sistema crea automáticamente una oportunidad en la etapa estable `qualified`, cuyo nombre
-	visible inicial es `Cualificado`.
+2. La acción `Crear Opportunity` aparece y permite enviar el producto/interés obligatorio; el sistema
+   crea la oportunidad en la etapa estable `qualified`, cuyo nombre visible inicial es `Cualificado`.
 3. Confirma que el contacto y el lead permanecen relacionados.
 4. La oportunidad aparece en Contact 360 sin duplicar el lead.
 
@@ -233,6 +253,22 @@ El Lead pasa de `cualificado` a `convertido` cuando se crea correctamente la pri
 con `origin=lead_conversion`. `convertido` significa que el Lead ya produjo una oportunidad de
 conversión; no impide crear Opportunities de conversión posteriores para productos distintos. Una
 Opportunity manual creada desde Pipeline no cambia por sí sola el estado del Lead.
+
+### Implementación de Fase 4
+
+`QualifiedLeadGuard` muestra la acción de conversión únicamente cuando el usuario tiene
+`crm.manage` y el Lead está en `cualificado`. `CreateOpportunityFromLead` exige producto/interés y
+mantiene el Contacto heredado del Lead fuera de edición. Consume `POST /api/crm/leads/conversion`
+sin crear un endpoint paralelo.
+
+La UI presenta tres resultados: Opportunity creada (201), Opportunity existente reutilizada (200)
+por la clave normalizada Lead + producto, o conflicto (409) con reintento seguro. Tras una creación o
+reutilización actualiza el Lead, las Opportunities relacionadas y Contact 360 mediante las consultas
+existentes. La etapa estable sigue siendo `qualified` y el origen `lead_conversion`.
+
+La evidencia técnica y de accesibilidad/interacción/responsive está disponible en los tests
+focalizados. La revisión visual y Playwright requieren aprobación explícita del usuario y permanecen
+bloqueados; por tanto, esta UX no se declara certificada todavía.
 
 ## 10. Criterios de aprobación
 

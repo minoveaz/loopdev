@@ -5,9 +5,14 @@ import { leadServiceErrorResponse } from '../../_lib/leadErrors';
 import { createOpportunityFromLead } from '@/services/crm/leads';
 
 export async function POST(request: Request) {
-  const parsed = CrmCreateOpportunityFromLeadCommandSchema.safeParse(
-    await request.json().catch(() => null),
-  );
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== 'object' || Array.isArray(body) || 'contactId' in body) {
+    return NextResponse.json(
+      { error: 'Invalid CRM lead conversion command', code: 'VALIDATION_ERROR' },
+      { status: 400 },
+    );
+  }
+  const parsed = CrmCreateOpportunityFromLeadCommandSchema.safeParse(body);
   if (!parsed.success)
     return NextResponse.json(
       {
