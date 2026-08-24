@@ -72,14 +72,17 @@ Leads does not implement real Marketing or WhatsApp integrations in this slice.
 
 ## Evidencia de Fase 5
 
-- La cobertura local de view models, adapters y mutaciones pasa `82/82`; la
-  suite completa serial pasa `859/859`.
-- Permisos, conflictos, idempotencia, semántica de tabla, dialog/sheet, foco,
+- La cobertura local de view models, adapters y mutaciones pasa `99/99`; la
+  suite completa serial pasa `862/862`.
+- Permisos, asignación a miembros activos, conflictos, idempotencia, semántica de tabla, dialog/sheet, foco,
   teclado y ARIA están cubiertos por tests focalizados y Axe.
-- Typecheck, lint, shell, registry, source-contracts, ownership, links,
-  governance de tracks/Supabase y `git diff --check` pasan.
+- Typecheck, lint, shell, frontend quality gate, registry, source-contracts, ownership, links,
+  governance de tracks/Supabase y `git diff --check` pasan. `validate:changed` se detiene en el build
+  por las variables Supabase ausentes.
 - El build y `validate:ci` están bloqueados por las variables Supabase ausentes;
-  pgTAP cross-tenant por Docker/Postgres local no disponible.
+  pgTAP cross-tenant por Docker/Postgres local no disponible. La migración de
+  alcance de asignaciones añade FK compuesto y política RLS para miembros
+  operativos activos; su ejecución remota queda pendiente.
 - Staging readiness/UAT de producto está `NOT READY` sin release candidate.
   Playwright y revisión visual quedan para el gate final y no se marca la fase
   como certificada.

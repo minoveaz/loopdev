@@ -1,7 +1,7 @@
 ---
 title: CRM Lead Contract
 status: approved
-version: 1.0
+version: 1.1
 created: 2026-08-13
 updated: 2026-08-24
 owner: crm
@@ -65,6 +65,9 @@ type LeadSource = {
 - Campaign and WhatsApp real integrations are deferred; `referral`, `social` and `partner` are
   active source values in the pilot and may be captured manually or through fixtures.
 - Agent and manager may move authorized leads; admin configures allowed states/rules.
+- `assignedUserId` may be null (automatic assignment to the actor) or an active `owner`, `admin`
+  or `agent` membership in the same organization; viewers, suspended memberships and cross-org
+  users are rejected before any Contact or Lead side effect.
 - Every state change and conversion is auditable.
 - A qualified Lead may create one conversion Opportunity per normalized product/interés key in
   stable stage ID `qualified`, initially displayed as `Cualificado`.
@@ -80,6 +83,9 @@ type LeadSource = {
 origin=lead_conversion)` and the command must be transactional.
 - The visible stage name/order may change without changing stable IDs, contracts or historical data.
 - Cross-tenant leads and references are never returned.
+- The application validates assignees against active organization membership, and the database
+  additionally enforces `(organization_id, assigned_to_user_id)` plus an RLS check for operational
+  roles.
 - The conversion command never accepts `contactId`; the transactional backend operation inherits
   the Lead's authorized Contact and rejects non-qualified status. A repeated normalized
   Lead/product conversion returns the existing Opportunity, while a successful new conversion

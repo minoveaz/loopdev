@@ -96,6 +96,10 @@ La UI conserva el envelope seguro del servidor y presenta estos códigos sin exp
   UUID de usuario; `utm_source` queda diferido hasta ampliar el contrato de atribución.
 - Contacts no se modifica: la captura reutiliza `findOrCreateContact` dentro del servicio de Leads y
   la búsqueda consume `GET /api/crm/contacts`.
+- El servicio valida la asignación contra `organization_memberships` y solo acepta miembros
+  operativos con estado `active`; la validación ocurre antes de resolver o crear un Contacto.
+- El índice único de captura sigue siendo la protección final frente a carreras: si dos capturas
+  compiten por la misma clave, el perdedor relee el Lead ganador y devuelve `reused: true`.
 
 ## Evidencia de detalle (Fase 3)
 
@@ -103,9 +107,10 @@ La UI conserva el envelope seguro del servidor y presenta estos códigos sin exp
   independiente y enfoca su encabezado al cambiar de selección.
 - El detalle directo usa `SuiteCanvas` con `mode="workspace"` y compone `LeadRecordView` con Contact,
   Opportunities y Activity desde el Customer 360 autorizado, sin entidad paralela.
-- `crm.manage` habilita edición, reasignación por UUID y estados manuales. El backend vigente no expone
-  un `version` numérico en Leads: las mutaciones usan `expectedUpdatedAt`, que la UI conserva como token
-  de concurrencia. Un `409` marca el detalle como `stale` y solo un refresh explícito reemplaza datos.
+- `crm.manage` habilita edición, reasignación por UUID y estados manuales. La reasignación solo acepta
+  miembros operativos activos de la misma organización; el backend vigente no expone un `version`
+  numérico en Leads: las mutaciones usan `expectedUpdatedAt`, que la UI conserva como token de
+  concurrencia. Un `409` marca el detalle como `stale` y solo un refresh explícito reemplaza datos.
 
 ## Query keys
 
@@ -160,13 +165,14 @@ No se añade un fallback silencioso para producción. Cualquier kill switch debe
 
 ## Evidencia de Fase 5 (sin certificación visual)
 
-- View models, adapters y mutaciones pasan en los tests focalizados (`82/82`),
+- View models, adapters y mutaciones pasan en los tests focalizados (`99/99`),
   incluyendo permisos `crm.read`/`crm.manage`, conflictos `409`, reintentos
   idempotentes y envelopes de error.
 - Tabla, dialog/sheet, foco, teclado y mensajes ARIA tienen cobertura
   unitaria/integración con Axe en los tests de captura, detalle y conversión.
-- Typecheck, lint, shell, registry, source-contracts, ownership, links y
-  governance de tracks/Supabase pasan localmente.
+- Typecheck, lint, shell, frontend quality gate, registry, source-contracts, ownership, links y
+  governance de tracks/Supabase pasan localmente. `validate:changed` se detiene en el build por las
+  variables Supabase ausentes.
 - La validación pgTAP cross-tenant está bloqueada por la ausencia del stack
   Docker local; staging readiness está `NOT READY` porque no existe una
   release candidate desplegada.

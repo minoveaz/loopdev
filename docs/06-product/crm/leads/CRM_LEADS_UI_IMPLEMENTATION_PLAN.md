@@ -138,8 +138,10 @@ operativa en `SplitWorkspace`, con el panel contextual cerrado hasta seleccionar
 - integrar feedback global para acciones y errores.
 
 **Estado 2026-08-24:** primera implementación y pruebas técnicas focalizadas completadas. La lista usa
-`SplitWorkspace`; el panel contextual se integra mediante `SuiteRuntime`. La revisión visual y E2E
-siguen pendientes.
+`SplitWorkspace`; el panel contextual se integra mediante `SuiteRuntime`. La validación server-side
+de asignaciones ahora exige un miembro operativo activo de la organización antes de resolver o crear
+el Contacto, y las carreras de captura por la clave única se reconcilian como `reused`. La revisión
+visual y E2E siguen pendientes.
 
 **Salida:** listado usable y persistente contra API real.
 
@@ -158,12 +160,16 @@ siguen pendientes.
 `LeadForm` valida contacto, origen, asignación, interés/producto y atribución (provider, externalId,
 campaña y UTM respaldado por el API), y persiste la nota inicial mediante el endpoint idempotente
 existente de Notes. Un reintento con el mismo `source + externalId` devuelve `reused: true` y el
-resultado lo comunica explícitamente. La captura de contacto nuevo reutiliza el contrato de Contacts
-desde el servicio de Leads; no se modificó Contacts.
+resultado lo comunica explícitamente; una carrera contra el índice único se reconcilia sin duplicar.
+La asignación se valida contra `organization_memberships` activo antes de cualquier efecto lateral.
+La captura de contacto nuevo reutiliza el contrato de Contacts desde el servicio de Leads; no se
+modificó Contacts.
 
 **Limitaciones documentadas:** el contrato actual no persiste `utm_source` ni ofrece un catálogo de
 usuarios para asignación; se exponen `utm_medium`, `utm_content` y `utm_term`, y asignación vacía
-significa el usuario autenticado. No se inventan endpoints ni se activa Marketing/WhatsApp real.
+significa el usuario autenticado. La migración de alcance de asignaciones falla de forma segura ante
+asignaciones históricas sin membresía; staging debe auditar ese caso antes de aplicarla. No se inventan
+endpoints ni se activa Marketing/WhatsApp real.
 La revisión visual y Playwright quedan deliberadamente para el gate final.
 
 **Salida técnica:** journeys L1 y L2 funcionales, incluyendo idempotencia visible al reintentar.
@@ -232,12 +238,13 @@ se reclama certificación UI/UX ni se inventan endpoints. Contacts permanece fue
 
 **Estado de Fase 5 — certificación técnica (2026-08-24):** ejecutada de forma
 parcial y no cerrada. Los tests focalizados de Leads (view models, adapters,
-mutaciones, permisos, conflictos, idempotencia y Axe) pasan `82/82`; la suite
-completa en modo serial pasa `859/859`. También pasan typecheck, lint, shell
+mutaciones, permisos, conflictos, idempotencia, asignación y Axe) pasan `99/99`;
+la suite completa en modo serial pasa `862/862`. También pasan typecheck, lint, shell
 `39/39`, `pnpm registries:check`, `pnpm certification:source-contracts`,
 `pnpm contracts:ownership:check`, `pnpm docs:links:check`,
 `pnpm validate:supabase-governance`, `node scripts/tracks/validate-tracks.mjs`,
-`pnpm validate:changed` y `git diff --check`.
+`pnpm front:check` y `git diff --check`. `pnpm validate:changed` alcanza los controles
+seleccionados pero se detiene en el build por las variables Supabase ausentes.
 
 El build y `pnpm validate:ci` quedan bloqueados al prerenderizar
 `loopdev-os`: el entorno no tiene `NEXT_PUBLIC_SUPABASE_URL` ni

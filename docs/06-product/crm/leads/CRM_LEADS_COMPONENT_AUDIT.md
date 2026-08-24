@@ -136,14 +136,18 @@ pendientes.
 
 ## Evidencia de Fase 5 — estado técnico
 
-La matriz técnica de Leads queda verificada localmente: `82/82` tests
+La matriz técnica de Leads queda verificada localmente: `99/99` tests
 focalizados pasan para view models, adapters, mutaciones, permisos, conflictos,
-idempotencia y Axe; la suite completa serial pasa `859/859`. Typecheck, lint,
-shell (`39/39`), registry, source-contracts, ownership, links, governance de
-tracks/Supabase y `git diff --check` pasan.
+idempotencia, asignación y Axe; la suite completa serial pasa `862/862`. Typecheck, lint,
+shell (`39/39`), frontend quality gate, registry, source-contracts, ownership, links, governance de
+tracks/Supabase y `git diff --check` pasan. `validate:changed` se detiene en el build por las
+variables Supabase ausentes.
 
 La cobertura de aislamiento pgTAP no pudo ejecutarse porque Docker y el
-Postgres local (`127.0.0.1:54322`) no están disponibles. Build y
+Postgres local (`127.0.0.1:54322`) no están disponibles. La migración
+`supabase/migrations/20260907000000_crm_lead_assignment_scope.sql` añade FK
+compuesto y RLS para impedir asignaciones fuera de la organización; su evidencia
+pgTAP queda pendiente de un entorno con Supabase local. Build y
 `validate:ci` quedan bloqueados por variables Supabase ausentes. Staging/UAT
 están `NOT READY` sin release candidate. Playwright L1/L2/L3 y revisión visual
 se reservan explícitamente para el gate final; la certificación UI/UX sigue

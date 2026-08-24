@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeProductKey } from './leads';
+import { isLeadAssigneeRoleAllowed, normalizeProductKey } from './leads';
 
 describe('CRM lead conversion product key normalization', () => {
   it('normalizes free-text interest/product values into a stable key', () => {
@@ -9,5 +9,18 @@ describe('CRM lead conversion product key normalization', () => {
 
   it('treats equivalent free-text values as the same conversion key', () => {
     expect(normalizeProductKey('seguro salud')).toBe(normalizeProductKey('  Seguro   Salud'));
+  });
+});
+
+describe('CRM lead assignment authorization', () => {
+  it('allows only active operational members', () => {
+    expect(isLeadAssigneeRoleAllowed('agent', 'active')).toBe(true);
+    expect(isLeadAssigneeRoleAllowed('admin', 'active')).toBe(true);
+    expect(isLeadAssigneeRoleAllowed('viewer', 'active')).toBe(false);
+    expect(isLeadAssigneeRoleAllowed('agent', 'suspended')).toBe(false);
+  });
+
+  it('does not treat a missing member role as an allowed assignment', () => {
+    expect(isLeadAssigneeRoleAllowed(undefined, 'active')).toBe(false);
   });
 });

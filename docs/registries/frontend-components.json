@@ -2575,7 +2575,8 @@
       "implementation": "apps/loopdev-os/src/suites/sales-crm/leads/LeadListWidget.tsx",
       "tests": [
         "apps/loopdev-os/src/app/sales-crm/leads/leads.test.ts",
-        "apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx"
+        "apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx",
+        "apps/loopdev-os/src/services/crm/capture.test.ts"
       ],
       "documentation": [
         "apps/loopdev-os/src/suites/sales-crm/leads/UI_UX_SPEC.md",
@@ -2591,6 +2592,7 @@
           "evidence": [
             "apps/loopdev-os/src/app/sales-crm/leads/leads.test.ts",
             "apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx",
+            "apps/loopdev-os/src/services/crm/capture.test.ts",
             "apps/loopdev-os/src/app/sales-crm/leads/leadCaptureForm.test.ts",
             "apps/loopdev-os/src/app/sales-crm/leads/lead-capture-api.test.ts",
             "apps/loopdev-os/src/app/api/crm/leads/route.test.ts",

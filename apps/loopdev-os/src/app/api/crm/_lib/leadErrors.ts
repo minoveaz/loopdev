@@ -7,6 +7,7 @@ const KNOWN_ERRORS: Record<string, { status: number; code: LeadErrorCode }> = {
   'CRM lead status transition is not allowed': { status: 409, code: 'INVALID_STATUS_TRANSITION' },
   'CRM lead is not qualified for conversion': { status: 409, code: 'INVALID_STATUS_TRANSITION' },
   'CRM contact required for lead capture': { status: 400, code: 'CONTACT_REQUIRED' },
+  'CRM lead assignee is not allowed': { status: 403, code: 'FORBIDDEN' },
 };
 
 /**

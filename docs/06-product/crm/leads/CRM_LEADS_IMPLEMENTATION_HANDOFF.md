@@ -104,10 +104,16 @@ existente `POST /api/crm/notes` con la clave `lead-capture-note-{leadId}`. Los r
 externalId muestran el resultado `reused` sin duplicar el Lead.
 
 **Evidencia técnica:** `leadCaptureForm.test.ts`, `QuickLeadCapture.test.tsx`,
-`LeadCaptureWorkspace.test.tsx`, `lead-capture-api.test.ts` y `api/crm/capture/route.test.ts`.
+`LeadCaptureWorkspace.test.tsx`, `lead-capture-api.test.ts`, `api/crm/capture/route.test.ts` y
+`services/crm/capture.test.ts`. El servicio valida que la asignación sea un miembro operativo
+activo antes de resolver/crear contactos y reconcilia carreras del índice único como `reused`.
+La migración `20260907000000_crm_lead_assignment_scope.sql` añade la misma barrera
+mediante FK compuesto y RLS; queda pendiente ejecutarla con Supabase real.
 
 **Limitaciones:** el backend actual no persiste `utm_source` ni ofrece un catálogo de asignados; no se
 inventan endpoints. UTM source queda diferido y la asignación vacía usa el usuario autenticado.
+La migración de alcance de asignaciones falla de forma segura si detecta registros históricos con un
+asignado fuera de `organization_memberships`; staging debe auditar esos datos antes de aplicarla.
 
 ## Estado de Fase 3 — previsualización y detalle
 
@@ -144,12 +150,11 @@ bloqueadas; no se marca certificación UI/UX. Contacts permanece sin cambios.
 ## Estado de Fase 5 — certificación técnica
 
 La certificación técnica se ejecutó el 2026-08-24 sin cerrar la fase. Leads
-focalizado pasa `82/82` tests y la suite completa serial pasa `859/859`,
-incluyendo view models, adapters, mutaciones, permisos, conflictos,
+focalizado pasa `99/99` tests y la suite completa serial pasa `862/862`,
+incluyendo view models, adapters, mutaciones, permisos, conflictos, asignación,
 idempotencia y Axe para tabla, dialog, foco, teclado y ARIA. Typecheck, lint,
-shell `39/39`, registry, source-contracts, ownership, links, governance de
-Supabase, validator de tracks, validación de cambios y `git diff --check`
-también pasan.
+shell `39/39`, frontend quality gate, registry, source-contracts, ownership, links,
+governance de Supabase, validator de tracks y `git diff --check` también pasan.
 
 El build/`validate:ci` está bloqueado por variables ausentes
 `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` durante el
@@ -158,7 +163,8 @@ prerender de `loopdev-os`. pgTAP de aislamiento no pudo conectar con
 desplegada en staging; la readiness y el UAT de producto quedan `NOT READY` y
 solo se documenta UAT técnico local.
 
-Playwright de L1/L2/L3 y la revisión visual se mantienen explícitamente para
+`validate:changed` alcanza los controles seleccionados pero se detiene en el build por la misma
+configuración ausente. Playwright de L1/L2/L3 y la revisión visual se mantienen explícitamente para
 el gate final, pendientes de aprobación visual del usuario. La infraestructura
 detectada no contiene journeys de Leads ni un proyecto tablet. Fase 5 sigue
 `in-progress`; no se declara completada ni certificada.
