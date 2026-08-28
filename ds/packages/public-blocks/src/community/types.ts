@@ -1,6 +1,7 @@
 export interface CommunityMember {
   id: string;
   name: string;
+  age?: number;
   avatarUrl?: string;
   isCaptain?: boolean;
 }
@@ -8,12 +9,14 @@ export interface CommunityMember {
 export interface ActivityCardData {
   id: string;
   title: string;
-  sport: string;
+  sport: 'running' | 'padel' | 'hiking' | 'cycling' | 'crossfit' | string;
   sportIcon?: string;
+  image?: string;
   date: string;
   time: string;
   location: string;
   level: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Todos los niveles';
+  paceOrDetails?: string;
   currentMembers: CommunityMember[];
   maxMembers: number;
   captain: CommunityMember;

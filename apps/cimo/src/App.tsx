@@ -143,6 +143,8 @@ export function App() {
             selectedActivityId={selectedActivityId}
             onSelectActivity={setSelectedActivityId}
             onJoinActivity={handleJoinActivity}
+            selectedSport={selectedSport}
+            onSelectSport={setSelectedSport}
           />
         ),
         contextInspector: (

@@ -31,9 +31,9 @@ describe('Community Blocks (CIMO)', () => {
     expect(screen.getByText('Running 8K Parque del Retiro')).toBeDefined();
     expect(screen.getByText('Running')).toBeDefined();
     expect(screen.getByText('Intermedio')).toBeDefined();
-    expect(screen.getByText('3/6')).toBeDefined();
+    expect(screen.getByText(/Crew 3\/6/)).toBeDefined();
 
-    const joinBtn = screen.getByRole('button', { name: 'Unirme' });
+    const joinBtn = screen.getByRole('button', { name: /Join Crew/i });
     fireEvent.click(joinBtn);
     expect(handleJoin).toHaveBeenCalledWith('act-1');
   });
