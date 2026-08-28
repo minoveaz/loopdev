@@ -3301,6 +3301,246 @@ export type Database = {
           },
         ]
       }
+      marketing_creative_projects: {
+        Row: {
+          brand_id: string
+          created_at: string
+          created_by: string | null
+          current_version_number: number
+          description: string | null
+          id: string
+          name: string
+          organization_id: string
+          status: string
+          type: string
+          updated_at: string
+          updated_by: string | null
+          workspace_id: string
+        }
+        Insert: {
+          brand_id: string
+          created_at?: string
+          created_by?: string | null
+          current_version_number?: number
+          description?: string | null
+          id?: string
+          name: string
+          organization_id: string
+          status?: string
+          type?: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id: string
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          created_by?: string | null
+          current_version_number?: number
+          description?: string | null
+          id?: string
+          name?: string
+          organization_id?: string
+          status?: string
+          type?: string
+          updated_at?: string
+          updated_by?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_creative_projects_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_projects_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_projects_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      marketing_creative_project_versions: {
+        Row: {
+          brand_id: string
+          change_summary: string | null
+          created_at: string
+          created_by: string | null
+          document: Json
+          id: string
+          organization_id: string
+          project_id: string
+          updated_at: string
+          updated_by: string | null
+          version_number: number
+          workspace_id: string
+        }
+        Insert: {
+          brand_id: string
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          document?: Json
+          id?: string
+          organization_id: string
+          project_id: string
+          updated_at?: string
+          updated_by?: string | null
+          version_number: number
+          workspace_id: string
+        }
+        Update: {
+          brand_id?: string
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          document?: Json
+          id?: string
+          organization_id?: string
+          project_id?: string
+          updated_at?: string
+          updated_by?: string | null
+          version_number?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_creative_project_versions_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_project_versions_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_project_versions_project_fkey"
+            columns: ["project_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_projects"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_project_versions_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      marketing_creative_variants: {
+        Row: {
+          brand_id: string
+          channel: string
+          created_at: string
+          created_by: string | null
+          format: string
+          height: number | null
+          id: string
+          key: string
+          organization_id: string
+          payload: Json
+          project_id: string
+          project_version_id: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+          width: number | null
+          workspace_id: string
+        }
+        Insert: {
+          brand_id: string
+          channel: string
+          created_at?: string
+          created_by?: string | null
+          format: string
+          height?: number | null
+          id?: string
+          key: string
+          organization_id: string
+          payload?: Json
+          project_id: string
+          project_version_id: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          width?: number | null
+          workspace_id: string
+        }
+        Update: {
+          brand_id?: string
+          channel?: string
+          created_at?: string
+          created_by?: string | null
+          format?: string
+          height?: number | null
+          id?: string
+          key?: string
+          organization_id?: string
+          payload?: Json
+          project_id?: string
+          project_version_id?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          width?: number | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_creative_variants_brand_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_variants_organization_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_variants_project_fkey"
+            columns: ["project_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_projects"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_variants_version_fkey"
+            columns: ["project_version_id", "project_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_project_versions"
+            referencedColumns: ["id", "project_id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_variants_workspace_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
       marketing_campaign_records: {
         Row: {
           assets: Json

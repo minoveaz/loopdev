@@ -26,6 +26,10 @@
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 1 · bloqueado
 
+### Marketing Studio
+
+- [Persistencia base de Creative Studio](./active/marketing-studio/2026-08-27-creative-studio-persistence.md) · `loopdev-io-creative-studio-persistence` · fase 2 · bloqueado
+
 ### Mobile
 
 - [Fundación de la aplicación móvil de LoopDev](./active/mobile/2026-08-09-mobile-app-foundation.md) · fase 1
@@ -41,7 +45,6 @@
 
 - [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
-
 ## Cerrados
 
 ### 2026
