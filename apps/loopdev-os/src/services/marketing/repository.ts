@@ -3,6 +3,7 @@ import {
   CreateMarketingCreativeProjectSchema,
   CreateMarketingCreativeProjectVersionSchema,
   CreateMarketingCreativeVariantSchema,
+  AutosaveMarketingCreativeProjectSchema,
   CreateMarketingCampaignSchema,
   MarketingCreativeProjectSchema,
   MarketingCreativeProjectVersionSchema,
@@ -18,6 +19,7 @@ import type {
   CreateMarketingCreativeProjectInput,
   CreateMarketingCreativeProjectVersionInput,
   CreateMarketingCreativeVariantInput,
+  AutosaveMarketingCreativeProjectInput,
   CreateMarketingCampaignInput,
   MarketingAccessGrant,
   MarketingAsset,
@@ -68,6 +70,10 @@ export interface MarketingRepository {
   createCreativeProject(
     context: MarketingRepositoryContext,
     input: CreateMarketingCreativeProjectInput,
+  ): Promise<MarketingCreativeProject>;
+  autosaveCreativeProject(
+    context: MarketingRepositoryContext,
+    input: AutosaveMarketingCreativeProjectInput,
   ): Promise<MarketingCreativeProject>;
   listCreativeProjectVersions(
     context: MarketingRepositoryContext,
@@ -313,6 +319,33 @@ export class InMemoryMarketingRepository implements MarketingRepository {
     return variant;
   }
 
+  async autosaveCreativeProject(
+    context: MarketingRepositoryContext,
+    input: AutosaveMarketingCreativeProjectInput,
+  ) {
+    assertAccess(context, 'edit');
+    const parsed = AutosaveMarketingCreativeProjectSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const projectIndex = this.creativeProjects.findIndex(
+      (project) => project.id === parsed.projectId && isCreativeProjectInContext(project, context),
+    );
+    if (projectIndex < 0) throw new MarketingAccessDeniedError();
+    const current = this.creativeProjects[projectIndex]!;
+    if (parsed.autosaveRevision < current.autosaveRevision) {
+      throw new Error('Creative project autosave revision is stale');
+    }
+    const updated = MarketingCreativeProjectSchema.parse({
+      ...current,
+      draftDocument: parsed.document,
+      autosaveRevision: parsed.autosaveRevision,
+      autosavedAt: new Date().toISOString(),
+      updatedBy: context.userId,
+      updatedAt: new Date().toISOString(),
+    });
+    this.creativeProjects[projectIndex] = updated;
+    return updated;
+  }
+
   async createCampaign(context: MarketingRepositoryContext, input: CreateMarketingCampaignInput) {
     assertAccess(context, 'edit');
     const parsed = CreateMarketingCampaignSchema.parse(input);
@@ -467,6 +500,31 @@ export class SupabaseCreativeRepository {
     return mapCreativeProject(data as unknown as CreativeProjectRow);
   }
 
+  async autosaveCreativeProject(
+    context: MarketingRepositoryContext,
+    input: AutosaveMarketingCreativeProjectInput,
+  ) {
+    const parsed = AutosaveMarketingCreativeProjectSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const supabase = await getAuthorizedSupabase(context, 'edit');
+    const { data, error } = await supabase
+      .from('marketing_creative_projects')
+      .update({
+        draft_document: parsed.document as import('@/types/database.types').Json,
+        autosave_revision: parsed.autosaveRevision,
+        autosaved_at: new Date().toISOString(),
+        updated_by: context.userId,
+      })
+      .eq('id', parsed.projectId)
+      .eq('organization_id', context.organizationId)
+      .eq('brand_id', context.brandId)
+      .eq('workspace_id', context.workspaceId)
+      .select(creativeProjectColumns)
+      .single();
+    if (error) throw new Error('Unable to autosave creative project');
+    return mapCreativeProject(data as unknown as CreativeProjectRow);
+  }
+
   async listCreativeProjectVersions(context: MarketingRepositoryContext, projectId: string) {
     const supabase = await getAuthorizedSupabase(context, 'read');
     const { data, error } = await supabase
@@ -554,7 +612,7 @@ export class SupabaseCreativeRepository {
 }
 
 const creativeProjectColumns =
-  'id, organization_id, brand_id, workspace_id, name, description, type, status, current_version_number, created_by, updated_by, created_at, updated_at';
+  'id, organization_id, brand_id, workspace_id, name, description, type, status, current_version_number, draft_document, autosave_revision, autosaved_at, created_by, updated_by, created_at, updated_at';
 const creativeProjectVersionColumns =
   'id, organization_id, brand_id, workspace_id, project_id, version_number, document, change_summary, created_by, updated_by, created_at, updated_at';
 const creativeVariantColumns =
@@ -570,6 +628,9 @@ type CreativeProjectRow = {
   type: string;
   status: string;
   current_version_number: number;
+  draft_document: unknown;
+  autosave_revision: number;
+  autosaved_at: string | null;
   created_by: string | null;
   updated_by: string | null;
   created_at: string;
@@ -620,6 +681,9 @@ function mapCreativeProject(row: CreativeProjectRow): MarketingCreativeProject {
     type: row.type,
     status: row.status,
     currentVersionNumber: row.current_version_number,
+    draftDocument: row.draft_document,
+    autosaveRevision: row.autosave_revision,
+    autosavedAt: row.autosaved_at,
     createdBy: row.created_by,
     updatedBy: row.updated_by,
     createdAt: row.created_at,

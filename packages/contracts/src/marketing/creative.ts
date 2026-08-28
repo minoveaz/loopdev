@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { MarketingIdSchema, MarketingScopedRecordSchema } from './scope';
+import { CreativeDocumentSchema } from './creative-assets';
 
 export const MarketingCreativeProjectTypeSchema = z.enum([
   'social_post',
@@ -26,6 +27,9 @@ export const MarketingCreativeProjectSchema = MarketingScopedRecordSchema.extend
   type: MarketingCreativeProjectTypeSchema.default('social_post'),
   status: MarketingCreativeProjectStatusSchema.default('draft'),
   currentVersionNumber: z.number().int().nonnegative().default(0),
+  draftDocument: CreativeDocumentSchema.default({}),
+  autosaveRevision: z.number().int().nonnegative().default(0),
+  autosavedAt: z.string().datetime().nullable().optional(),
 });
 export type MarketingCreativeProject = z.infer<typeof MarketingCreativeProjectSchema>;
 
@@ -45,7 +49,7 @@ export const MarketingCreativeProjectVersionSchema = MarketingScopedRecordSchema
   workspaceId: MarketingIdSchema,
   projectId: MarketingIdSchema,
   versionNumber: z.number().int().positive(),
-  document: z.record(z.string(), z.unknown()).default({}),
+  document: CreativeDocumentSchema.default({}),
   changeSummary: z.string().trim().max(1_000).nullable().optional(),
 });
 export type MarketingCreativeProjectVersion = z.infer<
@@ -94,7 +98,7 @@ export const MarketingCreativeVariantSchema = MarketingScopedRecordSchema.extend
   key: z.string().trim().min(1).max(80),
   channel: MarketingCreativeVariantChannelSchema,
   format: MarketingCreativeVariantFormatSchema,
-  payload: z.record(z.string(), z.unknown()).default({}),
+  payload: CreativeDocumentSchema.default({}),
   width: z.number().int().positive().nullable().optional(),
   height: z.number().int().positive().nullable().optional(),
   status: MarketingCreativeVariantStatusSchema.default('draft'),

@@ -14,6 +14,10 @@ const POLICY_VERBS_BY_TABLE = new Map([
   ['marketing_creative_projects', ['select', 'insert', 'update']],
   ['marketing_creative_project_versions', ['select', 'insert']],
   ['marketing_creative_variants', ['select', 'insert']],
+  ['marketing_creative_assets', ['select', 'insert', 'update', 'delete']],
+  ['marketing_creative_asset_references', ['select', 'insert', 'delete']],
+  ['marketing_creative_storage_quotas', ['select', 'insert', 'update']],
+  ['marketing_creative_storage_usage', ['select']],
 ]);
 const VERBS = ['select', 'insert', 'update', 'delete'];
 

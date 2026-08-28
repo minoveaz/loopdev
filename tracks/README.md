@@ -18,7 +18,6 @@
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
-
 ## En curso
 
 ### CRM
@@ -28,7 +27,7 @@
 
 ### Marketing Studio
 
-- [Persistencia base de Creative Studio](./active/marketing-studio/2026-08-27-creative-studio-persistence.md) · `loopdev-io-creative-studio-persistence` · fase 2 · bloqueado
+- [Persistencia y Storage de Creative Studio](./active/marketing-studio/2026-08-27-creative-studio-persistence.md) · `feature/marketing-studio-creative-persistence` · fase 3 · bloqueado
 
 ### Mobile
 

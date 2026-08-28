@@ -339,4 +339,35 @@ describe('InMemoryMarketingRepository', () => {
       }),
     ).rejects.toBeInstanceOf(MarketingAccessDeniedError);
   });
+
+  it('autosaves a draft without creating a project version and rejects stale revisions', async () => {
+    const repository = new InMemoryMarketingRepository();
+    const context = { ...ids, grants: [editableGrant, grant] };
+    const project = await repository.createCreativeProject(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      name: 'Autosave project',
+    });
+
+    const saved = await repository.autosaveCreativeProject(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      projectId: project.id,
+      document: { layers: [{ type: 'image', assetId: 'asset-reference' }] },
+      autosaveRevision: 1,
+    });
+
+    expect(saved.autosaveRevision).toBe(1);
+    expect((await repository.listCreativeProjectVersions(context, project.id))).toHaveLength(0);
+    await expect(repository.autosaveCreativeProject(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      projectId: project.id,
+      document: {},
+      autosaveRevision: 0,
+    })).rejects.toThrow('autosave revision is stale');
+  });
 });

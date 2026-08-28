@@ -3307,6 +3307,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           current_version_number: number
+          draft_document: Json
           description: string | null
           id: string
           name: string
@@ -3316,12 +3317,15 @@ export type Database = {
           updated_at: string
           updated_by: string | null
           workspace_id: string
+          autosave_revision: number
+          autosaved_at: string | null
         }
         Insert: {
           brand_id: string
           created_at?: string
           created_by?: string | null
           current_version_number?: number
+          draft_document?: Json
           description?: string | null
           id?: string
           name: string
@@ -3331,12 +3335,15 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
           workspace_id: string
+          autosave_revision?: number
+          autosaved_at?: string | null
         }
         Update: {
           brand_id?: string
           created_at?: string
           created_by?: string | null
           current_version_number?: number
+          draft_document?: Json
           description?: string | null
           id?: string
           name?: string
@@ -3346,6 +3353,8 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
           workspace_id?: string
+          autosave_revision?: number
+          autosaved_at?: string | null
         }
         Relationships: [
           {
@@ -3536,6 +3545,266 @@ export type Database = {
             foreignKeyName: "marketing_creative_variants_workspace_fkey"
             columns: ["workspace_id", "organization_id"]
             isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      marketing_creative_assets: {
+        Row: {
+          id: string
+          organization_id: string
+          brand_id: string
+          workspace_id: string
+          project_id: string | null
+          kind: string
+          status: string
+          storage_path: string
+          mime_type: string
+          size_bytes: number
+          content_hash: string
+          source_asset_id: string | null
+          compressed: boolean
+          width: number | null
+          height: number | null
+          expires_at: string | null
+          orphaned_at: string | null
+          created_by: string | null
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          brand_id: string
+          workspace_id: string
+          project_id?: string | null
+          kind: string
+          status?: string
+          storage_path: string
+          mime_type: string
+          size_bytes: number
+          content_hash: string
+          source_asset_id?: string | null
+          compressed?: boolean
+          width?: number | null
+          height?: number | null
+          expires_at?: string | null
+          orphaned_at?: string | null
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          brand_id?: string
+          workspace_id?: string
+          project_id?: string | null
+          kind?: string
+          status?: string
+          storage_path?: string
+          mime_type?: string
+          size_bytes?: number
+          content_hash?: string
+          source_asset_id?: string | null
+          compressed?: boolean
+          width?: number | null
+          height?: number | null
+          expires_at?: string | null
+          orphaned_at?: string | null
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_creative_assets_brand_id_organization_id_fkey"
+            columns: ["brand_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_assets_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_assets_workspace_id_organization_id_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_assets_project_id_organization_id_fkey"
+            columns: ["project_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_projects"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_assets_source_asset_id_organization_id_fkey"
+            columns: ["source_asset_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_assets"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      marketing_creative_asset_references: {
+        Row: {
+          id: string
+          organization_id: string
+          brand_id: string
+          workspace_id: string
+          asset_id: string
+          project_id: string
+          project_version_id: string | null
+          variant_id: string | null
+          layer_id: string | null
+          reference_type: string
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          brand_id: string
+          workspace_id: string
+          asset_id: string
+          project_id: string
+          project_version_id?: string | null
+          variant_id?: string | null
+          layer_id?: string | null
+          reference_type: string
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          brand_id?: string
+          workspace_id?: string
+          asset_id?: string
+          project_id?: string
+          project_version_id?: string | null
+          variant_id?: string | null
+          layer_id?: string | null
+          reference_type?: string
+          created_by?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_creative_asset_references_asset_id_organization_id_fkey"
+            columns: ["asset_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_assets"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_asset_references_project_id_organization_id_fkey"
+            columns: ["project_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_projects"
+            referencedColumns: ["id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_asset_references_project_version_id_project_id_organization_id_fkey"
+            columns: ["project_version_id", "project_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_project_versions"
+            referencedColumns: ["id", "project_id", "organization_id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_asset_references_variant_id_organization_id_fkey"
+            columns: ["variant_id", "organization_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_creative_variants"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      marketing_creative_storage_quotas: {
+        Row: {
+          organization_id: string
+          workspace_id: string
+          quota_bytes: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          organization_id: string
+          workspace_id: string
+          quota_bytes?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          organization_id?: string
+          workspace_id?: string
+          quota_bytes?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_creative_storage_quotas_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_storage_quotas_workspace_id_organization_id_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: true
+            referencedRelation: "workspaces"
+            referencedColumns: ["id", "organization_id"]
+          },
+        ]
+      }
+      marketing_creative_storage_usage: {
+        Row: {
+          organization_id: string
+          workspace_id: string
+          used_bytes: number
+          asset_count: number
+          updated_at: string
+        }
+        Insert: {
+          organization_id: string
+          workspace_id: string
+          used_bytes?: number
+          asset_count?: number
+          updated_at?: string
+        }
+        Update: {
+          organization_id?: string
+          workspace_id?: string
+          used_bytes?: number
+          asset_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_creative_storage_usage_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_creative_storage_usage_workspace_id_organization_id_fkey"
+            columns: ["workspace_id", "organization_id"]
+            isOneToOne: true
             referencedRelation: "workspaces"
             referencedColumns: ["id", "organization_id"]
           },
@@ -5275,6 +5544,14 @@ export type Database = {
         Args: { target_tenant_id: string }
         Returns: boolean
       }
+      cleanup_marketing_creative_assets: {
+        Args: {
+          orphan_before?: string
+          target_organization_id: string
+          target_workspace_id: string
+        }
+        Returns: string[]
+      }
       consume_oauth_state: {
         Args: { p_provider: string; p_state_hash: string }
         Returns: boolean
@@ -5314,6 +5591,14 @@ export type Database = {
       register_oauth_state: {
         Args: { p_provider: string; p_state_hash: string }
         Returns: undefined
+      }
+      retain_marketing_creative_versions: {
+        Args: {
+          keep_count?: number
+          target_organization_id: string
+          target_project_id: string
+        }
+        Returns: number
       }
       store_oauth_connection_secret: {
         Args: {
