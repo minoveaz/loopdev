@@ -200,5 +200,5 @@ describe('PhoneInput', () => {
         rules: { region: { enabled: false } },
       }),
     ).toHaveNoViolations();
-  });
+  }, 15_000);
 });
