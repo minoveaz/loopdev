@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@loopdev/contracts": ["../../packages/contracts"],
+      "@loopdev/tokens": ["../tokens"],
+      "@loopdev/tokens/*": ["../tokens/src/*"],
+      "@loopdev/ui": ["../ui/src"],
+      "@loopdev/public-shell": ["../public-shell/src"]
+    },
+    "outDir": "./dist"
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}
