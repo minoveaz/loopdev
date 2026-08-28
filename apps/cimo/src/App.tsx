@@ -5,7 +5,6 @@ import type { ActivityCardData } from '@loopdev/public-blocks';
 import { CIMO_FEED_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
 import { INITIAL_ACTIVITIES, INITIAL_CREW_CHATS } from './data/mockData';
 import { CimoFloatingSearchBar } from './components/CimoFloatingSearchBar';
-import { CimoSportCategoryBar } from './components/CimoSportCategoryBar';
 import { CimoAthleteProfileCard } from './components/CimoAthleteProfileCard';
 import { CimoCuratedFeed } from './components/CimoCuratedFeed';
 import { CimoCommunityWidgets } from './components/CimoCommunityWidgets';
@@ -154,12 +153,6 @@ export function App() {
               onSelectZone={setSelectedZone}
               selectedLevel={selectedLevel}
               onSelectLevel={setSelectedLevel}
-            />
-
-            {/* Sports Category Bar with Clean Icons */}
-            <CimoSportCategoryBar
-              selectedSport={selectedSport}
-              onSelectSport={setSelectedSport}
             />
 
             {/* Curated Feed with 2-Col Activity Cards Grid */}
