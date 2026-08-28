@@ -1,14 +1,14 @@
 ---
 id: creative-studio-persistence
-title: Persistencia base de Creative Studio
+title: Persistencia y Storage de Creative Studio
 status: active
 created: 2026-08-27
-updated: 2026-08-27
+updated: 2026-08-28
 owner: marketing-studio
 lead: null
 branch: feature/marketing-studio-creative-persistence
 branches: []
-phase: 2
+phase: 3
 pull_requests: []
 issues: []
 packages: [@loopdev/contracts, loopdev-os]
@@ -19,7 +19,7 @@ blocked_by: [remote-supabase-validation]
 supersedes: []
 ---
 
-# Persistencia base de Creative Studio
+# Persistencia y Storage de Creative Studio
 
 ## Outcome
 
@@ -41,6 +41,8 @@ referencia de contratos, acceso y persistencia CRM; no se importan cambios CRM e
 - Contratos Zod y tipos para proyectos, versiones y variantes.
 - Migración Supabase aditiva para `marketing_creative_projects`,
   `marketing_creative_project_versions` y `marketing_creative_variants`.
+- Buckets y políticas Storage, assets fuente/exportados, referencias de capas,
+  hashing/deduplicación, thumbnails comprimidas y cleanup seguro.
 - Claves compuestas de tenant, índices y RLS con `marketing.read`/`marketing.manage`.
 - Repositorio server-side Supabase y repositorio en memoria determinista para tests.
 - Tests de contratos, aislamiento del repositorio y RLS local.
@@ -48,7 +50,7 @@ referencia de contratos, acceso y persistencia CRM; no se importan cambios CRM e
 
 ### Excluido
 
-- Migraciones remotas, secretos, Storage, OAuth, publicación o proveedores externos.
+- Migraciones remotas, secretos, OAuth, publicación o proveedores externos.
 - Borrado o modificación de datos y tablas CRM existentes.
 - Edición destructiva de versiones o variantes; quedan append-only en esta entrega.
 - Importación de datos reales desde VitaBlue y UI completa del editor.
@@ -128,11 +130,56 @@ Las ramas CRM remotas revisadas son referencias previas y no forman parte de est
 
 **Estado:** tramo no destructivo implementado; publicación/edición avanzada diferida.
 
+### Controles de capacidad obligatorios
+
+Estos controles son invariantes de contratos, migraciones, repositorios y pruebas:
+
+1. Los proyectos, versiones, variantes y capas no almacenan base64 ni data URLs; usan referencias a Storage.
+2. Cada asset respeta un límite por archivo y cada proyecto respeta un límite agregado.
+3. Las thumbnails se comprimen y referencian el original; no duplican el archivo fuente.
+4. La retención elimina únicamente versiones fuera de las últimas 10 y sin referencias activas.
+5. Los assets huérfanos solo se limpian tras una ventana de gracia y si no tienen referencias.
+6. Las exportaciones temporales tienen expiración y se limpian después de vencer.
+7. La cuota y el uso se contabilizan por `organization_id` + `workspace_id`.
+8. El autosave actualiza el borrador sin crear una versión por pulsación.
+9. El hash SHA-256 deduplica assets activos dentro del tenant y workspace.
+10. IndexedDB es una caché limitada; Supabase/Storage permanece como fuente de verdad.
+
+### Fase 3: Assets y Storage
+
+**Objetivo:** persistir archivos fuente, exports y thumbnails con límites, aislamiento y cleanup
+seguro, sin introducir datos inline ni tocar CRM.
+
+**Definition of Ready**
+- [x] Los diez controles de capacidad están documentados como invariantes verificables.
+- [x] El bucket privado y las políticas Storage exigen rutas con organization/workspace y permisos Marketing.
+- [x] Assets y referencias tienen FKs compuestas para impedir cruces de tenant.
+
+**Entregables**
+- [x] Contratos Zod para assets, referencias, documentos sin inline data, cuotas y uso.
+- [x] Migración aditiva con bucket `marketing-creative`, políticas RLS, deduplicación por hash,
+  cuotas, límites, retención y funciones de cleanup.
+- [x] Repositorios server-side e in-memory para hashing, deduplicación, referencias, uso y cleanup.
+- [x] Autosave de borrador sin versionado por pulsación.
+- [x] Tipos locales de Supabase actualizados para tablas y funciones nuevas.
+
+**Validación**
+- [x] Tests de contratos para anti-base64, thumbnails y referencias.
+- [x] Tests del repositorio para hashing, dedupe, límites, uso y expiración.
+- [x] Test pgTAP de Storage/RLS preparado para Docker local.
+- [ ] Ejecución pgTAP contra la instancia local después de aplicar la migración.
+
+**Evidencia:** `packages/contracts/src/marketing/creative-assets.ts`,
+`supabase/migrations/20260827110000_marketing_creative_studio_storage.sql`,
+`apps/loopdev-os/src/services/marketing/creative-assets-repository.ts`,
+`supabase/tests/database/006_creative_studio_storage_rls.sql`.
+
 ## Registro de cambios de enfoque
 
 | Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
 | --- | --- | --- | --- | --- |
 | 2026-08-27 | Se separó la persistencia Creative Studio del track genérico de Marketing Studio. | El track existente no tenía una fase ejecutable ni evidencia específica para proyectos creativos. | Se creó este track activo con Fase 1 y Fase 2 parcial. | Solicitud explícita del usuario |
+| 2026-08-28 | Se incorporaron diez controles de capacidad y se abrió Fase 3 para Storage/assets. | Evitar crecimiento ilimitado, datos inline y divergencia entre caché y fuente autoritativa. | Se añaden bucket privado, metadatos, referencias, cuotas, dedupe y cleanup sin migración remota. | Solicitud explícita del usuario |
 
 ## Riesgos y bloqueos
 
@@ -141,12 +188,14 @@ Las ramas CRM remotas revisadas son referencias previas y no forman parte de est
 | No se ha autorizado una ejecución remota ni hay secretos disponibles. | No se puede certificar el esquema/RLS remoto. | Ejecutar el test SQL solo en Docker local o CI autorizado. | Plataforma | Abierto |
 | Los tipos de base de datos se actualizan manualmente hasta regeneración autorizada. | Puede existir divergencia con el esquema remoto. | Regenerar tipos en CI tras aplicar la migración local/remota. | Plataforma | Abierto |
 | El historial local de migraciones contiene versiones remotas ausentes en este checkout. | `supabase migration up --local` no puede reconciliarse automáticamente. | Se aplicó solo este SQL aditivo con `docker exec` al Postgres local; no se reparó el historial. | Plataforma | Abierto |
+| El upload y cleanup de objetos Storage dependen de la disponibilidad del servicio local y de jobs autorizados. | Un fallo de Storage puede dejar basura física tras limpiar metadatos. | El cleanup SQL valida referencias; el repositorio elimina objetos solo para IDs borrados y deja el proceso reintentable. | Plataforma | Abierto |
 
 ## Criterios de cierre
 
 - [ ] Outcome verificable cumplido en un entorno autorizado.
 - [ ] Fase 1 certificada con tests de contratos, repositorio y RLS.
 - [ ] Fase 2 no destructiva certificada; trabajo destructivo diferido explícitamente.
+- [ ] Fase 3 certificada con Storage, límites, dedupe, cuotas y cleanup local.
 - [ ] No se han alterado datos CRM existentes.
 - [ ] Riesgos residuales documentados.
 - [ ] Cierre aprobado explícitamente por el usuario.
@@ -160,16 +209,20 @@ Las ramas CRM remotas revisadas son referencias previas y no forman parte de est
 | 2026-08-27 | RLS Supabase local | PASS — 10 pgTAP tests | `supabase/tests/database/005_creative_studio_rls.sql` |
 | 2026-08-27 | Typecheck de `@loopdev/contracts` | PASS | `pnpm --filter @loopdev/contracts typecheck` |
 | 2026-08-27 | Typecheck completo de `loopdev-os` | Bloqueado por error preexistente en `repository.test.ts:41` (`CreateMarketingCampaignInput`) | No relacionado con Creative Studio |
+| 2026-08-28 | Contracts y repositorios Creative Studio | PASS — 21 tests focalizados | `packages/contracts/src/marketing/__tests__/creative-assets.test.ts`, `apps/loopdev-os/src/services/marketing/creative-assets-repository.test.ts`, `apps/loopdev-os/src/services/marketing/repository.test.ts` |
+| 2026-08-28 | Gobernanza de migración Storage | PASS — validación específica; el chequeo global conserva hallazgos preexistentes | `scripts/validate-supabase-governance.mjs` |
+| 2026-08-28 | Smoke RLS/controles en Docker local | PASS — tenancy, uso, thumbnail y anti-inline data | `supabase/migrations/20260827110000_marketing_creative_studio_storage.sql` |
+| 2026-08-28 | pgTAP Storage/RLS | Bloqueado — la imagen local no tiene instalada la función `plan()` de pgTAP | `supabase/tests/database/006_creative_studio_storage_rls.sql` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-27.
 - **Rama de continuación:** `feature/marketing-studio-creative-persistence`.
 - **Commit de partida:** `c0305f11`.
-- **Estado alcanzado:** Fase 1 y tramo append-only de Fase 2 implementados; sin commit ni push.
-- **Decisiones, bloqueos y riesgos:** Sin migraciones remotas ni secretos; RLS local pendiente si Docker permite ejecutar la validación.
-- **Validación ejecutada:** Contratos 4/4, repositorio 9/9, RLS local 10/10 y typecheck de contracts PASS; typecheck completo bloqueado por error preexistente de Campaign.
-- **Siguiente acción concreta:** Revisar el error preexistente de `CreateMarketingCampaignInput` antes de integrar la rama.
+- **Estado alcanzado:** Fase 1, tramo append-only de Fase 2 y código de Fase 3 implementados; falta validación local y commit.
+- **Decisiones, bloqueos y riesgos:** Sin migraciones remotas ni secretos; pgTAP formal requiere una imagen local con la extensión instalada.
+- **Validación ejecutada:** Contracts/repositories 21/21, gobernanza SQL específica, smoke RLS Docker PASS y typecheck/build de contracts PASS; typecheck completo bloqueado por dependencias frontend ausentes preexistentes.
+- **Siguiente acción concreta:** Ejecutar contracts, tests de Marketing, gobernanza Supabase y pgTAP local; corregir cualquier fallo antes del commit.
 
 ## Cierre
 
