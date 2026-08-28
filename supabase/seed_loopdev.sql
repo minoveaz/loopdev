@@ -3,13 +3,17 @@
 
 DO $$
 DECLARE
-  v_tenant_id uuid := '00000000-0000-0000-0000-000000000000'; -- Tenant DEMO (Ajustar si es necesario)
+  v_organization_id uuid;
 BEGIN
+  select id into strict v_organization_id
+  from public.organizations
+  where slug = 'estar-protegidos';
+
   INSERT INTO public.brands (
     name, 
     description, 
     status, 
-    tenant_id, 
+    organization_id,
     palette,
     typography,
     logos,
@@ -19,7 +23,7 @@ BEGIN
     'LoopDev',
     'The Operating System for Modern Engineering Teams. Built for scale, governed by rules.',
     'published',
-    v_tenant_id,
+    v_organization_id,
     '{
       "primary": "#135bec",
       "surface": "#0d121b",

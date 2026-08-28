@@ -1,21 +1,21 @@
 organization_key,workspace_key,brand_key,lead_key,contact_external_case,source,provider,external_id,campaign,utm_source,utm_medium,utm_campaign,interest,lead_status,assigned_role,notes
 estar-protegidos,commercial,vitablue,LEAD-001,EP-001,manual,internal,manual-001,,, ,,seguimiento comercial,nuevo,agente,Contacto creado manualmente
 estar-protegidos,commercial,vitablue,LEAD-002,EP-002,campaign,meta,meta-lead-002,Campana Salud Abril,facebook,paid,salud-abril,seguro salud,nuevo,agente,Origen de campana sintetizado
-estar-protegidos,commercial,vitablue,LEAD-003,EP-003,whatsapp_simulated,meta,wa-msg-003,,,,,consulta inicial,pending,manager,Mensaje WhatsApp simulado
-estar-protegidos,commercial,vitablue,LEAD-004,EP-004,campaign,meta,meta-lead-004,Campana Proteccion Mayo,instagram,paid,proteccion-mayo,proteccion familiar,contacted,agente,Lead con atribucion UTM
+estar-protegidos,commercial,vitablue,LEAD-003,EP-003,whatsapp_simulated,meta,wa-msg-003,,,,,consulta inicial,nuevo,manager,Mensaje WhatsApp simulado
+estar-protegidos,commercial,vitablue,LEAD-004,EP-004,campaign,meta,meta-lead-004,Campana Proteccion Mayo,instagram,paid,proteccion-mayo,proteccion familiar,contactado,agente,Lead con atribucion UTM
 estar-protegidos,commercial,vitablue,LEAD-005,EP-005,manual,internal,manual-005,,, ,,renovacion de interes,nuevo,agente,Sin integracion externa
-estar-protegidos,commercial,vitablue,LEAD-006,EP-006,campaign,meta,meta-lead-006,Campana Salud Abril,facebook,paid,salud-abril,seguro salud,qualified,manager,Lead listo para oportunidad
+estar-protegidos,commercial,vitablue,LEAD-006,EP-006,campaign,meta,meta-lead-006,Campana Salud Abril,facebook,paid,salud-abril,seguro salud,convertido,manager,Lead listo para oportunidad
 estar-protegidos,commercial,vitablue,LEAD-007,EP-007,whatsapp_simulated,meta,wa-msg-007,,,,,consulta precio,nuevo,agente,Mensaje simulado con identificador externo
-estar-protegidos,commercial,vitablue,LEAD-008,EP-008,manual,internal,manual-008,,, ,,comparar opciones,stalled,agente,Lead estancado para pruebas
-estar-protegidos,commercial,vitablue,LEAD-009,EP-009,whatsapp_simulated,meta,wa-msg-009,,,,,posible duplicado,pending,agente,Debe abrir revision de duplicado
-estar-protegidos,commercial,vitablue,LEAD-010,EP-010,campaign,meta,meta-lead-010,Campana Proteccion Mayo,facebook,paid,proteccion-mayo,proteccion familiar,qualified,manager,Debe conservar atribucion
+estar-protegidos,commercial,vitablue,LEAD-008,EP-008,manual,internal,manual-008,,, ,,comparar opciones,estancado,agente,Lead estancado para pruebas
+estar-protegidos,commercial,vitablue,LEAD-009,EP-009,whatsapp_simulated,meta,wa-msg-009,,,,,posible duplicado,nuevo,agente,Debe abrir revision de duplicado
+estar-protegidos,commercial,vitablue,LEAD-010,EP-010,campaign,meta,meta-lead-010,Campana Proteccion Mayo,facebook,paid,proteccion-mayo,proteccion familiar,cualificado,manager,Debe conservar atribucion
 estar-protegidos,commercial,vitablue,LEAD-011,EP-011,referral,internal,referral-011,,, ,,seguimiento,nuevo,agente,Fuente referral sintetizada
-estar-protegidos,commercial,vitablue,LEAD-012,EP-012,campaign,meta,meta-lead-012,Campana Salud Abril,instagram,paid,salud-abril,seguro salud,contacted,agente,Contacto realizado
+estar-protegidos,commercial,vitablue,LEAD-012,EP-012,campaign,meta,meta-lead-012,Campana Salud Abril,instagram,paid,salud-abril,seguro salud,contactado,agente,Contacto realizado
 estar-protegidos,commercial,vitablue,LEAD-013,EP-013,social,internal,social-013,,,instagram,organic,solicitud de informacion,nuevo,agente,Fuente social sintetizada
-estar-protegidos,commercial,vitablue,LEAD-014,EP-014,partner,internal,partner-014,,,,,consulta cobertura,contacted,manager,Fuente partner sintetizada
-estar-protegidos,commercial,vitablue,LEAD-015,EP-015,campaign,meta,meta-lead-015,Campana Proteccion Mayo,facebook,paid,proteccion-mayo,proteccion familiar,qualified,agente,Lead candidato a oportunidad
+estar-protegidos,commercial,vitablue,LEAD-014,EP-014,partner,internal,partner-014,,,,,consulta cobertura,contactado,manager,Fuente partner sintetizada
+estar-protegidos,commercial,vitablue,LEAD-015,EP-015,campaign,meta,meta-lead-015,Campana Proteccion Mayo,facebook,paid,proteccion-mayo,proteccion familiar,convertido,agente,Lead candidato a oportunidad
 tenant-b,commercial,tenantb,LEAD-B01,TB-001,manual,internal,manual-b001,,, ,,servicio general,nuevo,agente,Tenant B aislamiento
-tenant-b,commercial,tenantb,LEAD-B02,TB-002,campaign,meta,meta-lead-b002,Campana Tenant B,facebook,paid,tenantb-abril,producto demo,contacted,manager,Tenant B aislamiento
+tenant-b,commercial,tenantb,LEAD-B02,TB-002,campaign,meta,meta-lead-b002,Campana Tenant B,facebook,paid,tenantb-abril,producto demo,contactado,manager,Tenant B aislamiento
 tenant-b,commercial,tenantb,LEAD-B03,TB-003,whatsapp_simulated,meta,wa-msg-b003,,,,,consulta demo,nuevo,agente,Tenant B aislamiento
 tenant-b,commercial,tenantb,LEAD-B04,TB-004,manual,internal,manual-b004,,, ,,seguimiento,nuevo,agente,Tenant B aislamiento
-tenant-b,commercial,tenantb,LEAD-B05,TB-005,campaign,meta,meta-lead-b005,Campana Tenant B,instagram,paid,tenantb-abril,producto demo,qualified,manager,Tenant B aislamiento
+tenant-b,commercial,tenantb,LEAD-B05,TB-005,campaign,meta,meta-lead-b005,Campana Tenant B,instagram,paid,tenantb-abril,producto demo,convertido,manager,Tenant B aislamiento

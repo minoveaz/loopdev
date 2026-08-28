@@ -23,6 +23,11 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
   const isRail =
     !mobileMode && (navMode === 'rail' || navMode === 'hover' || context === 'focus' || context === 'inmersive');
 
+  const resolvedActiveModuleId =
+    activeModuleId && accessMap[activeModuleId] !== 'hidden' && accessMap[activeModuleId] !== 'forbidden'
+      ? activeModuleId
+      : undefined;
+
   // 2. Procesamiento de Navegación (Filtrado y Ordenación)
   const visibleGroups = useMemo(() => {
     return (
@@ -70,6 +75,6 @@ export const useSuiteSidebar = (props: SuiteSidebarProps) => {
     scrollAreaClasses,
     suite: schema.suite,
     exitHatch: schema.exitHatch,
-    activeModuleId,
+    activeModuleId: resolvedActiveModuleId,
   };
 };

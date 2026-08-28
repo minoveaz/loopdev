@@ -11,14 +11,62 @@ body {
   font-size: var(--lpd-font-size-base);
 }
 
-/* Chrome autofill must preserve the dark technical input surface. */
+.responsive-table-row:hover {
+  background-color: color-mix(in srgb, var(--lpd-color-brand-primary) 20%, transparent);
+}
+
+.responsive-table-row-selected {
+  background-color: color-mix(in srgb, var(--lpd-color-brand-primary) 10%, transparent);
+  box-shadow: inset 4px 0 0 var(--lpd-color-brand-primary);
+}
+
+.responsive-table-row-active {
+  outline: 2px solid color-mix(in srgb, var(--lpd-color-brand-primary) 55%, transparent);
+  outline-offset: -2px;
+}
+
+.responsive-table-scroll {
+  touch-action: pan-x pan-y;
+  overscroll-behavior-x: contain;
+  scrollbar-width: auto;
+  scrollbar-color: var(--lpd-color-brand-primary) var(--background-subtle);
+}
+
+.responsive-table-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.responsive-table-scroll::-webkit-scrollbar-track {
+  background: var(--background-subtle);
+}
+
+.responsive-table-scroll::-webkit-scrollbar-thumb {
+  background: var(--lpd-color-brand-primary);
+  border: 2px solid var(--background-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Chrome autofill follows the active semantic theme instead of forcing a dark field. */
 .lpd-input:-webkit-autofill,
 .lpd-input:-webkit-autofill:hover,
-.lpd-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #f8fafc;
-  -webkit-box-shadow: 0 0 0 1000px #11151c inset;
-  box-shadow: 0 0 0 1000px #11151c inset;
-  caret-color: #f8fafc;
+.lpd-input:-webkit-autofill:focus,
+.lpd-phone-input .PhoneInputInput:-webkit-autofill,
+.lpd-phone-input .PhoneInputInput:-webkit-autofill:hover,
+.lpd-phone-input .PhoneInputInput:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--lpd-color-text-base);
+  -webkit-box-shadow: 0 0 0 1000px var(--lpd-color-bg-base) inset;
+  box-shadow: 0 0 0 1000px var(--lpd-color-bg-base) inset;
+  caret-color: var(--lpd-color-brand-primary);
   transition: background-color 9999s ease-out 0s;
 }
 

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import prettier from 'prettier';
 
 const root = process.cwd();
 const indexPath = path.join(root, 'docs/registries/index.json');
@@ -16,7 +17,9 @@ function readJson(relativePath) {
 }
 
 function escapeCell(value) {
-  return String(value ?? '—').replaceAll('|', '\\|').replaceAll('\n', ' ');
+  return String(value ?? '—')
+    .replaceAll('|', '\\|')
+    .replaceAll('\n', ' ');
 }
 
 function validateRegistries(registries) {
@@ -73,17 +76,26 @@ function renderCatalog(registries, entries) {
   lines.push(`| **Total** | **${entries.length}** |`, '', '## Entries', '');
 
   for (const [domain, domainEntries] of [...grouped.entries()].sort()) {
-    lines.push(`### ${domain}`, '', '| ID | Name | Owner | Type | Status | Evidence gaps |', '| --- | --- | --- | --- | --- | --- |');
+    lines.push(
+      `### ${domain}`,
+      '',
+      '| ID | Name | Owner | Type | Status | Evidence gaps |',
+      '| --- | --- | --- | --- | --- | --- |',
+    );
     for (const entry of domainEntries.sort((left, right) => left.id.localeCompare(right.id))) {
       const gaps = entry.evidence_gaps?.length ? entry.evidence_gaps.join(', ') : '—';
-      lines.push(`| \`${escapeCell(entry.id)}\` | ${escapeCell(entry.name)} | ${escapeCell(entry.owner)} | ${escapeCell(entry.type)} | ${escapeCell(entry.status)} | ${escapeCell(gaps)} |`);
+      lines.push(
+        `| \`${escapeCell(entry.id)}\` | ${escapeCell(entry.name)} | ${escapeCell(entry.owner)} | ${escapeCell(entry.type)} | ${escapeCell(entry.status)} | ${escapeCell(gaps)} |`,
+      );
     }
     lines.push('');
   }
 
   lines.push('## Source registries', '');
   for (const { relativePath, document } of registries) {
-    lines.push(`- [${relativePath}](./${path.posix.basename(relativePath)}) — ${document.entries.length} entries`);
+    lines.push(
+      `- [${relativePath}](./${path.posix.basename(relativePath)}) — ${document.entries.length} entries`,
+    );
   }
   return `${lines.join('\n').trimEnd()}\n`;
 }
@@ -92,7 +104,9 @@ const registries = index.registries
   .filter((registry) => registry.path.endsWith('.json'))
   .map((registry) => readJson(registry.path));
 const entries = validateRegistries(registries);
-const output = renderCatalog(registries, entries);
+const output = await prettier.format(renderCatalog(registries, entries), {
+  parser: 'markdown',
+});
 
 if (process.argv.includes('--check')) {
   const current = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : '';

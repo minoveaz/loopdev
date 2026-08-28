@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-type DialogVariant = 'default' | 'info' | 'warning' | 'danger' | 'success';
+type DialogVariant = 'default' | 'info' | 'warning' | 'danger' | 'success' | 'form';
 
 /**
  * @interface TechnicalDialogProps
@@ -25,4 +25,8 @@ export interface TechnicalDialogProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   /** Additional class names */
   className?: string;
+  /** Semantic presentation for entity forms without an informational icon */
+  presentation?: 'technical' | 'form';
+  /** Accessible label for the close control */
+  closeLabel?: string;
 }

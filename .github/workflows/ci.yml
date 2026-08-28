@@ -49,10 +49,11 @@ jobs:
       contents: read
       pull-requests: read
     outputs:
-      frontend: ${{ steps.filter.outputs.frontend }}
       shell: ${{ steps.filter.outputs.shell }}
       quality: ${{ steps.plan.outputs.full_fallback }}
       package_validation: ${{ steps.impact.outputs.has_targeted_validation }}
+      frontend: ${{ steps.impact.outputs.frontend == 'true' || steps.filter.outputs.frontend == 'true' }}
+      backend: ${{ steps.filter.outputs.backend == 'true' }}
       mobile: ${{ steps.impact.outputs.mobile }}
       browser_desktop: ${{ steps.plan.outputs.browser_desktop }}
       browser_mobile: ${{ steps.plan.outputs.browser_mobile }}
@@ -74,13 +75,25 @@ jobs:
         with:
           filters: |
             frontend:
-              - 'apps/loopdev-os/**'
+              - 'apps/loopdev-os/src/components/**'
+              - 'apps/loopdev-os/src/suites/**'
+              - 'apps/loopdev-os/src/app/**'
+              - '!apps/loopdev-os/src/app/api/**'
+              - '!apps/loopdev-os/src/services/**'
+              - '!apps/loopdev-os/src/types/**'
               - 'ds/packages/ui/**'
-              - 'packages/contracts/**'
               - 'e2e/**'
               - 'playwright.config.mjs'
               - 'package.json'
               - 'pnpm-lock.yaml'
+            backend:
+              - 'apps/loopdev-os/src/app/api/**'
+              - 'apps/loopdev-os/src/services/**'
+              - 'apps/loopdev-os/src/types/**'
+              - 'packages/contracts/**'
+              - 'supabase/**'
+              - 'scripts/crm-backend-*.mjs'
+              - '.github/workflows/**'
             shell:
               - 'apps/loopdev-os/src/app/globals.css'
               - 'apps/loopdev-os/src/app/layout.tsx'
@@ -200,6 +213,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
+
       - name: Validate affected packages and consumers
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
@@ -230,6 +246,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
 
       - name: Validate mobile lint
         run: pnpm --filter loopdev-mobile lint
@@ -300,6 +319,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build shared contracts
+        run: pnpm --filter @loopdev/contracts build
+
       - name: CI validation
         run: pnpm validate:ci
 
@@ -311,19 +333,66 @@ jobs:
           path: coverage/
           if-no-files-found: ignore
 
-  frontend-e2e:
-    name: Web flows, accessibility and visual behavior
+  backend-validation:
+    name: Backend contract and API tests
     needs: [changes, dependency-preflight]
-    if: >-
-      needs.changes.outputs.frontend == 'true' &&
-      (needs.changes.outputs.browser_desktop == 'true' ||
-      needs.changes.outputs.browser_mobile == 'true' ||
-      needs.changes.outputs.browser_visual == 'true')
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build contracts
+        run: pnpm --filter @loopdev/contracts build
+      - name: Run CRM API contract tests
+        run: pnpm vitest run apps/loopdev-os/src/app/api/crm
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: 2.114.0
+      - name: Start and reset local Supabase
+        run: |
+          supabase start
+          supabase db reset
+          eval "$(supabase status -o env)"
+          echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY" >> "$GITHUB_ENV"
+          echo "SUPABASE_DB_URL=$DB_URL" >> "$GITHUB_ENV"
+      - name: Bootstrap authenticated CRM fixture
+        run: pnpm test:crm:bootstrap
+      - name: Start Next API
+        run: |
+          PORT=3001 pnpm --filter loopdev-os dev > /tmp/loopdev-os.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:3001/login >/dev/null && break
+            sleep 1
+          done
+      - name: Run authenticated CRM HTTP checks
+        env:
+          CRM_BACKEND_BASE_URL: http://127.0.0.1:3001
+        run: pnpm test:crm:backend-http
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop
+
+  frontend-validation:
+    name: Frontend lint, tests and build
+    needs: [changes, dependency-preflight]
+    if: github.event_name == 'pull_request' && needs.changes.outputs.frontend == 'true' && needs.changes.outputs.quality != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
     env:
-      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
-      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
@@ -345,42 +414,131 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build shared contracts
-        run: pnpm --filter @loopdev/contracts build
+      - name: Validate frontend surface
+        run: pnpm validate:frontend-ci
 
-      - name: Build shared UI
-        run: pnpm --filter @loopdev/ui build
+  frontend-e2e-functional:
+    name: Frontend E2E functional and accessibility
+    needs: [changes, dependency-preflight]
+    if: >-
+      needs.changes.outputs.frontend == 'true' &&
+      needs.changes.outputs.browser_desktop == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
+      NEXT_PUBLIC_CRM_CONTACTS_FIXTURE: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Build application
-        run: pnpm --filter loopdev-os build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install Playwright browser
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Setup frontend E2E environment
+        uses: ./.github/actions/setup-frontend-e2e
 
-      - name: Run desktop checks
+      - name: Run desktop functional and accessibility checks
         if: needs.changes.outputs.browser_desktop == 'true'
-        run: pnpm exec playwright test --project=desktop --workers=1 --reporter=line
+        run: >-
+          pnpm exec playwright test
+          e2e/*.smoke.spec.mjs
+          e2e/*.accessibility.spec.mjs
+          e2e/*certification.spec.mjs
+          --project=desktop --workers=1 --reporter=line
 
-      - name: Run Shell Showcase desktop contract
-        if: needs.changes.outputs.shell == 'true'
-        run: pnpm exec playwright test e2e/shell-showcase.contract.spec.mjs e2e/shell.visual.spec.mjs --project=desktop --workers=1 --reporter=line
+  frontend-e2e-visual:
+    name: Frontend E2E visual behavior
+    needs: [changes, dependency-preflight]
+    if: >-
+      needs.changes.outputs.frontend == 'true' &&
+      needs.changes.outputs.browser_visual == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: shell
+            runner: ubuntu-latest
+          - suite: tables
+            runner: macos-latest
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
+      NEXT_PUBLIC_CRM_CONTACTS_FIXTURE: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Run authenticated Mobile Web checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup frontend E2E environment
+        uses: ./.github/actions/setup-frontend-e2e
+
+      - name: Run shell and composition visual checks
+        if: matrix.suite == 'shell'
+        run: >-
+          pnpm exec playwright test
+          e2e/composition-showcase.visual.spec.mjs
+          e2e/quantitative-table.visual.spec.mjs
+          e2e/shell-showcase.visual.spec.mjs
+          e2e/shell.visual.spec.mjs
+          --project=desktop --workers=1 --reporter=line
+
+      - name: Run table visual checks
+        if: matrix.suite == 'tables'
+        run: >-
+          pnpm exec playwright test
+          e2e/dense-operational-table.visual.spec.mjs
+          e2e/entity-table-golden.visual.spec.mjs
+          --project=desktop --workers=1 --reporter=line
+
+  frontend-e2e-mobile:
+    name: Frontend E2E mobile behavior
+    needs: [changes, dependency-preflight]
+    if: >-
+      needs.changes.outputs.frontend == 'true' &&
+      (needs.changes.outputs.browser_mobile == 'true' ||
+      needs.changes.outputs.browser_visual == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
+      PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
+      NEXT_PUBLIC_CRM_CONTACTS_FIXTURE: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup frontend E2E environment
+        uses: ./.github/actions/setup-frontend-e2e
+
+      - name: Run authenticated mobile checks
         if: needs.changes.outputs.browser_mobile == 'true'
-        run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile --workers=1 --reporter=line
+        run: >-
+          pnpm exec playwright test
+          e2e/authenticated.mobile.spec.mjs
+          e2e/input.certification.spec.mjs
+          e2e/button.certification.spec.mjs
+          e2e/icon-button.certification.spec.mjs
+          e2e/filter-dropdown.certification.spec.mjs
+          e2e/crm-primitives.certification.spec.mjs
+          e2e/entity-table.certification.spec.mjs
+          e2e/activity-table.certification.spec.mjs
+          e2e/selection-table.certification.spec.mjs
+          e2e/command-dialog.certification.spec.mjs
+          --project=mobile --project=mobile-compact --workers=1 --reporter=line
 
-      - name: Run authenticated Mobile Compact checks
-        if: needs.changes.outputs.browser_mobile == 'true'
-        run: pnpm exec playwright test e2e/authenticated.mobile.spec.mjs --project=mobile-compact --workers=1 --reporter=line
-
-      - name: Run Mobile Web visual checks
+      - name: Run mobile visual checks
         if: needs.changes.outputs.browser_visual == 'true'
-        run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile --workers=1 --reporter=line
-
-      - name: Run Mobile Compact visual checks
-        if: needs.changes.outputs.browser_visual == 'true'
-        run: pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile-compact --workers=1 --reporter=line
-
-      - name: Run Shell Showcase mobile visual contract
-        if: needs.changes.outputs.shell == 'true'
-        run: pnpm exec playwright test e2e/shell.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1 --reporter=line
+        run: >-
+          pnpm exec playwright test
+          e2e/responsive.visual.spec.mjs
+          e2e/shell.visual.spec.mjs
+          --project=mobile --project=mobile-compact --workers=1 --reporter=line

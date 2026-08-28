@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { AppShell } from './index';
 
@@ -71,6 +71,22 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
     // Debería intentar cerrar el contexto primero
     expect(onCloseContext).toHaveBeenCalledWith('escape');
     expect(onCloseNav).not.toHaveBeenCalled();
+  });
+
+  it('US-SHELL-STATE-02: keeps context content inside the shell-owned panel', () => {
+    render(
+      <AppShell
+        headerSlot={mockSlots.header}
+        contextSlot={<div data-testid="global-context-content">Profile</div>}
+        config={{ activeOverlay: 'context' }}
+      >
+        {mockSlots.content}
+      </AppShell>,
+    );
+
+    expect(screen.getByRole('complementary', { name: 'Context Panel' })).toContainElement(
+      screen.getByTestId('global-context-content'),
+    );
   });
 
   it('US-A11Y-05: backdrop closes the correct active panel based on hierarchy', () => {
@@ -175,5 +191,85 @@ describe('AppShell Industrial Certification - v1.1 Refined (🔵🔵)', () => {
     expect(screen.getByRole('navigation', { name: 'Mobile suite navigation' })).toContainElement(
       screen.getByTestId('mobile-bottom-slot'),
     );
+  });
+
+  it('US-MOBILE-02: closes the mobile drawer and returns focus to its trigger', async () => {
+    const mediaQuery = {
+      matches: true,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    } as unknown as MediaQueryList;
+    vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery));
+
+    render(
+      <AppShell
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
+        onToggleLeftSidebar={vi.fn()}
+      >
+        {mockSlots.content}
+      </AppShell>,
+    );
+
+    const toggle = screen.getByRole('button', { name: 'Toggle navigation' });
+    fireEvent.click(toggle);
+    const closeToggle = screen.getByRole('button', { name: 'Close navigation' });
+    expect(closeToggle).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.click(closeToggle);
+    const reopenedToggle = screen.getByRole('button', { name: 'Toggle navigation' });
+    expect(reopenedToggle).toHaveAttribute('aria-expanded', 'false');
+    await waitFor(() => expect(document.activeElement).toBe(reopenedToggle));
+
+    vi.unstubAllGlobals();
+  });
+
+  it('US-MOBILE-04: opens the navigation drawer at the tablet breakpoint', () => {
+    const mediaQuery = {
+      matches: true,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    } as unknown as MediaQueryList;
+    vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery));
+
+    render(
+      <AppShell navSlot={mockSlots.nav} headerSlot={mockSlots.header}>
+        {mockSlots.content}
+      </AppShell>,
+    );
+
+    const toggle = screen.getByRole('button', { name: 'Toggle navigation' });
+    fireEvent.click(toggle);
+
+    expect(screen.getByRole('button', { name: 'Close navigation' })).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('navigation', { name: 'Global Navigation' })).toHaveStyle({ left: '0px' });
+
+    vi.unstubAllGlobals();
+  });
+
+  it('US-MOBILE-03: requests context closure before opening suite navigation', () => {
+    const mediaQuery = {
+      matches: true,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    } as unknown as MediaQueryList;
+    const onCloseContext = vi.fn();
+    vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery));
+
+    render(
+      <AppShell
+        navSlot={mockSlots.nav}
+        headerSlot={mockSlots.header}
+        onToggleLeftSidebar={vi.fn()}
+        onRequestCloseContext={onCloseContext}
+      >
+        {mockSlots.content}
+      </AppShell>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle navigation' }));
+
+    expect(onCloseContext).toHaveBeenCalledWith('route-change');
+    vi.unstubAllGlobals();
   });
 });

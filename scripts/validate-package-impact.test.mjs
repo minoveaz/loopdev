@@ -64,12 +64,23 @@ test('can omit native mobile consumers for a shell-only validation scope', () =>
   assert.ok(!commands.includes('--filter loopdev-mobile test'));
 });
 
-test('routes mobile application changes to global and mobile validation', () => {
+test('routes mobile application changes to native mobile validation only', () => {
   const impact = resolveImpact(['apps/loopdev-mobile/src/App.tsx']);
 
   assert.deepEqual(impact.packageIds, []);
-  assert.equal(impact.globalFallback, true);
+  assert.equal(impact.globalFallback, false);
   assert.equal(impact.mobile, true);
+});
+
+test('keeps web application changes out of native mobile and global fallback', () => {
+  const impact = resolveImpact([
+    'apps/loopdev-os/src/app/page.tsx',
+    'e2e/entity-table.certification.spec.mjs',
+  ]);
+
+  assert.equal(impact.globalFallback, false);
+  assert.equal(impact.frontend, true);
+  assert.equal(impact.mobile, false);
 });
 
 test('leaves Supabase-only changes to its specialized workflow', () => {
@@ -77,6 +88,17 @@ test('leaves Supabase-only changes to its specialized workflow', () => {
 
   assert.deepEqual(impact.packageIds, []);
   assert.equal(impact.globalFallback, false);
+  assert.equal(impact.mobile, false);
+});
+
+test('keeps backend-only web changes out of frontend validation', () => {
+  const impact = resolveImpact([
+    'apps/loopdev-os/src/app/api/crm/opportunities/route.ts',
+    'apps/loopdev-os/src/services/crm/pipeline.ts',
+    'packages/contracts/src/crm/crm.ts',
+  ]);
+
+  assert.equal(impact.frontend, false);
   assert.equal(impact.mobile, false);
 });
 

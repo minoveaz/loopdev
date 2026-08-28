@@ -2,11 +2,11 @@ import React from 'react';
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ToastViewport } from './components';
+import { ToastItem } from './index';
 import { toast, toastStore } from './toastStore';
 import { axe } from 'vitest-axe';
 
 describe('Toast System: Full Hardening (v2.1 Compliance)', () => {
-  
   beforeEach(() => {
     vi.useFakeTimers();
     toastStore.dismissAll();
@@ -15,6 +15,39 @@ describe('Toast System: Full Hardening (v2.1 Compliance)', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it('uses semantic themed surfaces and readable muted text', () => {
+    const { container } = render(
+      <ToastItem
+        id="themed-toast"
+        title="Contact saved"
+        description="The contact was updated successfully."
+        variant="success"
+        onDismiss={() => undefined}
+      />,
+    );
+
+    const toastElement = container.firstElementChild;
+    expect(toastElement).toHaveClass('bg-surface-elevated/95');
+    expect(screen.getByText('The contact was updated successfully.')).toHaveClass(
+      'text-text-muted',
+    );
+  });
+
+  it('delegates manual dismissal to the public callback', () => {
+    const onDismiss = vi.fn();
+    render(
+      <ToastItem
+        id="dismissible-toast"
+        title="Contact saved"
+        variant="success"
+        onDismiss={onDismiss}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss notification' }));
+    expect(onDismiss).toHaveBeenCalledWith('dismissible-toast');
   });
 
   // --- FRONTEND & UI STORIES ---
@@ -74,7 +107,7 @@ describe('Toast System: Full Hardening (v2.1 Compliance)', () => {
       toast.show({ tenantId: 'loopdev', variant: 'error', title: 'Critical Error' });
       toast.show({ tenantId: 'loopdev', variant: 'success', title: 'Stable State' });
     });
-    
+
     // Buscamos directamente por el rol ARIA
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByRole('status')).toBeInTheDocument();
@@ -118,5 +151,4 @@ describe('Toast System: Full Hardening (v2.1 Compliance)', () => {
     });
     expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[TELEMETRY]'));
   });
-
 });

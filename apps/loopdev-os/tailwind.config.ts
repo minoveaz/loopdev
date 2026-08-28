@@ -42,6 +42,7 @@ const config: Config = {
           soft: 'rgba(239, 68, 68, 0.1)',
           vivid: '#f43f5e',
         },
+        'status-warning': 'var(--lpd-color-status-warning, #ffd025)',
         accent: {
           DEFAULT: 'rgb(var(--lpd-color-brand-secondary-rgb, 255 208 37) / <alpha-value>)',
           hover: 'rgb(var(--lpd-color-brand-secondary-rgb, 255 208 37) / <alpha-value>)',

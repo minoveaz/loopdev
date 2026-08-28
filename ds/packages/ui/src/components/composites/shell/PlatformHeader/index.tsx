@@ -13,10 +13,12 @@ export const PlatformHeader: React.FC<PlatformHeaderProps> = ({
   profileSlot,
   isInert = false,
   className = '',
+  hasMobileNavigation = false,
+  hideProfileOnMobile = false,
 }) => {
   return (
     <div
-      className={`border-border-technical bg-shell-canvas relative flex h-full min-w-0 items-center gap-2 border-b px-3 text-slate-900 shadow-sm transition-colors md:gap-3 md:px-5 dark:text-white ${isInert ? 'pointer-events-none' : ''} ${className}`}
+      className={`border-border-technical bg-shell-canvas relative flex h-full min-w-0 items-center gap-2 border-b px-3 text-slate-900 shadow-sm transition-colors md:gap-3 md:px-5 dark:text-white ${hasMobileNavigation ? 'max-[1024px]:!pl-14' : ''} ${isInert ? 'pointer-events-none' : ''} ${className}`}
       role="banner"
       aria-hidden={isInert}
     >
@@ -37,7 +39,7 @@ export const PlatformHeader: React.FC<PlatformHeaderProps> = ({
       <div className="ml-auto flex min-w-0 items-center justify-end gap-1 md:gap-2">
         {primaryActionSlot && <div className="hidden md:flex">{primaryActionSlot}</div>}
         {controlsSlot && <div className="flex items-center gap-1">{controlsSlot}</div>}
-        {profileSlot && <div className="shrink-0">{profileSlot}</div>}
+        {profileSlot && <div className={`shrink-0 ${hideProfileOnMobile ? 'max-lg:hidden' : ''}`}>{profileSlot}</div>}
       </div>
     </div>
   );

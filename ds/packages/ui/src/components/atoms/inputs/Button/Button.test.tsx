@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { Button } from './index';
@@ -9,6 +8,9 @@ describe('Button Primitive', () => {
     render(<Button>Click me</Button>);
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute('data-control', 'button');
+    expect(button).toHaveAttribute('data-control-variant', 'primary');
+    expect(button).toHaveAttribute('data-control-size', 'md');
   });
 
   it('applies the energy variant class correctly', () => {
@@ -86,6 +88,7 @@ describe('Button Primitive', () => {
   it('has no accessibility violations in the default action state', async () => {
     const { container } = render(<Button>Save changes</Button>);
 
-    expect(await axe(container)).toHaveNoViolations();
+    const results = await axe(container);
+    expect(results.violations).toHaveLength(0);
   });
 });

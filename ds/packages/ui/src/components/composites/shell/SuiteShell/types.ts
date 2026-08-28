@@ -12,6 +12,7 @@ import type {
 import type { MobileSuiteNavItem } from '../../navigation/MobileSuiteNav';
 import type { ModuleContextSidebarWidth } from '../ModuleContextSidebar';
 import type { ModuleContextPanelWidth } from '../ModuleContextPanel';
+import type { SuiteSidebarContextualAction } from '../SuiteSidebar/types';
 
 export interface SuiteShellProps {
   schema: NavigationSchema;
@@ -24,6 +25,7 @@ export interface SuiteShellProps {
   centerSlot: ReactNode;
   rightSlot: ReactNode;
   profileSlot?: ReactNode;
+  mobileSidebarActions?: ReactNode;
   moduleContextSlot?: ReactNode;
   moduleContextFooterSlot?: ReactNode;
   moduleContextLabel?: string;
@@ -40,11 +42,13 @@ export interface SuiteShellProps {
     onOpenNavigation?: () => void;
   };
   onNavigate: (route: NavRouteRef) => void;
+  contextualSidebarAction?: SuiteSidebarContextualAction | ReactNode | ((isRail: boolean) => ReactNode);
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   isHeaderInert?: boolean;
   appShellProps?: Pick<
     AppShellProps,
     | 'config'
+    | 'contextSlot'
     | 'overlaySlot'
     | 'bannerSlot'
     | 'footerSlot'

@@ -13,7 +13,7 @@ import { useCommandBarTrigger } from './useCommandBarTrigger';
  * @phase 1
  */
 export const CommandBarTrigger: React.FC<CommandBarTriggerProps> = (props) => {
-  const { placeholder = 'Search or type a command...', shortcut = '⌘K', onOpen } = props;
+  const { placeholder, shortcut = '⌘K', onOpen } = props;
   const { 
     isIconMode,
     containerClasses,
@@ -21,9 +21,13 @@ export const CommandBarTrigger: React.FC<CommandBarTriggerProps> = (props) => {
     shortcutClasses 
   } = useCommandBarTrigger(props);
 
+  const { className: _className, onOpen: _onOpen, ...buttonProps } = props;
+
   return (
-    <button 
+    <button
+      type="button"
       onClick={onOpen}
+      {...buttonProps}
       className={containerClasses}
       aria-label="Abrir paleta de comandos"
     >
@@ -34,7 +38,7 @@ export const CommandBarTrigger: React.FC<CommandBarTriggerProps> = (props) => {
 
       {!isIconMode && (
         <>
-          <span className={placeholderClasses}>{placeholder}</span>
+          {placeholder && <span className={placeholderClasses}>{placeholder}</span>}
           <div className={shortcutClasses}>
             {shortcut}
           </div>

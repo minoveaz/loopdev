@@ -20,6 +20,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
   centerSlot,
   rightSlot,
   profileSlot,
+  mobileSidebarActions,
   moduleContextSlot,
   moduleContextFooterSlot,
   moduleContextLabel = 'Module context',
@@ -31,6 +32,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
   platformHeaderProps,
   mobileNavigation,
   onNavigate,
+  contextualSidebarAction,
   onNavModeChange,
   isHeaderInert = false,
   appShellProps,
@@ -67,12 +69,31 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
           accessMap={accessMap}
           telemetry={telemetry}
           onNavigate={onNavigate}
+          contextualAction={contextualSidebarAction}
           onNavModeChange={onNavModeChange}
+          mobileActions={
+            mobileSidebarActions || profileSlot ? (
+              <div className="flex w-full min-w-0 flex-col items-start gap-2">
+                {mobileSidebarActions ? (
+                  <div className="flex w-full min-w-0 items-center justify-start gap-2">
+                    {mobileSidebarActions}
+                  </div>
+                ) : null}
+                {profileSlot ? (
+                  <div className="border-border-technical flex w-full items-center justify-start border-t pt-2">
+                    {profileSlot}
+                  </div>
+                ) : null}
+              </div>
+            ) : null
+          }
         />
       }
       headerSlot={
         <PlatformHeader
           {...platformHeaderProps}
+          hasMobileNavigation={Boolean(appShellProps?.onToggleLeftSidebar || schema)}
+          hideProfileOnMobile={Boolean(mobileSidebarActions)}
           identitySlot={leftSlot}
           searchSlot={platformHeaderProps?.searchSlot ?? centerSlot}
           controlsSlot={platformHeaderProps?.controlsSlot ?? rightSlot}
@@ -99,7 +120,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
           : undefined
       }
     >
-      <div className="flex min-h-0 flex-1 overflow-hidden max-lg:flex-col lg:h-full">
+      <div className="flex h-full min-h-0 min-w-0 w-full max-w-full flex-1 overflow-hidden max-lg:flex-col max-lg:overflow-x-hidden max-lg:overflow-y-hidden lg:h-full">
         {moduleContextSlot ? (
           <ContextPanel
             label={moduleContextLabel}

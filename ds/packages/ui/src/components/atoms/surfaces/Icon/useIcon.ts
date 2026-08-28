@@ -13,10 +13,10 @@ export const useIcon = (props: any) => {
   } = props;
 
   const sizeMap: Record<string, string> = {
-    sm: 'text-[12px]',
-    md: 'text-[16px]',
-    lg: 'text-[20px]',
-    xl: 'text-[24px]',
+    sm: '!text-[12px]',
+    md: '!text-[16px]',
+    lg: '!text-[20px]',
+    xl: '!text-[24px]',
   };
 
   const containerSizes: Record<string, string> = {

@@ -18,7 +18,7 @@ const shellPaths = [
   'ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/',
   'ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/',
   'ds/packages/ui/src/components/composites/shell/',
-  'ds/packages/ui/src/components/composites/utilities/GlobalContextPanel/',
+  'ds/packages/ui/src/components/composites/utilities/PlatformContextPanel/',
   'ds/packages/ui/src/styles/globals.css',
   'packages/contracts/src/platform/navigation.ts',
   'scripts/check-shell.mjs',
@@ -29,7 +29,7 @@ const shellPaths = [
 const shellTests = [
   'ds/packages/ui/src/components/composites/shell/SuiteSidebar/SuiteSidebar.test.tsx',
   'ds/packages/ui/src/components/composites/shell/PlatformHeader/PlatformHeader.test.tsx',
-  'ds/packages/ui/src/components/composites/utilities/GlobalContextPanel/GlobalContextPanel.test.tsx',
+  'ds/packages/ui/src/components/composites/utilities/PlatformContextPanel/PlatformContextPanel.test.tsx',
   'ds/packages/ui/src/components/composites/shell/SidebarFooter/SidebarFooter.test.tsx',
   'ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/TechnicalTooltip.test.tsx',
 ];

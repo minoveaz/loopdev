@@ -37,7 +37,7 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
   if (mode === 'module') {
     return (
       <ModuleToolbar
-        left={
+        leftSlot={
           <div className="flex items-center gap-2">
             <IconButton icon="filter_list" size="sm" variant="ghost" aria-label="Filter" />
             <Divider orientation="vertical" className="h-4" />
@@ -46,7 +46,7 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
             </LpdText>
           </div>
         }
-        center={
+        centerSlot={
           <div className="flex items-center bg-background-subtle p-0.5 rounded-lg border border-border-technical">
             <IconButton 
               icon="grid_view" 
@@ -64,7 +64,7 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
             />
           </div>
         }
-        right={
+        rightSlot={
           <Button 
             variant="primary" 
             size="sm" 
@@ -82,12 +82,12 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
   if (isReadOnly) {
     return (
       <ModuleToolbar
-        left={
+        leftSlot={
           <div className="flex items-center gap-2">
             {/* Lock status is already in Header context */}
           </div>
         }
-        right={
+        rightSlot={
           <div className="flex items-center gap-2">
             <Button 
               variant="ghost" 
@@ -126,19 +126,19 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
   // 3. BRAND MODE: DRAFT (Active Editing)
   return (
     <ModuleToolbar
-      left={
+      leftSlot={
         <div className="flex items-center gap-2">
           <LpdText size="nano" className="text-primary font-mono font-bold uppercase tracking-widest">
             {'// EDITING DRAFT'}
           </LpdText>
         </div>
       }
-      center={
+      centerSlot={
         <div className="flex items-center gap-2">
            {/* Zoom controls could go here */}
         </div>
       }
-      right={
+      rightSlot={
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => onAction?.('discard_draft')}>
             Discard

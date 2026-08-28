@@ -5,7 +5,9 @@
 
 type CommandBarTriggerMode = 'full' | 'icon';
 
-export interface CommandBarTriggerProps {
+import type React from 'react';
+
+export interface CommandBarTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Texto del placeholder (ej: Search or type a command...) */
   placeholder?: string;
   /** Atajo de teclado a mostrar (ej: ⌘K) */
@@ -15,5 +17,4 @@ export interface CommandBarTriggerProps {
   /** Callback para abrir la paleta de comandos */
   onOpen: () => void;
   /** Clase CSS adicional */
-  className?: string;
 }

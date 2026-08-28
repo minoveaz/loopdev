@@ -25,15 +25,15 @@ su aprobacion y la posterior creacion del contrato e impact assessment.
 | --- | --- | --- | --- |
 | Lista de Leads | `/sales-crm/leads` | `data` | Buscar, filtrar, ordenar y abrir leads autorizados |
 | Lista + previsualizacion | `/sales-crm/leads` | `split` | Mantener la tabla visible mientras se inspecciona un Lead |
-| Crear/capturar Lead | `/sales-crm/leads/new` | `focus`; dialog/drawer para captura rapida | Seleccionar o crear contacto, origen y asignacion |
+| Crear/capturar Lead | `/sales-crm/leads/new` | `full-bleed`; dialog/drawer para captura rapida | Seleccionar o crear contacto, origen y asignacion |
 | Detalle de Lead desde lista | `/sales-crm/leads/:leadId` | `split` | Inspeccionar el Lead conservando la lista como contexto |
-| Detalle directo de Lead | `/sales-crm/leads/:leadId` | `record` | Ver y operar la ficha completa del Lead |
-| Crear oportunidad | Desde detalle de Lead | panel transaccional; `focus` si requiere mas datos | Convertir una intencion cualificada sin duplicar contacto ni Lead |
+| Detalle directo de Lead | `/sales-crm/leads/:leadId` | `workspace` | Ver y operar la ficha completa del Lead |
+| Crear oportunidad | Desde detalle de Lead | panel transaccional; `full-bleed` si requiere mas datos | Convertir una intencion cualificada sin duplicar contacto ni Lead |
 
 `SuiteCanvas` admite los modos genericos `overview`, `data`, `workspace`, `split`, `board`,
-`full-bleed`, `record` y `focus`. `record` representa la ficha operativa de una entidad y `focus`
+`full-bleed` y `workspace`. `workspace` representa la ficha operativa de una entidad y `full-bleed`
 representa una tarea guiada o transaccional. Ningun modo conoce Leads, Contacts u Opportunities.
-`SuiteCanvas` admite los modos genericos `overview`, `data`, `workspace`, `split`, `board`, `full-bleed`, `record` y `focus`. `data` es la tabla principal, `split` conserva tabla y previsualizacion, `record` representa la ficha operativa de una entidad y `focus` representa una tarea guiada o transaccional. Ningun modo conoce Leads, Contacts u Opportunities.
+`SuiteCanvas` admite los modos genericos `overview`, `data`, `workspace`, `split`, `board` y `full-bleed`. `data` es la tabla principal, `split` conserva tabla y previsualizacion, `workspace` representa la ficha operativa de una entidad y `full-bleed` representa una tarea guiada o transaccional. Ningun modo conoce Leads, Contacts u Opportunities.
 
 La ruta permanece delgada: `SuiteRuntime + SuiteCanvas` compone la superficie y FSD organiza
 widgets, features y entities dentro del Canvas.
@@ -44,10 +44,10 @@ widgets, features y entities dentro del Canvas.
 | --- | --- | --- | --- |
 | Lista de Leads | `data` | `ModuleHeader`, `ModuleToolbar`, `ContextBar`, `Input`, `Select`, `Button`, `IconButton`, `Badge`, `ResponsiveTable`, `EmptyState`, `LoadingState`, dialog accesible | `LeadListWidget`, `LeadToolbar`, `LeadTable`, `LeadFilters`, `LeadBulkActions` |
 | Captura rapida | dialog/drawer | `Dialog` o primitive equivalente, `Input`, `Select`, `Button`, `Badge`, `LoadingState`, `ErrorState` | `QuickLeadCapture`, `ContactLookupField`, `LeadSourceField`, `AssignmentField` |
-| Captura completa | `focus` | `ModuleHeader`, `ContextBar`, `Input`, `Select`, `Button`, `IconButton`, `EmptyState`, `LoadingState` | `LeadCaptureWorkspace`, `ContactSelector`, `CreateContactFromLead`, `LeadAttributionFields`, `LeadForm` |
+| Captura completa | `full-bleed` | `ModuleHeader`, `ContextBar`, `Input`, `Select`, `Button`, `IconButton`, `EmptyState`, `LoadingState` | `LeadCaptureWorkspace`, `ContactSelector`, `CreateContactFromLead`, `LeadAttributionFields`, `LeadForm` |
 | Lista + detalle | `split` | `ResponsiveTable`, `ModuleToolbar`, `Button`, `IconButton`, `Badge`, `ContextBar` | `LeadListWidget`, `LeadRecordPreview`, `LeadQuickActions` |
-| Detalle directo | `record` | `ModuleHeader`, `ContextBar`, `Tabs`, `Badge`, `Button`, `IconButton`, `EmptyState`, `LoadingState` | `LeadRecordView`, `LeadIdentityHeader`, `LeadAttributionPanel`, `RelatedContactSummary`, `RelatedOpportunityPanel`, `LeadTimeline`, `LeadWorkPanel` |
-| Crear Opportunity | panel transaccional o `focus` | `Dialog`/drawer, `Input`, `Select`, `Button`, `LoadingState`, `ErrorState`, `SuccessState` | `CreateOpportunityFromLead`, `QualifiedLeadGuard`, `OpportunityResultPanel` |
+| Detalle directo | `workspace` | `ModuleHeader`, `ContextBar`, `Tabs`, `Badge`, `Button`, `IconButton`, `EmptyState`, `LoadingState` | `LeadRecordView`, `LeadIdentityHeader`, `LeadAttributionPanel`, `RelatedContactSummary`, `RelatedOpportunityPanel`, `LeadTimeline`, `LeadWorkPanel` |
+| Crear Opportunity | panel transaccional o `full-bleed` | `Dialog`/drawer, `Input`, `Select`, `Button`, `LoadingState`, `ErrorState`, `SuccessState` | `CreateOpportunityFromLead`, `QualifiedLeadGuard`, `OpportunityResultPanel` |
 
 Los componentes reutilizables se consumen desde `@loopdev/ui` cuando ya existen y se certifican
 para accesibilidad, responsive y estados. Los componentes de CRM permanecen dentro del suite y no
@@ -83,7 +83,7 @@ Columnas principales de escritorio: Contacto, Estado, Origen, Interés/producto,
 actividad, Marca, Workspace, Opportunity relacionada, posible duplicado y Acciones.
 
 En mobile la fila prioriza Contacto, Estado, Origen, Asignado a y Última actividad. El resto aparece
-en el detalle `record` o en la previsualización `split`.
+en el detalle `workspace` o en la previsualización `split`.
 
 Filtros iniciales: estado, origen, asignado, marca, workspace, campaña, rango de fechas, con o sin
 Opportunity, con posible duplicado y sin actividad reciente. La lista usa paginación/cursor y nunca
@@ -97,19 +97,19 @@ Acciones masivas del piloto: cambiar responsable, cambiar estado y crear tarea. 
 conversión masiva, merge automático y exportación masiva quedan fuera de alcance.
 
 La ruta inicia en `data`. En escritorio, el clic simple sobre una fila puede abrir una previsualización
-en `split` sin abandonar la tabla. La acción "Ver ficha" abre el detalle completo en `record`. En
+en `split` sin abandonar la tabla. La acción "Ver ficha" abre el detalle completo en `workspace`. En
 mobile, la tabla navega al detalle y no mantiene dos columnas simultáneas.
 
 ## 5. Crear y capturar Lead
 
 La captura rápida se abre desde la tabla en dialog o drawer. La captura completa usa
-`SuiteCanvas mode=focus` en `/sales-crm/leads/new`. El formulario exige un contacto existente o la
+`SuiteCanvas mode=full-bleed` en `/sales-crm/leads/new`. El formulario exige un contacto existente o la
 creación de uno nuevo mediante el flujo de Contactos. No crea una segunda persona silenciosamente.
 
 Composición de captura completa:
 
 ```text
-SuiteCanvas mode=focus
+SuiteCanvas mode=full-bleed
 	-> LeadCaptureWorkspace
 		-> ContactSelector
 		-> LeadAttributionFields
@@ -241,10 +241,10 @@ Opportunity manual creada desde Pipeline no cambia por sí sola el estado del Le
 - [x] Estados y transiciones tienen owner y auditoría.
 - [x] Lead siempre pertenece a un Contact.
 - [x] Los roles y estados UX están definidos.
-- [x] Modos `data`, `split`, `record` y `focus` definidos para Leads.
+- [x] Modos `data`, `split`, `workspace` y `full-bleed` definidos para Leads.
 - [x] Columnas, filtros y acciones iniciales de la tabla aprobados.
 - [x] Captura rápida y captura completa aprobadas.
-- [x] Detalle `record`, timeline, tareas, notas y Opportunity aprobado.
+- [x] Detalle `workspace`, timeline, tareas, notas y Opportunity aprobado.
 - [x] Un Lead `cualificado` crea como máximo una Opportunity de conversión por producto/interés, vinculada al mismo Contact y Lead.
 - [x] La primera Opportunity de conversión cambia el Lead a `convertido`; las posteriores para otros productos siguen permitidas.
 - [x] El Contact queda bloqueado durante la conversión y se hereda del Lead.

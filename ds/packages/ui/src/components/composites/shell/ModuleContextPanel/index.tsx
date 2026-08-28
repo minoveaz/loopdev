@@ -14,18 +14,36 @@ const widthClasses = {
 export const ModuleContextPanel: React.FC<ModuleContextPanelProps> = ({
   children,
   footer,
+  footerSlot,
   label,
+  visible = true,
+  headerRows = 1,
+  showFooter,
+  footerRows = 1,
+  contentScrollable = true,
+  headerSlot,
   width = 'standard',
+  presentation = 'inline',
   onClose,
   className = '',
-}) => (
+}) => {
+  const footerContent = footerSlot ?? footer;
+  const shouldRenderFooter = showFooter ?? Boolean(footerContent);
+
+  if (!visible) return null;
+
+  return (
   <aside
     aria-label={label}
     data-testid="module-context-panel"
-    className={`border-border-technical bg-shell-canvas z-20 flex h-full min-h-0 shrink-0 self-stretch flex-col overflow-hidden border-l max-lg:max-h-64 max-lg:h-auto max-lg:w-full max-lg:border-b max-lg:border-l-0 ${widthClasses[width]} ${className}`}
+    data-width={width}
+    data-presentation={presentation}
+    data-content-scrollable={contentScrollable}
+    className={`border-border-technical bg-shell-canvas z-20 flex h-full min-h-0 shrink-0 self-stretch flex-col overflow-hidden border-l max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:h-full max-lg:w-full max-lg:border-b max-lg:border-l-0 ${widthClasses[width]} ${presentation === 'overlay' ? 'shadow-[-4px_0_16px_rgba(15,23,42,0.08)]' : ''} ${className}`}
   >
-    <div className="border-border-technical flex min-h-12 shrink-0 items-center justify-between gap-3 border-b px-4">
-      <h2 className="text-primary text-lpd-lg font-semibold leading-tight">{'{' + label + '}'}</h2>
+    <div className={`border-border-technical flex min-h-12 min-w-0 shrink-0 items-center justify-between gap-3 overflow-hidden border-b px-4 ${headerRows > 1 ? 'flex-wrap py-2' : ''}`}>
+      <h2 className="text-primary min-w-0 truncate text-lpd-lg font-semibold leading-tight">{label}</h2>
+      {headerSlot ? <div className="flex min-w-0 shrink-0 items-center">{headerSlot}</div> : null}
       {onClose ? (
         <button
           type="button"
@@ -37,9 +55,10 @@ export const ModuleContextPanel: React.FC<ModuleContextPanelProps> = ({
         </button>
       ) : null}
     </div>
-    <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto">{children}</div>
-    {footer ? <div className="border-border-technical shrink-0 border-t p-3">{footer}</div> : null}
+    <div className={`custom-scrollbar min-h-0 min-w-0 flex-1 overflow-x-hidden ${contentScrollable ? 'overflow-y-auto' : 'overflow-y-hidden'}`}>{children}</div>
+    {shouldRenderFooter && footerContent ? <div className={`border-border-technical min-w-0 shrink-0 border-t p-3 ${footerRows > 1 ? 'flex flex-wrap gap-2' : ''}`}>{footerContent}</div> : null}
   </aside>
-);
+  );
+};
 
 export * from './types';

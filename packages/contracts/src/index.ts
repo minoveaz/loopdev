@@ -11,10 +11,15 @@ export * from './platform/navigation';
 export * from './platform/shell';
 export * from './platform/tenancy';
 export * from './platform/home';
+export * from './platform/composition';
+export * from './platform/composition-registry';
+export * from './platform/composition-layout';
 
 // Export CRM contracts
 export * from './crm/crm';
 export * from './crm/customer-workspace';
+export * from './crm/tasks';
+export * from './crm/customer-360';
 export * from './communications/communications';
 export * from './documents/documents';
 export * from './ai/assistant';
@@ -24,6 +29,8 @@ export * from './catalog/catalog';
 export * from './marketing/marketing';
 export * from './marketing/content';
 export * from './marketing/asset';
+export * from './marketing/creative';
+export * from './marketing/creative-assets';
 
 // Export insurance and operations contracts
 export * from './insurance/insurance';

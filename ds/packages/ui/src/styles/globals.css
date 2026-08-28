@@ -7,6 +7,63 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .empty-state-ai-pattern {
+    background-image: radial-gradient(var(--lpd-color-innovation-purple) 0.8px, transparent 0.8px);
+    background-size: 24px 24px;
+    opacity: 0.15;
+  }
+
+  .empty-state-grid-pattern {
+    background-image: linear-gradient(to right, var(--lpd-color-brand-primary) 1px, transparent 1px), linear-gradient(to bottom, var(--lpd-color-brand-primary) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.03;
+  }
+
+  .dark .empty-state-ai-pattern {
+    opacity: 0.1;
+  }
+
+  .dark .empty-state-grid-pattern {
+    opacity: 0.05;
+  }
+
+  .lpd-command-dialog-backdrop {
+    z-index: var(--lpd-z-command-dialog);
+    background-color: var(--lpd-color-overlay-backdrop);
+    backdrop-filter: blur(4px);
+  }
+
+  .lpd-command-dialog-content {
+    z-index: calc(var(--lpd-z-command-dialog) + 1);
+    background-color: var(--lpd-shell-surface);
+  }
+
+  .lpd-phone-country-popover {
+    z-index: calc(var(--lpd-z-command-dialog) + 1);
+  }
+
+  .lpd-phone-country-popover .PhoneInputCountryIcon,
+  .lpd-phone-country-popover .PhoneInputCountryIcon--border,
+  .lpd-phone-country-popover .PhoneInputCountryIconImg,
+  .lpd-phone-input .PhoneInputCountryIcon,
+  .lpd-phone-input .PhoneInputCountryIcon--border,
+  .lpd-phone-input .PhoneInputCountryIconImg {
+    border: 0 !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+  }
+
+  .lpd-phone-country-list {
+    height: min(24rem, calc(100dvh - 12rem));
+    max-height: min(24rem, calc(100dvh - 12rem));
+    overflow-y: scroll !important;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 @layer base {
   :root {
     --lpd-color-brand-primary-rgb: 19 91 236;
@@ -19,6 +76,7 @@
     --lpd-shell-surface: #ffffff; /* Blanco puro para tarjetas */
     --lpd-color-bg-surface-elevated: #ffffff; 
     --lpd-color-bg-primary-subtle: #e0eaff; /* Azul tenue sólido para Light Mode */
+    --lpd-color-overlay-backdrop: rgba(15, 23, 42, 0.78);
     /* Typography: Now inherited from @loopdev/tokens */
   }
 
@@ -33,6 +91,7 @@
     --lpd-shell-surface: #181b21;
     --lpd-color-bg-surface-elevated: #181b21; /* Gris carbón para tarjetas */
     --lpd-color-bg-primary-subtle: rgba(19, 91, 236, 0.15); /* Azul profundo tenue para Dark Mode */
+    --lpd-color-overlay-backdrop: rgba(0, 0, 0, 0.68);
     
     color: var(--lpd-color-text-base);
   }
@@ -148,6 +207,24 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--lpd-color-brand-primary) !important;
+  }
+
+  .dark .custom-scrollbar {
+    scrollbar-color: rgb(var(--lpd-color-brand-primary-rgb) / 0.35) transparent !important;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-track,
+  .dark .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent !important;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--lpd-color-brand-primary-rgb) / 0.35) !important;
+    border: 0 !important;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: var(--lpd-color-brand-primary) !important;
   }
 

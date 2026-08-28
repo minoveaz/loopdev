@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Plus } from 'lucide-react';
-import { 
-  TechnicalDropdown, 
-  TechnicalMenuItem, 
+import { MoreVertical, Plus } from 'lucide-react';
+import {
+  TechnicalDropdown,
+  TechnicalMenuItem,
   TechnicalDropdownGroup,
   TechnicalDropdownSeparator,
   TechnicalLabel,
-  LpdText
+  LpdText,
 } from '../../../atoms';
 import { QuickActionMenuProps } from './types';
 import { useQuickActionMenu } from './useQuickActionMenu';
@@ -20,7 +20,7 @@ import { useQuickActionMenu } from './useQuickActionMenu';
  * @phase 1
  */
 export const QuickActionMenu: React.FC<QuickActionMenuProps> = (props) => {
-  const { groups, onOpenChange } = props;
+  const { groups, onOpenChange, triggerLabel = 'Quick actions', triggerIcon = 'add' } = props;
   const { isOpen, setIsOpen, triggerClasses } = useQuickActionMenu(props);
 
   const handleOpenChange = (open: boolean) => {
@@ -29,13 +29,14 @@ export const QuickActionMenu: React.FC<QuickActionMenuProps> = (props) => {
   };
 
   return (
-    <TechnicalDropdown 
+    <TechnicalDropdown
       align="end"
       open={isOpen}
       onOpenChange={handleOpenChange}
       trigger={
-        <button className={triggerClasses} title="Acciones Rápidas">
-          <Plus size={18} />
+        <button className={triggerClasses} title={triggerLabel} aria-label={triggerLabel}>
+          {triggerIcon === 'more_vert' ? <MoreVertical size={18} /> : <Plus size={18} />}
+          <span className="sr-only">{triggerLabel}</span>
         </button>
       }
     >
@@ -51,7 +52,7 @@ export const QuickActionMenu: React.FC<QuickActionMenuProps> = (props) => {
             )}
             <div className="flex flex-col py-1">
               {group.actions.map((action) => (
-                <TechnicalMenuItem 
+                <TechnicalMenuItem
                   key={action.id}
                   icon={action.icon}
                   label={action.label}

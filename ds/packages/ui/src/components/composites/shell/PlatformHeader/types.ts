@@ -22,4 +22,7 @@ export interface PlatformHeaderProps {
   isInert?: boolean;
   /** Clase adicional para integraciones controladas. */
   className?: string;
+  /** Reserva espacio para el trigger de navegación móvil del Shell. */
+  hasMobileNavigation?: boolean;
+  hideProfileOnMobile?: boolean;
 }

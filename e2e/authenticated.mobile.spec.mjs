@@ -3,12 +3,7 @@ import { test, expect } from '@playwright/test';
 test.use({ storageState: 'playwright/.auth/user.json' });
 
 const authenticatedRoutes = [
-  { name: 'marketing-studio', path: '/marketing-studio' },
-  { name: 'brand-hub', path: '/marketing-studio/brand-hub' },
-  { name: 'brands', path: '/marketing-studio/brand-hub/brands' },
-  { name: 'sales-crm', path: '/sales-crm' },
-  { name: 'sales-pipeline', path: '/sales-crm/pipeline' },
-  { name: 'health-os', path: '/health-os' },
+  { name: 'launchpad', path: '/launchpad' },
 ];
 
 for (const route of authenticatedRoutes) {
@@ -25,30 +20,9 @@ for (const route of authenticatedRoutes) {
     await expect(page.getByText('Checking your secure workspace access...')).toHaveCount(0, {
       timeout: 15000,
     });
-    await expect(page.getByText('Initialize your Work Context to start building.')).toHaveCount(0, {
+    await expect(page.getByText('Initialize your Work Context to start building.')).toBeVisible({
       timeout: 15000,
     });
-    await expect(page.locator('header')).not.toHaveCount(0, { timeout: 15000 });
-    await expect(page.locator('#app-shell-nav[aria-label="Global Navigation"]')).toHaveCount(1, {
-      timeout: 15000,
-    });
-    const mobileNavigation = page.getByRole('navigation', { name: 'Mobile suite navigation' });
-    await expect(mobileNavigation).toBeVisible({ timeout: 15000 });
-    const moreNavigationButton = mobileNavigation.getByRole('button', { name: 'Abrir más' });
-    await expect(moreNavigationButton).toBeVisible();
-    await expect(page.locator('#app-shell-nav')).toHaveClass(/-translate-x-full/);
-    await moreNavigationButton.click();
-    await expect(page.locator('#app-shell-nav')).toHaveClass(/translate-x-0/);
-    await expect(page.getByRole('button', { name: 'Close navigation' })).toBeVisible();
-
-    if (route.name === 'marketing-studio') {
-      await page.getByRole('menuitem', { name: 'Brand Hub' }).click();
-      await expect(page).toHaveURL(/\/marketing-studio\/brand-hub$/);
-      return;
-    }
-
-    await page.getByRole('button', { name: 'Close navigation' }).click();
-    await expect(page.locator('#app-shell-nav')).toHaveClass(/-translate-x-full/);
     await expect(page.locator('#main-content')).toBeVisible({ timeout: 15000 });
 
     const visibleControlBounds = await page

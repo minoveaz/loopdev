@@ -8,21 +8,27 @@ import {
   NOTIFICATION_CENTER_FIXTURES,
   OrganizationSwitcher,
   SuiteSwitcher,
-  UserMenu,
-  AVAILABLE_SUITES_FIXTURES,
-  GlobalContextPanel,
+  SHELL_SHOWCASE_SUITES_FIXTURES,
   MARKETING_STUDIO_SCHEMA,
   SuiteRuntime,
   Button,
   Heading,
+  Icon,
+  IconButton,
+  Input,
   ModuleHeader,
   ModuleToolbar,
-  type GlobalContextPanelMode,
+  ModuleSearch,
+  UserMenu,
+  type PlatformContextPanelMode,
+  ThemeToggle,
 } from '@loopdev/ui';
 import type { NavigationSchema, SuiteConfig } from '@loopdev/contracts';
 import { themes } from '@loopdev/tokens';
 import { PlatformHeaderControls } from '@/components/layout/PlatformHeaderControls';
-import { useRouter } from 'next/navigation';
+import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
+import { usePathname, useRouter } from 'next/navigation';
+import { CircleHelp, Menu } from 'lucide-react';
 
 type ShowcaseNavMode = 'expanded' | 'rail' | 'hover';
 type CanvasMode = 'overview' | 'data' | 'workspace' | 'split' | 'board' | 'full-bleed';
@@ -89,9 +95,16 @@ const SHOWCASE_ORGANIZATIONS = [
   },
 ];
 
+const SHOWCASE_SUITE = {
+  ...MARKETING_STUDIO_SCHEMA.suite,
+  suiteId: 'shell-showcase',
+  suiteName: 'Shell Showcase',
+  route: { routeId: '/shell-showcase' },
+};
+
 const SHOWCASE_NAVIGATION: NavigationSchema = {
   version: '1.0',
-  suite: MARKETING_STUDIO_SCHEMA.suite,
+  suite: SHOWCASE_SUITE,
   exitHatch: MARKETING_STUDIO_SCHEMA.exitHatch,
   groups: [
     {
@@ -123,7 +136,7 @@ const SHOWCASE_NAVIGATION: NavigationSchema = {
 };
 
 const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
-  identity: MARKETING_STUDIO_SCHEMA.suite,
+  identity: SHOWCASE_SUITE,
   navigation: SHOWCASE_NAVIGATION,
   accessMap: {},
   modules: CANVAS_MODES.map((mode) => ({
@@ -132,6 +145,22 @@ const SHOWCASE_SUITE_CONFIG: SuiteConfig = {
     route: `/shell-showcase?canvasMode=${mode.id}`,
     breadcrumbs: ['Shell Showcase', mode.label],
     capabilities: mode.id === 'data' ? ['sidebar', 'toolbar'] : ['sidebar'],
+    shell:
+      mode.id === 'split'
+        ? {
+            canvasMode: 'split',
+            moduleContextSidebar: {
+              label: 'ModuleContextSidebar',
+              collapsible: true,
+              collapsedPresentation: 'trigger',
+              collapseIcon: 'menu',
+              expandIcon: 'menu',
+            },
+            moduleContextPanel: {
+              label: 'ModuleContextPanel',
+            },
+          }
+        : undefined,
   })),
 };
 
@@ -144,7 +173,12 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{DataFixture}'}
             </p>
-            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+            <Heading
+              as="h2"
+              size="xl"
+              weight="semibold"
+              className="text-text-main mt-1 leading-tight"
+            >
               Resource directory
             </Heading>
           </div>
@@ -156,7 +190,9 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
           <div className="bg-shell-canvas text-text-muted text-lpd-sm min-w-44 rounded-md border px-3 py-2 leading-normal">
             Search resources
           </div>
-          <Button variant="primary" size="sm">Filter</Button>
+          <Button variant="primary" size="sm">
+            Filter
+          </Button>
           <Button variant="outline" size="sm">
             Export
           </Button>
@@ -195,7 +231,7 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
   if (mode === 'workspace') {
     return (
       <div className="text-lpd-sm flex min-h-full flex-col font-sans leading-normal">
-          <div className="border-border-technical flex items-center gap-1 overflow-x-auto px-3 pt-2">
+        <div className="border-border-technical flex items-center gap-1 overflow-x-auto px-3 pt-2">
           {['Untitled query', 'Resource audit', 'New document'].map((tab, index) => (
             <Button
               key={tab}
@@ -221,11 +257,18 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
               <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
                 {'{WorkspaceFixture}'}
               </p>
-              <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+              <Heading
+                as="h2"
+                size="xl"
+                weight="semibold"
+                className="text-text-main mt-1 leading-tight"
+              >
                 Document workspace
               </Heading>
             </div>
-            <Button variant="primary" size="sm">Run action</Button>
+            <Button variant="primary" size="sm">
+              Run action
+            </Button>
           </div>
           <div className="border-border-technical bg-background text-lpd-sm flex min-h-48 flex-1 items-center justify-center rounded-lg border font-mono leading-normal">
             <span className="text-text-muted">{'// Main workspace content'}</span>
@@ -263,11 +306,18 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{BoardFixture}'}
             </p>
-            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+            <Heading
+              as="h2"
+              size="xl"
+              weight="semibold"
+              className="text-text-main mt-1 leading-tight"
+            >
               Work queue
             </Heading>
           </div>
-          <Button variant="primary" size="sm">Add card</Button>
+          <Button variant="primary" size="sm">
+            Add card
+          </Button>
         </div>
         <div className="flex min-w-0 gap-4 overflow-x-auto pb-2">
           {[
@@ -279,7 +329,14 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
               key={column as string}
               className="border-border-technical bg-background min-w-64 flex-1 rounded-lg border p-3"
             >
-              <Heading as="h2" size="sm" weight="semibold" className="text-text-main leading-normal">{column}</Heading>
+              <Heading
+                as="h2"
+                size="sm"
+                weight="semibold"
+                className="text-text-main leading-normal"
+              >
+                {column}
+              </Heading>
               <div className="mt-3 space-y-2">
                 {(cards as string[]).map((card) => (
                   <div
@@ -309,7 +366,12 @@ function CanvasFixture({ mode }: { mode: CanvasMode }) {
             <p className="text-text-muted text-lpd-xs font-semibold uppercase leading-tight tracking-[0.18em]">
               {'{FullBleedFixture}'}
             </p>
-            <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+            <Heading
+              as="h2"
+              size="xl"
+              weight="semibold"
+              className="text-text-main mt-1 leading-tight"
+            >
               Immersive canvas
             </Heading>
           </div>
@@ -416,88 +478,223 @@ function ModuleContextPanelFooterFixture() {
   );
 }
 
-function SplitModuleFixture() {
+function SplitModuleFixture({ onOpenPanel }: { onOpenPanel?: () => void }) {
   return (
     <div className="bg-background min-h-full min-w-0 overflow-auto p-4 sm:p-6">
-          <p className="text-primary text-lpd-xs font-semibold leading-tight tracking-[0.18em]">
-            {'{SuiteCanvas}'}
-          </p>
-          <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">Users</Heading>
-          <div className="border-border-technical mt-5 overflow-hidden rounded-lg border">
-            <div className="border-border-technical text-text-muted grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-xs font-semibold uppercase tracking-wide">
-              <span aria-label="Select" />
-              <span>Email</span>
-              <span>UID</span>
-              <span>Display name</span>
-              <span>Phone</span>
-              <span>Role</span>
-              <span>Last sign in</span>
-            </div>
-            {[
-              'admin@localhost.com',
-              'editor@localhost.com',
-              'minoveaz@hotmail.com',
-              'superdev@loopdev.io',
-              'test@loopdev.dev',
-              'test2@test.com',
-              'viewer@localhost.com',
-            ].map((email) => (
-                <div
-                  key={email}
-                  className="border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0"
-                >
-                  <span className="text-text-muted">□</span>
-                  <span>{email}</span>
-                  <span className="text-text-muted">07b3b75e...</span>
-                  <span className="text-text-muted">-</span>
-                  <span className="text-text-muted">-</span>
-                  <span className="text-text-muted">Member</span>
-                  <span className="text-text-muted">Today</span>
-                </div>
-            ))}
+      <p className="text-primary text-lpd-xs font-semibold leading-tight tracking-[0.18em]">
+        {'{SuiteCanvas}'}
+      </p>
+      <Heading as="h2" size="xl" weight="semibold" className="text-text-main mt-1 leading-tight">
+        Users
+      </Heading>
+      <div className="border-border-technical mt-5 overflow-hidden rounded-lg border">
+        <div className="border-border-technical text-text-muted grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-xs font-semibold uppercase tracking-wide">
+          <span aria-label="Select" />
+          <span>Email</span>
+          <span>UID</span>
+          <span>Display name</span>
+          <span>Phone</span>
+          <span>Role</span>
+          <span>Last sign in</span>
+        </div>
+        {[
+          'admin@localhost.com',
+          'editor@localhost.com',
+          'minoveaz@hotmail.com',
+          'superdev@loopdev.io',
+          'test@loopdev.dev',
+          'test2@test.com',
+          'viewer@localhost.com',
+        ].map((email) => (
+          <div
+            key={email}
+            role={onOpenPanel ? 'button' : undefined}
+            tabIndex={onOpenPanel ? 0 : undefined}
+            onClick={onOpenPanel}
+            onKeyDown={
+              onOpenPanel
+                ? (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      onOpenPanel();
+                    }
+                  }
+                : undefined
+            }
+            className={`border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0 ${onOpenPanel ? 'cursor-pointer hover:bg-primary/5 focus-visible:bg-primary/5 focus-visible:outline-primary focus-visible:outline-2' : ''}`}
+          >
+            <span className="text-text-muted">□</span>
+            <span>{email}</span>
+            <span className="text-text-muted">07b3b75e...</span>
+            <span className="text-text-muted">-</span>
+            <span className="text-text-muted">-</span>
+            <span className="text-text-muted">Member</span>
+            <span className="text-text-muted">Today</span>
           </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function SplitModuleHeader() {
   return (
+    <>
+      <ModuleHeader
+        visibleOnMobile={false}
+        visibleOnDesktop={true}
+        segments={[
+          { id: 'suite', label: 'Shell Showcase' },
+          { id: 'module', label: 'Users', isActive: true },
+        ]}
+        statusLabel="Active"
+        statusSeverity="success"
+        rightSlot={null}
+      />
+    </>
+  );
+}
+
+function SplitModuleToolbar({
+  onToggleContext,
+  isContextOpen = false,
+}: {
+  onToggleContext?: () => void;
+  isContextOpen?: boolean;
+}) {
+  return (
+    <>
+      <ModuleToolbar
+        visibleOnMobile={true}
+        visibleOnDesktop={false}
+        className="px-3"
+        leftSlot={
+          <div className="flex min-w-0 w-full items-center gap-2">
+            {onToggleContext ? (
+              <IconButton
+                icon="menu"
+                variant="ghost"
+                size="sm"
+                aria-label={isContextOpen ? 'Close module context' : 'Open module context'}
+                aria-expanded={isContextOpen}
+                aria-controls="module-context-sidebar"
+                onClick={onToggleContext}
+                className="text-text-muted hover:bg-shell-surface hover:text-text-main flex size-8 shrink-0 items-center justify-center rounded-md"
+              />
+            ) : null}
+            <Input
+              aria-label="Start icon input"
+              placeholder="Search users"
+              startIcon={<Icon name="search" size="sm" />}
+              variant="ghost"
+              size="sm"
+              className="min-w-0 w-full"
+            />
+          </div>
+        }
+        rightSlot={
+          <Button variant="primary" size="sm">
+            Add
+          </Button>
+        }
+      />
+      <ModuleToolbar
+        visibleOnMobile={false}
+        visibleOnDesktop={true}
+        leftSlot={<ModuleSearch placeholder="Search contacts" />}
+        centerSlot={
+          <div className="text-text-muted flex items-center gap-3 text-xs">
+            <Button variant="ghost" size="sm">
+              All columns
+            </Button>
+            <Button variant="ghost" size="sm">
+              Sorted by user ID
+            </Button>
+          </div>
+        }
+        rightSlot={
+          <Button variant="primary" size="sm">
+            Add user
+          </Button>
+        }
+      />
+    </>
+  );
+}
+
+function ModeModuleHeader({ mode }: { mode: CanvasMode }) {
+  if (mode === 'full-bleed') return undefined;
+  if (mode === 'split') {
+    return <SplitModuleHeader />;
+  }
+
+  const fixtures: Record<Exclude<CanvasMode, 'split'>, { label: string; action: string }> = {
+    overview: { label: 'Overview', action: 'Customize overview' },
+    data: { label: 'Resource directory', action: 'Export data' },
+    workspace: { label: 'Document workspace', action: 'Run action' },
+    board: { label: 'Operations board', action: 'Add card' },
+    'full-bleed': { label: 'Immersive workflow', action: 'Start workflow' },
+  };
+  const fixture = fixtures[mode];
+
+  return (
     <ModuleHeader
+      visibleOnMobile={false}
       segments={[
         { id: 'suite', label: 'Shell Showcase' },
-        { id: 'module', label: 'Users', isActive: true },
+        { id: 'mode', label: fixture.label, isActive: true },
       ]}
-      statusLabel="Active"
+      statusLabel="Reference"
       statusSeverity="success"
       rightSlot={
         <Button variant="outline" size="sm">
-          Module action
+          {fixture.action}
         </Button>
       }
     />
   );
 }
 
-function SplitModuleToolbar() {
+function ModeModuleToolbar({
+  mode,
+  onToggleContext,
+  isContextOpen,
+}: {
+  mode: CanvasMode;
+  onToggleContext?: () => void;
+  isContextOpen?: boolean;
+}) {
+  if (mode === 'full-bleed') return undefined;
+  if (mode === 'split') {
+    return <SplitModuleToolbar onToggleContext={onToggleContext} isContextOpen={isContextOpen} />;
+  }
+
+  const fixtures: Record<
+    Exclude<CanvasMode, 'split'>,
+    { left: string; center: string; action: string }
+  > = {
+    overview: { left: 'Period: This week', center: 'Dashboard filters', action: 'Refresh' },
+    data: { left: 'Search resources', center: 'All columns', action: 'Filter' },
+    workspace: { left: 'Active document', center: 'Results / Chart', action: 'Save' },
+    board: { left: 'All stages', center: 'Group by status', action: 'New card' },
+    'full-bleed': { left: 'Workflow: Draft', center: 'Timeline controls', action: 'Preview' },
+  };
+  const fixture = fixtures[mode];
+
   return (
     <ModuleToolbar
-      left={
-        <div className="border-border-technical bg-background text-text-muted flex items-center gap-2 rounded-md border px-3 py-1.5">
-          <span aria-hidden="true">⌕</span>
-          <span>Search users</span>
-        </div>
+      visibleOnMobile={false}
+      leftSlot={
+        <span className="border-border-technical bg-background text-text-muted rounded-md border px-3 py-1.5 text-xs">
+          {fixture.left}
+        </span>
       }
-      center={
-        <div className="text-text-muted flex items-center gap-2 text-xs">
-          <Button variant="ghost" size="sm">
-            All columns
-          </Button>
-          <Button variant="ghost" size="sm">
-            Sorted by user ID
-          </Button>
-        </div>
+      centerSlot={<span className="text-text-muted text-xs">{fixture.center}</span>}
+      rightSlot={
+        <Button variant="primary" size="sm">
+          {fixture.action}
+        </Button>
       }
-      right={<Button variant="primary" size="sm">Add user</Button>}
     />
   );
 }
@@ -505,21 +702,26 @@ function SplitModuleToolbar() {
 function ShowcaseCanvas({ mode }: { mode: CanvasMode }) {
   return (
     <div className="bg-shell-canvas text-lpd-sm h-full min-h-full font-sans leading-normal">
+      <p className="text-primary px-4 pt-4 font-mono text-[10px] tracking-[0.16em]">
+        {'{SuiteCanvas}'}
+      </p>
       <CanvasFixture mode={mode} />
     </div>
   );
 }
 
 export default function ShellShowcasePage() {
-  const [contextMode, setContextMode] = useState<GlobalContextPanelMode | null>(null);
+  const pathname = usePathname();
+  const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<ShowcaseNavMode>('expanded');
   const [canvasMode, setCanvasMode] = useState<CanvasMode>('overview');
-  const [isSplitPanelOpen, setIsSplitPanelOpen] = useState(true);
+  const [isSplitPanelOpen, setIsSplitPanelOpen] = useState(false);
+  const [isSplitContextOpen, setIsSplitContextOpen] = useState(false);
   const [activeOrganizationId, setActiveOrganizationId] = useState(SHOWCASE_ORGANIZATIONS[0].id);
   const router = useRouter();
   const currentSuite =
-    AVAILABLE_SUITES_FIXTURES.find((suite) => suite.suiteId === 'salesCRM') ??
-    AVAILABLE_SUITES_FIXTURES[0];
+    SHELL_SHOWCASE_SUITES_FIXTURES.find((suite) => suite.suiteId === 'salesCRM') ??
+    SHELL_SHOWCASE_SUITES_FIXTURES[0];
   const activeOrganization = SHOWCASE_ORGANIZATIONS.find(({ id }) => id === activeOrganizationId);
 
   useEffect(() => {
@@ -566,14 +768,22 @@ export default function ShellShowcasePage() {
     <div className={`${activeOrganization?.theme ?? ''} h-full`}>
       <SuiteRuntime
         config={{ ...SHOWCASE_SUITE_CONFIG, navMode }}
+        scrollResetKey={pathname}
         activeModuleId={canvasMode === 'overview' ? undefined : canvasMode}
         moduleRenderers={Object.fromEntries(
-          CANVAS_MODES.map((mode) => [mode.id, () => <ShowcaseCanvas mode={mode.id} />]),
+          CANVAS_MODES.map((mode) => [
+            mode.id,
+            () =>
+              mode.id === 'split' ? (
+                <SplitModuleFixture onOpenPanel={() => setIsSplitPanelOpen(true)} />
+              ) : (
+                <ShowcaseCanvas mode={mode.id} />
+              ),
+          ]),
         )}
         moduleContextRenderers={{ split: () => <ModuleContextFixture /> }}
         moduleContextFooterRenderers={{ split: () => <ModuleContextFooterFixture /> }}
         moduleContextLabels={{ split: 'ModuleContextSidebar' }}
-        moduleContextWidths={{ split: 'standard' }}
         moduleContextPanelRenderers={{
           split: () => (isSplitPanelOpen ? <ModuleContextPanelFixture /> : null),
         }}
@@ -581,12 +791,59 @@ export default function ShellShowcasePage() {
           split: () => (isSplitPanelOpen ? <ModuleContextPanelFooterFixture /> : null),
         }}
         moduleContextPanelLabels={{ split: 'ModuleContextPanel' }}
-        moduleContextPanelWidths={{ split: 'extra-wide' }}
         moduleContextPanelOnClose={() => setIsSplitPanelOpen(false)}
+        mobileSidebarActions={
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
+            <div className="flex min-h-10 items-center">
+              <ThemeToggle
+                variant="technical"
+                size="md"
+                className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              aria-label="Open help center"
+              className="border-border-technical text-text-main hover:bg-primary/10 hover:text-primary flex min-h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition-colors"
+              onClick={() => setContextMode('help')}
+            >
+              <CircleHelp size={20} aria-hidden="true" />
+              <span>Help</span>
+            </Button>
+          </div>
+        }
+        moduleContextSidebarCollapsed={canvasMode === 'split' ? !isSplitContextOpen : undefined}
+        moduleContextSidebarShowCollapsedTrigger={canvasMode !== 'split'}
+        moduleContextSidebarOnCollapsedChange={(collapsed) => setIsSplitContextOpen(!collapsed)}
+        contextualSidebarAction={(isRail) =>
+          canvasMode === 'split' && !isSplitContextOpen ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              aria-label="Open module context"
+              onClick={() => setIsSplitContextOpen(true)}
+              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+            >
+              <Menu aria-hidden="true" size={18} className="shrink-0" />
+              {!isRail ? <span className="truncate">Open module context</span> : null}
+            </Button>
+          ) : null
+        }
         canvasProps={{
           mode: canvasMode,
-          header: canvasMode === 'split' ? <SplitModuleHeader /> : undefined,
-          toolbar: canvasMode === 'split' ? <SplitModuleToolbar /> : undefined,
+          header: <ModeModuleHeader mode={canvasMode} />,
+          toolbar: (
+            <ModeModuleToolbar
+              mode={canvasMode}
+              isContextOpen={isSplitContextOpen}
+              onToggleContext={
+                canvasMode === 'split' ? () => setIsSplitContextOpen((open) => !open) : undefined
+              }
+            />
+          ),
         }}
         onNavModeChange={setNavMode}
         onNavigate={(route) => {
@@ -599,6 +856,9 @@ export default function ShellShowcasePage() {
             return;
           }
 
+          if (new URL(route.routeId, window.location.origin).pathname === '/shell-showcase') {
+            setCanvasMode('overview');
+          }
           router.push(route.routeId);
         }}
         leftSlot={
@@ -606,7 +866,13 @@ export default function ShellShowcasePage() {
             <BrandLogo variant="isotype" size="sm" className="shrink-0" />
           </div>
         }
-        centerSlot={<CommandBarTrigger className="w-full" onOpen={() => undefined} />}
+        centerSlot={
+          <CommandBarTrigger
+            className="w-full"
+            placeholder="Search or type a command..."
+            onOpen={() => undefined}
+          />
+        }
         platformHeaderProps={{
           contextSlot: (
             <div className="flex min-w-0 items-center gap-2">
@@ -623,7 +889,7 @@ export default function ShellShowcasePage() {
               </span>
               <SuiteSwitcher
                 currentSuite={currentSuite}
-                availableSuites={AVAILABLE_SUITES_FIXTURES}
+                availableSuites={SHELL_SHOWCASE_SUITES_FIXTURES}
                 showIcon={false}
                 onSuiteChange={(suiteId) => {
                   if (suiteId === 'os.home') {
@@ -631,7 +897,9 @@ export default function ShellShowcasePage() {
                     return;
                   }
 
-                  const suite = AVAILABLE_SUITES_FIXTURES.find((item) => item.suiteId === suiteId);
+                  const suite = SHELL_SHOWCASE_SUITES_FIXTURES.find(
+                    (item) => item.suiteId === suiteId,
+                  );
                   router.push(suite?.route?.routeId ?? '/launchpad');
                 }}
               />
@@ -655,31 +923,32 @@ export default function ShellShowcasePage() {
             userRole="Tenant_Admin"
             tenantName="Showcase Workspace"
             userSrc="https://i.pravatar.cc/64?img=12"
-            timezoneOptions={[
-              { label: 'Auto detect', isActive: true },
-              { label: '(UTC) Coordinated Universal Time' },
-              { label: '(UTC-05:00) Eastern Time' },
-            ]}
-            onOpenChange={() => undefined}
+            timezoneOptions={[{ label: 'Auto detect', isActive: true }]}
+            onOpenChange={(open) => {
+              if (open) setContextMode(null);
+            }}
+            onAvatarClick={() => setContextMode('profile')}
+            onProfileClick={() => setContextMode('profile')}
             onLogout={() => undefined}
           />
         }
         appShellProps={{
+          onToggleLeftSidebar: () =>
+            setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
+          onRequestCloseContext: () => setContextMode(null),
           config: { activeOverlay: contextMode ? 'context' : null },
+          contextSlot: contextMode ? (
+            <ContextPanelHost
+              mode={contextMode}
+              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+              onClose={() => setContextMode(null)}
+            />
+          ) : undefined,
         }}
       >
-        <ShowcaseCanvas mode="overview" />
+        {canvasMode === 'overview' ? <ShowcaseCanvas mode="overview" /> : null}
       </SuiteRuntime>
-      {contextMode && (
-        <div className="fixed bottom-0 right-0 top-[var(--lpd-space-14)] z-50 w-[min(400px,100vw)] shadow-2xl">
-          <GlobalContextPanel
-            mode={contextMode}
-            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-            onClose={() => setContextMode(null)}
-          />
-        </div>
-      )}
     </div>
   );
 }

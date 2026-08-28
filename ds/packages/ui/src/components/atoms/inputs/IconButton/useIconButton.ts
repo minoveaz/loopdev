@@ -1,10 +1,9 @@
 'use client';
 
-'use client';
-
 import { useMemo } from 'react';
+import type { IconButtonProps } from './index';
 
-export const useIconButton = (props: any) => {
+export const useIconButton = (props: IconButtonProps) => {
   const {
     icon,
     children,
@@ -19,7 +18,7 @@ export const useIconButton = (props: any) => {
   } = props;
 
   const baseStyles =
-    'inline-flex items-center justify-center rounded-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center rounded-sm border border-transparent transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const sizeMap: Record<string, string> = {
     sm: 'w-7 h-7', // For 12px icon
@@ -36,7 +35,9 @@ export const useIconButton = (props: any) => {
       case 'success':
         return 'text-status-success hover:text-status-teal hover:bg-green-50 dark:hover:bg-green-900/20';
       case 'ghost':
-        return 'text-text-muted hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/15';
+        return 'bg-background-subtle text-text-muted hover:border-border-subtle hover:bg-background-subtle/80 hover:text-text-main dark:bg-background-subtle/60 dark:hover:bg-background-subtle';
+      case 'energy':
+        return 'text-energy-yellow hover:text-energy-yellow hover:bg-energy-yellow/10 dark:hover:bg-energy-yellow/15';
       case 'neutral': // Default
       default:
         return 'text-text-muted hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/15';

@@ -6,6 +6,7 @@ import {
   NavRouteRef,
   LayoutContext, // Importamos el tipo de contexto oficial
 } from '@loopdev/contracts';
+import type { ReactNode } from 'react';
 
 /**
  * @file types.ts
@@ -31,7 +32,18 @@ export interface SuiteSidebarProps {
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   /** Callback genérico de navegación */
   onNavigate: (route: NavRouteRef) => void;
+  contextualAction?: SuiteSidebarContextualAction | ReactNode | ((isRail: boolean) => ReactNode);
+  /** Acciones secundarias que viven al final del drawer móvil. */
+  mobileActions?: ReactNode;
 
   /** Clase CSS adicional */
   className?: string;
+}
+
+export interface SuiteSidebarContextualAction {
+  type: 'contextual-action';
+  icon: string;
+  label: string;
+  actionId: string;
+  onAction: () => void;
 }
