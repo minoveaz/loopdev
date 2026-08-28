@@ -57,6 +57,11 @@ VitaBlue es una fuente de evidencia funcional para diseñar los primeros vertica
 autoritativa de contratos, tenancy, seguridad o composición de LoopDev. La revisión del repositorio
 privado `minoveaz/vitablue` en su rama `main` identificó:
 
+Image Studio y Video Studio ya tienen desarrollo exploratorio iniciado en VitaBlue. Ese trabajo
+demuestra viabilidad, acelera el aprendizaje y seguirá evolucionando como laboratorio funcional;
+no activa por sí mismo rutas, contratos de runtime, persistencia, providers ni lanzamiento de
+producción en LoopDev.
+
 ### Image Studio
 
 - Editor visual basado en canvas/Konva con capas, selección, inspector, panel de capas y edición de
@@ -76,6 +81,20 @@ privado `minoveaz/vitablue` en su rama `main` identificó:
   composiciones Remotion, render jobs y almacenamiento de artefactos.
 - Tests de storyboard, motion kit, validación de escenas y snapshots visuales desktop/mobile.
 
+### Brand Hub and Campaign Orchestrator
+
+- Brand Hub cuenta con un panel exploratorio de identidad VitaBlue: variantes de logo, tokens de
+  color, tipografía y reglas creativas. Es evidencia de presentación y guía visual, no de un
+  lifecycle persistente de `Brand`/`BrandVersion`, revisión o publicación de contexto de marca.
+- Campaign Orchestrator cuenta con desarrollo exploratorio de Campaign Manager: objetivo, estado,
+  fecha, selección de canales y modos manual/automático, tipos de contenido, copy por canal,
+  edición y preview de assets, readiness, enlaces con tracking, actividad y preparación/exportación
+  para publicación.
+- VitaBlue incluye persistencia preliminar de campañas y publicaciones, incluida una migración con
+  RLS basada en rol. No tiene el aislamiento obligatorio de LoopDev por organización/workspace/marca
+  en esas reglas, por lo que sirve como evidencia de flujo y riesgos, pero no como contrato, esquema
+  ni política RLS reutilizable.
+
 ### Reglas de reutilización
 
 La evidencia de VitaBlue se utilizará para recuperar journeys, capacidades y riesgos ya explorados.
@@ -84,6 +103,10 @@ La migración a LoopDev deberá rediseñar los contratos sobre Platform Core, us
 editables, assets exportados, contenidos aprobados y artefactos renderizados. No se copiarán
 automáticamente `BackofficeShell`, rutas, `localStorage`, contratos, providers ni decisiones de
 persistencia de VitaBlue.
+
+El estado de madurez se registra por contexto: `exploratory/in progress` para los verticales de
+VitaBlue y `proposed/not authorized for implementation` para sus paquetes y activación dentro de
+LoopDev, hasta aprobar los gates correspondientes.
 
 ## Domain boundary
 
@@ -260,14 +283,20 @@ Cada vista debe definir estados `loading`, `empty`, `error`, `forbidden` y `succ
 mutaciones sensibles deben mostrar confirmación, error trazable y resultado idempotente cuando
 corresponda.
 
-El flujo de contenido propuesto es:
+El flujo editorial de Content Engine propuesto es:
 
 ```text
-Draft → In Review → Changes Requested → Approved → Scheduled → Published
-                                      ↘ Failed / Archived
+Draft → In Review → Changes Requested → Approved → Archived
 ```
 
 Un cambio posterior a la aprobación debe invalidar la aprobación de la versión anterior.
+
+El lifecycle externo de Publishing & Integrations queda separado y solo se habilita cuando su
+contrato esté aprobado:
+
+```text
+Publication requested → Queued → Scheduled → Delivered / Failed / Cancelled
+```
 
 ## Contracts and security
 
@@ -363,14 +392,21 @@ parte de esta definición conceptual.
 
 ## Module-definition evidence
 
-Pendiente. Los módulos iniciales requieren el paquete de cinco documentos antes de cualquier
-handoff de implementación:
+Los once módulos del mapa tienen un paquete de cinco documentos en estado `proposed`. Los siete
+módulos iniciales son candidatos a una futura implementación; Publishing & Integrations, Marketing
+Insights, Marketing Automation y Compliance & Governance están documentados como diferidos y sus
+gates bloquean cualquier implementación.
 
-- UX specification: pending
-- Component audit: pending
-- Domain contract: pending
-- Impact assessment: pending
-- Implementation handoff: pending
+| Group | Modules | Package status | Implementation status |
+| --- | --- | --- | --- |
+| Foundation and container | Brand Hub, Asset Library, Creative Studio | Five documents per module | Proposed; approval required |
+| First creative verticals | Image Studio, Video Studio | Five documents per module | VitaBlue exploration in progress; LoopDev implementation not authorized |
+| Initial workflow | Content Engine, Campaign Orchestrator | Five documents per module | Proposed; approval required |
+| Deferred | Publishing & Integrations, Marketing Insights, Marketing Automation, Compliance & Governance | Five documents per module | Proposed and blocked by module gates |
+
+Every package contains a UX specification, component audit, domain contract, impact assessment and
+implementation handoff. `proposed` means the package is a reviewable design artifact, not an
+approved contract, route, schema, RLS policy, provider integration or authorization to implement.
 
 ## Phases and readiness
 

@@ -75,12 +75,11 @@ jobs:
         with:
           filters: |
             frontend:
+              # Keep this filter positive: `some` treats a negated glob as a match for unrelated paths.
               - 'apps/loopdev-os/src/components/**'
               - 'apps/loopdev-os/src/suites/**'
-              - 'apps/loopdev-os/src/app/**'
-              - '!apps/loopdev-os/src/app/api/**'
-              - '!apps/loopdev-os/src/services/**'
-              - '!apps/loopdev-os/src/types/**'
+              - 'apps/loopdev-os/src/app/*.{ts,tsx}'
+              - 'apps/loopdev-os/src/app/!(api)/**'
               - 'ds/packages/ui/**'
               - 'e2e/**'
               - 'playwright.config.mjs'
