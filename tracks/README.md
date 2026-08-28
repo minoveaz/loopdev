@@ -7,6 +7,7 @@
 ### Marketing Studio
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
+- [Definición de módulos iniciales de Marketing Studio](./planned/marketing-studio/2026-08-28-marketing-studio-module-definition.md) · `docs/marketing-studio-module-definitions` · fase 0
 
 ### Platform
 
