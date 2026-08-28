@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChevronDown, MapPin, Search } from 'lucide-react';
 
 export interface CimoFloatingSearchBarProps {
@@ -30,9 +30,33 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
   onSearch,
 }) => {
   const [activeDropdown, setActiveDropdown] = useState<'sport' | 'day' | 'zone' | 'level' | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
-    <div className="relative w-full max-w-2xl">
+    <div ref={containerRef} className="relative w-full max-w-2xl">
       {/* Floating Capsule in Header */}
       <div className="bg-white border border-[#1F4E5F]/15 rounded-full pl-3 pr-1.5 py-1 shadow-xs hover:shadow-md transition-all duration-200 flex items-center justify-between text-[#1F4E5F]">
         {/* Sport Segment */}
@@ -62,7 +86,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                     onSelectSport(s);
                     setActiveDropdown(null);
                   }}
-                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors"
+                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors cursor-pointer"
                 >
                   {s}
                 </button>
@@ -100,7 +124,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                     onSelectDay(d);
                     setActiveDropdown(null);
                   }}
-                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors"
+                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors cursor-pointer"
                 >
                   {d}
                 </button>
@@ -138,7 +162,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                     onSelectZone(z);
                     setActiveDropdown(null);
                   }}
-                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors"
+                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors cursor-pointer"
                 >
                   {z}
                 </button>
@@ -176,7 +200,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                     onSelectLevel(l);
                     setActiveDropdown(null);
                   }}
-                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors"
+                  className="w-full text-left px-3 py-1.5 text-xs font-bold rounded-xl hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors cursor-pointer"
                 >
                   {l}
                 </button>
