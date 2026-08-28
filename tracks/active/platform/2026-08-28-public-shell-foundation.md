@@ -125,12 +125,13 @@ graph TD
 
 
 ### 📌 Fase 4: Refactorización Piloto de CIMO, Auditorías y Certificación
-- [ ] Configurar especificación `cimoFeedPageSpec`, `CIMO_FEED_COMPOSITION`, `cimoBrandTheme` y `cimoSeoConfig`.
-- [ ] Componer la aplicación CIMO importando exclusivamente bloques de `@loopdev/public-blocks` y `@loopdev/public-shell` (cero código inline).
-- [ ] Validar la experiencia de 3 columnas en Desktop, 2 columnas en Tablet y App móvil táctil en Mobile.
+- [x] Configurar especificación `cimoFeedPageSpec`, `CIMO_FEED_COMPOSITION`, `cimoBrandTheme` y `cimoSeoConfig`.
+- [x] Componer la aplicación CIMO importando exclusivamente bloques de `@loopdev/public-blocks` y `@loopdev/public-shell` (cero código inline).
+- [x] Validar la experiencia de 3 columnas en Desktop, 2 columnas en Tablet y App móvil táctil en Mobile.
 - [ ] Configurar scripts de auditoría automatizada con **Unlighthouse / Lighthouse** (`unlighthouse.config.ts`).
 - [ ] Suite de tests E2E de SEO y responsive con Playwright.
 - [ ] Ejecutar `pnpm turbo run build lint test` en todo el monorepo y registrar evidencia en el track.
+
 
 ---
 
