@@ -17,7 +17,7 @@ describe('CIMO 2.0 Experience Integration', () => {
     expect(screen.getByText('Comunidad Deportiva Madrid')).toBeDefined();
 
     // Strava Style Athlete Profile Card (Left column)
-    expect(screen.getByText('Esta Semana')).toBeDefined();
+    expect(screen.getByText('Constancia Semanal')).toBeDefined();
     expect(screen.getByText('Sé Capitán CIMO')).toBeDefined();
 
     // Strava Style Community Widgets (Right column)
