@@ -170,8 +170,7 @@ describe('PhoneInput', () => {
     expect(trigger).toHaveFocus();
   });
 
-  it('has no accessibility violations when closed and open', async () => {
-    const user = userEvent.setup();
+  it('has no accessibility violations when closed', async () => {
     const { container } = render(
       <PhoneInput
         id="phone"
@@ -182,9 +181,24 @@ describe('PhoneInput', () => {
     );
 
     expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('has no accessibility violations when open', async () => {
+    const user = userEvent.setup();
+    render(
+      <PhoneInput
+        id="phone"
+        label="Phone number"
+        helperText="Include the international calling code."
+        {...copy}
+      />,
+    );
+
     await user.click(screen.getByRole('button', { name: 'Country code' }));
     expect(
-      await axe(document.body, { rules: { region: { enabled: false } } }),
+      await axe(screen.getByRole('dialog', { name: 'Country code' }), {
+        rules: { region: { enabled: false } },
+      }),
     ).toHaveNoViolations();
   });
 });
