@@ -4,9 +4,11 @@ import { LogIn, Plus } from 'lucide-react';
 import type { ActivityCardData } from '@loopdev/public-blocks';
 import { CIMO_FEED_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
 import { INITIAL_ACTIVITIES, INITIAL_CREW_CHATS } from './data/mockData';
-import { CimoSportFilters } from './components/CimoSportFilters';
-import { CimoFeedView } from './components/CimoFeedView';
-import { CimoCrewDetailInspector } from './components/CimoCrewDetailInspector';
+import { CimoFloatingSearchBar } from './components/CimoFloatingSearchBar';
+import { CimoSportCategoryBar } from './components/CimoSportCategoryBar';
+import { CimoAthleteProfileCard } from './components/CimoAthleteProfileCard';
+import { CimoCuratedFeed } from './components/CimoCuratedFeed';
+import { CimoCommunityWidgets } from './components/CimoCommunityWidgets';
 import { CimoAuthModalContent } from './components/CimoAuthModalContent';
 import { CimoActivityDetailModal } from './components/CimoActivityDetailModal';
 import { CimoCreateActivityModal } from './components/CimoCreateActivityModal';
@@ -18,8 +20,9 @@ export function App() {
   const [selectedActivityId, setSelectedActivityId] = useState<string>(INITIAL_ACTIVITIES[0].id);
   const [chats, setChats] = useState(INITIAL_CREW_CHATS);
   const [selectedSport, setSelectedSport] = useState('Todos');
-  const [selectedLevel, setSelectedLevel] = useState('Todos');
-  const [selectedDay, setSelectedDay] = useState('Todos');
+  const [selectedDay, setSelectedDay] = useState('Cualquier día');
+  const [selectedZone, setSelectedZone] = useState('Toda la ciudad');
+  const [selectedLevel, setSelectedLevel] = useState('Cualquier nivel');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentRoute, setCurrentRoute] = useState('feed');
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -36,8 +39,11 @@ export function App() {
   const filteredActivities = useMemo(() => {
     return activities.filter((act) => {
       if (selectedSport !== 'Todos' && act.sport.toLowerCase() !== selectedSport.toLowerCase()) return false;
-      if (selectedLevel !== 'Todos' && act.level !== selectedLevel && act.level !== 'Todos los niveles') return false;
-      if (selectedDay !== 'Todos' && !act.date.toLowerCase().includes(selectedDay.toLowerCase())) return false;
+      if (selectedLevel !== 'Cualquier nivel' && act.level !== selectedLevel && act.level !== 'Todos los niveles') return false;
+      if (selectedDay === 'Hoy' && !act.date.toLowerCase().includes('hoy')) return false;
+      if (selectedDay === 'Mañana' && !act.date.toLowerCase().includes('mañana')) return false;
+      if (selectedDay === 'Este fin de semana' && !act.date.toLowerCase().includes('sábado') && !act.date.toLowerCase().includes('domingo')) return false;
+      if (selectedZone !== 'Toda la ciudad' && !act.location.toLowerCase().includes(selectedZone.toLowerCase())) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         return (
@@ -48,15 +54,15 @@ export function App() {
       }
       return true;
     });
-  }, [activities, selectedSport, selectedLevel, selectedDay, searchQuery]);
+  }, [activities, selectedSport, selectedLevel, selectedDay, selectedZone, searchQuery]);
 
   const selectedActivity = useMemo(() => {
     return activities.find((act) => act.id === selectedActivityId) ?? activities[0] ?? null;
   }, [activities, selectedActivityId]);
 
-  const currentMessages = useMemo(() => {
-    return chats[selectedActivityId] ?? [];
-  }, [chats, selectedActivityId]);
+  const joinedActivities = useMemo(() => {
+    return activities.filter((act) => act.isJoined);
+  }, [activities]);
 
   const handleJoinActivity = (activityId: string) => {
     if (!isAuthenticated) {
@@ -79,25 +85,7 @@ export function App() {
 
   const handleSelectActivity = (id: string) => {
     setSelectedActivityId(id);
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      setIsDetailModalOpen(true);
-    }
-  };
-
-  const handleSendMessage = (text: string) => {
-    const newMessage = {
-      id: `msg-${Date.now()}`,
-      senderId: 'user_me',
-      senderName: currentUser.name,
-      text,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      isOwn: true,
-    };
-
-    setChats((prev) => ({
-      ...prev,
-      [selectedActivityId]: [...(prev[selectedActivityId] ?? []), newMessage],
-    }));
+    setIsDetailModalOpen(true);
   };
 
   const handleCreateActivity = (newPlan: Partial<ActivityCardData>) => {
@@ -134,7 +122,7 @@ export function App() {
     setIsAuthOpen(false);
   };
 
-  // Main content renderer based on active tab
+  // Main Feed content renderer
   const renderMainContent = () => {
     switch (currentRoute) {
       case 'chats':
@@ -145,9 +133,7 @@ export function App() {
             selectedActivityId={selectedActivityId}
             onSelectChat={(id) => {
               setSelectedActivityId(id);
-              if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-                setIsDetailModalOpen(true);
-              }
+              setIsDetailModalOpen(true);
             }}
           />
         );
@@ -157,14 +143,33 @@ export function App() {
       case 'feed':
       default:
         return (
-          <CimoFeedView
-            activities={filteredActivities}
-            selectedActivityId={selectedActivityId}
-            onSelectActivity={handleSelectActivity}
-            onJoinActivity={handleJoinActivity}
-            selectedSport={selectedSport}
-            onSelectSport={setSelectedSport}
-          />
+          <div className="flex flex-col gap-6">
+            {/* Airbnb Experiences Style Floating Search Bar */}
+            <CimoFloatingSearchBar
+              selectedSport={selectedSport}
+              onSelectSport={setSelectedSport}
+              selectedDay={selectedDay}
+              onSelectDay={setSelectedDay}
+              selectedZone={selectedZone}
+              onSelectZone={setSelectedZone}
+              selectedLevel={selectedLevel}
+              onSelectLevel={setSelectedLevel}
+            />
+
+            {/* Sports Category Bar with Clean Icons */}
+            <CimoSportCategoryBar
+              selectedSport={selectedSport}
+              onSelectSport={setSelectedSport}
+            />
+
+            {/* Curated Feed with 2-Col Activity Cards Grid */}
+            <CimoCuratedFeed
+              activities={filteredActivities}
+              selectedActivityId={selectedActivityId}
+              onSelectActivity={handleSelectActivity}
+              onJoinActivity={handleJoinActivity}
+            />
+          </div>
         );
     }
   };
@@ -187,7 +192,7 @@ export function App() {
               activeRouteId={currentRoute}
               onNavigate={setCurrentRoute}
               rightSlot={
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <button
                     type="button"
                     onClick={() => {
@@ -197,9 +202,9 @@ export function App() {
                       }
                       setIsCreateOpen(true);
                     }}
-                    className="px-3.5 py-2 text-xs font-extrabold text-white bg-[#1F4E5F] hover:bg-[#183e4c] rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95"
+                    className="px-4 py-2 text-xs font-extrabold text-white bg-[#1F4E5F] hover:bg-[#183e4c] rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95"
                   >
-                    <Plus className="w-4 h-4 text-[#00B894]" />
+                    <Plus className="w-4 h-4 text-[#00B894] stroke-[3]" />
                     <span className="hidden sm:inline">Crear Plan</span>
                     <span className="sm:hidden">Crear</span>
                   </button>
@@ -209,7 +214,7 @@ export function App() {
                       type="button"
                       onClick={() => setCurrentRoute('profile')}
                       aria-label="Ver mi perfil"
-                      className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors"
+                      className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs"
                     >
                       {currentUser.avatarUrl ? (
                         <img src={currentUser.avatarUrl} alt={currentUser.name} className="w-full h-full object-cover" />
@@ -234,37 +239,27 @@ export function App() {
             />
           ),
           sidebarFilters: (
-            <CimoSportFilters
-              selectedSport={selectedSport}
-              onSelectSport={setSelectedSport}
-              selectedLevel={selectedLevel}
-              onSelectLevel={setSelectedLevel}
-              selectedDay={selectedDay}
-              onSelectDay={setSelectedDay}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
+            <CimoAthleteProfileCard
+              user={currentUser}
+              onCreateClick={() => setIsCreateOpen(true)}
+              onProfileClick={() => setCurrentRoute('profile')}
             />
           ),
           mainFeed: renderMainContent(),
           contextInspector: (
-            <CimoCrewDetailInspector
-              activity={selectedActivity}
-              messages={currentMessages}
-              onSendMessage={handleSendMessage}
-              onJoin={handleJoinActivity}
+            <CimoCommunityWidgets
+              joinedActivities={joinedActivities}
+              chats={chats}
+              onSelectActivity={handleSelectActivity}
+              onOpenChatTab={() => setCurrentRoute('chats')}
             />
           ),
           drawer: (
             <div className="flex flex-col gap-5 p-2">
-              <CimoSportFilters
-                selectedSport={selectedSport}
-                onSelectSport={setSelectedSport}
-                selectedLevel={selectedLevel}
-                onSelectLevel={setSelectedLevel}
-                selectedDay={selectedDay}
-                onSelectDay={setSelectedDay}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
+              <CimoAthleteProfileCard
+                user={currentUser}
+                onCreateClick={() => setIsCreateOpen(true)}
+                onProfileClick={() => setCurrentRoute('profile')}
               />
             </div>
           ),
@@ -282,7 +277,7 @@ export function App() {
         }}
       />
 
-      {/* Global Modals for Complete In-App Flows */}
+      {/* Global In-App Modals */}
       <CimoActivityDetailModal
         activity={selectedActivity}
         isOpen={isDetailModalOpen}
