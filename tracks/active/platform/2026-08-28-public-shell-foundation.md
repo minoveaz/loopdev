@@ -116,12 +116,13 @@ graph TD
 
 
 ### 📌 Fase 3: Construcción de `@loopdev/public-blocks`
-- [ ] Configurar `ds/packages/public-blocks/package.json` y `tsconfig.json`.
-- [ ] Extraer y estandarizar bloques transversales:
+- [x] Configurar `ds/packages/public-blocks/package.json` y `tsconfig.json`.
+- [x] Extraer y estandarizar bloques transversales:
   - **Bloques B2B / Plataforma (para LoopDev Web):** `ProductShowcaseGrid.tsx`, `PricingComparisonTable.tsx`, `FeatureSpotlight.tsx`.
   - **Bloques Lead-Gen / Portal (para VitaBlue):** `AdvisorCard.tsx`, `FaqSection.tsx`, `TestimonialsGrid.tsx`, `TrustBadgeBar.tsx`, `FloatingWhatsApp.tsx`.
-  - **Bloques Comunidad / App (para CIMO):** `ActivityCard.tsx`, `CrewAvatarGroup.tsx`, `ChatStreamWidget.tsx`, `FeedbackRatingBlock.tsx`, `OnboardingStepper.tsx`.
-- [ ] Suite de tests unitarios en `ds/packages/public-blocks`.
+  - **Bloques Comunidad / App (para CIMO):** `ActivityCard.tsx`, `CrewAvatarGroup.tsx`, `ChatStreamWidget.tsx`, `FeedbackRatingBlock.tsx`.
+- [x] Suite de tests unitarios en `ds/packages/public-blocks`.
+
 
 ### 📌 Fase 4: Refactorización Piloto de CIMO, Auditorías y Certificación
 - [ ] Configurar especificación `cimoFeedPageSpec`, `CIMO_FEED_COMPOSITION`, `cimoBrandTheme` y `cimoSeoConfig`.
