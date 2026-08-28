@@ -106,13 +106,14 @@ graph TD
 - [x] Ejecutar build de contracts: `pnpm --filter @loopdev/contracts build`.
 
 ### 📌 Fase 2: Construcción de `@loopdev/public-shell` y Servicios Base
-- [ ] Configurar `ds/packages/public-shell/package.json` y `tsconfig.json`.
-- [ ] Implementar el motor de theming: `BrandThemeProvider` y `useBrandTheme`.
-- [ ] Construir el orquestador `<PublicRuntime>` y el motor `<PublicCanvas>`.
-- [ ] Implementar `<PublicSeoHead>` (Helmet/Head con Canonicals, Open Graph, Twitter Cards y JSON-LD).
-- [ ] Implementar `<PublicAnalyticsProvider>` con soporte para GA4, Google Ads, `dataLayer` y Google Consent Mode v2.
-- [ ] Implementar componentes primitivos de navegación (`PublicTopBar`, `PublicBottomNav`, `PublicSidebar`, `PublicContextPanel`, `PublicAuthModal`, `PublicDrawer`).
-- [ ] Suite de tests unitarios en `ds/packages/public-shell`.
+- [x] Configurar `ds/packages/public-shell/package.json` y `tsconfig.json`.
+- [x] Implementar el motor de theming: `BrandThemeProvider` y `useBrandTheme`.
+- [x] Construir el orquestador `<PublicRuntime>` y el motor `<PublicCanvas>`.
+- [x] Implementar `<PublicSeoHead>` (Helmet/Head con Canonicals, Open Graph, Twitter Cards y JSON-LD).
+- [x] Implementar `<PublicAnalyticsProvider>` con soporte para GA4, Google Ads, `dataLayer` y Google Consent Mode v2.
+- [x] Implementar componentes primitivos de navegación (`PublicTopBar`, `PublicBottomNav`, `PublicSidebar`, `PublicContextPanel`, `PublicAuthModal`, `PublicDrawer`).
+- [x] Suite de tests unitarios en `ds/packages/public-shell`.
+
 
 ### 📌 Fase 3: Construcción de `@loopdev/public-blocks`
 - [ ] Configurar `ds/packages/public-blocks/package.json` y `tsconfig.json`.
