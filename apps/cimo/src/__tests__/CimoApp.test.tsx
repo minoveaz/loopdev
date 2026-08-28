@@ -3,8 +3,8 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
-describe('CIMO App Pilot Integration', () => {
-  it('renders CIMO header, 3-column feed and allows filtering by sport', () => {
+describe('CIMO In-App Experience Integration', () => {
+  it('renders CIMO feed, sport filters and captain details', () => {
     render(<App />);
 
     // Philosophy Banner
@@ -18,13 +18,28 @@ describe('CIMO App Pilot Integration', () => {
     expect(screen.getByText('Chat del Crew')).toBeDefined();
   });
 
-  it('opens Auth Modal when clicking login button', () => {
+  it('switches between tabs: Feed, Chats and Profile', () => {
     render(<App />);
 
-    const loginBtn = screen.getByRole('button', { name: 'Entrar' });
-    fireEvent.click(loginBtn);
+    // Switch to Chats
+    const chatsTab = screen.getByRole('button', { name: /Chats/i });
+    fireEvent.click(chatsTab);
+    expect(screen.getByText('Chats de tus Crews')).toBeDefined();
 
-    expect(screen.getByText('Conéctate a CIMO')).toBeDefined();
-    expect(screen.getByPlaceholderText('tu.email@ejemplo.com')).toBeDefined();
+    // Switch to Profile
+    const profileTab = screen.getAllByRole('button', { name: /Perfil/i })[0];
+    fireEvent.click(profileTab);
+    expect(screen.getByText('Alex Rivera')).toBeDefined();
+    expect(screen.getByText('Mis Deportes & Niveles')).toBeDefined();
+  });
+
+  it('opens Create Plan modal when clicking Crear button', () => {
+    render(<App />);
+
+    const createBtn = screen.getByRole('button', { name: /Crear/i });
+    fireEvent.click(createBtn);
+
+    expect(screen.getByText('Publica tu entrenamiento')).toBeDefined();
+    expect(screen.getByPlaceholderText('Ej: Rodaje 10K suave por Madrid Río')).toBeDefined();
   });
 });
