@@ -1,6 +1,6 @@
 ---
 id: public-shell-foundation
-title: Public Shell Foundation, Contract-Driven Architecture, Public Blocks and Modular Client Surfaces
+title: Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Performance Certification
 status: active
 created: 2026-08-28
 updated: 2026-08-28
@@ -19,15 +19,17 @@ blocked_by: []
 supersedes: []
 ---
 
-# Public Shell Foundation, Contract-Driven Architecture, Public Blocks and Modular Client Surfaces
+# Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Performance Certification
 
 ## Outcome
 
-Proveer una arquitectura canónica de frontend público para el ecosistema LoopDev compuesta por:
-1. Contratos formales y esquemas Zod en `@loopdev/contracts`.
-2. Un orquestador de tiempo de ejecución (`PublicRuntime`) y un canvas declarativo de 12 columnas (`PublicCanvas`) en `@loopdev/public-shell`.
-3. Una librería modular de bloques públicos reutilizables (`@loopdev/public-blocks`) promovidos desde **VitaBlue** (Lead-Gen / Asesores / FAQs) y **CIMO** (Comunidad / Tarjetas de Actividad / Chat Streams / Feedback).
-4. Un modelo de composición en **4 niveles de granularidad** que elimina el código inline en las pantallas, soporta tematización multi-marca (*White-label*) y entrega una experiencia integral en **Desktop (3 columnas / multi-panel)**, **Tablet (2 columnas adaptativas)** y **Mobile (PWA táctil con BottomNav)**.
+Proveer una arquitectura canónica de frontend público para todo el ecosistema LoopDev (clientes actuales como **CIMO**, **VitaBlue** y futuros desarrollos) que integre:
+1. **Contratos Formales Zod:** Gobernanza en `@loopdev/contracts` para estados, composición, navegación, SEO y telemetría.
+2. **Orquestador `PublicRuntime` y Canvas de 12 Columnas (`PublicCanvas`):** Resolución matemática de layouts sin código inline, garantizando la triple experiencia en **Desktop (3 columnas / multi-panel)**, **Tablet (2 columnas adaptativas)** y **Mobile (PWA táctil con BottomNav)**.
+3. **Librería de Bloques Reutilizables (`@loopdev/public-blocks`):** Componentes modulares promovidos de VitaBlue (Lead-Gen / Asesores / FAQs) y CIMO (Comunidad / Tarjetas de Actividad / Chat Streams / Feedback).
+4. **Motor de SEO de Primera Clase:** Contratos JSON-LD (`Schema.org`), canonicals automáticos, hreflang multi-idioma, Open Graph, Twitter Cards y generación de `sitemap.xml` / `robots.txt`.
+5. **Telemetría, Consentimiento y Conversiones:** Soporte nativo para GA4, Google Ads (`AW-XXXXXX`), GTM, Meta Pixel y Google Consent Mode v2 respetando el `CookieBanner`.
+6. **Certificación y Puertas de Calidad:** Playwright E2E SEO Audits, pruebas unitarias con Vitest y auditoría automatizada con **Lighthouse / Unlighthouse** (Score ≥ 90/100).
 
 ---
 
@@ -40,7 +42,7 @@ graph TD
     end
 
     subgraph "Nivel 2: Infraestructura de Shell (@loopdev/public-shell)"
-        SHELL_COMPS["🧭 Componentes de Navegación & Layout<br>PublicRuntime, PublicCanvas, PublicTopBar, PublicBottomNav, PublicDrawer, PublicAuthModal, BrandThemeProvider"]
+        SHELL_COMPS["🧭 Componentes de Navegación, Layout & Servicios<br>PublicRuntime, PublicCanvas, PublicTopBar, PublicBottomNav, PublicDrawer, PublicAuthModal, PublicSeoHead, AnalyticsProvider"]
     end
 
     subgraph "Nivel 3: Bloques y Composiciones de Dominio (@loopdev/public-blocks)"
@@ -49,9 +51,9 @@ graph TD
     end
 
     subgraph "Nivel 4: Superficies de Clientes (Instancias Declarativas)"
-        CIMO_APP["🏃 CIMO App (Consume Nivel 1, 2 y 3)"]
-        VITA_APP["💙 VitaBlue Web (Consume Nivel 1, 2 y 3)"]
-        FUTURO_APP["🚀 Nuevo Cliente (Compone bloques en 5 minutos)"]
+        CIMO_APP["🏃 CIMO App (Social Sports / PWA)"]
+        VITA_APP["💙 VitaBlue Web (Seguros / Lead-Gen)"]
+        FUTURO_APP["🚀 Nuevo Cliente (Configurado en 5 minutos)"]
     end
 
     ATOMS --> SHELL_COMPS
@@ -72,29 +74,18 @@ graph TD
 
 | Fecha | Decisión | Motivo | Impacto | Aprobado por |
 | :--- | :--- | :--- | :--- | :--- |
-| **2026-08-28** | Modelo de 4 Niveles de Componentes (`@loopdev/ui` ➔ `@loopdev/public-shell` ➔ `@loopdev/public-blocks` ➔ Clientes). | Desacoplar primitivos de diseño, infraestructura de shell y bloques de negocio público reutilizables. | Reutilización masiva de código entre VitaBlue, CIMO y futuros clientes. | `@minoveaz` |
-| **2026-08-28** | Unificar Desktop, Tablet y Mobile en un solo `PublicShell` adaptativo continuo. | Evitar bifurcaciones de código y proveer una experiencia desktop rica (3 columnas) sin degradar la app móvil. | Arquitectura universal para todos los clientes públicos. | `@minoveaz` |
-| **2026-08-28** | Implementar `PublicRuntime` como motor simétrico a `SuiteRuntime`. | Centralizar la orquestación de slots, breakpoints, eventos de navegación y ciclo de vida. | Separación total entre lógica de orquestación y bloques de UI. | `@minoveaz` |
-| **2026-08-28** | Implementar `PublicCanvas` con Grid matemático de 12 columnas. | Replicar la robustez de `SuiteCanvas` para resolver layouts sin código inline. | Layouts declarativos, predecibles y sin layout shifts. | `@minoveaz` |
-| **2026-08-28** | Arquitectura orientada a contratos en `@loopdev/contracts/src/platform/public-shell.ts`. | Mantener la misma disciplina y robustez que gobierna el SaaS Shell de LoopDev. | Tipado Zod estricto en runtime y compile-time. | `@minoveaz` |
-| **2026-08-28** | Inyección de Tokens de Marca dinámicos (`PublicBrandTheme`). | Permitir que CIMO, VitaBlue y futuros clientes compartan el 100% de la infraestructura visual. | Soporte nativo para clientes multi-marca (*White-Label*). | `@minoveaz` |
-
----
-
-## Reglas de Promoción de Componentes (*Component Promotion Workflow*)
-
-1. **Primitivo Puro UI (Agnóstico de negocio):** Vive en `@loopdev/ui` (ej. `Button`, `BottomSheet`, `RatingStars`).
-2. **Infraestructura de Shell/Navegación:** Vive en `@loopdev/public-shell` (ej. `PublicRuntime`, `PublicTopBar`, `PublicBottomNav`, `PublicCanvas`).
-3. **Bloque de Dominio Público Reutilizable:** Vive en `@loopdev/public-blocks` (ej. `AdvisorCard`, `ActivityCard`, `ChatStreamWidget`, `FaqSection`).
-4. **Lógica Exclusiva Vertical:** Vive en la aplicación del cliente (ej. cotizador Sanitas en `vitablue`, ritmo km en `cimo`).
+| **2026-08-28** | Arquitectura de 4 Niveles (`@loopdev/ui` ➔ `@loopdev/public-shell` ➔ `@loopdev/public-blocks` ➔ Clientes). | Desacoplar primitivos, infraestructura de navegación y bloques de negocio reutilizables. | Reutilización masiva de código entre VitaBlue, CIMO y futuros clientes. | `@minoveaz` |
+| **2026-08-28** | Unificar Desktop, Tablet y Mobile en un solo `PublicShell` adaptativo continuo. | Evitar bifurcaciones y entregar una experiencia desktop rica (3 columnas) sin degradar la app móvil. | Arquitectura universal para todos los clientes públicos. | `@minoveaz` |
+| **2026-08-28** | Implementar `PublicRuntime` y `PublicCanvas` (Grid 12 cols). | Replicar la disciplina de `SuiteRuntime` y `SuiteCanvas` del SaaS Shell. | Layouts declarativos matemáticos sin código inline. | `@minoveaz` |
+| **2026-08-28** | Sistema de SEO de Primera Clase gobernado por contratos Zod. | Garantizar indexabilidad, canonicals sin redirecciones, Open Graph y datos estructurados Schema.org. | Máxima visibilidad orgánica en Google y motores de IA. | `@minoveaz` |
+| **2026-08-28** | Telemetría Unificada (GA4, Google Ads, GTM, Consent Mode v2). | Estandarizar tracking de conversiones y eventos respetando el RGPD / CookieBanner. | Medición unificada de campañas y atribución. | `@minoveaz` |
+| **2026-08-28** | Puerta de Calidad de Auditoría Lighthouse / Unlighthouse en CI. | Exigir estándares de Performance, a11y, Best Practices y SEO (Score ≥ 90). | Experiencias ultra rápidas y certificadas. | `@minoveaz` |
 
 ---
 
 ## Arquitectura de Contratos (`@loopdev/contracts`)
 
-El archivo canónico `packages/contracts/src/platform/public-shell.ts` define:
-
-### 1. Estados Estructurales del Shell (`PublicShellState`)
+### 1. Estados Estructurales (`PublicShellState`)
 - `ready`, `loading`, `error`, `offline`, `unauthenticated`, `maintenance`.
 
 ### 2. Recetas Canónicas de Composición (`PublicCompositionRecipe`)
@@ -105,32 +96,59 @@ El archivo canónico `packages/contracts/src/platform/public-shell.ts` define:
 - `PublicWorkflowCanvas`: Stepper centrado (12 cols, max-w-xl) para Auth / Onboarding / Feedback.
 
 ### 3. Regiones de Canvas (`PublicCompositionRegion`)
-- `id`, `slot` (`top-bar`, `sidebar-filters`, `main-feed`, `context-inspector`, `bottom-nav`, `floating-actions`, `modal-overlay`), `colSpan` (1-12), `rowSpan`, `sizing`, `overflow`, y reglas responsivas (`tablet` y `mobile`).
+- `id`, `slot`, `colSpan` (1-12), `rowSpan`, `sizing`, `overflow`, y reglas responsivas (`tablet` y `mobile`).
 
-### 4. Navegación Pública Tipada (`PublicNavRoute`)
-- Rutas con `id`, `path`, `label`, `icon`, `badgeCount` en vivo, visibilidad por viewport (`mobile`, `tablet`, `desktop`) y `requiresAuth`.
+### 4. Contratos de SEO y Datos Estructurados (`PublicSeoMetadata`)
+```typescript
+export const PublicSeoMetadataSchema = z.object({
+  title: z.string().min(10).max(80),
+  description: z.string().min(50).max(200),
+  canonicalUrl: z.string().url().optional(),
+  hreflang: z.record(z.string()).optional(),
+  openGraph: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().url(),
+    type: z.enum(['website', 'article', 'profile']).default('website'),
+  }),
+  twitter: z.object({
+    card: z.enum(['summary', 'summary_large_image']).default('summary_large_image'),
+    site: z.string().optional(),
+  }).optional(),
+  jsonLd: z.array(z.record(z.any())).optional(), // Schema.org Objects (SportsEvent, Product, FAQPage)
+  indexable: z.boolean().default(true),
+});
+```
 
-### 5. Motor de Temas de Marca (`PublicBrandTheme`)
-- Paleta semántica (`primary`, `primaryHover`, `secondary`, `accent`, `background`, `surface`, `textMain`, `textSecondary`).
-- Logos vectoriales SVG (`markSvg`, `fullSvg`, `favicon`).
-- Tipografía y contraste accesible (mínimo 4.5:1 WCAG AA).
+### 5. Contratos de Telemetría y Analytics (`PublicAnalyticsConfig`)
+```typescript
+export const PublicAnalyticsConfigSchema = z.object({
+  googleAnalyticsId: z.string().regex(/^G-[A-Z0-9]+$/).optional(),
+  googleAdsId: z.string().regex(/^AW-[0-9]+$/).optional(),
+  gtmId: z.string().regex(/^GTM-[A-Z0-9]+$/).optional(),
+  metaPixelId: z.string().optional(),
+  consentModeEnabled: z.boolean().default(true),
+});
+```
 
 ---
 
 ## Fases de Ejecución y Checkpoints
 
-### 📌 Fase 1: Contratos y Especificaciones en `@loopdev/contracts`
-- [ ] Crear `packages/contracts/src/platform/public-shell.ts` con todos los schemas Zod y tipos inferidos.
-- [ ] Exportar los contratos en `packages/contracts/src/index.ts`.
-- [ ] Añadir suite de tests unitarios de validación de contratos (`public-shell.test.ts`).
+### 📌 Fase 1: Contratos Zod en `@loopdev/contracts`
+- [ ] Crear `packages/contracts/src/platform/public-shell.ts` con todos los schemas (`PublicShellState`, `PublicCompositionRecipe`, `PublicCompositionRegion`, `PublicViewComposition`, `PublicNavRoute`, `PublicBrandTheme`).
+- [ ] Crear `packages/contracts/src/platform/seo.ts` y `telemetry.ts` con los contratos de SEO y Analytics.
+- [ ] Exportar contratos en `packages/contracts/src/index.ts`.
+- [ ] Suite de tests unitarios de validación de contratos (`public-shell.test.ts`, `seo.test.ts`).
 - [ ] Ejecutar build de contracts: `pnpm --filter @loopdev/contracts build`.
 
-### 📌 Fase 2: Construcción de `@loopdev/public-shell` y Primitivos UI
+### 📌 Fase 2: Construcción de `@loopdev/public-shell` y Servicios Base
 - [ ] Configurar `ds/packages/public-shell/package.json` y `tsconfig.json`.
 - [ ] Implementar el motor de theming: `BrandThemeProvider` y `useBrandTheme`.
 - [ ] Construir el orquestador `<PublicRuntime>` y el motor `<PublicCanvas>`.
+- [ ] Implementar `<PublicSeoHead>` (Helmet/Head con Canonicals, Open Graph, Twitter Cards y JSON-LD).
+- [ ] Implementar `<PublicAnalyticsProvider>` con soporte para GA4, Google Ads, `dataLayer` y Google Consent Mode v2.
 - [ ] Implementar componentes primitivos de navegación (`PublicTopBar`, `PublicBottomNav`, `PublicSidebar`, `PublicContextPanel`, `PublicAuthModal`, `PublicDrawer`).
-- [ ] Añadir primitivos faltantes en `@loopdev/ui` (ej. `BottomSheet`, `RatingStars`).
 - [ ] Suite de tests unitarios en `ds/packages/public-shell`.
 
 ### 📌 Fase 3: Construcción de `@loopdev/public-blocks`
@@ -141,23 +159,27 @@ El archivo canónico `packages/contracts/src/platform/public-shell.ts` define:
   - `ActivityCard.tsx`, `CrewAvatarGroup.tsx`, `ChatStreamWidget.tsx`, `FeedbackRatingBlock.tsx`, `OnboardingStepper.tsx`.
 - [ ] Suite de tests unitarios en `ds/packages/public-blocks`.
 
-### 📌 Fase 4: Refactorización Piloto de CIMO y Certificación
-- [ ] Declarar `cimoFeedPageSpec`, `CIMO_FEED_COMPOSITION` y `cimoBrandTheme`.
+### 📌 Fase 4: Refactorización Piloto de CIMO, Auditorías y Certificación
+- [ ] Configurar especificación `cimoFeedPageSpec`, `CIMO_FEED_COMPOSITION`, `cimoBrandTheme` y `cimoSeoConfig`.
 - [ ] Componer la aplicación CIMO importando exclusivamente bloques de `@loopdev/public-blocks` y `@loopdev/public-shell` (cero código inline).
 - [ ] Validar la experiencia de 3 columnas en Desktop, 2 columnas en Tablet y App móvil táctil en Mobile.
-- [ ] Ejecutar `pnpm turbo run build lint test` en todo el monorepo.
-- [ ] Registrar evidencia en el track y preparar Pull Request hacia `develop`.
+- [ ] Configurar scripts de auditoría automatizada con **Unlighthouse / Lighthouse** (`unlighthouse.config.ts`).
+- [ ] Suite de tests E2E de SEO y responsive con Playwright.
+- [ ] Ejecutar `pnpm turbo run build lint test` en todo el monorepo y registrar evidencia en el track.
 
 ---
 
-## Criterios de Aceptación
+## Criterios de Aceptación y Certificación
 
-1. **Validación de Contratos:** El 100% de los schemas Zod de `public-shell.ts` compilan y superan las pruebas unitarias.
-2. **Orquestador PublicRuntime y PublicCanvas:** Resuelven la distribución de 12 columnas, slots y eventos responsivos sin código inline.
+1. **Validación de Contratos:** El 100% de los schemas Zod de `public-shell.ts`, `seo.ts` y `telemetry.ts` compilan y superan los tests.
+2. **Orquestador PublicRuntime y PublicCanvas:** Resuelven la distribución de 12 columnas, slots, responsive y eventos de ciclo de vida sin código inline.
 3. **Librería de Bloques Operativa:** `@loopdev/public-blocks` exporta componentes modulares listos para ser consumidos por cualquier portal o app.
 4. **Triple Experiencia Verificada en CIMO:**
    - **Desktop (`≥ 1024px`):** Layout expansivo de 3 columnas (`Filtros` | `Feed` | `Inspector de Crew`).
    - **Tablet (`640px - 1024px`):** Reorganización limpia en 2 columnas con drawer colapsable.
    - **Mobile (`< 640px`):** Experiencia táctil fluida con TopBar compacta, BottomNav fija y safe-areas respetadas.
-5. **Theming White-Label Universal:** El cambio de tokens de marca adapta instantáneamente colores, logos y tipografías.
-6. **Quality Gate Verde:** `pnpm turbo run build typecheck test` finaliza con 0 errores en el monorepo.
+5. **SEO & Telemetría Certificados:**
+   - 100% de páginas con canonical, meta description, Open Graph y datos estructurados Schema.org válidos.
+   - Tracking de GA4 y conversiones de Google Ads disparándose a `dataLayer` conforme al consentimiento.
+6. **Lighthouse Score ≥ 90:** Rendimiento, Accesibilidad, Mejores Prácticas y SEO certificados.
+7. **Quality Gate Verde:** `pnpm turbo run build typecheck test` finaliza con 0 errores en el monorepo.
