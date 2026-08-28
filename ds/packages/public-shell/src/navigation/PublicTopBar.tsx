@@ -62,7 +62,7 @@ export const PublicTopBar: React.FC<PublicTopBarProps> = ({
 
       {/* Center: Search / Tabs / Custom slot */}
       {centerSlot ? (
-        <div className="hidden md:flex flex-1 max-w-md mx-6">{centerSlot}</div>
+        <div className="hidden md:flex flex-1 max-w-2xl mx-4 justify-center">{centerSlot}</div>
       ) : navigation?.routes ? (
         <nav className="hidden lg:flex items-center gap-1">
           {navigation.routes

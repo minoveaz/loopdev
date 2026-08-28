@@ -142,27 +142,12 @@ export function App() {
       case 'feed':
       default:
         return (
-          <div className="flex flex-col gap-6">
-            {/* Airbnb Experiences Style Floating Search Bar */}
-            <CimoFloatingSearchBar
-              selectedSport={selectedSport}
-              onSelectSport={setSelectedSport}
-              selectedDay={selectedDay}
-              onSelectDay={setSelectedDay}
-              selectedZone={selectedZone}
-              onSelectZone={setSelectedZone}
-              selectedLevel={selectedLevel}
-              onSelectLevel={setSelectedLevel}
-            />
-
-            {/* Curated Feed with 2-Col Activity Cards Grid */}
-            <CimoCuratedFeed
-              activities={filteredActivities}
-              selectedActivityId={selectedActivityId}
-              onSelectActivity={handleSelectActivity}
-              onJoinActivity={handleJoinActivity}
-            />
-          </div>
+          <CimoCuratedFeed
+            activities={filteredActivities}
+            selectedActivityId={selectedActivityId}
+            onSelectActivity={handleSelectActivity}
+            onJoinActivity={handleJoinActivity}
+          />
         );
     }
   };
@@ -184,8 +169,20 @@ export function App() {
               navigation={cimoNavigation}
               activeRouteId={currentRoute}
               onNavigate={setCurrentRoute}
+              centerSlot={
+                <CimoFloatingSearchBar
+                  selectedSport={selectedSport}
+                  onSelectSport={setSelectedSport}
+                  selectedDay={selectedDay}
+                  onSelectDay={setSelectedDay}
+                  selectedZone={selectedZone}
+                  onSelectZone={setSelectedZone}
+                  selectedLevel={selectedLevel}
+                  onSelectLevel={setSelectedLevel}
+                />
+              }
               rightSlot={
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => {
@@ -195,11 +192,28 @@ export function App() {
                       }
                       setIsCreateOpen(true);
                     }}
-                    className="px-4 py-2 text-xs font-extrabold text-white bg-[#1F4E5F] hover:bg-[#183e4c] rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95"
+                    className="px-3.5 py-2 text-xs font-extrabold text-white bg-[#1F4E5F] hover:bg-[#183e4c] rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0"
                   >
                     <Plus className="w-4 h-4 text-[#00B894] stroke-[3]" />
                     <span className="hidden sm:inline">Crear Plan</span>
                     <span className="sm:hidden">Crear</span>
+                  </button>
+
+                  {/* Chats button with badge */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentRoute('chats')}
+                    aria-label="Abrir chats"
+                    className={`relative p-2.5 rounded-full border transition-all cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center shrink-0 ${
+                      currentRoute === 'chats'
+                        ? 'bg-[#1F4E5F] text-white border-[#1F4E5F]'
+                        : 'bg-[#F7F7F7] border-[#1F4E5F]/10 text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
+                    }`}
+                  >
+                    <span className="text-sm">💬</span>
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#00B894] text-white text-[9px] font-black flex items-center justify-center border-2 border-white">
+                      3
+                    </span>
                   </button>
 
                   {isAuthenticated ? (
@@ -207,7 +221,7 @@ export function App() {
                       type="button"
                       onClick={() => setCurrentRoute('profile')}
                       aria-label="Ver mi perfil"
-                      className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs"
+                      className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs shrink-0"
                     >
                       {currentUser.avatarUrl ? (
                         <img src={currentUser.avatarUrl} alt={currentUser.name} className="w-full h-full object-cover" />
