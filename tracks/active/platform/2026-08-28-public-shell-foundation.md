@@ -99,11 +99,11 @@ graph TD
 ## Fases de Ejecución y Checkpoints
 
 ### 📌 Fase 1: Contratos Zod en `@loopdev/contracts`
-- [ ] Crear `packages/contracts/src/platform/public-shell.ts` con todos los schemas (`PublicShellState`, `PublicCompositionRecipe`, `PublicCompositionRegion`, `PublicViewComposition`, `PublicNavRoute`, `PublicBrandTheme`).
-- [ ] Crear `packages/contracts/src/platform/seo.ts` y `telemetry.ts` con los contratos de SEO y Analytics.
-- [ ] Exportar contratos en `packages/contracts/src/index.ts`.
-- [ ] Suite de tests unitarios de validación de contratos (`public-shell.test.ts`, `seo.test.ts`).
-- [ ] Ejecutar build de contracts: `pnpm --filter @loopdev/contracts build`.
+- [x] Crear `packages/contracts/src/platform/public-shell.ts` con todos los schemas (`PublicShellState`, `PublicCompositionRecipe`, `PublicCompositionRegion`, `PublicViewComposition`, `PublicNavRoute`, `PublicBrandTheme`).
+- [x] Crear `packages/contracts/src/platform/seo.ts` y `telemetry.ts` con los contratos de SEO y Analytics.
+- [x] Exportar contratos en `packages/contracts/src/index.ts`.
+- [x] Suite de tests unitarios de validación de contratos (`public-shell.test.ts`, `seo.test.ts`).
+- [x] Ejecutar build de contracts: `pnpm --filter @loopdev/contracts build`.
 
 ### 📌 Fase 2: Construcción de `@loopdev/public-shell` y Servicios Base
 - [ ] Configurar `ds/packages/public-shell/package.json` y `tsconfig.json`.
