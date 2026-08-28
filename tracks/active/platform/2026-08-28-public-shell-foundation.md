@@ -124,12 +124,15 @@ graph TD
 - [x] Suite de tests unitarios en `ds/packages/public-blocks`.
 
 
-### 📌 Fase 4: Refactorización Piloto de CIMO, Auditorías y Certificación
+### 📌 Fase 4: Refactorización Piloto de CIMO, Landing Page, Onboarding & Auditorías
 - [x] Configurar especificación `cimoFeedPageSpec`, `CIMO_FEED_COMPOSITION`, `cimoBrandTheme` y `cimoSeoConfig`.
-- [x] Componer la aplicación CIMO importando exclusivamente bloques de `@loopdev/public-blocks` y `@loopdev/public-shell` (cero código inline).
+- [x] Componer el motor de App de CIMO importando exclusivamente bloques de `@loopdev/public-blocks` y `@loopdev/public-shell` (cero código inline).
 - [x] Validar la experiencia de 3 columnas en Desktop, 2 columnas en Tablet y App móvil táctil en Mobile.
+- [ ] Construir la **Landing Page Pública de CIMO** (Hero de conversión, 3 pilares 'Match con entrenos no con personas', showcase de planes en vivo, cómo funciona 1-2-3 y testimonios).
+- [ ] Construir el flujo de **Onboarding & Registro Deportivo** (email magic-link, selección de deportes favoritos y nivel).
+- [ ] Conectar la transición fluida: `Landing Page` (visitantes) ➔ `Onboarding` ➔ `App Feed 3-col / Mobile PWA` (registrados).
 - [ ] Configurar scripts de auditoría automatizada con **Unlighthouse / Lighthouse** (`unlighthouse.config.ts`).
-- [ ] Suite de tests E2E de SEO y responsive con Playwright.
+- [ ] Suite de tests E2E de SEO, responsive y embudo de conversión con Playwright.
 - [ ] Ejecutar `pnpm turbo run build lint test` en todo el monorepo y registrar evidencia en el track.
 
 
