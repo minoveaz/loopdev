@@ -6,6 +6,7 @@
   --lpd-z-sticky: 1100;
   --lpd-z-banner: 1200;
   --lpd-z-overlay: 1300;
+  --lpd-z-command-dialog: 5000;
   --lpd-z-modal: 1400;
   --lpd-z-popover: 1500;
   --lpd-z-toast: 1600;

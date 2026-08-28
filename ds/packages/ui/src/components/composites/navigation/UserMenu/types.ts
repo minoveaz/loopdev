@@ -27,6 +27,8 @@ export interface UserMenuProps {
   onLogout: () => void;
   /** Callback para ir a los ajustes de perfil */
   onProfileClick?: () => void;
+  /** Callback para abrir el panel contextual directamente desde el avatar */
+  onAvatarClick?: () => void;
   /** Callback para abrir los ajustes de cuenta */
   onSettingsClick?: () => void;
   /** Callback para ir a facturación */

@@ -42,7 +42,7 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = (props) => {
                 type="button"
                 aria-label="Sidebar control"
                 onPointerDown={props.onMenuTrigger}
-                className="text-text-muted hover:bg-accent/10 hover:text-accent dark:hover:bg-accent/15 dark:hover:text-accent focus-visible:ring-primary flex size-10 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2"
+                className="text-text-muted hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/15 dark:hover:text-primary focus-visible:ring-primary flex size-10 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2"
               >
                 <PanelLeft size={18} aria-hidden="true" />
               </button>

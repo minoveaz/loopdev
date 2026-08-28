@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
-import { StatusPulse } from '../..';
 import { IdentityBar } from '../..';
 import { TechnicalTooltip } from '../..';
 import { NavSidebarItemProps } from './types';
@@ -39,7 +38,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
       onPointerEnter={isRail && technicalTooltip ? () => setIsTooltipOpen(true) : undefined}
       onPointerLeave={isRail && technicalTooltip ? () => setIsTooltipOpen(false) : undefined}
       className={containerClasses}
-      role="menuitem"
+      role={props.role ?? 'menuitem'}
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}
       aria-disabled={isDisabled || isComingSoon}
@@ -57,7 +56,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
       <IconComponent size={isRail ? 20 : 18} className={`${contentClasses} shrink-0`} />
 
       {/* 3. Etiqueta de Texto (Oculta en Rail) */}
-      {!isRail && <span className={`${contentClasses} text-sm truncate flex-1`}>{label}</span>}
+      {!isRail && <span className={`${contentClasses} text-base truncate flex-1`}>{label}</span>}
       {isRail && revealOnHover && (
         <span
           data-sidebar-label
@@ -67,14 +66,7 @@ export const NavSidebarItem: React.FC<NavSidebarItemProps> = (props) => {
         </span>
       )}
 
-      {/* 4. Momentum Dot (Contexto Vivo - Solo en Expanded) */}
-      {isActive && !isRail && (
-        <div className="flex items-center justify-center shrink-0 w-4 h-4">
-          <StatusPulse variant="energy" size="sm" />
-        </div>
-      )}
-
-      {/* 5. Telemetría / Badges */}
+      {/* 4. Telemetría / Badges */}
       {telemetry && !isRail && !isActive && (
         <div className="bg-primary text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-sm">
           {telemetry.value}

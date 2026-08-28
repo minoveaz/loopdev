@@ -32,6 +32,35 @@ describe('NavSidebarItem Atom', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
+  it('no debe disparar navegación si el estado es forbidden', () => {
+    const mockNavigate = vi.fn();
+    render(
+      <NavSidebarItem label="Forbidden" icon="Lock" status="forbidden" onNavigate={mockNavigate} />,
+    );
+
+    const item = screen.getByRole('menuitem');
+    fireEvent.click(item);
+    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(item).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('mantiene la navegación disponible en modo read-only', () => {
+    const mockNavigate = vi.fn();
+    const testRoute = { routeId: '/read-only' };
+    render(
+      <NavSidebarItem
+        label="Read only"
+        icon="Eye"
+        status="read-only"
+        onNavigate={mockNavigate}
+        route={testRoute}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('menuitem'));
+    expect(mockNavigate).toHaveBeenCalledWith(testRoute);
+  });
+
   it('debe ocultar el texto en modo Rail', () => {
     render(<NavSidebarItem label="Hidden Text" icon="LibraryBig" isRail={true} />);
     expect(screen.queryByText('Hidden Text')).not.toBeInTheDocument();
@@ -80,12 +109,21 @@ describe('NavSidebarItem Atom', () => {
     render(<NavSidebarItem label="Active" icon="LibraryBig" isActive={true} />);
     const item = screen.getByRole('menuitem');
     expect(item).toHaveAttribute('aria-current', 'page');
-    expect(item).toHaveClass('bg-primary', 'text-white');
+    expect(item).toHaveClass(
+      'border-l-4',
+      'border-l-[var(--lpd-color-brand-primary)]',
+      'bg-[var(--lpd-color-bg-primary-subtle)]',
+      'text-slate-800',
+    );
   });
 
-  it('debe usar el acento amarillo para hover en estados interactivos', () => {
+  it('debe usar una superficie sutil y texto principal para hover en estados interactivos', () => {
     render(<NavSidebarItem label="Hoverable" icon="LibraryBig" />);
-    expect(screen.getByRole('menuitem')).toHaveClass('hover:bg-accent/10', 'hover:!text-accent');
+    expect(screen.getByRole('menuitem')).toHaveClass(
+      'hover:border-primary/20',
+      'hover:bg-surface-elevated',
+      'hover:!text-text-main',
+    );
   });
 
   it('has no accessibility violations in the active navigation state', async () => {

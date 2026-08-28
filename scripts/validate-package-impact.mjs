@@ -165,15 +165,35 @@ function isPackageManifest(file) {
   return file.endsWith('/package.json') || file === 'package.json';
 }
 
+function isBackendOnlyWebFile(file) {
+  return (
+    file.startsWith('apps/loopdev-os/src/app/api/') ||
+    file.startsWith('apps/loopdev-os/src/services/') ||
+    file.startsWith('apps/loopdev-os/src/types/')
+  );
+}
+
 function resolveImpact(files) {
   const rules = new Map();
   let globalFallback = false;
   let mobile = false;
+  let frontend = false;
 
   for (const file of files) {
     if (file.startsWith('supabase/')) continue;
 
-    if (file.startsWith('apps/loopdev-mobile/')) mobile = true;
+    if (file.startsWith('apps/loopdev-mobile/')) {
+      mobile = true;
+      continue;
+    }
+
+    if (
+      (file.startsWith('apps/loopdev-os/') && !isBackendOnlyWebFile(file)) ||
+      file.startsWith('e2e/')
+    ) {
+      frontend = true;
+      continue;
+    }
 
     if (isDocumentation(file)) continue;
 
@@ -205,6 +225,7 @@ function resolveImpact(files) {
     globalFallback,
     hasTargetedValidation: rules.size > 0,
     mobile,
+    frontend,
   };
 }
 
@@ -241,6 +262,7 @@ function writeGithubOutput(impact) {
       `global_fallback=${impact.globalFallback}`,
       `has_targeted_validation=${impact.hasTargetedValidation}`,
       `mobile=${impact.mobile}`,
+      `frontend=${impact.frontend}`,
       `package_ids=${impact.packageIds.join(',')}`,
     ].join('\n') + '\n',
   );
@@ -295,7 +317,7 @@ function main() {
   }
 }
 
-export { buildCommands, resolveImpact };
+export { buildCommands, isBackendOnlyWebFile, resolveImpact };
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main();

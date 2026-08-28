@@ -12,12 +12,14 @@ export const useQuickActionMenu = (props: QuickActionMenuProps) => {
   const triggerClasses = `
     p-2 rounded-lg transition-all duration-300 flex items-center justify-center
     bg-primary/10 text-primary hover:bg-primary hover:text-white shadow-lg shadow-primary/10
-    ${isOpen ? 'rotate-45 bg-primary text-white' : 'rotate-0'}
-  `.replace(/\s+/g, ' ').trim();
+    ${isOpen ? `${props.triggerIcon === 'more_vert' ? 'rotate-0' : 'rotate-45'} bg-primary text-white` : 'rotate-0'}
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
 
   return {
     isOpen,
     setIsOpen,
-    triggerClasses
+    triggerClasses,
   };
 };

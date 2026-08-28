@@ -247,8 +247,8 @@ Pull request #56 contains the executable phase 1 implementation and is open agai
 Focused resolver tests, Node syntax, ESLint, Prettier, UI lint/typecheck/build, and mobile
 lint/typecheck passed. Mobile Jest currently has three pre-existing failures in `App.test.tsx`
 (two 5-second timeouts and one organization-state expectation); the `loopdev-os` consumer build
-also fails in generated `.next/dev/types` because `src/app/operation-os/page.tsx` cannot be
-resolved. The full phase remains open until those validation gaps are addressed or explicitly
+also fails TypeScript resolution for `@loopdev/tokens` from the remaining shell showcase. The full
+phase remains open until those validation gaps are addressed or explicitly
 accepted in a later evidence update.
 
 **Estado:** en ejecución

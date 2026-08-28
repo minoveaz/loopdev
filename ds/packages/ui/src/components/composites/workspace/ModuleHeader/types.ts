@@ -1,7 +1,7 @@
 import React from 'react';
 import { BadgeSeverity } from '../../../atoms/indicators/TechnicalStatusBadge/types';
 
-interface BreadcrumbSegment {
+export interface BreadcrumbSegment {
   id: string;
   label: string;
   href?: string;
@@ -10,6 +10,15 @@ interface BreadcrumbSegment {
 }
 
 export interface ModuleHeaderProps {
+  /** Slot izquierdo: orientación y contexto del módulo. */
+  leftSlot?: React.ReactNode;
+
+  /** Slot central: estado o información contextual del módulo. */
+  centerSlot?: React.ReactNode;
+
+  /** Slot derecho: acciones propias del módulo. */
+  rightSlot?: React.ReactNode;
+
   /** Ruta de breadcrumbs jerárquicos { SUITE / MODULE / VIEW } */
   segments: BreadcrumbSegment[];
 
@@ -29,9 +38,16 @@ export interface ModuleHeaderProps {
     ariaLabel?: string;
   };
 
-  /** Slot para acciones a la derecha */
-  rightSlot?: React.ReactNode;
+  /** Número de filas visuales permitidas por el chasis. */
+  rows?: 1 | 2;
 
   /** Clase CSS adicional */
   className?: string;
+
+  /** Nombre accesible del encabezado de módulo. */
+  ariaLabel?: string;
+
+  /** Control responsive de visibilidad */
+  visibleOnMobile?: boolean;
+  visibleOnDesktop?: boolean;
 }

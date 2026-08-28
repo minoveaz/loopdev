@@ -40,7 +40,6 @@ export const PasswordToggle: React.FC<{ show: boolean; onToggle: () => void }> =
     onClick={onToggle}
     aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}
     className="mr-3 text-text-muted hover:text-text-main dark:hover:text-white transition-colors outline-none focus:text-primary"
-    tabIndex={-1}
   >
     {show ? <EyeOff size={18} /> : <Eye size={18} />}
   </button>

@@ -29,6 +29,16 @@ describe('UserMenu', () => {
 
     expect(screen.getByText('LoopDev Workspace')).toBeInTheDocument();
   });
+
+  it('opens the contextual profile flow directly from the avatar when configured', () => {
+    const onAvatarClick = vi.fn();
+    render(<UserMenu {...userProps} onAvatarClick={onAvatarClick} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open profile' }));
+
+    expect(onAvatarClick).toHaveBeenCalledOnce();
+    expect(screen.queryByText('Ada Lovelace')).not.toBeInTheDocument();
+  });
 });
 
 import { describe, it, expect, vi } from 'vitest';

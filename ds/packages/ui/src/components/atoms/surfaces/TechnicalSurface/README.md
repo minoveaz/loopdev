@@ -21,4 +21,9 @@ import { TechnicalSurface } from '@loopdev/ui';
 | --- | --- | --- | --- |
 | `variant` | `'surface' \| 'glass' \| 'canvas'` | `'surface'` | Estética base del fondo. |
 | `depth` | `'flat' \| 'raised' \| 'overlay'` | `'flat'` | Nivel de sombra y contraste de borde. |
-| `withGrid` | `boolean` | `false` | Activa la textura de micro-grilla Blueprint. |
+| `withGrid` | `boolean` | `false` | Compone la capa decorativa canónica `TechnicalCanvas`; solo debe usarse en canvas, dashboards, boards técnicos o workflows inmersivos aprobados. |
+
+`TechnicalSurface` no dibuja la grilla directamente. `withGrid` mantiene la
+compatibilidad pública y compone `TechnicalCanvas` con una configuración
+compacta de 20px sin subgrilla. Las recipes no deben reproducir la grilla con
+CSS local.

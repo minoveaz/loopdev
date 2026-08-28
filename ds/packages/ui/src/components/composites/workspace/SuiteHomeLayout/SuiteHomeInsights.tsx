@@ -10,6 +10,8 @@ interface SuiteHomeInsightsProps {
 
 /**
  * @component SuiteHomeInsights
+ * @deprecated Legacy child of SuiteHomeLayout. Use current dashboard
+ * composites and explicit composition slots for new suite screens.
  * @description Panel de telemetría ejecutiva.
  * Renderiza una rejilla de tarjetas de métricas industriales.
  */

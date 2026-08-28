@@ -3,7 +3,7 @@
 import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import process from 'node:process';
-import { resolveImpact } from './validate-package-impact.mjs';
+import { isBackendOnlyWebFile, resolveImpact } from './validate-package-impact.mjs';
 
 const checks = {
   governance: {
@@ -28,7 +28,7 @@ const checks = {
       'apps/loopdev-os/src/app/shell-showcase/',
       'apps/loopdev-os/src/app/launchpad/',
       'ds/packages/ui/src/components/composites/shell/',
-      'ds/packages/ui/src/components/composites/utilities/GlobalContextPanel/',
+      'ds/packages/ui/src/components/composites/utilities/PlatformContextPanel/',
       'scripts/check-shell.mjs',
     ],
   },
@@ -54,23 +54,23 @@ function matchesPath(file, path) {
 }
 
 function isDocumentationOnly(file) {
-  return (
-    file.startsWith('docs/') ||
-    file.startsWith('conductor/') ||
-    /\.(md|mdx|txt)$/i.test(file)
-  );
+  return file.startsWith('docs/') || file.startsWith('conductor/') || /\.(md|mdx|txt)$/i.test(file);
 }
 
 function buildExperiencePlan(files) {
   const hasWebApplicationChange = files.some(
-    (file) => file.startsWith('apps/loopdev-os/') || file.startsWith('ds/packages/ui/'),
+    (file) =>
+      (file.startsWith('apps/loopdev-os/') &&
+        !file.startsWith('apps/loopdev-os/src/app/api/') &&
+        !file.startsWith('apps/loopdev-os/src/services/') &&
+        !file.startsWith('apps/loopdev-os/src/types/')) ||
+      file.startsWith('ds/packages/ui/'),
   );
   const desktop =
     hasWebApplicationChange ||
     files.some((file) =>
       [
         'e2e/authenticated.application.spec.mjs',
-        'e2e/marketing-studio.dam.spec.mjs',
         'e2e/phase5.certification.spec.mjs',
         'e2e/shell.accessibility.spec.mjs',
         'e2e/shell.smoke.spec.mjs',
@@ -108,7 +108,12 @@ function buildValidationPlan(files) {
     }
 
     for (const [domain, check] of Object.entries(checks)) {
-      if (check.paths.some((path) => matchesPath(file, path))) changedDomains.add(domain);
+      if (
+        check.paths.some((path) => matchesPath(file, path)) &&
+        !(domain === 'web' && isBackendOnlyWebFile(file))
+      ) {
+        changedDomains.add(domain);
+      }
     }
 
     if (fullFallbackFiles.some((path) => matchesPath(file, path))) {
@@ -192,7 +197,9 @@ function renderGithubSummary(plan) {
     '',
     '_This report explains derived validation scope; it does not provide a skip override._',
     '',
-  ].filter((line) => line !== '').join('\n');
+  ]
+    .filter((line) => line !== '')
+    .join('\n');
 }
 
 function writeGithubSummary(plan) {

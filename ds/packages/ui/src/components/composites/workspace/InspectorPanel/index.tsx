@@ -16,30 +16,37 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = (props) => {
   const { title, subtitle, onClose, headerSlot, children, footerSlot, className = '' } = props;
 
   return (
-    <div className={`flex flex-col h-full bg-shell-canvas ${className}`} role="region" aria-label="Panel de inspección">
-      
+    <div
+      className={`flex flex-col h-full bg-shell-canvas ${className}`}
+      role="region"
+      aria-label="Panel de inspección"
+    >
       {/* 1. Header del Panel (Fijo) */}
       <div className="flex flex-col flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-3 h-[48px]">
           <div className="flex flex-col min-w-0">
-            <LpdText size="sm" weight="bold" className="text-text-main truncate uppercase tracking-tight">
+            <LpdText
+              size="sm"
+              weight="bold"
+              className="text-text-main truncate uppercase tracking-tight"
+            >
               {title || 'Propiedades'}
             </LpdText>
             {subtitle && (
               <LpdText size="nano" className="text-text-muted truncate font-mono opacity-60">
-                {`{ ${subtitle} }`}
+                {subtitle}
               </LpdText>
             )}
           </div>
-          
+
           <div className="flex items-center gap-1">
             {headerSlot}
-            <IconButton 
-              icon="close" 
-              size="sm" 
-              variant="ghost" 
-              onClick={onClose} 
-              aria-label="Cerrar panel" 
+            <IconButton
+              icon="close"
+              size="sm"
+              variant="ghost"
+              onClick={onClose}
+              aria-label="Cerrar panel"
             />
           </div>
         </div>
@@ -49,9 +56,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = (props) => {
       {/* 2. Cuerpo del Panel (Scrollable) */}
       <div className="flex-1 relative overflow-hidden">
         <ScrollArea visibility="auto" className="h-full">
-          <div className="p-4 space-y-6">
-            {children}
-          </div>
+          <div className="p-4 space-y-6">{children}</div>
         </ScrollArea>
       </div>
 

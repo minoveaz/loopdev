@@ -23,6 +23,17 @@ Este protocolo **opera sobre** y **depende explícitamente de**:
 
 Este documento define el protocolo único para construir componentes en LoopDev. La meta es pasar de un "Blueprint" a un "Componente Productivo" con un proceso industrial: **Indestructible, Accesible y Plenamente Personalizable vía Data.**
 
+## 0.1 Estado de implementación
+
+This protocol describes the target contract and does not claim that every
+existing component already satisfies it. Current components are classified as
+`implemented`, `legacy`, `migration-required` or `platform-follow-up` in the
+[component alignment matrix](COMPONENT_ALIGNMENT_MATRIX.md).
+
+New components must satisfy this protocol. Existing components may remain in
+production only when their exception is documented with an owner, rationale,
+affected rule and destination.
+
 ---
 
 ## 1) Equipos y Responsabilidades (Ciclo Ágil)
@@ -125,6 +136,11 @@ la validación visual se ejecuta con Playwright.
 ### 7.1 Zero Hardcoding Policy (OBLIGATORIO)
 
 **Regla fundamental:** Todo valor visual debe derivar de tokens del Design System.
+
+Dynamic inline styles used only to assign a CSS variable required by runtime
+layout are a permitted technical exception. They must not contain visual
+colors, shadows, typography or local spacing values, and the exception must be
+listed in the alignment matrix.
 
 **❌ PROHIBIDO:**
 ```tsx

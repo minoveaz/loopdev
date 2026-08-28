@@ -35,6 +35,12 @@ describe('PlatformHeader Composite', () => {
     expect(header).toHaveClass('bg-shell-canvas', 'border-border-technical');
   });
 
+  it('reserves the mobile navigation gutter through the iPad breakpoint', () => {
+    render(<PlatformHeader identitySlot="LoopDev" hasMobileNavigation />);
+
+    expect(screen.getByRole('banner')).toHaveClass('max-[1024px]:!pl-14');
+  });
+
   it('marks the header inert when a blocking overlay is active', () => {
     render(<PlatformHeader identitySlot="LoopDev" isInert />);
 

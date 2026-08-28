@@ -6,6 +6,16 @@ import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
 const ACTIVE_ORGANIZATION_STORAGE_KEY = 'loopdev.activeOrganizationId';
+const isE2EAuthBypassEnabled = process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true';
+const e2eOrganization = {
+  id: 'e2e-organization',
+  name: 'E2E Organization',
+  slug: 'e2e',
+  legacyTenantId: null,
+  isActive: true,
+  createdAt: '2026-01-01T00:00:00.000Z',
+  updatedAt: '2026-01-01T00:00:00.000Z',
+} as Organization;
 const normalizeTimestamp = (value: unknown) => Array.isArray(value) ? String(value[0]) : String(value);
 
 export type OrganizationContextType = {
@@ -22,14 +32,19 @@ export const OrganizationContext = createContext<OrganizationContextType | undef
 
 export function OrganizationProvider({ children }: { children: ReactNode }) {
   const { user, memberships, isPlatformAdministrator } = useAuth();
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [activeOrganizationId, setActiveOrganizationIdState] = useState<string | null>(null);
+  const [organizations, setOrganizations] = useState<Organization[]>(
+    isE2EAuthBypassEnabled ? [e2eOrganization] : [],
+  );
+  const [activeOrganizationId, setActiveOrganizationIdState] = useState<string | null>(
+    isE2EAuthBypassEnabled ? e2eOrganization.id : null,
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
     const loadOrganizations = async () => {
+      if (isE2EAuthBypassEnabled) return;
       if (!user) {
         setOrganizations([]);
         setActiveOrganizationIdState(null);

@@ -12,6 +12,7 @@ export interface LabelProps {
   htmlFor?: string;
   textSize?: string;
   textWeight?: string;
+  variant?: 'technical' | 'form';
 }
 
 /**

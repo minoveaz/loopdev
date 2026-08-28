@@ -21,41 +21,30 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
     action,
     iconBadge,
     isLoading = false,
-    loadingMessages = ['Analyzing system components...', 'Optimizing structure...']
+    loadingMessages = ['Analyzing system components...', 'Optimizing structure...'],
   } = props;
 
   const { containerClasses, iconSize, isAI } = useEmptyState(props);
 
   return (
     <div className={containerClasses} role="status">
-      
       {/* 1. Dynamic Background Patterns */}
       {isAI ? (
         // IA Pattern: Subtle purple dots (Neural feel)
-        <div className="absolute inset-0 opacity-[0.15] dark:opacity-[0.1] pointer-events-none" 
-             style={{ 
-               backgroundImage: `radial-gradient(var(--lpd-color-innovation-purple) 0.8px, transparent 0.8px)`, 
-               backgroundSize: '24px 24px' 
-             }} 
-        />
+        <div className="empty-state-ai-pattern absolute inset-0 pointer-events-none" />
       ) : (
         // Standard Pattern: Blueprint grid (Architectural feel)
         props.variant === 'card' && (
-          <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none" 
-               style={{ 
-                 backgroundImage: `linear-gradient(to right, var(--lpd-color-brand-primary) 1px, transparent 1px), linear-gradient(to bottom, var(--lpd-color-brand-primary) 1px, transparent 1px)`, 
-                 backgroundSize: '40px 40px' 
-               }} 
-          />
+          <div className="empty-state-grid-pattern absolute inset-0 pointer-events-none" />
         )
       )}
 
       {/* 2. Visual Anchor */}
       {isAI ? (
         <AIBracketVisual>
-          <div className="bg-innovation-purple/10 p-6 rounded-full relative">
-            <Icon name="auto_awesome" size={iconSize} className="text-innovation-purple" />
-            <div className="absolute inset-0 border border-innovation-purple/20 rounded-full animate-ping opacity-20" />
+          <div className="bg-primary-subtle p-6 rounded-full relative">
+            <Icon name="auto_awesome" size={iconSize} className="text-primary" />
+            <div className="absolute inset-0 border border-primary/20 rounded-full animate-ping opacity-20" />
           </div>
         </AIBracketVisual>
       ) : (
@@ -63,9 +52,9 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
           <EmptyStateVisual size={props.size}>
             <Icon name={icon} size={iconSize} />
           </EmptyStateVisual>
-          
+
           {iconBadge && (
-            <span className="absolute -top-1 -right-1 bg-energy text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-white dark:border-surface-dark shadow-lg animate-bounce z-20">
+            <span className="absolute -top-1 -right-1 bg-energy text-text-base text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-surface-elevated shadow-lg animate-bounce z-20">
               {iconBadge}
             </span>
           )}
@@ -74,33 +63,30 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
 
       {/* 3. Narrative Section */}
       <div className="relative z-10 max-w-sm space-y-3">
-        <Heading 
-          as="h3" 
+        <Heading
+          as="h3"
           size={props.size === 'sm' ? 'xs' : 'base'}
           className={isAI ? 'text-innovation-purple' : ''}
         >
           {title}
         </Heading>
-        
+
         {isLoading ? (
           <div className="py-4">
             <AILoader messages={loadingMessages} speed="fast" />
           </div>
         ) : (
-                    <LpdText 
-                      size="sm" 
-                      className="max-w-xs mx-auto mb-10 leading-relaxed text-center text-slate-400"
-                    >
-                      {description}
-                    </LpdText>        )}
+          <LpdText
+            size="sm"
+            className="max-w-xs mx-auto mb-10 leading-relaxed text-center text-text-muted"
+          >
+            {description}
+          </LpdText>
+        )}
       </div>
 
       {/* 4. Functional Section */}
-      {action && !isLoading && (
-        <div className="relative z-10 mt-10">
-          {action}
-        </div>
-      )}
+      {action && !isLoading && <div className="relative z-10 mt-10">{action}</div>}
     </div>
   );
 };

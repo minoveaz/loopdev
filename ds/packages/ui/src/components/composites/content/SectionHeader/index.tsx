@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '../../../../helpers/cn';
-import { LpdText } from '../../../atoms/foundations/Typography';
+import { Heading } from '../../../atoms';
 import type { SectionHeaderProps } from './types';
 
 /**
@@ -13,17 +13,22 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   icon,
   action,
+  headingAs = 'h2',
   className,
 }) => (
-  <div className={cn('flex items-center gap-2 pb-2 border-b border-border-technical', className)}>
+  <header className={cn('flex items-center gap-2 border-b border-border-technical pb-2', className)}>
     <div className="flex min-w-0 items-center gap-2">
       {icon}
-      <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest">
+      <Heading
+        as={headingAs}
+        size="xs"
+        className="truncate font-mono uppercase tracking-widest text-text-muted"
+      >
         {title}
-      </LpdText>
+      </Heading>
     </div>
-    {action && <div className="ml-auto">{action}</div>}
-  </div>
+    {action && <div className="ml-auto shrink-0">{action}</div>}
+  </header>
 );
 
 export type { SectionHeaderProps } from './types';

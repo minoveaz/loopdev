@@ -22,7 +22,7 @@ Customer 360 compone read models autorizados; no contiene repositorios ni mutaci
 ## Composicion
 
 ```text
-SuiteCanvas mode=record
+SuiteCanvas mode=workspace
   -> Customer360RecordView
     -> ContactProfileSummary
     -> RelatedLeads
@@ -64,7 +64,7 @@ compatibilidad demostrada.
 ## Definition of Ready
 
 - [x] UX, contract e impact assessment aprobados.
-- [x] Vistas `record`, `split` y `overview`, junto con sus componentes y owners iniciales, aprobadas.
+- [x] Vistas `workspace`, `split` y `overview`, junto con sus componentes y owners iniciales, aprobadas.
 - [x] Secciones autorizadas, estados parciales y agregación deduplicada aprobadas.
 - [x] Contrato de Customer 360 aprobado.
 - [x] Record, split y overview tienen owners.

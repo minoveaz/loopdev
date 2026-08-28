@@ -57,13 +57,13 @@ export const SuiteSwitcher: React.FC<SuiteSwitcherProps> = (props) => {
               size="xs"
               weight="normal"
               variant="sans"
-              className="text-text-main group-hover:text-accent dark:text-white"
+              className="text-text-main group-hover:text-primary dark:text-white"
             >
               {currentSuite.suiteName}
             </LpdText>
             <LucideIcons.ChevronDown
               size={12}
-              className="text-text-muted group-hover:text-accent opacity-40 transition-colors"
+              className="text-text-muted group-hover:text-primary opacity-40 transition-colors"
             />
           </div>
         </button>

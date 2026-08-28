@@ -25,6 +25,7 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
     userSrc,
     tenantName,
     onLogout,
+    onAvatarClick,
     onProfileClick,
     onSettingsClick,
     onBillingClick,
@@ -39,19 +40,25 @@ export const UserMenu: React.FC<UserMenuProps> = (props) => {
     onOpenChange?.(open);
   };
 
+  const avatarTrigger = (
+    <button
+      type="button"
+      className="hover:border-accent/50 hover:ring-accent/5 dark:hover:border-accent/50 dark:hover:ring-accent/10 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 p-0.5 transition-all duration-500 hover:ring-4 dark:border-white/10"
+      aria-label={onAvatarClick ? 'Open profile' : 'Abrir menú de usuario'}
+      onClick={onAvatarClick}
+    >
+      <UserAvatar name={userName} src={userSrc} size="sm" withStatus status="online" />
+    </button>
+  );
+
+  if (onAvatarClick) return avatarTrigger;
+
   return (
     <TechnicalDropdown
       align="end"
       open={isOpen}
       onOpenChange={handleOpenChange}
-      trigger={
-        <button
-          className="hover:border-accent/50 hover:ring-accent/5 dark:hover:border-accent/50 dark:hover:ring-accent/10 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 p-0.5 transition-all duration-500 hover:ring-4 dark:border-white/10"
-          aria-label="Abrir menú de usuario"
-        >
-          <UserAvatar name={userName} src={userSrc} size="sm" withStatus status="online" />
-        </button>
-      }
+      trigger={avatarTrigger}
     >
       <div className="dark:bg-surface-elevated flex flex-col bg-white">
         <div className={`${headerClasses} dark:bg-surface-elevated bg-white`}>

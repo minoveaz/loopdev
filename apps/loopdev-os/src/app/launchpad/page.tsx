@@ -84,7 +84,7 @@ export default function LaunchpadPage() {
       <TechnicalSurface
         variant="canvas"
         depth="flat"
-        className="relative z-10 p-8 border-b border-border-technical backdrop-blur-md"
+        className="relative z-10 p-4 sm:p-8 border-b border-border-technical backdrop-blur-md"
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-6">
@@ -139,9 +139,9 @@ export default function LaunchpadPage() {
                 title="Marketing Studio"
                 description="High-performance identity governance and generative content engine for modern teams."
                 illustration={<UIKitIllustration />}
-                href="/marketing-studio"
+                href="#"
                 version="1.0.4"
-                isLocked={isLocked('marketing.read', 'marketing')}
+                isLocked
               />
             )}
             {shouldShowSuite('crm') && (
@@ -151,7 +151,6 @@ export default function LaunchpadPage() {
                 illustration={<Icon name="groups" size="md" />}
                 href="/sales-crm"
                 version="0.8.2"
-                isLocked={isLocked('crm.read', 'crm')}
               />
             )}
             {isPlatformScope && (
@@ -171,6 +170,7 @@ export default function LaunchpadPage() {
                 illustration={<Icon name="trending_up" size="md" />}
                 href="/quant-ops"
                 version="0.0.1"
+                status="lab"
                 isLocked={isLocked('quant.read', 'quant')}
               />
             )}
@@ -179,9 +179,9 @@ export default function LaunchpadPage() {
                 title="Health OS"
                 description="Industrial-grade clinical care, electronic health records (HCE), and medical agenda for IPS providers."
                 illustration={<Icon name="medical_services" size="md" />}
-                href="/health-os"
+                href="#"
                 version="0.1.0"
-                isLocked={isLocked('health.read', 'health')}
+                isLocked
               />
             )}
           </div>

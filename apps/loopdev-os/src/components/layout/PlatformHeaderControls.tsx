@@ -6,7 +6,7 @@ import {
   BrandLogo,
   IconButton,
   NotificationCenter,
-  type GlobalContextPanelMode,
+  type PlatformContextPanelMode,
   type NotificationItem,
   ThemeToggle,
 } from '@loopdev/ui';
@@ -36,7 +36,7 @@ export function PlatformHeaderActionButton({
       title={title}
       ariaLabel={label}
       tooltip={title}
-      className={`${active ? `${danger ? 'border-danger' : 'border-transparent'} bg-[var(--lpd-color-brand-primary)] text-white` : `${danger ? 'border-danger dark:border-danger' : 'border-black/10 dark:border-white/10'} text-text-muted bg-white/50 dark:bg-black/20`} ${danger ? 'hover:border-danger dark:hover:border-danger' : active ? 'hover:border-transparent' : 'hover:border-accent/50 dark:hover:border-accent/50'} hover:bg-accent/10 hover:text-accent focus-visible:border-accent/50 focus-visible:ring-primary dark:hover:bg-accent/10 group relative flex !size-9 items-center justify-center !rounded-full border transition-all duration-300 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2`}
+      className={`${active ? '!border-transparent !bg-[var(--lpd-color-brand-primary)] !text-white hover:!border-transparent hover:!bg-[var(--lpd-color-brand-primary)] hover:!text-white focus-visible:!border-transparent focus-visible:!bg-[var(--lpd-color-brand-primary)] focus-visible:!text-white focus-visible:!ring-[var(--lpd-color-brand-primary)]' : `${danger ? 'border-danger dark:border-danger' : 'border-black/10 dark:border-white/10'} text-text-muted bg-white/50 dark:bg-black/20 hover:bg-primary/10 hover:text-primary focus-visible:border-primary/50`} group relative flex !size-9 items-center justify-center !rounded-full border transition-all duration-300 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2`}
       onClick={onClick}
     >
       {children}
@@ -50,7 +50,7 @@ interface PlatformHeaderControlsProps {
   onOpenHelp?: () => void;
   onOpenAI?: () => void;
   onOpenNotifications?: () => void;
-  activeContext?: GlobalContextPanelMode | null;
+  activeContext?: PlatformContextPanelMode | null;
   onViewAllNotifications?: () => void;
   onMarkAsRead?: (id: string) => void;
   onMarkAllRead?: () => void;
@@ -73,15 +73,17 @@ export function PlatformHeaderControls({
 }: PlatformHeaderControlsProps) {
   return (
     <div className="flex items-center gap-1">
-      <ThemeToggle variant="technical" size="md" />
-      <PlatformHeaderActionButton
-        label="Open help center"
-        title="Help center"
-        active={activeContext === 'help'}
-        onClick={onOpenHelp}
-      >
-        <CircleHelp size={16} aria-hidden="true" />
-      </PlatformHeaderActionButton>
+      <div className="hidden items-center gap-1 lg:flex">
+        <ThemeToggle variant="technical" size="md" />
+        <PlatformHeaderActionButton
+          label="Open help center"
+          title="Help center"
+          active={activeContext === 'help'}
+          onClick={onOpenHelp}
+        >
+          <CircleHelp size={16} aria-hidden="true" />
+        </PlatformHeaderActionButton>
+      </div>
       {onOpenNotifications ? (
         <PlatformHeaderActionButton
           label="Open notifications"
@@ -93,7 +95,7 @@ export function PlatformHeaderControls({
           <Lightbulb
             size={16}
             aria-hidden="true"
-            className={activeContext === 'notifications' ? 'text-white' : unreadCount > 0 ? 'text-danger group-hover:text-danger' : 'group-hover:text-accent'}
+            className={activeContext === 'notifications' ? 'text-white' : unreadCount > 0 ? 'text-danger group-hover:text-danger' : 'group-hover:text-primary'}
           />
           {unreadCount > 0 && (
             <span className="bg-danger absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-center text-[9px] font-bold text-white">
@@ -112,20 +114,22 @@ export function PlatformHeaderControls({
           onClear={onClearNotifications}
         />
       )}
-      <PlatformHeaderActionButton
-        label="Open AI assistant"
-        title="AI assistant"
-        active={activeContext === 'assistant'}
-        onClick={onOpenAI}
-      >
-        <BrandLogo
-          variant="isotype"
-          surface="plain"
-          size="xs"
-          className="shrink-0"
-          isotypeClassName={activeContext === 'assistant' ? 'text-white' : ''}
-        />
-      </PlatformHeaderActionButton>
+      <div className="flex">
+        <PlatformHeaderActionButton
+          label="Open AI assistant"
+          title="AI assistant"
+          active={activeContext === 'assistant'}
+          onClick={onOpenAI}
+        >
+          <BrandLogo
+            variant="isotype"
+            surface="plain"
+            size="xs"
+            className="shrink-0"
+            isotypeClassName={activeContext === 'assistant' ? 'text-white' : ''}
+          />
+        </PlatformHeaderActionButton>
+      </div>
     </div>
   );
 }

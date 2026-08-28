@@ -34,7 +34,7 @@ Opportunities, Tasks, Notes y Timeline deduplicados y sin entidad paralela.
 ## Composición obligatoria
 
 ```text
-App Router -> SuiteRuntime -> SuiteCanvas mode=record/split/overview
+App Router -> SuiteRuntime -> SuiteCanvas mode=workspace/split/overview
   -> widgets -> features -> entities -> shared
 ```
 

@@ -14,6 +14,7 @@ describe('Button RBAC Security', () => {
     const button = screen.getByRole('button', { name: /create user/i });
     expect(button).not.toBeDisabled();
     expect(button).not.toHaveAttribute('aria-disabled', 'true');
+    expect(button).not.toHaveAttribute('data-permission');
   });
 
   it('should be disabled if user LACKS required permission', () => {
@@ -28,6 +29,7 @@ describe('Button RBAC Security', () => {
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute('aria-disabled', 'true');
     expect(button).toHaveAttribute('title', 'No tienes permisos para realizar esta acción.');
+    expect(button).not.toHaveAttribute('data-permission');
   });
 
   it('should always be enabled for OWNER (Superuser)', () => {

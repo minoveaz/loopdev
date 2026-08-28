@@ -7,6 +7,7 @@ import { NavRouteRef, ModuleAccessState, NavBadge } from '@loopdev/contracts';
  */
 
 export type NavItemStatus = ModuleAccessState | 'coming-soon';
+export type NavSidebarItemVariant = 'default' | 'contextual-action';
 
 export interface NavSidebarItemProps {
   /** Nombre del icono (Lucide) */
@@ -37,4 +38,8 @@ export interface NavSidebarItemProps {
   
   /** Clase CSS adicional */
   className?: string;
+  /** Tratamiento visual para acciones contextuales del SuiteSidebar */
+  variant?: NavSidebarItemVariant;
+  /** Rol semántico para acciones fuera del menú de navegación */
+  role?: 'menuitem' | 'button';
 }

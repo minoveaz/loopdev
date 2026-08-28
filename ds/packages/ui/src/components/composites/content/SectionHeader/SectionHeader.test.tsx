@@ -1,8 +1,14 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { axe } from 'vitest-axe';
 import { SectionHeader } from './index';
 
 describe('SectionHeader', () => {
+  it('renders its title as a semantic section heading', () => {
+    render(<SectionHeader title="Brand identity" />);
+
+    expect(screen.getByRole('heading', { name: 'Brand identity', level: 2 })).toBeInTheDocument();
+  });
+
   it('has no accessibility violations with an action slot', async () => {
     const { container } = render(
       <SectionHeader title="Brand identity" action={<button type="button">Edit</button>} />,

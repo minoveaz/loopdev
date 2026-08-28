@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SemanticComponentColors } from '../../../shared/types';
 
 /**
  * @file types.ts
@@ -8,6 +9,8 @@ import React from 'react';
 type EmptyStateSize = 'sm' | 'md' | 'lg';
 
 export interface EmptyStateProps {
+  /** Semantic state used to style the feedback boundary. */
+  status?: 'default' | 'error';
   /** Nombre del icono de Material Symbols */
   icon?: string;
   /** Título principal */
@@ -28,4 +31,5 @@ export interface EmptyStateProps {
   loadingMessages?: string[];
   /** Clase CSS adicional */
   className?: string;
+  colors?: SemanticComponentColors;
 }

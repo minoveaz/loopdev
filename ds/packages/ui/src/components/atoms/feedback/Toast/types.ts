@@ -5,7 +5,7 @@
 
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info' | 'loading';
 
-interface ToastAction {
+export interface ToastAction {
   label: string;
   onClick: () => void;
 }
@@ -16,7 +16,7 @@ export interface ToastProps {
   description?: string;
   variant?: ToastVariant;
   action?: ToastAction;
-  metadata?: string; // Para usar con brackets { }
+  metadata?: string;
   onDismiss: (id: string) => void;
   /** Duración en ms */
   duration?: number;

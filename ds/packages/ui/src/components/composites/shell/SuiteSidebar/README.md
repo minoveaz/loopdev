@@ -31,7 +31,7 @@ import { SuiteSidebar, marketingStudioSchema } from '@loopdev/ui';
 | `schema` | `NavigationSchema` | Definición de identidad, grupos y módulos. |
 | `navMode` | `'expanded' \| 'rail'` | Densidad visual del sidebar. |
 | `activeModuleId` | `string` | ID del módulo que tendrá el indicador de actividad. |
-| `accessMap` | `AccessMap` | Diccionario de permisos (`enabled`, `disabled`, `hidden`). |
+| `accessMap` | `AccessMap` | Diccionario de permisos (`enabled`, `disabled`, `hidden`, `coming-soon`, `forbidden`, `read-only`). |
 | `telemetry` | `TelemetryMap` | Mapa de badges para notificaciones. |
 | `onExitToOS` | `function` | Acción del botón "Back to OS". |
 

@@ -44,7 +44,7 @@ Este registro consolida la evidencia estática, de componentes y de aplicación 
 
 Una suite solo puede pasar a `Front_Certified` cuando las columnas bloqueantes estén verificadas y exista evidencia de Vitest, Playwright, Axe, light/dark y responsive.
 
-El alcance de Fase 4 es explícito: Marketing Studio, Brand Hub, Sales CRM y Pipeline se validan en mobile; Quant Ops se valida únicamente en desktop porque no tendrá versión móvil; Health OS conserva smoke de shell/responsive en mobile, pero su funcionalidad interna queda fuera de prioridad hasta que la suite esté desarrollada.
+Este documento conserva la evidencia histórica de Fase 4. Tras el reinicio de suites, Marketing Studio, Brand Hub, Sales CRM, Pipeline y Health OS quedan fuera de la certificación funcional activa hasta su reconstrucción. Quant Ops permanece como laboratorio experimental, fuera de este paquete de validación y sin tests nuevos en este track.
 
 La separación de proyectos Playwright queda verificada con `19` tests en `desktop`, `12` en `mobile` y `12` en `mobile-compact`. Los tests de interacción autenticada de `authenticated.application.spec.mjs` son desktop-only; las rutas de `authenticated.mobile.spec.mjs` se ejecutan en los dos proyectos mobile. Axe desktop cubre ahora login, launchpad y Sales Pipeline sin violaciones críticas o serias.
 
@@ -53,4 +53,4 @@ La separación de proyectos Playwright queda verificada con `19` tests en `deskt
 1. Fase 3 completada en el Design System: `pnpm --filter @loopdev/ui exec vitest run` → 204 suites, 341 tests PASS; `pnpm --filter @loopdev/ui typecheck` → PASS. Cobertura Axe explícita en 43 archivos; composites complejos cuentan con tests propios y Axe cuando el montaje es estable. `SuiteLaunchpad` conserva un gap Axe documentado por un input sin label visible en producción.
 2. `pnpm exec playwright test --project=desktop --project=mobile --project=mobile-compact --workers=1` → 43 tests PASS.
 3. `pnpm exec playwright test e2e/responsive.visual.spec.mjs --project=mobile --project=mobile-compact --workers=1` → 4 snapshots PASS.
-4. CI ejecuta Desktop Web, Mobile Web, Mobile Compact, Axe de navegador y snapshots visuales. Quant Ops permanece desktop-only y Health OS limita la cobertura móvil a shell/responsive.
+4. La evidencia de CI descrita aquí corresponde al estado anterior al reinicio. La certificación futura deberá definirse por cada suite reconstruida; Quant Ops no forma parte de este paquete.
