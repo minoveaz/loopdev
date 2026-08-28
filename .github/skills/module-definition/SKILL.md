@@ -11,10 +11,11 @@ one repeatable definition package, not to start product code.
 
 ## Mandatory branch guard
 
-This skill may be used to create or modify module-definition documentation only on:
+This skill may be used to create or modify module-definition documentation only
+on a dedicated documentation branch based on the current `develop`, normally:
 
 ```text
-docs/2026-execution-roadmap
+docs/<area>-<topic>
 ```
 
 Before reading for implementation or creating any file, run:
@@ -23,14 +24,13 @@ Before reading for implementation or creating any file, run:
 git branch --show-current
 ```
 
-If the result is not exactly `docs/2026-execution-roadmap`, stop immediately and warn:
+If the result is not a `docs/*` branch, stop immediately and warn:
 
-> Module Definition solo puede ejecutarse en la rama `docs/2026-execution-roadmap`. No se creara ni
-> modificara documentacion en la rama actual.
+> Module Definition solo puede ejecutarse en una rama documental `docs/*`. No se creara ni modificara documentacion en la rama actual.
 
 Do not create, edit, move, delete, stage or commit module-definition documentation when this guard
-fails. Do not switch branches automatically; ask the user to switch to the required documentation
-branch and then rerun the workflow. This guard applies to all five module documents, related CRM
+fails. Do not switch branches automatically; ask the user to switch to a dedicated documentation
+branch and then rerun the workflow. This guard applies to all five module documents, related
 README/index updates, track references and module-definition evidence created by this skill.
 
 The branch check must be repeated before the first edit if the workflow has involved any branch or
