@@ -12,9 +12,9 @@ describe('CIMO 2.0 Experience Integration', () => {
     expect(screen.getByText('Cuándo')).toBeDefined();
     expect(screen.getByText('Zona')).toBeDefined();
 
-    // Curated Feed Sections
-    expect(screen.getByText(/Disponibles Hoy en Madrid/i)).toBeDefined();
-    expect(screen.getByText(/Próximos Entrenos & Fin de Semana/i)).toBeDefined();
+    // Curated Feed Surface Header
+    expect(screen.getByText('Explorar Entrenamientos')).toBeDefined();
+    expect(screen.getByText('Comunidad Deportiva Madrid')).toBeDefined();
 
     // Strava Style Athlete Profile Card (Left column)
     expect(screen.getByText('Esta Semana')).toBeDefined();
