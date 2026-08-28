@@ -206,14 +206,16 @@ seguro, sin introducir datos inline ni tocar CRM.
 - [x] Tests de contratos para anti-base64, thumbnails y referencias.
 - [x] Tests del repositorio para hashing, dedupe, límites, uso y expiración.
 - [x] Test pgTAP de Storage/RLS preparado para Docker local.
-- [ ] Ejecución pgTAP contra la instancia local después de aplicar la migración.
+- [x] Validación SQL local reproducible equivalente ejecutada con `psql` contra Docker; la imagen no
+  incluye pgTAP y el archivo pgTAP queda reservado para CI o una imagen autorizada.
 
 **Evidencia:** `packages/contracts/src/marketing/creative-assets.ts`,
 `supabase/migrations/20260827110000_marketing_creative_studio_storage.sql`,
 `apps/loopdev-os/src/services/marketing/creative-assets-repository.ts`,
-`supabase/tests/database/006_creative_studio_storage_rls.sql`.
+`supabase/tests/database/006_creative_studio_storage_rls.sql`,
+`supabase/tests/database/006_creative_studio_storage_local.sql`.
 
-**Estado:** implementada localmente; certificación formal pgTAP y publicación remota pendientes.
+**Estado:** implementada y validada localmente; certificación formal pgTAP y publicación remota pendientes.
 
 ### Fase 4: Integración y rollout controlado
 
@@ -253,11 +255,11 @@ Storage, RLS, observabilidad y el mapeo de VitaBlue.
 | --- | --- | --- | --- | --- |
 | No se ha autorizado una ejecución remota ni hay secretos disponibles. | No se puede certificar el esquema/RLS remoto. | Ejecutar el test SQL solo en Docker local o CI autorizado. | Plataforma | Abierto |
 | Los tipos de base de datos se actualizan manualmente hasta regeneración autorizada. | Puede existir divergencia con el esquema remoto. | Regenerar tipos en CI tras aplicar la migración local/remota. | Plataforma | Abierto |
-| El historial local de migraciones contiene versiones remotas ausentes en este checkout. | `supabase migration up --local` no puede reconciliarse automáticamente. | Se aplicó solo este SQL aditivo con `docker exec` al Postgres local; no se reparó el historial. | Plataforma | Abierto |
+| El historial local de migraciones contenía versiones remotas ausentes en este checkout. | `supabase migration up --local` no podía reconciliarse automáticamente. | Se verificó el esquema existente y se ejecutó `supabase migration repair --local --status applied 20260827100000 20260827110000`; `supabase migration up --local` queda sin pendientes. | Plataforma | Cerrado localmente |
 | El upload y cleanup de objetos Storage dependen de la disponibilidad del servicio local y de jobs autorizados. | Un fallo de Storage puede dejar basura física tras limpiar metadatos. | El cleanup SQL valida referencias; el repositorio elimina objetos solo para IDs borrados y deja el proceso reintentable. | Plataforma | Abierto |
 | No existe todavía un mapeo aprobado ni un importador para datos reales de VitaBlue. | Una importación prematura puede duplicar assets, perder procedencia o cruzar tenants. | Usar fixtures sintéticos hasta aprobar el mapeo, importación idempotente y reconciliación de hashes. | Marketing Studio | Abierto |
 | El rollout requiere observabilidad, backup, kill switch y rollback de Storage. | Un fallo operativo podría dejar proyectos incompletos o assets no recuperables. | Exigir Fase 4 como gate posterior y no habilitar publicación con evidencia solo local. | Plataforma | Abierto |
-| La imagen local no incluye pgTAP (`plan()`). | El test formal de Storage/RLS no puede ejecutarse en Docker local. | Mantener el test preparado y ejecutarlo en CI o imagen autorizada con pgTAP. | Plataforma | Abierto |
+| La imagen local no incluye pgTAP (`plan()`). | El test formal de Storage/RLS no puede ejecutarse en Docker local. | La validación SQL equivalente reproducible cubre el gate local; ejecutar el archivo pgTAP en CI o una imagen autorizada. | Plataforma | Cerrado localmente; pendiente CI formal |
 | El typecheck completo de `loopdev-os` tiene dependencias frontend ausentes preexistentes. | La certificación global de la aplicación no puede cerrarse en este checkout. | Mantener la validación focalizada y resolver dependencias en el pipeline de aplicación. | Plataforma | Abierto |
 
 ## Criterios de cierre
@@ -281,7 +283,8 @@ Storage, RLS, observabilidad y el mapeo de VitaBlue.
 - [x] Autosave no crea una versión por pulsación; la retención protege las últimas diez versiones y
   las referencias activas.
 - [x] CRM, sus tablas y sus datos no forman parte de la migración ni del repositorio Creative Studio.
-- [ ] Fase 3 tiene pgTAP ejecutado en una imagen con la extensión instalada.
+- [x] Fase 3 tiene una validación SQL local reproducible de Storage/RLS ejecutada; pgTAP formal queda
+  como evidencia adicional de CI.
 - [ ] Rollout de VitaBlue cuenta con importación aprobada, canary, observabilidad, rollback y
   evidencia en un entorno autorizado.
 - [ ] El cierre del track recibe aprobación explícita del usuario.
@@ -299,15 +302,17 @@ Storage, RLS, observabilidad y el mapeo de VitaBlue.
 | 2026-08-28 | Gobernanza de migración Storage | PASS — validación específica; el chequeo global conserva hallazgos preexistentes | `scripts/validate-supabase-governance.mjs` |
 | 2026-08-28 | Smoke RLS/controles en Docker local | PASS — tenancy, uso, thumbnail y anti-inline data | `supabase/migrations/20260827110000_marketing_creative_studio_storage.sql` |
 | 2026-08-28 | pgTAP Storage/RLS | Bloqueado — la imagen local no tiene instalada la función `plan()` de pgTAP | `supabase/tests/database/006_creative_studio_storage_rls.sql` |
+| 2026-08-28 | Fallback SQL Storage/RLS sin pgTAP | PASS — 11 comprobaciones en transacción con rollback: bucket privado, asset/thumbnail, uso, anti-inline, aislamiento y denegaciones Storage/RLS | `docker exec -i supabase_db_loopdev psql -U postgres -d postgres -v ON_ERROR_STOP=1 < supabase/tests/database/006_creative_studio_storage_local.sql` |
+| 2026-08-28 | Registro reproducible de migraciones locales | PASS — `20260827100000` y `20260827110000` registrados; `supabase migration up --local` devuelve `applied: []` | `supabase migration list --local` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-28.
 - **Rama de continuación:** `feature/marketing-studio-creative-persistence`.
-- **Commit de partida:** `c05b844e14f8cde66340ad27165a47aaae00b4e5`.
-- **Estado alcanzado:** Fases 1 y 2 no destructiva implementadas; Fase 3 implementada y validada localmente; integración VitaBlue y rollout quedan en Fase 4 diferida.
-- **Decisiones, bloqueos y riesgos:** Sin migraciones remotas ni secretos; pgTAP Storage requiere una imagen con la extensión instalada; no existe aún importación aprobada de datos reales.
-- **Validación ejecutada:** 21 tests focalizados, contracts build/typecheck, ESLint, gobernanza SQL, validación de tracks y smoke Docker/Supabase PASS; typecheck completo bloqueado por dependencias frontend ausentes preexistentes.
+- **Commit de partida:** `b8433e825bb304734a7191c0fdf19c263474980e`.
+- **Estado alcanzado:** Fases 1 y 2 no destructiva implementadas; Fase 3 implementada y validada localmente con fallback SQL reproducible; integración VitaBlue y rollout quedan en Fase 4 diferida.
+- **Decisiones, bloqueos y riesgos:** Sin migraciones remotas ni secretos; el gate local de pgTAP queda cubierto por `psql`, mientras la ejecución formal pgTAP sigue pendiente de CI; no existe aún importación aprobada de datos reales.
+- **Validación ejecutada:** 21 tests focalizados, fallback SQL Storage/RLS con rollback, registro de migraciones local, contracts build/typecheck, ESLint, gobernanza SQL, validación de tracks y smoke Docker/Supabase PASS; typecheck completo bloqueado por dependencias frontend ausentes preexistentes.
 - **Siguiente acción concreta:** Revisar y publicar este paquete documental junto con la autorización para el rollout; no ejecutar migraciones remotas ni importar datos hasta completar Fase 4.
 
 ## Cierre
