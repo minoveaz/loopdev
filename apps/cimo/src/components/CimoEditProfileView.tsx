@@ -965,27 +965,27 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
         </div>
 
         {/* 🚀 Bottom Action Card */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] block">
               ¿Listo para guardar tu Pasaporte Deportivo?
             </span>
-            <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
+            <p className="text-xs text-[#1F4E5F]/70 mt-1 font-medium">
               Tu disponibilidad por día y contactos se sincronizarán al instante.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 self-end sm:self-auto">
+          <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
             <button
               type="button"
               onClick={onBack}
-              className="px-6 py-3 rounded-full text-xs font-extrabold text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors cursor-pointer"
+              className="px-5 py-3 rounded-full text-xs font-extrabold text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-8 py-3.5 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer active:scale-95"
+              className="px-7 py-3.5 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95 whitespace-nowrap"
             >
               {savedSuccess ? (
                 <>
