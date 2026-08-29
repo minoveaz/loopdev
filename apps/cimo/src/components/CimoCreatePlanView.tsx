@@ -24,6 +24,7 @@ import type { ActivityCardData } from '@loopdev/public-blocks';
 import { CimoCitySearchCombobox } from './CimoCitySearchCombobox';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
 import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
+import { useSpainLocationSearch } from '../hooks/useSpainLocationSearch';
 
 export interface CimoCreatePlanViewProps {
   onBack: () => void;
@@ -185,7 +186,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [isCustomCalendarOpen, setIsCustomCalendarOpen] = useState(false);
   const [isCustomTimeOpen, setIsCustomTimeOpen] = useState(false);
+  const [customCoords, setCustomCoords] = useState<{ lat: number; lng: number } | null>(null);
   const locationContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const { results: liveResults, isLoading: isSearchingPlaces } = useSpainLocationSearch(location, selectedCity);
 
   // Click outside listener for location dropdown
   React.useEffect(() => {
@@ -625,7 +629,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                 )}
               </div>
 
-              {/* Floating Location Suggestions Dropdown */}
+              {/* Floating Location Suggestions Dropdown with Live Geocoding */}
               {isLocationDropdownOpen && (() => {
                 const allCityPoints = cityLocationsMap[selectedCity] ?? cityLocationsMap.Otra;
                 const isExactMatch = allCityPoints.includes(location);
@@ -634,8 +638,56 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                   : allCityPoints.filter((pt) => pt.toLowerCase().includes(location.toLowerCase()));
 
                 return (
-                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2 z-30 max-h-64 overflow-y-auto flex flex-col gap-1 animate-in fade-in zoom-in-98 duration-150">
-                    <div className="px-2 py-1 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
+                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2.5 z-30 max-h-72 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
+                    {/* 1. Live Geocoding Search Results (when typing query) */}
+                    {liveResults.length > 0 && (
+                      <div className="flex flex-col gap-1 pb-1.5 border-b border-[#1F4E5F]/10">
+                        <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#00B894] flex items-center justify-between">
+                          <span className="flex items-center gap-1">
+                            <Sparkles className="w-3 h-3" />
+                            <span>Ubicaciones exactas encontradas</span>
+                          </span>
+                          <span className="text-[9px] font-bold text-[#1F4E5F]/50">Maps GPS</span>
+                        </div>
+
+                        {liveResults.map((place) => (
+                          <button
+                            key={`${place.name}-${place.lat}-${place.lng}`}
+                            type="button"
+                            onClick={() => {
+                              setLocation(place.name);
+                              setCustomCoords({ lat: place.lat, lng: place.lng });
+                              setIsLocationDropdownOpen(false);
+                            }}
+                            className="w-full p-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#00B894]/10 text-[#1F4E5F] border border-transparent hover:border-[#00B894]/20"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="w-6 h-6 rounded-lg bg-[#00B894]/15 text-[#00B894] flex items-center justify-center shrink-0">
+                                <MapPin className="w-3.5 h-3.5 fill-[#00B894]" />
+                              </div>
+                              <div className="truncate">
+                                <span className="text-xs font-black block truncate leading-tight">{place.name}</span>
+                                <span className="text-[10px] font-bold text-[#1F4E5F]/60 block truncate">{place.address}</span>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-black text-[#00B894] uppercase shrink-0 bg-[#00B894]/10 px-2 py-0.5 rounded-full">
+                              Confirmar
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Searching Loader Indicator */}
+                    {isSearchingPlaces && (
+                      <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/60 flex items-center gap-2 animate-pulse">
+                        <div className="w-3 h-3 rounded-full border-2 border-[#00B894] border-t-transparent animate-spin" />
+                        <span>Buscando en Google & OpenStreetMap...</span>
+                      </div>
+                    )}
+
+                    {/* 2. Frequent Local Spots */}
+                    <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
                       <span>Puntos frecuentes en {selectedCity}</span>
                       <span className="text-[#00B894] font-black">{displayPoints.length} sugeridos</span>
                     </div>
@@ -648,6 +700,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                           type="button"
                           onClick={() => {
                             setLocation(pt);
+                            setCustomCoords(null);
                             setIsLocationDropdownOpen(false);
                           }}
                           className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
@@ -673,6 +726,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                           setIsLocationDropdownOpen(false);
                         } else {
                           setLocation('');
+                          setCustomCoords(null);
                           const inputEl = document.getElementById('custom-location-input');
                           inputEl?.focus();
                         }
@@ -699,6 +753,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               onSelectCity={(cityName) => {
                 setSelectedCity(cityName);
                 setIsCityComboboxOpen(false);
+                setCustomCoords(null);
                 const cityPoints = cityLocationsMap[cityName];
                 if (cityPoints && cityPoints.length > 0) {
                   setLocation(cityPoints[0]);
@@ -710,11 +765,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
             />
           )}
 
-          {/* Real-Time Mini Map Preview Card */}
+          {/* Real-Time Mini Map Preview Card with Custom GPS Coords support */}
           {location.trim() && (
             <CimoMapPreviewCard
               location={location}
               city={selectedCity}
+              coords={customCoords}
               className="mt-1"
             />
           )}

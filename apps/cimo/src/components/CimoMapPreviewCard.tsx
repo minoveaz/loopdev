@@ -6,6 +6,7 @@ export interface CimoMapPreviewCardProps {
   location: string;
   city: string;
   postalCode?: string;
+  coords?: { lat: number; lng: number } | null;
   className?: string;
 }
 
@@ -22,9 +23,21 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
   location,
   city,
   postalCode,
+  coords,
   className = '',
 }) => {
   const { mapEmbedUrl, googleMapsUrl, resolvedAddress, isExactVenue } = useMemo(() => {
+    // 1. Direct coordinates override
+    if (coords && coords.lat && coords.lng) {
+      const latLng = `${coords.lat},${coords.lng}`;
+      return {
+        mapEmbedUrl: `https://maps.google.com/maps?q=${latLng}&z=16&output=embed`,
+        googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${latLng}`,
+        resolvedAddress: `${location}, ${city}`,
+        isExactVenue: true,
+      };
+    }
+
     const locClean = cleanText(location);
     const cityClean = cleanText(city);
 
