@@ -56,9 +56,14 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
   return (
     <div className={`flex flex-col gap-3 ${className}`}>
       <div className="flex items-center justify-between">
-        <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-          5. Nivel & Ritmo del entrenamiento
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+            5
+          </span>
+          <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+            Nivel & Ritmo del entrenamiento
+          </span>
+        </div>
         <span className="text-[11px] font-bold text-[#00B894]">
           {currentPace.level}
         </span>

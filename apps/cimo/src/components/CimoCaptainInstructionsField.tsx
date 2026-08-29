@@ -34,12 +34,16 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
   return (
     <div className={`flex flex-col gap-3 ${className}`}>
       <div className="flex items-center justify-between">
-        <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
-          <FileText className="w-3.5 h-3.5 text-[#00B894]" />
-          <span>Instrucciones adicionales del Capitán (Opcional)</span>
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+            6
+          </span>
+          <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+            Instrucciones del Capitán <span className="text-[#1F4E5F]/40 font-bold lowercase">(opcional)</span>
+          </span>
+        </div>
         <span className="text-[10px] font-bold text-[#1F4E5F]/50">
-          {value.length}/300 caracteres
+          {value.length}/300
         </span>
       </div>
 

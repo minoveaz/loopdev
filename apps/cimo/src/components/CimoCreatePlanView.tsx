@@ -269,9 +269,18 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         {/* 1. Selector Visual de Deporte */}
         <div className="flex flex-col gap-3">
-          <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-2">
-            <span>1. Elige el deporte</span>
-          </span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                1
+              </span>
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                ¿Qué deporte vas a liderar?
+              </span>
+            </div>
+            <span className="text-xs font-extrabold text-[#00B894] capitalize">{sport}</span>
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             {sportsList.map((s) => {
               const isSelected = sport === s.id;
@@ -300,9 +309,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
         {/* 2. Selector Visual de Fecha (Grid Adaptativo + Mini-Calendario Interactivo) */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-              2. ¿Qué día entrenamos?
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                2
+              </span>
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                ¿Qué día entrenamos?
+              </span>
+            </div>
             <span className="text-xs font-extrabold text-[#00B894]">{date}</span>
           </div>
 
@@ -358,53 +372,40 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                 <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
                   {calendarMonth}
                 </span>
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => setCalendarMonth('Agosto 2026')}
-                    className="p-1.5 rounded-full hover:bg-white text-[#1F4E5F] transition-colors cursor-pointer"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCalendarMonth('Septiembre 2026')}
-                    className="p-1.5 rounded-full hover:bg-white text-[#1F4E5F] transition-colors cursor-pointer"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
+                <span className="text-xs font-extrabold text-[#7FB77E]">Selecciona fecha</span>
               </div>
 
-              {/* Calendar Grid Header */}
+              {/* Day names header */}
               <div className="grid grid-cols-7 gap-1 text-center">
-                {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d, i) => (
-                  <span key={i} className="text-[10px] font-black text-[#1F4E5F]/50 py-1">
+                {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d) => (
+                  <span key={d} className="text-[10px] font-black text-[#1F4E5F]/60 py-1">
                     {d}
                   </span>
                 ))}
+              </div>
 
-                {/* Calendar Days */}
-                {calendarDays.map((item, idx) => {
-                  if (item.empty) {
-                    return <div key={idx} className="h-9" />;
+              {/* Day cells */}
+              <div className="grid grid-cols-7 gap-1">
+                {calendarDays.map((cd, idx) => {
+                  if (cd.empty) {
+                    return <div key={`empty-${idx}`} className="h-8" />;
                   }
-                  const isSelected = date === item.name;
+                  const isSelectedDay = date === cd.name;
                   return (
                     <button
-                      key={idx}
+                      key={cd.day}
                       type="button"
                       onClick={() => {
-                        setDate(item.name!);
+                        setDate(cd.name!);
                         setIsCustomCalendarOpen(false);
                       }}
-                      className={`h-9 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center cursor-pointer ${
-                        isSelected
-                          ? 'bg-[#1F4E5F] text-white shadow-xs font-black scale-105'
-                          : 'bg-white hover:bg-[#00B894]/10 hover:text-[#00B894] text-[#1F4E5F] border border-[#1F4E5F]/5'
+                      className={`h-8 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center cursor-pointer ${
+                        isSelectedDay
+                          ? 'bg-[#00B894] text-white shadow-xs font-black scale-105'
+                          : 'bg-white hover:bg-[#00B894]/20 text-[#1F4E5F]'
                       }`}
                     >
-                      {item.day}
+                      {cd.day}
                     </button>
                   );
                 })}
@@ -416,9 +417,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
         {/* 3. Selector Visual de Hora (Píldoras Rápidas + Selector Digital de Horas/Minutos) */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-              3. ¿A qué hora?
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                3
+              </span>
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                ¿A qué hora?
+              </span>
+            </div>
             <span className="text-xs font-extrabold text-[#00B894]">{time} h</span>
           </div>
 
@@ -537,9 +543,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
         {/* 4. Ciudad & Punto de Encuentro (Clean Form Inputs - Zero Badge Clutter) */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-              4. Ciudad & Punto de encuentro
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                4
+              </span>
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                Ciudad & Punto de encuentro
+              </span>
+            </div>
             <span className="text-xs font-extrabold text-[#00B894]">{selectedCity}</span>
           </div>
 
@@ -754,10 +765,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
         {/* 7. Cupo Máximo con Stepper Interactivo */}
         <div className="p-5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] block">
-              7. Cupo máximo de personas
-            </span>
-            <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                7
+              </span>
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                Cupo máximo de personas
+              </span>
+            </div>
+            <p className="text-xs text-[#1F4E5F]/70 mt-1 pl-7">
               Recomendamos microgrupos de 4 a 6 personas para garantizar cercanía y conversación.
             </p>
           </div>

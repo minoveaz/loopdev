@@ -32,10 +32,12 @@ describe('CIMO 2.0 Dedicated Views Integration', () => {
     fireEvent.click(createBtn);
 
     expect(screen.getByText('Crea tu Entrenamiento Grupal')).toBeDefined();
-    expect(screen.getByText('1. Elige el deporte')).toBeDefined();
-    expect(screen.getByText('2. ¿Qué día entrenamos?')).toBeDefined();
-    expect(screen.getByText('3. ¿A qué hora?')).toBeDefined();
-    expect(screen.getByText('4. Ciudad & Punto de encuentro')).toBeDefined();
+    expect(screen.getByText('¿Qué deporte vas a liderar?')).toBeDefined();
+    expect(screen.getByText('¿Qué día entrenamos?')).toBeDefined();
+    expect(screen.getByText('¿A qué hora?')).toBeDefined();
+    expect(screen.getByText('Ciudad & Punto de encuentro')).toBeDefined();
+    expect(screen.getByText('Nivel & Ritmo del entrenamiento')).toBeDefined();
+    expect(screen.getByText('Cupo máximo de personas')).toBeDefined();
     expect(screen.getByText('Volver a Explorar')).toBeDefined();
   });
 
