@@ -54,8 +54,8 @@ export const CIMO_FEED_COMPOSITION: PublicViewComposition = {
   recipe: 'PublicSocialFeed',
   grid: {
     columns: 12,
-    gap: 'md',
-    maxWidth: '7xl',
+    gap: 'lg',
+    maxWidth: 'full',
   },
   regions: [
     {
