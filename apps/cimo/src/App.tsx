@@ -32,6 +32,55 @@ export function App() {
     avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
   });
 
+  // Standard Navigation & URL Deep Linking
+  const parseCurrentUrl = () => {
+    const hash = window.location.hash.replace(/^#\/?/, '');
+    if (hash.startsWith('activity/')) {
+      const id = hash.split('/')[1];
+      return { route: 'activity-detail', activityId: id };
+    }
+    if (hash === 'create') return { route: 'create', activityId: null };
+    if (hash === 'chats') return { route: 'chats', activityId: null };
+    if (hash === 'profile') return { route: 'profile', activityId: null };
+    return { route: 'feed', activityId: null };
+  };
+
+  React.useEffect(() => {
+    const handleLocationChange = () => {
+      const { route, activityId } = parseCurrentUrl();
+      setCurrentRoute(route);
+      if (activityId) {
+        setSelectedActivityId(activityId);
+      }
+    };
+
+    handleLocationChange();
+
+    window.addEventListener('hashchange', handleLocationChange);
+    window.addEventListener('popstate', handleLocationChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleLocationChange);
+      window.removeEventListener('popstate', handleLocationChange);
+    };
+  }, []);
+
+  const navigateTo = (route: string, activityId?: string) => {
+    setCurrentRoute(route);
+    if (activityId) {
+      setSelectedActivityId(activityId);
+      window.location.hash = `#/activity/${activityId}`;
+    } else if (route === 'create') {
+      window.location.hash = '#/create';
+    } else if (route === 'chats') {
+      window.location.hash = '#/chats';
+    } else if (route === 'profile') {
+      window.location.hash = '#/profile';
+    } else {
+      window.location.hash = '#/';
+    }
+  };
+
   // Filter activities
   const filteredActivities = useMemo(() => {
     return activities.filter((act) => {
@@ -81,8 +130,7 @@ export function App() {
   };
 
   const handleSelectActivity = (id: string) => {
-    setSelectedActivityId(id);
-    setCurrentRoute('activity-detail');
+    navigateTo('activity-detail', id);
   };
 
   const handleCreateActivity = (newPlan: Partial<ActivityCardData>) => {
@@ -110,8 +158,7 @@ export function App() {
     };
 
     setActivities((prev) => [created, ...prev]);
-    setSelectedActivityId(created.id);
-    setCurrentRoute('activity-detail');
+    navigateTo('activity-detail', created.id);
   };
 
   const handleSendMessage = (activityId: string, text: string) => {
@@ -143,7 +190,7 @@ export function App() {
       case 'create':
         return (
           <CimoCreatePlanView
-            onBack={() => setCurrentRoute('feed')}
+            onBack={() => navigateTo('feed')}
             onCreate={handleCreateActivity}
           />
         );
@@ -152,7 +199,7 @@ export function App() {
           <CimoActivityDetailView
             activity={selectedActivity}
             chatMessages={chats[selectedActivity.id] ?? []}
-            onBack={() => setCurrentRoute('feed')}
+            onBack={() => navigateTo('feed')}
             onJoin={handleJoinActivity}
             onSendMessage={handleSendMessage}
           />
@@ -164,8 +211,7 @@ export function App() {
             chats={chats}
             selectedActivityId={selectedActivityId}
             onSelectChat={(id) => {
-              setSelectedActivityId(id);
-              setCurrentRoute('activity-detail');
+              navigateTo('activity-detail', id);
             }}
           />
         );
@@ -193,7 +239,7 @@ export function App() {
         composition={CIMO_FEED_COMPOSITION}
         seo={cimoSeoConfig}
         activeRouteId={currentRoute}
-        onNavigate={setCurrentRoute}
+        onNavigate={navigateTo}
         isAuthenticated={isAuthenticated}
         currentUser={currentUser ? { name: currentUser.name } : undefined}
         renderers={{
@@ -201,7 +247,7 @@ export function App() {
             <PublicTopBar
               navigation={cimoNavigation}
               activeRouteId={currentRoute}
-              onNavigate={setCurrentRoute}
+              onNavigate={navigateTo}
               centerSlot={
                 <CimoFloatingSearchBar
                   selectedSport={selectedSport}
@@ -223,7 +269,7 @@ export function App() {
                         setIsAuthOpen(true);
                         return;
                       }
-                      setCurrentRoute('create');
+                      navigateTo('create');
                     }}
                     className={`px-3.5 py-2 text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
                       currentRoute === 'create'
@@ -239,7 +285,7 @@ export function App() {
                   {/* Chats button with badge */}
                   <button
                     type="button"
-                    onClick={() => setCurrentRoute('chats')}
+                    onClick={() => navigateTo('chats')}
                     aria-label="Abrir chats"
                     className={`relative p-2.5 rounded-full border transition-all cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center shrink-0 ${
                       currentRoute === 'chats'
@@ -256,7 +302,7 @@ export function App() {
                   {isAuthenticated ? (
                     <button
                       type="button"
-                      onClick={() => setCurrentRoute('profile')}
+                      onClick={() => navigateTo('profile')}
                       aria-label="Ver mi perfil"
                       className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs shrink-0"
                     >
@@ -285,8 +331,8 @@ export function App() {
           sidebarFilters: (
             <CimoAthleteProfileCard
               user={currentUser}
-              onCreateClick={() => setCurrentRoute('create')}
-              onProfileClick={() => setCurrentRoute('profile')}
+              onCreateClick={() => navigateTo('create')}
+              onProfileClick={() => navigateTo('profile')}
             />
           ),
           mainFeed: renderMainContent(),
@@ -295,15 +341,15 @@ export function App() {
               joinedActivities={joinedActivities}
               chats={chats}
               onSelectActivity={handleSelectActivity}
-              onOpenChatTab={() => setCurrentRoute('chats')}
+              onOpenChatTab={() => navigateTo('chats')}
             />
           ),
           drawer: (
             <div className="flex flex-col gap-5 p-2">
               <CimoAthleteProfileCard
                 user={currentUser}
-                onCreateClick={() => setCurrentRoute('create')}
-                onProfileClick={() => setCurrentRoute('profile')}
+                onCreateClick={() => navigateTo('create')}
+                onProfileClick={() => navigateTo('profile')}
               />
             </div>
           ),
