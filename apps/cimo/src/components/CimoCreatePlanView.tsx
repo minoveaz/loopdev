@@ -84,6 +84,30 @@ const cityLocationsMap: Record<string, string[]> = {
     'Riberas del Ebro / Expo',
     'Pádel Indoor Actur',
   ],
+  Granada: [
+    'Paseo del Salón / Río Genil',
+    'Parque García Lorca',
+    'Pádel Club Granada',
+    'Sierra Nevada / Cumbres Verdes',
+  ],
+  Santander: [
+    'Paseo Marítimo de El Sardinero',
+    'Península de La Magdalena',
+    'Parque de Las Llamas',
+    'Club Tenis Santander',
+  ],
+  Alicante: [
+    'Paseo de la Explanada / Puerto',
+    'Playa de San Juan',
+    'Castillo de Santa Bárbara',
+    'Pádel Indoor Alicante',
+  ],
+  'San Sebastián / Donostia': [
+    'Paseo de La Concha / Peine del Viento',
+    'Monte Urgull / Zurriola',
+    'Parque Cristina Enea',
+    'Pádel Club Donostia',
+  ],
   Otra: [
     'Polideportivo Municipal',
     'Parque Principal',
@@ -578,16 +602,21 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               </div>
 
               {/* Floating Location Suggestions Dropdown */}
-              {isLocationDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2 z-30 max-h-64 overflow-y-auto flex flex-col gap-1 animate-in fade-in zoom-in-98 duration-150">
-                  <div className="px-2 py-1 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
-                    <span>Puntos sugeridos en {selectedCity}</span>
-                    <span className="text-[#00B894]">Frecuentes</span>
-                  </div>
+              {isLocationDropdownOpen && (() => {
+                const allCityPoints = cityLocationsMap[selectedCity] ?? cityLocationsMap.Otra;
+                const isExactMatch = allCityPoints.includes(location);
+                const displayPoints = isExactMatch || !location.trim()
+                  ? allCityPoints
+                  : allCityPoints.filter((pt) => pt.toLowerCase().includes(location.toLowerCase()));
 
-                  {(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid)
-                    .filter((pt) => !location.trim() || pt.toLowerCase().includes(location.toLowerCase()))
-                    .map((pt) => {
+                return (
+                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2 z-30 max-h-64 overflow-y-auto flex flex-col gap-1 animate-in fade-in zoom-in-98 duration-150">
+                    <div className="px-2 py-1 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
+                      <span>Puntos frecuentes en {selectedCity}</span>
+                      <span className="text-[#00B894] font-black">{displayPoints.length} sugeridos</span>
+                    </div>
+
+                    {displayPoints.map((pt) => {
                       const isSelected = location === pt;
                       return (
                         <button
@@ -612,19 +641,20 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                       );
                     })}
 
-                  {/* Option to use custom location if typed */}
-                  {location.trim() && !(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid).includes(location) && (
-                    <button
-                      type="button"
-                      onClick={() => setIsLocationDropdownOpen(false)}
-                      className="w-full px-3 py-2 rounded-xl text-left text-xs font-black transition-all cursor-pointer flex items-center gap-2 bg-[#00B894]/10 text-[#1F4E5F] hover:bg-[#00B894]/20 border border-dashed border-[#00B894]"
-                    >
-                      <Plus className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
-                      <span className="truncate">Usar lugar: "{location.trim()}"</span>
-                    </button>
-                  )}
-                </div>
-              )}
+                    {/* Option to use custom location if typed */}
+                    {location.trim() && !isExactMatch && (
+                      <button
+                        type="button"
+                        onClick={() => setIsLocationDropdownOpen(false)}
+                        className="w-full px-3 py-2 rounded-xl text-left text-xs font-black transition-all cursor-pointer flex items-center gap-2 bg-[#00B894]/10 text-[#1F4E5F] hover:bg-[#00B894]/20 border border-dashed border-[#00B894] mt-1"
+                      >
+                        <Plus className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
+                        <span className="truncate">Usar lugar: "{location.trim()}"</span>
+                      </button>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           </div>
 
