@@ -514,7 +514,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           )}
         </div>
 
-        {/* 4. Ciudad & Punto de Encuentro */}
+        {/* 4. Ciudad & Punto de Encuentro (Clean Form Inputs - Zero Badge Clutter) */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
@@ -523,48 +523,42 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
             <span className="text-xs font-extrabold text-[#00B894]">{selectedCity}</span>
           </div>
 
-          {/* City Selector Pills */}
-          <div className="flex flex-wrap gap-1.5">
-            {spanishCities.map((c) => {
-              if (c === 'Otra') {
-                const isCustomCity = !spanishCities.filter((x) => x !== 'Otra').includes(selectedCity);
-                return (
-                  <button
-                    key="Otra"
-                    type="button"
-                    onClick={() => setIsCityComboboxOpen(!isCityComboboxOpen)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer flex items-center gap-1 ${
-                      isCityComboboxOpen || isCustomCity
-                        ? 'bg-[#00B894] text-white border-[#00B894] shadow-xs'
-                        : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
-                    }`}
-                  >
-                    <span>{isCustomCity ? `📍 ${selectedCity}` : '📍 Otra ciudad'}</span>
-                  </button>
-                );
-              }
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Field A: Ciudad */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                Ciudad o Municipio
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsCityComboboxOpen(true)}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 hover:border-[#00B894] cursor-pointer bg-[#F7F7F7] hover:bg-white flex items-center justify-between text-xs font-extrabold text-[#1F4E5F] transition-all relative text-left shadow-2xs"
+              >
+                <MapPin className="w-4 h-4 text-[#00B894] absolute left-3 top-3" />
+                <span className="truncate">{selectedCity}</span>
+                <span className="text-[10px] font-black text-[#00B894] uppercase tracking-wider shrink-0 bg-[#00B894]/10 px-2 py-0.5 rounded-full">
+                  Cambiar
+                </span>
+              </button>
+            </div>
 
-              const isSelected = selectedCity === c;
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => {
-                    setSelectedCity(c);
-                    setIsCityComboboxOpen(false);
-                    const cityPoints = cityLocationsMap[c] ?? cityLocationsMap.Madrid;
-                    setLocation(cityPoints[0]);
-                  }}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-xs'
-                      : 'bg-[#F7F7F7] text-[#1F4E5F] border-[#1F4E5F]/10 hover:bg-[#1F4E5F]/5'
-                  }`}
-                >
-                  {c}
-                </button>
-              );
-            })}
+            {/* Field B: Punto de encuentro */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                Punto de encuentro exacto
+              </label>
+              <div className="relative">
+                <input
+                  id="custom-location-input"
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder={`Parque, club deportivo o calle en ${selectedCity}`}
+                  className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
+                />
+                <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
+              </div>
+            </div>
           </div>
 
           {/* City Autocomplete Combobox when requested */}
@@ -584,57 +578,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               onClose={() => setIsCityComboboxOpen(false)}
             />
           )}
-
-          {/* Dynamic Suggested Location Pills for Selected City */}
-          <div className="flex flex-wrap gap-2 pt-1">
-            {(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid).map((loc) => {
-              const isSelected = location === loc;
-              return (
-                <button
-                  key={loc}
-                  type="button"
-                  onClick={() => setLocation(loc)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
-                    isSelected
-                      ? 'border-[#00B894] bg-[#00B894]/10 text-[#1F4E5F] font-black shadow-xs'
-                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F]/80 hover:bg-[#1F4E5F]/5'
-                  }`}
-                >
-                  <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
-                  <span>{loc}</span>
-                </button>
-              );
-            })}
-
-            {/* Explicit Button for Custom Location */}
-            <button
-              type="button"
-              onClick={() => {
-                setLocation('');
-                const inputEl = document.getElementById('custom-location-input');
-                inputEl?.focus();
-              }}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
-                !(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid).includes(location) && location.trim() !== ''
-                  ? 'border-[#00B894] bg-[#00B894]/10 text-[#1F4E5F] font-black'
-                  : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
-              }`}
-            >
-              <span>✏️ Otro lugar</span>
-            </button>
-          </div>
-
-          <div className="relative mt-1">
-            <input
-              id="custom-location-input"
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder={`Escribe el nombre del parque, pista de pádel, club o dirección exacta en ${selectedCity === 'Otra' ? 'tu zona' : selectedCity}`}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
-            />
-            <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
-          </div>
         </div>
 
         {/* 5. Nivel & Ritmo Deportivo */}
