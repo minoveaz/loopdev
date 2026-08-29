@@ -20,6 +20,7 @@ import {
   Zap,
 } from 'lucide-react';
 import type { ActivityCardData } from '@loopdev/public-blocks';
+import { CimoCitySearchCombobox } from './CimoCitySearchCombobox';
 
 export interface CimoCreatePlanViewProps {
   onBack: () => void;
@@ -152,6 +153,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [maxMembers, setMaxMembers] = useState(5);
 
   // Custom Visual Pickers State
+  const [isCityComboboxOpen, setIsCityComboboxOpen] = useState(false);
   const [isCustomCalendarOpen, setIsCustomCalendarOpen] = useState(false);
   const [isCustomTimeOpen, setIsCustomTimeOpen] = useState(false);
   const [calendarMonth, setCalendarMonth] = useState('Septiembre 2026');
@@ -524,6 +526,24 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           {/* City Selector Pills */}
           <div className="flex flex-wrap gap-1.5">
             {spanishCities.map((c) => {
+              if (c === 'Otra') {
+                const isCustomCity = !spanishCities.filter((x) => x !== 'Otra').includes(selectedCity);
+                return (
+                  <button
+                    key="Otra"
+                    type="button"
+                    onClick={() => setIsCityComboboxOpen(!isCityComboboxOpen)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer flex items-center gap-1 ${
+                      isCityComboboxOpen || isCustomCity
+                        ? 'bg-[#00B894] text-white border-[#00B894] shadow-xs'
+                        : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
+                    }`}
+                  >
+                    <span>{isCustomCity ? `📍 ${selectedCity}` : '📍 Otra ciudad'}</span>
+                  </button>
+                );
+              }
+
               const isSelected = selectedCity === c;
               return (
                 <button
@@ -531,6 +551,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                   type="button"
                   onClick={() => {
                     setSelectedCity(c);
+                    setIsCityComboboxOpen(false);
                     const cityPoints = cityLocationsMap[c] ?? cityLocationsMap.Madrid;
                     setLocation(cityPoints[0]);
                   }}
@@ -540,11 +561,29 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                       : 'bg-[#F7F7F7] text-[#1F4E5F] border-[#1F4E5F]/10 hover:bg-[#1F4E5F]/5'
                   }`}
                 >
-                  {c === 'Otra' ? '📍 Otra ciudad' : c}
+                  {c}
                 </button>
               );
             })}
           </div>
+
+          {/* City Autocomplete Combobox when requested */}
+          {isCityComboboxOpen && (
+            <CimoCitySearchCombobox
+              selectedCity={selectedCity}
+              onSelectCity={(cityName) => {
+                setSelectedCity(cityName);
+                setIsCityComboboxOpen(false);
+                const cityPoints = cityLocationsMap[cityName];
+                if (cityPoints && cityPoints.length > 0) {
+                  setLocation(cityPoints[0]);
+                } else {
+                  setLocation(`Parque Principal, ${cityName}`);
+                }
+              }}
+              onClose={() => setIsCityComboboxOpen(false)}
+            />
+          )}
 
           {/* Dynamic Suggested Location Pills for Selected City */}
           <div className="flex flex-wrap gap-2 pt-1">
