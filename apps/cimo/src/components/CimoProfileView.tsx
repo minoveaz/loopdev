@@ -241,59 +241,59 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
         </div>
       </div>
 
-      {/* 🧭 Tabs Navigation Card */}
-      <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-4 shadow-xs">
-        <div className="flex items-center gap-2 overflow-x-auto">
+      {/* 🧭 Tabs Navigation Card (Responsive Zero-Overflow Grid) */}
+      <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-3 sm:p-4 shadow-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <button
             type="button"
             onClick={() => setActiveTab('plans')}
-            className={`px-5 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+            className={`px-3 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 text-center ${
               activeTab === 'plans'
                 ? 'bg-[#1F4E5F] text-white shadow-xs'
                 : 'bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
             }`}
           >
-            <Calendar className="w-4 h-4" />
-            <span>Mis Planes & Entrenos</span>
+            <Calendar className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Mis Planes</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('sports')}
-            className={`px-5 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+            className={`px-3 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 text-center ${
               activeTab === 'sports'
                 ? 'bg-[#1F4E5F] text-white shadow-xs'
                 : 'bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
             }`}
           >
-            <Zap className="w-4 h-4" />
-            <span>Deportes & Ritmos</span>
+            <Zap className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Deportes & Ritmos</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('badges')}
-            className={`px-5 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+            className={`px-3 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 text-center ${
               activeTab === 'badges'
                 ? 'bg-[#1F4E5F] text-white shadow-xs'
                 : 'bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
             }`}
           >
-            <Trophy className="w-4 h-4" />
-            <span>Insignias & Logros ({ATHLETE_BADGES.length})</span>
+            <Trophy className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Insignias ({ATHLETE_BADGES.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('reviews')}
-            className={`px-5 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+            className={`px-3 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 text-center ${
               activeTab === 'reviews'
                 ? 'bg-[#1F4E5F] text-white shadow-xs'
                 : 'bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
             }`}
           >
-            <MessageCircle className="w-4 h-4" />
-            <span>Reseñas de Crews ({COMMUNITY_REVIEWS.length})</span>
+            <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Reseñas ({COMMUNITY_REVIEWS.length})</span>
           </button>
         </div>
       </div>

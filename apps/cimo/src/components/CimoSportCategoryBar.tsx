@@ -22,7 +22,7 @@ export const CimoSportCategoryBar: React.FC<CimoSportCategoryBarProps> = ({
   className,
 }) => {
   return (
-    <div className={clsx('flex items-center gap-3 overflow-x-auto no-scrollbar py-2', className)}>
+    <div className={clsx('flex items-center flex-wrap gap-3 py-2', className)}>
       {categories.map((cat) => {
         const isSelected = selectedSport.toLowerCase() === cat.id.toLowerCase();
         return (
