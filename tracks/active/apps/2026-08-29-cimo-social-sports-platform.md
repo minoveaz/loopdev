@@ -4,7 +4,7 @@ title: CIMO Social Sports Platform, Strava/Airbnb 2.0 Architecture, Dedicated In
 status: active
 created: 2026-08-29
 updated: 2026-08-29
-owner: mobile
+owner: apps
 lead: null
 branch: feature/public-shell-foundation
 branches: [feature/public-shell-foundation]
@@ -13,7 +13,7 @@ pull_requests: []
 issues: []
 packages: ['apps/cimo', '@loopdev/public-shell', '@loopdev/public-blocks', '@loopdev/contracts']
 release: not-required
-areas: [mobile, platform, marketing-studio]
+areas: [apps, platform, marketing-studio]
 dependencies: [public-shell-foundation]
 blocked_by: []
 supersedes: []
@@ -75,7 +75,7 @@ graph TD
 
 | Fecha | Decisión | Motivo | Impacto | Aprobado por |
 | :--- | :--- | :--- | :--- | :--- |
-| **2026-08-29** | Creación del Track Dedicado de CIMO. | Desacoplar la evolución de la aplicación de producto CIMO del track de infraestructura transversal `public-shell-foundation`. | Foco exclusivo en UX, engagement deportivo y conversión de CIMO. | `@minoveaz` |
+| **2026-08-29** | Creación del Track Dedicado de CIMO bajo el dominio `apps`. | Desacoplar la evolución de la aplicación de producto CIMO del track de infraestructura transversal `public-shell-foundation`. | Foco exclusivo en UX, engagement deportivo y conversión de CIMO. | `@minoveaz` |
 | **2026-08-29** | Arquitectura CIMO 2.0 (Strava + Airbnb Experiences). | Eliminar layouts rígidos de oficina y adoptar la búsqueda flotante de Airbnb con la estructura de 3 columnas de Strava. | Experiencia deportiva de primer nivel mundial. | `@minoveaz` |
 | **2026-08-29** | Cápsula de Búsqueda Flotante integrada en el Header. | Ganar espacio vertical y mantener el buscador siempre visible (*sticky*) con cierre click-outside. | Interfaz limpia, rápida y sin redundancias. | `@minoveaz` |
 | **2026-08-29** | 3 Superficies Sólidas Alineadas en el Canvas (`max-w-[1720px]`). | Dotar de peso visual homogéneo a las 3 columnas y eliminar los espacios laterales vacíos en pantallas panorámicas. | Composición simétrica y profesional. | `@minoveaz` |
