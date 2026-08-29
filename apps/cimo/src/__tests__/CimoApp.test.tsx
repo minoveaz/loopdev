@@ -64,6 +64,7 @@ describe('CIMO 2.0 Dedicated Views Integration', () => {
     const profileTab = screen.getAllByRole('button', { name: /Perfil/i })[0];
     fireEvent.click(profileTab);
     expect(screen.getAllByText('Alex Rivera').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('Mis Deportes & Niveles')).toBeDefined();
+    expect(screen.getByText('Editar Perfil')).toBeDefined();
+    expect(screen.getByText('Tus Entrenos Activos y Liderados')).toBeDefined();
   });
 });

@@ -216,7 +216,15 @@ export function App() {
           />
         );
       case 'profile':
-        return <CimoProfileView user={currentUser} />;
+        return (
+          <CimoProfileView
+            user={currentUser}
+            userActivities={activities}
+            onSelectActivity={handleSelectActivity}
+            onCreatePlan={() => navigateTo('create')}
+            onUpdateUser={(updated) => setCurrentUser((prev) => ({ ...prev, ...updated }))}
+          />
+        );
       case 'explore':
       case 'feed':
       default:
