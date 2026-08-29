@@ -3,7 +3,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
-describe('CIMO 2.0 Experience Integration', () => {
+describe('CIMO 2.0 Dedicated Views Integration', () => {
   it('renders CIMO 2.0 floating search bar, curated feed sections and athlete stats', () => {
     render(<App />);
 
@@ -25,6 +25,28 @@ describe('CIMO 2.0 Experience Integration', () => {
     expect(screen.getByText('Capitanes de la Comunidad')).toBeDefined();
   });
 
+  it('navigates to dedicated Create Plan view when clicking Crear Plan button', () => {
+    render(<App />);
+
+    const createBtn = screen.getByRole('button', { name: /Crear Plan/i });
+    fireEvent.click(createBtn);
+
+    expect(screen.getByText('Publica tu Entrenamiento')).toBeDefined();
+    expect(screen.getByText('1. Selecciona el deporte')).toBeDefined();
+    expect(screen.getByText('Volver a Explorar')).toBeDefined();
+  });
+
+  it('navigates to dedicated Activity Detail view when clicking an activity card', () => {
+    render(<App />);
+
+    const activityTitle = screen.getAllByText('Running 8K por Parque del Retiro')[0];
+    fireEvent.click(activityTitle);
+
+    expect(screen.getByText('Información del Plan')).toBeDefined();
+    expect(screen.getByText('Itinerario Previsto')).toBeDefined();
+    expect(screen.getByText('Volver a Explorar')).toBeDefined();
+  });
+
   it('switches between tabs: Feed, Chats and Profile', () => {
     render(<App />);
 
@@ -38,15 +60,5 @@ describe('CIMO 2.0 Experience Integration', () => {
     fireEvent.click(profileTab);
     expect(screen.getAllByText('Alex Rivera').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Mis Deportes & Niveles')).toBeDefined();
-  });
-
-  it('opens Create Plan modal when clicking Crear Plan button', () => {
-    render(<App />);
-
-    const createBtn = screen.getByRole('button', { name: /Crear Plan/i });
-    fireEvent.click(createBtn);
-
-    expect(screen.getByText('Publica tu entrenamiento')).toBeDefined();
-    expect(screen.getByPlaceholderText('Ej: Rodaje 10K suave por Madrid Río')).toBeDefined();
   });
 });

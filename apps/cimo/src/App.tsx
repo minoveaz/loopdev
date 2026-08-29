@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { PublicAuthModal, PublicCookieBanner, PublicRuntime, PublicTopBar } from '@loopdev/public-shell';
 import { LogIn, Plus } from 'lucide-react';
-import type { ActivityCardData } from '@loopdev/public-blocks';
+import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
 import { CIMO_FEED_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
 import { INITIAL_ACTIVITIES, INITIAL_CREW_CHATS } from './data/mockData';
 import { CimoFloatingSearchBar } from './components/CimoFloatingSearchBar';
@@ -9,15 +9,15 @@ import { CimoAthleteProfileCard } from './components/CimoAthleteProfileCard';
 import { CimoCuratedFeed } from './components/CimoCuratedFeed';
 import { CimoCommunityWidgets } from './components/CimoCommunityWidgets';
 import { CimoAuthModalContent } from './components/CimoAuthModalContent';
-import { CimoActivityDetailModal } from './components/CimoActivityDetailModal';
-import { CimoCreateActivityModal } from './components/CimoCreateActivityModal';
+import { CimoActivityDetailView } from './components/CimoActivityDetailView';
+import { CimoCreatePlanView } from './components/CimoCreatePlanView';
 import { CimoChatListView } from './components/CimoChatListView';
 import { CimoProfileView } from './components/CimoProfileView';
 
 export function App() {
   const [activities, setActivities] = useState<ActivityCardData[]>(INITIAL_ACTIVITIES);
   const [selectedActivityId, setSelectedActivityId] = useState<string>(INITIAL_ACTIVITIES[0].id);
-  const [chats, setChats] = useState(INITIAL_CREW_CHATS);
+  const [chats, setChats] = useState<Record<string, ChatMessage[]>>(INITIAL_CREW_CHATS);
   const [selectedSport, setSelectedSport] = useState('Todos');
   const [selectedDay, setSelectedDay] = useState('Cualquier día');
   const [selectedZone, setSelectedZone] = useState('Toda la ciudad');
@@ -25,8 +25,6 @@ export function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentRoute, setCurrentRoute] = useState('feed');
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string; avatarUrl?: string }>({
     name: 'Alex Rivera',
@@ -84,7 +82,7 @@ export function App() {
 
   const handleSelectActivity = (id: string) => {
     setSelectedActivityId(id);
-    setIsDetailModalOpen(true);
+    setCurrentRoute('activity-detail');
   };
 
   const handleCreateActivity = (newPlan: Partial<ActivityCardData>) => {
@@ -98,6 +96,7 @@ export function App() {
       level: newPlan.level ?? 'Intermedio',
       paceOrDetails: newPlan.paceOrDetails,
       maxMembers: newPlan.maxMembers ?? 5,
+      image: newPlan.image,
       captain: {
         id: 'user_me',
         name: currentUser.name,
@@ -112,6 +111,23 @@ export function App() {
 
     setActivities((prev) => [created, ...prev]);
     setSelectedActivityId(created.id);
+    setCurrentRoute('activity-detail');
+  };
+
+  const handleSendMessage = (activityId: string, text: string) => {
+    const newMsg: ChatMessage = {
+      id: `msg_${Date.now()}`,
+      senderId: 'user_me',
+      senderName: currentUser.name,
+      senderAvatar: currentUser.avatarUrl,
+      text,
+      timestamp: 'Ahora',
+      isOwn: true,
+    };
+    setChats((prev) => ({
+      ...prev,
+      [activityId]: [...(prev[activityId] ?? []), newMsg],
+    }));
   };
 
   const handleAuthSuccess = (email: string) => {
@@ -121,9 +137,26 @@ export function App() {
     setIsAuthOpen(false);
   };
 
-  // Main Feed content renderer
+  // Main Feed content renderer with dedicated views (No Modals)
   const renderMainContent = () => {
     switch (currentRoute) {
+      case 'create':
+        return (
+          <CimoCreatePlanView
+            onBack={() => setCurrentRoute('feed')}
+            onCreate={handleCreateActivity}
+          />
+        );
+      case 'activity-detail':
+        return (
+          <CimoActivityDetailView
+            activity={selectedActivity}
+            chatMessages={chats[selectedActivity.id] ?? []}
+            onBack={() => setCurrentRoute('feed')}
+            onJoin={handleJoinActivity}
+            onSendMessage={handleSendMessage}
+          />
+        );
       case 'chats':
         return (
           <CimoChatListView
@@ -132,7 +165,7 @@ export function App() {
             selectedActivityId={selectedActivityId}
             onSelectChat={(id) => {
               setSelectedActivityId(id);
-              setIsDetailModalOpen(true);
+              setCurrentRoute('activity-detail');
             }}
           />
         );
@@ -190,11 +223,15 @@ export function App() {
                         setIsAuthOpen(true);
                         return;
                       }
-                      setIsCreateOpen(true);
+                      setCurrentRoute('create');
                     }}
-                    className="px-3.5 py-2 text-xs font-extrabold text-white bg-[#1F4E5F] hover:bg-[#183e4c] rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0"
+                    className={`px-3.5 py-2 text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
+                      currentRoute === 'create'
+                        ? 'bg-[#00B894] text-white'
+                        : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white'
+                    }`}
                   >
-                    <Plus className="w-4 h-4 text-[#00B894] stroke-[3]" />
+                    <Plus className="w-4 h-4 text-white stroke-[3]" />
                     <span className="hidden sm:inline">Crear Plan</span>
                     <span className="sm:hidden">Crear</span>
                   </button>
@@ -248,7 +285,7 @@ export function App() {
           sidebarFilters: (
             <CimoAthleteProfileCard
               user={currentUser}
-              onCreateClick={() => setIsCreateOpen(true)}
+              onCreateClick={() => setCurrentRoute('create')}
               onProfileClick={() => setCurrentRoute('profile')}
             />
           ),
@@ -265,7 +302,7 @@ export function App() {
             <div className="flex flex-col gap-5 p-2">
               <CimoAthleteProfileCard
                 user={currentUser}
-                onCreateClick={() => setIsCreateOpen(true)}
+                onCreateClick={() => setCurrentRoute('create')}
                 onProfileClick={() => setCurrentRoute('profile')}
               />
             </div>
@@ -282,20 +319,6 @@ export function App() {
           ),
           cookieBanner: <PublicCookieBanner />,
         }}
-      />
-
-      {/* Global In-App Modals */}
-      <CimoActivityDetailModal
-        activity={selectedActivity}
-        isOpen={isDetailModalOpen}
-        onClose={() => setIsDetailModalOpen(false)}
-        onJoin={handleJoinActivity}
-      />
-
-      <CimoCreateActivityModal
-        isOpen={isCreateOpen}
-        onClose={() => setIsCreateOpen(false)}
-        onCreate={handleCreateActivity}
       />
     </>
   );

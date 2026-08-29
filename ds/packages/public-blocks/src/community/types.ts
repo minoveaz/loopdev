@@ -4,6 +4,7 @@ export interface CommunityMember {
   age?: number;
   avatarUrl?: string;
   isCaptain?: boolean;
+  bio?: string;
 }
 
 export interface ActivityCardData {
