@@ -10,12 +10,20 @@ import {
   Flame,
   Globe,
   Heart,
+  Image as ImageIcon,
   Instagram,
+  Linkedin,
+  Lock,
   MapPin,
+  MessageCircle,
+  Phone,
   Plus,
   Save,
   ShieldCheck,
   Sparkles,
+  Sun,
+  Sunrise,
+  Sunset,
   Timer,
   Trophy,
   User,
@@ -24,16 +32,26 @@ import {
 } from 'lucide-react';
 import type { UserProfileData } from './CimoEditProfileModal';
 
+export type DayTimeSlot = 'morning' | 'noon' | 'afternoon';
+
+export interface DaySchedule {
+  day: string; // 'Lunes', 'Martes', etc.
+  dayShort: string; // 'Lun', 'Mar', etc.
+  slots: DayTimeSlot[];
+}
+
 export interface ExtendedUserProfileData extends UserProfileData {
   handle?: string;
   neighborhood?: string;
   coverUrl?: string;
-  preferredDays?: string[];
-  preferredTimes?: string[];
+  weeklySchedule?: Record<string, DayTimeSlot[]>;
   groupSizePreference?: 'micro' | 'medium';
   goals?: string[];
   isCaptainAvailable?: boolean;
   defaultCaptainNotes?: string;
+  phoneWhatsapp?: string;
+  phonePrivacy?: boolean;
+  linkedinUrl?: string;
   stravaUrl?: string;
   instagramHandle?: string;
 }
@@ -44,12 +62,28 @@ export interface CimoEditProfileViewProps {
   onSave: (updated: ExtendedUserProfileData) => void;
 }
 
+// 100% verified, stable high-res sports photography presets
 const COVER_PRESETS = [
-  'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&q=80&w=1600',
-  'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1600',
-  'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1600',
-  'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1600',
-  'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=1600',
+  {
+    name: 'Running al Atardecer',
+    url: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400',
+  },
+  {
+    name: 'Pista de Pádel',
+    url: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1400',
+  },
+  {
+    name: 'Montaña & Hiking',
+    url: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1400',
+  },
+  {
+    name: 'Ciclismo de Carretera',
+    url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=1400',
+  },
+  {
+    name: 'Crossfit & Training',
+    url: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=1400',
+  },
 ];
 
 const AVATAR_PRESETS = [
@@ -105,21 +139,20 @@ const ALL_SPORTS_CATALOG = [
   },
 ];
 
-const DAYS_OF_WEEK = [
-  { id: 'L', label: 'Lunes' },
-  { id: 'M', label: 'Martes' },
-  { id: 'X', label: 'Miércoles' },
-  { id: 'J', label: 'Jueves' },
-  { id: 'V', label: 'Viernes' },
-  { id: 'S', label: 'Sábado' },
-  { id: 'D', label: 'Domingo' },
+const WEEK_DAYS = [
+  { id: 'Lunes', short: 'L' },
+  { id: 'Martes', short: 'M' },
+  { id: 'Miércoles', short: 'X' },
+  { id: 'Jueves', short: 'J' },
+  { id: 'Viernes', short: 'V' },
+  { id: 'Sábado', short: 'S' },
+  { id: 'Domingo', short: 'D' },
 ];
 
-const TIME_SLOTS = [
-  { id: 'morning', label: '🌅 Mañanas tempranas', sub: '07:00 - 09:00 h' },
-  { id: 'noon', label: '☀️ Mediodía / Almuerzo', sub: '14:00 - 15:30 h' },
-  { id: 'afternoon', label: '🌇 Tardes / Atardecer', sub: '18:30 - 21:00 h' },
-  { id: 'weekend_morning', label: '☕ Fines de semana mañanas', sub: '08:30 - 11:30 h' },
+const TIME_SLOT_OPTIONS: Array<{ id: DayTimeSlot; label: string; icon: any; timeText: string }> = [
+  { id: 'morning', label: 'Mañanas', icon: Sunrise, timeText: '07:00 - 09:00' },
+  { id: 'noon', label: 'Mediodía', icon: Sun, timeText: '14:00 - 15:30' },
+  { id: 'afternoon', label: 'Tardes', icon: Sunset, timeText: '18:30 - 21:00' },
 ];
 
 const COMMUNITY_GOALS = [
@@ -145,7 +178,8 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
       'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros y conectar con gente activa!'
   );
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? AVATAR_PRESETS[0]);
-  const [coverUrl, setCoverUrl] = useState(user.coverUrl ?? COVER_PRESETS[0]);
+  const [coverUrl, setCoverUrl] = useState(user.coverUrl ?? COVER_PRESETS[0].url);
+  const [customCoverInput, setCustomCoverInput] = useState('');
 
   // Sports & Technical Passport
   const [sports, setSports] = useState<Array<{ sport: string; level: string; pace?: string }>>(
@@ -156,15 +190,20 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
     ]
   );
 
-  // Availability
-  const [preferredDays, setPreferredDays] = useState<string[]>(
-    user.preferredDays ?? ['M', 'J', 'S', 'D']
-  );
-  const [preferredTimes, setPreferredTimes] = useState<string[]>(
-    user.preferredTimes ?? ['morning', 'afternoon']
+  // Day-by-Day Schedule Matrix (Record<day, DayTimeSlot[]>)
+  const [weeklySchedule, setWeeklySchedule] = useState<Record<string, DayTimeSlot[]>>(
+    user.weeklySchedule ?? {
+      Lunes: ['afternoon'],
+      Martes: ['morning'],
+      Miércoles: ['afternoon'],
+      Jueves: ['afternoon'],
+      Viernes: [],
+      Sábado: ['morning'],
+      Domingo: ['morning'],
+    }
   );
 
-  // Community & Social
+  // Community & Social Preferences
   const [groupSizePreference, setGroupSizePreference] = useState<'micro' | 'medium'>(
     user.groupSizePreference ?? 'micro'
   );
@@ -175,17 +214,25 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
       '🔥 Mantener constancia semanal',
     ]
   );
+
+  // Contact Channels
+  const [phoneWhatsapp, setPhoneWhatsapp] = useState(user.phoneWhatsapp ?? '+34 612 345 678');
+  const [phonePrivacy, setPhonePrivacy] = useState(user.phonePrivacy ?? true);
+  const [linkedinUrl, setLinkedinUrl] = useState(user.linkedinUrl ?? 'https://linkedin.com/in/alexrivera-sport');
+  const [stravaUrl, setStravaUrl] = useState(user.stravaUrl ?? 'https://strava.com/athletes/alexrivera');
+  const [instagramHandle, setInstagramHandle] = useState(user.instagramHandle ?? '@alex_rivera_cimo');
+
+  // Captain Mode
   const [isCaptainAvailable, setIsCaptainAvailable] = useState<boolean>(
     user.isCaptainAvailable ?? true
   );
   const [defaultCaptainNotes, setDefaultCaptainNotes] = useState<string>(
     user.defaultCaptainNotes ?? '💧 Traer agua • ⏰ Llegar 5 min antes • 🧘 Estiramientos al terminar'
   );
-  const [stravaUrl, setStravaUrl] = useState(user.stravaUrl ?? 'https://strava.com/athletes/alexrivera');
-  const [instagramHandle, setInstagramHandle] = useState(user.instagramHandle ?? '@alex_rivera_cimo');
 
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // Sports toggle
   const handleToggleSport = (catalogSport: typeof ALL_SPORTS_CATALOG[0]) => {
     if (sports.some((s) => s.sport === catalogSport.id)) {
       setSports(sports.filter((s) => s.sport !== catalogSport.id));
@@ -207,19 +254,46 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
     );
   };
 
-  const handleToggleDay = (dayId: string) => {
-    if (preferredDays.includes(dayId)) {
-      setPreferredDays(preferredDays.filter((d) => d !== dayId));
-    } else {
-      setPreferredDays([...preferredDays, dayId]);
-    }
+  // Day-by-Day Schedule Slot Toggle
+  const handleToggleDaySlot = (day: string, slot: DayTimeSlot) => {
+    const currentSlots = weeklySchedule[day] ?? [];
+    const updated = currentSlots.includes(slot)
+      ? currentSlots.filter((s) => s !== slot)
+      : [...currentSlots, slot];
+
+    setWeeklySchedule((prev) => ({
+      ...prev,
+      [day]: updated,
+    }));
   };
 
-  const handleToggleTime = (timeId: string) => {
-    if (preferredTimes.includes(timeId)) {
-      setPreferredTimes(preferredTimes.filter((t) => t !== timeId));
-    } else {
-      setPreferredTimes([...preferredTimes, timeId]);
+  const handleQuickPresetSchedule = (type: 'afternoons' | 'mornings' | 'weekends') => {
+    if (type === 'afternoons') {
+      setWeeklySchedule({
+        Lunes: ['afternoon'],
+        Martes: ['afternoon'],
+        Miércoles: ['afternoon'],
+        Jueves: ['afternoon'],
+        Viernes: ['afternoon'],
+        Sábado: ['morning'],
+        Domingo: ['morning'],
+      });
+    } else if (type === 'mornings') {
+      setWeeklySchedule({
+        Lunes: ['morning'],
+        Martes: ['morning'],
+        Miércoles: ['morning'],
+        Jueves: ['morning'],
+        Viernes: ['morning'],
+        Sábado: ['morning'],
+        Domingo: [],
+      });
+    } else if (type === 'weekends') {
+      setWeeklySchedule((prev) => ({
+        ...prev,
+        Sábado: ['morning', 'noon'],
+        Domingo: ['morning'],
+      }));
     }
   };
 
@@ -243,12 +317,14 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
       avatarUrl,
       coverUrl,
       sports,
-      preferredDays,
-      preferredTimes,
+      weeklySchedule,
       groupSizePreference,
       goals,
       isCaptainAvailable,
       defaultCaptainNotes,
+      phoneWhatsapp,
+      phonePrivacy,
+      linkedinUrl,
       stravaUrl,
       instagramHandle,
     };
@@ -257,7 +333,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
     setSavedSuccess(true);
     setTimeout(() => {
       onBack();
-    }, 800);
+    }, 700);
   };
 
   return (
@@ -276,16 +352,16 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
 
           <div className="flex items-center gap-1.5 text-xs font-black text-[#00B894] uppercase tracking-wider bg-[#00B894]/10 px-3 py-1 rounded-full">
             <Award className="w-4 h-4" />
-            <span>Pasaporte de Atleta CIMO</span>
+            <span>Pasaporte Deportivo CIMO</span>
           </div>
         </div>
 
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-[#1F4E5F] tracking-tight">
-            Edita tu Perfil & Pasaporte Deportivo
+            Edita tu Perfil & Pasaporte de Atleta
           </h1>
           <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1 font-medium leading-relaxed">
-            Completa tu identidad atlética, tus ritmos exactos y tus horarios para hacer match perfecto con entrenos y compañeros en tu ciudad.
+            Configura tu disponibilidad exacta por día, canales de contacto y marcas deportivas para unirte a los mejores Crews.
           </p>
         </div>
       </div>
@@ -306,38 +382,63 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
           </div>
 
           {/* Panoramic Cover Preview & Presets */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-              Foto de Portada Panorámica
-            </label>
-            <div className="relative h-36 sm:h-44 rounded-2xl overflow-hidden border border-[#1F4E5F]/15 shadow-inner">
-              <img src={coverUrl} alt="Cover preview" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <span className="text-xs font-black text-white bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-xs">
-                  Vista previa de portada
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                Foto de Portada Panorámica
+              </label>
+              <span className="text-[10px] font-bold text-[#00B894]">
+                Resolución 16:9 de alta calidad
+              </span>
+            </div>
+
+            <div className="relative h-40 sm:h-48 rounded-2xl overflow-hidden border border-[#1F4E5F]/15 shadow-inner bg-[#1F4E5F]/5">
+              <img
+                src={coverUrl}
+                alt="Vista previa de portada"
+                className="w-full h-full object-cover transition-all"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = COVER_PRESETS[0].url;
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 flex items-end p-4">
+                <span className="text-xs font-black text-white bg-black/60 px-3 py-1 rounded-full backdrop-blur-xs">
+                  📷 Portada en Vivo
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-[11px] font-extrabold text-[#1F4E5F]/70">Elegir portada:</span>
-              {COVER_PRESETS.map((cp, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setCoverUrl(cp)}
-                  className={`h-7 w-12 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
-                    coverUrl === cp ? 'border-[#00B894] scale-105 shadow-xs' : 'border-transparent opacity-60 hover:opacity-100'
-                  }`}
-                >
-                  <img src={cp} alt={`Cover ${idx}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
+            {/* Presets Gallery */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[11px] font-extrabold text-[#1F4E5F]/70">
+                Elige una foto de portada deportiva:
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                {COVER_PRESETS.map((cp, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCoverUrl(cp.url)}
+                    className={`p-1.5 rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center gap-1 text-left ${
+                      coverUrl === cp.url
+                        ? 'border-[#00B894] bg-[#00B894]/10 ring-2 ring-[#00B894]/20 shadow-xs'
+                        : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:border-[#1F4E5F]/30'
+                    }`}
+                  >
+                    <div className="h-12 w-full rounded-lg overflow-hidden bg-slate-200">
+                      <img src={cp.url} alt={cp.name} className="w-full h-full object-cover" />
+                    </div>
+                    <span className="text-[10px] font-bold text-[#1F4E5F] truncate w-full text-center">
+                      {cp.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Avatar Selector */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-2 border-t border-[#1F4E5F]/10">
             <div className="relative shrink-0">
               <img
                 src={avatarUrl}
@@ -360,7 +461,9 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                     type="button"
                     onClick={() => setAvatarUrl(ap)}
                     className={`w-9 h-9 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
-                      avatarUrl === ap ? 'border-[#00B894] ring-2 ring-[#00B894]/30 scale-110 shadow-xs' : 'border-transparent opacity-60 hover:opacity-100'
+                      avatarUrl === ap
+                        ? 'border-[#00B894] ring-2 ring-[#00B894]/30 scale-110 shadow-xs'
+                        : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={ap} alt={`Avatar ${idx}`} className="w-full h-full object-cover" />
@@ -510,7 +613,6 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                     </button>
                   </div>
 
-                  {/* Sport Specific Fine-Tuning */}
                   {isSelected && (
                     <div className="pt-2 border-t border-[#1F4E5F]/10 flex flex-col gap-2 animate-in fade-in">
                       <div className="flex flex-col gap-1">
@@ -550,7 +652,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
           </div>
         </div>
 
-        {/* ⏰ Isla 3: Disponibilidad & Horarios Favoritos */}
+        {/* ⏰ Isla 3: Disponibilidad Exacta por Día y Franja Horaria (Schedule Matrix) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
@@ -558,86 +660,125 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 3
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                Disponibilidad & Momentos Favoritos
+                Disponibilidad por Día & Horario
               </span>
             </div>
             <span className="text-xs font-bold text-[#00B894]">Paso 3 de 5</span>
           </div>
 
-          {/* Days selector */}
-          <div className="flex flex-col gap-2.5">
-            <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-              ¿Qué días sueles entrenar?
-            </label>
-            <div className="grid grid-cols-7 gap-2">
-              {DAYS_OF_WEEK.map((d) => {
-                const isSelected = preferredDays.includes(d.id);
-                return (
-                  <button
-                    key={d.id}
-                    type="button"
-                    onClick={() => handleToggleDay(d.id)}
-                    className={`py-3 rounded-2xl text-xs font-black transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
-                      isSelected
-                        ? 'bg-[#1F4E5F] text-white shadow-xs scale-105'
-                        : 'bg-[#F7F7F7] border border-[#1F4E5F]/10 text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
-                    }`}
-                  >
-                    <span>{d.id}</span>
-                    <span className="text-[9px] font-normal opacity-70 hidden sm:inline">
-                      {d.label.slice(0, 3)}
-                    </span>
-                  </button>
-                );
-              })}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 -mt-2">
+            <p className="text-xs text-[#1F4E5F]/70 font-medium">
+              Marca qué momentos tienes libres en cada día de la semana.
+            </p>
+
+            {/* Quick Helper Presets */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] font-extrabold text-[#1F4E5F]/60">Atajos rápidos:</span>
+              <button
+                type="button"
+                onClick={() => handleQuickPresetSchedule('afternoons')}
+                className="px-2.5 py-1 rounded-full text-[10px] font-black bg-[#1F4E5F]/10 hover:bg-[#1F4E5F]/20 text-[#1F4E5F] transition-colors cursor-pointer"
+              >
+                🌇 Tardes
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickPresetSchedule('mornings')}
+                className="px-2.5 py-1 rounded-full text-[10px] font-black bg-[#1F4E5F]/10 hover:bg-[#1F4E5F]/20 text-[#1F4E5F] transition-colors cursor-pointer"
+              >
+                🌅 Mañanas
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickPresetSchedule('weekends')}
+                className="px-2.5 py-1 rounded-full text-[10px] font-black bg-[#1F4E5F]/10 hover:bg-[#1F4E5F]/20 text-[#1F4E5F] transition-colors cursor-pointer"
+              >
+                ☕ Finde
+              </button>
             </div>
           </div>
 
-          {/* Time Slots */}
-          <div className="flex flex-col gap-2.5 pt-2 border-t border-[#1F4E5F]/10">
-            <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-              Franjas horarias preferidas
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {TIME_SLOTS.map((ts) => {
-                const isSelected = preferredTimes.includes(ts.id);
-                return (
-                  <button
-                    key={ts.id}
-                    type="button"
-                    onClick={() => handleToggleTime(ts.id)}
-                    className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
-                      isSelected
-                        ? 'border-[#00B894] bg-[#00B894]/10 shadow-2xs'
-                        : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white'
-                    }`}
-                  >
-                    <div>
-                      <span className="text-xs font-black text-[#1F4E5F] block">
-                        {ts.label}
-                      </span>
-                      <span className="text-[11px] font-bold text-[#1F4E5F]/60">
-                        {ts.sub}
-                      </span>
-                    </div>
+          {/* Day-by-Day Schedule Rows */}
+          <div className="flex flex-col gap-3">
+            {WEEK_DAYS.map((wd) => {
+              const activeSlots = weeklySchedule[wd.id] ?? [];
+              const isDayActive = activeSlots.length > 0;
 
+              return (
+                <div
+                  key={wd.id}
+                  className={`p-3.5 sm:p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                    isDayActive
+                      ? 'border-[#00B894]/40 bg-[#00B894]/5'
+                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7]/60 opacity-85 hover:opacity-100'
+                  }`}
+                >
+                  {/* Day Header */}
+                  <div className="flex items-center gap-3 min-w-[120px]">
                     <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
-                        isSelected
-                          ? 'bg-[#00B894] text-white'
-                          : 'border border-[#1F4E5F]/30 bg-white'
+                      className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${
+                        isDayActive
+                          ? 'bg-[#00B894] text-white shadow-2xs'
+                          : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'
                       }`}
                     >
-                      {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                      {wd.short}
                     </div>
-                  </button>
-                );
-              })}
-            </div>
+                    <div>
+                      <span className="text-xs font-black text-[#1F4E5F] block leading-tight">
+                        {wd.id}
+                      </span>
+                      <span className="text-[10px] font-bold text-[#1F4E5F]/60">
+                        {isDayActive ? `${activeSlots.length} franja(s)` : 'No disponible'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 3 Time Slot Pills for This Day */}
+                  <div className="grid grid-cols-3 gap-2 flex-1 max-w-xl">
+                    {TIME_SLOT_OPTIONS.map((slot) => {
+                      const isSlotActive = activeSlots.includes(slot.id);
+                      const IconComp = slot.icon;
+
+                      return (
+                        <button
+                          key={slot.id}
+                          type="button"
+                          onClick={() => handleToggleDaySlot(wd.id, slot.id)}
+                          className={`py-2 px-2 rounded-xl text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border ${
+                            isSlotActive
+                              ? 'bg-[#1F4E5F] border-[#1F4E5F] text-white font-black shadow-2xs scale-[1.02]'
+                              : 'bg-white border-[#1F4E5F]/15 text-[#1F4E5F] hover:bg-white hover:border-[#1F4E5F]/30'
+                          }`}
+                        >
+                          <div className="flex items-center gap-1">
+                            <IconComp
+                              className={`w-3.5 h-3.5 ${
+                                isSlotActive ? 'text-[#00B894]' : 'text-[#1F4E5F]/60'
+                              }`}
+                            />
+                            <span className="text-xs font-black leading-tight">
+                              {slot.label}
+                            </span>
+                          </div>
+                          <span
+                            className={`text-[9px] font-extrabold ${
+                              isSlotActive ? 'text-white/80' : 'text-[#1F4E5F]/50'
+                            }`}
+                          >
+                            {slot.timeText}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* 🤝 Isla 4: Estilo Social & Metas Deportivas */}
+        {/* 📱 Isla 4: Canales de Contacto, Redes & Estilo Social */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
@@ -645,61 +786,88 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 4
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                Estilo Social & Tercer Tiempo
+                Canales de Contacto & Redes
               </span>
             </div>
             <span className="text-xs font-bold text-[#00B894]">Paso 4 de 5</span>
           </div>
 
-          {/* Group size */}
-          <div className="flex flex-col gap-2.5">
-            <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-              Tamaño de grupo preferido
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setGroupSizePreference('micro')}
-                className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-1 ${
-                  groupSizePreference === 'micro'
-                    ? 'border-[#00B894] bg-[#00B894]/10 ring-2 ring-[#00B894]/20'
-                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-[#1F4E5F]">
-                    👥 Microgrupos (4 a 6 personas)
-                  </span>
-                  {groupSizePreference === 'micro' && (
-                    <Check className="w-4 h-4 text-[#00B894] stroke-[3]" />
-                  )}
-                </div>
-                <span className="text-[11px] text-[#1F4E5F]/70 font-medium">
-                  Ideal para charlar, ritmo homogéneo y dinámicas cercanas.
-                </span>
-              </button>
+          {/* WhatsApp / Phone with Privacy Lock */}
+          <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-1.5">
+                <Phone className="w-4 h-4 text-[#00B894]" />
+                <span>WhatsApp / Teléfono de Coordinación</span>
+              </label>
+              <div className="flex items-center gap-1.5 text-[10px] font-extrabold text-[#00B894] bg-[#00B894]/10 px-2.5 py-0.5 rounded-full">
+                <Lock className="w-3 h-3" />
+                <span>Privacidad protegida</span>
+              </div>
+            </div>
 
-              <button
-                type="button"
-                onClick={() => setGroupSizePreference('medium')}
-                className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-1 ${
-                  groupSizePreference === 'medium'
-                    ? 'border-[#00B894] bg-[#00B894]/10 ring-2 ring-[#00B894]/20'
-                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-[#1F4E5F]">
-                    🏃 Grupos Medianos (8 a 15 personas)
-                  </span>
-                  {groupSizePreference === 'medium' && (
-                    <Check className="w-4 h-4 text-[#00B894] stroke-[3]" />
-                  )}
-                </div>
-                <span className="text-[11px] text-[#1F4E5F]/70 font-medium">
-                  Más energía grupal, diversidad de ritmos y espíritu de club.
-                </span>
-              </button>
+            <input
+              type="tel"
+              value={phoneWhatsapp}
+              onChange={(e) => setPhoneWhatsapp(e.target.value)}
+              placeholder="+34 600 000 000"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
+            />
+
+            <label className="flex items-center gap-2 text-xs font-bold text-[#1F4E5F]/80 cursor-pointer pt-1">
+              <input
+                type="checkbox"
+                checked={phonePrivacy}
+                onChange={(e) => setPhonePrivacy(e.target.checked)}
+                className="w-4 h-4 rounded text-[#00B894] focus:ring-[#00B894]"
+              />
+              <span>
+                Compartir solo con capitanes y compañeros de entrenos a los que me haya unido.
+              </span>
+            </label>
+          </div>
+
+          {/* Social Links: LinkedIn, Strava, Instagram */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
+                <Linkedin className="w-3.5 h-3.5 text-blue-700" />
+                <span>LinkedIn Profesional</span>
+              </label>
+              <input
+                type="url"
+                value={linkedinUrl}
+                onChange={(e) => setLinkedinUrl(e.target.value)}
+                placeholder="https://linkedin.com/in/tu_perfil"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-[#00B894]" />
+                <span>Perfil de Strava</span>
+              </label>
+              <input
+                type="url"
+                value={stravaUrl}
+                onChange={(e) => setStravaUrl(e.target.value)}
+                placeholder="https://strava.com/athletes/..."
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
+                <Instagram className="w-3.5 h-3.5 text-pink-600" />
+                <span>Instagram Deportivo</span>
+              </label>
+              <input
+                type="text"
+                value={instagramHandle}
+                onChange={(e) => setInstagramHandle(e.target.value)}
+                placeholder="@tu_instagram"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+              />
             </div>
           </div>
 
@@ -731,37 +899,6 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                   </button>
                 );
               })}
-            </div>
-          </div>
-
-          {/* Social Links */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#1F4E5F]/10">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
-                <Globe className="w-3.5 h-3.5 text-[#00B894]" />
-                <span>Perfil de Strava (Opcional)</span>
-              </label>
-              <input
-                type="url"
-                value={stravaUrl}
-                onChange={(e) => setStravaUrl(e.target.value)}
-                placeholder="https://strava.com/athletes/tu_perfil"
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
-                <Instagram className="w-3.5 h-3.5 text-pink-600" />
-                <span>Instagram Deportivo (Opcional)</span>
-              </label>
-              <input
-                type="text"
-                value={instagramHandle}
-                onChange={(e) => setInstagramHandle(e.target.value)}
-                placeholder="@tu_instagram"
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
-              />
             </div>
           </div>
         </div>
@@ -834,7 +971,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
               ¿Listo para guardar tu Pasaporte Deportivo?
             </span>
             <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
-              Tu perfil se actualizará al instante en el Feed y en las recomendaciones de entrenos.
+              Tu disponibilidad por día y contactos se sincronizarán al instante.
             </p>
           </div>
 

@@ -3,34 +3,43 @@ import {
   Award,
   Calendar,
   CheckCircle2,
+  Clock,
   Edit3,
   Flame,
+  Globe,
   Heart,
+  Instagram,
+  Linkedin,
+  Lock,
   MapPin,
   MessageCircle,
+  Phone,
   Plus,
   Share2,
   ShieldCheck,
   Sparkles,
   Star,
+  Sun,
+  Sunrise,
+  Sunset,
   Timer,
   Trophy,
   Users,
   Zap,
 } from 'lucide-react';
 import type { ActivityCardData } from '@loopdev/public-blocks';
-import { CimoEditProfileModal, type UserProfileData } from './CimoEditProfileModal';
+import type { ExtendedUserProfileData } from './CimoEditProfileView';
 
 export interface CimoProfileViewProps {
-  user: UserProfileData;
+  user: ExtendedUserProfileData;
   userActivities?: ActivityCardData[];
   onSelectActivity?: (id: string) => void;
   onCreatePlan?: () => void;
   onEditProfile?: () => void;
-  onUpdateUser?: (updated: UserProfileData) => void;
+  onUpdateUser?: (updated: ExtendedUserProfileData) => void;
 }
 
-const DEFAULT_COVER = 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&q=80&w=1600';
+const DEFAULT_COVER = 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400';
 
 const COMMUNITY_REVIEWS = [
   {
@@ -93,6 +102,8 @@ const ATHLETE_BADGES = [
   },
 ];
 
+const WEEK_DAYS_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
 export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
   user,
   userActivities = [],
@@ -102,7 +113,6 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
   onUpdateUser,
 }) => {
   const [activeTab, setActiveTab] = useState<'plans' | 'sports' | 'badges' | 'reviews'>('plans');
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
 
   const handleShareProfile = () => {
@@ -111,19 +121,21 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
     setTimeout(() => setShareCopied(false), 2500);
   };
 
-  const handleTriggerEdit = () => {
-    if (onEditProfile) {
-      onEditProfile();
-    } else {
-      setIsEditModalOpen(true);
-    }
-  };
-
   const sportsList = user.sports ?? [
     { sport: 'Running', level: 'Intermedio', pace: '5:15 min/km' },
     { sport: 'Pádel', level: 'Nivel 3.5 (Intermedio)', pace: 'Drive / Revés' },
     { sport: 'Hiking', level: 'Rutas 10-15 km', pace: 'Desnivel medio' },
   ];
+
+  const weeklySchedule = user.weeklySchedule ?? {
+    Lunes: ['afternoon'],
+    Martes: ['morning'],
+    Miércoles: ['afternoon'],
+    Jueves: ['afternoon'],
+    Viernes: [],
+    Sábado: ['morning'],
+    Domingo: ['morning'],
+  };
 
   return (
     <div className="flex flex-col gap-6 text-[#1F4E5F] max-w-4xl mx-auto pb-12 animate-in fade-in duration-200">
@@ -135,6 +147,9 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             src={user.coverUrl ?? DEFAULT_COVER}
             alt="Cover"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = DEFAULT_COVER;
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
@@ -150,7 +165,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             </button>
             <button
               type="button"
-              onClick={handleTriggerEdit}
+              onClick={onEditProfile}
               className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
             >
               <Edit3 className="w-3.5 h-3.5" />
@@ -169,20 +184,24 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                 alt={user.name}
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white shadow-xl bg-white"
               />
-              <div
-                className="absolute bottom-1 right-1 bg-[#00B894] text-white p-1.5 rounded-full shadow-md border-2 border-white"
-                title="Capitán Verificado CIMO"
-              >
-                <ShieldCheck className="w-4 h-4 stroke-[3]" />
-              </div>
+              {user.isCaptainAvailable !== false && (
+                <div
+                  className="absolute bottom-1 right-1 bg-[#00B894] text-white p-1.5 rounded-full shadow-md border-2 border-white"
+                  title="Capitán Verificado CIMO"
+                >
+                  <ShieldCheck className="w-4 h-4 stroke-[3]" />
+                </div>
+              )}
             </div>
 
             {/* Quick Status Badges */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-3 py-1 rounded-full text-xs font-black bg-[#00B894]/10 text-[#00B894] border border-[#00B894]/20 flex items-center gap-1">
-                <Award className="w-3.5 h-3.5" />
-                <span>Capitán Verificado</span>
-              </span>
+              {user.isCaptainAvailable !== false && (
+                <span className="px-3 py-1 rounded-full text-xs font-black bg-[#00B894]/10 text-[#00B894] border border-[#00B894]/20 flex items-center gap-1">
+                  <Award className="w-3.5 h-3.5" />
+                  <span>Capitán Verificado</span>
+                </span>
+              )}
               <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-500/10 text-amber-800 border border-amber-500/20 flex items-center gap-1">
                 <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                 <span>5.0 (18 entrenos)</span>
@@ -190,24 +209,82 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             </div>
           </div>
 
-          {/* Name, Bio and Location */}
-          <div className="flex flex-col gap-2">
-            <h1 className="text-2xl sm:text-3xl font-black text-[#1F4E5F] tracking-tight">
-              {user.name}
-            </h1>
-            <div className="flex items-center gap-2 text-xs font-bold text-[#1F4E5F]/70">
-              <MapPin className="w-4 h-4 text-[#00B894]" />
-              <span>{user.city ?? 'Madrid, España'}</span>
-              <span>•</span>
-              <span>Miembro activo desde Mayo 2026</span>
+          {/* Name, Bio, Location and Contact Channels */}
+          <div className="flex flex-col gap-2.5">
+            <div className="flex items-baseline gap-2">
+              <h1 className="text-2xl sm:text-3xl font-black text-[#1F4E5F] tracking-tight">
+                {user.name}
+              </h1>
+              {user.handle && (
+                <span className="text-xs font-bold text-[#1F4E5F]/50">
+                  {user.handle}
+                </span>
+              )}
             </div>
-            <p className="text-xs sm:text-sm text-[#1F4E5F]/80 font-medium leading-relaxed mt-1 max-w-2xl">
+
+            <div className="flex items-center gap-2 text-xs font-bold text-[#1F4E5F]/70 flex-wrap">
+              <div className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-[#00B894]" />
+                <span>{user.city ?? 'Madrid, España'}</span>
+                {user.neighborhood && <span>({user.neighborhood})</span>}
+              </div>
+              <span>•</span>
+              <span>Miembro activo CIMO</span>
+            </div>
+
+            <p className="text-xs sm:text-sm text-[#1F4E5F]/80 font-medium leading-relaxed max-w-2xl">
               {user.bio ?? 'Apasionado del running matutino y las partidas de pádel. ¡Siempre buscando sumar nuevos kilómetros y conectar con gente activa!'}
             </p>
+
+            {/* Social & Contact Channels Badges */}
+            <div className="flex items-center gap-2 flex-wrap pt-2">
+              {user.phoneWhatsapp && (
+                <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{user.phoneWhatsapp}</span>
+                  {user.phonePrivacy && (
+                    <span className="text-[10px] text-emerald-700/80 font-normal flex items-center gap-0.5">
+                      <Lock className="w-2.5 h-2.5" /> (Crew)
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {user.stravaUrl && (
+                <a
+                  href={user.stravaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1 bg-[#00B894]/10 hover:bg-[#00B894]/20 border border-[#00B894]/30 rounded-full text-xs font-bold text-[#1F4E5F] flex items-center gap-1.5 transition-colors"
+                >
+                  <Globe className="w-3.5 h-3.5 text-[#00B894]" />
+                  <span>Strava</span>
+                </a>
+              )}
+
+              {user.linkedinUrl && (
+                <a
+                  href={user.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-full text-xs font-bold text-blue-800 flex items-center gap-1.5 transition-colors"
+                >
+                  <Linkedin className="w-3.5 h-3.5 text-blue-700" />
+                  <span>LinkedIn</span>
+                </a>
+              )}
+
+              {user.instagramHandle && (
+                <div className="px-3 py-1 bg-pink-50 border border-pink-200 rounded-full text-xs font-bold text-pink-800 flex items-center gap-1.5">
+                  <Instagram className="w-3.5 h-3.5 text-pink-600" />
+                  <span>{user.instagramHandle}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* 📊 Strava Style Performance Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-[#1F4E5F]/10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#1F4E5F]/10">
             <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center">
               <Flame className="w-5 h-5 text-amber-500 mb-1" />
               <span className="text-xl font-black text-[#1F4E5F]">
@@ -336,7 +413,6 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Sample active workout card */}
               <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col justify-between gap-3 hover:border-[#00B894] transition-all">
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -386,49 +462,122 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
           </div>
         )}
 
-        {/* Tab 2: Deportes y Ritmos */}
+        {/* Tab 2: Deportes, Ritmos & Disponibilidad por Día */}
         {activeTab === 'sports' && (
-          <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-black text-[#1F4E5F]">
-                  Tus Deportes y Marcas de Ritmo
-                </h2>
-                <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
-                  Esto ayuda a recomendarte planes que coincidan exactamente con tu nivel.
-                </p>
+          <div className="flex flex-col gap-6">
+            {/* Sports & Paces */}
+            <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-black text-[#1F4E5F]">
+                    Tus Deportes y Marcas de Ritmo
+                  </h2>
+                  <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
+                    Marcas que garantizan homogeneidad en tus entrenos.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={onEditProfile}
+                  className="text-xs font-black text-[#00B894] hover:text-[#009678] transition-colors cursor-pointer"
+                >
+                  Editar Deportes
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={handleTriggerEdit}
-                className="text-xs font-black text-[#00B894] hover:text-[#009678] transition-colors cursor-pointer"
-              >
-                Editar Deportes
-              </button>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {sportsList.map((s, idx) => (
+                  <div
+                    key={idx}
+                    className="p-5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-base font-black text-[#1F4E5F]">
+                        {s.sport}
+                      </span>
+                      <span className="text-xs font-black text-[#00B894] bg-[#00B894]/10 px-2.5 py-0.5 rounded-full">
+                        {s.level}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#1F4E5F]/70">
+                      <Timer className="w-4 h-4 text-[#7FB77E]" />
+                      <span>Ritmo habitual: <strong className="text-[#1F4E5F]">{s.pace ?? '5:15 min/km'}</strong></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {sportsList.map((s, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-base font-black text-[#1F4E5F]">
-                      {s.sport}
-                    </span>
-                    <span className="text-xs font-black text-[#00B894] bg-[#00B894]/10 px-2.5 py-0.5 rounded-full">
-                      {s.level}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#1F4E5F]/70">
-                    <Timer className="w-4 h-4 text-[#7FB77E]" />
-                    <span>Ritmo habitual: <strong className="text-[#1F4E5F]">{s.pace ?? '5:15 min/km'}</strong></span>
-                  </div>
+            {/* Day-by-Day Availability Matrix on Profile */}
+            <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-black text-[#1F4E5F]">
+                    Tu Disponibilidad Semanal por Día
+                  </h2>
+                  <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
+                    Días y franjas horarias exactas en las que sueles estar libre para entrenar.
+                  </p>
                 </div>
-              ))}
+
+                <button
+                  type="button"
+                  onClick={onEditProfile}
+                  className="text-xs font-black text-[#00B894] hover:text-[#009678] transition-colors cursor-pointer"
+                >
+                  Cambiar Horarios
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
+                {WEEK_DAYS_NAMES.map((dayName) => {
+                  const slots = weeklySchedule[dayName] ?? [];
+                  const isAvailable = slots.length > 0;
+
+                  return (
+                    <div
+                      key={dayName}
+                      className={`p-3.5 rounded-2xl border flex flex-col justify-between gap-2.5 ${
+                        isAvailable
+                          ? 'bg-[#00B894]/5 border-[#00B894]/30'
+                          : 'bg-[#F7F7F7] border-[#1F4E5F]/10 opacity-70'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-[#1F4E5F]">
+                          {dayName.slice(0, 3)}
+                        </span>
+                        {isAvailable && (
+                          <span className="w-2 h-2 rounded-full bg-[#00B894]" />
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-1 text-[10px] font-bold">
+                        {slots.includes('morning') && (
+                          <span className="px-2 py-0.5 bg-amber-500/10 text-amber-900 rounded-md flex items-center gap-1">
+                            <Sunrise className="w-3 h-3 text-amber-600" /> Mañanas
+                          </span>
+                        )}
+                        {slots.includes('noon') && (
+                          <span className="px-2 py-0.5 bg-sky-500/10 text-sky-900 rounded-md flex items-center gap-1">
+                            <Sun className="w-3 h-3 text-sky-600" /> Mediodía
+                          </span>
+                        )}
+                        {slots.includes('afternoon') && (
+                          <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-900 rounded-md flex items-center gap-1">
+                            <Sunset className="w-3 h-3 text-indigo-600" /> Tardes
+                          </span>
+                        )}
+                        {!isAvailable && (
+                          <span className="text-[#1F4E5F]/40 italic">Descanso</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
@@ -515,18 +664,6 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
           </div>
         )}
       </div>
-
-      {/* Edit Profile Modal */}
-      <CimoEditProfileModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        user={user}
-        onSave={(updated) => {
-          if (onUpdateUser) {
-            onUpdateUser(updated);
-          }
-        }}
-      />
     </div>
   );
 };
