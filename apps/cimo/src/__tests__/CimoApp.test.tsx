@@ -31,8 +31,10 @@ describe('CIMO 2.0 Dedicated Views Integration', () => {
     const createBtn = screen.getByRole('button', { name: /Crear Plan/i });
     fireEvent.click(createBtn);
 
-    expect(screen.getByText('Publica tu Entrenamiento')).toBeDefined();
-    expect(screen.getByText('1. Selecciona el deporte')).toBeDefined();
+    expect(screen.getByText('Crea tu Entrenamiento Grupal')).toBeDefined();
+    expect(screen.getByText('1. Elige el deporte')).toBeDefined();
+    expect(screen.getByText('2. ¿Qué día entrenamos?')).toBeDefined();
+    expect(screen.getByText('3. ¿A qué hora?')).toBeDefined();
     expect(screen.getByText('Volver a Explorar')).toBeDefined();
   });
 
