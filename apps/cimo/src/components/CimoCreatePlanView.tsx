@@ -557,7 +557,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                   onClick={() => setLocation(loc)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                     isSelected
-                      ? 'border-[#00B894] bg-[#00B894]/10 text-[#1F4E5F] font-black'
+                      ? 'border-[#00B894] bg-[#00B894]/10 text-[#1F4E5F] font-black shadow-xs'
                       : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F]/80 hover:bg-[#1F4E5F]/5'
                   }`}
                 >
@@ -566,15 +566,33 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                 </button>
               );
             })}
+
+            {/* Explicit Button for Custom Location */}
+            <button
+              type="button"
+              onClick={() => {
+                setLocation('');
+                const inputEl = document.getElementById('custom-location-input');
+                inputEl?.focus();
+              }}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
+                !(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid).includes(location) && location.trim() !== ''
+                  ? 'border-[#00B894] bg-[#00B894]/10 text-[#1F4E5F] font-black'
+                  : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
+              }`}
+            >
+              <span>✏️ Otro lugar</span>
+            </button>
           </div>
 
           <div className="relative mt-1">
             <input
+              id="custom-location-input"
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder={`Escribe el punto de encuentro en ${selectedCity === 'Otra' ? 'tu ciudad' : selectedCity}`}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white"
+              placeholder={`Escribe el nombre del parque, pista de pádel, club o dirección exacta en ${selectedCity === 'Otra' ? 'tu zona' : selectedCity}`}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
             />
             <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
           </div>
