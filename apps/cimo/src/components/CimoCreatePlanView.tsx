@@ -264,14 +264,19 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
             <button
               type="button"
               onClick={() => setIsCustomCalendarOpen(!isCustomCalendarOpen)}
-              className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center gap-1 ${
+              className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center min-h-[58px] ${
                 isCustomCalendarOpen
-                  ? 'border-[#00B894] bg-[#00B894] text-white shadow-xs'
+                  ? 'border-[#00B894] bg-[#00B894] text-white shadow-xs scale-[1.02]'
                   : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
               }`}
             >
-              <Calendar className="w-4 h-4" />
-              <span className="text-[11px] font-black leading-tight">Elegir fecha...</span>
+              <div className="flex items-center gap-1">
+                <Calendar className={`w-3.5 h-3.5 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`} />
+                <span className="text-xs font-black leading-tight whitespace-nowrap">Otro día</span>
+              </div>
+              <span className={`text-[10px] font-bold mt-0.5 whitespace-nowrap ${isCustomCalendarOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
+                Calendario
+              </span>
             </button>
           </div>
 
@@ -374,14 +379,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
             <button
               type="button"
               onClick={() => setIsCustomTimeOpen(!isCustomTimeOpen)}
-              className={`py-2.5 px-2 rounded-2xl border transition-all cursor-pointer flex items-center justify-center gap-1 ${
+              className={`py-2.5 px-2 rounded-2xl border transition-all cursor-pointer flex items-center justify-center gap-1.5 min-h-[42px] ${
                 isCustomTimeOpen
-                  ? 'border-[#00B894] bg-[#00B894] text-white font-black shadow-xs'
+                  ? 'border-[#00B894] bg-[#00B894] text-white font-black shadow-xs scale-105'
                   : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] font-bold hover:bg-[#F7F7F7]'
               }`}
             >
-              <Clock className="w-3.5 h-3.5" />
-              <span className="text-xs">Otra hora...</span>
+              <Clock className={`w-3.5 h-3.5 ${isCustomTimeOpen ? 'text-white' : 'opacity-70'}`} />
+              <span className="text-xs whitespace-nowrap">Otra hora</span>
             </button>
           </div>
 
@@ -490,7 +495,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="O escribe otro punto de encuentro..."
+              placeholder="Escribe otro punto de encuentro"
               className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white"
             />
             <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
