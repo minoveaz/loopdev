@@ -183,16 +183,26 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* 2. Selector de Fecha (Carrusel de Días & Calendario) */}
+        {/* 2. Selector de Fecha (Grid Adaptativo sin scroll horizontal) */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
               2. ¿Qué día entrenamos?
             </span>
-            <span className="text-xs font-extrabold text-[#00B894]">{date}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-extrabold text-[#00B894]">{date}</span>
+              <button
+                type="button"
+                onClick={() => setShowCustomCalendar(!showCustomCalendar)}
+                className="px-2.5 py-1 rounded-full border border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors cursor-pointer flex items-center gap-1 text-[11px] font-bold"
+              >
+                <Calendar className="w-3 h-3 text-[#7FB77E]" />
+                <span>{showCustomCalendar ? 'Cerrar calendario' : 'Otro día'}</span>
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
             {quickDates.map((qd) => {
               const isSelected = date === qd.value;
               return (
@@ -203,9 +213,9 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                     setDate(qd.value);
                     setShowCustomCalendar(false);
                   }}
-                  className={`px-4 py-2.5 rounded-2xl border text-center transition-all shrink-0 cursor-pointer flex flex-col items-center min-w-[90px] ${
+                  className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
                     isSelected
-                      ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white shadow-xs'
+                      ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white shadow-xs scale-[1.02]'
                       : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
                   }`}
                 >
@@ -216,22 +226,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                 </button>
               );
             })}
-
-            <button
-              type="button"
-              onClick={() => setShowCustomCalendar(!showCustomCalendar)}
-              className="px-3.5 py-2.5 rounded-2xl border border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors shrink-0 cursor-pointer flex items-center gap-1.5 text-xs font-bold"
-            >
-              <Calendar className="w-4 h-4 text-[#7FB77E]" />
-              <span>Otro día</span>
-            </button>
           </div>
 
           {/* Custom Date Input when requested */}
           {showCustomCalendar && (
-            <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex items-center gap-3 animate-in fade-in">
-              <Calendar className="w-4 h-4 text-[#1F4E5F]" />
-              <label className="text-xs font-extrabold text-[#1F4E5F]">Selecciona fecha exacta:</label>
+            <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center gap-3 animate-in fade-in">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-[#1F4E5F]" />
+                <label className="text-xs font-extrabold text-[#1F4E5F]">Selecciona la fecha exacta en el calendario:</label>
+              </div>
               <input
                 type="date"
                 onChange={(e) => {
@@ -240,7 +243,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                     setDate(d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }));
                   }
                 }}
-                className="px-3 py-1.5 bg-white border border-[#1F4E5F]/20 rounded-xl text-xs font-bold text-[#1F4E5F] outline-none"
+                className="px-3.5 py-2 bg-white border border-[#1F4E5F]/20 rounded-xl text-xs font-bold text-[#1F4E5F] outline-none"
               />
             </div>
           )}
