@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import type { ActivityCardData } from '@loopdev/public-blocks';
 import { CimoCitySearchCombobox } from './CimoCitySearchCombobox';
+import { CimoMapPreviewCard } from './CimoMapPreviewCard';
+import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
 
 export interface CimoCreatePlanViewProps {
   onBack: () => void;
@@ -176,6 +178,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [time, setTime] = useState('19:30');
   const [selectedPaceIndex, setSelectedPaceIndex] = useState(1);
   const [maxMembers, setMaxMembers] = useState(5);
+  const [instructions, setInstructions] = useState('');
 
   // Custom Visual Pickers State
   const [isCityComboboxOpen, setIsCityComboboxOpen] = useState(false);
@@ -217,6 +220,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
       paceOrDetails: currentPace.label,
       maxMembers,
       image: selectedSportObj.image,
+      instructions: instructions.trim() || undefined,
     });
   };
 
@@ -705,6 +709,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               onClose={() => setIsCityComboboxOpen(false)}
             />
           )}
+
+          {/* Real-Time Mini Map Preview Card */}
+          {location.trim() && (
+            <CimoMapPreviewCard
+              location={location}
+              city={selectedCity}
+              className="mt-1"
+            />
+          )}
         </div>
 
         {/* 5. Nivel & Ritmo Deportivo */}
@@ -748,11 +761,18 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* 6. Cupo Máximo con Stepper Interactivo */}
+        {/* 6. Instrucciones Adicionales del Capitán */}
+        <CimoCaptainInstructionsField
+          value={instructions}
+          onChange={setInstructions}
+          sport={sport}
+        />
+
+        {/* 7. Cupo Máximo con Stepper Interactivo */}
         <div className="p-5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] block">
-              6. Cupo máximo de personas
+              7. Cupo máximo de personas
             </span>
             <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
               Recomendamos microgrupos de 4 a 6 personas para garantizar cercanía y conversación.

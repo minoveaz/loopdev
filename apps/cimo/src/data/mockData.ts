@@ -13,8 +13,10 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
     date: 'Hoy',
     time: '19:30',
     location: 'Puerta de Alcalá - Parque del Retiro',
+    postalCode: '28009',
     level: 'Intermedio',
     paceOrDetails: '8 km • Ritmo 5:25 min/km',
+    instructions: 'Quedamos justo en la estatua central de la Puerta de Alcalá. Traed agua, rodaremos en grupo compacto y terminaremos con 5 min de estiramientos.',
     maxMembers: 5,
     captain: {
       id: 'capt_1',

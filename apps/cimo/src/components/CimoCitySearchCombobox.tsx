@@ -32,7 +32,8 @@ export const CimoCitySearchCombobox: React.FC<CimoCitySearchComboboxProps> = ({
       const name = normalizeStr(city.name);
       const prov = normalizeStr(city.province);
       const reg = normalizeStr(city.region);
-      return name.includes(q) || prov.includes(q) || reg.includes(q);
+      const matchesCp = city.postalCodes?.some((cp) => cp.includes(q));
+      return name.includes(q) || prov.includes(q) || reg.includes(q) || matchesCp;
     }).slice(0, 8);
   }, [query]);
 

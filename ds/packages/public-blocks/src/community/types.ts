@@ -23,6 +23,8 @@ export interface ActivityCardData {
   captain: CommunityMember;
   isJoined?: boolean;
   price?: string;
+  instructions?: string;
+  postalCode?: string;
 }
 
 export interface ChatMessage {

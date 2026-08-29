@@ -16,6 +16,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { CrewAvatarGroup, type ActivityCardData, type ChatMessage } from '@loopdev/public-blocks';
+import { CimoMapPreviewCard } from './CimoMapPreviewCard';
 
 export interface CimoActivityDetailViewProps {
   activity: ActivityCardData;
@@ -181,6 +182,23 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </div>
           </div>
 
+          {/* Captain Instructions (if present) */}
+          {activity.instructions && (
+            <div className="p-4 bg-[#00B894]/10 border border-[#00B894]/20 rounded-2xl flex items-start gap-3">
+              <div className="p-2 rounded-xl bg-[#00B894] text-white shrink-0">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col gap-0.5 min-w-0">
+                <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
+                  Instrucciones del Capitán ({activity.captain.name})
+                </span>
+                <p className="text-xs text-[#1F4E5F] font-bold leading-relaxed">
+                  "{activity.instructions}"
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Technical Details & Itinerary */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-4 bg-white rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-2">
@@ -218,6 +236,18 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                 </li>
               </ul>
             </div>
+          </div>
+
+          {/* Map Preview & GPS Navigation Button */}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
+              Punto de encuentro y navegación GPS
+            </span>
+            <CimoMapPreviewCard
+              location={activity.location}
+              city={activity.location.includes('Barcelona') ? 'Barcelona' : activity.location.includes('Valencia') ? 'Valencia' : 'Madrid'}
+              postalCode={activity.postalCode}
+            />
           </div>
 
           {/* Attendees / The Crew */}
