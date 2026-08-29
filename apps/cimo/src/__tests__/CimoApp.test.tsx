@@ -10,7 +10,7 @@ describe('CIMO 2.0 Dedicated Views Integration', () => {
     // Airbnb Style Floating Search Bar
     expect(screen.getByText('Deporte')).toBeDefined();
     expect(screen.getByText('Cuándo')).toBeDefined();
-    expect(screen.getByText('Zona')).toBeDefined();
+    expect(screen.getByText('Ciudad')).toBeDefined();
 
     // Curated Feed Surface Header
     expect(screen.getByText('Explorar Entrenamientos')).toBeDefined();
@@ -35,6 +35,7 @@ describe('CIMO 2.0 Dedicated Views Integration', () => {
     expect(screen.getByText('1. Elige el deporte')).toBeDefined();
     expect(screen.getByText('2. ¿Qué día entrenamos?')).toBeDefined();
     expect(screen.getByText('3. ¿A qué hora?')).toBeDefined();
+    expect(screen.getByText('4. Ciudad & Punto de encuentro')).toBeDefined();
     expect(screen.getByText('Volver a Explorar')).toBeDefined();
   });
 

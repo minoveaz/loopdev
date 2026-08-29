@@ -15,7 +15,7 @@ export interface CimoFloatingSearchBarProps {
 
 const sportsOptions = ['Todos', 'Running', 'Pádel', 'Hiking', 'Crossfit', 'Ciclismo'];
 const daysOptions = ['Cualquier día', 'Hoy', 'Mañana', 'Este fin de semana', 'Próxima semana'];
-const zonesOptions = ['Toda la ciudad', 'Retiro / Centro', 'Chamartín', 'Chamberí', 'Madrid Río', 'Sierra'];
+const zonesOptions = ['Toda España', 'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Málaga', 'Bilbao', 'Zaragoza'];
 const levelsOptions = ['Cualquier nivel', 'Principiante', 'Intermedio', 'Avanzado'];
 
 export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
@@ -135,7 +135,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
 
         <div className="h-5 w-[1px] bg-[#1F4E5F]/10 shrink-0 hidden sm:block" />
 
-        {/* Zone Segment */}
+        {/* City Segment */}
         <div
           onClick={() => setActiveDropdown(activeDropdown === 'zone' ? null : 'zone')}
           className={`px-3 py-1 rounded-full cursor-pointer transition-colors relative hidden sm:block ${
@@ -143,7 +143,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
           }`}
         >
           <span className="text-[9px] font-black uppercase tracking-wider text-[#1F4E5F]/50 block leading-none">
-            Zona
+            Ciudad
           </span>
           <span className="text-xs font-extrabold text-[#1F4E5F] truncate block mt-0.5">
             {selectedZone}

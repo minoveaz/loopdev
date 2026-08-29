@@ -34,14 +34,62 @@ const sportsList = [
   { id: 'cycling', label: 'Ciclismo', emoji: '🚴', image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=1200' },
 ];
 
-const suggestedLocations = [
-  'Parque del Retiro (Puerta de Alcalá)',
-  'Madrid Río (Puente de Segovia)',
-  'Club Tenis Chamartín',
-  'Casa de Campo (Lago)',
-  'Box Singular Chamberí',
-  'Sierra de Guadarrama / Navacerrada',
-];
+const spanishCities = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Málaga', 'Bilbao', 'Zaragoza', 'Otra'];
+
+const cityLocationsMap: Record<string, string[]> = {
+  Madrid: [
+    'Parque del Retiro (Puerta de Alcalá)',
+    'Madrid Río (Puente de Segovia)',
+    'Club Tenis Chamartín',
+    'Casa de Campo (Lago)',
+    'Box Singular Chamberí',
+    'Sierra de Guadarrama / Navacerrada',
+  ],
+  Barcelona: [
+    'Paseo Marítimo Barceloneta',
+    'Carretera de les Aigües',
+    'Montjuïc (Font Màgica)',
+    'Diagonal / Turó Park',
+    'Pádel Indoor Poble Nou',
+    'Parc de Collserola',
+  ],
+  Valencia: [
+    'Jardines del Turia (Puente de las Flores)',
+    'Marina Real de Valencia',
+    'Playa de la Malvarrosa',
+    'Pádel Club Ruzafa',
+    'Parque de Cabecera',
+  ],
+  Sevilla: [
+    'Parque de María Luisa / Plaza de España',
+    'Márgenes del Guadalquivir (Triana)',
+    'Parque del Alamillo',
+    'Club Pádel Los Remedios',
+  ],
+  Málaga: [
+    'Paseo Marítimo Antonio Banderas',
+    'Muelle Uno / La Farola',
+    'Castillo de Gibralfaro',
+    'Pádel Club Cerrado de Calderón',
+  ],
+  Bilbao: [
+    'Ría de Bilbao / Guggenheim',
+    'Parque Doña Casilda',
+    'Paseo de Artxanda',
+    'Pádel Indoor San Mamés',
+  ],
+  Zaragoza: [
+    'Parque Grande José Antonio Labordeta',
+    'Riberas del Ebro / Expo',
+    'Pádel Indoor Actur',
+  ],
+  Otra: [
+    'Polideportivo Municipal',
+    'Parque Principal',
+    'Paseo Marítimo / Ruta Local',
+    'Club Deportivo / Pistas de Pádel',
+  ],
+};
 
 const quickDates = [
   { label: 'Hoy', sub: 'Sáb 29 Ago', value: 'Hoy' },
@@ -95,6 +143,7 @@ const sportPaces: Record<string, { label: string; desc: string; level: 'Principi
 
 export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, onCreate }) => {
   const [sport, setSport] = useState('running');
+  const [selectedCity, setSelectedCity] = useState('Madrid');
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('Parque del Retiro (Puerta de Alcalá)');
   const [date, setDate] = useState('Hoy');
@@ -463,21 +512,50 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           )}
         </div>
 
-        {/* 4. Punto de Encuentro con Píldoras Sugeridas */}
+        {/* 4. Ciudad & Punto de Encuentro */}
         <div className="flex flex-col gap-3">
-          <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-            4. Punto de encuentro
-          </span>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
+              4. Ciudad & Punto de encuentro
+            </span>
+            <span className="text-xs font-extrabold text-[#00B894]">{selectedCity}</span>
+          </div>
 
-          <div className="flex flex-wrap gap-2">
-            {suggestedLocations.map((loc) => {
+          {/* City Selector Pills */}
+          <div className="flex flex-wrap gap-1.5">
+            {spanishCities.map((c) => {
+              const isSelected = selectedCity === c;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCity(c);
+                    const cityPoints = cityLocationsMap[c] ?? cityLocationsMap.Madrid;
+                    setLocation(cityPoints[0]);
+                  }}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-xs'
+                      : 'bg-[#F7F7F7] text-[#1F4E5F] border-[#1F4E5F]/10 hover:bg-[#1F4E5F]/5'
+                  }`}
+                >
+                  {c === 'Otra' ? '📍 Otra ciudad' : c}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Dynamic Suggested Location Pills for Selected City */}
+          <div className="flex flex-wrap gap-2 pt-1">
+            {(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid).map((loc) => {
               const isSelected = location === loc;
               return (
                 <button
                   key={loc}
                   type="button"
                   onClick={() => setLocation(loc)}
-                  className={`px-3.5 py-2 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                     isSelected
                       ? 'border-[#00B894] bg-[#00B894]/10 text-[#1F4E5F] font-black'
                       : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F]/80 hover:bg-[#1F4E5F]/5'
@@ -495,7 +573,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="Escribe otro punto de encuentro"
+              placeholder={`Escribe el punto de encuentro en ${selectedCity === 'Otra' ? 'tu ciudad' : selectedCity}`}
               className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white"
             />
             <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
