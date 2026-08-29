@@ -770,39 +770,81 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
         />
 
         {/* Live Preview Card */}
-        <div className="flex flex-col gap-2 pt-2">
-          <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#7FB77E]">
-            <Eye className="w-4 h-4" />
-            <span>Vista previa de tu tarjeta en el feed</span>
+        <div className="flex flex-col gap-3 pt-4 border-t border-[#1F4E5F]/10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#00B894]">
+              <Eye className="w-4 h-4" />
+              <span>Vista previa en vivo de tu tarjeta en el feed</span>
+            </div>
+            <span className="text-[10px] font-bold text-[#1F4E5F]/50">
+              Así lo descubrirán los demás deportistas
+            </span>
           </div>
 
-          <div className="max-w-md bg-white rounded-3xl overflow-hidden border border-[#1F4E5F]/15 shadow-sm">
+          <div className="w-full max-w-xl bg-white rounded-3xl overflow-hidden border border-[#1F4E5F]/15 shadow-md hover:shadow-lg transition-all">
+            {/* Image Header with Gradient & Tags */}
             <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#1F4E5F]/5">
               <img src={selectedSportObj.image} alt={finalTitle} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1F4E5F]/90 via-transparent to-transparent" />
-              <div className="absolute top-3 left-3 flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full font-black text-xs bg-white text-[#1F4E5F] capitalize">
-                  {sport}
-                </span>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-[#1F4E5F]/80 text-white">
-                  {currentPace.level}
-                </span>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1F4E5F]/95 via-[#1F4E5F]/30 to-transparent" />
+
+              {/* Floating Top Badges */}
+              <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="px-3 py-1 rounded-full font-black text-xs bg-white text-[#1F4E5F] capitalize shadow-xs">
+                    {sport}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-[#00B894] text-white shadow-xs">
+                    {currentPace.title} • {currentPace.metric}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#1F4E5F]/80 text-white backdrop-blur-xs">
+                    {currentPace.level}
+                  </span>
+                </div>
               </div>
-              <div className="absolute bottom-3 left-3.5 right-3.5 text-white">
-                <h3 className="font-extrabold text-sm line-clamp-1">{finalTitle}</h3>
-                <div className="flex items-center gap-1 text-[11px] text-white/90 mt-0.5">
-                  <MapPin className="w-3 h-3 text-[#7FB77E]" />
-                  <span className="truncate">{location}</span>
+
+              {/* Bottom Card Title & Location */}
+              <div className="absolute bottom-3.5 left-4 right-4 text-white">
+                <h3 className="font-black text-base sm:text-lg leading-tight line-clamp-1 drop-shadow-xs">
+                  {finalTitle}
+                </h3>
+                <div className="flex items-center gap-1.5 text-xs text-white/90 mt-1">
+                  <MapPin className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
+                  <span className="truncate">{location} ({selectedCity})</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-3.5 flex items-center justify-between text-[#1F4E5F]">
-              <div className="text-xs font-bold">
-                <span>{date} • {time} h</span>
-              </div>
-              <div className="text-xs font-extrabold text-[#00B894]">
-                1/{maxMembers} plazas (Tú como Capitán)
+            {/* Content & Details Footer */}
+            <div className="p-4 flex flex-col gap-3">
+              {/* Optional Captain Instructions Preview */}
+              {instructions.trim() && (
+                <div className="p-2.5 bg-[#00B894]/10 border border-[#00B894]/20 rounded-xl text-xs text-[#1F4E5F] font-bold flex items-start gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-[#00B894] shrink-0 mt-0.5" />
+                  <p className="line-clamp-2">
+                    <span className="font-black">Capitán: </span>"{instructions.trim()}"
+                  </p>
+                </div>
+              )}
+
+              {/* Date, Time and Crew Spot Counters */}
+              <div className="flex items-center justify-between text-xs text-[#1F4E5F] pt-1">
+                <div className="flex items-center gap-2 font-black">
+                  <span className="px-2.5 py-1 rounded-lg bg-[#F7F7F7] border border-[#1F4E5F]/10">
+                    📅 {date}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#F7F7F7] border border-[#1F4E5F]/10">
+                    ⏰ {time} h
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-[#1F4E5F] text-white text-[10px] font-black flex items-center justify-center shadow-xs">
+                    AR
+                  </div>
+                  <span className="text-xs font-black text-[#00B894]">
+                    1/{maxMembers} plazas
+                  </span>
+                </div>
               </div>
             </div>
           </div>
