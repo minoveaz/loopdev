@@ -154,8 +154,21 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
 
   // Custom Visual Pickers State
   const [isCityComboboxOpen, setIsCityComboboxOpen] = useState(false);
+  const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [isCustomCalendarOpen, setIsCustomCalendarOpen] = useState(false);
   const [isCustomTimeOpen, setIsCustomTimeOpen] = useState(false);
+  const locationContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // Click outside listener for location dropdown
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (locationContainerRef.current && !locationContainerRef.current.contains(e.target as Node)) {
+        setIsLocationDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   const [calendarMonth, setCalendarMonth] = useState('Septiembre 2026');
   const [selectedHour, setSelectedHour] = useState('19');
   const [selectedMinute, setSelectedMinute] = useState('30');
@@ -542,8 +555,8 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               </button>
             </div>
 
-            {/* Field B: Punto de encuentro */}
-            <div className="flex flex-col gap-1.5">
+            {/* Field B: Punto de encuentro with smart autocomplete dropdown */}
+            <div ref={locationContainerRef} className="flex flex-col gap-1.5 relative">
               <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
                 Punto de encuentro exacto
               </label>
@@ -552,12 +565,66 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                   id="custom-location-input"
                   type="text"
                   value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                  onFocus={() => setIsLocationDropdownOpen(true)}
+                  onChange={(e) => {
+                    setLocation(e.target.value);
+                    setIsLocationDropdownOpen(true);
+                  }}
                   placeholder={`Parque, club deportivo o calle en ${selectedCity}`}
                   className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
+                  autoComplete="off"
                 />
                 <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
               </div>
+
+              {/* Floating Location Suggestions Dropdown */}
+              {isLocationDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2 z-30 max-h-64 overflow-y-auto flex flex-col gap-1 animate-in fade-in zoom-in-98 duration-150">
+                  <div className="px-2 py-1 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
+                    <span>Puntos sugeridos en {selectedCity}</span>
+                    <span className="text-[#00B894]">Frecuentes</span>
+                  </div>
+
+                  {(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid)
+                    .filter((pt) => !location.trim() || pt.toLowerCase().includes(location.toLowerCase()))
+                    .map((pt) => {
+                      const isSelected = location === pt;
+                      return (
+                        <button
+                          key={pt}
+                          type="button"
+                          onClick={() => {
+                            setLocation(pt);
+                            setIsLocationDropdownOpen(false);
+                          }}
+                          className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
+                            isSelected
+                              ? 'bg-[#1F4E5F] text-white'
+                              : 'hover:bg-[#F7F7F7] text-[#1F4E5F]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 truncate">
+                            <MapPin className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#00B894]' : 'text-[#7FB77E]'}`} />
+                            <span className="truncate">{pt}</span>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-[#00B894] shrink-0" />}
+                        </button>
+                      );
+                    })}
+
+                  {/* Option to use custom location if typed */}
+                  {location.trim() && !(cityLocationsMap[selectedCity] ?? cityLocationsMap.Madrid).includes(location) && (
+                    <button
+                      type="button"
+                      onClick={() => setIsLocationDropdownOpen(false)}
+                      className="w-full px-3 py-2 rounded-xl text-left text-xs font-black transition-all cursor-pointer flex items-center gap-2 bg-[#00B894]/10 text-[#1F4E5F] hover:bg-[#00B894]/20 border border-dashed border-[#00B894]"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
+                      <span className="truncate">Usar lugar: "{location.trim()}"</span>
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
