@@ -31,7 +31,7 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
   return (
     <aside
       aria-label="Perfil del deportista"
-      className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 shadow-xs flex flex-col gap-5 text-[#1F4E5F] sticky top-20"
+      className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 shadow-xs flex flex-col gap-5 text-[#1F4E5F] w-full"
     >
       {/* Header Profile Info */}
       <div className="flex flex-col items-center text-center">

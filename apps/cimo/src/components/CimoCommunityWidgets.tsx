@@ -24,7 +24,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
   return (
     <aside
       aria-label="Comunidad y entrenos activos"
-      className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 shadow-xs flex flex-col gap-5 text-[#1F4E5F] sticky top-20"
+      className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 shadow-xs flex flex-col gap-5 text-[#1F4E5F] w-full"
     >
       {/* Section 1: Mis Crews Activos / Próximos Entrenos */}
       <div className="flex flex-col gap-3">
