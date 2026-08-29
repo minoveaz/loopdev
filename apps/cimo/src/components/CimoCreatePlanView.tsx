@@ -16,6 +16,7 @@ import {
   Sun,
   Sunrise,
   Sunset,
+  Timer,
   Users,
   X,
   Zap,
@@ -142,31 +143,39 @@ const quickTimes = [
 const availableHours = ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
 const availableMinutes = ['00', '15', '30', '45'];
 
-const sportPaces: Record<string, { label: string; desc: string; level: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Todos los niveles' }[]> = {
+export interface SportPaceConfig {
+  title: string;
+  metric: string;
+  label: string;
+  desc: string;
+  level: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Todos los niveles';
+}
+
+const sportPaces: Record<string, SportPaceConfig[]> = {
   running: [
-    { label: 'Suave (> 5:45 min/km)', desc: 'Ritmo conversacional, ideal para rodar y charlar', level: 'Principiante' },
-    { label: 'Medio (5:00 - 5:30 min/km)', desc: 'Ritmo constante para corredores habituales', level: 'Intermedio' },
-    { label: 'Alegre (< 4:45 min/km)', desc: 'Ritmo vivo para series o tempo run', level: 'Avanzado' },
+    { title: 'Suave', metric: '+5:45 min/km', label: 'Suave (+5:45 min/km)', desc: 'Ritmo conversacional, ideal para rodar y charlar', level: 'Principiante' },
+    { title: 'Medio', metric: '5:00 - 5:30 min/km', label: 'Medio (5:00 - 5:30 min/km)', desc: 'Ritmo constante para corredores habituales', level: 'Intermedio' },
+    { title: 'Alegre', metric: 'Sub 4:45 min/km', label: 'Alegre (Sub 4:45 min/km)', desc: 'Ritmo vivo para series o tempo run', level: 'Avanzado' },
   ],
   padel: [
-    { label: 'Iniciación (Nivel 2.0 - 2.5)', desc: 'Partidos amistosos para aprender y coger confianza', level: 'Principiante' },
-    { label: 'Intermedio (Nivel 3.0 - 3.5)', desc: 'Peloteo fluido, voleas y globos controlados', level: 'Intermedio' },
-    { label: 'Avanzado (Nivel 4.0+)', desc: 'Partida competitiva con buena pegada y táctica', level: 'Avanzado' },
+    { title: 'Iniciación', metric: 'Nivel 2.0 - 2.5', label: 'Iniciación (Nivel 2.0 - 2.5)', desc: 'Partidos amistosos para aprender y coger confianza', level: 'Principiante' },
+    { title: 'Intermedio', metric: 'Nivel 3.0 - 3.5', label: 'Intermedio (Nivel 3.0 - 3.5)', desc: 'Peloteo fluido, voleas y globos controlados', level: 'Intermedio' },
+    { title: 'Avanzado', metric: 'Nivel 4.0+', label: 'Avanzado (Nivel 4.0+)', desc: 'Partida competitiva con buena pegada y táctica', level: 'Avanzado' },
   ],
   hiking: [
-    { label: 'Paseo Fácil (6 - 8 km)', desc: 'Senderismo suave por senderos llanos', level: 'Principiante' },
-    { label: 'Media Montaña (10 - 14 km)', desc: 'Desnivel medio (+400m), ritmo activo', level: 'Intermedio' },
-    { label: 'Alta Exigencia (+16 km)', desc: 'Cumbres y terreno técnico con buen desnivel', level: 'Avanzado' },
+    { title: 'Paseo Fácil', metric: '6 - 8 km', label: 'Paseo Fácil (6 - 8 km)', desc: 'Senderismo suave por senderos llanos', level: 'Principiante' },
+    { title: 'Media Montaña', metric: '10 - 14 km (+400m)', label: 'Media Montaña (10 - 14 km)', desc: 'Desnivel medio (+400m), ritmo activo', level: 'Intermedio' },
+    { title: 'Alta Exigencia', metric: '+16 km (Técnico)', label: 'Alta Exigencia (+16 km)', desc: 'Cumbres y terreno técnico con buen desnivel', level: 'Avanzado' },
   ],
   crossfit: [
-    { label: 'WOD Todos los Niveles', desc: 'Pesos y movimientos escalables para todos', level: 'Todos los niveles' },
-    { label: 'Intermedio / RX Scaled', desc: 'Manejo de movimientos gimnásticos y barra', level: 'Intermedio' },
-    { label: 'RX Competitivo', desc: 'Pesos oficiales y alta intensidad', level: 'Avanzado' },
+    { title: 'WOD Escalable', metric: 'Todos los pesos', label: 'WOD Todos los Niveles', desc: 'Pesos y movimientos escalables para todos', level: 'Todos los niveles' },
+    { title: 'RX Scaled', metric: 'Gimnásticos + Barra', label: 'Intermedio / RX Scaled', desc: 'Manejo de movimientos gimnásticos y barra', level: 'Intermedio' },
+    { title: 'RX Competitivo', metric: 'Pesos oficiales', label: 'RX Competitivo', desc: 'Pesos oficiales y alta intensidad', level: 'Avanzado' },
   ],
   cycling: [
-    { label: 'Rodaje Suave (22 - 25 km/h)', desc: 'Salida en grupeta para sumar kilómetros', level: 'Principiante' },
-    { label: 'Ritmo Medio (26 - 29 km/h)', desc: 'Salida con algún puerto de montaña', level: 'Intermedio' },
-    { label: 'Ritmo Fuerte (> 30 km/h)', desc: 'Entrenamiento rápido con relevos', level: 'Avanzado' },
+    { title: 'Rodaje Suave', metric: '22 - 25 km/h', label: 'Rodaje Suave (22 - 25 km/h)', desc: 'Salida en grupeta para sumar kilómetros', level: 'Principiante' },
+    { title: 'Ritmo Medio', metric: '26 - 29 km/h', label: 'Ritmo Medio (26 - 29 km/h)', desc: 'Salida con algún puerto de montaña', level: 'Intermedio' },
+    { title: 'Ritmo Fuerte', metric: '> 30 km/h', label: 'Ritmo Fuerte (> 30 km/h)', desc: 'Entrenamiento rápido con relevos', level: 'Avanzado' },
   ],
 };
 
@@ -799,13 +808,21 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                       : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white hover:border-[#1F4E5F]/30'
                   }`}
                 >
-                  <div className="flex flex-col gap-1.5 w-full">
+                  <div className="flex flex-col gap-2 w-full">
+                    {/* Top Row: Title + Metric + Radio Check */}
                     <div className="flex items-start justify-between gap-2">
-                      <span className={`text-xs font-black leading-tight ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}>
-                        {p.label}
-                      </span>
+                      <div>
+                        <span className={`text-sm font-black leading-tight block ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}>
+                          {p.title}
+                        </span>
+                        <span className="text-xs font-black text-[#00B894] flex items-center gap-1 mt-0.5">
+                          <Timer className="w-3.5 h-3.5 shrink-0" />
+                          <span>{p.metric}</span>
+                        </span>
+                      </div>
+
                       <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                        className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all mt-0.5 ${
                           isSelected
                             ? 'bg-[#00B894] text-white shadow-xs'
                             : 'border-2 border-[#1F4E5F]/20 group-hover:border-[#1F4E5F]/40'
@@ -815,6 +832,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                       </div>
                     </div>
 
+                    {/* Difficulty Badge */}
                     <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border w-fit ${levelBadgeStyle}`}>
                       {p.level}
                     </span>
