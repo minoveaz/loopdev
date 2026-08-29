@@ -26,6 +26,7 @@ import { CimoCitySearchCombobox } from './CimoCitySearchCombobox';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
 import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
 import { CimoSportPaceSelector, SPORT_PACES_CATALOG } from './CimoSportPaceSelector';
+import { CimoCapacityStepper } from './CimoCapacityStepper';
 import { useSpainLocationSearch } from '../hooks/useSpainLocationSearch';
 
 export interface CimoCreatePlanViewProps {
@@ -762,44 +763,11 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           sport={sport}
         />
 
-        {/* 7. Cupo Máximo con Stepper Interactivo */}
-        <div className="p-5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
-                7
-              </span>
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
-                Cupo máximo de personas
-              </span>
-            </div>
-            <p className="text-xs text-[#1F4E5F]/70 mt-1 pl-7">
-              Recomendamos microgrupos de 4 a 6 personas para garantizar cercanía y conversación.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
-            <button
-              type="button"
-              disabled={maxMembers <= 3}
-              onClick={() => setMaxMembers((prev) => Math.max(3, prev - 1))}
-              className="w-9 h-9 rounded-full bg-white border border-[#1F4E5F]/20 flex items-center justify-center text-[#1F4E5F] hover:bg-[#1F4E5F]/5 disabled:opacity-30 cursor-pointer font-bold"
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-            <span className="text-base font-black text-[#1F4E5F] w-20 text-center">
-              {maxMembers} plazas
-            </span>
-            <button
-              type="button"
-              disabled={maxMembers >= 10}
-              onClick={() => setMaxMembers((prev) => Math.min(10, prev + 1))}
-              className="w-9 h-9 rounded-full bg-white border border-[#1F4E5F]/20 flex items-center justify-center text-[#1F4E5F] hover:bg-[#1F4E5F]/5 disabled:opacity-30 cursor-pointer font-bold"
-            >
-              <Plus className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        {/* 7. Cupo Máximo con Stepper Interactivo (Componente Reutilizable) */}
+        <CimoCapacityStepper
+          value={maxMembers}
+          onChange={setMaxMembers}
+        />
 
         {/* Live Preview Card */}
         <div className="flex flex-col gap-2 pt-2">
