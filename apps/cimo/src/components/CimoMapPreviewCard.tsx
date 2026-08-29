@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ExternalLink, MapPin, Navigation, Sparkles } from 'lucide-react';
+import { ExternalLink, MapPin } from 'lucide-react';
 import { POPULAR_SPORTS_VENUES } from '../data/spanishCitiesCatalog';
 
 export interface CimoMapPreviewCardProps {
@@ -26,7 +26,7 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
   coords,
   className = '',
 }) => {
-  const { mapEmbedUrl, googleMapsUrl, resolvedAddress, isExactVenue } = useMemo(() => {
+  const { mapEmbedUrl, googleMapsUrl, resolvedAddress } = useMemo(() => {
     // 1. Direct coordinates override
     if (coords && coords.lat && coords.lng) {
       const latLng = `${coords.lat},${coords.lng}`;
@@ -34,7 +34,6 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
         mapEmbedUrl: `https://maps.google.com/maps?q=${latLng}&z=16&output=embed`,
         googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${latLng}`,
         resolvedAddress: `${location}, ${city}`,
-        isExactVenue: true,
       };
     }
 
@@ -47,12 +46,10 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
       const vAddr = cleanText(v.address);
       const vCity = cleanText(v.city);
 
-      // Match city if specified
       if (cityClean && vCity && !vCity.includes(cityClean) && !cityClean.includes(vCity)) {
         return false;
       }
 
-      // Match name or address
       const locBase = cleanText(location.replace(/\s*\([^)]*\)/g, ''));
       return (
         locClean === vName ||
@@ -69,7 +66,6 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
         mapEmbedUrl: `https://maps.google.com/maps?q=${latLng}&z=16&output=embed`,
         googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(matchedVenue.address)}`,
         resolvedAddress: matchedVenue.address,
-        isExactVenue: true,
       };
     }
 
@@ -80,13 +76,12 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
       mapEmbedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`,
       googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`,
       resolvedAddress: `${cleanLocation || location}, ${city}`,
-      isExactVenue: false,
     };
-  }, [location, city, postalCode]);
+  }, [location, city, postalCode, coords]);
 
   return (
     <div className={`bg-[#F7F7F7] border border-[#1F4E5F]/15 rounded-2xl overflow-hidden flex flex-col gap-0 shadow-2xs ${className}`}>
-      {/* Interactive Map Embed / Preview */}
+      {/* Interactive Map Embed */}
       <div className="relative aspect-[21/9] sm:aspect-[24/9] w-full bg-slate-200 overflow-hidden">
         <iframe
           key={mapEmbedUrl}
@@ -95,35 +90,16 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
           className="w-full h-full border-0 pointer-events-none opacity-90 contrast-[1.05]"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1F4E5F]/85 via-transparent to-transparent pointer-events-none" />
-
-        {/* Floating Pin Badge */}
-        <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white pointer-events-none">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-7 h-7 rounded-full bg-[#00B894] text-white flex items-center justify-center shrink-0 shadow-md">
-              <MapPin className="w-4 h-4 fill-white" />
-            </div>
-            <div className="truncate">
-              <span className="text-xs font-black block truncate leading-tight drop-shadow-xs">{location}</span>
-              <span className="text-[10px] font-bold text-white/85 block truncate">
-                {resolvedAddress}
-              </span>
-            </div>
-          </div>
-          {isExactVenue && (
-            <span className="px-2 py-0.5 rounded-full bg-[#00B894] text-white text-[9px] font-black uppercase tracking-wider shadow-xs shrink-0 hidden sm:inline-block">
-              GPS Exacto
-            </span>
-          )}
-        </div>
       </div>
 
       {/* Action Navigation Footer */}
       <div className="p-3 bg-white flex items-center justify-between gap-2 border-t border-[#1F4E5F]/10">
-        <span className="text-[11px] font-extrabold text-[#1F4E5F]/70 flex items-center gap-1.5 truncate">
-          <Navigation className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
-          <span className="truncate">{resolvedAddress}</span>
-        </span>
+        <div className="flex items-center gap-2 min-w-0">
+          <MapPin className="w-4 h-4 text-[#00B894] shrink-0" />
+          <span className="text-xs font-bold text-[#1F4E5F] truncate">
+            {resolvedAddress}
+          </span>
+        </div>
 
         <a
           href={googleMapsUrl}
