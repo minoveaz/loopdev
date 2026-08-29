@@ -7,7 +7,7 @@ export interface CimoAthleteProfileCardProps {
     avatarUrl?: string;
     city?: string;
     completedWorkouts?: number;
-    sports?: string[];
+    sports?: string[] | Array<{ sport: string; level?: string; pace?: string }>;
   };
   onCreateClick?: () => void;
   onProfileClick?: () => void;

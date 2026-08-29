@@ -13,6 +13,7 @@ import { CimoActivityDetailView } from './components/CimoActivityDetailView';
 import { CimoCreatePlanView } from './components/CimoCreatePlanView';
 import { CimoChatListView } from './components/CimoChatListView';
 import { CimoProfileView } from './components/CimoProfileView';
+import { CimoEditProfileView, type ExtendedUserProfileData } from './components/CimoEditProfileView';
 
 export function App() {
   const [activities, setActivities] = useState<ActivityCardData[]>(INITIAL_ACTIVITIES);
@@ -26,10 +27,15 @@ export function App() {
   const [currentRoute, setCurrentRoute] = useState('feed');
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [currentUser, setCurrentUser] = useState<{ name: string; email: string; avatarUrl?: string }>({
+  const [currentUser, setCurrentUser] = useState<ExtendedUserProfileData>({
     name: 'Alex Rivera',
     email: 'alex.rivera@example.com',
+    handle: '@alexrivera',
+    city: 'Madrid, España',
+    neighborhood: 'Retiro / Chamberí',
     avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
+    coverUrl: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&q=80&w=1600',
+    bio: 'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros y conectar con gente activa!',
   });
 
   // Standard Navigation & URL Deep Linking
@@ -41,6 +47,7 @@ export function App() {
     }
     if (hash === 'create') return { route: 'create', activityId: null };
     if (hash === 'chats') return { route: 'chats', activityId: null };
+    if (hash === 'profile/edit') return { route: 'profile-edit', activityId: null };
     if (hash === 'profile') return { route: 'profile', activityId: null };
     return { route: 'feed', activityId: null };
   };
@@ -74,6 +81,8 @@ export function App() {
       window.location.hash = '#/create';
     } else if (route === 'chats') {
       window.location.hash = '#/chats';
+    } else if (route === 'profile-edit') {
+      window.location.hash = '#/profile/edit';
     } else if (route === 'profile') {
       window.location.hash = '#/profile';
     } else {
@@ -215,6 +224,16 @@ export function App() {
             }}
           />
         );
+      case 'profile-edit':
+        return (
+          <CimoEditProfileView
+            user={currentUser}
+            onBack={() => navigateTo('profile')}
+            onSave={(updated) => {
+              setCurrentUser((prev) => ({ ...prev, ...updated }));
+            }}
+          />
+        );
       case 'profile':
         return (
           <CimoProfileView
@@ -222,6 +241,7 @@ export function App() {
             userActivities={activities}
             onSelectActivity={handleSelectActivity}
             onCreatePlan={() => navigateTo('create')}
+            onEditProfile={() => navigateTo('profile-edit')}
             onUpdateUser={(updated) => setCurrentUser((prev) => ({ ...prev, ...updated }))}
           />
         );

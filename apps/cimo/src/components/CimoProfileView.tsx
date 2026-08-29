@@ -26,6 +26,7 @@ export interface CimoProfileViewProps {
   userActivities?: ActivityCardData[];
   onSelectActivity?: (id: string) => void;
   onCreatePlan?: () => void;
+  onEditProfile?: () => void;
   onUpdateUser?: (updated: UserProfileData) => void;
 }
 
@@ -97,6 +98,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
   userActivities = [],
   onSelectActivity,
   onCreatePlan,
+  onEditProfile,
   onUpdateUser,
 }) => {
   const [activeTab, setActiveTab] = useState<'plans' | 'sports' | 'badges' | 'reviews'>('plans');
@@ -107,6 +109,14 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
     navigator.clipboard?.writeText(window.location.href);
     setShareCopied(true);
     setTimeout(() => setShareCopied(false), 2500);
+  };
+
+  const handleTriggerEdit = () => {
+    if (onEditProfile) {
+      onEditProfile();
+    } else {
+      setIsEditModalOpen(true);
+    }
   };
 
   const sportsList = user.sports ?? [
@@ -140,7 +150,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => setIsEditModalOpen(true)}
+              onClick={handleTriggerEdit}
               className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
             >
               <Edit3 className="w-3.5 h-3.5" />
@@ -391,7 +401,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
               <button
                 type="button"
-                onClick={() => setIsEditModalOpen(true)}
+                onClick={handleTriggerEdit}
                 className="text-xs font-black text-[#00B894] hover:text-[#009678] transition-colors cursor-pointer"
               >
                 Editar Deportes
