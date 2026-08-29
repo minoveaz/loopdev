@@ -17,6 +17,7 @@ import {
   Sunrise,
   Sunset,
   Users,
+  X,
   Zap,
 } from 'lucide-react';
 import type { ActivityCardData } from '@loopdev/public-blocks';
@@ -589,16 +590,35 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                   id="custom-location-input"
                   type="text"
                   value={location}
-                  onFocus={() => setIsLocationDropdownOpen(true)}
+                  onFocus={(e) => {
+                    setIsLocationDropdownOpen(true);
+                    e.target.select();
+                  }}
                   onChange={(e) => {
                     setLocation(e.target.value);
                     setIsLocationDropdownOpen(true);
                   }}
                   placeholder={`Parque, club deportivo o calle en ${selectedCity}`}
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
+                  className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
                   autoComplete="off"
                 />
                 <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
+                {location && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLocation('');
+                      setIsLocationDropdownOpen(true);
+                      const inputEl = document.getElementById('custom-location-input');
+                      inputEl?.focus();
+                    }}
+                    className="p-1 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
+                    title="Limpiar y escribir otro lugar"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               {/* Floating Location Suggestions Dropdown */}
@@ -641,17 +661,27 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                       );
                     })}
 
-                    {/* Option to use custom location if typed */}
-                    {location.trim() && !isExactMatch && (
-                      <button
-                        type="button"
-                        onClick={() => setIsLocationDropdownOpen(false)}
-                        className="w-full px-3 py-2 rounded-xl text-left text-xs font-black transition-all cursor-pointer flex items-center gap-2 bg-[#00B894]/10 text-[#1F4E5F] hover:bg-[#00B894]/20 border border-dashed border-[#00B894] mt-1"
-                      >
-                        <Plus className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
-                        <span className="truncate">Usar lugar: "{location.trim()}"</span>
-                      </button>
-                    )}
+                    {/* Option to clear and type a new custom spot */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!isExactMatch && location.trim()) {
+                          setIsLocationDropdownOpen(false);
+                        } else {
+                          setLocation('');
+                          const inputEl = document.getElementById('custom-location-input');
+                          inputEl?.focus();
+                        }
+                      }}
+                      className="w-full px-3 py-2 rounded-xl text-left text-xs font-black transition-all cursor-pointer flex items-center gap-2 bg-[#00B894]/10 text-[#1F4E5F] hover:bg-[#00B894]/20 border border-dashed border-[#00B894] mt-1"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
+                      <span className="truncate">
+                        {location.trim() && !isExactMatch
+                          ? `Usar lugar: "${location.trim()}"`
+                          : 'Escribir otro lugar o dirección'}
+                      </span>
+                    </button>
                   </div>
                 );
               })()}
