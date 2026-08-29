@@ -92,13 +92,29 @@ graph TD
 - [x] Envolver el feed central (`CimoCuratedFeed`) en un contenedor con filtros de momento (*Todos, Hoy, Finde*).
 - [x] Expandir el canvas a `max-w-[1720px]` con espaciado amplio y alineación superior simétrica (`items-start`).
 
-### 📌 Fase 2: Vistas Inmersivas Dedicadas (Eliminación de Modales)
-- [ ] Implementar `CimoActivityDetailView` como vista completa inmersiva dentro del canvas (portada panorámica, biografía del capitán, mapa de la ruta, miembros confirmados y chat del Crew).
-- [ ] Implementar `CimoCreatePlanView` como vista dedicada paso a paso para publicar entrenos sin popups.
-- [ ] Conectar la navegación interna fluida entre Explorar, Detalle de Actividad, Crear Plan, Chats y Perfil.
-- [ ] Soportar URLs canónicas y deep linking (`/`, `/activity/:id`, `/create`, `/chats`, `/profile`).
+### 📌 Fase 2: Vistas Inmersivas Dedicadas & Pasaporte de Atleta (Eliminación de Modales)
+- [x] Implementar `CimoActivityDetailView` como vista completa inmersiva dentro del canvas (portada panorámica, biografía del capitán, mapa de la ruta, miembros confirmados y chat del Crew).
+- [x] Implementar `CimoCreatePlanView` como vista dedicada en 7 islas modulares para publicar entrenos sin popups.
+- [x] Implementar `CimoProfileView` y `CimoEditProfileView` con Pasaporte Deportivo completo, matriz semanal día a día y canales de contacto con candado de privacidad.
+- [x] Conectar la navegación interna fluida entre Explorar, Detalle de Actividad, Crear Plan, Chats y Perfil con deep linking bidireccional (`/`, `/activity/:id`, `/create`, `/chats`, `/profile`, `/profile/edit`).
 
-### 📌 Fase 3: Landing Page Pública de Captación & Onboarding
+### 📌 Fase 3: Red Social Deportiva, Tercer Tiempo & Algoritmo de Matching Deportivo Inteligente
+- [ ] **Sección de "Tercer Tiempo" Integrada en Planes:**
+  - Definir e integrar en la creación y detalle de planes el momento social post-entreno (*"☕ Café y charla en Café Murillo tras los 8K"* o *"🍻 Cañas y tapeo post-partido de Pádel"*).
+  - Badge explícito de Tercer Tiempo en las tarjetas panorámicas del feed.
+- [ ] **Algoritmo de Matching Deportivo Inteligente (5 Vectores de Compatibilidad):**
+  - **Vector 1: Fit de Ritmo & Nivel (40%):** Ventana de ritmo compatible (ej: 5:10 - 5:25 min/km) y nivel Playtomic exacto.
+  - **Vector 2: Proximidad & Barrio Habitual (20%):** Retiro, Chamberí, Salamanca, etc.
+  - **Vector 3: Coincidencia de Matriz de Horarios (20%):** Días y franjas libres compartidas.
+  - **Vector 4: Afinidad de Tercer Tiempo & Estilo Social (10%):** Microgrupos (4-6 pers), café, caña o competición.
+  - **Vector 5: Conexiones Previas & Confianza (10%):** Amigos en común, entrenos compartidos y valoración del capitán.
+- [ ] **Badge de Compatibilidad en Tarjetas (% Afinidad):**
+  - Mostrar en cada tarjeta del Feed: `⚡ 96% Compatibilidad: Mismo ritmo (5:15), horario de tarde y café post-entreno`.
+- [ ] **"Mi Red de Crew" & Conexiones Deportivas:**
+  - Ficha de deportistas con los que ya has entrenado (*"Has compartido 3 entrenos con Sofía"*).
+  - Sugerencia de compañeros compatibles para invitar en 1 clic al crear nuevos planes (*Smart Captain Invites*).
+
+### 📌 Fase 4: Landing Page Pública de Captación & Onboarding Deportivo
 - [ ] Construir la Landing Page Pública para visitantes no autenticados:
   - Hero de conversión con propuesta de valor (*"Match con entrenos, no con personas"*).
   - Showcase de planes y entrenos en vivo en Madrid.
@@ -110,7 +126,7 @@ graph TD
   - Configuración de ritmo / nivel deportivo y zona habitual de entrenamiento.
 - [ ] Transición fluida: `Landing Pública` (visitantes) ➔ `Onboarding` ➔ `App CIMO 2.0` (deportistas).
 
-### 📌 Fase 4: Calidad, Rendimiento, PWA & Quality Gate
+### 📌 Fase 5: Calidad, Rendimiento, PWA & Quality Gate
 - [ ] Configurar auditoría Lighthouse / Unlighthouse para certificar Score ≥ 90 en Desktop y Mobile.
 - [ ] Suite de pruebas de integración con Vitest y Testing Library.
 - [ ] Verificación de responsive en Mobile PWA, Tablet y Desktop panorámico.
@@ -118,10 +134,23 @@ graph TD
 
 ---
 
-## Criterios de Aceptación y Certificación
+## Criterios de cierre
 
-1. **Jerarquía Visual 2.0:** Header con búsqueda flotante, 3 superficies sólidas alineadas y canvas ancho `max-w-[1720px]`.
-2. **Cero Modales para Flujos Principales:** Detalle de entreno y Creación de plan operan como vistas inmersivas dedicadas.
-3. **Flujos Completos Operativos:** Feed curado, creación de entrenos, unirse a un Crew, chat en tiempo real y perfil deportivo.
-4. **Embudo de Conversión:** Landing pública ➔ Onboarding deportivo ➔ App inmersiva.
-5. **Auditoría de Rendimiento:** Lighthouse Score ≥ 90 en Performance, Accesibilidad, Mejores Prácticas y SEO.
+- [x] Jerarquía Visual 2.0: Header con búsqueda flotante, 3 superficies sólidas alineadas y canvas ancho `max-w-[1720px]`.
+- [x] Cero Modales para Flujos Principales: Detalle de entreno, Creación de plan y Edición de perfil operan como vistas inmersivas dedicadas sin scroll horizontal.
+- [ ] Red Social Deportiva & Matching: Algoritmo de 5 vectores con Badge de Afinidad (%) y Tercer Tiempo integrado en cada plan.
+- [ ] Flujos Completos Operativos: Feed curado con fotos exactas, creación de entrenos, unirse a un Crew, chat en tiempo real y perfil deportivo.
+- [ ] Embudo de Conversión: Landing pública ➔ Onboarding deportivo ➔ App inmersiva.
+- [ ] Auditoría de Rendimiento: Lighthouse Score ≥ 90 en Performance, Accesibilidad, Mejores Prácticas y SEO.
+
+## Evidencia de validación
+
+| Fecha | Validación | Resultado | Referencia |
+| :--- | :--- | :--- | :--- |
+| 2026-08-29 | `pnpm --filter cimo typecheck` | Correcta | TypeScript 0 errores |
+| 2026-08-29 | `pnpm --filter cimo test` | Correcta | Vitest 4/4 passing |
+| 2026-08-29 | `pnpm --filter cimo build` | Correcta | Vite build exitoso |
+
+## Cierre
+
+Pendiente de completar Fase 3 (Red Social & Matching), Fase 4 (Landing & Onboarding) y Fase 5 (Quality Gate Lighthouse).

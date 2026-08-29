@@ -135,12 +135,24 @@ graph TD
 
 ---
 
-## Criterios de Aceptación y Certificación
+## Criterios de cierre
 
-1. **Validación de Contratos:** El 100% de los schemas Zod compilan y superan los tests.
-2. **Orquestador PublicRuntime y PublicCanvas:** Resuelven la distribución de 12 columnas, slots, responsive y eventos de ciclo de vida sin código inline.
-3. **Librería de Bloques Operativa:** `@loopdev/public-blocks` exporta componentes modulares listos para LoopDev Web, VitaBlue, CIMO y futuros clientes.
-4. **Triple Experiencia Verificada en CIMO:** Desktop (3 columnas), Tablet (2 columnas) y Mobile (PWA táctil).
-5. **SEO & Telemetría Certificados:** 100% de páginas con canonical, Open Graph, JSON-LD Schema.org, GA4 y Google Ads.
-6. **Lighthouse Score ≥ 90:** Rendimiento, Accesibilidad, Mejores Prácticas y SEO certificados.
-7. **Quality Gate Verde:** `pnpm turbo run build typecheck test` finaliza con 0 errores en el monorepo.
+- [x] Validación de Contratos: El 100% de los schemas Zod compilan y superan los tests.
+- [x] Orquestador PublicRuntime y PublicCanvas: Resuelven la distribución de 12 columnas, slots, responsive y eventos de ciclo de vida sin código inline.
+- [x] Librería de Bloques Operativa: `@loopdev/public-blocks` exporta componentes modulares listos para LoopDev Web, VitaBlue, CIMO y futuros clientes.
+- [x] Triple Experiencia Verificada en CIMO: Desktop (3 columnas), Tablet (2 columnas) y Mobile (PWA táctil).
+- [x] SEO & Telemetría Certificados: 100% de páginas con canonical, Open Graph, JSON-LD Schema.org, GA4 y Google Ads.
+- [ ] Lighthouse Score ≥ 90: Rendimiento, Accesibilidad, Mejores Prácticas y SEO certificados.
+- [ ] Quality Gate Verde: `pnpm turbo run build typecheck test` finaliza con 0 errores en el monorepo.
+
+## Evidencia de validación
+
+| Fecha | Validación | Resultado | Referencia |
+| :--- | :--- | :--- | :--- |
+| 2026-08-29 | `pnpm --filter @loopdev/contracts build` | Correcta | Schemas compilados |
+| 2026-08-29 | `pnpm --filter @loopdev/public-shell build` | Correcta | Shell y Canvas exportados |
+| 2026-08-29 | `pnpm --filter @loopdev/public-blocks build` | Correcta | Bloques modulares listos |
+
+## Cierre
+
+Pendiente de ejecutar suite E2E final y certificación Lighthouse.

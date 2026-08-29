@@ -29,6 +29,10 @@
 
 - [Fundación de la aplicación móvil de LoopDev](./active/mobile/2026-08-09-mobile-app-foundation.md) · fase 1
 
+### Apps
+
+- [CIMO Social Sports Platform, Strava/Airbnb 2.0 Architecture, Dedicated In-App Views, Crew Hub, Chat & Public Onboarding Landing](./active/apps/2026-08-29-cimo-social-sports-platform.md) · `feature/public-shell-foundation` · fase 1
+
 ### Platform
 
 - [Estandarización del shell de LoopDev OS](./active/platform/2026-08-10-shell-standardization.md) · fase 4
