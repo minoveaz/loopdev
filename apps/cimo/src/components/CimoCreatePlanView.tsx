@@ -8,7 +8,7 @@ import {
   ChevronRight,
   Clock,
   Eye,
-  Heart,
+  FileText,
   MapPin,
   Minus,
   Plus,
@@ -66,30 +66,25 @@ const cityLocationsMap: Record<string, string[]> = {
     'Marina Real de Valencia',
     'Playa de la Malvarrosa',
     'Pádel Club Ruzafa',
-    'Parque de Cabecera',
   ],
   Sevilla: [
     'Parque de María Luisa / Plaza de España',
     'Márgenes del Guadalquivir (Triana)',
     'Parque del Alamillo',
-    'Club Pádel Los Remedios',
   ],
   Málaga: [
     'Paseo Marítimo Antonio Banderas',
     'Muelle Uno / La Farola',
     'Castillo de Gibralfaro',
-    'Pádel Club Cerrado de Calderón',
   ],
   Bilbao: [
     'Ría de Bilbao / Guggenheim',
     'Parque Doña Casilda',
     'Paseo de Artxanda',
-    'Pádel Indoor San Mamés',
   ],
   Zaragoza: [
     'Parque Grande José Antonio Labordeta',
     'Riberas del Ebro / Expo',
-    'Pádel Indoor Actur',
   ],
   Granada: [
     'Paseo del Salón / Río Genil',
@@ -101,31 +96,26 @@ const cityLocationsMap: Record<string, string[]> = {
     'Paseo Marítimo de El Sardinero',
     'Península de La Magdalena',
     'Parque de Las Llamas',
-    'Club Tenis Santander',
   ],
   Alicante: [
     'Paseo de la Explanada / Puerto',
     'Playa de San Juan',
-    'Castillo de Santa Bárbara',
-    'Pádel Indoor Alicante',
   ],
   'San Sebastián / Donostia': [
-    'Paseo de La Concha / Peine del Viento',
-    'Monte Urgull / Zurriola',
-    'Parque Cristina Enea',
-    'Pádel Club Donostia',
+    'Paseo de La Concha',
+    'Monte Urgull / Kursaal',
+    'Playa de Zurriola',
   ],
   Otra: [
-    'Polideportivo Municipal',
     'Parque Principal',
-    'Paseo Marítimo / Ruta Local',
-    'Club Deportivo / Pistas de Pádel',
+    'Polideportivo Municipal',
+    'Plaza Mayor',
   ],
 };
 
 const quickDates = [
-  { label: 'Hoy', sub: 'Sáb 29 Ago', value: 'Hoy' },
-  { label: 'Mañana', sub: 'Dom 30 Ago', value: 'Mañana' },
+  { label: 'Hoy', sub: '29 Ago', value: 'Hoy' },
+  { label: 'Mañana', sub: '30 Ago', value: 'Mañana' },
   { label: 'Lunes', sub: '31 Ago', value: 'Lunes 31 Ago' },
   { label: 'Martes', sub: '1 Sep', value: 'Martes 1 Sep' },
   { label: 'Miércoles', sub: '2 Sep', value: 'Miércoles 2 Sep' },
@@ -176,6 +166,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
   const [calendarMonth, setCalendarMonth] = useState('Septiembre 2026');
   const [selectedHour, setSelectedHour] = useState('19');
   const [selectedMinute, setSelectedMinute] = useState('30');
@@ -196,7 +187,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
       date,
       time,
       level: currentPace.level,
-      paceOrDetails: currentPace.label,
+      paceOrDetails: `${currentPace.title} • ${currentPace.metric}`,
       maxMembers,
       image: selectedSportObj.image,
       instructions: instructions.trim() || undefined,
@@ -239,47 +230,50 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   ];
 
   return (
-    <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-8 text-[#1F4E5F]">
-      {/* Top Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#1F4E5F]/10">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex items-center gap-2 text-xs font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver a Explorar</span>
-        </button>
+    <div className="flex flex-col gap-6 text-[#1F4E5F] max-w-4xl mx-auto pb-12 animate-in fade-in duration-200">
+      {/* 🧭 Top Navigation Header Island */}
+      <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4">
+        <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-2 text-xs font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Volver a Explorar</span>
+          </button>
 
-        <div className="flex items-center gap-1.5 text-xs font-black text-[#7FB77E] uppercase tracking-wider">
-          <Award className="w-4 h-4" />
-          <span>Estudio de Capitán</span>
+          <div className="flex items-center gap-1.5 text-xs font-black text-[#00B894] uppercase tracking-wider bg-[#00B894]/10 px-3 py-1 rounded-full">
+            <Award className="w-4 h-4" />
+            <span>Estudio de Capitán</span>
+          </div>
+        </div>
+
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-black text-[#1F4E5F] tracking-tight">
+            Crea tu Entrenamiento Grupal
+          </h1>
+          <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1 font-medium leading-relaxed">
+            Diseña tu Crew en 7 pasos guiados. Los miembros de tu ciudad podrán descubrir tu propuesta y unirse.
+          </p>
         </div>
       </div>
 
-      {/* Title & Introduction */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-[#1F4E5F] tracking-tight">
-          Crea tu Entrenamiento Grupal
-        </h1>
-        <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1 font-medium">
-          Configura tu Crew con controles personalizados. Los miembros podrán descubrirlo en el feed y unirse.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-        {/* 1. Selector Visual de Deporte */}
-        <div className="flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        {/* 🏃 Island 1: Deporte */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
                 1
               </span>
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 ¿Qué deporte vas a liderar?
               </span>
             </div>
-            <span className="text-xs font-extrabold text-[#00B894] capitalize">{sport}</span>
+            <span className="text-xs font-black text-[#00B894] capitalize bg-[#00B894]/10 px-3 py-1 rounded-full">
+              {sport}
+            </span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
@@ -307,248 +301,250 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* 2. Selector Visual de Fecha (Grid Adaptativo + Mini-Calendario Interactivo) */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
-                2
-              </span>
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
-                ¿Qué día entrenamos?
-              </span>
+        {/* 📅 Island 2: Cuándo Entrenamos (Fecha & Hora) */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+          {/* Step 2: Fecha */}
+          <div className="flex flex-col gap-3.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+                  2
+                </span>
+                <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+                  ¿Qué día entrenamos?
+                </span>
+              </div>
+              <span className="text-xs font-extrabold text-[#00B894]">{date}</span>
             </div>
-            <span className="text-xs font-extrabold text-[#00B894]">{date}</span>
-          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-            {quickDates.map((qd) => {
-              const isSelected = date === qd.value && !isCustomCalendarOpen;
-              return (
-                <button
-                  key={qd.value}
-                  type="button"
-                  onClick={() => {
-                    setDate(qd.value);
-                    setIsCustomCalendarOpen(false);
-                  }}
-                  className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
-                    isSelected
-                      ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white shadow-xs scale-[1.02]'
-                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
-                  }`}
-                >
-                  <span className="text-xs font-black leading-tight">{qd.label}</span>
-                  <span className={`text-[10px] font-bold mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
-                    {qd.sub}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+              {quickDates.map((qd) => {
+                const isSelected = date === qd.value && !isCustomCalendarOpen;
+                return (
+                  <button
+                    key={qd.value}
+                    type="button"
+                    onClick={() => {
+                      setDate(qd.value);
+                      setIsCustomCalendarOpen(false);
+                    }}
+                    className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
+                      isSelected
+                        ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white shadow-xs scale-[1.02]'
+                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
+                    }`}
+                  >
+                    <span className="text-xs font-black leading-tight">{qd.label}</span>
+                    <span className={`text-[10px] font-bold mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
+                      {qd.sub}
+                    </span>
+                  </button>
+                );
+              })}
+
+              {/* 7th item: Custom Calendar Trigger Button */}
+              <button
+                type="button"
+                onClick={() => setIsCustomCalendarOpen(!isCustomCalendarOpen)}
+                className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center min-h-[58px] ${
+                  isCustomCalendarOpen
+                    ? 'border-[#00B894] bg-[#00B894] text-white shadow-xs scale-[1.02]'
+                    : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
+                }`}
+              >
+                <div className="flex items-center gap-1">
+                  <Calendar className={`w-3.5 h-3.5 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`} />
+                  <span className="text-xs font-black leading-tight whitespace-nowrap">Otro día</span>
+                </div>
+                <span className={`text-[10px] font-bold mt-0.5 whitespace-nowrap ${isCustomCalendarOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
+                  Calendario
+                </span>
+              </button>
+            </div>
+
+            {/* Custom Visual Interactive Month Calendar */}
+            {isCustomCalendarOpen && (
+              <div className="p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-4 animate-in fade-in zoom-in-98 duration-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
+                    {calendarMonth}
                   </span>
-                </button>
-              );
-            })}
+                  <span className="text-xs font-extrabold text-[#7FB77E]">Selecciona fecha</span>
+                </div>
 
-            {/* 7th item: Custom Calendar Trigger Button */}
-            <button
-              type="button"
-              onClick={() => setIsCustomCalendarOpen(!isCustomCalendarOpen)}
-              className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center min-h-[58px] ${
-                isCustomCalendarOpen
-                  ? 'border-[#00B894] bg-[#00B894] text-white shadow-xs scale-[1.02]'
-                  : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
-              }`}
-            >
-              <div className="flex items-center gap-1">
-                <Calendar className={`w-3.5 h-3.5 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`} />
-                <span className="text-xs font-black leading-tight whitespace-nowrap">Otro día</span>
-              </div>
-              <span className={`text-[10px] font-bold mt-0.5 whitespace-nowrap ${isCustomCalendarOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
-                Calendario
-              </span>
-            </button>
-          </div>
+                {/* Day names header */}
+                <div className="grid grid-cols-7 gap-1 text-center">
+                  {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d) => (
+                    <span key={d} className="text-[10px] font-black text-[#1F4E5F]/60 py-1">
+                      {d}
+                    </span>
+                  ))}
+                </div>
 
-          {/* Custom Visual Interactive Month Calendar */}
-          {isCustomCalendarOpen && (
-            <div className="p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-4 animate-in fade-in zoom-in-98 duration-200">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
-                  {calendarMonth}
-                </span>
-                <span className="text-xs font-extrabold text-[#7FB77E]">Selecciona fecha</span>
-              </div>
-
-              {/* Day names header */}
-              <div className="grid grid-cols-7 gap-1 text-center">
-                {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d) => (
-                  <span key={d} className="text-[10px] font-black text-[#1F4E5F]/60 py-1">
-                    {d}
-                  </span>
-                ))}
-              </div>
-
-              {/* Day cells */}
-              <div className="grid grid-cols-7 gap-1">
-                {calendarDays.map((cd, idx) => {
-                  if (cd.empty) {
-                    return <div key={`empty-${idx}`} className="h-8" />;
-                  }
-                  const isSelectedDay = date === cd.name;
-                  return (
-                    <button
-                      key={cd.day}
-                      type="button"
-                      onClick={() => {
-                        setDate(cd.name!);
-                        setIsCustomCalendarOpen(false);
-                      }}
-                      className={`h-8 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center cursor-pointer ${
-                        isSelectedDay
-                          ? 'bg-[#00B894] text-white shadow-xs font-black scale-105'
-                          : 'bg-white hover:bg-[#00B894]/20 text-[#1F4E5F]'
-                      }`}
-                    >
-                      {cd.day}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 3. Selector Visual de Hora (Píldoras Rápidas + Selector Digital de Horas/Minutos) */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
-                3
-              </span>
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
-                ¿A qué hora?
-              </span>
-            </div>
-            <span className="text-xs font-extrabold text-[#00B894]">{time} h</span>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
-            {quickTimes.map((qt) => {
-              const isSelected = time === qt.label && !isCustomTimeOpen;
-              const IconComp = qt.icon;
-              return (
-                <button
-                  key={qt.label}
-                  type="button"
-                  onClick={() => {
-                    setTime(qt.label);
-                    setIsCustomTimeOpen(false);
-                  }}
-                  className={`py-2.5 px-2 rounded-2xl border text-center transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                    isSelected
-                      ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white font-black shadow-xs scale-105'
-                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] font-bold hover:bg-[#1F4E5F]/5'
-                  }`}
-                >
-                  <IconComp className="w-3.5 h-3.5 opacity-70" />
-                  <span className="text-xs">{qt.label}</span>
-                </button>
-              );
-            })}
-
-            {/* 8th item: Custom Time Tuner Trigger Button */}
-            <button
-              type="button"
-              onClick={() => setIsCustomTimeOpen(!isCustomTimeOpen)}
-              className={`py-2.5 px-2 rounded-2xl border transition-all cursor-pointer flex items-center justify-center gap-1.5 min-h-[42px] ${
-                isCustomTimeOpen
-                  ? 'border-[#00B894] bg-[#00B894] text-white font-black shadow-xs scale-105'
-                  : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] font-bold hover:bg-[#F7F7F7]'
-              }`}
-            >
-              <Clock className={`w-3.5 h-3.5 ${isCustomTimeOpen ? 'text-white' : 'opacity-70'}`} />
-              <span className="text-xs whitespace-nowrap">Otra hora</span>
-            </button>
-          </div>
-
-          {/* Custom Visual Digital Time Tuner */}
-          {isCustomTimeOpen && (
-            <div className="p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-4 animate-in fade-in zoom-in-98 duration-200">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
-                  Configura la hora exacta
-                </span>
-                <span className="text-sm font-black bg-[#1F4E5F] text-white px-3 py-1 rounded-full">
-                  {selectedHour}:{selectedMinute} h
-                </span>
-              </div>
-
-              {/* Hours Row */}
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
-                  Hora:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {availableHours.map((hr) => {
-                    const isSelected = selectedHour === hr;
+                {/* Day cells */}
+                <div className="grid grid-cols-7 gap-1">
+                  {calendarDays.map((cd, idx) => {
+                    if (cd.empty) {
+                      return <div key={`empty-${idx}`} className="h-8" />;
+                    }
+                    const isSelectedDay = date === cd.name;
                     return (
                       <button
-                        key={hr}
+                        key={cd.day}
                         type="button"
                         onClick={() => {
-                          setSelectedHour(hr);
-                          setTime(`${hr}:${selectedMinute}`);
+                          setDate(cd.name!);
+                          setIsCustomCalendarOpen(false);
                         }}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#00B894] text-white font-black shadow-xs'
-                            : 'bg-white text-[#1F4E5F] hover:bg-[#00B894]/10 border border-[#1F4E5F]/10'
+                        className={`h-8 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center cursor-pointer ${
+                          isSelectedDay
+                            ? 'bg-[#00B894] text-white shadow-xs font-black scale-105'
+                            : 'bg-white hover:bg-[#00B894]/20 text-[#1F4E5F]'
                         }`}
                       >
-                        {hr}:00
+                        {cd.day}
                       </button>
                     );
                   })}
                 </div>
               </div>
+            )}
+          </div>
 
-              {/* Minutes Row */}
-              <div className="flex flex-col gap-1.5 pt-2 border-t border-[#1F4E5F]/10">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
-                  Minutos:
+          <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
+            {/* Step 3: Hora */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+                  3
                 </span>
-                <div className="flex gap-2">
-                  {availableMinutes.map((min) => {
-                    const isSelected = selectedMinute === min;
-                    return (
-                      <button
-                        key={min}
-                        type="button"
-                        onClick={() => {
-                          setSelectedMinute(min);
-                          setTime(`${selectedHour}:${min}`);
-                        }}
-                        className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer text-center ${
-                          isSelected
-                            ? 'bg-[#1F4E5F] text-white font-black shadow-xs'
-                            : 'bg-white text-[#1F4E5F] hover:bg-[#1F4E5F]/10 border border-[#1F4E5F]/10'
-                        }`}
-                      >
-                        :{min}
-                      </button>
-                    );
-                  })}
+                <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+                  ¿A qué hora?
+                </span>
+              </div>
+              <span className="text-xs font-extrabold text-[#00B894]">{time} h</span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+              {quickTimes.map((qt) => {
+                const isSelected = time === qt.label && !isCustomTimeOpen;
+                const IconComp = qt.icon;
+                return (
+                  <button
+                    key={qt.label}
+                    type="button"
+                    onClick={() => {
+                      setTime(qt.label);
+                      setIsCustomTimeOpen(false);
+                    }}
+                    className={`py-2.5 px-2 rounded-2xl border text-center transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                      isSelected
+                        ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white font-black shadow-xs scale-105'
+                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] font-bold hover:bg-[#1F4E5F]/5'
+                    }`}
+                  >
+                    <IconComp className="w-3.5 h-3.5 opacity-70" />
+                    <span className="text-xs">{qt.label}</span>
+                  </button>
+                );
+              })}
+
+              <button
+                type="button"
+                onClick={() => setIsCustomTimeOpen(!isCustomTimeOpen)}
+                className={`py-2.5 px-2 rounded-2xl border transition-all cursor-pointer flex items-center justify-center gap-1.5 min-h-[42px] ${
+                  isCustomTimeOpen
+                    ? 'border-[#00B894] bg-[#00B894] text-white font-black shadow-xs scale-105'
+                    : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] font-bold hover:bg-[#F7F7F7]'
+                }`}
+              >
+                <Clock className={`w-3.5 h-3.5 ${isCustomTimeOpen ? 'text-white' : 'opacity-70'}`} />
+                <span className="text-xs whitespace-nowrap">Otra hora</span>
+              </button>
+            </div>
+
+            {/* Custom Visual Digital Time Tuner */}
+            {isCustomTimeOpen && (
+              <div className="p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-4 animate-in fade-in zoom-in-98 duration-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
+                    Configura la hora exacta
+                  </span>
+                  <span className="text-sm font-black bg-[#1F4E5F] text-white px-3 py-1 rounded-full">
+                    {selectedHour}:{selectedMinute} h
+                  </span>
+                </div>
+
+                {/* Hours Row */}
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                    Hora:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {availableHours.map((hr) => {
+                      const isSelected = selectedHour === hr;
+                      return (
+                        <button
+                          key={hr}
+                          type="button"
+                          onClick={() => {
+                            setSelectedHour(hr);
+                            setTime(`${hr}:${selectedMinute}`);
+                          }}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#00B894] text-white font-black shadow-xs'
+                              : 'bg-white text-[#1F4E5F] hover:bg-[#00B894]/10 border border-[#1F4E5F]/10'
+                          }`}
+                        >
+                          {hr}:00
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Minutes Row */}
+                <div className="flex flex-col gap-1.5 pt-2 border-t border-[#1F4E5F]/10">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                    Minutos:
+                  </span>
+                  <div className="flex gap-2">
+                    {availableMinutes.map((min) => {
+                      const isSelected = selectedMinute === min;
+                      return (
+                        <button
+                          key={min}
+                          type="button"
+                          onClick={() => {
+                            setSelectedMinute(min);
+                            setTime(`${selectedHour}:${min}`);
+                          }}
+                          className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer text-center ${
+                            isSelected
+                              ? 'bg-[#1F4E5F] text-white font-black shadow-xs'
+                              : 'bg-white text-[#1F4E5F] hover:bg-[#1F4E5F]/10 border border-[#1F4E5F]/10'
+                          }`}
+                        >
+                          :{min}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* 4. Ciudad & Punto de Encuentro (Clean Form Inputs - Zero Badge Clutter) */}
-        <div className="flex flex-col gap-3">
+        {/* 📍 Island 3: Dónde Quedamos (Ciudad, Punto de Encuentro & Mapa) */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
                 4
               </span>
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Ciudad & Punto de encuentro
               </span>
             </div>
@@ -749,39 +745,45 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           )}
         </div>
 
-        {/* 5. Nivel & Ritmo Deportivo (Componente Reutilizable) */}
-        <CimoSportPaceSelector
-          sport={sport}
-          selectedIndex={selectedPaceIndex}
-          onSelectIndex={setSelectedPaceIndex}
-        />
+        {/* ⚡ Island 4: Nivel & Ritmo Deportivo */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+          <CimoSportPaceSelector
+            sport={sport}
+            selectedIndex={selectedPaceIndex}
+            onSelectIndex={setSelectedPaceIndex}
+          />
+        </div>
 
-        {/* 6. Instrucciones Adicionales del Capitán */}
-        <CimoCaptainInstructionsField
-          value={instructions}
-          onChange={setInstructions}
-          sport={sport}
-        />
+        {/* 📝 Island 5: Instrucciones del Capitán */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+          <CimoCaptainInstructionsField
+            value={instructions}
+            onChange={setInstructions}
+            sport={sport}
+          />
+        </div>
 
-        {/* 7. Cupo Máximo con Stepper Interactivo (Componente Reutilizable) */}
-        <CimoCapacityStepper
-          value={maxMembers}
-          onChange={setMaxMembers}
-        />
+        {/* 👥 Island 6: Cupo de Plazas */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+          <CimoCapacityStepper
+            value={maxMembers}
+            onChange={setMaxMembers}
+          />
+        </div>
 
-        {/* Live Preview Card */}
-        <div className="flex flex-col gap-3 pt-4 border-t border-[#1F4E5F]/10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#00B894]">
+        {/* 🌟 Island 7: Vista Previa en Vivo & Publicación */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+            <div className="flex items-center gap-2.5 text-xs font-black uppercase tracking-wider text-[#00B894]">
               <Eye className="w-4 h-4" />
               <span>Vista previa en vivo de tu tarjeta en el feed</span>
             </div>
-            <span className="text-[10px] font-bold text-[#1F4E5F]/50">
+            <span className="text-[10px] font-bold text-[#1F4E5F]/50 hidden sm:inline-block">
               Así lo descubrirán los demás deportistas
             </span>
           </div>
 
-          <div className="w-full max-w-xl bg-white rounded-3xl overflow-hidden border border-[#1F4E5F]/15 shadow-md hover:shadow-lg transition-all">
+          <div className="w-full max-w-xl mx-auto bg-white rounded-3xl overflow-hidden border border-[#1F4E5F]/15 shadow-md hover:shadow-lg transition-all">
             {/* Image Header with Gradient & Tags */}
             <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#1F4E5F]/5">
               <img src={selectedSportObj.image} alt={finalTitle} className="w-full h-full object-cover" />
@@ -848,24 +850,24 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-[#1F4E5F]/10">
-          <button
-            type="button"
-            onClick={onBack}
-            className="px-5 py-2.5 rounded-full text-xs font-extrabold text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors cursor-pointer"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="px-7 py-3 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all shadow-md flex items-center gap-2 cursor-pointer active:scale-95"
-          >
-            <Plus className="w-4 h-4 stroke-[3]" />
-            <span>Publicar Entrenamiento</span>
-          </button>
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#1F4E5F]/10">
+            <button
+              type="button"
+              onClick={onBack}
+              className="px-6 py-3 rounded-full text-xs font-extrabold text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors cursor-pointer"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="px-8 py-3.5 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer active:scale-95"
+            >
+              <Plus className="w-4 h-4 stroke-[3]" />
+              <span>Publicar Entrenamiento</span>
+            </button>
+          </div>
         </div>
       </form>
     </div>
