@@ -765,40 +765,65 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
 
         {/* 5. Nivel & Ritmo Deportivo */}
         <div className="flex flex-col gap-3">
-          <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
-            5. Nivel & Ritmo del entrenamiento
-          </span>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
+              5. Nivel & Ritmo del entrenamiento
+            </span>
+            <span className="text-[11px] font-bold text-[#00B894]">
+              {currentPace.level}
+            </span>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {activePaces.map((p, idx) => {
               const isSelected = selectedPaceIndex === idx;
+
+              // Color-coded difficulty badges
+              const levelBadgeStyle =
+                p.level === 'Principiante'
+                  ? 'bg-[#7FB77E]/15 text-[#2E7D32] border-[#7FB77E]/30'
+                  : p.level === 'Intermedio'
+                  ? 'bg-[#1F4E5F]/10 text-[#1F4E5F] border-[#1F4E5F]/20'
+                  : p.level === 'Avanzado'
+                  ? 'bg-amber-500/15 text-amber-800 border-amber-500/30'
+                  : 'bg-emerald-500/15 text-emerald-800 border-emerald-500/30';
+
               return (
-                <div
+                <button
                   key={p.label}
+                  type="button"
                   onClick={() => setSelectedPaceIndex(idx)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-2 ${
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 relative group ${
                     isSelected
-                      ? 'border-[#1F4E5F] bg-[#1F4E5F]/5 ring-2 ring-[#1F4E5F]/20'
-                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7] hover:bg-[#1F4E5F]/5'
+                      ? 'border-[#00B894] bg-white ring-2 ring-[#00B894]/20 shadow-sm'
+                      : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white hover:border-[#1F4E5F]/30'
                   }`}
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-black text-[#1F4E5F]">{p.label}</span>
-                      <span className="text-[9px] font-black uppercase text-[#7FB77E] bg-[#7FB77E]/20 px-2 py-0.5 rounded-full">
-                        {p.level}
+                  <div className="flex flex-col gap-1.5 w-full">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className={`text-xs font-black leading-tight ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}>
+                        {p.label}
                       </span>
+                      <div
+                        className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                          isSelected
+                            ? 'bg-[#00B894] text-white shadow-xs'
+                            : 'border-2 border-[#1F4E5F]/20 group-hover:border-[#1F4E5F]/40'
+                        }`}
+                      >
+                        {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                      </div>
                     </div>
-                    <p className="text-[11px] text-[#1F4E5F]/70 leading-relaxed font-medium">
-                      {p.desc}
-                    </p>
+
+                    <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border w-fit ${levelBadgeStyle}`}>
+                      {p.level}
+                    </span>
                   </div>
 
-                  <div className="flex items-center gap-1 text-[10px] font-extrabold text-[#1F4E5F]/50 pt-1 border-t border-[#1F4E5F]/5">
-                    <Zap className="w-3 h-3 text-[#7FB77E]" />
-                    <span>Seleccionado</span>
-                  </div>
-                </div>
+                  <p className="text-[11px] text-[#1F4E5F]/70 leading-relaxed font-medium">
+                    {p.desc}
+                  </p>
+                </button>
               );
             })}
           </div>
