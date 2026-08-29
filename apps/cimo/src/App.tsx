@@ -34,8 +34,35 @@ export function App() {
     city: 'Madrid, España',
     neighborhood: 'Retiro / Chamberí',
     avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
-    coverUrl: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&q=80&w=1600',
+    coverUrl: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400',
     bio: 'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros y conectar con gente activa!',
+    sports: [
+      { sport: 'Running', level: 'Intermedio (5-10K)', pace: '5:15 min/km' },
+      { sport: 'Pádel', level: 'Nivel 3.5 (Intermedio)', pace: 'Drive / Revés' },
+      { sport: 'Hiking', level: 'Rutas 10-15 km', pace: '10-15 km • +600m desnivel' },
+    ],
+    weeklySchedule: {
+      Lunes: ['afternoon'],
+      Martes: ['morning'],
+      Miércoles: ['afternoon'],
+      Jueves: ['afternoon'],
+      Viernes: [],
+      Sábado: ['morning'],
+      Domingo: ['morning'],
+    },
+    groupSizePreference: 'micro',
+    goals: [
+      '🤝 Conocer deportistas activos',
+      '☕ Café / Caña post-entreno (Tercer Tiempo)',
+      '🔥 Mantener constancia semanal',
+    ],
+    isCaptainAvailable: true,
+    defaultCaptainNotes: '💧 Traer agua • ⏰ Llegar 5 min antes • 🧘 Estiramientos al terminar',
+    phoneWhatsapp: '+34 612 345 678',
+    phonePrivacy: true,
+    linkedinUrl: 'https://linkedin.com/in/alexrivera-sport',
+    stravaUrl: 'https://strava.com/athletes/alexrivera',
+    instagramHandle: '@alex_rivera_cimo',
   });
 
   // Standard Navigation & URL Deep Linking
