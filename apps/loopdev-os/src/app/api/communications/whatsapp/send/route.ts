@@ -12,7 +12,7 @@ const SendWhatsAppTextSchema = z.object({
 export async function POST(request: Request) {
   const parsed = SendWhatsAppTextSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: 'Invalid WhatsApp message payload' }, { status: 400 });
-  const access = await authorizeCommunications(parsed.data.organizationId, 'communications.send');
+  const access = await authorizeCommunications(parsed.data.organizationId, 'communications.reply');
   if (!access.allowed) return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
   try {
     return NextResponse.json(await sendWhatsAppConversationText(parsed.data), { status: 201 });

@@ -29,6 +29,7 @@
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 1 · bloqueado
+- [Implementación de Communications Core para WhatsApp CRM](./active/crm/2026-08-29-communications-core-implementation.md) · `feature/communications-core-implementation` · fase 0
 
 ### Marketing Studio
 

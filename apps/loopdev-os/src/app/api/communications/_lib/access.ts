@@ -1,8 +1,9 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import type { CommunicationPermissionKey } from '@loopdev/contracts';
 
 export async function authorizeCommunications(
   organizationId: string,
-  permission: 'communications.read' | 'communications.send',
+  permission: CommunicationPermissionKey,
 ) {
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();

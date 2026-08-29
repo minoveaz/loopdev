@@ -9,6 +9,31 @@ export const CommunicationMessageDirectionSchema = z.enum(['inbound', 'outbound'
 export const CommunicationMessageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
 export const CommunicationAccountStatusSchema = z.enum(['pending', 'connected', 'disconnected', 'error']);
 export const CommunicationTemplateStatusSchema = z.enum(['draft', 'approved', 'rejected', 'archived']);
+export const CommunicationPermissionKeySchema = z.enum([
+  'communications.read',
+  'communications.reply',
+  'communications.note',
+  'communications.assign',
+  'communications.lifecycle',
+  'communications.manage-accounts',
+]);
+export type CommunicationPermissionKey = z.infer<typeof CommunicationPermissionKeySchema>;
+
+export type MessagingProvider = {
+  sendText(input: {
+    accountId: string;
+    recipient: string;
+    body: string;
+    idempotencyKey: string;
+  }): Promise<{ providerMessageId: string }>;
+  sendTemplate(input: {
+    accountId: string;
+    recipient: string;
+    templateId: string;
+    parameters: Record<string, string>;
+    idempotencyKey: string;
+  }): Promise<{ providerMessageId: string }>;
+};
 
 export const CommunicationAccountSchema = z.object({
   id: IdSchema,
@@ -18,6 +43,7 @@ export const CommunicationAccountSchema = z.object({
   provider: z.string().trim().min(1).max(80),
   externalAccountId: z.string().trim().min(1).max(240),
   status: CommunicationAccountStatusSchema,
+  outboundEnabled: z.boolean().default(true),
   credentialsRef: z.string().trim().min(1).max(240),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
@@ -28,6 +54,7 @@ export const CommunicationTemplateSchema = z.object({
   id: IdSchema,
   organizationId: IdSchema,
   brandId: IdSchema.nullable().optional(),
+  accountId: IdSchema,
   channel: CommunicationChannelSchema,
   externalTemplateId: z.string().trim().min(1).max(240),
   language: z.string().trim().min(2).max(20),
@@ -53,10 +80,13 @@ export const CommunicationConversationSchema = z.object({
   organizationId: IdSchema,
   brandId: IdSchema.nullable().optional(),
   workspaceId: IdSchema.nullable().optional(),
+  accountId: IdSchema,
   contactId: IdSchema,
+  channelId: IdSchema,
   channel: CommunicationChannelSchema,
   status: CommunicationConversationStatusSchema,
   assignedToUserId: IdSchema.nullable().optional(),
+  lastActivityAt: TimestampSchema,
   lastInboundAt: TimestampSchema.nullable().optional(),
   windowExpiresAt: TimestampSchema.nullable().optional(),
   createdAt: TimestampSchema,
@@ -72,7 +102,7 @@ export const CommunicationMessageSchema = z.object({
   direction: CommunicationMessageDirectionSchema,
   status: CommunicationMessageStatusSchema,
   body: z.string().max(100_000).nullable().optional(),
-  templateId: z.string().trim().max(240).nullable().optional(),
+  templateId: IdSchema.nullable().optional(),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
 });
@@ -83,8 +113,9 @@ export const SendCommunicationCommandSchema = z.object({
   conversationId: IdSchema,
   channel: CommunicationChannelSchema,
   body: z.string().trim().max(100_000).nullable().optional(),
-  templateId: z.string().trim().max(240).nullable().optional(),
+  templateId: IdSchema.nullable().optional(),
   templateParameters: z.record(z.string(), z.string().max(2_000)).default({}),
+  idempotencyKey: z.string().trim().min(1).max(240),
 }).superRefine((value, context) => {
   if (!value.body && !value.templateId) {
     context.addIssue({ code: z.ZodIssueCode.custom, message: 'body or templateId is required' });
@@ -110,6 +141,7 @@ export const CreateCommunicationMessageCommandSchema = z.object({
   status: CommunicationMessageStatusSchema.default('queued'),
   body: z.string().max(100_000).nullable().optional(),
   templateId: IdSchema.nullable().optional(),
+  idempotencyKey: z.string().trim().min(1).max(240).nullable().optional(),
 }).superRefine((value, context) => {
   if (!value.body && !value.templateId) context.addIssue({ code: z.ZodIssueCode.custom, message: 'body or templateId is required' });
 });

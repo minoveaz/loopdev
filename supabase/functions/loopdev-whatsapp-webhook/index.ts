@@ -49,32 +49,13 @@ async function persistInboundMessage(
 ) {
   const phone = normalizePhone(String(message.from));
   const profileName = value.contacts?.find((contact: Record<string, any>) => contact.wa_id === message.from)?.profile?.name;
-  const firstName = String(profileName || phone).trim().split(/\s+/)[0] || phone;
-  const lastName = profileName ? String(profileName).trim().split(/\s+/).slice(1).join(' ') || null : null;
-
-  const contactResult = await supabase.from('crm_contacts')
-    .select('id')
-    .eq('organization_id', account.organization_id)
-    .eq('phone_normalized', phone)
-    .maybeSingle();
-  if (contactResult.error) throw contactResult.error;
-  let contactId = contactResult.data?.id;
-  if (!contactId) {
-    const createdContact = await supabase.from('crm_contacts').insert({
-      organization_id: account.organization_id,
-      first_name: firstName,
-      last_name: lastName,
-      phone,
-      phone_normalized: phone,
-    }).select('id').single();
-    if (createdContact.error?.code === '23505') {
-      const existingContact = await supabase.from('crm_contacts').select('id')
-        .eq('organization_id', account.organization_id).eq('phone_normalized', phone).single();
-      if (existingContact.error) throw existingContact.error;
-      contactId = existingContact.data.id;
-    } else if (createdContact.error) throw createdContact.error;
-    else contactId = createdContact.data.id;
-  }
+  const contactResult = await supabase.rpc('crm_resolve_whatsapp_inbound_contact', {
+    p_organization_id: account.organization_id,
+    p_phone: phone,
+    p_profile_name: profileName ?? null,
+  }).single();
+  if (contactResult.error || !contactResult.data) throw contactResult.error ?? new Error('Unable to resolve CRM contact');
+  const contactId = contactResult.data.contact_id;
 
   const channelResult = await supabase.from('communication_channels').select('id')
     .eq('organization_id', account.organization_id).eq('account_id', account.id)

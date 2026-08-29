@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CrmActivityReadSchema, CrmActivitySchema, CrmAuditEventSchema, CrmCaptureLeadCommandSchema, CrmContactConsentSchema, CrmCompanySchema, CrmContactSchema, CrmCreateLeadCommandSchema, CrmEntityLookupPageSchema, CrmLeadSchema, CrmLeadAttributionSchema, CrmNoteReadSchema, CrmNoteSchema, CrmRelatedPersonSchema, CrmTaskSchema } from '../crm';
+import { CrmActivityReadSchema, CrmActivitySchema, CrmAuditEventSchema, CrmCaptureLeadCommandSchema, CrmContactConsentSchema, CrmCompanySchema, CrmContactSchema, CrmCreateLeadCommandSchema, CrmEntityLookupPageSchema, CrmInboundContactResolutionSchema, CrmLeadSchema, CrmLeadAttributionSchema, CrmNoteReadSchema, CrmNoteSchema, CrmRelatedPersonSchema, CrmResolveWhatsAppInboundContactCommandSchema, CrmTaskSchema } from '../crm';
 
 const ids = { organizationId: '00000000-0000-4000-9000-000000000001', contactId: '00000000-0000-4000-9000-000000000002', leadId: '00000000-0000-4000-9000-000000000003', id: '00000000-0000-4000-9000-000000000004' };
 const timestamp = '2026-08-07T00:00:00.000Z';
@@ -27,6 +27,12 @@ describe('CRM contracts', () => {
     expect(CrmContactConsentSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, contactId: ids.contactId, channel: 'whatsapp', purpose: 'customer support', status: 'granted', createdAt: timestamp, updatedAt: timestamp }).success).toBe(true);
     expect(CrmCreateLeadCommandSchema.safeParse({ organizationId: ids.organizationId, contactId: ids.contactId, source: manualSource }).success).toBe(true);
     expect(CrmCreateLeadCommandSchema.safeParse({ organizationId: ids.organizationId, contactId: ids.contactId, source: { kind: 'facebook' } }).success).toBe(false);
+  });
+
+  it('defines a CRM-owned resolution contract for WhatsApp inbound contacts', () => {
+    expect(CrmResolveWhatsAppInboundContactCommandSchema.safeParse({ organizationId: ids.organizationId, phone: '+34600123456', profileName: 'Ana' }).success).toBe(true);
+    expect(CrmResolveWhatsAppInboundContactCommandSchema.safeParse({ organizationId: ids.organizationId, phone: '600123456' }).success).toBe(false);
+    expect(CrmInboundContactResolutionSchema.safeParse({ contactId: ids.contactId, organizationId: ids.organizationId, identityStatus: 'pending_identity_review', created: true }).success).toBe(true);
   });
 
   it('keeps notes scoped and auditable', () => {

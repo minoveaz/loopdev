@@ -95,7 +95,7 @@ Every business record is scoped by `organization_id`. Organization context and p
 
 ### Roles and permissions
 
-The initial model separates `communications.read`, reply/internal-note, assignment, lifecycle and account-management permissions. Agent may read and operate conversations assigned within an authorized workspace and assign an eligible conversation to self. Manager may operate and reassign conversations within authorized workspaces. Viewer is read-only. Organization administrator configures accounts outside the routine inbox. Export remains deferred.
+The initial model separates `communications.read`, reply/internal-note, assignment, lifecycle and `communications.manage-accounts` permissions. Agent may read and operate conversations assigned within an authorized workspace and assign an eligible conversation to self. Manager may operate and reassign conversations within authorized workspaces. Viewer is read-only. Organization administrator configures accounts outside the routine inbox. Export remains deferred.
 
 ### Events and integrations
 

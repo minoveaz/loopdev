@@ -85,6 +85,7 @@ export const CrmContactSchema = z.object({
   email: z.string().email().nullable().optional(),
   phone: z.string().trim().min(3).max(32).nullable().optional(),
   companyName: z.string().trim().max(160).nullable().optional(),
+  identityStatus: z.enum(['verified', 'pending_identity_review']).default('verified'),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
 });
@@ -119,6 +120,21 @@ export const CrmCreateContactCommandSchema = z
     path: ['email'],
   });
 export type CrmCreateContactCommand = z.infer<typeof CrmCreateContactCommandSchema>;
+
+export const CrmResolveWhatsAppInboundContactCommandSchema = z.object({
+  organizationId: IdSchema,
+  phone: z.string().regex(/^\+[1-9]\d{6,14}$/),
+  profileName: z.string().trim().min(1).max(120).nullable().optional(),
+});
+export type CrmResolveWhatsAppInboundContactCommand = z.infer<typeof CrmResolveWhatsAppInboundContactCommandSchema>;
+
+export const CrmInboundContactResolutionSchema = z.object({
+  contactId: IdSchema,
+  organizationId: IdSchema,
+  identityStatus: z.enum(['verified', 'pending_identity_review']),
+  created: z.boolean(),
+});
+export type CrmInboundContactResolution = z.infer<typeof CrmInboundContactResolutionSchema>;
 
 export const CrmUpdateContactCommandSchema = z.object({
   organizationId: IdSchema,
