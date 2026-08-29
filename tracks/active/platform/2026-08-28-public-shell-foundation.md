@@ -124,16 +124,13 @@ graph TD
 - [x] Suite de tests unitarios en `ds/packages/public-blocks`.
 
 
-### 📌 Fase 4: Refactorización Piloto de CIMO, Landing Page, Onboarding & Auditorías
-- [x] Configurar especificación `cimoFeedPageSpec`, `CIMO_FEED_COMPOSITION`, `cimoBrandTheme` y `cimoSeoConfig`.
-- [x] Componer el motor de App de CIMO importando exclusivamente bloques de `@loopdev/public-blocks` y `@loopdev/public-shell` (cero código inline).
-- [x] Validar la experiencia de 3 columnas en Desktop, 2 columnas en Tablet y App móvil táctil en Mobile.
-- [ ] Construir la **Landing Page Pública de CIMO** (Hero de conversión, 3 pilares 'Match con entrenos no con personas', showcase de planes en vivo, cómo funciona 1-2-3 y testimonios).
-- [ ] Construir el flujo de **Onboarding & Registro Deportivo** (email magic-link, selección de deportes favoritos y nivel).
-- [ ] Conectar la transición fluida: `Landing Page` (visitantes) ➔ `Onboarding` ➔ `App Feed 3-col / Mobile PWA` (registrados).
+### 📌 Fase 4: Integración Piloto de Superficies Públicas, Theming & Quality Gate
+- [x] Implementar instancias de prueba para las 3 superficies canónicas (`LoopDev Web`, `VitaBlue Portal` y `CIMO App`).
+- [x] Validar que el 100% de los layouts públicos se gobiernen por `PublicRuntime` y `PublicCanvas` sin código inline.
+- [x] Validar la experiencia adaptativa: Desktop (12 columnas / full-width), Tablet (drawer lateral) y Mobile (BottomNav táctil).
+- [x] Desacoplar el desarrollo de producto de CIMO hacia su propio track dedicado ([`2026-08-29-cimo-social-sports-platform.md`](file:///Users/minoveaz/Documents/Proyectos/loopdev-public-shell-foundation/tracks/active/mobile/2026-08-29-cimo-social-sports-platform.md)).
 - [ ] Configurar scripts de auditoría automatizada con **Unlighthouse / Lighthouse** (`unlighthouse.config.ts`).
-- [ ] Suite de tests E2E de SEO, responsive y embudo de conversión con Playwright.
-- [ ] Ejecutar `pnpm turbo run build lint test` en todo el monorepo y registrar evidencia en el track.
+- [ ] Suite de tests E2E y Quality Gate final: `pnpm turbo run build lint test` en todo el monorepo.
 
 
 ---
