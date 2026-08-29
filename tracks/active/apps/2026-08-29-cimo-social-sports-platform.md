@@ -99,20 +99,52 @@ graph TD
 - [x] Conectar la navegación interna fluida entre Explorar, Detalle de Actividad, Crear Plan, Chats y Perfil con deep linking bidireccional (`/`, `/activity/:id`, `/create`, `/chats`, `/profile`, `/profile/edit`).
 
 ### 📌 Fase 3: Red Social Deportiva, Tercer Tiempo & Algoritmo de Matching Deportivo Inteligente
-- [ ] **Sección de "Tercer Tiempo" Integrada en Planes:**
-  - Definir e integrar en la creación y detalle de planes el momento social post-entreno (*"☕ Café y charla en Café Murillo tras los 8K"* o *"🍻 Cañas y tapeo post-partido de Pádel"*).
-  - Badge explícito de Tercer Tiempo en las tarjetas panorámicas del feed.
-- [ ] **Algoritmo de Matching Deportivo Inteligente (5 Vectores de Compatibilidad):**
-  - **Vector 1: Fit de Ritmo & Nivel (40%):** Ventana de ritmo compatible (ej: 5:10 - 5:25 min/km) y nivel Playtomic exacto.
-  - **Vector 2: Proximidad & Barrio Habitual (20%):** Retiro, Chamberí, Salamanca, etc.
-  - **Vector 3: Coincidencia de Matriz de Horarios (20%):** Días y franjas libres compartidas.
-  - **Vector 4: Afinidad de Tercer Tiempo & Estilo Social (10%):** Microgrupos (4-6 pers), café, caña o competición.
-  - **Vector 5: Conexiones Previas & Confianza (10%):** Amigos en común, entrenos compartidos y valoración del capitán.
-- [ ] **Badge de Compatibilidad en Tarjetas (% Afinidad):**
-  - Mostrar en cada tarjeta del Feed: `⚡ 96% Compatibilidad: Mismo ritmo (5:15), horario de tarde y café post-entreno`.
-- [ ] **"Mi Red de Crew" & Conexiones Deportivas:**
-  - Ficha de deportistas con los que ya has entrenado (*"Has compartido 3 entrenos con Sofía"*).
-  - Sugerencia de compañeros compatibles para invitar en 1 clic al crear nuevos planes (*Smart Captain Invites*).
+
+#### ☕ 1. Protocolo de "Tercer Tiempo" Integrado en Planes (Post-Workout Social Experience)
+* **Objetivo:** Convertir el entrenamiento en un catalizador de relaciones humanas, asegurando que cada plan tenga un momento explícito de tertulia e hidratación post-ejercicio.
+* **Tipologías Canónicas:**
+  - `☕ Café & Desayuno / Brunch:` Para rodajes matutinos de running o ciclismo (07:00 - 10:00 h).
+  - `🍻 Caña & Tapeo / Aperitivo:` Para partidas de pádel, partidos de tenis o entrenos de tarde/fin de semana.
+  - `🥤 Smoothie / Recovery Bar:` Para sesiones de alta intensidad en box de CrossFit, Hyrox o entrenos funcionales.
+  - `🌿 Picnic & Hidratación al Aire Libre:` Para rutas de Hiking, montaña o parques urbanos.
+* **Integración en Componentes & Contratos:**
+  - **`CimoCreatePlanView` (Paso de Tercer Tiempo):** Selector conmutador (`hasThirdHalf`), Tipo (`cafe`, `beer`, `smoothie`, `picnic`), Nombre del local/lugar y breve nota de sobremesa (*"Nos quedaremos 30 min en Café Murillo a desayunar y comentar la tirada"*).
+  - **`CimoCuratedFeed` (Badges de Tercer Tiempo):** Pastilla contextual visible en la tarjeta: `☕ Tercer Tiempo: Café Murillo` o `🍻 Caña post-pádel en Terraza Chamartín`.
+  - **`CimoActivityDetailView` (Bloque Social):** Sección dedicada con tarjeta de ubicación, hora estimada de finalización del entreno e inicio del Tercer Tiempo, facilitando que miembros que lleguen tarde o se sumen después puedan ubicarse.
+
+#### 🧠 2. Motor de Matching Deportivo & Social Inteligente (5 Vectores Ponderados)
+* **Objetivo:** Calcular una puntuación de afinidad real ($Score \in [0\%, 100\%]$) entre el Pasaporte Deportivo del Atleta y los parámetros de cada entreno / compañeros, eliminando la frustración de ritmos incompatibles y maximizando la sintonía social.
+* **Formulación de los 5 Vectores de Compatibilidad:**
+  $$\text{MatchScore} = 0.40 \cdot V_{\text{fit}} + 0.20 \cdot V_{\text{geo}} + 0.20 \cdot V_{\text{schedule}} + 0.10 \cdot V_{\text{social}} + 0.10 \cdot V_{\text{trust}}$$
+  1. **$V_{\text{fit}}$ - Homogeneidad de Ritmo y Nivel Técnico ($40\%$ de peso):**
+     - *Running:* $\Delta \text{pace} \le 15\text{ s/km} \rightarrow 100\%$, $\Delta \text{pace} \le 30\text{ s/km} \rightarrow 75\%$, $\Delta \text{pace} > 45\text{ s/km} \rightarrow 20\%$.
+     - *Pádel:* $\Delta \text{nivel Playtomic} \le 0.25 \rightarrow 100\%$, $\Delta \le 0.50 \rightarrow 75\%$, $\Delta > 0.75 \rightarrow 25\%$.
+     - *Ciclismo / Hiking / CrossFit:* Compatibilidad estricta de categoría (`Intermedio`, `Avanzado`, `Open`, `Scaled`).
+  2. **$V_{\text{geo}}$ - Geo-Conveniencia y Barrios Habituales ($20\%$ de peso):**
+     - Coincidencia en barrio base o distrito colindante (ej. Retiro con Salamanca / Chamberí con Chamartín).
+  3. **$V_{\text{schedule}}$ - Solapamiento en Matriz de Horarios ($20\%$ de peso):**
+     - Coincidencia directa entre el día/hora del plan y las franjas marcadas por el atleta en su matriz semanal (`morning`, `noon`, `afternoon`).
+  4. **$V_{\text{social}}$ - Afinidad de Tercer Tiempo & Tamaño de Grupo ($10\%$ de peso):**
+     - Preferencia coincidente de tamaño de grupo (`micro` 4-6 vs `medium` 8-15) y metas compartidas (*"☕ Café post-entreno"*, *"🤝 Conocer gente activa"*).
+  5. **$V_{\text{trust}}$ - Red Previa, Conexiones & Confianza ($10\%$ de peso):**
+     - Bonificación si el usuario ya ha entrenado con el Capitán o miembros del Crew, o si el Capitán posee valoración $\ge 4.9$ con 0 cancelaciones.
+* **Visualización en UI:**
+  - Pastilla de Afinidad destacada en cada tarjeta: `⚡ 96% Match con tu Pasaporte` con tooltip explicativo desglosando los factores clave.
+
+#### 🤝 4. Social Graph Deportivo: "Mi Red de Crew" & Smart Captain Invites
+* **Objetivo:** Fomentar la recurrencia, la retención y la transformación de compañeros de entreno esporádicos en una red de amigos y deportistas habituales.
+* **Funcionalidades Nucleares:**
+  - **Directorio de Conexiones ("Mi Red de Crew"):**
+    - Vista dedicada dentro del perfil o pestaña principal donde el atleta visualiza a todas las personas con las que ha compartido entrenos.
+    - Contador de entrenos mutuos (*"Has corrido 4 veces con Sofía Díaz"*, *"2 partidas de pádel con Javier"*).
+    - Canales de contacto desbloqueados según permisos mutuos (acceso al WhatsApp de coordinación si ambos han asistido al entreno, LinkedIn profesional y Strava).
+  - **Smart Captain Invites (Invitación Inteligente en 1 Clic):**
+    - Al publicar un entreno como Capitán, el sistema sugiere automáticamente a los deportistas de su red con mayor compatibilidad ($>90\%$) para ese deporte y horario.
+    - Botón `[ 📨 Invitar a mi Crew habitual ]` para pre-llenar los cupos en minutos antes de abrirlo a la comunidad general.
+  - **Insignias Sociales y Dinámicas de Comunidad:**
+    - `🏅 Conector Deportivo:` Por entrenar con más de 25 personas diferentes.
+    - `🛡️ Crew Fiel:` Por mantener 4 semanas seguidas entrenando con el mismo grupo.
+    - `⭐ Capitán de Oro:` Por liderar entrenos con puntualidad impecable y Tercer Tiempo valorado positivamente.
 
 ### 📌 Fase 4: Landing Page Pública de Captación & Onboarding Deportivo
 - [ ] Construir la Landing Page Pública para visitantes no autenticados:
