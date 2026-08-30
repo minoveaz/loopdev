@@ -19,18 +19,21 @@ export const cimoBrandTheme: PublicBrandTheme = {
     textSecondary: '#6C757D',
   },
   logos: {
-    markSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" class="w-full h-full">
-      <circle cx="50" cy="50" r="48" fill="#00B894" />
-      <path d="M30 50C30 38.9543 38.9543 30 50 30C61.0457 30 70 38.9543 70 50C70 61.0457 61.0457 70 50 70C38.9543 70 30 61.0457 30 50Z" stroke="white" stroke-width="8" stroke-linecap="round"/>
-      <circle cx="38" cy="42" r="5" fill="white" />
-      <circle cx="62" cy="58" r="5" fill="#1F4E5F" />
+    markSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+      <circle cx="36" cy="30" r="8" fill="#1F4E5F" />
+      <path d="M 36 44 C 22 44 14 56 14 68 C 14 80 28 84 42 74 C 54 65 62 52 70 52" stroke="#1F4E5F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="64" cy="30" r="8" fill="#7FB77E" />
+      <path d="M 64 44 C 78 44 86 56 86 68 C 86 80 72 84 58 74 C 46 65 38 52 30 52" stroke="#7FB77E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
     </svg>`,
-    fullSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none" class="h-8">
-      <circle cx="30" cy="30" r="24" fill="#00B894" />
-      <path d="M20 30C20 24.4772 24.4772 20 30 20C35.5228 20 40 24.4772 40 30C40 35.5228 35.5228 40 30 40C24.4772 40 20 35.5228 20 30Z" stroke="white" stroke-width="4"/>
-      <circle cx="25" cy="27" r="3" fill="white" />
-      <circle cx="35" cy="33" r="3" fill="#1F4E5F" />
-      <text x="65" y="38" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="900" font-size="28" fill="#161D1A" letter-spacing="-0.5">CIMO</text>
+    fullSvg: `<svg viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-9 w-auto">
+      <g transform="translate(4, 3) scale(0.72)">
+        <circle cx="36" cy="30" r="8" fill="#1F4E5F" />
+        <path d="M 36 44 C 22 44 14 56 14 68 C 14 80 28 84 42 74 C 54 65 62 52 70 52" stroke="#1F4E5F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="64" cy="30" r="8" fill="#7FB77E" />
+        <path d="M 64 44 C 78 44 86 56 86 68 C 86 80 72 84 58 74 C 46 65 38 52 30 52" stroke="#7FB77E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <text x="82" y="47" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="34" font-weight="900" fill="#1F4E5F" letter-spacing="-0.03em">Cimo</text>
+      <text x="83" y="61" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#7FB77E" letter-spacing="0.05em">SPORT &amp; SOCIAL</text>
     </svg>`,
   },
   typography: {
