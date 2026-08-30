@@ -122,10 +122,29 @@ export function App() {
     return activities.filter((act) => {
       if (selectedSport !== 'Todos' && act.sport.toLowerCase() !== selectedSport.toLowerCase()) return false;
       if (selectedLevel !== 'Cualquier nivel' && act.level !== selectedLevel && act.level !== 'Todos los niveles') return false;
-      if (selectedDay === 'Hoy' && !act.date.toLowerCase().includes('hoy')) return false;
-      if (selectedDay === 'Mañana' && !act.date.toLowerCase().includes('mañana')) return false;
-      if (selectedDay === 'Este fin de semana' && !act.date.toLowerCase().includes('sábado') && !act.date.toLowerCase().includes('domingo')) return false;
-      if (selectedZone !== 'Toda la ciudad' && !act.location.toLowerCase().includes(selectedZone.toLowerCase())) return false;
+
+      // Day filtering with calendar and quick options
+      if (selectedDay !== 'Cualquier día') {
+        const d = selectedDay.toLowerCase();
+        const actD = act.date.toLowerCase();
+        if (d === 'hoy' && !actD.includes('hoy')) return false;
+        if (d === 'mañana' && !actD.includes('mañana')) return false;
+        if (d === 'este fin de semana' && !actD.includes('sábado') && !actD.includes('domingo') && !actD.includes('sab') && !actD.includes('dom')) return false;
+        if (!['hoy', 'mañana', 'este fin de semana', 'esta semana'].includes(d)) {
+          // Custom specific day match (e.g. "Mar 1 Sep", "1 Sep", "Sábado", etc.)
+          const cleanToken = d.split(' ')[0] ?? d;
+          if (!actD.includes(cleanToken) && !actD.includes(d)) return false;
+        }
+      }
+
+      // City / Zone filtering
+      if (selectedZone !== 'Toda la ciudad' && selectedZone !== 'Toda España' && selectedZone !== 'Todas') {
+        const z = selectedZone.toLowerCase();
+        const loc = act.location.toLowerCase();
+        const tit = act.title.toLowerCase();
+        if (!loc.includes(z) && !tit.includes(z)) return false;
+      }
+
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         return (
@@ -181,6 +200,8 @@ export function App() {
       paceOrDetails: newPlan.paceOrDetails,
       maxMembers: newPlan.maxMembers ?? 5,
       image: newPlan.image,
+      instructions: newPlan.instructions,
+      thirdHalf: newPlan.thirdHalf,
       captain: {
         id: 'user_me',
         name: currentUser.name,
