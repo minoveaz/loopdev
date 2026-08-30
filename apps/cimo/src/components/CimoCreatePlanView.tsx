@@ -790,12 +790,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           />
         </div>
 
-        {/* ☕ Island 7: Tercer Tiempo Post-Entreno (Opcional) */}
+        {/* ☕ Island 8: Tercer Tiempo Post-Entreno (Opcional) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                7
+                8
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Tercer Tiempo Post-Entreno
