@@ -17,10 +17,11 @@ approved_at: 2026-08-29
 
 1. [Transversal definition](../COMMUNICATIONS_CORE_DEFINITION.md)
 2. [Inbox UX specification](CRM_COMMUNICATIONS_INBOX_UX_SPEC.md)
-3. [Inbox component audit](CRM_COMMUNICATIONS_INBOX_COMPONENT_AUDIT.md)
-4. [Inbox contract](CRM_COMMUNICATIONS_INBOX_CONTRACT.md)
-5. [Inbox impact assessment](CRM_COMMUNICATIONS_INBOX_IMPACT_ASSESSMENT.md)
-6. [Communications Core contract](../communications-core/COMMUNICATIONS_CORE_CONTRACT.md)
+3. [Chatwoot -> LoopDev reference guide](CHATWOOT_LOOPDEV_REFERENCE_GUIDE.md)
+4. [Inbox component audit](CRM_COMMUNICATIONS_INBOX_COMPONENT_AUDIT.md)
+5. [Inbox contract](CRM_COMMUNICATIONS_INBOX_CONTRACT.md)
+6. [Inbox impact assessment](CRM_COMMUNICATIONS_INBOX_IMPACT_ASSESSMENT.md)
+7. [Communications Core contract](../communications-core/COMMUNICATIONS_CORE_CONTRACT.md)
 
 ## Delivery instruction
 

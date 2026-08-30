@@ -3,10 +3,10 @@ id: communications-core-crm-inbox-definition
 title: Definición de Communications Core y CRM Communications Inbox
 status: planned
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 owner: crm
 lead: null
-branch: docs/communications-core-crm-inbox-definition
+branch: docs/crm-communications-inbox-chatwoot-guide
 branches: []
 phase: 0
 pull_requests: []
@@ -81,7 +81,7 @@ La experiencia usa `AppShell -> SuiteRuntime -> SuiteCanvas`. CRM Communications
 
 ## Branch strategy
 
-La definición se realiza en `docs/communications-core-crm-inbox-definition` desde `develop`. La documentación de producto vive en `docs/06-product/communications/`; este track conserva alcance, decisiones, fases y evidencia. Una futura implementación parte de `develop` en ramas separadas y solo después de aprobación explícita.
+La definición inicial se realizó en `docs/communications-core-crm-inbox-definition` desde `develop`. La ampliación de la experiencia se realiza en `docs/crm-communications-inbox-chatwoot-guide`, también desde `develop`, y se integra mediante Pull Request hacia `develop`. La documentación de producto vive en `docs/06-product/communications/`; este track conserva alcance, decisiones, fases y evidencia. La implementación parte en una rama separada solo después de la revisión documental y la confirmación de readiness.
 
 ## Fases
 
@@ -100,19 +100,21 @@ La definición se realiza en `docs/communications-core-crm-inbox-definition` des
 - [x] Definición transversal en `docs/06-product/communications/`.
 - [x] Paquete de `communications-core`.
 - [x] Paquete de `crm-communications-inbox`.
+- [x] Guía de referencia Chatwoot -> LoopDev y límite de portabilidad para futuros consumidores.
 - [x] Revisión de registry y evidencia de gaps.
 
 **Validación**
 - [x] Enlaces Markdown, validador de tracks, índice generado y revisión cruzada.
 
-**Evidencia:** Paquetes aprobados por User el 2026-08-29; Issues #157 y #158 quedan preparados para confirmar readiness antes de implementación.
+**Evidencia:** Paquetes aprobados por User el 2026-08-29. La guía Chatwoot -> LoopDev y la ampliación de portabilidad se preparan el 2026-08-30 en la rama documental dedicada; Issues #157 y #158 quedan preparados para confirmar readiness antes de implementación.
 
-**Estado:** completada
+**Estado:** revisión documental ampliada; pendiente de Pull Request y revisión final
 
 ## Registro de cambios de enfoque
 
 | Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
 | --- | --- | --- | --- | --- |
+| 2026-08-30 | Se añade una guía de referencia Chatwoot -> LoopDev y un límite de portabilidad para Conversation Workspace. | Diseñar una experiencia de inbox operativa y reutilizable para CRM, VitaBlue y futuros consumidores sin copiar arquitectura ni UI externa. | Reabre la revisión documental de UX, componentes y handoff; no autoriza código, nuevos canales ni una suite Communications independiente. | Usuario |
 
 ## Riesgos y bloqueos
 
@@ -147,13 +149,13 @@ La definición se realiza en `docs/communications-core-crm-inbox-definition` des
 
 ## Handoff de sesión
 
-- **Fecha:** 2026-08-29.
-- **Rama de continuación:** `docs/communications-core-crm-inbox-definition`.
-- **Commit de partida:** `f53383b`.
-- **Estado alcanzado:** Definición transversal y paquetes aprobados; el track permanece planned hasta que cada Issue confirme readiness de implementación.
+- **Fecha:** 2026-08-30.
+- **Rama de continuación:** `docs/crm-communications-inbox-chatwoot-guide`.
+- **Commit de partida:** `61a81ad`.
+- **Estado alcanzado:** Guía Chatwoot -> LoopDev añadida, portabilidad CRM/VitaBlue documentada y referencias integradas; el track permanece planned hasta completar la revisión documental y confirmar readiness de implementación.
 - **Decisiones, bloqueos y riesgos:** Core cross-suite, Inbox CRM primer consumidor, WhatsApp Cloud completo, permisos, consentimiento, contacto inbound, onboarding Meta, retención, rollout y kill switch aprobados; legal hold, media y expansión post-piloto diferidos.
-- **Validación ejecutada:** Track validator y Markdown links pasaron.
-- **Siguiente acción concreta:** Confirmar Definition of Ready en #157 antes de crear `feature/communications-core-implementation` desde updated `develop`.
+- **Validación ejecutada:** `pnpm docs:links:check`, track validator, inventario documental, `pnpm registries:check` y `git diff --check` pasaron.
+- **Siguiente acción concreta:** Revisar el PR documental hacia `develop`; después confirmar Definition of Ready en #158 antes de implementar en `feature/crm-communications-inbox-implementation`.
 
 ## Cierre
 
