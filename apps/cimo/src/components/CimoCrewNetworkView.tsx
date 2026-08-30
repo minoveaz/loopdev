@@ -280,22 +280,22 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
             return (
               <div
                 key={conn.id}
-                className="bg-white border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-2xs hover:shadow-sm hover:border-[#00B894]/30 transition-all flex flex-col justify-between gap-4 group"
+                className="bg-white border border-[#1F4E5F]/15 rounded-3xl p-5 shadow-2xs hover:shadow-xs hover:border-[#00B894]/40 transition-all flex flex-col justify-between gap-4 group"
               >
                 {/* Top Section: Avatar + Name + Subtitle + Favorite */}
                 <div className="flex flex-col gap-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="relative shrink-0">
+                      <div className="relative shrink-0 w-14 h-14">
                         <img
                           src={conn.athlete.avatarUrl}
                           alt={conn.athlete.name}
-                          className="w-13 h-13 rounded-full object-cover ring-2 ring-white shadow-xs group-hover:scale-102 transition-transform"
+                          className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-full object-cover ring-2 ring-[#1F4E5F]/10 group-hover:ring-[#00B894]/40 transition-all"
                         />
                         {conn.athlete.isCaptain && (
                           <span
                             title="Capitán en CIMO"
-                            className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-full bg-[#00B894] text-white flex items-center justify-center shadow-xs text-[9px] border-2 border-white"
+                            className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#00B894] text-white flex items-center justify-center shadow-xs text-[10px] border-2 border-white"
                           >
                             ⭐
                           </span>
@@ -310,7 +310,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                           >
                             {conn.athlete.name}
                           </h3>
-                          <span className="text-[11px] text-[#1F4E5F]/50 font-bold shrink-0">
+                          <span className="text-xs text-[#1F4E5F]/50 font-bold shrink-0">
                             • {conn.athlete.age}
                           </span>
                         </div>
@@ -336,9 +336,9 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                   </div>
 
                   {/* Clean Mutual Connection Headline (LinkedIn-style) */}
-                  <div className="flex items-center justify-between text-xs py-2 px-3 bg-[#F7F7F7] rounded-xl border border-[#1F4E5F]/5">
+                  <div className="flex items-center justify-between text-xs py-2 px-3 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/5">
                     <span className="font-extrabold text-[#1F4E5F] flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#00B894]" />
+                      <span className="w-2 h-2 rounded-full bg-[#00B894] shrink-0" />
                       <span>{conn.stats.sharedWorkoutsCount} entrenos en común</span>
                     </span>
                     <span className="text-[11px] text-[#1F4E5F]/50 font-medium">
@@ -352,7 +352,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                       {conn.sports.map((sp) => (
                         <span
                           key={sp.sport}
-                          className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#1F4E5F]/5 text-[#1F4E5F]/85"
+                          className="px-2.5 py-1 rounded-xl text-[10px] font-bold bg-[#1F4E5F]/5 text-[#1F4E5F]/85 border border-[#1F4E5F]/10"
                         >
                           {getSportEmoji(sp.sport)} {sp.paceOrMetric}
                         </span>
