@@ -242,55 +242,6 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
           className="absolute top-full left-0 right-0 w-full mt-2.5 bg-white border border-[#1F4E5F]/15 rounded-3xl p-5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-4 text-[#1F4E5F]"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Top Panel Navigation Bar */}
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
-            <div className="flex items-center gap-1.5 p-1 bg-[#F7F7F7] rounded-full border border-[#1F4E5F]/5">
-              <button
-                type="button"
-                onClick={() => setActiveDropdown('sport')}
-                className={`px-3 py-1 rounded-full text-xs font-black transition-all cursor-pointer ${
-                  activeDropdown === 'sport' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'text-[#1F4E5F]/70 hover:text-[#1F4E5F]'
-                }`}
-              >
-                🏃 Deporte
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveDropdown('day')}
-                className={`px-3 py-1 rounded-full text-xs font-black transition-all cursor-pointer ${
-                  activeDropdown === 'day' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'text-[#1F4E5F]/70 hover:text-[#1F4E5F]'
-                }`}
-              >
-                📅 Cuándo
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveDropdown('zone')}
-                className={`px-3 py-1 rounded-full text-xs font-black transition-all cursor-pointer ${
-                  activeDropdown === 'zone' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'text-[#1F4E5F]/70 hover:text-[#1F4E5F]'
-                }`}
-              >
-                📍 Ciudad
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveDropdown('level')}
-                className={`px-3 py-1 rounded-full text-xs font-black transition-all cursor-pointer ${
-                  activeDropdown === 'level' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'text-[#1F4E5F]/70 hover:text-[#1F4E5F]'
-                }`}
-              >
-                ⚡ Nivel
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setActiveDropdown(null)}
-              className="p-1.5 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/50 hover:text-[#1F4E5F] transition-colors cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
 
           {/* 🏃 CONTENT 1: DEPORTE */}
           {activeDropdown === 'sport' && (
