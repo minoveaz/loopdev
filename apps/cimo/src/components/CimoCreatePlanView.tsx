@@ -29,6 +29,7 @@ import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
 import { CimoSportPaceSelector, SPORT_PACES_CATALOG } from './CimoSportPaceSelector';
 import { CimoCapacityStepper } from './CimoCapacityStepper';
 import { useSpainLocationSearch } from '../hooks/useSpainLocationSearch';
+import { CIMO_SPORTS_CATALOG } from '../data/spanishCitiesCatalog';
 
 export interface CimoCreatePlanViewProps {
   onBack: () => void;
@@ -42,13 +43,7 @@ const THIRD_HALF_TYPES = [
   { id: 'picnic' as const, label: 'Picnic al Aire Libre', emoji: '🌿', defaultVenue: 'Césped con sombra' },
 ];
 
-const sportsList = [
-  { id: 'running', label: 'Running', emoji: '🏃', image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200' },
-  { id: 'padel', label: 'Pádel', emoji: '🎾', image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200' },
-  { id: 'hiking', label: 'Hiking / Trekking', emoji: '🥾', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1200' },
-  { id: 'crossfit', label: 'Crossfit / WOD', emoji: '🏋️', image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=1200' },
-  { id: 'cycling', label: 'Ciclismo', emoji: '🚴', image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=1200' },
-];
+const sportsList = CIMO_SPORTS_CATALOG;
 
 const spanishCities = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Málaga', 'Bilbao', 'Zaragoza', 'Otra'];
 

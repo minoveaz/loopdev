@@ -124,8 +124,56 @@ export const POPULAR_SPORTS_VENUES: SportsVenue[] = [
   // Zaragoza
   { name: 'Parque Grande José Antonio Labordeta', city: 'Zaragoza', postalCode: '50009', category: 'Running', address: 'Paseo de San Sebastián, 50009 Zaragoza', lat: 41.6334, lng: -0.8987 },
   { name: 'Riberas del Ebro / Expo', city: 'Zaragoza', postalCode: '50018', category: 'Running', address: 'Paseo de la Ribera, 50018 Zaragoza', lat: 41.6612, lng: -0.8912 },
-
   // Alicante
   { name: 'Paseo de la Explanada / Puerto', city: 'Alicante', postalCode: '03001', category: 'Running', address: 'Passeig de l\'Esplanada d\'Espanya, 03001 Alacant', lat: 38.3442, lng: -0.4821 },
   { name: 'Playa de San Juan', city: 'Alicante', postalCode: '03540', category: 'Playa', address: 'Avenida de Niza, 03540 Alicante', lat: 38.3682, lng: -0.4187 },
+];
+
+export const POPULAR_CITIES = [
+  'Toda España',
+  'Madrid',
+  'Barcelona',
+  'Valencia',
+  'Sevilla',
+  'Málaga',
+  'Bilbao',
+  'Zaragoza',
+  'Granada',
+  'Alicante',
+  'Santander',
+  'San Sebastián / Donostia',
+];
+
+export interface CimoSportDefinition {
+  id: string;
+  label: string;
+  emoji: string;
+  image: string;
+  description: string;
+}
+
+export const CIMO_SPORTS_CATALOG: CimoSportDefinition[] = [
+  { id: 'running', label: 'Running', emoji: '🏃', image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200', description: 'Rodajes en parques, series en pista y tiradas largas' },
+  { id: 'padel', label: 'Pádel', emoji: '🎾', image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200', description: 'Partidas 2vs2 mixtas y masculinas en club' },
+  { id: 'hiking', label: 'Hiking / Trekking', emoji: '🥾', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1200', description: 'Rutas de montaña, sierra y naturaleza' },
+  { id: 'crossfit', label: 'Crossfit / WOD', emoji: '🏋️', image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=1200', description: 'WODs en parejas, fuerza y acondicionamiento' },
+  { id: 'cycling', label: 'Ciclismo', emoji: '🚴', image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=1200', description: 'Grupeta de carretera y gravel' },
+  { id: 'yoga', label: 'Yoga & Pilates', emoji: '🧘', image: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&q=80&w=1200', description: 'Movilidad, flexibilidad y bienestar al aire libre' },
+  { id: 'natacion', label: 'Natación', emoji: '🏊', image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&q=80&w=1200', description: 'Aguas abiertas y sesiones en piscina' },
+];
+
+export const CIMO_LEVELS_CATALOG = [
+  { id: 'Cualquier nivel', label: 'Cualquier nivel', desc: 'Ver todos los ritmos y categorías' },
+  { id: 'Principiante', label: 'Principiante', desc: 'Iniciación y ritmos muy suaves' },
+  { id: 'Intermedio', label: 'Intermedio', desc: 'Ritmo constante y regular' },
+  { id: 'Avanzado', label: 'Avanzado', desc: 'Intensidad alta y series exigentes' },
+  { id: 'Todos los niveles', label: 'Todos los niveles', desc: 'Grupos abiertos y escalables' },
+];
+
+export const CIMO_DATE_PRESETS = [
+  { label: 'Cualquier día', sub: 'Sin límite', value: 'Cualquier día' },
+  { label: '🔥 Hoy', sub: 'Entrenos hoy', value: 'Hoy' },
+  { label: '⚡ Mañana', sub: 'Próximas 24h', value: 'Mañana' },
+  { label: '⭐ Este finde', sub: 'Sáb & Dom', value: 'Este fin de semana' },
+  { label: '🗓️ Esta semana', sub: 'Lunes a Viernes', value: 'Esta semana' },
 ];

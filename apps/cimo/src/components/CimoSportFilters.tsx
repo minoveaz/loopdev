@@ -1,6 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import { Filter, Search } from 'lucide-react';
+import { CIMO_LEVELS_CATALOG, CIMO_SPORTS_CATALOG } from '../data/spanishCitiesCatalog';
 
 export interface CimoSportFiltersProps {
   selectedSport: string;
@@ -14,15 +15,12 @@ export interface CimoSportFiltersProps {
 }
 
 const sportsList = [
-  { id: 'Todos', label: 'Todas', emoji: '⚡' },
-  { id: 'running', label: 'Running', emoji: '🏃' },
-  { id: 'padel', label: 'Pádel', emoji: '🎾' },
-  { id: 'hiking', label: 'Hiking', emoji: '🥾' },
-  { id: 'crossfit', label: 'Crossfit', emoji: '🏋️' },
+  { id: 'Todos', label: 'Todas', emoji: '⭐' },
+  ...CIMO_SPORTS_CATALOG.map((s) => ({ id: s.id, label: s.label, emoji: s.emoji })),
 ];
 
 const daysList = ['Todos', 'Hoy', 'Mañana', 'Sábado', 'Domingo'];
-const levelsList = ['Todos', 'Principiante', 'Intermedio', 'Avanzado'];
+const levelsList = ['Todos', ...CIMO_LEVELS_CATALOG.filter((l) => l.id !== 'Cualquier nivel').map((l) => l.id)];
 
 export const CimoSportFilters: React.FC<CimoSportFiltersProps> = ({
   selectedSport,
