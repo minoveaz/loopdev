@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { PublicAuthModal, PublicCookieBanner, PublicRuntime, PublicTopBar } from '@loopdev/public-shell';
-import { LogIn, Plus } from 'lucide-react';
+import { LogIn, MessageSquare, Plus, Users } from 'lucide-react';
 import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
 import { CIMO_FEED_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
 import { INITIAL_ACTIVITIES, INITIAL_CREW_CHATS } from './data/mockData';
@@ -363,7 +363,7 @@ export function App() {
                         : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border border-[#1F4E5F]/15'
                     }`}
                   >
-                    <span className="text-sm">🤝</span>
+                    <Users className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-white' : 'text-[#00B894]'}`} />
                     <span className="hidden md:inline">Mi Crew</span>
                     <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-white/20 text-white' : 'bg-[#00B894]/15 text-[#00B894]'}`}>
                       7
@@ -401,7 +401,7 @@ export function App() {
                         : 'bg-[#F7F7F7] border-[#1F4E5F]/10 text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
                     }`}
                   >
-                    <span className="text-sm">💬</span>
+                    <MessageSquare className="w-4 h-4 text-[#1F4E5F]" />
                     <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#00B894] text-white text-[9px] font-black flex items-center justify-center border-2 border-white">
                       3
                     </span>
