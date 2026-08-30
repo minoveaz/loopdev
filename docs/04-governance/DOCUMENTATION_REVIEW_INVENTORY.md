@@ -4,8 +4,8 @@
 > `PENDING_REVIEW` entries require content, authority, ownership, and
 > reference review before the documentation migration track can close.
 
-- Total files inventoried: 240
-- Pending content review: 129
+- Total files inventoried: 241
+- Pending content review: 130
 - Frozen strategic documents are listed for completeness and must not be edited.
 - Archived files are retained as historical evidence and are not candidates for content refresh.
 
@@ -77,6 +77,7 @@
 | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_IMPACT_ASSESSMENT.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_IMPACT_ASSESSMENT.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_IMPLEMENTATION_HANDOFF.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_IMPLEMENTATION_HANDOFF.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_UX_SPEC.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_UX_SPEC.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
+| `docs/06-product/communications/crm-communications-inbox/CHATWOOT_LOOPDEV_REFERENCE_GUIDE.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/crm-communications-inbox/CHATWOOT_LOOPDEV_REFERENCE_GUIDE.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/crm-communications-inbox/CRM_COMMUNICATIONS_INBOX_COMPONENT_AUDIT.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/crm-communications-inbox/CRM_COMMUNICATIONS_INBOX_COMPONENT_AUDIT.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/crm-communications-inbox/CRM_COMMUNICATIONS_INBOX_CONTRACT.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/crm-communications-inbox/CRM_COMMUNICATIONS_INBOX_CONTRACT.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/crm-communications-inbox/CRM_COMMUNICATIONS_INBOX_IMPACT_ASSESSMENT.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/crm-communications-inbox/CRM_COMMUNICATIONS_INBOX_IMPACT_ASSESSMENT.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
