@@ -7,7 +7,10 @@ import {
   CommunicationsInboxProvider,
   CommunicationsInboxThread,
 } from '@/suites/sales-crm/communications/CommunicationsInboxWidget';
-import { COMMUNICATIONS_INBOX_COPY, COMMUNICATIONS_INBOX_FORMATTERS } from '@/suites/sales-crm/communications/copy';
+import {
+  COMMUNICATIONS_INBOX_COPY,
+  COMMUNICATIONS_INBOX_FORMATTERS,
+} from '@/suites/sales-crm/communications/copy';
 import { createFixtureInboxDataSource } from '@/suites/sales-crm/communications/inbox-data-source';
 import { COMMUNICATIONS_INBOX_MODEL } from '@/suites/sales-crm/communications/inbox.fixture';
 
@@ -77,6 +80,30 @@ describe('Communications Inbox', () => {
 
     expect(screen.getByText('No matches')).toBeInTheDocument();
     expect(screen.getByText('Try another search or clear the status filter.')).toBeInTheDocument();
+  });
+
+  it('moves through list, thread and CRM context surfaces for mobile', () => {
+    renderInbox();
+
+    const list = screen.getByRole('list', { name: 'Conversations' }).closest('div.bg-background');
+    const thread = screen.getByLabelText('Messages with Ana Garcia').closest('div.bg-shell-canvas');
+    const context = screen.getByRole('heading', { name: 'CRM context' }).closest('div.space-y-5');
+
+    expect(list.className).not.toContain('max-lg:hidden');
+    expect(thread?.className).toContain('max-lg:hidden');
+    expect(context?.className).toContain('max-lg:hidden');
+
+    fireEvent.click(screen.getByRole('button', { name: /Ana Garcia/ }));
+    expect(list.className).toContain('max-lg:hidden');
+    expect(thread?.className).not.toContain('max-lg:hidden');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open CRM context' }));
+    expect(thread?.className).toContain('max-lg:hidden');
+    expect(context?.className).not.toContain('max-lg:hidden');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Back to conversation' }));
+    expect(thread?.className).not.toContain('max-lg:hidden');
+    expect(context?.className).toContain('max-lg:hidden');
   });
 
   it('passes axe for the ready composition', async () => {

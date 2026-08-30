@@ -4,7 +4,7 @@ import { useInbox } from './useCommunicationsInbox';
 export function CommunicationsInboxFooter() {
   const { selectedConversation, copy } = useInbox();
   return selectedConversation ? (
-    <div className="text-text-muted flex items-center gap-2 text-xs">
+    <div className="text-text-muted flex items-center gap-2 text-xs max-lg:hidden">
       <Archive size={13} aria-hidden="true" /> {copy.linkedContextLabel}
     </div>
   ) : null;

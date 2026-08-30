@@ -31,7 +31,9 @@ import {
   CommunicationsInboxModuleHeader,
   CommunicationsInboxProvider,
   CommunicationsInboxWidget,
+  useInbox,
 } from './communications/CommunicationsInboxWidget';
+import type { InboxMobileSurface } from './communications/types';
 import {
   COMMUNICATIONS_INBOX_ACTOR_LABEL,
   COMMUNICATIONS_INBOX_COPY,
@@ -48,6 +50,15 @@ const COMMUNICATIONS_INBOX_DATA_SOURCE =
     ? createFixtureInboxDataSource(COMMUNICATIONS_INBOX_ACTOR_LABEL)
     : communicationsInboxApiDataSource;
 const USE_COMMUNICATIONS_INBOX_FIXTURE = process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true';
+
+function CommunicationsInboxRuntime({
+  children,
+}: {
+  children: (surface: InboxMobileSurface) => ReactNode;
+}) {
+  const { mobileSurface } = useInbox();
+  return children(mobileSurface);
+}
 
 export function SalesCrmShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -74,115 +85,127 @@ export function SalesCrmShell({ children }: { children: ReactNode }) {
       formatters={COMMUNICATIONS_INBOX_FORMATTERS}
       actorLabel={COMMUNICATIONS_INBOX_ACTOR_LABEL}
     >
-      <SuiteRuntime
-        config={{ ...SALES_CRM_SUITE_CONFIG, navMode }}
-        activeModuleId={activeModuleId}
-        moduleRenderers={{
-          communications: () => <CommunicationsInboxWidget />,
-        }}
-        moduleHeaderRenderers={{
-          communications: () => <CommunicationsInboxModuleHeader />,
-        }}
-        moduleContextRenderers={{
-          communications: () => <CommunicationsInboxList />,
-        }}
-        moduleContextFooterRenderers={{
-          communications: () => <CommunicationsInboxFooter />,
-        }}
-        moduleContextShowFooter={{ communications: true }}
-        moduleContextPanelRenderers={{
-          communications: () => <CommunicationsInboxContext />,
-        }}
-        moduleContextPanelLabels={{ communications: 'CRM context' }}
-        leftSlot={<BrandLogo variant="isotype" size="sm" className="shrink-0" />}
-        centerSlot={
-          <CommandBarTrigger className="w-full" placeholder="Search CRM" onOpen={() => undefined} />
-        }
-        rightSlot={
-          <PlatformHeaderControls
-            notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-            unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-            activeContext={contextMode}
-            onOpenNotifications={() => setContextMode('notifications')}
-            onOpenHelp={() => setContextMode('help')}
-            onOpenAI={() => setContextMode('assistant')}
-          />
-        }
-        platformHeaderProps={{
-          contextSlot: (
-            <div className="flex min-w-0 items-center gap-2">
-              <OrganizationSwitcher
-                organizations={organizations.map(({ id, name }) => ({
-                  id,
-                  name,
-                  planLabel: 'PRO',
-                }))}
-                activeOrganizationId={activeOrganizationId}
-                isLoading={isLoadingOrganizations}
-                onOrganizationNavigate={() => router.push('/launchpad')}
-                onOrganizationChange={setActiveOrganizationId}
-                onAllOrganizations={() => router.push('/launchpad')}
-                onCreateOrganization={() => undefined}
-              />
-              <span className="text-primary px-1 text-xs" aria-hidden="true">
-                |
-              </span>
-              <SuiteSwitcher
-                currentSuite={SALES_CRM_SUITE_CONFIG.identity}
-                availableSuites={[SALES_CRM_SUITE_CONFIG.identity]}
-                showIcon={false}
-                onSuiteChange={() => router.push('/sales-crm')}
-              />
-            </div>
-          ),
-        }}
-        profileSlot={
-          <UserMenu
-            userName="CRM User"
-            userEmail="crm@loopdev.local"
-            userRole="CRM Member"
-            tenantName={activeOrganization?.name}
-            onOpenChange={(open) => {
-              if (open) setContextMode(null);
+      <CommunicationsInboxRuntime>
+        {(mobileSurface) => (
+          <SuiteRuntime
+            config={{ ...SALES_CRM_SUITE_CONFIG, navMode }}
+            activeModuleId={activeModuleId}
+            moduleRenderers={{
+              communications: () => <CommunicationsInboxWidget />,
             }}
-            onAvatarClick={() => setContextMode('profile')}
-            onProfileClick={() => setContextMode('profile')}
-            onLogout={() => undefined}
-          />
-        }
-        mobileSidebarActions={
-          <div className="flex min-w-0 items-center gap-1">
-            <ThemeToggle variant="technical" size="md" />
-            <PlatformHeaderActionButton
-              label="Open help center"
-              title="Help center"
-              active={contextMode === 'help'}
-              onClick={() => setContextMode('help')}
-            >
-              <CircleHelp size={16} aria-hidden="true" />
-            </PlatformHeaderActionButton>
-          </div>
-        }
-        canvasProps={{ mode: 'data' }}
-        onNavModeChange={setNavMode}
-        appShellProps={{
-          onToggleLeftSidebar: () =>
-            setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
-          onRequestCloseContext: () => setContextMode(null),
-          config: { activeOverlay: contextMode ? 'context' : null },
-          contextSlot: contextMode ? (
-            <ContextPanelHost
-              mode={contextMode}
-              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-              onClose={() => setContextMode(null)}
-            />
-          ) : undefined,
-        }}
-        onNavigate={(route: NavRouteRef) => router.push(route.routeId)}
-      >
-        {children}
-      </SuiteRuntime>
+            moduleHeaderRenderers={{
+              communications: () => <CommunicationsInboxModuleHeader />,
+            }}
+            moduleContextRenderers={{
+              communications: () => <CommunicationsInboxList />,
+            }}
+            moduleContextFooterRenderers={{
+              communications: () => <CommunicationsInboxFooter />,
+            }}
+            moduleContextShowFooter={{ communications: true }}
+            moduleContextPanelRenderers={{
+              communications: () => <CommunicationsInboxContext />,
+            }}
+            moduleContextPanelLabels={{ communications: 'CRM context' }}
+            moduleContextSidebarMobileVisibility={mobileSurface === 'list' ? 'visible' : 'hidden'}
+            moduleContextPanelMobileVisibility={mobileSurface === 'context' ? 'visible' : 'hidden'}
+            leftSlot={<BrandLogo variant="isotype" size="sm" className="shrink-0" />}
+            centerSlot={
+              <CommandBarTrigger
+                className="w-full"
+                placeholder="Search CRM"
+                onOpen={() => undefined}
+              />
+            }
+            rightSlot={
+              <PlatformHeaderControls
+                notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+                unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+                activeContext={contextMode}
+                onOpenNotifications={() => setContextMode('notifications')}
+                onOpenHelp={() => setContextMode('help')}
+                onOpenAI={() => setContextMode('assistant')}
+              />
+            }
+            platformHeaderProps={{
+              contextSlot: (
+                <div className="flex min-w-0 items-center gap-2">
+                  <OrganizationSwitcher
+                    organizations={organizations.map(({ id, name }) => ({
+                      id,
+                      name,
+                      planLabel: 'PRO',
+                    }))}
+                    activeOrganizationId={activeOrganizationId}
+                    isLoading={isLoadingOrganizations}
+                    onOrganizationNavigate={() => router.push('/launchpad')}
+                    onOrganizationChange={setActiveOrganizationId}
+                    onAllOrganizations={() => router.push('/launchpad')}
+                    onCreateOrganization={() => undefined}
+                  />
+                  <span className="text-primary px-1 text-xs" aria-hidden="true">
+                    |
+                  </span>
+                  <SuiteSwitcher
+                    currentSuite={SALES_CRM_SUITE_CONFIG.identity}
+                    availableSuites={[SALES_CRM_SUITE_CONFIG.identity]}
+                    showIcon={false}
+                    onSuiteChange={() => router.push('/sales-crm')}
+                  />
+                </div>
+              ),
+            }}
+            profileSlot={
+              <UserMenu
+                userName="CRM User"
+                userEmail="crm@loopdev.local"
+                userRole="CRM Member"
+                tenantName={activeOrganization?.name}
+                onOpenChange={(open) => {
+                  if (open) setContextMode(null);
+                }}
+                onAvatarClick={() => setContextMode('profile')}
+                onProfileClick={() => setContextMode('profile')}
+                onLogout={() => undefined}
+              />
+            }
+            mobileSidebarActions={
+              <div className="flex min-w-0 items-center gap-1">
+                <ThemeToggle variant="technical" size="md" />
+                <PlatformHeaderActionButton
+                  label="Open help center"
+                  title="Help center"
+                  active={contextMode === 'help'}
+                  onClick={() => setContextMode('help')}
+                >
+                  <CircleHelp size={16} aria-hidden="true" />
+                </PlatformHeaderActionButton>
+              </div>
+            }
+            canvasProps={{ mode: 'data' }}
+            onNavModeChange={setNavMode}
+            appShellProps={{
+              onToggleLeftSidebar: () =>
+                setNavMode((current) => (current === 'expanded' ? 'rail' : 'expanded')),
+              onRequestCloseContext: () => setContextMode(null),
+              config: { activeOverlay: contextMode ? 'context' : null },
+              contextSlot: contextMode ? (
+                <ContextPanelHost
+                  mode={contextMode}
+                  notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+                  unreadCount={
+                    NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length
+                  }
+                  onClose={() => setContextMode(null)}
+                />
+              ) : undefined,
+            }}
+            onNavigate={(route: NavRouteRef) => router.push(route.routeId)}
+          >
+            {children}
+          </SuiteRuntime>
+        )}
+      </CommunicationsInboxRuntime>
     </CommunicationsInboxProvider>
   );
 }

@@ -98,6 +98,8 @@ export const COMMUNICATIONS_INBOX_COPY: InboxCopy = {
   sentMessageLabel: 'Sent message',
   receivedMessageLabel: 'Received message',
   moreActionsLabel: 'More conversation actions',
+  openContextLabel: 'Open CRM context',
+  backToThreadLabel: 'Back to conversation',
   unreadLabel: (count) => `${count} unread`,
   messageStatusLabel: (status) =>
     status === 'queued'

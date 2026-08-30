@@ -25,6 +25,7 @@ export type InboxFilterOption = {
 };
 
 export type InboxStatusTone = 'success' | 'energy' | 'neutral' | 'primary';
+export type InboxMobileSurface = 'list' | 'thread' | 'context';
 
 export type InboxLifecycleAction = {
   status: InboxStatus;
@@ -106,6 +107,8 @@ export type InboxCopy = {
   sentMessageLabel: string;
   receivedMessageLabel: string;
   moreActionsLabel: string;
+  openContextLabel: string;
+  backToThreadLabel: string;
   unreadLabel: (count: number) => string;
   messageStatusLabel: (status: CommunicationMessageStatus) => string;
   todayLabel: string;
@@ -143,6 +146,7 @@ export type InboxProviderProps = {
   copy: InboxCopy;
   formatters: InboxFormatters;
   actorLabel: string;
+  mobileSurface: InboxMobileSurface;
 };
 
 export type InboxContextValue = {
@@ -160,6 +164,9 @@ export type InboxContextValue = {
   setFilter: (filter: InboxFilter) => void;
   setSearchQuery: (query: string) => void;
   selectConversation: (conversationId: string) => void;
+  showMobileList: () => void;
+  showMobileThread: () => void;
+  showMobileContext: () => void;
   setComposerMode: (mode: ComposerMode) => void;
   setDraft: (draft: string) => void;
   retry: () => void;

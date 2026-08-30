@@ -6,6 +6,7 @@ import {
   Clock3,
   MessageCircle,
   MoreHorizontal,
+  UsersRound,
 } from 'lucide-react';
 import { Badge, Button, EmptyState, Heading, UserAvatar } from '@loopdev/ui';
 import { InboxComposer } from './InboxComposer';
@@ -79,7 +80,16 @@ function MessageBubble({ item }: { item: InboxMessage }) {
 }
 
 export function CommunicationsInboxThread() {
-  const { selectedConversation, model, assignToSelf, copy, formatters } = useInbox();
+  const {
+    selectedConversation,
+    model,
+    assignToSelf,
+    copy,
+    formatters,
+    mobileSurface,
+    showMobileList,
+    showMobileContext,
+  } = useInbox();
   if (!selectedConversation)
     return (
       <EmptyState
@@ -90,13 +100,16 @@ export function CommunicationsInboxThread() {
     );
 
   return (
-    <div className="bg-shell-canvas flex h-full min-h-0 flex-col">
+    <div
+      className={`bg-shell-canvas flex h-full min-h-0 flex-col ${mobileSurface !== 'thread' ? 'max-lg:hidden' : ''}`}
+    >
       <header className="border-border-technical flex shrink-0 items-center justify-between gap-3 border-b px-4 py-3 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           <button
             type="button"
             className="text-text-muted hover:bg-shell-surface flex size-8 shrink-0 items-center justify-center rounded-md lg:hidden"
             aria-label={copy.backToConversationsLabel}
+            onClick={showMobileList}
           >
             <ArrowLeft size={17} aria-hidden="true" />
           </button>
@@ -137,6 +150,14 @@ export function CommunicationsInboxThread() {
             className="text-text-muted hover:bg-shell-surface flex size-8 items-center justify-center rounded-md"
           >
             <MoreHorizontal size={18} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            aria-label={copy.openContextLabel}
+            onClick={showMobileContext}
+            className="text-text-muted hover:bg-shell-surface flex size-8 items-center justify-center rounded-md lg:hidden"
+          >
+            <UsersRound size={17} aria-hidden="true" />
           </button>
         </div>
       </header>

@@ -15,10 +15,21 @@ export function CommunicationsInboxList() {
     selectConversation,
     copy,
     formatters,
+    mobileSurface,
   } = useInbox();
+  const filterCounts = Object.fromEntries(
+    copy.filters.map((item) => [
+      item.id,
+      item.id === 'all'
+        ? model.conversations.length
+        : model.conversations.filter((conversation) => conversation.status === item.id).length,
+    ]),
+  );
 
   return (
-    <div className="bg-background flex min-h-full flex-col">
+    <div
+      className={`bg-background flex min-h-full flex-col ${mobileSurface !== 'list' ? 'max-lg:hidden' : ''}`}
+    >
       <div className="border-border-subtle shrink-0 border-b p-3">
         <label className="sr-only" htmlFor={copy.searchInputId}>
           {copy.searchLabel}
@@ -31,16 +42,21 @@ export function CommunicationsInboxList() {
           size="sm"
           startIcon={<Search size={15} aria-hidden="true" />}
         />
-        <div className="mt-3 grid grid-cols-4 gap-1" aria-label={copy.filtersLabel} role="group">
+        <div
+          className="mt-3 grid grid-cols-4 gap-1 rounded-lg bg-shell-surface p-1"
+          aria-label={copy.filtersLabel}
+          role="group"
+        >
           {copy.filters.map((item) => (
             <button
               key={item.id}
               type="button"
               aria-pressed={filter === item.id}
               onClick={() => setFilter(item.id)}
-              className={`focus-visible:outline-primary min-h-8 rounded-md px-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 ${filter === item.id ? 'bg-primary text-primary-foreground' : 'text-text-muted hover:bg-shell-surface hover:text-text-main'}`}
+              className={`focus-visible:outline-primary min-h-8 rounded-md px-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 ${filter === item.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-text-muted hover:bg-background hover:text-text-main'}`}
             >
-              {item.label}
+              <span>{item.label}</span>
+              <span className="text-[10px] opacity-75">{filterCounts[item.id]}</span>
             </button>
           ))}
         </div>
@@ -72,7 +88,7 @@ export function CommunicationsInboxList() {
                 aria-current={selected ? 'page' : undefined}
                 aria-label={`${conversation.contactName}, ${copy.statusLabel(conversation.status)}, ${conversation.preview ?? copy.noMessagesLabel}`}
                 onClick={() => selectConversation(conversation.id)}
-                className={`border-border-subtle focus-visible:outline-primary flex w-full min-w-0 gap-3 border-b px-3 py-3 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${selected ? 'bg-primary/10' : 'hover:bg-shell-surface'}`}
+                className={`border-border-subtle focus-visible:outline-primary flex w-full min-w-0 gap-3 border-b px-3 py-2.5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${selected ? 'border-l-2 border-l-primary bg-primary/10 pl-[10px]' : 'hover:bg-shell-surface'}`}
               >
                 <UserAvatar
                   name={conversation.contactName}

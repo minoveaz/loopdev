@@ -1,23 +1,46 @@
-import { UsersRound } from 'lucide-react';
+import { ArrowLeft, UsersRound } from 'lucide-react';
 import { Button, EmptyState, Heading, UserAvatar } from '@loopdev/ui';
 import { useInbox } from './useCommunicationsInbox';
 
 export function CommunicationsInboxContext() {
-  const { selectedConversation, assignToSelf, model, changeStatus, copy, formatters } = useInbox();
-  if (!selectedConversation)
+  const {
+    selectedConversation,
+    assignToSelf,
+    model,
+    changeStatus,
+    copy,
+    formatters,
+    showMobileThread,
+    mobileSurface,
+  } = useInbox();
+
+  if (!selectedConversation) {
     return (
-      <EmptyState
-        title={copy.noContextTitle}
-        description={copy.noContextDescription}
-        icon="person_search"
-        size="sm"
-        variant="ghost"
-      />
+      <div className={`space-y-5 p-4 ${mobileSurface !== 'context' ? 'max-lg:hidden' : ''}`}>
+        <EmptyState
+          title={copy.noContextTitle}
+          description={copy.noContextDescription}
+          icon="person_search"
+          size="sm"
+          variant="ghost"
+        />
+      </div>
     );
+  }
 
   const lifecycleAction = copy.lifecycleAction(selectedConversation.status);
+
   return (
-    <div className="space-y-5 p-4">
+    <div className={`space-y-5 p-4 ${mobileSurface !== 'context' ? 'max-lg:hidden' : ''}`}>
+      <button
+        type="button"
+        aria-label={copy.backToThreadLabel}
+        onClick={showMobileThread}
+        className="text-text-muted hover:text-text-main inline-flex items-center gap-2 text-xs font-semibold lg:hidden"
+      >
+        <ArrowLeft size={14} aria-hidden="true" />
+        {copy.backToThreadLabel}
+      </button>
       <div className="flex items-center gap-3">
         <UserAvatar
           name={selectedConversation.contactName}

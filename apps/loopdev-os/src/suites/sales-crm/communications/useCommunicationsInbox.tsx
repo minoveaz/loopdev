@@ -64,6 +64,7 @@ export function CommunicationsInboxProvider({
   const [draft, setDraft] = useState('');
   const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [reloadVersion, setReloadVersion] = useState(0);
+  const [mobileSurface, setMobileSurface] = useState<InboxContextValue['mobileSurface']>('list');
 
   useEffect(() => {
     if (useFixtureModel || !organizationId) return;
@@ -138,12 +139,17 @@ export function CommunicationsInboxProvider({
     copy,
     formatters,
     actorLabel,
+    mobileSurface,
     setFilter,
     setSearchQuery,
     selectConversation: (conversationId) => {
       setSelectedId(conversationId);
       setActionNotice(null);
+      setMobileSurface('thread');
     },
+    showMobileList: () => setMobileSurface('list'),
+    showMobileThread: () => setMobileSurface('thread'),
+    showMobileContext: () => setMobileSurface('context'),
     setComposerMode: (mode) => {
       setComposerMode(mode);
       setActionNotice(null);
