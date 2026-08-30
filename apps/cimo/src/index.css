@@ -14,10 +14,14 @@
   --lpd-brand-font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif;
 }
 
+body, button, input, select, textarea {
+  font-family: var(--lpd-brand-font-family);
+}
+
 body {
   margin: 0;
-  font-family: var(--lpd-brand-font-family);
   background-color: var(--lpd-brand-background);
   color: var(--lpd-brand-text-main);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
