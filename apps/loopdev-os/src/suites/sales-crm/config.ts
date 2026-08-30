@@ -56,6 +56,15 @@ export const SALES_CRM_NAVIGATION: NavigationSchema = {
           priority: 4,
           route: { routeId: '/sales-crm/tasks' },
         },
+        {
+          id: 'crm.communications',
+          kind: 'module',
+          moduleId: 'communications',
+          label: 'Communications',
+          icon: 'MessageCircle',
+          priority: 5,
+          route: { routeId: '/sales-crm/communications' },
+        },
       ],
     },
   ],
@@ -98,6 +107,26 @@ export const SALES_CRM_SUITE_CONFIG: SuiteConfig = {
       route: '/sales-crm/tasks',
       breadcrumbs: ['Sales & CRM', 'Tasks'],
       capabilities: ['mobile-navigation'],
+    },
+    {
+      moduleId: 'communications',
+      label: 'Communications',
+      route: '/sales-crm/communications',
+      breadcrumbs: ['Sales & CRM', 'Communications'],
+      capabilities: ['mobile-navigation'],
+      shell: {
+        canvasMode: 'split',
+        moduleContextSidebar: {
+          label: 'Inbox',
+          width: 'standard',
+          contentScrollable: true,
+        },
+        moduleContextPanel: {
+          label: 'CRM context',
+          width: 'standard',
+          contentScrollable: true,
+        },
+      },
     },
   ],
 };

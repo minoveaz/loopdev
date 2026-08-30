@@ -317,6 +317,19 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(vitest@4.0.16(@types/node@20.19.27)(jiti@2.7.0)(jsdom@27.4.0)(lightningcss@1.32.0)(terser@5.44.1)(yaml@2.9.0))
 
+  apps/loopdev-worker:
+    dependencies:
+      '@loopdev/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+    devDependencies:
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.16(@types/node@25.0.3)(jiti@2.7.0)(jsdom@27.4.0)(lightningcss@1.32.0)(terser@5.44.1)(yaml@2.9.0)
+
   ds/apps/estar-protegidos:
     dependencies:
       next:
@@ -9985,7 +9998,7 @@ snapshots:
       '@vitest/spy': 4.0.16
       '@vitest/utils': 4.0.16
       chai: 6.2.2
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.1
 
   '@vitest/mocker@4.0.16(vite@6.4.1(@types/node@20.19.27)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.44.1)(yaml@2.9.0))':
     dependencies:
@@ -10005,7 +10018,7 @@ snapshots:
 
   '@vitest/pretty-format@4.0.16':
     dependencies:
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.1
 
   '@vitest/runner@4.0.16':
     dependencies:
@@ -14507,12 +14520,12 @@ snapshots:
       magic-string: 0.30.21
       obug: 2.1.1
       pathe: 2.0.3
-      picomatch: 4.0.3
+      picomatch: 4.0.5
       std-env: 3.10.0
       tinybench: 2.9.0
       tinyexec: 1.0.2
-      tinyglobby: 0.2.15
-      tinyrainbow: 3.0.3
+      tinyglobby: 0.2.17
+      tinyrainbow: 3.1.1
       vite: 6.4.1(@types/node@20.19.27)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.44.1)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:

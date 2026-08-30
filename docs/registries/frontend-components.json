@@ -2528,6 +2528,55 @@
       "evidence_gaps": []
     },
     {
+      "id": "communications-inbox-widget-v1",
+      "name": "CommunicationsInboxWidget",
+      "domain": "frontend",
+      "type": "widget",
+      "category": "communications",
+      "status": "in-progress",
+      "suite": "sales-crm",
+      "certification": {
+        "frontend": "in-progress",
+        "ui_ux": {
+          "status": "in-progress",
+          "evidence": ["apps/loopdev-os/src/suites/sales-crm/communications/UI_UX_SPEC.md"]
+        },
+        "technical": {
+          "status": "in-progress",
+          "evidence": ["apps/loopdev-os/src/app/api/communications/inbox/route.test.ts"]
+        },
+        "source_contract": {
+          "status": "pending",
+          "evidence": ["packages/contracts/src/communications/inbox.ts"]
+        },
+        "overall": "in-progress"
+      },
+      "compliance": {
+        "blocks_0_compliance": true
+      },
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "sales-crm",
+      "phase": 0,
+      "dependencies": ["module-workspace-v1.4"],
+      "contracts": [
+        "packages/contracts/src/communications/communications.ts",
+        "packages/contracts/src/communications/inbox.ts",
+        "apps/loopdev-os/src/suites/sales-crm/communications/types.ts"
+      ],
+      "implementation": "apps/loopdev-os/src/suites/sales-crm/communications/CommunicationsInboxWidget.tsx",
+      "tests": [
+        "apps/loopdev-os/src/app/api/communications/inbox/route.test.ts",
+        "apps/loopdev-os/src/app/sales-crm/communications/CommunicationsInbox.test.tsx"
+      ],
+      "documentation": ["apps/loopdev-os/src/suites/sales-crm/communications/UI_UX_SPEC.md"],
+      "evidence_gaps": [
+        "ui-ux-certification",
+        "accessibility-test-runtime",
+        "responsive-visual-review",
+        "persistent-mutation-adapters"
+      ]
+    },
+    {
       "id": "c-ol-or-co-nt-ex-tb-ar",
       "name": "ColorContextBar",
       "domain": "frontend",

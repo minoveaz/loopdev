@@ -8,7 +8,7 @@ import { OrganizationMembershipSchema, type OrganizationMembership } from '@loop
 
 const isE2EAuthBypassEnabled = process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true';
 const e2eUser = {
-  id: 'e2e-user',
+  id: '00000000-0000-4000-9000-000000000011',
   aud: 'authenticated',
   role: 'authenticated',
   email: 'e2e@loopdev.test',
@@ -22,8 +22,8 @@ const e2eSession = {
   user: e2eUser,
 } as Session;
 const e2eMembership = {
-  organizationId: 'e2e-organization',
-  userId: 'e2e-user',
+  organizationId: '00000000-0000-4000-9000-000000000010',
+  userId: '00000000-0000-4000-9000-000000000011',
   role: 'owner',
   status: 'active',
   createdAt: '2026-01-01T00:00:00.000Z',

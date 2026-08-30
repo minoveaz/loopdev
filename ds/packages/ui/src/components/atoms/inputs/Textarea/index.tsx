@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useId } from 'react';
+import React, { forwardRef, useId } from 'react';
 import type { TextareaHTMLAttributes } from 'react';
 import { cn } from '../../../../lib/utils';
 

@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 const ACTIVE_ORGANIZATION_STORAGE_KEY = 'loopdev.activeOrganizationId';
 const isE2EAuthBypassEnabled = process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true';
 const e2eOrganization = {
-  id: 'e2e-organization',
+  id: '00000000-0000-4000-9000-000000000010',
   name: 'E2E Organization',
   slug: 'e2e',
   legacyTenantId: null,

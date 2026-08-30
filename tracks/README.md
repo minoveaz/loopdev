@@ -23,6 +23,7 @@
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
+
 ## En curso
 
 ### CRM
@@ -30,6 +31,7 @@
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 1 · bloqueado
 - [Implementación de Communications Core para WhatsApp CRM](./active/crm/2026-08-29-communications-core-implementation.md) · `feature/communications-core-implementation` · fase 0
+- [Implementacion de CRM Communications Inbox](./active/crm/2026-08-30-communications-inbox-implementation.md) · `feature/crm-communications-inbox-implementation` · fase 0
 
 ### Marketing Studio
 
@@ -50,6 +52,7 @@
 
 - [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
+
 ## Cerrados
 
 ### 2026
