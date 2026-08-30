@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import { Filter, Search } from 'lucide-react';
-import { CIMO_LEVELS_CATALOG, CIMO_SPORTS_CATALOG } from '../data/spanishCitiesCatalog';
+import { CIMO_LEVELS_CATALOG, CIMO_SPORTS_CATALOG } from '../data/sportsCatalog';
 
 export interface CimoSportFiltersProps {
   selectedSport: string;

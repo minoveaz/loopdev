@@ -1,31 +1,12 @@
 import React from 'react';
 import { Check, Timer } from 'lucide-react';
+import {
+  getSportPaces,
+  SPORT_PACES_CATALOG,
+  type SportPaceOption,
+} from '../data/sportsCatalog';
 
-export interface SportPaceOption {
-  title: string;
-  metric: string;
-  label: string;
-  desc: string;
-  level: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Todos los niveles';
-}
-
-export const SPORT_PACES_CATALOG: Record<string, SportPaceOption[]> = {
-  running: [
-    { title: 'Suave', metric: '+5:45 min/km', label: 'Suave (+5:45 min/km)', desc: 'Ritmo conversacional, ideal para rodar y charlar', level: 'Principiante' },
-    { title: 'Medio', metric: '5:00 - 5:30 min/km', label: 'Medio (5:00 - 5:30 min/km)', desc: 'Ritmo constante para corredores habituales', level: 'Intermedio' },
-    { title: 'Alegre', metric: 'Sub 4:45 min/km', label: 'Alegre (Sub 4:45 min/km)', desc: 'Ritmo vivo para series o tempo run', level: 'Avanzado' },
-  ],
-  padel: [
-    { title: 'Iniciación', metric: 'Nivel 2.0 - 2.5', label: 'Iniciación (Nivel 2.0 - 2.5)', desc: 'Partidos amistosos para aprender y coger confianza', level: 'Principiante' },
-    { title: 'Intermedio', metric: 'Nivel 3.0 - 3.5', label: 'Intermedio (Nivel 3.0 - 3.5)', desc: 'Peloteo fluido, voleas y globos controlados', level: 'Intermedio' },
-    { title: 'Avanzado', metric: 'Nivel 4.0+', label: 'Avanzado (Nivel 4.0+)', desc: 'Partida competitiva con buena pegada y táctica', level: 'Avanzado' },
-  ],
-  hiking: [
-    { title: 'Paseo Fácil', metric: '6 - 8 km', label: 'Paseo Fácil (6 - 8 km)', desc: 'Senderismo suave por senderos llanos', level: 'Principiante' },
-    { title: 'Media Montaña', metric: '10 - 14 km (+400m)', label: 'Media Montaña (10 - 14 km)', desc: 'Desnivel medio (+400m), ritmo activo', level: 'Intermedio' },
-    { title: 'Alta Exigencia', metric: '+16 km (Técnico)', label: 'Alta Exigencia (+16 km)', desc: 'Cumbres y terreno técnico con buen desnivel', level: 'Avanzado' },
-  ],
-};
+export { SPORT_PACES_CATALOG, type SportPaceOption };
 
 export interface CimoSportPaceSelectorProps {
   sport: string;
@@ -40,7 +21,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
   onSelectIndex,
   className = '',
 }) => {
-  const activePaces = SPORT_PACES_CATALOG[sport] ?? SPORT_PACES_CATALOG.running;
+  const activePaces = getSportPaces(sport);
   const currentPace = activePaces[selectedIndex] ?? activePaces[0];
 
   return (

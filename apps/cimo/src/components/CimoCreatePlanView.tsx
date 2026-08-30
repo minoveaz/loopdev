@@ -26,10 +26,10 @@ import type { ActivityCardData } from '@loopdev/public-blocks';
 import { CimoCitySearchCombobox } from './CimoCitySearchCombobox';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
 import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
-import { CimoSportPaceSelector, SPORT_PACES_CATALOG } from './CimoSportPaceSelector';
+import { CimoSportPaceSelector } from './CimoSportPaceSelector';
 import { CimoCapacityStepper } from './CimoCapacityStepper';
 import { useSpainLocationSearch } from '../hooks/useSpainLocationSearch';
-import { CIMO_SPORTS_CATALOG } from '../data/spanishCitiesCatalog';
+import { CIMO_SPORTS_CATALOG, getSportPaces, SPORT_PACES_CATALOG } from '../data/sportsCatalog';
 
 export interface CimoCreatePlanViewProps {
   onBack: () => void;
@@ -181,7 +181,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [selectedMinute, setSelectedMinute] = useState('30');
 
   const selectedSportObj = sportsList.find((s) => s.id === sport) ?? sportsList[0];
-  const activePaces = SPORT_PACES_CATALOG[sport] ?? SPORT_PACES_CATALOG.running;
+  const activePaces = getSportPaces(sport);
   const currentPace = activePaces[selectedPaceIndex] ?? activePaces[0];
 
   const finalTitle = title.trim() || `${selectedSportObj.label} en ${location.split('(')[0].trim()}`;

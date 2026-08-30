@@ -11,13 +11,12 @@ import {
   X,
   Zap,
 } from 'lucide-react';
+import { POPULAR_CITIES, SPANISH_CITIES } from '../data/spanishCitiesCatalog';
 import {
   CIMO_DATE_PRESETS,
   CIMO_LEVELS_CATALOG,
   CIMO_SPORTS_CATALOG,
-  POPULAR_CITIES,
-  SPANISH_CITIES,
-} from '../data/spanishCitiesCatalog';
+} from '../data/sportsCatalog';
 
 export interface CimoFloatingSearchBarProps {
   selectedSport: string;
