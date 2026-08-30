@@ -242,6 +242,29 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                     </div>
                   )}
 
+                  {/* Optional Third Half Chip (Social Post-Workout) */}
+                  {act.thirdHalf?.enabled && (
+                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-amber-900 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20 shadow-2xs">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="text-sm">
+                          {act.thirdHalf.type === 'beer'
+                            ? '🍻'
+                            : act.thirdHalf.type === 'smoothie'
+                            ? '🥤'
+                            : act.thirdHalf.type === 'picnic'
+                            ? '🌿'
+                            : '☕'}
+                        </span>
+                        <span className="truncate">
+                          <strong>Tercer Tiempo:</strong> {act.thirdHalf.venue}
+                        </span>
+                      </div>
+                      <span className="text-[9px] font-black uppercase tracking-wider text-amber-800 bg-amber-500/20 px-1.5 py-0.5 rounded-full shrink-0">
+                        Social
+                      </span>
+                    </div>
+                  )}
+
                   {/* Footer: Crew Avatars + Action Button */}
                   <div className="flex items-center justify-between pt-1 mt-auto gap-2">
                     <div className="flex items-center gap-2">

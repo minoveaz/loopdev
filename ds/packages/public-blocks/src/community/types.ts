@@ -7,6 +7,13 @@ export interface CommunityMember {
   bio?: string;
 }
 
+export interface ThirdHalfData {
+  enabled: boolean;
+  type?: 'cafe' | 'beer' | 'smoothie' | 'picnic';
+  venue?: string;
+  notes?: string;
+}
+
 export interface ActivityCardData {
   id: string;
   title: string;
@@ -25,6 +32,7 @@ export interface ActivityCardData {
   price?: string;
   instructions?: string;
   postalCode?: string;
+  thirdHalf?: ThirdHalfData;
 }
 
 export interface ChatMessage {

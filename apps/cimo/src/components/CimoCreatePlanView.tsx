@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
+  Coffee,
   Eye,
   FileText,
   MapPin,
@@ -33,6 +34,13 @@ export interface CimoCreatePlanViewProps {
   onBack: () => void;
   onCreate: (newPlan: Partial<ActivityCardData>) => void;
 }
+
+const THIRD_HALF_TYPES = [
+  { id: 'cafe' as const, label: 'Café & Desayuno', emoji: '☕', defaultVenue: 'Cafetería cercana con terraza' },
+  { id: 'beer' as const, label: 'Caña & Tapeo', emoji: '🍻', defaultVenue: 'Terraza o bar del club' },
+  { id: 'smoothie' as const, label: 'Smoothie Recovery', emoji: '🥤', defaultVenue: 'Juice & Recovery Bar' },
+  { id: 'picnic' as const, label: 'Picnic al Aire Libre', emoji: '🌿', defaultVenue: 'Césped con sombra' },
+];
 
 const sportsList = [
   { id: 'running', label: 'Running', emoji: '🏃', image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200' },
@@ -146,6 +154,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [maxMembers, setMaxMembers] = useState(5);
   const [instructions, setInstructions] = useState('');
 
+  // Optional Third Half (Tercer Tiempo) State
+  const [hasThirdHalf, setHasThirdHalf] = useState(true);
+  const [thirdHalfType, setThirdHalfType] = useState<'cafe' | 'beer' | 'smoothie' | 'picnic'>('cafe');
+  const [thirdHalfVenue, setThirdHalfVenue] = useState('Café Murillo (Retiro)');
+  const [thirdHalfNotes, setThirdHalfNotes] = useState('Nos sentaremos 30 min a tomar un café, rehidratarnos y charlar tras el entreno.');
+
   // Custom Visual Pickers State
   const [isCityComboboxOpen, setIsCityComboboxOpen] = useState(false);
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
@@ -191,6 +205,16 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
       maxMembers,
       image: selectedSportObj.image,
       instructions: instructions.trim() || undefined,
+      thirdHalf: hasThirdHalf
+        ? {
+            enabled: true,
+            type: thirdHalfType,
+            venue: thirdHalfVenue.trim() || 'Cafetería cercana',
+            notes: thirdHalfNotes.trim() || undefined,
+          }
+        : {
+            enabled: false,
+          },
     });
   };
 
@@ -771,7 +795,117 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           />
         </div>
 
-        {/* 🌟 Island 7: Vista Previa en Vivo & Publicación */}
+        {/* ☕ Island 7: Tercer Tiempo Post-Entreno (Opcional) */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+                7
+              </span>
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+                Tercer Tiempo Post-Entreno
+              </span>
+            </div>
+            <span className="text-xs font-black text-[#00B894] bg-[#00B894]/10 px-2.5 py-0.5 rounded-full">
+              Opcional
+            </span>
+          </div>
+
+          {/* Toggle Switch */}
+          <div className="flex items-center justify-between p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#00B894]/10 text-[#00B894] flex items-center justify-center shrink-0">
+                <Coffee className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="text-xs font-black text-[#1F4E5F] block">
+                  ¿Habrá plan social tras el entreno?
+                </span>
+                <span className="text-[11px] text-[#1F4E5F]/70 font-medium">
+                  {hasThirdHalf
+                    ? '¡Genial! Añade el local o plan para tomar algo y charlar juntos.'
+                    : 'Entrenamiento puro 100% deportivo (sin sobremesa posterior).'}
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setHasThirdHalf(!hasThirdHalf)}
+              className={`w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 ${
+                hasThirdHalf ? 'bg-[#00B894] justify-end' : 'bg-[#1F4E5F]/20 justify-start'
+              }`}
+            >
+              <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+            </button>
+          </div>
+
+          {hasThirdHalf && (
+            <div className="flex flex-col gap-4 pt-2 animate-in fade-in zoom-in-98 duration-150">
+              {/* Type selector pills */}
+              <div className="flex flex-col gap-2">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                  Tipo de Tercer Tiempo
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {THIRD_HALF_TYPES.map((tht) => {
+                    const isSelected = thirdHalfType === tht.id;
+                    return (
+                      <button
+                        key={tht.id}
+                        type="button"
+                        onClick={() => {
+                          setThirdHalfType(tht.id);
+                          if (!thirdHalfVenue || thirdHalfVenue === 'Cafetería cercana con terraza') {
+                            setThirdHalfVenue(tht.defaultVenue);
+                          }
+                        }}
+                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                          isSelected
+                            ? 'border-[#00B894] bg-[#00B894]/10 ring-2 ring-[#00B894]/20 shadow-2xs'
+                            : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                        }`}
+                      >
+                        <span className="text-xl">{tht.emoji}</span>
+                        <span className="text-xs font-black">{tht.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Venue / Local */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                  Nombre del local, cafetería o punto social
+                </label>
+                <input
+                  type="text"
+                  value={thirdHalfVenue}
+                  onChange={(e) => setThirdHalfVenue(e.target.value)}
+                  placeholder="Ej: Café Murillo, Terraza Club Chamartín, Raw Bar..."
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                />
+              </div>
+
+              {/* Notes */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                  Nota breve sobre el tercer tiempo
+                </label>
+                <input
+                  type="text"
+                  value={thirdHalfNotes}
+                  onChange={(e) => setThirdHalfNotes(e.target.value)}
+                  placeholder="Ej: Nos quedaremos 30 min a desayunar, rehidratarnos y charlar."
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 🌟 Island 8: Vista Previa en Vivo & Publicación */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5 text-xs font-black uppercase tracking-wider text-[#00B894]">
@@ -825,6 +959,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                   <p className="line-clamp-2">
                     <span className="font-black">Capitán: </span>"{instructions.trim()}"
                   </p>
+                </div>
+              )}
+
+              {/* Optional Third Half Preview */}
+              {hasThirdHalf && (
+                <div className="p-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-900 font-bold flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 truncate">
+                    <span className="text-base">
+                      {THIRD_HALF_TYPES.find((t) => t.id === thirdHalfType)?.emoji ?? '☕'}
+                    </span>
+                    <span className="truncate">
+                      <strong>Tercer Tiempo:</strong> {thirdHalfVenue || 'Cafetería cercana'}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-black text-amber-800 bg-amber-500/20 px-2 py-0.5 rounded-full shrink-0">
+                    Social
+                  </span>
                 </div>
               )}
 

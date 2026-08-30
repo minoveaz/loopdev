@@ -32,6 +32,12 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
       { id: 'user_me', name: 'Alex Rivera', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400', age: 28 },
     ],
     isJoined: true,
+    thirdHalf: {
+      enabled: true,
+      type: 'cafe',
+      venue: 'Café Murillo (Retiro)',
+      notes: 'Nos sentaremos en la terraza 30-40 min a tomar un café, rehidratarnos y charlar tras los 8K.',
+    },
   },
   {
     id: 'act_2',
@@ -43,6 +49,7 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
     location: 'Club de Tenis Chamartín (Madrid)',
     level: 'Intermedio',
     paceOrDetails: 'Pista reservada 1h 30m • Nivel 3.5 Playtomic',
+    instructions: 'Pista 4 cubierta. Traed vuestra pala y agua. Pelotas nuevas incluidas.',
     maxMembers: 4,
     captain: {
       id: 'capt_2',
@@ -57,6 +64,12 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
       { id: 'usr_5', name: 'Carlos', avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400', age: 30 },
     ],
     isJoined: false,
+    thirdHalf: {
+      enabled: true,
+      type: 'beer',
+      venue: 'Terraza Club Chamartín',
+      notes: 'Tercer tiempo con cañas, refrescos y picoteo para comentar los mejores puntos del partido.',
+    },
   },
   {
     id: 'act_3',
@@ -68,6 +81,7 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
     location: 'Aparcamiento Canto Cochino, Manzanares el Real',
     level: 'Intermedio',
     paceOrDetails: '12 km • Desnivel +450m • 4 horas aprox',
+    instructions: 'Calzado de montaña obligatorio, 1.5L de agua y algo de picar para el camino.',
     maxMembers: 8,
     captain: {
       id: 'capt_3',
@@ -83,6 +97,9 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
       { id: 'usr_8', name: 'Javier Gil', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400', age: 30 },
     ],
     isJoined: false,
+    thirdHalf: {
+      enabled: false,
+    },
   },
   {
     id: 'act_4',
@@ -94,6 +111,7 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
     location: 'Box Singular CrossFit, Chamberí (Madrid)',
     level: 'Todos los niveles',
     paceOrDetails: 'WOD escalable en box • Nivel adaptado',
+    instructions: 'Llegar 10 min antes para calentar muñecas y hombros. Toalla y botella de agua.',
     maxMembers: 6,
     captain: {
       id: 'capt_4',
@@ -107,6 +125,12 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
       { id: 'usr_9', name: 'Laura', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400', age: 26 },
     ],
     isJoined: false,
+    thirdHalf: {
+      enabled: true,
+      type: 'smoothie',
+      venue: 'Raw Recovery Bar Chamberí',
+      notes: 'Batidos de proteínas y smoothies naturales para reponer energía y charlar post-entreno.',
+    },
   },
 ];
 

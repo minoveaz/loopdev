@@ -116,16 +116,16 @@ graph TD
     - `⭐ Capitán de Oro:` Por liderar entrenos con puntualidad impecable y Tercer Tiempo valorado positivamente.
 
 #### ☕ 2. Sección Explícita de "Tercer Tiempo" en Cada Plan (Post-Workout Social Protocol)
-* **Objetivo:** Convertir el entrenamiento en un catalizador de relaciones humanas, asegurando que cada plan tenga un momento explícito de tertulia e hidratación post-ejercicio.
+* **Objetivo:** Convertir el entrenamiento en un catalizador de relaciones humanas, asegurando que cada plan tenga un momento opcional de tertulia e hidratación post-ejercicio.
 * **Tipologías Canónicas:**
   - `☕ Café & Desayuno / Brunch:` Para rodajes matutinos de running o ciclismo (07:00 - 10:00 h).
   - `🍻 Caña & Tapeo / Aperitivo:` Para partidas de pádel, partidos de tenis o entrenos de tarde/fin de semana.
   - `🥤 Smoothie / Recovery Bar:` Para sesiones de alta intensidad en box de CrossFit, Hyrox o entrenos funcionales.
   - `🌿 Picnic & Hidratación al Aire Libre:` Para rutas de Hiking, montaña o parques urbanos.
 * **Integración en Componentes & Contratos:**
-  - **`CimoCreatePlanView` (Paso de Tercer Tiempo):** Selector conmutador (`hasThirdHalf`), Tipo (`cafe`, `beer`, `smoothie`, `picnic`), Nombre del local/lugar y breve nota de sobremesa (*"Nos quedaremos 30 min en Café Murillo a desayunar y comentar la tirada"*).
-  - **`CimoCuratedFeed` (Badges de Tercer Tiempo):** Pastilla contextual visible en la tarjeta: `☕ Tercer Tiempo: Café Murillo` o `🍻 Caña post-pádel en Terraza Chamartín`.
-  - **`CimoActivityDetailView` (Bloque Social):** Sección dedicada con tarjeta de ubicación, hora estimada de finalización del entreno e inicio del Tercer Tiempo, facilitando que miembros que lleguen tarde o se sumen después puedan ubicarse.
+  - [x] **`CimoCreatePlanView` (Isla 7 de Tercer Tiempo Opcional):** Selector conmutador (`hasThirdHalf`), Tipo (`cafe`, `beer`, `smoothie`, `picnic`), Nombre del local/lugar y nota de sobremesa (*"Nos sentaremos 30 min en Café Murillo..."*).
+  - [x] **`CimoCuratedFeed` (Badges de Tercer Tiempo):** Pastilla contextual visible en la tarjeta: `☕ Tercer Tiempo: Café Murillo` o `🍻 Tercer Tiempo: Terraza Club Chamartín`, manteniendo limpias las tarjetas sin tercer tiempo.
+  - [x] **`CimoActivityDetailView` (Bloque Social):** Sección dedicada con tarjeta visual del Tercer Tiempo, hora estimada post-entreno e indicación de plan 100% deportivo cuando no está habilitado.
 
 #### 🎯 3. Motor de Matching Deportivo Inteligente (5 Vectores de Compatibilidad & Radar)
 * **Objetivo:** Calcular una puntuación de afinidad real ($Score \in [0\%, 100\%]$) entre el Pasaporte Deportivo del Atleta y los parámetros de cada entreno / compañeros, eliminando la frustración de ritmos incompatibles y maximizando la sintonía social.
