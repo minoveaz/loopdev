@@ -103,14 +103,14 @@ graph TD
 #### 🤝 1. "Mi Red de Crew" & Contactos Deportivos (Social Graph & Directorio de Conexiones)
 * **Objetivo:** Fomentar la recurrencia, la retención y la transformación de compañeros de entreno esporádicos en una red de amigos y deportistas habituales.
 * **Funcionalidades Nucleares:**
-  - **Directorio de Conexiones ("Mi Red de Crew"):**
+  - [x] **Directorio de Conexiones ("Mi Red de Crew" - `CimoCrewNetworkView.tsx` / `/#/crew`):**
     - Vista dedicada dentro del perfil o pestaña principal donde el atleta visualiza a todas las personas con las que ha compartido entrenos.
     - Contador de entrenos mutuos (*"Has compartido 4 entrenos con Sofía Díaz (5:15 min/km)"*, *"2 partidas de pádel con Javier"*).
     - Canales de contacto desbloqueados según permisos mutuos (acceso al WhatsApp de coordinación si ambos han asistido al entreno, LinkedIn profesional y Strava).
-  - **Smart Captain Invites (Invitación Inteligente en 1 Clic):**
+  - [x] **Smart Captain Invites (Invitación Inteligente en 1 Clic - `CimoInviteCrewModal.tsx`):**
     - Al publicar un entreno como Capitán, el sistema sugiere automáticamente a los deportistas de su red con mayor compatibilidad ($>90\%$) para ese deporte y horario.
     - Botón `[ 📨 Invitar a mi Crew habitual ]` para pre-llenar los cupos en minutos antes de abrirlo a la comunidad general.
-  - **Insignias Sociales y Dinámicas de Comunidad:**
+  - [x] **Insignias Sociales y Dinámicas de Comunidad:**
     - `🏅 Conector Deportivo:` Por entrenar con más de 25 personas diferentes.
     - `🛡️ Crew Fiel:` Por mantener 4 semanas seguidas entrenando con el mismo grupo.
     - `⭐ Capitán de Oro:` Por liderar entrenos con puntualidad impecable y Tercer Tiempo valorado positivamente.
