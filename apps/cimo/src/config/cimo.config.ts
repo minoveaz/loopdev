@@ -25,15 +25,15 @@ export const cimoBrandTheme: PublicBrandTheme = {
       <circle cx="64" cy="30" r="8" fill="#7FB77E" />
       <path d="M 64 44 C 78 44 86 56 86 68 C 86 80 72 84 58 74 C 46 65 38 52 30 52" stroke="#7FB77E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
     </svg>`,
-    fullSvg: `<svg viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-9 w-auto">
-      <g transform="translate(4, 3) scale(0.72)">
+    fullSvg: `<svg viewBox="0 18 215 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-auto">
+      <g transform="translate(0, -2) scale(0.85)">
         <circle cx="36" cy="30" r="8" fill="#1F4E5F" />
         <path d="M 36 44 C 22 44 14 56 14 68 C 14 80 28 84 42 74 C 54 65 62 52 70 52" stroke="#1F4E5F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
         <circle cx="64" cy="30" r="8" fill="#7FB77E" />
         <path d="M 64 44 C 78 44 86 56 86 68 C 86 80 72 84 58 74 C 46 65 38 52 30 52" stroke="#7FB77E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
       </g>
-      <text x="82" y="47" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="34" font-weight="900" fill="#1F4E5F" letter-spacing="-0.03em">Cimo</text>
-      <text x="83" y="61" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#7FB77E" letter-spacing="0.05em">SPORT &amp; SOCIAL</text>
+      <text x="86" y="46" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="34" font-weight="900" fill="#1F4E5F" letter-spacing="-0.03em">Cimo</text>
+      <text x="87" y="60" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#7FB77E" letter-spacing="0.06em">SPORT &amp; SOCIAL</text>
     </svg>`,
   },
   typography: {
