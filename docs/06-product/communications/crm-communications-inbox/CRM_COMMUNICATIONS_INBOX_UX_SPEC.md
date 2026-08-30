@@ -17,6 +17,12 @@ approved_at: 2026-08-29
 
 CRM Communications Inbox lets authorized commercial teams triage and handle customer WhatsApp conversations while keeping the canonical CRM relationship in context. It consumes Communications Core; it never owns provider accounts, credentials, webhook processing or delivery policy.
 
+The [Chatwoot -> LoopDev reference guide](CHATWOOT_LOOPDEV_REFERENCE_GUIDE.md)
+records the external product patterns used as evidence and the portability
+boundary for future consumers such as VitaBlue. Chatwoot informs workflow
+anatomy only; LoopDev contracts, Shell recipes, tenant isolation and Core policy
+remain authoritative.
+
 ## Navigation and Canvas
 
 | Surface | Proposed route | Canvas recipe | Purpose |
@@ -47,6 +53,25 @@ The list row has stable density and shows contact identity, last-message preview
 If the account is disconnected, outbound is paused by the account kill switch, the user lacks permission, the message failed, no conversation is selected, the list is empty, or the WhatsApp 24-hour window has expired, the screen renders a specific state. A paused account preserves authorized reading and history but disables replies with an operational status. Expired windows disable free text and provide the approved-template selection permitted by Core policy. The Inbox never bypasses Core validation or displays templates rejected, archived or outside the current organization.
 
 Desktop displays the three declared work areas. Tablet may collapse the CRM context panel. Mobile shows inbox, conversation and CRM context as sequential views while preserving the same actions, semantics and accessible labels. Loading preserves stable list and composer geometry; destructive actions require confirmation.
+
+## Portability contract
+
+The first implementation is a CRM composition of a provider-neutral
+Conversation Workspace capability. The reusable boundary owns list, timeline,
+composer semantics, assignment presentation, lifecycle presentation and
+policy-state feedback. The consuming product supplies participant identity,
+context panel content, available actions, localized copy and permission
+presentation.
+
+CRM may render contact, identity review, lead and Customer 360 context. A future
+consumer such as VitaBlue may render policy, claim or appointment context
+without importing CRM entities. Neither consumer may make the workspace resolve
+organization context, call a provider, decide consent or mutate internal Core
+repositories.
+
+Promotion of rows, timeline items or the composer into `@loopdev/ui` remains
+deferred until a second real consumer exists and the shared API passes duplicate,
+ownership, accessibility, responsive, theme and data-boundary review.
 
 ## Journeys and exclusions
 

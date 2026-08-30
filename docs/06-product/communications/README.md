@@ -12,6 +12,7 @@ Communications no es una suite independiente en esta fase. Su owner transitorio 
 
 - [Communications Core](communications-core/COMMUNICATIONS_CORE_UX_SPEC.md): paquete formal `proposed` para capacidades conversacionales, proveedores y políticas compartidas.
 - [CRM Communications Inbox](crm-communications-inbox/CRM_COMMUNICATIONS_INBOX_UX_SPEC.md): paquete formal `proposed` para la primera experiencia operativa sobre WhatsApp Cloud.
+- [Chatwoot -> LoopDev reference guide](crm-communications-inbox/CHATWOOT_LOOPDEV_REFERENCE_GUIDE.md): matriz de patrones operativos, adaptaciones y limites de portabilidad.
 
 ## Estado
 

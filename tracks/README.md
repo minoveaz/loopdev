@@ -6,7 +6,7 @@
 
 ### CRM
 
-- [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/communications-core-crm-inbox-definition` · fase 0
+- [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0
 
 ### Marketing Studio
 
