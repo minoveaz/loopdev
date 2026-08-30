@@ -7,6 +7,7 @@ import type {
   CommunicationInboxMessage,
   CommunicationInboxModel,
   CommunicationInboxPresentation,
+  CommunicationInboxTemplate,
 } from '@loopdev/contracts';
 import type { ReactNode } from 'react';
 
@@ -16,6 +17,7 @@ export type InboxModel = CommunicationInboxModel;
 export type InboxFilter = CommunicationInboxFilter;
 export type ComposerMode = CommunicationInboxComposerMode;
 export type InboxPresentationState = CommunicationInboxPresentation;
+export type InboxTemplate = CommunicationInboxTemplate;
 export type CommunicationMessageStatus = InboxMessage['status'];
 export type InboxStatus = CommunicationConversationStatus;
 
@@ -78,6 +80,10 @@ export type InboxCopy = {
   composerModeLabel: string;
   replyLabel: string;
   internalNoteLabel: string;
+  templateLabel: string;
+  templateInputLabel: string;
+  templatePlaceholder: string;
+  templateParameterLabel: (name: string) => string;
   internalNoteAudienceLabel: string;
   replyAudienceLabel: string;
   replyInputLabel: string;
@@ -136,6 +142,12 @@ export type InboxDataSource = {
     conversation: InboxConversation,
     status: InboxStatus,
   ) => Promise<InboxActionResult>;
+  loadTemplates?: (organizationId: string) => Promise<InboxTemplate[]>;
+  sendTemplate?: (
+    conversation: InboxConversation,
+    templateId: string,
+    parameters: Record<string, string>,
+  ) => Promise<InboxActionResult>;
 };
 
 export type InboxProviderProps = {
@@ -146,7 +158,6 @@ export type InboxProviderProps = {
   copy: InboxCopy;
   formatters: InboxFormatters;
   actorLabel: string;
-  mobileSurface: InboxMobileSurface;
 };
 
 export type InboxContextValue = {
@@ -161,6 +172,10 @@ export type InboxContextValue = {
   copy: InboxCopy;
   formatters: InboxFormatters;
   actorLabel: string;
+  mobileSurface: InboxMobileSurface;
+  templates: InboxTemplate[];
+  selectedTemplateId: string | null;
+  templateParameters: Record<string, string>;
   setFilter: (filter: InboxFilter) => void;
   setSearchQuery: (query: string) => void;
   selectConversation: (conversationId: string) => void;
@@ -169,8 +184,11 @@ export type InboxContextValue = {
   showMobileContext: () => void;
   setComposerMode: (mode: ComposerMode) => void;
   setDraft: (draft: string) => void;
+  setSelectedTemplateId: (templateId: string) => void;
+  setTemplateParameter: (name: string, value: string) => void;
   retry: () => void;
   assignToSelf: () => void;
   sendDraft: () => void;
+  sendTemplate: () => void;
   changeStatus: (status: InboxStatus) => void;
 };

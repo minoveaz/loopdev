@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createWhatsAppCloudProvider, normalizeWhatsAppPhone, normalizeWhatsAppTemplate, parseWhatsAppWebhook, resolveWhatsAppTemplateParameters, sendWhatsAppTemplate, sendWhatsAppText, WhatsAppProviderError } from './whatsapp';
+import { createWhatsAppCloudProvider, normalizeWhatsAppPhone, normalizeWhatsAppTemplate, parseWhatsAppWebhook, renderWhatsAppTemplateBody, resolveWhatsAppTemplateParameters, sendWhatsAppTemplate, sendWhatsAppText, WhatsAppProviderError } from './whatsapp';
 
 describe('WhatsApp webhook parser', () => {
   afterEach(() => vi.restoreAllMocks());
@@ -89,5 +89,12 @@ describe('WhatsApp webhook parser', () => {
   it('preserves approved parameter order and rejects a mismatched parameter set', () => {
     expect(resolveWhatsAppTemplateParameters(['firstName', 'policyNumber'], { policyNumber: 'P-1', firstName: 'Ana' })).toEqual(['Ana', 'P-1']);
     expect(() => resolveWhatsAppTemplateParameters(['firstName'], { unexpected: 'Ana' })).toThrow('parameters do not match');
+  });
+
+  it('renders the approved template body with the validated parameters', () => {
+    expect(renderWhatsAppTemplateBody('Hola {{ firstName }}, tu referencia es {{reference}}.', {
+      firstName: 'Ada',
+      reference: 'P-1',
+    })).toBe('Hola Ada, tu referencia es P-1.');
   });
 });

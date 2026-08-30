@@ -14,10 +14,10 @@ import {
 import { createFixtureInboxDataSource } from '@/suites/sales-crm/communications/inbox-data-source';
 import { COMMUNICATIONS_INBOX_MODEL } from '@/suites/sales-crm/communications/inbox.fixture';
 
-function renderInbox() {
+function renderInbox(model = COMMUNICATIONS_INBOX_MODEL) {
   return render(
     <CommunicationsInboxProvider
-      initialModel={COMMUNICATIONS_INBOX_MODEL}
+      initialModel={model}
       dataSource={createFixtureInboxDataSource('You')}
       copy={COMMUNICATIONS_INBOX_COPY}
       formatters={COMMUNICATIONS_INBOX_FORMATTERS}
@@ -69,6 +69,47 @@ describe('Communications Inbox', () => {
       ).toBeInTheDocument();
       expect(screen.getByRole('status')).toHaveTextContent('Reply sent.');
     });
+  });
+
+  it('sends an approved template with completed parameters', async () => {
+    renderInbox();
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Template' })).toBeEnabled());
+    fireEvent.click(screen.getByRole('button', { name: 'Template' }));
+    const templateSelect = await screen.findByRole('button', { name: 'Approved WhatsApp template' });
+    fireEvent.click(templateSelect);
+    const templateOptions = screen.getAllByText('Proposal follow-up');
+    fireEvent.click(templateOptions[templateOptions.length - 1]);
+    fireEvent.change(screen.getByRole('textbox', { name: 'Template parameter firstName' }), {
+      target: { value: 'Ada' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Send reply/ }));
+
+    await waitFor(() => {
+      expect(
+        within(screen.getByLabelText('Messages with Ana Garcia')).getByText(
+          'Hola Ada, te compartimos el seguimiento de tu propuesta.',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByRole('status')).toHaveTextContent('Reply sent.');
+    });
+  });
+
+  it('blocks free-form replies after the WhatsApp window expires', async () => {
+    const expiredModel = {
+      ...COMMUNICATIONS_INBOX_MODEL,
+      conversations: COMMUNICATIONS_INBOX_MODEL.conversations.map((conversation, index) =>
+        index === 0
+          ? { ...conversation, windowExpiresAt: '2020-01-01T00:00:00.000Z' }
+          : conversation,
+      ),
+    };
+    renderInbox(expiredModel);
+
+    expect(screen.getByText('The WhatsApp reply window has expired. Use an approved template to restart the conversation.')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Reply message' })).toBeDisabled();
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Template' })).toBeEnabled());
+    expect(screen.getByRole('button', { name: /Send reply/ })).toBeDisabled();
   });
 
   it('shows filtered-empty feedback for an unmatched search', () => {

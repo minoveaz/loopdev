@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import type { InboxContextValue, InboxModel, InboxProviderProps, InboxConversation } from './types';
+import type {
+  InboxContextValue,
+  InboxModel,
+  InboxProviderProps,
+  InboxConversation,
+  InboxTemplate,
+} from './types';
 
 const InboxContext = createContext<InboxContextValue | null>(null);
 
@@ -65,6 +71,9 @@ export function CommunicationsInboxProvider({
   const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [reloadVersion, setReloadVersion] = useState(0);
   const [mobileSurface, setMobileSurface] = useState<InboxContextValue['mobileSurface']>('list');
+  const [templates, setTemplates] = useState<InboxTemplate[]>([]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [templateParameters, setTemplateParameters] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (useFixtureModel || !organizationId) return;
@@ -91,6 +100,28 @@ export function CommunicationsInboxProvider({
       isMounted = false;
     };
   }, [dataSource, organizationId, reloadVersion, useFixtureModel]);
+
+  useEffect(() => {
+    if (!dataSource.loadTemplates) return;
+    let isMounted = true;
+    void dataSource
+      .loadTemplates(organizationId ?? '')
+      .then((nextTemplates) => {
+        if (!isMounted) return;
+        setTemplates(nextTemplates);
+        setSelectedTemplateId((current) =>
+          current && nextTemplates.some((template) => template.id === current)
+            ? current
+            : (nextTemplates[0]?.id ?? null),
+        );
+      })
+      .catch(() => {
+        if (isMounted) setTemplates([]);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [dataSource, organizationId, reloadVersion]);
 
   const visibleConversations = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -140,6 +171,9 @@ export function CommunicationsInboxProvider({
     formatters,
     actorLabel,
     mobileSurface,
+    templates,
+    selectedTemplateId,
+    templateParameters,
     setFilter,
     setSearchQuery,
     selectConversation: (conversationId) => {
@@ -155,6 +189,13 @@ export function CommunicationsInboxProvider({
       setActionNotice(null);
     },
     setDraft,
+    setSelectedTemplateId: (templateId) => {
+      setSelectedTemplateId(templateId);
+      setTemplateParameters({});
+      setActionNotice(null);
+    },
+    setTemplateParameter: (name, value) =>
+      setTemplateParameters((current) => ({ ...current, [name]: value })),
     retry: () => setReloadVersion((current) => current + 1),
     assignToSelf: () => {
       void applyAction(
@@ -169,6 +210,13 @@ export function CommunicationsInboxProvider({
         dataSource.send?.bind(dataSource, selectedConversation, composerMode, body),
         composerMode === 'note' ? copy.actionNotice.noteAdded : copy.actionNotice.replySent,
       ).then(() => setDraft(''));
+    },
+    sendTemplate: () => {
+      if (!selectedConversation || !selectedTemplateId || !dataSource.sendTemplate) return;
+      void applyAction(
+        () => dataSource.sendTemplate!(selectedConversation, selectedTemplateId, templateParameters),
+        copy.actionNotice.replySent,
+      );
     },
     changeStatus: (status) => {
       void applyAction(

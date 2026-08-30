@@ -71,5 +71,48 @@ export const CommunicationInboxFilterSchema = z.union([
 ]);
 export type CommunicationInboxFilter = z.infer<typeof CommunicationInboxFilterSchema>;
 
-export const CommunicationInboxComposerModeSchema = z.enum(['reply', 'note']);
+export const CommunicationInboxComposerModeSchema = z.enum(['reply', 'template', 'note']);
 export type CommunicationInboxComposerMode = z.infer<typeof CommunicationInboxComposerModeSchema>;
+
+export const CommunicationInboxTemplateSchema = z.object({
+  id: z.string().uuid(),
+  organizationId: z.string().uuid(),
+  channel: z.literal('whatsapp'),
+  externalTemplateId: z.string().trim().min(1).max(240),
+  language: z.string().trim().min(2).max(20),
+  name: z.string().trim().min(1).max(512),
+  body: z.string().trim().min(1).max(100_000),
+  parameterNames: z.array(z.string().trim().min(1).max(120)).max(100),
+});
+export type CommunicationInboxTemplate = z.infer<typeof CommunicationInboxTemplateSchema>;
+
+const CommunicationInboxActionBaseSchema = {
+  organizationId: z.string().uuid(),
+  conversationId: z.string().uuid(),
+};
+
+export const CommunicationInboxActionSchema = z.discriminatedUnion('action', [
+  z.object({ ...CommunicationInboxActionBaseSchema, action: z.literal('assign') }),
+  z.object({
+    ...CommunicationInboxActionBaseSchema,
+    action: z.literal('reply'),
+    body: z.string().trim().min(1).max(4_096),
+  }),
+  z.object({
+    ...CommunicationInboxActionBaseSchema,
+    action: z.literal('note'),
+    body: z.string().trim().min(1).max(100_000),
+  }),
+  z.object({
+    ...CommunicationInboxActionBaseSchema,
+    action: z.literal('template'),
+    templateId: z.string().uuid(),
+    templateParameters: z.record(z.string(), z.string().max(2_000)).default({}),
+  }),
+  z.object({
+    ...CommunicationInboxActionBaseSchema,
+    action: z.literal('status'),
+    status: CommunicationConversationStatusSchema,
+  }),
+]);
+export type CommunicationInboxAction = z.infer<typeof CommunicationInboxActionSchema>;

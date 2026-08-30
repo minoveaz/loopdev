@@ -9,8 +9,8 @@
 - Last reviewed: `2026-08-30`
 - Consumers: `/sales-crm/communications`
 - Related track: `tracks/active/crm/2026-08-30-communications-inbox-implementation.md`
-- Spec version: `0.1`
-- Contract version: `0.1`
+- Spec version: `0.2`
+- Contract version: `0.2`
 - Compatible since: `2026-08-30`
 - Platform target: `mobile-adapted`
 
@@ -43,7 +43,7 @@ leaving the CRM workspace.
 ### Owns
 
 - Conversation list, active filter state and selected conversation presentation.
-- Thread reading order, Reply/Internal note mode and user feedback for actions.
+- Thread reading order, Reply/Template/Internal note mode and user feedback for actions.
 - Presentation of assignment, lifecycle and Core policy states.
 - Responsive transition between list, thread and context.
 
@@ -64,7 +64,7 @@ SuiteRuntime / SplitWorkspace
 ├── SuiteCanvas
 │   ├── conversation identity and actions
 │   ├── message timeline
-│   └── Reply / Internal note composer
+│   └── Reply / Template / Internal note composer
 └── ModuleContextPanel
     └── CRM-owned participant and relationship context
 ```
@@ -86,9 +86,9 @@ The public boundary is split by responsibility:
 
 - `CommunicationsInboxProvider` receives `organizationId`, `initialModel`,
   `dataSource`, `copy`, `formatters` and `actorLabel` through typed props.
-- `InboxDataSource` owns loading and optional mutations. The API adapter only
-  implements the currently available authorized read; the fixture adapter is
-  used by isolated tests and the E2E bypass.
+- `InboxDataSource` owns loading and optional mutations. The API adapter
+  implements authorized reads and actions; the fixture adapter is used by
+  isolated tests and the E2E bypass.
 - `InboxCopy` owns all visible product copy, labels, status naming and
   accessibility text. Components do not define domain data or business copy.
 - `InboxModel` and its nested conversation/message contracts are exported by
@@ -110,15 +110,17 @@ organizations, permissions, persistence or provider credentials.
 
 ## Interaction model
 
-No popup is required by the first slice. Any future menu or template selector
-must define its open, select, clear, Escape and outside-click behavior in a
-versioned spec before implementation.
+The template selector is the shared `Select` single-select control. Opening is
+owned by the control, selecting a template closes its menu, and Escape restores
+the previous selection without submitting. No clear action is needed because
+an empty template selection returns the composer to its disabled state.
 
 | Capability                 | User intent               | Pointer/touch             | Keyboard/focus                                             | Escape/close                              | Feedback                                    |
 | -------------------------- | ------------------------- | ------------------------- | ---------------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
 | Select conversation        | Open a thread             | Activate a row            | Tab to row, Enter or Space activates                       | No overlay; selection remains             | Selected row and thread heading update      |
 | Change status filter       | Narrow triage list        | Activate one filter       | Arrow keys within filter group, Enter commits              | No overlay                                | Result count and list update                |
-| Toggle Reply/Internal note | Choose audience           | Activate the mode control | Tab and arrow keys; mode is single-select                  | No overlay                                | Composer label and send action change       |
+| Toggle Reply/Template/Internal note | Choose audience or approved outbound format | Activate the mode control | Tab and arrow keys; mode is single-select | No overlay | Composer label and send action change |
+| Select approved template | Choose a policy-compliant outbound template | Open the shared Select and choose one option | Arrow keys and Enter within the menu | Escape restores prior selection | Parameter fields and send action update |
 | Assign to self             | Claim work                | Activate assign action    | Button activation with Enter or Space                      | No overlay                                | Pending then assignment event               |
 | Send reply or note         | Submit a composed message | Activate send             | Ctrl/Cmd+Enter submits when valid; Enter creates a newline | Draft remains available                   | Queued, sent, failed or policy feedback     |
 | Change lifecycle           | Progress or close work    | Activate status action    | Button/menu trigger is keyboard reachable                  | Destructive confirmation closes on Escape | Timeline event and status badge update      |
@@ -138,7 +140,7 @@ versioned spec before implementation.
 | `forbidden`      | Actor lacks read scope                                   | No conversation data; access explanation                  | Navigate away or retry after access change | Sensitive content is absent from DOM              |
 | `read-only`      | Actor can read but cannot mutate                         | Full thread and context, no mutation controls             | Navigation and reading only                | Hidden actions are not focusable                  |
 | `paused`         | Core account or organization kill switch blocks outbound | History remains; reply and retry are disabled with reason | Read, inspect and allowed non-send actions | Pause is communicated as text, not color only     |
-| `window-expired` | WhatsApp free-text window is closed                      | Free text disabled; approved template path when supplied  | Select valid template or read              | Disabled reason is associated with composer       |
+| `window-expired` | WhatsApp free-text window is closed                      | Free text disabled; approved template path when supplied | Select valid template and fill parameters or read | Disabled reason is associated with composer |
 | `send-failure`   | Core/provider returns normalized failure                 | Draft retained and failure shown                          | Correct or explicitly retry                | Failure announcement includes recovery guidance   |
 | `conflict`       | Version changed since read                               | Affected context refresh notice                           | Reload current state; no silent overwrite  | Conflict is announced and focus moves to recovery |
 | `offline`        | Network is unavailable                                   | Read cache or unavailable state as supplied by consumer   | Retry; no false success                    | Offline status is visible and announced           |
@@ -179,8 +181,8 @@ versioned spec before implementation.
 - Keyboard order and activation: filters -> list -> thread actions -> timeline -> composer -> context; all actions support keyboard activation.
 - Reduced motion: no required motion; transitions are disabled or shortened under `prefers-reduced-motion`.
 - Contrast and non-color state communication: status text, icons or labels accompany color indicators.
-- Overlay persistence: not applicable for the first slice; future overlays must document select, clear, Escape and outside interaction.
-- Clear-all action: `Clear filters` is consumer-owned, visible when filters are active, disabled when none are active and returns focus to the filter group.
+- Overlay persistence: the template selector is native single-select; selection closes it, Escape restores the previous value and outside interaction is browser-owned.
+- Clear-all action: `Clear filters` is consumer-owned, visible when filters are active, disabled when none are active and returns focus to the filter group. Template selection has no clear action; the consumer can return to Reply or Note.
 - Automated A11y evidence: focused Vitest/Testing Library and Axe evidence before visual review.
 
 ## Platform portability
@@ -263,11 +265,17 @@ server API boundary instead.
 - The API route owns authentication and `communications.read`; the server
   service owns tenant-scoped joins across conversations, contacts, channels and
   messages.
+- `GET /api/communications/templates` exposes approved WhatsApp templates after
+  `communications.read`; `POST /api/communications/inbox/actions` owns the
+  authorized reply, template, note, assignment and lifecycle command envelope.
+- The action route maps each envelope to a Core command without forwarding the
+  transport discriminator, and Core keeps provider credentials server-side.
 - Fixture data is retained only when the provider is used without an
   organization, which keeps isolated component tests and the E2E visual bypass
   deterministic.
-- Reply, note, assignment and lifecycle mutations remain pending API adapters;
-  the current fixture workflow is not evidence of provider persistence.
+- The API adapter refreshes the authorized Inbox read model after mutations;
+  fixture mutations remain deterministic test behavior, not evidence of live
+  provider persistence.
 
 ## Approved and experimental compositions
 
@@ -329,16 +337,16 @@ server API boundary instead.
 | Resilience and failure boundaries    | required      | in-progress | Error, policy and conflict states |
 | Maintainability and testing contract | required      | in-progress | Focused tests and active track    |
 
-- Contract: `pending` - public widget props and model implementation pending.
-- Accessibility: `pending` - Axe and keyboard tests pending.
-- Interaction: `pending` - focused component tests pending.
-- Responsive: `pending` - desktop, tablet and mobile evidence pending.
-- States: `pending` - state fixtures and tests pending.
+- Contract: `in-progress` - public widget props, action adapter and template model are implemented; visual review remains.
+- Accessibility: `in-progress` - Axe evidence passes; keyboard review remains.
+- Interaction: `in-progress` - focused action, template and policy tests pass; keyboard review remains.
+- Responsive: `in-progress` - mobile list -> thread -> context evidence passes; visual review remains.
+- States: `in-progress` - expired-window and action feedback are covered; failure and forbidden evidence remains.
 - Consumer ownership: `in-progress` - documented in the active track.
 - Visual review: `pending` - visual approval is required before Playwright.
 - Registry: `pending` - module widget is not a shared registry entry.
 - Reproducibility: `pending` - route, fixture and viewport evidence pending.
-- A11y automation: `pending` - Axe evidence pending.
+- A11y automation: `passed` - focused Vitest Axe test passes for the ready composition.
 
 ## Change impact matrix
 
@@ -356,6 +364,7 @@ server API boundary instead.
 | Date       | Version | Change                                            | Impact                                                                 | Reviewer |
 | ---------- | ------- | ------------------------------------------------- | ---------------------------------------------------------------------- | -------- |
 | 2026-08-30 | 0.1     | Initial widget contract for mock-backed CRM Inbox | Establishes ownership, states, responsive and future-consumer boundary | Pending  |
+| 2026-08-30 | 0.2     | Adds approved-template interaction and authorized action boundary | Covers template parameters, expired-window behavior and Core handoff | Pending  |
 
 ## Reopen triggers
 

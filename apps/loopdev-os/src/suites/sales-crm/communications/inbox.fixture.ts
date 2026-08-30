@@ -5,6 +5,7 @@ import type {
 } from '@loopdev/contracts';
 
 export type { InboxConversation, InboxMessage, InboxModel };
+export type { CommunicationInboxTemplate as InboxTemplate } from '@loopdev/contracts';
 export type {
   CommunicationInboxComposerMode as ComposerMode,
   CommunicationInboxFilter as InboxFilter,
@@ -15,6 +16,19 @@ type CommunicationMessageStatus = InboxMessage['status'];
 const ORGANIZATION_ID = '00000000-0000-4000-9000-000000000010';
 const ACCOUNT_ID = '11111111-1111-4111-8111-111111111111';
 const CHANNEL_ID = '22222222-2222-4222-8222-222222222222';
+
+export const COMMUNICATIONS_INBOX_TEMPLATES = [
+  {
+    id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    organizationId: ORGANIZATION_ID,
+    channel: 'whatsapp' as const,
+    externalTemplateId: 'proposal_follow_up',
+    language: 'es',
+    name: 'Proposal follow-up',
+    body: 'Hola {{firstName}}, te compartimos el seguimiento de tu propuesta.',
+    parameterNames: ['firstName'],
+  },
+];
 
 function message(
   id: string,
