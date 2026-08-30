@@ -158,17 +158,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
   };
 
   return (
-    <>
-      {/* 🌟 1. Sutil Backdrop Dimmer (Heurística #1 y Enfoque de Capas) */}
-      {activeDropdown && (
-        <div
-          className="fixed inset-0 bg-black/25 backdrop-blur-[2px] z-40 transition-opacity"
-          onClick={() => setActiveDropdown(null)}
-          aria-hidden="true"
-        />
-      )}
-
-      <div ref={containerRef} className="relative w-full max-w-2xl z-50">
+    <div ref={containerRef} className="relative w-full max-w-2xl z-50">
         {/* 🌟 Floating Capsule in Header (Clean, Light & Crisp) */}
         <div className="bg-white border border-slate-200/90 rounded-full pl-3 pr-1.5 py-1 shadow-sm hover:shadow-md hover:border-[#7FB77E]/60 transition-all duration-200 flex items-center justify-between text-[#1F4E5F] relative z-50">
           {/* 1. Sport Segment */}
@@ -559,6 +549,5 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
           </div>
         )}
       </div>
-    </>
   );
 };
