@@ -13,7 +13,7 @@ export const cimoBrandTheme: PublicBrandTheme = {
     primaryHover: '#6ea26d',
     secondary: '#1F4E5F',
     accent: '#7FB77E',
-    background: '#F8F9FA',
+    background: '#EEF2F2',
     surface: '#FFFFFF',
     textMain: '#161D1A',
     textSecondary: '#6C757D',
