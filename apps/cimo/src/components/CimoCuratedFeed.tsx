@@ -95,12 +95,12 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
           </h2>
         </div>
 
-        {/* Time Filter Segmented Control */}
-        <div className="flex items-center gap-1 p-1 bg-[#F1F5F9] rounded-2xl border border-slate-200/80 shrink-0 self-start sm:self-auto">
+        {/* Time Filter Segmented Control with accessible touch height */}
+        <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-2xl border border-slate-200/80 shrink-0 self-start sm:self-auto min-h-[44px]">
           <button
             type="button"
             onClick={() => setTimeFilter('all')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer min-h-[36px] ${
               timeFilter === 'all'
                 ? 'bg-[#1F4E5F] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#1F4E5F]'
@@ -111,7 +111,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
           <button
             type="button"
             onClick={() => setTimeFilter('today')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 min-h-[36px] ${
               timeFilter === 'today'
                 ? 'bg-[#1F4E5F] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#1F4E5F]'
@@ -123,7 +123,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
           <button
             type="button"
             onClick={() => setTimeFilter('weekend')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 min-h-[36px] ${
               timeFilter === 'weekend'
                 ? 'bg-[#1F4E5F] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#1F4E5F]'
@@ -159,17 +159,17 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
         <button
           type="button"
           onClick={() => onSelectActivity(activities[0]?.id ?? 'act_1')}
-          className="px-4 py-2 rounded-xl bg-[#7FB77E] hover:bg-[#6ea26d] text-[#1F4E5F] text-xs font-black transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95 self-start sm:self-center"
+          className="px-4 py-2 rounded-xl bg-[#7FB77E] hover:bg-[#6ea26d] text-[#1F4E5F] text-xs font-black transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95 self-start sm:self-center min-h-[40px]"
         >
           <span>Ver Convocatoria</span>
           <ChevronRight className="w-3.5 h-3.5 stroke-[3]" />
         </button>
       </div>
 
-      {/* 🌟 3. Activities Grid (Sports Boarding Pass Aesthetic) */}
+      {/* 🌟 3. Refactored Activities Grid (Clean Heuristic Card Anatomy) */}
       {displayedActivities.length === 0 ? (
-        <div className="py-16 text-center text-xs text-[#1F4E5F]/50 flex flex-col items-center gap-2">
-          <Trophy className="w-8 h-8 text-[#1F4E5F]/30" />
+        <div className="py-16 text-center text-xs text-slate-400 flex flex-col items-center gap-2">
+          <Trophy className="w-8 h-8 text-slate-300" />
           <p className="font-bold">No hay entrenamientos para este filtro.</p>
           <p>Prueba a seleccionar "Todos" o cambia tu búsqueda en la barra superior.</p>
         </div>
@@ -192,8 +192,8 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                     : 'border-slate-200/90 hover:border-[#7FB77E]/40'
                 }`}
               >
-                {/* 1. Cover Photo 16:9 with Cinematic Gradient Overlay */}
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#1F4E5F]/20">
+                {/* 1. Cover Photo 160px with Tags & Favorite Button */}
+                <div className="relative h-40 sm:h-44 w-full overflow-hidden bg-slate-100">
                   <img
                     src={act.image}
                     alt={act.title}
@@ -202,15 +202,15 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1000';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1F4E5F]/95 via-[#1F4E5F]/40 to-black/20" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-                  {/* Top Floating Badges (Vector Icon + Level) */}
+                  {/* Top Tags */}
                   <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
-                    <span className="px-3 py-1 rounded-full font-black text-xs bg-white/95 text-[#1F4E5F] shadow-xs flex items-center gap-1.5 backdrop-blur-md">
+                    <span className="px-2.5 py-1 rounded-full font-black text-xs bg-white/95 text-[#1F4E5F] shadow-xs flex items-center gap-1.5 backdrop-blur-md">
                       {getSportVectorIcon(act.sport, 'w-3.5 h-3.5 text-[#7FB77E]')}
                       <span className="capitalize">{act.sport}</span>
                     </span>
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-black/50 text-white backdrop-blur-md border border-white/10">
+                    <span className="px-2 py-0.8 rounded-full text-[10px] font-black bg-black/60 text-white backdrop-blur-md border border-white/10">
                       {act.level}
                     </span>
                   </div>
@@ -229,94 +229,55 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                     />
                   </button>
 
-                  {/* Title and Location on the Photo Overlay */}
+                  {/* Title on the Cover */}
                   <div className="absolute bottom-3 left-3.5 right-3.5 text-white">
                     <h3 className="font-black text-base leading-tight drop-shadow-xs line-clamp-1">
                       {act.title}
                     </h3>
-                    <div className="flex items-center gap-1.5 text-xs text-white/90 mt-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
-                      <span className="truncate font-medium">{act.location}</span>
-                    </div>
                   </div>
                 </div>
 
-                {/* 2. Card Body with Rich Color Contrasts (Zero Monotonous White) */}
-                <div className="p-4 sm:p-5 flex flex-col gap-3.5 flex-1 justify-between text-[#1F4E5F]">
-                  {/* Captain & Date Row */}
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <div className="flex items-center gap-2.5">
-                      <div className="relative">
-                        {act.captain.avatarUrl ? (
-                          <img
-                            src={act.captain.avatarUrl}
-                            alt={act.captain.name}
-                            className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-2xs"
-                          />
-                        ) : (
-                          <div className="w-9 h-9 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] font-black text-xs flex items-center justify-center">
-                            {act.captain.name.charAt(0)}
-                          </div>
-                        )}
-                        <span className="absolute -bottom-0.5 -right-0.5 bg-[#7FB77E] text-white p-0.5 rounded-full border border-white">
-                          <ShieldCheck className="w-2.5 h-2.5" />
-                        </span>
+                {/* 2. Refactored Card Body (Clean Streamlined Anatomy) */}
+                <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1 justify-between text-[#1F4E5F]">
+                  {/* Logistics Row: Location & Date/Time */}
+                  <div className="flex flex-col gap-1.5 text-xs">
+                    <div className="flex items-center justify-between text-slate-600 font-bold gap-2">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+                        <span className="truncate">{act.location}</span>
                       </div>
-
-                      <div>
-                        <span className="text-[10px] font-black text-[#7FB77E] uppercase tracking-wider block leading-none">
-                          Capitán
-                        </span>
-                        <span className="text-xs font-black text-[#1F4E5F] mt-0.5 block">
-                          {act.captain.name}{act.captain.age ? `, ${act.captain.age}a` : ''}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <div className="flex items-center gap-1.5 text-xs font-black text-[#1F4E5F]">
+                      <div className="flex items-center gap-1 font-black text-[#1F4E5F] shrink-0">
                         <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
-                        <span>{act.date}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-[11px] font-bold text-[#1F4E5F]/60 justify-end mt-0.5">
-                        <Clock className="w-3 h-3 text-slate-400" />
-                        <span>{act.time} h</span>
+                        <span>{act.date}, {act.time}h</span>
                       </div>
                     </div>
+
+                    {/* Pace / Details Line */}
+                    {act.paceOrDetails && (
+                      <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+                        <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <span>Ritmo: <strong>{act.paceOrDetails}</strong></span>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Logistics Detail Pill */}
-                  {act.paceOrDetails && (
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#1F4E5F] bg-[#F8FAFC] px-3.5 py-2 rounded-xl border border-slate-200/80">
-                      <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                      <span className="truncate leading-none">{act.paceOrDetails}</span>
-                    </div>
-                  )}
-
-                  {/* Warm Social Third Half Box (Breaks away from white) */}
+                  {/* 3. Compact 1-Line Third Half Pill (No nested boxes) */}
                   {act.thirdHalf?.enabled && (
-                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-amber-900 bg-[#FFFBEB] px-3 py-2 rounded-xl border border-[#FDE68A] shadow-2xs">
-                      <div className="flex items-center gap-2 truncate">
-                        <div className="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                          {getThirdHalfVectorIcon(act.thirdHalf.type, 'w-3.5 h-3.5 text-amber-700')}
-                        </div>
-                        <div className="truncate">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-amber-800/80 block leading-none">
-                            Tercer Tiempo
-                          </span>
-                          <span className="text-xs font-extrabold text-[#78350F] truncate block mt-0.5">
-                            {act.thirdHalf.venue}
-                          </span>
-                        </div>
+                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-amber-900 bg-[#FFFBEB] px-3 py-1.5 rounded-xl border border-[#FDE68A]">
+                      <div className="flex items-center gap-1.5 truncate">
+                        {getThirdHalfVectorIcon(act.thirdHalf.type, 'w-3.5 h-3.5 text-amber-700 shrink-0')}
+                        <span className="truncate">
+                          <strong>Tercer Tiempo:</strong> {act.thirdHalf.venue}
+                        </span>
                       </div>
-                      <span className="text-[9px] font-black uppercase tracking-wider text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded-full shrink-0">
+                      <span className="text-[9px] font-black uppercase text-amber-800 bg-amber-200/80 px-1.5 py-0.2 rounded-md shrink-0">
                         Social
                       </span>
                     </div>
                   )}
 
-                  {/* Footer: Crew Avatars + Action Button */}
-                  <div className="flex items-center justify-between pt-1 mt-auto gap-2">
+                  {/* 4. Footer: Crew Avatars + Fixed-Width Anti-CLS Action Button */}
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
                     <div className="flex items-center gap-2">
                       <CrewAvatarGroup members={act.currentMembers} size="sm" />
                       <div>
@@ -324,11 +285,12 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                           {act.currentMembers.length}/{act.maxMembers}
                         </span>
                         <span className="text-[10px] font-bold text-[#7FB77E] block mt-0.5">
-                          {isFull ? 'Completo' : `${remainingSpots} plaza(s)`}
+                          {isFull ? 'Completo' : `${remainingSpots} libre(s)`}
                         </span>
                       </div>
                     </div>
 
+                    {/* Fixed Width Button (w-28 text-center) to prevent Cumulative Layout Shift (CLS) */}
                     <button
                       type="button"
                       disabled={isFull && !isJoined}
@@ -336,11 +298,11 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                         e.stopPropagation();
                         onJoinActivity(act.id);
                       }}
-                      className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-xs cursor-pointer ${
+                      className={`w-28 py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-xs cursor-pointer min-h-[38px] ${
                         isJoined
                           ? 'bg-[#7FB77E] text-white shadow-xs'
                           : isFull
-                          ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
+                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
                           : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95'
                       }`}
                     >

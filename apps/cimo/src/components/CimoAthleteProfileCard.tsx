@@ -66,24 +66,24 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
   return (
     <aside
       aria-label="Centro de Control del Atleta"
-      className="bg-[#1F4E5F] text-white rounded-3xl p-6 shadow-xl shadow-[#1F4E5F]/20 flex flex-col gap-5 w-full border border-white/10"
+      className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xs flex flex-col gap-5 text-[#1F4E5F] w-full"
     >
-      {/* 1. Header Profile Info (Dark Athletic Card) */}
+      {/* 1. Header Profile Info */}
       <div className="flex flex-col items-center text-center">
         <div className="relative mb-3 cursor-pointer" onClick={onProfileClick}>
           {user.avatarUrl ? (
             <img
               src={user.avatarUrl}
               alt={user.name}
-              className="w-20 h-20 rounded-full object-cover ring-4 ring-[#7FB77E] shadow-lg bg-white"
+              className="w-20 h-20 rounded-full object-cover ring-4 ring-[#7FB77E] shadow-md bg-white"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-white/10 text-white font-black text-2xl flex items-center justify-center ring-4 ring-[#7FB77E]">
+            <div className="w-20 h-20 rounded-full bg-[#1F4E5F] text-white font-black text-2xl flex items-center justify-center ring-4 ring-[#7FB77E]">
               {user.name.charAt(0)}
             </div>
           )}
           <span
-            className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#7FB77E] border-2 border-[#1F4E5F] flex items-center justify-center text-[10px] text-[#1F4E5F] font-black shadow-xs"
+            className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#7FB77E] border-2 border-white flex items-center justify-center text-[10px] text-white font-black shadow-xs"
             title="Capitán Verificado CIMO"
           >
             ✓
@@ -93,18 +93,18 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
         <div className="flex items-center gap-1.5 justify-center">
           <h3
             onClick={onProfileClick}
-            className="text-base font-black text-white hover:text-[#7FB77E] transition-colors cursor-pointer"
+            className="text-base font-black text-[#1F4E5F] hover:text-[#7FB77E] transition-colors cursor-pointer"
           >
             {user.name}
           </h3>
           {user.handle && (
-            <span className="text-xs font-bold text-white/50">
+            <span className="text-xs font-bold text-slate-400">
               {user.handle}
             </span>
           )}
         </div>
 
-        <p className="text-xs text-white/70 flex items-center gap-1 mt-0.5 font-medium">
+        <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5 font-medium">
           <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
           <span>{user.city ?? 'Madrid, España'}</span>
           {user.neighborhood && <span className="opacity-80">({user.neighborhood})</span>}
@@ -114,7 +114,7 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
         <button
           type="button"
           onClick={onProfileClick}
-          className="mt-3 px-3.5 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-full text-[11px] font-black text-white flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95"
+          className="mt-3 px-3.5 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full text-[11px] font-black text-[#1F4E5F] flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs active:scale-95 min-h-[32px]"
         >
           <Edit3 className="w-3 h-3 text-[#7FB77E]" />
           <span>Ver mi Pasaporte Deportivo</span>
@@ -122,12 +122,12 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
       </div>
 
       {/* 2. Your Sports & Paces Quick Summary */}
-      <div className="p-4 bg-white/10 rounded-2xl border border-white/10 flex flex-col gap-2.5 backdrop-blur-xs">
+      <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase tracking-wider text-white/60">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
             Tus Deportes & Ritmos
           </span>
-          <span className="text-[10px] font-black text-[#7FB77E] bg-[#7FB77E]/20 px-2 py-0.2 rounded-full">
+          <span className="text-[10px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
             Activo
           </span>
         </div>
@@ -136,7 +136,7 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
           {sportsArray.slice(0, 3).map((s, idx) => (
             <div
               key={idx}
-              className="flex items-center justify-between text-xs font-bold text-white bg-black/20 px-3 py-2 rounded-xl border border-white/5"
+              className="flex items-center justify-between text-xs font-bold text-[#1F4E5F] bg-white px-3 py-2 rounded-xl border border-slate-200/70 shadow-2xs"
             >
               <div className="flex items-center gap-2">
                 {getSportVector(s.sport)}
@@ -150,10 +150,10 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
         </div>
       </div>
 
-      {/* 3. Integrated Weekly Constancy Sub-block */}
-      <div className="p-3.5 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-xs">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-black uppercase tracking-wider text-white/60">
+      {/* 3. Integrated Weekly Constancy Sub-block (Ley de Fitts: Botones táctiles de min 40px) */}
+      <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
+        <div className="flex items-center justify-between mb-2.5">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
             Constancia Semanal
           </span>
           <span className="text-xs font-black text-[#7FB77E] flex items-center gap-1">
@@ -162,16 +162,16 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
           </span>
         </div>
 
-        {/* 7-Day interactive dots */}
-        <div className="grid grid-cols-7 gap-1">
+        {/* 7-Day interactive dots with accessible target area (min 40px) */}
+        <div className="grid grid-cols-7 gap-1.5">
           {weeklyDays.map((d) => (
             <div
               key={d.id}
               title={`${d.id}: ${d.active ? 'Día activo de entreno' : 'Descanso'}`}
-              className={`h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
+              className={`h-10 rounded-xl flex items-center justify-center text-xs font-black transition-all cursor-default ${
                 d.active
-                  ? 'bg-[#7FB77E] text-[#1F4E5F] shadow-xs'
-                  : 'bg-white/5 text-white/40'
+                  ? 'bg-[#1F4E5F] text-white shadow-2xs'
+                  : 'bg-white text-slate-400 border border-slate-200/60'
               }`}
             >
               {d.short}
@@ -181,18 +181,18 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
       </div>
 
       {/* 4. CTA: Publicar Entreno como Capitán */}
-      <div className="p-3.5 bg-black/25 rounded-2xl border border-white/10 flex flex-col gap-2 text-white">
+      <div className="p-4 bg-gradient-to-br from-[#1F4E5F] to-[#163a47] rounded-2xl text-white shadow-xs flex flex-col gap-2">
         <div className="flex items-center gap-1.5 text-[#7FB77E] text-[11px] font-black uppercase tracking-wider">
           <Award className="w-4 h-4" />
           <span>Sé Capitán CIMO</span>
         </div>
-        <p className="text-xs text-white/80 leading-relaxed font-medium">
+        <p className="text-xs text-white/90 leading-relaxed font-medium">
           ¿Tienes una ruta o partida en mente? Convoca a tu microgrupo deportivo.
         </p>
         <button
           type="button"
           onClick={onCreateClick}
-          className="w-full py-2.5 rounded-xl bg-[#7FB77E] hover:bg-[#6ea26d] text-[#1F4E5F] font-black text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 mt-0.5"
+          className="w-full py-2.5 rounded-xl bg-[#7FB77E] hover:bg-[#6ea26d] text-[#1F4E5F] font-black text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 min-h-[44px] mt-1"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>Crear Nuevo Plan</span>
