@@ -185,8 +185,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
 
           {/* Captain Instructions (if present) */}
           {activity.instructions && (
-            <div className="p-4 bg-[#00B894]/10 border border-[#00B894]/20 rounded-2xl flex items-start gap-3">
-              <div className="p-2 rounded-xl bg-[#00B894] text-white shrink-0">
+            <div className="p-4 bg-[#7FB77E]/10 border border-[#7FB77E]/20 rounded-2xl flex items-start gap-3">
+              <div className="p-2 rounded-xl bg-[#7FB77E] text-white shrink-0">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div className="flex flex-col gap-0.5 min-w-0">
@@ -220,19 +220,19 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               </span>
               <ul className="text-[11px] text-[#1F4E5F]/80 flex flex-col gap-1.5 font-medium">
                 <li className="flex items-center gap-1.5">
-                  <span className="text-[#00B894] font-black">1.</span>
+                  <span className="text-[#7FB77E] font-black">1.</span>
                   <span>Encuentro en {activity.location}</span>
                 </li>
                 <li className="flex items-center gap-1.5">
-                  <span className="text-[#00B894] font-black">2.</span>
+                  <span className="text-[#7FB77E] font-black">2.</span>
                   <span>Calentamiento y presentación (5 min)</span>
                 </li>
                 <li className="flex items-center gap-1.5">
-                  <span className="text-[#00B894] font-black">3.</span>
+                  <span className="text-[#7FB77E] font-black">3.</span>
                   <span>Entrenamiento principal en grupo</span>
                 </li>
                 <li className="flex items-center gap-1.5">
-                  <span className="text-[#00B894] font-black">4.</span>
+                  <span className="text-[#7FB77E] font-black">4.</span>
                   <span>{activity.thirdHalf?.enabled ? 'Estiramientos y Tercer Tiempo social' : 'Estiramientos y cierre deportivo'}</span>
                 </li>
               </ul>
@@ -374,12 +374,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Escribe un mensaje al Crew..."
-              className="flex-1 px-4 py-2 bg-white rounded-full text-xs font-medium text-[#1F4E5F] border border-[#1F4E5F]/15 focus:border-[#00B894] focus:outline-none"
+              className="flex-1 px-4 py-2 bg-white rounded-full text-xs font-medium text-[#1F4E5F] border border-[#1F4E5F]/15 focus:border-[#7FB77E] focus:outline-none"
             />
             <button
               type="submit"
               disabled={!inputText.trim()}
-              className="px-4 py-2 rounded-full bg-[#00B894] hover:bg-[#009678] disabled:opacity-40 text-white text-xs font-black flex items-center justify-center cursor-pointer transition-colors"
+              className="px-4 py-2 rounded-full bg-[#7FB77E] hover:bg-[#6ea26d] disabled:opacity-40 text-white text-xs font-black flex items-center justify-center cursor-pointer transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
             </button>
@@ -407,7 +407,7 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               ? 'bg-[#7FB77E] text-white shadow-xs'
               : isFull
               ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-              : 'bg-[#00B894] hover:bg-[#009678] text-white active:scale-95'
+              : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white active:scale-95'
           }`}
         >
           {isJoined ? (

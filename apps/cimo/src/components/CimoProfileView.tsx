@@ -189,7 +189,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             <button
               type="button"
               onClick={onEditProfile}
-              className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
+              className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Editar Perfil</span>
@@ -209,7 +209,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
               />
               {user.isCaptainAvailable !== false && (
                 <div
-                  className="absolute bottom-1 right-1 bg-[#00B894] text-white p-1.5 rounded-full shadow-md border-2 border-white"
+                  className="absolute bottom-1 right-1 bg-[#7FB77E] text-white p-1.5 rounded-full shadow-md border-2 border-white"
                   title="Capitán Verificado CIMO"
                 >
                   <ShieldCheck className="w-4 h-4 stroke-[3]" />
@@ -220,7 +220,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             {/* Quick Status Badges */}
             <div className="flex items-center gap-2 flex-wrap">
               {user.isCaptainAvailable !== false && (
-                <span className="px-3 py-1 rounded-full text-xs font-black bg-[#00B894]/10 text-[#00B894] border border-[#00B894]/20 flex items-center gap-1">
+                <span className="px-3 py-1 rounded-full text-xs font-black bg-[#7FB77E]/10 text-[#7FB77E] border border-[#7FB77E]/20 flex items-center gap-1">
                   <Award className="w-3.5 h-3.5" />
                   <span>Capitán Verificado</span>
                 </span>
@@ -247,7 +247,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
             <div className="flex items-center gap-2 text-xs font-bold text-[#1F4E5F]/70 flex-wrap">
               <div className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-[#00B894]" />
+                <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
                 <span>{user.city ?? 'Madrid, España'}</span>
                 {user.neighborhood && <span className="text-[#1F4E5F]">({user.neighborhood})</span>}
               </div>
@@ -278,9 +278,9 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                   href={user.stravaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1 bg-[#00B894]/10 hover:bg-[#00B894]/20 border border-[#00B894]/30 rounded-full text-xs font-bold text-[#1F4E5F] flex items-center gap-1.5 transition-colors shadow-2xs"
+                  className="px-3 py-1 bg-[#7FB77E]/10 hover:bg-[#7FB77E]/20 border border-[#7FB77E]/30 rounded-full text-xs font-bold text-[#1F4E5F] flex items-center gap-1.5 transition-colors shadow-2xs"
                 >
-                  <Globe className="w-3.5 h-3.5 text-[#00B894]" />
+                  <Globe className="w-3.5 h-3.5 text-[#7FB77E]" />
                   <span>Strava</span>
                 </a>
               )}
@@ -319,7 +319,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             </div>
 
             <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center">
-              <Timer className="w-5 h-5 text-[#00B894] mb-1" />
+              <Timer className="w-5 h-5 text-[#7FB77E] mb-1" />
               <span className="text-xl font-black text-[#1F4E5F]">
                 {user.totalKm ?? 184} km
               </span>
@@ -331,9 +331,9 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             <button
               type="button"
               onClick={onNavigateToCrew}
-              className="p-4 bg-[#F7F7F7] hover:bg-white hover:border-[#00B894] hover:shadow-xs transition-all rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center cursor-pointer active:scale-95"
+              className="p-4 bg-[#F7F7F7] hover:bg-white hover:border-[#7FB77E] hover:shadow-xs transition-all rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center cursor-pointer active:scale-95"
             >
-              <Users className="w-5 h-5 text-[#00B894] mb-1" />
+              <Users className="w-5 h-5 text-[#7FB77E] mb-1" />
               <span className="text-xl font-black text-[#1F4E5F]">
                 7
               </span>
@@ -431,7 +431,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                 <button
                   type="button"
                   onClick={onCreatePlan}
-                  className="px-4 py-2 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  className="px-4 py-2 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
                 >
                   <Plus className="w-4 h-4 stroke-[3]" />
                   <span>Nuevo Entreno</span>
@@ -440,10 +440,10 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col justify-between gap-3 hover:border-[#00B894] transition-all">
+              <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col justify-between gap-3 hover:border-[#7FB77E] transition-all">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#00B894] bg-[#00B894]/10 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.5 rounded-full">
                       Tú eres Capitán
                     </span>
                     <h3 className="font-black text-sm text-[#1F4E5F] mt-2">
@@ -459,11 +459,11 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
                 <div className="flex items-center justify-between pt-2 border-t border-[#1F4E5F]/10 text-xs font-extrabold text-[#1F4E5F]">
                   <span>Hoy • 19:30 h</span>
-                  <span className="text-[#00B894]">4/5 confirmados</span>
+                  <span className="text-[#7FB77E]">4/5 confirmados</span>
                 </div>
               </div>
 
-              <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col justify-between gap-3 hover:border-[#00B894] transition-all">
+              <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col justify-between gap-3 hover:border-[#7FB77E] transition-all">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/70 bg-[#1F4E5F]/10 px-2 py-0.5 rounded-full">
@@ -482,7 +482,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
                 <div className="flex items-center justify-between pt-2 border-t border-[#1F4E5F]/10 text-xs font-extrabold text-[#1F4E5F]">
                   <span>Mañana • 18:30 h</span>
-                  <span className="text-[#00B894]">4/4 plazas llenas</span>
+                  <span className="text-[#7FB77E]">4/4 plazas llenas</span>
                 </div>
               </div>
             </div>
@@ -507,7 +507,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                 <button
                   type="button"
                   onClick={onEditProfile}
-                  className="text-xs font-black text-[#00B894] hover:text-[#009678] transition-colors cursor-pointer"
+                  className="text-xs font-black text-[#7FB77E] hover:text-[#6ea26d] transition-colors cursor-pointer"
                 >
                   Editar Deportes
                 </button>
@@ -519,7 +519,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                   return (
                     <div
                       key={idx}
-                      className="p-5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col justify-between gap-3 hover:border-[#00B894]/40 transition-all shadow-2xs"
+                      className="p-5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col justify-between gap-3 hover:border-[#7FB77E]/40 transition-all shadow-2xs"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -528,7 +528,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                             {s.sport}
                           </span>
                         </div>
-                        <span className="text-[11px] font-black text-[#00B894] bg-[#00B894]/10 px-2.5 py-0.5 rounded-full">
+                        <span className="text-[11px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
                           {s.level}
                         </span>
                       </div>
@@ -558,7 +558,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                 <button
                   type="button"
                   onClick={onEditProfile}
-                  className="text-xs font-black text-[#00B894] hover:text-[#009678] transition-colors cursor-pointer"
+                  className="text-xs font-black text-[#7FB77E] hover:text-[#6ea26d] transition-colors cursor-pointer"
                 >
                   Cambiar Horarios
                 </button>
@@ -574,7 +574,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                       key={dayName}
                       className={`p-3.5 rounded-2xl border flex flex-col justify-between gap-2.5 ${
                         isAvailable
-                          ? 'bg-[#00B894]/5 border-[#00B894]/30 shadow-2xs'
+                          ? 'bg-[#7FB77E]/5 border-[#7FB77E]/30 shadow-2xs'
                           : 'bg-[#F7F7F7] border-[#1F4E5F]/10 opacity-70'
                       }`}
                     >
@@ -583,7 +583,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                           {dayName.slice(0, 3)}
                         </span>
                         {isAvailable && (
-                          <span className="w-2 h-2 rounded-full bg-[#00B894]" />
+                          <span className="w-2 h-2 rounded-full bg-[#7FB77E]" />
                         )}
                       </div>
 
@@ -628,7 +628,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                 <button
                   type="button"
                   onClick={onEditProfile}
-                  className="text-xs font-black text-[#00B894] hover:text-[#009678] transition-colors cursor-pointer"
+                  className="text-xs font-black text-[#7FB77E] hover:text-[#6ea26d] transition-colors cursor-pointer"
                 >
                   Editar Preferencias
                 </button>
@@ -641,7 +641,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                     Formato de Grupo Preferido
                   </span>
                   <div className="flex items-center gap-2">
-                    <Users className="w-5 h-5 text-[#00B894]" />
+                    <Users className="w-5 h-5 text-[#7FB77E]" />
                     <span className="text-sm font-black text-[#1F4E5F]">
                       {user.groupSizePreference === 'medium'
                         ? '🏃 Grupos Medianos (8 a 15 personas)'
@@ -666,7 +666,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                         key={idx}
                         className="px-3 py-1 bg-white border border-[#1F4E5F]/15 rounded-full text-xs font-bold text-[#1F4E5F] flex items-center gap-1 shadow-2xs"
                       >
-                        <Check className="w-3 h-3 text-[#00B894] stroke-[3]" />
+                        <Check className="w-3 h-3 text-[#7FB77E] stroke-[3]" />
                         <span>{g}</span>
                       </span>
                     ))}

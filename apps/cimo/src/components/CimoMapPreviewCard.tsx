@@ -95,7 +95,7 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
       {/* Action Navigation Footer */}
       <div className="p-3 bg-white flex items-center justify-between gap-2 border-t border-[#1F4E5F]/10">
         <div className="flex items-center gap-2 min-w-0">
-          <MapPin className="w-4 h-4 text-[#00B894] shrink-0" />
+          <MapPin className="w-4 h-4 text-[#7FB77E] shrink-0" />
           <span className="text-xs font-bold text-[#1F4E5F] truncate">
             {resolvedAddress}
           </span>
@@ -108,7 +108,7 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
           className="px-3.5 py-1.5 rounded-full bg-[#1F4E5F] hover:bg-[#163946] text-white text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95 shrink-0"
         >
           <span>Abrir en Google Maps</span>
-          <ExternalLink className="w-3 h-3 text-[#00B894]" />
+          <ExternalLink className="w-3 h-3 text-[#7FB77E]" />
         </a>
       </div>
     </div>

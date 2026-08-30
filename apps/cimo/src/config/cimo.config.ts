@@ -9,8 +9,8 @@ export const cimoBrandTheme: PublicBrandTheme = {
   id: 'cimo',
   name: 'CIMO',
   colors: {
-    primary: '#00B894',
-    primaryHover: '#009678',
+    primary: '#7FB77E',
+    primaryHover: '#6ea26d',
     secondary: '#1F4E5F',
     accent: '#7FB77E',
     background: '#F8F9FA',

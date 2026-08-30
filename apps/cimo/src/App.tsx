@@ -359,13 +359,13 @@ export function App() {
                     aria-label="Abrir mi red de Crew"
                     className={`px-3 py-2 text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
                       currentRoute === 'crew'
-                        ? 'bg-[#00B894] text-white shadow-xs font-black'
+                        ? 'bg-[#7FB77E] text-white shadow-xs font-black'
                         : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border border-[#1F4E5F]/15'
                     }`}
                   >
-                    <Users className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-white' : 'text-[#00B894]'}`} />
+                    <Users className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-white' : 'text-[#7FB77E]'}`} />
                     <span className="hidden md:inline">Mi Crew</span>
-                    <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-white/20 text-white' : 'bg-[#00B894]/15 text-[#00B894]'}`}>
+                    <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#7FB77E]'}`}>
                       7
                     </span>
                   </button>
@@ -381,7 +381,7 @@ export function App() {
                     }}
                     className={`px-3.5 py-2 text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
                       currentRoute === 'create'
-                        ? 'bg-[#00B894] text-white'
+                        ? 'bg-[#7FB77E] text-white'
                         : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white'
                     }`}
                   >
@@ -402,7 +402,7 @@ export function App() {
                     }`}
                   >
                     <MessageSquare className="w-4 h-4 text-[#1F4E5F]" />
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#00B894] text-white text-[9px] font-black flex items-center justify-center border-2 border-white">
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#7FB77E] text-white text-[9px] font-black flex items-center justify-center border-2 border-white">
                       3
                     </span>
                   </button>

@@ -28,7 +28,7 @@ export const CimoCapacityStepper: React.FC<CimoCapacityStepperProps> = ({
             Cupo máximo de personas
           </span>
         </div>
-        <span className="text-xs font-extrabold text-[#00B894]">
+        <span className="text-xs font-extrabold text-[#7FB77E]">
           {value} plazas
         </span>
       </div>
@@ -58,7 +58,7 @@ export const CimoCapacityStepper: React.FC<CimoCapacityStepperProps> = ({
             type="button"
             disabled={value >= max}
             onClick={() => onChange(Math.min(max, value + 1))}
-            className="w-8 h-8 rounded-full bg-[#00B894] hover:bg-[#009678] text-white flex items-center justify-center disabled:opacity-30 cursor-pointer font-bold transition-colors shadow-xs active:scale-95"
+            className="w-8 h-8 rounded-full bg-[#7FB77E] hover:bg-[#6ea26d] text-white flex items-center justify-center disabled:opacity-30 cursor-pointer font-bold transition-colors shadow-xs active:scale-95"
             aria-label="Aumentar plazas"
           >
             <Plus className="w-4 h-4 stroke-[3]" />

@@ -66,7 +66,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
       {/* Surface Header with Title and Filter Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#1F4E5F]/10">
         <div>
-          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#00B894] block">
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#7FB77E] block">
             Comunidad Deportiva Madrid
           </span>
           <h2 className="text-xl sm:text-2xl font-black text-[#1F4E5F] mt-0.5 tracking-tight">
@@ -137,7 +137,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                 onClick={() => onSelectActivity(act.id)}
                 className={`bg-[#F7F7F7]/60 hover:bg-[#F7F7F7] rounded-3xl overflow-hidden border transition-all duration-200 cursor-pointer group flex flex-col justify-between ${
                   isSelected
-                    ? 'border-[#00B894] ring-2 ring-[#00B894]/20 shadow-md bg-white'
+                    ? 'border-[#7FB77E] ring-2 ring-[#7FB77E]/20 shadow-md bg-white'
                     : 'border-[#1F4E5F]/10 hover:border-[#1F4E5F]/30 hover:shadow-sm'
                 }`}
               >
@@ -184,7 +184,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                       {act.title}
                     </h3>
                     <div className="flex items-center gap-1.5 text-xs text-white/90 mt-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#00B894] shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
                       <span className="truncate font-medium">{act.location}</span>
                     </div>
                   </div>
@@ -207,13 +207,13 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                             {act.captain.name.charAt(0)}
                           </div>
                         )}
-                        <span className="absolute -bottom-0.5 -right-0.5 bg-[#00B894] text-white p-0.5 rounded-full">
+                        <span className="absolute -bottom-0.5 -right-0.5 bg-[#7FB77E] text-white p-0.5 rounded-full">
                           <ShieldCheck className="w-2.5 h-2.5" />
                         </span>
                       </div>
 
                       <div>
-                        <span className="text-[10px] font-extrabold text-[#00B894] uppercase tracking-wider block leading-none">
+                        <span className="text-[10px] font-extrabold text-[#7FB77E] uppercase tracking-wider block leading-none">
                           Capitán
                         </span>
                         <span className="text-xs font-black text-[#1F4E5F] mt-0.5 block">
@@ -224,7 +224,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
 
                     <div className="text-right">
                       <div className="flex items-center gap-1 text-xs font-black text-[#1F4E5F]">
-                        <Calendar className="w-3.5 h-3.5 text-[#00B894]" />
+                        <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
                         <span>{act.date}</span>
                       </div>
                       <div className="flex items-center gap-1 text-[11px] font-bold text-[#1F4E5F]/60 justify-end mt-0.5">
@@ -273,7 +273,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                         <span className="text-xs font-black text-[#1F4E5F] block leading-none">
                           {act.currentMembers.length}/{act.maxMembers}
                         </span>
-                        <span className="text-[10px] font-bold text-[#00B894] block mt-0.5">
+                        <span className="text-[10px] font-bold text-[#7FB77E] block mt-0.5">
                           {isFull ? 'Completo' : `${remainingSpots} libre(s)`}
                         </span>
                       </div>
@@ -288,7 +288,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                       }}
                       className={`px-4 py-2 rounded-full text-xs font-black transition-all flex items-center gap-1.5 shadow-xs cursor-pointer ${
                         isJoined
-                          ? 'bg-[#00B894] text-white shadow-xs'
+                          ? 'bg-[#7FB77E] text-white shadow-xs'
                           : isFull
                           ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
                           : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95'

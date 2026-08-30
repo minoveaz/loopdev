@@ -63,12 +63,12 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between pb-2.5 border-b border-[#1F4E5F]/10">
           <div className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-[#00B894]" />
+            <Calendar className="w-4 h-4 text-[#7FB77E]" />
             <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]">
               Tus Próximos Entrenos
             </span>
           </div>
-          <span className="text-[10px] font-black bg-[#00B894]/15 text-[#00B894] px-2 py-0.5 rounded-full">
+          <span className="text-[10px] font-black bg-[#7FB77E]/15 text-[#7FB77E] px-2 py-0.5 rounded-full">
             {joinedActivities.length} activo(s)
           </span>
         </div>
@@ -85,11 +85,11 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                 <div
                   key={act.id}
                   onClick={() => onSelectActivity(act.id)}
-                  className="p-3 bg-[#F7F7F7] hover:bg-[#00B894]/5 rounded-2xl border border-[#1F4E5F]/10 hover:border-[#00B894]/40 transition-all cursor-pointer flex items-center justify-between gap-2.5 shadow-2xs"
+                  className="p-3 bg-[#F7F7F7] hover:bg-[#7FB77E]/5 rounded-2xl border border-[#1F4E5F]/10 hover:border-[#7FB77E]/40 transition-all cursor-pointer flex items-center justify-between gap-2.5 shadow-2xs"
                 >
                   <div className="truncate">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-black uppercase text-[#00B894]">
+                      <span className="text-[10px] font-black uppercase text-[#7FB77E]">
                         {act.sport}
                       </span>
                       <span className="text-[10px] text-[#1F4E5F]/40">•</span>
@@ -102,7 +102,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                     </h4>
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0 text-[#00B894] bg-white px-2 py-1 rounded-xl border border-[#1F4E5F]/5">
+                  <div className="flex items-center gap-1 shrink-0 text-[#7FB77E] bg-white px-2 py-1 rounded-xl border border-[#1F4E5F]/5">
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span className="text-[10px] font-black">{msgs.length}</span>
                   </div>
@@ -116,7 +116,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
           <button
             type="button"
             onClick={onOpenChatTab}
-            className="text-xs font-black text-[#00B894] hover:underline flex items-center justify-center gap-1 pt-0.5 cursor-pointer"
+            className="text-xs font-black text-[#7FB77E] hover:underline flex items-center justify-center gap-1 pt-0.5 cursor-pointer"
           >
             <span>Abrir todos los chats de mis Crews</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -137,7 +137,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
         </div>
 
         <div className="w-full bg-[#1F4E5F]/10 h-2 rounded-full overflow-hidden">
-          <div className="bg-[#00B894] h-full rounded-full transition-all" style={{ width: '71%' }} />
+          <div className="bg-[#7FB77E] h-full rounded-full transition-all" style={{ width: '71%' }} />
         </div>
 
         <div className="flex items-center justify-between text-[10px] font-bold text-[#1F4E5F]/70">
@@ -152,7 +152,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
           <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]">
             Capitanes de la Comunidad
           </span>
-          <ShieldCheck className="w-4 h-4 text-[#00B894]" />
+          <ShieldCheck className="w-4 h-4 text-[#7FB77E]" />
         </div>
 
         <div className="flex flex-col gap-2.5">
@@ -181,7 +181,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                 <span className="text-[10px] font-black text-[#1F4E5F] block">
                   ★ {capt.rating}
                 </span>
-                <span className="text-[9px] text-[#00B894] font-bold block">
+                <span className="text-[9px] text-[#7FB77E] font-bold block">
                   {capt.workouts} planes
                 </span>
               </div>
@@ -191,8 +191,8 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
       </div>
 
       {/* 4. Filosofía & Garantía CIMO */}
-      <div className="p-3.5 bg-[#00B894]/10 border border-[#00B894]/20 rounded-2xl text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
-        <Sparkles className="w-4 h-4 text-[#00B894] shrink-0 mt-0.5" />
+      <div className="p-3.5 bg-[#7FB77E]/10 border border-[#7FB77E]/20 rounded-2xl text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
+        <Sparkles className="w-4 h-4 text-[#7FB77E] shrink-0 mt-0.5" />
         <div className="text-xs">
           <span className="font-black block text-[11px]">Garantía CIMO</span>
           <p className="text-[10px] text-[#1F4E5F]/80 mt-0.5 leading-relaxed font-medium">

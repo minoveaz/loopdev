@@ -73,7 +73,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between pb-3 border-b border-[#1F4E5F]/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#00B894]/10 text-[#00B894] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
               <Users className="w-5 h-5" />
             </div>
             <div>
@@ -97,7 +97,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
         {/* Success State */}
         {sentSuccess ? (
           <div className="py-10 flex flex-col items-center justify-center text-center gap-3 animate-in fade-in duration-200">
-            <div className="w-14 h-14 rounded-full bg-[#00B894]/15 text-[#00B894] flex items-center justify-center scale-110">
+            <div className="w-14 h-14 rounded-full bg-[#7FB77E]/15 text-[#7FB77E] flex items-center justify-center scale-110">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <div>
@@ -119,7 +119,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
               <button
                 type="button"
                 onClick={handleSelectAll}
-                className="text-[11px] font-black text-[#00B894] hover:underline cursor-pointer"
+                className="text-[11px] font-black text-[#7FB77E] hover:underline cursor-pointer"
               >
                 {selectedIds.length === connections.length
                   ? 'Deseleccionar todos'
@@ -138,7 +138,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                     onClick={() => toggleSelect(conn.athlete.id)}
                     className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 ${
                       isSelected
-                        ? 'bg-[#1F4E5F] text-white border-transparent shadow-xs ring-2 ring-[#00B894]/40'
+                        ? 'bg-[#1F4E5F] text-white border-transparent shadow-xs ring-2 ring-[#7FB77E]/40'
                         : 'bg-[#F7F7F7] hover:bg-white border-[#1F4E5F]/10 text-[#1F4E5F]'
                     }`}
                   >
@@ -154,7 +154,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                             {conn.athlete.name}
                           </span>
                           {conn.athlete.isCaptain && (
-                            <span className={`text-[9px] font-black px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#00B894]/10 text-[#00B894]'}`}>
+                            <span className={`text-[9px] font-black px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/10 text-[#7FB77E]'}`}>
                               Capitán
                             </span>
                           )}
@@ -168,7 +168,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                     <div
                       className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 border transition-all ${
                         isSelected
-                          ? 'bg-[#00B894] border-[#00B894] text-white'
+                          ? 'bg-[#7FB77E] border-[#7FB77E] text-white'
                           : 'border-[#1F4E5F]/20 bg-white text-transparent'
                       }`}
                     >
@@ -194,7 +194,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                 onClick={handleSend}
                 className={`px-5 py-2.5 rounded-full text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
                   selectedIds.length > 0
-                    ? 'bg-[#00B894] hover:bg-[#009678] text-white shadow-xs hover:scale-102 active:scale-98'
+                    ? 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white shadow-xs hover:scale-102 active:scale-98'
                     : 'bg-[#1F4E5F]/10 text-[#1F4E5F]/40 cursor-not-allowed'
                 }`}
               >

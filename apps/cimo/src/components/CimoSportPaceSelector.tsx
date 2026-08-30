@@ -35,7 +35,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
             Nivel & Ritmo del entrenamiento
           </span>
         </div>
-        <span className="text-[11px] font-bold text-[#00B894]">
+        <span className="text-[11px] font-bold text-[#7FB77E]">
           {currentPace.level}
         </span>
       </div>
@@ -61,7 +61,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
               onClick={() => onSelectIndex(idx)}
               className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 relative group ${
                 isSelected
-                  ? 'border-[#00B894] bg-white ring-2 ring-[#00B894]/20 shadow-sm'
+                  ? 'border-[#7FB77E] bg-white ring-2 ring-[#7FB77E]/20 shadow-sm'
                   : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white hover:border-[#1F4E5F]/30'
               }`}
             >
@@ -72,7 +72,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
                     <span className={`text-sm font-black leading-tight block ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}>
                       {p.title}
                     </span>
-                    <span className="text-xs font-black text-[#00B894] flex items-center gap-1 mt-0.5">
+                    <span className="text-xs font-black text-[#7FB77E] flex items-center gap-1 mt-0.5">
                       <Timer className="w-3.5 h-3.5 shrink-0" />
                       <span>{p.metric}</span>
                     </span>
@@ -81,7 +81,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
                   <div
                     className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all mt-0.5 ${
                       isSelected
-                        ? 'bg-[#00B894] text-white shadow-xs'
+                        ? 'bg-[#7FB77E] text-white shadow-xs'
                         : 'border-2 border-[#1F4E5F]/20 group-hover:border-[#1F4E5F]/40'
                     }`}
                   >

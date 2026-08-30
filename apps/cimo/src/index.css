@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --lpd-brand-primary: #00B894;
-  --lpd-brand-primary-hover: #009678;
+  --lpd-brand-primary: #7FB77E;
+  --lpd-brand-primary-hover: #6ea26d;
   --lpd-brand-secondary: #1F4E5F;
   --lpd-brand-accent: #7FB77E;
   --lpd-brand-background: #F8F9FA;

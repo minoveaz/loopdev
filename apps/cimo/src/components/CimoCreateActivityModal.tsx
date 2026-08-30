@@ -119,7 +119,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ej: Rodaje 10K suave por Madrid Río"
-              className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+              className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
             />
           </div>
 
@@ -137,7 +137,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Ej: Puente de Toledo, Madrid Río"
-                className="w-full pl-10 pr-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+                className="w-full pl-10 pr-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
                 id="create-plan-day"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
               >
                 <option value="Hoy">Hoy</option>
                 <option value="Mañana">Mañana</option>
@@ -172,7 +172,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 placeholder="19:30"
-                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
               />
             </div>
           </div>
@@ -187,7 +187,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
                 id="create-plan-level"
                 value={level}
                 onChange={(e) => setLevel(e.target.value as any)}
-                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
               >
                 {levelsOptions.map((lvl) => (
                   <option key={lvl} value={lvl}>
@@ -208,7 +208,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
                 max={12}
                 value={maxMembers}
                 onChange={(e) => setMaxMembers(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+                className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
               />
             </div>
           </div>
@@ -224,7 +224,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
               value={paceOrDetails}
               onChange={(e) => setPaceOrDetails(e.target.value)}
               placeholder="Ej: 10 km • Ritmo 5:15 min/km • Tomamos algo después"
-              className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+              className="w-full px-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
             />
           </div>
 
@@ -233,7 +233,7 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
             type="submit"
             className="w-full py-3.5 px-4 text-xs font-extrabold text-white bg-[#1F4E5F] hover:bg-[#183e4c] rounded-2xl transition-all shadow-md mt-2 flex items-center justify-center gap-2 cursor-pointer min-h-[44px] active:scale-98"
           >
-            <Plus className="w-4 h-4 text-[#00B894]" />
+            <Plus className="w-4 h-4 text-[#7FB77E]" />
             <span>Publicar Plan en CIMO</span>
           </button>
         </form>

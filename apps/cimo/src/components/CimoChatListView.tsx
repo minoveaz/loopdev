@@ -73,7 +73,7 @@ export const CimoChatListView: React.FC<CimoChatListViewProps> = ({
                   <span className="text-[10px] text-[#1F4E5F]/40 font-bold block">
                     {lastMsg?.timestamp ?? act.time}
                   </span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#00B894] text-white mt-1">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#7FB77E] text-white mt-1">
                     {messages.length} msgs
                   </span>
                 </div>

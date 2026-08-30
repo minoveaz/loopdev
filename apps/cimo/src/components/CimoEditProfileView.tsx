@@ -350,7 +350,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
             <span>Volver a Mi Perfil</span>
           </button>
 
-          <div className="flex items-center gap-1.5 text-xs font-black text-[#00B894] uppercase tracking-wider bg-[#00B894]/10 px-3 py-1 rounded-full">
+          <div className="flex items-center gap-1.5 text-xs font-black text-[#7FB77E] uppercase tracking-wider bg-[#7FB77E]/10 px-3 py-1 rounded-full">
             <Award className="w-4 h-4" />
             <span>Pasaporte Deportivo CIMO</span>
           </div>
@@ -378,7 +378,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 Identidad & Fotos de Portada
               </span>
             </div>
-            <span className="text-xs font-bold text-[#00B894]">Paso 1 de 5</span>
+            <span className="text-xs font-bold text-[#7FB77E]">Paso 1 de 5</span>
           </div>
 
           {/* Panoramic Cover Preview & Presets */}
@@ -387,7 +387,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
                 Foto de Portada Panorámica
               </label>
-              <span className="text-[10px] font-bold text-[#00B894]">
+              <span className="text-[10px] font-bold text-[#7FB77E]">
                 Resolución 16:9 de alta calidad
               </span>
             </div>
@@ -421,7 +421,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                     onClick={() => setCoverUrl(cp.url)}
                     className={`p-1.5 rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center gap-1 text-left ${
                       coverUrl === cp.url
-                        ? 'border-[#00B894] bg-[#00B894]/10 ring-2 ring-[#00B894]/20 shadow-xs'
+                        ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/20 shadow-xs'
                         : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:border-[#1F4E5F]/30'
                     }`}
                   >
@@ -443,9 +443,9 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
               <img
                 src={avatarUrl}
                 alt={name}
-                className="w-20 h-20 rounded-full object-cover border-3 border-[#00B894] shadow-md bg-white"
+                className="w-20 h-20 rounded-full object-cover border-3 border-[#7FB77E] shadow-md bg-white"
               />
-              <div className="absolute bottom-0 right-0 bg-[#00B894] text-white p-1 rounded-full border border-white">
+              <div className="absolute bottom-0 right-0 bg-[#7FB77E] text-white p-1 rounded-full border border-white">
                 <Check className="w-3 h-3 stroke-[3]" />
               </div>
             </div>
@@ -462,7 +462,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                     onClick={() => setAvatarUrl(ap)}
                     className={`w-9 h-9 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
                       avatarUrl === ap
-                        ? 'border-[#00B894] ring-2 ring-[#00B894]/30 scale-110 shadow-xs'
+                        ? 'border-[#7FB77E] ring-2 ring-[#7FB77E]/30 scale-110 shadow-xs'
                         : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
@@ -485,7 +485,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Tu nombre completo"
                 required
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
               />
             </div>
 
@@ -498,7 +498,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 value={handle}
                 onChange={(e) => setHandle(e.target.value)}
                 placeholder="@tu_usuario"
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
               />
             </div>
 
@@ -512,7 +512,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="Ej: Madrid, España"
                 required
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
               />
             </div>
 
@@ -525,7 +525,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 value={neighborhood}
                 onChange={(e) => setNeighborhood(e.target.value)}
                 placeholder="Ej: Retiro / Chamberí / Salamanca"
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
               />
             </div>
           </div>
@@ -546,7 +546,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Cuéntale al Crew qué te apasiona del deporte, tus metas del año o tu estilo de entreno..."
-              className="w-full p-4 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs resize-none leading-relaxed"
+              className="w-full p-4 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs resize-none leading-relaxed"
             />
           </div>
         </div>
@@ -562,7 +562,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 Pasaporte Técnico por Deporte
               </span>
             </div>
-            <span className="text-xs font-bold text-[#00B894]">Paso 2 de 5</span>
+            <span className="text-xs font-bold text-[#7FB77E]">Paso 2 de 5</span>
           </div>
 
           <p className="text-xs text-[#1F4E5F]/70 font-medium -mt-2">
@@ -579,7 +579,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                   key={cat.id}
                   className={`p-4 rounded-2xl border transition-all flex flex-col gap-3 ${
                     isSelected
-                      ? 'border-[#00B894] bg-[#00B894]/5 shadow-xs'
+                      ? 'border-[#7FB77E] bg-[#7FB77E]/5 shadow-xs'
                       : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:border-[#1F4E5F]/30'
                   }`}
                 >
@@ -605,7 +605,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                       onClick={() => handleToggleSport(cat)}
                       className={`w-6 h-6 rounded-full flex items-center justify-center transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-[#00B894] text-white shadow-2xs'
+                          ? 'bg-[#7FB77E] text-white shadow-2xs'
                           : 'border border-[#1F4E5F]/30 bg-white text-transparent'
                       }`}
                     >
@@ -626,7 +626,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                             handleUpdateSportField(cat.id, 'pace', e.target.value)
                           }
                           placeholder="Ej: 5:15 min/km o Nivel 3.5 Playtomic"
-                          className="w-full px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15 bg-white text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#00B894]"
+                          className="w-full px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15 bg-white text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#7FB77E]"
                         />
                       </div>
 
@@ -641,7 +641,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                             handleUpdateSportField(cat.id, 'level', e.target.value)
                           }
                           placeholder="Ej: Intermedio (5-10K)"
-                          className="w-full px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15 bg-white text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#00B894]"
+                          className="w-full px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15 bg-white text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#7FB77E]"
                         />
                       </div>
                     </div>
@@ -663,7 +663,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 Disponibilidad por Día & Horario
               </span>
             </div>
-            <span className="text-xs font-bold text-[#00B894]">Paso 3 de 5</span>
+            <span className="text-xs font-bold text-[#7FB77E]">Paso 3 de 5</span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 -mt-2">
@@ -709,7 +709,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                   key={wd.id}
                   className={`p-3.5 sm:p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                     isDayActive
-                      ? 'border-[#00B894]/40 bg-[#00B894]/5'
+                      ? 'border-[#7FB77E]/40 bg-[#7FB77E]/5'
                       : 'border-[#1F4E5F]/10 bg-[#F7F7F7]/60 opacity-85 hover:opacity-100'
                   }`}
                 >
@@ -718,7 +718,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                     <div
                       className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${
                         isDayActive
-                          ? 'bg-[#00B894] text-white shadow-2xs'
+                          ? 'bg-[#7FB77E] text-white shadow-2xs'
                           : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'
                       }`}
                     >
@@ -754,7 +754,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                           <div className="flex items-center gap-1">
                             <IconComp
                               className={`w-3.5 h-3.5 ${
-                                isSlotActive ? 'text-[#00B894]' : 'text-[#1F4E5F]/60'
+                                isSlotActive ? 'text-[#7FB77E]' : 'text-[#1F4E5F]/60'
                               }`}
                             />
                             <span className="text-xs font-black leading-tight">
@@ -789,17 +789,17 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 Canales de Contacto & Redes
               </span>
             </div>
-            <span className="text-xs font-bold text-[#00B894]">Paso 4 de 5</span>
+            <span className="text-xs font-bold text-[#7FB77E]">Paso 4 de 5</span>
           </div>
 
           {/* WhatsApp / Phone with Privacy Lock */}
           <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-1.5">
-                <Phone className="w-4 h-4 text-[#00B894]" />
+                <Phone className="w-4 h-4 text-[#7FB77E]" />
                 <span>WhatsApp / Teléfono de Coordinación</span>
               </label>
-              <div className="flex items-center gap-1.5 text-[10px] font-extrabold text-[#00B894] bg-[#00B894]/10 px-2.5 py-0.5 rounded-full">
+              <div className="flex items-center gap-1.5 text-[10px] font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
                 <Lock className="w-3 h-3" />
                 <span>Privacidad protegida</span>
               </div>
@@ -810,7 +810,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
               value={phoneWhatsapp}
               onChange={(e) => setPhoneWhatsapp(e.target.value)}
               placeholder="+34 600 000 000"
-              className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
             />
 
             <label className="flex items-center gap-2 text-xs font-bold text-[#1F4E5F]/80 cursor-pointer pt-1">
@@ -818,7 +818,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 type="checkbox"
                 checked={phonePrivacy}
                 onChange={(e) => setPhonePrivacy(e.target.checked)}
-                className="w-4 h-4 rounded text-[#00B894] focus:ring-[#00B894]"
+                className="w-4 h-4 rounded text-[#7FB77E] focus:ring-[#7FB77E]"
               />
               <span>
                 Compartir solo con capitanes y compañeros de entrenos a los que me haya unido.
@@ -838,13 +838,13 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 value={linkedinUrl}
                 onChange={(e) => setLinkedinUrl(e.target.value)}
                 placeholder="https://linkedin.com/in/tu_perfil"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
-                <Globe className="w-3.5 h-3.5 text-[#00B894]" />
+                <Globe className="w-3.5 h-3.5 text-[#7FB77E]" />
                 <span>Perfil de Strava</span>
               </label>
               <input
@@ -852,7 +852,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 value={stravaUrl}
                 onChange={(e) => setStravaUrl(e.target.value)}
                 placeholder="https://strava.com/athletes/..."
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
               />
             </div>
 
@@ -866,7 +866,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 value={instagramHandle}
                 onChange={(e) => setInstagramHandle(e.target.value)}
                 placeholder="@tu_instagram"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#00B894] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
               />
             </div>
           </div>
@@ -886,14 +886,14 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                     onClick={() => handleToggleGoal(g)}
                     className={`px-3.5 py-2 rounded-full text-xs font-extrabold border transition-all cursor-pointer flex items-center gap-1.5 ${
                       isSelected
-                        ? 'border-[#00B894] bg-[#00B894]/15 text-[#1F4E5F] font-black shadow-2xs'
+                        ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] font-black shadow-2xs'
                         : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
                     }`}
                   >
                     {isSelected ? (
-                      <Check className="w-3.5 h-3.5 text-[#00B894] stroke-[3]" />
+                      <Check className="w-3.5 h-3.5 text-[#7FB77E] stroke-[3]" />
                     ) : (
-                      <Plus className="w-3.5 h-3.5 text-[#00B894]" />
+                      <Plus className="w-3.5 h-3.5 text-[#7FB77E]" />
                     )}
                     <span>{g}</span>
                   </button>
@@ -914,12 +914,12 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 Modo Capitán & Normas Habituales
               </span>
             </div>
-            <span className="text-xs font-bold text-[#00B894]">Paso 5 de 5</span>
+            <span className="text-xs font-bold text-[#7FB77E]">Paso 5 de 5</span>
           </div>
 
           <div className="flex items-center justify-between p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#00B894]/10 text-[#00B894] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
                 <Award className="w-5 h-5" />
               </div>
               <div>
@@ -936,7 +936,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
               type="button"
               onClick={() => setIsCaptainAvailable(!isCaptainAvailable)}
               className={`w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center ${
-                isCaptainAvailable ? 'bg-[#00B894] justify-end' : 'bg-[#1F4E5F]/20 justify-start'
+                isCaptainAvailable ? 'bg-[#7FB77E] justify-end' : 'bg-[#1F4E5F]/20 justify-start'
               }`}
             >
               <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
@@ -949,7 +949,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
                   Tus Instrucciones Habituales de Capitán
                 </label>
-                <span className="text-[10px] font-bold text-[#00B894]">
+                <span className="text-[10px] font-bold text-[#7FB77E]">
                   Se precargarán en tus entrenos
                 </span>
               </div>
@@ -958,7 +958,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                 value={defaultCaptainNotes}
                 onChange={(e) => setDefaultCaptainNotes(e.target.value)}
                 placeholder="Ej: 💧 Traer agua • ⏰ Llegar 5 min antes • 🧘 Estiramientos al terminar"
-                className="w-full p-4 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#00B894] focus:ring-2 focus:ring-[#00B894]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs resize-none leading-relaxed"
+                className="w-full p-4 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs resize-none leading-relaxed"
               />
             </div>
           )}
@@ -985,7 +985,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
             </button>
             <button
               type="submit"
-              className="px-7 py-3.5 rounded-full text-xs font-black bg-[#00B894] hover:bg-[#009678] text-white transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95 whitespace-nowrap"
+              className="px-7 py-3.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95 whitespace-nowrap"
             >
               {savedSuccess ? (
                 <>

@@ -62,7 +62,7 @@ export const CimoSportFilters: React.FC<CimoSportFiltersProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Retiro, Chamartín, Chamberí..."
-            className="w-full pl-10 pr-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#00B894] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
+            className="w-full pl-10 pr-3.5 py-2.5 text-xs bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#7FB77E] focus:bg-white transition-all min-h-[40px] text-[#1F4E5F]"
           />
         </div>
       </div>
@@ -91,7 +91,7 @@ export const CimoSportFilters: React.FC<CimoSportFiltersProps> = ({
                   <span>{sport.emoji}</span>
                   <span>{sport.label}</span>
                 </div>
-                {isSelected && <span className="w-2 h-2 rounded-full bg-[#00B894]" />}
+                {isSelected && <span className="w-2 h-2 rounded-full bg-[#7FB77E]" />}
               </button>
             );
           })}

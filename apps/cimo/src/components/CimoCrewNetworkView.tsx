@@ -148,8 +148,8 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
     <div className="w-full flex flex-col gap-6 animate-in fade-in duration-150 text-[#1F4E5F] pb-16">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#1F4E5F] text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 animate-in slide-in-from-bottom-4 duration-150 border border-[#00B894]/40">
-          <Sparkles className="w-4 h-4 text-[#00B894] shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 bg-[#1F4E5F] text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 animate-in slide-in-from-bottom-4 duration-150 border border-[#7FB77E]/40">
+          <Sparkles className="w-4 h-4 text-[#7FB77E] shrink-0" />
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>
       )}
@@ -157,7 +157,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
       {/* 🌟 1. Compact Header Bar (Clean Professional Design System) */}
       <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-5 sm:p-6 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-[#00B894]/10 text-[#00B894] flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-2xl bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
             <Users className="w-5 h-5" />
           </div>
           <div>
@@ -165,7 +165,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
               <h1 className="text-xl sm:text-2xl font-black text-[#1F4E5F] tracking-tight">
                 Mi Red de Crew
               </h1>
-              <span className="text-xs font-extrabold bg-[#00B894]/10 text-[#00B894] px-2.5 py-0.5 rounded-full border border-[#00B894]/20">
+              <span className="text-xs font-extrabold bg-[#7FB77E]/10 text-[#7FB77E] px-2.5 py-0.5 rounded-full border border-[#7FB77E]/20">
                 {squads.length} squads • {connections.length} compañeros
               </span>
             </div>
@@ -232,7 +232,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
       <div className="flex flex-col gap-3.5">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00B894]" />
+            <span className="w-2 h-2 rounded-full bg-[#7FB77E]" />
             <h2 className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/75">
               Tus Squads Habituales
             </h2>
@@ -240,7 +240,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
           <button
             type="button"
             onClick={() => handleOpenPropose('squad', 'Nuevo Squad', 'running')}
-            className="text-xs font-bold text-[#00B894] hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-xs font-bold text-[#7FB77E] hover:underline flex items-center gap-1 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Crear nuevo Squad</span>
@@ -287,7 +287,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                         <Clock className="w-3.5 h-3.5 text-slate-400" />
                         <span>{sq.recurringSchedule}</span>
                         <span>•</span>
-                        <MapPin className="w-3.5 h-3.5 text-[#00B894]" />
+                        <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
                         <span>{sq.location}</span>
                       </div>
                     </div>
@@ -319,7 +319,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenPropose('squad', sq.name, sq.sport)}
-                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-[#00B894] hover:bg-[#00B894]/10 border border-[#00B894]/30 transition-all cursor-pointer flex items-center gap-1"
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-[#7FB77E] hover:bg-[#7FB77E]/10 border border-[#7FB77E]/30 transition-all cursor-pointer flex items-center gap-1"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Convocatoria</span>
@@ -346,7 +346,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                       {/* Left: Meeting Point */}
                       <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 flex items-center gap-3">
                         <div className="w-8 h-8 rounded-xl bg-slate-200/60 text-[#1F4E5F] flex items-center justify-center shrink-0">
-                          <MapPin className="w-4 h-4 text-[#00B894]" />
+                          <MapPin className="w-4 h-4 text-[#7FB77E]" />
                         </div>
                         <div className="truncate">
                           <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
@@ -406,7 +406,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                           onClick={() => handleRsvpChange(sq.id, 'going')}
                           className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                             myRsvp === 'going'
-                              ? 'bg-[#00B894] text-white shadow-xs scale-102'
+                              ? 'bg-[#7FB77E] text-white shadow-xs scale-102'
                               : 'text-slate-600 hover:text-[#1F4E5F]'
                           }`}
                         >
@@ -450,7 +450,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenPropose('squad', sq.name, sq.sport)}
-                      className="px-3 py-1.5 rounded-xl bg-[#00B894] text-white text-xs font-black cursor-pointer hover:bg-[#009678]"
+                      className="px-3 py-1.5 rounded-xl bg-[#7FB77E] text-white text-xs font-black cursor-pointer hover:bg-[#6ea26d]"
                     >
                       + Proponer Entreno al Squad
                     </button>
@@ -497,7 +497,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     {conn.athlete.isCaptain && (
                       <span
                         title="Capitán CIMO"
-                        className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#00B894] text-white flex items-center justify-center text-[8px] font-black border border-white"
+                        className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#7FB77E] text-white flex items-center justify-center text-[8px] font-black border border-white"
                       >
                         ★
                       </span>
@@ -507,7 +507,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                   <div className="truncate">
                     <div className="flex items-center gap-2">
                       <h3
-                        className="text-sm font-black text-[#1F4E5F] hover:text-[#00B894] transition-colors cursor-pointer truncate"
+                        className="text-sm font-black text-[#1F4E5F] hover:text-[#7FB77E] transition-colors cursor-pointer truncate"
                         onClick={() => onNavigateToProfile?.(conn.athlete.id)}
                       >
                         {conn.athlete.name}
@@ -518,8 +518,8 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2 mt-0.5 text-xs text-[#1F4E5F]/65 font-medium">
-                      <span className="font-extrabold text-[#00B894] flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00B894]" />
+                      <span className="font-extrabold text-[#7FB77E] flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#7FB77E]" />
                         <span>{conn.stats.sharedWorkoutsCount} entrenos en común</span>
                       </span>
                       <span>•</span>
@@ -543,7 +543,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenPropose('athlete', conn.athlete.name, primarySport?.sport ?? 'running')}
-                      className="px-3 py-1.5 rounded-xl border border-[#00B894] text-[#00B894] hover:bg-[#00B894] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 active:scale-98"
+                      className="px-3 py-1.5 rounded-xl border border-[#7FB77E] text-[#7FB77E] hover:bg-[#7FB77E] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 active:scale-98"
                     >
                       <Zap className="w-3.5 h-3.5" />
                       <span>Proponer Entreno</span>
@@ -577,7 +577,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
           >
             <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/10">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#00B894]/10 text-[#00B894] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
                   <Zap className="w-4 h-4" />
                 </div>
                 <div>
@@ -658,7 +658,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#00B894] hover:bg-[#009678] text-white text-xs font-black flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer active:scale-98"
+                  className="px-4 py-2 rounded-xl bg-[#7FB77E] hover:bg-[#6ea26d] text-white text-xs font-black flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer active:scale-98"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>Enviar Convocatoria</span>
