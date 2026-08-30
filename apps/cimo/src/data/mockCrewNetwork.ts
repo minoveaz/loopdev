@@ -1,3 +1,36 @@
+export interface SportsSquadMember {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  isCaptain?: boolean;
+}
+
+export interface SquadCallout {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  meetingPoint: string;
+  myRsvp: 'going' | 'declined' | 'maybe' | 'none';
+  attendingMembers: SportsSquadMember[];
+  maxCapacity: number;
+  hasThirdHalf: boolean;
+  thirdHalfType?: 'cafe' | 'beer' | 'smoothie' | 'picnic';
+  thirdHalfVenue?: string;
+}
+
+export interface SportsSquad {
+  id: string;
+  name: string;
+  sport: 'running' | 'padel' | 'hiking';
+  badgeEmoji: string;
+  location: string;
+  typicalPaceOrLevel: string;
+  recurringSchedule: string;
+  members: SportsSquadMember[];
+  activeCallout?: SquadCallout;
+}
+
 export interface CrewConnection {
   id: string;
   athlete: {
@@ -31,6 +64,103 @@ export interface CrewConnection {
   };
   connectionStatus: 'habitual' | 'occasional' | 'favorite';
 }
+
+export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
+  {
+    id: 'sq_1',
+    name: 'Retiro Morning Runners',
+    sport: 'running',
+    badgeEmoji: '🏃',
+    location: 'Parque del Retiro, Madrid',
+    typicalPaceOrLevel: '5:15 min/km',
+    recurringSchedule: 'Martes & Jueves • 07:30h',
+    members: [
+      { id: 'usr_me', name: 'Tú (Alex)', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200', isCaptain: true },
+      { id: 'capt_1', name: 'Sofía Díaz', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
+      { id: 'usr_2', name: 'Marco Rossi', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200' },
+      { id: 'usr_3', name: 'Elena Ramos', avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200' },
+    ],
+    activeCallout: {
+      id: 'call_1',
+      title: 'Rodaje 8.5K amanecer + Café de especialidad',
+      date: 'Mañana (Martes)',
+      time: '07:30h',
+      meetingPoint: 'Puerta de Alcalá',
+      myRsvp: 'going',
+      attendingMembers: [
+        { id: 'usr_me', name: 'Tú', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
+        { id: 'capt_1', name: 'Sofía', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
+        { id: 'usr_2', name: 'Marco', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200' },
+      ],
+      maxCapacity: 5,
+      hasThirdHalf: true,
+      thirdHalfType: 'cafe',
+      thirdHalfVenue: 'Café Murillo (Retiro)',
+    },
+  },
+  {
+    id: 'sq_2',
+    name: 'Cuarteto Pádel Chamartín',
+    sport: 'padel',
+    badgeEmoji: '🎾',
+    location: 'Club Pádel Chamartín',
+    typicalPaceOrLevel: 'Nivel 3.5 Playtomic',
+    recurringSchedule: 'Viernes • 19:00h',
+    members: [
+      { id: 'usr_me', name: 'Tú (Alex)', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
+      { id: 'capt_2', name: 'Javier Chamartín', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200', isCaptain: true },
+      { id: 'usr_4', name: 'Lucía Méndez', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200' },
+      { id: 'usr_5', name: 'Carlos Villa', avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200' },
+    ],
+    activeCallout: {
+      id: 'call_2',
+      title: 'Partida 2vs2 + Caña & Aperitivo',
+      date: 'Este Viernes',
+      time: '19:00h',
+      meetingPoint: 'Pista 4 Cubierta, Club Chamartín',
+      myRsvp: 'none',
+      attendingMembers: [
+        { id: 'capt_2', name: 'Javier', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
+        { id: 'usr_4', name: 'Lucía', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200' },
+        { id: 'usr_5', name: 'Carlos', avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200' },
+      ],
+      maxCapacity: 4,
+      hasThirdHalf: true,
+      thirdHalfType: 'beer',
+      thirdHalfVenue: 'Terraza Club Chamartín',
+    },
+  },
+  {
+    id: 'sq_3',
+    name: 'Sierra Guadarrama Hikers',
+    sport: 'hiking',
+    badgeEmoji: '🥾',
+    location: 'Navacerrada & Pedriza',
+    typicalPaceOrLevel: 'Media Montaña (12-16 km)',
+    recurringSchedule: 'Fines de semana',
+    members: [
+      { id: 'usr_me', name: 'Tú (Alex)', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
+      { id: 'capt_3', name: 'Marta Navacerrada', avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200', isCaptain: true },
+      { id: 'capt_1', name: 'Sofía Díaz', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
+    ],
+    activeCallout: {
+      id: 'call_3',
+      title: 'Ruta Canto Cochino & Mirador de las Buitreras',
+      date: 'Este Sábado',
+      time: '09:00h',
+      meetingPoint: 'Parking Cantocochino, Manzanares el Real',
+      myRsvp: 'maybe',
+      attendingMembers: [
+        { id: 'capt_3', name: 'Marta', avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200' },
+        { id: 'capt_1', name: 'Sofía', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
+      ],
+      maxCapacity: 6,
+      hasThirdHalf: true,
+      thirdHalfType: 'picnic',
+      thirdHalfVenue: 'Picnic en Pradera de la Pedriza',
+    },
+  },
+];
 
 export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
   {
