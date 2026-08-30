@@ -357,15 +357,15 @@ export function App() {
                     type="button"
                     onClick={() => navigateTo('crew')}
                     aria-label="Abrir mi red de Crew"
-                    className={`px-3 py-2 text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
+                    className={`px-3 py-2 text-xs font-black rounded-full transition-all flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
                       currentRoute === 'crew'
-                        ? 'bg-[#7FB77E] text-white shadow-xs font-black'
-                        : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border border-[#1F4E5F]/15'
+                        ? 'bg-[#1F4E5F] text-white shadow-xs'
+                        : 'bg-white/90 hover:bg-white text-[#1F4E5F] border border-slate-200/90 shadow-2xs'
                     }`}
                   >
-                    <Users className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-white' : 'text-[#7FB77E]'}`} />
+                    <Users className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-[#7FB77E]' : 'text-[#1F4E5F]'}`} />
                     <span className="hidden md:inline">Mi Crew</span>
-                    <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#7FB77E]'}`}>
+                    <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-[#7FB77E] text-[#1F4E5F]' : 'bg-[#7FB77E]/20 text-[#1F4E5F]'}`}>
                       7
                     </span>
                   </button>
@@ -379,13 +379,13 @@ export function App() {
                       }
                       navigateTo('create');
                     }}
-                    className={`px-3.5 py-2 text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
+                    className={`px-3.5 py-2 text-xs font-black rounded-full transition-all flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 shadow-xs ${
                       currentRoute === 'create'
-                        ? 'bg-[#7FB77E] text-white'
-                        : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white'
+                        ? 'bg-[#7FB77E] text-[#1F4E5F]'
+                        : 'bg-[#1F4E5F] hover:bg-[#163a47] text-white'
                     }`}
                   >
-                    <Plus className="w-4 h-4 text-white stroke-[3]" />
+                    <Plus className="w-4 h-4 stroke-[3]" />
                     <span className="hidden sm:inline">Crear Plan</span>
                     <span className="sm:hidden">Crear</span>
                   </button>
@@ -397,12 +397,12 @@ export function App() {
                     aria-label="Abrir chats"
                     className={`relative p-2.5 rounded-full border transition-all cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center shrink-0 ${
                       currentRoute === 'chats'
-                        ? 'bg-[#1F4E5F] text-white border-[#1F4E5F]'
-                        : 'bg-[#F7F7F7] border-[#1F4E5F]/10 text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
+                        ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-xs'
+                        : 'bg-white/90 border-slate-200/90 text-[#1F4E5F] hover:bg-white shadow-2xs'
                     }`}
                   >
-                    <MessageSquare className="w-4 h-4 text-[#1F4E5F]" />
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#7FB77E] text-white text-[9px] font-black flex items-center justify-center border-2 border-white">
+                    <MessageSquare className="w-4 h-4" />
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#7FB77E] text-[#1F4E5F] text-[9px] font-black flex items-center justify-center border-2 border-white shadow-2xs">
                       3
                     </span>
                   </button>
