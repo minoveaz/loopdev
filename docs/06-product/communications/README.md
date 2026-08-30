@@ -23,3 +23,4 @@ La definición transversal y sus dos paquetes están `approved`. La aprobación 
 - Persistencia y RLS: `supabase/migrations/20260829000000_communications_core_foundation.sql` y `supabase/migrations/20260902000000_crm_security_hardening.sql`.
 - Webhook de WhatsApp Cloud: `supabase/functions/loopdev-whatsapp-webhook/index.ts`.
 - Track de definición: `tracks/planned/crm/2026-08-29-communications-core-crm-inbox-definition.md`.
+- [Handoff Docker/Supabase](COMMUNICATIONS_CORE_DOCKER_SUPABASE_HANDOFF.md): procedimiento único para validar cada fase en un entorno con runtime de base de datos.

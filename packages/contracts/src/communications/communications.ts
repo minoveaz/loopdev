@@ -9,6 +9,10 @@ export const CommunicationMessageDirectionSchema = z.enum(['inbound', 'outbound'
 export const CommunicationMessageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
 export const CommunicationAccountStatusSchema = z.enum(['pending', 'connected', 'disconnected', 'error']);
 export const CommunicationTemplateStatusSchema = z.enum(['draft', 'approved', 'rejected', 'archived']);
+export const CommunicationAccountOnboardingStatusSchema = z.enum(['pending', 'connected', 'failed', 'expired']);
+export const CommunicationTemplateCategorySchema = z.enum(['authentication', 'marketing', 'utility']);
+export const CommunicationWorkerJobTypeSchema = z.enum(['delivery', 'retry', 'purge']);
+export type CommunicationWorkerJobType = z.infer<typeof CommunicationWorkerJobTypeSchema>;
 export const CommunicationPermissionKeySchema = z.enum([
   'communications.read',
   'communications.reply',
@@ -18,6 +22,39 @@ export const CommunicationPermissionKeySchema = z.enum([
   'communications.manage-accounts',
 ]);
 export type CommunicationPermissionKey = z.infer<typeof CommunicationPermissionKeySchema>;
+
+export const CommunicationWorkerJobSchema = z.object({
+  id: IdSchema,
+  type: CommunicationWorkerJobTypeSchema,
+  organizationId: IdSchema,
+  accountId: IdSchema.nullable().optional(),
+  messageId: IdSchema.nullable().optional(),
+  traceId: z.string().trim().min(1).max(240),
+  attempt: z.number().int().min(0).max(3).default(0),
+  createdAt: TimestampSchema,
+}).superRefine((value, context) => {
+  if ((value.type === 'delivery' || value.type === 'retry') && (!value.accountId || !value.messageId)) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: 'delivery and retry jobs require accountId and messageId' });
+  }
+  if (value.type === 'purge' && (value.accountId || value.messageId)) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: 'purge jobs must not target an account or message' });
+  }
+});
+export type CommunicationWorkerJob = z.infer<typeof CommunicationWorkerJobSchema>;
+
+export const StartWhatsAppEmbeddedSignupCommandSchema = z.object({
+  organizationId: IdSchema,
+  brandId: IdSchema.nullable().optional(),
+  state: z.string().trim().min(32).max(240),
+});
+export type StartWhatsAppEmbeddedSignupCommand = z.infer<typeof StartWhatsAppEmbeddedSignupCommandSchema>;
+
+export const CompleteWhatsAppEmbeddedSignupCommandSchema = z.object({
+  organizationId: IdSchema,
+  onboardingId: IdSchema,
+  code: z.string().trim().min(1).max(4_000),
+});
+export type CompleteWhatsAppEmbeddedSignupCommand = z.infer<typeof CompleteWhatsAppEmbeddedSignupCommandSchema>;
 
 export type MessagingProvider = {
   sendText(input: {
@@ -30,6 +67,7 @@ export type MessagingProvider = {
     accountId: string;
     recipient: string;
     templateId: string;
+    parameterNames: string[];
     parameters: Record<string, string>;
     idempotencyKey: string;
   }): Promise<{ providerMessageId: string }>;
@@ -58,12 +96,21 @@ export const CommunicationTemplateSchema = z.object({
   channel: CommunicationChannelSchema,
   externalTemplateId: z.string().trim().min(1).max(240),
   language: z.string().trim().min(2).max(20),
+  name: z.string().trim().min(1).max(512),
+  category: CommunicationTemplateCategorySchema,
   status: CommunicationTemplateStatusSchema,
   body: z.string().trim().min(1).max(100_000),
+  parameterNames: z.array(z.string().trim().min(1).max(120)).max(100).default([]),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
 });
 export type CommunicationTemplate = z.infer<typeof CommunicationTemplateSchema>;
+
+export const SynchronizeCommunicationTemplatesCommandSchema = z.object({
+  organizationId: IdSchema,
+  accountId: IdSchema,
+});
+export type SynchronizeCommunicationTemplatesCommand = z.infer<typeof SynchronizeCommunicationTemplatesCommandSchema>;
 
 export const CommunicationInboundEventSchema = z.object({
   organizationId: IdSchema,

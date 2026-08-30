@@ -4,8 +4,8 @@
 > `PENDING_REVIEW` entries require content, authority, ownership, and
 > reference review before the documentation migration track can close.
 
-- Total files inventoried: 240
-- Pending content review: 129
+- Total files inventoried: 241
+- Pending content review: 130
 - Frozen strategic documents are listed for completeness and must not be edited.
 - Archived files are retained as historical evidence and are not candidates for content refresh.
 
@@ -72,6 +72,7 @@
 | `docs/06-ai-skills/tier-3-governance/README.md` | NAVIGATION | CLASSIFIED | AI skills and agent behavior | AI Platform | Each skill or routing change | `docs/06-ai-skills/tier-3-governance/README.md` | REVIEW | Index or generated catalog |
 | `docs/06-ai-skills/tier-3-governance/SECURITY_AUDIT_SKILL.md` | CANONICAL | CLASSIFIED | AI skills and agent behavior | AI Platform | Each security or tenancy change | `docs/06-ai-skills/tier-3-governance/SECURITY_AUDIT_SKILL.md` | UPDATE_AND_VALIDATE_COMMANDS | Security and organization-isolation audit guidance; scanner commands require repository verification |
 | `docs/06-product/communications/COMMUNICATIONS_CORE_DEFINITION.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/COMMUNICATIONS_CORE_DEFINITION.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
+| `docs/06-product/communications/COMMUNICATIONS_CORE_DOCKER_SUPABASE_HANDOFF.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/COMMUNICATIONS_CORE_DOCKER_SUPABASE_HANDOFF.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_COMPONENT_AUDIT.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_COMPONENT_AUDIT.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_CONTRACT.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_CONTRACT.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |
 | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_IMPACT_ASSESSMENT.md` | PENDING_REVIEW | PENDING | Suite product documentation | Domain owner | Each roadmap or module-scope change | `docs/06-product/communications/communications-core/COMMUNICATIONS_CORE_IMPACT_ASSESSMENT.md` | REVIEW_AND_CLASSIFY | Requires document-by-document review |

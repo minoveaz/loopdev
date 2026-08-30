@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { normalizeWhatsAppPhone, parseWhatsAppWebhook, sendWhatsAppText } from './whatsapp';
+import { createWhatsAppCloudProvider, normalizeWhatsAppPhone, normalizeWhatsAppTemplate, parseWhatsAppWebhook, resolveWhatsAppTemplateParameters, sendWhatsAppTemplate, sendWhatsAppText, WhatsAppProviderError } from './whatsapp';
 
 describe('WhatsApp webhook parser', () => {
   afterEach(() => vi.restoreAllMocks());
@@ -64,6 +64,30 @@ describe('WhatsApp webhook parser', () => {
 
   it('surfaces provider errors from the Meta Cloud API adapter', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { message: 'Invalid token' } }), { status: 401 })));
-    await expect(sendWhatsAppText({ phoneNumberId: 'phone-1', accessToken: 'token', to: '34600123456', body: 'Hola' })).rejects.toThrow('Invalid token');
+    await expect(sendWhatsAppText({ phoneNumberId: 'phone-1', accessToken: 'token', to: '34600123456', body: 'Hola' })).rejects.toMatchObject({ code: 'PROVIDER_REJECTED', message: 'Invalid token' } satisfies Partial<WhatsAppProviderError>);
+  });
+
+  it('sends a template and resolves credentials only through the account resolver', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ messages: [{ id: 'wamid.template' }] }), { status: 200 })));
+    const resolveCredentials = vi.fn().mockResolvedValue({ phoneNumberId: 'phone-1', accessToken: 'token' });
+    const provider = createWhatsAppCloudProvider(resolveCredentials);
+    await expect(provider.sendTemplate({ accountId: 'account-1', recipient: '+34600123456', templateId: 'welcome', parameterNames: ['firstName'], parameters: { firstName: 'Ana' }, idempotencyKey: 'key-1' })).resolves.toEqual({ providerMessageId: 'wamid.template' });
+    expect(resolveCredentials).toHaveBeenCalledWith('account-1');
+    expect(fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ body: expect.stringContaining('"type":"template"') }));
+  });
+
+  it('normalizes approved templates and rejects incomplete provider payloads', () => {
+    expect(normalizeWhatsAppTemplate({ id: 'template-1', name: 'welcome', language: 'es', category: 'UTILITY', status: 'APPROVED', components: [{ type: 'BODY', text: 'Hola {{firstName}}' }] })).toMatchObject({ status: 'approved', parameterNames: ['firstName'] });
+    expect(normalizeWhatsAppTemplate({ id: 'template-1', name: 'welcome' })).toBeNull();
+  });
+
+  it('classifies provider rate limits and unavailability', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { message: 'Rate limit' } }), { status: 429 })));
+    await expect(sendWhatsAppTemplate({ phoneNumberId: 'phone-1', accessToken: 'token', to: '+34600123456', templateName: 'welcome', language: 'es', parameters: [] })).rejects.toMatchObject({ code: 'PROVIDER_RATE_LIMITED' } satisfies Partial<WhatsAppProviderError>);
+  });
+
+  it('preserves approved parameter order and rejects a mismatched parameter set', () => {
+    expect(resolveWhatsAppTemplateParameters(['firstName', 'policyNumber'], { policyNumber: 'P-1', firstName: 'Ana' })).toEqual(['Ana', 'P-1']);
+    expect(() => resolveWhatsAppTemplateParameters(['firstName'], { unexpected: 'Ana' })).toThrow('parameters do not match');
   });
 });

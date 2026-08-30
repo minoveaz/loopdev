@@ -83,17 +83,19 @@ async function persistInboundMessage(
   if (conversationResult.error) throw conversationResult.error;
   let conversationId = conversationResult.data?.id;
   if (!conversationId) {
+    const lastActivityAt = timestamp(message.timestamp);
     const createdConversation = await supabase.from('communication_conversations').insert({
       organization_id: account.organization_id, contact_id: contactId, channel_id: channelId,
-      channel: 'whatsapp', status: 'open', last_inbound_at: timestamp(message.timestamp),
-      window_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      channel: 'whatsapp', status: 'open', last_inbound_at: lastActivityAt, last_activity_at: lastActivityAt,
+      window_expires_at: new Date(Date.parse(lastActivityAt) + 24 * 60 * 60 * 1000).toISOString(),
     }).select('id').single();
     if (createdConversation.error) throw createdConversation.error;
     conversationId = createdConversation.data.id;
   } else {
+    const lastActivityAt = timestamp(message.timestamp);
     const updatedConversation = await supabase.from('communication_conversations').update({
-      last_inbound_at: timestamp(message.timestamp),
-      window_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      last_inbound_at: lastActivityAt, last_activity_at: lastActivityAt,
+      window_expires_at: new Date(Date.parse(lastActivityAt) + 24 * 60 * 60 * 1000).toISOString(),
       updated_at: new Date().toISOString(),
     }).eq('id', conversationId).select('id').single();
     if (updatedConversation.error) throw updatedConversation.error;

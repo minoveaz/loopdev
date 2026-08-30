@@ -67,10 +67,13 @@ La POC existente sirve como evidencia de Meta Cloud, webhook firmado, normalizac
 | 2026-08-29 | Conservar `loopdev-whatsapp-webhook` como la única entrada pública canónica de WhatsApp Cloud. | Es el endpoint registrado y el único con evidencia documentada de WABA Sandbox, verificación GET y POST firmado. | La ruta Next duplicada se depreca y se retira o convierte en adaptador interno solo tras pruebas de equivalencia, firma, deduplicación y aislamiento. | Usuario |
 | 2026-08-29 | Representar el Manager inicial de Communications mediante los roles Platform existentes `owner` y `admin`. | Platform Core no tiene un rol global `manager`; añadirlo extendería membresías y consumidores fuera de #157. | `owner` y `admin` pueden reasignar; `agent` opera y se autoasigna; `viewer` conserva solo lectura. | Usuario |
 | 2026-08-29 | Usar `communications.manage-accounts` como key canónica de administración. | El catálogo Platform permite guiones y no guiones bajos en permission keys. | Contrato y documentación se alinean con la migración; no cambia la semántica aprobada. | Corrección técnica respaldada por el contrato Platform |
+| 2026-08-30 | Usar Supabase Queues/`pgmq` como cola durable inicial y crear `apps/loopdev-worker` como workspace desplegable. | Sigue la arquitectura aprobada y separa trabajo durable de Next.js y Edge Functions. | El worker inicial se limita a Communications; procesa delivery, retries y purgas mediante un adapter que se completa tras verificar la API pgmq en Supabase local. | Usuario |
 
 ## Arquitectura y contratos
 
 El flujo canónico es `provider webhook -> verify/normalize -> Communications application service -> CRM public contact command -> communications persistence and outbox -> limited worker -> provider adapter`. Los Route Handlers y Edge Functions verifican entrada y delegan; el worker realiza trabajo durable. Ninguna UI, webhook o adaptador accede a repositorios internos de otro módulo.
+
+El procedimiento reproducible de Docker/Supabase, validación, rollout y rollback por fase vive en [COMMUNICATIONS_CORE_DOCKER_SUPABASE_HANDOFF.md](../../../docs/06-product/communications/COMMUNICATIONS_CORE_DOCKER_SUPABASE_HANDOFF.md). Es el único handoff operativo para estos requisitos de entorno; este track conserva únicamente alcance, decisiones y evidencia.
 
 ## Fases
 
@@ -178,62 +181,71 @@ Docker Desktop y Podman no están disponibles en este equipo, por lo que `pnpm e
 **Objetivo:** Implementar lifecycle de cuenta Meta, Embedded Signup, reconexión y templates sin secretos de cliente.
 
 **Definition of Ready**
-- [ ] Fase 1 validada.
+- [ ] Fase 1 validada con Docker/Supabase; implementación local de Fase 2 puede avanzar, pero no se cierra sin ese gate.
 
 **Entregables**
-- [ ] Account health y onboarding server-side.
-- [ ] Sincronización y lifecycle de templates.
-- [ ] Validación de cuenta, organización, marca y parámetros.
+- [x] Contratos y migración preparados para onboarding con estado hash, lifecycle de cuenta y health metadata sin secretos en cliente.
+- [x] Adaptador WhatsApp Cloud testeable con resolución de credenciales inyectada y errores normalizados.
+- [x] Normalización pura de templates Meta y contrato de parámetros.
+- [x] Migración y pgTAP preparados para cuenta, organización, marca y onboarding.
 
 **Validación**
-- [ ] Tests de adapter y estados de cuenta/template.
-- [ ] Revisión de secretos y auditoría.
+- [x] Tests de adapter, templates y contratos disponibles en este entorno.
+- [x] Revisión de secretos: credenciales solo entran por resolver server-side y el onboarding persiste `state_hash`.
+- [ ] Aplicar `20260908000000_communications_phase2_accounts_templates.sql` y ejecutar `008_communications_accounts_templates.sql` con Docker/Supabase.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Tests locales cubren normalización de template, dispatch con credential resolver, provider rejection/rate limit y contratos de Embedded Signup. Validación SQL y pgTAP quedan bloqueadas por Docker/Podman no disponibles.
 
-**Estado:** pendiente
+**Estado:** implementación local preparada; validación de base de datos bloqueada por entorno
 
 ### Fase 3: Inbound, outbound y delivery
 
 **Objetivo:** Completar el flujo WhatsApp con webhook, contacto CRM, ventana de 24 horas, texto, templates y estados de entrega.
 
 **Definition of Ready**
-- [ ] Fase 2 validada.
+- [ ] Fases 1 y 2 validadas con Docker/Supabase; el desarrollo local puede preparar lógica pura, pero no cerrar Fase 3 sin esos gates.
 
 **Entregables**
-- [ ] Webhook y eventos idempotentes.
-- [ ] Conversaciones inbound abiertas y sin asignación.
-- [ ] Dispatch de texto y templates con enforcement de policy.
-- [ ] Delivery states normalizados y auditables.
+- [x] Política pura de dispatch: texto solo dentro de ventana y template aprobado/same-account fuera de ella.
+- [x] Ruta Next de webhook retirada con `410`; Edge Function permanece como única entrada pública canónica.
+- [x] Edge Function usa timestamp de Meta para `last_activity_at` y para la ventana de 24 horas.
+- [x] pgTAP preparado para idempotencia de eventos, delivery history y aislamiento inbound.
+- [ ] Validar Edge Function, migraciones y pgTAP en Docker/Supabase antes de conectar tráfico Meta.
 
 **Validación**
-- [ ] Tests signed webhook, duplicados, CRM resolution, ventana, template y delivery.
-- [ ] Pruebas de aislamiento y errores de proveedor.
+- [x] Tests de firma, parser, dispatch, template y retirada de ruta Next disponibles en este entorno.
+- [ ] Tests signed webhook end-to-end, duplicados, CRM resolution, ventana, template y delivery con Supabase local.
+- [ ] Pruebas de aislamiento y errores de proveedor contra base de datos.
 
-**Evidencia:** Pendiente.
+**Evidencia:** 19 tests locales cubren firma, parser, dispatch y endpoint único. La migración/persistencia/pgTAP permanecen bloqueadas por Docker/Podman no disponibles.
 
-**Estado:** pendiente
+**Estado:** implementación local preparada; validación de base de datos y Edge Function bloqueada por entorno
 
 ### Fase 4: Worker, retención y controles operativos
 
 **Objetivo:** Añadir trabajo durable y controles de recuperación sin ampliar canales.
 
 **Definition of Ready**
-- [ ] Fase 3 validada.
+- [ ] Fases 1 a 3 validadas con Docker/Supabase; el desarrollo local puede preparar worker y controles, pero no cerrar Fase 4 sin esos gates.
 
 **Entregables**
-- [ ] Worker least-privilege y reintentos acotados.
-- [ ] Kill switch por organización/cuenta.
-- [ ] Retención, purge dry-run y auditoría.
-- [ ] Métricas de salud, trazas y runbook de rollback.
+- [x] Workspace desplegable `apps/loopdev-worker` con scripts build, start, typecheck y test aislado.
+- [x] Motor de jobs tipado para delivery, retry y purge; handlers inyectables, errores normalizados y shutdown cooperativo.
+- [x] Kill switch por organización preparado junto al control existente por cuenta.
+- [x] Retención de 24 meses, legal hold y purge dry-run preparados como lógica pura y schema.
+- [x] Logs estructurados y redacted con trace, organización, cuenta, mensaje, intento y outcome, sin body o secretos.
+- [x] Migración pgmq, controles operativos y pgTAP preparados.
+- [ ] Adapter `pgmq` real, heartbeat, DLQ y failure drills validados con Supabase local.
 
 **Validación**
-- [ ] Tests de worker, retry, purge y kill switch.
-- [ ] Validación de observabilidad sin cuerpos ni secretos.
+- [x] Tests de worker, purge dry-run, errores y logs redacted disponibles en este entorno.
+- [x] Build, typecheck y lint aislados de `@loopdev/worker`.
+- [ ] Aplicar `20260909000000_communications_phase4_worker_controls.sql` y ejecutar `010_communications_worker_controls.sql` con Docker/Supabase.
+- [ ] Verificar el API real de pgmq, implementar su adapter, heartbeat, DLQ y failure drills en Docker/Supabase.
 
-**Evidencia:** Pendiente.
+**Evidencia:** 4 tests aislados del worker, 6 tests de contratos, build/typecheck/lint y gobernanza estática de Supabase pasaron. El comando inicial de test del worker arrastró la suite global y falló por dependencias UI existentes; se corrigió con `apps/loopdev-worker/vitest.config.ts` y la suite aislada pasó.
 
-**Estado:** pendiente
+**Estado:** implementación local preparada; adapter pgmq y validación de base de datos bloqueados por entorno
 
 ### Fase 5: Gate de activación y handoff Inbox
 
@@ -287,16 +299,20 @@ Docker Desktop y Podman no están disponibles en este equipo, por lo que `pnpm e
 | 2026-08-29 | Typecheck y lint focalizados | Pasaron. | `@loopdev/contracts` y rutas Communications |
 | 2026-08-29 | `pnpm test:supabase-governance` | Pasó. | Gobernanza estática de migraciones |
 | 2026-08-29 | Reset local y pgTAP | Bloqueados. | Docker Desktop/Podman no están disponibles en este equipo |
+| 2026-08-30 | Fase 2: adapter y contratos | Pasaron 16 tests, typecheck y lint focalizados. | Templates, Embedded Signup y credential resolver server-side |
+| 2026-08-30 | Fase 2: gobernanza, track y enlaces | Pasaron. | Migración y pgTAP preparados; ejecución SQL sigue bloqueada por Docker/Podman |
+| 2026-08-30 | Fase 3: endpoint único y dispatch | Pasaron 24 tests focalizados, typecheck, lint, governance, track, enlaces y diff. | Ruta Next retirada con `410`; Edge Function permanece canónica |
+| 2026-08-30 | Fase 4: worker local | Pasaron 4 tests aislados, build, typecheck y lint de `@loopdev/worker`; contratos y gobernanza Supabase pasaron. | pgmq adapter y pgTAP pendientes de Docker/Supabase |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-08-29.
 - **Rama de continuación:** `feature/communications-core-implementation`.
 - **Commit de partida:** `61a81ad`.
-- **Estado alcanzado:** Fase 0 completada; Fase 1 implementada en código, migración y pgTAP preparados, pendiente de runtime Docker/Supabase.
-- **Decisiones, bloqueos y riesgos:** Estar Protegidos es el piloto multi-marca; WABA, secretos y usuarios reales se difieren a activación; POC es evidencia; Edge Function es la entrada pública canónica y la ruta Next se depreca después de equivalencia. La migración no puede validarse localmente sin Docker/Podman.
-- **Validación ejecutada:** 21 tests focalizados, typecheck de contratos, lint de rutas, gobernanza Supabase, branch-base, track y diff pasaron. `supabase db reset` y pgTAP están pendientes por entorno.
-- **Siguiente acción concreta:** En un equipo con Docker/Supabase, ejecutar el procedimiento de entrega preparado, regenerar tipos y cerrar Fase 1 solo si la migración y pgTAP pasan.
+- **Estado alcanzado:** Fase 0 completada; Fases 1 a 4 preparadas en código, migraciones, pgTAP y worker, pendientes de runtime Docker/Supabase.
+- **Decisiones, bloqueos y riesgos:** Estar Protegidos es el piloto multi-marca; WABA, secretos y usuarios reales se difieren a activación; POC es evidencia; Edge Function es la entrada pública canónica. `pgmq` y `@loopdev/worker` están aprobados; la API concreta de pgmq debe verificarse localmente antes de implementar su adapter. Las migraciones no pueden validarse aquí sin Docker/Podman.
+- **Validación ejecutada:** Fases 1 a 3: 24 tests focalizados de contratos, parser, firma, templates, dispatch y endpoint. Fase 4: 4 tests aislados del worker, build, typecheck y lint. Gobernanza Supabase, track, enlaces y diff pasaron. `supabase db reset`, pgTAP y adapter pgmq están pendientes por entorno.
+- **Siguiente acción concreta:** En un equipo con Docker/Supabase, ejecutar Fases 1 a 4 del runbook, verificar pgmq, implementar el adapter, regenerar tipos y cerrar fases solo si migraciones, lint, pgTAP y drills pasan.
 
 ## Cierre
 

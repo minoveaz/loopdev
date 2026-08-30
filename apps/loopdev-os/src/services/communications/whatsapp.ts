@@ -1,3 +1,5 @@
+import type { MessagingProvider } from '@loopdev/contracts';
+
 export type WhatsAppInboundEvent =
   | {
       kind: 'message';
@@ -44,6 +46,31 @@ export type WhatsAppOutboundResult = {
   status: 'accepted';
 };
 
+export type WhatsAppCloudCredentials = {
+  phoneNumberId: string;
+  accessToken: string;
+  graphApiVersion?: string;
+};
+
+export type WhatsAppTemplateRecord = {
+  id: string;
+  name: string;
+  language: string;
+  category: 'authentication' | 'marketing' | 'utility';
+  status: 'draft' | 'approved' | 'rejected' | 'archived';
+  body: string;
+  parameterNames: string[];
+};
+
+export class WhatsAppProviderError extends Error {
+  constructor(
+    readonly code: 'PROVIDER_REJECTED' | 'PROVIDER_RATE_LIMITED' | 'PROVIDER_UNAVAILABLE',
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
 export async function sendWhatsAppText(input: {
   phoneNumberId: string;
   accessToken: string;
@@ -69,9 +96,102 @@ export async function sendWhatsAppText(input: {
   );
   const payload = await response.json().catch(() => null) as { messages?: Array<{ id?: string }>; error?: { message?: string } } | null;
   if (!response.ok || !payload?.messages?.[0]?.id) {
-    throw new Error(payload?.error?.message ?? 'WhatsApp provider rejected the message');
+    throwWhatsAppProviderError(response.status, payload?.error?.message);
   }
   return { providerMessageId: payload.messages[0].id, status: 'accepted' };
+}
+
+export async function sendWhatsAppTemplate(input: {
+  phoneNumberId: string;
+  accessToken: string;
+  to: string;
+  templateName: string;
+  language: string;
+  parameters: string[];
+  graphApiVersion?: string;
+}): Promise<WhatsAppOutboundResult> {
+  const response = await fetch(
+    `https://graph.facebook.com/${input.graphApiVersion ?? 'v20.0'}/${input.phoneNumberId}/messages`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${input.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        to: normalizeWhatsAppPhone(input.to).replace('+', ''),
+        type: 'template',
+        template: {
+          name: input.templateName,
+          language: { code: input.language },
+          components: input.parameters.length
+            ? [{ type: 'body', parameters: input.parameters.map((text) => ({ type: 'text', text })) }]
+            : [],
+        },
+      }),
+    },
+  );
+  const payload = await response.json().catch(() => null) as { messages?: Array<{ id?: string }>; error?: { message?: string } } | null;
+  if (!response.ok || !payload?.messages?.[0]?.id) {
+    throwWhatsAppProviderError(response.status, payload?.error?.message);
+  }
+  return { providerMessageId: payload.messages[0].id, status: 'accepted' };
+}
+
+export function createWhatsAppCloudProvider(resolveCredentials: (accountId: string) => Promise<WhatsAppCloudCredentials>): MessagingProvider {
+  return {
+    async sendText(input) {
+      const credentials = await resolveCredentials(input.accountId);
+      const result = await sendWhatsAppText({
+        ...credentials,
+        to: input.recipient,
+        body: input.body,
+      });
+      return { providerMessageId: result.providerMessageId };
+    },
+    async sendTemplate(input) {
+      const credentials = await resolveCredentials(input.accountId);
+      const result = await sendWhatsAppTemplate({
+        ...credentials,
+        to: input.recipient,
+        templateName: input.templateId,
+        language: 'es',
+        parameters: resolveWhatsAppTemplateParameters(input.parameterNames, input.parameters),
+      });
+      return { providerMessageId: result.providerMessageId };
+    },
+  };
+}
+
+export function resolveWhatsAppTemplateParameters(parameterNames: string[], parameters: Record<string, string>): string[] {
+  const expected = new Set(parameterNames);
+  if (expected.size !== parameterNames.length || Object.keys(parameters).length !== expected.size || Object.keys(parameters).some((name) => !expected.has(name))) {
+    throw new WhatsAppProviderError('PROVIDER_REJECTED', 'WhatsApp template parameters do not match the approved template');
+  }
+  return parameterNames.map((name) => parameters[name]);
+}
+
+export function normalizeWhatsAppTemplate(value: unknown): WhatsAppTemplateRecord | null {
+  const template = objectValue(value);
+  const id = stringValue(template?.id);
+  const name = stringValue(template?.name);
+  const language = stringValue(template?.language);
+  const category = stringValue(template?.category)?.toLowerCase();
+  const status = stringValue(template?.status)?.toLowerCase();
+  if (!id || !name || !language || !category || !status || !['authentication', 'marketing', 'utility'].includes(category)) return null;
+  const components = Array.isArray(template?.components) ? template.components.filter(isObject) : [];
+  const body = components.find((component) => stringValue(component.type)?.toLowerCase() === 'body');
+  const bodyText = stringValue(body?.text);
+  if (!bodyText || !['draft', 'approved', 'rejected', 'archived'].includes(status)) return null;
+  const parameterNames = [...bodyText.matchAll(/{{\s*([\w.-]+)\s*}}/g)].map((match) => match[1]);
+  return { id, name, language, category: category as WhatsAppTemplateRecord['category'], status: status as WhatsAppTemplateRecord['status'], body: bodyText, parameterNames };
+}
+
+function throwWhatsAppProviderError(status: number, message?: string): never {
+  if (status === 429) throw new WhatsAppProviderError('PROVIDER_RATE_LIMITED', message ?? 'WhatsApp provider rate limit reached');
+  if (status >= 500) throw new WhatsAppProviderError('PROVIDER_UNAVAILABLE', message ?? 'WhatsApp provider is unavailable');
+  throw new WhatsAppProviderError('PROVIDER_REJECTED', message ?? 'WhatsApp provider rejected the message');
 }
 
 function timestamp(value: unknown) {
