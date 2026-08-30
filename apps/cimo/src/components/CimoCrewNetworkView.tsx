@@ -207,7 +207,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="flex flex-col gap-4">
           {filteredSquads.map((sq) => {
             const callout = sq.activeCallout;
             const myRsvp = callout?.myRsvp ?? 'none';
@@ -215,32 +215,36 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
             return (
               <div
                 key={sq.id}
-                className="bg-white border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-2xs hover:shadow-xs hover:border-[#00B894]/30 transition-all flex flex-col justify-between gap-4"
+                className="bg-white border border-[#1F4E5F]/12 rounded-3xl p-5 sm:p-6 shadow-2xs hover:shadow-xs hover:border-[#00B894]/35 transition-all flex flex-col gap-4"
               >
-                {/* Squad Header */}
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="text-2xl shrink-0 p-2 rounded-2xl bg-[#F7F7F7] border border-[#1F4E5F]/5">
-                        {sq.badgeEmoji}
-                      </span>
-                      <div className="truncate">
-                        <h3 className="text-sm font-black text-[#1F4E5F] truncate">
+                {/* 1. Squad Header Row: Name, Schedule, Pace & Members */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-[#1F4E5F]/8">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-2xl shrink-0 p-2.5 rounded-2xl bg-[#F7F7F7] border border-[#1F4E5F]/5">
+                      {sq.badgeEmoji}
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-base font-black text-[#1F4E5F]">
                           {sq.name}
                         </h3>
-                        <p className="text-[11px] text-[#1F4E5F]/60 font-medium truncate">
-                          {sq.recurringSchedule}
-                        </p>
+                        <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-[#1F4E5F]/5 text-[#1F4E5F]/80">
+                          {sq.typicalPaceOrLevel}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#1F4E5F]/60 font-medium mt-0.5">
+                        <span>{sq.recurringSchedule}</span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-[#00B894]" />
+                          {sq.location}
+                        </span>
                       </div>
                     </div>
-
-                    <span className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-[#1F4E5F]/5 text-[#1F4E5F]/80 shrink-0">
-                      {sq.typicalPaceOrLevel}
-                    </span>
                   </div>
 
-                  {/* Overlapping Members Avatars */}
-                  <div className="flex items-center justify-between pt-1 border-t border-[#1F4E5F]/8 text-xs">
+                  {/* Overlapping Members + Action buttons */}
+                  <div className="flex items-center gap-3 self-end sm:self-center shrink-0">
                     <div className="flex items-center -space-x-2">
                       {sq.members.map((mem) => (
                         <img
@@ -248,121 +252,119 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                           src={mem.avatarUrl}
                           alt={mem.name}
                           title={mem.name}
-                          className="w-7 h-7 rounded-full object-cover ring-2 ring-white"
+                          className="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-2xs"
                         />
                       ))}
                     </div>
-                    <span className="text-[11px] font-bold text-[#1F4E5F]/60">
+                    <span className="text-xs font-bold text-[#1F4E5F]/60 pr-1">
                       {sq.members.length} miembros
                     </span>
-                  </div>
 
-                  {/* ⚡ ACTIVE SQUAD CALLOUT / CONVOCATORIA (High Value) */}
-                  {callout ? (
-                    <div className="p-3.5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-2.5">
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="font-black text-[#1F4E5F] flex items-center gap-1.5">
-                          <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
+                    <button
+                      type="button"
+                      onClick={() => onOpenChat?.(sq.id)}
+                      className="px-3 py-1.5 rounded-xl bg-[#F7F7F7] hover:bg-[#1F4E5F] text-[#1F4E5F] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 active:scale-98"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>Chat</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleOpenPropose('squad', sq.name, sq.sport)}
+                      className="px-3.5 py-1.5 rounded-xl bg-[#00B894]/10 hover:bg-[#00B894] text-[#00B894] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 active:scale-98"
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Lanzar Quedada</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Active Convocatoria Box in Row Format */}
+                {callout ? (
+                  <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    {/* Callout Details */}
+                    <div className="flex flex-col gap-1.5 max-w-xl">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-amber-500/15 text-amber-900 border border-amber-500/20 flex items-center gap-1">
+                          <Flame className="w-3 h-3 text-amber-600 fill-amber-600" />
                           <span>Próxima Convocatoria</span>
                         </span>
-                        <span className="font-extrabold text-[#00B894] bg-[#00B894]/10 px-2 py-0.2 rounded-full">
+                        <span className="text-xs font-black text-[#00B894] bg-[#00B894]/10 px-2.5 py-0.5 rounded-full">
                           {callout.date} • {callout.time}
                         </span>
                       </div>
 
-                      <div>
-                        <span className="text-xs font-extrabold text-[#1F4E5F] block leading-snug">
-                          {callout.title}
+                      <h4 className="text-sm font-extrabold text-[#1F4E5F]">
+                        {callout.title}
+                      </h4>
+
+                      <div className="flex items-center gap-3 text-xs text-[#1F4E5F]/70 font-medium flex-wrap">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-[#00B894]" />
+                          <span>{callout.meetingPoint}</span>
                         </span>
-                        <div className="flex items-center gap-1.5 text-[11px] text-[#1F4E5F]/65 mt-1">
-                          <MapPin className="w-3 h-3 text-[#00B894] shrink-0" />
-                          <span className="truncate">{callout.meetingPoint}</span>
-                        </div>
-                      </div>
-
-                      {callout.hasThirdHalf && callout.thirdHalfVenue && (
-                        <div className="flex items-center gap-1.5 text-[10px] text-[#1F4E5F]/75 font-semibold bg-white px-2.5 py-1 rounded-xl border border-[#1F4E5F]/5">
-                          <span>{callout.thirdHalfType === 'beer' ? '🍻' : callout.thirdHalfType === 'picnic' ? '🌿' : '☕'}</span>
-                          <span className="truncate">3er Tiempo: {callout.thirdHalfVenue}</span>
-                        </div>
-                      )}
-
-                      {/* 1-Click Interactive RSVP Selector */}
-                      <div className="pt-2 border-t border-[#1F4E5F]/10 flex flex-col gap-1.5">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50">
-                          Tu asistencia ({callout.attendingMembers.length}/{callout.maxCapacity} confirmados):
-                        </span>
-                        <div className="grid grid-cols-3 gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => handleRsvpChange(sq.id, 'going')}
-                            className={`py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                              myRsvp === 'going'
-                                ? 'bg-[#00B894] text-white shadow-2xs font-black scale-102'
-                                : 'bg-white hover:bg-[#00B894]/10 text-[#1F4E5F] border border-[#1F4E5F]/10'
-                            }`}
-                          >
-                            <Check className="w-3.5 h-3.5" />
-                            <span>Voy</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleRsvpChange(sq.id, 'maybe')}
-                            className={`py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                              myRsvp === 'maybe'
-                                ? 'bg-amber-500 text-white shadow-2xs font-black scale-102'
-                                : 'bg-white hover:bg-amber-50 text-[#1F4E5F] border border-[#1F4E5F]/10'
-                            }`}
-                          >
-                            <HelpCircle className="w-3.5 h-3.5" />
-                            <span>Duda</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleRsvpChange(sq.id, 'declined')}
-                            className={`py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                              myRsvp === 'declined'
-                                ? 'bg-rose-500 text-white shadow-2xs font-black scale-102'
-                                : 'bg-white hover:bg-rose-50 text-[#1F4E5F] border border-[#1F4E5F]/10'
-                            }`}
-                          >
-                            <X className="w-3.5 h-3.5" />
-                            <span>No</span>
-                          </button>
-                        </div>
+                        {callout.hasThirdHalf && callout.thirdHalfVenue && (
+                          <span className="flex items-center gap-1 bg-white px-2 py-0.5 rounded-lg border border-[#1F4E5F]/10 font-bold text-[#1F4E5F]">
+                            <span>{callout.thirdHalfType === 'beer' ? '🍻' : callout.thirdHalfType === 'picnic' ? '🌿' : '☕'}</span>
+                            <span>{callout.thirdHalfVenue}</span>
+                          </span>
+                        )}
                       </div>
                     </div>
-                  ) : (
-                    <div className="p-4 bg-[#F7F7F7] rounded-2xl text-center flex flex-col items-center justify-center gap-2">
-                      <span className="text-xs text-[#1F4E5F]/60 font-medium">
-                        Sin convocatoria activa esta semana.
+
+                    {/* RSVP Buttons */}
+                    <div className="flex flex-col gap-1.5 shrink-0">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/55">
+                        Tu asistencia ({callout.attendingMembers.length}/{callout.maxCapacity} confirmados):
                       </span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleRsvpChange(sq.id, 'going')}
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                            myRsvp === 'going'
+                              ? 'bg-[#00B894] text-white shadow-2xs scale-102'
+                              : 'bg-white hover:bg-[#00B894]/10 text-[#1F4E5F] border border-[#1F4E5F]/15'
+                          }`}
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Voy</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRsvpChange(sq.id, 'maybe')}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                            myRsvp === 'maybe'
+                              ? 'bg-amber-500 text-white shadow-2xs scale-102'
+                              : 'bg-white hover:bg-amber-50 text-[#1F4E5F] border border-[#1F4E5F]/15'
+                          }`}
+                        >
+                          <HelpCircle className="w-3.5 h-3.5" />
+                          <span>Duda</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRsvpChange(sq.id, 'declined')}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                            myRsvp === 'declined'
+                              ? 'bg-rose-500 text-white shadow-2xs scale-102'
+                              : 'bg-white hover:bg-rose-50 text-[#1F4E5F] border border-[#1F4E5F]/15'
+                          }`}
+                        >
+                          <X className="w-3.5 h-3.5" />
+                          <span>No</span>
+                        </button>
+                      </div>
                     </div>
-                  )}
-                </div>
-
-                {/* Squad Action Buttons */}
-                <div className="pt-2 border-t border-[#1F4E5F]/8 flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleOpenPropose('squad', sq.name, sq.sport)}
-                    className="flex-1 py-2 rounded-xl bg-[#00B894]/10 hover:bg-[#00B894] text-[#00B894] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-98"
-                  >
-                    <Zap className="w-3.5 h-3.5" />
-                    <span>Lanzar Quedada</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => onOpenChat?.(sq.id)}
-                    className="px-3.5 py-2 rounded-xl bg-[#F7F7F7] hover:bg-[#1F4E5F] text-[#1F4E5F] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-98"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>Chat</span>
-                  </button>
-                </div>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-[#F7F7F7] rounded-xl text-xs text-[#1F4E5F]/60">
+                    Sin convocatoria activa esta semana.
+                  </div>
+                )}
               </div>
             );
           })}
