@@ -14,6 +14,7 @@ import { CimoCreatePlanView } from './components/CimoCreatePlanView';
 import { CimoChatListView } from './components/CimoChatListView';
 import { CimoProfileView } from './components/CimoProfileView';
 import { CimoEditProfileView, type ExtendedUserProfileData } from './components/CimoEditProfileView';
+import { CimoCrewNetworkView } from './components/CimoCrewNetworkView';
 
 export function App() {
   const [activities, setActivities] = useState<ActivityCardData[]>(INITIAL_ACTIVITIES);
@@ -74,6 +75,7 @@ export function App() {
     }
     if (hash === 'create') return { route: 'create', activityId: null };
     if (hash === 'chats') return { route: 'chats', activityId: null };
+    if (hash === 'crew') return { route: 'crew', activityId: null };
     if (hash === 'profile/edit') return { route: 'profile-edit', activityId: null };
     if (hash === 'profile') return { route: 'profile', activityId: null };
     return { route: 'feed', activityId: null };
@@ -108,6 +110,8 @@ export function App() {
       window.location.hash = '#/create';
     } else if (route === 'chats') {
       window.location.hash = '#/chats';
+    } else if (route === 'crew') {
+      window.location.hash = '#/crew';
     } else if (route === 'profile-edit') {
       window.location.hash = '#/profile/edit';
     } else if (route === 'profile') {
@@ -261,6 +265,15 @@ export function App() {
             onSendMessage={handleSendMessage}
           />
         );
+      case 'crew':
+        return (
+          <CimoCrewNetworkView
+            onBackToExplore={() => navigateTo('feed')}
+            onNavigateToProfile={() => navigateTo('profile')}
+            onOpenChat={() => navigateTo('chats')}
+            onCreateWorkout={() => navigateTo('create')}
+          />
+        );
       case 'chats':
         return (
           <CimoChatListView
@@ -290,6 +303,7 @@ export function App() {
             onSelectActivity={handleSelectActivity}
             onCreatePlan={() => navigateTo('create')}
             onEditProfile={() => navigateTo('profile-edit')}
+            onNavigateToCrew={() => navigateTo('crew')}
             onUpdateUser={(updated) => setCurrentUser((prev) => ({ ...prev, ...updated }))}
           />
         );
@@ -338,6 +352,24 @@ export function App() {
               }
               rightSlot={
                 <div className="flex items-center gap-2">
+                  {/* Mi Crew Button with Badge */}
+                  <button
+                    type="button"
+                    onClick={() => navigateTo('crew')}
+                    aria-label="Abrir mi red de Crew"
+                    className={`px-3 py-2 text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
+                      currentRoute === 'crew'
+                        ? 'bg-[#00B894] text-white shadow-xs font-black'
+                        : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border border-[#1F4E5F]/15'
+                    }`}
+                  >
+                    <span className="text-sm">🤝</span>
+                    <span className="hidden md:inline">Mi Crew</span>
+                    <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-white/20 text-white' : 'bg-[#00B894]/15 text-[#00B894]'}`}>
+                      7
+                    </span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => {

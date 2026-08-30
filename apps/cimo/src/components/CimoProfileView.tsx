@@ -39,6 +39,7 @@ export interface CimoProfileViewProps {
   onSelectActivity?: (id: string) => void;
   onCreatePlan?: () => void;
   onEditProfile?: () => void;
+  onNavigateToCrew?: () => void;
   onUpdateUser?: (updated: ExtendedUserProfileData) => void;
 }
 
@@ -125,6 +126,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
   onSelectActivity,
   onCreatePlan,
   onEditProfile,
+  onNavigateToCrew,
   onUpdateUser,
 }) => {
   const [activeTab, setActiveTab] = useState<'plans' | 'sports' | 'badges' | 'reviews'>('plans');
@@ -326,15 +328,19 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
               </span>
             </div>
 
-            <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center">
-              <Users className="w-5 h-5 text-[#1F4E5F] mb-1" />
+            <button
+              type="button"
+              onClick={onNavigateToCrew}
+              className="p-4 bg-[#F7F7F7] hover:bg-white hover:border-[#00B894] hover:shadow-xs transition-all rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center cursor-pointer active:scale-95"
+            >
+              <Users className="w-5 h-5 text-[#00B894] mb-1" />
               <span className="text-xl font-black text-[#1F4E5F]">
-                46
+                7
               </span>
               <span className="text-[10px] font-bold text-[#1F4E5F]/60 uppercase tracking-wider">
-                Compañeros de Crew
+                Mi Red de Crew →
               </span>
-            </div>
+            </button>
 
             <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center">
               <Trophy className="w-5 h-5 text-[#7FB77E] mb-1" />
