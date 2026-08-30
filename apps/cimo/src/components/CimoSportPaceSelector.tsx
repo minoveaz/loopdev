@@ -25,16 +25,6 @@ export const SPORT_PACES_CATALOG: Record<string, SportPaceOption[]> = {
     { title: 'Media Montaña', metric: '10 - 14 km (+400m)', label: 'Media Montaña (10 - 14 km)', desc: 'Desnivel medio (+400m), ritmo activo', level: 'Intermedio' },
     { title: 'Alta Exigencia', metric: '+16 km (Técnico)', label: 'Alta Exigencia (+16 km)', desc: 'Cumbres y terreno técnico con buen desnivel', level: 'Avanzado' },
   ],
-  crossfit: [
-    { title: 'WOD Escalable', metric: 'Todos los pesos', label: 'WOD Todos los Niveles', desc: 'Pesos y movimientos escalables para todos', level: 'Todos los niveles' },
-    { title: 'RX Scaled', metric: 'Gimnásticos + Barra', label: 'Intermedio / RX Scaled', desc: 'Manejo de movimientos gimnásticos y barra', level: 'Intermedio' },
-    { title: 'RX Competitivo', metric: 'Pesos oficiales', label: 'RX Competitivo', desc: 'Pesos oficiales y alta intensidad', level: 'Avanzado' },
-  ],
-  cycling: [
-    { title: 'Rodaje Suave', metric: '22 - 25 km/h', label: 'Rodaje Suave (22 - 25 km/h)', desc: 'Salida en grupeta para sumar kilómetros', level: 'Principiante' },
-    { title: 'Ritmo Medio', metric: '26 - 29 km/h', label: 'Ritmo Medio (26 - 29 km/h)', desc: 'Salida con algún puerto de montaña', level: 'Intermedio' },
-    { title: 'Ritmo Fuerte', metric: '> 30 km/h', label: 'Ritmo Fuerte (> 30 km/h)', desc: 'Entrenamiento rápido con relevos', level: 'Avanzado' },
-  ],
 };
 
 export interface CimoSportPaceSelectorProps {
