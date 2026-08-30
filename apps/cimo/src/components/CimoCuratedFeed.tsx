@@ -135,7 +135,38 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
         </div>
       </div>
 
-      {/* 🌟 2. Activities Grid (Sports Boarding Pass Aesthetic) */}
+      {/* 🌟 2. Hero Featured Callout Banner in Deep Petrol Teal (#1F4E5F) */}
+      <div className="bg-[#1F4E5F] text-white rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md border border-white/10">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#7FB77E]/20 text-[#7FB77E] flex items-center justify-center shrink-0 border border-[#7FB77E]/30">
+            <Flame className="w-5 h-5 fill-[#7FB77E]" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E] bg-[#7FB77E]/20 px-2 py-0.2 rounded-full">
+                Quedada Destacada
+              </span>
+              <span className="text-xs font-bold text-slate-300">
+                Mañana • 07:30h
+              </span>
+            </div>
+            <h3 className="text-sm sm:text-base font-black text-white mt-0.5">
+              Rodaje 8.5K al amanecer en Retiro + Tercer Tiempo en Café Murillo
+            </h3>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => onSelectActivity(activities[0]?.id ?? 'act_1')}
+          className="px-4 py-2 rounded-xl bg-[#7FB77E] hover:bg-[#6ea26d] text-[#1F4E5F] text-xs font-black transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95 self-start sm:self-center"
+        >
+          <span>Ver Convocatoria</span>
+          <ChevronRight className="w-3.5 h-3.5 stroke-[3]" />
+        </button>
+      </div>
+
+      {/* 🌟 3. Activities Grid (Sports Boarding Pass Aesthetic) */}
       {displayedActivities.length === 0 ? (
         <div className="py-16 text-center text-xs text-[#1F4E5F]/50 flex flex-col items-center gap-2">
           <Trophy className="w-8 h-8 text-[#1F4E5F]/30" />
