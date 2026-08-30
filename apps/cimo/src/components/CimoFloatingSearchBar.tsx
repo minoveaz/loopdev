@@ -165,13 +165,13 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
         <div
           onClick={() => setActiveDropdown(activeDropdown === 'sport' ? null : 'sport')}
           className={`px-3 py-1.5 rounded-full cursor-pointer transition-all relative flex-1 text-left ${
-            activeDropdown === 'sport' ? 'bg-[#7FB77E]/15 ring-1 ring-[#7FB77E] text-[#1F4E5F]' : 'hover:bg-slate-100/70'
+            activeDropdown === 'sport' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'hover:bg-slate-100/70'
           }`}
         >
-          <span className="text-[9px] font-black uppercase tracking-wider block leading-none text-[#1F4E5F]/60">
+          <span className={`text-[9px] font-black uppercase tracking-wider block leading-none ${activeDropdown === 'sport' ? 'text-white/70' : 'text-[#1F4E5F]/60'}`}>
             Deporte
           </span>
-          <span className="text-xs font-black truncate block mt-0.5 text-[#1F4E5F]">
+          <span className="text-xs font-black truncate block mt-0.5">
             {selectedSport}
           </span>
         </div>
@@ -182,13 +182,13 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
         <div
           onClick={() => setActiveDropdown(activeDropdown === 'day' ? null : 'day')}
           className={`px-3 py-1.5 rounded-full cursor-pointer transition-all relative flex-1 text-left ${
-            activeDropdown === 'day' ? 'bg-[#7FB77E]/15 ring-1 ring-[#7FB77E] text-[#1F4E5F]' : 'hover:bg-slate-100/70'
+            activeDropdown === 'day' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'hover:bg-slate-100/70'
           }`}
         >
-          <span className="text-[9px] font-black uppercase tracking-wider block leading-none text-[#1F4E5F]/60">
+          <span className={`text-[9px] font-black uppercase tracking-wider block leading-none ${activeDropdown === 'day' ? 'text-white/70' : 'text-[#1F4E5F]/60'}`}>
             Cuándo
           </span>
-          <span className="text-xs font-black truncate block mt-0.5 text-[#1F4E5F]">
+          <span className="text-xs font-black truncate block mt-0.5">
             {selectedDay}
           </span>
         </div>
@@ -199,13 +199,13 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
         <div
           onClick={() => setActiveDropdown(activeDropdown === 'zone' ? null : 'zone')}
           className={`px-3 py-1.5 rounded-full cursor-pointer transition-all relative hidden sm:block flex-1 text-left ${
-            activeDropdown === 'zone' ? 'bg-[#7FB77E]/15 ring-1 ring-[#7FB77E] text-[#1F4E5F]' : 'hover:bg-slate-100/70'
+            activeDropdown === 'zone' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'hover:bg-slate-100/70'
           }`}
         >
-          <span className="text-[9px] font-black uppercase tracking-wider block leading-none text-[#1F4E5F]/60">
+          <span className={`text-[9px] font-black uppercase tracking-wider block leading-none ${activeDropdown === 'zone' ? 'text-white/70' : 'text-[#1F4E5F]/60'}`}>
             Ciudad
           </span>
-          <span className="text-xs font-black truncate block mt-0.5 text-[#1F4E5F]">
+          <span className="text-xs font-black truncate block mt-0.5">
             {selectedZone}
           </span>
         </div>
@@ -216,13 +216,13 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
         <div
           onClick={() => setActiveDropdown(activeDropdown === 'level' ? null : 'level')}
           className={`px-3 py-1.5 rounded-full cursor-pointer transition-all relative hidden lg:block flex-1 text-left ${
-            activeDropdown === 'level' ? 'bg-[#7FB77E]/15 ring-1 ring-[#7FB77E] text-[#1F4E5F]' : 'hover:bg-slate-100/70'
+            activeDropdown === 'level' ? 'bg-[#1F4E5F] text-white shadow-xs' : 'hover:bg-slate-100/70'
           }`}
         >
-          <span className="text-[9px] font-black uppercase tracking-wider block leading-none text-[#1F4E5F]/60">
+          <span className={`text-[9px] font-black uppercase tracking-wider block leading-none ${activeDropdown === 'level' ? 'text-white/70' : 'text-[#1F4E5F]/60'}`}>
             Nivel
           </span>
-          <span className="text-xs font-black truncate block mt-0.5 text-[#1F4E5F]">
+          <span className="text-xs font-black truncate block mt-0.5">
             {selectedLevel}
           </span>
         </div>
@@ -249,26 +249,26 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
         </button>
       </div>
 
-      {/* 🌟 100% SOLID OPAQUE DROPDOWN PANEL (Zero Translucency Bleeding) */}
+      {/* 🌟 OPTION A: DARK PETROLEUM CONTROL CENTER DROPDOWN PANEL (#1F4E5F) */}
       {activeDropdown && (
         <div
-          className="absolute top-full left-0 right-0 w-full mt-2.5 bg-white border border-slate-200 rounded-3xl p-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)] z-50 animate-in fade-in duration-150 flex flex-col gap-4 text-[#1F4E5F]"
+          className="absolute top-full left-0 right-0 w-full mt-3 bg-[#1F4E5F] text-white border border-white/15 rounded-3xl p-5 sm:p-6 shadow-2xl shadow-[#1F4E5F]/40 z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-4"
           onClick={(e) => e.stopPropagation()}
         >
 
-          {/* 🏃 CONTENT 1: DEPORTE */}
+          {/* 🏃 CONTENT 1: DEPORTE (Dark Card) */}
           {activeDropdown === 'sport' && (
             <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+              <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <span className="text-[11px] font-black uppercase tracking-wider text-white/70">
                   Disciplinas disponibles en CIMO
                 </span>
-                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/20 border border-[#7FB77E]/30 px-2.5 py-0.5 rounded-full">
                   {selectedSport}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
                 {/* Option: Todos */}
                 <button
                   type="button"
@@ -276,17 +276,17 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                     onSelectSport('Todos');
                     setActiveDropdown(null);
                   }}
-                  className={`p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center justify-between ${
+                  className={`p-3.5 rounded-2xl text-left transition-all cursor-pointer flex items-center justify-between ${
                     selectedSport === 'Todos'
-                      ? 'bg-[#1F4E5F] text-white shadow-xs font-black'
-                      : 'bg-slate-50 hover:bg-slate-100 text-[#1F4E5F] border border-slate-200/80'
+                      ? 'bg-[#7FB77E] text-[#1F4E5F] shadow-lg font-black scale-102 ring-2 ring-white/40'
+                      : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 truncate">
-                    <Layers className={`w-4 h-4 ${selectedSport === 'Todos' ? 'text-[#7FB77E]' : 'text-slate-500'} shrink-0`} />
+                    <Layers className={`w-4 h-4 ${selectedSport === 'Todos' ? 'text-[#1F4E5F]' : 'text-[#7FB77E]'} shrink-0`} />
                     <span className="text-xs font-black truncate">Todos los deportes</span>
                   </div>
-                  {selectedSport === 'Todos' && <Check className="w-4 h-4 text-[#7FB77E] shrink-0" />}
+                  {selectedSport === 'Todos' && <Check className="w-4 h-4 text-[#1F4E5F] stroke-[3] shrink-0" />}
                 </button>
 
                 {/* Specific sports */}
@@ -300,17 +300,17 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                         onSelectSport(s.label);
                         setActiveDropdown(null);
                       }}
-                      className={`p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center justify-between ${
+                      className={`p-3.5 rounded-2xl text-left transition-all cursor-pointer flex items-center justify-between ${
                         isSelected
-                          ? 'bg-[#1F4E5F] text-white shadow-xs font-black'
-                          : 'bg-slate-50 hover:bg-slate-100 text-[#1F4E5F] border border-slate-200/80'
+                          ? 'bg-[#7FB77E] text-[#1F4E5F] shadow-lg font-black scale-102 ring-2 ring-white/40'
+                          : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 truncate">
-                        <span className={isSelected ? 'text-[#7FB77E]' : 'text-slate-500'}>{getSportVectorIcon(s.id, 'w-4 h-4')}</span>
+                        <span className={isSelected ? 'text-[#1F4E5F]' : 'text-[#7FB77E]'}>{getSportVectorIcon(s.id, 'w-4 h-4')}</span>
                         <span className="text-xs font-black truncate">{s.label}</span>
                       </div>
-                      {isSelected && <Check className="w-4 h-4 text-[#7FB77E] shrink-0" />}
+                      {isSelected && <Check className="w-4 h-4 text-[#1F4E5F] stroke-[3] shrink-0" />}
                     </button>
                   );
                 })}
@@ -318,14 +318,14 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
             </div>
           )}
 
-          {/* 📅 CONTENT 2: FECHAS / DÍAS */}
+          {/* 📅 CONTENT 2: FECHAS / DÍAS (Dark Card) */}
           {activeDropdown === 'day' && (
-            <div className="flex flex-col gap-3.5">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <span className="text-[11px] font-black uppercase tracking-wider text-white/70">
                   Elige cuándo quieres entrenar
                 </span>
-                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/20 border border-[#7FB77E]/30 px-2.5 py-0.5 rounded-full">
                   {selectedDay}
                 </span>
               </div>
@@ -342,24 +342,26 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                     }}
                     className={`py-2 px-2.5 rounded-xl text-xs font-black transition-all cursor-pointer text-center ${
                       selectedDay === preset.label
-                        ? 'bg-[#1F4E5F] text-white shadow-xs'
-                        : 'bg-slate-50 hover:bg-slate-100 text-[#1F4E5F] border border-slate-200/80'
+                        ? 'bg-[#7FB77E] text-[#1F4E5F] shadow-md font-black'
+                        : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
                     }`}
                   >
                     <span className="block">{preset.label}</span>
-                    <span className="text-[10px] opacity-60 block mt-0.5">{preset.sub}</span>
+                    <span className={`text-[10px] block mt-0.5 ${selectedDay === preset.label ? 'text-[#1F4E5F]/70' : 'text-white/50'}`}>
+                      {preset.sub}
+                    </span>
                   </button>
                 ))}
               </div>
 
               {/* September 2026 Calendar Grid */}
-              <div className="pt-2 border-t border-slate-100">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60 block mb-2">
+              <div className="pt-2 border-t border-white/10">
+                <span className="text-[10px] font-black uppercase tracking-wider text-white/60 block mb-2">
                   Septiembre 2026
                 </span>
                 <div className="grid grid-cols-7 gap-1 text-center text-xs">
                   {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d, i) => (
-                    <span key={i} className="text-[10px] font-black text-slate-400 py-1">
+                    <span key={i} className="text-[10px] font-black text-white/40 py-1">
                       {d}
                     </span>
                   ))}
@@ -377,7 +379,7 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                         className={`h-7 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           selectedDay === c.name
                             ? 'bg-[#7FB77E] text-[#1F4E5F] font-black shadow-xs'
-                            : 'hover:bg-slate-100 text-[#1F4E5F]'
+                            : 'hover:bg-white/20 text-white'
                         }`}
                       >
                         {c.day}
@@ -389,44 +391,44 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
             </div>
           )}
 
-          {/* 📍 CONTENT 3: CIUDAD / ZONA (Smart, Fast & Compact) */}
+          {/* 📍 CONTENT 3: CIUDAD / ZONA (Dark Pro City Picker) */}
           {activeDropdown === 'zone' && (
             <div className="flex flex-col gap-3.5">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+              <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <span className="text-[11px] font-black uppercase tracking-wider text-white/70">
                   Ubicación & Ciudades de España
                 </span>
-                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/20 border border-[#7FB77E]/30 px-2.5 py-0.5 rounded-full">
                   {selectedZone}
                 </span>
               </div>
 
-              {/* Search Bar for Cities */}
+              {/* Search Bar for Cities with Dark Surface */}
               <div className="relative">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <Search className="w-4 h-4 text-white/50 absolute left-3.5 top-3" />
                 <input
                   type="text"
                   autoFocus
                   value={citySearchQuery}
                   onChange={(e) => setCitySearchQuery(e.target.value)}
                   placeholder="Escribe una ciudad o municipio (ej. Madrid, Pozuelo, Barcelona...)"
-                  className="w-full pl-10 pr-9 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-[#1F4E5F] focus:bg-white focus:outline-none focus:border-[#7FB77E] shadow-2xs"
+                  className="w-full pl-10 pr-9 py-2.5 bg-black/30 border border-white/20 rounded-2xl text-xs font-bold text-white placeholder:text-white/40 focus:bg-black/50 focus:outline-none focus:border-[#7FB77E] shadow-inner"
                 />
                 {citySearchQuery && (
                   <button
                     type="button"
                     onClick={() => setCitySearchQuery('')}
-                    className="absolute right-3 top-3 text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer"
+                    className="absolute right-3 top-3 text-white/50 hover:text-white p-0.5 cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
 
-              {/* 1. STATE A: No query typed -> Show Only Popular Cities Pills (Compact, Zero bottom grid) */}
+              {/* 1. STATE A: No query typed -> Show Only Popular Cities Pills */}
               {!citySearchQuery.trim() && (
                 <div className="flex flex-col gap-2 pt-1">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-white/50">
                     Ciudades Populares
                   </span>
                   <div className="flex items-center gap-1.5 flex-wrap">
@@ -438,11 +440,11 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                       }}
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedZone === 'Toda España'
-                          ? 'bg-[#1F4E5F] text-white shadow-xs font-black'
-                          : 'bg-slate-50 hover:bg-slate-100 text-[#1F4E5F] border border-slate-200/80'
+                          ? 'bg-[#7FB77E] text-[#1F4E5F] shadow-xs font-black'
+                          : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
                       }`}
                     >
-                      <Compass className="w-3.5 h-3.5 text-[#7FB77E]" />
+                      <Compass className={`w-3.5 h-3.5 ${selectedZone === 'Toda España' ? 'text-[#1F4E5F]' : 'text-[#7FB77E]'}`} />
                       <span>Toda España</span>
                     </button>
 
@@ -456,11 +458,11 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                         }}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                           selectedZone === cityName
-                            ? 'bg-[#1F4E5F] text-white shadow-xs font-black'
-                            : 'bg-slate-50 hover:bg-slate-100 text-[#1F4E5F] border border-slate-200/80'
+                            ? 'bg-[#7FB77E] text-[#1F4E5F] shadow-xs font-black'
+                            : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
                         }`}
                       >
-                        <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
+                        <MapPin className={`w-3.5 h-3.5 ${selectedZone === cityName ? 'text-[#1F4E5F]' : 'text-[#7FB77E]'}`} />
                         <span>{cityName}</span>
                       </button>
                     ))}
@@ -468,11 +470,11 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                 </div>
               )}
 
-              {/* 2. STATE B: Query typed -> Popular cities disappear, ONLY Exact Suggestions List */}
+              {/* 2. STATE B: Query typed -> ONLY Exact Suggestions List */}
               {citySearchQuery.trim() && (
                 <div className="flex flex-col gap-1 max-h-56 overflow-y-auto pr-1">
                   {filteredCities.length === 0 ? (
-                    <div className="py-6 text-center text-xs text-slate-400 font-medium">
+                    <div className="py-6 text-center text-xs text-white/50 font-medium">
                       No encontramos municipios que coincidan con "{citySearchQuery}".
                     </div>
                   ) : (
@@ -485,22 +487,22 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                           setActiveDropdown(null);
                           setCitySearchQuery('');
                         }}
-                        className={`p-2.5 rounded-xl text-left text-xs font-bold transition-all cursor-pointer flex items-center justify-between hover:bg-slate-100 ${
+                        className={`p-2.5 rounded-xl text-left text-xs font-bold transition-all cursor-pointer flex items-center justify-between ${
                           selectedZone === city.name
-                            ? 'bg-[#1F4E5F] text-white'
-                            : 'bg-slate-50 text-[#1F4E5F] border border-slate-100'
+                            ? 'bg-[#7FB77E] text-[#1F4E5F] font-black'
+                            : 'bg-white/10 hover:bg-white/20 text-white border border-white/5'
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
-                          <MapPin className={`w-3.5 h-3.5 ${selectedZone === city.name ? 'text-white' : 'text-[#7FB77E]'}`} />
+                          <MapPin className={`w-3.5 h-3.5 ${selectedZone === city.name ? 'text-[#1F4E5F]' : 'text-[#7FB77E]'}`} />
                           <div>
                             <span className="font-extrabold block">{city.name}</span>
-                            <span className={`text-[10px] block ${selectedZone === city.name ? 'text-white/70' : 'text-slate-400'}`}>
+                            <span className={`text-[10px] block ${selectedZone === city.name ? 'text-[#1F4E5F]/70' : 'text-white/50'}`}>
                               {city.province} • {city.region}
                             </span>
                           </div>
                         </div>
-                        {selectedZone === city.name && <Check className="w-4 h-4 text-[#7FB77E] shrink-0" />}
+                        {selectedZone === city.name && <Check className="w-4 h-4 text-[#1F4E5F] stroke-[3] shrink-0" />}
                       </button>
                     ))
                   )}
@@ -509,19 +511,19 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
             </div>
           )}
 
-          {/* ⚡ CONTENT 4: NIVEL */}
+          {/* ⚡ CONTENT 4: NIVEL (Dark Card) */}
           {activeDropdown === 'level' && (
             <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+              <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <span className="text-[11px] font-black uppercase tracking-wider text-white/70">
                   Nivel de Intensidad
                 </span>
-                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/20 border border-[#7FB77E]/30 px-2.5 py-0.5 rounded-full">
                   {selectedLevel}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
                 {CIMO_LEVELS_CATALOG.map((lvl) => {
                   const isSelected = selectedLevel.toLowerCase() === lvl.label.toLowerCase();
                   return (
@@ -532,19 +534,19 @@ export const CimoFloatingSearchBar: React.FC<CimoFloatingSearchBarProps> = ({
                         onSelectLevel(lvl.label);
                         setActiveDropdown(null);
                       }}
-                      className={`p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center justify-between ${
+                      className={`p-3.5 rounded-2xl text-left transition-all cursor-pointer flex items-center justify-between ${
                         isSelected
-                          ? 'bg-[#1F4E5F] text-white shadow-xs font-black'
-                          : 'bg-slate-50 hover:bg-slate-100 text-[#1F4E5F] border border-slate-200/80'
+                          ? 'bg-[#7FB77E] text-[#1F4E5F] shadow-lg font-black scale-102 ring-2 ring-white/40'
+                          : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
                       }`}
                     >
                       <div>
                         <span className="text-xs font-black block">{lvl.label}</span>
-                        <span className={`text-[10px] block mt-0.5 ${isSelected ? 'text-white/70' : 'text-slate-500'}`}>
+                        <span className={`text-[10px] block mt-0.5 ${isSelected ? 'text-[#1F4E5F]/80' : 'text-white/60'}`}>
                           {lvl.desc}
                         </span>
                       </div>
-                      {isSelected && <Check className="w-4 h-4 text-[#7FB77E] shrink-0" />}
+                      {isSelected && <Check className="w-4 h-4 text-[#1F4E5F] stroke-[3] shrink-0" />}
                     </button>
                   );
                 })}
