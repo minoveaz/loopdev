@@ -77,9 +77,10 @@ graph TD
 | :--- | :--- | :--- | :--- | :--- |
 | **2026-08-29** | Creación del Track Dedicado de CIMO bajo el dominio `apps`. | Desacoplar la evolución de la aplicación de producto CIMO del track de infraestructura transversal `public-shell-foundation`. | Foco exclusivo en UX, engagement deportivo y conversión de CIMO. | `@minoveaz` |
 | **2026-08-29** | Arquitectura CIMO 2.0 (Strava + Airbnb Experiences). | Eliminar layouts rígidos de oficina y adoptar la búsqueda flotante de Airbnb con la estructura de 3 columnas de Strava. | Experiencia deportiva de primer nivel mundial. | `@minoveaz` |
-| **2026-08-29** | Cápsula de Búsqueda Flotante integrada en el Header. | Ganar espacio vertical y mantener el buscador siempre visible (*sticky*) con cierre click-outside. | Interfaz limpia, rápida y sin redundancias. | `@minoveaz` |
-| **2026-08-29** | 3 Superficies Sólidas Alineadas en el Canvas (`max-w-[1720px]`). | Dotar de peso visual homogéneo a las 3 columnas y eliminar los espacios laterales vacíos en pantallas panorámicas. | Composición simétrica y profesional. | `@minoveaz` |
 | **2026-08-29** | Vistas Inmersivas Dedicadas en lugar de Modales (*No Modal Hell*). | Permitir URLs compartibles por WhatsApp/redes, mapas amplios, timelines y mejor control de navegación. | Máxima viralidad, deep linking y usabilidad. | `@minoveaz` |
+| **2026-08-30** | Arquitectura de 2 Bloques para "Mi Crew" (Squads Habituales + Círculo Íntimo). | Adaptar lo mejor de *Playtomic* (convocatoria rápida), *Spond* (asistencia en 1 clic) y *Timeleft* (conexiones limpias). | Foco en micro-comunidades activas y retención deportiva. | `@minoveaz` |
+| **2026-08-30** | Erradicación Total de Emojis del SO en Controles de UI. | Evitar el aspecto informal de "prototipo/chat" y garantizar consistencia cross-platform. | Interfaz seria, deportiva y profesional con SVG vectoriales (Lucide). | `@minoveaz` |
+| **2026-08-30** | Elevación del Design System de Autor (4 Capas: Depth, Typography, Signature Components & Polish). | Romper la monotonía de "tarjeta blanca plana con borde gris" e infundir la calidad visual y de autor de *VitaBlue*, *LoopDev SaaS*, *Strava* y *Linear*. | Identidad de marca única, jerarquía visual de élite y acabado premium. | `@minoveaz` |
 
 ---
 
@@ -106,26 +107,32 @@ graph TD
 * **Arquitectura de la Pantalla en 2 Bloques Canónicos:**
   - [ ] **📦 BLOQUE 1: "Mis Squads Deportivos" (Micro-Equipos Habituales - Estilo Playtomic + Spond):**
     - Tarjetas de grupos habituales activos del atleta:
-      - *🏃 Retiro Morning Crew:* (Sofía, Marco, Elena, Alex) • Ritmo: 5:15 min/km • Martes & Jueves 07:30.
-      - *🎾 Cuarteto Pádel Chamartín:* (Javier, Carlos, Lucía, Alex) • Nivel 3.5 • Viernes 19:00.
-      - *🥾 Sierra Guadarrama Hikers:* (Marta, Sofía, Alex) • Rutas 12-15 km • Fines de semana.
-    - Estado de la **Próxima Convocatoria Activa** dentro del Squad con selector de asistencia en 1 toque: `[ 🟢 Voy | 🔴 No puedo | 🟡 En duda ]`.
-    - Botón de **Lanzamiento Rápido de Quedada**: `[ ⚡ Lanzar quedada al Squad ]` para convocar al grupo cerrado antes de abrir plazas a la comunidad.
-    - Acceso directo al chat grupal del Squad.
-  - [ ] **👥 BLOQUE 2: "Mi Círculo Íntimo de Compañeros" (Conexiones Directas 1 a 1 - Estilo Timeleft + Strava):**
-    - Directorio limpio, espacioso y minimalista de los deportistas con los que ya has compartido entrenos.
-    - Memoria compartida y mística deportiva (*"4 entrenos juntos en Retiro • Último: Ayer"*, *"Tercer tiempo favorito: ☕ Café & Brunch"*).
-    - Chips discretos de compatibilidad deportiva (`🏃 5:15 min/km`, `🎾 Nivel 3.5`, `🥾 Media Montaña`).
-    - Acciones 1 a 1 sin datos invasivos: `[ 📨 Proponer entreno directo ]` y `[ 💬 Chat privado ]`.
+  - [x] **📦 BLOQUE 1: "Mis Squads Deportivos" (Micro-Equipos Habituales - Estilo Playtomic + Spond):**
+    - Mostrar los 2-3 Squads recurrentes del atleta (*Retiro Morning Runners 🏃*, *Cuarteto Pádel Chamartín 🎾*, *Sierra Guadarrama Hikers 🥾*).
+    - Tarjeta integrada y espaciosa sin dobles cajas grises con:
+      - Nombre del grupo, deporte, ritmo y horario recurrente.
+      - **Próxima Convocatoria Activa** con split-card de *Punto de Encuentro* vs *Tercer Tiempo Cálido* (`#FFFBEB`).
+      - **Segmented Control Táctil** de asistencia: `[ ✓ Voy | ? Duda | ✕ No ]`.
+      - Acciones: `[ + Convocatoria ]` y `[ 💬 Chat del Squad ]`.
+  - [x] **👥 BLOQUE 2: "Mi Círculo Íntimo de Compañeros" (Conexiones Directas 1 a 1 - Estilo Timeleft + Strava):**
+    - Filas limpias, minimalistas y espaciosas de los deportistas habituales.
+    - Memoria compartida (*"🟢 4 entrenos en común • Último: Ayer"*).
+    - Chip consolidado de ritmo y tercer tiempo (*"Activity 5:15 min/km • Coffee"*).
+    - Acciones 1 a 1: `[ ⚡ Proponer entreno ]` (modal rápido) y `[ 💬 Chat ]`.
   - [x] **Smart Captain Invites (Invitación Inteligente en 1 Clic - `CimoInviteCrewModal.tsx`):**
     - Al publicar un entreno como Capitán, el sistema sugiere automáticamente a los deportistas de su red con mayor compatibilidad ($>90\%$) para ese deporte y horario.
     - Botón `[ 📨 Invitar a mi Crew habitual ]` para pre-llenar los cupos en minutos antes de abrirlo a la comunidad general.
-  - [x] **Insignias Sociales y Dinámicas de Comunidad:**
-    - `🏅 Conector Deportivo:` Por entrenar con más de 25 personas diferentes.
-    - `🛡️ Crew Fiel:` Por mantener 4 semanas seguidas entrenando con el mismo grupo.
-    - `⭐ Capitán de Oro:` Por liderar entrenos con puntualidad impecable y Tercer Tiempo valorado positivamente.
 
-#### ☕ 2. Sección Explícita de "Tercer Tiempo" en Cada Plan (Post-Workout Social Protocol)
+#### 🎨 2. Elevación del Design System & UI Craft Sprint (Identidad de Autor tipo VitaBlue / Linear)
+* **Objetivo:** Erradicar el look genérico de plantilla plana de IA y dotar a CIMO de un lenguaje visual deportivo de alta fidelidad, profundidad y coherencia.
+* **Pilares de Ejecución:**
+  - [x] **Erradicación de Emojis del SO:** Reemplazo integral de emojis en botones, tabs y badges por iconografía vectorial SVG (`Lucide`) con tokens de color consistentes.
+  - [x] **Carga Tipográfica Oficial `Plus Jakarta Sans`:** Importación de todos los pesos (400-900) con tracking ajustado (-0.03em en títulos, +0.08em en overlines) y números tabulares.
+  - [x] **Segmented Control Táctil:** Selector de asistencia físico con micro-feedbacks y estados claros.
+  - [ ] **Tokens de Elevación & Sombras Difusas:** Implementar escala de superficies (Canvas, Slabs satinados, Highlights cálidos de Tercer Tiempo con bordes suaves).
+  - [ ] **Signature Components en Feed y Tarjetas de Actividad:** Llevar la estética *Sports Boarding Pass* y chips unificados a todo el catálogo de planes.
+
+#### ☕ 3. Sección Explícita de "Tercer Tiempo" en Cada Plan (Post-Workout Social Protocol)
 * **Objetivo:** Convertir el entrenamiento en un catalizador de relaciones humanas, asegurando que cada plan tenga un momento opcional de tertulia e hidratación post-ejercicio.
 * **Tipologías Canónicas:**
   - `☕ Café & Desayuno / Brunch:` Para rodajes matutinos de running o ciclismo (07:00 - 10:00 h).
