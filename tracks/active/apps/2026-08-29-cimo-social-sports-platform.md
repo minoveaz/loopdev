@@ -100,13 +100,23 @@ graph TD
 
 ### 📌 Fase 3: Red Social Deportiva, Tercer Tiempo & Algoritmo de Matching Deportivo Inteligente
 
-#### 🤝 1. "Mi Red de Crew" & Contactos Deportivos (Social Graph & Directorio de Conexiones)
-* **Objetivo:** Fomentar la recurrencia, la retención y la transformación de compañeros de entreno esporádicos en una red de amigos y deportistas habituales.
-* **Funcionalidades Nucleares:**
-  - [x] **Directorio de Conexiones ("Mi Red de Crew" - `CimoCrewNetworkView.tsx` / `/#/crew`):**
-    - Vista dedicada dentro del perfil o pestaña principal donde el atleta visualiza a todas las personas con las que ha compartido entrenos.
-    - Contador de entrenos mutuos (*"Has compartido 4 entrenos con Sofía Díaz (5:15 min/km)"*, *"2 partidas de pádel con Javier"*).
-    - Canales de contacto desbloqueados según permisos mutuos (acceso al WhatsApp de coordinación si ambos han asistido al entreno, LinkedIn profesional y Strava).
+#### 🤝 1. "Mi Red de Crew" & Arquitectura de 2 Bloques (Squads Habituales & Círculo Íntimo)
+* **Objetivo:** Fomentar la recurrencia, la retención y la transformación de compañeros de entreno esporádicos en micro-comunidades sólidas y grupos de confianza habituales.
+* **Inspiración de Producto & UX:** Combinación de lo mejor de *Playtomic* (convocatoria rápida a habituales), *Spond/Heja* (gestión de squads y asistencia), *Midnight Runners/NRC* (squads por ritmos) y *Timeleft* (conexiones limpias post-experiencia).
+* **Arquitectura de la Pantalla en 2 Bloques Canónicos:**
+  - [ ] **📦 BLOQUE 1: "Mis Squads Deportivos" (Micro-Equipos Habituales - Estilo Playtomic + Spond):**
+    - Tarjetas de grupos habituales activos del atleta:
+      - *🏃 Retiro Morning Crew:* (Sofía, Marco, Elena, Alex) • Ritmo: 5:15 min/km • Martes & Jueves 07:30.
+      - *🎾 Cuarteto Pádel Chamartín:* (Javier, Carlos, Lucía, Alex) • Nivel 3.5 • Viernes 19:00.
+      - *🥾 Sierra Guadarrama Hikers:* (Marta, Sofía, Alex) • Rutas 12-15 km • Fines de semana.
+    - Estado de la **Próxima Convocatoria Activa** dentro del Squad con selector de asistencia en 1 toque: `[ 🟢 Voy | 🔴 No puedo | 🟡 En duda ]`.
+    - Botón de **Lanzamiento Rápido de Quedada**: `[ ⚡ Lanzar quedada al Squad ]` para convocar al grupo cerrado antes de abrir plazas a la comunidad.
+    - Acceso directo al chat grupal del Squad.
+  - [ ] **👥 BLOQUE 2: "Mi Círculo Íntimo de Compañeros" (Conexiones Directas 1 a 1 - Estilo Timeleft + Strava):**
+    - Directorio limpio, espacioso y minimalista de los deportistas con los que ya has compartido entrenos.
+    - Memoria compartida y mística deportiva (*"4 entrenos juntos en Retiro • Último: Ayer"*, *"Tercer tiempo favorito: ☕ Café & Brunch"*).
+    - Chips discretos de compatibilidad deportiva (`🏃 5:15 min/km`, `🎾 Nivel 3.5`, `🥾 Media Montaña`).
+    - Acciones 1 a 1 sin datos invasivos: `[ 📨 Proponer entreno directo ]` y `[ 💬 Chat privado ]`.
   - [x] **Smart Captain Invites (Invitación Inteligente en 1 Clic - `CimoInviteCrewModal.tsx`):**
     - Al publicar un entreno como Capitán, el sistema sugiere automáticamente a los deportistas de su red con mayor compatibilidad ($>90\%$) para ese deporte y horario.
     - Botón `[ 📨 Invitar a mi Crew habitual ]` para pre-llenar los cupos en minutos antes de abrirlo a la comunidad general.
