@@ -123,7 +123,11 @@ export function App() {
       if (parsed.type === 'activity' && parsed.paramId) {
         setSelectedActivityId(parsed.paramId);
       } else if (parsed.type === 'profile') {
+        const handle = parsed.paramId || currentUser.handle?.replace('@', '') || 'alexrivera';
         setActiveProfileUserId(parsed.paramId);
+        if (!parsed.paramId && window.location.hash.includes('profile') && !window.location.hash.includes('edit')) {
+          window.history.replaceState(null, '', `#/app/profile/${handle}`);
+        }
       } else if (parsed.type === 'chat') {
         setActiveChatId(parsed.paramId);
       } else if (parsed.type === 'squad') {
@@ -155,8 +159,10 @@ export function App() {
       setActiveChatId(paramId ?? null);
       window.location.hash = paramId ? `#/app/chats/${paramId}` : '#/app/chats';
     } else if (route === 'profile') {
+      const myHandle = currentUser.handle?.replace('@', '') || 'alexrivera';
+      const target = paramId || myHandle;
       setActiveProfileUserId(paramId ?? null);
-      window.location.hash = paramId ? `#/app/profile/${paramId}` : '#/app/profile';
+      window.location.hash = `#/app/profile/${target}`;
     } else if (route === 'profile-edit') {
       window.location.hash = '#/app/profile/edit';
     } else if (route === 'create') {
