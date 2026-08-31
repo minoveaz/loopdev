@@ -798,85 +798,29 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           />
         </div>
 
-        {/* 📝 Island 5: Instrucciones del Capitán */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+        {/* 📝 Island 5: Instrucciones del Capitán & Material Recomendado */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+          {/* Parte A: Instrucciones Escritas del Capitán */}
           <CimoCaptainInstructionsField
             value={instructions}
             onChange={setInstructions}
             sport={sport}
           />
-        </div>
 
-        {/* 👥 Island 6: Plazas & Material Recomendado (Unificados) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
-          {/* Parte A: Cupo de Plazas */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                  6
-                </span>
-                <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                  Cupo de Plazas & Material Recomendado
-                </span>
-              </div>
-              <span className="text-xs font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
-                {maxMembers} plazas
-              </span>
-            </div>
-
-            <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-xs font-black text-[#1F4E5F] block">
-                  Cupo máximo de personas
-                </span>
-                <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5">
-                  Recomendamos microgrupos de 4 a 8 personas para garantizar cercanía, seguridad y buen rollo.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto bg-white px-3 py-1.5 rounded-full border border-[#1F4E5F]/15 shadow-2xs">
-                <button
-                  type="button"
-                  disabled={maxMembers <= 2}
-                  onClick={() => setMaxMembers(Math.max(2, maxMembers - 1))}
-                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
-                  aria-label="Reducir plazas"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-
-                <span className="text-sm font-black text-[#1F4E5F] min-w-[75px] text-center">
-                  {maxMembers} plazas
-                </span>
-
-                <button
-                  type="button"
-                  disabled={maxMembers >= 16}
-                  onClick={() => setMaxMembers(Math.min(16, maxMembers + 1))}
-                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
-                  aria-label="Aumentar plazas"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Parte B: Material Recomendado (Checklist Amplio sin texto cortado) */}
+          {/* Parte B: Material Recomendado (Checklist Amplio y Legible) */}
           <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4 text-[#7FB77E]" />
-                <span>Qué deben traer los asistentes ({selectedSportObj.label})</span>
+                <span>Material recomendado para los asistentes ({selectedSportObj.label})</span>
               </span>
-              <span className="text-[11px] font-bold text-[#7FB77E]">
-                Checklist personalizable
+              <span className="text-[11px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                Checklist
               </span>
             </div>
 
             <p className="text-xs text-[#1F4E5F]/70 font-medium">
-              Haz clic para activar o desactivar los elementos que consideres necesarios:
+              Selecciona el material esencial que los deportistas deben traer:
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
@@ -947,6 +891,60 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                   </button>
                 );
               })}
+            </div>
+          </div>
+        </div>
+
+        {/* 👥 Island 6: Cupo de Plazas (Separado) */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+                6
+              </span>
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+                Cupo máximo de personas
+              </span>
+            </div>
+            <span className="text-xs font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
+              {maxMembers} plazas
+            </span>
+          </div>
+
+          <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span className="text-xs font-black text-[#1F4E5F] block">
+                Límite de asistentes al entreno
+              </span>
+              <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5">
+                Recomendamos microgrupos de 4 a 8 personas para garantizar cercanía, seguridad y buen rollo.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto bg-white px-3 py-1.5 rounded-full border border-[#1F4E5F]/15 shadow-2xs">
+              <button
+                type="button"
+                disabled={maxMembers <= 2}
+                onClick={() => setMaxMembers(Math.max(2, maxMembers - 1))}
+                className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                aria-label="Reducir plazas"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+
+              <span className="text-sm font-black text-[#1F4E5F] min-w-[75px] text-center">
+                {maxMembers} plazas
+              </span>
+
+              <button
+                type="button"
+                disabled={maxMembers >= 16}
+                onClick={() => setMaxMembers(Math.min(16, maxMembers + 1))}
+                className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                aria-label="Aumentar plazas"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>

@@ -9,11 +9,11 @@ export interface CimoCaptainInstructionsFieldProps {
 }
 
 const quickChipsBySport: Record<string, string[]> = {
-  running: ['💧 Traer agua', '⏰ Llegar 5 min antes', '👟 Calzado de asfalto/trail', '🧘 Estiramientos al terminar'],
-  padel: ['🎾 Traer pala propia', '🪙 Pista a medias (3€ aprox)', '⏰ Estar en recepción 10 min antes', '🎾 Bolas nuevas'],
-  hiking: ['🥾 Calzado de montaña', '💧 Mínimo 1.5L de agua', '🧥 Cortavientos / Abrigo', '🥪 Snack / Fruta'],
-  crossfit: ['💧 Botella de agua y toalla', '⏰ Calentamiento previo 10 min', '🏋️ Magnesio'],
-  cycling: ['⛑️ Casco obligatorio', '🔧 Kit de pinchazos y bomba', '💧 2 bidones de agua', '💡 Luces delantera/trasera'],
+  running: ['Traer agua personal', 'Llegar 5 min antes', 'Calzado adecuado', 'Estiramientos al terminar'],
+  padel: ['Traer pala propia', 'Pista reservada', 'Estar en recepción 10 min antes', 'Bolas nuevas incluidas'],
+  hiking: ['Calzado de montaña', 'Mínimo 1.5L de agua', 'Cortavientos / Abrigo', 'Snack / Frutos secos'],
+  crossfit: ['Botella de agua y toalla', 'Calentamiento previo 10 min', 'Magnesio'],
+  cycling: ['Casco obligatorio', 'Kit de pinchazos y bomba', '2 bidones de agua', 'Luces delantera/trasera'],
 };
 
 const TEMPLATE_STORAGE_KEY = 'cimo_captain_instructions_preset';
