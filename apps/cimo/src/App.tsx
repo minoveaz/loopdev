@@ -67,31 +67,65 @@ export function App() {
   });
 
   // Standard Navigation & URL Deep Linking (/app/home, /app/activity/:id, /app/create, etc.)
+  // Parametric ID routing state
+  const [activeProfileUserId, setActiveProfileUserId] = useState<string | null>(null);
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  const [activeSquadId, setActiveSquadId] = useState<string | null>(null);
+
+  // Standard Dynamic Navigation & URL Deep Linking (/app/profile/:id, /app/chats/:id, /app/squad/:id, /app/activity/:id)
   const parseCurrentUrl = () => {
     const raw = window.location.hash.replace(/^#\/?/, '');
     const clean = raw.startsWith('app/') ? raw.slice(4) : raw;
 
+    // 1. Activity Detail: /app/activity/:activityId
     if (clean.startsWith('activity/')) {
       const id = clean.split('/')[1];
-      return { route: 'activity-detail', activityId: id };
+      return { route: 'activity-detail', paramId: id, type: 'activity' };
     }
-    if (clean === 'create') return { route: 'create', activityId: null };
-    if (clean === 'chats') return { route: 'chats', activityId: null };
-    if (clean === 'crew') return { route: 'crew', activityId: null };
-    if (clean === 'profile/edit') return { route: 'profile-edit', activityId: null };
-    if (clean === 'profile') return { route: 'profile', activityId: null };
+
+    // 2. Squad Hub: /app/squad/:squadId
+    if (clean.startsWith('squad/')) {
+      const id = clean.split('/')[1];
+      return { route: 'squad', paramId: id, type: 'squad' };
+    }
+
+    // 3. Specific Chat or Inbox: /app/chats/:chatId or /app/chats
+    if (clean.startsWith('chats/')) {
+      const id = clean.split('/')[1];
+      return { route: 'chats', paramId: id, type: 'chat' };
+    }
+    if (clean === 'chats') return { route: 'chats', paramId: null, type: 'chat' };
+
+    // 4. Specific Athlete Profile or My Profile: /app/profile/:userId or /app/profile
+    if (clean.startsWith('profile/') && clean !== 'profile/edit') {
+      const id = clean.split('/')[1];
+      return { route: 'profile', paramId: id, type: 'profile' };
+    }
+    if (clean === 'profile/edit') return { route: 'profile-edit', paramId: null, type: 'profile' };
+    if (clean === 'profile') return { route: 'profile', paramId: null, type: 'profile' };
+
+    // 5. Other App Views
+    if (clean === 'create') return { route: 'create', paramId: null, type: 'create' };
+    if (clean === 'crew') return { route: 'crew', paramId: null, type: 'crew' };
     if (clean === 'home' || clean === 'feed' || clean === '' || clean === 'app') {
-      return { route: 'feed', activityId: null };
+      return { route: 'feed', paramId: null, type: 'feed' };
     }
-    return { route: 'feed', activityId: null };
+    return { route: 'feed', paramId: null, type: 'feed' };
   };
 
   React.useEffect(() => {
     const handleLocationChange = () => {
-      const { route, activityId } = parseCurrentUrl();
-      setCurrentRoute(route);
-      if (activityId) {
-        setSelectedActivityId(activityId);
+      const parsed = parseCurrentUrl();
+      setCurrentRoute(parsed.route);
+
+      if (parsed.type === 'activity' && parsed.paramId) {
+        setSelectedActivityId(parsed.paramId);
+      } else if (parsed.type === 'profile') {
+        setActiveProfileUserId(parsed.paramId);
+      } else if (parsed.type === 'chat') {
+        setActiveChatId(parsed.paramId);
+      } else if (parsed.type === 'squad') {
+        setActiveSquadId(parsed.paramId);
       }
     };
 
@@ -106,21 +140,27 @@ export function App() {
     };
   }, []);
 
-  const navigateTo = (route: string, activityId?: string) => {
+  const navigateTo = (route: string, paramId?: string) => {
     setCurrentRoute(route);
-    if (activityId) {
-      setSelectedActivityId(activityId);
-      window.location.hash = `#/app/activity/${activityId}`;
-    } else if (route === 'create') {
-      window.location.hash = '#/app/create';
+    if (route === 'activity-detail' || (paramId && route.includes('activity'))) {
+      const id = paramId ?? selectedActivityId;
+      setSelectedActivityId(id);
+      window.location.hash = `#/app/activity/${id}`;
+    } else if (route === 'squad') {
+      setActiveSquadId(paramId ?? 'squad_1');
+      window.location.hash = `#/app/squad/${paramId ?? 'squad_1'}`;
     } else if (route === 'chats') {
-      window.location.hash = '#/app/chats';
-    } else if (route === 'crew') {
-      window.location.hash = '#/app/crew';
+      setActiveChatId(paramId ?? null);
+      window.location.hash = paramId ? `#/app/chats/${paramId}` : '#/app/chats';
+    } else if (route === 'profile') {
+      setActiveProfileUserId(paramId ?? null);
+      window.location.hash = paramId ? `#/app/profile/${paramId}` : '#/app/profile';
     } else if (route === 'profile-edit') {
       window.location.hash = '#/app/profile/edit';
-    } else if (route === 'profile') {
-      window.location.hash = '#/app/profile';
+    } else if (route === 'create') {
+      window.location.hash = '#/app/create';
+    } else if (route === 'crew') {
+      window.location.hash = '#/app/crew';
     } else {
       window.location.hash = '#/app/home';
     }
