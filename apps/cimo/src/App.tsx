@@ -542,6 +542,7 @@ export function App() {
               navigation={cimoNavigation}
               activeRouteId={currentRoute}
               onNavigate={navigateTo}
+              showDrawerTrigger={false}
               centerSlot={
                 <CimoFloatingSearchBar
                   selectedSport={selectedSport}
@@ -556,24 +557,25 @@ export function App() {
               }
               rightSlot={
                 <div className="flex items-center gap-2">
-                  {/* Mi Crew Button with Badge */}
+                  {/* Mi Crew Button (Desktop/Tablet only, since it is in BottomNav on Mobile) */}
                   <button
                     type="button"
                     onClick={() => navigateTo('crew')}
                     aria-label="Abrir mi red de Crew"
-                    className={`px-3 py-2 text-xs font-black rounded-full transition-all flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
+                    className={`hidden md:flex px-3 py-2 text-xs font-black rounded-full transition-all items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
                       currentRoute === 'crew'
                         ? 'bg-[#1F4E5F] text-white shadow-xs'
                         : 'bg-white/90 hover:bg-white text-[#1F4E5F] border border-slate-200/90 shadow-2xs'
                     }`}
                   >
                     <Users className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-[#7FB77E]' : 'text-[#1F4E5F]'}`} />
-                    <span className="hidden md:inline">Mi Crew</span>
+                    <span>Mi Crew</span>
                     <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-[#7FB77E] text-[#1F4E5F]' : 'bg-[#7FB77E]/20 text-[#1F4E5F]'}`}>
                       7
                     </span>
                   </button>
 
+                  {/* Crear Plan Button (Always Prominently Visible) */}
                   <button
                     type="button"
                     onClick={() => {
@@ -594,12 +596,12 @@ export function App() {
                     <span className="sm:hidden">Crear</span>
                   </button>
 
-                  {/* Chats button with badge */}
+                  {/* Chats button (Desktop/Tablet only, since it is in BottomNav on Mobile) */}
                   <button
                     type="button"
                     onClick={() => navigateTo('chats')}
                     aria-label="Abrir chats"
-                    className={`relative p-2.5 rounded-full border transition-all cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center shrink-0 ${
+                    className={`hidden md:flex relative p-2.5 rounded-full border transition-all cursor-pointer min-h-[38px] min-w-[38px] items-center justify-center shrink-0 ${
                       currentRoute === 'chats'
                         ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-xs'
                         : 'bg-white/90 border-slate-200/90 text-[#1F4E5F] hover:bg-white shadow-2xs'
@@ -616,7 +618,7 @@ export function App() {
                       type="button"
                       onClick={() => navigateTo('profile')}
                       aria-label="Ver mi perfil"
-                      className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs shrink-0"
+                      className="hidden sm:flex w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs shrink-0"
                     >
                       {currentUser.avatarUrl ? (
                         <img src={currentUser.avatarUrl} alt={currentUser.name} className="w-full h-full object-cover" />

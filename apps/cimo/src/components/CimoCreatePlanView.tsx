@@ -28,6 +28,7 @@ import {
   Send,
   ShieldCheck,
   ShoppingBag,
+  Smartphone,
   Sparkles,
   Sun,
   Sunrise,
@@ -45,6 +46,7 @@ import { CimoCitySearchCombobox } from './CimoCitySearchCombobox';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
 import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
 import { CimoSportPaceSelector } from './CimoSportPaceSelector';
+import { CimoLivePlanPreviewWidget } from './CimoLivePlanPreviewWidget';
 import { useSpainLocationSearch } from '../hooks/useSpainLocationSearch';
 import {
   CIMO_SPORTS_CATALOG,
@@ -255,6 +257,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [isCustomCalendarOpen, setIsCustomCalendarOpen] = useState(false);
   const [isCustomTimeOpen, setIsCustomTimeOpen] = useState(false);
+  const [isMobilePreviewOpen, setIsMobilePreviewOpen] = useState(false);
   const [customCoords, setCustomCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [customThirdHalfCoords, setCustomThirdHalfCoords] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -1805,6 +1808,69 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           </div>
         </div>
       </form>
+
+      {/* 📱 Mobile Floating Preview Trigger (lg:hidden) */}
+      <div className="fixed bottom-6 right-4 sm:right-6 z-40 lg:hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <button
+          type="button"
+          onClick={() => setIsMobilePreviewOpen(true)}
+          aria-label="Abrir vista previa del plan"
+          className="px-4 py-2.5 bg-[#1F4E5F] hover:bg-[#163a47] text-white rounded-full font-black text-xs shadow-2xl flex items-center gap-2 border border-white/20 active:scale-95 cursor-pointer backdrop-blur-md"
+        >
+          <Smartphone className="w-4 h-4 text-[#7FB77E]" />
+          <span>Ver Preview</span>
+        </button>
+      </div>
+
+      {/* 📱 Mobile Bottom Sheet Modal (lg:hidden) */}
+      {isMobilePreviewOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-[#FCFDFD] rounded-t-3xl max-h-[88vh] flex flex-col shadow-2xl border-t border-[#1F4E5F]/15 animate-in slide-in-from-bottom duration-250">
+            {/* Header / Grab Handle */}
+            <div className="p-4 border-b border-[#1F4E5F]/10 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Smartphone className="w-4 h-4 text-[#7FB77E]" />
+                <span className="text-xs font-black uppercase text-[#1F4E5F] tracking-wider">
+                  Live Preview & Co-Piloto
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsMobilePreviewOpen(false)}
+                aria-label="Cerrar vista previa móvil"
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Scrollable Content: Live Preview Widget */}
+            <div className="p-4 overflow-y-auto">
+              <CimoLivePlanPreviewWidget
+                formData={{
+                  sport: selectedSportObj.label,
+                  title: effectiveTitle,
+                  description: effectiveDescription,
+                  date,
+                  time,
+                  location,
+                  capacity: maxMembers,
+                  level: `${currentPace.title} (${currentPace.metric})`,
+                  thirdHalfType,
+                  thirdHalfTitle: hasThirdHalf
+                    ? (THIRD_HALF_TYPES.find((t) => t.id === thirdHalfType)?.label ?? 'Tercer Tiempo')
+                    : 'Sin tercer tiempo',
+                  thirdHalfLocation: hasThirdHalf ? thirdHalfVenue : '',
+                  image: effectiveImage,
+                  price: 'Gratis',
+                  instructions,
+                }}
+                currentUser={currentUser ?? { name: 'Capitán' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
