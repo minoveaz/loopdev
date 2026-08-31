@@ -456,18 +456,41 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
     { day: 21, name: 'Lun 21 Sep' },
     { day: 22, name: 'Mar 22 Sep' },
     { day: 23, name: 'Mié 23 Sep' },
-    { day: 24, name: 'Jue 24 Sep' },
-    { day: 25, name: 'Vie 25 Sep' },
-    { day: 26, name: 'Sáb 26 Sep' },
-    { day: 27, name: 'Dom 27 Sep' },
-    { day: 28, name: 'Lun 28 Sep' },
-    { day: 29, name: 'Mar 29 Sep' },
-    { day: 30, name: 'Mié 30 Sep' },
+    { day: 1, name: 'Mar 1 Sep', dateStr: 'Mar 1 Sep' },
+    { day: 2, name: 'Mié 2 Sep', dateStr: 'Mié 2 Sep' },
+    { day: 3, name: 'Jue 3 Sep', dateStr: 'Jue 3 Sep' },
+    { day: 4, name: 'Vie 4 Sep', dateStr: 'Vie 4 Sep' },
+    { day: 5, name: 'Sáb 5 Sep', dateStr: 'Sáb 5 Sep' },
+    { day: 6, name: 'Dom 6 Sep', dateStr: 'Dom 6 Sep' },
+    { day: 7, name: 'Lun 7 Sep', dateStr: 'Lun 7 Sep' },
+    { day: 8, name: 'Mar 8 Sep', dateStr: 'Mar 8 Sep' },
+    { day: 9, name: 'Mié 9 Sep', dateStr: 'Mié 9 Sep' },
+    { day: 10, name: 'Jue 10 Sep', dateStr: 'Jue 10 Sep' },
+    { day: 11, name: 'Vie 11 Sep', dateStr: 'Vie 11 Sep' },
+    { day: 12, name: 'Sáb 12 Sep', dateStr: 'Sáb 12 Sep' },
+    { day: 13, name: 'Dom 13 Sep', dateStr: 'Dom 13 Sep' },
+    { day: 14, name: 'Lun 14 Sep', dateStr: 'Lun 14 Sep' },
+    { day: 15, name: 'Mar 15 Sep', dateStr: 'Mar 15 Sep' },
+    { day: 16, name: 'Mié 16 Sep', dateStr: 'Mié 16 Sep' },
+    { day: 17, name: 'Jue 17 Sep', dateStr: 'Jue 17 Sep' },
+    { day: 18, name: 'Vie 18 Sep', dateStr: 'Vie 18 Sep' },
+    { day: 19, name: 'Sáb 19 Sep', dateStr: 'Sáb 19 Sep' },
+    { day: 20, name: 'Dom 20 Sep', dateStr: 'Dom 20 Sep' },
+    { day: 21, name: 'Lun 21 Sep', dateStr: 'Lun 21 Sep' },
+    { day: 22, name: 'Mar 22 Sep', dateStr: 'Mar 22 Sep' },
+    { day: 23, name: 'Mié 23 Sep', dateStr: 'Mié 23 Sep' },
+    { day: 24, name: 'Jue 24 Sep', dateStr: 'Jue 24 Sep' },
+    { day: 25, name: 'Vie 25 Sep', dateStr: 'Vie 25 Sep' },
+    { day: 26, name: 'Sáb 26 Sep', dateStr: 'Sáb 26 Sep' },
+    { day: 27, name: 'Dom 27 Sep', dateStr: 'Dom 27 Sep' },
+    { day: 28, name: 'Lun 28 Sep', dateStr: 'Lun 28 Sep' },
+    { day: 29, name: 'Mar 29 Sep', dateStr: 'Mar 29 Sep' },
+    { day: 30, name: 'Mié 30 Sep', dateStr: 'Mié 30 Sep' },
   ];
 
   return (
-    <div className="flex flex-col gap-6 text-[#1F4E5F] max-w-4xl mx-auto pb-12 animate-in fade-in duration-200">
-      {/* 🧭 Top Navigation Header Island */}
+    <div className="flex flex-col gap-6 text-[#1F4E5F] max-w-4xl mx-auto pb-16 px-4 sm:px-6 animate-in fade-in duration-200">
+      {/* 🧭 Top Navigation Header */}
       <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4">
         <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
           <button
@@ -490,76 +513,170 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             Crea tu Entrenamiento Grupal
           </h1>
           <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1 font-medium leading-relaxed">
-            Diseña tu Crew en 9 pasos guiados. Los miembros de tu ciudad podrán descubrir tu propuesta y unirse.
+            Diseña tu Crew en 5 bloques guiados: deporte, logística, recomendaciones, tercer tiempo social y portada.
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        {/* 🏃 Island 1: Deporte */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
-          <div className="flex items-center justify-between">
+        {/* ========================================================================= */}
+        {/* 🟢 BLOQUE 1: DEFINICIÓN DEPORTIVA (Deporte + Nivel/Ritmo + Plazas)       */}
+        {/* ========================================================================= */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+              <span className="w-7 h-7 rounded-full bg-[#1F4E5F] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
                 1
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                ¿Qué deporte vas a liderar?
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+                Definición Deportiva & Grupo
               </span>
             </div>
-            <span className="text-xs font-black text-[#7FB77E] capitalize bg-[#7FB77E]/10 px-3 py-1 rounded-full">
-              {sport}
+            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
+              {selectedSportObj.label} • {maxMembers} plazas
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            {sportsList.map((s) => {
-              const isSelected = sport === s.id;
-              return (
+          {/* 1.1 Deporte */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                  1.1
+                </span>
+                <span>¿Qué deporte vas a liderar?</span>
+              </span>
+              <span className="text-xs font-bold text-[#7FB77E] capitalize">
+                {sport}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {sportsList.map((s) => {
+                const isSelected = sport === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => {
+                      setSport(s.id);
+                      setSelectedPaceIndex(1);
+                      setIsCustomImageMode(false);
+                    }}
+                    className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 cursor-pointer ${
+                      isSelected
+                        ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white shadow-md scale-[1.02]'
+                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5 hover:border-[#1F4E5F]/20'
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#1F4E5F]'}`}>
+                      {s.id === 'hiking' ? (
+                        <Footprints className="w-5 h-5" />
+                      ) : s.id === 'padel' ? (
+                        <Activity className="w-5 h-5" />
+                      ) : s.id === 'cycling' ? (
+                        <Bike className="w-5 h-5" />
+                      ) : (
+                        <Flame className="w-5 h-5" />
+                      )}
+                    </div>
+                    <span className="text-xs font-extrabold">{s.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 1.2 Nivel & Ritmo */}
+          <div className="pt-5 border-t border-[#1F4E5F]/10">
+            <CimoSportPaceSelector
+              sport={sport}
+              selectedIndex={selectedPaceIndex}
+              onSelectIndex={setSelectedPaceIndex}
+              stepNumber="1.2"
+            />
+          </div>
+
+          {/* 1.3 Cupo de Plazas */}
+          <div className="pt-5 border-t border-[#1F4E5F]/10 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                  1.3
+                </span>
+                <span>Cupo máximo de personas</span>
+              </span>
+              <span className="text-xs font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                {maxMembers} plazas
+              </span>
+            </div>
+
+            <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-black text-[#1F4E5F] block">
+                  Límite de asistentes al entreno
+                </span>
+                <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5">
+                  Recomendamos microgrupos de 4 a 8 personas para garantizar cercanía, seguridad y buen rollo.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto bg-white px-3 py-1.5 rounded-full border border-[#1F4E5F]/15 shadow-2xs">
                 <button
-                  key={s.id}
                   type="button"
-                  onClick={() => {
-                    setSport(s.id);
-                    setSelectedPaceIndex(1);
-                  }}
-                  className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 cursor-pointer ${
-                    isSelected
-                      ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white shadow-md scale-[1.02]'
-                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5 hover:border-[#1F4E5F]/20'
-                  }`}
+                  disabled={maxMembers <= 2}
+                  onClick={() => setMaxMembers(Math.max(2, maxMembers - 1))}
+                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                  aria-label="Reducir plazas"
                 >
-                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#1F4E5F]'}`}>
-                    {s.id === 'hiking' ? (
-                      <Footprints className="w-5 h-5" />
-                    ) : s.id === 'padel' ? (
-                      <Activity className="w-5 h-5" />
-                    ) : s.id === 'cycling' ? (
-                      <Bike className="w-5 h-5" />
-                    ) : (
-                      <Flame className="w-5 h-5" />
-                    )}
-                  </div>
-                  <span className="text-xs font-extrabold">{s.label}</span>
+                  <Minus className="w-4 h-4" />
                 </button>
-              );
-            })}
+
+                <span className="text-sm font-black text-[#1F4E5F] min-w-[75px] text-center">
+                  {maxMembers} plazas
+                </span>
+
+                <button
+                  type="button"
+                  disabled={maxMembers >= 16}
+                  onClick={() => setMaxMembers(Math.min(16, maxMembers + 1))}
+                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                  aria-label="Aumentar plazas"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* 📅 Island 2: Cuándo Entrenamos (Fecha & Hora) */}
+        {/* ========================================================================= */}
+        {/* 🟢 BLOQUE 2: LOGÍSTICA ESPACIO-TEMPORAL (Cuándo & Dónde)                   */}
+        {/* ========================================================================= */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
-          {/* Step 2: Fecha */}
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-full bg-[#1F4E5F] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+                2
+              </span>
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+                Logística Espacio-Temporal (Cuándo & Dónde)
+              </span>
+            </div>
+            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
+              {date} a las {time}h
+            </span>
+          </div>
+
+          {/* 2.1 Fecha */}
           <div className="flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                  2
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                  2.1
                 </span>
-                <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                  ¿Qué día entrenamos?
-                </span>
-              </div>
+                <span>¿Qué día entrenamos?</span>
+              </span>
               <span className="text-xs font-extrabold text-[#7FB77E]">{date}</span>
             </div>
 
@@ -588,64 +705,65 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 );
               })}
 
-              {/* 7th item: Custom Calendar Trigger Button */}
               <button
                 type="button"
                 onClick={() => setIsCustomCalendarOpen(!isCustomCalendarOpen)}
-                className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center min-h-[58px] ${
+                className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center ${
                   isCustomCalendarOpen
                     ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-xs scale-[1.02]'
                     : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
                 }`}
               >
-                <div className="flex items-center gap-1">
-                  <Calendar className={`w-3.5 h-3.5 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`} />
-                  <span className="text-xs font-black leading-tight whitespace-nowrap">Otro día</span>
-                </div>
-                <span className={`text-[10px] font-bold mt-0.5 whitespace-nowrap ${isCustomCalendarOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
+                <Calendar className={`w-4 h-4 mb-0.5 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`} />
+                <span className="text-xs font-black leading-tight">Otro día</span>
+                <span className={`text-[9px] font-bold mt-0.5 ${isCustomCalendarOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
                   Calendario
                 </span>
               </button>
             </div>
 
-            {/* Custom Visual Interactive Month Calendar */}
             {isCustomCalendarOpen && (
-              <div className="p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-4 animate-in fade-in zoom-in-98 duration-200">
+              <div className="p-4 sm:p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-3 animate-in fade-in zoom-in-98 duration-200">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
                     {calendarMonth}
                   </span>
-                  <span className="text-xs font-extrabold text-[#7FB77E]">Selecciona fecha</span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      className="p-1.5 rounded-xl hover:bg-white text-[#1F4E5F] cursor-pointer"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      className="p-1.5 rounded-xl hover:bg-white text-[#1F4E5F] cursor-pointer"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Day names header */}
                 <div className="grid grid-cols-7 gap-1 text-center">
-                  {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d) => (
-                    <span key={d} className="text-[10px] font-black text-[#1F4E5F]/60 py-1">
-                      {d}
+                  {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((day) => (
+                    <span key={day} className="text-[10px] font-black text-[#1F4E5F]/40 py-1">
+                      {day}
                     </span>
                   ))}
-                </div>
-
-                {/* Day cells */}
-                <div className="grid grid-cols-7 gap-1">
-                  {calendarDays.map((cd, idx) => {
+                  {calendarDays.map((cd, index) => {
                     if (cd.empty) {
-                      return <div key={`empty-${idx}`} className="h-8" />;
+                      return <div key={`empty-${index}`} className="p-2" />;
                     }
-                    const isSelectedDay = date === cd.name;
+                    const isSelected = date === cd.dateStr;
                     return (
                       <button
-                        key={cd.day}
+                        key={cd.dateStr}
                         type="button"
                         onClick={() => {
-                          setDate(cd.name!);
-                          setIsCustomCalendarOpen(false);
+                          if (cd.dateStr) setDate(cd.dateStr);
                         }}
-                        className={`h-8 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center cursor-pointer ${
-                          isSelectedDay
-                            ? 'bg-[#7FB77E] text-white shadow-xs font-black scale-105'
-                            : 'bg-white hover:bg-[#7FB77E]/20 text-[#1F4E5F]'
+                        className={`p-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                          isSelected ? 'bg-[#1F4E5F] text-white shadow-xs' : 'hover:bg-white text-[#1F4E5F]'
                         }`}
                       >
                         {cd.day}
@@ -657,17 +775,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             )}
           </div>
 
+          {/* 2.2 Hora */}
           <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
-            {/* Step 3: Hora */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                  3
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                  2.2
                 </span>
-                <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                  ¿A qué hora?
-                </span>
-              </div>
+                <span>¿A qué hora?</span>
+              </span>
               <span className="text-xs font-extrabold text-[#7FB77E]">{time} h</span>
             </div>
 
@@ -709,7 +825,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               </button>
             </div>
 
-            {/* Custom Visual Digital Time Tuner */}
             {isCustomTimeOpen && (
               <div className="p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-4 animate-in fade-in zoom-in-98 duration-200">
                 <div className="flex items-center justify-between">
@@ -721,7 +836,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   </span>
                 </div>
 
-                {/* Hours Row */}
                 <div className="flex flex-col gap-1.5">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
                     Hora:
@@ -750,7 +864,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   </div>
                 </div>
 
-                {/* Minutes Row */}
                 <div className="flex flex-col gap-1.5 pt-2 border-t border-[#1F4E5F]/10">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
                     Minutos:
@@ -781,240 +894,206 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               </div>
             )}
           </div>
-        </div>
 
-        {/* 📍 Island 3: Dónde Quedamos (Ciudad, Punto de Encuentro & Mapa) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                4
-              </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                Ciudad & Punto de encuentro
-              </span>
-            </div>
-            <span className="text-xs font-extrabold text-[#7FB77E]">{selectedCity}</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {/* Field A: Ciudad */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
-                Ciudad o Municipio
-              </label>
-              <button
-                type="button"
-                onClick={() => setIsCityComboboxOpen(true)}
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 hover:border-[#7FB77E] cursor-pointer bg-[#F7F7F7] hover:bg-white flex items-center justify-between text-xs font-extrabold text-[#1F4E5F] transition-all relative text-left shadow-2xs"
-              >
-                <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
-                <span className="truncate">{selectedCity}</span>
-                <span className="text-[10px] font-black text-[#7FB77E] uppercase tracking-wider shrink-0 bg-[#7FB77E]/10 px-2 py-0.5 rounded-full">
-                  Cambiar
+          {/* 2.3 Ciudad & Punto de Encuentro */}
+          <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                  2.3
                 </span>
-              </button>
+                <span>Ciudad & Punto de encuentro</span>
+              </span>
+              <span className="text-xs font-extrabold text-[#7FB77E]">{selectedCity}</span>
             </div>
 
-            {/* Field B: Punto de encuentro with smart autocomplete dropdown */}
-            <div ref={locationContainerRef} className="flex flex-col gap-1.5 relative">
-              <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
-                Punto de encuentro exacto
-              </label>
-              <div className="relative">
-                <input
-                  id="custom-location-input"
-                  type="text"
-                  value={location}
-                  onFocus={(e) => {
-                    setIsLocationDropdownOpen(true);
-                    e.target.select();
-                  }}
-                  onChange={(e) => {
-                    setLocation(e.target.value);
-                    setIsLocationDropdownOpen(true);
-                  }}
-                  placeholder={`Parque, club deportivo o calle en ${selectedCity}`}
-                  className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
-                  autoComplete="off"
-                />
-                <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 top-3" />
-                {location && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setLocation('');
-                      setIsLocationDropdownOpen(true);
-                      const inputEl = document.getElementById('custom-location-input');
-                      inputEl?.focus();
-                    }}
-                    className="p-1 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
-                    title="Limpiar y escribir otro lugar"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                  Ciudad o Municipio
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsCityComboboxOpen(true)}
+                  className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 hover:border-[#7FB77E] cursor-pointer bg-[#F7F7F7] hover:bg-white flex items-center justify-between text-xs font-extrabold text-[#1F4E5F] transition-all relative text-left shadow-2xs"
+                >
+                  <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3" />
+                  <span className="truncate">{selectedCity}</span>
+                  <span className="text-[10px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.5 rounded-full shrink-0">
+                    Cambiar
+                  </span>
+                </button>
               </div>
 
-              {/* Floating Location Suggestions Dropdown with Live Geocoding */}
-              {isLocationDropdownOpen && (() => {
-                const allCityPoints = cityLocationsMap[selectedCity] ?? cityLocationsMap.Otra;
-                const isExactMatch = allCityPoints.includes(location);
-                const displayPoints = isExactMatch || !location.trim()
-                  ? allCityPoints
-                  : allCityPoints.filter((pt) => pt.toLowerCase().includes(location.toLowerCase()));
-
-                return (
-                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2.5 z-30 max-h-72 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
-                    {/* 1. Live Geocoding Search Results (when typing query) */}
-                    {liveResults.length > 0 && (
-                      <div className="flex flex-col gap-1 pb-1">
-                        {liveResults.map((place) => (
-                          <button
-                            key={`${place.name}-${place.lat}-${place.lng}`}
-                            type="button"
-                            onClick={() => {
-                              setLocation(place.name);
-                              setCustomCoords({ lat: place.lat, lng: place.lng });
-                              setIsLocationDropdownOpen(false);
-                            }}
-                            className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#F7F7F7] text-[#1F4E5F]"
-                          >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <MapPin className="w-4 h-4 text-[#7FB77E] shrink-0" />
-                              <div className="truncate">
-                                <span className="text-xs font-black block truncate leading-tight">{place.name}</span>
-                                <span className="text-[10px] text-[#1F4E5F]/50 block truncate">{place.address}</span>
-                              </div>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Searching Loader Indicator */}
-                    {isSearchingPlaces && (
-                      <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/60 flex items-center gap-2 animate-pulse">
-                        <div className="w-3 h-3 rounded-full border-2 border-[#7FB77E] border-t-transparent animate-spin" />
-                        <span>Buscando en Google & OpenStreetMap...</span>
-                      </div>
-                    )}
-
-                    {/* 2. Frequent Local Spots */}
-                    <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
-                      <span>Puntos frecuentes en {selectedCity}</span>
-                      <span className="text-[#7FB77E] font-black">{displayPoints.length} sugeridos</span>
-                    </div>
-
-                    {displayPoints.map((pt) => {
-                      const isSelected = location === pt;
-                      return (
-                        <button
-                          key={pt}
-                          type="button"
-                          onClick={() => {
-                            setLocation(pt);
-                            setCustomCoords(null);
-                            setIsLocationDropdownOpen(false);
-                          }}
-                          className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
-                            isSelected
-                              ? 'bg-[#1F4E5F] text-white'
-                              : 'hover:bg-[#F7F7F7] text-[#1F4E5F]'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2 truncate">
-                            <MapPin className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#7FB77E]' : 'text-[#7FB77E]'}`} />
-                            <span className="truncate">{pt}</span>
-                          </div>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />}
-                        </button>
-                      );
-                    })}
-
-                    {/* Option to clear and type a new custom spot */}
+              <div className="flex flex-col gap-1.5 relative" ref={locationContainerRef}>
+                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                  Punto o Lugar de encuentro
+                </label>
+                <div className="relative flex items-center">
+                  <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 pointer-events-none" />
+                  <input
+                    id="custom-location-input"
+                    type="text"
+                    value={location}
+                    onFocus={() => setIsLocationDropdownOpen(true)}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                      setIsLocationDropdownOpen(true);
+                    }}
+                    placeholder="Ej: Estatua del Ángel Caído (Retiro)"
+                    className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-black text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                  />
+                  {location && (
                     <button
                       type="button"
                       onClick={() => {
-                        if (!isExactMatch && location.trim()) {
-                          setIsLocationDropdownOpen(false);
-                        } else {
-                          setLocation('');
-                          setCustomCoords(null);
-                          const inputEl = document.getElementById('custom-location-input');
-                          inputEl?.focus();
-                        }
+                        setLocation('');
+                        setCustomCoords(null);
                       }}
-                      className="w-full px-3 py-2 rounded-xl text-left text-xs font-black transition-all cursor-pointer flex items-center gap-2 bg-[#7FB77E]/10 text-[#1F4E5F] hover:bg-[#7FB77E]/20 border border-dashed border-[#7FB77E] mt-1"
+                      className="p-1 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
                     >
-                      <Plus className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
-                      <span className="truncate">
-                        {location.trim() && !isExactMatch
-                          ? `Usar lugar: "${location.trim()}"`
-                          : 'Escribir otro lugar o dirección'}
-                      </span>
+                      <X className="w-3.5 h-3.5" />
                     </button>
-                  </div>
-                );
-              })()}
+                  )}
+                </div>
+
+                {isLocationDropdownOpen && (() => {
+                  const allCityPoints = cityLocationsMap[selectedCity] ?? cityLocationsMap.Otra;
+                  const isExactMatch = allCityPoints.includes(location);
+                  const displayPoints = isExactMatch || !location.trim()
+                    ? allCityPoints
+                    : allCityPoints.filter((pt) => pt.toLowerCase().includes(location.toLowerCase()));
+
+                  return (
+                    <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2.5 z-30 max-h-72 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
+                      {liveResults.length > 0 && (
+                        <div className="flex flex-col gap-1 pb-1">
+                          {liveResults.map((place) => (
+                            <button
+                              key={`${place.name}-${place.lat}-${place.lng}`}
+                              type="button"
+                              onClick={() => {
+                                setLocation(place.name);
+                                setCustomCoords({ lat: place.lat, lng: place.lng });
+                                setIsLocationDropdownOpen(false);
+                              }}
+                              className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#F7F7F7] text-[#1F4E5F]"
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <MapPin className="w-4 h-4 text-[#7FB77E] shrink-0" />
+                                <div className="truncate">
+                                  <span className="text-xs font-black block truncate leading-tight">{place.name}</span>
+                                  <span className="text-[10px] text-[#1F4E5F]/50 block truncate">{place.address}</span>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {isSearchingPlaces && (
+                        <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/60 flex items-center gap-2 animate-pulse">
+                          <div className="w-3 h-3 rounded-full border-2 border-[#7FB77E] border-t-transparent animate-spin" />
+                          <span>Buscando en Google & OpenStreetMap...</span>
+                        </div>
+                      )}
+
+                      <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
+                        <span>Puntos frecuentes en {selectedCity}</span>
+                        <span className="text-[#7FB77E] font-black">{displayPoints.length} sugeridos</span>
+                      </div>
+
+                      {displayPoints.map((pt) => {
+                        const isSelected = location === pt;
+                        return (
+                          <button
+                            key={pt}
+                            type="button"
+                            onClick={() => {
+                              setLocation(pt);
+                              setCustomCoords(null);
+                              setIsLocationDropdownOpen(false);
+                            }}
+                            className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
+                              isSelected ? 'bg-[#1F4E5F] text-white' : 'hover:bg-[#F7F7F7] text-[#1F4E5F]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 truncate">
+                              <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+                              <span className="truncate">{pt}</span>
+                            </div>
+                            {isSelected && <Check className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+              </div>
             </div>
+
+            {isCityComboboxOpen && (
+              <CimoCitySearchCombobox
+                selectedCity={selectedCity}
+                onSelectCity={(cityName) => {
+                  setSelectedCity(cityName);
+                  setIsCityComboboxOpen(false);
+                  setCustomCoords(null);
+                  const cityPoints = cityLocationsMap[cityName];
+                  if (cityPoints && cityPoints.length > 0) {
+                    setLocation(cityPoints[0]);
+                  } else {
+                    setLocation(`Parque Principal, ${cityName}`);
+                  }
+                }}
+                onClose={() => setIsCityComboboxOpen(false)}
+              />
+            )}
+
+            {location.trim() && (
+              <CimoMapPreviewCard
+                location={location}
+                city={selectedCity}
+                coords={customCoords}
+                className="mt-1"
+              />
+            )}
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 🟢 BLOQUE 3: GUÍA & RECOMENDACIONES (Instrucciones & Material)            */}
+        {/* ========================================================================= */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-full bg-[#1F4E5F] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+                3
+              </span>
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+                Recomendaciones del Capitán & Equipamiento
+              </span>
+            </div>
+            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
+              Preparación
+            </span>
           </div>
 
-          {/* City Autocomplete Combobox when requested */}
-          {isCityComboboxOpen && (
-            <CimoCitySearchCombobox
-              selectedCity={selectedCity}
-              onSelectCity={(cityName) => {
-                setSelectedCity(cityName);
-                setIsCityComboboxOpen(false);
-                setCustomCoords(null);
-                const cityPoints = cityLocationsMap[cityName];
-                if (cityPoints && cityPoints.length > 0) {
-                  setLocation(cityPoints[0]);
-                } else {
-                  setLocation(`Parque Principal, ${cityName}`);
-                }
-              }}
-              onClose={() => setIsCityComboboxOpen(false)}
-            />
-          )}
-
-          {/* Real-Time Mini Map Preview Card with Custom GPS Coords support */}
-          {location.trim() && (
-            <CimoMapPreviewCard
-              location={location}
-              city={selectedCity}
-              coords={customCoords}
-              className="mt-1"
-            />
-          )}
-        </div>
-
-        {/* ⚡ Island 4: Nivel & Ritmo Deportivo (Paso 5) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs">
-          <CimoSportPaceSelector
-            sport={sport}
-            selectedIndex={selectedPaceIndex}
-            onSelectIndex={setSelectedPaceIndex}
-            stepNumber={5}
-          />
-        </div>
-
-        {/* 📝 Island 5: Instrucciones del Capitán & Material Recomendado (Paso 6) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
-          {/* Parte A: Instrucciones Escritas del Capitán */}
+          {/* 3.1 Instrucciones Escritas */}
           <CimoCaptainInstructionsField
             value={instructions}
             onChange={setInstructions}
             sport={sport}
-            stepNumber={6}
+            stepNumber="3.1"
           />
 
-          {/* Parte B: Material Recomendado (Checklist Amplio y Legible) */}
+          {/* 3.2 Material Recomendado */}
           <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                  3.2
+                </span>
                 <ShoppingBag className="w-4 h-4 text-[#7FB77E]" />
                 <span>Material recomendado para los asistentes ({selectedSportObj.label})</span>
               </span>
@@ -1099,87 +1178,53 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           </div>
         </div>
 
-        {/* 👥 Island 6: Cupo de Plazas (Paso 7) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-3">
-          <div className="flex items-center justify-between">
+        {/* ========================================================================= */}
+        {/* 🔵 BLOQUE 4: DIMENSIÓN SOCIAL — TERCER TIEMPO (AZUL SOCIAL / CONEXIÓN)     */}
+        {/* ========================================================================= */}
+        <div className="border-2 border-blue-200 bg-gradient-to-br from-blue-50/60 via-white to-blue-50/20 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5 text-[#1E3A8A]">
+          <div className="flex items-center justify-between pb-3 border-b border-blue-100">
             <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                7
+              <span className="w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+                4
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                Cupo máximo de personas
-              </span>
-            </div>
-            <span className="text-xs font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
-              {maxMembers} plazas
-            </span>
-          </div>
-
-          <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <span className="text-xs font-black text-[#1F4E5F] block">
-                Límite de asistentes al entreno
-              </span>
-              <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5">
-                Recomendamos microgrupos de 4 a 8 personas para garantizar cercanía, seguridad y buen rollo.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto bg-white px-3 py-1.5 rounded-full border border-[#1F4E5F]/15 shadow-2xs">
-              <button
-                type="button"
-                disabled={maxMembers <= 2}
-                onClick={() => setMaxMembers(Math.max(2, maxMembers - 1))}
-                className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
-                aria-label="Reducir plazas"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-
-              <span className="text-sm font-black text-[#1F4E5F] min-w-[75px] text-center">
-                {maxMembers} plazas
-              </span>
-
-              <button
-                type="button"
-                disabled={maxMembers >= 16}
-                onClick={() => setMaxMembers(Math.min(16, maxMembers + 1))}
-                className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
-                aria-label="Aumentar plazas"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* ☕ Island 7: Tercer Tiempo Post-Entreno con Búsqueda GPS (Paso 8) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
-            <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                8
-              </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+              <span className="text-sm font-black uppercase tracking-wider text-blue-950">
                 Tercer Tiempo Post-Entreno
               </span>
             </div>
-            <button
-              type="button"
-              onClick={() => setHasThirdHalf(!hasThirdHalf)}
-              className={`w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 ${
-                hasThirdHalf ? 'bg-[#7FB77E] justify-end' : 'bg-[#1F4E5F]/20 justify-start'
-              }`}
-            >
-              <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black text-blue-700 bg-blue-100/80 px-3 py-1 rounded-full flex items-center gap-1">
+                <Coffee className="w-3.5 h-3.5 text-blue-600" />
+                <span>Dimensión Social</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setHasThirdHalf(!hasThirdHalf)}
+                className={`w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 ${
+                  hasThirdHalf ? 'bg-blue-600 justify-end' : 'bg-slate-300 justify-start'
+                }`}
+                aria-label="Activar o desactivar tercer tiempo"
+              >
+                <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xs font-black text-blue-950 block">
+                ¿Hacemos algo después de entrenar?
+              </span>
+              <p className="text-xs text-blue-900/70 font-medium mt-0.5">
+                El 80% de los miembros se unen a CIMO por el factor social y conectar con otros deportistas tras la sesión.
+              </p>
+            </div>
           </div>
 
           {hasThirdHalf && (
-            <div className="flex flex-col gap-5 animate-in fade-in zoom-in-98 duration-150">
+            <div className="flex flex-col gap-5 pt-1 animate-in fade-in zoom-in-98 duration-150">
               {/* Type selector pills */}
               <div className="flex flex-col gap-2">
-                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                <label className="text-[11px] font-black uppercase tracking-wider text-blue-900/80">
                   Tipo de Tercer Tiempo
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -1200,12 +1245,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                         }}
                         className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
                           isSelected
-                            ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/20 shadow-2xs'
-                            : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                            ? 'border-blue-500 bg-blue-50/80 ring-2 ring-blue-500/30 shadow-2xs'
+                            : 'border-blue-100 bg-white hover:bg-blue-50/40 text-blue-950'
                         }`}
                       >
-                        <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 flex items-center justify-center text-[#1F4E5F]">
-                          <tht.icon className="w-4 h-4 text-[#1F4E5F]" />
+                        <div className="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700">
+                          <tht.icon className="w-4 h-4 text-blue-700" />
                         </div>
                         <span className="text-xs font-black">{tht.label}</span>
                       </button>
@@ -1216,11 +1261,11 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
 
               {/* Local / Terraza con buscador Maps GPS */}
               <div className="flex flex-col gap-1.5 relative" ref={thirdHalfContainerRef}>
-                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                <label className="text-[11px] font-black uppercase tracking-wider text-blue-900/80">
                   Lugar o local previsto en {selectedCity}
                 </label>
                 <div className="relative flex items-center">
-                  <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 pointer-events-none" />
+                  <MapPin className="w-4 h-4 text-blue-600 absolute left-3 pointer-events-none" />
                   <input
                     type="text"
                     value={thirdHalfVenue}
@@ -1230,24 +1275,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       setIsThirdHalfDropdownOpen(true);
                     }}
                     placeholder="Ej: Café Murillo, Terraza Florida Park, Honest Greens..."
-                    className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-black text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                    className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-xs font-black text-blue-950 outline-none bg-white shadow-2xs"
                   />
                   {thirdHalfVenue && (
                     <button
                       type="button"
                       onClick={() => setThirdHalfVenue('')}
-                      className="p-1 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
+                      className="p-1 rounded-full hover:bg-blue-50 text-blue-400 hover:text-blue-700 absolute right-2.5 top-2.5 transition-colors cursor-pointer"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
 
-                {/* Third Half Live Search Dropdown */}
                 {isThirdHalfDropdownOpen && (() => {
                   const spots = getThirdHalfSpots(selectedCity, thirdHalfType);
                   return (
-                    <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2.5 z-30 max-h-60 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
+                    <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-blue-200 shadow-xl p-2.5 z-30 max-h-60 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
                       {liveThirdHalfResults.length > 0 && (
                         <div className="flex flex-col gap-1 pb-1">
                           {liveThirdHalfResults.map((place) => (
@@ -1258,13 +1302,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                                 setThirdHalfVenue(place.name);
                                 setIsThirdHalfDropdownOpen(false);
                               }}
-                              className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#F7F7F7] text-[#1F4E5F]"
+                              className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-blue-50 text-blue-950"
                             >
                               <div className="flex items-center gap-2.5 min-w-0">
-                                <MapPin className="w-4 h-4 text-[#7FB77E] shrink-0" />
+                                <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
                                 <div className="truncate">
                                   <span className="text-xs font-black block truncate leading-tight">{place.name}</span>
-                                  <span className="text-[10px] text-[#1F4E5F]/50 block truncate">{place.address}</span>
+                                  <span className="text-[10px] text-blue-500 block truncate">{place.address}</span>
                                 </div>
                               </div>
                             </button>
@@ -1273,13 +1317,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       )}
 
                       {isSearchingThirdHalf && (
-                        <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/60 flex items-center gap-2 animate-pulse">
-                          <div className="w-3 h-3 rounded-full border-2 border-[#7FB77E] border-t-transparent animate-spin" />
+                        <div className="px-3 py-1.5 text-xs font-bold text-blue-600 flex items-center gap-2 animate-pulse">
+                          <div className="w-3 h-3 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
                           <span>Buscando cafeterías y terrazas...</span>
                         </div>
                       )}
 
-                      <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50">
+                      <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-blue-900/60">
                         Sitios recomendados en {selectedCity}
                       </div>
 
@@ -1294,11 +1338,11 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                               setIsThirdHalfDropdownOpen(false);
                             }}
                             className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
-                              isSelected ? 'bg-[#1F4E5F] text-white' : 'hover:bg-[#F7F7F7] text-[#1F4E5F]'
+                              isSelected ? 'bg-blue-600 text-white' : 'hover:bg-blue-50 text-blue-950'
                             }`}
                           >
                             <span className="truncate">{spot}</span>
-                            {isSelected && <Check className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />}
+                            {isSelected && <Check className="w-3.5 h-3.5 text-white shrink-0" />}
                           </button>
                         );
                       })}
@@ -1310,10 +1354,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               {/* Notes Contextual with standardized '+' chips */}
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                  <label className="text-[11px] font-black uppercase tracking-wider text-blue-900/80">
                     Nota breve sobre el tercer tiempo
                   </label>
-                  <span className="text-[10px] font-bold text-[#1F4E5F]/40">
+                  <span className="text-[10px] font-bold text-blue-600">
                     {thirdHalfNotes.length}/200
                   </span>
                 </div>
@@ -1328,14 +1372,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                         onClick={() => handleAddThirdHalfChip(sug)}
                         className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                           isAdded
-                            ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] font-black shadow-2xs'
-                            : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                            ? 'border-blue-500 bg-blue-100 text-blue-900 font-black shadow-2xs'
+                            : 'border-blue-200 bg-white hover:bg-blue-50 text-blue-900'
                         }`}
                       >
                         {isAdded ? (
-                          <Check className="w-3.5 h-3.5 text-[#7FB77E] stroke-[3]" />
+                          <Check className="w-3.5 h-3.5 text-blue-600 stroke-[3]" />
                         ) : (
-                          <Plus className="w-3.5 h-3.5 text-[#7FB77E]" />
+                          <Plus className="w-3.5 h-3.5 text-blue-600" />
                         )}
                         <span>{sug}</span>
                       </button>
@@ -1348,21 +1392,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   value={thirdHalfNotes}
                   onChange={(e) => setThirdHalfNotes(e.target.value.slice(0, 200))}
                   placeholder="Ej: Nos quedaremos 30 min a desayunar, rehidratarnos y charlar."
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                  className="w-full px-4 py-2.5 rounded-xl border border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-xs font-bold text-blue-950 outline-none bg-white shadow-2xs"
                 />
               </div>
             </div>
           )}
         </div>
 
-        {/* 🌟 Island 8: Estudio de Portada, Título & Descripción Inteligente (Paso 9 - Cierre) */}
+        {/* ========================================================================= */}
+        {/* ✨ BLOQUE 5: ESTUDIO DE PORTADA, TÍTULO & DESCRIPCIÓN (CIERRE)             */}
+        {/* ========================================================================= */}
         <div className="bg-white border-2 border-[#7FB77E]/40 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-[#7FB77E] via-[#1F4E5F] to-[#7FB77E]" />
 
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
-                9
+              <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+                5
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
                 Estudio de Portada, Título & Descripción Inteligente
@@ -1374,7 +1420,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             </span>
           </div>
 
-          {/* 1. Título Inteligente con 3 Variantes Rápidas */}
+          {/* 5.1 Título Inteligente con 3 Variantes Rápidas */}
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
@@ -1453,7 +1499,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             />
           </div>
 
-          {/* 2. Descripción Inteligente con Chips Estandarizados '+' */}
+          {/* 5.2 Descripción Inteligente con Chips Estandarizados '+' */}
           <div className="flex flex-col gap-2.5 pt-4 border-t border-[#1F4E5F]/10">
             <div className="flex items-center justify-between">
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
@@ -1512,7 +1558,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             />
           </div>
 
-          {/* 3. Selector de Foto Real de Portada & Subida Personalizada */}
+          {/* 5.3 Selector de Foto Real de Portada & Subida Personalizada */}
           <div className="flex flex-col gap-3 pt-4 border-t border-[#1F4E5F]/10">
             <div className="flex items-center justify-between">
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
@@ -1563,7 +1609,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               })}
             </div>
 
-            {/* Custom upload or custom URL */}
             <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
               <input
                 ref={fileInputRef}
@@ -1602,7 +1647,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             </div>
           </div>
 
-          {/* 4. Action Buttons */}
+          {/* Action Buttons */}
           <div className="flex items-center justify-between pt-6 border-t border-[#1F4E5F]/10">
             <button
               type="button"

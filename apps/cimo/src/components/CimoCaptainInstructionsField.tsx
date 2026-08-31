@@ -5,7 +5,7 @@ export interface CimoCaptainInstructionsFieldProps {
   value: string;
   onChange: (val: string) => void;
   sport?: string;
-  stepNumber?: number;
+  stepNumber?: string | number;
   className?: string;
 }
 

@@ -12,7 +12,7 @@ export interface CimoSportPaceSelectorProps {
   sport: string;
   selectedIndex: number;
   onSelectIndex: (index: number) => void;
-  stepNumber?: number;
+  stepNumber?: string | number;
   className?: string;
 }
 
@@ -20,7 +20,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
   sport,
   selectedIndex,
   onSelectIndex,
-  stepNumber = 5,
+  stepNumber = 2,
   className = '',
 }) => {
   const activePaces = getSportPaces(sport);
