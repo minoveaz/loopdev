@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   createActivityDeepLink,
+  createActivitySemanticSlug,
   createChatDeepLink,
   createProfileDeepLink,
   createSquadDeepLink,
+  extractActivityIdFromSlug,
   generateUniqueSlug,
   isValidKebabSlug,
   isValidUserHandle,
@@ -73,5 +75,19 @@ describe('LoopDev Deep Linking Standard Contract', () => {
     const autoSuffixSlug = generateUniqueSlug('Pádel Chamartín', existing);
     expect(autoSuffixSlug.startsWith('padel-chamartin-')).toBe(true);
     expect(autoSuffixSlug.length).toBeGreaterThan('padel-chamartin-'.length);
+  });
+
+  it('builds and parses SEO-friendly semantic activity slugs', () => {
+    // Generate semantic slug with keywords
+    const semanticSlug = createActivitySemanticSlug('Running 8K por Parque del Retiro', 'act_1');
+    expect(semanticSlug).toBe('running-8k-por-parque-del-retiro-act_1');
+
+    // Deep link with semantic slug
+    expect(createActivityDeepLink('act_1', 'Running 8K por Parque del Retiro')).toBe('#/app/activity/running-8k-por-parque-del-retiro-act_1');
+
+    // Extract raw activity ID from semantic slug
+    expect(extractActivityIdFromSlug('running-8k-por-parque-del-retiro-act_1')).toBe('act_1');
+    expect(extractActivityIdFromSlug('partida-padel-chamartin-act_9824')).toBe('act_9824');
+    expect(extractActivityIdFromSlug('act_1')).toBe('act_1');
   });
 });

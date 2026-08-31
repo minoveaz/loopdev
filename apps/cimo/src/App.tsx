@@ -3,6 +3,7 @@ import { PublicAuthModal, PublicCookieBanner, PublicRuntime, PublicTopBar } from
 import { LogIn, MessageSquare, Plus, Users } from 'lucide-react';
 import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
 import { CIMO_FEED_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
+import { createActivitySemanticSlug, extractActivityIdFromSlug } from '@loopdev/contracts';
 import { INITIAL_ACTIVITIES, INITIAL_CREW_CHATS } from './data/mockData';
 import { CimoFloatingSearchBar } from './components/CimoFloatingSearchBar';
 import { CimoAthleteProfileCard } from './components/CimoAthleteProfileCard';
@@ -79,10 +80,11 @@ export function App() {
     const raw = window.location.hash.replace(/^#\/?/, '');
     const clean = raw.startsWith('app/') ? raw.slice(4) : raw;
 
-    // 1. Activity Detail: /app/activity/:activityId
+    // 1. Activity Detail: /app/activity/:semanticSlugOrId
     if (clean.startsWith('activity/')) {
-      const id = clean.split('/')[1];
-      return { route: 'activity-detail', paramId: id, type: 'activity' };
+      const rawSlugOrId = clean.split('/')[1];
+      const canonicalId = extractActivityIdFromSlug(rawSlugOrId);
+      return { route: 'activity-detail', paramId: canonicalId, type: 'activity' };
     }
 
     // 2. Squad Hub: /app/squad/:squadId
@@ -149,9 +151,12 @@ export function App() {
   const navigateTo = (route: string, paramId?: string) => {
     setCurrentRoute(route);
     if (route === 'activity-detail' || (paramId && route.includes('activity'))) {
-      const id = paramId ?? selectedActivityId;
-      setSelectedActivityId(id);
-      window.location.hash = `#/app/activity/${id}`;
+      const rawId = paramId ?? selectedActivityId;
+      const canonicalId = extractActivityIdFromSlug(rawId);
+      setSelectedActivityId(canonicalId);
+      const act = activities.find((a) => a.id === canonicalId);
+      const semanticSlug = act ? createActivitySemanticSlug(act.title, act.id) : canonicalId;
+      window.location.hash = `#/app/activity/${semanticSlug}`;
     } else if (route === 'squad') {
       setActiveSquadId(paramId ?? 'squad_1');
       window.location.hash = `#/app/squad/${paramId ?? 'squad_1'}`;

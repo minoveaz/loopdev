@@ -75,10 +75,34 @@ export function createProfileDeepLink(handleOrId: string, basePath = '#/app/prof
 }
 
 /**
+ * Genera un slug semántico enriquecido con SEO y palabras clave para una actividad:
+ * Ejemplo: "Running 8K por Parque del Retiro", "act_1" ➔ "running-8k-por-parque-del-retiro-act_1"
+ */
+export function createActivitySemanticSlug(title: string, activityId: string): string {
+  const baseSlug = slugifyText(title);
+  if (!baseSlug) return activityId;
+  if (baseSlug.endsWith(activityId.toLowerCase())) return baseSlug;
+  return `${baseSlug}-${activityId}`;
+}
+
+/**
+ * Extrae el ID canónico de una actividad a partir de su slug o parámetro de ruta:
+ * - "running-8k-por-parque-del-retiro-act_1" ➔ "act_1"
+ * - "act_1" ➔ "act_1"
+ */
+export function extractActivityIdFromSlug(slugOrId: string): string {
+  if (!slugOrId) return '';
+  const match = slugOrId.match(/(act_[a-zA-Z0-9_-]+)$/i);
+  if (match) return match[1];
+  return slugOrId;
+}
+
+/**
  * Genera la URL canónica de Deep Link para una actividad / entreno.
  */
-export function createActivityDeepLink(activityId: string, basePath = '#/app/activity'): string {
-  return `${basePath}/${activityId}`;
+export function createActivityDeepLink(activityId: string, title?: string, basePath = '#/app/activity'): string {
+  const slug = title ? createActivitySemanticSlug(title, activityId) : activityId;
+  return `${basePath}/${slug}`;
 }
 
 /**
