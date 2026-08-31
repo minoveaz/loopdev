@@ -10,6 +10,7 @@ adicionales afectados por su trabajo.
 | crm | Sales CRM, communications, insurance pack, customer workflows, and commercial operations |
 | marketing-studio | Brand Hub, assets, campaigns, content, publishing, and marketing integrations |
 | mobile | Mobile applications, foundations, and mobile platform integration |
+| apps | Consumer and client-facing standalone applications (e.g. CIMO, public products, user portals) |
 | platform | Tenancy, shared contracts, infrastructure, runtime, shared platform capabilities, and OS architecture |
 | governance | Quality systems, engineering standards, workflow, certification, and repository governance |
 | health | Health OS and regulated health workflows |
