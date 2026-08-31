@@ -9,7 +9,7 @@ export interface SportsVenue {
   name: string;
   city: string;
   postalCode: string;
-  category: 'Parque' | 'Pádel' | 'Running' | 'Polideportivo' | 'Montaña' | 'Playa';
+  category: 'Parque' | 'Pádel' | 'Running' | 'Polideportivo' | 'Montaña' | 'Playa' | 'Café' | 'Tercer Tiempo' | 'Restaurante';
   address: string;
   lat: number;
   lng: number;
@@ -95,10 +95,39 @@ export const POPULAR_SPORTS_VENUES: SportsVenue[] = [
   { name: 'Playa de la Malvarrosa', city: 'Valencia', postalCode: '46011', category: 'Playa', address: 'Paseo Marítimo de la Malvarrosa, 46011 Valencia', lat: 39.4812, lng: -0.3245 },
   { name: 'Pádel Club Ruzafa', city: 'Valencia', postalCode: '46006', category: 'Pádel', address: 'Carrer de Cuba 32, 46006 Valencia', lat: 39.4623, lng: -0.3751 },
 
+  // Madrid Tercer Tiempo
+  { name: 'Café Murillo (Retiro)', city: 'Madrid', postalCode: '28014', category: 'Café', address: 'Calle de Ruiz de Alarcón 27, 28014 Madrid', lat: 40.4152, lng: -3.6917 },
+  { name: 'Café Murillo', city: 'Madrid', postalCode: '28014', category: 'Café', address: 'Calle de Ruiz de Alarcón 27, 28014 Madrid', lat: 40.4152, lng: -3.6917 },
+  { name: 'Terraza Florida Park (Retiro)', city: 'Madrid', postalCode: '28009', category: 'Tercer Tiempo', address: 'Paseo de Panamá s/n, Parque del Retiro, 28009 Madrid', lat: 40.4168, lng: -3.6825 },
+  { name: 'Honest Greens Retiro', city: 'Madrid', postalCode: '28009', category: 'Restaurante', address: 'Calle de Alcalá 63, 28009 Madrid', lat: 40.4208, lng: -3.6872 },
+  { name: 'Honest Greens', city: 'Madrid', postalCode: '28009', category: 'Restaurante', address: 'Calle de Alcalá 63, 28009 Madrid', lat: 40.4208, lng: -3.6872 },
+  { name: 'Pum Puk Café (Chamberí)', city: 'Madrid', postalCode: '28003', category: 'Café', address: 'Calle de José Abascal 61, 28003 Madrid', lat: 40.4379, lng: -3.6938 },
+  { name: 'Terraza Florida Park', city: 'Madrid', postalCode: '28009', category: 'Tercer Tiempo', address: 'Paseo de Panamá s/n, Parque del Retiro, 28009 Madrid', lat: 40.4168, lng: -3.6825 },
+  { name: 'Café del Río (Madrid Río)', city: 'Madrid', postalCode: '28011', category: 'Café', address: 'Avenida de Portugal 1, 28011 Madrid', lat: 40.4143, lng: -3.7259 },
+  { name: 'Plaza Mayor (Terrazas)', city: 'Madrid', postalCode: '28012', category: 'Tercer Tiempo', address: 'Plaza Mayor, 28012 Madrid', lat: 40.4155, lng: -3.7074 },
+  { name: 'La Latina / Cava Baja', city: 'Madrid', postalCode: '28005', category: 'Tercer Tiempo', address: 'Calle de la Cava Baja, 28005 Madrid', lat: 40.4124, lng: -3.7102 },
+  { name: 'Raw Coco Green Bar (Salamanca)', city: 'Madrid', postalCode: '28001', category: 'Café', address: 'Calle del General Pardiñas 21, 28001 Madrid', lat: 40.4265, lng: -3.6812 },
+
+  // Barcelona Tercer Tiempo
+  { name: 'Syra Coffee (Gràcia)', city: 'Barcelona', postalCode: '08012', category: 'Café', address: 'Carrer de Siracusa 13, 08012 Barcelona', lat: 41.4018, lng: 2.1584 },
+  { name: 'Nomad Coffee Lab (Born)', city: 'Barcelona', postalCode: '08003', category: 'Café', address: 'Passatge Sert 12, 08003 Barcelona', lat: 41.3879, lng: 2.1764 },
+  { name: 'Honest Greens Rambla Catalunya', city: 'Barcelona', postalCode: '08007', category: 'Restaurante', address: 'Rambla de Catalunya 3, 08007 Barcelona', lat: 41.3872, lng: 2.1678 },
+  { name: 'El Chiringuito Barceloneta', city: 'Barcelona', postalCode: '08003', category: 'Tercer Tiempo', address: 'Passeig Marítim de la Barceloneta, 08003 Barcelona', lat: 41.3805, lng: 2.1936 },
+  { name: 'Terraza Miramar (Montjuïc)', city: 'Barcelona', postalCode: '08038', category: 'Tercer Tiempo', address: 'Carretera de Miramar 40, 08038 Barcelona', lat: 41.3718, lng: 2.1724 },
+
+  // Valencia Tercer Tiempo
+  { name: 'Bluebell Coffee Co (Ruzafa)', city: 'Valencia', postalCode: '46006', category: 'Café', address: 'Carrer de Buenos Aires 3, 46006 Valencia', lat: 39.4628, lng: -0.3721 },
+  { name: 'Blackbird Coffee & Pastry', city: 'Valencia', postalCode: '46011', category: 'Café', address: 'Carrer de la Reina 82, 46011 Valencia', lat: 39.4674, lng: -0.3298 },
+  { name: 'Marina Beach Club Valencia', city: 'Valencia', postalCode: '46024', category: 'Tercer Tiempo', address: 'Carrer Marina Real Juan Carlos I, 46024 Valencia', lat: 39.4632, lng: -0.3229 },
+  { name: 'Mercado de Colón (Terrazas)', city: 'Valencia', postalCode: '46004', category: 'Tercer Tiempo', address: 'Carrer de Jorge Juan 19, 46004 Valencia', lat: 39.4687, lng: -0.3695 },
+
   // Sevilla
   { name: 'Parque de María Luisa / Plaza de España', city: 'Sevilla', postalCode: '41013', category: 'Running', address: 'Avenida de Isabel la Católica, 41013 Sevilla', lat: 37.3772, lng: -5.9869 },
   { name: 'Márgenes del Guadalquivir (Triana)', city: 'Sevilla', postalCode: '41010', category: 'Running', address: 'Calle Betis, 41010 Sevilla', lat: 37.3854, lng: -6.0002 },
   { name: 'Parque del Alamillo', city: 'Sevilla', postalCode: '41092', category: 'Running', address: 'Parque del Alamillo, Isla de la Cartuja, 41092 Sevilla', lat: 37.4145, lng: -5.9982 },
+  { name: 'Virgin Coffee (Las Setas)', city: 'Sevilla', postalCode: '41003', category: 'Café', address: 'Calle Regina 1, 41003 Sevilla', lat: 37.3934, lng: -5.9918 },
+  { name: 'Torch Coffee Roasters (Paseo de las Delicias)', city: 'Sevilla', postalCode: '41012', category: 'Café', address: 'Paseo de las Delicias 3, 41012 Sevilla', lat: 37.3754, lng: -5.9912 },
+  { name: 'La Terraza del EME (Giralda)', city: 'Sevilla', postalCode: '41004', category: 'Tercer Tiempo', address: 'Calle Alemanes 27, 41004 Sevilla', lat: 37.3862, lng: -5.9924 },
 
   // Granada
   { name: 'Paseo del Salón / Río Genil', city: 'Granada', postalCode: '18009', category: 'Running', address: 'Paseo del Salón, 18009 Granada', lat: 37.1691, lng: -3.5932 },

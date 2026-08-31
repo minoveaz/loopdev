@@ -34,7 +34,7 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
     if (coords && coords.lat && coords.lng) {
       const latLng = `${coords.lat},${coords.lng}`;
       return {
-        mapEmbedUrl: `https://maps.google.com/maps?q=${latLng}&z=${zoom}&output=embed`,
+        mapEmbedUrl: `https://maps.google.com/maps?q=${latLng}&z=${zoom}&output=embed&t=m&iwloc=`,
         googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${latLng}`,
         resolvedAddress: `${location}, ${city}`,
       };
@@ -66,7 +66,7 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
     if (matchedVenue) {
       const latLng = `${matchedVenue.lat},${matchedVenue.lng}`;
       return {
-        mapEmbedUrl: `https://maps.google.com/maps?q=${latLng}&z=${zoom}&output=embed`,
+        mapEmbedUrl: `https://maps.google.com/maps?q=${latLng}&z=${zoom}&output=embed&t=m&iwloc=`,
         googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(matchedVenue.address)}`,
         resolvedAddress: matchedVenue.address,
       };
@@ -76,7 +76,7 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
     const cleanLocation = location.replace(/\s*\([^)]*\)/g, '').trim();
     const query = `${cleanLocation || location}, ${city}${postalCode ? ' ' + postalCode : ''}, España`;
     return {
-      mapEmbedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=${zoom}&output=embed`,
+      mapEmbedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=${zoom}&output=embed&t=m&iwloc=`,
       googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`,
       resolvedAddress: `${cleanLocation || location}, ${city}`,
     };
