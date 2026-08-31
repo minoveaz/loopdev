@@ -2,86 +2,118 @@ import React from 'react';
 import {
   Award,
   CheckCircle2,
+  Clock,
   Compass,
-  Heart,
-  HelpCircle,
   Lightbulb,
   MapPin,
   ShieldCheck,
   Sparkles,
-  Target,
   Users,
   Zap,
 } from 'lucide-react';
 
 export const CimoCaptainGuideTipsWidget: React.FC = () => {
   return (
-    <aside className="h-full overflow-y-auto flex flex-col gap-3.5 text-[#1F4E5F] pr-0.5" aria-label="Guía del Capitán">
-      <div className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 sm:p-6 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <span className="p-2 rounded-xl bg-[#7FB77E]/20 text-[#1F4E5F]">
-            <Lightbulb className="w-4 h-4 text-[#1F4E5F]" />
+    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Guía del Capitán">
+      {/* 1. Cabecera */}
+      <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
+        <div className="flex items-center gap-1.5">
+          <Lightbulb className="w-3.5 h-3.5 text-[#7FB77E]" />
+          <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
+            Estudio del Capitán
           </span>
-          <div>
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E] block">
-              Buenas Prácticas
-            </span>
-            <h3 className="font-black text-sm text-[#1F4E5F]">Guía del Capitán CIMO</h3>
-          </div>
         </div>
+        <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+          Buenas Prácticas
+        </span>
+      </div>
 
-        <p className="text-xs font-medium text-[#1F4E5F]/75 leading-relaxed">
-          Como Capitán, tú marcas el tono y la energía del grupo. Sigue estos 4 pilares para una convocatoria exitosa:
-        </p>
+      {/* 2. Los 4 Pilares de un Buen Entreno */}
+      <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2.5">
+        <span className="text-[10px] font-black uppercase text-[#1F4E5F]/60 tracking-wider">
+          Guía del Capitán CIMO
+        </span>
 
-        <div className="flex flex-col gap-3 pt-2">
-          <div className="flex items-start gap-2.5 bg-white p-3 rounded-2xl border border-[#1F4E5F]/8">
-            <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-start gap-2 text-xs">
+            <span className="w-4 h-4 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">
               1
             </span>
             <div>
-              <h4 className="text-xs font-black text-[#1F4E5F]">Punto de encuentro inconfundible</h4>
-              <p className="text-[11px] font-medium text-[#1F4E5F]/70 mt-0.5">
-                Elige una estatua, fuente o puerta reconocible para que nadie se pierda.
+              <h4 className="text-[11px] font-black text-[#1F4E5F]">Punto de encuentro inconfundible</h4>
+              <p className="text-[10px] text-[#1F4E5F]/65 mt-0.2 leading-tight">
+                Elige una estatua o puerta reconocible.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-2.5 bg-white p-3 rounded-2xl border border-[#1F4E5F]/8">
-            <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
+          <div className="flex items-start gap-2 text-xs">
+            <span className="w-4 h-4 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">
               2
             </span>
             <div>
-              <h4 className="text-xs font-black text-[#1F4E5F]">Ritmo claro y honesto</h4>
-              <p className="text-[11px] font-medium text-[#1F4E5F]/70 mt-0.5">
-                Especifica si el entreno es suave o exigente para asegurar que el grupo vaya unido.
+              <h4 className="text-[11px] font-black text-[#1F4E5F]">Ritmo claro y honesto</h4>
+              <p className="text-[10px] text-[#1F4E5F]/65 mt-0.2 leading-tight">
+                Declara el ritmo objetivo (ej. 5:15 min/km).
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-2.5 bg-white p-3 rounded-2xl border border-[#1F4E5F]/8">
-            <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
+          <div className="flex items-start gap-2 text-xs">
+            <span className="w-4 h-4 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">
               3
             </span>
             <div>
-              <h4 className="text-xs font-black text-[#1F4E5F]">Plazas reducidas (4 a 8)</h4>
-              <p className="text-[11px] font-medium text-[#1F4E5F]/70 mt-0.5">
-                Los micro-grupos facilitan la conversación y generan conexiones reales de amistad.
+              <h4 className="text-[11px] font-black text-[#1F4E5F]">Plazas reducidas (4 a 8)</h4>
+              <p className="text-[10px] text-[#1F4E5F]/65 mt-0.2 leading-tight">
+                Los micro-grupos facilitan la conversación y la amistad.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-2.5 bg-white p-3 rounded-2xl border border-[#1F4E5F]/8">
-            <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
+          <div className="flex items-start gap-2 text-xs">
+            <span className="w-4 h-4 rounded-full bg-[#7FB77E]/20 text-[#1F4E5F] text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">
               4
             </span>
             <div>
-              <h4 className="text-xs font-black text-[#1F4E5F]">Tercer Tiempo social</h4>
-              <p className="text-[11px] font-medium text-[#1F4E5F]/70 mt-0.5">
-                Un café o refrigerio post-entreno es donde se forja la comunidad.
+              <h4 className="text-[11px] font-black text-[#1F4E5F]">Tercer Tiempo social</h4>
+              <p className="text-[10px] text-[#1F4E5F]/65 mt-0.2 leading-tight">
+                Un café o caña para conectar tras la sesión.
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 3. Checklist de Publicación */}
+      <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2">
+        <span className="text-[10px] font-black uppercase text-[#1F4E5F]/60 tracking-wider">
+          Checklist de Convocatoria
+        </span>
+        <div className="flex flex-col gap-1.5 text-[11px] font-bold text-[#1F4E5F]">
+          <div className="flex items-center gap-2 p-1.5 bg-[#EEF2F2]/50 rounded-xl">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <span>Foto de alta calidad vinculada</span>
+          </div>
+          <div className="flex items-center gap-2 p-1.5 bg-[#EEF2F2]/50 rounded-xl">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <span>Cupo máximo entre 4 y 8 plazas</span>
+          </div>
+          <div className="flex items-center gap-2 p-1.5 bg-[#EEF2F2]/50 rounded-xl">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <span>Chat del Crew activado</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Garantía del Capitán */}
+      <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
+        <ShieldCheck className="w-4 h-4 text-[#7FB77E] flex-shrink-0 mt-0.5" />
+        <div>
+          <h4 className="text-[11px] font-black text-[#1F4E5F]">Rol de Capitán CIMO</h4>
+          <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
+            Tus entrenos suman puntos de reputación y desbloquean insignias exclusivas en tu pasaporte.
+          </p>
         </div>
       </div>
     </aside>
