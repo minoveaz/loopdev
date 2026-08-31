@@ -245,7 +245,7 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               <div className="flex items-center gap-2 text-[#7FB77E]">
                 <Sparkles className="w-4 h-4 text-[#7FB77E]" />
                 <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
-                  Instrucciones de {activity.captain.name}
+                  Instrucciones & Claves del Capitán ({activity.captain.name})
                 </span>
               </div>
               <p className="text-sm sm:text-base font-semibold text-[#1F4E5F] leading-relaxed italic">
@@ -253,6 +253,147 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               </p>
             </div>
           ) : null}
+
+          {/* 🎒 Qué debes traer & Material Recomendado (Estilo Airbnb Experiences / Komoot) */}
+          <div className="p-5 bg-white rounded-3xl border border-[#1F4E5F]/10 flex flex-col gap-3 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
+                <span>🎒</span>
+                <span>Qué debes traer para esta sesión</span>
+              </span>
+              <span className="text-[10px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                Checklist Recomendado
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+              {activity.sport === 'hiking' ? (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🥾</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Trail</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Suela con agarre</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">💧</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Agua (1.5L)</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Mínimo sugerido</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🥪</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Snack / Fruta</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Frutos secos o barrita</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🧢</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Protección Solar</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Gorra y crema</span>
+                    </div>
+                  </div>
+                </>
+              ) : activity.sport === 'padel' ? (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🎾</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Pala de Pádel</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Propia o alquilada</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">👟</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Pádel</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Suela espiga / clay</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">💧</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Botella de Agua</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Para cambios de lado</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">📦</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Bolas Incluidas</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Las pone el capitán</span>
+                    </div>
+                  </div>
+                </>
+              ) : activity.sport === 'cycling' ? (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🚴‍♂️</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Bici a Punto</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Presión y frenos</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🪖</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Casco Obligatorio</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Homologado</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">💧</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Bidón de Agua</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Con sales o agua</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🔧</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Cámara / Bomba</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Kit de repuesto</span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">👟</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Técnico</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Zapatillas adecuadas</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">🎽</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Ropa Cómoda</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Tejido transpirable</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">💧</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Hidratación</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Botella de agua</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <span className="text-xl">⚡</span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Buena Energía</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Ganas de entrenar</span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
 
           {/* ☕ Tercer Tiempo Post-Entreno (Solo si está activo) */}
           {activity.thirdHalf?.enabled && (
