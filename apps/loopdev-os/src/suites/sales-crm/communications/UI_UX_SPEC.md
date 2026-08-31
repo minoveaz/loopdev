@@ -251,7 +251,7 @@ server API boundary instead.
 ### Designed capabilities and future suites
 
 - Designed for: triage, selected-thread reading, policy-aware reply, internal notes, assignment and lifecycle presentation.
-- Not designed for: campaigns, automation, bots, AI, media, calls, SLA or provider configuration.
+- Not designed for: campaigns, automation, bots, AI, media, attachments, labels, calls, SLA or provider configuration. These were not capabilities of the confirmed WhatsApp POC and are not Inbox parity gaps.
 - Future CRM use: contact record deep link, Customer 360 conversation history and lead follow-up context.
 - Future Marketing Studio use: only an approved transactional conversation review surface; campaign composition remains outside this widget.
 - Future Operations use: provider health and delivery inspection with read-only context, not human reply workflow unless separately approved.

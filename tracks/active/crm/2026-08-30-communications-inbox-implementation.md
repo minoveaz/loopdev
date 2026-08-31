@@ -67,6 +67,7 @@ The WhatsApp POC is the capability source for this track, not a persistence or o
 | 2026-08-30 | Keep conversation workflow CRM-owned until a second real consumer exists. | VitaBlue is a future consumer, not current implementation evidence.                                                           | Shared promotion is deferred; the contract remains provider-neutral.                               | User        |
 | 2026-08-30 | Use this existing Inbox track as the POC adaptation and CRM integration track; keep provider execution and durable operations in Communications Core. | The Inbox already consumes Core and owns the CRM workflow, while a third track would duplicate scope and ownership. | Add an explicit POC capability map and integration phases without moving provider, webhook, persistence or worker ownership into the UI track. | User |
 | 2026-08-30 | Rescue POC behavior through canonical contracts and adapters, not through legacy POC tables or direct provider access. | The POC proves useful workflows but its legacy storage and shortcuts do not satisfy current tenant and ownership boundaries. | Preserve product behavior while allowing the underlying implementation to be replaced by authorized Core services. | User |
+| 2026-08-31 | Confirm that the WhatsApp POC did not include multimedia, attachments, labels or automations. | The POC has no additional capabilities requiring parity work beyond the mapped Inbox workflow. | Keep these capabilities outside the current Inbox scope; do not treat them as missing POC parity or implementation blockers. | User |
 
 ## Architecture and contracts
 
@@ -102,7 +103,7 @@ WhatsApp POC capability inventory
 | Reply and internal note | Separate public reply and team-only note flows | Core policy and persistence; Inbox composer | Implemented through the authorized Inbox action adapter; live provider/RLS evidence pending |
 | 24-hour window and approved templates | Policy-aware composer and template path | Communications Core | Implemented: approved-template read, parameter UI, policy gate and server-side dispatch |
 | Queued/sent/delivered/read/failed states | Message status presentation and recovery feedback | Communications Core worker/events | Contract and service primitives prepared; end-to-end evidence pending |
-| Signed webhook, media and interactive inbound events | Normalized activity/read model; media rendering deferred | Communications Core / webhook worker | Parser and canonical entry prepared; Inbox rendering pending |
+| Signed webhook and interactive inbound events | Normalized activity/read model; media rendering is outside the confirmed POC scope | Communications Core / webhook worker | Parser and canonical entry prepared; Inbox rendering pending |
 | Organization isolation and auditability | Capability-driven controls and safe context | Platform/Communications Core | Contracts and authorization paths present; Docker/Supabase evidence pending |
 
 ## Branch strategy
@@ -157,7 +158,7 @@ Implementation continues on `feature/crm-communications-inbox-implementation`, b
 - [ ] Authorized adapters cover reply, internal note, assignment and lifecycle actions with normalized pending/success/failure feedback.
 - [ ] Composer contract supports the 24-hour policy and an approved-template path without exposing provider credentials.
 - [ ] Delivery and webhook-derived activity can be consumed as Core-owned read data.
-- [ ] Deferred POC capabilities are recorded with rationale, especially media rendering, calls, routing, macros, bulk actions, AI and SLA.
+- [ ] Deferred or future product capabilities are recorded with rationale; multimedia, attachments, labels and automations are confirmed as absent from the POC, while calls, routing, macros, bulk actions, AI and SLA remain outside this track.
 
 **Validation**
 
@@ -210,7 +211,7 @@ Implementation continues on `feature/crm-communications-inbox-implementation`, b
 | Core persistence and RLS are not executable on this machine. | Real integration cannot be certified locally.            | Keep the adapter boundary explicit and complete the Docker/Supabase handoff before live data.                 | communications/platform | open  |
 | A CRM widget could become a hidden shared component.         | Future consumers would inherit CRM nouns or permissions. | Keep ownership in CRM and defer promotion until a second real consumer.                                       | crm/platform            | open  |
 | Conversation actions may drift from Core policy.             | UI could suggest unsupported sends or transitions.       | Capabilities now derive from granular permissions; mutations remain behind the future authorized API adapter. | crm/communications      | open  |
-| POC scope could expand into an unbounded omnichannel rebuild. | Delivery would lose focus and duplicate future tracks. | Maintain the capability map and explicitly defer media rendering, calls, routing, macros, bulk actions, AI and SLA. | crm/communications | open |
+| POC scope could expand into an unbounded omnichannel rebuild. | Delivery would lose focus and duplicate future tracks. | Preserve the confirmed POC boundary: multimedia, attachments, labels and automations were not present; calls, routing, macros, bulk actions, AI and SLA remain outside this track. | crm/communications | open |
 
 ## Criterios de cierre
 
