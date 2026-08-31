@@ -106,13 +106,6 @@ export const TennisBallIcon: React.FC<{ className?: string }> = ({ className = '
   </svg>
 );
 
-export const CHAT_DURATION_OPTIONS = [
-  { id: '24h' as const, label: '24 horas tras el entreno', badge: 'Recomendado', desc: 'Se archiva al día siguiente de la quedada' },
-  { id: '48h' as const, label: '48 horas tras el entreno', badge: 'Extendido', desc: 'Tiempo extra para compartir fotos y rutas' },
-  { id: '12h' as const, label: '12 horas tras el entreno', badge: 'Rápido', desc: 'Para quedadas puntuales y directas' },
-  { id: 'same_day' as const, label: 'Al terminar el día', badge: 'Mismo día', desc: 'Cierre automático a las 23:59 del evento' },
-];
-
 const sportsList = CIMO_SPORTS_CATALOG;
 
 const spanishCities = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Málaga', 'Bilbao', 'Zaragoza', 'Otra'];
@@ -256,7 +249,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
   const [selectedCoverUrl, setSelectedCoverUrl] = useState('');
   const [customImageUrl, setCustomImageUrl] = useState('');
   const [isCustomImageMode, setIsCustomImageMode] = useState(false);
-  const [chatDuration, setChatDuration] = useState<'24h' | '48h' | '12h' | 'same_day'>('24h');
 
   // Custom Visual Pickers State
   const [isCityComboboxOpen, setIsCityComboboxOpen] = useState(false);
@@ -1788,54 +1780,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 text-xs font-medium text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white"
                 />
               </div>
-            </div>
-          </div>
-
-          {/* 5.4 Duración del Chat del Evento (Grupo Efímero) */}
-          <div className="flex flex-col gap-3 pt-6 sm:pt-7 border-t border-[#1F4E5F]/10">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#7FB77E]" />
-                <span>5.4 Duración del Chat del Evento</span>
-              </label>
-              <span className="text-[10px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-[#7FB77E]" />
-                <span>Chat Efímero</span>
-              </span>
-            </div>
-
-            <p className="text-xs text-[#1F4E5F]/65 font-medium">
-              Para evitar grupos zombis y proteger la privacidad de todos, el chat se archivará automáticamente tras finalizar la quedada:
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-              {CHAT_DURATION_OPTIONS.map((opt) => {
-                const isSelected = chatDuration === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => setChatDuration(opt.id)}
-                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1.5 ${
-                      isSelected
-                        ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/25 shadow-2xs'
-                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <span className="text-xs font-black text-[#1F4E5F]">{opt.label}</span>
-                      <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full shrink-0 ${
-                        isSelected ? 'bg-[#7FB77E] text-white' : 'bg-[#1F4E5F]/10 text-[#1F4E5F]/60'
-                      }`}>
-                        {opt.badge}
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-[#1F4E5F]/60 font-medium leading-tight">
-                      {opt.desc}
-                    </span>
-                  </button>
-                );
-              })}
             </div>
           </div>
 
