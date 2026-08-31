@@ -86,6 +86,7 @@ graph TD
 | **2026-08-30** | Erradicación Total de Emojis del SO en Controles de UI. | Evitar el aspecto informal de "prototipo/chat" y garantizar consistencia cross-platform. | Interfaz seria, deportiva y profesional con SVG vectoriales (Lucide). | `@minoveaz` |
 | **2026-08-30** | Elevación del Design System de Autor (4 Capas: Depth, Typography, Signature Components & Polish). | Romper la monotonía de "tarjeta blanca plana con borde gris" e infundir la calidad visual y de autor de *VitaBlue*, *LoopDev SaaS*, *Strava* y *Linear*. | Identidad de marca única, jerarquía visual de élite y acabado premium. | `@minoveaz` |
 | **2026-08-31** | **Roadmap de Expansión de Producto & Integraciones CIMO 2.5:**<br>1. Feed de Crew multicapa (Amigos + 2º grado + Afinidad).<br>2. Perfil con 1-4 fotos reales en acción (anti-stock).<br>3. Ficha Técnica estructurada por desplegables (sin texto libre).<br>4. Integración Playtomic (Pádel) & Strava/Wikiloc/Garmin (Running/Hiking).<br>5. Squad Hub dedicado (`/squad/:id`) con flujo de creación y sugerencias.<br>6. Directorio & Ranking de Tercer Tiempo y Hotspots Deportivos.<br>7. Panel de Administración / Backoffice CIMO. | Llevar la plataforma de un directorio de eventos a una red social deportiva y ecosistema integral con datos certificados y micro-comunidades activas. | Fuerte diferenciación competitiva, engagement diario y monetización/alianzas B2B. | `@minoveaz` |
+| **2026-08-31** | **Aprobación de 5 Innovaciones Clave de Engagement:**<br>1. Check-in GPS/QR post-entreno (Zero No-Shows & Proof of Workout).<br>2. Indicador de Liebre / Pacer oficial en quedadas de Running.<br>3. División de gastos de pista / consumiciones con enlace directo Bizum/Revolut.<br>4. Etiquetas de Energía Social / Vibe (Focused vs Conversational).<br>5. Desafíos y retos mensuales inter-squads. | Blindar la puntualidad, eliminar la fricción de pagos en grupo y maximizar la seguridad y sintonía de los miembros. | Confianza total de la comunidad, alta retención y crecimiento orgánico de Squads. | `@minoveaz` |
 
 ---
 
@@ -206,6 +207,7 @@ graph TD
 - [ ] Integraciones con Playtomic, Strava, Garmin, Wikiloc y candados de privacidad de WhatsApp/Redes.
 - [ ] Squad Hub dedicado (`/squad/:id`) con flujo de creación y sugerencias.
 - [ ] Ranking de Tercer Tiempo & Hotspots Deportivos con convenios de locales.
+- [ ] 5 Innovaciones de Engagement (Check-in GPS/QR anti-no-shows, Liebre oficial, Split Cost Bizum, Etiquetas de Vibe y Desafíos Inter-Squads).
 - [ ] Panel de Administración de CIMO (`/admin`).
 - [ ] Quality Gate en verde: `pnpm --filter cimo typecheck && pnpm --filter cimo test && pnpm --filter cimo build`.
 
