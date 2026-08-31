@@ -25,6 +25,7 @@ export interface CimoActivityDetailViewProps {
   onBack: () => void;
   onJoin: (id: string) => void;
   onSendMessage: (activityId: string, text: string) => void;
+  onNavigateToProfile?: (athleteId: string) => void;
 }
 
 export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
@@ -33,12 +34,22 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
   onBack,
   onJoin,
   onSendMessage,
+  onNavigateToProfile,
 }) => {
   const [activeTab, setActiveTab] = useState<'details' | 'chat'>('details');
   const [inputText, setInputText] = useState('');
+  const [shareCopied, setShareCopied] = useState(false);
 
   const isFull = activity.currentMembers.length >= activity.maxMembers;
   const isJoined = Boolean(activity.isJoined);
+
+  const handleCopyLink = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2500);
+    }
+  };
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,21 +74,17 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => {
-              if (navigator.clipboard) {
-                navigator.clipboard.writeText(window.location.href);
-              }
-            }}
+            onClick={handleCopyLink}
             aria-label="Compartir entreno"
-            className="p-2 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors flex items-center gap-1.5 text-xs font-extrabold cursor-pointer"
+            className="px-3 py-1.5 rounded-full bg-[#F7F7F7] hover:bg-[#7FB77E]/15 text-[#1F4E5F] transition-colors flex items-center gap-1.5 text-xs font-black cursor-pointer border border-[#1F4E5F]/10"
           >
-            <Share2 className="w-4 h-4" />
-            <span className="hidden sm:inline">Compartir</span>
+            {shareCopied ? <Check className="w-3.5 h-3.5 text-[#7FB77E]" /> : <Share2 className="w-3.5 h-3.5" />}
+            <span>{shareCopied ? '¡Enlace copiado!' : 'Compartir'}</span>
           </button>
           <button
             type="button"
             aria-label="Guardar en favoritos"
-            className="p-2 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors cursor-pointer"
+            className="p-2 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F] transition-colors cursor-pointer border border-[#1F4E5F]/10"
           >
             <Heart className="w-4 h-4" />
           </button>
@@ -310,13 +317,14 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               {activity.currentMembers.map((m) => (
                 <div
                   key={m.id}
-                  className="p-3 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5"
+                  onClick={() => onNavigateToProfile?.(m.id)}
+                  className="p-3 bg-[#F7F7F7] hover:bg-[#7FB77E]/10 rounded-2xl border border-[#1F4E5F]/5 hover:border-[#7FB77E]/30 flex items-center gap-2.5 transition-all cursor-pointer group"
                 >
                   {m.avatarUrl ? (
                     <img
                       src={m.avatarUrl}
                       alt={m.name}
-                      className="w-8 h-8 rounded-full object-cover border border-[#1F4E5F]/15 shrink-0"
+                      className="w-8 h-8 rounded-full object-cover border border-[#1F4E5F]/15 shrink-0 group-hover:scale-105 transition-transform"
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] font-black text-xs flex items-center justify-center shrink-0">
@@ -324,7 +332,7 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                     </div>
                   )}
                   <div className="truncate">
-                    <span className="text-xs font-bold text-[#1F4E5F] block truncate">{m.name}</span>
+                    <span className="text-xs font-bold text-[#1F4E5F] block truncate group-hover:text-[#7FB77E] transition-colors">{m.name}</span>
                     <span className="text-[9px] text-[#7FB77E] font-black uppercase block">
                       {m.isCaptain ? 'Capitán' : 'Miembro'}
                     </span>

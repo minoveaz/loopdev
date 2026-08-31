@@ -34,6 +34,7 @@ import { INITIAL_CREW_CONNECTIONS, INITIAL_SPORTS_SQUADS } from '../data/mockCre
 export interface CimoCrewNetworkViewProps {
   onBackToExplore: () => void;
   onNavigateToProfile?: (athleteId: string) => void;
+  onNavigateToSquad?: (squadId: string) => void;
   onOpenChat?: (chatId?: string) => void;
   onCreateWorkout?: () => void;
 }
@@ -63,6 +64,7 @@ export function getThirdHalfVectorIcon(type?: string, className = 'w-3.5 h-3.5')
 export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
   onBackToExplore,
   onNavigateToProfile,
+  onNavigateToSquad,
   onOpenChat,
   onCreateWorkout,
 }) => {
@@ -276,7 +278,10 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     </div>
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-base sm:text-lg font-black text-[#1F4E5F]">
+                        <h3
+                          onClick={() => onNavigateToSquad?.(sq.id)}
+                          className="text-base sm:text-lg font-black text-[#1F4E5F] hover:text-[#7FB77E] transition-colors cursor-pointer"
+                        >
                           {sq.name}
                         </h3>
                         <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#1F4E5F]/5 text-[#1F4E5F] border border-[#1F4E5F]/10">
@@ -302,10 +307,20 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                           src={mem.avatarUrl}
                           alt={mem.name}
                           title={mem.name}
-                          className="w-7 h-7 rounded-full object-cover ring-2 ring-white shadow-2xs"
+                          onClick={() => onNavigateToProfile?.(mem.id)}
+                          className="w-7 h-7 rounded-full object-cover ring-2 ring-white shadow-2xs cursor-pointer hover:scale-110 transition-transform"
                         />
                       ))}
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigateToSquad?.(sq.id)}
+                      className="px-3 py-1.5 rounded-xl bg-[#7FB77E]/15 hover:bg-[#7FB77E] text-[#1F4E5F] text-xs font-bold transition-all cursor-pointer flex items-center gap-1 border border-[#7FB77E]/30"
+                    >
+                      <Users className="w-3.5 h-3.5" />
+                      <span>Hub</span>
+                    </button>
 
                     <button
                       type="button"

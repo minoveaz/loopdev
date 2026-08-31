@@ -19,29 +19,30 @@ export interface CimoCommunityWidgetsProps {
   chats: Record<string, ChatMessage[]>;
   onSelectActivity: (id: string) => void;
   onOpenChatTab?: () => void;
+  onNavigateToProfile?: (athleteId: string) => void;
 }
 
 const verifiedCaptains = [
   {
-    id: 'c1',
+    id: 'sofia-diaz',
     name: 'Sofía Díaz',
-    sport: '🏃 Running 8K',
+    sport: 'Running 8K',
     rating: '5.0',
     workouts: 24,
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
   },
   {
-    id: 'c2',
+    id: 'javier-chamartin',
     name: 'Javier Chamartín',
-    sport: '🎾 Pádel 3.5',
+    sport: 'Pádel 3.5',
     rating: '4.9',
     workouts: 18,
     avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
   },
   {
-    id: 'c3',
+    id: 'marta-soler',
     name: 'Marta Soler',
-    sport: '🥾 Hiking Sierra',
+    sport: 'Hiking Sierra',
     rating: '5.0',
     workouts: 32,
     avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80',
@@ -53,6 +54,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
   chats,
   onSelectActivity,
   onOpenChatTab,
+  onNavigateToProfile,
 }) => {
   return (
     <aside
@@ -159,16 +161,17 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
           {verifiedCaptains.map((capt) => (
             <div
               key={capt.id}
-              className="flex items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-[#F7F7F7] transition-colors"
+              onClick={() => onNavigateToProfile?.(capt.id)}
+              className="flex items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-[#F7F7F7] hover:border-[#7FB77E]/30 border border-transparent transition-all cursor-pointer group"
             >
               <div className="flex items-center gap-2.5 truncate">
                 <img
                   src={capt.avatarUrl}
                   alt={capt.name}
-                  className="w-9 h-9 rounded-full object-cover border border-[#1F4E5F]/15 shrink-0"
+                  className="w-9 h-9 rounded-full object-cover border border-[#1F4E5F]/15 shrink-0 group-hover:scale-105 transition-transform"
                 />
                 <div className="truncate">
-                  <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                  <span className="text-xs font-black text-[#1F4E5F] block truncate group-hover:text-[#7FB77E] transition-colors">
                     {capt.name}
                   </span>
                   <span className="text-[10px] font-bold text-[#1F4E5F]/60 block truncate">

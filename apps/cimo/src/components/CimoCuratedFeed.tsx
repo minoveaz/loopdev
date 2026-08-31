@@ -29,6 +29,7 @@ export interface CimoCuratedFeedProps {
   selectedActivityId: string;
   onSelectActivity: (id: string) => void;
   onJoinActivity: (id: string) => void;
+  onNavigateToProfile?: (athleteId: string) => void;
 }
 
 // Vector Sport Icon Helper
@@ -58,6 +59,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
   selectedActivityId,
   onSelectActivity,
   onJoinActivity,
+  onNavigateToProfile,
 }) => {
   const [timeFilter, setTimeFilter] = useState<'all' | 'today' | 'weekend'>('all');
   const [favorites, setFavorites] = useState<string[]>([]);

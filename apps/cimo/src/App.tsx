@@ -15,6 +15,8 @@ import { CimoChatListView } from './components/CimoChatListView';
 import { CimoProfileView } from './components/CimoProfileView';
 import { CimoEditProfileView, type ExtendedUserProfileData } from './components/CimoEditProfileView';
 import { CimoCrewNetworkView } from './components/CimoCrewNetworkView';
+import { CimoSquadHubView } from './components/CimoSquadHubView';
+import { getAthleteProfileById } from './data/mockAthletes';
 
 export function App() {
   const [activities, setActivities] = useState<ActivityCardData[]>(INITIAL_ACTIVITIES);
@@ -308,14 +310,26 @@ export function App() {
             onBack={() => navigateTo('feed')}
             onJoin={handleJoinActivity}
             onSendMessage={handleSendMessage}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+          />
+        );
+      case 'squad':
+        return (
+          <CimoSquadHubView
+            squadId={activeSquadId ?? 'sq_1'}
+            onBackToCrew={() => navigateTo('crew')}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+            onSelectActivity={handleSelectActivity}
+            onCreateWorkout={() => navigateTo('create')}
           />
         );
       case 'crew':
         return (
           <CimoCrewNetworkView
             onBackToExplore={() => navigateTo('feed')}
-            onNavigateToProfile={() => navigateTo('profile')}
-            onOpenChat={() => navigateTo('chats')}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+            onNavigateToSquad={(squadId) => navigateTo('squad', squadId)}
+            onOpenChat={(chatId) => navigateTo('chats', chatId)}
             onCreateWorkout={() => navigateTo('create')}
           />
         );
@@ -324,7 +338,7 @@ export function App() {
           <CimoChatListView
             activities={activities}
             chats={chats}
-            selectedActivityId={selectedActivityId}
+            selectedActivityId={activeChatId ?? selectedActivityId}
             onSelectChat={(id) => {
               navigateTo('activity-detail', id);
             }}
@@ -340,18 +354,27 @@ export function App() {
             }}
           />
         );
-      case 'profile':
+      case 'profile': {
+        const isOwn = !activeProfileUserId || activeProfileUserId === 'usr_me' || activeProfileUserId === 'alexrivera';
+        const profileUserToDisplay = isOwn ? currentUser : getAthleteProfileById(activeProfileUserId);
+
         return (
           <CimoProfileView
-            user={currentUser}
+            user={profileUserToDisplay}
+            isOwnProfile={isOwn}
             userActivities={activities}
             onSelectActivity={handleSelectActivity}
             onCreatePlan={() => navigateTo('create')}
             onEditProfile={() => navigateTo('profile-edit')}
             onNavigateToCrew={() => navigateTo('crew')}
-            onUpdateUser={(updated) => setCurrentUser((prev) => ({ ...prev, ...updated }))}
+            onUpdateUser={(updated) => {
+              if (isOwn) {
+                setCurrentUser((prev) => ({ ...prev, ...updated }));
+              }
+            }}
           />
         );
+      }
       case 'explore':
       case 'feed':
       default:
@@ -361,6 +384,7 @@ export function App() {
             selectedActivityId={selectedActivityId}
             onSelectActivity={handleSelectActivity}
             onJoinActivity={handleJoinActivity}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
           />
         );
     }
@@ -495,6 +519,7 @@ export function App() {
               chats={chats}
               onSelectActivity={handleSelectActivity}
               onOpenChatTab={() => navigateTo('chats')}
+              onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
             />
           ),
           drawer: (

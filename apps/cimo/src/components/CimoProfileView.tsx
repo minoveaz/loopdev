@@ -35,6 +35,7 @@ import type { ExtendedUserProfileData } from './CimoEditProfileView';
 
 export interface CimoProfileViewProps {
   user: ExtendedUserProfileData;
+  isOwnProfile?: boolean;
   userActivities?: ActivityCardData[];
   onSelectActivity?: (id: string) => void;
   onCreatePlan?: () => void;
@@ -122,6 +123,7 @@ const WEEK_DAYS_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', '
 
 export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
   user,
+  isOwnProfile = true,
   userActivities = [],
   onSelectActivity,
   onCreatePlan,
@@ -186,14 +188,29 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
               <Share2 className="w-3.5 h-3.5" />
               <span>{shareCopied ? '¡Enlace copiado!' : 'Compartir'}</span>
             </button>
-            <button
-              type="button"
-              onClick={onEditProfile}
-              className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
-            >
-              <Edit3 className="w-3.5 h-3.5" />
-              <span>Editar Perfil</span>
-            </button>
+            {isOwnProfile ? (
+              <button
+                type="button"
+                onClick={onEditProfile}
+                className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Editar Perfil</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  if (user.phoneWhatsapp) {
+                    window.open(`https://wa.me/${user.phoneWhatsapp.replace(/[^0-9]/g, '')}`, '_blank');
+                  }
+                }}
+                className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Contactar</span>
+              </button>
+            )}
           </div>
         </div>
 
