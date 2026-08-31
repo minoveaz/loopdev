@@ -18,8 +18,8 @@ Para evitar monotonía y comunicar claramente la naturaleza de cada sección, se
   * Fecha, Hora y Punto de encuentro
   * Instrucciones del Capitán y Checklist de Material
 
-### 🔵 Dimensión Social / Comunidad (`Azul Social & Conexión`)
-* **Colores clave:** `#2563EB` (Azul Eléctrico), `#3B82F6` (Azul Claro), `#EFF6FF` (Fondo Azul Suave), `#1E40AF` (Azul Marino Texto).
+### 🔵 Dimensión Social / Comunidad (`Azul Petróleo CIMO #1F4E5F`)
+* **Colores clave:** `#1F4E5F` (Azul Petróleo de CIMO), `#1F4E5F`/10 (Fondo Suave), `#1F4E5F`/20 (Bordes).
 * **Significado:** Tercer Tiempo, relajación post-entreno, sobremesa, café de especialidad, cañas, networking, charlas y amistad.
 * **Secciones que lo aplican:**
   * Bloque de Tercer Tiempo (Opcional)
