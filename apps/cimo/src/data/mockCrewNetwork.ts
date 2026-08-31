@@ -21,6 +21,7 @@ export interface SquadCallout {
 
 export interface SportsSquad {
   id: string;
+  slug: string;
   name: string;
   sport: 'running' | 'padel' | 'hiking';
   badgeEmoji: string;
@@ -68,6 +69,7 @@ export interface CrewConnection {
 export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
   {
     id: 'sq_1',
+    slug: 'retiro-morning-runners',
     name: 'Retiro Morning Runners',
     sport: 'running',
     badgeEmoji: '🏃',
@@ -100,6 +102,7 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
   },
   {
     id: 'sq_2',
+    slug: 'cuarteto-padel-chamartin',
     name: 'Cuarteto Pádel Chamartín',
     sport: 'padel',
     badgeEmoji: '🎾',
@@ -132,6 +135,7 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
   },
   {
     id: 'sq_3',
+    slug: 'sierra-guadarrama-hikers',
     name: 'Sierra Guadarrama Hikers',
     sport: 'hiking',
     badgeEmoji: '🥾',
@@ -161,6 +165,12 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
     },
   },
 ];
+
+export function getSquadBySlugOrId(slugOrId: string): SportsSquad {
+  const clean = slugOrId.toLowerCase();
+  const match = INITIAL_SPORTS_SQUADS.find((s) => s.slug === clean || s.id === clean);
+  return match ?? INITIAL_SPORTS_SQUADS[0];
+}
 
 export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
   {

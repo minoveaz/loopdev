@@ -25,9 +25,8 @@ import {
   Users,
   Zap,
 } from 'lucide-react';
-import type { ActivityCardData } from '@loopdev/public-blocks';
 import type { SportsSquad } from '../data/mockCrewNetwork';
-import { INITIAL_SPORTS_SQUADS } from '../data/mockCrewNetwork';
+import { getSquadBySlugOrId } from '../data/mockCrewNetwork';
 
 export interface CimoSquadHubViewProps {
   squadId: string;
@@ -44,7 +43,7 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
   onSelectActivity,
   onCreateWorkout,
 }) => {
-  const squad = INITIAL_SPORTS_SQUADS.find((s) => s.id === squadId) ?? INITIAL_SPORTS_SQUADS[0];
+  const squad = getSquadBySlugOrId(squadId);
   const [activeTab, setActiveTab] = useState<'convocatorias' | 'members' | 'chat'>('convocatorias');
   const [shareCopied, setShareCopied] = useState(false);
   const [messages, setMessages] = useState([

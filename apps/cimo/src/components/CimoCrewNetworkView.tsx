@@ -279,7 +279,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3
-                          onClick={() => onNavigateToSquad?.(sq.id)}
+                          onClick={() => onNavigateToSquad?.(sq.slug || sq.id)}
                           className="text-base sm:text-lg font-black text-[#1F4E5F] hover:text-[#7FB77E] transition-colors cursor-pointer"
                         >
                           {sq.name}
@@ -315,7 +315,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
 
                     <button
                       type="button"
-                      onClick={() => onNavigateToSquad?.(sq.id)}
+                      onClick={() => onNavigateToSquad?.(sq.slug || sq.id)}
                       className="px-3 py-1.5 rounded-xl bg-[#7FB77E]/15 hover:bg-[#7FB77E] text-[#1F4E5F] text-xs font-bold transition-all cursor-pointer flex items-center gap-1 border border-[#7FB77E]/30"
                     >
                       <Users className="w-3.5 h-3.5" />
