@@ -282,7 +282,7 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
               ? 'bg-[#1F4E5F] text-white hover:bg-[#163a47]'
               : isFull
               ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
-              : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-[#1F4E5F] hover:shadow-md'
+              : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white hover:shadow-md'
           }`}
         >
           {isJoined ? (

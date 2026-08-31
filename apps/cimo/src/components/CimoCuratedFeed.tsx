@@ -305,7 +305,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                           ? 'bg-[#7FB77E] text-white shadow-xs'
                           : isFull
                           ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
-                          : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95'
+                          : 'bg-[#7FB77E] hover:bg-[#6ea86d] text-white active:scale-95 shadow-xs'
                       }`}
                     >
                       {isJoined ? (

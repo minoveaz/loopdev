@@ -236,7 +236,7 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
               </div>
 
               {/* Action Button */}
-              <div className="w-28 py-2 rounded-xl text-xs font-black bg-[#1F4E5F] text-white flex items-center justify-center gap-1.5 shadow-xs cursor-default">
+              <div className="w-28 py-2 rounded-xl text-xs font-black bg-[#7FB77E] text-white flex items-center justify-center gap-1.5 shadow-xs cursor-default">
                 <span>Unirme</span>
               </div>
             </div>
