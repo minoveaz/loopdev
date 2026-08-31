@@ -102,7 +102,7 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
       {/* Unified Step Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+          <span className="w-6 h-6 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-xs font-black flex items-center justify-center shrink-0">
             {stepNumber}
           </span>
           <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">

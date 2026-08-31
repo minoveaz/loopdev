@@ -105,10 +105,10 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
           href={googleMapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-3.5 py-1.5 rounded-full bg-[#1F4E5F] hover:bg-[#163946] text-white text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95 shrink-0"
+          className="px-3.5 py-1.5 rounded-full bg-[#7FB77E] hover:bg-[#6ea26d] text-white text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95 shrink-0"
         >
           <span>Abrir en Google Maps</span>
-          <ExternalLink className="w-3 h-3 text-[#7FB77E]" />
+          <ExternalLink className="w-3 h-3 text-white" />
         </a>
       </div>
     </div>

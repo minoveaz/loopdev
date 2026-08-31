@@ -541,7 +541,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
                   1.1
                 </span>
                 <span>¿Qué deporte vas a liderar?</span>
@@ -601,7 +601,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           <div className="pt-5 border-t border-[#1F4E5F]/10 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
                   1.3
                 </span>
                 <span>Cupo máximo de personas</span>
@@ -672,7 +672,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           <div className="flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
                   2.1
                 </span>
                 <span>¿Qué día entrenamos?</span>
@@ -779,7 +779,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
                   2.2
                 </span>
                 <span>¿A qué hora?</span>
@@ -899,7 +899,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
                   2.3
                 </span>
                 <span>Ciudad & Punto de encuentro</span>
@@ -1091,7 +1091,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
                   3.2
                 </span>
                 <ShoppingBag className="w-4 h-4 text-[#7FB77E]" />
