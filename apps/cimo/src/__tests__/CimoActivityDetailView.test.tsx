@@ -21,7 +21,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
     expect(screen.getByText('Información del Plan')).toBeDefined();
     expect(screen.getByText('Itinerario Previsto')).toBeDefined();
     expect(screen.getByText('Tercer Tiempo Organizado')).toBeDefined();
-    expect(screen.getByText('Alex Rivera')).toBeDefined();
+    expect(screen.getByText(mockActivity.captain.name)).toBeDefined();
   });
 
   it('allows sending messages to the crew chat in real-time', () => {
@@ -88,7 +88,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
       />
     );
 
-    const captainName = screen.getByText('Alex Rivera');
+    const captainName = screen.getByText(mockActivity.captain.name);
     fireEvent.click(captainName);
 
     expect(onNavigateProfile).toHaveBeenCalled();

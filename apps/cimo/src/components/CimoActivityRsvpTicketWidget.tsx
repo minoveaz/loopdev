@@ -122,7 +122,7 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-[#7FB77E] shrink-0 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-[#7FB77E] shrink-0 shadow-xs">
             <img src={activity.captain.avatarUrl} alt={activity.captain.name} className="w-full h-full object-cover" />
           </div>
           <div className="min-w-0 flex-1">
@@ -142,30 +142,74 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
         </button>
       </div>
 
-      {/* 2. 🌤️ Condiciones Previstas & Clima */}
-      <div className="bg-white p-3 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F]">
-            <CloudSun className="w-4 h-4 text-[#1F4E5F]" />
-          </div>
-          <div>
-            <span className="text-[10px] font-black uppercase text-[#1F4E5F]/60 block leading-tight">
-              Condiciones Previstas
+      {/* 2. 👥 El Crew: Personas que van a asistir (Muy Visible) */}
+      <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <Users className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
+              Asistentes Confirmados ({activity.currentMembers.length}/{activity.maxMembers})
             </span>
-            <span className="text-xs font-black text-[#1F4E5F]">19ºC • Despejado</span>
           </div>
+          <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+            {spotsLeft} libres
+          </span>
         </div>
-        <span className="text-[10px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.5 rounded-full">
-          Firme Seco
-        </span>
+
+        {/* Lista visual de deportistas que asisten */}
+        <div className="flex flex-col gap-1.5 max-h-44 overflow-y-auto pr-0.5">
+          {activity.currentMembers.map((m) => (
+            <div
+              key={m.id}
+              onClick={() => onNavigateToProfile?.(m.id)}
+              className="flex items-center justify-between p-2 bg-[#EEF2F2]/50 hover:bg-[#7FB77E]/15 rounded-xl border border-[#1F4E5F]/5 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-full overflow-hidden border border-[#1F4E5F]/15 shrink-0 group-hover:border-[#7FB77E]">
+                  <img src={m.avatarUrl} alt={m.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-xs font-black text-[#1F4E5F] truncate block group-hover:text-[#7FB77E] transition-colors">
+                    {m.name}
+                  </span>
+                  <span className="text-[9px] text-[#1F4E5F]/60 font-bold uppercase block">
+                    {m.isCaptain ? 'Capitán del Crew' : 'Deportista Confirmado'}
+                  </span>
+                </div>
+              </div>
+              {m.isCaptain ? (
+                <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/15 px-2 py-0.5 rounded-md shrink-0">
+                  Capitán
+                </span>
+              ) : (
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* 3. [Issue #32] Etiqueta de Vibe Social */}
-      <div className="p-2.5 bg-[#EEF2F2]/50 rounded-2xl border border-[#7FB77E]/20 flex items-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
-        <span className="text-[11px] font-bold text-[#1F4E5F]">
-          Vibe: <strong>Ritmo Conversacional</strong> (Hablamos mientras entrenamos)
-        </span>
+      {/* 3. 🌤️ Clima & Vibe Social */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className="bg-white p-2.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex items-center gap-2">
+          <div className="p-1.5 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F]">
+            <CloudSun className="w-3.5 h-3.5" />
+          </div>
+          <div>
+            <span className="text-[9px] font-black uppercase text-[#1F4E5F]/60 block leading-tight">Condiciones Previstas</span>
+            <span className="text-[11px] font-black text-[#1F4E5F]">19ºC Despejado</span>
+          </div>
+        </div>
+
+        <div className="bg-white p-2.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex items-center gap-2">
+          <div className="p-1.5 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F]">
+            <Sparkles className="w-3.5 h-3.5 text-[#7FB77E]" />
+          </div>
+          <div>
+            <span className="text-[9px] font-black uppercase text-[#1F4E5F]/60 block leading-tight">Vibe</span>
+            <span className="text-[11px] font-black text-[#1F4E5F]">Conversacional</span>
+          </div>
+        </div>
       </div>
 
       {/* 4. 🎟️ Ticket de Reserva & Plazas */}
@@ -228,7 +272,7 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
 
         {/* [Issue #7] Sincronización en 1 Clic con Calendario */}
         {isJoined && (
-          <div className="flex gap-1.5 pt-1">
+          <div className="flex gap-1.5 pt-0.5">
             <button
               type="button"
               onClick={handleAddToGoogleCalendar}
@@ -266,20 +310,6 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
           >
             {linkCopied ? <Check className="w-3.5 h-3.5 text-[#7FB77E]" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
-        </div>
-
-        {/* Avatares de Miembros Confirmados */}
-        <div className="pt-2 border-t border-[#1F4E5F]/8 flex flex-col gap-1.5">
-          <span className="text-[10px] font-black text-[#1F4E5F]/60 uppercase tracking-wide">
-            Miembros Confirmados ({activity.currentMembers.length})
-          </span>
-          <div className="flex items-center gap-2">
-            <CrewAvatarGroup
-              members={activity.currentMembers}
-              maxVisible={6}
-              size="md"
-            />
-          </div>
         </div>
       </div>
 

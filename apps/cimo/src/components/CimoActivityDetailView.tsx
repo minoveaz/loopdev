@@ -166,13 +166,16 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
       {activeTab === 'details' ? (
         <div className="flex flex-col gap-6">
           {/* Captain Card */}
-          <div className="p-4 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div
+            onClick={() => onNavigateToProfile?.(activity.captain.id)}
+            className="p-4 bg-[#F7F7F7] hover:bg-[#7FB77E]/10 rounded-3xl border border-[#1F4E5F]/5 hover:border-[#7FB77E]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer transition-all group"
+          >
             <div className="flex items-center gap-3">
               {activity.captain.avatarUrl ? (
                 <img
                   src={activity.captain.avatarUrl}
                   alt={activity.captain.name}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-[#1F4E5F]/20 shadow-xs"
+                  className="w-14 h-14 rounded-full object-cover border-2 border-[#1F4E5F]/20 shadow-xs group-hover:border-[#7FB77E]"
                 />
               ) : (
                 <div className="w-14 h-14 rounded-full bg-[#1F4E5F] text-white font-black text-lg flex items-center justify-center">
@@ -317,46 +320,6 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               postalCode={activity.postalCode}
             />
           </div>
-
-          {/* Attendees / The Crew */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
-                El Crew ({activity.currentMembers.length} de {activity.maxMembers} plazas ocupadas)
-              </span>
-              <span className="text-xs font-bold text-[#7FB77E]">
-                {activity.maxMembers - activity.currentMembers.length} plazas disponibles
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {activity.currentMembers.map((m) => (
-                <div
-                  key={m.id}
-                  onClick={() => onNavigateToProfile?.(m.id)}
-                  className="p-3 bg-[#F7F7F7] hover:bg-[#7FB77E]/10 rounded-2xl border border-[#1F4E5F]/5 hover:border-[#7FB77E]/30 flex items-center gap-2.5 transition-all cursor-pointer group"
-                >
-                  {m.avatarUrl ? (
-                    <img
-                      src={m.avatarUrl}
-                      alt={m.name}
-                      className="w-8 h-8 rounded-full object-cover border border-[#1F4E5F]/15 shrink-0 group-hover:scale-105 transition-transform"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] font-black text-xs flex items-center justify-center shrink-0">
-                      {m.name.charAt(0)}
-                    </div>
-                  )}
-                  <div className="truncate">
-                    <span className="text-xs font-bold text-[#1F4E5F] block truncate group-hover:text-[#7FB77E] transition-colors">{m.name}</span>
-                    <span className="text-[9px] text-[#7FB77E] font-black uppercase block">
-                      {m.isCaptain ? 'Capitán' : 'Miembro'}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       ) : (
         /* Embedded Crew Chat */
@@ -411,8 +374,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
         </div>
       )}
 
-      {/* Sticky Bottom Action CTA */}
-      <div className="pt-4 border-t border-[#1F4E5F]/10 flex items-center justify-between gap-4">
+      {/* Mobile/Tablet Sticky Bottom Action CTA (Hidden on Desktop) */}
+      <div className="pt-4 border-t border-[#1F4E5F]/10 flex lg:hidden items-center justify-between gap-4">
         <div>
           <span className="text-xs font-black text-[#1F4E5F] block">
             {activity.date} a las {activity.time}h
