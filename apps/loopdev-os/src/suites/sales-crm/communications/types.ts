@@ -60,7 +60,16 @@ export type InboxCopy = {
   noMatchesDescription: string;
   inboxUnavailableTitle: string;
   inboxUnavailableDescription: string;
+  accountPausedTitle: string;
+  accountPausedDescription: string;
+  expiredWindowTitle: string;
   retryLabel: string;
+  sendFailureTitle: string;
+  sendFailureDescription: string;
+  conflictTitle: string;
+  conflictDescription: string;
+  offlineTitle: string;
+  offlineDescription: string;
   selectConversationTitle: string;
   selectConversationDescription: string;
   noContextTitle: string;

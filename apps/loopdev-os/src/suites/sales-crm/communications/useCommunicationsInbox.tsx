@@ -31,6 +31,25 @@ function loadingModel(organizationId: string) {
   };
 }
 
+function templateParametersFromContext(
+  template: InboxTemplate | undefined,
+  conversation: InboxConversation | undefined,
+) {
+  if (!template || !conversation) return {};
+  const firstName = conversation.contactName.trim().split(/\s+/)[0] ?? '';
+  return Object.fromEntries(
+    template.parameterNames.flatMap((name) => {
+      if (name === 'firstName') return [[name, firstName]];
+      if (name === 'contactName') return [[name, conversation.contactName]];
+      if (name === 'phone') return [[name, conversation.contactPhone]];
+      if (name === 'companyName' && conversation.contactCompany) {
+        return [[name, conversation.contactCompany]];
+      }
+      return [];
+    }),
+  );
+}
+
 function modelForDataSource(
   model: InboxModel,
   dataSource: InboxProviderProps['dataSource'],
@@ -138,6 +157,19 @@ export function CommunicationsInboxProvider({
 
   const selectedConversation = conversations.find(({ id }) => id === selectedId);
 
+  useEffect(() => {
+    const template = templates.find(({ id }) => id === selectedTemplateId);
+    const contextParameters = templateParametersFromContext(template, selectedConversation);
+    if (!Object.keys(contextParameters).length) return;
+    setTemplateParameters((current) => {
+      const next = { ...current };
+      for (const [name, value] of Object.entries(contextParameters)) {
+        if (!next[name]?.trim()) next[name] = value;
+      }
+      return next;
+    });
+  }, [selectedConversation?.id, selectedTemplateId, templates]);
+
   const updateSelected = (update: (conversation: InboxConversation) => InboxConversation) => {
     setConversations((current) =>
       current.map((conversation) =>
@@ -180,6 +212,9 @@ export function CommunicationsInboxProvider({
       setSelectedId(conversationId);
       setActionNotice(null);
       setMobileSurface('thread');
+      const conversation = conversations.find(({ id }) => id === conversationId);
+      const template = templates.find(({ id }) => id === selectedTemplateId);
+      setTemplateParameters(templateParametersFromContext(template, conversation));
     },
     showMobileList: () => setMobileSurface('list'),
     showMobileThread: () => setMobileSurface('thread'),
@@ -191,7 +226,8 @@ export function CommunicationsInboxProvider({
     setDraft,
     setSelectedTemplateId: (templateId) => {
       setSelectedTemplateId(templateId);
-      setTemplateParameters({});
+      const template = templates.find(({ id }) => id === templateId);
+      setTemplateParameters(templateParametersFromContext(template, selectedConversation));
       setActionNotice(null);
     },
     setTemplateParameter: (name, value) =>

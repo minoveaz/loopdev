@@ -13,6 +13,7 @@ import {
 } from '@/suites/sales-crm/communications/copy';
 import { createFixtureInboxDataSource } from '@/suites/sales-crm/communications/inbox-data-source';
 import { COMMUNICATIONS_INBOX_MODEL } from '@/suites/sales-crm/communications/inbox.fixture';
+import type { InboxPresentationState } from '@/suites/sales-crm/communications/types';
 
 function renderInbox(model = COMMUNICATIONS_INBOX_MODEL) {
   return render(
@@ -80,15 +81,13 @@ describe('Communications Inbox', () => {
     fireEvent.click(templateSelect);
     const templateOptions = screen.getAllByText('Proposal follow-up');
     fireEvent.click(templateOptions[templateOptions.length - 1]);
-    fireEvent.change(screen.getByRole('textbox', { name: 'Template parameter firstName' }), {
-      target: { value: 'Ada' },
-    });
+    expect(screen.getByRole('textbox', { name: 'Template parameter firstName' })).toHaveValue('Ana');
     fireEvent.click(screen.getByRole('button', { name: /Send reply/ }));
 
     await waitFor(() => {
       expect(
         within(screen.getByLabelText('Messages with Ana Garcia')).getByText(
-          'Hola Ada, te compartimos el seguimiento de tu propuesta.',
+          'Hola Ana, te compartimos el seguimiento de tu propuesta.',
         ),
       ).toBeInTheDocument();
       expect(screen.getByRole('status')).toHaveTextContent('Reply sent.');
@@ -112,6 +111,70 @@ describe('Communications Inbox', () => {
     expect(screen.getByRole('button', { name: /Send reply/ })).toBeDisabled();
   });
 
+  it('renders queued, delivered and failed delivery states in the thread', () => {
+    const deliveryModel = {
+      ...COMMUNICATIONS_INBOX_MODEL,
+      conversations: COMMUNICATIONS_INBOX_MODEL.conversations.map((conversation, index) =>
+        index === 0
+          ? {
+              ...conversation,
+              messages: [
+                ...conversation.messages,
+                {
+                  id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+                  organizationId: conversation.organizationId,
+                  conversationId: conversation.id,
+                  externalId: null,
+                  direction: 'outbound' as const,
+                  status: 'queued' as const,
+                  body: 'Queued message',
+                  templateId: null,
+                  createdAt: conversation.updatedAt,
+                  updatedAt: conversation.updatedAt,
+                  kind: 'message' as const,
+                  authorName: 'You',
+                },
+                {
+                  id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+                  organizationId: conversation.organizationId,
+                  conversationId: conversation.id,
+                  externalId: 'wamid.delivered',
+                  direction: 'outbound' as const,
+                  status: 'delivered' as const,
+                  body: 'Delivered message',
+                  templateId: null,
+                  createdAt: conversation.updatedAt,
+                  updatedAt: conversation.updatedAt,
+                  kind: 'message' as const,
+                  authorName: 'You',
+                },
+                {
+                  id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+                  organizationId: conversation.organizationId,
+                  conversationId: conversation.id,
+                  externalId: 'wamid.failed',
+                  direction: 'outbound' as const,
+                  status: 'failed' as const,
+                  body: 'Failed message',
+                  templateId: null,
+                  createdAt: conversation.updatedAt,
+                  updatedAt: conversation.updatedAt,
+                  kind: 'message' as const,
+                  authorName: 'You',
+                },
+              ],
+            }
+          : conversation,
+      ),
+    };
+    renderInbox(deliveryModel);
+
+    const messages = within(screen.getByLabelText('Messages with Ana Garcia'));
+    expect(messages.getByText('Delivered')).toBeInTheDocument();
+    expect(messages.getByText('Queued')).toBeInTheDocument();
+    expect(messages.getByText('Failed')).toBeInTheDocument();
+  });
+
   it('shows filtered-empty feedback for an unmatched search', () => {
     renderInbox();
 
@@ -121,6 +184,18 @@ describe('Communications Inbox', () => {
 
     expect(screen.getByText('No matches')).toBeInTheDocument();
     expect(screen.getByText('Try another search or clear the status filter.')).toBeInTheDocument();
+  });
+
+  it.each([
+    ['paused', 'WhatsApp account paused'],
+    ['window-expired', 'Reply window expired'],
+    ['send-failure', 'Message not sent'],
+    ['conflict', 'Conversation changed'],
+    ['offline', 'You are offline'],
+  ] as const)('renders the %s presentation state', (state, title) => {
+    renderInbox({ ...COMMUNICATIONS_INBOX_MODEL, presentation: state as InboxPresentationState });
+
+    expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
   });
 
   it('moves through list, thread and CRM context surfaces for mobile', () => {

@@ -101,7 +101,7 @@ WhatsApp POC capability inventory
 | Thread timeline and CRM context | SplitWorkspace thread/context workflow | CRM Inbox + CRM read model | Implemented in mock-backed slice |
 | Self-assignment and lifecycle | Granular authorized actions and state feedback | Communications Core contract + CRM Inbox presentation | Implemented through the authorized Inbox action adapter; live persistence evidence pending |
 | Reply and internal note | Separate public reply and team-only note flows | Core policy and persistence; Inbox composer | Implemented through the authorized Inbox action adapter; live provider/RLS evidence pending |
-| 24-hour window and approved templates | Policy-aware composer and template path | Communications Core | Implemented: approved-template read, parameter UI, policy gate and server-side dispatch |
+| 24-hour window and approved templates | Policy-aware composer and template path; known parameters are prefilled from CRM contact context and remain editable | Communications Core + CRM Inbox | Implemented: approved-template read, parameter UI, CRM autofill, policy gate and server-side dispatch |
 | Queued/sent/delivered/read/failed states | Message status presentation and recovery feedback | Communications Core worker/events | Contract and service primitives prepared; end-to-end evidence pending |
 | Signed webhook and interactive inbound events | Normalized activity/read model; media rendering is outside the confirmed POC scope | Communications Core / webhook worker | Parser and canonical entry prepared; Inbox rendering pending |
 | Organization isolation and auditability | Capability-driven controls and safe context | Platform/Communications Core | Contracts and authorization paths present; Docker/Supabase evidence pending |
@@ -156,7 +156,7 @@ Implementation continues on `feature/crm-communications-inbox-implementation`, b
 
 - [ ] Inbox read model exposes the conversation, participant, assignment, lifecycle, policy and delivery data required by the workflow.
 - [ ] Authorized adapters cover reply, internal note, assignment and lifecycle actions with normalized pending/success/failure feedback.
-- [ ] Composer contract supports the 24-hour policy and an approved-template path without exposing provider credentials.
+- [ ] Composer contract supports the 24-hour policy and an approved-template path without exposing provider credentials; known contact parameters are auto-filled and unknown parameters remain manual.
 - [ ] Delivery and webhook-derived activity can be consumed as Core-owned read data.
 - [ ] Deferred or future product capabilities are recorded with rationale; multimedia, attachments, labels and automations are confirmed as absent from the POC, while calls, routing, macros, bulk actions, AI and SLA remain outside this track.
 
@@ -233,7 +233,7 @@ Implementation continues on `feature/crm-communications-inbox-implementation`, b
 | 2026-08-30 | Communications Inbox focused UI/Axe and mobile-surface tests | Passed: 5 cases, including list -> thread -> context responsive flow and Axe | `apps/loopdev-os/src/app/sales-crm/communications/CommunicationsInbox.test.tsx` |
 | 2026-08-30 | Shell changed-only validation                   | Partial: 10 tests passed; 3 suites blocked by the workspace Radix `aria-hidden` resolution error | `pnpm test:shell:changed` |
 | 2026-08-30 | Contracts, source-contract and ownership checks | Passed: shared contracts build, no local redeclarations and zero hardcoded component contract findings | `packages/contracts/src/communications/inbox.ts`, `apps/loopdev-os/src/suites/sales-crm/communications`             |
-| 2026-08-30 | Communications Inbox action and template tests | Passed: 21 focused tests covering Core provider parameter handling, authorized action dispatch, template listing, template UI interpolation and expired-window gating | `apps/loopdev-os/src/app/api/communications/inbox/actions/route.test.ts`, `apps/loopdev-os/src/app/api/communications/templates/route.test.ts`, `apps/loopdev-os/src/app/sales-crm/communications/CommunicationsInbox.test.tsx`, `apps/loopdev-os/src/services/communications/whatsapp.test.ts` |
+| 2026-08-31 | Communications Inbox action, template, state and delivery tests | Passed: 40 focused tests covering Core provider parameter handling, authorized action dispatch, template listing, CRM parameter autofill, template UI interpolation, policy gating, operational states and delivery presentation | `apps/loopdev-os/src/app/api/communications/inbox/actions/route.test.ts`, `apps/loopdev-os/src/app/api/communications/templates/route.test.ts`, `apps/loopdev-os/src/app/sales-crm/communications/CommunicationsInbox.test.tsx`, `apps/loopdev-os/src/services/communications/whatsapp.test.ts`, `packages/contracts/src/communications/__tests__/communications.test.ts` |
 | 2026-08-30 | Contracts build and Communications typecheck | Contracts build passed; app typecheck reports only pre-existing `.next` operation route and Contacts fixture errors, with no Communications diagnostics | `packages/contracts`, `apps/loopdev-os/tsconfig.json` |
 
 ## Session handoff

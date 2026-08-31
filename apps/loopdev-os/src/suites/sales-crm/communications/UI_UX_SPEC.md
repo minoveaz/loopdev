@@ -107,13 +107,18 @@ organizations, permissions, persistence or provider credentials.
 | `formatters`   | Date and time presentation                                        | Formats timestamps without changing the model         | Consumer owns locale and timezone policy                 | Dates retain machine-readable values where rendered     |
 | `actorLabel`   | Current actor display name                                        | Names local outbound messages and assignment feedback | Consumer supplies the authorized actor context           | Author identity is readable in the timeline             |
 | `presentation` | `ready`, `loading`, `empty`, `forbidden`, `error` or policy state | Selects a complete state while preserving geometry    | Retry is exposed through the provider                    | `role=status` or `role=alert` is used by urgency        |
+| template parameters | Values required by the approved template | Known CRM values are prefilled; unresolved values remain editable inputs | Consumer owns the context mapping and manual edits | Each parameter has an associated accessible label |
 
 ## Interaction model
 
 The template selector is the shared `Select` single-select control. Opening is
 owned by the control, selecting a template closes its menu, and Escape restores
-the previous selection without submitting. No clear action is needed because
-an empty template selection returns the composer to its disabled state.
+the previous selection without submitting. Known parameters are prefilled from
+the selected CRM contact (`firstName`, `contactName`, `phone` and
+`companyName` when available), remain editable, and are never overwritten after
+the user changes them. Unknown parameters remain manual inputs. No clear action
+is needed because an empty template selection returns the composer to its
+disabled state.
 
 | Capability                 | User intent               | Pointer/touch             | Keyboard/focus                                             | Escape/close                              | Feedback                                    |
 | -------------------------- | ------------------------- | ------------------------- | ---------------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
@@ -337,11 +342,11 @@ server API boundary instead.
 | Resilience and failure boundaries    | required      | in-progress | Error, policy and conflict states |
 | Maintainability and testing contract | required      | in-progress | Focused tests and active track    |
 
-- Contract: `in-progress` - public widget props, action adapter and template model are implemented; visual review remains.
+- Contract: `in-progress` - public widget props, action adapter, template model and CRM parameter autofill are implemented; visual review remains.
 - Accessibility: `in-progress` - Axe evidence passes; keyboard review remains.
 - Interaction: `in-progress` - focused action, template and policy tests pass; keyboard review remains.
 - Responsive: `in-progress` - mobile list -> thread -> context evidence passes; visual review remains.
-- States: `in-progress` - expired-window and action feedback are covered; failure and forbidden evidence remains.
+- States: `in-progress` - policy, delivery, operational failure, conflict, offline and forbidden state evidence is covered; visual review remains.
 - Consumer ownership: `in-progress` - documented in the active track.
 - Visual review: `pending` - visual approval is required before Playwright.
 - Registry: `pending` - module widget is not a shared registry entry.
@@ -365,6 +370,7 @@ server API boundary instead.
 | ---------- | ------- | ------------------------------------------------- | ---------------------------------------------------------------------- | -------- |
 | 2026-08-30 | 0.1     | Initial widget contract for mock-backed CRM Inbox | Establishes ownership, states, responsive and future-consumer boundary | Pending  |
 | 2026-08-30 | 0.2     | Adds approved-template interaction and authorized action boundary | Covers template parameters, expired-window behavior and Core handoff | Pending  |
+| 2026-08-31 | 0.3     | Prefills known template parameters from CRM contact context | Keeps Meta parameter validation while removing repeated manual entry | Pending  |
 
 ## Reopen triggers
 

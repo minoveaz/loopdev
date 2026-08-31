@@ -46,5 +46,52 @@ export function InboxState({ state }: { state: InboxPresentationState }) {
       />
     );
   }
+  if (state === 'paused') {
+    return (
+      <EmptyState
+        title={copy.accountPausedTitle}
+        description={copy.accountPausedDescription}
+        icon="pause_circle"
+      />
+    );
+  }
+  if (state === 'window-expired') {
+    return (
+      <EmptyState
+        title={copy.expiredWindowTitle}
+        description={copy.expiredWindowDescription}
+        icon="schedule"
+      />
+    );
+  }
+  if (state === 'send-failure') {
+    return (
+      <EmptyState
+        status="error"
+        title={copy.sendFailureTitle}
+        description={copy.sendFailureDescription}
+        icon="error_outline"
+      />
+    );
+  }
+  if (state === 'conflict') {
+    return (
+      <EmptyState
+        status="error"
+        title={copy.conflictTitle}
+        description={copy.conflictDescription}
+        icon="sync_problem"
+      />
+    );
+  }
+  if (state === 'offline') {
+    return (
+      <EmptyState
+        title={copy.offlineTitle}
+        description={copy.offlineDescription}
+        icon="wifi_off"
+      />
+    );
+  }
   return null;
 }
