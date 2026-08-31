@@ -591,7 +591,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               {sportsList.map((s) => {
                 const isSelected = sport === s.id;
                 return (
@@ -603,24 +603,27 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       setSelectedPaceIndex(1);
                       setIsCustomImageMode(false);
                     }}
-                    className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 cursor-pointer ${
+                    className={`p-4 sm:p-5 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer ${
                       isSelected
                         ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-md scale-[1.02]'
-                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5 hover:border-[#1F4E5F]/20'
+                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white hover:border-[#1F4E5F]/25 shadow-2xs'
                     }`}
                   >
-                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#1F4E5F]'}`}>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#1F4E5F]'}`}>
                       {s.id === 'hiking' ? (
-                        <Footprints className="w-5 h-5" />
+                        <Footprints className="w-6 h-6" />
                       ) : s.id === 'padel' ? (
-                        <Activity className="w-5 h-5" />
-                      ) : s.id === 'cycling' ? (
-                        <Bike className="w-5 h-5" />
+                        <Activity className="w-6 h-6" />
                       ) : (
-                        <Flame className="w-5 h-5" />
+                        <Flame className="w-6 h-6" />
                       )}
                     </div>
-                    <span className="text-xs font-extrabold">{s.label}</span>
+                    <div className="flex flex-col items-center">
+                      <span className="text-sm font-black">{s.label}</span>
+                      <span className={`text-[11px] font-medium mt-0.5 line-clamp-1 ${isSelected ? 'text-white/90' : 'text-[#1F4E5F]/60'}`}>
+                        {s.description}
+                      </span>
+                    </div>
                   </button>
                 );
               })}
