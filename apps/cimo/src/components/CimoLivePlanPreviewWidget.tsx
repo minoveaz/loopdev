@@ -9,6 +9,7 @@ import {
   Eye,
   Flame,
   Footprints,
+  Heart,
   Info,
   Layers,
   Lightbulb,
@@ -138,9 +139,9 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
           </div>
         </div>
 
-        {/* Tarjeta Mockup Realista de CIMO */}
-        <div className="bg-white border border-[#1F4E5F]/15 rounded-3xl overflow-hidden shadow-xs flex flex-col transition-all hover:border-[#7FB77E]/50">
-          {/* Imagen de Portada con Badges */}
+        {/* Tarjeta Mockup Realista de CIMO (Idéntica al Feed Principal) */}
+        <div className="bg-white border border-[#1F4E5F]/15 rounded-3xl overflow-hidden shadow-xs flex flex-col transition-all hover:border-[#7FB77E]/50 group">
+          {/* 1. Imagen de Portada con Badges y Título */}
           <div className={`relative w-full bg-[#1F4E5F]/5 overflow-hidden ${previewCardFormat === 'story' ? 'aspect-[4/3]' : 'aspect-[16/9]'}`}>
             <img
               src={
@@ -148,88 +149,96 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
                 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=800'
               }
               alt={formData.title || 'Preview'}
-              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-            {/* Top Badges */}
-            <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#1F4E5F] text-[10px] font-black uppercase tracking-wider shadow-2xs">
+            {/* Top Tags */}
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+              <span className="px-2.5 py-1 rounded-full font-black text-xs bg-white/95 text-[#1F4E5F] shadow-xs flex items-center gap-1.5 backdrop-blur-md">
                 {sportIcon}
-                <span>{formData.sport || 'Running'}</span>
-              </div>
-
-              <div className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-extrabold flex items-center gap-1">
-                <Users className="w-3 h-3 text-[#7FB77E]" />
-                <span>1 / {formData.capacity || 6}</span>
-              </div>
+                <span className="capitalize">{formData.sport || 'Running'}</span>
+              </span>
+              <span className="px-2 py-0.8 rounded-full text-[10px] font-black bg-black/60 text-white backdrop-blur-md border border-white/10">
+                {formData.level || 'Intermedio'}
+              </span>
             </div>
 
-            {/* Bottom Image Overlay: Title & Ritmo */}
-            <div className="absolute bottom-2.5 left-2.5 right-2.5 flex flex-col text-white">
-              <span className="text-[10px] font-black text-[#7FB77E] uppercase tracking-wider flex items-center gap-1">
-                <Timer className="w-3 h-3" />
-                <span>{formData.level || 'Ritmo Medio'}</span>
-              </span>
-              <h4 className="font-black text-sm leading-tight text-white line-clamp-1 drop-shadow-xs">
+            {/* Favorite Heart Button */}
+            <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center backdrop-blur-md">
+              <Heart className="w-4 h-4 fill-transparent text-white" />
+            </div>
+
+            {/* Title on the Cover Overlay */}
+            <div className="absolute bottom-3 left-3.5 right-3.5 text-white">
+              <h3 className="font-black text-base leading-tight drop-shadow-xs line-clamp-1">
                 {formData.title || 'Título de tu entrenamiento'}
-              </h4>
+              </h3>
             </div>
           </div>
 
-          {/* Contenido de la Tarjeta */}
-          <div className="p-4 flex flex-col gap-2.5">
-            <p className="text-xs font-medium text-[#1F4E5F]/75 line-clamp-2 leading-relaxed">
-              {formData.description || 'Describe la ruta, el objetivo y el ritmo para tus compañeros del Crew.'}
-            </p>
-
-            {/* Metadatos: Fecha, Hora y Punto */}
-            <div className="pt-2 border-t border-[#1F4E5F]/8 flex flex-col gap-1.5 text-xs text-[#1F4E5F]/85 font-bold">
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
+          {/* 2. Cuerpo de la Tarjeta */}
+          <div className="p-4 sm:p-5 flex flex-col gap-3 text-[#1F4E5F]">
+            {/* Logistics Row: Location & Date/Time */}
+            <div className="flex flex-col gap-1.5 text-xs">
+              <div className="flex items-center justify-between text-slate-600 font-bold gap-2">
+                <div className="flex items-center gap-1.5 truncate">
+                  <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+                  <span className="truncate">{formData.location || 'Punto de encuentro'}</span>
+                </div>
+                <div className="flex items-center gap-1 font-black text-[#1F4E5F] shrink-0">
                   <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
-                  <span>{formData.date || 'Fecha'} • {formData.time || 'Hora'}h</span>
-                </span>
-                <span className="text-[11px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
-                  {formData.price || 'Gratis'}
-                </span>
+                  <span>{formData.date || 'Fecha'}, {formData.time || '19:30'}h</span>
+                </div>
               </div>
 
-              <div className="flex items-center gap-1.5 truncate text-[11px] text-[#1F4E5F]/70">
-                <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
-                <span className="truncate">{formData.location || 'Lugar de encuentro'}</span>
+              {/* Pace / Level Line */}
+              <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+                <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span>Ritmo: <strong>{formData.level || 'Medio'}</strong></span>
               </div>
+
+              {/* Description preview */}
+              <p className="text-xs font-medium text-slate-600 line-clamp-2 leading-relaxed mt-0.5">
+                {formData.description || 'Describe la ruta, el objetivo y el ritmo para tus compañeros del Crew.'}
+              </p>
             </div>
 
-            {/* Tercer Tiempo Pill si está activo */}
+            {/* 3. Compact 1-Line Third Half Pill */}
             {hasThirdHalf && (
-              <div className="p-2.5 bg-[#EEF2F2] rounded-2xl border border-[#7FB77E]/30 flex items-center gap-2 text-xs">
-                <Coffee className="w-4 h-4 text-[#1F4E5F] shrink-0" />
-                <div className="min-w-0">
-                  <span className="text-[9px] font-black uppercase text-[#1F4E5F]/60 block leading-tight">
-                    Tercer Tiempo Social
-                  </span>
-                  <span className="font-extrabold text-[#1F4E5F] truncate block leading-tight">
-                    {formData.thirdHalfLocation || formData.thirdHalfTitle || 'Café & Desayuno Post-Entreno'}
+              <div className="flex items-center justify-between gap-2 text-xs font-bold text-amber-900 bg-[#FFFBEB] px-3 py-1.5 rounded-xl border border-[#FDE68A]">
+                <div className="flex items-center gap-1.5 truncate">
+                  <Coffee className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                  <span className="truncate">
+                    <strong>Tercer Tiempo:</strong> {formData.thirdHalfLocation || formData.thirdHalfTitle || 'Café & Charla Post-Entreno'}
                   </span>
                 </div>
+                <span className="text-[9px] font-black uppercase text-amber-800 bg-amber-200/80 px-1.5 py-0.2 rounded-md shrink-0">
+                  Social
+                </span>
               </div>
             )}
 
-            {/* Capitán Organizer Footer */}
-            <div className="pt-2 border-t border-[#1F4E5F]/8 flex items-center justify-between">
+            {/* 4. Footer: Crew Avatars + Action Button */}
+            <div className="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#7FB77E] text-white text-[10px] font-black flex items-center justify-center">
+                <div className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center ring-2 ring-white shadow-2xs">
                   {currentUser.name[0]}
                 </div>
-                <span className="text-xs font-bold text-[#1F4E5F]">
-                  Capitán {currentUser.name.split(' ')[0]}
-                </span>
+                <div>
+                  <span className="text-xs font-black text-[#1F4E5F] block leading-none">
+                    1/{formData.capacity || 6}
+                  </span>
+                  <span className="text-[10px] font-bold text-[#7FB77E] block mt-0.5">
+                    {(formData.capacity || 6) - 1} libre(s)
+                  </span>
+                </div>
               </div>
-              <span className="text-[10px] font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-[#7FB77E]" />
-                <span>Verificado</span>
-              </span>
+
+              {/* Action Button */}
+              <div className="w-28 py-2 rounded-xl text-xs font-black bg-[#1F4E5F] text-white flex items-center justify-center gap-1.5 shadow-xs cursor-default">
+                <span>Unirme</span>
+              </div>
             </div>
           </div>
         </div>

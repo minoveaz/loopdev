@@ -80,7 +80,7 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
     expect(screen.getByText('Simulador Móvil en Vivo')).toBeDefined();
     expect(screen.getByText('Rodaje Suave por Madrid Río')).toBeDefined();
     expect(screen.getByText('6K a ritmo cómodo para estirar piernas.')).toBeDefined();
-    expect(screen.getByText('Capitán Alex')).toBeDefined();
+    expect(screen.getByText('Unirme')).toBeDefined();
     expect(screen.getByText('Score de Atractivo del Plan')).toBeDefined();
     expect(screen.getByText(/Atletas afines activos/i)).toBeDefined();
     expect(screen.getByText(/Tip de Capitán CIMO/i)).toBeDefined();
