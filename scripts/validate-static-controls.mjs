@@ -14,6 +14,7 @@ const ignoredPathPattern =
   /(^|[\\/])(node_modules|\.next|\.turbo|coverage|dist|build|storybook-static)([\\/]|$)/;
 const isWindows = process.platform === 'win32';
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
+const generatedFiles = new Set(['tracks/README.md']);
 
 function changedFilesForScope(scope, revision) {
   if (scope === 'worktree') return changedFilesFromWorktree();
@@ -25,7 +26,10 @@ function changedFilesForScope(scope, revision) {
 function classifyStaticFiles(files) {
   const normalized = files
     .map((file) => file.replaceAll('\\', '/'))
-    .filter((file) => sourceFilePattern.test(file) && !ignoredPathPattern.test(file));
+    .filter(
+      (file) =>
+        sourceFilePattern.test(file) && !ignoredPathPattern.test(file) && !generatedFiles.has(file),
+    );
   return {
     files: [...new Set(normalized)].sort(),
     lintFiles: [...new Set(normalized.filter((file) => lintFilePattern.test(file)))].sort(),

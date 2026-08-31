@@ -9,6 +9,7 @@ test('limits local static validation to changed source and lint files', () => {
     'node_modules/example/index.ts',
     'apps/cimo/dist/index.js',
     'pnpm-lock.yaml',
+    'tracks/README.md',
   ]);
 
   assert.deepEqual(classification.files, [

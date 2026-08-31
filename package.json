@@ -41,7 +41,7 @@
     "design:visual:changed": "node scripts/validate-visual-change.mjs",
     "validation:observations": "node scripts/validate-observations.mjs config/validation-observations.example.json",
     "knip": "knip",
-    "front:check": "pnpm format:check && pnpm classes:check && pnpm contracts:ownership:check && pnpm certification:source-contracts && pnpm front:audit --fail-on-new-findings --baseline=config/frontend-audit-baseline.json && pnpm duplication:check && pnpm knip --no-exit-code --reporter compact",
+    "front:check": "pnpm quality:static:branch",
     "quality:static:worktree": "node scripts/validate-static-controls.mjs worktree",
     "quality:static:commit": "node scripts/validate-static-controls.mjs commit",
     "quality:static:branch": "node scripts/validate-static-controls.mjs branch",

@@ -324,40 +324,43 @@ retaining repository-wide analysis for integration and release confidence.
 
 **Definition of Ready**
 
-- [ ] Each lint, typecheck, build, and frontend quality command has a documented
+- [x] Each lint, typecheck, build, and frontend quality command has a documented
       filesystem scope and package dependency behavior.
-- [ ] Global scans are distinguished from changed-file checks.
-- [ ] Package scripts are normalized sufficiently for domain invocation.
+- [x] Global scans are distinguished from changed-file checks.
+- [x] Package scripts are normalized sufficiently for domain invocation.
 
 **Entregables**
 
-- [ ] Focused lint, typecheck, and build commands for each registered domain.
+- [x] Focused lint, typecheck, and build commands for each registered domain.
 - [x] Explicit static quality commands for worktree, commit, and branch scopes:
       `quality:static:worktree`, `quality:static:commit`, and
       `quality:static:branch`.
-- [ ] Scope policy for Turbo lint/typecheck/build and package dependency traversal.
-- [ ] Split `front:check` policy: changed-file formatting, domain checks, and
+- [x] Scope policy for Turbo lint/typecheck/build and package dependency traversal.
+- [x] Split `front:check` policy: changed-file formatting, domain checks, and
       repository audits (`front:audit`, duplication, contract ownership, Knip).
-- [ ] CI schedule for static scans that are too broad for every local iteration.
+- [x] CI schedule for static scans that are too broad for every local iteration.
 
 **Validacion**
 
-- [ ] CIMO lint/typecheck do not invoke unrelated mobile or LoopDev OS checks.
-- [ ] A LoopDev OS change does not invoke CIMO lint/typecheck/build.
+- [x] CIMO lint/typecheck do not invoke unrelated mobile or LoopDev OS checks.
+- [x] A LoopDev OS change does not invoke CIMO lint/typecheck/build.
 - [x] Local static runner keeps worktree and commit scopes to changed-file
       Prettier and ESLint checks.
 - [x] Branch static runner retains repository-wide classes, ownership,
       source-contract, audit, duplication, and Knip scans.
-- [ ] `format:check` remains changed-file based.
-- [ ] Repository-wide static scans remain available for branch/full certification.
+- [x] `format:check` remains changed-file based.
+- [x] Repository-wide static scans remain available for branch/full certification.
 
 **Evidencia:** `node --test scripts/validate-static-controls.test.mjs` passes 3
 tests covering changed-file classification, local scan exclusion, and branch
 scan inclusion. The runner is intentionally not auto-added beside domain lint:
 that would duplicate ESLint for CIMO and other domains. Its integration into
-the final plan will follow the control-deduplication policy.
+the final plan follows the control-deduplication policy. `pnpm
+quality:static:branch` completed with exit code 0; jscpd reported 81 clone groups
+and Knip reported existing unused symbols as informational findings under the
+current non-blocking configuration.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ### Fase 4: Shared-package consumer impact
 
@@ -560,10 +563,10 @@ duration, coverage, false runs, false skips, and residual risks.
 - **Fecha:** 2026-08-31.
 - **Rama de continuacion:** `test/domain-validation-routing`.
 - **Commit de partida:** `66c64a27`.
-- **Estado alcanzado:** Fase 2 in progress, with Fase 3 static-scope work started. CIMO, mobile, and LoopDev OS application routing consume catalog metadata; Public Shell/Public Blocks routing is advisory and static-control deduplication remains pending.
+- **Estado alcanzado:** Fase 2 in progress; Fase 3 static-scope work completed. CIMO, mobile, and LoopDev OS application routing consume catalog metadata; Public Shell/Public Blocks routing is advisory and remaining domain/CI migration is pending.
 - **Decisiones, bloqueos y riesgos:** Quant is excluded while experimental. `validate:changed` is a stable branch alias. New domains must declare four quality controls or an explicit non-applicability. The global shell requires an active platform track for its branch. Public Shell permits domain contributions only while `public-shell-foundation` is active. CIMO resolves contracts from source in Vitest; its pre-existing lint warnings and chunk advisory are tracked separately.
 - **Validacion ejecutada:** Baseline inventory, 34 planner/package-impact/catalog tests, 3 domain-control tests, 5 catalog tests, 4 protected-surface ownership tests, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, repository validators, and dry-run checks.
-- **Siguiente accion concreta:** Complete static-control deduplication and migrate remaining CI filters without restricting active Public Shell development.
+- **Siguiente accion concreta:** Migrate remaining domain runners and CI/static-control consumers without restricting active Public Shell development.
 
 ## Cierre
 
