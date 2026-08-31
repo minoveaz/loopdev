@@ -877,12 +877,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   ))}
                   {calendarDays.map((cd, index) => {
                     if (cd.empty) {
-                      return <div key={`empty-${index}`} className="p-2" />;
+                      return <div key={`empty-slot-${index}`} className="p-2" />;
                     }
                     const isSelected = date === cd.dateStr;
                     return (
                       <button
-                        key={cd.dateStr || `day-${index}`}
+                        key={`cal-day-${cd.day}-${index}`}
                         type="button"
                         onClick={() => {
                           if (cd.dateStr) setDate(cd.dateStr);
