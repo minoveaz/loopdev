@@ -63,7 +63,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
               onClick={() => onSelectIndex(idx)}
               className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 relative group ${
                 isSelected
-                  ? 'border-[#7FB77E] bg-white ring-2 ring-[#7FB77E]/20 shadow-sm'
+                  ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/30 shadow-sm'
                   : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white hover:border-[#1F4E5F]/30'
               }`}
             >
