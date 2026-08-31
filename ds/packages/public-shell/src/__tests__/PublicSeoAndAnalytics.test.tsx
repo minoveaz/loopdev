@@ -40,6 +40,7 @@ const TestAnalyticsConsumer = () => {
             eventName: 'test_conversion',
             category: 'conversion',
             conversionLabel: 'AW_CONV_123',
+            currency: 'EUR',
           });
         }}
       >

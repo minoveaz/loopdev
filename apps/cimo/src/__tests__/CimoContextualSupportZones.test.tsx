@@ -84,6 +84,8 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
       <CimoAthleteMetricsWidget
         user={{
           name: 'Alex Rivera',
+          email: 'alex@example.com',
+          handle: '@alexrivera',
           sports: [{ sport: 'Running', level: 'Intermedio' }],
           weeklySchedule: {},
         }}
