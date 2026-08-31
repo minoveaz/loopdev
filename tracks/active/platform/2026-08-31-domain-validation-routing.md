@@ -306,6 +306,14 @@ stale contracts `dist` artifact. CIMO lint reports 1,247 existing warnings and
 no errors; Vite reports a >500 kB uncompressed chunk advisory while the initial
 JavaScript output is 145.97 kB gzip.
 
+LoopDev OS and mobile now declare their routing in the same catalog. The
+catalog's `excludePaths` keeps LoopDev OS API, services, and types out of web
+experience routing, while its `frontend` and `mobile` flags replace the
+application-specific classification in package impact. The catalog validator
+rejects malformed routing flags or exclusion lists. Public Shell and Public
+Blocks retain their existing consumer rules until their complete migration in
+Phase 4.
+
 **Estado:** en curso; CIMO proves the catalog-driven pattern, while remaining
 domains and CI path filters still require migration.
 
@@ -324,6 +332,9 @@ retaining repository-wide analysis for integration and release confidence.
 **Entregables**
 
 - [ ] Focused lint, typecheck, and build commands for each registered domain.
+- [x] Explicit static quality commands for worktree, commit, and branch scopes:
+      `quality:static:worktree`, `quality:static:commit`, and
+      `quality:static:branch`.
 - [ ] Scope policy for Turbo lint/typecheck/build and package dependency traversal.
 - [ ] Split `front:check` policy: changed-file formatting, domain checks, and
       repository audits (`front:audit`, duplication, contract ownership, Knip).
@@ -333,10 +344,18 @@ retaining repository-wide analysis for integration and release confidence.
 
 - [ ] CIMO lint/typecheck do not invoke unrelated mobile or LoopDev OS checks.
 - [ ] A LoopDev OS change does not invoke CIMO lint/typecheck/build.
+- [x] Local static runner keeps worktree and commit scopes to changed-file
+      Prettier and ESLint checks.
+- [x] Branch static runner retains repository-wide classes, ownership,
+      source-contract, audit, duplication, and Knip scans.
 - [ ] `format:check` remains changed-file based.
 - [ ] Repository-wide static scans remain available for branch/full certification.
 
-**Evidencia:** Pendiente.
+**Evidencia:** `node --test scripts/validate-static-controls.test.mjs` passes 3
+tests covering changed-file classification, local scan exclusion, and branch
+scan inclusion. The runner is intentionally not auto-added beside domain lint:
+that would duplicate ESLint for CIMO and other domains. Its integration into
+the final plan will follow the control-deduplication policy.
 
 **Estado:** pendiente
 
@@ -525,24 +544,26 @@ duration, coverage, false runs, false skips, and residual risks.
 
 ## Evidencia de validacion
 
-| Fecha      | Validacion                                  | Resultado                                                                                                                       | Referencia                                                                                                 |
-| ---------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| 2026-08-31 | `pnpm validate:plan`                        | Passed; branch-level plan selected web, shell, data, governance, and packages for 77 accumulated files.                         | Baseline routing inventory                                                                                 |
-| 2026-08-31 | `pnpm exec playwright test --list`          | Passed; 279 tests discovered in 26 files, with 28 versioned E2E specifications.                                                 | Baseline browser inventory                                                                                 |
-| 2026-08-31 | CIMO Vitest discovery                       | Blocked; configuration cannot resolve `@vitejs/plugin-react`.                                                                   | Baseline runner inventory                                                                                  |
-| 2026-08-31 | Worker and mobile runner discovery          | Passed; worker exposes 4 tests and mobile exposes 9 test files.                                                                 | Baseline runner inventory                                                                                  |
-| 2026-08-31 | Domain catalog and protected-surface guards | Passed; 7 Node tests and both repository validators pass.                                                                       | `test:domain-catalog`, `validate:domain-catalog`, `test:protected-surfaces`, `validate:protected-surfaces` |
-| 2026-08-31 | Scope semantics                             | Passed; 24 routing tests cover worktree, commit, branch, staged, unstaged, untracked, documentation-only, and fallback routing. | `validate-plan.test.mjs`, `validate-local.test.mjs`                                                        |
+| Fecha      | Validacion                                  | Resultado                                                                                                                                                                                       | Referencia                                                                                                 |
+| ---------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 2026-08-31 | `pnpm validate:plan`                        | Passed; branch-level plan selected web, shell, data, governance, and packages for 77 accumulated files.                                                                                         | Baseline routing inventory                                                                                 |
+| 2026-08-31 | `pnpm exec playwright test --list`          | Passed; 279 tests discovered in 26 files, with 28 versioned E2E specifications.                                                                                                                 | Baseline browser inventory                                                                                 |
+| 2026-08-31 | CIMO Vitest discovery                       | Blocked; configuration cannot resolve `@vitejs/plugin-react`.                                                                                                                                   | Baseline runner inventory                                                                                  |
+| 2026-08-31 | Worker and mobile runner discovery          | Passed; worker exposes 4 tests and mobile exposes 9 test files.                                                                                                                                 | Baseline runner inventory                                                                                  |
+| 2026-08-31 | Domain catalog and protected-surface guards | Passed; 7 Node tests and both repository validators pass.                                                                                                                                       | `test:domain-catalog`, `validate:domain-catalog`, `test:protected-surfaces`, `validate:protected-surfaces` |
+| 2026-08-31 | Scope semantics                             | Passed; 24 routing tests cover worktree, commit, branch, staged, unstaged, untracked, documentation-only, and fallback routing.                                                                 | `validate-plan.test.mjs`, `validate-local.test.mjs`                                                        |
+| 2026-08-31 | Catalog-driven application CI routing       | Passed; 34 planner/package-impact/catalog tests, catalog validation, and Prettier validation pass. Mobile and LoopDev OS use catalog-derived flags without duplicate domain-controls execution. | `validate-package-impact.test.mjs`, `validate-plan.test.mjs`, `ci.yml`                                     |
+| 2026-08-31 | Advisory Public Shell/Public Blocks routing | Passed; 21 catalog/package-impact tests and catalog validation confirm focused controls and direct consumers without global fallback.                                                           | `validate-package-impact.test.mjs`, `validate-domain-catalog.test.mjs`                                     |
 
 ## Handoff de sesion
 
 - **Fecha:** 2026-08-31.
 - **Rama de continuacion:** `test/domain-validation-routing`.
 - **Commit de partida:** `66c64a27`.
-- **Estado alcanzado:** Fase 2 in progress. CIMO is catalog-driven and no longer falls through to global fallback; remaining domains and CI filters are not yet migrated.
+- **Estado alcanzado:** Fase 2 in progress, with Fase 3 static-scope work started. CIMO, mobile, and LoopDev OS application routing consume catalog metadata; Public Shell/Public Blocks routing is advisory and static-control deduplication remains pending.
 - **Decisiones, bloqueos y riesgos:** Quant is excluded while experimental. `validate:changed` is a stable branch alias. New domains must declare four quality controls or an explicit non-applicability. The global shell requires an active platform track for its branch. Public Shell permits domain contributions only while `public-shell-foundation` is active. CIMO resolves contracts from source in Vitest; its pre-existing lint warnings and chunk advisory are tracked separately.
-- **Validacion ejecutada:** Baseline inventory, 36 routing tests, 2 domain-control tests, 4 catalog-contract tests, 4 protected-surface ownership tests, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, repository validators, and dry-run checks.
-- **Siguiente accion concreta:** Migrate LoopDev OS, mobile, public-shell, and public-blocks package routing from local rules to the catalog, then replace CI path filters with the same metadata.
+- **Validacion ejecutada:** Baseline inventory, 34 planner/package-impact/catalog tests, 3 domain-control tests, 5 catalog tests, 4 protected-surface ownership tests, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, repository validators, and dry-run checks.
+- **Siguiente accion concreta:** Complete static-control deduplication and migrate remaining CI filters without restricting active Public Shell development.
 
 ## Cierre
 

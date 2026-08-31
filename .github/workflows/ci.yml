@@ -52,6 +52,8 @@ jobs:
       shell: ${{ steps.filter.outputs.shell }}
       quality: ${{ steps.plan.outputs.full_fallback }}
       package_validation: ${{ steps.impact.outputs.has_targeted_validation }}
+      domain_ids: ${{ steps.impact.outputs.domain_ids }}
+      cimo: ${{ contains(format(',{0},', steps.impact.outputs.domain_ids), ',cimo,') }}
       frontend: ${{ steps.impact.outputs.frontend == 'true' || steps.filter.outputs.frontend == 'true' }}
       backend: ${{ steps.filter.outputs.backend == 'true' }}
       mobile: ${{ steps.impact.outputs.mobile }}
@@ -75,6 +77,8 @@ jobs:
         with:
           filters: |
             frontend:
+              # Domain-owned application routing comes from catalog/package impact.
+              # Keep this filter for shared frontend surfaces and browser specifications.
               # Keep this filter positive: `some` treats a negated glob as a match for unrelated paths.
               - 'apps/loopdev-os/src/components/**'
               - 'apps/loopdev-os/src/suites/**'

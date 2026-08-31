@@ -8,8 +8,12 @@ const requiredControls = ['lint', 'typecheck', 'unit', 'build'];
 
 function validateControl(control, label) {
   if (!control || typeof control !== 'object') return [`${label} is required`];
-  const keys = ['script', 'command', 'notApplicable'].filter((key) => typeof control[key] === 'string' && control[key].trim());
-  return keys.length === 1 ? [] : [`${label} must declare exactly one of script, command, or notApplicable`];
+  const keys = ['script', 'command', 'notApplicable'].filter(
+    (key) => typeof control[key] === 'string' && control[key].trim(),
+  );
+  return keys.length === 1
+    ? []
+    : [`${label} must declare exactly one of script, command, or notApplicable`];
 }
 
 function pathsOverlap(first, second) {
@@ -30,22 +34,57 @@ function validateDomainCatalog(catalog, manifests = {}, applicationManifests = [
   const manifestsInCatalog = new Set();
   for (const domain of catalog.domains) {
     const label = `domain '${domain?.id ?? 'unknown'}'`;
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(domain?.id ?? '')) errors.push(`${label} has an invalid id`);
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(domain?.id ?? ''))
+      errors.push(`${label} has an invalid id`);
     if (ids.has(domain?.id)) errors.push(`${label} is duplicated`);
     ids.add(domain?.id);
     if (!domain?.owner?.trim()) errors.push(`${label}.owner is required`);
-    if (!Array.isArray(domain?.paths) || domain.paths.length === 0) errors.push(`${label}.paths is required`);
-    if (!domain?.manifest?.endsWith('/package.json')) errors.push(`${label}.manifest must reference package.json`);
+    if (!Array.isArray(domain?.paths) || domain.paths.length === 0)
+      errors.push(`${label}.paths is required`);
+    if (!domain?.manifest?.endsWith('/package.json'))
+      errors.push(`${label}.manifest must reference package.json`);
     manifestsInCatalog.add(domain?.manifest);
     for (const domainPath of domain?.paths ?? []) {
-      if (typeof domainPath !== 'string' || !domainPath.endsWith('/')) errors.push(`${label} path '${domainPath}' must end with /`);
+      if (typeof domainPath !== 'string' || !domainPath.endsWith('/'))
+        errors.push(`${label} path '${domainPath}' must end with /`);
       domainPaths.push({ id: domain.id, path: domainPath });
     }
     for (const controlName of requiredControls) {
-      errors.push(...validateControl(domain?.controls?.[controlName], `${label}.controls.${controlName}`));
+      errors.push(
+        ...validateControl(domain?.controls?.[controlName], `${label}.controls.${controlName}`),
+      );
       const script = domain?.controls?.[controlName]?.script;
       if (script && !manifests[domain.manifest]?.scripts?.[script]) {
         errors.push(`${label} declares missing package script '${script}'`);
+      }
+    }
+    if (domain.routing) {
+      for (const field of ['frontend', 'mobile', 'packageImpact']) {
+        if (field in domain.routing && typeof domain.routing[field] !== 'boolean') {
+          errors.push(`${label}.routing.${field} must be boolean`);
+        }
+      }
+      if (
+        domain.routing.packageRule !== undefined &&
+        (typeof domain.routing.packageRule !== 'string' || !domain.routing.packageRule.trim())
+      ) {
+        errors.push(`${label}.routing.packageRule must be a non-empty string`);
+      }
+      if (domain.routing.advisory !== undefined && typeof domain.routing.advisory !== 'boolean') {
+        errors.push(`${label}.routing.advisory must be boolean`);
+      }
+      if (
+        domain.routing.planDomain !== undefined &&
+        (typeof domain.routing.planDomain !== 'string' || !domain.routing.planDomain.trim())
+      ) {
+        errors.push(`${label}.routing.planDomain must be a non-empty string`);
+      }
+      if (
+        domain.routing.excludePaths !== undefined &&
+        (!Array.isArray(domain.routing.excludePaths) ||
+          domain.routing.excludePaths.some((excludedPath) => typeof excludedPath !== 'string'))
+      ) {
+        errors.push(`${label}.routing.excludePaths must be an array of paths`);
       }
     }
   }
@@ -61,13 +100,15 @@ function validateDomainCatalog(catalog, manifests = {}, applicationManifests = [
   }
 
   for (const manifest of applicationManifests) {
-    if (!manifestsInCatalog.has(manifest)) errors.push(`application manifest '${manifest}' has no domain entry`);
+    if (!manifestsInCatalog.has(manifest))
+      errors.push(`application manifest '${manifest}' has no domain entry`);
   }
 
   for (const surface of catalog?.protectedSurfaces ?? []) {
     const label = `protected surface '${surface?.id ?? 'unknown'}'`;
     if (surface?.owner !== 'platform') errors.push(`${label} must be owned by platform`);
-    if (!Array.isArray(surface?.paths) || surface.paths.length === 0) errors.push(`${label}.paths is required`);
+    if (!Array.isArray(surface?.paths) || surface.paths.length === 0)
+      errors.push(`${label}.paths is required`);
   }
 
   return errors;
@@ -99,14 +140,22 @@ function applicationManifests(repositoryRoot) {
 
 function main() {
   const repositoryRoot = process.cwd();
-  const catalog = JSON.parse(readFileSync(path.join(repositoryRoot, 'config/validation-domain-catalog.json'), 'utf8'));
-  const errors = validateDomainCatalog(catalog, loadManifests(repositoryRoot, catalog), applicationManifests(repositoryRoot));
+  const catalog = JSON.parse(
+    readFileSync(path.join(repositoryRoot, 'config/validation-domain-catalog.json'), 'utf8'),
+  );
+  const errors = validateDomainCatalog(
+    catalog,
+    loadManifests(repositoryRoot, catalog),
+    applicationManifests(repositoryRoot),
+  );
   if (errors.length > 0) {
     console.error(`Domain catalog validation failed:\n- ${errors.join('\n- ')}`);
     process.exitCode = 1;
     return;
   }
-  console.log(`Domain catalog validation passed for ${catalog.domains.length} domains and ${catalog.protectedSurfaces.length} protected surfaces.`);
+  console.log(
+    `Domain catalog validation passed for ${catalog.domains.length} domains and ${catalog.protectedSurfaces.length} protected surfaces.`,
+  );
 }
 
 export { validateDomainCatalog };

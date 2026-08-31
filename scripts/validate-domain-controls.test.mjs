@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { commandsForDomain } from './validate-domain-controls.mjs';
+import { commandForControl, commandsForDomain } from './validate-domain-controls.mjs';
 
 const cimo = {
   id: 'cimo',
@@ -29,5 +29,20 @@ test('includes build for branch-level package validation', () => {
     ['--filter', 'cimo', 'typecheck'],
     ['--filter', 'cimo', 'test'],
     ['--filter', 'cimo', 'build'],
+  ]);
+});
+
+test('removes the pnpm executable from a declared direct command', () => {
+  const directCommandDomain = {
+    ...cimo,
+    controls: { ...cimo.controls, unit: { command: 'pnpm exec vitest run --project loopdev-os' } },
+  };
+
+  assert.deepEqual(commandForControl(directCommandDomain, 'unit', manifest), [
+    'exec',
+    'vitest',
+    'run',
+    '--project',
+    'loopdev-os',
   ]);
 });

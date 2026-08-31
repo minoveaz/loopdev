@@ -21,6 +21,15 @@
       "owner": "platform",
       "paths": ["apps/loopdev-os/"],
       "manifest": "apps/loopdev-os/package.json",
+      "routing": {
+        "planDomain": "web",
+        "frontend": true,
+        "excludePaths": [
+          "apps/loopdev-os/src/app/api/",
+          "apps/loopdev-os/src/services/",
+          "apps/loopdev-os/src/types/"
+        ]
+      },
       "controls": {
         "lint": { "script": "lint" },
         "typecheck": { "command": "pnpm exec tsc -p apps/loopdev-os/tsconfig.json --noEmit" },
@@ -35,6 +44,7 @@
       "owner": "mobile",
       "paths": ["apps/loopdev-mobile/"],
       "manifest": "apps/loopdev-mobile/package.json",
+      "routing": { "planDomain": "mobile", "mobile": true },
       "controls": {
         "lint": { "script": "lint" },
         "typecheck": { "script": "typecheck" },
@@ -83,6 +93,7 @@
       "owner": "platform",
       "paths": ["ds/packages/public-shell/"],
       "manifest": "ds/packages/public-shell/package.json",
+      "routing": { "packageRule": "public-shell", "advisory": true },
       "controls": {
         "lint": { "script": "lint" },
         "typecheck": { "script": "typecheck" },
@@ -95,6 +106,7 @@
       "owner": "platform",
       "paths": ["ds/packages/public-blocks/"],
       "manifest": "ds/packages/public-blocks/package.json",
+      "routing": { "packageRule": "public-blocks", "advisory": true },
       "controls": {
         "lint": { "script": "lint" },
         "typecheck": { "script": "typecheck" },

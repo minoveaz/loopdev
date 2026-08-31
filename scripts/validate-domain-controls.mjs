@@ -16,7 +16,15 @@ const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
 function commandForControl(domain, controlName, manifest) {
   const control = domain.controls[controlName];
   if (control.notApplicable) return null;
-  if (control.command) return control.command.trim().split(/\s+/);
+  if (control.command) {
+    const command = control.command.trim().split(/\s+/);
+    if (command.shift() !== 'pnpm') {
+      throw new Error(
+        `Domain '${domain.id}' control '${controlName}' command must start with pnpm`,
+      );
+    }
+    return command;
+  }
   return ['--filter', packageNameFromManifest(domain, manifest), control.script];
 }
 

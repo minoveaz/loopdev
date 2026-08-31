@@ -5,7 +5,7 @@ import { appendFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
-import { domainForFile } from './validation-domain-catalog-utils.mjs';
+import { routingForFile } from './validation-domain-catalog-utils.mjs';
 
 const isWindows = process.platform === 'win32';
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
@@ -93,6 +93,29 @@ const packageRules = [
     packageName: '@loopdev/tsconfig',
     scripts: ['lint', 'typecheck'],
     globalFallback: true,
+  },
+  {
+    id: 'public-shell',
+    path: 'ds/packages/public-shell/',
+    packageName: '@loopdev/public-shell',
+    scripts: ['lint', 'typecheck', 'test', 'build'],
+    consumers: [
+      ['@loopdev/contracts', 'build'],
+      ['@loopdev/ui', 'build'],
+      ['cimo', 'build'],
+      ['loopdev-os', 'build'],
+    ],
+  },
+  {
+    id: 'public-blocks',
+    path: 'ds/packages/public-blocks/',
+    packageName: '@loopdev/public-blocks',
+    scripts: ['lint', 'typecheck', 'test', 'build'],
+    consumers: [
+      ['@loopdev/contracts', 'build'],
+      ['@loopdev/public-shell', 'build'],
+      ['cimo', 'build'],
+    ],
   },
 ];
 
@@ -184,26 +207,31 @@ function resolveImpact(files) {
   for (const file of files) {
     if (file.startsWith('supabase/')) continue;
 
-    if (file.startsWith('apps/loopdev-mobile/')) {
-      mobile = true;
+    const catalogRouting = routingForFile(file);
+    if (catalogRouting) {
+      if (catalogRouting.routing.mobile) mobile = true;
+      if (catalogRouting.routing.frontend) frontend = true;
+      if (catalogRouting.routing.packageImpact) domainIds.add(catalogRouting.domain.id);
+      if (catalogRouting.routing.packageRule) {
+        const rule = packageRules.find(
+          (candidate) => candidate.id === catalogRouting.routing.packageRule,
+        );
+        if (!rule) {
+          throw new Error(
+            `Missing package rule '${catalogRouting.routing.packageRule}' for domain '${catalogRouting.domain.id}'`,
+          );
+        }
+        rules.set(rule.id, rule);
+      }
       continue;
     }
 
-    if (
-      (file.startsWith('apps/loopdev-os/') && !isBackendOnlyWebFile(file)) ||
-      file.startsWith('e2e/')
-    ) {
+    if (file.startsWith('e2e/')) {
       frontend = true;
       continue;
     }
 
     if (isDocumentation(file)) continue;
-
-    const domain = domainForFile(file);
-    if (domain?.routing?.packageImpact) {
-      domainIds.add(domain.id);
-      continue;
-    }
 
     const rule = findPackageRule(file);
     if (rule) {

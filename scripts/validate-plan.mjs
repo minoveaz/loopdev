@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import process from 'node:process';
 import { isBackendOnlyWebFile, resolveImpact } from './validate-package-impact.mjs';
-import { domainForFile } from './validation-domain-catalog-utils.mjs';
+import { routingForFile } from './validation-domain-catalog-utils.mjs';
 
 const checks = {
   governance: {
@@ -108,8 +108,8 @@ function buildValidationPlan(files) {
       continue;
     }
 
-    const domain = domainForFile(file);
-    if (domain?.routing?.planDomain) changedDomains.add(domain.routing.planDomain);
+    const catalogRouting = routingForFile(file);
+    if (catalogRouting?.routing.planDomain) changedDomains.add(catalogRouting.routing.planDomain);
 
     for (const [domain, check] of Object.entries(checks)) {
       if (
