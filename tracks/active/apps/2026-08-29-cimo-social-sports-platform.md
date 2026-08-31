@@ -87,6 +87,7 @@ graph TD
 | **2026-08-30** | Elevación del Design System de Autor (4 Capas: Depth, Typography, Signature Components & Polish). | Romper la monotonía de "tarjeta blanca plana con borde gris" e infundir la calidad visual y de autor de *VitaBlue*, *LoopDev SaaS*, *Strava* y *Linear*. | Identidad de marca única, jerarquía visual de élite y acabado premium. | `@minoveaz` |
 | **2026-08-31** | **Roadmap de Expansión de Producto & Integraciones CIMO 2.5:**<br>1. Feed de Crew multicapa (Amigos + 2º grado + Afinidad).<br>2. Perfil con 1-4 fotos reales en acción (anti-stock).<br>3. Ficha Técnica estructurada por desplegables (sin texto libre).<br>4. Integración Playtomic (Pádel) & Strava/Wikiloc/Garmin (Running/Hiking).<br>5. Squad Hub dedicado (`/squad/:id`) con flujo de creación y sugerencias.<br>6. Directorio & Ranking de Tercer Tiempo y Hotspots Deportivos.<br>7. Panel de Administración / Backoffice CIMO. | Llevar la plataforma de un directorio de eventos a una red social deportiva y ecosistema integral con datos certificados y micro-comunidades activas. | Fuerte diferenciación competitiva, engagement diario y monetización/alianzas B2B. | `@minoveaz` |
 | **2026-08-31** | **Aprobación de 5 Innovaciones Clave de Engagement:**<br>1. Check-in GPS/QR post-entreno (Zero No-Shows & Proof of Workout).<br>2. Indicador de Liebre / Pacer oficial en quedadas de Running.<br>3. División de gastos de pista / consumiciones con enlace directo Bizum/Revolut.<br>4. Etiquetas de Energía Social / Vibe (Focused vs Conversational).<br>5. Desafíos y retos mensuales inter-squads. | Blindar la puntualidad, eliminar la fricción de pagos en grupo y maximizar la seguridad y sintonía de los miembros. | Confianza total de la comunidad, alta retención y crecimiento orgánico de Squads. | `@minoveaz` |
+| **2026-08-31** | **Incorporación de 4 Mecanismos de Eventbrite / Luma de Alta Conversión & Asistencia:**<br>1. **Lista de Espera Inteligente & Auto-Relleno (Waitlist Engine):** Cola de espera automática con ventana de 15 minutos para reclamar plaza libre si alguien cancela.<br>2. **Sincronización con Google / Apple Calendar en 1 Clic:** Botón directo (.ics / Google URL) con recordatorio 2h, GPS exacto y link al chat.<br>3. **Preguntas Clave de Admisión (RSVP Questionnaire):** 1-2 preguntas obligatorias configurables por el capitán (ritmo 10K, pala propia, calzado de montaña).<br>4. **Broadcast Pre-Entreno del Capitán:** Envío de avisos prioritarios fijados al grupo (cambios de clima, hidratación). | Maximizar la tasa de asistencia real, evitar huecos de última hora en grupos pequeños y dar control operativo total a los capitanes. | Cero absentismo, organización impecable y máxima retención deportiva. | `@minoveaz` |
 
 ---
 
@@ -198,17 +199,35 @@ graph TD
 
 ---
 
+### 🎟️ Mecanismos de Eventbrite / Luma de Alta Conversión y Asistencia:
+
+1. **Lista de Espera Inteligente & Auto-Relleno (Waitlist Engine):**
+   - Para actividades con plazas completas (ej: 4/4 en pádel o 6/6 en running), los usuarios pueden sumarse a la lista de espera con 1 clic.
+   - Si un asistente confirma su baja o no puede asistir, el primer atleta en la lista recibe una notificación prioritaria con un temporizador de 15 minutos para reclamar su plaza antes de pasar al siguiente.
+2. **Añadir a Google / Apple Calendar en 1 Clic (Sync Automático):**
+   - Generación instantánea de archivo `.ics` y enlace directo a Google Calendar al unirse al entreno.
+   - Incluye alarma recordatorio 2 horas antes, coordenadas y chincheta GPS del punto de encuentro y enlace directo al chat del Crew.
+3. **Preguntas Clave de Admisión (Custom RSVP Questionnaire):**
+   - El Capitán puede definir 1-2 preguntas breves antes de confirmar la plaza (ej: *"¿Traes pala propia o necesitas préstamo?"*, *"¿Ritmo medio en 10K?"*, *"¿Calzado de trail para la ruta?"*).
+4. **Broadcast & Aviso Urgente del Capitán (Pre-Workout Blast):**
+   - Canal de aviso destacado en la cabecera del entreno para avisos de última hora (cambios por lluvia, aviso de hidratación o punto de encuentro exacto).
+
+---
+
 ## Criterios de Cierre Actualizados
 
 - [x] Jerarquía Visual 2.0 con búsqueda flotante, 3 columnas proporcionales y fondo mineral `#EEF2F2`.
 - [x] Calendario dinámico multi-mes/año y buscador de ciudades predictivo sin duplicados.
+- [x] Deep Linking completo y estándar de URLs canónicas con handles de deportistas y slugs semánticos de squads y entrenos.
 - [ ] Feed Social de Red de Confianza (1er y 2º grado + Afinidad algorítmica).
 - [ ] Perfil con 1-4 fotos reales en acción y Ficha Técnica desplegable por deporte.
 - [ ] Integraciones con Playtomic, Strava, Garmin, Wikiloc y candados de privacidad de WhatsApp/Redes.
 - [ ] Squad Hub dedicado (`/squad/:id`) con flujo de creación y sugerencias.
 - [ ] Ranking de Tercer Tiempo & Hotspots Deportivos con convenios de locales.
 - [ ] 5 Innovaciones de Engagement (Check-in GPS/QR anti-no-shows, Liebre oficial, Split Cost Bizum, Etiquetas de Vibe y Desafíos Inter-Squads).
+- [ ] 4 Mecanismos Eventbrite/Luma (Waitlist inteligente, 1-Click Calendar Sync, Preguntas de admisión y Broadcast del capitán).
 - [ ] Panel de Administración de CIMO (`/admin`).
+- [ ] Suite de Tests Focalizados estilo Vitablue (Componentes, a11y, WCAG).
 - [ ] Quality Gate en verde: `pnpm --filter cimo typecheck && pnpm --filter cimo test && pnpm --filter cimo build`.
 
 ---
