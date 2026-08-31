@@ -106,7 +106,7 @@ export const PublicRuntime: React.FC<PublicRuntimeProps> = ({
         <PublicRuntimeContext.Provider value={contextValue}>
           <div
             className={clsx(
-              'min-h-screen bg-[var(--lpd-brand-background)] text-[var(--lpd-brand-text-main)] font-[family-name:var(--lpd-brand-font-family)]',
+              'min-h-screen w-full max-w-full overflow-x-clip bg-[var(--lpd-brand-background)] text-[var(--lpd-brand-text-main)] font-[family-name:var(--lpd-brand-font-family)]',
               'flex flex-col antialiased selection:bg-[var(--lpd-brand-primary)] selection:text-white',
               breakpoint.isMobile && 'pb-20', // Margen inferior para que BottomNav no tape el contenido
               className,

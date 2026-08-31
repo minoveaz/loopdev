@@ -551,7 +551,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
   ];
 
   return (
-    <div className="flex flex-col gap-8 text-[#1F4E5F] max-w-4xl mx-auto pb-20 px-4 sm:px-6 animate-in fade-in duration-200">
+    <div className="flex flex-col gap-8 text-[#1F4E5F] w-full max-w-4xl mx-auto pb-20 min-w-0 animate-in fade-in duration-200">
       {/* 🧭 Top Navigation Header */}
       <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-4">
         <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">

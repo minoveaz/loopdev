@@ -47,7 +47,7 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
     canvasContext?.composition.regions.find((r) => r.id === id);
 
   if (!spec) {
-    return <div id={id} className={clsx('col-span-12', className)}>{children}</div>;
+    return <div id={id} className={clsx('col-span-12 min-w-0 max-w-full', className)}>{children}</div>;
   }
 
   const colSpan = Math.min(12, Math.max(1, spec.colSpan));
@@ -84,10 +84,10 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
   const isStretch = canvasContext?.composition.grid.alignment === 'stretch' || spec.sizing === 'fill';
   const sizingClass =
     isStretch
-      ? 'h-full min-h-0 flex flex-col'
+      ? 'h-full min-h-0 min-w-0 max-w-full flex flex-col'
       : spec.sizing === 'fixed'
-      ? 'flex-shrink-0'
-      : 'h-auto';
+      ? 'flex-shrink-0 min-w-0 max-w-full'
+      : 'h-auto min-w-0 max-w-full';
 
   const placementClass =
     spec.placement === 'sticky-top'

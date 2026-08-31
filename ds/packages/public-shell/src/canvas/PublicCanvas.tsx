@@ -47,7 +47,7 @@ export const PublicCanvas: React.FC<PublicCanvasProps> = ({
     <PublicCanvasContext.Provider value={{ composition }}>
       <main
         className={clsx(
-          'w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-5',
+          'w-full max-w-full min-w-0 mx-auto px-3 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-5 overflow-x-clip lg:overflow-x-visible',
           'grid grid-cols-12',
           isViewportLocked && 'lg:h-[calc(100vh-4.5rem)] lg:max-h-[calc(100vh-4.5rem)] lg:overflow-hidden',
           isStartAlign ? 'auto-rows-min' : 'auto-rows-fr',
