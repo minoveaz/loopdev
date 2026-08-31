@@ -17,6 +17,7 @@ export * from './platform/composition-layout';
 export * from './platform/public-shell';
 export * from './platform/seo';
 export * from './platform/telemetry';
+export * from './platform/deepLinking';
 
 
 // Export CRM contracts
