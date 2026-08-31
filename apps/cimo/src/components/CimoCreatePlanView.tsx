@@ -1856,22 +1856,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons: Cancel & Publish on the same row, no blank gap, prioritizing publish */}
-          <div className="flex items-center gap-3 sm:gap-4 pt-6 sm:pt-8 border-t border-[#1F4E5F]/10 w-full">
+          {/* Action Buttons: 1st Publicar, 2nd Cancelar on the same row */}
+          <div className="flex items-center gap-2.5 sm:gap-4 pt-6 sm:pt-8 border-t border-[#1F4E5F]/10 w-full">
             <button
-              type="button"
-              onClick={onBack}
-              className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border border-[#1F4E5F]/20 text-xs sm:text-sm font-black text-[#1F4E5F] hover:bg-[#F7F7F7] transition-all cursor-pointer text-center shrink-0"
+              type="submit"
+              className="flex-1 py-3.5 sm:py-4 px-4 sm:px-6 rounded-2xl bg-[#7FB77E] hover:bg-[#6ea26d] text-white font-black text-xs sm:text-base shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 text-center min-h-[46px] sm:min-h-[52px]"
             >
-              Cancelar
+              <Send className="w-4 h-4 text-white shrink-0" />
+              <span className="hidden sm:inline">Publicar Convocatoria Grupal</span>
+              <span className="sm:hidden">Publicar Convocatoria</span>
             </button>
 
             <button
-              type="submit"
-              className="flex-1 py-3.5 sm:py-4 px-6 rounded-2xl bg-[#7FB77E] hover:bg-[#6ea26d] text-white font-black text-sm sm:text-base shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98 text-center"
+              type="button"
+              onClick={onBack}
+              className="px-4 sm:px-8 py-3.5 sm:py-4 rounded-2xl border border-[#1F4E5F]/20 text-xs sm:text-sm font-black text-[#1F4E5F] hover:bg-[#F7F7F7] transition-all cursor-pointer text-center shrink-0 min-h-[46px] sm:min-h-[52px] flex items-center justify-center"
             >
-              <Send className="w-4 h-4 text-white" />
-              <span>Publicar Convocatoria Grupal</span>
+              Cancelar
             </button>
           </div>
         </div>
