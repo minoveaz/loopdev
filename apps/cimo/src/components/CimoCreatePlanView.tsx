@@ -74,6 +74,7 @@ export interface CimoCreatePlanViewProps {
     image: string;
     price: string;
   }) => void;
+  currentUser?: { name: string; avatarUrl?: string };
 }
 
 const THIRD_HALF_TYPES = [
@@ -171,13 +172,13 @@ const quickDates = [
 ];
 
 const quickTimes = [
-  { label: '07:30', icon: Sunrise, desc: 'Madrugón' },
-  { label: '08:30', icon: Sunrise, desc: 'Mañana' },
-  { label: '10:00', icon: Sun, desc: 'Media mañana' },
-  { label: '14:00', icon: Sun, desc: 'Mediodía' },
-  { label: '18:30', icon: Sunset, desc: 'Tarde' },
-  { label: '19:30', icon: Sunset, desc: 'Afterwork' },
-  { label: '20:30', icon: Sunset, desc: 'Noche' },
+  { label: '07:30', icon: Sunrise, period: 'Madrugón', value: '07:30' },
+  { label: '08:30', icon: Sunrise, period: 'Mañana', value: '08:30' },
+  { label: '10:00', icon: Sun, period: 'Media mañana', value: '10:00' },
+  { label: '14:00', icon: Sun, period: 'Mediodía', value: '14:00' },
+  { label: '18:30', icon: Sunset, period: 'Tarde', value: '18:30' },
+  { label: '19:30', icon: Sunset, period: 'Afterwork', value: '19:30' },
+  { label: '20:30', icon: Sunset, period: 'Noche', value: '20:30' },
 ];
 
 const availableHours = ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
@@ -223,6 +224,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
   onBack,
   onCreate,
   onDraftChange,
+  currentUser,
 }) => {
   const [sport, setSport] = useState('running');
   const [selectedCity, setSelectedCity] = useState('Madrid');

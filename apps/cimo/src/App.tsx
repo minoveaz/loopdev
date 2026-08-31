@@ -323,6 +323,7 @@ export function App() {
             onBack={() => navigateTo('feed')}
             onCreate={handleCreateActivity}
             onDraftChange={setPlanDraft}
+            currentUser={currentUser}
           />
         );
       case 'activity-detail':
