@@ -25,6 +25,8 @@ import { CimoAthleteMetricsWidget } from './components/CimoAthleteMetricsWidget'
 import { CimoBadgesShowcaseWidget } from './components/CimoBadgesShowcaseWidget';
 import { CimoCrewNetworkStatsWidget } from './components/CimoCrewNetworkStatsWidget';
 import { CimoSuggestedAthletesWidget } from './components/CimoSuggestedAthletesWidget';
+import { CimoChatChannelsWidget } from './components/CimoChatChannelsWidget';
+import { CimoChatContextInspectorWidget } from './components/CimoChatContextInspectorWidget';
 import { getAthleteProfileById } from './data/mockAthletes';
 
 export function App() {
@@ -432,6 +434,17 @@ export function App() {
           />
         );
       case 'chats':
+        return (
+          <CimoChatChannelsWidget
+            activities={activities}
+            chats={chats}
+            selectedActivityId={activeChatId ?? selectedActivityId}
+            onSelectChat={(id) => {
+              setActiveChatId(id);
+              setSelectedActivityId(id);
+            }}
+          />
+        );
       case 'explore':
       case 'feed':
       default:
@@ -487,6 +500,12 @@ export function App() {
       case 'profile-edit':
         return <CimoBadgesShowcaseWidget />;
       case 'chats':
+        return (
+          <CimoChatContextInspectorWidget
+            activity={activities.find((a) => a.id === (activeChatId ?? selectedActivityId)) ?? activities[0]}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+          />
+        );
       case 'feed':
       case 'explore':
       default:
