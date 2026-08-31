@@ -5,6 +5,7 @@
 Este documento establece el **estándar oficial transversal de LoopDev** para la construcción de URLs, Deep Links e identificadores de entidades en todas las aplicaciones de producto y plataformas sociales (CIMO, ProtegeTuSalud, CRM, Marketing Studio).
 
 Inspirado en los estándares de clase mundial de **Instagram, Strava, Twitter/X, Spotify y Airbnb**, este sistema resuelve tres vectores críticos:
+
 1. **Experiencia Humana (Shareability):** URLs legibles y memorables para personas y enlaces en WhatsApp / Redes Sociales.
 2. **Seguridad y Anti-Scraping:** Prevención total de ataques de enumeración de IDs secuenciales.
 3. **Escalabilidad Distribuida:** Compatibilidad con arquitecturas sharded y bases de datos cloud sin cuellos de botella de auto-incremento.
@@ -93,7 +94,7 @@ import {
   createActivityDeepLink,
   createSquadDeepLink,
   createChatDeepLink,
-  LOOPDEV_DEEP_LINK_PATTERNS
+  LOOPDEV_DEEP_LINK_PATTERNS,
 } from '@loopdev/contracts';
 
 // 1. Generación de Perfil con @handle:
@@ -118,6 +119,7 @@ const uniqueSlug = generateUniqueSlug('Retiro Morning Runners', ['retiro-morning
 ## 5. Auditoría de Calidad y Criterios de Aceptación
 
 Para certificar que una aplicación cumple el estándar LoopDev de Deep Linking:
+
 - [x] **Cero IDs numéricos secuenciales simples** (`1, 2, 3...`) en URLs públicas.
 - [x] **Auto-canonicalización:** Rutas base como `/app/profile` se reescriben automáticamente al `@handle` del atleta.
 - [x] **Resolución Anti-Colisión:** Nombres idénticos de Squads se diferencian con sufijos no invasivos sin romper URLs.
