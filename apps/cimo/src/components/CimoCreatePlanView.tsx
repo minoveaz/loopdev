@@ -817,7 +817,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                     const isSelected = date === cd.dateStr;
                     return (
                       <button
-                        key={cd.dateStr}
+                        key={cd.dateStr || `day-${index}`}
                         type="button"
                         onClick={() => {
                           if (cd.dateStr) setDate(cd.dateStr);
@@ -1090,7 +1090,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                             }`}
                           >
                             <div className="flex items-center gap-2 truncate">
-                              <MapPin className="w-3.5 h-3.5 text-white shrink-0" />
+                              <MapPin className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#7FB77E]'} shrink-0`} />
                               <span className="truncate">{pt}</span>
                             </div>
                             {isSelected && <Check className="w-3.5 h-3.5 text-white shrink-0" />}
