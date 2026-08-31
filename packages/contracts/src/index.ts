@@ -34,6 +34,8 @@ export * from './catalog/catalog';
 export * from './marketing/marketing';
 export * from './marketing/content';
 export * from './marketing/asset';
+export * from './marketing/creative';
+export * from './marketing/creative-assets';
 
 // Export insurance and operations contracts
 export * from './insurance/insurance';

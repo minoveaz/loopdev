@@ -285,4 +285,89 @@ describe('InMemoryMarketingRepository', () => {
       repository.listAssetVariants({ ...context, brandId: ids.otherBrandId }, asset.id),
     ).rejects.toBeInstanceOf(MarketingAccessDeniedError);
   });
+  it('persists creative projects, immutable versions, and variants within one scope', async () => {
+    const repository = new InMemoryMarketingRepository();
+    const context = { ...ids, grants: [editableGrant, grant] };
+    const project = await repository.createCreativeProject(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      name: 'Summer social kit',
+      type: 'social_post',
+    });
+    const version = await repository.createCreativeProjectVersion(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      projectId: project.id,
+      versionNumber: 1,
+      document: { layers: [{ type: 'text', value: 'Hola' }] },
+    });
+    const variant = await repository.createCreativeVariant(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      projectId: project.id,
+      projectVersionId: version.id,
+      key: 'instagram-square',
+      channel: 'instagram',
+      format: 'square',
+      width: 1080,
+      height: 1080,
+      payload: { background: '#001122' },
+    });
+
+    expect(await repository.listCreativeProjects(context)).toHaveLength(1);
+    expect((await repository.listCreativeProjectVersions(context, project.id))[0]?.id).toBe(version.id);
+    expect((await repository.listCreativeVariants(context, version.id))[0]?.id).toBe(variant.id);
+    await expect(
+      repository.createCreativeProjectVersion(context, {
+        organizationId: ids.organizationId,
+        brandId: ids.brandId,
+        workspaceId: ids.workspaceId,
+        projectId: project.id,
+        versionNumber: 1,
+        document: {},
+      }),
+    ).rejects.toThrow('Creative project version already exists');
+    await expect(
+      repository.createCreativeProject(context, {
+        organizationId: ids.otherOrganizationId,
+        brandId: ids.brandId,
+        workspaceId: ids.workspaceId,
+        name: 'Cross tenant',
+      }),
+    ).rejects.toBeInstanceOf(MarketingAccessDeniedError);
+  });
+
+  it('autosaves a draft without creating a project version and rejects stale revisions', async () => {
+    const repository = new InMemoryMarketingRepository();
+    const context = { ...ids, grants: [editableGrant, grant] };
+    const project = await repository.createCreativeProject(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      name: 'Autosave project',
+    });
+
+    const saved = await repository.autosaveCreativeProject(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      projectId: project.id,
+      document: { layers: [{ type: 'image', assetId: 'asset-reference' }] },
+      autosaveRevision: 1,
+    });
+
+    expect(saved.autosaveRevision).toBe(1);
+    expect((await repository.listCreativeProjectVersions(context, project.id))).toHaveLength(0);
+    await expect(repository.autosaveCreativeProject(context, {
+      organizationId: ids.organizationId,
+      brandId: ids.brandId,
+      workspaceId: ids.workspaceId,
+      projectId: project.id,
+      document: {},
+      autosaveRevision: 0,
+    })).rejects.toThrow('autosave revision is stale');
+  });
 });

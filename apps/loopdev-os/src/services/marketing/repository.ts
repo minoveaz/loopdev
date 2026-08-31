@@ -1,6 +1,13 @@
 import {
   BrandContextSnapshotSchema,
+  CreateMarketingCreativeProjectSchema,
+  CreateMarketingCreativeProjectVersionSchema,
+  CreateMarketingCreativeVariantSchema,
+  AutosaveMarketingCreativeProjectSchema,
   CreateMarketingCampaignSchema,
+  MarketingCreativeProjectSchema,
+  MarketingCreativeProjectVersionSchema,
+  MarketingCreativeVariantSchema,
   MarketingAssetSchema,
   MarketingAssetVariantSchema,
   MarketingCampaignSchema,
@@ -9,11 +16,18 @@ import {
 } from '@loopdev/contracts';
 import type {
   BrandContextSnapshot,
+  CreateMarketingCreativeProjectInput,
+  CreateMarketingCreativeProjectVersionInput,
+  CreateMarketingCreativeVariantInput,
+  AutosaveMarketingCreativeProjectInput,
   CreateMarketingCampaignInput,
   MarketingAccessGrant,
   MarketingAsset,
   MarketingAssetVariant,
   MarketingCampaign,
+  MarketingCreativeProject,
+  MarketingCreativeProjectVersion,
+  MarketingCreativeVariant,
   MarketingPermission,
   SocialConnection,
   UpdateMarketingCampaignInput,
@@ -30,6 +44,9 @@ export type MarketingRepositoryContext = {
 
 export type MarketingRepositorySeed = {
   campaigns?: MarketingCampaign[];
+  creativeProjects?: MarketingCreativeProject[];
+  creativeProjectVersions?: MarketingCreativeProjectVersion[];
+  creativeVariants?: MarketingCreativeVariant[];
   brandSnapshots?: BrandContextSnapshot[];
   assets?: MarketingAsset[];
   assetVariants?: MarketingAssetVariant[];
@@ -49,6 +66,31 @@ export interface MarketingRepository {
   listAssetVariants(context: MarketingRepositoryContext, assetId: string): Promise<MarketingAssetVariant[]>;
   listConnections(context: MarketingRepositoryContext): Promise<SocialConnection[]>;
   disconnectConnection(context: MarketingRepositoryContext, connectionId: string): Promise<SocialConnection>;
+  listCreativeProjects(context: MarketingRepositoryContext): Promise<MarketingCreativeProject[]>;
+  createCreativeProject(
+    context: MarketingRepositoryContext,
+    input: CreateMarketingCreativeProjectInput,
+  ): Promise<MarketingCreativeProject>;
+  autosaveCreativeProject(
+    context: MarketingRepositoryContext,
+    input: AutosaveMarketingCreativeProjectInput,
+  ): Promise<MarketingCreativeProject>;
+  listCreativeProjectVersions(
+    context: MarketingRepositoryContext,
+    projectId: string,
+  ): Promise<MarketingCreativeProjectVersion[]>;
+  createCreativeProjectVersion(
+    context: MarketingRepositoryContext,
+    input: CreateMarketingCreativeProjectVersionInput,
+  ): Promise<MarketingCreativeProjectVersion>;
+  listCreativeVariants(
+    context: MarketingRepositoryContext,
+    projectVersionId: string,
+  ): Promise<MarketingCreativeVariant[]>;
+  createCreativeVariant(
+    context: MarketingRepositoryContext,
+    input: CreateMarketingCreativeVariantInput,
+  ): Promise<MarketingCreativeVariant>;
 }
 
 export class MarketingAccessDeniedError extends Error {
@@ -66,6 +108,9 @@ function assertAccess(context: MarketingRepositoryContext, permission: Marketing
 
 export class InMemoryMarketingRepository implements MarketingRepository {
   private readonly campaigns: MarketingCampaign[];
+  private readonly creativeProjects: MarketingCreativeProject[];
+  private readonly creativeProjectVersions: MarketingCreativeProjectVersion[];
+  private readonly creativeVariants: MarketingCreativeVariant[];
   private readonly brandSnapshots: BrandContextSnapshot[];
   private readonly assets: MarketingAsset[];
   private readonly assetVariants: MarketingAssetVariant[];
@@ -74,6 +119,15 @@ export class InMemoryMarketingRepository implements MarketingRepository {
   constructor(seed: MarketingRepositorySeed | MarketingCampaign[] = []) {
     const normalizedSeed = Array.isArray(seed) ? { campaigns: seed } : seed;
     this.campaigns = (normalizedSeed.campaigns ?? []).map((campaign) => MarketingCampaignSchema.parse(campaign));
+    this.creativeProjects = (normalizedSeed.creativeProjects ?? []).map((project) =>
+      MarketingCreativeProjectSchema.parse(project),
+    );
+    this.creativeProjectVersions = (normalizedSeed.creativeProjectVersions ?? []).map((version) =>
+      MarketingCreativeProjectVersionSchema.parse(version),
+    );
+    this.creativeVariants = (normalizedSeed.creativeVariants ?? []).map((variant) =>
+      MarketingCreativeVariantSchema.parse(variant),
+    );
     this.brandSnapshots = (normalizedSeed.brandSnapshots ?? []).map((snapshot) => BrandContextSnapshotSchema.parse(snapshot));
     this.assets = (normalizedSeed.assets ?? []).map((asset) => MarketingAssetSchema.parse(asset));
     this.assetVariants = (normalizedSeed.assetVariants ?? []).map((variant) => MarketingAssetVariantSchema.parse(variant));
@@ -168,6 +222,130 @@ export class InMemoryMarketingRepository implements MarketingRepository {
     return revokedConnection;
   }
 
+  async listCreativeProjects(context: MarketingRepositoryContext) {
+    assertAccess(context, 'read');
+    return this.creativeProjects.filter((project) => isCreativeProjectInContext(project, context));
+  }
+
+  async createCreativeProject(context: MarketingRepositoryContext, input: CreateMarketingCreativeProjectInput) {
+    assertAccess(context, 'edit');
+    const parsed = CreateMarketingCreativeProjectSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const now = new Date().toISOString();
+    const project = MarketingCreativeProjectSchema.parse({
+      ...parsed,
+      id: crypto.randomUUID(),
+      createdBy: context.userId,
+      updatedBy: context.userId,
+      createdAt: now,
+      updatedAt: now,
+    });
+    this.creativeProjects.push(project);
+    return project;
+  }
+
+  async listCreativeProjectVersions(context: MarketingRepositoryContext, projectId: string) {
+    assertAccess(context, 'read');
+    assertProjectInContext(this.creativeProjects, projectId, context);
+    return this.creativeProjectVersions.filter(
+      (version) => version.projectId === projectId && isCreativeProjectInContext(version, context),
+    );
+  }
+
+  async createCreativeProjectVersion(
+    context: MarketingRepositoryContext,
+    input: CreateMarketingCreativeProjectVersionInput,
+  ) {
+    assertAccess(context, 'edit');
+    const parsed = CreateMarketingCreativeProjectVersionSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    assertProjectInContext(this.creativeProjects, parsed.projectId, context);
+    if (
+      this.creativeProjectVersions.some(
+        (version) => version.projectId === parsed.projectId && version.versionNumber === parsed.versionNumber,
+      )
+    ) {
+      throw new Error('Creative project version already exists');
+    }
+    const now = new Date().toISOString();
+    const version = MarketingCreativeProjectVersionSchema.parse({
+      ...parsed,
+      id: crypto.randomUUID(),
+      createdBy: context.userId,
+      updatedBy: context.userId,
+      createdAt: now,
+      updatedAt: now,
+    });
+    this.creativeProjectVersions.push(version);
+    return version;
+  }
+
+  async listCreativeVariants(context: MarketingRepositoryContext, projectVersionId: string) {
+    assertAccess(context, 'read');
+    const version = this.creativeProjectVersions.find((candidate) => candidate.id === projectVersionId);
+    if (!version || !isCreativeProjectInContext(version, context)) throw new MarketingAccessDeniedError();
+    return this.creativeVariants.filter(
+      (variant) => variant.projectVersionId === projectVersionId && isCreativeProjectInContext(variant, context),
+    );
+  }
+
+  async createCreativeVariant(context: MarketingRepositoryContext, input: CreateMarketingCreativeVariantInput) {
+    assertAccess(context, 'edit');
+    const parsed = CreateMarketingCreativeVariantSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    assertProjectInContext(this.creativeProjects, parsed.projectId, context);
+    const version = this.creativeProjectVersions.find(
+      (candidate) => candidate.id === parsed.projectVersionId && candidate.projectId === parsed.projectId,
+    );
+    if (!version || !isCreativeProjectInContext(version, context)) throw new MarketingAccessDeniedError();
+    if (
+      this.creativeVariants.some(
+        (variant) =>
+          variant.projectVersionId === parsed.projectVersionId && variant.key === parsed.key,
+      )
+    ) {
+      throw new Error('Creative project variant already exists');
+    }
+    const now = new Date().toISOString();
+    const variant = MarketingCreativeVariantSchema.parse({
+      ...parsed,
+      id: crypto.randomUUID(),
+      createdBy: context.userId,
+      updatedBy: context.userId,
+      createdAt: now,
+      updatedAt: now,
+    });
+    this.creativeVariants.push(variant);
+    return variant;
+  }
+
+  async autosaveCreativeProject(
+    context: MarketingRepositoryContext,
+    input: AutosaveMarketingCreativeProjectInput,
+  ) {
+    assertAccess(context, 'edit');
+    const parsed = AutosaveMarketingCreativeProjectSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const projectIndex = this.creativeProjects.findIndex(
+      (project) => project.id === parsed.projectId && isCreativeProjectInContext(project, context),
+    );
+    if (projectIndex < 0) throw new MarketingAccessDeniedError();
+    const current = this.creativeProjects[projectIndex]!;
+    if (parsed.autosaveRevision < current.autosaveRevision) {
+      throw new Error('Creative project autosave revision is stale');
+    }
+    const updated = MarketingCreativeProjectSchema.parse({
+      ...current,
+      draftDocument: parsed.document,
+      autosaveRevision: parsed.autosaveRevision,
+      autosavedAt: new Date().toISOString(),
+      updatedBy: context.userId,
+      updatedAt: new Date().toISOString(),
+    });
+    this.creativeProjects[projectIndex] = updated;
+    return updated;
+  }
+
   async createCampaign(context: MarketingRepositoryContext, input: CreateMarketingCampaignInput) {
     assertAccess(context, 'edit');
     const parsed = CreateMarketingCampaignSchema.parse(input);
@@ -249,4 +427,324 @@ export class InMemoryMarketingRepository implements MarketingRepository {
     this.campaigns[campaignIndex] = approvedCampaign;
     return approvedCampaign;
   }
+}
+
+type CreativeScopedRecord = {
+  organizationId: string;
+  brandId: string;
+  workspaceId: string;
+};
+
+function isCreativeProjectInContext(
+  record: CreativeScopedRecord,
+  context: MarketingRepositoryContext,
+) {
+  return (
+    record.organizationId === context.organizationId
+    && record.brandId === context.brandId
+    && record.workspaceId === context.workspaceId
+  );
+}
+
+function assertCreativeScope(record: CreativeScopedRecord, context: MarketingRepositoryContext) {
+  if (!isCreativeProjectInContext(record, context)) throw new MarketingAccessDeniedError();
+}
+
+function assertProjectInContext(
+  projects: MarketingCreativeProject[],
+  projectId: string,
+  context: MarketingRepositoryContext,
+) {
+  const project = projects.find((candidate) => candidate.id === projectId);
+  if (!project || !isCreativeProjectInContext(project, context)) throw new MarketingAccessDeniedError();
+}
+
+export class SupabaseCreativeRepository {
+  async listCreativeProjects(context: MarketingRepositoryContext) {
+    const supabase = await getAuthorizedSupabase(context, 'read');
+    const { data, error } = await supabase
+      .from('marketing_creative_projects')
+      .select(creativeProjectColumns)
+      .eq('organization_id', context.organizationId)
+      .eq('brand_id', context.brandId)
+      .eq('workspace_id', context.workspaceId)
+      .order('updated_at', { ascending: false });
+    if (error) throw new Error('Unable to load creative projects');
+    return ((data ?? []) as unknown as CreativeProjectRow[]).map(mapCreativeProject);
+  }
+
+  async createCreativeProject(
+    context: MarketingRepositoryContext,
+    input: CreateMarketingCreativeProjectInput,
+  ) {
+    const parsed = CreateMarketingCreativeProjectSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const supabase = await getAuthorizedSupabase(context, 'edit');
+    const { data, error } = await supabase
+      .from('marketing_creative_projects')
+      .insert({
+        organization_id: parsed.organizationId,
+        brand_id: parsed.brandId,
+        workspace_id: parsed.workspaceId,
+        name: parsed.name,
+        description: parsed.description ?? null,
+        type: parsed.type,
+        status: parsed.status,
+        current_version_number: parsed.currentVersionNumber,
+        created_by: context.userId,
+        updated_by: context.userId,
+      })
+      .select(creativeProjectColumns)
+      .single();
+    if (error) throw new Error('Unable to create creative project');
+    return mapCreativeProject(data as unknown as CreativeProjectRow);
+  }
+
+  async autosaveCreativeProject(
+    context: MarketingRepositoryContext,
+    input: AutosaveMarketingCreativeProjectInput,
+  ) {
+    const parsed = AutosaveMarketingCreativeProjectSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const supabase = await getAuthorizedSupabase(context, 'edit');
+    const { data, error } = await supabase
+      .from('marketing_creative_projects')
+      .update({
+        draft_document: parsed.document as import('@/types/database.types').Json,
+        autosave_revision: parsed.autosaveRevision,
+        autosaved_at: new Date().toISOString(),
+        updated_by: context.userId,
+      })
+      .eq('id', parsed.projectId)
+      .eq('organization_id', context.organizationId)
+      .eq('brand_id', context.brandId)
+      .eq('workspace_id', context.workspaceId)
+      .select(creativeProjectColumns)
+      .single();
+    if (error) throw new Error('Unable to autosave creative project');
+    return mapCreativeProject(data as unknown as CreativeProjectRow);
+  }
+
+  async listCreativeProjectVersions(context: MarketingRepositoryContext, projectId: string) {
+    const supabase = await getAuthorizedSupabase(context, 'read');
+    const { data, error } = await supabase
+      .from('marketing_creative_project_versions')
+      .select(creativeProjectVersionColumns)
+      .eq('organization_id', context.organizationId)
+      .eq('brand_id', context.brandId)
+      .eq('workspace_id', context.workspaceId)
+      .eq('project_id', projectId)
+      .order('version_number', { ascending: false });
+    if (error) throw new Error('Unable to load creative project versions');
+    return ((data ?? []) as unknown as CreativeProjectVersionRow[]).map(mapCreativeProjectVersion);
+  }
+
+  async createCreativeProjectVersion(
+    context: MarketingRepositoryContext,
+    input: CreateMarketingCreativeProjectVersionInput,
+  ) {
+    const parsed = CreateMarketingCreativeProjectVersionSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const supabase = await getAuthorizedSupabase(context, 'edit');
+    const { data, error } = await supabase
+      .from('marketing_creative_project_versions')
+      .insert({
+        organization_id: parsed.organizationId,
+        brand_id: parsed.brandId,
+        workspace_id: parsed.workspaceId,
+        project_id: parsed.projectId,
+        version_number: parsed.versionNumber,
+        document: parsed.document as import('@/types/database.types').Json,
+        change_summary: parsed.changeSummary ?? null,
+        created_by: context.userId,
+        updated_by: context.userId,
+      })
+      .select(creativeProjectVersionColumns)
+      .single();
+    if (error) throw new Error('Unable to create creative project version');
+    return mapCreativeProjectVersion(data as unknown as CreativeProjectVersionRow);
+  }
+
+  async listCreativeVariants(context: MarketingRepositoryContext, projectVersionId: string) {
+    const supabase = await getAuthorizedSupabase(context, 'read');
+    const { data, error } = await supabase
+      .from('marketing_creative_variants')
+      .select(creativeVariantColumns)
+      .eq('organization_id', context.organizationId)
+      .eq('brand_id', context.brandId)
+      .eq('workspace_id', context.workspaceId)
+      .eq('project_version_id', projectVersionId)
+      .order('created_at', { ascending: true });
+    if (error) throw new Error('Unable to load creative variants');
+    return ((data ?? []) as unknown as CreativeVariantRow[]).map(mapCreativeVariant);
+  }
+
+  async createCreativeVariant(
+    context: MarketingRepositoryContext,
+    input: CreateMarketingCreativeVariantInput,
+  ) {
+    const parsed = CreateMarketingCreativeVariantSchema.parse(input);
+    assertCreativeScope(parsed, context);
+    const supabase = await getAuthorizedSupabase(context, 'edit');
+    const { data, error } = await supabase
+      .from('marketing_creative_variants')
+      .insert({
+        organization_id: parsed.organizationId,
+        brand_id: parsed.brandId,
+        workspace_id: parsed.workspaceId,
+        project_id: parsed.projectId,
+        project_version_id: parsed.projectVersionId,
+        key: parsed.key,
+        channel: parsed.channel,
+        format: parsed.format,
+        payload: parsed.payload as import('@/types/database.types').Json,
+        width: parsed.width ?? null,
+        height: parsed.height ?? null,
+        status: parsed.status,
+        created_by: context.userId,
+        updated_by: context.userId,
+      })
+      .select(creativeVariantColumns)
+      .single();
+    if (error) throw new Error('Unable to create creative variant');
+    return mapCreativeVariant(data as unknown as CreativeVariantRow);
+  }
+}
+
+const creativeProjectColumns =
+  'id, organization_id, brand_id, workspace_id, name, description, type, status, current_version_number, draft_document, autosave_revision, autosaved_at, created_by, updated_by, created_at, updated_at';
+const creativeProjectVersionColumns =
+  'id, organization_id, brand_id, workspace_id, project_id, version_number, document, change_summary, created_by, updated_by, created_at, updated_at';
+const creativeVariantColumns =
+  'id, organization_id, brand_id, workspace_id, project_id, project_version_id, key, channel, format, payload, width, height, status, created_by, updated_by, created_at, updated_at';
+
+type CreativeProjectRow = {
+  id: string;
+  organization_id: string;
+  brand_id: string;
+  workspace_id: string;
+  name: string;
+  description: string | null;
+  type: string;
+  status: string;
+  current_version_number: number;
+  draft_document: unknown;
+  autosave_revision: number;
+  autosaved_at: string | null;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+type CreativeProjectVersionRow = {
+  id: string;
+  organization_id: string;
+  brand_id: string;
+  workspace_id: string;
+  project_id: string;
+  version_number: number;
+  document: unknown;
+  change_summary: string | null;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+type CreativeVariantRow = {
+  id: string;
+  organization_id: string;
+  brand_id: string;
+  workspace_id: string;
+  project_id: string;
+  project_version_id: string;
+  key: string;
+  channel: string;
+  format: string;
+  payload: unknown;
+  width: number | null;
+  height: number | null;
+  status: string;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+function mapCreativeProject(row: CreativeProjectRow): MarketingCreativeProject {
+  return MarketingCreativeProjectSchema.parse({
+    id: row.id,
+    organizationId: row.organization_id,
+    brandId: row.brand_id,
+    workspaceId: row.workspace_id,
+    name: row.name,
+    description: row.description,
+    type: row.type,
+    status: row.status,
+    currentVersionNumber: row.current_version_number,
+    draftDocument: row.draft_document,
+    autosaveRevision: row.autosave_revision,
+    autosavedAt: row.autosaved_at,
+    createdBy: row.created_by,
+    updatedBy: row.updated_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  });
+}
+
+function mapCreativeProjectVersion(row: CreativeProjectVersionRow): MarketingCreativeProjectVersion {
+  return MarketingCreativeProjectVersionSchema.parse({
+    id: row.id,
+    organizationId: row.organization_id,
+    brandId: row.brand_id,
+    workspaceId: row.workspace_id,
+    projectId: row.project_id,
+    versionNumber: row.version_number,
+    document: row.document,
+    changeSummary: row.change_summary,
+    createdBy: row.created_by,
+    updatedBy: row.updated_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  });
+}
+
+function mapCreativeVariant(row: CreativeVariantRow): MarketingCreativeVariant {
+  return MarketingCreativeVariantSchema.parse({
+    id: row.id,
+    organizationId: row.organization_id,
+    brandId: row.brand_id,
+    workspaceId: row.workspace_id,
+    projectId: row.project_id,
+    projectVersionId: row.project_version_id,
+    key: row.key,
+    channel: row.channel,
+    format: row.format,
+    payload: row.payload,
+    width: row.width,
+    height: row.height,
+    status: row.status,
+    createdBy: row.created_by,
+    updatedBy: row.updated_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  });
+}
+
+async function getAuthorizedSupabase(
+  context: MarketingRepositoryContext,
+  permission: 'read' | 'edit',
+) {
+  const supabase = await import('@/lib/supabase/server').then(({ createServerSupabaseClient }) =>
+    createServerSupabaseClient(),
+  );
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  if (authError || !authData.user || authData.user.id !== context.userId) {
+    throw new MarketingAccessDeniedError();
+  }
+  const { data, error } = await supabase.rpc('has_organization_permission', {
+    target_organization_id: context.organizationId,
+    required_permission: permission === 'read' ? 'marketing.read' : 'marketing.manage',
+  });
+  if (error || data !== true) throw new MarketingAccessDeniedError();
+  return supabase;
 }

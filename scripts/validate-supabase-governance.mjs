@@ -10,6 +10,15 @@ const repositoryRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const BUSINESS_TABLE_PATTERN =
   /^(crm_|communication_|catalog_|marketing_|content_|quant_|strategy_|insurance_|operations_)/i;
 const APPEND_ONLY_TABLES = new Set(['crm_activities', 'crm_audit_events']);
+const POLICY_VERBS_BY_TABLE = new Map([
+  ['marketing_creative_projects', ['select', 'insert', 'update']],
+  ['marketing_creative_project_versions', ['select', 'insert']],
+  ['marketing_creative_variants', ['select', 'insert']],
+  ['marketing_creative_assets', ['select', 'insert', 'update', 'delete']],
+  ['marketing_creative_asset_references', ['select', 'insert', 'delete']],
+  ['marketing_creative_storage_quotas', ['select', 'insert', 'update']],
+  ['marketing_creative_storage_usage', ['select']],
+]);
 const VERBS = ['select', 'insert', 'update', 'delete'];
 
 function normalizeIdentifier(identifier) {
@@ -133,7 +142,9 @@ export function validateSql(sql, fileName = 'migration.sql') {
     }
 
     const policies = policiesForTable(sql, definition.name);
-    const expectedVerbs = APPEND_ONLY_TABLES.has(definition.name) ? ['select', 'insert'] : VERBS;
+    const expectedVerbs =
+      POLICY_VERBS_BY_TABLE.get(definition.name) ??
+      (APPEND_ONLY_TABLES.has(definition.name) ? ['select', 'insert'] : VERBS);
     for (const verb of expectedVerbs) {
       if (!policies.includes(verb)) issues.push(`${definition.name} has no ${verb} policy`);
     }

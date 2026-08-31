@@ -4,9 +4,14 @@
 
 ## Planificados
 
+### CRM
+
+- [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0
+
 ### Marketing Studio
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
+- [Definición de módulos iniciales de Marketing Studio](./planned/marketing-studio/2026-08-28-marketing-studio-module-definition.md) · `docs/marketing-studio-module-definitions` · fase 0
 
 ### Platform
 
@@ -24,6 +29,10 @@
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 1 · bloqueado
+
+### Marketing Studio
+
+- [Persistencia y Storage de Creative Studio](./active/marketing-studio/2026-08-27-creative-studio-persistence.md) · `feature/marketing-studio-creative-persistence` · fase 3 · bloqueado
 
 ### Mobile
 
