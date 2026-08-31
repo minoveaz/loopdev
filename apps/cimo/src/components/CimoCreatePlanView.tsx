@@ -807,100 +807,156 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           />
         </div>
 
-        {/* 👥 Island 6: Cupo de Plazas */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs">
-          <CimoCapacityStepper
-            value={maxMembers}
-            onChange={setMaxMembers}
-          />
+        {/* 👥 Island 6: Plazas & Material Recomendado (Unificados) */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+          {/* Parte A: Cupo de Plazas */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+                  6
+                </span>
+                <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+                  Cupo de Plazas & Material Recomendado
+                </span>
+              </div>
+              <span className="text-xs font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
+                {maxMembers} plazas
+              </span>
+            </div>
+
+            <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-black text-[#1F4E5F] block">
+                  Cupo máximo de personas
+                </span>
+                <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5">
+                  Recomendamos microgrupos de 4 a 8 personas para garantizar cercanía, seguridad y buen rollo.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto bg-white px-3 py-1.5 rounded-full border border-[#1F4E5F]/15 shadow-2xs">
+                <button
+                  type="button"
+                  disabled={maxMembers <= 2}
+                  onClick={() => setMaxMembers(Math.max(2, maxMembers - 1))}
+                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                  aria-label="Reducir plazas"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+
+                <span className="text-sm font-black text-[#1F4E5F] min-w-[75px] text-center">
+                  {maxMembers} plazas
+                </span>
+
+                <button
+                  type="button"
+                  disabled={maxMembers >= 16}
+                  onClick={() => setMaxMembers(Math.min(16, maxMembers + 1))}
+                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#1F4E5F]/10 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                  aria-label="Aumentar plazas"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Parte B: Material Recomendado (Checklist Amplio sin texto cortado) */}
+          <div className="border-t border-[#1F4E5F]/10 pt-5 flex flex-col gap-3.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4 text-[#7FB77E]" />
+                <span>Qué deben traer los asistentes ({selectedSportObj.label})</span>
+              </span>
+              <span className="text-[11px] font-bold text-[#7FB77E]">
+                Checklist personalizable
+              </span>
+            </div>
+
+            <p className="text-xs text-[#1F4E5F]/70 font-medium">
+              Haz clic para activar o desactivar los elementos que consideres necesarios:
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {getSportGear(sport).map((item) => {
+                const isSelected = selectedGearIds.includes(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedGearIds((prev) =>
+                        prev.includes(item.id) ? prev.filter((id) => id !== item.id) : [...prev, item.id]
+                      );
+                    }}
+                    className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3.5 ${
+                      isSelected
+                        ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/20 shadow-2xs'
+                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-2xs ${
+                          isSelected ? 'bg-[#7FB77E] text-white' : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'
+                        }`}
+                      >
+                        {item.icon === 'Footprints' ? (
+                          <Footprints className="w-5 h-5" />
+                        ) : item.icon === 'Droplets' ? (
+                          <Droplets className="w-5 h-5" />
+                        ) : item.icon === 'Apple' ? (
+                          <Apple className="w-5 h-5" />
+                        ) : item.icon === 'Sun' ? (
+                          <Sun className="w-5 h-5" />
+                        ) : item.icon === 'Activity' ? (
+                          <Activity className="w-5 h-5" />
+                        ) : item.icon === 'CheckCircle2' ? (
+                          <CheckCircle2 className="w-5 h-5" />
+                        ) : item.icon === 'Bike' ? (
+                          <Bike className="w-5 h-5" />
+                        ) : item.icon === 'ShieldCheck' ? (
+                          <ShieldCheck className="w-5 h-5" />
+                        ) : item.icon === 'Wrench' ? (
+                          <Wrench className="w-5 h-5" />
+                        ) : item.icon === 'Flame' ? (
+                          <Flame className="w-5 h-5" />
+                        ) : (
+                          <Zap className="w-5 h-5" />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-xs sm:text-sm font-black text-[#1F4E5F] block leading-snug">
+                          {item.label}
+                        </span>
+                        <span className="text-xs text-[#1F4E5F]/70 font-medium block leading-snug mt-0.5">
+                          {item.sub}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                        isSelected ? 'bg-[#7FB77E] text-white' : 'border-2 border-[#1F4E5F]/20'
+                      }`}
+                    >
+                      {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
-        {/* 🎒 Island 7: Material Recomendado & Qué Traer */}
+        {/* ☕ Island 7: Tercer Tiempo Post-Entreno (Opcional) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
                 7
-              </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                Material Recomendado & Qué Traer
-              </span>
-            </div>
-            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
-              Checklist
-            </span>
-          </div>
-
-          <p className="text-xs text-[#1F4E5F]/70 font-medium">
-            Selecciona el material esencial que los atletas deben traer para este entreno de {selectedSportObj.label}:
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {getSportGear(sport).map((item) => {
-              const isSelected = selectedGearIds.includes(item.id);
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => {
-                    setSelectedGearIds((prev) =>
-                      prev.includes(item.id) ? prev.filter((id) => id !== item.id) : [...prev, item.id]
-                    );
-                  }}
-                  className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
-                    isSelected
-                      ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/20 shadow-2xs'
-                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7] opacity-60 hover:opacity-100'
-                  }`}
-                >
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                    isSelected ? 'bg-[#7FB77E] text-white' : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'
-                  }`}>
-                    {item.icon === 'Footprints' ? (
-                      <Footprints className="w-4 h-4" />
-                    ) : item.icon === 'Droplets' ? (
-                      <Droplets className="w-4 h-4" />
-                    ) : item.icon === 'Apple' ? (
-                      <Apple className="w-4 h-4" />
-                    ) : item.icon === 'Sun' ? (
-                      <Sun className="w-4 h-4" />
-                    ) : item.icon === 'Activity' ? (
-                      <Activity className="w-4 h-4" />
-                    ) : item.icon === 'CheckCircle2' ? (
-                      <CheckCircle2 className="w-4 h-4" />
-                    ) : item.icon === 'Bike' ? (
-                      <Bike className="w-4 h-4" />
-                    ) : item.icon === 'ShieldCheck' ? (
-                      <ShieldCheck className="w-4 h-4" />
-                    ) : item.icon === 'Wrench' ? (
-                      <Wrench className="w-4 h-4" />
-                    ) : item.icon === 'Flame' ? (
-                      <Flame className="w-4 h-4" />
-                    ) : (
-                      <Zap className="w-4 h-4" />
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-xs font-black text-[#1F4E5F] block truncate">{item.label}</span>
-                    <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">{item.sub}</span>
-                  </div>
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
-                    isSelected ? 'bg-[#7FB77E] text-white' : 'border border-[#1F4E5F]/20'
-                  }`}>
-                    {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ☕ Island 8: Tercer Tiempo Post-Entreno (Opcional) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
-            <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                8
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Tercer Tiempo Post-Entreno
