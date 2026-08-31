@@ -89,6 +89,15 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
       ? 'flex-shrink-0'
       : 'h-auto';
 
+  const placementClass =
+    spec.placement === 'sticky-top'
+      ? 'lg:sticky lg:top-20 lg:self-start z-10'
+      : spec.placement === 'fixed-bottom'
+      ? 'fixed bottom-0 left-0 right-0 z-20'
+      : spec.placement === 'floating'
+      ? 'fixed z-30'
+      : '';
+
   return (
     <section
       id={id}
@@ -99,6 +108,7 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
         desktopClass,
         overflowClass,
         sizingClass,
+        placementClass,
         className,
       )}
     >

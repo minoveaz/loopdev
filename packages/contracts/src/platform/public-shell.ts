@@ -85,6 +85,7 @@ export const PublicGridSchema = z.object({
   gap: z.enum(['none', 'sm', 'md', 'lg']).default('md'),
   maxWidth: z.enum(['sm', 'md', 'lg', 'xl', '2xl', '7xl', 'full']).default('7xl'),
   alignment: z.enum(['start', 'stretch', 'center']).default('stretch'),
+  scrollMode: z.enum(['viewport-contained', 'page-flow']).default('viewport-contained'),
 });
 
 export type PublicGrid = z.infer<typeof PublicGridSchema>;
@@ -191,6 +192,7 @@ export function createPublicContextualTriptychComposition(options?: {
   gap?: 'none' | 'sm' | 'md' | 'lg';
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '7xl' | 'full';
   alignment?: 'start' | 'stretch' | 'center';
+  scrollMode?: 'viewport-contained' | 'page-flow';
 }): PublicViewComposition {
   const left = options?.leftColSpan ?? 3;
   const main = options?.mainColSpan ?? 6;
@@ -204,6 +206,7 @@ export function createPublicContextualTriptychComposition(options?: {
       gap: options?.gap ?? 'md',
       maxWidth: options?.maxWidth ?? 'full',
       alignment: options?.alignment ?? 'stretch',
+      scrollMode: options?.scrollMode ?? 'viewport-contained',
     },
     regions: [
       {
@@ -211,6 +214,8 @@ export function createPublicContextualTriptychComposition(options?: {
         slot: 'sidebar-filters',
         component: 'LeftSupportZone',
         colSpan: left,
+        sizing: 'fill',
+        overflow: 'auto-y',
         responsive: { tablet: 'drawer', mobile: 'sheet' },
       },
       {
@@ -218,6 +223,8 @@ export function createPublicContextualTriptychComposition(options?: {
         slot: 'main-feed',
         component: 'PrimaryWorkArea',
         colSpan: main,
+        sizing: 'fill',
+        overflow: 'auto-y',
         responsive: { tablet: 'preserve', mobile: 'stack' },
       },
       {
@@ -225,6 +232,8 @@ export function createPublicContextualTriptychComposition(options?: {
         slot: 'context-inspector',
         component: 'RightSupportZone',
         colSpan: right,
+        sizing: 'fill',
+        overflow: 'auto-y',
         responsive: { tablet: 'drawer', mobile: 'hidden' },
       },
     ],

@@ -41,13 +41,15 @@ export const PublicCanvas: React.FC<PublicCanvasProps> = ({
   const maxWidthClass = maxWidthClasses[composition.grid.maxWidth ?? '7xl'];
   const alignClass = alignmentClasses[composition.grid.alignment ?? 'stretch'];
   const isStartAlign = composition.grid.alignment === 'start';
+  const isViewportLocked = (composition.grid.scrollMode ?? 'viewport-contained') === 'viewport-contained';
 
   return (
     <PublicCanvasContext.Provider value={{ composition }}>
       <main
         className={clsx(
-          'w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6',
+          'w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-5',
           'grid grid-cols-12',
+          isViewportLocked && 'lg:h-[calc(100vh-4.5rem)] lg:max-h-[calc(100vh-4.5rem)] lg:overflow-hidden',
           isStartAlign ? 'auto-rows-min' : 'auto-rows-fr',
           alignClass,
           gapClass,

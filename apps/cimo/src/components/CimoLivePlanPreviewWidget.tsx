@@ -43,7 +43,7 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
   currentUser,
 }) => {
   return (
-    <aside className="h-full flex flex-col gap-5 text-[#1F4E5F]" aria-label="Vista Previa de la Tarjeta">
+    <aside className="h-full overflow-y-auto flex flex-col gap-3.5 text-[#1F4E5F] pr-0.5" aria-label="Vista Previa de la Tarjeta">
       <div className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 sm:p-6 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E] flex items-center gap-1">
