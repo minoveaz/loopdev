@@ -37,7 +37,7 @@ describe('CIMO 2.0 Dedicated Views Integration', () => {
     expect(screen.getByText('Crea tu Entrenamiento Grupal')).toBeDefined();
     expect(screen.getByText('Elige el deporte')).toBeDefined();
     expect(screen.getByText('¿Qué día entrenamos?')).toBeDefined();
-    expect(screen.getByText('¿A qué hora?')).toBeDefined();
+    expect(screen.getByText('¿A qué hora nos vemos?')).toBeDefined();
     expect(screen.getByText('Ciudad y punto de encuentro')).toBeDefined();
     expect(screen.getByText('Ritmo y nivel del grupo')).toBeDefined();
     expect(screen.getByText('¿Cuántas personas como máximo?')).toBeDefined();
