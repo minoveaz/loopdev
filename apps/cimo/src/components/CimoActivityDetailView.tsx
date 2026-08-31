@@ -24,10 +24,13 @@ import {
   ShoppingBag,
   Sparkles,
   Sun,
+  Timer,
   Users,
   Wrench,
+  X,
   Zap,
 } from 'lucide-react';
+import { TennisBallIcon } from './CimoCreatePlanView';
 import { CrewAvatarGroup, type ActivityCardData, type ChatMessage } from '@loopdev/public-blocks';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
 import { CimoActivitySeoHead } from './CimoActivitySeoHead';
@@ -344,7 +347,7 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                 <>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
-                      <Activity className="w-4 h-4 text-[#1F4E5F]" />
+                      <TennisBallIcon className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Pala de Pádel</span>

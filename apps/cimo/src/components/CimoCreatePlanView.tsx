@@ -89,6 +89,22 @@ const THIRD_HALF_NOTES_SUGGESTIONS = [
   'Cada asistente paga su consumición',
 ];
 
+export const TennisBallIcon: React.FC<{ className?: string }> = ({ className = 'w-6 h-6' }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <circle cx="12" cy="12" r="9.5" />
+    <path d="M4.5 7.5C8.8 8.5 12.5 12.2 13.5 19.5" />
+    <path d="M19.5 16.5C15.2 15.5 11.5 11.8 10.5 4.5" />
+  </svg>
+);
+
 const sportsList = CIMO_SPORTS_CATALOG;
 
 const spanishCities = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Málaga', 'Bilbao', 'Zaragoza', 'Otra'];
@@ -613,7 +629,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       {s.id === 'hiking' ? (
                         <Footprints className="w-6 h-6" />
                       ) : s.id === 'padel' ? (
-                        <Activity className="w-6 h-6" />
+                        <TennisBallIcon className="w-6 h-6" />
                       ) : (
                         <Flame className="w-6 h-6" />
                       )}
