@@ -89,6 +89,7 @@ graph TD
 | **2026-08-31** | **Aprobación de 5 Innovaciones Clave de Engagement:**<br>1. Check-in GPS/QR post-entreno (Zero No-Shows & Proof of Workout).<br>2. Indicador de Liebre / Pacer oficial en quedadas de Running.<br>3. División de gastos de pista / consumiciones con enlace directo Bizum/Revolut.<br>4. Etiquetas de Energía Social / Vibe (Focused vs Conversational).<br>5. Desafíos y retos mensuales inter-squads. | Blindar la puntualidad, eliminar la fricción de pagos en grupo y maximizar la seguridad y sintonía de los miembros. | Confianza total de la comunidad, alta retención y crecimiento orgánico de Squads. | `@minoveaz` |
 | **2026-08-31** | **Incorporación de 4 Mecanismos de Eventbrite / Luma de Alta Conversión & Asistencia:**<br>1. **Lista de Espera Inteligente & Auto-Relleno (Waitlist Engine):** Cola de espera automática con ventana de 15 minutos para reclamar plaza libre si alguien cancela.<br>2. **Sincronización con Google / Apple Calendar en 1 Clic:** Botón directo (.ics / Google URL) con recordatorio 2h, GPS exacto y link al chat.<br>3. **Preguntas Clave de Admisión (RSVP Questionnaire):** 1-2 preguntas obligatorias configurables por el capitán (ritmo 10K, pala propia, calzado de montaña).<br>4. **Broadcast Pre-Entreno del Capitán:** Envío de avisos prioritarios fijados al grupo (cambios de clima, hidratación). | Maximizar la tasa de asistencia real, evitar huecos de última hora en grupos pequeños y dar control operativo total a los capitanes. | Cero absentismo, organización impecable y máxima retención deportiva. | `@minoveaz` |
 | **2026-08-31** | **Sistema de Gamificación, Insignias de Autor (CIMO Badges) & Top Leaderboard Local:**<br>1. **Insignias de Constancia y Reputación:** *Club del Amanecer* (5 entrenos pre-8h), *Palabra de Honor* (100% asistencia / 0 no-shows), *Embajador Tercer Tiempo*, *Capitán 5 Estrellas*, *Pacer de Oro*.<br>2. **Hall of Fame / Top Ranking por Ciudad y Deporte:** Leaderboard mensual de deportistas más constantes (no por velocidad, sino por días activos y asistencia). | Desbloquear el estatus social, la motivación diaria y la confianza entre deportistas. | Máxima retención diaria (DAU/MAU) y orgullo de pertenencia. | `@minoveaz` |
+| **2026-08-31** | **Sistema de Valoraciones 360º Tripartita (Evento + Capitán + Compañeros de Entreno):**<br>1. **Valoración del Evento (1-5⭐ + Micro-tags):** Cumplimiento de ruta, ritmo real y calidad del Tercer Tiempo.<br>2. **Valoración del Capitán:** Liderazgo, acogida a los nuevos y puntualidad (alimenta el sello de Capitán Verificado).<br>3. **Feedback entre Compañeros (Kudos & "¿Volverías a entrenar con él/ella?"):** Reconocimientos positivos de energía/compañerismo y reporte discreto de seguridad/conducta. | Generar confianza ciega entre deportistas que no se conocen y blindar la seguridad de la comunidad. | Conversión máxima de nuevos usuarios y cero toxicidad. | `@minoveaz` |
 
 ---
 
@@ -231,6 +232,24 @@ graph TD
 
 ---
 
+### ⭐️ Sistema de Valoraciones 360º Tripartita (Evento, Capitán y Compañeros):
+
+1. **Valoración de la Actividad / Entreno (1-5 ⭐ + Micro-Tags):**
+   - Pregunta clave: *"¿El ritmo y la ruta se ajustaron a lo prometido en la ficha?"*
+   - Tags rápidos: `[ 🎯 Ritmo Clavado ]` `[ 🗺️ Ruta Espectacular ]` `[ ☕ Tercer Tiempo Top ]` `[ ⚡ Intenso & Retador ]` `[ 💬 Muy Social & Divertido ]`.
+2. **Valoración del Capitán Organizador (Trust & Leadership):**
+   - Puntualidad, dinamización y bienvenida a nuevos miembros.
+   - Tags: `[ ⏱️ Muy Puntual ]` `[ 🛡️ Súper Atento ]` `[ 🧭 Conoce la Ruta ]` `[ 🤝 Acoge a Nuevos ]`.
+   - Alimenta el ranking de Capitanes Destacados de la ciudad y el sello de Capitán Verificado.
+3. **Feedback entre Compañeros de Entreno (Peer Review & Kudos):**
+   - Micro-feedback positivo y privado: *"¿Volverías a entrenar con este compañero? [ 👍 Sí, sin duda ] [ 😐 Neutral ]"*.
+   - Reconocimientos de 1 toque (Kudos): `[ 🔥 Gran Energía ]` `[ 🤝 Excelente Compañero ]` `[ 💨 Pacer Constante ]`.
+   - Canal de reporte de seguridad y conducta deportiva para moderación inmediata.
+4. **Flujo Post-Entreno en 15 Segundos:**
+   - Notificación/tarjeta emergente automática 2 horas después de finalizar la actividad para calificar en solo 2 toques sin fricción.
+
+---
+
 ## Criterios de Cierre Actualizados
 
 - [x] Jerarquía Visual 2.0 con búsqueda flotante, 3 columnas proporcionales y fondo mineral `#EEF2F2`.
@@ -244,6 +263,7 @@ graph TD
 - [ ] 5 Innovaciones de Engagement (Check-in GPS/QR anti-no-shows, Liebre oficial, Split Cost Bizum, Etiquetas de Vibe y Desafíos Inter-Squads).
 - [ ] 4 Mecanismos Eventbrite/Luma (Waitlist inteligente, 1-Click Calendar Sync, Preguntas de admisión y Broadcast del capitán).
 - [ ] Sistema de Gamificación (Insignias de Autor en el Perfil y Top Leaderboard / Hall of Fame por Ciudad y Deporte).
+- [ ] Sistema de Valoraciones 360º Tripartita (Evento, Capitán y Compañeros con Kudos y Reporte de Seguridad).
 - [ ] Panel de Administración de CIMO (`/admin`).
 - [ ] Suite de Tests Focalizados estilo Vitablue (Componentes, a11y, WCAG).
 - [ ] Quality Gate en verde: `pnpm --filter cimo typecheck && pnpm --filter cimo test && pnpm --filter cimo build`.
