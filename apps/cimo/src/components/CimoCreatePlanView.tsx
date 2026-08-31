@@ -1,24 +1,35 @@
 import React, { useState } from 'react';
 import {
+  Activity,
+  Apple,
   ArrowLeft,
   Award,
+  Beer,
+  Bike,
   Calendar,
   Check,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Clock,
   Coffee,
+  Droplets,
   Eye,
   FileText,
+  Flame,
+  Footprints,
   MapPin,
   Minus,
   Plus,
+  ShieldCheck,
+  ShoppingBag,
   Sparkles,
   Sun,
   Sunrise,
   Sunset,
   Timer,
   Users,
+  Wrench,
   X,
   Zap,
 } from 'lucide-react';
@@ -29,7 +40,7 @@ import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
 import { CimoSportPaceSelector } from './CimoSportPaceSelector';
 import { CimoCapacityStepper } from './CimoCapacityStepper';
 import { useSpainLocationSearch } from '../hooks/useSpainLocationSearch';
-import { CIMO_SPORTS_CATALOG, getSportPaces, SPORT_PACES_CATALOG } from '../data/sportsCatalog';
+import { CIMO_SPORTS_CATALOG, getSportPaces, getSportGear, SPORT_PACES_CATALOG } from '../data/sportsCatalog';
 
 export interface CimoCreatePlanViewProps {
   onBack: () => void;
@@ -37,10 +48,10 @@ export interface CimoCreatePlanViewProps {
 }
 
 const THIRD_HALF_TYPES = [
-  { id: 'cafe' as const, label: 'Café & Desayuno', emoji: '☕', defaultVenue: 'Cafetería cercana con terraza' },
-  { id: 'beer' as const, label: 'Caña & Tapeo', emoji: '🍻', defaultVenue: 'Terraza o bar del club' },
-  { id: 'smoothie' as const, label: 'Smoothie Recovery', emoji: '🥤', defaultVenue: 'Juice & Recovery Bar' },
-  { id: 'picnic' as const, label: 'Picnic al Aire Libre', emoji: '🌿', defaultVenue: 'Césped con sombra' },
+  { id: 'cafe' as const, label: 'Café & Desayuno', icon: Coffee, defaultVenue: 'Cafetería cercana con terraza' },
+  { id: 'beer' as const, label: 'Caña & Tapeo', icon: Beer, defaultVenue: 'Terraza o bar del club' },
+  { id: 'smoothie' as const, label: 'Smoothie Recovery', icon: Sparkles, defaultVenue: 'Juice & Recovery Bar' },
+  { id: 'picnic' as const, label: 'Picnic al Aire Libre', icon: Sun, defaultVenue: 'Césped con sombra' },
 ];
 
 const sportsList = CIMO_SPORTS_CATALOG;
@@ -148,6 +159,9 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [selectedPaceIndex, setSelectedPaceIndex] = useState(1);
   const [maxMembers, setMaxMembers] = useState(5);
   const [instructions, setInstructions] = useState('');
+  const [selectedGearIds, setSelectedGearIds] = useState<string[]>([
+    'footwear', 'water', 'snack', 'sun', 'racket', 'shoes', 'balls', 'bike', 'helmet', 'tools', 'apparel', 'energy'
+  ]);
 
   // Optional Third Half (Tercer Tiempo) State
   const [hasThirdHalf, setHasThirdHalf] = useState(true);
@@ -200,6 +214,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
       maxMembers,
       image: selectedSportObj.image,
       instructions: instructions.trim() || undefined,
+      whatToBring: getSportGear(sport).filter((g) => selectedGearIds.includes(g.id)),
       thirdHalf: hasThirdHalf
         ? {
             enabled: true,
@@ -312,7 +327,17 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                       : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5 hover:border-[#1F4E5F]/20'
                   }`}
                 >
-                  <span className="text-3xl">{s.emoji}</span>
+                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#1F4E5F]'}`}>
+                    {s.id === 'hiking' ? (
+                      <Footprints className="w-5 h-5" />
+                    ) : s.id === 'padel' ? (
+                      <Activity className="w-5 h-5" />
+                    ) : s.id === 'cycling' ? (
+                      <Bike className="w-5 h-5" />
+                    ) : (
+                      <Flame className="w-5 h-5" />
+                    )}
+                  </div>
                   <span className="text-xs font-extrabold">{s.label}</span>
                 </button>
               );
@@ -790,6 +815,86 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           />
         </div>
 
+        {/* 🎒 Island 7: Material Recomendado & Qué Traer */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+                7
+              </span>
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+                Material Recomendado & Qué Traer
+              </span>
+            </div>
+            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+              Checklist
+            </span>
+          </div>
+
+          <p className="text-xs text-[#1F4E5F]/70 font-medium">
+            Selecciona el material esencial que los atletas deben traer para este entreno de {selectedSportObj.label}:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {getSportGear(sport).map((item) => {
+              const isSelected = selectedGearIds.includes(item.id);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedGearIds((prev) =>
+                      prev.includes(item.id) ? prev.filter((id) => id !== item.id) : [...prev, item.id]
+                    );
+                  }}
+                  className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                    isSelected
+                      ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/20 shadow-2xs'
+                      : 'border-[#1F4E5F]/10 bg-[#F7F7F7] opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                    isSelected ? 'bg-[#7FB77E] text-white' : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'
+                  }`}>
+                    {item.icon === 'Footprints' ? (
+                      <Footprints className="w-4 h-4" />
+                    ) : item.icon === 'Droplets' ? (
+                      <Droplets className="w-4 h-4" />
+                    ) : item.icon === 'Apple' ? (
+                      <Apple className="w-4 h-4" />
+                    ) : item.icon === 'Sun' ? (
+                      <Sun className="w-4 h-4" />
+                    ) : item.icon === 'Activity' ? (
+                      <Activity className="w-4 h-4" />
+                    ) : item.icon === 'CheckCircle2' ? (
+                      <CheckCircle2 className="w-4 h-4" />
+                    ) : item.icon === 'Bike' ? (
+                      <Bike className="w-4 h-4" />
+                    ) : item.icon === 'ShieldCheck' ? (
+                      <ShieldCheck className="w-4 h-4" />
+                    ) : item.icon === 'Wrench' ? (
+                      <Wrench className="w-4 h-4" />
+                    ) : item.icon === 'Flame' ? (
+                      <Flame className="w-4 h-4" />
+                    ) : (
+                      <Zap className="w-4 h-4" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-xs font-black text-[#1F4E5F] block truncate">{item.label}</span>
+                    <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">{item.sub}</span>
+                  </div>
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
+                    isSelected ? 'bg-[#7FB77E] text-white' : 'border border-[#1F4E5F]/20'
+                  }`}>
+                    {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* ☕ Island 8: Tercer Tiempo Post-Entreno (Opcional) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
@@ -861,7 +966,9 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                             : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
                         }`}
                       >
-                        <span className="text-xl">{tht.emoji}</span>
+                        <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 flex items-center justify-center text-[#1F4E5F]">
+                          <tht.icon className="w-4 h-4 text-[#1F4E5F]" />
+                        </div>
                         <span className="text-xs font-black">{tht.label}</span>
                       </button>
                     );

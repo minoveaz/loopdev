@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
 import {
+  Activity,
+  Apple,
   ArrowLeft,
+  Beer,
+  Bike,
   Calendar,
   Check,
+  CheckCircle2,
   ChevronRight,
   Clock,
   Coffee,
+  Droplets,
+  Flame,
+  Footprints,
   Heart,
   MapPin,
   MessageSquare,
   Send,
   Share2,
   ShieldCheck,
+  ShoppingBag,
   Sparkles,
+  Sun,
   Users,
+  Wrench,
   Zap,
 } from 'lucide-react';
 import { CrewAvatarGroup, type ActivityCardData, type ChatMessage } from '@loopdev/public-blocks';
@@ -254,11 +265,11 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </div>
           ) : null}
 
-          {/* 🎒 Qué debes traer & Material Recomendado (Estilo Airbnb Experiences / Komoot) */}
+          {/* 🎒 Qué debes traer & Material Recomendado (100% Vectorial sin Emojis OS) */}
           <div className="p-5 bg-white rounded-3xl border border-[#1F4E5F]/10 flex flex-col gap-3 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
-                <span>🎒</span>
+                <ShoppingBag className="w-4 h-4 text-[#7FB77E]" />
                 <span>Qué debes traer para esta sesión</span>
               </span>
               <span className="text-[10px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
@@ -270,28 +281,36 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               {activity.sport === 'hiking' ? (
                 <>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🥾</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Footprints className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Trail</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Suela con agarre</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">💧</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Agua (1.5L)</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Mínimo sugerido</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🥪</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Apple className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Snack / Fruta</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Frutos secos o barrita</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🧢</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Sun className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Protección Solar</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Gorra y crema</span>
@@ -301,28 +320,36 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               ) : activity.sport === 'padel' ? (
                 <>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🎾</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Activity className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Pala de Pádel</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Propia o alquilada</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">👟</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Footprints className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Pádel</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Suela espiga / clay</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">💧</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Botella de Agua</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Para cambios de lado</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">📦</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Bolas Incluidas</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Las pone el capitán</span>
@@ -332,28 +359,36 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               ) : activity.sport === 'cycling' ? (
                 <>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🚴‍♂️</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Bike className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Bici a Punto</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Presión y frenos</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🪖</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Casco Obligatorio</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Homologado</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">💧</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Bidón de Agua</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Con sales o agua</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🔧</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Wrench className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Cámara / Bomba</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Kit de repuesto</span>
@@ -363,28 +398,36 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               ) : (
                 <>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">👟</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Footprints className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Técnico</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Zapatillas adecuadas</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">🎽</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Flame className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Ropa Cómoda</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Tejido transpirable</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">💧</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Hidratación</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Botella de agua</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
-                    <span className="text-xl">⚡</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Zap className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Buena Energía</span>
                       <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Ganas de entrenar</span>
@@ -395,18 +438,20 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </div>
           </div>
 
-          {/* ☕ Tercer Tiempo Post-Entreno (Solo si está activo) */}
+          {/* Tercer Tiempo Post-Entreno (Vectorial) */}
           {activity.thirdHalf?.enabled && (
             <div className="p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/25 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-900 flex items-center justify-center text-2xl shrink-0 shadow-2xs">
-                  {activity.thirdHalf.type === 'beer'
-                    ? '🍻'
-                    : activity.thirdHalf.type === 'smoothie'
-                    ? '🥤'
-                    : activity.thirdHalf.type === 'picnic'
-                    ? '🌿'
-                    : '☕'}
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-900 flex items-center justify-center shrink-0 shadow-2xs">
+                  {activity.thirdHalf.type === 'beer' ? (
+                    <Beer className="w-6 h-6 text-amber-900" />
+                  ) : activity.thirdHalf.type === 'smoothie' ? (
+                    <Sparkles className="w-6 h-6 text-amber-900" />
+                  ) : activity.thirdHalf.type === 'picnic' ? (
+                    <Sun className="w-6 h-6 text-amber-900" />
+                  ) : (
+                    <Coffee className="w-6 h-6 text-amber-900" />
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -428,8 +473,9 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                 </div>
               </div>
 
-              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-amber-500/20 text-xs font-bold text-amber-900 shrink-0 shadow-2xs">
-                ☕ Post-Entreno (~30-40 min)
+              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-amber-500/20 text-xs font-bold text-amber-900 shrink-0 shadow-2xs flex items-center gap-1.5">
+                <Coffee className="w-3.5 h-3.5 text-amber-700" />
+                <span>Post-Entreno (~30-40 min)</span>
               </div>
             </div>
           )}

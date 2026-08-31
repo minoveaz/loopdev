@@ -58,6 +58,40 @@ export const SPORT_PACES_CATALOG: Record<CimoSportId, SportPaceOption[]> = {
   ],
 };
 
+export interface SportGearItem {
+  id: string;
+  label: string;
+  sub: string;
+  icon: string;
+}
+
+export const SPORT_GEAR_CATALOG: Record<string, SportGearItem[]> = {
+  hiking: [
+    { id: 'footwear', label: 'Calzado Trail', sub: 'Suela con agarre', icon: 'Footprints' },
+    { id: 'water', label: 'Agua (1.5L)', sub: 'Mínimo sugerido', icon: 'Droplets' },
+    { id: 'snack', label: 'Snack / Fruta', sub: 'Frutos secos o barrita', icon: 'Apple' },
+    { id: 'sun', label: 'Protección Solar', sub: 'Gorra y crema', icon: 'Sun' },
+  ],
+  padel: [
+    { id: 'racket', label: 'Pala de Pádel', sub: 'Propia o alquilada', icon: 'Activity' },
+    { id: 'shoes', label: 'Calzado Pádel', sub: 'Suela espiga / clay', icon: 'Footprints' },
+    { id: 'water', label: 'Botella de Agua', sub: 'Para cambios de lado', icon: 'Droplets' },
+    { id: 'balls', label: 'Bolas Incluidas', sub: 'Las pone el capitán', icon: 'CheckCircle2' },
+  ],
+  cycling: [
+    { id: 'bike', label: 'Bici a Punto', sub: 'Presión y frenos', icon: 'Bike' },
+    { id: 'helmet', label: 'Casco Obligatorio', sub: 'Homologado', icon: 'ShieldCheck' },
+    { id: 'water', label: 'Bidón de Agua', sub: 'Con sales o agua', icon: 'Droplets' },
+    { id: 'tools', label: 'Cámara / Bomba', sub: 'Kit de repuesto', icon: 'Wrench' },
+  ],
+  running: [
+    { id: 'shoes', label: 'Calzado Técnico', sub: 'Zapatillas de running', icon: 'Footprints' },
+    { id: 'apparel', label: 'Ropa Cómoda', sub: 'Tejido transpirable', icon: 'Flame' },
+    { id: 'water', label: 'Hidratación', sub: 'Botella de agua', icon: 'Droplets' },
+    { id: 'energy', label: 'Buena Energía', sub: 'Ganas de entrenar', icon: 'Zap' },
+  ],
+};
+
 export const CIMO_LEVELS_CATALOG = [
   { id: 'Cualquier nivel', label: 'Cualquier nivel', desc: 'Ver todos los ritmos y categorías' },
   { id: 'Principiante', label: 'Principiante', desc: 'Iniciación y ritmos muy suaves' },
@@ -68,20 +102,15 @@ export const CIMO_LEVELS_CATALOG = [
 
 export const CIMO_DATE_PRESETS = [
   { label: 'Cualquier día', sub: 'Sin límite', value: 'Cualquier día' },
-  { label: '🔥 Hoy', sub: 'Entrenos hoy', value: 'Hoy' },
-  { label: '⚡ Mañana', sub: 'Próximas 24h', value: 'Mañana' },
-  { label: '⭐ Este finde', sub: 'Sáb & Dom', value: 'Este fin de semana' },
-  { label: '🗓️ Esta semana', sub: 'Lunes a Viernes', value: 'Esta semana' },
+  { label: 'Hoy', sub: 'Entrenos hoy', value: 'Hoy' },
+  { label: 'Mañana', sub: 'Próximas 24h', value: 'Mañana' },
+  { label: 'Este finde', sub: 'Sáb & Dom', value: 'Este fin de semana' },
+  { label: 'Esta semana', sub: 'Lunes a Viernes', value: 'Esta semana' },
 ];
 
 export function getSportById(id: string): CimoSportDefinition | undefined {
   const norm = id.toLowerCase();
   return CIMO_SPORTS_CATALOG.find((s) => s.id === norm || s.label.toLowerCase() === norm);
-}
-
-export function getSportEmoji(id: string): string {
-  if (id.toLowerCase() === 'todos') return '⭐';
-  return getSportById(id)?.emoji ?? '🏃';
 }
 
 export function getSportLabel(id: string): string {
@@ -92,4 +121,9 @@ export function getSportLabel(id: string): string {
 export function getSportPaces(sportId: string): SportPaceOption[] {
   const key = sportId.toLowerCase() as CimoSportId;
   return SPORT_PACES_CATALOG[key] ?? SPORT_PACES_CATALOG.running;
+}
+
+export function getSportGear(sportId: string): SportGearItem[] {
+  const key = sportId.toLowerCase();
+  return SPORT_GEAR_CATALOG[key] ?? SPORT_GEAR_CATALOG.running;
 }
