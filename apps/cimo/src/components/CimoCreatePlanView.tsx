@@ -775,17 +775,19 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsCustomCalendarOpen(!isCustomCalendarOpen)}
-                className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center ${
+                className={`col-span-2 sm:col-span-2 lg:col-span-1 p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-row lg:flex-col items-center justify-center gap-2 lg:gap-0.5 ${
                   isCustomCalendarOpen
-                    ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-xs scale-[1.02]'
+                    ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-xs scale-[1.01]'
                     : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
                 }`}
               >
-                <Calendar className={`w-4 h-4 mb-0.5 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`} />
-                <span className="text-xs font-black leading-tight">Otro día</span>
-                <span className={`text-[9px] font-bold mt-0.5 ${isCustomCalendarOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
-                  Calendario
-                </span>
+                <Calendar className={`w-4 h-4 shrink-0 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`} />
+                <div className="flex items-center gap-1.5 lg:flex-col lg:gap-0">
+                  <span className="text-xs font-black leading-tight">Otro día</span>
+                  <span className={`text-[10px] font-bold ${isCustomCalendarOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}>
+                    Calendario
+                  </span>
+                </div>
               </button>
             </div>
 
