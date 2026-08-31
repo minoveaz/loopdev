@@ -109,6 +109,177 @@ export const CIMO_DATE_PRESETS = [
   { label: 'Esta semana', sub: 'Lunes a Viernes', value: 'Esta semana' },
 ];
 
+export interface SportRealPhoto {
+  id: string;
+  url: string;
+  title: string;
+  locationTag: string;
+}
+
+export const SPORT_REAL_PHOTOS_CATALOG: Record<string, SportRealPhoto[]> = {
+  hiking: [
+    {
+      id: 'hk_1',
+      url: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1200',
+      title: 'Senderismo Sierra & Granito',
+      locationTag: 'La Pedriza / Guadarrama',
+    },
+    {
+      id: 'hk_2',
+      url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200',
+      title: 'Cumbres y Valle Panorámico',
+      locationTag: 'Pirineos / Gredos',
+    },
+    {
+      id: 'hk_3',
+      url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=1200',
+      title: 'Sendero Boscoso de Montaña',
+      locationTag: 'Bosques y Riberas',
+    },
+    {
+      id: 'hk_4',
+      url: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&q=80&w=1200',
+      title: 'Grupo de Trekking Activo',
+      locationTag: 'Ruta Comunitaria',
+    },
+  ],
+  running: [
+    {
+      id: 'rn_1',
+      url: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200',
+      title: 'Parque Arbolado & Sombra',
+      locationTag: 'Parque del Retiro (Madrid)',
+    },
+    {
+      id: 'rn_2',
+      url: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80&w=1200',
+      title: 'Grupo Running al Atardecer',
+      locationTag: 'Madrid Río / Paseo Marítimo',
+    },
+    {
+      id: 'rn_3',
+      url: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&q=80&w=1200',
+      title: 'Asfalto y Ritmo Vivo',
+      locationTag: 'Circuito Urbano',
+    },
+    {
+      id: 'rn_4',
+      url: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&q=80&w=1200',
+      title: 'Trail Running Matutino',
+      locationTag: 'Casa de Campo / Collserola',
+    },
+  ],
+  padel: [
+    {
+      id: 'pd_1',
+      url: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200',
+      title: 'Pistas Panorámicas de Pádel',
+      locationTag: 'Club Deportivo',
+    },
+    {
+      id: 'pd_2',
+      url: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&q=80&w=1200',
+      title: 'Césped Azul & Pelotas Nuevas',
+      locationTag: 'Pista de Competición',
+    },
+    {
+      id: 'pd_3',
+      url: 'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?auto=format&fit=crop&q=80&w=1200',
+      title: 'Pista Cubierta Climatizada',
+      locationTag: 'Indoor Club',
+    },
+  ],
+  cycling: [
+    {
+      id: 'cy_1',
+      url: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&q=80&w=1200',
+      title: 'Pelotón Carretera Secundaria',
+      locationTag: 'Sierra & Asfalto',
+    },
+    {
+      id: 'cy_2',
+      url: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&q=80&w=1200',
+      title: 'Ruta Gravel & Pistas de Tierra',
+      locationTag: 'Pistas Rurales',
+    },
+  ],
+  crossfit: [
+    {
+      id: 'cf_1',
+      url: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=1200',
+      title: 'Box Equipado para WOD',
+      locationTag: 'Box Oficial',
+    },
+    {
+      id: 'cf_2',
+      url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1200',
+      title: 'Entreno Funcional Outdoor',
+      locationTag: 'Calistenia Park',
+    },
+  ],
+};
+
+export const THIRD_HALF_CITY_SPOTS: Record<string, Record<string, string[]>> = {
+  Madrid: {
+    cafe: ['Café Murillo (Retiro)', 'Honest Greens (Castellana)', 'Toma Café (Malasaña)', 'Café del Art (La Latina)', 'Federal Café (Conde Duque)'],
+    beer: ['Terraza Florida Park (Retiro)', 'Cervecería La Fábrica (Chamartín)', 'El Tigre del Norte (Chueca)', 'Terraza Atenas (La Latina)', 'Cervecería Santa Bárbara'],
+    smoothie: ['Frutas Prohibidas (Chueca)', 'Oakberry Açaí (Salamanca)', 'Roots Lamarca (Fernando VI)', 'Honest Greens Juice Bar'],
+    picnic: ['Césped Palacio de Cristal (Retiro)', 'Templo de Debod (Moncloa)', 'Lago de la Casa de Campo', 'Parque del Oeste'],
+  },
+  Barcelona: {
+    cafe: ['Nomad Coffee Lab (El Born)', 'Federal Café (Sant Antoni)', "Satan's Coffee Corner (Gótico)", 'Syra Coffee (Gràcia)'],
+    beer: ['Cervecería Moritz (Sant Antoni)', 'La Terrassa del Duquesa (Port Vell)', 'Bar Lobo (Raval)', 'Cervecería El Vaso de Oro (Barceloneta)'],
+    smoothie: ['The Green Spot (Barceloneta)', 'Teresa Carles (Raval)', 'FitBar Açaí (Gràcia)'],
+    picnic: ['Parc de la Ciutadella', 'Bunkers del Carmel (Vistas)', 'Parc del Laberint'],
+  },
+  Valencia: {
+    cafe: ['Bluebell Coffee (Ruzafa)', 'Dulce de Leche (Ruzafa)', 'Federal Café (Ciutat Vella)'],
+    beer: ['Mercado de Colón (Eixample)', 'Fàbrica de Hielo (Cabanyal)', 'Tyris On Tap (Ciutat Vella)'],
+    smoothie: ['Almalibre Açaí Bar (El Carmen)', 'Be Green Salad Company'],
+    picnic: ['Jardines del Turia (Tramo Alameda)', 'Parque de Cabecera'],
+  },
+  Sevilla: {
+    cafe: ['Virgin Coffee (Las Setas)', 'Torch Coffee Roasters (Paseo de las Delicias)'],
+    beer: ['La Terraza del EME (Giralda)', 'El Rinconcillo (Centro)', 'Mercado de Triana'],
+    smoothie: ['Milk Away (Centro)', 'Berry Açaí Bar'],
+    picnic: ['Parque de María Luisa (Plaza de España)', 'Jardines de Murillo'],
+  },
+  Málaga: {
+    cafe: ['Mia Coffee Shop (Centro)', 'Santa Canela Café (Soho)'],
+    beer: ['La Terraza del Chinitas (Centro)', 'Cervecería Los Gatos', 'El Pimpi (Alcazaba)'],
+    smoothie: ['Recyclo Bike Café', 'Raw Coco Green Bar'],
+    picnic: ['Parque de Málaga', 'Gibralfaro'],
+  },
+  Bilbao: {
+    cafe: ['Cinnamon Café (Centro)', 'Wiché Café Bakery'],
+    beer: ['Plaza Nueva (Casco Viejo)', 'Terraza Dique (Ría de Bilbao)'],
+    smoothie: ['Copper Deli', 'Green Bistro'],
+    picnic: ['Parque Doña Casilda', 'Artxanda'],
+  },
+  Zaragoza: {
+    cafe: ['Doña Hipólita (Plaza San Felipe)', 'Café Nolasco'],
+    beer: ['El Tubo (Centro)', 'Terraza El Molino de San Lázaro'],
+    smoothie: ['Mi Habitación Favorita', 'La Clandestina'],
+    picnic: ['Parque Grande José Antonio Labordeta', 'Riberas del Ebro'],
+  },
+  Otra: {
+    cafe: ['Cafetería con terraza soleada cercana', 'Café de Especialidad local', 'Pastelería / Bakery artesanal'],
+    beer: ['Bar o terraza del club deportivo', 'Cervecería de la plaza mayor', 'Chiringuito / Terraza'],
+    smoothie: ['Juice & Recovery Bar', 'Bar de batidos naturales y fruta'],
+    picnic: ['Parque principal de la zona', 'Mirador panorámico', 'Área recreativa arbolada'],
+  },
+};
+
+export function getSportRealPhotos(sportId: string): SportRealPhoto[] {
+  const key = sportId.toLowerCase();
+  return SPORT_REAL_PHOTOS_CATALOG[key] ?? SPORT_REAL_PHOTOS_CATALOG.running;
+}
+
+export function getThirdHalfSpots(city: string, type: 'cafe' | 'beer' | 'smoothie' | 'picnic'): string[] {
+  const cityData = THIRD_HALF_CITY_SPOTS[city] ?? THIRD_HALF_CITY_SPOTS.Madrid ?? THIRD_HALF_CITY_SPOTS.Otra;
+  return cityData[type] ?? THIRD_HALF_CITY_SPOTS.Otra[type] ?? ['Cafetería con terraza'];
+}
+
 export function getSportById(id: string): CimoSportDefinition | undefined {
   const norm = id.toLowerCase();
   return CIMO_SPORTS_CATALOG.find((s) => s.id === norm || s.label.toLowerCase() === norm);

@@ -82,6 +82,7 @@ export function App() {
   // Standard Navigation & URL Deep Linking (/app/home, /app/activity/:id, /app/create, etc.)
   // Parametric ID routing state
   const [activeProfileUserId, setActiveProfileUserId] = useState<string | null>(null);
+  const [planDraft, setPlanDraft] = useState<any>(null);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [activeSquadId, setActiveSquadId] = useState<string | null>(null);
 
@@ -321,6 +322,7 @@ export function App() {
           <CimoCreatePlanView
             onBack={() => navigateTo('feed')}
             onCreate={handleCreateActivity}
+            onDraftChange={setPlanDraft}
           />
         );
       case 'activity-detail':
@@ -466,21 +468,23 @@ export function App() {
       case 'create':
         return (
           <CimoLivePlanPreviewWidget
-            formData={{
-              sport: selectedSport === 'Todos' ? 'Running' : selectedSport,
-              title: '',
-              description: '',
-              date: 'Mañana',
-              time: '08:00',
-              location: selectedZone === 'Toda la ciudad' ? 'Parque del Retiro, Madrid' : selectedZone,
-              capacity: 6,
-              level: selectedLevel === 'Cualquier nivel' ? 'Intermedio (5:15 min/km)' : selectedLevel,
-              thirdHalfType: 'cafe',
-              thirdHalfTitle: 'Café de Especialidad',
-              thirdHalfLocation: 'Plaza de la Independencia',
-              image: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80&w=800',
-              price: 'Gratis',
-            }}
+            formData={
+              planDraft ?? {
+                sport: selectedSport === 'Todos' ? 'Running' : selectedSport,
+                title: 'Running 8K • Parque del Retiro',
+                description: 'Rodaje dinámico en grupo por los senderos arbolados del Retiro. Mantendremos un ritmo intermedio con buen ambiente.',
+                date: 'Hoy',
+                time: '19:30',
+                location: selectedZone === 'Toda la ciudad' ? 'Parque del Retiro (Puerta de Alcalá)' : selectedZone,
+                capacity: 5,
+                level: selectedLevel === 'Cualquier nivel' ? 'Intermedio (5:00 - 5:30 min/km)' : selectedLevel,
+                thirdHalfType: 'cafe',
+                thirdHalfTitle: 'Café & Desayuno',
+                thirdHalfLocation: 'Café Murillo (Retiro)',
+                image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200',
+                price: 'Gratis',
+              }
+            }
             currentUser={currentUser}
           />
         );

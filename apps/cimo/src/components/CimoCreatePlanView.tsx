@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Activity,
   Apple,
@@ -7,6 +7,7 @@ import {
   Beer,
   Bike,
   Calendar,
+  Camera,
   Check,
   CheckCircle2,
   ChevronLeft,
@@ -18,9 +19,12 @@ import {
   FileText,
   Flame,
   Footprints,
+  Image as ImageIcon,
   MapPin,
   Minus,
   Plus,
+  RefreshCw,
+  Search,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
@@ -28,7 +32,9 @@ import {
   Sunrise,
   Sunset,
   Timer,
+  Upload,
   Users,
+  Wand2,
   Wrench,
   X,
   Zap,
@@ -38,20 +44,49 @@ import { CimoCitySearchCombobox } from './CimoCitySearchCombobox';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
 import { CimoCaptainInstructionsField } from './CimoCaptainInstructionsField';
 import { CimoSportPaceSelector } from './CimoSportPaceSelector';
-import { CimoCapacityStepper } from './CimoCapacityStepper';
 import { useSpainLocationSearch } from '../hooks/useSpainLocationSearch';
-import { CIMO_SPORTS_CATALOG, getSportPaces, getSportGear, SPORT_PACES_CATALOG } from '../data/sportsCatalog';
+import {
+  CIMO_SPORTS_CATALOG,
+  getSportGear,
+  getSportPaces,
+  getSportRealPhotos,
+  getThirdHalfSpots,
+} from '../data/sportsCatalog';
 
 export interface CimoCreatePlanViewProps {
   onBack: () => void;
   onCreate: (newPlan: Partial<ActivityCardData>) => void;
+  onDraftChange?: (draft: {
+    sport: string;
+    title: string;
+    description: string;
+    date: string;
+    time: string;
+    location: string;
+    capacity: number;
+    level: string;
+    thirdHalfType: string;
+    thirdHalfTitle: string;
+    thirdHalfLocation: string;
+    image: string;
+    price: string;
+  }) => void;
 }
 
 const THIRD_HALF_TYPES = [
-  { id: 'cafe' as const, label: 'Café & Desayuno', icon: Coffee, defaultVenue: 'Cafetería cercana con terraza' },
+  { id: 'cafe' as const, label: 'Café & Desayuno', icon: Coffee, defaultVenue: 'Cafetería con terraza soleada' },
   { id: 'beer' as const, label: 'Caña & Tapeo', icon: Beer, defaultVenue: 'Terraza o bar del club' },
   { id: 'smoothie' as const, label: 'Smoothie Recovery', icon: Sparkles, defaultVenue: 'Juice & Recovery Bar' },
   { id: 'picnic' as const, label: 'Picnic al Aire Libre', icon: Sun, defaultVenue: 'Césped con sombra' },
+];
+
+const THIRD_HALF_NOTES_SUGGESTIONS = [
+  'Mesa en terraza soleada',
+  'Café de especialidad y desayuno',
+  'Cañas y picoteo para comentar los puntos',
+  'Batidos proteicos y fruta fresca',
+  'Charla distendida de 30-40 min tras entrenar',
+  'Cada asistente paga su consumición',
 ];
 
 const sportsList = CIMO_SPORTS_CATALOG;
@@ -100,121 +135,78 @@ const cityLocationsMap: Record<string, string[]> = {
     'Parque Grande José Antonio Labordeta',
     'Riberas del Ebro / Expo',
   ],
-  Granada: [
-    'Paseo del Salón / Río Genil',
-    'Parque García Lorca',
-    'Pádel Club Granada',
-    'Sierra Nevada / Cumbres Verdes',
-  ],
-  Santander: [
-    'Paseo Marítimo de El Sardinero',
-    'Península de La Magdalena',
-    'Parque de Las Llamas',
-  ],
-  Alicante: [
-    'Paseo de la Explanada / Puerto',
-    'Playa de San Juan',
-  ],
-  'San Sebastián / Donostia': [
-    'Paseo de La Concha',
-    'Monte Urgull / Kursaal',
-    'Playa de Zurriola',
-  ],
   Otra: [
     'Parque Principal',
     'Polideportivo Municipal',
-    'Plaza Mayor',
+    'Pistas del Club',
   ],
 };
 
 const quickDates = [
-  { label: 'Hoy', sub: '29 Ago', value: 'Hoy' },
-  { label: 'Mañana', sub: '30 Ago', value: 'Mañana' },
-  { label: 'Lunes', sub: '31 Ago', value: 'Lunes 31 Ago' },
-  { label: 'Martes', sub: '1 Sep', value: 'Martes 1 Sep' },
-  { label: 'Miércoles', sub: '2 Sep', value: 'Miércoles 2 Sep' },
-  { label: 'Jueves', sub: '3 Sep', value: 'Jueves 3 Sep' },
+  { label: 'Hoy', sub: 'Entreno hoy', value: 'Hoy' },
+  { label: 'Mañana', sub: 'Próximas 24h', value: 'Mañana' },
+  { label: 'Este finde', sub: 'Sáb o Dom', value: 'Este fin de semana' },
+  { label: 'Sábado', sub: 'Fin de semana', value: 'Sábado' },
+  { label: 'Domingo', sub: 'Fin de semana', value: 'Domingo' },
+  { label: 'Próx. semana', sub: 'Días laborables', value: 'Próxima semana' },
 ];
 
 const quickTimes = [
-  { label: '07:30', group: 'morning', icon: Sunrise },
-  { label: '08:30', group: 'morning', icon: Sunrise },
-  { label: '09:00', group: 'morning', icon: Sunrise },
-  { label: '14:00', group: 'noon', icon: Sun },
-  { label: '18:30', group: 'afternoon', icon: Sunset },
-  { label: '19:00', group: 'afternoon', icon: Sunset },
-  { label: '19:30', group: 'afternoon', icon: Sunset },
+  { label: '07:30', icon: Sunrise, desc: 'Madrugón' },
+  { label: '08:30', icon: Sunrise, desc: 'Mañana' },
+  { label: '10:00', icon: Sun, desc: 'Media mañana' },
+  { label: '14:00', icon: Sun, desc: 'Mediodía' },
+  { label: '18:30', icon: Sunset, desc: 'Tarde' },
+  { label: '19:30', icon: Sunset, desc: 'Afterwork' },
+  { label: '20:30', icon: Sunset, desc: 'Noche' },
 ];
 
 const availableHours = ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
-const descriptionTemplatesBySport: Record<string, { label: string; text: string }[]> = {
+const availableMinutes = ['00', '15', '30', '45'];
+
+const descriptionEnhancementChips: Record<string, string[]> = {
   hiking: [
-    {
-      label: 'Ruta circular panorámica',
-      text: 'Espectacular ruta circular por senderos naturales con paradas de reagrupación para fotos, hidratación y disfrutar de las vistas panorámicas de la sierra.',
-    },
-    {
-      label: 'Trekking de media montaña',
-      text: 'Trekking de media montaña a ritmo constante y ameno. Ideal para desconectar de la ciudad, respirar aire puro y compartir el camino con otros senderistas.',
-    },
-    {
-      label: 'Paseo suave & naturaleza',
-      text: 'Caminata relajada por sendas llanas y arboladas, enfocada en disfrutar del entorno natural sin prisas y conversar.',
-    },
+    'Ruta circular panorámica',
+    'Paradas de reagrupación y fotos',
+    'Ritmo constante y ameno',
+    'Vistas despejadas de la sierra',
+    'Desconexión total en la naturaleza',
   ],
   running: [
-    {
-      label: 'Rodaje conversacional',
-      text: 'Rodaje dinámico en grupo a ritmo cómodo conversacional por zonas llanas y arboladas, con estiramientos y buena charla al terminar.',
-    },
-    {
-      label: 'Tirada progresiva',
-      text: 'Tirada progresiva para sumar kilómetros en equipo con buen rollo, marcando ritmos regulares y motivación mutua durante todo el recorrido.',
-    },
-    {
-      label: 'Series y cambios de ritmo',
-      text: 'Sesión de calidad combinando calentamiento suave, series controladas en llano y vuelta a la calma en grupo.',
-    },
+    'Rodaje conversacional continuo',
+    'Tirada progresiva en grupo',
+    '5 min de estiramientos finales',
+    'Trazado llano y con sombra',
+    'Buen rollo y motivación mutua',
   ],
   padel: [
-    {
-      label: 'Partido amistoso 3 sets',
-      text: 'Partido amistoso de pádel mixto a 3 sets en pista cubierta. Buscaremos peloteo fluido, voleas y buen ambiente sin presiones competitivas.',
-    },
-    {
-      label: 'Pozo americano rotativo',
-      text: 'Pozo dinámico de pádel con rotación de parejas cada 20 minutos para jugar con y contra todos los asistentes en un ambiente muy social.',
-    },
-    {
-      label: 'Peloteo & entrenamiento técnico',
-      text: 'Sesión de peloteo continuo, práctica de globos, bajadas de pared y partidos cortos para afinar golpes.',
-    },
+    'Partido amistoso a 3 sets',
+    'Peloteo fluido y voleas',
+    'Rotación de parejas dinámica',
+    'Ambiente social sin presión',
+    'Pista de cristal climatizada',
   ],
   cycling: [
-    {
-      label: 'Salida en grupeta',
-      text: 'Salida en grupeta por carreteras secundarias tranquilas con relevos suaves, ritmo continuo y parada en fuente a mitad de ruta.',
-    },
-    {
-      label: 'Ruta gravel / pista',
-      text: 'Ruta mixta de gravel por pistas de tierra y caminos rurales a ritmo alegre pero accesible para todos.',
-    },
+    'Salida en grupeta con relevos suaves',
+    'Carreteras secundarias tranquilas',
+    'Parada en fuente intermedia',
+    'Ritmo constante y seguro',
   ],
   crossfit: [
-    {
-      label: 'WOD en equipo',
-      text: 'Sesión intensa de entrenamiento funcional en equipo, con calentamiento guiado, bloques por estaciones y estiramientos finales.',
-    },
+    'WOD en equipo por estaciones',
+    'Calentamiento articular guiado',
+    'Adaptable a cualquier condición física',
+    'Estiramientos y vuelta a la calma',
   ],
 };
 
-const availableMinutes = ['00', '15', '30', '45'];
-
-export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, onCreate }) => {
+export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
+  onBack,
+  onCreate,
+  onDraftChange,
+}) => {
   const [sport, setSport] = useState('running');
   const [selectedCity, setSelectedCity] = useState('Madrid');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [location, setLocation] = useState('Parque del Retiro (Puerta de Alcalá)');
   const [date, setDate] = useState('Hoy');
   const [time, setTime] = useState('19:30');
@@ -222,7 +214,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [maxMembers, setMaxMembers] = useState(5);
   const [instructions, setInstructions] = useState('');
   const [selectedGearIds, setSelectedGearIds] = useState<string[]>([
-    'footwear', 'water', 'windbreaker', 'snack', 'sun', 'racket', 'shoes', 'balls', 'bike', 'helmet', 'tools', 'apparel', 'energy'
+    'footwear', 'water', 'windbreaker', 'snack', 'sun', 'racket', 'shoes', 'balls', 'bike', 'helmet', 'tools', 'apparel', 'energy',
   ]);
 
   // Optional Third Half (Tercer Tiempo) State
@@ -230,6 +222,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [thirdHalfType, setThirdHalfType] = useState<'cafe' | 'beer' | 'smoothie' | 'picnic'>('cafe');
   const [thirdHalfVenue, setThirdHalfVenue] = useState('Café Murillo (Retiro)');
   const [thirdHalfNotes, setThirdHalfNotes] = useState('Nos sentaremos 30 min a tomar un café, rehidratarnos y charlar tras el entreno.');
+  const [isThirdHalfDropdownOpen, setIsThirdHalfDropdownOpen] = useState(false);
+
+  // Final Step 9: Title, Smart Description & Real Photo Cover State
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [selectedCoverUrl, setSelectedCoverUrl] = useState('');
+  const [customImageUrl, setCustomImageUrl] = useState('');
+  const [isCustomImageMode, setIsCustomImageMode] = useState(false);
 
   // Custom Visual Pickers State
   const [isCityComboboxOpen, setIsCityComboboxOpen] = useState(false);
@@ -237,15 +237,22 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [isCustomCalendarOpen, setIsCustomCalendarOpen] = useState(false);
   const [isCustomTimeOpen, setIsCustomTimeOpen] = useState(false);
   const [customCoords, setCustomCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const locationContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const locationContainerRef = useRef<HTMLDivElement>(null);
+  const thirdHalfContainerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { results: liveResults, isLoading: isSearchingPlaces } = useSpainLocationSearch(location, selectedCity);
+  const { results: liveThirdHalfResults, isLoading: isSearchingThirdHalf } = useSpainLocationSearch(thirdHalfVenue, selectedCity);
 
-  // Click outside listener for location dropdown
-  React.useEffect(() => {
+  // Click outside listener for dropdowns
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (locationContainerRef.current && !locationContainerRef.current.contains(e.target as Node)) {
         setIsLocationDropdownOpen(false);
+      }
+      if (thirdHalfContainerRef.current && !thirdHalfContainerRef.current.contains(e.target as Node)) {
+        setIsThirdHalfDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -259,14 +266,146 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const selectedSportObj = sportsList.find((s) => s.id === sport) ?? sportsList[0];
   const activePaces = getSportPaces(sport);
   const currentPace = activePaces[selectedPaceIndex] ?? activePaces[0];
+  const realPhotos = useMemo(() => getSportRealPhotos(sport), [sport]);
 
-  const finalTitle = title.trim() || `${selectedSportObj.label} en ${location.split('(')[0].trim()}`;
+  // Set default photo cover when sport changes if not manually custom
+  useEffect(() => {
+    if (!isCustomImageMode && realPhotos.length > 0) {
+      setSelectedCoverUrl(realPhotos[0].url);
+    }
+  }, [sport, realPhotos, isCustomImageMode]);
+
+  const cleanLocationName = useMemo(() => {
+    return location.split('(')[0].replace(/,\s*[A-Za-zÀ-ÿ\s]+$/, '').trim() || location.trim();
+  }, [location]);
+
+  // Smart Generated Title Options
+  const titleVariants = useMemo(() => {
+    const loc = cleanLocationName;
+    const sportName = selectedSportObj.label;
+    const paceLabel = currentPace.metric ? `(${currentPace.metric})` : '';
+
+    return {
+      dynamic: `${sportName} ${paceLabel} • ${loc}`.replace(/\s+/g, ' ').trim(),
+      social: `Sesión en Grupo ${hasThirdHalf ? '& ' + (thirdHalfType === 'cafe' ? 'Café' : thirdHalfType === 'beer' ? 'Cañas' : 'Tercer Tiempo') : ''} en ${loc}`.replace(/\s+/g, ' ').trim(),
+      technical: `Entrenamiento ${currentPace.title} • ${loc}`.replace(/\s+/g, ' ').trim(),
+    };
+  }, [cleanLocationName, selectedSportObj, currentPace, hasThirdHalf, thirdHalfType]);
+
+  // Auto-generate smart description based on all inputs
+  const autoGeneratedDescription = useMemo(() => {
+    const sportName = selectedSportObj.label;
+    const loc = cleanLocationName;
+    const paceTitle = currentPace.title;
+    const paceMetric = currentPace.metric;
+    const thirdHalfText = hasThirdHalf
+      ? ` Al terminar, nos quedaremos en ${thirdHalfVenue.split('(')[0].trim() || 'una terraza cercana'} para compartir el tercer tiempo.`
+      : '';
+
+    if (sport === 'hiking') {
+      return `Ruta circular de senderismo por la zona de ${loc}. Mantendremos un ritmo de ${paceTitle} (${paceMetric}) con paradas para fotos y reagrupación.${thirdHalfText}`;
+    }
+    if (sport === 'padel') {
+      return `Partido amistoso de pádel nivel ${paceTitle} (${paceMetric}) en ${loc}. Peloteo continuo, buen ambiente y puntos disputados.${thirdHalfText}`;
+    }
+    if (sport === 'cycling') {
+      return `Salida en grupeta ciclista saliendo de ${loc}. Rodaremos a ritmo ${paceTitle} con relevos suaves y seguridad en todo el trayecto.${thirdHalfText}`;
+    }
+    return `Rodaje dinámico en grupo por ${loc}. Mantendremos un ritmo ${paceTitle} (${paceMetric}), ideal para sumar kilómetros con buena energía.${thirdHalfText}`;
+  }, [selectedSportObj, cleanLocationName, currentPace, hasThirdHalf, thirdHalfVenue, sport]);
+
+  // Effective title and image
+  const effectiveTitle = title.trim() || titleVariants.dynamic;
+  const effectiveDescription = description.trim() || autoGeneratedDescription;
+  const effectiveImage = isCustomImageMode && customImageUrl ? customImageUrl : (selectedCoverUrl || realPhotos[0]?.url || selectedSportObj.image);
+
+  // Sync draft state with RightSupportZone Live Preview
+  useEffect(() => {
+    if (onDraftChange) {
+      onDraftChange({
+        sport: selectedSportObj.label,
+        title: effectiveTitle,
+        description: effectiveDescription,
+        date,
+        time,
+        location,
+        capacity: maxMembers,
+        level: `${currentPace.title} (${currentPace.metric})`,
+        thirdHalfType,
+        thirdHalfTitle: hasThirdHalf
+          ? (THIRD_HALF_TYPES.find((t) => t.id === thirdHalfType)?.label ?? 'Tercer Tiempo')
+          : 'Sin tercer tiempo',
+        thirdHalfLocation: hasThirdHalf ? thirdHalfVenue : '',
+        image: effectiveImage,
+        price: 'Gratis',
+      });
+    }
+  }, [
+    effectiveTitle,
+    effectiveDescription,
+    effectiveImage,
+    sport,
+    selectedSportObj,
+    date,
+    time,
+    location,
+    maxMembers,
+    currentPace,
+    hasThirdHalf,
+    thirdHalfType,
+    thirdHalfVenue,
+    onDraftChange,
+  ]);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        if (result) {
+          setCustomImageUrl(result);
+          setIsCustomImageMode(true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddDescriptionChip = (chipText: string) => {
+    if (description.includes(chipText)) {
+      const cleaned = description
+        .replace(new RegExp(`\\.?\\s*${chipText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.?`, 'g'), '')
+        .replace(/\s+/g, ' ')
+        .replace(/^\s*\.\s*/, '')
+        .trim();
+      setDescription(cleaned);
+    } else {
+      const current = description.trim() || autoGeneratedDescription;
+      const updated = current ? `${current}. ${chipText}` : chipText;
+      setDescription(updated.slice(0, 500));
+    }
+  };
+
+  const handleAddThirdHalfChip = (chipText: string) => {
+    if (thirdHalfNotes.includes(chipText)) {
+      const cleaned = thirdHalfNotes
+        .replace(new RegExp(`\\.?\\s*${chipText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.?`, 'g'), '')
+        .replace(/\s+/g, ' ')
+        .replace(/^\s*\.\s*/, '')
+        .trim();
+      setThirdHalfNotes(cleaned);
+    } else {
+      const updated = thirdHalfNotes.trim() ? `${thirdHalfNotes.trim()}. ${chipText}` : chipText;
+      setThirdHalfNotes(updated.slice(0, 200));
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     onCreate({
-      title: finalTitle,
+      title: effectiveTitle,
       sport,
       location,
       date,
@@ -274,8 +413,8 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
       level: currentPace.level,
       paceOrDetails: `${currentPace.title} • ${currentPace.metric}`,
       maxMembers,
-      image: selectedSportObj.image,
-      description: description.trim() || undefined,
+      image: effectiveImage,
+      description: effectiveDescription,
       instructions: instructions.trim() || undefined,
       whatToBring: getSportGear(sport).filter((g) => selectedGearIds.includes(g.id)),
       thirdHalf: hasThirdHalf
@@ -852,94 +991,24 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           )}
         </div>
 
-        {/* ⚡ Island 4: Nivel & Ritmo Deportivo */}
+        {/* ⚡ Island 4: Nivel & Ritmo Deportivo (Paso 5) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs">
           <CimoSportPaceSelector
             sport={sport}
             selectedIndex={selectedPaceIndex}
             onSelectIndex={setSelectedPaceIndex}
+            stepNumber={5}
           />
         </div>
 
-        {/* 📖 Island 5: Título & Descripción de la Experiencia (Paso 6) */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
-            <div className="flex items-center gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                6
-              </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-                Título & Descripción del Entrenamiento
-              </span>
-            </div>
-            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
-              Personalizable
-            </span>
-          </div>
-
-          {/* Title input */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
-              Título de la convocatoria
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={`Ej: ${selectedSportObj.label} en ${location.split('(')[0].trim()}`}
-              className="w-full px-4 py-3 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-sm font-black text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
-            />
-          </div>
-
-          {/* Description input with character counter and templates */}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
-                ¿De qué trata tu sesión? <span className="text-[#1F4E5F]/50 font-medium lowercase">(describe la experiencia)</span>
-              </label>
-              <span className="text-[11px] font-bold text-[#1F4E5F]/50">
-                {description.length}/500
-              </span>
-            </div>
-
-            {/* Quick Inspiration Templates */}
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
-                Inspiración & Plantillas Rápidas (Haz clic para rellenar o editar):
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {(descriptionTemplatesBySport[sport] ?? descriptionTemplatesBySport.running).map((tmpl) => (
-                  <button
-                    key={tmpl.label}
-                    type="button"
-                    onClick={() => setDescription(tmpl.text)}
-                    className="px-3 py-1.5 rounded-xl border border-[#7FB77E]/30 bg-[#7FB77E]/10 hover:bg-[#7FB77E]/20 text-[#1F4E5F] text-xs font-black transition-all cursor-pointer flex items-center gap-1.5"
-                  >
-                    <Sparkles className="w-3 h-3 text-[#7FB77E]" />
-                    <span>{tmpl.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value.slice(0, 500))}
-              rows={3}
-              placeholder={`Describe brevemente el recorrido, dinámicas del grupo o ambiente del entreno de ${selectedSportObj.label}...`}
-              className="w-full px-4 py-3 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs sm:text-sm font-medium text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white resize-none shadow-2xs leading-relaxed"
-            />
-          </div>
-        </div>
-
-        {/* 📝 Island 6: Instrucciones del Capitán & Material Recomendado (Paso 7) */}
+        {/* 📝 Island 5: Instrucciones del Capitán & Material Recomendado (Paso 6) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
           {/* Parte A: Instrucciones Escritas del Capitán */}
           <CimoCaptainInstructionsField
             value={instructions}
             onChange={setInstructions}
             sport={sport}
-            stepNumber={7}
+            stepNumber={6}
           />
 
           {/* Parte B: Material Recomendado (Checklist Amplio y Legible) */}
@@ -1030,12 +1099,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* 👥 Island 7: Cupo de Plazas (Paso 8) */}
+        {/* 👥 Island 6: Cupo de Plazas (Paso 7) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                8
+                7
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Cupo máximo de personas
@@ -1084,40 +1153,17 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* ☕ Island 8: Tercer Tiempo Post-Entreno (Paso 9) */}
+        {/* ☕ Island 7: Tercer Tiempo Post-Entreno con Búsqueda GPS (Paso 8) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                9
+                8
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Tercer Tiempo Post-Entreno
               </span>
             </div>
-            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
-              Opcional
-            </span>
-          </div>
-
-          {/* Toggle Switch */}
-          <div className="flex items-center justify-between p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
-                <Coffee className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-xs font-black text-[#1F4E5F] block">
-                  ¿Habrá plan social tras el entreno?
-                </span>
-                <span className="text-[11px] text-[#1F4E5F]/70 font-medium">
-                  {hasThirdHalf
-                    ? '¡Genial! Añade el local o plan para tomar algo y charlar juntos.'
-                    : 'Entrenamiento puro 100% deportivo (sin sobremesa posterior).'}
-                </span>
-              </div>
-            </div>
-
             <button
               type="button"
               onClick={() => setHasThirdHalf(!hasThirdHalf)}
@@ -1130,7 +1176,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
 
           {hasThirdHalf && (
-            <div className="flex flex-col gap-4 pt-2 animate-in fade-in zoom-in-98 duration-150">
+            <div className="flex flex-col gap-5 animate-in fade-in zoom-in-98 duration-150">
               {/* Type selector pills */}
               <div className="flex flex-col gap-2">
                 <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
@@ -1145,7 +1191,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                         type="button"
                         onClick={() => {
                           setThirdHalfType(tht.id);
-                          if (!thirdHalfVenue || thirdHalfVenue === 'Cafetería cercana con terraza') {
+                          const citySpots = getThirdHalfSpots(selectedCity, tht.id);
+                          if (citySpots && citySpots.length > 0) {
+                            setThirdHalfVenue(citySpots[0]);
+                          } else {
                             setThirdHalfVenue(tht.defaultVenue);
                           }
                         }}
@@ -1165,29 +1214,139 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
                 </div>
               </div>
 
-              {/* Venue / Local */}
-              <div className="flex flex-col gap-1.5">
+              {/* Local / Terraza con buscador Maps GPS */}
+              <div className="flex flex-col gap-1.5 relative" ref={thirdHalfContainerRef}>
                 <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
-                  Nombre del local, cafetería o punto social
+                  Lugar o local previsto en {selectedCity}
                 </label>
-                <input
-                  type="text"
-                  value={thirdHalfVenue}
-                  onChange={(e) => setThirdHalfVenue(e.target.value)}
-                  placeholder="Ej: Café Murillo, Terraza Club Chamartín, Raw Bar..."
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
-                />
+                <div className="relative flex items-center">
+                  <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={thirdHalfVenue}
+                    onFocus={() => setIsThirdHalfDropdownOpen(true)}
+                    onChange={(e) => {
+                      setThirdHalfVenue(e.target.value);
+                      setIsThirdHalfDropdownOpen(true);
+                    }}
+                    placeholder="Ej: Café Murillo, Terraza Florida Park, Honest Greens..."
+                    className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-black text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                  />
+                  {thirdHalfVenue && (
+                    <button
+                      type="button"
+                      onClick={() => setThirdHalfVenue('')}
+                      className="p-1 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Third Half Live Search Dropdown */}
+                {isThirdHalfDropdownOpen && (() => {
+                  const spots = getThirdHalfSpots(selectedCity, thirdHalfType);
+                  return (
+                    <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2.5 z-30 max-h-60 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
+                      {liveThirdHalfResults.length > 0 && (
+                        <div className="flex flex-col gap-1 pb-1">
+                          {liveThirdHalfResults.map((place) => (
+                            <button
+                              key={`${place.name}-${place.lat}-${place.lng}`}
+                              type="button"
+                              onClick={() => {
+                                setThirdHalfVenue(place.name);
+                                setIsThirdHalfDropdownOpen(false);
+                              }}
+                              className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#F7F7F7] text-[#1F4E5F]"
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <MapPin className="w-4 h-4 text-[#7FB77E] shrink-0" />
+                                <div className="truncate">
+                                  <span className="text-xs font-black block truncate leading-tight">{place.name}</span>
+                                  <span className="text-[10px] text-[#1F4E5F]/50 block truncate">{place.address}</span>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {isSearchingThirdHalf && (
+                        <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/60 flex items-center gap-2 animate-pulse">
+                          <div className="w-3 h-3 rounded-full border-2 border-[#7FB77E] border-t-transparent animate-spin" />
+                          <span>Buscando cafeterías y terrazas...</span>
+                        </div>
+                      )}
+
+                      <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50">
+                        Sitios recomendados en {selectedCity}
+                      </div>
+
+                      {spots.map((spot) => {
+                        const isSelected = thirdHalfVenue === spot;
+                        return (
+                          <button
+                            key={spot}
+                            type="button"
+                            onClick={() => {
+                              setThirdHalfVenue(spot);
+                              setIsThirdHalfDropdownOpen(false);
+                            }}
+                            className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
+                              isSelected ? 'bg-[#1F4E5F] text-white' : 'hover:bg-[#F7F7F7] text-[#1F4E5F]'
+                            }`}
+                          >
+                            <span className="truncate">{spot}</span>
+                            {isSelected && <Check className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
               </div>
 
-              {/* Notes */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
-                  Nota breve sobre el tercer tiempo
-                </label>
+              {/* Notes Contextual with standardized '+' chips */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/70">
+                    Nota breve sobre el tercer tiempo
+                  </label>
+                  <span className="text-[10px] font-bold text-[#1F4E5F]/40">
+                    {thirdHalfNotes.length}/200
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {THIRD_HALF_NOTES_SUGGESTIONS.map((sug) => {
+                    const isAdded = thirdHalfNotes.includes(sug);
+                    return (
+                      <button
+                        key={sug}
+                        type="button"
+                        onClick={() => handleAddThirdHalfChip(sug)}
+                        className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          isAdded
+                            ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] font-black shadow-2xs'
+                            : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                        }`}
+                      >
+                        {isAdded ? (
+                          <Check className="w-3.5 h-3.5 text-[#7FB77E] stroke-[3]" />
+                        ) : (
+                          <Plus className="w-3.5 h-3.5 text-[#7FB77E]" />
+                        )}
+                        <span>{sug}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
                 <input
                   type="text"
                   value={thirdHalfNotes}
-                  onChange={(e) => setThirdHalfNotes(e.target.value)}
+                  onChange={(e) => setThirdHalfNotes(e.target.value.slice(0, 200))}
                   placeholder="Ej: Nos quedaremos 30 min a desayunar, rehidratarnos y charlar."
                   className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
                 />
@@ -1196,118 +1355,269 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           )}
         </div>
 
-        {/* 🌟 Island 8: Vista Previa en Vivo & Publicación */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+        {/* 🌟 Island 8: Estudio de Portada, Título & Descripción Inteligente (Paso 9 - Cierre) */}
+        <div className="bg-white border-2 border-[#7FB77E]/40 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-[#7FB77E] via-[#1F4E5F] to-[#7FB77E]" />
+
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
-            <div className="flex items-center gap-2.5 text-xs font-black uppercase tracking-wider text-[#7FB77E]">
-              <Eye className="w-4 h-4" />
-              <span>Vista previa en vivo de tu tarjeta en el feed</span>
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+                9
+              </span>
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+                Estudio de Portada, Título & Descripción Inteligente
+              </span>
             </div>
-            <span className="text-[10px] font-bold text-[#1F4E5F]/50 hidden sm:inline-block">
-              Así lo descubrirán los demás deportistas
+            <span className="text-[11px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-[#7FB77E]" />
+              <span>Paso Final</span>
             </span>
           </div>
 
-          <div className="w-full max-w-xl mx-auto bg-white rounded-3xl overflow-hidden border border-[#1F4E5F]/15 shadow-md hover:shadow-lg transition-all">
-            {/* Image Header with Gradient & Tags */}
-            <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#1F4E5F]/5">
-              <img src={selectedSportObj.image} alt={finalTitle} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1F4E5F]/95 via-[#1F4E5F]/30 to-transparent" />
+          {/* 1. Título Inteligente con 3 Variantes Rápidas */}
+          <div className="flex flex-col gap-2.5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
+                Título de la Convocatoria
+              </label>
+              <button
+                type="button"
+                onClick={() => setTitle(titleVariants.dynamic)}
+                className="text-[11px] font-black text-[#7FB77E] hover:text-[#6ea26d] flex items-center gap-1 cursor-pointer"
+              >
+                <RefreshCw className="w-3 h-3" />
+                <span>Restaurar sugerencia</span>
+              </button>
+            </div>
 
-              {/* Floating Top Badges */}
-              <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="px-3 py-1 rounded-full font-black text-xs bg-white text-[#1F4E5F] capitalize shadow-xs">
-                    {sport}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-[#7FB77E] text-white shadow-xs">
-                    {currentPace.title} • {currentPace.metric}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#1F4E5F]/80 text-white backdrop-blur-xs">
-                    {currentPace.level}
-                  </span>
-                </div>
-              </div>
+            <p className="text-xs text-[#1F4E5F]/60 font-medium">
+              Hemos sintetizado 3 propuestas automáticas en base a lo que configuraste. Haz clic en una para aplicarla o escribe la tuya:
+            </p>
 
-              {/* Bottom Card Title & Location */}
-              <div className="absolute bottom-3.5 left-4 right-4 text-white">
-                <h3 className="font-black text-base sm:text-lg leading-tight line-clamp-1 drop-shadow-xs">
-                  {finalTitle}
-                </h3>
-                <div className="flex items-center gap-1.5 text-xs text-white/90 mt-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
-                  <span className="truncate">{location} ({selectedCity})</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => setTitle(titleVariants.dynamic)}
+                className={`p-3 rounded-2xl border text-left text-xs font-black transition-all cursor-pointer flex flex-col gap-1 ${
+                  effectiveTitle === titleVariants.dynamic
+                    ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] ring-2 ring-[#7FB77E]/30'
+                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                }`}
+              >
+                <div className="flex items-center justify-between text-[10px] font-black uppercase text-[#7FB77E]">
+                  <span>Opción Dinámica</span>
+                  <Plus className="w-3 h-3 text-[#7FB77E]" />
                 </div>
+                <span className="line-clamp-2 leading-snug">{titleVariants.dynamic}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTitle(titleVariants.social)}
+                className={`p-3 rounded-2xl border text-left text-xs font-black transition-all cursor-pointer flex flex-col gap-1 ${
+                  effectiveTitle === titleVariants.social
+                    ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] ring-2 ring-[#7FB77E]/30'
+                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                }`}
+              >
+                <div className="flex items-center justify-between text-[10px] font-black uppercase text-[#7FB77E]">
+                  <span>Opción Social</span>
+                  <Plus className="w-3 h-3 text-[#7FB77E]" />
+                </div>
+                <span className="line-clamp-2 leading-snug">{titleVariants.social}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTitle(titleVariants.technical)}
+                className={`p-3 rounded-2xl border text-left text-xs font-black transition-all cursor-pointer flex flex-col gap-1 ${
+                  effectiveTitle === titleVariants.technical
+                    ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] ring-2 ring-[#7FB77E]/30'
+                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                }`}
+              >
+                <div className="flex items-center justify-between text-[10px] font-black uppercase text-[#7FB77E]">
+                  <span>Opción Técnica</span>
+                  <Plus className="w-3 h-3 text-[#7FB77E]" />
+                </div>
+                <span className="line-clamp-2 leading-snug">{titleVariants.technical}</span>
+              </button>
+            </div>
+
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder={titleVariants.dynamic}
+              className="w-full px-4 py-3 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-sm font-black text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs mt-1"
+            />
+          </div>
+
+          {/* 2. Descripción Inteligente con Chips Estandarizados '+' */}
+          <div className="flex flex-col gap-2.5 pt-4 border-t border-[#1F4E5F]/10">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
+                ¿De qué trata tu sesión? (Descripción Inteligente)
+              </label>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setDescription(autoGeneratedDescription)}
+                  className="text-[11px] font-black text-[#7FB77E] hover:text-[#6ea26d] flex items-center gap-1 cursor-pointer"
+                >
+                  <Wand2 className="w-3 h-3 text-[#7FB77E]" />
+                  <span>Autogenerar</span>
+                </button>
+                <span className="text-[11px] font-bold text-[#1F4E5F]/40">
+                  {effectiveDescription.length}/500
+                </span>
               </div>
             </div>
 
-            {/* Content & Details Footer */}
-            <div className="p-4 flex flex-col gap-3">
-              {/* Optional Captain Instructions Preview */}
-              {instructions.trim() && (
-                <div className="p-2.5 bg-[#7FB77E]/10 border border-[#7FB77E]/20 rounded-xl text-xs text-[#1F4E5F] font-bold flex items-start gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-[#7FB77E] shrink-0 mt-0.5" />
-                  <p className="line-clamp-2">
-                    <span className="font-black">Capitán: </span>"{instructions.trim()}"
-                  </p>
-                </div>
-              )}
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+              Añade detalles con 1 clic (estandarizados con +):
+            </span>
 
-              {/* Optional Third Half Preview */}
-              {hasThirdHalf && (
-                <div className="p-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-900 font-bold flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 truncate">
-                    <span className="text-base">
-                      {THIRD_HALF_TYPES.find((t) => t.id === thirdHalfType)?.emoji ?? '☕'}
-                    </span>
-                    <span className="truncate">
-                      <strong>Tercer Tiempo:</strong> {thirdHalfVenue || 'Cafetería cercana'}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-black text-amber-800 bg-amber-500/20 px-2 py-0.5 rounded-full shrink-0">
-                    Social
-                  </span>
-                </div>
-              )}
+            <div className="flex flex-wrap gap-1.5">
+              {(descriptionEnhancementChips[sport] ?? descriptionEnhancementChips.running).map((chip) => {
+                const isAdded = description.includes(chip);
+                return (
+                  <button
+                    key={chip}
+                    type="button"
+                    onClick={() => handleAddDescriptionChip(chip)}
+                    className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isAdded
+                        ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] font-black shadow-2xs'
+                        : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                    }`}
+                  >
+                    {isAdded ? (
+                      <Check className="w-3.5 h-3.5 text-[#7FB77E] stroke-[3]" />
+                    ) : (
+                      <Plus className="w-3.5 h-3.5 text-[#7FB77E]" />
+                    )}
+                    <span>{chip}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-              {/* Date, Time and Crew Spot Counters */}
-              <div className="flex items-center justify-between text-xs text-[#1F4E5F] pt-1">
-                <div className="flex items-center gap-2 font-black">
-                  <span className="px-2.5 py-1 rounded-lg bg-[#F7F7F7] border border-[#1F4E5F]/10">
-                    📅 {date}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#F7F7F7] border border-[#1F4E5F]/10">
-                    ⏰ {time} h
-                  </span>
-                </div>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value.slice(0, 500))}
+              rows={3}
+              placeholder={autoGeneratedDescription}
+              className="w-full px-4 py-3 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs sm:text-sm font-medium text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white resize-none shadow-2xs leading-relaxed"
+            />
+          </div>
 
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-[#1F4E5F] text-white text-[10px] font-black flex items-center justify-center shadow-xs">
-                    AR
-                  </div>
-                  <span className="text-xs font-black text-[#7FB77E]">
-                    1/{maxMembers} plazas
-                  </span>
-                </div>
+          {/* 3. Selector de Foto Real de Portada & Subida Personalizada */}
+          <div className="flex flex-col gap-3 pt-4 border-t border-[#1F4E5F]/10">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
+                <Camera className="w-4 h-4 text-[#7FB77E]" />
+                <span>Foto Real de Portada ({selectedSportObj.label})</span>
+              </label>
+              <span className="text-[10px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                Fotografías Reales
+              </span>
+            </div>
+
+            <p className="text-xs text-[#1F4E5F]/60 font-medium">
+              Elige una fotografía de alta calidad de nuestra galería o sube tu propia imagen:
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {realPhotos.map((photo) => {
+                const isSelected = !isCustomImageMode && selectedCoverUrl === photo.url;
+                return (
+                  <button
+                    key={photo.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCoverUrl(photo.url);
+                      setIsCustomImageMode(false);
+                    }}
+                    className={`relative rounded-2xl overflow-hidden aspect-[16/10] border-2 transition-all cursor-pointer group text-left ${
+                      isSelected
+                        ? 'border-[#7FB77E] ring-4 ring-[#7FB77E]/20 shadow-md scale-[1.02]'
+                        : 'border-[#1F4E5F]/15 opacity-75 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={photo.url} alt={photo.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                    <div className="absolute bottom-2 left-2 right-2 flex flex-col text-white">
+                      <span className="text-[11px] font-black leading-tight line-clamp-1">{photo.title}</span>
+                      <span className="text-[9px] text-[#7FB77E] font-bold leading-tight line-clamp-1">{photo.locationTag}</span>
+                    </div>
+
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 bg-[#7FB77E] text-white p-1 rounded-full shadow-xs">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Custom upload or custom URL */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className={`w-full sm:w-auto px-4 py-2.5 rounded-xl border text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                  isCustomImageMode && customImageUrl
+                    ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F]'
+                    : 'border-dashed border-[#1F4E5F]/30 hover:border-[#7FB77E] bg-[#F7F7F7] text-[#1F4E5F]'
+                }`}
+              >
+                <Upload className="w-3.5 h-3.5 text-[#7FB77E]" />
+                <span>{isCustomImageMode && customImageUrl ? 'Foto subida correctamente' : 'Subir foto propia desde el dispositivo'}</span>
+              </button>
+
+              <span className="text-xs font-bold text-[#1F4E5F]/40 hidden sm:inline">o</span>
+
+              <div className="relative flex-1 w-full">
+                <input
+                  type="text"
+                  value={isCustomImageMode ? customImageUrl : ''}
+                  onChange={(e) => {
+                    setCustomImageUrl(e.target.value);
+                    setIsCustomImageMode(Boolean(e.target.value.trim()));
+                  }}
+                  placeholder="Pegar URL de foto personalizada..."
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 text-xs font-medium text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white"
+                />
               </div>
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#1F4E5F]/10">
+          {/* 4. Action Buttons */}
+          <div className="flex items-center justify-between pt-6 border-t border-[#1F4E5F]/10">
             <button
               type="button"
               onClick={onBack}
-              className="px-6 py-3 rounded-full text-xs font-extrabold text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors cursor-pointer"
+              className="px-5 py-3 rounded-2xl border border-[#1F4E5F]/20 text-xs font-black text-[#1F4E5F] hover:bg-[#F7F7F7] transition-all cursor-pointer"
             >
               Cancelar
             </button>
+
             <button
               type="submit"
-              className="px-8 py-3.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer active:scale-95"
+              className="px-8 py-3.5 rounded-2xl bg-[#1F4E5F] hover:bg-[#163a47] text-white font-black text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer active:scale-98"
             >
-              <Plus className="w-4 h-4 stroke-[3]" />
-              <span>Publicar Entrenamiento</span>
+              <Sparkles className="w-4 h-4 text-[#7FB77E]" />
+              <span>Publicar Convocatoria Grupal</span>
             </button>
           </div>
         </div>
