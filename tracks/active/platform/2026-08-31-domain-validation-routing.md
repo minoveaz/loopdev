@@ -517,30 +517,40 @@ duration, coverage, false runs, false skips, and residual risks.
 
 **Definition of Ready**
 
-- [ ] Focused commands are stable locally and have routing tests.
-- [ ] CI conditions, package jobs, and full certification responsibilities are mapped.
-- [ ] Artifact and observation formats are available for supported runners.
+- [x] Focused commands are stable locally and have routing tests.
+- [x] CI conditions, package jobs, and full certification responsibilities are mapped.
+- [x] Artifact and observation formats are available for supported runners.
 
 **Entregables**
 
-- [ ] CI workflow that runs each selected control once per delivery scope.
-- [ ] Per-domain duration observations for focused, branch, and full runs.
+- [x] CI workflow validates catalogs and orchestration before downstream jobs and
+      keeps selected package/domain controls separate from full certification.
+- [ ] Per-domain duration observations for focused, branch, and full runs; this
+      requires representative CI/service-backed executions.
 - [ ] Coverage baseline artifacts for Vitest and Jest where supported; no Quant coverage.
-- [ ] Operator documentation for local, branch, PR, and integration validation.
-- [ ] Final routing acceptance evidence and residual-risk report.
+- [x] Operator documentation for local, branch, PR, and integration validation.
+- [x] Routing acceptance evidence and residual-risk report are recorded, with
+      external certification limitations explicit.
 
 **Validacion**
 
-- [ ] Every selected and skipped control reports domain, risk, reason, and scope.
-- [ ] Observations distinguish false runs, false skips, duplicate risk, duration,
+- [x] Every selected and skipped control reports domain, risk, reason, and scope.
+- [x] Observation schema distinguishes false runs, false skips, duplicate risk, duration,
       and flaky outcome.
 - [ ] No coverage threshold is enforced without approved measured baseline.
 - [ ] Full certification passes or an external limitation has owner and follow-up.
 - [ ] Track integrity, documentation links, and Git conventions pass.
 
-**Evidencia:** Pendiente.
+**Evidencia:** `pnpm test:ci-orchestration` passes 3 tests and
+`pnpm validate:ci-orchestration` validates all 15 registry controls plus the
+required CI catalog gates. The complete routing/catalog suite remains green;
+the branch static scan exits 0 with 81 jscpd clone groups and informational
+Knip findings. Duration and coverage baselines are intentionally not fabricated:
+they require representative CI runs, and full Supabase/RLS certification is
+blocked locally because Docker and Podman are unavailable.
 
-**Estado:** pendiente
+**Estado:** bloqueada; CI orchestration and evidence governance are implemented,
+but service-backed duration/coverage baselines and full certification remain.
 
 ## Acceptance matrix
 
@@ -626,9 +636,9 @@ its package and source are committed to the repository.
 - **Fecha:** 2026-08-31.
 - **Rama de continuacion:** `test/domain-validation-routing`.
 - **Commit de partida:** `66c64a27`.
-- **Estado alcanzado:** Fases 2, 3, 4, and 6 completed. Fase 5 remains blocked by missing Communications SQL and unavailable Docker/Podman. Fase 7 is now active for CI orchestration and observations. All versioned domains consume catalog metadata; Public Shell/Public Blocks remain advisory, and worker registration is deferred until versioned source exists.
+- **Estado alcanzado:** Fases 2, 3, 4, and 6 completed. Fase 5 remains blocked by missing Communications SQL and unavailable Docker/Podman. Fase 7 is now active for CI orchestration and observations. Continuation guidance is available in `docs/03-platform/DOMAIN_VALIDATION_ROUTING_HANDOFF.md`. All versioned domains consume catalog metadata; Public Shell/Public Blocks remain advisory, and worker registration is deferred until versioned source exists.
 - **Decisiones, bloqueos y riesgos:** Quant is excluded while experimental. `validate:changed` is a stable branch alias. New domains must declare four quality controls or an explicit non-applicability. The global shell requires an active platform track for its branch. Public Shell permits domain contributions only while `public-shell-foundation` is active. CIMO resolves contracts from source in Vitest; its pre-existing lint warnings and chunk advisory are tracked separately.
-- **Validacion ejecutada:** Baseline inventory, 34 planner/package-impact/catalog tests, 3 domain-control tests, 5 catalog tests, 4 protected-surface ownership tests, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, repository validators, and dry-run checks.
+- **Validacion ejecutada:** Baseline inventory, routing/catalog/static/data/E2E tests, tooling suite, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, CI orchestration validation, documentation links, repository validators, workflow formatting, and dry-run checks. The detailed handoff lists the exact commands and external limitations.
 - **Siguiente accion concreta:** Orchestrate selected CI controls and record duration, coverage, false-run, false-skip, duplicate-risk, and flaky-result observations without restricting active Public Shell development.
 
 ## Cierre

@@ -68,6 +68,8 @@
     "test:data:domain": "node scripts/run-database-tests.mjs",
     "validate:e2e-catalog": "node scripts/validate-e2e-catalog.mjs",
     "test:e2e-catalog": "node --test scripts/validate-e2e-catalog.test.mjs",
+    "validate:ci-orchestration": "node scripts/validate-ci-orchestration.mjs",
+    "test:ci-orchestration": "node --test scripts/validate-ci-orchestration.test.mjs",
     "e2e:profile": "node scripts/run-e2e-profile.mjs",
     "test:e2e:profile": "node --test scripts/run-e2e-profile.test.mjs",
     "validate:protected-surfaces": "node scripts/validate-protected-surface-ownership.mjs",

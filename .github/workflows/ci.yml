@@ -130,6 +130,9 @@ jobs:
       - name: Validate E2E testing catalog
         run: pnpm test:e2e-catalog && pnpm validate:e2e-catalog
 
+      - name: Validate CI orchestration
+        run: pnpm test:ci-orchestration && pnpm validate:ci-orchestration
+
       - name: Protect platform-owned shell surfaces
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
