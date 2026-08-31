@@ -87,6 +87,18 @@ Antes de escribir cualquier lógica de UI o Endpoint:
 
 ---
 
+## 🔗 ADR 005: Deep Linking, Slugs & Entity URL Conventions
+
+Para asegurar que todas las aplicaciones de producto y redes sociales (CIMO, ProtegeTuSalud, CRM) compartan un sistema de rutas de clase mundial (tipo Instagram, Strava, Airbnb, Eventbrite):
+
+1. **Perfiles de Usuario:** Siempre canónicos con `@handle` (`/app/profile/:handle`). Auto-redirección de `/app/profile` al handle propio.
+2. **Entrenos / Actividades:** Slugs semánticos enriquecidos con SEO y palabras clave + ID al final (`/app/activity/:semanticSlug-act_:id`). Enrutamiento bidireccional tolerante a fallos.
+3. **Squads / Clubs / Comunidades:** Kebab-case slugs (`/app/squad/:slug`) con resolución automática no invasiva de colisiones (`generateUniqueSlug`).
+4. **Contratos Canónicos:** Centralizados y testeados en `@loopdev/contracts/platform/deepLinking.ts`.
+5. **Documentación Completa:** Véase [`docs/04-standards/loopdev-deep-linking-and-url-conventions.md`](file:///Users/minoveaz/Documents/Proyectos/loopdev-public-shell-foundation/docs/04-standards/loopdev-deep-linking-and-url-conventions.md).
+
+---
+
 ## 🛠️ Estándares de Ingeniería
 
 - **Dynamic Navigation**: El Sidebar se construye leyendo un registro de módulos activos.
