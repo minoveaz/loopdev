@@ -393,6 +393,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         thirdHalfLocation: hasThirdHalf ? thirdHalfVenue : '',
         image: effectiveImage,
         price: 'Gratis',
+        instructions,
       });
     }
   }, [
@@ -409,6 +410,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
     hasThirdHalf,
     thirdHalfType,
     thirdHalfVenue,
+    instructions,
     onDraftChange,
   ]);
 

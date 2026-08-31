@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { PublicAuthModal, PublicCookieBanner, PublicRuntime, PublicTopBar } from '@loopdev/public-shell';
 import { LogIn, MessageSquare, Plus, Users } from 'lucide-react';
 import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
-import { CIMO_FEED_COMPOSITION, CIMO_ACTIVITY_DETAIL_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
+import { CIMO_FEED_COMPOSITION, CIMO_ACTIVITY_DETAIL_COMPOSITION, CIMO_CREATE_PLAN_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
 import { createActivitySemanticSlug, extractActivityIdFromSlug } from '@loopdev/contracts';
 import { INITIAL_ACTIVITIES, INITIAL_CREW_CHATS } from './data/mockData';
 import { CimoFloatingSearchBar } from './components/CimoFloatingSearchBar';
@@ -416,9 +416,8 @@ export function App() {
   const renderLeftSupportZone = () => {
     switch (currentRoute) {
       case 'activity-detail':
-        return null;
       case 'create':
-        return <CimoCaptainGuideTipsWidget />;
+        return null;
       case 'crew':
       case 'squad':
         return <CimoCrewNetworkStatsWidget />;
@@ -525,7 +524,13 @@ export function App() {
       <PublicRuntime
         brandTheme={cimoBrandTheme}
         navigation={cimoNavigation}
-        composition={currentRoute === 'activity-detail' ? CIMO_ACTIVITY_DETAIL_COMPOSITION : CIMO_FEED_COMPOSITION}
+        composition={
+          currentRoute === 'activity-detail'
+            ? CIMO_ACTIVITY_DETAIL_COMPOSITION
+            : currentRoute === 'create'
+            ? CIMO_CREATE_PLAN_COMPOSITION
+            : CIMO_FEED_COMPOSITION
+        }
         seo={cimoSeoConfig}
         activeRouteId={currentRoute}
         onNavigate={navigateTo}
