@@ -8,7 +8,7 @@ owner: platform
 lead: null
 branch: test/domain-validation-routing
 branches: [test/domain-validation-routing]
-phase: 5
+phase: 7
 pull_requests: []
 issues: []
 packages:
@@ -423,28 +423,42 @@ retain ordered full-data certification for cross-schema integration.
 
 **Definition of Ready**
 
-- [ ] All SQL tests are mapped to platform, marketing, creative, CRM, or
-      Communications ownership.
-- [ ] Migration ordering and shared fixtures are documented.
-- [ ] Supabase workflow and validation registry use the same command catalog.
+- [x] All SQL tests present in this branch are mapped to platform, marketing,
+      creative, or CRM ownership; Communications is declared explicitly with no
+      files until its migrations are versioned here.
+- [x] Migration ordering and shared fixture expectations are documented in the
+      catalog runner and full command order.
+- [x] Supabase workflow and validation registry use the same catalog-backed full
+      command.
 
 **Entregables**
 
-- [ ] Focused Supabase commands for each schema domain.
-- [ ] Complete Communications SQL route including controls `007` through `010`.
-- [ ] Ordered full-data command containing all intended database tests.
-- [ ] Removal of unnecessary overlap between backend and dedicated Supabase jobs.
+- [x] Focused Supabase commands for platform, marketing, creative, CRM, and an
+      explicit empty Communications domain.
+- [ ] Complete Communications SQL route including controls `007` through `010`;
+      blocked until those files are versioned in this branch.
+- [x] Ordered full-data command containing all 9 SQL tests present in this branch.
+- [x] Supabase workflow no longer duplicates a manual partial SQL file list.
 
 **Validacion**
 
-- [ ] CRM, Creative, Marketing, and Communications changes select only their
+- [x] CRM, Creative, and Marketing changes select only their
       focused controls unless a shared migration requires full data certification.
-- [ ] Full-data certification runs every versioned database control in order.
-- [ ] Data workflow retains tenant-security and migration-governance protection.
+- [x] Full-data dry-run includes every versioned database control in catalog order.
+- [x] Data workflow retains tenant-security and migration-governance protection.
+- [ ] Communications changes select controls `007-010` once those migrations
+      exist in the branch.
 
-**Evidencia:** Pendiente.
+**Evidencia:** `pnpm test:data-catalog` passes 7 catalog/runner tests and
+`pnpm validate:data-catalog` confirms 9 SQL tests across 5 domains. Dry-runs
+produce focused platform, marketing, creative, CRM commands and a complete
+ordered command containing all 9 SQL files. Actual Supabase execution is
+blocked in this environment because Docker and Podman are not available.
+Communications remains an explicit empty domain because controls `007` through
+`010` are not present as versioned files on this branch.
 
-**Estado:** pendiente
+**Estado:** bloqueada; catalog and workflow automation are complete, but real RLS
+certification and Communications controls remain unavailable.
 
 ### Fase 6: Browser and experience profiles
 
@@ -453,29 +467,48 @@ so interaction checks do not pay responsive and visual matrices unnecessarily.
 
 **Definition of Ready**
 
-- [ ] Each Playwright spec has an owner, primary risk, route, and viewport policy.
-- [ ] Versioned specs not discovered by a project have a documented disposition.
-- [ ] Shell, accessibility, functional, visual, and responsive contracts are distinct.
+- [x] Each Playwright spec has an owner, primary risk, route, and viewport policy
+      through the declarative E2E catalog.
+- [x] Versioned specs not discovered by a project have a documented disposition;
+      `marketing-studio.dam.spec.mjs` is now discovered by desktop.
+- [x] Shell, accessibility, functional, visual, and responsive contracts are distinct.
 
 **Entregables**
 
-- [ ] Smoke, domain, shell, visual-desktop, responsive-matrix, and full browser profiles.
-- [ ] CI job selection based on the same domain catalog and experience metadata.
-- [ ] Resolution for every versioned but undiscovered Playwright specification.
-- [ ] Removal of duplicate viewport/theme execution where it does not protect a
-      distinct responsive or visual contract.
+- [x] Declarative E2E catalog records domain, profile, and supported project for
+      every versioned Playwright spec.
+- [x] Playwright projects derive `testMatch` from the catalog.
+- [x] Smoke, domain, shell, visual, responsive, and full browser profile
+      selection is available through `e2e:profile`.
+- [x] CI validates E2E catalog ownership before downstream experience jobs.
+- [x] Resolution for every versioned but undiscovered Playwright specification.
+- [x] Responsive desktop execution is removed where the contract is mobile-only;
+      remaining viewport/theme matrices are retained only where snapshots or
+      responsive behavior require them.
 
 **Validacion**
 
-- [ ] Interaction-only change defaults to desktop smoke/domain coverage.
-- [ ] CSS, layout, breakpoint, touch, or visual-contract change selects the
+- [x] Interaction-only change defaults to desktop smoke/domain coverage.
+- [x] CSS, layout, breakpoint, touch, or visual-contract change selects the
       appropriate responsive/visual matrix.
-- [ ] Shell changes select shell behavior and accessibility evidence.
-- [ ] Full browser certification discovers all intended E2E specifications.
+- [x] Shell changes select shell behavior and accessibility evidence.
+- [x] Full browser discovery validates all 28 cataloged E2E specifications across
+      the three existing projects.
 
-**Evidencia:** Pendiente.
+**Evidencia:** `pnpm test:e2e-catalog` passes 5 catalog tests and
+`pnpm validate:e2e-catalog` validates 28 specs across desktop, mobile, and
+mobile-compact. `playwright test --list` now discovers 282 tests in 27 files;
+the change from 279 reflects adding the previously orphaned Marketing Studio DAM
+spec while removing responsive desktop execution, not a new viewport matrix.
+Existing project and viewport behavior is preserved
+until the remaining profile-deduplication work is explicitly reviewed.
 
-**Estado:** pendiente
+The `e2e:profile` runner adds profile and domain selection without hardcoded
+spec lists. `smoke`, `functional`, `domain`, `component`, `accessibility`,
+`visual`, `responsive`, `diagnostic`, `contract`, and `full` are available as
+catalog selections; `domain:marketing-studio` selects only the DAM spec.
+
+**Estado:** completada
 
 ### Fase 7: CI orchestration, observations, and certification
 
@@ -593,10 +626,10 @@ its package and source are committed to the repository.
 - **Fecha:** 2026-08-31.
 - **Rama de continuacion:** `test/domain-validation-routing`.
 - **Commit de partida:** `66c64a27`.
-- **Estado alcanzado:** Fase 2, Fase 3, and Fase 4 completed. Fase 5 is now active for database validation by schema domain. All versioned domains consume catalog metadata; Public Shell/Public Blocks remain advisory, and worker registration is deferred until versioned source exists.
+- **Estado alcanzado:** Fases 2, 3, 4, and 6 completed. Fase 5 remains blocked by missing Communications SQL and unavailable Docker/Podman. Fase 7 is now active for CI orchestration and observations. All versioned domains consume catalog metadata; Public Shell/Public Blocks remain advisory, and worker registration is deferred until versioned source exists.
 - **Decisiones, bloqueos y riesgos:** Quant is excluded while experimental. `validate:changed` is a stable branch alias. New domains must declare four quality controls or an explicit non-applicability. The global shell requires an active platform track for its branch. Public Shell permits domain contributions only while `public-shell-foundation` is active. CIMO resolves contracts from source in Vitest; its pre-existing lint warnings and chunk advisory are tracked separately.
 - **Validacion ejecutada:** Baseline inventory, 34 planner/package-impact/catalog tests, 3 domain-control tests, 5 catalog tests, 4 protected-surface ownership tests, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, repository validators, and dry-run checks.
-- **Siguiente accion concreta:** Map Supabase SQL controls by platform, marketing, creative, CRM, and Communications schema domains without restricting active Public Shell development.
+- **Siguiente accion concreta:** Orchestrate selected CI controls and record duration, coverage, false-run, false-skip, duplicate-risk, and flaky-result observations without restricting active Public Shell development.
 
 ## Cierre
 

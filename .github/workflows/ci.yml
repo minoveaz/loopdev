@@ -127,6 +127,9 @@ jobs:
       - name: Validate domain testing catalog
         run: pnpm test:domain-catalog && pnpm validate:domain-catalog
 
+      - name: Validate E2E testing catalog
+        run: pnpm test:e2e-catalog && pnpm validate:e2e-catalog
+
       - name: Protect platform-owned shell surfaces
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}

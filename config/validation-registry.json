@@ -69,6 +69,28 @@
       "modes": ["domain"]
     },
     {
+      "id": "database-catalog",
+      "domain": "data",
+      "layer": "routing",
+      "environment": "local-ci",
+      "risk": "database test ownership and complete suite discovery",
+      "owner": "data",
+      "command": "pnpm validate:data-catalog",
+      "cost": "low",
+      "modes": ["changed", "domain", "full"]
+    },
+    {
+      "id": "e2e-catalog",
+      "domain": "web",
+      "layer": "routing",
+      "environment": "local-ci",
+      "risk": "E2E specification ownership and project coverage",
+      "owner": "web",
+      "command": "pnpm validate:e2e-catalog",
+      "cost": "low",
+      "modes": ["changed", "domain", "experience", "full"]
+    },
+    {
       "id": "unit-contracts",
       "domain": "web",
       "layer": "functional",
@@ -108,7 +130,7 @@
       "environment": "supabase",
       "risk": "schema and tenant security",
       "owner": "data",
-      "command": "pnpm exec supabase test db --local supabase/tests/database/001_platform_core.sql supabase/tests/database/002_platform_core_rls.sql supabase/tests/database/003_marketing_rls.sql supabase/tests/database/004_content_engine_rls.sql supabase/tests/database/005_crm_security.sql supabase/tests/database/006_crm_tasks_contract.sql",
+      "command": "pnpm test:data",
       "cost": "high",
       "modes": ["domain"]
     },
