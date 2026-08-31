@@ -94,3 +94,35 @@ export function createSquadDeepLink(squadSlugOrId: string, basePath = '#/app/squ
 export function createChatDeepLink(chatId?: string, basePath = '#/app/chats'): string {
   return chatId ? `${basePath}/${chatId}` : basePath;
 }
+
+/**
+ * Convierte cualquier texto en un slug kebab-case limpio:
+ * - Normaliza acentos y caracteres especiales (Retiró ➔ retiro, Pádel ➔ padel)
+ * - Elimina caracteres no alfanuméricos
+ * - Colapsa espacios y guiones
+ */
+export function slugifyText(text: string): string {
+  if (!text) return '';
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/**
+ * Genera un slug garantizado único para Squads y Comunidades:
+ * Si el slug base ya existe en `existingSlugs`, genera automáticamente un sufijo corto no invasivo (ej: retiro-morning-runners-7k2p).
+ */
+export function generateUniqueSlug(title: string, existingSlugs: string[] = [], customSuffix?: string): string {
+  const base = slugifyText(title) || 'squad';
+  if (!existingSlugs.includes(base)) {
+    return base;
+  }
+  const suffix = customSuffix || Math.random().toString(36).substring(2, 6);
+  return `${base}-${suffix}`;
+}

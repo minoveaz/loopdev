@@ -4,9 +4,11 @@ import {
   createChatDeepLink,
   createProfileDeepLink,
   createSquadDeepLink,
+  generateUniqueSlug,
   isValidKebabSlug,
   isValidUserHandle,
   LOOPDEV_DEEP_LINK_PATTERNS,
+  slugifyText,
 } from '../deepLinking';
 
 describe('LoopDev Deep Linking Standard Contract', () => {
@@ -48,5 +50,28 @@ describe('LoopDev Deep Linking Standard Contract', () => {
     expect(LOOPDEV_DEEP_LINK_PATTERNS.activityDetail.idFormat).toBe('prefixed-nanoid');
     expect(LOOPDEV_DEEP_LINK_PATTERNS.squadHub.idFormat).toBe('kebab-slug');
     expect(LOOPDEV_DEEP_LINK_PATTERNS.chatConversation.idFormat).toBe('prefixed-nanoid');
+  });
+
+  it('transforms plain titles with accents into clean kebab-case slugs', () => {
+    expect(slugifyText('Retiro Morning Runners')).toBe('retiro-morning-runners');
+    expect(slugifyText('Cuarteto Pádel Chamartín & Amigos!')).toBe('cuarteto-padel-chamartin-amigos');
+    expect(slugifyText('  Ruta Sierra de Guadarrama  ')).toBe('ruta-sierra-de-guadarrama');
+    expect(slugifyText('')).toBe('');
+  });
+
+  it('resolves duplicate squad slug collisions by appending a non-invasive unique suffix', () => {
+    const existing = ['retiro-morning-runners', 'padel-chamartin'];
+
+    // First time squad name -> clean slug
+    expect(generateUniqueSlug('Sierra Hikers', existing)).toBe('sierra-hikers');
+
+    // Duplicate squad name -> clean slug with custom or random unique suffix
+    const duplicateSlug = generateUniqueSlug('Retiro Morning Runners', existing, '7k2p');
+    expect(duplicateSlug).toBe('retiro-morning-runners-7k2p');
+
+    // Automatic random suffix when colliding
+    const autoSuffixSlug = generateUniqueSlug('Pádel Chamartín', existing);
+    expect(autoSuffixSlug.startsWith('padel-chamartin-')).toBe(true);
+    expect(autoSuffixSlug.length).toBeGreaterThan('padel-chamartin-'.length);
   });
 });
