@@ -671,41 +671,43 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 </span>
                 <span>¿Cuántas personas como máximo?</span>
               </span>
-              <span className="text-xs font-extrabold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
-                {maxMembers} plazas
-              </span>
             </div>
 
-            <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-2xl border border-[#1F4E5F]/10 bg-[#F7F7F7] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <span className="text-xs font-black text-[#1F4E5F] block">
                   Límite de asistentes al entreno
                 </span>
-                <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5">
+                <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5 max-w-md">
                   Recomendamos grupitos de 4 a 8 personas para asegurar buen ambiente, cercanía y que nadie se quede atrás.
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto bg-white px-3 py-1.5 rounded-full border border-[#1F4E5F]/15 shadow-2xs">
+              <div className="flex items-center justify-between sm:justify-center gap-3 w-full sm:w-auto sm:min-w-[200px] bg-white px-4 py-2 rounded-2xl border border-[#1F4E5F]/15 shadow-2xs">
                 <button
                   type="button"
                   disabled={maxMembers <= 2}
                   onClick={() => setMaxMembers(Math.max(2, maxMembers - 1))}
-                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#7FB77E]/15 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                  className="w-9 h-9 rounded-xl bg-[#F7F7F7] hover:bg-[#7FB77E]/20 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors active:scale-95 shrink-0"
                   aria-label="Reducir plazas"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
 
-                <span className="text-sm font-black text-[#1F4E5F] min-w-[75px] text-center">
-                  {maxMembers} plazas
-                </span>
+                <div className="flex flex-col items-center px-3 flex-1 sm:flex-initial sm:min-w-[95px]">
+                  <span className="text-sm sm:text-base font-black text-[#1F4E5F] text-center leading-none">
+                    {maxMembers} plazas
+                  </span>
+                  <span className="text-[9px] font-black text-[#7FB77E] uppercase tracking-wider mt-0.5">
+                    {maxMembers <= 4 ? 'Íntimo' : maxMembers <= 8 ? 'Óptimo' : 'Amplio'}
+                  </span>
+                </div>
 
                 <button
                   type="button"
                   disabled={maxMembers >= 16}
                   onClick={() => setMaxMembers(Math.min(16, maxMembers + 1))}
-                  className="w-8 h-8 rounded-full bg-[#F7F7F7] hover:bg-[#7FB77E]/15 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors"
+                  className="w-9 h-9 rounded-xl bg-[#F7F7F7] hover:bg-[#7FB77E]/20 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors active:scale-95 shrink-0"
                   aria-label="Aumentar plazas"
                 >
                   <Plus className="w-4 h-4" />
