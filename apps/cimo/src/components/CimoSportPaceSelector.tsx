@@ -34,7 +34,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
             {stepNumber}
           </span>
           <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
-            Nivel & Ritmo del entrenamiento
+            Ritmo y nivel del grupo
           </span>
         </div>
         <span className="text-[11px] font-bold text-[#7FB77E]">
