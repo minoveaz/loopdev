@@ -1924,7 +1924,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         </button>
       </div>
 
-      {/* 📱 Mobile Bottom Sheet Modal (lg:hidden) */}
+      {/* 📱 Mobile Bottom Sheet Modal (Option A: h-[96vh] Top-Edge Sheet) */}
       {isMobilePreviewOpen && (
         <div
           className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
@@ -1934,35 +1934,40 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             }
           }}
         >
-          <div className="bg-[#FCFDFD] rounded-t-3xl max-h-[88vh] flex flex-col shadow-2xl border-t border-[#1F4E5F]/15 animate-in slide-in-from-bottom duration-250">
+          <div className="bg-[#FCFDFD] rounded-t-3xl h-[96vh] max-h-[96vh] flex flex-col shadow-2xl border-t border-[#1F4E5F]/15 animate-in slide-in-from-bottom duration-250">
             {/* Grab Handle */}
-            <div className="pt-2.5 pb-1 flex justify-center">
+            <div className="pt-3 pb-1 flex justify-center shrink-0">
               <div className="w-12 h-1.5 rounded-full bg-slate-300" />
             </div>
 
-            {/* Header */}
-            <div className="px-4 py-2.5 border-b border-[#1F4E5F]/10 flex items-center justify-between">
+            {/* Unified Top Header Bar */}
+            <div className="px-4 py-2.5 border-b border-[#1F4E5F]/10 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-[#7FB77E]" />
-                <span className="text-xs font-black uppercase text-[#1F4E5F] tracking-wider">
-                  Live Preview & Co-Piloto
+                <span className="w-7 h-7 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] flex items-center justify-center shrink-0">
+                  <Smartphone className="w-4 h-4 text-[#7FB77E]" />
                 </span>
-                <span className="bg-[#7FB77E]/15 text-[#1F4E5F] text-[10px] font-black px-2 py-0.5 rounded-full">
-                  Score: {previewScore}%
-                </span>
+                <div>
+                  <span className="text-xs font-black uppercase text-[#1F4E5F] tracking-wider block leading-tight">
+                    Vista Previa Móvil
+                  </span>
+                  <span className="text-[10px] text-[#1F4E5F]/60 font-semibold block">
+                    Score del plan: <strong className="text-[#2E7D32]">{previewScore}%</strong>
+                  </span>
+                </div>
               </div>
+
               <button
                 type="button"
                 onClick={() => setIsMobilePreviewOpen(false)}
                 aria-label="Cerrar vista previa móvil"
-                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer transition-colors"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center cursor-pointer transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Scrollable Content: Live Preview Widget */}
-            <div className="p-4 overflow-y-auto">
+            {/* Scrollable Content: Live Preview Widget without duplicate header */}
+            <div className="p-4 overflow-y-auto flex-1">
               <CimoLivePlanPreviewWidget
                 formData={{
                   sport: selectedSportObj.label,
@@ -1983,6 +1988,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   instructions,
                 }}
                 currentUser={currentUser ?? { name: 'Capitán' }}
+                hideHeader={true}
               />
             </div>
           </div>

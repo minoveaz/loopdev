@@ -47,11 +47,13 @@ export interface CimoLivePlanPreviewWidgetProps {
     name: string;
     avatarUrl?: string;
   };
+  hideHeader?: boolean;
 }
 
 export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps> = ({
   formData,
   currentUser,
+  hideHeader = false,
 }) => {
   const [previewCardFormat, setPreviewCardFormat] = useState<'feed' | 'story'>('feed');
 
@@ -83,29 +85,35 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
 
   return (
     <aside
-      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      className={`flex flex-col gap-5 text-[#1F4E5F] w-full ${
+        hideHeader
+          ? 'bg-transparent border-0 p-0 shadow-none'
+          : 'bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] h-full overflow-y-auto'
+      }`}
       aria-label="Co-Piloto del Capitán y Live Preview"
     >
-      {/* 1. Cabecera Principal */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
-        <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] flex items-center justify-center shrink-0 shadow-2xs">
-            <Zap className="w-4 h-4" />
-          </span>
-          <div>
-            <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] block leading-none">
-              Co-Piloto del Capitán
+      {/* 1. Cabecera Principal (Desktop / Full view only) */}
+      {!hideHeader && (
+        <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+          <div className="flex items-center gap-2">
+            <span className="w-7 h-7 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] flex items-center justify-center shrink-0 shadow-2xs">
+              <Zap className="w-4 h-4" />
             </span>
-            <span className="text-[10px] text-[#1F4E5F]/60 font-medium mt-0.5 block">
-              Asistencia & Live Preview
-            </span>
+            <div>
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] block leading-none">
+                Co-Piloto del Capitán
+              </span>
+              <span className="text-[10px] text-[#1F4E5F]/60 font-medium mt-0.5 block">
+                Asistencia & Live Preview
+              </span>
+            </div>
           </div>
-        </div>
 
-        <span className={`text-[10px] font-black px-2.5 py-1 rounded-full ${scoreBadgeBg}`}>
-          {score}% Atractivo
-        </span>
-      </div>
+          <span className={`text-[10px] font-black px-2.5 py-1 rounded-full ${scoreBadgeBg}`}>
+            {score}% Atractivo
+          </span>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* 📱 SECCIÓN 1: LIVE PREVIEW (SIMULADOR MÓVIL)                              */}
