@@ -54,7 +54,7 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
     expect(screen.getByText('Tercer Tiempo social')).toBeDefined();
   });
 
-  it('renders CimoLivePlanPreviewWidget with real-time card reflection and assistant tabs', () => {
+  it('renders CimoLivePlanPreviewWidget with continuous vertical layout (live preview and demand intelligence)', () => {
     render(
       <CimoLivePlanPreviewWidget
         formData={{
@@ -77,18 +77,13 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
     );
 
     expect(screen.getByText('Co-Piloto del Capitán')).toBeDefined();
-    expect(screen.getByText('Live Preview')).toBeDefined();
-    expect(screen.getByText('Demanda & Tips')).toBeDefined();
+    expect(screen.getByText('Simulador Móvil en Vivo')).toBeDefined();
     expect(screen.getByText('Rodaje Suave por Madrid Río')).toBeDefined();
     expect(screen.getByText('6K a ritmo cómodo para estirar piernas.')).toBeDefined();
     expect(screen.getByText('Capitán Alex')).toBeDefined();
-
-    // Switch to Assistant tab
-    const assistantTabBtn = screen.getByRole('button', { name: /Demanda & Tips/i });
-    fireEvent.click(assistantTabBtn);
-
-    expect(screen.getByText('Nivel de Atractivo del Plan')).toBeDefined();
+    expect(screen.getByText('Score de Atractivo del Plan')).toBeDefined();
     expect(screen.getByText(/Atletas afines activos/i)).toBeDefined();
+    expect(screen.getByText(/Tip de Capitán CIMO/i)).toBeDefined();
   });
 
   it('renders CimoAthleteMetricsWidget with verified passport and consistency level', () => {
