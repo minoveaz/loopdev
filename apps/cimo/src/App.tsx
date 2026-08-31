@@ -66,18 +66,23 @@ export function App() {
     instagramHandle: '@alex_rivera_cimo',
   });
 
-  // Standard Navigation & URL Deep Linking
+  // Standard Navigation & URL Deep Linking (/app/home, /app/activity/:id, /app/create, etc.)
   const parseCurrentUrl = () => {
-    const hash = window.location.hash.replace(/^#\/?/, '');
-    if (hash.startsWith('activity/')) {
-      const id = hash.split('/')[1];
+    const raw = window.location.hash.replace(/^#\/?/, '');
+    const clean = raw.startsWith('app/') ? raw.slice(4) : raw;
+
+    if (clean.startsWith('activity/')) {
+      const id = clean.split('/')[1];
       return { route: 'activity-detail', activityId: id };
     }
-    if (hash === 'create') return { route: 'create', activityId: null };
-    if (hash === 'chats') return { route: 'chats', activityId: null };
-    if (hash === 'crew') return { route: 'crew', activityId: null };
-    if (hash === 'profile/edit') return { route: 'profile-edit', activityId: null };
-    if (hash === 'profile') return { route: 'profile', activityId: null };
+    if (clean === 'create') return { route: 'create', activityId: null };
+    if (clean === 'chats') return { route: 'chats', activityId: null };
+    if (clean === 'crew') return { route: 'crew', activityId: null };
+    if (clean === 'profile/edit') return { route: 'profile-edit', activityId: null };
+    if (clean === 'profile') return { route: 'profile', activityId: null };
+    if (clean === 'home' || clean === 'feed' || clean === '' || clean === 'app') {
+      return { route: 'feed', activityId: null };
+    }
     return { route: 'feed', activityId: null };
   };
 
@@ -105,19 +110,19 @@ export function App() {
     setCurrentRoute(route);
     if (activityId) {
       setSelectedActivityId(activityId);
-      window.location.hash = `#/activity/${activityId}`;
+      window.location.hash = `#/app/activity/${activityId}`;
     } else if (route === 'create') {
-      window.location.hash = '#/create';
+      window.location.hash = '#/app/create';
     } else if (route === 'chats') {
-      window.location.hash = '#/chats';
+      window.location.hash = '#/app/chats';
     } else if (route === 'crew') {
-      window.location.hash = '#/crew';
+      window.location.hash = '#/app/crew';
     } else if (route === 'profile-edit') {
-      window.location.hash = '#/profile/edit';
+      window.location.hash = '#/app/profile/edit';
     } else if (route === 'profile') {
-      window.location.hash = '#/profile';
+      window.location.hash = '#/app/profile';
     } else {
-      window.location.hash = '#/';
+      window.location.hash = '#/app/home';
     }
   };
 

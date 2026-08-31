@@ -44,12 +44,12 @@ export const cimoBrandTheme: PublicBrandTheme = {
 export const cimoNavigation: PublicNavigation = {
   brandId: 'cimo',
   defaultRouteId: 'feed',
-  mobilePrimaryRouteIds: ['feed', 'explore', 'chats', 'profile'],
+  mobilePrimaryRouteIds: ['feed', 'crew', 'chats', 'profile'],
   routes: [
-    { id: 'feed', path: '/', label: 'Feed', icon: 'Home', requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'explore', path: '/explorar', label: 'Explorar', icon: 'Compass', requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'chats', path: '/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 3, requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'profile', path: '/perfil', label: 'Perfil', icon: 'User', requiresAuth: true, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
+    { id: 'feed', path: '/app/home', label: 'Feed', icon: 'Home', requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
+    { id: 'crew', path: '/app/crew', label: 'Mi Crew', icon: 'Users', badgeCount: 7, requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
+    { id: 'chats', path: '/app/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 3, requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
+    { id: 'profile', path: '/app/profile', label: 'Perfil', icon: 'User', requiresAuth: true, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
   ],
 };
 
