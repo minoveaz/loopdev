@@ -605,6 +605,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             Monta tu quedada en 5 pasos sencillos: elige deporte, cuándo y dónde, qué traer, si os tomáis algo después y listo.
           </p>
         </div>
+
+        {/* 📱 Mobile Top Quick Preview Trigger (lg:hidden) */}
+        <div className="pt-1 lg:hidden">
+          <button
+            type="button"
+            onClick={() => setIsMobilePreviewOpen(true)}
+            className="w-full py-2.5 px-4 rounded-2xl bg-[#1F4E5F] hover:bg-[#163a47] text-white text-xs font-black flex items-center justify-between shadow-xs cursor-pointer active:scale-98 transition-all"
+          >
+            <div className="flex items-center gap-2">
+              <Smartphone className="w-4 h-4 text-[#7FB77E]" />
+              <span>Ver Live Preview & Co-Piloto</span>
+            </div>
+            <span className="bg-[#7FB77E] text-[#1F4E5F] text-[10px] font-black px-2 py-0.5 rounded-full">
+              {previewScore}% Atractivo
+            </span>
+          </button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-8 sm:gap-10">
@@ -1890,16 +1907,16 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
       </form>
 
       {/* 📱 Mobile Floating Preview Trigger (lg:hidden) */}
-      <div className="fixed bottom-6 right-4 sm:right-6 z-40 lg:hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="fixed bottom-20 right-4 sm:right-6 z-50 lg:hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
         <button
           type="button"
           onClick={() => setIsMobilePreviewOpen(true)}
           aria-label="Abrir vista previa del plan"
-          className="px-4 py-2.5 bg-[#1F4E5F] hover:bg-[#163a47] text-white rounded-full font-black text-xs shadow-2xl flex items-center gap-2 border border-white/20 active:scale-95 cursor-pointer backdrop-blur-md transition-transform"
+          className="px-4 py-3 bg-[#1F4E5F] hover:bg-[#163a47] text-white rounded-full font-black text-xs shadow-2xl flex items-center gap-2.5 border-2 border-white/30 active:scale-95 cursor-pointer backdrop-blur-md transition-all"
         >
           <Smartphone className="w-4 h-4 text-[#7FB77E]" />
           <span>Ver Preview</span>
-          <span className="bg-[#7FB77E] text-[#1F4E5F] text-[10px] font-black px-1.5 py-0.2 rounded-full shadow-2xs">
+          <span className="bg-[#7FB77E] text-[#1F4E5F] text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-2xs">
             {previewScore}%
           </span>
         </button>
