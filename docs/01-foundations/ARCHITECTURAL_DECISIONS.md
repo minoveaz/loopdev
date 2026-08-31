@@ -99,6 +99,23 @@ Para asegurar que todas las aplicaciones de producto y redes sociales (CIMO, Pro
 
 ---
 
+## 🧪 ADR 006: The 7-Layer Quality & Performance Testing Standard
+
+Para garantizar que todas las aplicaciones de LoopDev tengan calidad de nivel de producción (estilo Vitablue, Airbnb y Strava):
+
+1. **Pirámide de 7 Capas:**
+   - Capa 1: Tests Atómicos de Componente (UI & Variantes).
+   - Capa 2: Interacción y Flujos de Usuario (User-Centric RTL).
+   - Capa 3: Accesibilidad & WCAG (a11y).
+   - Capa 4: SEO, Metadatos y OpenGraph (Public Shell).
+   - Capa 5: Resiliencia, Errores y Casos Límite (Edge cases & fallbacks).
+   - Capa 6: Persistencia y Estado Local (Storage & Session).
+   - Capa 7: Rendimiento & Anti-CLS (Cumulative Layout Shift = 0.00).
+2. **Umbrales Obligatorios de Velocidad (SLA):** LCP < 1.2s, INP < 50ms, CLS 0.00, Bundle Initial < 150 kB (gzip).
+3. **Documentación Completa:** Véase [`docs/04-standards/loopdev-app-testing-standard.md`](file:///Users/minoveaz/Documents/Proyectos/loopdev-public-shell-foundation/docs/04-standards/loopdev-app-testing-standard.md).
+
+---
+
 ## 🛠️ Estándares de Ingeniería
 
 - **Dynamic Navigation**: El Sidebar se construye leyendo un registro de módulos activos.
