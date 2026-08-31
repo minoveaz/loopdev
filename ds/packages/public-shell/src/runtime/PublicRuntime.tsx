@@ -129,24 +129,35 @@ export const PublicRuntime: React.FC<PublicRuntimeProps> = ({
               children
             ) : (
               <PublicCanvas composition={composition}>
-                {/* Region: Sidebar Filters */}
-                {renderers.sidebarFilters && (
-                  <PublicCanvasRegion id="cimo-filters-col">
-                    {resolveSlot(renderers.sidebarFilters, contextValue)}
-                  </PublicCanvasRegion>
-                )}
+                {/* Region: Sidebar Filters / Left Support Zone */}
+                {renderers.sidebarFilters && (() => {
+                  const region = composition.regions.find((r) => r.slot === 'sidebar-filters');
+                  return region ? (
+                    <PublicCanvasRegion id={region.id} regionSpec={region}>
+                      {resolveSlot(renderers.sidebarFilters, contextValue)}
+                    </PublicCanvasRegion>
+                  ) : null;
+                })()}
 
-                {/* Region: Main Feed */}
-                <PublicCanvasRegion id="cimo-feed-col">
-                  {resolveSlot(renderers.mainFeed, contextValue)}
-                </PublicCanvasRegion>
+                {/* Region: Main Feed / Primary Work Area */}
+                {(() => {
+                  const region = composition.regions.find((r) => r.slot === 'main-feed');
+                  return region ? (
+                    <PublicCanvasRegion id={region.id} regionSpec={region}>
+                      {resolveSlot(renderers.mainFeed, contextValue)}
+                    </PublicCanvasRegion>
+                  ) : null;
+                })()}
 
-                {/* Region: Context Inspector */}
-                {renderers.contextInspector && (
-                  <PublicCanvasRegion id="cimo-inspector-col">
-                    {resolveSlot(renderers.contextInspector, contextValue)}
-                  </PublicCanvasRegion>
-                )}
+                {/* Region: Context Inspector / Right Support Zone */}
+                {renderers.contextInspector && (() => {
+                  const region = composition.regions.find((r) => r.slot === 'context-inspector');
+                  return region ? (
+                    <PublicCanvasRegion id={region.id} regionSpec={region}>
+                      {resolveSlot(renderers.contextInspector, contextValue)}
+                    </PublicCanvasRegion>
+                  ) : null;
+                })()}
               </PublicCanvas>
             )}
 
