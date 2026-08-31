@@ -88,6 +88,7 @@ graph TD
 | **2026-08-31** | **Roadmap de Expansión de Producto & Integraciones CIMO 2.5:**<br>1. Feed de Crew multicapa (Amigos + 2º grado + Afinidad).<br>2. Perfil con 1-4 fotos reales en acción (anti-stock).<br>3. Ficha Técnica estructurada por desplegables (sin texto libre).<br>4. Integración Playtomic (Pádel) & Strava/Wikiloc/Garmin (Running/Hiking).<br>5. Squad Hub dedicado (`/squad/:id`) con flujo de creación y sugerencias.<br>6. Directorio & Ranking de Tercer Tiempo y Hotspots Deportivos.<br>7. Panel de Administración / Backoffice CIMO. | Llevar la plataforma de un directorio de eventos a una red social deportiva y ecosistema integral con datos certificados y micro-comunidades activas. | Fuerte diferenciación competitiva, engagement diario y monetización/alianzas B2B. | `@minoveaz` |
 | **2026-08-31** | **Aprobación de 5 Innovaciones Clave de Engagement:**<br>1. Check-in GPS/QR post-entreno (Zero No-Shows & Proof of Workout).<br>2. Indicador de Liebre / Pacer oficial en quedadas de Running.<br>3. División de gastos de pista / consumiciones con enlace directo Bizum/Revolut.<br>4. Etiquetas de Energía Social / Vibe (Focused vs Conversational).<br>5. Desafíos y retos mensuales inter-squads. | Blindar la puntualidad, eliminar la fricción de pagos en grupo y maximizar la seguridad y sintonía de los miembros. | Confianza total de la comunidad, alta retención y crecimiento orgánico de Squads. | `@minoveaz` |
 | **2026-08-31** | **Incorporación de 4 Mecanismos de Eventbrite / Luma de Alta Conversión & Asistencia:**<br>1. **Lista de Espera Inteligente & Auto-Relleno (Waitlist Engine):** Cola de espera automática con ventana de 15 minutos para reclamar plaza libre si alguien cancela.<br>2. **Sincronización con Google / Apple Calendar en 1 Clic:** Botón directo (.ics / Google URL) con recordatorio 2h, GPS exacto y link al chat.<br>3. **Preguntas Clave de Admisión (RSVP Questionnaire):** 1-2 preguntas obligatorias configurables por el capitán (ritmo 10K, pala propia, calzado de montaña).<br>4. **Broadcast Pre-Entreno del Capitán:** Envío de avisos prioritarios fijados al grupo (cambios de clima, hidratación). | Maximizar la tasa de asistencia real, evitar huecos de última hora en grupos pequeños y dar control operativo total a los capitanes. | Cero absentismo, organización impecable y máxima retención deportiva. | `@minoveaz` |
+| **2026-08-31** | **Sistema de Gamificación, Insignias de Autor (CIMO Badges) & Top Leaderboard Local:**<br>1. **Insignias de Constancia y Reputación:** *Club del Amanecer* (5 entrenos pre-8h), *Palabra de Honor* (100% asistencia / 0 no-shows), *Embajador Tercer Tiempo*, *Capitán 5 Estrellas*, *Pacer de Oro*.<br>2. **Hall of Fame / Top Ranking por Ciudad y Deporte:** Leaderboard mensual de deportistas más constantes (no por velocidad, sino por días activos y asistencia). | Desbloquear el estatus social, la motivación diaria y la confianza entre deportistas. | Máxima retención diaria (DAU/MAU) y orgullo de pertenencia. | `@minoveaz` |
 
 ---
 
@@ -214,6 +215,22 @@ graph TD
 
 ---
 
+### 🏅 Gamificación, Insignias de Autor (CIMO Badges) y Top Ranking Local:
+
+1. **Vitrina de Insignias de Autor en el Perfil:**
+   - 🌅 *Club del Amanecer:* 5 entrenos completados antes de las 08:00 AM.
+   - 🛡️ *Palabra de Honor (100% Asistencia):* 10 entrenos consecutivos con check-in y cero no-shows.
+   - ☕ *Embajador del Tercer Tiempo:* 10 asistencias al café/caña post-entreno.
+   - 👑 *Capitán Verificado 5 Estrellas:* Liderar 5 convocatorias con valoración comunitaria 5.0.
+   - ⚡ *Pacer / Liebre de Oro:* Marcar el ritmo oficial en 3 rodajes grupales.
+   - 🏔️ *Cumbres de Madrid:* Completar 3 rutas de senderismo/hiking en la sierra.
+2. **Top Leaderboard / Hall of Fame por Ciudad y Deporte:**
+   - Ranking mensual de constancia comunitaria (días activos de entreno + fiabilidad de asistencia).
+   - Filtros dinámicos por Ciudad (*Madrid, Barcelona, Valencia*) y Deporte (*Running, Pádel, Hiking*).
+   - Acceso directo a los perfiles de los deportistas más activos de la zona para proponer entrenos.
+
+---
+
 ## Criterios de Cierre Actualizados
 
 - [x] Jerarquía Visual 2.0 con búsqueda flotante, 3 columnas proporcionales y fondo mineral `#EEF2F2`.
@@ -226,6 +243,7 @@ graph TD
 - [ ] Ranking de Tercer Tiempo & Hotspots Deportivos con convenios de locales.
 - [ ] 5 Innovaciones de Engagement (Check-in GPS/QR anti-no-shows, Liebre oficial, Split Cost Bizum, Etiquetas de Vibe y Desafíos Inter-Squads).
 - [ ] 4 Mecanismos Eventbrite/Luma (Waitlist inteligente, 1-Click Calendar Sync, Preguntas de admisión y Broadcast del capitán).
+- [ ] Sistema de Gamificación (Insignias de Autor en el Perfil y Top Leaderboard / Hall of Fame por Ciudad y Deporte).
 - [ ] Panel de Administración de CIMO (`/admin`).
 - [ ] Suite de Tests Focalizados estilo Vitablue (Componentes, a11y, WCAG).
 - [ ] Quality Gate en verde: `pnpm --filter cimo typecheck && pnpm --filter cimo test && pnpm --filter cimo build`.
