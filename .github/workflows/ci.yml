@@ -120,6 +120,16 @@ jobs:
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: node scripts/validate-package-impact.mjs --base "$BASE_SHA" --head "$HEAD_SHA" --dry-run
 
+      - name: Validate domain testing catalog
+        run: pnpm test:domain-catalog && pnpm validate:domain-catalog
+
+      - name: Protect platform-owned shell surfaces
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          HEAD_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: pnpm test:protected-surfaces && pnpm validate:protected-surfaces --base "$BASE_SHA" --head "$HEAD_SHA" --branch "$HEAD_BRANCH"
+
       - name: Validate package impact resolver
         run: pnpm test:package-impact
 

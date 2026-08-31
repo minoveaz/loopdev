@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import process from 'node:process';
 import { isBackendOnlyWebFile, resolveImpact } from './validate-package-impact.mjs';
+import { domainForFile } from './validation-domain-catalog-utils.mjs';
 
 const checks = {
   governance: {
@@ -107,6 +108,9 @@ function buildValidationPlan(files) {
       continue;
     }
 
+    const domain = domainForFile(file);
+    if (domain?.routing?.planDomain) changedDomains.add(domain.routing.planDomain);
+
     for (const [domain, check] of Object.entries(checks)) {
       if (
         check.paths.some((path) => matchesPath(file, path)) &&
@@ -154,12 +158,36 @@ function buildValidationPlan(files) {
   };
 }
 
-function changedFilesFromGit() {
+function changedFilesFromGit(runGit = execFileSync) {
   const base = process.env.BASE_SHA ?? 'origin/develop';
   const head = process.env.HEAD_SHA ?? 'HEAD';
-  return execFileSync('git', ['diff', '--name-only', `${base}...${head}`], { encoding: 'utf8' })
+  return runGit('git', ['diff', '--name-only', `${base}...${head}`], { encoding: 'utf8' })
     .split(/\r?\n/)
     .filter(Boolean);
+}
+
+function changedFilesFromCommit(revision = 'HEAD', runGit = execFileSync) {
+  return runGit('git', ['diff-tree', '--no-commit-id', '--name-only', '-r', revision], {
+    encoding: 'utf8',
+  })
+    .split(/\r?\n/)
+    .filter(Boolean);
+}
+
+function changedFilesFromWorktree(runGit = execFileSync) {
+  const commands = [
+    ['diff', '--name-only'],
+    ['diff', '--name-only', '--cached'],
+    ['ls-files', '--others', '--exclude-standard'],
+  ];
+
+  return [
+    ...new Set(
+      commands.flatMap((args) =>
+        runGit('git', args, { encoding: 'utf8' }).split(/\r?\n/).filter(Boolean),
+      ),
+    ),
+  ].sort();
 }
 
 function printPlan(plan) {
@@ -228,14 +256,27 @@ function writeGithubOutputs(plan) {
 export {
   buildGithubOutputs,
   buildValidationPlan,
+  changedFilesFromCommit,
   changedFilesFromGit,
+  changedFilesFromWorktree,
   renderGithubSummary,
   writeGithubOutputs,
   writeGithubSummary,
 };
 
 if (process.argv[1]?.endsWith('validate-plan.mjs')) {
-  const plan = buildValidationPlan(changedFilesFromGit());
+  const scope = process.argv[2] ?? 'branch';
+  const revision = process.argv[3] ?? 'HEAD';
+  if (!['branch', 'commit', 'worktree'].includes(scope)) {
+    throw new Error(`Unknown plan scope: ${scope}`);
+  }
+  const files =
+    scope === 'worktree'
+      ? changedFilesFromWorktree()
+      : scope === 'commit'
+        ? changedFilesFromCommit(revision)
+        : changedFilesFromGit();
+  const plan = buildValidationPlan(files);
   printPlan(plan);
   writeGithubOutputs(plan);
   writeGithubSummary(plan);

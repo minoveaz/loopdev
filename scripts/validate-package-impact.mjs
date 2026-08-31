@@ -5,6 +5,7 @@ import { appendFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { domainForFile } from './validation-domain-catalog-utils.mjs';
 
 const isWindows = process.platform === 'win32';
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
@@ -175,6 +176,7 @@ function isBackendOnlyWebFile(file) {
 
 function resolveImpact(files) {
   const rules = new Map();
+  const domainIds = new Set();
   let globalFallback = false;
   let mobile = false;
   let frontend = false;
@@ -196,6 +198,12 @@ function resolveImpact(files) {
     }
 
     if (isDocumentation(file)) continue;
+
+    const domain = domainForFile(file);
+    if (domain?.routing?.packageImpact) {
+      domainIds.add(domain.id);
+      continue;
+    }
 
     const rule = findPackageRule(file);
     if (rule) {
@@ -220,10 +228,11 @@ function resolveImpact(files) {
 
   return {
     changedFiles: files,
+    domainIds: [...domainIds],
     packageIds: [...rules.keys()],
     packageRules: packageRules.filter((rule) => rules.has(rule.id)),
     globalFallback,
-    hasTargetedValidation: rules.size > 0,
+    hasTargetedValidation: rules.size > 0 || domainIds.size > 0,
     mobile,
     frontend,
   };
@@ -235,7 +244,7 @@ function addCommand(commands, packageName, script, extraArgs = []) {
   if (!commands.has(key)) commands.set(key, args);
 }
 
-function buildCommands(packageRules, skippedConsumers = new Set()) {
+function buildCommands(packageRules, skippedConsumers = new Set(), domainIds = []) {
   const commands = new Map();
 
   for (const rule of packageRules) {
@@ -248,6 +257,10 @@ function buildCommands(packageRules, skippedConsumers = new Set()) {
       if (skippedConsumers.has(consumer)) continue;
       addCommand(commands, consumer, script);
     }
+  }
+
+  for (const id of domainIds) {
+    addCommand(commands, 'loopdev-monorepo', 'validate:domain-controls', [id, '--include-build']);
   }
 
   return [...commands.values()];
@@ -264,6 +277,7 @@ function writeGithubOutput(impact) {
       `mobile=${impact.mobile}`,
       `frontend=${impact.frontend}`,
       `package_ids=${impact.packageIds.join(',')}`,
+      `domain_ids=${impact.domainIds.join(',')}`,
     ].join('\n') + '\n',
   );
 }
@@ -278,7 +292,7 @@ function main() {
   const skippedConsumers = new Set(getOptionValues('--skip-consumer'));
   const files = getChangedFiles(base, head);
   const impact = resolveImpact(files);
-  const commands = buildCommands(impact.packageRules, skippedConsumers);
+  const commands = buildCommands(impact.packageRules, skippedConsumers, impact.domainIds);
 
   writeGithubOutput(impact);
 
@@ -286,6 +300,7 @@ function main() {
   console.log(`Package impact head: ${head}`);
   console.log(`Changed files: ${files.length}`);
   console.log(`Targeted packages: ${impact.packageIds.join(', ') || 'none'}`);
+  console.log(`Targeted domains: ${impact.domainIds.join(', ') || 'none'}`);
   console.log(`Global fallback: ${impact.globalFallback}`);
   console.log(`Mobile validation: ${impact.mobile}`);
   console.log(`Skipped consumers: ${[...skippedConsumers].join(', ') || 'none'}`);

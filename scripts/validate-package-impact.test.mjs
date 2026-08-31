@@ -72,6 +72,21 @@ test('routes mobile application changes to native mobile validation only', () =>
   assert.equal(impact.mobile, true);
 });
 
+test('routes CIMO changes to its declared domain controls without global fallback', () => {
+  const impact = resolveImpact(['apps/cimo/src/App.tsx']);
+  const commands = buildCommands(impact.packageRules, new Set(), impact.domainIds).map((args) =>
+    args.join(' '),
+  );
+
+  assert.deepEqual(impact.domainIds, ['cimo']);
+  assert.equal(impact.globalFallback, false);
+  assert.equal(impact.mobile, false);
+  assert.equal(impact.frontend, false);
+  assert.deepEqual(commands, [
+    '--filter loopdev-monorepo validate:domain-controls cimo --include-build',
+  ]);
+});
+
 test('keeps web application changes out of native mobile and global fallback', () => {
   const impact = resolveImpact([
     'apps/loopdev-os/src/app/page.tsx',

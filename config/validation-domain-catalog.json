@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "domains": [
+    {
+      "id": "cimo",
+      "owner": "apps",
+      "paths": ["apps/cimo/"],
+      "manifest": "apps/cimo/package.json",
+      "validationScopes": ["worktree", "commit", "branch"],
+      "routing": { "planDomain": "cimo", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "loopdev-os",
+      "owner": "platform",
+      "paths": ["apps/loopdev-os/"],
+      "manifest": "apps/loopdev-os/package.json",
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "command": "pnpm exec tsc -p apps/loopdev-os/tsconfig.json --noEmit" },
+        "unit": {
+          "command": "pnpm exec vitest run --config vitest.config.ts --project loopdev-os"
+        },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "mobile",
+      "owner": "mobile",
+      "paths": ["apps/loopdev-mobile/"],
+      "manifest": "apps/loopdev-mobile/package.json",
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "notApplicable": "Expo build is a release pipeline concern." }
+      }
+    },
+    {
+      "id": "contracts",
+      "owner": "platform",
+      "paths": ["packages/contracts/"],
+      "manifest": "packages/contracts/package.json",
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "command": "pnpm exec vitest run --config vitest.config.ts --project contracts" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "ui",
+      "owner": "platform",
+      "paths": ["ds/packages/ui/"],
+      "manifest": "ds/packages/ui/package.json",
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "ui-native",
+      "owner": "platform",
+      "paths": ["ds/packages/ui-native/"],
+      "manifest": "ds/packages/ui-native/package.json",
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "notApplicable": "Native behavior is validated through the mobile consumer." },
+        "build": { "notApplicable": "Native primitives are compiled by their consumer." }
+      }
+    },
+    {
+      "id": "public-shell",
+      "owner": "platform",
+      "paths": ["ds/packages/public-shell/"],
+      "manifest": "ds/packages/public-shell/package.json",
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "public-blocks",
+      "owner": "platform",
+      "paths": ["ds/packages/public-blocks/"],
+      "manifest": "ds/packages/public-blocks/package.json",
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    }
+  ],
+  "protectedSurfaces": [
+    {
+      "id": "platform-shell",
+      "owner": "platform",
+      "paths": [
+        "apps/loopdev-os/src/app/layout.tsx",
+        "apps/loopdev-os/src/app/shell-showcase/",
+        "ds/packages/ui/src/components/composites/shell/",
+        "ds/packages/ui/src/components/composites/utilities/PlatformContextPanel/"
+      ]
+    },
+    {
+      "id": "public-shell",
+      "owner": "platform",
+      "allowedDuringActiveTracks": ["public-shell-foundation"],
+      "paths": ["ds/packages/public-shell/"]
+    }
+  ]
+}

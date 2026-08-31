@@ -133,6 +133,17 @@
       "command": "pnpm --filter loopdev-mobile test",
       "cost": "high",
       "modes": ["domain"]
+    },
+    {
+      "id": "cimo-functional",
+      "domain": "cimo",
+      "layer": "functional",
+      "environment": "local-ci",
+      "risk": "CIMO application behavior and public experience integration",
+      "owner": "apps",
+      "command": "pnpm validate:domain-controls cimo",
+      "cost": "medium",
+      "modes": ["worktree", "commit", "branch", "domain"]
     }
   ]
 }
