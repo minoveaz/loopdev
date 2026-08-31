@@ -35,6 +35,9 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
     expect(screen.getByText('Convocatoria Abierta')).toBeDefined();
     expect(screen.getByText(/Plazas del Crew/i)).toBeDefined();
     expect(screen.getByText(/Tercer Tiempo Confirmado/i)).toBeDefined();
+    expect(screen.getByText('Capitán Verificado')).toBeDefined();
+    expect(screen.getByText('Condiciones Previstas')).toBeDefined();
+    expect(screen.getByText('Compartir WhatsApp')).toBeDefined();
 
     const joinBtn = screen.getByRole('button', { name: /Estás dentro/i });
     fireEvent.click(joinBtn);

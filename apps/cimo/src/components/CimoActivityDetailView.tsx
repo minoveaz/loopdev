@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { CrewAvatarGroup, type ActivityCardData, type ChatMessage } from '@loopdev/public-blocks';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
+import { CimoActivitySeoHead } from './CimoActivitySeoHead';
 
 export interface CimoActivityDetailViewProps {
   activity: ActivityCardData;
@@ -58,18 +59,33 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
     setInputText('');
   };
 
+  const city = activity.location.split(',')[1]?.trim() || 'Madrid';
+
   return (
     <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6 text-[#1F4E5F]">
-      {/* Top Bar with Back Button & Share */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#1F4E5F]/10">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex items-center gap-2 text-xs font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver a Explorar</span>
-        </button>
+      {/* 🧭 SEO Head & Breadcrumbs */}
+      <CimoActivitySeoHead activity={activity} />
+
+      {/* Top Bar with Breadcrumbs & Back Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#1F4E5F]/10">
+        <div className="flex items-center gap-2 text-xs">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-1.5 font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors cursor-pointer mr-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Volver a Explorar</span>
+          </button>
+          <span className="text-[#1F4E5F]/30">•</span>
+          <nav aria-label="Migas de pan" className="flex items-center gap-1 text-[11px] font-bold text-[#1F4E5F]/60 flex-wrap">
+            <span className="hover:text-[#1F4E5F] cursor-pointer" onClick={onBack}>CIMO</span>
+            <span>›</span>
+            <span>{city}</span>
+            <span>›</span>
+            <span className="capitalize text-[#7FB77E]">{activity.sport}</span>
+          </nav>
+        </div>
 
         <div className="flex items-center gap-2">
           <button

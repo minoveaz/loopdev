@@ -93,4 +93,29 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
 
     expect(onNavigateProfile).toHaveBeenCalled();
   });
+
+  it('renders Breadcrumbs navigation and injects Schema.org JSON-LD structured data', () => {
+    render(
+      <CimoActivityDetailView
+        activity={mockActivity}
+        chatMessages={[]}
+        onBack={vi.fn()}
+        onJoin={vi.fn()}
+        onSendMessage={vi.fn()}
+      />
+    );
+
+    // Visual Breadcrumbs navigation
+    expect(screen.getByRole('navigation', { name: /Migas de pan/i })).toBeDefined();
+
+    // Check JSON-LD scripts in head
+    const sportsScript = document.getElementById('cimo-schema-sports-event');
+    expect(sportsScript).toBeDefined();
+    expect(sportsScript?.textContent).toContain('SportsEvent');
+    expect(sportsScript?.textContent).toContain(mockActivity.title);
+
+    const breadcrumbsScript = document.getElementById('cimo-schema-breadcrumbs');
+    expect(breadcrumbsScript).toBeDefined();
+    expect(breadcrumbsScript?.textContent).toContain('BreadcrumbList');
+  });
 });

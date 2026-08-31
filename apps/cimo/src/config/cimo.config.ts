@@ -64,6 +64,37 @@ export const CIMO_FEED_COMPOSITION: PublicViewComposition = createPublicContextu
   alignment: 'stretch',
 });
 
+export const CIMO_ACTIVITY_DETAIL_COMPOSITION: PublicViewComposition = {
+  recipe: 'PublicContextualTriptych',
+  grid: {
+    columns: 12,
+    gap: 'lg',
+    maxWidth: 'full',
+    alignment: 'stretch',
+    scrollMode: 'viewport-contained',
+  },
+  regions: [
+    {
+      id: 'cimo-primary-work-area',
+      slot: 'main-feed',
+      component: 'PrimaryWorkArea',
+      colSpan: 8,
+      sizing: 'fill',
+      overflow: 'auto-y',
+      responsive: { tablet: 'preserve', mobile: 'stack' },
+    },
+    {
+      id: 'cimo-right-support',
+      slot: 'context-inspector',
+      component: 'RightSupportZone',
+      colSpan: 4,
+      sizing: 'fill',
+      overflow: 'auto-y',
+      responsive: { tablet: 'drawer', mobile: 'hidden' },
+    },
+  ],
+};
+
 export const cimoSeoConfig: PublicSeoMetadata = {
   title: 'CIMO | Conoce personas entrenando y crea tu Crew deportivo',
   description: 'Únete a planes deportivos grupales en Madrid y otras ciudades: running, pádel, crossfit, ciclismo y más.',
