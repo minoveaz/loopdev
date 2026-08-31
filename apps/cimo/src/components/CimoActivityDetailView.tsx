@@ -209,67 +209,56 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </div>
           </div>
 
-          {/* Captain Instructions (if present) */}
-          {activity.instructions && (
-            <div className="p-4 bg-[#7FB77E]/10 border border-[#7FB77E]/20 rounded-2xl flex items-start gap-3">
-              <div className="p-2 rounded-xl bg-[#7FB77E] text-white shrink-0">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div className="flex flex-col gap-0.5 min-w-0">
-                <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
-                  Instrucciones del Capitán ({activity.captain.name})
-                </span>
-                <p className="text-xs text-[#1F4E5F] font-bold leading-relaxed">
-                  "{activity.instructions}"
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Technical Details & Itinerary */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 bg-white rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E]">
-                Ritmo & Requisitos
+          {/* ⚡ Métricas Clave del Plan (Tipografía Clara y Legible) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-4 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/8 flex flex-col justify-center">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#7FB77E] block mb-1">
+                Ritmo & Exigencia
               </span>
-              <p className="text-xs font-bold text-[#1F4E5F]">
-                ⚡ {activity.paceOrDetails ?? 'Ritmo cómodo adaptado al nivel de grupo.'}
-              </p>
-              <p className="text-[11px] text-[#1F4E5F]/70 mt-1">
-                Llevar calzado adecuado y ropa cómoda. Se recomienda llegar 5 minutos antes.
+              <p className="text-sm font-black text-[#1F4E5F]">
+                {activity.paceOrDetails ?? 'Ritmo cómodo y adaptado al grupo'}
               </p>
             </div>
 
-            <div className="p-4 bg-white rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E]">
-                Itinerario Previsto
+            <div className="p-4 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/8 flex flex-col justify-center">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#7FB77E] block mb-1">
+                Nivel Recomendado
               </span>
-              <ul className="text-[11px] text-[#1F4E5F]/80 flex flex-col gap-1.5 font-medium">
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">1.</span>
-                  <span>Encuentro en {activity.location}</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">2.</span>
-                  <span>Calentamiento y presentación (5 min)</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">3.</span>
-                  <span>Entrenamiento principal en grupo</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">4.</span>
-                  <span>{activity.thirdHalf?.enabled ? 'Estiramientos y Tercer Tiempo social' : 'Estiramientos y cierre deportivo'}</span>
-                </li>
-              </ul>
+              <p className="text-sm font-black text-[#1F4E5F]">
+                {activity.level}
+              </p>
+            </div>
+
+            <div className="p-4 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/8 flex flex-col justify-center">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#7FB77E] block mb-1">
+                Fecha & Horario
+              </span>
+              <p className="text-sm font-black text-[#1F4E5F]">
+                {activity.date} a las {activity.time}h
+              </p>
             </div>
           </div>
 
-          {/* ☕ Tercer Tiempo Post-Entreno (Optional Social Experience) */}
-          {activity.thirdHalf?.enabled ? (
-            <div className="p-4 sm:p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/25 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          {/* 💬 Instrucciones del Capitán (Bloque Editorial Destacado) */}
+          {activity.instructions ? (
+            <div className="p-5 bg-gradient-to-br from-[#7FB77E]/15 via-[#7FB77E]/5 to-transparent border border-[#7FB77E]/30 rounded-3xl flex flex-col gap-2 shadow-2xs">
+              <div className="flex items-center gap-2 text-[#7FB77E]">
+                <Sparkles className="w-4 h-4 text-[#7FB77E]" />
+                <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
+                  Instrucciones de {activity.captain.name}
+                </span>
+              </div>
+              <p className="text-sm sm:text-base font-semibold text-[#1F4E5F] leading-relaxed italic">
+                "{activity.instructions}"
+              </p>
+            </div>
+          ) : null}
+
+          {/* ☕ Tercer Tiempo Post-Entreno (Solo si está activo) */}
+          {activity.thirdHalf?.enabled && (
+            <div className="p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/25 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-900 flex items-center justify-center text-2xl shrink-0 shadow-2xs">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-900 flex items-center justify-center text-2xl shrink-0 shadow-2xs">
                   {activity.thirdHalf.type === 'beer'
                     ? '🍻'
                     : activity.thirdHalf.type === 'smoothie'
@@ -284,28 +273,23 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       Tercer Tiempo Organizado
                     </span>
                     <span className="text-[10px] font-black text-amber-800 bg-amber-500/20 px-2 py-0.5 rounded-full">
-                      Social
+                      Social & Recovery
                     </span>
                   </div>
-                  <h4 className="text-sm font-black text-[#1F4E5F] mt-0.5">
+                  <h4 className="text-base font-black text-[#1F4E5F] mt-0.5">
                     {activity.thirdHalf.venue || 'Cafetería cercana'}
                   </h4>
-                  <p className="text-xs text-[#1F4E5F]/75 font-medium mt-1 leading-relaxed">
-                    {activity.thirdHalf.notes || 'Espacio para charlar, rehidratarnos y comentar el entreno tras estirar.'}
-                  </p>
+                  {activity.thirdHalf.notes && (
+                    <p className="text-xs sm:text-sm text-[#1F4E5F]/75 font-medium mt-1 leading-relaxed">
+                      {activity.thirdHalf.notes}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              <div className="px-3.5 py-1.5 rounded-xl bg-white/80 border border-amber-500/20 text-[11px] font-bold text-amber-900 shrink-0 shadow-2xs">
+              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-amber-500/20 text-xs font-bold text-amber-900 shrink-0 shadow-2xs">
                 ☕ Post-Entreno (~30-40 min)
               </div>
-            </div>
-          ) : (
-            <div className="p-3 bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-2xl flex items-center gap-2.5 text-xs text-[#1F4E5F]/70 font-medium">
-              <span className="text-base">⚡</span>
-              <span>
-                <strong>Plan Deportivo Puro:</strong> Este entreno está enfocado 100% en la sesión física sin tercer tiempo posterior organizado.
-              </span>
             </div>
           )}
 

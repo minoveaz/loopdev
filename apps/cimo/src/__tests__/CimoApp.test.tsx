@@ -51,7 +51,7 @@ describe('CIMO 2.0 Dedicated Views Integration', () => {
     fireEvent.click(activityTitle);
 
     expect(screen.getByText('Información del Plan')).toBeDefined();
-    expect(screen.getByText('Itinerario Previsto')).toBeDefined();
+    expect(screen.getByText('Ritmo & Exigencia')).toBeDefined();
     expect(screen.getByText('Volver a Explorar')).toBeDefined();
   });
 

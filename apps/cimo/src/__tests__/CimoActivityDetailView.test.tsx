@@ -19,7 +19,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
     );
 
     expect(screen.getByText('Información del Plan')).toBeDefined();
-    expect(screen.getByText('Itinerario Previsto')).toBeDefined();
+    expect(screen.getByText('Ritmo & Exigencia')).toBeDefined();
     expect(screen.getByText('Tercer Tiempo Organizado')).toBeDefined();
     expect(screen.getByText(mockActivity.captain.name)).toBeDefined();
   });
