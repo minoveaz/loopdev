@@ -12,6 +12,7 @@ export interface CimoSportPaceSelectorProps {
   sport: string;
   selectedIndex: number;
   onSelectIndex: (index: number) => void;
+  stepNumber?: number;
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
   sport,
   selectedIndex,
   onSelectIndex,
+  stepNumber = 5,
   className = '',
 }) => {
   const activePaces = getSportPaces(sport);
@@ -29,7 +31,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="w-5 h-5 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-[11px] font-black flex items-center justify-center shrink-0">
-            5
+            {stepNumber}
           </span>
           <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
             Nivel & Ritmo del entrenamiento

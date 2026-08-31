@@ -351,7 +351,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
             Crea tu Entrenamiento Grupal
           </h1>
           <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1 font-medium leading-relaxed">
-            Diseña tu Crew en 8 pasos guiados. Los miembros de tu ciudad podrán descubrir tu propuesta y unirse.
+            Diseña tu Crew en 9 pasos guiados. Los miembros de tu ciudad podrán descubrir tu propuesta y unirse.
           </p>
         </div>
       </div>
@@ -861,12 +861,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           />
         </div>
 
-        {/* 📖 Island 5: Título & Descripción de la Experiencia */}
+        {/* 📖 Island 5: Título & Descripción de la Experiencia (Paso 6) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                5
+                6
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Título & Descripción del Entrenamiento
@@ -932,13 +932,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* 📝 Island 6: Instrucciones del Capitán & Material Recomendado */}
+        {/* 📝 Island 6: Instrucciones del Capitán & Material Recomendado (Paso 7) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
           {/* Parte A: Instrucciones Escritas del Capitán */}
           <CimoCaptainInstructionsField
             value={instructions}
             onChange={setInstructions}
             sport={sport}
+            stepNumber={7}
           />
 
           {/* Parte B: Material Recomendado (Checklist Amplio y Legible) */}
@@ -1029,12 +1030,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* 👥 Island 7: Cupo de Plazas (Separado) */}
+        {/* 👥 Island 7: Cupo de Plazas (Paso 8) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                7
+                8
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Cupo máximo de personas
@@ -1083,12 +1084,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* ☕ Island 8: Tercer Tiempo Post-Entreno (Opcional) */}
+        {/* ☕ Island 8: Tercer Tiempo Post-Entreno (Paso 9) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                8
+                9
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Tercer Tiempo Post-Entreno
