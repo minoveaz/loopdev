@@ -92,8 +92,29 @@ export function createActivitySemanticSlug(title: string, activityId: string): s
  */
 export function extractActivityIdFromSlug(slugOrId: string): string {
   if (!slugOrId) return '';
-  const match = slugOrId.match(/(act_[a-zA-Z0-9_-]+)$/i);
-  if (match) return match[1];
+  const lower = slugOrId.toLowerCase();
+  const idx = lower.lastIndexOf('act_');
+  if (idx !== -1) {
+    const candidate = slugOrId.slice(idx);
+    // Safe deterministic O(k) validation of ID characters (avoiding polynomial regex backtracking)
+    let isValid = true;
+    for (let i = 4; i < candidate.length; i++) {
+      const code = candidate.charCodeAt(i);
+      const isAlphaNum =
+        (code >= 48 && code <= 57) || // 0-9
+        (code >= 65 && code <= 90) || // A-Z
+        (code >= 97 && code <= 122) || // a-z
+        code === 45 || // -
+        code === 95; // _
+      if (!isAlphaNum) {
+        isValid = false;
+        break;
+      }
+    }
+    if (isValid && candidate.length > 4) {
+      return candidate;
+    }
+  }
   return slugOrId;
 }
 
