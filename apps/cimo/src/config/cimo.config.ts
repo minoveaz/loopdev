@@ -1,8 +1,9 @@
-import type {
-  PublicBrandTheme,
-  PublicNavigation,
-  PublicSeoMetadata,
-  PublicViewComposition,
+import {
+  createPublicContextualTriptychComposition,
+  type PublicBrandTheme,
+  type PublicNavigation,
+  type PublicSeoMetadata,
+  type PublicViewComposition,
 } from '@loopdev/contracts';
 
 export const cimoBrandTheme: PublicBrandTheme = {
@@ -53,52 +54,15 @@ export const cimoNavigation: PublicNavigation = {
   ],
 };
 
-export const CIMO_FEED_COMPOSITION: PublicViewComposition = {
-  recipe: 'PublicSocialFeed',
-  grid: {
-    columns: 12,
-    gap: 'lg',
-    maxWidth: 'full',
-  },
-  regions: [
-    {
-      id: 'cimo-filters-col',
-      slot: 'sidebar-filters',
-      component: 'CimoSportFilters',
-      colSpan: 3,
-      sizing: 'fill',
-      overflow: 'auto-y',
-      responsive: {
-        tablet: 'drawer',
-        mobile: 'sheet',
-      },
-    },
-    {
-      id: 'cimo-feed-col',
-      slot: 'main-feed',
-      component: 'CimoActivitiesFeed',
-      colSpan: 6,
-      sizing: 'fill',
-      overflow: 'auto-y',
-      responsive: {
-        tablet: 'preserve',
-        mobile: 'stack',
-      },
-    },
-    {
-      id: 'cimo-inspector-col',
-      slot: 'context-inspector',
-      component: 'CimoCrewDetailInspector',
-      colSpan: 3,
-      sizing: 'fill',
-      overflow: 'auto-y',
-      responsive: {
-        tablet: 'stack',
-        mobile: 'modal',
-      },
-    },
-  ],
-};
+export const CIMO_FEED_COMPOSITION: PublicViewComposition = createPublicContextualTriptychComposition({
+  idPrefix: 'cimo',
+  leftColSpan: 3,
+  mainColSpan: 6,
+  rightColSpan: 3,
+  gap: 'lg',
+  maxWidth: 'full',
+  alignment: 'stretch',
+});
 
 export const cimoSeoConfig: PublicSeoMetadata = {
   title: 'CIMO | Conoce personas entrenando y crea tu Crew deportivo',

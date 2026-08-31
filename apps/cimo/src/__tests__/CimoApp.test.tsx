@@ -1,9 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 describe('CIMO 2.0 Dedicated Views Integration', () => {
+  beforeEach(() => {
+    window.location.hash = '#/app/home';
+  });
   it('renders CIMO 2.0 floating search bar, curated feed sections and athlete stats', () => {
     render(<App />);
 

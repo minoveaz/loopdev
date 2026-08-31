@@ -81,9 +81,10 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
       ? 'overflow-x-auto'
       : 'overflow-visible';
 
+  const isStretch = canvasContext?.composition.grid.alignment === 'stretch' || spec.sizing === 'fill';
   const sizingClass =
-    spec.sizing === 'fill'
-      ? 'h-full min-h-0'
+    isStretch
+      ? 'h-full min-h-0 flex flex-col'
       : spec.sizing === 'fixed'
       ? 'flex-shrink-0'
       : 'h-auto';

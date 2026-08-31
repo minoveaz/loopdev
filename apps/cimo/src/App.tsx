@@ -17,6 +17,14 @@ import { CimoProfileView } from './components/CimoProfileView';
 import { CimoEditProfileView, type ExtendedUserProfileData } from './components/CimoEditProfileView';
 import { CimoCrewNetworkView } from './components/CimoCrewNetworkView';
 import { CimoSquadHubView } from './components/CimoSquadHubView';
+import { CimoCaptainBadgeInspector } from './components/CimoCaptainBadgeInspector';
+import { CimoActivityRsvpTicketWidget } from './components/CimoActivityRsvpTicketWidget';
+import { CimoCaptainGuideTipsWidget } from './components/CimoCaptainGuideTipsWidget';
+import { CimoLivePlanPreviewWidget } from './components/CimoLivePlanPreviewWidget';
+import { CimoAthleteMetricsWidget } from './components/CimoAthleteMetricsWidget';
+import { CimoBadgesShowcaseWidget } from './components/CimoBadgesShowcaseWidget';
+import { CimoCrewNetworkStatsWidget } from './components/CimoCrewNetworkStatsWidget';
+import { CimoSuggestedAthletesWidget } from './components/CimoSuggestedAthletesWidget';
 import { getAthleteProfileById } from './data/mockAthletes';
 
 export function App() {
@@ -401,6 +409,99 @@ export function App() {
     }
   };
 
+  const renderLeftSupportZone = () => {
+    switch (currentRoute) {
+      case 'activity-detail':
+        return selectedActivity ? (
+          <CimoCaptainBadgeInspector
+            activity={selectedActivity}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+          />
+        ) : null;
+      case 'create':
+        return <CimoCaptainGuideTipsWidget />;
+      case 'crew':
+      case 'squad':
+        return <CimoCrewNetworkStatsWidget />;
+      case 'profile':
+      case 'profile-edit':
+        return (
+          <CimoAthleteMetricsWidget
+            user={activeProfileUserId ? (getAthleteProfileById(activeProfileUserId) ?? currentUser) : currentUser}
+            isOwnProfile={!activeProfileUserId || activeProfileUserId === (currentUser.handle?.replace('@', '') || 'alexrivera')}
+          />
+        );
+      case 'chats':
+      case 'explore':
+      case 'feed':
+      default:
+        return (
+          <CimoAthleteProfileCard
+            user={currentUser}
+            onCreateClick={() => navigateTo('create')}
+            onProfileClick={() => navigateTo('profile')}
+          />
+        );
+    }
+  };
+
+  const renderRightSupportZone = () => {
+    switch (currentRoute) {
+      case 'activity-detail':
+        return selectedActivity ? (
+          <CimoActivityRsvpTicketWidget
+            activity={selectedActivity}
+            onJoin={handleJoinActivity}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+          />
+        ) : null;
+      case 'create':
+        return (
+          <CimoLivePlanPreviewWidget
+            formData={{
+              sport: selectedSport === 'Todos' ? 'Running' : selectedSport,
+              title: '',
+              description: '',
+              date: 'Mañana',
+              time: '08:00',
+              location: selectedZone === 'Toda la ciudad' ? 'Parque del Retiro, Madrid' : selectedZone,
+              capacity: 6,
+              level: selectedLevel === 'Cualquier nivel' ? 'Intermedio (5:15 min/km)' : selectedLevel,
+              thirdHalfType: 'cafe',
+              thirdHalfTitle: 'Café de Especialidad',
+              thirdHalfLocation: 'Plaza de la Independencia',
+              image: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80&w=800',
+              price: 'Gratis',
+            }}
+            currentUser={currentUser}
+          />
+        );
+      case 'crew':
+      case 'squad':
+        return (
+          <CimoSuggestedAthletesWidget
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+          />
+        );
+      case 'profile':
+      case 'profile-edit':
+        return <CimoBadgesShowcaseWidget />;
+      case 'chats':
+      case 'feed':
+      case 'explore':
+      default:
+        return (
+          <CimoCommunityWidgets
+            joinedActivities={joinedActivities}
+            chats={chats}
+            onSelectActivity={handleSelectActivity}
+            onOpenChatTab={() => navigateTo('chats')}
+            onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
+          />
+        );
+    }
+  };
+
   return (
     <>
       <PublicRuntime
@@ -516,23 +617,9 @@ export function App() {
               }
             />
           ),
-          sidebarFilters: (
-            <CimoAthleteProfileCard
-              user={currentUser}
-              onCreateClick={() => navigateTo('create')}
-              onProfileClick={() => navigateTo('profile')}
-            />
-          ),
-          mainFeed: renderMainContent(),
-          contextInspector: (
-            <CimoCommunityWidgets
-              joinedActivities={joinedActivities}
-              chats={chats}
-              onSelectActivity={handleSelectActivity}
-              onOpenChatTab={() => navigateTo('chats')}
-              onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
-            />
-          ),
+          sidebarFilters: () => renderLeftSupportZone(),
+          mainFeed: () => renderMainContent(),
+          contextInspector: () => renderRightSupportZone(),
           drawer: (
             <div className="flex flex-col gap-5 p-2">
               <CimoAthleteProfileCard

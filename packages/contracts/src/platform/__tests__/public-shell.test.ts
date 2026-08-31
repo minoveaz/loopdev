@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import {
+  createPublicContextualTriptychComposition,
   PublicBrandThemeSchema,
   PublicNavigationSchema,
   PublicPageSpecSchema,
@@ -7,6 +7,23 @@ import {
 } from '../public-shell';
 
 describe('Public Shell Contracts', () => {
+  it('validates a standard 3-column contextual triptych composition with equal-height stretch', () => {
+    const triptych = createPublicContextualTriptychComposition({
+      idPrefix: 'cimo-test',
+      leftColSpan: 3,
+      mainColSpan: 6,
+      rightColSpan: 3,
+      gap: 'md',
+      maxWidth: 'full',
+      alignment: 'stretch',
+    });
+
+    const parsed = PublicViewCompositionSchema.safeParse(triptych);
+    expect(parsed.success).toBe(true);
+    expect(triptych.recipe).toBe('PublicContextualTriptych');
+    expect(triptych.grid.alignment).toBe('stretch');
+    expect(triptych.regions).toHaveLength(3);
+  });
   it('validates a bounded 3-column public social feed composition (CIMO pattern)', () => {
     const validCimoComposition = {
       recipe: 'PublicSocialFeed',

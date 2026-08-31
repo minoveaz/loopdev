@@ -26,6 +26,12 @@ const maxWidthClasses = {
   full: 'max-w-[1720px]',
 } as const;
 
+const alignmentClasses = {
+  start: 'items-start',
+  stretch: 'items-stretch',
+  center: 'items-center',
+} as const;
+
 export const PublicCanvas: React.FC<PublicCanvasProps> = ({
   composition,
   children,
@@ -33,13 +39,17 @@ export const PublicCanvas: React.FC<PublicCanvasProps> = ({
 }) => {
   const gapClass = gapClasses[composition.grid.gap ?? 'md'];
   const maxWidthClass = maxWidthClasses[composition.grid.maxWidth ?? '7xl'];
+  const alignClass = alignmentClasses[composition.grid.alignment ?? 'stretch'];
+  const isStartAlign = composition.grid.alignment === 'start';
 
   return (
     <PublicCanvasContext.Provider value={{ composition }}>
       <main
         className={clsx(
           'w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6',
-          'grid grid-cols-12 auto-rows-min items-start',
+          'grid grid-cols-12',
+          isStartAlign ? 'auto-rows-min' : 'auto-rows-fr',
+          alignClass,
           gapClass,
           maxWidthClass,
           className,
