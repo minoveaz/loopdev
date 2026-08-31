@@ -69,6 +69,7 @@ export const SPORT_GEAR_CATALOG: Record<string, SportGearItem[]> = {
   hiking: [
     { id: 'footwear', label: 'Calzado Trail', sub: 'Suela con agarre', icon: 'Footprints' },
     { id: 'water', label: 'Agua (1.5L)', sub: 'Mínimo sugerido', icon: 'Droplets' },
+    { id: 'windbreaker', label: 'Cortavientos / Capa', sub: 'Protección para la cumbre', icon: 'ShieldCheck' },
     { id: 'snack', label: 'Snack / Fruta', sub: 'Frutos secos o barrita', icon: 'Apple' },
     { id: 'sun', label: 'Protección Solar', sub: 'Gorra y crema', icon: 'Sun' },
   ],

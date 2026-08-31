@@ -277,7 +277,7 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1">
               {activity.sport === 'hiking' ? (
                 <>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -300,11 +300,20 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Cortavientos</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Capa de abrigo</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
                       <Apple className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
                       <span className="text-xs font-black text-[#1F4E5F] block truncate">Snack / Fruta</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Frutos secos o barrita</span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Frutos secos</span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
