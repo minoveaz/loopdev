@@ -263,16 +263,16 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                     )}
                   </div>
 
-                  {/* 3. Compact 1-Line Third Half Pill (No nested boxes) */}
+                  {/* 3. Compact 1-Line Third Half Pill (Social Blue) */}
                   {act.thirdHalf?.enabled && (
-                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-amber-900 bg-[#FFFBEB] px-3 py-1.5 rounded-xl border border-[#FDE68A]">
+                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-[#1F4E5F] bg-[#EEF2F2]/70 px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15">
                       <div className="flex items-center gap-1.5 truncate">
-                        {getThirdHalfVectorIcon(act.thirdHalf.type, 'w-3.5 h-3.5 text-amber-700 shrink-0')}
+                        {getThirdHalfVectorIcon(act.thirdHalf.type, 'w-3.5 h-3.5 text-[#1F4E5F] shrink-0')}
                         <span className="truncate">
                           <strong>Tercer Tiempo:</strong> {act.thirdHalf.venue}
                         </span>
                       </div>
-                      <span className="text-[9px] font-black uppercase text-amber-800 bg-amber-200/80 px-1.5 py-0.2 rounded-md shrink-0">
+                      <span className="text-[9px] font-black uppercase text-white bg-[#1F4E5F] px-1.5 py-0.2 rounded-md shrink-0">
                         Social
                       </span>
                     </div>

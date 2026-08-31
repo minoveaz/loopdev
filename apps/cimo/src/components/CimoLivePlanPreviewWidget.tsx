@@ -204,16 +204,16 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
               </p>
             </div>
 
-            {/* 3. Compact 1-Line Third Half Pill */}
+            {/* 3. Compact 1-Line Third Half Pill (Social Blue) */}
             {hasThirdHalf && (
-              <div className="flex items-center justify-between gap-2 text-xs font-bold text-amber-900 bg-[#FFFBEB] px-3 py-1.5 rounded-xl border border-[#FDE68A]">
+              <div className="flex items-center justify-between gap-2 text-xs font-bold text-[#1F4E5F] bg-[#EEF2F2]/70 px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15">
                 <div className="flex items-center gap-1.5 truncate">
-                  <Coffee className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                  <Coffee className="w-3.5 h-3.5 text-[#1F4E5F] shrink-0" />
                   <span className="truncate">
                     <strong>Tercer Tiempo:</strong> {formData.thirdHalfLocation || formData.thirdHalfTitle || 'Café & Charla Post-Entreno'}
                   </span>
                 </div>
-                <span className="text-[9px] font-black uppercase text-amber-800 bg-amber-200/80 px-1.5 py-0.2 rounded-md shrink-0">
+                <span className="text-[9px] font-black uppercase text-white bg-[#1F4E5F] px-1.5 py-0.2 rounded-md shrink-0">
                   Social
                 </span>
               </div>

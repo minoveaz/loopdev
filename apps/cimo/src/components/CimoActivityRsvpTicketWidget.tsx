@@ -343,20 +343,22 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
         </div>
       </div>
 
-      {/* 5. ☕ Tercer Tiempo Post-Entreno */}
+      {/* 5. Tercer Tiempo Post-Entreno (CIMO Social Blue) */}
       {activity.thirdHalf && activity.thirdHalf.enabled && (
-        <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-center gap-2.5 mt-auto">
-          <div className="w-7 h-7 rounded-xl bg-[#7FB77E]/15 flex items-center justify-center text-sm shrink-0">
-            {activity.thirdHalf.type === 'beer'
-              ? '🍻'
-              : activity.thirdHalf.type === 'smoothie'
-              ? '🥤'
-              : activity.thirdHalf.type === 'picnic'
-              ? '🌿'
-              : '☕'}
+        <div className="p-3 bg-[#EEF2F2]/60 rounded-2xl border border-[#1F4E5F]/15 text-[#1F4E5F] flex items-center gap-2.5 mt-auto">
+          <div className="w-7 h-7 rounded-xl bg-[#1F4E5F]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+            {activity.thirdHalf.type === 'beer' ? (
+              <Beer className="w-3.5 h-3.5" />
+            ) : activity.thirdHalf.type === 'smoothie' ? (
+              <Sparkles className="w-3.5 h-3.5" />
+            ) : activity.thirdHalf.type === 'picnic' ? (
+              <Sun className="w-3.5 h-3.5" />
+            ) : (
+              <Coffee className="w-3.5 h-3.5" />
+            )}
           </div>
           <div className="min-w-0 flex-1">
-            <span className="text-[10px] font-black text-[#7FB77E] uppercase block">Tercer Tiempo Confirmado</span>
+            <span className="text-[10px] font-black text-[#1F4E5F] uppercase block">Tercer Tiempo Confirmado</span>
             <p className="text-[11px] font-black text-[#1F4E5F] truncate">{activity.thirdHalf.venue || 'Café / Terraza'}</p>
             {activity.thirdHalf.notes && (
               <p className="text-[10px] text-[#1F4E5F]/70 font-medium truncate mt-0.2">{activity.thirdHalf.notes}</p>

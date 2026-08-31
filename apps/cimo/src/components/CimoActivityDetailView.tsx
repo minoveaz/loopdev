@@ -464,27 +464,27 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </div>
           </div>
 
-          {/* Tercer Tiempo Post-Entreno (Vectorial) */}
+          {/* Tercer Tiempo Post-Entreno (CIMO Social Blue) */}
           {activity.thirdHalf?.enabled && (
-            <div className="p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/25 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="p-5 bg-gradient-to-r from-[#1F4E5F]/10 via-[#1F4E5F]/5 to-transparent border border-[#1F4E5F]/20 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-900 flex items-center justify-center shrink-0 shadow-2xs">
+                <div className="w-12 h-12 rounded-2xl bg-[#1F4E5F]/15 text-[#1F4E5F] flex items-center justify-center shrink-0 shadow-2xs">
                   {activity.thirdHalf.type === 'beer' ? (
-                    <Beer className="w-6 h-6 text-amber-900" />
+                    <Beer className="w-6 h-6 text-[#1F4E5F]" />
                   ) : activity.thirdHalf.type === 'smoothie' ? (
-                    <Sparkles className="w-6 h-6 text-amber-900" />
+                    <Sparkles className="w-6 h-6 text-[#1F4E5F]" />
                   ) : activity.thirdHalf.type === 'picnic' ? (
-                    <Sun className="w-6 h-6 text-amber-900" />
+                    <Sun className="w-6 h-6 text-[#1F4E5F]" />
                   ) : (
-                    <Coffee className="w-6 h-6 text-amber-900" />
+                    <Coffee className="w-6 h-6 text-[#1F4E5F]" />
                   )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-black uppercase tracking-wider text-amber-900">
+                    <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
                       Tercer Tiempo Organizado
                     </span>
-                    <span className="text-[10px] font-black text-amber-800 bg-amber-500/20 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-black text-white bg-[#1F4E5F] px-2 py-0.5 rounded-full">
                       Social & Recovery
                     </span>
                   </div>
@@ -499,8 +499,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                 </div>
               </div>
 
-              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-amber-500/20 text-xs font-bold text-amber-900 shrink-0 shadow-2xs flex items-center gap-1.5">
-                <Coffee className="w-3.5 h-3.5 text-amber-700" />
+              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-[#1F4E5F]/20 text-xs font-bold text-[#1F4E5F] shrink-0 shadow-2xs flex items-center gap-1.5">
+                <Coffee className="w-3.5 h-3.5 text-[#1F4E5F]" />
                 <span>Post-Entreno (~30-40 min)</span>
               </div>
             </div>
