@@ -27,7 +27,19 @@ route -> SuiteRuntime/SuiteCanvas -> communications-inbox widget -> conversation
 | Conversation, message, delivery state and assignment view models | Implement as domain entities | CRM presentation of Communications read models. |
 | Contact summary, lead and activity context | Compose existing CRM entities | CRM remains the owner of relationship data. |
 | Conversation row, message item and policy-aware composer | Implement as module feature | No second consumer proves shared promotion yet. |
+| Conversation Workspace portability boundary | Defer shared promotion | Define a provider-neutral composition contract now; promote only after a second real consumer such as VitaBlue. |
 
 ## Constraints and evidence
 
 The inbox may not mount its own sidebar, header or overlay manager. It must audit existing list, avatar, badge, menu, dialog, tooltip, input, empty-state and accessibility primitives before creating UI. New module components need keyboard navigation, focus restoration, screen-reader labels, stable dimensions and responsive evidence. Chatwoot informs workflow anatomy only; no component, styles or source code are reused.
+
+## Future consumer review
+
+The CRM widget must keep the conversation list, timeline and composer free of
+CRM-specific nouns and data. CRM-specific ownership remains in the context
+panel and feature actions. A future VitaBlue consumer may replace that panel
+with policy, claim or appointment context while retaining the same Core policy
+states and conversation semantics.
+
+The portability contract and Chatwoot pattern decisions are recorded in the
+[Chatwoot -> LoopDev reference guide](CHATWOOT_LOOPDEV_REFERENCE_GUIDE.md).

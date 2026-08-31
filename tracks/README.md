@@ -6,7 +6,7 @@
 
 ### CRM
 
-- [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/communications-core-crm-inbox-definition` · fase 0
+- [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0
 
 ### Marketing Studio
 
@@ -39,12 +39,17 @@
 
 - [Fundación de la aplicación móvil de LoopDev](./active/mobile/2026-08-09-mobile-app-foundation.md) · fase 1
 
+### Apps
+
+- [CIMO Social Sports Platform, Strava/Airbnb 2.0 Architecture, Dedicated In-App Views, Crew Hub, Chat & Public Onboarding Landing](./active/apps/2026-08-29-cimo-social-sports-platform.md) · `feature/public-shell-foundation` · fase 1
+
 ### Platform
 
 - [Estandarización del shell de LoopDev OS](./active/platform/2026-08-10-shell-standardization.md) · fase 4
 - [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-impact-validation` · fase 1
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
+- [Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Universal Multi-Client Surface System](./active/platform/2026-08-28-public-shell-foundation.md) · `feature/public-shell-foundation` · fase 1
 
 ### Governance
 
