@@ -41,6 +41,9 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
     const chatTab = screen.getByRole('button', { name: /Chat del Crew/i });
     fireEvent.click(chatTab);
 
+    expect(screen.getByText('Chat Temporal del Evento')).toBeDefined();
+    expect(screen.getByText(/Cierra 24h tras el entreno/i)).toBeDefined();
+
     const input = screen.getByPlaceholderText(/Escribe un mensaje al Crew/i);
     fireEvent.change(input, { target: { value: '¡Nos vemos mañana en el Retiro!' } });
 

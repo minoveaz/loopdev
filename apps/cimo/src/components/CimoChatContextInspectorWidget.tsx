@@ -117,14 +117,32 @@ export const CimoChatContextInspectorWidget: React.FC<CimoChatContextInspectorWi
 
       {/* 4. Tercer Tiempo */}
       {activity.thirdHalf && (
-        <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-center gap-2.5 mt-auto">
+        <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-center gap-2.5">
           <Coffee className="w-4 h-4 text-[#7FB77E] shrink-0" />
           <div>
             <span className="text-[10px] font-black text-[#7FB77E] uppercase block">Tercer Tiempo Acordado</span>
-            <p className="text-[11px] font-black text-[#1F4E5F]">{activity.thirdHalf.venueName}</p>
+            <p className="text-[11px] font-black text-[#1F4E5F]">{activity.thirdHalf.venueName ?? (activity.thirdHalf as any).venue}</p>
           </div>
         </div>
       )}
+
+      {/* 5. Duración Limitada del Chat */}
+      <div className="p-3 bg-white rounded-2xl border border-[#1F4E5F]/10 text-[#1F4E5F] flex flex-col gap-1.5 mt-auto shadow-2xs">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-black uppercase text-[#1F4E5F]/60 tracking-wider">
+            Ciclo del Chat
+          </span>
+          <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+            ⏳ Temporal
+          </span>
+        </div>
+        <p className="text-[11px] font-black text-[#1F4E5F]">
+          Activo hasta 24h tras el entreno
+        </p>
+        <p className="text-[10px] text-[#1F4E5F]/65 font-medium leading-relaxed">
+          Se cerrará y archivará automáticamente tras la quedada para proteger la privacidad del grupo.
+        </p>
+      </div>
     </aside>
   );
 };

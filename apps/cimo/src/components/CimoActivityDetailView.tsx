@@ -521,6 +521,19 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
       ) : (
         /* Embedded Crew Chat */
         <div className="flex flex-col h-96 bg-[#F7F7F7] rounded-3xl p-4 border border-[#1F4E5F]/5">
+          {/* Ephemeral Chat Expiration Header */}
+          <div className="mb-3 px-3 py-2 bg-white rounded-2xl border border-[#7FB77E]/20 flex items-center justify-between shadow-2xs">
+            <div className="flex items-center gap-2 min-w-0">
+              <Clock className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+              <span className="text-[11px] font-black text-[#1F4E5F] truncate">
+                Chat Temporal del Evento
+              </span>
+            </div>
+            <span className="text-[9px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.5 rounded-full shrink-0">
+              ⏳ Cierra 24h tras el entreno
+            </span>
+          </div>
+
           <div className="flex-1 overflow-y-auto space-y-3 pr-1">
             {chatMessages.length === 0 ? (
               <div className="h-full flex items-center justify-center text-xs text-[#1F4E5F]/50">

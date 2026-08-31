@@ -81,9 +81,14 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-black text-[#1F4E5F] truncate">{act.title}</span>
                     </div>
-                    <p className="text-[10px] text-[#1F4E5F]/60 truncate mt-0.2 font-medium">
-                      {lastMsg ? `${lastMsg.senderName}: ${lastMsg.text}` : `${act.date} • ${act.time}`}
-                    </p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <p className="text-[10px] text-[#1F4E5F]/60 truncate font-medium flex-1">
+                        {lastMsg ? `${lastMsg.senderName}: ${lastMsg.text}` : `${act.date} • ${act.time}`}
+                      </p>
+                      <span className="text-[9px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-1.5 py-0.2 rounded-full shrink-0">
+                        ⏳ 24h
+                      </span>
+                    </div>
                   </div>
                   {msgs.length > 0 && (
                     <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-[#7FB77E] text-white shrink-0">
@@ -118,9 +123,9 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
       <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
         <ShieldCheck className="w-4 h-4 text-[#7FB77E] flex-shrink-0 mt-0.5" />
         <div>
-          <h4 className="text-[11px] font-black text-[#1F4E5F]">Bandeja Limpia CIMO</h4>
+          <h4 className="text-[11px] font-black text-[#1F4E5F]">Chat de Duración Limitada</h4>
           <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
-            Los chats se archivan automáticamente 48h tras el entreno para evitar notificaciones innecesarias.
+            Los chats de eventos son efímeros y se archivan automáticamente 24h tras el entreno para proteger la privacidad y evitar grupos zombis.
           </p>
         </div>
       </div>
