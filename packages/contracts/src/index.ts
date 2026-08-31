@@ -14,6 +14,11 @@ export * from './platform/home';
 export * from './platform/composition';
 export * from './platform/composition-registry';
 export * from './platform/composition-layout';
+export * from './platform/public-shell';
+export * from './platform/seo';
+export * from './platform/telemetry';
+export * from './platform/deepLinking';
+
 
 // Export CRM contracts
 export * from './crm/crm';
