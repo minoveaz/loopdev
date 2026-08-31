@@ -16,7 +16,8 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
     postalCode: '28009',
     level: 'Intermedio',
     paceOrDetails: '8 km • Ritmo 5:15 min/km',
-    instructions: 'Quedamos en la estatua de la Puerta de Alcalá. Rodaje continuo por sombra y 5 min de estiramientos post-entreno.',
+    description: 'Rodaje dinámico y en grupo por los senderos de sombra del Parque del Retiro. Mantendremos un ritmo conversacional cómodo de 5:15 min/km, perfecto para conectar con otros runners y terminar con 5 minutos de estiramientos y buena charla.',
+    instructions: 'Quedamos en la estatua de la Puerta de Alcalá. Llegar 5 min antes para calentar juntos.',
     maxMembers: 5,
     captain: {
       id: 'capt_1',
@@ -49,7 +50,8 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
     location: 'Club de Tenis Chamartín (Madrid)',
     level: 'Intermedio',
     paceOrDetails: 'Pista reservada 1h 30m • Nivel 3.5 Playtomic',
-    instructions: 'Pista 4 cubierta. Traed vuestra pala y agua. Pelotas nuevas incluidas.',
+    description: 'Partido amistoso de pádel mixto a 3 sets en pista cubierta. Buscaremos peloteo fluido, voleas y buen ambiente sin presiones competitivas, terminando con cañas en la terraza del club.',
+    instructions: 'Pista 4 cubierta. Estar en recepción 10 min antes para calentar.',
     maxMembers: 4,
     captain: {
       id: 'capt_2',
@@ -81,7 +83,8 @@ export const INITIAL_ACTIVITIES: ActivityCardData[] = [
     location: 'Aparcamiento Canto Cochino, Manzanares el Real',
     level: 'Intermedio',
     paceOrDetails: '12 km • Desnivel +450m • 4 horas aprox',
-    instructions: 'Calzado de montaña obligatorio, 1.5L de agua y algo de picar para el camino.',
+    description: 'Espectacular ruta circular por el corazón de La Pedriza saliendo desde Canto Cochino. Disfrutaremos de senderos de media montaña entre bloques de granito, paradas de reagrupación para fotos y vistas panorámicas de la sierra.',
+    instructions: 'Quedamos en el aparcamiento principal de Canto Cochino. Llegar 10 min antes.',
     maxMembers: 8,
     captain: {
       id: 'capt_3',

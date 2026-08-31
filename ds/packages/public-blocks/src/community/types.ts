@@ -30,6 +30,7 @@ export interface ActivityCardData {
   captain: CommunityMember;
   isJoined?: boolean;
   price?: string;
+  description?: string;
   instructions?: string;
   postalCode?: string;
   thirdHalf?: ThirdHalfData;

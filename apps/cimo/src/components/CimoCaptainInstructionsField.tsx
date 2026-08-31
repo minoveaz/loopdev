@@ -101,7 +101,7 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-            5
+            6
           </span>
           <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
             Instrucciones del Capitán <span className="text-[#1F4E5F]/40 font-bold lowercase">(opcional)</span>

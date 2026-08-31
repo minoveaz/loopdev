@@ -147,12 +147,74 @@ const quickTimes = [
 ];
 
 const availableHours = ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
+const descriptionTemplatesBySport: Record<string, { label: string; text: string }[]> = {
+  hiking: [
+    {
+      label: 'Ruta circular panorámica',
+      text: 'Espectacular ruta circular por senderos naturales con paradas de reagrupación para fotos, hidratación y disfrutar de las vistas panorámicas de la sierra.',
+    },
+    {
+      label: 'Trekking de media montaña',
+      text: 'Trekking de media montaña a ritmo constante y ameno. Ideal para desconectar de la ciudad, respirar aire puro y compartir el camino con otros senderistas.',
+    },
+    {
+      label: 'Paseo suave & naturaleza',
+      text: 'Caminata relajada por sendas llanas y arboladas, enfocada en disfrutar del entorno natural sin prisas y conversar.',
+    },
+  ],
+  running: [
+    {
+      label: 'Rodaje conversacional',
+      text: 'Rodaje dinámico en grupo a ritmo cómodo conversacional por zonas llanas y arboladas, con estiramientos y buena charla al terminar.',
+    },
+    {
+      label: 'Tirada progresiva',
+      text: 'Tirada progresiva para sumar kilómetros en equipo con buen rollo, marcando ritmos regulares y motivación mutua durante todo el recorrido.',
+    },
+    {
+      label: 'Series y cambios de ritmo',
+      text: 'Sesión de calidad combinando calentamiento suave, series controladas en llano y vuelta a la calma en grupo.',
+    },
+  ],
+  padel: [
+    {
+      label: 'Partido amistoso 3 sets',
+      text: 'Partido amistoso de pádel mixto a 3 sets en pista cubierta. Buscaremos peloteo fluido, voleas y buen ambiente sin presiones competitivas.',
+    },
+    {
+      label: 'Pozo americano rotativo',
+      text: 'Pozo dinámico de pádel con rotación de parejas cada 20 minutos para jugar con y contra todos los asistentes en un ambiente muy social.',
+    },
+    {
+      label: 'Peloteo & entrenamiento técnico',
+      text: 'Sesión de peloteo continuo, práctica de globos, bajadas de pared y partidos cortos para afinar golpes.',
+    },
+  ],
+  cycling: [
+    {
+      label: 'Salida en grupeta',
+      text: 'Salida en grupeta por carreteras secundarias tranquilas con relevos suaves, ritmo continuo y parada en fuente a mitad de ruta.',
+    },
+    {
+      label: 'Ruta gravel / pista',
+      text: 'Ruta mixta de gravel por pistas de tierra y caminos rurales a ritmo alegre pero accesible para todos.',
+    },
+  ],
+  crossfit: [
+    {
+      label: 'WOD en equipo',
+      text: 'Sesión intensa de entrenamiento funcional en equipo, con calentamiento guiado, bloques por estaciones y estiramientos finales.',
+    },
+  ],
+};
+
 const availableMinutes = ['00', '15', '30', '45'];
 
 export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, onCreate }) => {
   const [sport, setSport] = useState('running');
   const [selectedCity, setSelectedCity] = useState('Madrid');
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [location, setLocation] = useState('Parque del Retiro (Puerta de Alcalá)');
   const [date, setDate] = useState('Hoy');
   const [time, setTime] = useState('19:30');
@@ -160,7 +222,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
   const [maxMembers, setMaxMembers] = useState(5);
   const [instructions, setInstructions] = useState('');
   const [selectedGearIds, setSelectedGearIds] = useState<string[]>([
-    'footwear', 'water', 'snack', 'sun', 'racket', 'shoes', 'balls', 'bike', 'helmet', 'tools', 'apparel', 'energy'
+    'footwear', 'water', 'windbreaker', 'snack', 'sun', 'racket', 'shoes', 'balls', 'bike', 'helmet', 'tools', 'apparel', 'energy'
   ]);
 
   // Optional Third Half (Tercer Tiempo) State
@@ -213,6 +275,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
       paceOrDetails: `${currentPace.title} • ${currentPace.metric}`,
       maxMembers,
       image: selectedSportObj.image,
+      description: description.trim() || undefined,
       instructions: instructions.trim() || undefined,
       whatToBring: getSportGear(sport).filter((g) => selectedGearIds.includes(g.id)),
       thirdHalf: hasThirdHalf
@@ -288,7 +351,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
             Crea tu Entrenamiento Grupal
           </h1>
           <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1 font-medium leading-relaxed">
-            Diseña tu Crew en 7 pasos guiados. Los miembros de tu ciudad podrán descubrir tu propuesta y unirse.
+            Diseña tu Crew en 8 pasos guiados. Los miembros de tu ciudad podrán descubrir tu propuesta y unirse.
           </p>
         </div>
       </div>
@@ -798,7 +861,78 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           />
         </div>
 
-        {/* 📝 Island 5: Instrucciones del Capitán & Material Recomendado */}
+        {/* 📖 Island 5: Título & Descripción de la Experiencia */}
+        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
+                5
+              </span>
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
+                Título & Descripción del Entrenamiento
+              </span>
+            </div>
+            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+              Personalizable
+            </span>
+          </div>
+
+          {/* Title input */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+              Título de la convocatoria
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder={`Ej: ${selectedSportObj.label} en ${location.split('(')[0].trim()}`}
+              className="w-full px-4 py-3 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-sm font-black text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+            />
+          </div>
+
+          {/* Description input with character counter and templates */}
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                ¿De qué trata tu sesión? <span className="text-[#1F4E5F]/50 font-medium lowercase">(describe la experiencia)</span>
+              </label>
+              <span className="text-[11px] font-bold text-[#1F4E5F]/50">
+                {description.length}/500
+              </span>
+            </div>
+
+            {/* Quick Inspiration Templates */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                Inspiración & Plantillas Rápidas (Haz clic para rellenar o editar):
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {(descriptionTemplatesBySport[sport] ?? descriptionTemplatesBySport.running).map((tmpl) => (
+                  <button
+                    key={tmpl.label}
+                    type="button"
+                    onClick={() => setDescription(tmpl.text)}
+                    className="px-3 py-1.5 rounded-xl border border-[#7FB77E]/30 bg-[#7FB77E]/10 hover:bg-[#7FB77E]/20 text-[#1F4E5F] text-xs font-black transition-all cursor-pointer flex items-center gap-1.5"
+                  >
+                    <Sparkles className="w-3 h-3 text-[#7FB77E]" />
+                    <span>{tmpl.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value.slice(0, 500))}
+              rows={3}
+              placeholder={`Describe brevemente el recorrido, dinámicas del grupo o ambiente del entreno de ${selectedSportObj.label}...`}
+              className="w-full px-4 py-3 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs sm:text-sm font-medium text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white resize-none shadow-2xs leading-relaxed"
+            />
+          </div>
+        </div>
+
+        {/* 📝 Island 6: Instrucciones del Capitán & Material Recomendado */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
           {/* Parte A: Instrucciones Escritas del Capitán */}
           <CimoCaptainInstructionsField
@@ -895,12 +1029,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* 👥 Island 6: Cupo de Plazas (Separado) */}
+        {/* 👥 Island 7: Cupo de Plazas (Separado) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                6
+                7
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Cupo máximo de personas
@@ -949,12 +1083,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({ onBack, 
           </div>
         </div>
 
-        {/* ☕ Island 7: Tercer Tiempo Post-Entreno (Opcional) */}
+        {/* ☕ Island 8: Tercer Tiempo Post-Entreno (Opcional) */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-5">
           <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-                7
+                8
               </span>
               <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
                 Tercer Tiempo Post-Entreno

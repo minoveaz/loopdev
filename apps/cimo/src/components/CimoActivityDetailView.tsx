@@ -12,6 +12,7 @@ import {
   Clock,
   Coffee,
   Droplets,
+  FileText,
   Flame,
   Footprints,
   Heart,
@@ -249,6 +250,19 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               </p>
             </div>
           </div>
+
+          {/* 📖 Acerca del Entrenamiento / Qué Haremos */}
+          {activity.description && (
+            <div className="p-6 bg-white rounded-3xl border border-[#1F4E5F]/10 flex flex-col gap-2.5 shadow-2xs">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#7FB77E]" />
+                <span>Acerca de este entrenamiento</span>
+              </span>
+              <p className="text-sm sm:text-base text-[#1F4E5F]/90 font-normal leading-relaxed">
+                {activity.description}
+              </p>
+            </div>
+          )}
 
           {/* 💬 Instrucciones del Capitán (Bloque Editorial Destacado) */}
           {activity.instructions ? (
