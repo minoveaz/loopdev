@@ -398,7 +398,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
       setThirdHalfNotes(cleaned);
     } else {
       const updated = thirdHalfNotes.trim() ? `${thirdHalfNotes.trim()}. ${chipText}` : chipText;
-      setThirdHalfNotes(updated.slice(0, 200));
+      setThirdHalfNotes(updated.slice(0, 300));
     }
   };
 
@@ -1387,13 +1387,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               )}
 
               {/* Notes Contextual with standardized '+' chips */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2.5">
                 <div className="flex items-center justify-between">
                   <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/80">
-                    Nota breve sobre el tercer tiempo
+                    Notas y detalles del tercer tiempo
                   </label>
                   <span className="text-[10px] font-bold text-[#1F4E5F]/60">
-                    {thirdHalfNotes.length}/200
+                    {thirdHalfNotes.length}/300
                   </span>
                 </div>
 
@@ -1422,12 +1422,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   })}
                 </div>
 
-                <input
-                  type="text"
+                <textarea
+                  rows={3}
+                  maxLength={300}
                   value={thirdHalfNotes}
-                  onChange={(e) => setThirdHalfNotes(e.target.value.slice(0, 200))}
-                  placeholder="Ej: Nos quedaremos 30 min a desayunar, rehidratarnos y charlar."
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/25 focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-white shadow-2xs"
+                  onChange={(e) => setThirdHalfNotes(e.target.value.slice(0, 300))}
+                  placeholder="Escribe detalles del tercer tiempo: duración aproximada, tipo de consumición, reserva de mesa o terraza, buen rollo post-entreno..."
+                  className="w-full p-4 rounded-2xl border border-[#1F4E5F]/25 focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 text-xs sm:text-sm font-medium text-[#1F4E5F] outline-none bg-white shadow-2xs resize-none leading-relaxed transition-all"
                 />
               </div>
             </div>
