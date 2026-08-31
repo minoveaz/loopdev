@@ -3,7 +3,7 @@ id: cimo-social-sports-platform
 title: CIMO Social Sports Platform, Strava/Airbnb 2.0 Architecture, Dedicated In-App Views, Crew Hub, Chat & Public Onboarding Landing
 status: active
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-31
 owner: apps
 lead: null
 branch: feature/public-shell-foundation
@@ -42,13 +42,13 @@ La aplicación combina:
 ```mermaid
 graph TD
     subgraph "1. Cabecera Universal (Airbnb Floating Capsule)"
-        HEADER["Logo CIMO + [ 🏃 Deporte | 📅 Cuándo | 📍 Zona | ⚡ Nivel + 🔍 ] + [ ➕ Crear Plan | 💬 Chats (3) | 👤 Perfil ]"]
+        HEADER["Logo CIMO + [ 🏃 Deporte | 📅 Cuándo | 📍 Zona | ⚡ Nivel + 🔍 ] + [ 👥 Mi Crew (7) | ➕ Crear Plan | 💬 Chats (3) | 👤 Perfil ]"]
     end
 
     subgraph "2. Canvas de 3 Superficies Sólidas (Strava Alignment)"
         COL_L["👈 Columna Perfil (25%)<br>• Avatar Verificado + Stats<br>• Constancia Semanal L M X J V S D<br>• Callout Sé Capitán CIMO"]
-        COL_C["📑 Columna Central (50%)<br>• Filtros de Momento (Todos, Hoy, Finde)<br>• Grid 2-Col Tarjetas Panorámicas<br>• Transición a Vista Detalle / Crear"]
-        COL_R["👉 Columna Comunidad (25%)<br>• Próximos Entrenos Confirmados<br>• Capitanes Destacados Madrid<br>• Garantía CIMO"]
+        COL_C["📑 Columna Central (50%)<br>• Feed de Crew (Amigos + 2º Grado + Afinidad)<br>• Grid 2-Col Tarjetas Panorámicas<br>• Transición a Vista Detalle / Crear"]
+        COL_R["👉 Columna Comunidad (25%)<br>• Próximos Entrenos Confirmados<br>• Capitanes Destacados Madrid<br>• Ranking Tercer Tiempo & Spots"]
     end
 
     subgraph "3. Vistas Inmersivas Dedicadas"
@@ -56,7 +56,9 @@ graph TD
         V_DETAIL["Detalle de Entreno & Crew Hub (/activity/:id)"]
         V_CREATE["Crear Entrenamiento (/create)"]
         V_CHATS["Centro de Chats de Crews (/chats)"]
-        V_PROFILE["Perfil del Deportista (/profile)"]
+        V_PROFILE["Perfil / Ficha Deportiva (/profile)"]
+        V_SQUAD["Página Dedicada de Squad (/squad/:id)"]
+        V_ADMIN["Panel de Administración CIMO (/admin)"]
     end
 
     HEADER --> COL_L
@@ -67,6 +69,8 @@ graph TD
     COL_C --- V_CREATE
     COL_C --- V_CHATS
     COL_C --- V_PROFILE
+    COL_C --- V_SQUAD
+    COL_C --- V_ADMIN
 ```
 
 ---
@@ -81,6 +85,7 @@ graph TD
 | **2026-08-30** | Arquitectura de 2 Bloques para "Mi Crew" (Squads Habituales + Círculo Íntimo). | Adaptar lo mejor de *Playtomic* (convocatoria rápida), *Spond* (asistencia en 1 clic) y *Timeleft* (conexiones limpias). | Foco en micro-comunidades activas y retención deportiva. | `@minoveaz` |
 | **2026-08-30** | Erradicación Total de Emojis del SO en Controles de UI. | Evitar el aspecto informal de "prototipo/chat" y garantizar consistencia cross-platform. | Interfaz seria, deportiva y profesional con SVG vectoriales (Lucide). | `@minoveaz` |
 | **2026-08-30** | Elevación del Design System de Autor (4 Capas: Depth, Typography, Signature Components & Polish). | Romper la monotonía de "tarjeta blanca plana con borde gris" e infundir la calidad visual y de autor de *VitaBlue*, *LoopDev SaaS*, *Strava* y *Linear*. | Identidad de marca única, jerarquía visual de élite y acabado premium. | `@minoveaz` |
+| **2026-08-31** | **Roadmap de Expansión de Producto & Integraciones CIMO 2.5:**<br>1. Feed de Crew multicapa (Amigos + 2º grado + Afinidad).<br>2. Perfil con 1-4 fotos reales en acción (anti-stock).<br>3. Ficha Técnica estructurada por desplegables (sin texto libre).<br>4. Integración Playtomic (Pádel) & Strava/Wikiloc/Garmin (Running/Hiking).<br>5. Squad Hub dedicado (`/squad/:id`) con flujo de creación y sugerencias.<br>6. Directorio & Ranking de Tercer Tiempo y Hotspots Deportivos.<br>7. Panel de Administración / Backoffice CIMO. | Llevar la plataforma de un directorio de eventos a una red social deportiva y ecosistema integral con datos certificados y micro-comunidades activas. | Fuerte diferenciación competitiva, engagement diario y monetización/alianzas B2B. | `@minoveaz` |
 
 ---
 
@@ -99,116 +104,117 @@ graph TD
 - [x] Implementar `CimoProfileView` y `CimoEditProfileView` con Pasaporte Deportivo completo, matriz semanal día a día y canales de contacto con candado de privacidad.
 - [x] Conectar la navegación interna fluida entre Explorar, Detalle de Actividad, Crear Plan, Chats y Perfil con deep linking bidireccional (`/`, `/activity/:id`, `/create`, `/chats`, `/profile`, `/profile/edit`).
 
-### 📌 Fase 3: Red Social Deportiva, Tercer Tiempo & Algoritmo de Matching Deportivo Inteligente
+---
 
-#### 🤝 1. "Mi Red de Crew" & Arquitectura de 2 Bloques (Squads Habituales & Círculo Íntimo)
-* **Objetivo:** Fomentar la recurrencia, la retención y la transformación de compañeros de entreno esporádicos en micro-comunidades sólidas y grupos de confianza habituales.
-* **Inspiración de Producto & UX:** Combinación de lo mejor de *Playtomic* (convocatoria rápida a habituales), *Spond/Heja* (gestión de squads y asistencia), *Midnight Runners/NRC* (squads por ritmos) y *Timeleft* (conexiones limpias post-experiencia).
-* **Arquitectura de la Pantalla en 2 Bloques Canónicos:**
-  - [ ] **📦 BLOQUE 1: "Mis Squads Deportivos" (Micro-Equipos Habituales - Estilo Playtomic + Spond):**
-    - Tarjetas de grupos habituales activos del atleta:
-  - [x] **📦 BLOQUE 1: "Mis Squads Deportivos" (Micro-Equipos Habituales - Estilo Playtomic + Spond):**
-    - Mostrar los 2-3 Squads recurrentes del atleta (*Retiro Morning Runners 🏃*, *Cuarteto Pádel Chamartín 🎾*, *Sierra Guadarrama Hikers 🥾*).
-    - Tarjeta integrada y espaciosa sin dobles cajas grises con:
-      - Nombre del grupo, deporte, ritmo y horario recurrente.
-      - **Próxima Convocatoria Activa** con split-card de *Punto de Encuentro* vs *Tercer Tiempo Cálido* (`#FFFBEB`).
-      - **Segmented Control Táctil** de asistencia: `[ ✓ Voy | ? Duda | ✕ No ]`.
-      - Acciones: `[ + Convocatoria ]` y `[ 💬 Chat del Squad ]`.
-  - [x] **👥 BLOQUE 2: "Mi Círculo Íntimo de Compañeros" (Conexiones Directas 1 a 1 - Estilo Timeleft + Strava):**
-    - Filas limpias, minimalistas y espaciosas de los deportistas habituales.
-    - Memoria compartida (*"🟢 4 entrenos en común • Último: Ayer"*).
-    - Chip consolidado de ritmo y tercer tiempo (*"Activity 5:15 min/km • Coffee"*).
-    - Acciones 1 a 1: `[ ⚡ Proponer entreno ]` (modal rápido) y `[ 💬 Chat ]`.
-  - [x] **Smart Captain Invites (Invitación Inteligente en 1 Clic - `CimoInviteCrewModal.tsx`):**
-    - Al publicar un entreno como Capitán, el sistema sugiere automáticamente a los deportistas de su red con mayor compatibilidad ($>90\%$) para ese deporte y horario.
-    - Botón `[ 📨 Invitar a mi Crew habitual ]` para pre-llenar los cupos en minutos antes de abrirlo a la comunidad general.
+### 📌 Fase 3: Red Social Deportiva, Integraciones, Squad Hubs & Motor de Matching
 
-#### 🎨 2. Elevación del Design System & UI Craft Sprint (Identidad de Autor tipo VitaBlue / Linear)
-* **Objetivo:** Erradicar el look genérico de plantilla plana de IA y dotar a CIMO de un lenguaje visual deportivo de alta fidelidad, profundidad y coherencia.
-* **Pilares de Ejecución:**
-  - [x] **Erradicación de Emojis del SO:** Reemplazo integral de emojis en botones, tabs y badges por iconografía vectorial SVG (`Lucide`) con tokens de color consistentes.
-  - [x] **Carga Tipográfica Oficial `Plus Jakarta Sans`:** Importación de todos los pesos (400-900) con tracking ajustado (-0.03em en títulos, +0.08em en overlines) y números tabulares.
-  - [x] **Segmented Control Táctil:** Selector de asistencia físico con micro-feedbacks y estados claros.
-  - [ ] **Tokens de Elevación & Sombras Difusas:** Implementar escala de superficies (Canvas, Slabs satinados, Highlights cálidos de Tercer Tiempo con bordes suaves).
-  - [ ] **Signature Components en Feed y Tarjetas de Actividad:** Llevar la estética *Sports Boarding Pass* y chips unificados a todo el catálogo de planes.
+#### 🌐 1. Feed Social de Red de Confianza (Crew Multicapa: 1er Grado, 2º Grado & Afinidad Algorítmica)
+* **Concepto:** En el Home, el feed no es un listado plano anónimo, sino el pulso vivo de tu red deportiva expandida:
+  - **Nivel 1 (Directos):** Convocatorias de tus amigos y miembros de tus Squads habituales.
+  - **Nivel 2 (Amigos de Amigos):** Entrenos creados por contactos de tu círculo íntimo (*"Creado por Sofía Díaz, amiga de Alex"*).
+  - **Nivel 3 (Matching por Afinidad):** Entrenos públicos recomendados según tu Ficha Técnica y horarios ($Score > 85\%$).
+* **Filtros de Feed:** Pestañas superiores `[ 🌐 Todo mi Crew ] [ 👥 Amigos ] [ ⚡ Sugeridos para ti ]`.
 
-#### ☕ 3. Sección Explícita de "Tercer Tiempo" en Cada Plan (Post-Workout Social Protocol)
-* **Objetivo:** Convertir el entrenamiento en un catalizador de relaciones humanas, asegurando que cada plan tenga un momento opcional de tertulia e hidratación post-ejercicio.
-* **Tipologías Canónicas:**
-  - `☕ Café & Desayuno / Brunch:` Para rodajes matutinos de running o ciclismo (07:00 - 10:00 h).
-  - `🍻 Caña & Tapeo / Aperitivo:` Para partidas de pádel, partidos de tenis o entrenos de tarde/fin de semana.
-  - `🥤 Smoothie / Recovery Bar:` Para sesiones de alta intensidad en box de CrossFit, Hyrox o entrenos funcionales.
-  - `🌿 Picnic & Hidratación al Aire Libre:` Para rutas de Hiking, montaña o parques urbanos.
-* **Integración en Componentes & Contratos:**
-  - [x] **`CimoCreatePlanView` (Isla 7 de Tercer Tiempo Opcional):** Selector conmutador (`hasThirdHalf`), Tipo (`cafe`, `beer`, `smoothie`, `picnic`), Nombre del local/lugar y nota de sobremesa (*"Nos sentaremos 30 min en Café Murillo..."*).
-  - [x] **`CimoCuratedFeed` (Badges de Tercer Tiempo):** Pastilla contextual visible en la tarjeta: `☕ Tercer Tiempo: Café Murillo` o `🍻 Tercer Tiempo: Terraza Club Chamartín`, manteniendo limpias las tarjetas sin tercer tiempo.
-  - [x] **`CimoActivityDetailView` (Bloque Social):** Sección dedicada con tarjeta visual del Tercer Tiempo, hora estimada post-entreno e indicación de plan 100% deportivo cuando no está habilitado.
+#### 📸 2. Perfil Deportivo con Portada de Fotos Reales en Acción (Anti-Fotos de Stock)
+* **Concepto:** Cero fotos de stock genéricas en la portada del perfil.
+* **Galería Deportiva Real (1 a 4 fotos):**
+  - El usuario sube de 1 a 4 fotografías reales entrenando, compitiendo o compartiendo un Tercer Tiempo.
+  - Formato carrusel / mosaico dinámico de presentación atlética.
+  - Permite a otros miembros del Crew conocer la energía, estilo y presencia real del deportista antes de entrenar juntos.
 
-#### 🎯 3. Motor de Matching Deportivo Inteligente (5 Vectores de Compatibilidad & Radar)
-* **Objetivo:** Calcular una puntuación de afinidad real ($Score \in [0\%, 100\%]$) entre el Pasaporte Deportivo del Atleta y los parámetros de cada entreno / compañeros, eliminando la frustración de ritmos incompatibles y maximizando la sintonía social.
-* **Formulación de los 5 Vectores de Compatibilidad:**
-  $$\text{MatchScore} = 0.40 \cdot V_{\text{fit}} + 0.20 \cdot V_{\text{geo}} + 0.20 \cdot V_{\text{schedule}} + 0.10 \cdot V_{\text{social}} + 0.10 \cdot V_{\text{trust}}$$
-  1. **$V_{\text{fit}}$ - Homogeneidad de Ritmo y Nivel Técnico ($40\%$ de peso):**
-     - *Running:* $\Delta \text{pace} \le 15\text{ s/km} \rightarrow 100\%$, $\Delta \text{pace} \le 30\text{ s/km} \rightarrow 75\%$, $\Delta \text{pace} > 45\text{ s/km} \rightarrow 20\%$.
-     - *Pádel:* $\Delta \text{nivel Playtomic} \le 0.25 \rightarrow 100\%$, $\Delta \le 0.50 \rightarrow 75\%$, $\Delta > 0.75 \rightarrow 25\%$.
-     - *Ciclismo / Hiking / CrossFit:* Compatibilidad estricta de categoría (`Intermedio`, `Avanzado`, `Open`, `Scaled`).
-  2. **$V_{\text{geo}}$ - Geo-Conveniencia y Barrios Habituales ($20\%$ de peso):**
-     - Coincidencia en barrio base o distrito colindante (ej. Retiro con Salamanca / Chamberí con Chamartín).
-  3. **$V_{\text{schedule}}$ - Solapamiento en Matriz de Horarios ($20\%$ de peso):**
-     - Coincidencia directa entre el día/hora del plan y las franjas marcadas por el atleta en su matriz semanal (`morning`, `noon`, `afternoon`).
-  4. **$V_{\text{social}}$ - Afinidad de Tercer Tiempo & Tamaño de Grupo ($10\%$ de peso):**
-     - Preferencia coincidente de tamaño de grupo (`micro` 4-6 vs `medium` 8-15) y metas compartidas (*"☕ Café post-entreno"*, *"🤝 Conocer gente activa"*).
-  5. **$V_{\text{trust}}$ - Red Previa, Conexiones & Confianza ($10\%$ de peso):**
-     - Bonificación si el usuario ya ha entrenado con el Capitán o miembros del Crew, o si el Capitán posee valoración $\ge 4.9$ con 0 cancelaciones.
-* **Visualización en UI:**
-  - Pastilla de Afinidad destacada en cada tarjeta: `⚡ 96% Match con tu Pasaporte` con tooltip explicativo desglosando los factores clave.
-  - Carrusel / Radar en el Feed: *"Deportistas en Retiro a tu mismo ritmo (5:15 min/km)"*.
+#### 📋 3. Ficha Técnica Deportiva Estructurada (Desplegables Estándar por Deporte)
+* **Naming:** Alternativas a debatir: *Ficha Técnica CIMO, Credencial Atlética, Carnet Deportivo, Perfil Técnico*.
+* **Estructura Estricta por Deporte (Sin texto libre):**
+  - **Running:**
+    - *Ritmo Base:* `< 4:15 min/km (Élite)`, `4:15 - 4:45 (Avanzado)`, `4:45 - 5:15 (Medio-Alto)`, `5:15 - 5:45 (Medio)`, `> 5:45 (Iniciación/Suave)`.
+    - *Distancia Habitual:* `5-8K`, `10K`, `Media Maratón (21K)`, `Maratón (42K)`, `Trail Running`.
+    - *Objetivo Actual:* Mantenimiento, Preparación de Carrera, Rodaje Social.
+  - **Pádel:**
+    - *Nivel Playtomic:* `1.0 - 2.0 (Iniciación)`, `2.0 - 3.0 (Principiante)`, `3.0 - 4.0 (Intermedio)`, `4.0 - 5.0 (Avanzado)`, `5.0+ (Competición)`.
+    - *Posición en pista:* `Drive`, `Revés`, `Ambos`.
+    - *Mano hábil:* `Diestro`, `Zurdo`.
+  - **Hiking / Trekking:**
+    - *Exigencia Física:* `Fácil (< 8 km / plano)`, `Moderada (10-15 km / +400m)`, `Exigente (+16 km / +800m)`, `Alta Montaña / Técnico`.
+    - *Terreno preferido:* Senderos de bosque, Sierra de Guadarrama, Cumbres/Crestas, Vías Ferratas.
 
-#### 💬 4. Chats de Crew Orientados a Comunidad & Coordinación Post-Entreno
-* **Objetivo:** Transformar el chat de un simple canal de texto a un centro de coordinación social del grupo antes, durante y después del entreno.
-* **Capacidades Específicas:**
-  - **Punto de Encuentro & Mapa en Tiempo Real:** Botón fijado con la chincheta exacta para que nadie se pierda.
-  - **Álbum de Fotos del Entreno:** Espacio para compartir fotos grupales post-workout que quedan guardadas en el historial del Crew.
-  - **Confirmación del Tercer Tiempo:** Votación rápida o confirmación del café/caña elegido tras la sesión.
-  - **Canal Permanente del Crew:** Opción de mantener el grupo de chat activo para planificar futuras quedadas recurrentes.
+#### 🔌 4. Ecosistema de Integraciones Deportivas & Redes con Privacidad Granular
+* **Integración Playtomic (Pádel):**
+  - Sincronización de Nivel Oficial Playtomic verificado con badge en el perfil.
+  - Importación/vinculación de reservas de pistas de clubes de Playtomic a convocatorias CIMO.
+* **Integración Running & Outdoor (Strava, Garmin, Wikiloc, Komoot, AllTrails):**
+  - **Strava:** Conexión OAuth para validar kilometraje semanal real, ritmos promedio y últimas actividades.
+  - **Wikiloc & Komoot:** Importación de tracks GPX/KML para rutas de Hiking y Ciclismo con altimetría y mapa interactivo.
+  - **Garmin Connect:** Sincronización de constancia de entrenos.
+* **Integración WhatsApp & Redes Sociales con Políticas de Privacidad:**
+  - Enlace rápido a WhatsApp (`wa.me/`) e Instagram/Strava/LinkedIn.
+  - **Matriz de Privacidad:** El usuario elige quién puede ver sus enlaces de contacto:
+    - `Público:` Visible para toda la comunidad CIMO.
+    - `Solo Miembros de mis Squads / Conexiones:` Visible solo tras haber entrenado juntos.
+    - `Solo tras Confirmar Asistencia:` El teléfono/WhatsApp solo se revela a los inscritos confirmados en el mismo entreno.
 
-### 📌 Fase 4: Landing Page Pública de Captación & Onboarding Deportivo
-- [ ] Construir la Landing Page Pública para visitantes no autenticados:
-  - Hero de conversión con propuesta de valor (*"Match con entrenos, no con personas"*).
-  - Showcase de planes y entrenos en vivo en Madrid.
-  - Explicación de los 3 pasos (*Elige deporte ➔ Únete al Crew ➔ Entrena y comparte*).
-  - Testimonios y social proof de capitanes.
-- [ ] Flujo de Onboarding deportivo:
-  - Captación rápida de email magic-link.
-  - Selección de deportes favoritos (Running, Pádel, Hiking, Crossfit, Ciclismo).
-  - Configuración de ritmo / nivel deportivo y zona habitual de entrenamiento.
-- [ ] Transición fluida: `Landing Pública` (visitantes) ➔ `Onboarding` ➔ `App CIMO 2.0` (deportistas).
+#### 🛡️ 5. Rediseño del Módulo de Squads & Squad Hub Dedicado (`/squad/:id`)
+* **Tarjeta de Entidad de Squad:** La tarjeta muestra la esencia del Squad (nombre, insignia, disciplina, nivel medio, capitanes, miembros y frecuencia habitual), sin saturarla con eventos anidados.
+* **Flujos Clave:**
+  - Botón `[ + Crear Nuevo Squad ]` con asistente guiado.
+  - Carrusel de **"Squads Sugeridos para ti"** según afinidad de ritmo y zona.
+* **Página Dedicada de Squad (`/squad/:id`):**
+  - Portada del equipo y manifiesto del grupo.
+  - Próximas convocatorias oficiales del Squad.
+  - Historial de entrenos y álbum de fotos compartidas.
+  - **Chat Exclusivo del Squad** con notificaciones y encuestas de horario.
 
-### 📌 Fase 5: Calidad, Rendimiento, PWA & Quality Gate
-- [ ] Configurar auditoría Lighthouse / Unlighthouse para certificar Score ≥ 90 en Desktop y Mobile.
-- [ ] Suite de pruebas de integración con Vitest y Testing Library.
-- [ ] Verificación de responsive en Mobile PWA, Tablet y Desktop panorámico.
-- [ ] Quality Gate final en verde: `pnpm --filter cimo typecheck && pnpm --filter cimo test && pnpm --filter cimo build`.
+#### 🍻 6. Directorio & Ranking CIMO de Tercer Tiempo & Hotspots Deportivos
+* **Ranking de Tercer Tiempo:**
+  - Los locales (cafeterías de especialidad, terrazas de pádel, cervecerías artesanales) mejor valorados por los Crews en Madrid y principales ciudades.
+  - Métricas: Calidad de café/brunch, espacio para grupos grandes, facilidad para dejar mochilas/bicis, ambiente post-deporte.
+  - Alianzas/Beneficios CIMO (descuento del 10% o consumición especial para Crews que hagan check-in post-entreno).
+* **Directorio de Hotspots Deportivos:**
+  - Circuitos de running icónicos (Retiro, Madrid Río, Casa de Campo).
+  - Pistas de pádel con mejor luz/césped.
+  - Rutas de senderismo certificadas (La Pedriza, Cotos, Peñalara).
+
+#### 🛠️ 7. Panel de Administración CIMO (Backoffice / SuperAdmin `/admin`)
+* **Dashboard de Métricas Clave:** Usuarios activos diarios (DAU/MAU), entrenos creados vs completados, ratio de asistencia real, tasa de conversión a Tercer Tiempo.
+* **Moderación de Comunidad:** Gestión de reportes de conducta, validación de insignias de Capitanes Verificados, control de no-shows (usuarios que reservan y no van).
+* **Gestión de Spots y Tercer Tiempo:** Alta de locales aliados, promociones para Crews y gestión de tracks de rutas recomendadas.
+* **Configuración de Algoritmos:** Calibración de pesos del matching score ($V_{\text{fit}}, V_{\text{geo}}, V_{\text{schedule}}$).
 
 ---
 
-## Criterios de cierre
+### 💡 Ideas de Innovación Propuestas por el Equipo de Diseño (Aportes UI/UX):
 
-- [x] Jerarquía Visual 2.0: Header con búsqueda flotante, 3 superficies sólidas alineadas y canvas ancho `max-w-[1720px]`.
-- [x] Cero Modales para Flujos Principales: Detalle de entreno, Creación de plan y Edición de perfil operan como vistas inmersivas dedicadas sin scroll horizontal.
-- [ ] Red Social Deportiva & Matching: Algoritmo de 5 vectores con Badge de Afinidad (%) y Tercer Tiempo integrado en cada plan.
-- [ ] Flujos Completos Operativos: Feed curado con fotos exactas, creación de entrenos, unirse a un Crew, chat en tiempo real y perfil deportivo.
-- [ ] Embudo de Conversión: Landing pública ➔ Onboarding deportivo ➔ App inmersiva.
-- [ ] Auditoría de Rendimiento: Lighthouse Score ≥ 90 en Performance, Accesibilidad, Mejores Prácticas y SEO.
+1. **Check-in GPS / QR Post-Entreno ("Proof of Workout" & Asistencia Garantizada):**
+   - Cuando el grupo se reúne en el punto de encuentro, el Capitán o el sistema valida la presencia vía geolocalización o escaneo de QR en 1 segundo.
+   - Otorga puntos de reputación y desbloquea el Tercer Tiempo, eliminando el problema de los *no-shows* (gente que reserva plaza y no aparece).
+2. **"Liebre / Pacer" en Entrenos de Running:**
+   - En las quedadas de running, marcar quién del grupo lleva el reloj con el ritmo fijo establecido para dar total seguridad a los corredores que temen quedarse atrás.
+3. **División de Gasto Integrada para Pádel y Tercer Tiempo (Split Cost / Bizum link):**
+   - En partidos de pádel donde se alquila pista (ej. 24€ / 4 = 6€ por persona), incluir el cálculo automático y el botón para pagar al capitán o compartir enlace de Bizum/Revolut en 1 toque.
+4. **Desafíos Inter-Squads (Gamificación Saludable de Club):**
+   - Retos mensuales entre Squads de Madrid (ej. *"¿Qué Squad acumula más kilómetros en septiembre?"* o *"Liga de Pádel entre Squads de Chamartín"*).
+5. **Nivel de "Energía Social" del Plan (Etiquetas de Vibe):**
+   - Definir si el entreno es *100% Focused Workout* (series duras sin casi charla) o *Social & Conversational* (ritmo tranquilo donde el 50% de la experiencia es hablar y conocer al grupo).
 
-## Evidencia de validación
+---
+
+## Criterios de Cierre Actualizados
+
+- [x] Jerarquía Visual 2.0 con búsqueda flotante, 3 columnas proporcionales y fondo mineral `#EEF2F2`.
+- [x] Calendario dinámico multi-mes/año y buscador de ciudades predictivo sin duplicados.
+- [ ] Feed Social de Red de Confianza (1er y 2º grado + Afinidad algorítmica).
+- [ ] Perfil con 1-4 fotos reales en acción y Ficha Técnica desplegable por deporte.
+- [ ] Integraciones con Playtomic, Strava, Garmin, Wikiloc y candados de privacidad de WhatsApp/Redes.
+- [ ] Squad Hub dedicado (`/squad/:id`) con flujo de creación y sugerencias.
+- [ ] Ranking de Tercer Tiempo & Hotspots Deportivos con convenios de locales.
+- [ ] Panel de Administración de CIMO (`/admin`).
+- [ ] Quality Gate en verde: `pnpm --filter cimo typecheck && pnpm --filter cimo test && pnpm --filter cimo build`.
+
+---
+
+## Evidencia de Validación
 
 | Fecha | Validación | Resultado | Referencia |
 | :--- | :--- | :--- | :--- |
-| 2026-08-29 | `pnpm --filter cimo typecheck` | Correcta | TypeScript 0 errores |
-| 2026-08-29 | `pnpm --filter cimo test` | Correcta | Vitest 4/4 passing |
-| 2026-08-29 | `pnpm --filter cimo build` | Correcta | Vite build exitoso |
-
-## Cierre
-
-Pendiente de completar Fase 3 (Red Social & Matching), Fase 4 (Landing & Onboarding) y Fase 5 (Quality Gate Lighthouse).
+| **2026-08-30** | `pnpm --filter cimo typecheck` | Correcta | TypeScript 0 errores |
+| **2026-08-30** | `pnpm --filter cimo test` | Correcta | Vitest 4/4 passing |
+| **2026-08-30** | `pnpm --filter cimo build` | Correcta | Vite build exitoso |
