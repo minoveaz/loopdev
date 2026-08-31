@@ -1259,23 +1259,26 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         </div>
 
         {/* ========================================================================= */}
-        {/* 🔵 BLOQUE 4: TERCER TIEMPO (¿NOS TOMAMOS ALGO DESPUÉS?)                   */}
+        {/* 🔵 BLOQUE 4: TERCER TIEMPO SOCIAL                                         */}
         {/* ========================================================================= */}
         <div className="border-2 border-[#1F4E5F]/30 bg-gradient-to-br from-[#1F4E5F]/10 via-white to-[#1F4E5F]/5 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8 text-[#1F4E5F]">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/15">
-            <div className="flex items-center gap-2.5">
+          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/15 gap-2">
+            <div className="flex items-center gap-2.5 min-w-0">
               <span className="w-7 h-7 rounded-full bg-[#1F4E5F] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
                 4
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
-                Tercer Tiempo: ¿Nos tomamos algo después?
+              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F] truncate">
+                Tercer Tiempo Social
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-black text-[#1F4E5F] bg-[#1F4E5F]/10 px-3 py-1 rounded-full flex items-center gap-1">
-                <Coffee className="w-3.5 h-3.5 text-[#1F4E5F]" />
-                <span>Opcional • Tomar algo</span>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xs font-black text-[#1F4E5F] bg-[#1F4E5F]/10 px-2.5 py-1 rounded-full flex items-center gap-1">
+                <Coffee className="w-3.5 h-3.5 text-[#1F4E5F] shrink-0" />
+                <span className="hidden sm:inline">Opcional •</span>
+                <span>{hasThirdHalf ? 'Activado' : 'Opcional'}</span>
               </span>
+
               <button
                 type="button"
                 onClick={() => setHasThirdHalf(!hasThirdHalf)}
@@ -1289,15 +1292,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xs font-black text-[#1F4E5F] block">
-                ¿Nos tomamos algo después de entrenar?
-              </span>
-              <p className="text-xs text-[#1F4E5F]/75 font-medium mt-0.5">
-                El post-entreno perfecto para charlar, reponer fuerzas y conocer a los demás miembros del grupo.
-              </p>
-            </div>
+          <div>
+            <span className="text-xs font-black text-[#1F4E5F] block">
+              ¿Nos tomamos algo después de entrenar?
+            </span>
+            <p className="text-xs text-[#1F4E5F]/75 font-medium mt-0.5 leading-relaxed">
+              El post-entreno perfecto para charlar, reponer fuerzas y conocer a los demás miembros del grupo.
+            </p>
           </div>
 
           {hasThirdHalf && (
