@@ -24,17 +24,25 @@ test('validates UI and its web consumer without global fallback', () => {
   assert.ok(commands.includes('--filter loopdev-os build'));
 });
 
-test('forces global fallback for contracts and validates declared consumers', () => {
+test('validates contracts and declared consumers without global fallback', () => {
   const files = ['packages/contracts/src/platform/navigation.ts'];
   const impact = resolveImpact(files);
   const commands = commandList(files);
 
   assert.deepEqual(impact.packageIds, ['contracts']);
-  assert.equal(impact.globalFallback, true);
+  assert.equal(impact.globalFallback, false);
   assert.ok(commands.includes('--filter @loopdev/ui build'));
   assert.ok(commands.includes('--filter loopdev-os build'));
   assert.ok(commands.includes('--filter loopdev-mobile typecheck'));
   assert.ok(commands.includes('--filter loopdev-mobile test'));
+});
+
+test('deduplicates shared consumer commands across overlapping package changes', () => {
+  const files = ['packages/contracts/src/platform/navigation.ts', 'ds/packages/ui/src/index.ts'];
+  const commands = commandList(files);
+
+  assert.equal(new Set(commands).size, commands.length);
+  assert.equal(commands.filter((command) => command === '--filter loopdev-os build').length, 1);
 });
 
 test('keeps package validation in dependency order for mixed changes', () => {

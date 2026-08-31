@@ -8,7 +8,7 @@ owner: platform
 lead: null
 branch: test/domain-validation-routing
 branches: [test/domain-validation-routing]
-phase: 2
+phase: 5
 pull_requests: []
 issues: []
 packages:
@@ -257,10 +257,13 @@ one canonical catalog of executable domains, paths, runners, and owners.
 
 **Definition of Ready**
 
-- [ ] The runner command and test discovery result are known for each domain.
-- [ ] Each domain has one primary owner and no ambiguous overlapping path rule.
-- [ ] CIMO configuration-resolution failure has a minimal reproducible check.
-- [ ] Every declared package task exists or is intentionally excluded.
+- [x] The runner command and test discovery result are known for each versioned
+      domain; the unversioned worker is explicitly deferred.
+- [x] Each versioned domain has one primary owner and no ambiguous overlapping
+      path rule.
+- [x] CIMO configuration-resolution failure has a minimal reproducible check
+      and a source-resolution fix.
+- [x] Every declared package task exists or is explicitly not applicable.
 
 **Entregables**
 
@@ -269,13 +272,18 @@ one canonical catalog of executable domains, paths, runners, and owners.
       and build applicability.
 - [x] Runnable CIMO lint, typecheck, and Vitest discovery commands, with
       contracts resolved from source during Vitest.
-- [ ] Focused runner commands for worker, tooling, public-shell, public-blocks,
-      mobile, contracts, and LoopDev OS.
+- [x] Focused runner commands for tooling, public-shell, public-blocks, mobile,
+      contracts, and LoopDev OS.
 - [x] CIMO `lint` script, eliminating its missing Turbo task.
 - [x] Protected-surface ownership validator for global shell and Public Shell.
 - [x] Planner and package-impact resolver consume the CIMO catalog entry.
-- [ ] Migrate the remaining planner paths, package-impact rules, and CI path
-      filters to the catalog instead of maintaining independent domain maps.
+- [x] Planner and package-impact routing use catalog metadata for all versioned
+      domains; CI's remaining frontend/backend/shell filters are intentionally
+      limited to shared experience surfaces and browser specifications.
+- [x] Tooling tests use a dedicated `test:tooling` runner discovered from
+      `scripts/**/*.test.mjs`.
+- [x] Worker registration is explicitly deferred until its package and source
+      become versioned; the current local directory contains generated files only.
 
 **Validacion**
 
@@ -286,10 +294,12 @@ one canonical catalog of executable domains, paths, runners, and owners.
       Public Shell is temporarily permitted for domain branches while its
       `public-shell-foundation` standardization track is active.
 - [x] CIMO source change selects CIMO checks and does not force global quality.
-- [ ] A documentation-only change has no application runner selected.
+- [x] A documentation-only change has no application runner selected.
+- [x] Tooling changes select the tooling runner without selecting application,
+      mobile, browser, SQL, or Quant tests.
 
-**Evidencia:** `pnpm test:domain-catalog` passes 4 catalog-contract tests and
-`pnpm validate:domain-catalog` validates 8 domains and 2 protected surfaces.
+**Evidencia:** `pnpm test:domain-catalog` passes 6 catalog-contract tests and
+`pnpm validate:domain-catalog` validates 14 domains and 2 protected surfaces.
 `pnpm test:protected-surfaces` passes 3 ownership tests, including rejection of
 a CIMO branch changing Public Shell. The guard now additionally permits a
 domain branch while the declared `public-shell-foundation` track remains active,
@@ -314,8 +324,13 @@ rejects malformed routing flags or exclusion lists. Public Shell and Public
 Blocks retain their existing consumer rules until their complete migration in
 Phase 4.
 
-**Estado:** en curso; CIMO proves the catalog-driven pattern, while remaining
-domains and CI path filters still require migration.
+Tooling is now a governed domain with 19 discovered test files and 96 passing
+Node tests. `loopdev-worker` remains explicitly deferred because no versioned
+`package.json` or source files exist under `apps/loopdev-worker/` in this branch;
+the local directory contains generated dependencies only.
+
+**Estado:** completada; all versioned domains are cataloged and routed. Worker
+registration is an accepted explicit deferral because no source is versioned.
 
 ### Fase 3: Static checks, lint, typecheck, and build calibration
 
@@ -369,29 +384,37 @@ unnecessary fallback to every application or duplicate global certification.
 
 **Definition of Ready**
 
-- [ ] Consumer lists for contracts, UI, UI-native, tokens, design contracts,
+- [x] Consumer lists for contracts, UI, UI-native, tokens, design contracts,
       public-shell, and public-blocks are verified.
-- [ ] The primary risk protected by each consumer command is declared.
-- [ ] Shared package changes can be distinguished from root configuration changes.
+- [x] The primary risk protected by each consumer command is declared.
+- [x] Shared package changes can be distinguished from root configuration changes.
 
 **Entregables**
 
-- [ ] Direct-consumer rules and tests for all shared packages in scope.
-- [ ] Explicit full-fallback policy limited to root configuration, workflow,
+- [x] Direct-consumer rules and tests for all shared packages in scope.
+- [x] Explicit full-fallback policy limited to root configuration, workflow,
       dependency graph, and approved cross-domain integration changes.
-- [ ] Command deduplication for package validation versus global quality jobs.
+- [x] Command deduplication for package validation versus global quality jobs.
 
 **Validacion**
 
-- [ ] Contract change selects declared consumers with no undeclared domain test.
-- [ ] UI-only change does not select mobile Jest unless `ui-native` or a declared
+- [x] Contract change selects declared consumers with no undeclared domain test.
+- [x] UI-only change does not select mobile Jest unless `ui-native` or a declared
       mobile contract is affected.
-- [ ] Public package change runs its own tests rather than only a generic global job.
-- [ ] Root manifest or workflow change still selects full certification.
+- [x] Public package change runs its own tests rather than only a generic global job.
+- [x] Root manifest or workflow change still selects full certification.
 
-**Evidencia:** Pendiente.
+**Evidencia:** The package-impact rules cover contracts, UI, UI-native, design
+contracts, tokens, Tailwind config, ESLint config, tsconfig, Public Shell, and
+Public Blocks with direct consumers. `validate-package-impact.test.mjs` verifies
+contract consumers, UI consumers, native mobile boundaries, Public Shell and
+Public Blocks consumers, dependency ordering, and command deduplication. The
+contract fallback was narrowed so shared contract changes run package and direct
+consumer validation without duplicating the global `quality` job; root/workflow
+configuration still retains full fallback. The catalog has 14 domains and its
+validator passes.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ### Fase 5: Database validation by schema domain
 
@@ -558,15 +581,22 @@ duration, coverage, false runs, false skips, and residual risks.
 | 2026-08-31 | Catalog-driven application CI routing       | Passed; 34 planner/package-impact/catalog tests, catalog validation, and Prettier validation pass. Mobile and LoopDev OS use catalog-derived flags without duplicate domain-controls execution. | `validate-package-impact.test.mjs`, `validate-plan.test.mjs`, `ci.yml`                                     |
 | 2026-08-31 | Advisory Public Shell/Public Blocks routing | Passed; 21 catalog/package-impact tests and catalog validation confirm focused controls and direct consumers without global fallback.                                                           | `validate-package-impact.test.mjs`, `validate-domain-catalog.test.mjs`                                     |
 
+Tooling is now a governed domain with 19 discovered test files and 96 passing
+Node tests. The local `apps/loopdev-worker` directory is not versioned and
+contains generated dependencies only, so worker registration is deferred until
+its package and source are committed to the repository.
+
+| 2026-08-31 | Phase 2 domain catalog closure | Passed; 14 versioned domains validate, package rules resolve through catalog metadata, and documentation-only routing remains excluded. Worker is explicitly deferred because its source is not versioned. | `validate:domain-catalog`, planner/package-impact tests |
+
 ## Handoff de sesion
 
 - **Fecha:** 2026-08-31.
 - **Rama de continuacion:** `test/domain-validation-routing`.
 - **Commit de partida:** `66c64a27`.
-- **Estado alcanzado:** Fase 2 in progress; Fase 3 static-scope work completed. CIMO, mobile, and LoopDev OS application routing consume catalog metadata; Public Shell/Public Blocks routing is advisory and remaining domain/CI migration is pending.
+- **Estado alcanzado:** Fase 2, Fase 3, and Fase 4 completed. Fase 5 is now active for database validation by schema domain. All versioned domains consume catalog metadata; Public Shell/Public Blocks remain advisory, and worker registration is deferred until versioned source exists.
 - **Decisiones, bloqueos y riesgos:** Quant is excluded while experimental. `validate:changed` is a stable branch alias. New domains must declare four quality controls or an explicit non-applicability. The global shell requires an active platform track for its branch. Public Shell permits domain contributions only while `public-shell-foundation` is active. CIMO resolves contracts from source in Vitest; its pre-existing lint warnings and chunk advisory are tracked separately.
 - **Validacion ejecutada:** Baseline inventory, 34 planner/package-impact/catalog tests, 3 domain-control tests, 5 catalog tests, 4 protected-surface ownership tests, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, repository validators, and dry-run checks.
-- **Siguiente accion concreta:** Migrate remaining domain runners and CI/static-control consumers without restricting active Public Shell development.
+- **Siguiente accion concreta:** Map Supabase SQL controls by platform, marketing, creative, CRM, and Communications schema domains without restricting active Public Shell development.
 
 ## Cierre
 

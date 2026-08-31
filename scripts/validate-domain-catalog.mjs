@@ -41,7 +41,7 @@ function validateDomainCatalog(catalog, manifests = {}, applicationManifests = [
     if (!domain?.owner?.trim()) errors.push(`${label}.owner is required`);
     if (!Array.isArray(domain?.paths) || domain.paths.length === 0)
       errors.push(`${label}.paths is required`);
-    if (!domain?.manifest?.endsWith('/package.json'))
+    if (domain?.manifest !== 'package.json' && !domain?.manifest?.endsWith('/package.json'))
       errors.push(`${label}.manifest must reference package.json`);
     manifestsInCatalog.add(domain?.manifest);
     for (const domainPath of domain?.paths ?? []) {
@@ -72,6 +72,12 @@ function validateDomainCatalog(catalog, manifests = {}, applicationManifests = [
       }
       if (domain.routing.advisory !== undefined && typeof domain.routing.advisory !== 'boolean') {
         errors.push(`${label}.routing.advisory must be boolean`);
+      }
+      if (
+        domain.routing.packageImpact !== undefined &&
+        typeof domain.routing.packageImpact !== 'boolean'
+      ) {
+        errors.push(`${label}.routing.packageImpact must be boolean`);
       }
       if (
         domain.routing.planDomain !== undefined &&

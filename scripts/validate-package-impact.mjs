@@ -17,7 +17,7 @@ const packageRules = [
     path: 'packages/contracts/',
     packageName: '@loopdev/contracts',
     scripts: ['lint', 'typecheck', 'build'],
-    globalFallback: true,
+    globalFallback: false,
     consumers: [
       ['@loopdev/ui', 'build'],
       ['loopdev-os', 'build'],
@@ -173,6 +173,10 @@ function getChangedFiles(base, head) {
 }
 
 function findPackageRule(file) {
+  const catalogRouting = routingForFile(file);
+  if (catalogRouting?.routing.packageRule) {
+    return packageRules.find((rule) => rule.id === catalogRouting.routing.packageRule);
+  }
   return packageRules.find((rule) => file.startsWith(rule.path));
 }
 
@@ -206,22 +210,24 @@ function resolveImpact(files) {
 
   for (const file of files) {
     if (file.startsWith('supabase/')) continue;
+    if (isDocumentation(file)) continue;
 
     const catalogRouting = routingForFile(file);
     if (catalogRouting) {
       if (catalogRouting.routing.mobile) mobile = true;
       if (catalogRouting.routing.frontend) frontend = true;
-      if (catalogRouting.routing.packageImpact) domainIds.add(catalogRouting.domain.id);
+      if (catalogRouting.routing.packageImpact && !catalogRouting.routing.packageRule) {
+        domainIds.add(catalogRouting.domain.id);
+      }
       if (catalogRouting.routing.packageRule) {
-        const rule = packageRules.find(
-          (candidate) => candidate.id === catalogRouting.routing.packageRule,
-        );
+        const rule = findPackageRule(file);
         if (!rule) {
           throw new Error(
             `Missing package rule '${catalogRouting.routing.packageRule}' for domain '${catalogRouting.domain.id}'`,
           );
         }
         rules.set(rule.id, rule);
+        if (rule.globalFallback || isPackageManifest(file)) globalFallback = true;
       }
       continue;
     }
@@ -230,8 +236,6 @@ function resolveImpact(files) {
       frontend = true;
       continue;
     }
-
-    if (isDocumentation(file)) continue;
 
     const rule = findPackageRule(file);
     if (rule) {

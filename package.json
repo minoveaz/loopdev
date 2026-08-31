@@ -61,6 +61,7 @@
     "test:domain-catalog": "node --test scripts/validate-domain-catalog.test.mjs",
     "validate:domain-controls": "node scripts/validate-domain-controls.mjs",
     "test:domain-controls": "node --test scripts/validate-domain-controls.test.mjs",
+    "test:tooling": "node scripts/run-tooling-tests.mjs",
     "validate:protected-surfaces": "node scripts/validate-protected-surface-ownership.mjs",
     "test:protected-surfaces": "node --test scripts/validate-protected-surface-ownership.test.mjs",
     "validate:package-impact": "node scripts/validate-package-impact.mjs",
