@@ -237,6 +237,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
   const [isCustomCalendarOpen, setIsCustomCalendarOpen] = useState(false);
   const [isCustomTimeOpen, setIsCustomTimeOpen] = useState(false);
   const [customCoords, setCustomCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [customThirdHalfCoords, setCustomThirdHalfCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   const locationContainerRef = useRef<HTMLDivElement>(null);
   const thirdHalfContainerRef = useRef<HTMLDivElement>(null);
@@ -1259,97 +1260,131 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 </div>
               </div>
 
-              {/* Local / Terraza con buscador Maps GPS */}
-              <div className="flex flex-col gap-1.5 relative" ref={thirdHalfContainerRef}>
-                <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/80">
-                  Lugar o local previsto en {selectedCity}
-                </label>
-                <div className="relative flex items-center">
-                  <MapPin className="w-4 h-4 text-[#1F4E5F] absolute left-3 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={thirdHalfVenue}
-                    onFocus={() => setIsThirdHalfDropdownOpen(true)}
-                    onChange={(e) => {
-                      setThirdHalfVenue(e.target.value);
-                      setIsThirdHalfDropdownOpen(true);
-                    }}
-                    placeholder="Ej: Café Murillo, Terraza Florida Park, Honest Greens..."
-                    className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#1F4E5F]/25 focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 text-xs font-black text-[#1F4E5F] outline-none bg-white shadow-2xs"
-                  />
-                  {thirdHalfVenue && (
-                    <button
-                      type="button"
-                      onClick={() => setThirdHalfVenue('')}
-                      className="p-1 rounded-full hover:bg-[#1F4E5F]/10 text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
+              {/* 4.2 Ciudad & Local / Terraza con buscador Maps GPS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                    Ciudad o Municipio
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsCityComboboxOpen(true)}
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 hover:border-[#1F4E5F] cursor-pointer bg-white flex items-center justify-between text-xs font-extrabold text-[#1F4E5F] transition-all relative text-left shadow-2xs"
+                  >
+                    <MapPin className="w-4 h-4 text-[#1F4E5F] absolute left-3" />
+                    <span className="truncate">{selectedCity}</span>
+                    <span className="text-[10px] font-black text-[#1F4E5F] bg-[#1F4E5F]/10 px-2 py-0.5 rounded-full shrink-0">
+                      Cambiar
+                    </span>
+                  </button>
                 </div>
 
-                {isThirdHalfDropdownOpen && (() => {
-                  const spots = getThirdHalfSpots(selectedCity, thirdHalfType);
-                  return (
-                    <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/20 shadow-xl p-2.5 z-30 max-h-60 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
-                      {liveThirdHalfResults.length > 0 && (
-                        <div className="flex flex-col gap-1 pb-1">
-                          {liveThirdHalfResults.map((place) => (
+                <div className="flex flex-col gap-1.5 relative" ref={thirdHalfContainerRef}>
+                  <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                    Lugar o local previsto en {selectedCity}
+                  </label>
+                  <div className="relative flex items-center">
+                    <MapPin className="w-4 h-4 text-[#1F4E5F] absolute left-3 pointer-events-none" />
+                    <input
+                      type="text"
+                      value={thirdHalfVenue}
+                      onFocus={() => setIsThirdHalfDropdownOpen(true)}
+                      onChange={(e) => {
+                        setThirdHalfVenue(e.target.value);
+                        setIsThirdHalfDropdownOpen(true);
+                      }}
+                      placeholder="Ej: Café Murillo, Terraza Florida Park, Honest Greens..."
+                      className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#1F4E5F]/25 focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 text-xs font-black text-[#1F4E5F] outline-none bg-white shadow-2xs"
+                    />
+                    {thirdHalfVenue && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setThirdHalfVenue('');
+                          setCustomThirdHalfCoords(null);
+                        }}
+                        className="p-1 rounded-full hover:bg-[#1F4E5F]/10 text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  {isThirdHalfDropdownOpen && (() => {
+                    const spots = getThirdHalfSpots(selectedCity, thirdHalfType);
+                    return (
+                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/20 shadow-xl p-2.5 z-30 max-h-60 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
+                        {liveThirdHalfResults.length > 0 && (
+                          <div className="flex flex-col gap-1 pb-1">
+                            {liveThirdHalfResults.map((place) => (
+                              <button
+                                key={`${place.name}-${place.lat}-${place.lng}`}
+                                type="button"
+                                onClick={() => {
+                                  setThirdHalfVenue(place.name);
+                                  setCustomThirdHalfCoords({ lat: place.lat, lng: place.lng });
+                                  setIsThirdHalfDropdownOpen(false);
+                                }}
+                                className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#1F4E5F]/5 text-[#1F4E5F]"
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <MapPin className="w-4 h-4 text-[#1F4E5F] shrink-0" />
+                                  <div className="truncate">
+                                    <span className="text-xs font-black block truncate leading-tight">{place.name}</span>
+                                    <span className="text-[10px] text-[#1F4E5F]/50 block truncate">{place.address}</span>
+                                  </div>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {isSearchingThirdHalf && (
+                          <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F] flex items-center gap-2 animate-pulse">
+                            <div className="w-3 h-3 rounded-full border-2 border-[#1F4E5F] border-t-transparent animate-spin" />
+                            <span>Buscando cafeterías y terrazas...</span>
+                          </div>
+                        )}
+
+                        <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
+                          Sitios recomendados en {selectedCity}
+                        </div>
+
+                        {spots.map((spot) => {
+                          const isSelected = thirdHalfVenue === spot;
+                          return (
                             <button
-                              key={`${place.name}-${place.lat}-${place.lng}`}
+                              key={spot}
                               type="button"
                               onClick={() => {
-                                setThirdHalfVenue(place.name);
+                                setThirdHalfVenue(spot);
+                                setCustomThirdHalfCoords(null);
                                 setIsThirdHalfDropdownOpen(false);
                               }}
-                              className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#1F4E5F]/5 text-[#1F4E5F]"
+                              className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
+                                isSelected ? 'bg-[#1F4E5F] text-white' : 'hover:bg-[#1F4E5F]/5 text-[#1F4E5F]'
+                              }`}
                             >
-                              <div className="flex items-center gap-2.5 min-w-0">
-                                <MapPin className="w-4 h-4 text-[#1F4E5F] shrink-0" />
-                                <div className="truncate">
-                                  <span className="text-xs font-black block truncate leading-tight">{place.name}</span>
-                                  <span className="text-[10px] text-[#1F4E5F]/50 block truncate">{place.address}</span>
-                                </div>
-                              </div>
+                              <span className="truncate">{spot}</span>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-white shrink-0" />}
                             </button>
-                          ))}
-                        </div>
-                      )}
-
-                      {isSearchingThirdHalf && (
-                        <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F] flex items-center gap-2 animate-pulse">
-                          <div className="w-3 h-3 rounded-full border-2 border-[#1F4E5F] border-t-transparent animate-spin" />
-                          <span>Buscando cafeterías y terrazas...</span>
-                        </div>
-                      )}
-
-                      <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
-                        Sitios recomendados en {selectedCity}
+                          );
+                        })}
                       </div>
-
-                      {spots.map((spot) => {
-                        const isSelected = thirdHalfVenue === spot;
-                        return (
-                          <button
-                            key={spot}
-                            type="button"
-                            onClick={() => {
-                              setThirdHalfVenue(spot);
-                              setIsThirdHalfDropdownOpen(false);
-                            }}
-                            className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
-                              isSelected ? 'bg-[#1F4E5F] text-white' : 'hover:bg-[#1F4E5F]/5 text-[#1F4E5F]'
-                            }`}
-                          >
-                            <span className="truncate">{spot}</span>
-                            {isSelected && <Check className="w-3.5 h-3.5 text-white shrink-0" />}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  );
-                })()}
+                    );
+                  })()}
+                </div>
               </div>
+
+              {/* Mapa Interactivo con GPS Pin del Tercer Tiempo */}
+              {thirdHalfVenue.trim() && (
+                <CimoMapPreviewCard
+                  location={thirdHalfVenue}
+                  city={selectedCity}
+                  coords={customThirdHalfCoords}
+                  className="mt-0"
+                />
+              )}
 
               {/* Notes Contextual with standardized '+' chips */}
               <div className="flex flex-col gap-2">
