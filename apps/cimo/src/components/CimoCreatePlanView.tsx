@@ -585,18 +585,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* 🟢 BLOQUE 1: DEPORTE, NIVEL Y PLAZAS                                      */}
         {/* ========================================================================= */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
                 1
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
                 ¿Qué deporte practicamos?
+              </h3>
+            </div>
+            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
+              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+                Configura el deporte, ritmo sugerido y tamaño del grupo
+              </span>
+              <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full shrink-0">
+                {selectedSportObj.label} • {maxMembers} plazas
               </span>
             </div>
-            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
-              {selectedSportObj.label} • {maxMembers} plazas
-            </span>
           </div>
 
           {/* 1.1 Deporte */}
@@ -721,18 +726,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* 🟢 BLOQUE 2: CUÁNDO Y DÓNDE QUEDAMOS                                      */}
         {/* ========================================================================= */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
                 2
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
                 ¿Cuándo y dónde quedamos?
+              </h3>
+            </div>
+            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
+              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+                Fecha, horario y punto de encuentro con GPS
+              </span>
+              <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full shrink-0">
+                {date} a las {time}h
               </span>
             </div>
-            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
-              {date} a las {time}h
-            </span>
           </div>
 
           {/* 2.1 Fecha */}
@@ -1145,18 +1155,23 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* 🟢 BLOQUE 3: CONSEJOS DEL CAPITÁN Y QUÉ LLEVAR                            */}
         {/* ========================================================================= */}
         <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
                 3
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
                 Consejos del Capitán y qué llevar
+              </h3>
+            </div>
+            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
+              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+                Instrucciones de ruta y checklist de equipamiento
+              </span>
+              <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full shrink-0">
+                {selectedGearIds.length} recomendados
               </span>
             </div>
-            <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full">
-              Recomendaciones
-            </span>
           </div>
 
           {/* 3.1 Instrucciones Escritas */}
@@ -1262,33 +1277,39 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* 🔵 BLOQUE 4: TERCER TIEMPO SOCIAL                                         */}
         {/* ========================================================================= */}
         <div className="border-2 border-[#1F4E5F]/30 bg-gradient-to-br from-[#1F4E5F]/10 via-white to-[#1F4E5F]/5 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8 text-[#1F4E5F]">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/15 gap-2">
-            <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex flex-col gap-3 pb-3.5 border-b border-[#1F4E5F]/15">
+            <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-full bg-[#1F4E5F] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
                 4
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F] truncate">
+              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
                 Tercer Tiempo Social
-              </span>
+              </h3>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="text-xs font-black text-[#1F4E5F] bg-[#1F4E5F]/10 px-2.5 py-1 rounded-full flex items-center gap-1">
-                <Coffee className="w-3.5 h-3.5 text-[#1F4E5F] shrink-0" />
-                <span className="hidden sm:inline">Opcional •</span>
-                <span>{hasThirdHalf ? 'Activado' : 'Opcional'}</span>
-              </span>
+            <div className="flex items-center justify-between gap-3 pl-9.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black text-[#1F4E5F] bg-[#1F4E5F]/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                  <Coffee className="w-3.5 h-3.5 text-[#1F4E5F] shrink-0" />
+                  <span>{hasThirdHalf ? 'Activado • Tomar algo post-entreno' : 'Opcional (Desactivado)'}</span>
+                </span>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setHasThirdHalf(!hasThirdHalf)}
-                className={`w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 ${
-                  hasThirdHalf ? 'bg-[#1F4E5F] justify-end' : 'bg-[#1F4E5F]/20 justify-start'
-                }`}
-                aria-label="Activar o desactivar tercer tiempo"
-              >
-                <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-[11px] font-bold text-[#1F4E5F]/70 hidden sm:inline">
+                  {hasThirdHalf ? 'Incluir en el plan' : 'Desactivado'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setHasThirdHalf(!hasThirdHalf)}
+                  className={`w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 ${
+                    hasThirdHalf ? 'bg-[#1F4E5F] justify-end' : 'bg-[#1F4E5F]/20 justify-start'
+                  }`}
+                  aria-label="Activar o desactivar tercer tiempo"
+                >
+                  <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1419,13 +1440,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                           </div>
                         )}
 
-                        {isSearchingThirdHalf && (
-                          <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F] flex items-center gap-2 animate-pulse">
-                            <div className="w-3 h-3 rounded-full border-2 border-[#1F4E5F] border-t-transparent animate-spin" />
-                            <span>Buscando cafeterías y terrazas...</span>
-                          </div>
-                        )}
-
                         <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
                           Sitios recomendados en {selectedCity}
                         </div>
@@ -1453,18 +1467,46 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       </div>
                     );
                   })()}
+
+                  {/* Contextual Suggestion Pills for Current City */}
+                  {(() => {
+                    const cityPointSuggestions = [
+                      { label: `Café Central, ${selectedCity}`, coords: { lat: 40.4168, lng: -3.7038 } },
+                      { label: `Terraza Plaza Mayor, ${selectedCity}`, coords: { lat: 40.4154, lng: -3.7074 } },
+                      { label: `Cervecería del Parque, ${selectedCity}`, coords: { lat: 40.418, lng: -3.682 } },
+                    ];
+
+                    return (
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        <span className="text-[10px] font-bold text-[#1F4E5F]/60 self-center mr-0.5">
+                          Sugerencias en {selectedCity}:
+                        </span>
+                        {cityPointSuggestions.map((venue) => {
+                          const isSelected = thirdHalfVenue === venue.label;
+                          return (
+                            <button
+                              key={venue.label}
+                              type="button"
+                              onClick={() => {
+                                setThirdHalfVenue(venue.label);
+                                setCustomThirdHalfCoords(venue.coords);
+                              }}
+                              className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                                isSelected
+                                  ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-2xs'
+                                  : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border-[#1F4E5F]/15 shadow-2xs'
+                              }`}
+                            >
+                              <Plus className="w-3 h-3 text-[#1F4E5F]" />
+                              <span>{venue.label.split(',')[0]}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
-
-              {/* Mapa Interactivo con GPS Pin del Tercer Tiempo */}
-              {thirdHalfVenue.trim() && (
-                <CimoMapPreviewCard
-                  location={thirdHalfVenue}
-                  city={selectedCity}
-                  coords={customThirdHalfCoords}
-                  className="mt-0"
-                />
-              )}
 
               {/* Notes Contextual with standardized '+' chips */}
               <div className="flex flex-col gap-2.5">
@@ -1478,35 +1520,33 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 </div>
 
                 <div className="flex flex-wrap gap-1.5">
-                  {THIRD_HALF_NOTES_SUGGESTIONS.map((sug) => {
-                    const isAdded = thirdHalfNotes.includes(sug);
-                    return (
-                      <button
-                        key={sug}
-                        type="button"
-                        onClick={() => handleAddThirdHalfChip(sug)}
-                        className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                          isAdded
-                            ? 'border-[#1F4E5F] bg-[#1F4E5F]/15 text-[#1F4E5F] font-black shadow-2xs'
-                            : 'border-[#1F4E5F]/20 bg-white hover:bg-[#1F4E5F]/5 text-[#1F4E5F]'
-                        }`}
-                      >
-                        {isAdded ? (
-                          <Check className="w-3.5 h-3.5 text-[#1F4E5F] stroke-[3]" />
-                        ) : (
-                          <Plus className="w-3.5 h-3.5 text-[#1F4E5F]" />
-                        )}
-                        <span>{sug}</span>
-                      </button>
-                    );
-                  })}
+                  {[
+                    'Pediremos ronda de cervezas / refrescos',
+                    'Terraza reservada para el grupo',
+                    'Tomaremos café de especialidad y charlaremos',
+                    'Smoothies y batidos de proteínas',
+                    'Picoteo informal de tapas',
+                  ].map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      onClick={() => setThirdHalfNotes(chip)}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                        thirdHalfNotes === chip
+                          ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-2xs'
+                          : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border-[#1F4E5F]/15 shadow-2xs'
+                      }`}
+                    >
+                      <Plus className="w-3 h-3 text-[#1F4E5F]" />
+                      <span>{chip}</span>
+                    </button>
+                  ))}
                 </div>
 
                 <textarea
-                  rows={3}
-                  maxLength={300}
+                  rows={2}
                   value={thirdHalfNotes}
-                  onChange={(e) => setThirdHalfNotes(e.target.value.slice(0, 300))}
+                  onChange={(e) => setThirdHalfNotes(e.target.value)}
                   placeholder="Escribe detalles del tercer tiempo: duración aproximada, tipo de consumición, reserva de mesa o terraza, buen rollo post-entreno..."
                   className="w-full p-4 rounded-2xl border border-[#1F4E5F]/25 focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 text-xs sm:text-sm font-medium text-[#1F4E5F] outline-none bg-white shadow-2xs resize-none leading-relaxed transition-all"
                 />
@@ -1521,19 +1561,24 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         <div className="bg-white border-2 border-[#7FB77E]/40 rounded-3xl p-6 sm:p-9 shadow-sm flex flex-col gap-7 sm:gap-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-[#7FB77E] via-[#1F4E5F] to-[#7FB77E]" />
 
-          <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
                 5
               </span>
-              <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
                 Dale el toque final y publica
+              </h3>
+            </div>
+            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
+              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+                Revisa el título, descripción y foto de portada antes de lanzar
+              </span>
+              <span className="text-[11px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full flex items-center gap-1 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E]" />
+                <span>Paso Final</span>
               </span>
             </div>
-            <span className="text-[11px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E]" />
-              <span>Paso Final</span>
-            </span>
           </div>
 
           {/* 5.1 Título Inteligente con 3 Variantes Rápidas */}
