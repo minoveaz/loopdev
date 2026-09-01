@@ -3,7 +3,7 @@ id: domain-validation-routing
 title: Domain Validation Routing and Test Efficiency
 status: active
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-02
 owner: platform
 lead: null
 branch: test/domain-validation-routing
@@ -449,16 +449,17 @@ retain ordered full-data certification for cross-schema integration.
 - [ ] Communications changes select controls `007-010` once those migrations
       exist in the branch.
 
-**Evidencia:** `pnpm test:data-catalog` passes 7 catalog/runner tests and
-`pnpm validate:data-catalog` confirms 9 SQL tests across 5 domains. Dry-runs
-produce focused platform, marketing, creative, CRM commands and a complete
-ordered command containing all 9 SQL files. Actual Supabase execution is
-blocked in this environment because Docker and Podman are not available.
-Communications remains an explicit empty domain because controls `007` through
-`010` are not present as versioned files on this branch.
+**Evidencia:** `pnpm test:data-catalog` and the database runner tests pass;
+`pnpm validate:data-catalog` confirms 8 pgTAP SQL tests across 5 domains plus
+one explicitly classified manual SQL fallback. Docker-backed `supabase start`,
+`supabase db reset`, `supabase db lint --local`, governance validation, and the
+full database runner pass: 8 files and 196 pgTAP tests. Communications remains
+an explicit empty domain because controls `007` through `010` are not present as
+versioned files on this branch.
 
-**Estado:** bloqueada; catalog and workflow automation are complete, but real RLS
-certification and Communications controls remain unavailable.
+**Estado:** bloqueada; local RLS and migration certification pass, but the
+Communications controls remain unavailable until files `007` through `010` are
+versioned in this branch.
 
 ### Fase 6: Browser and experience profiles
 
@@ -581,6 +582,26 @@ but service-backed duration/coverage baselines and full certification remain.
 | 2026-08-31 | Initial track created from test inventory and routing audit.                  | Establish an auditable implementation plan before changing validation behavior.                                                         | Defines five implementation phases and explicit acceptance matrix.                                                 | Usuario      |
 | 2026-08-31 | Expand the track from test-runner routing to all executable quality controls. | Lint, typecheck, build, static checks, package impact, and CI orchestration cause the same false-run and duplicate-work risks as tests. | Replaces the plan with eight aligned phases and acceptance criteria for selection, exclusion, and non-duplication. | Usuario      |
 | 2026-08-31 | Retain `validate:changed` as a stable alias for branch validation.            | Existing automation and operator habits need a predictable migration path.                                                              | New local work uses `validate:worktree`; PR review uses `validate:branch` or the compatibility alias.              | Usuario      |
+| 2026-09-02 | Record branch review findings as Phase 5/7 follow-up work.                    | The declared routing contract is not fully enforced by registry modes, CI triggers, or runner classification.                           | Keep the track active; correct these gaps before collecting final CI/Supabase evidence.                            | Usuario      |
+
+## Hallazgos de revisión pendientes
+
+The branch review found implementation gaps, not approved scope expansion:
+
+- `validate:branch` selects only controls declaring `branch`, while most
+  accumulated-impact controls declare `changed`, `domain`, or `full`.
+- Branch-sensitive CI validation must have the base history or explicit SHAs
+  required by `origin/develop...HEAD` calculations.
+- Protected-surface ownership needs explicit PR-versus-push semantics for
+  merges to `develop` and `main`.
+- The data catalog routes a manual SQL fallback through the pgTAP runner;
+  non-pgTAP scripts must be separated or given an explicit runner contract.
+- Supabase path filters omit catalog, runner, validator, and package-script
+  changes, allowing routing changes without database CI.
+- Static validation must exclude deleted paths before invoking Prettier/ESLint.
+
+These findings map to existing Phase 5 and Phase 7 deliverables. No phase is
+marked complete by this review.
 
 ## Riesgos y bloqueos
 
@@ -595,6 +616,14 @@ but service-backed duration/coverage baselines and full certification remain.
 | Over-aggressive E2E reduction may weaken responsive or accessibility coverage. | User-facing regressions can escape.                                                      | Retain matrix for visual/responsive contracts and full certification.                                                  | platform/design-system | abierto  |
 | SQL focused suites may hide migration ordering dependencies.                   | Schema integration failures can appear late.                                             | Preserve ordered full-data certification for branch integration and release.                                           | platform/data          | abierto  |
 | Coverage metrics may be gamed or misinterpreted.                               | Time may shift to low-value tests.                                                       | Baseline first; use behavior, risk, duration, false-run, and false-skip evidence.                                      | platform/governance    | abierto  |
+
+### Riesgos adicionales identificados
+
+- Branch scope can silently skip accumulated-impact controls; reconcile registry
+  modes with branch semantics and add a regression fixture.
+- CI routing sources can change without activating the relevant workflow; expand
+  Supabase path filters and validate the trigger contract.
+- Static checks receive deleted paths; filter them before invoking Prettier/ESLint.
 
 ## Criterios de cierre
 
@@ -630,16 +659,24 @@ contains generated dependencies only, so worker registration is deferred until
 its package and source are committed to the repository.
 
 | 2026-08-31 | Phase 2 domain catalog closure | Passed; 14 versioned domains validate, package rules resolve through catalog metadata, and documentation-only routing remains excluded. Worker is explicitly deferred because its source is not versioned. | `validate:domain-catalog`, planner/package-impact tests |
+| 2026-09-02 | Branch review follow-up | Findings recorded for branch-mode coverage, CI history/filters, protected push semantics, SQL classification, and deletion-safe static checks. No phase closure changed. | `validate-local.mjs`, `validate-plan.mjs`, `validate-static-controls.mjs`, `config/validation-registry.json`, CI workflows, `scripts/run-database-tests.mjs` |
+| 2026-09-02 | CI checkout history correction | Quality and frontend validation jobs now fetch full history required by branch-sensitive static checks. | `.github/workflows/ci.yml` |
+| 2026-09-02 | Protected-surface push semantics correction | Ownership validation is now pull-request scoped; merged pushes to protected branches no longer use a feature-branch ownership lookup. | `.github/workflows/ci.yml`, `scripts/validate-ci-orchestration.mjs` |
+| 2026-09-02 | SQL runner classification correction | Manual storage fallback SQL is now explicitly classified as non-test and excluded from the pgTAP command; catalog validation preserves ownership and existence checks. | `config/validation-data-catalog.json`, `scripts/validate-data-catalog.mjs`, `scripts/run-database-tests.mjs` |
+| 2026-09-02 | Supabase workflow trigger correction | Catalog, runner, validator, related tests, and package-script changes now activate the Supabase governance workflow. | `.github/workflows/supabase.yml` |
+| 2026-09-02 | Deletion-safe static routing correction | Git file collectors now use `--diff-filter=ACMR`, preventing deleted paths from reaching Prettier or ESLint. | `scripts/validate-plan.mjs`, `scripts/validate-plan.test.mjs` |
+| 2026-09-02 | Public Shell experience routing clarification | Public Shell and Public Blocks retain focused package/consumer validation and now explicitly select the visual experience signal without activating unrelated app or mobile suites. | `scripts/validate-plan.mjs`, `scripts/validate-plan.test.mjs`, `scripts/validate-package-impact.test.mjs` |
+| 2026-09-02 | Local Supabase certification evidence | Docker-backed reset, schema lint, governance checks, and all cataloged pgTAP tests pass locally; Phase 5 remains blocked only by missing Communications controls. | Supabase CLI, `scripts/validate-supabase-governance.mjs`, `scripts/run-database-tests.mjs` |
 
 ## Handoff de sesion
 
 - **Fecha:** 2026-08-31.
 - **Rama de continuacion:** `test/domain-validation-routing`.
 - **Commit de partida:** `66c64a27`.
-- **Estado alcanzado:** Fases 2, 3, 4, and 6 completed. Fase 5 remains blocked by missing Communications SQL and unavailable Docker/Podman. Fase 7 is now active for CI orchestration and observations. Continuation guidance is available in `docs/03-platform/DOMAIN_VALIDATION_ROUTING_HANDOFF.md`. All versioned domains consume catalog metadata; Public Shell/Public Blocks remain advisory, and worker registration is deferred until versioned source exists.
+- **Estado alcanzado:** Fases 2, 3, 4, and 6 remain completed. Fase 5 remains blocked by missing Communications SQL and unavailable Docker/Podman. Fase 7 is active; the 2026-09-02 review found routing, CI trigger/history, protected-push, SQL classification, and deletion-safe static-check follow-up work.
 - **Decisiones, bloqueos y riesgos:** Quant is excluded while experimental. `validate:changed` is a stable branch alias. New domains must declare four quality controls or an explicit non-applicability. The global shell requires an active platform track for its branch. Public Shell permits domain contributions only while `public-shell-foundation` is active. CIMO resolves contracts from source in Vitest; its pre-existing lint warnings and chunk advisory are tracked separately.
 - **Validacion ejecutada:** Baseline inventory, routing/catalog/static/data/E2E tests, tooling suite, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, CI orchestration validation, documentation links, repository validators, workflow formatting, and dry-run checks. The detailed handoff lists the exact commands and external limitations.
-- **Siguiente accion concreta:** Orchestrate selected CI controls and record duration, coverage, false-run, false-skip, duplicate-risk, and flaky-result observations without restricting active Public Shell development.
+- **Siguiente accion concreta:** Correct the six recorded gaps, add focused regression evidence, then execute representative CI and Supabase runs and record duration, coverage, false-run, false-skip, duplicate-risk, and flaky-result observations.
 
 ## Cierre
 

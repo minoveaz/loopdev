@@ -6,6 +6,12 @@ on:
       - 'supabase/**'
       - '.github/workflows/supabase.yml'
       - 'scripts/**supabase**'
+      - 'scripts/run-database-tests.mjs'
+      - 'scripts/validate-data-catalog.mjs'
+      - 'scripts/run-database-tests.test.mjs'
+      - 'scripts/validate-data-catalog.test.mjs'
+      - 'config/validation-data-catalog.json'
+      - 'package.json'
       - 'scripts/validate-supabase-governance*'
   push:
     branches: [develop, main]
@@ -13,6 +19,12 @@ on:
       - 'supabase/**'
       - '.github/workflows/supabase.yml'
       - 'scripts/**supabase**'
+      - 'scripts/run-database-tests.mjs'
+      - 'scripts/validate-data-catalog.mjs'
+      - 'scripts/run-database-tests.test.mjs'
+      - 'scripts/validate-data-catalog.test.mjs'
+      - 'config/validation-data-catalog.json'
+      - 'package.json'
       - 'scripts/validate-supabase-governance*'
   schedule:
     - cron: '41 3 * * 2'

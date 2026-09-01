@@ -23,6 +23,18 @@ test('rejects unassigned SQL files', () => {
   );
 });
 
+test('allows explicitly classified non-test SQL files', () => {
+  const errors = validateDataCatalog(
+    {
+      ...catalog,
+      nonTestFiles: { 'manual.sql': 'manual fallback' },
+    },
+    ['001_platform_core.sql', 'manual.sql'],
+  );
+
+  assert.deepEqual(errors, []);
+});
+
 test('rejects duplicate SQL ownership across domains', () => {
   const invalidCatalog = {
     ...catalog,

@@ -74,10 +74,13 @@ function commandsForPlan(plan, mode, value) {
     ];
   }
 
+  // Branch scope uses accumulated files, but the registry's changed controls
+  // are the controls that protect each selected domain.
+  const registryMode = mode === 'branch' ? 'changed' : mode;
   return [
     ...preflight,
     ...registry.checks
-      .filter((check) => check.modes.includes(mode) && domains.includes(check.domain))
+      .filter((check) => check.modes.includes(registryMode) && domains.includes(check.domain))
       .filter((check) => check.id !== 'branch-base')
       .map((check) => commandArgs(check.command)),
   ];

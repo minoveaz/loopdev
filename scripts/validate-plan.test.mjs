@@ -73,8 +73,8 @@ test('collects unstaged, staged, and untracked files once for worktree validatio
   const files = changedFilesFromWorktree(
     gitFixture(
       new Map([
-        ['diff --name-only', 'docs/guide.md\napps/cimo/src/App.tsx\n'],
-        ['diff --name-only --cached', 'apps/cimo/src/App.tsx\ntracks/active/apps/cimo.md\n'],
+        ['diff --name-only --diff-filter=ACMR', 'docs/guide.md\napps/cimo/src/App.tsx\n'],
+        ['diff --name-only --cached --diff-filter=ACMR', 'apps/cimo/src/App.tsx\ntracks/active/apps/cimo.md\n'],
         ['ls-files --others --exclude-standard', 'notes.txt\n'],
       ]),
     ),
@@ -91,7 +91,7 @@ test('collects unstaged, staged, and untracked files once for worktree validatio
 test('collects only the specified commit revision for commit validation', () => {
   const files = changedFilesFromCommit(
     'HEAD~2',
-    gitFixture(new Map([['diff-tree --no-commit-id --name-only -r HEAD~2', 'docs/guide.md\n']])),
+    gitFixture(new Map([['diff-tree --diff-filter=ACMR --no-commit-id --name-only -r HEAD~2', 'docs/guide.md\n']])),
   );
 
   assert.deepEqual(files, ['docs/guide.md']);
@@ -160,6 +160,14 @@ test('selects desktop, mobile, and visual experiences for UI changes', () => {
   const plan = buildValidationPlan(['ds/packages/ui/src/components/Button.tsx']);
 
   assert.deepEqual(plan.experiences, { desktop: true, mobile: true, visual: true });
+});
+
+test('selects visual experience for Public Shell changes without unrelated app suites', () => {
+  const plan = buildValidationPlan(['ds/packages/public-shell/src/PublicRuntime.tsx']);
+
+  assert.deepEqual(plan.experiences, { desktop: false, mobile: false, visual: true });
+  assert.ok(plan.selected.some((check) => check.id === 'packages'));
+  assert.equal(plan.fullFallback, false);
 });
 
 test('selects only mobile experience for a mobile browser spec', () => {

@@ -29,6 +29,8 @@ const workflow = [
   'pnpm test:protected-surfaces',
   'pnpm test:package-impact',
   'pnpm validate:plan',
+  '- name: Protect platform-owned shell surfaces',
+  "if: github.event_name == 'pull_request'",
 ].join('\n');
 
 test('accepts a registry and CI workflow with required gates', () => {
@@ -45,4 +47,10 @@ test('rejects a workflow missing a catalog gate', () => {
   const errors = validateCiOrchestration(registry, workflow.replace('pnpm test:e2e-catalog', ''));
 
   assert.ok(errors.some((error) => error.includes('test:e2e-catalog')));
+});
+
+test('rejects unscoped protected-surface ownership', () => {
+  const errors = validateCiOrchestration(registry, workflow.replace("\nif: github.event_name == 'pull_request'", ''));
+
+  assert.ok(errors.some((error) => error.includes('protected-surface ownership')));
 });

@@ -89,7 +89,11 @@ function buildExperiencePlan(files) {
     );
   const visual =
     files.some((file) => file.endsWith('.visual.spec.mjs')) ||
-    files.some((file) => file.startsWith('ds/packages/ui/'));
+    files.some((file) =>
+      ['ds/packages/ui/', 'ds/packages/public-shell/', 'ds/packages/public-blocks/'].some((path) =>
+        file.startsWith(path),
+      ),
+    );
 
   return { desktop, mobile, visual };
 }
@@ -161,13 +165,13 @@ function buildValidationPlan(files) {
 function changedFilesFromGit(runGit = execFileSync) {
   const base = process.env.BASE_SHA ?? 'origin/develop';
   const head = process.env.HEAD_SHA ?? 'HEAD';
-  return runGit('git', ['diff', '--name-only', `${base}...${head}`], { encoding: 'utf8' })
+  return runGit('git', ['diff', '--name-only', '--diff-filter=ACMR', `${base}...${head}`], { encoding: 'utf8' })
     .split(/\r?\n/)
     .filter(Boolean);
 }
 
 function changedFilesFromCommit(revision = 'HEAD', runGit = execFileSync) {
-  return runGit('git', ['diff-tree', '--no-commit-id', '--name-only', '-r', revision], {
+  return runGit('git', ['diff-tree', '--diff-filter=ACMR', '--no-commit-id', '--name-only', '-r', revision], {
     encoding: 'utf8',
   })
     .split(/\r?\n/)
@@ -176,8 +180,8 @@ function changedFilesFromCommit(revision = 'HEAD', runGit = execFileSync) {
 
 function changedFilesFromWorktree(runGit = execFileSync) {
   const commands = [
-    ['diff', '--name-only'],
-    ['diff', '--name-only', '--cached'],
+    ['diff', '--name-only', '--diff-filter=ACMR'],
+    ['diff', '--name-only', '--cached', '--diff-filter=ACMR'],
     ['ls-files', '--others', '--exclude-standard'],
   ];
 

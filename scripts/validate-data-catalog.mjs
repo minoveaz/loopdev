@@ -13,6 +13,7 @@ function validateDataCatalog(catalog, availableFiles = []) {
   }
 
   const knownFiles = new Set(availableFiles);
+  const nonTestFiles = new Set(Object.keys(catalog.nonTestFiles ?? {}));
   const assigned = new Map();
   for (const [domain, files] of Object.entries(catalog.domains)) {
     if (!Array.isArray(files)) {
@@ -30,7 +31,12 @@ function validateDataCatalog(catalog, availableFiles = []) {
   }
 
   for (const file of knownFiles) {
-    if (!assigned.has(file)) errors.push(`SQL '${file}' has no data domain`);
+    if (!assigned.has(file) && !nonTestFiles.has(file))
+      errors.push(`SQL '${file}' has no data domain`);
+  }
+  for (const file of nonTestFiles) {
+    if (!knownFiles.has(file)) errors.push(`non-test SQL '${file}' does not exist`);
+    if (assigned.has(file)) errors.push(`non-test SQL '${file}' cannot also be assigned to a domain`);
   }
   return errors;
 }

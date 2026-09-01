@@ -5,6 +5,7 @@ import { databaseCommand, sqlFilesForDomain } from './run-database-tests.mjs';
 const catalog = {
   root: 'supabase/tests/database',
   domains: { platform: ['001_platform_core.sql'], communications: [] },
+  nonTestFiles: { '006_creative_studio_storage_local.sql': 'manual fallback' },
 };
 
 test('builds a focused platform database command', () => {
