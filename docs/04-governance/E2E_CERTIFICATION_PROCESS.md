@@ -17,7 +17,9 @@ started.
 6. **Responsive matrix**: the same suite runs in desktop, mobile and
    mobile-compact projects, including light and dark themes where applicable.
 7. **Evidence and cleanup**: static checks, test output and changed-file review
-   are completed; generated `test-results/` artifacts stay untracked.
+   are completed; generated `test-results/` artifacts stay untracked locally.
+   CI publishes `playwright-report/` and `test-results/` from each E2E job,
+   including available screenshots, traces and Axe attachments.
 
 ## Official commands
 

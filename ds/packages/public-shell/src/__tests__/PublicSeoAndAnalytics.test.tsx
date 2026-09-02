@@ -51,7 +51,7 @@ const TestAnalyticsConsumer = () => {
 };
 
 describe('PublicSeoHead and PublicAnalyticsProvider', () => {
-  it('updates document.title and structured JSON-LD scripts', () => {
+  it('sets the public page title and canonical URL from SEO metadata', () => {
     render(<PublicSeoHead seo={testSeo} />);
     expect(document.title).toBe('Running 8K Madrid Retiro');
 
@@ -59,7 +59,7 @@ describe('PublicSeoHead and PublicAnalyticsProvider', () => {
     expect(canonicalLink?.getAttribute('href')).toBe('https://cimo.app/running-retiro');
   });
 
-  it('provides analytics tracking and Google Consent Mode updates', () => {
+  it('updates Google Consent Mode from denied to granted for a conversion', () => {
     render(
       <PublicAnalyticsProvider
         config={{

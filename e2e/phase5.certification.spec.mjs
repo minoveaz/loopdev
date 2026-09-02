@@ -2,13 +2,13 @@ import { test, expect } from '@playwright/test';
 
 test.use({ storageState: 'playwright/.auth/user.json' });
 
-const suites = [
-  { name: 'launchpad', path: '/launchpad' },
-];
+const suites = [{ name: 'launchpad', path: '/launchpad' }];
 
 for (const theme of ['light', 'dark']) {
   for (const suite of suites) {
-    test(`${suite.name} certification ${theme}`, async ({ page }) => {
+    test(`${suite.name} has no overflow or unexpected browser errors in ${theme} theme`, async ({
+      page,
+    }) => {
       const browserErrors = [];
       page.on('pageerror', (error) => browserErrors.push(error.message));
 

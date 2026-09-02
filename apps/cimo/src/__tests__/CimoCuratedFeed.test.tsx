@@ -5,7 +5,7 @@ import { CimoCuratedFeed } from '../components/CimoCuratedFeed';
 import { INITIAL_ACTIVITIES } from '../data/mockData';
 
 describe('CimoCuratedFeed (Capa 1, 2 & 7: UI, Interacción y Anti-CLS)', () => {
-  it('renders curated feed header and activities list', () => {
+  it('renders the curated feed header and first activity card', () => {
     const onSelect = vi.fn();
     const onJoin = vi.fn();
 
@@ -15,7 +15,7 @@ describe('CimoCuratedFeed (Capa 1, 2 & 7: UI, Interacción y Anti-CLS)', () => {
         selectedActivityId={INITIAL_ACTIVITIES[0].id}
         onSelectActivity={onSelect}
         onJoinActivity={onJoin}
-      />
+      />,
     );
 
     expect(screen.getByText('Explorar Entrenamientos')).toBeDefined();
@@ -30,7 +30,7 @@ describe('CimoCuratedFeed (Capa 1, 2 & 7: UI, Interacción y Anti-CLS)', () => {
         selectedActivityId={INITIAL_ACTIVITIES[0].id}
         onSelectActivity={vi.fn()}
         onJoinActivity={vi.fn()}
-      />
+      />,
     );
 
     const weekendFilterBtn = screen.getByRole('button', { name: /Finde/i });
@@ -49,7 +49,7 @@ describe('CimoCuratedFeed (Capa 1, 2 & 7: UI, Interacción y Anti-CLS)', () => {
         selectedActivityId={INITIAL_ACTIVITIES[0].id}
         onSelectActivity={vi.fn()}
         onJoinActivity={onJoin}
-      />
+      />,
     );
 
     // Find the join buttons with fixed w-28 dimension
@@ -71,7 +71,7 @@ describe('CimoCuratedFeed (Capa 1, 2 & 7: UI, Interacción y Anti-CLS)', () => {
         onSelectActivity={vi.fn()}
         onJoinActivity={vi.fn()}
         onNavigateToProfile={onNavigateProfile}
-      />
+      />,
     );
 
     const card = screen.getAllByText('Running 8K por Parque del Retiro')[0];

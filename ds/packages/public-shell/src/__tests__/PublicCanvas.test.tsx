@@ -34,7 +34,7 @@ const testComposition: PublicViewComposition = {
 };
 
 describe('PublicCanvas and PublicCanvasRegion', () => {
-  it('renders a 12-column grid and maps desktop/mobile responsive classes properly', () => {
+  it('applies the 12-column layout and responsive classes to public canvas regions', () => {
     const { container } = render(
       <PublicCanvas composition={testComposition}>
         <PublicCanvasRegion id="filters-region">

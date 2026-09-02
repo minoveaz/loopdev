@@ -1,4 +1,4 @@
-name: CI
+name: Domain-aware validation CI
 
 on:
   pull_request:
@@ -52,12 +52,16 @@ jobs:
       shell: ${{ steps.filter.outputs.shell }}
       quality: ${{ steps.plan.outputs.full_fallback }}
       package_validation: ${{ steps.impact.outputs.has_targeted_validation }}
+      domain_ids: ${{ steps.impact.outputs.domain_ids }}
+      cimo: ${{ contains(format(',{0},', steps.impact.outputs.domain_ids), ',cimo,') }}
       frontend: ${{ steps.impact.outputs.frontend == 'true' || steps.filter.outputs.frontend == 'true' }}
       backend: ${{ steps.filter.outputs.backend == 'true' }}
       mobile: ${{ steps.impact.outputs.mobile }}
       browser_desktop: ${{ steps.plan.outputs.browser_desktop }}
       browser_mobile: ${{ steps.plan.outputs.browser_mobile }}
       browser_visual: ${{ steps.plan.outputs.browser_visual }}
+      e2e_desktop_functional: ${{ steps.plan.outputs.e2e_desktop_functional }}
+      e2e_mobile_functional: ${{ steps.plan.outputs.e2e_mobile_functional }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -75,6 +79,8 @@ jobs:
         with:
           filters: |
             frontend:
+              # Domain-owned application routing comes from catalog/package impact.
+              # Keep this filter for shared frontend surfaces and browser specifications.
               # Keep this filter positive: `some` treats a negated glob as a match for unrelated paths.
               - 'apps/loopdev-os/src/components/**'
               - 'apps/loopdev-os/src/suites/**'
@@ -119,6 +125,23 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: node scripts/validate-package-impact.mjs --base "$BASE_SHA" --head "$HEAD_SHA" --dry-run
+
+      - name: Validate domain testing catalog
+        run: pnpm test:domain-catalog && pnpm validate:domain-catalog
+
+      - name: Validate E2E testing catalog
+        run: pnpm test:e2e-catalog && pnpm validate:e2e-catalog
+
+      - name: Validate CI orchestration
+        run: pnpm test:ci-orchestration && pnpm validate:ci-orchestration
+
+      - name: Protect platform-owned shell surfaces
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          HEAD_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: pnpm test:protected-surfaces && pnpm validate:protected-surfaces --base "$BASE_SHA" --head "$HEAD_SHA" --branch "$HEAD_BRANCH"
 
       - name: Validate package impact resolver
         run: pnpm test:package-impact
@@ -208,6 +231,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -242,6 +272,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -268,6 +305,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -279,6 +318,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -287,7 +333,10 @@ jobs:
         run: pnpm --filter @loopdev/contracts build
 
       - name: Validate shell interaction surface
-        run: pnpm test:shell
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: pnpm test:shell:changed
 
   quality:
     name: Lint, typecheck, tests and build
@@ -303,6 +352,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -314,12 +365,16 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build shared contracts
-        run: pnpm --filter @loopdev/contracts build
 
       - name: CI validation
         run: pnpm validate:ci
@@ -350,6 +405,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build contracts
@@ -398,6 +460,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -409,6 +473,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -438,14 +509,31 @@ jobs:
       - name: Setup frontend E2E environment
         uses: ./.github/actions/setup-frontend-e2e
 
-      - name: Run desktop functional and accessibility checks
-        if: needs.changes.outputs.browser_desktop == 'true'
+      - name: Run catalog-backed desktop E2E checks
+        if: needs.changes.outputs.browser_desktop == 'true' && needs.changes.outputs.e2e_desktop_functional != ''
         run: >-
-          pnpm exec playwright test
-          e2e/*.smoke.spec.mjs
-          e2e/*.accessibility.spec.mjs
-          e2e/*certification.spec.mjs
+          pnpm e2e:profile
+          files:${{ needs.changes.outputs.e2e_desktop_functional }}
           --project=desktop --workers=1 --reporter=line
+
+      - name: Run catalog-backed desktop E2E checks
+        if: >-
+          needs.changes.outputs.browser_desktop == 'true' &&
+          needs.changes.outputs.e2e_desktop_functional == ''
+        run: >-
+          pnpm e2e:profile
+          profiles:smoke,accessibility,functional,domain,component,contract
+          --project=desktop --workers=1 --reporter=line
+
+      - name: Upload desktop E2E and Axe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-desktop-functional-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
 
   frontend-e2e-visual:
     name: Frontend E2E visual behavior
@@ -480,20 +568,24 @@ jobs:
       - name: Run shell and composition visual checks
         if: matrix.suite == 'shell'
         run: >-
-          pnpm exec playwright test
-          e2e/composition-showcase.visual.spec.mjs
-          e2e/quantitative-table.visual.spec.mjs
-          e2e/shell-showcase.visual.spec.mjs
-          e2e/shell.visual.spec.mjs
+          pnpm e2e:profile visual
           --project=desktop --workers=1 --reporter=line
 
       - name: Run table visual checks
         if: matrix.suite == 'tables'
         run: >-
-          pnpm exec playwright test
-          e2e/dense-operational-table.visual.spec.mjs
-          e2e/entity-table-golden.visual.spec.mjs
+          pnpm e2e:profile visual
           --project=desktop --workers=1 --reporter=line
+
+      - name: Upload visual E2E and Axe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-visual-${{ matrix.suite }}-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
 
   frontend-e2e-mobile:
     name: Frontend E2E mobile behavior
@@ -518,26 +610,34 @@ jobs:
       - name: Setup frontend E2E environment
         uses: ./.github/actions/setup-frontend-e2e
 
-      - name: Run authenticated mobile checks
-        if: needs.changes.outputs.browser_mobile == 'true'
+      - name: Run catalog-backed mobile E2E checks
+        if: needs.changes.outputs.browser_mobile == 'true' && needs.changes.outputs.e2e_mobile_functional != ''
         run: >-
-          pnpm exec playwright test
-          e2e/authenticated.mobile.spec.mjs
-          e2e/input.certification.spec.mjs
-          e2e/button.certification.spec.mjs
-          e2e/icon-button.certification.spec.mjs
-          e2e/filter-dropdown.certification.spec.mjs
-          e2e/crm-primitives.certification.spec.mjs
-          e2e/entity-table.certification.spec.mjs
-          e2e/activity-table.certification.spec.mjs
-          e2e/selection-table.certification.spec.mjs
-          e2e/command-dialog.certification.spec.mjs
+          pnpm e2e:profile
+          files:${{ needs.changes.outputs.e2e_mobile_functional }}
+          --project=mobile --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Run catalog-backed mobile E2E checks
+        if: >-
+          needs.changes.outputs.browser_mobile == 'true' &&
+          needs.changes.outputs.e2e_mobile_functional == ''
+        run: >-
+          pnpm e2e:profile
+          profiles:responsive,domain,component,diagnostic
           --project=mobile --project=mobile-compact --workers=1 --reporter=line
 
       - name: Run mobile visual checks
         if: needs.changes.outputs.browser_visual == 'true'
         run: >-
-          pnpm exec playwright test
-          e2e/responsive.visual.spec.mjs
-          e2e/shell.visual.spec.mjs
+          pnpm e2e:profile visual
           --project=mobile --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Upload mobile E2E and Axe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-mobile-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore

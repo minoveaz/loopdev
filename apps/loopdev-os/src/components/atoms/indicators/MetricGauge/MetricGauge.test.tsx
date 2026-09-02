@@ -9,7 +9,7 @@ import { describe, it, expect } from 'vitest';
 import { MetricGauge } from './index';
 
 describe('MetricGauge Component', () => {
-  it('renders correctly with default props', () => {
+  it('renders the RSI status region with default value and label', () => {
     render(<MetricGauge value={50} label="RSI" />);
 
     const gauge = screen.getByRole('status');
@@ -17,21 +17,21 @@ describe('MetricGauge Component', () => {
     expect(gauge).toHaveAttribute('aria-label', 'RSI: 50');
   });
 
-  it('displays the current value in the center', () => {
+  it('displays the current RSI value in the gauge center', () => {
     render(<MetricGauge value={45.5} label="RSI" />);
 
     const text = screen.getByText('45.5');
     expect(text).toBeInTheDocument();
   });
 
-  it('displays the label below the gauge', () => {
+  it('displays the metric label below the gauge', () => {
     render(<MetricGauge value={50} label="RSI" />);
 
     const label = screen.getByText('RSI');
     expect(label).toBeInTheDocument();
   });
 
-  it('shows percentage of range', () => {
+  it('shows the current value as a percentage of its configured range', () => {
     render(<MetricGauge value={50} min={0} max={100} label="RSI" />);
 
     const percentage = screen.getByText('50% of range');
@@ -92,7 +92,7 @@ describe('MetricGauge Component', () => {
     expect(text).toBeInTheDocument();
   });
 
-  it('supports different size variants', () => {
+  it('renders both compact and large size variants', () => {
     const { container: containerSm } = render(<MetricGauge value={50} size="sm" label="RSI" />);
     const { container: containerLg } = render(<MetricGauge value={50} size="lg" label="RSI" />);
 
@@ -100,7 +100,7 @@ describe('MetricGauge Component', () => {
     expect(containerLg).toBeInTheDocument();
   });
 
-  it('applies custom className', () => {
+  it('applies a caller-provided className to the gauge', () => {
     const { container } = render(<MetricGauge value={50} className="custom-class" label="RSI" />);
 
     const gauge = container.querySelector('div');

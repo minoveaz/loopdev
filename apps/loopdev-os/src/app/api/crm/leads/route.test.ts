@@ -34,7 +34,7 @@ describe('CRM leads API', () => {
     expect(listLeads).toHaveBeenCalledWith({ organizationId, status: 'nuevo', limit: 20 });
   });
 
-  it('rejects an invalid query before calling the service', async () => {
+  it('rejects an invalid lead query before calling the listing service', async () => {
     const response = await GET(
       new Request('http://localhost/api/crm/leads?organizationId=not-a-uuid'),
     );
@@ -42,7 +42,7 @@ describe('CRM leads API', () => {
     expect(listLeads).not.toHaveBeenCalled();
   });
 
-  it('returns the authorization status without calling the service', async () => {
+  it('returns the lead authorization status without calling the listing service', async () => {
     authorizeCrm.mockResolvedValue({ allowed: false, status: 403 });
     const response = await GET(
       new Request(`http://localhost/api/crm/leads?organizationId=${organizationId}`),
@@ -51,7 +51,7 @@ describe('CRM leads API', () => {
     expect(listLeads).not.toHaveBeenCalled();
   });
 
-  it('requires the expected version for updates', async () => {
+  it('requires the expected lead version for optimistic updates', async () => {
     const response = await PATCH(
       new Request('http://localhost/api/crm/leads', {
         method: 'PATCH',
@@ -62,7 +62,7 @@ describe('CRM leads API', () => {
     expect(updateLead).not.toHaveBeenCalled();
   });
 
-  it('forwards an authorized optimistic update', async () => {
+  it('forwards an authorized lead optimistic update', async () => {
     const response = await PATCH(
       new Request('http://localhost/api/crm/leads', {
         method: 'PATCH',

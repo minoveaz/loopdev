@@ -24,17 +24,25 @@ test('validates UI and its web consumer without global fallback', () => {
   assert.ok(commands.includes('--filter loopdev-os build'));
 });
 
-test('forces global fallback for contracts and validates declared consumers', () => {
+test('validates contracts and declared consumers without global fallback', () => {
   const files = ['packages/contracts/src/platform/navigation.ts'];
   const impact = resolveImpact(files);
   const commands = commandList(files);
 
   assert.deepEqual(impact.packageIds, ['contracts']);
-  assert.equal(impact.globalFallback, true);
+  assert.equal(impact.globalFallback, false);
   assert.ok(commands.includes('--filter @loopdev/ui build'));
   assert.ok(commands.includes('--filter loopdev-os build'));
   assert.ok(commands.includes('--filter loopdev-mobile typecheck'));
   assert.ok(commands.includes('--filter loopdev-mobile test'));
+});
+
+test('deduplicates shared consumer commands across overlapping package changes', () => {
+  const files = ['packages/contracts/src/platform/navigation.ts', 'ds/packages/ui/src/index.ts'];
+  const commands = commandList(files);
+
+  assert.equal(new Set(commands).size, commands.length);
+  assert.equal(commands.filter((command) => command === '--filter loopdev-os build').length, 1);
 });
 
 test('keeps package validation in dependency order for mixed changes', () => {
@@ -68,8 +76,48 @@ test('routes mobile application changes to native mobile validation only', () =>
   const impact = resolveImpact(['apps/loopdev-mobile/src/App.tsx']);
 
   assert.deepEqual(impact.packageIds, []);
+  assert.deepEqual(impact.domainIds, []);
   assert.equal(impact.globalFallback, false);
   assert.equal(impact.mobile, true);
+});
+
+test('routes CIMO changes to its declared domain controls without global fallback', () => {
+  const impact = resolveImpact(['apps/cimo/src/App.tsx']);
+  const commands = buildCommands(impact.packageRules, new Set(), impact.domainIds).map((args) =>
+    args.join(' '),
+  );
+
+  assert.deepEqual(impact.domainIds, ['cimo']);
+  assert.equal(impact.globalFallback, false);
+  assert.equal(impact.mobile, false);
+  assert.equal(impact.frontend, false);
+  assert.deepEqual(commands, [
+    '--filter loopdev-monorepo validate:domain-controls cimo --include-build',
+  ]);
+});
+
+test('routes Public Shell changes through declared consumers without global fallback', () => {
+  const files = ['ds/packages/public-shell/src/PublicRuntime.tsx'];
+  const impact = resolveImpact(files);
+  const commands = commandList(files);
+
+  assert.deepEqual(impact.packageIds, ['public-shell']);
+  assert.equal(impact.globalFallback, false);
+  assert.ok(commands.includes('--filter @loopdev/public-shell test'));
+  assert.ok(commands.includes('--filter cimo build'));
+  assert.ok(commands.includes('--filter loopdev-os build'));
+});
+
+test('routes Public Blocks changes through its declared Public Shell consumer', () => {
+  const files = ['ds/packages/public-blocks/src/index.ts'];
+  const impact = resolveImpact(files);
+  const commands = commandList(files);
+
+  assert.deepEqual(impact.packageIds, ['public-blocks']);
+  assert.equal(impact.globalFallback, false);
+  assert.ok(commands.includes('--filter @loopdev/public-blocks test'));
+  assert.ok(commands.includes('--filter @loopdev/public-shell build'));
+  assert.ok(commands.includes('--filter cimo build'));
 });
 
 test('keeps web application changes out of native mobile and global fallback', () => {
@@ -100,6 +148,23 @@ test('keeps backend-only web changes out of frontend validation', () => {
 
   assert.equal(impact.frontend, false);
   assert.equal(impact.mobile, false);
+});
+
+test('routes LoopDev OS application changes through catalog metadata', () => {
+  const impact = resolveImpact(['apps/loopdev-os/src/app/page.tsx']);
+
+  assert.deepEqual(impact.domainIds, []);
+  assert.equal(impact.frontend, true);
+  assert.equal(impact.mobile, false);
+  assert.equal(impact.globalFallback, false);
+});
+
+test('keeps LoopDev OS backend paths out of catalog frontend routing', () => {
+  const impact = resolveImpact(['apps/loopdev-os/src/app/api/health/route.ts']);
+
+  assert.deepEqual(impact.domainIds, []);
+  assert.equal(impact.frontend, false);
+  assert.equal(impact.globalFallback, true);
 });
 
 test('uses global fallback for root, shared configuration, and unknown changes', () => {

@@ -40,7 +40,7 @@ describe('CRM contacts API', () => {
     });
   });
 
-  it('returns the authorization status without calling the service', async () => {
+  it('returns the contact authorization status without calling the listing service', async () => {
     authorizeCrm.mockResolvedValue({ allowed: false, status: 403 });
     const response = await GET(
       new Request(`http://localhost/api/crm/contacts?organizationId=${organizationId}`),
@@ -79,7 +79,7 @@ describe('CRM contacts API', () => {
     });
   });
 
-  it('requires the expected version for updates', async () => {
+  it('requires the expected contact version for optimistic updates', async () => {
     const response = await PATCH(
       new Request('http://localhost/api/crm/contacts', {
         method: 'PATCH',
@@ -94,7 +94,7 @@ describe('CRM contacts API', () => {
     expect(updateContact).not.toHaveBeenCalled();
   });
 
-  it('forwards an authorized optimistic update', async () => {
+  it('forwards an authorized contact optimistic update', async () => {
     const response = await PATCH(
       new Request('http://localhost/api/crm/contacts', {
         method: 'PATCH',

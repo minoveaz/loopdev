@@ -5,7 +5,12 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
-import { buildValidationPlan, changedFilesFromGit } from './validate-plan.mjs';
+import {
+  buildValidationPlan,
+  changedFilesFromCommit,
+  changedFilesFromGit,
+  changedFilesFromWorktree,
+} from './validate-plan.mjs';
 
 const isWindows = process.platform === 'win32';
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
@@ -27,6 +32,10 @@ function preflightCommands() {
     .map((check) => commandArgs(check.command));
 }
 
+function requiresBranchPreflight(mode) {
+  return !['worktree', 'commit'].includes(mode);
+}
+
 function parseArgs(args) {
   const positional = args.filter((arg) => arg !== '--' && !arg.startsWith('--'));
   const mode = positional[0] ?? 'changed';
@@ -35,25 +44,46 @@ function parseArgs(args) {
 }
 
 function commandsForPlan(plan, mode, value) {
-  if (!['changed', 'domain', 'experience', 'full'].includes(mode)) {
+  if (!['worktree', 'commit', 'branch', 'changed', 'domain', 'experience', 'full'].includes(mode)) {
     throw new Error(`Unknown validation mode: ${mode}`);
   }
+  const preflight = requiresBranchPreflight(mode) ? preflightCommands() : [];
   if (mode === 'full') {
-    return [...preflightCommands(), ...registry.checks.filter((check) => check.modes.includes('full') && check.id !== 'branch-base').map((check) => commandArgs(check.command))];
+    return [
+      ...preflight,
+      ...registry.checks
+        .filter((check) => check.modes.includes('full') && check.id !== 'branch-base')
+        .map((check) => commandArgs(check.command)),
+    ];
   }
 
-  const domains = mode === 'domain' || mode === 'experience' ? [value] : plan.selected.map(({ id }) => id);
-  if ((mode === 'domain' || mode === 'experience') && !registry.checks.some((check) => check.domain === value && check.modes.includes(mode))) {
+  const domains =
+    mode === 'domain' || mode === 'experience' ? [value] : plan.selected.map(({ id }) => id);
+  if (
+    (mode === 'domain' || mode === 'experience') &&
+    !registry.checks.some((check) => check.domain === value && check.modes.includes(mode))
+  ) {
     throw new Error(`Unknown ${mode} scope: ${value || '(missing)'}`);
   }
-  if (mode === 'changed' && plan.fullFallback) {
-    return [...preflightCommands(), ...registry.checks.filter((check) => check.modes.includes('full') && check.id !== 'branch-base').map((check) => commandArgs(check.command))];
+  if (['worktree', 'commit', 'branch', 'changed'].includes(mode) && plan.fullFallback) {
+    return [
+      ...preflight,
+      ...registry.checks
+        .filter((check) => check.modes.includes('full') && check.id !== 'branch-base')
+        .map((check) => commandArgs(check.command)),
+    ];
   }
 
-  return [...preflightCommands(), ...registry.checks
-    .filter((check) => check.modes.includes(mode) && domains.includes(check.domain))
-    .filter((check) => check.id !== 'branch-base')
-    .map((check) => commandArgs(check.command))];
+  // Branch scope uses accumulated files, but the registry's changed controls
+  // are the controls that protect each selected domain.
+  const registryMode = mode === 'branch' ? 'changed' : mode;
+  return [
+    ...preflight,
+    ...registry.checks
+      .filter((check) => check.modes.includes(registryMode) && domains.includes(check.domain))
+      .filter((check) => check.id !== 'branch-base')
+      .map((check) => commandArgs(check.command)),
+  ];
 }
 
 function formatCommand(args) {
@@ -72,7 +102,16 @@ function runCommand(args) {
 
 function main() {
   const { mode, value, dryRun } = parseArgs(process.argv.slice(2));
-  const plan = mode === 'full' ? null : buildValidationPlan(changedFilesFromGit());
+  const plan =
+    mode === 'full'
+      ? null
+      : buildValidationPlan(
+          mode === 'worktree'
+            ? changedFilesFromWorktree()
+            : mode === 'commit'
+              ? changedFilesFromCommit(value)
+              : changedFilesFromGit(),
+        );
   const commands = commandsForPlan(plan ?? { selected: [], fullFallback: false }, mode, value);
 
   console.log(`Validation scope: ${mode}${value ? ` (${value})` : ''}`);

@@ -52,7 +52,6 @@
 
 ### Governance
 
-- [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
 ## Cerrados
 
@@ -85,3 +84,5 @@
 - [CRM shared foundation implementation](./closed/2026/2026-08-14-crm-shared-foundation.md) · `feature/crm-contacts-backend-foundation` · fase 1
 - [CRM UI foundation and composition](./closed/2026/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
 - [Reusable suite composition patterns](./closed/2026/platform/2026-08-18-reusable-suite-composition-patterns.md) · `feature/reusable-suite-composition-patterns` · fase 2
+- [LoopDev Frontend Quality System](./closed/2026/2026-08-08-loopdev-frontend-quality-system.md) · fase 5
+- [Domain Validation Routing and Test Efficiency](./closed/2026/2026-08-31-domain-validation-routing.md) · `test/domain-validation-routing` · fase 7
