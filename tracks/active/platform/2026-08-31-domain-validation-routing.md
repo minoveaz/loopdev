@@ -571,9 +571,9 @@ artefacto de baseline versionado ni observaciones CI representativas que
 persistir. `pnpm validation:observations` valida el esquema de ejemplo, pero
 sus métricas sintéticas no se usan como evidencia.
 
-**Estado:** bloqueada; la orquestación, la validación estática, la cobertura
-local y la certificación Supabase disponible pasan, pero no hay duración CI
-remota representativa. La evidencia E2E
+**Estado:** completada; la orquestación, la validación estática, la cobertura
+local y la certificación Supabase disponible pasan. La duración CI remota es
+telemetría operativa opcional y no condiciona la certificación. La evidencia E2E
 de ejecución también queda limitada al discovery/catalogo en esta sesión:
 `pnpm e2e:preflight` no pudo conectar a `127.0.0.1:3001` porque no había
 servidor LoopDev OS levantado.
