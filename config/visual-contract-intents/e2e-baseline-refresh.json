@@ -1,0 +1,15 @@
+{
+  "kind": "visual-contract-change",
+  "surfaces": [
+    "e2e/entity-table-golden.visual.spec.mjs",
+    "e2e/responsive.visual.spec.mjs",
+    "e2e/shell.visual.spec.mjs"
+  ],
+  "userIntent": "Refresh Darwin visual baselines for active responsive shell and EntityTable certification scenarios after stabilizing the E2E fixture composition.",
+  "evidence": {
+    "functional": "The active E2E suite passes with the refreshed fixtures and baselines.",
+    "accessibility": "Shell and component certification checks pass for the supported responsive projects.",
+    "visual": "Updated Darwin baselines match the approved active shell and EntityTable compositions."
+  },
+  "approvedBy": "design-system"
+}
