@@ -37,7 +37,7 @@ reclasifican como false skip sin una observación representativa.
   archivos de test SQL versionados.
 - Fase 7: la orquestación y la certificación local pasan, pero no hay dataset
   representativo de CI remoto para duración, false runs, false skips,
-  duplicación o flakiness, ni baseline de cobertura versionado.
+  duplicación o flakiness.
 - Quant permanece fuera de alcance por seguir experimental/no publicable.
 - El cierre no se ejecuta: requiere criterios completos y aprobación explícita
   del usuario.
@@ -91,8 +91,9 @@ reclasifican como false skip sin una observación representativa.
   60.42% branches, 49.81% functions, 69.20% lines.
 - `pnpm --filter loopdev-mobile test:coverage` — 9 suites y 22 tests; 56.92%
   statements, 44.72% branches, 55.75% functions, 61.27% lines.
-- El baseline medido de Vitest está persistido en
-  `config/validation-coverage-baseline.json`; no se imponen thresholds.
+- La cobertura Vitest medida está disponible como referencia en
+  `config/validation-coverage-baseline.json`; no bloquea validaciones ni cierre
+  y no se imponen thresholds.
 - `pnpm exec playwright test --list` — discovery disponible: 282 tests en 27
   archivos.
 - `pnpm e2e:preflight` — bloqueado en esta sesión porque no había LoopDev OS

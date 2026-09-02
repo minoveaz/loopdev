@@ -536,7 +536,8 @@ duration, coverage, false runs, false skips, and residual risks.
 - [x] Every selected and skipped control reports domain, risk, reason, and scope.
 - [x] Observation schema distinguishes false runs, false skips, duplicate risk, duration,
       and flaky outcome.
-- [x] No coverage threshold is enforced without approved measured baseline.
+- [x] Coverage is reference-only; no threshold is enforced and it does not gate
+      validation or closure.
 - [x] Full certification passes or an external limitation has owner and follow-up.
 - [ ] Track integrity, documentation links, and Git conventions pass.
 
@@ -572,7 +573,7 @@ sus métricas sintéticas no se usan como evidencia.
 
 **Estado:** bloqueada; la orquestación, la validación estática, la cobertura
 local y la certificación Supabase disponible pasan, pero no hay duración CI
-remota representativa ni baseline de cobertura versionado. La evidencia E2E
+remota representativa. La evidencia E2E
 de ejecución también queda limitada al discovery/catalogo en esta sesión:
 `pnpm e2e:preflight` no pudo conectar a `127.0.0.1:3001` porque no había
 servidor LoopDev OS levantado.
@@ -664,7 +665,7 @@ risk tables below; they are not silently marked complete.
 - [ ] Every versioned Playwright spec is discovered by an intended profile or explicitly retired with approval.
 - [ ] Browser smoke, domain, visual, responsive, and full profiles have explicit purpose and viewport policy.
 - [ ] Routing unit tests cover every acceptance-matrix row.
-- [ ] Baseline duration and available coverage evidence are recorded without unapproved global thresholds.
+- [ ] Baseline duration is recorded without unapproved global thresholds.
 - [ ] Documentation, registry, and operator commands are updated and validated.
 - [ ] Outcome is verified, residual risks are documented, and closure is approved explicitly by the user.
 

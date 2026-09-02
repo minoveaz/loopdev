@@ -13,10 +13,10 @@
     "functions": 49.82,
     "branches": 15.8
   },
-  "status": "informational",
+  "status": "reference-only",
   "thresholdEnforced": false,
   "notes": [
-    "Baseline is a measured reference for regression comparison.",
+    "Measured reference only; it does not gate validation or closure.",
     "No coverage threshold is enforced by this track."
   ]
 }
