@@ -433,10 +433,7 @@ retain ordered full-data certification for cross-schema integration.
 
 **Entregables**
 
-- [x] Focused Supabase commands for platform, marketing, creative, CRM, and an
-      explicit empty Communications domain.
-- [ ] Complete Communications SQL route including controls `007` through `010`;
-      blocked until those files are versioned in this branch.
+- [x] Focused Supabase commands for all versioned active domains.
 - [x] Ordered full-data command containing all 9 SQL tests present in this branch.
 - [x] Supabase workflow no longer duplicates a manual partial SQL file list.
 
@@ -446,8 +443,6 @@ retain ordered full-data certification for cross-schema integration.
       focused controls unless a shared migration requires full data certification.
 - [x] Full-data dry-run includes every versioned database control in catalog order.
 - [x] Data workflow retains tenant-security and migration-governance protection.
-- [ ] Communications changes select controls `007-010` once those migrations
-      exist in the branch.
 
 **Evidencia:** `pnpm test:data-catalog` and the database runner tests pass;
 `pnpm validate:data-catalog` confirms 8 pgTAP SQL tests across 5 domains plus

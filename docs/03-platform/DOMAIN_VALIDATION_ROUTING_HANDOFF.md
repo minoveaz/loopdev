@@ -105,13 +105,12 @@ test/domain-validation-routing` pasa para la rama canónica.
 
 | Limitación                                                                | Owner                 | Follow-up                                                                                                        |
 | ------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Faltan tests SQL Communications `007`–`010`; el catálogo permanece vacío. | `platform/crm`        | Versionar los controles/tests SQL requeridos y añadirlos al catálogo antes de reclamar cobertura Communications. |
 | No hay duración ni observaciones representativas de CI remoto.            | `platform/governance` | Obtener runs CI accesibles y registrar solo duración, false run/skip, duplicación y flakiness observados.        |
 | E2E runtime requiere servidor LoopDev OS.                                 | `platform/apps`       | Levantar el servidor con entorno equivalente a CI y repetir perfiles focalizados.                                |
 | La rama scratch actual no cumple la convención de nombres.                | `platform/governance` | Renombrar a `test/<area>-<topic>` antes de commit/push; la rama canónica sí pasa.                                |
 
 ## Siguiente acción
 
-Conservar el track activo. Obtener la evidencia remota faltante y resolver o
-aceptar explícitamente el diferimiento de Communications; después solicitar
-aprobación explícita del usuario antes de mover el track a `tracks/closed/`.
+Conservar el track activo hasta obtener la evidencia remota faltante; después
+solicitar aprobación explícita del usuario antes de mover el track a
+`tracks/closed/`.
