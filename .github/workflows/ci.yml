@@ -509,23 +509,31 @@ jobs:
       - name: Setup frontend E2E environment
         uses: ./.github/actions/setup-frontend-e2e
 
-      - name: Run desktop functional and accessibility checks
+      - name: Run catalog-backed desktop E2E checks
         if: needs.changes.outputs.browser_desktop == 'true' && needs.changes.outputs.e2e_desktop_functional != ''
         run: >-
           pnpm e2e:profile
           files:${{ needs.changes.outputs.e2e_desktop_functional }}
           --project=desktop --workers=1 --reporter=line
 
-      - name: Run desktop functional and accessibility checks
+      - name: Run catalog-backed desktop E2E checks
         if: >-
           needs.changes.outputs.browser_desktop == 'true' &&
           needs.changes.outputs.e2e_desktop_functional == ''
         run: >-
-          pnpm exec playwright test
-          e2e/*.smoke.spec.mjs
-          e2e/*.accessibility.spec.mjs
-          e2e/*certification.spec.mjs
+          pnpm e2e:profile
+          profiles:smoke,accessibility,functional,domain,component,contract
           --project=desktop --workers=1 --reporter=line
+
+      - name: Upload desktop E2E and Axe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-desktop-functional-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
 
   frontend-e2e-visual:
     name: Frontend E2E visual behavior
@@ -560,20 +568,24 @@ jobs:
       - name: Run shell and composition visual checks
         if: matrix.suite == 'shell'
         run: >-
-          pnpm exec playwright test
-          e2e/composition-showcase.visual.spec.mjs
-          e2e/quantitative-table.visual.spec.mjs
-          e2e/shell-showcase.visual.spec.mjs
-          e2e/shell.visual.spec.mjs
+          pnpm e2e:profile visual
           --project=desktop --workers=1 --reporter=line
 
       - name: Run table visual checks
         if: matrix.suite == 'tables'
         run: >-
-          pnpm exec playwright test
-          e2e/dense-operational-table.visual.spec.mjs
-          e2e/entity-table-golden.visual.spec.mjs
+          pnpm e2e:profile visual
           --project=desktop --workers=1 --reporter=line
+
+      - name: Upload visual E2E and Axe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-visual-${{ matrix.suite }}-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
 
   frontend-e2e-mobile:
     name: Frontend E2E mobile behavior
@@ -598,35 +610,34 @@ jobs:
       - name: Setup frontend E2E environment
         uses: ./.github/actions/setup-frontend-e2e
 
-      - name: Run authenticated mobile checks
+      - name: Run catalog-backed mobile E2E checks
         if: needs.changes.outputs.browser_mobile == 'true' && needs.changes.outputs.e2e_mobile_functional != ''
         run: >-
           pnpm e2e:profile
           files:${{ needs.changes.outputs.e2e_mobile_functional }}
           --project=mobile --project=mobile-compact --workers=1 --reporter=line
 
-      - name: Run authenticated mobile checks
+      - name: Run catalog-backed mobile E2E checks
         if: >-
           needs.changes.outputs.browser_mobile == 'true' &&
           needs.changes.outputs.e2e_mobile_functional == ''
         run: >-
-          pnpm exec playwright test
-          e2e/authenticated.mobile.spec.mjs
-          e2e/input.certification.spec.mjs
-          e2e/button.certification.spec.mjs
-          e2e/icon-button.certification.spec.mjs
-          e2e/filter-dropdown.certification.spec.mjs
-          e2e/crm-primitives.certification.spec.mjs
-          e2e/entity-table.certification.spec.mjs
-          e2e/activity-table.certification.spec.mjs
-          e2e/selection-table.certification.spec.mjs
-          e2e/command-dialog.certification.spec.mjs
+          pnpm e2e:profile
+          profiles:responsive,domain,component,diagnostic
           --project=mobile --project=mobile-compact --workers=1 --reporter=line
 
       - name: Run mobile visual checks
         if: needs.changes.outputs.browser_visual == 'true'
         run: >-
-          pnpm exec playwright test
-          e2e/responsive.visual.spec.mjs
-          e2e/shell.visual.spec.mjs
+          pnpm e2e:profile visual
           --project=mobile --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Upload mobile E2E and Axe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-mobile-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore

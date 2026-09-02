@@ -52,7 +52,7 @@
 
 ### Governance
 
-- [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
+- [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 5
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
 ## Cerrados
 

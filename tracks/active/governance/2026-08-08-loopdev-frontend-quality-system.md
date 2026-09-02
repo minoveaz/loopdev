@@ -3,18 +3,23 @@ id: loopdev-frontend-quality-system
 title: LoopDev Frontend Quality System
 status: active
 created: 2026-08-08
-updated: 2026-08-12
+updated: 2026-09-02
 owner: governance
 branch: null
-areas: []
+areas: [governance, platform, apps, mobile, crm, marketing-studio, health]
 dependencies: []
 blocked_by: []
 supersedes: []
 migration_source: conductor/tracks/2026-08-08-loopdev-frontend-quality-system.md
 lead: null
-branches: [feature/frontend-work3]
-phase: 1
-pull_requests: []
+branches:
+  - feature/frontend-work3
+  - test/domain-validation-routing
+  - loopdev-io-chore/ci-validation-optimization
+  - chore/ci-lint-pipeline-optimization
+  - loopdev-io-reconcile-frontend-quality-track
+phase: 5
+pull_requests: [162, 163, 164, 165, 166, 167, 168, 169]
 issues: []
 packages: []
 release: not-required
@@ -24,7 +29,9 @@ release: not-required
 
 ## Outcome
 
-Track existente consolidado. El outcome operativo se conserva en la especificación migrada y debe formalizarse en la próxima actualización del track.
+Sistema frontend de calidad ejecutable y trazable: auditoría estática, contratos
+de componentes, validación de aplicación real, Axe, snapshots y routing de CI
+quedan coordinados por catálogos y con evidencia por fase.
 
 ## Branch strategy
 
@@ -32,11 +39,55 @@ El sistema de calidad se ejecuta por oleadas de certificación. Las ramas de cad
 
 ## Fases
 
-Las fases, checkpoints y tareas existentes se preservan en la especificación migrada.
+| Fase                                  | Estado     | Evidencia vigente                                                      |
+| ------------------------------------- | ---------- | ---------------------------------------------------------------------- |
+| 0 — Inventario y línea base           | completada | `scripts/front-audit.mjs`, baseline y matriz de certificación          |
+| 1 — Primitives y contratos visuales   | completada | primitives compartidos, contratos públicos y tests focalizados         |
+| 2 — Quality Gate automático           | completada | `pnpm front:check`, baseline y gate CI                                 |
+| 3 — Pruebas de componentes            | completada | Vitest/Testing Library y Axe en los componentes aplicables             |
+| 4 — Pruebas reales de aplicación      | completada | Playwright por proyecto, responsive, overflow y accesibilidad          |
+| 4.1 — Flujo de certificación frontend | completada | CI con catálogo E2E, perfiles, Axe integrado y artefactos de evidencia |
+| 5 — Migración por suite               | completada | auditoría y evidencia de las cinco suites con alcance documentado      |
+
+La fase activa del track es la auditoría final y preparación de cierre; el estado
+permanece `active` hasta la aprobación explícita requerida por gobernanza.
+
+## Decisiones aprobadas
+
+| Fecha      | Decisión                                                                                                                                                  | Motivo                                                                                                         | Impacto                                                                                                                                                                        | Aprobado por |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
+| 2026-09-02 | Usar el catálogo E2E como fuente de selección para fallbacks desktop/mobile y publicar sus resultados CI con el patrón existente de `upload-artifact@v4`. | La solicitud exige reconciliar lo catalogado con lo ejecutado y conservar evidencia sin introducir thresholds. | Añade selección multi-perfil, corrige la clasificación visual de `responsive.visual` y publica `playwright-report/` y `test-results/`; no cambia Communications, DAM ni Quant. | Usuario      |
+
+## Registro de cambios de enfoque
+
+| Fecha      | Cambio                                                                                              | Motivo                                     | Impacto en alcance/fases                                                                            | Aprobado por |
+| ---------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------- | ------------ |
+| 2026-09-02 | La selección de fallbacks deja de depender de globs/listas manuales y pasa a perfiles del catálogo. | Evitar drift entre specs versionados y CI. | Ajuste de Fase 4.1; mantiene los proyectos y perfiles definidos, sin ampliar superficies excluidas. | Usuario      |
+
+## Evidencia de PRs mergeados
+
+| PR   | Commit     | Fecha de merge       | Checks                |
+| ---- | ---------- | -------------------- | --------------------- |
+| #162 | `5f5360ca` | 2026-09-02 07:24:46Z | 14 SUCCESS, 5 SKIPPED |
+| #163 | `ba4cacec` | 2026-09-02 11:07:33Z | 10 SUCCESS, 6 SKIPPED |
+| #164 | `6db792dd` | 2026-09-02 13:00:04Z | 15 SUCCESS, 3 SKIPPED |
+| #165 | `f781b63b` | 2026-09-02 14:41:38Z | 16 SUCCESS, 2 SKIPPED |
+| #166 | `fe1da8d9` | 2026-09-02 18:50:45Z | 16 SUCCESS, 3 SKIPPED |
+| #167 | `4a56dd4e` | 2026-09-02 19:01:42Z | 9 SUCCESS, 9 SKIPPED  |
+| #168 | `082aa0d5` | 2026-09-02 19:27:45Z | 11 SUCCESS, 5 SKIPPED |
+| #169 | `098b107a` | 2026-09-02 19:46:55Z | 8 SUCCESS, 8 SKIPPED  |
+
+Los checks `SKIPPED` se conservan como resultado del rollup de GitHub; no se
+reclasifican como false skip sin una observación representativa.
 
 ## Criterios de cierre
 
-- [ ] Formalizar criterios de cierre verificables durante la próxima actualización.
+- [x] Outcome verificable: las fases 0–5 y 4.1 tienen estado y evidencia registrada.
+- [x] Catálogo E2E sincronizado con los specs versionados y los perfiles ejecutados por CI.
+- [x] Fallbacks desktop/mobile corregidos para seleccionar desde el catálogo, sin ampliar Quant.
+- [x] CI publica `playwright-report/` y `test-results/` con `if: always()` e ignora ausencias.
+- [x] Validaciones locales y evidencia remota de PRs registradas sin inventar thresholds.
+- [x] Riesgos residuales y alcance excluido documentados.
 - [ ] Obtener aprobación explícita del usuario antes de mover el track a `closed`.
 
 ## Especificación migrada
@@ -73,14 +124,9 @@ Las fases, checkpoints y tareas existentes se preservan en la especificación mi
 
 - Mantener la constitución visual corta de consulta diaria en `docs/02-frontend/LOOPDEV_FRONTEND_CONSTITUTION.md`.
 - Mantener la matriz versionada de certificación por suite y actualizarla con evidencia de Fase 3 y posteriores.
-- Añadir pruebas Playwright de shell, responsive, temas y overflow; esta tarea pertenece a la Fase 4, no a la Fase 1.
-- Revisar visualmente las cuatro suites en desktop, mobile, light y dark.
-- Implementar el flujo de certificación frontend por capas: `front:audit` → Vitest + Testing Library → Playwright → Axe integrado en Playwright → snapshots visuales.
 - Mantener `shellArchitecture` con excepciones explícitas y detección de wrappers no registrados.
 - Revisar periódicamente las excepciones del baseline y actualizar la matriz con evidencia de las fases posteriores.
-- Completar la cobertura de componentes y Axe para primitives compartidos; esto corresponde a la Fase 3.
-- Ejecutar Playwright, Axe y snapshots en GitHub Actions con reportes y checks de PR; esto corresponde a la Fase 4.1.
-- Registrar las excepciones y la deuda residual por suite.
+- Registrar cualquier nueva excepción o deuda residual por suite antes de solicitar el cierre.
 
 ### Estado actual
 
@@ -94,17 +140,45 @@ Las fases, checkpoints y tareas existentes se preservan en la especificación mi
 
 La ejecución de checks en GitHub Actions no constituye una fase independiente. Los checks estáticos y `front:check` se incorporan en la Fase 2; Playwright, Axe, snapshots y los checks requeridos de Pull Request se incorporan en la Fase 4.1.
 
-La Fase 5 queda cerrada con la evidencia registrada en la matriz. GitHub Actions E2E, Axe de navegador y snapshots se ejecutan en sus proyectos definidos, mientras que las suites sin versión móvil permanecen fuera de los proyectos mobile.
+La Fase 5 queda cerrada con la evidencia registrada en la matriz. GitHub Actions E2E, Axe de navegador y snapshots se ejecutan mediante selecciones derivadas del catálogo en sus proyectos definidos, mientras que las suites sin versión móvil permanecen fuera de los proyectos mobile.
 
 ### Evidencia de separación Playwright
 
-La configuración actual lista `19` tests en `desktop`, `12` tests en `mobile` y `12` tests en `mobile-compact`. `authenticated.application.spec.mjs`, incluidos Sales CRM y Quant Ops, se ejecuta únicamente en desktop; `authenticated.mobile.spec.mjs` se ejecuta únicamente en los dos proyectos mobile. Quant Ops queda fuera de mobile por decisión de producto. Health OS conserva únicamente cobertura de shell/responsive en mobile, no certificación funcional de sus módulos internos.
+La configuración actual descubre `279` tests en `26` archivos catalogados: `112` en `desktop`, `86` en `mobile` y `81` en `mobile-compact`. `authenticated.mobile.spec.mjs` se ejecuta únicamente en los dos proyectos mobile. Quant Ops queda fuera de mobile por decisión de producto. Health OS conserva únicamente cobertura de shell/responsive en mobile, no certificación funcional de sus módulos internos.
 
 El scan Axe desktop cubre login, launchpad y Sales Pipeline sin violaciones críticas o serias. Sales Pipeline queda certificado en accesibilidad de navegador para desktop; el resto de suites mantiene el alcance indicado en la matriz.
 
 ### Evidencia de cierre de Fase 5
 
-`e2e/phase5.certification.spec.mjs` valida las cinco suites en light y dark con sesión E2E, contenido principal visible, ausencia de overflow horizontal y ausencia de errores de navegador no conocidos: 10 tests PASS. `front:audit --file` devuelve 0 hallazgos para cada suite y `pnpm --filter loopdev-os build` pasa con el bypass E2E de CI.
+`e2e/phase5.certification.spec.mjs` valida las cinco suites en light y dark con sesión E2E, contenido principal visible, ausencia de overflow horizontal y ausencia de errores de navegador no conocidos: 10 tests PASS. La validación actual del catálogo pasa para 26 specs y 3 proyectos; la discovery de Playwright suma 279 tests. `front:audit --file` devuelve 0 hallazgos para cada suite y `pnpm --filter loopdev-os build` pasa con el bypass E2E de CI.
+
+### Auditoría final — 2026-09-02
+
+- Catálogo: 26 specs y 3 proyectos; `responsive.visual.spec.mjs` queda clasificado como `visual`, coherente con sus snapshots y el job visual.
+- Fallback desktop: selecciona `smoke`, `accessibility`, `functional`, `domain`, `component` y `contract` desde el catálogo.
+- Fallback mobile: selecciona `responsive`, `domain`, `component` y `diagnostic` desde el catálogo; `mobile-compact` conserva el mismo alcance de archivos.
+- Visuales: los jobs desktop y mobile usan el perfil `visual` del catálogo, sin listas paralelas.
+- Artefactos: los tres jobs E2E publican `playwright-report/` y `test-results/` con `if: always()` e `if-no-files-found: ignore`; el segundo incluye adjuntos Axe disponibles.
+- Exclusiones: Communications, DAM y Quant no reciben cambios en esta reconciliación.
+
+## Evidencia de validación
+
+| Fecha      | Validación                                                      | Resultado                                                    | Referencia                                       |
+| ---------- | --------------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| 2026-09-02 | `pnpm test:e2e:profile`                                         | PASS, 8 tests                                                | selección multi-perfil y validaciones de entrada |
+| 2026-09-02 | `pnpm test:e2e-catalog` y `pnpm validate:e2e-catalog`           | PASS, 5 tests; 26 specs y 3 proyectos                        | `config/e2e-validation-catalog.json`             |
+| 2026-09-02 | `pnpm test:ci-orchestration` y `pnpm validate:ci-orchestration` | PASS, 4 tests; 15 controles                                  | `.github/workflows/ci.yml`                       |
+| 2026-09-02 | Playwright discovery por proyectos                              | PASS, 279 tests en 26 archivos                               | `desktop=112`, `mobile=86`, `mobile-compact=81`  |
+| 2026-09-02 | `pnpm quality:static:worktree`                                  | PASS, Prettier y ESLint focalizados                          | 6 archivos fuente afectados                      |
+| 2026-09-02 | `pnpm validate:ci`                                              | PASS, 7/7 tareas con valores Supabase locales no productivos | validación completa de CI                        |
+| 2026-09-02 | `node scripts/tracks/validate-tracks.mjs`                       | PASS                                                         | track activo y metadatos reconciliados           |
+
+## Riesgos y bloqueos
+
+| Riesgo o bloqueo                                                                                                            | Impacto                                                  | Mitigación                                                                                                                             | Responsable | Estado  |
+| --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
+| No hay duración ni observaciones representativas de CI remoto.                                                              | No permite afirmar rendimiento, false skips o flakiness. | Conservar los estados SUCCESS/SKIPPED de #162–#169 y obtener observaciones representativas antes de una auditoría operativa posterior. | governance  | abierto |
+| El runtime generó la rama `loopdev-io-reconcile-frontend-quality-track`, que no cumple el prefijo de entrega del validador. | No debe usarse para push o PR.                           | Mantener esta sesión sin push/PR y renombrar mediante el flujo de workspace antes de una entrega remota.                               | governance  | abierto |
 
 ### Nomenclatura de superficies
 
@@ -604,6 +678,21 @@ El track se considera completado cuando un cambio frontend nuevo puede responder
 - qué suite queda certificada o qué deuda queda registrada.
 
 La meta no es que todas las pantallas sean idénticas. La meta es que todas hablen el mismo lenguaje visual y que las desviaciones sean visibles, explicables y controlables antes de llegar a producción.
+
+## Handoff de sesión
+
+- **Fecha:** 2026-09-02.
+- **Rama de continuación:** `loopdev-io-reconcile-frontend-quality-track`.
+- **Commit de partida:** `098b107a`.
+- **Estado alcanzado:** Reconciliados metadatos, fases, evidencia de PRs #162–#169 y conteos Playwright; fallbacks y publicación de artefactos E2E/Axe ajustados.
+- **Decisiones, bloqueos y riesgos:** Se mantiene `active`; falta únicamente aprobación explícita para mover a `closed`. Communications, DAM y Quant permanecen fuera de alcance.
+- **Validación ejecutada:** catálogos E2E/CI, tests de selección multi-perfil, discovery Playwright por proyecto y validador de tracks.
+- **Siguiente acción concreta:** Solicitar aprobación explícita del usuario y, si se concede, mover el track a `tracks/closed/2026/`.
+
+## Cierre
+
+Pendiente de aprobación explícita del usuario. No se ejecuta ninguna transición de
+estado en esta sesión.
 
 ## Registro de migración
 
