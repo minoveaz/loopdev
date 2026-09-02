@@ -44,7 +44,7 @@ values (
   '00000000-0000-4000-8300-000000000001'
 );
 
-select is((select count(*)::integer from public.marketing_creative_projects), 1, 'owner reads own creative projects');
+select is((select count(*)::integer from public.marketing_creative_projects), 1, 'creative owner reads projects in own organization');
 select lives_ok($$ insert into public.marketing_creative_project_versions (
   organization_id, brand_id, workspace_id, project_id, version_number, document, created_by, updated_by
 ) values (
@@ -56,7 +56,7 @@ select lives_ok($$ insert into public.marketing_creative_project_versions (
   '{"layers":[]}'::jsonb,
   '00000000-0000-4000-8300-000000000001',
   '00000000-0000-4000-8300-000000000001'
-) $$, 'owner appends project version');
+) $$, 'creative owner appends a project version');
 select lives_ok($$ insert into public.marketing_creative_variants (
   organization_id, brand_id, workspace_id, project_id, project_version_id, key, channel, format, width, height, created_by, updated_by
 ) values (
@@ -72,10 +72,10 @@ select lives_ok($$ insert into public.marketing_creative_variants (
   1080,
   '00000000-0000-4000-8300-000000000001',
   '00000000-0000-4000-8300-000000000001'
-) $$, 'owner appends creative variant');
-select lives_ok($$ update public.marketing_creative_projects set name = 'Creative project A updated' where id = '00000000-0000-4000-9900-000000000001' $$, 'owner updates project metadata');
-select is((select count(*)::integer from public.marketing_creative_project_versions), 1, 'owner reads own project versions');
-select is((select count(*)::integer from public.marketing_creative_variants), 1, 'owner reads own variants');
+) $$, 'creative owner appends a project variant');
+select lives_ok($$ update public.marketing_creative_projects set name = 'Creative project A updated' where id = '00000000-0000-4000-9900-000000000001' $$, 'creative owner updates project metadata');
+select is((select count(*)::integer from public.marketing_creative_project_versions), 1, 'creative owner reads project versions in own organization');
+select is((select count(*)::integer from public.marketing_creative_variants), 1, 'creative owner reads project variants in own organization');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8300-000000000002', true);
 select is((select count(*)::integer from public.marketing_creative_projects), 0, 'viewer cannot read another organization projects');
@@ -86,7 +86,7 @@ select throws_ok($$ insert into public.marketing_creative_projects (
   '00000000-0000-4000-9700-000000000001',
   '00000000-0000-4000-9800-000000000001',
   'Cross tenant project'
-) $$, 'new row violates row-level security policy for table "marketing_creative_projects"', 'viewer cannot create project');
+) $$, 'new row violates row-level security policy for table "marketing_creative_projects"', 'creative viewer cannot create a project in another organization');
 select throws_ok($$ insert into public.marketing_creative_project_versions (
   organization_id, brand_id, workspace_id, project_id, version_number
 ) values (
@@ -95,8 +95,8 @@ select throws_ok($$ insert into public.marketing_creative_project_versions (
   '00000000-0000-4000-9800-000000000001',
   '00000000-0000-4000-9900-000000000001',
   2
-) $$, 'new row violates row-level security policy for table "marketing_creative_project_versions"', 'viewer cannot append version');
-select throws_ok($$ delete from public.marketing_creative_project_versions $$, 'permission denied for table marketing_creative_project_versions', 'versions remain append-only');
+) $$, 'new row violates row-level security policy for table "marketing_creative_project_versions"', 'creative viewer cannot append a project version');
+select throws_ok($$ delete from public.marketing_creative_project_versions $$, 'permission denied for table marketing_creative_project_versions', 'creative project versions remain append-only');
 
 select * from finish();
 rollback;

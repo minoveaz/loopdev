@@ -104,8 +104,8 @@ select throws_ok(
   'organization member cannot write into another workspace organization'
 );
 
-select ok(has_table_privilege('authenticated', 'public.crm_audit_events', 'update') = false, 'audit UPDATE privilege is revoked');
-select ok(has_table_privilege('authenticated', 'public.crm_audit_events', 'delete') = false, 'audit DELETE privilege is revoked');
+select ok(has_table_privilege('authenticated', 'public.crm_audit_events', 'update') = false, 'CRM audit UPDATE privilege is revoked');
+select ok(has_table_privilege('authenticated', 'public.crm_audit_events', 'delete') = false, 'CRM audit DELETE privilege is revoked');
 select lives_ok(
   $$ insert into public.crm_audit_events (organization_id, entity_type, entity_id, action) values ('00000000-0000-4000-9700-000000000001', 'contact', '00000000-0000-4000-9a00-000000000001', 'created') $$,
   'authorized CRM command can append an audit event'

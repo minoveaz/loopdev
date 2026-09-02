@@ -31,15 +31,15 @@ values ('00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-0000000
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8200-000000000001', true);
 set local role authenticated;
 
-select is((select count(*)::integer from public.content_briefs), 1, 'owner can read own briefs');
-select lives_ok($$ insert into public.content_items (organization_id, brand_id, title, type) values ('00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Item A', 'social_post') $$, 'owner can create own content item');
-select lives_ok($$ insert into public.content_generation_jobs (organization_id, brand_id, provider, model, status, input_hash) values ('00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'pending', 'none', 'queued', 'content-input-a') $$, 'owner can create own generation job');
+select is((select count(*)::integer from public.content_briefs), 1, 'content owner can read briefs in own organization');
+select lives_ok($$ insert into public.content_items (organization_id, brand_id, title, type) values ('00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Item A', 'social_post') $$, 'content owner can create an item in own organization');
+select lives_ok($$ insert into public.content_generation_jobs (organization_id, brand_id, provider, model, status, input_hash) values ('00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'pending', 'none', 'queued', 'content-input-a') $$, 'content owner can create a generation job in own organization');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8200-000000000002', true);
-select is((select count(*)::integer from public.content_briefs), 0, 'viewer cannot read another organization briefs');
-select is((select count(*)::integer from public.content_items), 0, 'viewer cannot read another organization items');
-select is((select count(*)::integer from public.content_generation_jobs), 0, 'viewer cannot read another organization jobs');
-select throws_ok($$ insert into public.content_briefs (organization_id, brand_id, name, objective) values ('00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Cross tenant', 'Denied') $$, 'new row violates row-level security policy for table "content_briefs"', 'viewer cannot create cross-organization brief');
+select is((select count(*)::integer from public.content_briefs), 0, 'content viewer cannot read briefs from another organization');
+select is((select count(*)::integer from public.content_items), 0, 'content viewer cannot read items from another organization');
+select is((select count(*)::integer from public.content_generation_jobs), 0, 'content viewer cannot read generation jobs from another organization');
+select throws_ok($$ insert into public.content_briefs (organization_id, brand_id, name, objective) values ('00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Cross tenant', 'Denied') $$, 'new row violates row-level security policy for table "content_briefs"', 'content viewer cannot create a brief across organizations');
 
 select * from finish();
 rollback;

@@ -10,10 +10,10 @@ describe('NarrativeBlock Composite', () => {
     mission: 'Test mission',
     vision: 'Test vision',
     promise: 'Test promise',
-    values: [{ title: 'V1', description: 'D1' }]
+    values: [{ title: 'V1', description: 'D1' }],
   };
 
-  it('renders all sections correctly in read-only mode', () => {
+  it('renders mission, vision, and values in read-only mode', () => {
     render(<NarrativeBlock data={mockData} isEditable={false} />);
     expect(screen.getByText(/Brand Narrative Foundation/i)).toBeDefined();
     expect(screen.getByText('Test mission')).toBeDefined();
@@ -21,7 +21,7 @@ describe('NarrativeBlock Composite', () => {
     expect(screen.getByText('V1')).toBeDefined();
   });
 
-  it('shows draft indicator when isEditable is true', () => {
+  it('renders the draft-mode indicator for editable narratives', () => {
     render(<NarrativeBlock data={mockData} isEditable={true} />);
     expect(screen.getByText(/\/\/ DRAFT_MODE_ACTIVE/i)).toBeDefined();
   });
