@@ -73,6 +73,7 @@ export interface CimoCreatePlanViewProps {
     thirdHalfLocation: string;
     image: string;
     price: string;
+    instructions?: string;
   }) => void;
   currentUser?: { name: string; avatarUrl?: string };
 }

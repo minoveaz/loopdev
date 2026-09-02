@@ -121,7 +121,7 @@ export const CimoChatContextInspectorWidget: React.FC<CimoChatContextInspectorWi
           <Coffee className="w-4 h-4 text-[#7FB77E] shrink-0" />
           <div>
             <span className="text-[10px] font-black text-[#7FB77E] uppercase block">Tercer Tiempo Acordado</span>
-            <p className="text-[11px] font-black text-[#1F4E5F]">{activity.thirdHalf.venueName ?? (activity.thirdHalf as any).venue}</p>
+            <p className="text-[11px] font-black text-[#1F4E5F]">{activity.thirdHalf.venue ?? (activity.thirdHalf as any).venueName ?? 'Terraza acordada'}</p>
           </div>
         </div>
       )}

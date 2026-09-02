@@ -10,7 +10,6 @@ import {
   Zap,
 } from 'lucide-react';
 import type { CrewConnection } from '../data/mockCrewNetwork';
-import { getSportEmoji } from '../data/sportsCatalog';
 
 export interface CimoInviteCrewModalProps {
   isOpen: boolean;
@@ -59,8 +58,6 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
     }, 1800);
   };
 
-  const sportEmoji = getSportEmoji(targetSport);
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1F4E5F]/60 backdrop-blur-xs animate-in fade-in duration-200"
@@ -81,7 +78,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                 Invitar a tu Crew Habitual
               </h3>
               <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5 truncate max-w-xs">
-                {sportEmoji} {targetActivityTitle}
+                {targetActivityTitle}
               </p>
             </div>
           </div>

@@ -32,6 +32,7 @@ export interface ActivityCardData {
   price?: string;
   description?: string;
   instructions?: string;
+  whatToBring?: Array<{ id: string; label: string; icon?: any } | string>;
   postalCode?: string;
   thirdHalf?: ThirdHalfData;
 }
