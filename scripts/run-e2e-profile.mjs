@@ -2,7 +2,7 @@
 
 import { spawnSync } from 'node:child_process';
 import process from 'node:process';
-import { specsForDomain, specsForProfile } from './validate-e2e-catalog.mjs';
+import { loadE2eCatalog, specsForDomain, specsForProfile } from './validate-e2e-catalog.mjs';
 
 const profiles = new Set([
   'smoke',
@@ -21,6 +21,17 @@ const playwrightCommand = isWindows ? 'playwright.cmd' : 'playwright';
 
 function filesForSelection(selection, catalog) {
   if (selection === 'full') return null;
+  if (selection.startsWith('files:')) {
+    const files = selection.slice('files:'.length).split(',').filter(Boolean);
+    if (files.length === 0) throw new Error('File selection requires at least one E2E spec');
+    const knownFiles = new Set(
+      (catalog ?? loadE2eCatalog()).specs.map((spec) => `e2e/${spec.file}`),
+    );
+    if (files.some((file) => !knownFiles.has(file))) {
+      throw new Error(`Unknown E2E spec in file selection: ${files.join(', ')}`);
+    }
+    return files;
+  }
   if (selection.startsWith('domain:'))
     return specsForDomain(selection.slice('domain:'.length), catalog).map(
       (spec) => `e2e/${spec.file}`,

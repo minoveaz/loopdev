@@ -41,6 +41,8 @@ function validateWorkflowContract(workflowSource) {
     'pnpm test:protected-surfaces',
     'pnpm test:package-impact',
     'pnpm validate:plan',
+    'pnpm test:shell:changed',
+    'pnpm e2e:profile',
   ];
   const errors = requiredCommands
     .filter((command) => !workflowSource.includes(command))

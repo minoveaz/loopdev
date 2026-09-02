@@ -85,6 +85,6 @@ function main() {
   );
 }
 
-export { availableE2eFiles, specsForDomain, specsForProfile, validateE2eCatalog };
+export { availableE2eFiles, loadE2eCatalog, specsForDomain, specsForProfile, validateE2eCatalog };
 
 if (process.argv[1]?.endsWith('validate-e2e-catalog.mjs')) main();

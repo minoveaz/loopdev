@@ -26,3 +26,18 @@ test('selects a domain without selecting unrelated domains', () => {
 test('uses Playwright discovery for full certification', () => {
   assert.equal(filesForSelection('full'), null);
 });
+
+test('selects explicitly targeted catalog files', () => {
+  assert.deepEqual(
+    filesForSelection('files:e2e/button.certification.spec.mjs,e2e/input.certification.spec.mjs'),
+    ['e2e/button.certification.spec.mjs', 'e2e/input.certification.spec.mjs'],
+  );
+});
+
+test('rejects explicitly targeted files outside the E2E catalog', () => {
+  assert.throws(() => filesForSelection('files:e2e/not-catalogued.spec.mjs'), /Unknown E2E spec/);
+});
+
+test('rejects an empty explicit file selection', () => {
+  assert.throws(() => filesForSelection('files:'), /at least one E2E spec/);
+});
