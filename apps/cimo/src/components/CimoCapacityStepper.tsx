@@ -28,9 +28,7 @@ export const CimoCapacityStepper: React.FC<CimoCapacityStepperProps> = ({
             Cupo máximo de personas
           </span>
         </div>
-        <span className="text-xs font-extrabold text-[#7FB77E]">
-          {value} plazas
-        </span>
+        <span className="text-xs font-extrabold text-[#7FB77E]">{value} plazas</span>
       </div>
 
       {/* Stepper Card */}

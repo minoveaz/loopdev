@@ -93,8 +93,13 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             <span>Volver a Explorar</span>
           </button>
           <span className="text-[#1F4E5F]/30">•</span>
-          <nav aria-label="Migas de pan" className="flex items-center gap-1 text-[11px] font-bold text-[#1F4E5F]/60 flex-wrap">
-            <span className="hover:text-[#1F4E5F] cursor-pointer" onClick={onBack}>CIMO</span>
+          <nav
+            aria-label="Migas de pan"
+            className="flex items-center gap-1 text-[11px] font-bold text-[#1F4E5F]/60 flex-wrap"
+          >
+            <span className="hover:text-[#1F4E5F] cursor-pointer" onClick={onBack}>
+              CIMO
+            </span>
             <span>›</span>
             <span>{city}</span>
             <span>›</span>
@@ -109,7 +114,11 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             aria-label="Compartir entreno"
             className="px-3 py-1.5 rounded-full bg-[#F7F7F7] hover:bg-[#7FB77E]/15 text-[#1F4E5F] transition-colors flex items-center gap-1.5 text-xs font-black cursor-pointer border border-[#1F4E5F]/10"
           >
-            {shareCopied ? <Check className="w-3.5 h-3.5 text-[#7FB77E]" /> : <Share2 className="w-3.5 h-3.5" />}
+            {shareCopied ? (
+              <Check className="w-3.5 h-3.5 text-[#7FB77E]" />
+            ) : (
+              <Share2 className="w-3.5 h-3.5" />
+            )}
             <span>{shareCopied ? '¡Enlace copiado!' : 'Compartir'}</span>
           </button>
           <button
@@ -207,7 +216,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
-                  {activity.captain.bio ?? 'Organizador activo en CIMO. Apasionado por entrenar en grupo y con buen rollo.'}
+                  {activity.captain.bio ??
+                    'Organizador activo en CIMO. Apasionado por entrenar en grupo y con buen rollo.'}
                 </p>
               </div>
             </div>
@@ -239,9 +249,7 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
               <span className="text-[11px] font-black uppercase tracking-wider text-[#7FB77E] block mb-1">
                 Nivel Recomendado
               </span>
-              <p className="text-sm font-black text-[#1F4E5F]">
-                {activity.level}
-              </p>
+              <p className="text-sm font-black text-[#1F4E5F]">{activity.level}</p>
             </div>
 
             <div className="p-4 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/8 flex flex-col justify-center">
@@ -302,8 +310,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Footprints className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Trail</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Suela con agarre</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Calzado Trail
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Suela con agarre
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -311,8 +323,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Droplets className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Agua (1.5L)</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Mínimo sugerido</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Agua (1.5L)
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Mínimo sugerido
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -320,8 +336,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <ShieldCheck className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Cortavientos</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Capa de abrigo</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Cortavientos
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Capa de abrigo
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -329,8 +349,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Apple className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Snack / Fruta</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Frutos secos</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Snack / Fruta
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Frutos secos
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -338,8 +362,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Sun className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Protección Solar</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Gorra y crema</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Protección Solar
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Gorra y crema
+                      </span>
                     </div>
                   </div>
                 </>
@@ -350,8 +378,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <TennisBallIcon className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Pala de Pádel</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Propia o alquilada</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Pala de Pádel
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Propia o alquilada
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -359,8 +391,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Footprints className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Pádel</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Suela espiga / clay</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Calzado Pádel
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Suela espiga / clay
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -368,8 +404,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Droplets className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Botella de Agua</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Para cambios de lado</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Botella de Agua
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Para cambios de lado
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -377,8 +417,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <CheckCircle2 className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Bolas Incluidas</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Las pone el capitán</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Bolas Incluidas
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Las pone el capitán
+                      </span>
                     </div>
                   </div>
                 </>
@@ -389,8 +433,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Bike className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Bici a Punto</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Presión y frenos</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Bici a Punto
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Presión y frenos
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -398,8 +446,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <ShieldCheck className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Casco Obligatorio</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Homologado</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Casco Obligatorio
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Homologado
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -407,8 +459,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Droplets className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Bidón de Agua</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Con sales o agua</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Bidón de Agua
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Con sales o agua
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -416,8 +472,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Wrench className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Cámara / Bomba</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Kit de repuesto</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Cámara / Bomba
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Kit de repuesto
+                      </span>
                     </div>
                   </div>
                 </>
@@ -428,8 +488,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Footprints className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Calzado Técnico</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Zapatillas adecuadas</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Calzado Técnico
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Zapatillas adecuadas
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -437,8 +501,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Flame className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Ropa Cómoda</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Tejido transpirable</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Ropa Cómoda
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Tejido transpirable
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -446,8 +514,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Droplets className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Hidratación</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Botella de agua</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Hidratación
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Botella de agua
+                      </span>
                     </div>
                   </div>
                   <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
@@ -455,8 +527,12 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                       <Zap className="w-4 h-4 text-[#1F4E5F]" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-black text-[#1F4E5F] block truncate">Buena Energía</span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">Ganas de entrenar</span>
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Buena Energía
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Ganas de entrenar
+                      </span>
                     </div>
                   </div>
                 </>
@@ -513,7 +589,13 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </span>
             <CimoMapPreviewCard
               location={activity.location}
-              city={activity.location.includes('Barcelona') ? 'Barcelona' : activity.location.includes('Valencia') ? 'Valencia' : 'Madrid'}
+              city={
+                activity.location.includes('Barcelona')
+                  ? 'Barcelona'
+                  : activity.location.includes('Valencia')
+                    ? 'Valencia'
+                    : 'Madrid'
+              }
               postalCode={activity.postalCode}
             />
           </div>
@@ -555,7 +637,9 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                   )}
                   <div className="flex-1 bg-white p-3 rounded-2xl shadow-2xs border border-[#1F4E5F]/5">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-extrabold text-[#1F4E5F]">{msg.senderName}</span>
+                      <span className="text-xs font-extrabold text-[#1F4E5F]">
+                        {msg.senderName}
+                      </span>
                       <span className="text-[10px] text-[#1F4E5F]/40">{msg.timestamp}</span>
                     </div>
                     <p className="text-xs text-[#1F4E5F]/90 leading-relaxed">{msg.text}</p>
@@ -603,8 +687,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             isJoined
               ? 'bg-[#7FB77E] text-white shadow-xs'
               : isFull
-              ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-              : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white active:scale-95'
+                ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
+                : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white active:scale-95'
           }`}
         >
           {isJoined ? (

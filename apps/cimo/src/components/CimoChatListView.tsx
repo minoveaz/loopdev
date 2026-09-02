@@ -69,7 +69,9 @@ export const CimoChatListView: React.FC<CimoChatListViewProps> = ({
             </span>
           </div>
           <p className="text-[11px] text-[#1F4E5F]/75 font-medium leading-relaxed mt-0.5">
-            Los chats se abren para coordinar la quedada y el tercer tiempo, y <strong>se archivan automáticamente 24h después</strong> de la actividad para evitar grupos zombis y proteger la privacidad de todos.
+            Los chats se abren para coordinar la quedada y el tercer tiempo, y{' '}
+            <strong>se archivan automáticamente 24h después</strong> de la actividad para evitar
+            grupos zombis y proteger la privacidad de todos.
           </p>
         </div>
       </div>
@@ -79,9 +81,12 @@ export const CimoChatListView: React.FC<CimoChatListViewProps> = ({
           <div className="w-10 h-10 rounded-2xl bg-[#EEF2F2] flex items-center justify-center text-[#1F4E5F]/40">
             <Archive className="w-5 h-5" />
           </div>
-          <p className="font-black text-xs text-[#1F4E5F]">No tienes chats archivados actualmente</p>
+          <p className="font-black text-xs text-[#1F4E5F]">
+            No tienes chats archivados actualmente
+          </p>
           <p className="max-w-xs text-[11px] leading-relaxed">
-            Cuando un entreno concluya y pasen las 24 horas de gracia, su conversación se trasladará a este histórico en modo solo lectura.
+            Cuando un entreno concluya y pasen las 24 horas de gracia, su conversación se trasladará
+            a este histórico en modo solo lectura.
           </p>
         </div>
       ) : joinedActivities.length === 0 ? (
@@ -91,7 +96,8 @@ export const CimoChatListView: React.FC<CimoChatListViewProps> = ({
           </div>
           <p className="font-black text-sm text-[#1F4E5F]">Aún no te has unido a ningún Crew</p>
           <p className="max-w-xs leading-relaxed">
-            Explora los entrenamientos en el feed y pulsa "Unirme al Crew" para entrar a su grupo de conversación.
+            Explora los entrenamientos en el feed y pulsa "Unirme al Crew" para entrar a su grupo de
+            conversación.
           </p>
         </div>
       ) : (
@@ -117,13 +123,17 @@ export const CimoChatListView: React.FC<CimoChatListViewProps> = ({
                   </div>
                   <div className="truncate">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-black text-[#1F4E5F] truncate">{act.title}</span>
+                      <span className="text-sm font-black text-[#1F4E5F] truncate">
+                        {act.title}
+                      </span>
                       <span className="text-[10px] text-[#7FB77E] font-black shrink-0 bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
                         {act.date}
                       </span>
                     </div>
                     <p className="text-xs text-[#1F4E5F]/65 font-medium truncate mt-0.5">
-                      {lastMsg ? `${lastMsg.senderName}: ${lastMsg.text}` : 'No hay mensajes aún en esta quedada.'}
+                      {lastMsg
+                        ? `${lastMsg.senderName}: ${lastMsg.text}`
+                        : 'No hay mensajes aún en esta quedada.'}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1">
                       <span className="text-[10px] font-bold text-[#7FB77E] flex items-center gap-1">

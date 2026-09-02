@@ -121,7 +121,11 @@ export function extractActivityIdFromSlug(slugOrId: string): string {
 /**
  * Genera la URL canónica de Deep Link para una actividad / entreno.
  */
-export function createActivityDeepLink(activityId: string, title?: string, basePath = '#/app/activity'): string {
+export function createActivityDeepLink(
+  activityId: string,
+  title?: string,
+  basePath = '#/app/activity',
+): string {
   const slug = title ? createActivitySemanticSlug(title, activityId) : activityId;
   return `${basePath}/${slug}`;
 }
@@ -163,7 +167,11 @@ export function slugifyText(text: string): string {
  * Genera un slug garantizado único para Squads y Comunidades:
  * Si el slug base ya existe en `existingSlugs`, genera automáticamente un sufijo corto no invasivo (ej: retiro-morning-runners-7k2p).
  */
-export function generateUniqueSlug(title: string, existingSlugs: string[] = [], customSuffix?: string): string {
+export function generateUniqueSlug(
+  title: string,
+  existingSlugs: string[] = [],
+  customSuffix?: string,
+): string {
   const base = slugifyText(title) || 'squad';
   if (!existingSlugs.includes(base)) {
     return base;

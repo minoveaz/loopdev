@@ -21,40 +21,97 @@ export const CIMO_SPORTS_CATALOG: CimoSportDefinition[] = [
     id: 'running',
     label: 'Running',
     emoji: '🏃',
-    image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200',
+    image:
+      'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200',
     description: 'Rodajes en parques, series en pista y tiradas largas',
   },
   {
     id: 'padel',
     label: 'Pádel',
     emoji: '🎾',
-    image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200',
+    image:
+      'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1200',
     description: 'Partidas 2vs2 mixtas y masculinas en club',
   },
   {
     id: 'hiking',
     label: 'Hiking / Trekking',
     emoji: '🥾',
-    image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1200',
+    image:
+      'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1200',
     description: 'Rutas de montaña, sierra y senderismo',
   },
 ];
 
 export const SPORT_PACES_CATALOG: Record<CimoSportId, SportPaceOption[]> = {
   running: [
-    { title: 'Suave', metric: '+5:45 min/km', label: 'Suave (+5:45 min/km)', desc: 'Ritmo conversacional, ideal para rodar y charlar', level: 'Principiante' },
-    { title: 'Medio', metric: '5:00 - 5:30 min/km', label: 'Medio (5:00 - 5:30 min/km)', desc: 'Ritmo constante para corredores habituales', level: 'Intermedio' },
-    { title: 'Alegre', metric: 'Sub 4:45 min/km', label: 'Alegre (Sub 4:45 min/km)', desc: 'Ritmo vivo para series o tempo run', level: 'Avanzado' },
+    {
+      title: 'Suave',
+      metric: '+5:45 min/km',
+      label: 'Suave (+5:45 min/km)',
+      desc: 'Ritmo conversacional, ideal para rodar y charlar',
+      level: 'Principiante',
+    },
+    {
+      title: 'Medio',
+      metric: '5:00 - 5:30 min/km',
+      label: 'Medio (5:00 - 5:30 min/km)',
+      desc: 'Ritmo constante para corredores habituales',
+      level: 'Intermedio',
+    },
+    {
+      title: 'Alegre',
+      metric: 'Sub 4:45 min/km',
+      label: 'Alegre (Sub 4:45 min/km)',
+      desc: 'Ritmo vivo para series o tempo run',
+      level: 'Avanzado',
+    },
   ],
   padel: [
-    { title: 'Iniciación', metric: 'Nivel 2.0 - 2.5', label: 'Iniciación (Nivel 2.0 - 2.5)', desc: 'Partidos amistosos para aprender y coger confianza', level: 'Principiante' },
-    { title: 'Intermedio', metric: 'Nivel 3.0 - 3.5', label: 'Intermedio (Nivel 3.0 - 3.5)', desc: 'Peloteo fluido, voleas y globos controlados', level: 'Intermedio' },
-    { title: 'Avanzado', metric: 'Nivel 4.0+', label: 'Avanzado (Nivel 4.0+)', desc: 'Partida competitiva con buena pegada y táctica', level: 'Avanzado' },
+    {
+      title: 'Iniciación',
+      metric: 'Nivel 2.0 - 2.5',
+      label: 'Iniciación (Nivel 2.0 - 2.5)',
+      desc: 'Partidos amistosos para aprender y coger confianza',
+      level: 'Principiante',
+    },
+    {
+      title: 'Intermedio',
+      metric: 'Nivel 3.0 - 3.5',
+      label: 'Intermedio (Nivel 3.0 - 3.5)',
+      desc: 'Peloteo fluido, voleas y globos controlados',
+      level: 'Intermedio',
+    },
+    {
+      title: 'Avanzado',
+      metric: 'Nivel 4.0+',
+      label: 'Avanzado (Nivel 4.0+)',
+      desc: 'Partida competitiva con buena pegada y táctica',
+      level: 'Avanzado',
+    },
   ],
   hiking: [
-    { title: 'Paseo Fácil', metric: '6 - 8 km', label: 'Paseo Fácil (6 - 8 km)', desc: 'Senderismo suave por senderos llanos', level: 'Principiante' },
-    { title: 'Media Montaña', metric: '10 - 14 km (+400m)', label: 'Media Montaña (10 - 14 km)', desc: 'Desnivel medio (+400m), ritmo activo', level: 'Intermedio' },
-    { title: 'Alta Exigencia', metric: '+16 km (Técnico)', label: 'Alta Exigencia (+16 km)', desc: 'Cumbres y terreno técnico con buen desnivel', level: 'Avanzado' },
+    {
+      title: 'Paseo Fácil',
+      metric: '6 - 8 km',
+      label: 'Paseo Fácil (6 - 8 km)',
+      desc: 'Senderismo suave por senderos llanos',
+      level: 'Principiante',
+    },
+    {
+      title: 'Media Montaña',
+      metric: '10 - 14 km (+400m)',
+      label: 'Media Montaña (10 - 14 km)',
+      desc: 'Desnivel medio (+400m), ritmo activo',
+      level: 'Intermedio',
+    },
+    {
+      title: 'Alta Exigencia',
+      metric: '+16 km (Técnico)',
+      label: 'Alta Exigencia (+16 km)',
+      desc: 'Cumbres y terreno técnico con buen desnivel',
+      level: 'Avanzado',
+    },
   ],
 };
 
@@ -69,7 +126,12 @@ export const SPORT_GEAR_CATALOG: Record<string, SportGearItem[]> = {
   hiking: [
     { id: 'footwear', label: 'Calzado Trail', sub: 'Suela con agarre', icon: 'Footprints' },
     { id: 'water', label: 'Agua (1.5L)', sub: 'Mínimo sugerido', icon: 'Droplets' },
-    { id: 'windbreaker', label: 'Cortavientos / Capa', sub: 'Protección para la cumbre', icon: 'ShieldCheck' },
+    {
+      id: 'windbreaker',
+      label: 'Cortavientos / Capa',
+      sub: 'Protección para la cumbre',
+      icon: 'ShieldCheck',
+    },
     { id: 'snack', label: 'Snack / Fruta', sub: 'Frutos secos o barrita', icon: 'Apple' },
     { id: 'sun', label: 'Protección Solar', sub: 'Gorra y crema', icon: 'Sun' },
   ],
@@ -221,20 +283,56 @@ export const SPORT_REAL_PHOTOS_CATALOG: Record<string, SportRealPhoto[]> = {
 
 export const THIRD_HALF_CITY_SPOTS: Record<string, Record<string, string[]>> = {
   Madrid: {
-    cafe: ['Café Murillo (Retiro)', 'Honest Greens (Castellana)', 'Toma Café (Malasaña)', 'Café del Art (La Latina)', 'Federal Café (Conde Duque)'],
-    beer: ['Terraza Florida Park (Retiro)', 'Cervecería La Fábrica (Chamartín)', 'El Tigre del Norte (Chueca)', 'Terraza Atenas (La Latina)', 'Cervecería Santa Bárbara'],
-    smoothie: ['Frutas Prohibidas (Chueca)', 'Oakberry Açaí (Salamanca)', 'Roots Lamarca (Fernando VI)', 'Honest Greens Juice Bar'],
-    picnic: ['Césped Palacio de Cristal (Retiro)', 'Templo de Debod (Moncloa)', 'Lago de la Casa de Campo', 'Parque del Oeste'],
+    cafe: [
+      'Café Murillo (Retiro)',
+      'Honest Greens (Castellana)',
+      'Toma Café (Malasaña)',
+      'Café del Art (La Latina)',
+      'Federal Café (Conde Duque)',
+    ],
+    beer: [
+      'Terraza Florida Park (Retiro)',
+      'Cervecería La Fábrica (Chamartín)',
+      'El Tigre del Norte (Chueca)',
+      'Terraza Atenas (La Latina)',
+      'Cervecería Santa Bárbara',
+    ],
+    smoothie: [
+      'Frutas Prohibidas (Chueca)',
+      'Oakberry Açaí (Salamanca)',
+      'Roots Lamarca (Fernando VI)',
+      'Honest Greens Juice Bar',
+    ],
+    picnic: [
+      'Césped Palacio de Cristal (Retiro)',
+      'Templo de Debod (Moncloa)',
+      'Lago de la Casa de Campo',
+      'Parque del Oeste',
+    ],
   },
   Barcelona: {
-    cafe: ['Nomad Coffee Lab (El Born)', 'Federal Café (Sant Antoni)', "Satan's Coffee Corner (Gótico)", 'Syra Coffee (Gràcia)'],
-    beer: ['Cervecería Moritz (Sant Antoni)', 'La Terrassa del Duquesa (Port Vell)', 'Bar Lobo (Raval)', 'Cervecería El Vaso de Oro (Barceloneta)'],
+    cafe: [
+      'Nomad Coffee Lab (El Born)',
+      'Federal Café (Sant Antoni)',
+      "Satan's Coffee Corner (Gótico)",
+      'Syra Coffee (Gràcia)',
+    ],
+    beer: [
+      'Cervecería Moritz (Sant Antoni)',
+      'La Terrassa del Duquesa (Port Vell)',
+      'Bar Lobo (Raval)',
+      'Cervecería El Vaso de Oro (Barceloneta)',
+    ],
     smoothie: ['The Green Spot (Barceloneta)', 'Teresa Carles (Raval)', 'FitBar Açaí (Gràcia)'],
     picnic: ['Parc de la Ciutadella', 'Bunkers del Carmel (Vistas)', 'Parc del Laberint'],
   },
   Valencia: {
     cafe: ['Bluebell Coffee (Ruzafa)', 'Dulce de Leche (Ruzafa)', 'Federal Café (Ciutat Vella)'],
-    beer: ['Mercado de Colón (Eixample)', 'Fàbrica de Hielo (Cabanyal)', 'Tyris On Tap (Ciutat Vella)'],
+    beer: [
+      'Mercado de Colón (Eixample)',
+      'Fàbrica de Hielo (Cabanyal)',
+      'Tyris On Tap (Ciutat Vella)',
+    ],
     smoothie: ['Almalibre Açaí Bar (El Carmen)', 'Be Green Salad Company'],
     picnic: ['Jardines del Turia (Tramo Alameda)', 'Parque de Cabecera'],
   },
@@ -263,8 +361,16 @@ export const THIRD_HALF_CITY_SPOTS: Record<string, Record<string, string[]>> = {
     picnic: ['Parque Grande José Antonio Labordeta', 'Riberas del Ebro'],
   },
   Otra: {
-    cafe: ['Cafetería con terraza soleada cercana', 'Café de Especialidad local', 'Pastelería / Bakery artesanal'],
-    beer: ['Bar o terraza del club deportivo', 'Cervecería de la plaza mayor', 'Chiringuito / Terraza'],
+    cafe: [
+      'Cafetería con terraza soleada cercana',
+      'Café de Especialidad local',
+      'Pastelería / Bakery artesanal',
+    ],
+    beer: [
+      'Bar o terraza del club deportivo',
+      'Cervecería de la plaza mayor',
+      'Chiringuito / Terraza',
+    ],
     smoothie: ['Juice & Recovery Bar', 'Bar de batidos naturales y fruta'],
     picnic: ['Parque principal de la zona', 'Mirador panorámico', 'Área recreativa arbolada'],
   },
@@ -275,8 +381,12 @@ export function getSportRealPhotos(sportId: string): SportRealPhoto[] {
   return SPORT_REAL_PHOTOS_CATALOG[key] ?? SPORT_REAL_PHOTOS_CATALOG.running;
 }
 
-export function getThirdHalfSpots(city: string, type: 'cafe' | 'beer' | 'smoothie' | 'picnic'): string[] {
-  const cityData = THIRD_HALF_CITY_SPOTS[city] ?? THIRD_HALF_CITY_SPOTS.Madrid ?? THIRD_HALF_CITY_SPOTS.Otra;
+export function getThirdHalfSpots(
+  city: string,
+  type: 'cafe' | 'beer' | 'smoothie' | 'picnic',
+): string[] {
+  const cityData =
+    THIRD_HALF_CITY_SPOTS[city] ?? THIRD_HALF_CITY_SPOTS.Madrid ?? THIRD_HALF_CITY_SPOTS.Otra;
   return cityData[type] ?? THIRD_HALF_CITY_SPOTS.Otra[type] ?? ['Cafetería con terraza'];
 }
 

@@ -16,7 +16,7 @@ describe('CimoFloatingSearchBar (Capa 2 & 3: Búsqueda Airbnb, Interacción y Te
         onSelectZone={vi.fn()}
         onSelectLevel={vi.fn()}
         onSearch={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Deporte')).toBeDefined();
@@ -39,7 +39,7 @@ describe('CimoFloatingSearchBar (Capa 2 & 3: Búsqueda Airbnb, Interacción y Te
         onSelectZone={vi.fn()}
         onSelectLevel={vi.fn()}
         onSearch={vi.fn()}
-      />
+      />,
     );
 
     // Click on Deporte capsule segment
@@ -67,7 +67,7 @@ describe('CimoFloatingSearchBar (Capa 2 & 3: Búsqueda Airbnb, Interacción y Te
         onSelectZone={vi.fn()}
         onSelectLevel={vi.fn()}
         onSearch={vi.fn()}
-      />
+      />,
     );
 
     // Open dropdown

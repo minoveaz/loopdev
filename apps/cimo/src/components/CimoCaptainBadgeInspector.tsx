@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Award,
-  CheckCircle2,
-  MapPin,
-  ShieldCheck,
-  Star,
-  Sun,
-} from 'lucide-react';
+import { Award, CheckCircle2, MapPin, ShieldCheck, Star, Sun } from 'lucide-react';
 import type { ActivityCardData } from '@loopdev/public-blocks';
 
 export interface CimoCaptainBadgeInspectorProps {
@@ -21,7 +14,10 @@ export const CimoCaptainBadgeInspector: React.FC<CimoCaptainBadgeInspectorProps>
   const captain = activity.captain;
 
   return (
-    <aside className="h-full overflow-y-auto flex flex-col gap-3.5 text-[#1F4E5F] pr-0.5" aria-label="Información del Capitán">
+    <aside
+      className="h-full overflow-y-auto flex flex-col gap-3.5 text-[#1F4E5F] pr-0.5"
+      aria-label="Información del Capitán"
+    >
       {/* 1. Tarjeta del Capitán */}
       <div className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 sm:p-6 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-4">
         <div className="flex items-center justify-between">
@@ -42,7 +38,10 @@ export const CimoCaptainBadgeInspector: React.FC<CimoCaptainBadgeInspectorProps>
             className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-[#7FB77E]/40 shrink-0 cursor-pointer hover:border-[#1F4E5F] transition-all hover:scale-105"
           >
             <img
-              src={captain.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'}
+              src={
+                captain.avatarUrl ||
+                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
+              }
               alt={captain.name}
               className="w-full h-full object-cover"
             />
@@ -54,9 +53,7 @@ export const CimoCaptainBadgeInspector: React.FC<CimoCaptainBadgeInspectorProps>
             >
               {captain.name}
             </h3>
-            <p className="text-xs font-bold text-[#1F4E5F]/70 truncate">
-              Organizador del Crew
-            </p>
+            <p className="text-xs font-bold text-[#1F4E5F]/70 truncate">Organizador del Crew</p>
             <p className="text-[11px] font-medium text-[#1F4E5F]/60 flex items-center gap-1 mt-0.5">
               <MapPin className="w-3 h-3 text-[#7FB77E]" />
               {activity.location}
@@ -67,11 +64,15 @@ export const CimoCaptainBadgeInspector: React.FC<CimoCaptainBadgeInspectorProps>
         {/* Stats del Capitán */}
         <div className="grid grid-cols-2 gap-2 pt-3 border-t border-[#1F4E5F]/8">
           <div className="bg-white p-2.5 rounded-xl border border-[#1F4E5F]/8 text-center">
-            <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">Entrenos</span>
+            <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">
+              Entrenos
+            </span>
             <span className="text-sm font-black text-[#1F4E5F]">28 liderados</span>
           </div>
           <div className="bg-white p-2.5 rounded-xl border border-[#1F4E5F]/8 text-center">
-            <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">Asistencia</span>
+            <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">
+              Asistencia
+            </span>
             <span className="text-sm font-black text-[#7FB77E]">100% puntual</span>
           </div>
         </div>
@@ -101,7 +102,8 @@ export const CimoCaptainBadgeInspector: React.FC<CimoCaptainBadgeInspectorProps>
           </div>
         </div>
         <p className="text-[11px] font-medium text-[#1F4E5F]/70 bg-white p-2.5 rounded-xl border border-[#1F4E5F]/8">
-          💡 <strong>Consejo del Capitán:</strong> Hidratación recomendada de 500ml y calzado para asfalto/tierra compacta.
+          💡 <strong>Consejo del Capitán:</strong> Hidratación recomendada de 500ml y calzado para
+          asfalto/tierra compacta.
         </p>
       </div>
     </aside>

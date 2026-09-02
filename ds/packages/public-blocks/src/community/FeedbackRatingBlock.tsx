@@ -43,12 +43,19 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
 
   if (isSubmitted) {
     return (
-      <div className={clsx('bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-sm', className)}>
+      <div
+        className={clsx(
+          'bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-sm',
+          className,
+        )}
+      >
         <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
           <Star className="w-6 h-6 fill-current" />
         </div>
         <h3 className="text-base font-bold text-slate-900">¡Gracias por tu valoración!</h3>
-        <p className="text-xs text-slate-500 mt-1">Tu feedback ayuda a mejorar la comunidad de deportistas.</p>
+        <p className="text-xs text-slate-500 mt-1">
+          Tu feedback ayuda a mejorar la comunidad de deportistas.
+        </p>
       </div>
     );
   }
@@ -56,7 +63,10 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className={clsx('bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col gap-4', className)}
+      className={clsx(
+        'bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col gap-4',
+        className,
+      )}
     >
       <div>
         <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--lpd-brand-primary)]">

@@ -30,7 +30,8 @@ const verifiedCaptains = [
     sport: 'Running 8K',
     rating: '5.0',
     workouts: 24,
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
   },
   {
     id: 'javier-chamartin',
@@ -38,7 +39,8 @@ const verifiedCaptains = [
     sport: 'Pádel 3.5',
     rating: '4.9',
     workouts: 18,
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
   },
   {
     id: 'marta-soler',
@@ -46,7 +48,8 @@ const verifiedCaptains = [
     sport: 'Hiking Sierra',
     rating: '5.0',
     workouts: 32,
-    avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80',
   },
 ];
 
@@ -78,7 +81,8 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
 
         {joinedActivities.length === 0 ? (
           <div className="p-3 bg-white rounded-2xl border border-[#1F4E5F]/8 text-center text-[11px] text-[#1F4E5F]/60 font-medium shadow-2xs">
-            No te has unido a ningún entreno todavía. Pulsa <strong className="text-[#1F4E5F]">"Unirme"</strong> en el feed para reservar plaza.
+            No te has unido a ningún entreno todavía. Pulsa{' '}
+            <strong className="text-[#1F4E5F]">"Unirme"</strong> en el feed para reservar plaza.
           </div>
         ) : (
           <div className="flex flex-col gap-1.5">
@@ -100,9 +104,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                         {act.date} {act.time}h
                       </span>
                     </div>
-                    <p className="text-xs font-black text-[#1F4E5F] truncate mt-0.5">
-                      {act.title}
-                    </p>
+                    <p className="text-xs font-black text-[#1F4E5F] truncate mt-0.5">{act.title}</p>
                   </div>
 
                   <div className="flex items-center gap-1 flex-shrink-0">
@@ -173,12 +175,8 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                   className="w-7 h-7 rounded-full object-cover ring-2 ring-[#7FB77E]/60"
                 />
                 <div>
-                  <h4 className="text-xs font-black text-[#1F4E5F] leading-tight">
-                    {cap.name}
-                  </h4>
-                  <span className="text-[10px] text-[#1F4E5F]/60 font-bold block">
-                    {cap.sport}
-                  </span>
+                  <h4 className="text-xs font-black text-[#1F4E5F] leading-tight">{cap.name}</h4>
+                  <span className="text-[10px] text-[#1F4E5F]/60 font-bold block">{cap.sport}</span>
                 </div>
               </div>
 
@@ -186,9 +184,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                 <span className="text-[11px] font-black text-[#1F4E5F] flex items-center gap-0.5 justify-end">
                   ★ {cap.rating}
                 </span>
-                <span className="text-[9px] font-bold text-[#7FB77E]">
-                  {cap.workouts} planes
-                </span>
+                <span className="text-[9px] font-bold text-[#7FB77E]">{cap.workouts} planes</span>
               </div>
             </div>
           ))}
@@ -219,7 +215,8 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Garantía & Compromiso CIMO</h4>
           <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
-            Planes 100% deportivos en microgrupos de 4 a 8 personas con ritmos homogéneos y confirmación previa.
+            Planes 100% deportivos en microgrupos de 4 a 8 personas con ritmos homogéneos y
+            confirmación previa.
           </p>
         </div>
       </div>

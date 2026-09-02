@@ -32,16 +32,13 @@ const alignmentClasses = {
   center: 'items-center',
 } as const;
 
-export const PublicCanvas: React.FC<PublicCanvasProps> = ({
-  composition,
-  children,
-  className,
-}) => {
+export const PublicCanvas: React.FC<PublicCanvasProps> = ({ composition, children, className }) => {
   const gapClass = gapClasses[composition.grid.gap ?? 'md'];
   const maxWidthClass = maxWidthClasses[composition.grid.maxWidth ?? '7xl'];
   const alignClass = alignmentClasses[composition.grid.alignment ?? 'stretch'];
   const isStartAlign = composition.grid.alignment === 'start';
-  const isViewportLocked = (composition.grid.scrollMode ?? 'viewport-contained') === 'viewport-contained';
+  const isViewportLocked =
+    (composition.grid.scrollMode ?? 'viewport-contained') === 'viewport-contained';
 
   return (
     <PublicCanvasContext.Provider value={{ composition }}>
@@ -49,7 +46,8 @@ export const PublicCanvas: React.FC<PublicCanvasProps> = ({
         className={clsx(
           'w-full max-w-full min-w-0 mx-auto px-3 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-5 overflow-x-clip lg:overflow-x-visible',
           'grid grid-cols-12',
-          isViewportLocked && 'lg:h-[calc(100vh-4.5rem)] lg:max-h-[calc(100vh-4.5rem)] lg:overflow-hidden',
+          isViewportLocked &&
+            'lg:h-[calc(100vh-4.5rem)] lg:max-h-[calc(100vh-4.5rem)] lg:overflow-hidden',
           isStartAlign ? 'auto-rows-min' : 'auto-rows-fr',
           alignClass,
           gapClass,

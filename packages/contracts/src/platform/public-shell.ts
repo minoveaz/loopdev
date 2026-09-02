@@ -19,12 +19,12 @@ export type PublicViewportMode = z.infer<typeof PublicViewportModeSchema>;
 // --- 3. Recetas Canónicas de Composición Pública ---
 export const PublicCompositionRecipeSchema = z.enum([
   'PublicContextualTriptych', // Estándar de 3 Bloques Contextuales con Altura Igualada (3-6-3 / Left Support | Work Area | Right Support)
-  'PublicB2BLanding',         // LoopDev Web: Hero B2B (12) + Suites Showcase (6-6) + Pricing/Testimonials (4-4-4) + CTA (12)
-  'PublicSocialFeed',         // CIMO App: 3-Col: Filtros (3) | Feed (6) | Inspector de Crew/Plan (3)
-  'PublicDiscoverySplit',     // 2-Col Split: Listado/Cards (5) | Mapa / Calendario interactivo (7)
-  'PublicDetailWorkspace',    // Hero (12) + Detalle/Itinerario (8) | Acción de Unión / Capitán (4)
-  'PublicPortalOverview',     // VitaBlue: Hero (12) + Grid de Productos (4-4-4) + Asesor & FAQ (12)
-  'PublicWorkflowCanvas',     // Stepper centrado (12, max-w-xl) para Auth / Onboarding / Feedback
+  'PublicB2BLanding', // LoopDev Web: Hero B2B (12) + Suites Showcase (6-6) + Pricing/Testimonials (4-4-4) + CTA (12)
+  'PublicSocialFeed', // CIMO App: 3-Col: Filtros (3) | Feed (6) | Inspector de Crew/Plan (3)
+  'PublicDiscoverySplit', // 2-Col Split: Listado/Cards (5) | Mapa / Calendario interactivo (7)
+  'PublicDetailWorkspace', // Hero (12) + Detalle/Itinerario (8) | Acción de Unión / Capitán (4)
+  'PublicPortalOverview', // VitaBlue: Hero (12) + Grid de Productos (4-4-4) + Asesor & FAQ (12)
+  'PublicWorkflowCanvas', // Stepper centrado (12, max-w-xl) para Auth / Onboarding / Feedback
 ]);
 
 export type PublicCompositionRecipe = z.infer<typeof PublicCompositionRecipeSchema>;
@@ -148,13 +148,17 @@ export const PublicBrandThemeSchema = z.object({
   name: z.string().min(1),
   colors: z.object({
     primary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
-    primaryHover: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
+    primaryHover: z
+      .string()
+      .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     secondary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     accent: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     background: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     surface: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     textMain: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
-    textSecondary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
+    textSecondary: z
+      .string()
+      .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
   }),
   logos: z.object({
     markSvg: z.string().min(1),

@@ -47,7 +47,10 @@ export const ChatStreamWidget: React.FC<ChatStreamWidgetProps> = ({
             return (
               <div
                 key={msg.id}
-                className={clsx('flex flex-col max-w-[80%]', isOwn ? 'self-end items-end' : 'self-start items-start')}
+                className={clsx(
+                  'flex flex-col max-w-[80%]',
+                  isOwn ? 'self-end items-end' : 'self-start items-start',
+                )}
               >
                 {!isOwn && (
                   <span className="text-[11px] font-medium text-slate-500 mb-0.5 ml-1">
@@ -72,7 +75,10 @@ export const ChatStreamWidget: React.FC<ChatStreamWidgetProps> = ({
       </div>
 
       {/* Message Input Form */}
-      <form onSubmit={handleSubmit} className="p-3 border-t border-slate-100 flex items-center gap-2 bg-white">
+      <form
+        onSubmit={handleSubmit}
+        className="p-3 border-t border-slate-100 flex items-center gap-2 bg-white"
+      >
         <input
           type="text"
           value={text}

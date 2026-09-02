@@ -105,9 +105,7 @@ describe('Public Shell Contracts', () => {
     const exceedingColSpan = {
       recipe: 'PublicSocialFeed',
       grid: { columns: 12, gap: 'md' },
-      regions: [
-        { id: 'invalid-col', slot: 'main-feed', component: 'Feed', colSpan: 14 },
-      ],
+      regions: [{ id: 'invalid-col', slot: 'main-feed', component: 'Feed', colSpan: 14 }],
     };
 
     const result = PublicViewCompositionSchema.safeParse(exceedingColSpan);
@@ -173,9 +171,29 @@ describe('Public Shell Contracts', () => {
       mobilePrimaryRouteIds: ['feed', 'explore', 'chats', 'profile'],
       routes: [
         { id: 'feed', path: '/', label: 'Feed', icon: 'Home', presentation: 'tab' },
-        { id: 'explore', path: '/explorar', label: 'Explorar', icon: 'Compass', presentation: 'tab' },
-        { id: 'chats', path: '/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 3, presentation: 'tab' },
-        { id: 'profile', path: '/perfil', label: 'Perfil', icon: 'User', requiresAuth: true, presentation: 'tab' },
+        {
+          id: 'explore',
+          path: '/explorar',
+          label: 'Explorar',
+          icon: 'Compass',
+          presentation: 'tab',
+        },
+        {
+          id: 'chats',
+          path: '/chats',
+          label: 'Chats',
+          icon: 'MessageCircle',
+          badgeCount: 3,
+          presentation: 'tab',
+        },
+        {
+          id: 'profile',
+          path: '/perfil',
+          label: 'Perfil',
+          icon: 'User',
+          requiresAuth: true,
+          presentation: 'tab',
+        },
       ],
     };
 
@@ -190,17 +208,13 @@ describe('Public Shell Contracts', () => {
       composition: {
         recipe: 'PublicSocialFeed',
         grid: { columns: 12, gap: 'md', maxWidth: '7xl' },
-        regions: [
-          { id: 'main', slot: 'main-feed', component: 'FeedBlock', colSpan: 12 },
-        ],
+        regions: [{ id: 'main', slot: 'main-feed', component: 'FeedBlock', colSpan: 12 }],
       },
       navigation: {
         brandId: 'cimo',
         defaultRouteId: 'feed',
         mobilePrimaryRouteIds: ['feed'],
-        routes: [
-          { id: 'feed', path: '/', label: 'Feed', icon: 'Home' },
-        ],
+        routes: [{ id: 'feed', path: '/', label: 'Feed', icon: 'Home' }],
       },
       theme: {
         id: 'cimo',

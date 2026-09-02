@@ -32,7 +32,10 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
   const joinedActivities = activities.filter((act) => act.isJoined);
 
   return (
-    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Canales de Chat">
+    <aside
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      aria-label="Canales de Chat"
+    >
       {/* 1. Cabecera */}
       <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
         <div className="flex items-center gap-1.5">
@@ -79,11 +82,15 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-black text-[#1F4E5F] truncate">{act.title}</span>
+                      <span className="text-xs font-black text-[#1F4E5F] truncate">
+                        {act.title}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
                       <p className="text-[10px] text-[#1F4E5F]/60 truncate font-medium flex-1">
-                        {lastMsg ? `${lastMsg.senderName}: ${lastMsg.text}` : `${act.date} • ${act.time}`}
+                        {lastMsg
+                          ? `${lastMsg.senderName}: ${lastMsg.text}`
+                          : `${act.date} • ${act.time}`}
                       </p>
                       <span className="text-[9px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-1.5 py-0.2 rounded-full shrink-0">
                         ⏳ 24h
@@ -125,7 +132,8 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Chat de Duración Limitada</h4>
           <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
-            Los chats de eventos son efímeros y se archivan automáticamente 24h tras el entreno para proteger la privacidad y evitar grupos zombis.
+            Los chats de eventos son efímeros y se archivan automáticamente 24h tras el entreno para
+            proteger la privacidad y evitar grupos zombis.
           </p>
         </div>
       </div>

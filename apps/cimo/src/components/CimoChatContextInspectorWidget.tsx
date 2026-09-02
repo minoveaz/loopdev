@@ -24,7 +24,10 @@ export const CimoChatContextInspectorWidget: React.FC<CimoChatContextInspectorWi
 }) => {
   if (!activity) {
     return (
-      <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Detalles de la Conversación">
+      <aside
+        className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+        aria-label="Detalles de la Conversación"
+      >
         <div className="flex items-center gap-1.5 pb-2 border-b border-[#1F4E5F]/8">
           <Info className="w-3.5 h-3.5 text-[#7FB77E]" />
           <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
@@ -39,7 +42,10 @@ export const CimoChatContextInspectorWidget: React.FC<CimoChatContextInspectorWi
   }
 
   return (
-    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Detalles de la Conversación">
+    <aside
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      aria-label="Detalles de la Conversación"
+    >
       {/* 1. Cabecera */}
       <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
         <div className="flex items-center gap-1.5">
@@ -56,11 +62,7 @@ export const CimoChatContextInspectorWidget: React.FC<CimoChatContextInspectorWi
       {/* 2. Tarjeta Resumen */}
       <div className="bg-white border border-[#1F4E5F]/10 rounded-2xl overflow-hidden shadow-2xs flex flex-col">
         <div className="relative aspect-[16/9] w-full bg-[#1F4E5F]/5 overflow-hidden">
-          <img
-            src={activity.image}
-            alt={activity.title}
-            className="w-full h-full object-cover"
-          />
+          <img src={activity.image} alt={activity.title} className="w-full h-full object-cover" />
           <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-lg bg-black/70 backdrop-blur-md text-white text-[9px] font-bold flex items-center gap-1">
             <Users className="w-3 h-3 text-[#7FB77E]" />
             {activity.currentMembers.length} / {activity.maxMembers}
@@ -120,8 +122,14 @@ export const CimoChatContextInspectorWidget: React.FC<CimoChatContextInspectorWi
         <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-center gap-2.5">
           <Coffee className="w-4 h-4 text-[#7FB77E] shrink-0" />
           <div>
-            <span className="text-[10px] font-black text-[#7FB77E] uppercase block">Tercer Tiempo Acordado</span>
-            <p className="text-[11px] font-black text-[#1F4E5F]">{activity.thirdHalf.venue ?? (activity.thirdHalf as any).venueName ?? 'Terraza acordada'}</p>
+            <span className="text-[10px] font-black text-[#7FB77E] uppercase block">
+              Tercer Tiempo Acordado
+            </span>
+            <p className="text-[11px] font-black text-[#1F4E5F]">
+              {activity.thirdHalf.venue ??
+                (activity.thirdHalf as any).venueName ??
+                'Terraza acordada'}
+            </p>
           </div>
         </div>
       )}
@@ -136,11 +144,10 @@ export const CimoChatContextInspectorWidget: React.FC<CimoChatContextInspectorWi
             ⏳ Temporal
           </span>
         </div>
-        <p className="text-[11px] font-black text-[#1F4E5F]">
-          Activo hasta 24h tras el entreno
-        </p>
+        <p className="text-[11px] font-black text-[#1F4E5F]">Activo hasta 24h tras el entreno</p>
         <p className="text-[10px] text-[#1F4E5F]/65 font-medium leading-relaxed">
-          Se cerrará y archivará automáticamente tras la quedada para proteger la privacidad del grupo.
+          Se cerrará y archivará automáticamente tras la quedada para proteger la privacidad del
+          grupo.
         </p>
       </div>
     </aside>

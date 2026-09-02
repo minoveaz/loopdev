@@ -47,22 +47,57 @@ export const cimoNavigation: PublicNavigation = {
   defaultRouteId: 'feed',
   mobilePrimaryRouteIds: ['feed', 'crew', 'chats', 'profile'],
   routes: [
-    { id: 'feed', path: '/app/home', label: 'Feed', icon: 'Home', requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'crew', path: '/app/crew', label: 'Mi Crew', icon: 'Users', badgeCount: 7, requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'chats', path: '/app/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 3, requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'profile', path: '/app/profile', label: 'Perfil', icon: 'User', requiresAuth: true, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
+    {
+      id: 'feed',
+      path: '/app/home',
+      label: 'Feed',
+      icon: 'Home',
+      requiresAuth: false,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
+    {
+      id: 'crew',
+      path: '/app/crew',
+      label: 'Mi Crew',
+      icon: 'Users',
+      badgeCount: 7,
+      requiresAuth: false,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
+    {
+      id: 'chats',
+      path: '/app/chats',
+      label: 'Chats',
+      icon: 'MessageCircle',
+      badgeCount: 3,
+      requiresAuth: false,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
+    {
+      id: 'profile',
+      path: '/app/profile',
+      label: 'Perfil',
+      icon: 'User',
+      requiresAuth: true,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
   ],
 };
 
-export const CIMO_FEED_COMPOSITION: PublicViewComposition = createPublicContextualTriptychComposition({
-  idPrefix: 'cimo',
-  leftColSpan: 3,
-  mainColSpan: 6,
-  rightColSpan: 3,
-  gap: 'lg',
-  maxWidth: 'full',
-  alignment: 'stretch',
-});
+export const CIMO_FEED_COMPOSITION: PublicViewComposition =
+  createPublicContextualTriptychComposition({
+    idPrefix: 'cimo',
+    leftColSpan: 3,
+    mainColSpan: 6,
+    rightColSpan: 3,
+    gap: 'lg',
+    maxWidth: 'full',
+    alignment: 'stretch',
+  });
 
 export const CIMO_ACTIVITY_DETAIL_COMPOSITION: PublicViewComposition = {
   recipe: 'PublicContextualTriptych',
@@ -128,11 +163,13 @@ export const CIMO_CREATE_PLAN_COMPOSITION: PublicViewComposition = {
 
 export const cimoSeoConfig: PublicSeoMetadata = {
   title: 'CIMO | Conoce personas entrenando y crea tu Crew deportivo',
-  description: 'Únete a planes deportivos grupales en Madrid y otras ciudades: running, pádel, crossfit, ciclismo y más.',
+  description:
+    'Únete a planes deportivos grupales en Madrid y otras ciudades: running, pádel, crossfit, ciclismo y más.',
   canonicalUrl: 'https://minoveaz.github.io/CIMO/',
   openGraph: {
     title: 'CIMO | Conoce personas entrenando',
-    description: 'Encuentra compañeros para entrenar, únete a microgrupos (Crews) y comparte tus deportes favoritos.',
+    description:
+      'Encuentra compañeros para entrenar, únete a microgrupos (Crews) y comparte tus deportes favoritos.',
     image: 'https://minoveaz.github.io/CIMO/cimo-mark.svg',
     type: 'website',
     locale: 'es_ES',

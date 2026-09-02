@@ -16,7 +16,9 @@ export const CimoActivitySeoHead: React.FC<CimoActivitySeoHeadProps> = ({ activi
       '@context': 'https://schema.org',
       '@type': 'SportsEvent',
       name: activity.title,
-      description: activity.instructions || `Únete a este entreno grupal de ${activity.sport} (${activity.level}) con ${activity.captain.name} en ${activity.location}.`,
+      description:
+        activity.instructions ||
+        `Únete a este entreno grupal de ${activity.sport} (${activity.level}) con ${activity.captain.name} en ${activity.location}.`,
       startDate: '2026-09-01T07:30:00+02:00',
       eventStatus: 'https://schema.org/EventScheduled',
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -40,9 +42,10 @@ export const CimoActivitySeoHead: React.FC<CimoActivitySeoHeadProps> = ({ activi
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'EUR',
-        availability: activity.currentMembers.length >= activity.maxMembers
-          ? 'https://schema.org/SoldOut'
-          : 'https://schema.org/InStock',
+        availability:
+          activity.currentMembers.length >= activity.maxMembers
+            ? 'https://schema.org/SoldOut'
+            : 'https://schema.org/InStock',
         validFrom: '2026-08-31',
         url: window.location.href,
       },

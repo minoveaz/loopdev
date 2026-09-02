@@ -1,10 +1,6 @@
 import React from 'react';
 import { Check, Timer } from 'lucide-react';
-import {
-  getSportPaces,
-  SPORT_PACES_CATALOG,
-  type SportPaceOption,
-} from '../data/sportsCatalog';
+import { getSportPaces, SPORT_PACES_CATALOG, type SportPaceOption } from '../data/sportsCatalog';
 
 export { SPORT_PACES_CATALOG, type SportPaceOption };
 
@@ -37,9 +33,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
             Ritmo y nivel del grupo
           </span>
         </div>
-        <span className="text-[11px] font-bold text-[#7FB77E]">
-          {currentPace.level}
-        </span>
+        <span className="text-[11px] font-bold text-[#7FB77E]">{currentPace.level}</span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -51,10 +45,10 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
             p.level === 'Principiante'
               ? 'bg-[#7FB77E]/15 text-[#2E7D32] border-[#7FB77E]/30'
               : p.level === 'Intermedio'
-              ? 'bg-[#1F4E5F]/10 text-[#1F4E5F] border-[#1F4E5F]/20'
-              : p.level === 'Avanzado'
-              ? 'bg-amber-500/15 text-amber-800 border-amber-500/30'
-              : 'bg-emerald-500/15 text-emerald-800 border-emerald-500/30';
+                ? 'bg-[#1F4E5F]/10 text-[#1F4E5F] border-[#1F4E5F]/20'
+                : p.level === 'Avanzado'
+                  ? 'bg-amber-500/15 text-amber-800 border-amber-500/30'
+                  : 'bg-emerald-500/15 text-emerald-800 border-emerald-500/30';
 
           return (
             <button
@@ -71,7 +65,9 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
                 {/* Top Row: Title + Metric + Radio Check */}
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className={`text-sm font-black leading-tight block ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}>
+                    <span
+                      className={`text-sm font-black leading-tight block ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}
+                    >
                       {p.title}
                     </span>
                     <span className="text-xs font-black text-[#7FB77E] flex items-center gap-1 mt-0.5">
@@ -92,14 +88,14 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
                 </div>
 
                 {/* Difficulty Badge */}
-                <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border w-fit ${levelBadgeStyle}`}>
+                <span
+                  className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border w-fit ${levelBadgeStyle}`}
+                >
                   {p.level}
                 </span>
               </div>
 
-              <p className="text-[11px] text-[#1F4E5F]/70 leading-relaxed font-medium">
-                {p.desc}
-              </p>
+              <p className="text-[11px] text-[#1F4E5F]/70 leading-relaxed font-medium">{p.desc}</p>
             </button>
           );
         })}

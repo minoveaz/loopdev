@@ -60,10 +60,16 @@ export const validateCompositionAgainstRegistry = (
       issues.push({ regionId: region.id, message: `Slot "${region.slot}" is not allowed` });
     }
     if (!definition.allowedComponents.includes(region.component)) {
-      issues.push({ regionId: region.id, message: `Component "${region.component}" is not allowed` });
+      issues.push({
+        regionId: region.id,
+        message: `Component "${region.component}" is not allowed`,
+      });
     }
     if (region.rowSpan && region.rowSpan > definition.maxRowSpan) {
-      issues.push({ regionId: region.id, message: `rowSpan exceeds recipe maximum of ${definition.maxRowSpan}` });
+      issues.push({
+        regionId: region.id,
+        message: `rowSpan exceeds recipe maximum of ${definition.maxRowSpan}`,
+      });
     }
   });
 

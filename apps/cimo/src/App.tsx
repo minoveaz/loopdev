@@ -1,8 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { PublicAuthModal, PublicCookieBanner, PublicRuntime, PublicTopBar } from '@loopdev/public-shell';
+import {
+  PublicAuthModal,
+  PublicCookieBanner,
+  PublicRuntime,
+  PublicTopBar,
+} from '@loopdev/public-shell';
 import { LogIn, MessageSquare, Plus, Users } from 'lucide-react';
 import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
-import { CIMO_FEED_COMPOSITION, CIMO_ACTIVITY_DETAIL_COMPOSITION, CIMO_CREATE_PLAN_COMPOSITION, cimoBrandTheme, cimoNavigation, cimoSeoConfig } from './config/cimo.config';
+import {
+  CIMO_FEED_COMPOSITION,
+  CIMO_ACTIVITY_DETAIL_COMPOSITION,
+  CIMO_CREATE_PLAN_COMPOSITION,
+  cimoBrandTheme,
+  cimoNavigation,
+  cimoSeoConfig,
+} from './config/cimo.config';
 import { createActivitySemanticSlug, extractActivityIdFromSlug } from '@loopdev/contracts';
 import { INITIAL_ACTIVITIES, INITIAL_CREW_CHATS } from './data/mockData';
 import { CimoFloatingSearchBar } from './components/CimoFloatingSearchBar';
@@ -14,7 +26,10 @@ import { CimoActivityDetailView } from './components/CimoActivityDetailView';
 import { CimoCreatePlanView } from './components/CimoCreatePlanView';
 import { CimoChatListView } from './components/CimoChatListView';
 import { CimoProfileView } from './components/CimoProfileView';
-import { CimoEditProfileView, type ExtendedUserProfileData } from './components/CimoEditProfileView';
+import {
+  CimoEditProfileView,
+  type ExtendedUserProfileData,
+} from './components/CimoEditProfileView';
 import { CimoCrewNetworkView } from './components/CimoCrewNetworkView';
 import { CimoSquadHubView } from './components/CimoSquadHubView';
 import { CimoCaptainBadgeInspector } from './components/CimoCaptainBadgeInspector';
@@ -47,8 +62,10 @@ export function App() {
     handle: '@alexrivera',
     city: 'Madrid, España',
     neighborhood: 'Retiro / Chamberí',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
-    coverUrl: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
+    coverUrl:
+      'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400',
     bio: 'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros y conectar con gente activa!',
     sports: [
       { sport: 'Running', level: 'Intermedio (5-10K)', pace: '5:15 min/km' },
@@ -138,7 +155,11 @@ export function App() {
       } else if (parsed.type === 'profile') {
         const handle = parsed.paramId || currentUser.handle?.replace('@', '') || 'alexrivera';
         setActiveProfileUserId(parsed.paramId);
-        if (!parsed.paramId && window.location.hash.includes('profile') && !window.location.hash.includes('edit')) {
+        if (
+          !parsed.paramId &&
+          window.location.hash.includes('profile') &&
+          !window.location.hash.includes('edit')
+        ) {
           window.history.replaceState(null, '', `#/app/profile/${handle}`);
         }
       } else if (parsed.type === 'chat') {
@@ -193,8 +214,14 @@ export function App() {
   // Filter activities
   const filteredActivities = useMemo(() => {
     return activities.filter((act) => {
-      if (selectedSport !== 'Todos' && act.sport.toLowerCase() !== selectedSport.toLowerCase()) return false;
-      if (selectedLevel !== 'Cualquier nivel' && act.level !== selectedLevel && act.level !== 'Todos los niveles') return false;
+      if (selectedSport !== 'Todos' && act.sport.toLowerCase() !== selectedSport.toLowerCase())
+        return false;
+      if (
+        selectedLevel !== 'Cualquier nivel' &&
+        act.level !== selectedLevel &&
+        act.level !== 'Todos los niveles'
+      )
+        return false;
 
       // Day filtering with calendar and quick options
       if (selectedDay !== 'Cualquier día') {
@@ -202,7 +229,14 @@ export function App() {
         const actD = act.date.toLowerCase();
         if (d === 'hoy' && !actD.includes('hoy')) return false;
         if (d === 'mañana' && !actD.includes('mañana')) return false;
-        if (d === 'este fin de semana' && !actD.includes('sábado') && !actD.includes('domingo') && !actD.includes('sab') && !actD.includes('dom')) return false;
+        if (
+          d === 'este fin de semana' &&
+          !actD.includes('sábado') &&
+          !actD.includes('domingo') &&
+          !actD.includes('sab') &&
+          !actD.includes('dom')
+        )
+          return false;
         if (!['hoy', 'mañana', 'este fin de semana', 'esta semana'].includes(d)) {
           // Custom specific day match (e.g. "Mar 1 Sep", "1 Sep", "Sábado", etc.)
           const cleanToken = d.split(' ')[0] ?? d;
@@ -211,7 +245,11 @@ export function App() {
       }
 
       // City / Zone filtering
-      if (selectedZone !== 'Toda la ciudad' && selectedZone !== 'Toda España' && selectedZone !== 'Todas') {
+      if (
+        selectedZone !== 'Toda la ciudad' &&
+        selectedZone !== 'Toda España' &&
+        selectedZone !== 'Todas'
+      ) {
         const z = selectedZone.toLowerCase();
         const loc = act.location.toLowerCase();
         const tit = act.title.toLowerCase();
@@ -248,7 +286,10 @@ export function App() {
         if (act.id === activityId) {
           const isJoined = !act.isJoined;
           const currentMembers = isJoined
-            ? [...act.currentMembers, { id: 'user_me', name: currentUser.name, avatarUrl: currentUser.avatarUrl }]
+            ? [
+                ...act.currentMembers,
+                { id: 'user_me', name: currentUser.name, avatarUrl: currentUser.avatarUrl },
+              ]
             : act.currentMembers.filter((m) => m.id !== 'user_me');
           return { ...act, isJoined, currentMembers };
         }
@@ -282,7 +323,12 @@ export function App() {
         isCaptain: true,
       },
       currentMembers: [
-        { id: 'user_me', name: currentUser.name, avatarUrl: currentUser.avatarUrl, isCaptain: true },
+        {
+          id: 'user_me',
+          name: currentUser.name,
+          avatarUrl: currentUser.avatarUrl,
+          isCaptain: true,
+        },
       ],
       isJoined: true,
     };
@@ -379,8 +425,13 @@ export function App() {
           />
         );
       case 'profile': {
-        const isOwn = !activeProfileUserId || activeProfileUserId === 'usr_me' || activeProfileUserId === 'alexrivera';
-        const profileUserToDisplay = isOwn ? currentUser : getAthleteProfileById(activeProfileUserId);
+        const isOwn =
+          !activeProfileUserId ||
+          activeProfileUserId === 'usr_me' ||
+          activeProfileUserId === 'alexrivera';
+        const profileUserToDisplay = isOwn
+          ? currentUser
+          : getAthleteProfileById(activeProfileUserId);
 
         return (
           <CimoProfileView
@@ -426,8 +477,15 @@ export function App() {
       case 'profile-edit':
         return (
           <CimoAthleteMetricsWidget
-            user={activeProfileUserId ? (getAthleteProfileById(activeProfileUserId) ?? currentUser) : currentUser}
-            isOwnProfile={!activeProfileUserId || activeProfileUserId === (currentUser.handle?.replace('@', '') || 'alexrivera')}
+            user={
+              activeProfileUserId
+                ? (getAthleteProfileById(activeProfileUserId) ?? currentUser)
+                : currentUser
+            }
+            isOwnProfile={
+              !activeProfileUserId ||
+              activeProfileUserId === (currentUser.handle?.replace('@', '') || 'alexrivera')
+            }
           />
         );
       case 'chats':
@@ -472,16 +530,24 @@ export function App() {
               planDraft ?? {
                 sport: selectedSport === 'Todos' ? 'Running' : selectedSport,
                 title: 'Running 8K • Parque del Retiro',
-                description: 'Rodaje dinámico en grupo por los senderos arbolados del Retiro. Mantendremos un ritmo intermedio con buen ambiente.',
+                description:
+                  'Rodaje dinámico en grupo por los senderos arbolados del Retiro. Mantendremos un ritmo intermedio con buen ambiente.',
                 date: 'Hoy',
                 time: '19:30',
-                location: selectedZone === 'Toda la ciudad' ? 'Parque del Retiro (Puerta de Alcalá)' : selectedZone,
+                location:
+                  selectedZone === 'Toda la ciudad'
+                    ? 'Parque del Retiro (Puerta de Alcalá)'
+                    : selectedZone,
                 capacity: 5,
-                level: selectedLevel === 'Cualquier nivel' ? 'Intermedio (5:00 - 5:30 min/km)' : selectedLevel,
+                level:
+                  selectedLevel === 'Cualquier nivel'
+                    ? 'Intermedio (5:00 - 5:30 min/km)'
+                    : selectedLevel,
                 thirdHalfType: 'cafe',
                 thirdHalfTitle: 'Café & Desayuno',
                 thirdHalfLocation: 'Café Murillo (Retiro)',
-                image: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200',
+                image:
+                  'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1200',
                 price: 'Gratis',
               }
             }
@@ -501,7 +567,9 @@ export function App() {
       case 'chats':
         return (
           <CimoChatContextInspectorWidget
-            activity={activities.find((a) => a.id === (activeChatId ?? selectedActivityId)) ?? activities[0]}
+            activity={
+              activities.find((a) => a.id === (activeChatId ?? selectedActivityId)) ?? activities[0]
+            }
             onNavigateToProfile={(athleteId) => navigateTo('profile', athleteId)}
           />
         );
@@ -529,8 +597,8 @@ export function App() {
           currentRoute === 'activity-detail'
             ? CIMO_ACTIVITY_DETAIL_COMPOSITION
             : currentRoute === 'create'
-            ? CIMO_CREATE_PLAN_COMPOSITION
-            : CIMO_FEED_COMPOSITION
+              ? CIMO_CREATE_PLAN_COMPOSITION
+              : CIMO_FEED_COMPOSITION
         }
         seo={cimoSeoConfig}
         activeRouteId={currentRoute}
@@ -569,9 +637,13 @@ export function App() {
                         : 'bg-white/90 hover:bg-white text-[#1F4E5F] border border-slate-200/90 shadow-2xs'
                     }`}
                   >
-                    <Users className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-[#7FB77E]' : 'text-[#1F4E5F]'}`} />
+                    <Users
+                      className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-[#7FB77E]' : 'text-[#1F4E5F]'}`}
+                    />
                     <span>Mi Crew</span>
-                    <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-[#7FB77E] text-[#1F4E5F]' : 'bg-[#7FB77E]/20 text-[#1F4E5F]'}`}>
+                    <span
+                      className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-[#7FB77E] text-[#1F4E5F]' : 'bg-[#7FB77E]/20 text-[#1F4E5F]'}`}
+                    >
                       7
                     </span>
                   </button>
@@ -622,7 +694,11 @@ export function App() {
                       className="hidden sm:flex w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs shrink-0"
                     >
                       {currentUser.avatarUrl ? (
-                        <img src={currentUser.avatarUrl} alt={currentUser.name} className="w-full h-full object-cover" />
+                        <img
+                          src={currentUser.avatarUrl}
+                          alt={currentUser.name}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <div className="w-full h-full bg-[#1F4E5F] text-white font-extrabold text-xs flex items-center justify-center">
                           {currentUser.name.charAt(0)}

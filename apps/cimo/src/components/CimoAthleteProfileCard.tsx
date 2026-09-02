@@ -46,8 +46,10 @@ const weeklyDays = [
 function getSportVector(sport: string) {
   const norm = sport.toLowerCase();
   if (norm.includes('run')) return <Activity className="w-3.5 h-3.5 text-[#7FB77E]" />;
-  if (norm.includes('pad') || norm.includes('pádel')) return <Target className="w-3.5 h-3.5 text-[#7FB77E]" />;
-  if (norm.includes('hik') || norm.includes('trek')) return <Mountain className="w-3.5 h-3.5 text-[#7FB77E]" />;
+  if (norm.includes('pad') || norm.includes('pádel'))
+    return <Target className="w-3.5 h-3.5 text-[#7FB77E]" />;
+  if (norm.includes('hik') || norm.includes('trek'))
+    return <Mountain className="w-3.5 h-3.5 text-[#7FB77E]" />;
   return <Flame className="w-3.5 h-3.5 text-[#7FB77E]" />;
 }
 
@@ -99,9 +101,7 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
             {user.name}
           </h3>
           {user.handle && (
-            <span className="text-xs font-bold text-[#1F4E5F]/60">
-              {user.handle}
-            </span>
+            <span className="text-xs font-bold text-[#1F4E5F]/60">{user.handle}</span>
           )}
         </div>
 
@@ -157,8 +157,7 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
             Constancia Semanal
           </span>
           <span className="text-xs font-black text-[#7FB77E] flex items-center gap-1">
-            <Flame className="w-3.5 h-3.5 fill-[#7FB77E]" />
-            5 días
+            <Flame className="w-3.5 h-3.5 fill-[#7FB77E]" />5 días
           </span>
         </div>
 
@@ -217,7 +216,13 @@ export const CimoAthleteProfileCard: React.FC<CimoAthleteProfileCardProps> = ({
       {/* 6. Mini Footer & Enlaces de Comunidad */}
       <div className="pt-2 border-t border-[#1F4E5F]/8 flex flex-col gap-1 text-center mt-auto">
         <div className="flex items-center justify-center gap-2 text-[10px] font-bold text-[#1F4E5F]/60">
-          <button type="button" onClick={onProfileClick} className="hover:text-[#1F4E5F] transition-colors cursor-pointer">Mi Pasaporte</button>
+          <button
+            type="button"
+            onClick={onProfileClick}
+            className="hover:text-[#1F4E5F] transition-colors cursor-pointer"
+          >
+            Mi Pasaporte
+          </button>
           <span>•</span>
           <span className="hover:text-[#1F4E5F] cursor-pointer">Soporte</span>
           <span>•</span>

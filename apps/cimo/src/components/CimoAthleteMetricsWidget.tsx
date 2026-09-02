@@ -23,11 +23,12 @@ export interface CimoAthleteMetricsWidgetProps {
   isOwnProfile?: boolean;
 }
 
-export const CimoAthleteMetricsWidget: React.FC<CimoAthleteMetricsWidgetProps> = ({
-  user,
-}) => {
+export const CimoAthleteMetricsWidget: React.FC<CimoAthleteMetricsWidgetProps> = ({ user }) => {
   return (
-    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Métricas del Atleta">
+    <aside
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      aria-label="Métricas del Atleta"
+    >
       {/* 1. Cabecera */}
       <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
         <div className="flex items-center gap-1.5">
@@ -49,7 +50,9 @@ export const CimoAthleteMetricsWidget: React.FC<CimoAthleteMetricsWidgetProps> =
               <Flame className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">Constancia</span>
+              <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">
+                Constancia
+              </span>
               <span className="text-xs font-black text-[#1F4E5F]">Nivel Oro (4+ días/sem)</span>
             </div>
           </div>
@@ -62,7 +65,9 @@ export const CimoAthleteMetricsWidget: React.FC<CimoAthleteMetricsWidgetProps> =
               <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
             </div>
             <div>
-              <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">Valoración Media</span>
+              <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">
+                Valoración Media
+              </span>
               <span className="text-xs font-black text-[#1F4E5F]">4.9 ★ (28 reseñas)</span>
             </div>
           </div>
@@ -75,7 +80,9 @@ export const CimoAthleteMetricsWidget: React.FC<CimoAthleteMetricsWidgetProps> =
               <CheckCircle2 className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">Asistencia</span>
+              <span className="text-[10px] font-black text-[#1F4E5F]/60 block uppercase">
+                Asistencia
+              </span>
               <span className="text-xs font-black text-[#1F4E5F]">100% Palabra de Honor</span>
             </div>
           </div>
@@ -95,7 +102,9 @@ export const CimoAthleteMetricsWidget: React.FC<CimoAthleteMetricsWidgetProps> =
           </div>
           <div className="p-2 bg-[#EEF2F2]/50 rounded-xl border border-[#1F4E5F]/6">
             <span className="text-xs font-black text-[#7FB77E]">Nivel 3.5</span>
-            <p className="text-[9px] font-bold text-[#1F4E5F]/60 uppercase mt-0.5">Pádel Playtomic</p>
+            <p className="text-[9px] font-bold text-[#1F4E5F]/60 uppercase mt-0.5">
+              Pádel Playtomic
+            </p>
           </div>
         </div>
       </div>
@@ -105,7 +114,9 @@ export const CimoAthleteMetricsWidget: React.FC<CimoAthleteMetricsWidgetProps> =
         <div className="flex items-center gap-2">
           <Users className="w-4 h-4 text-[#7FB77E]" />
           <div>
-            <span className="text-[10px] font-black text-[#1F4E5F]/60 uppercase block">Comunidad Activa</span>
+            <span className="text-[10px] font-black text-[#1F4E5F]/60 uppercase block">
+              Comunidad Activa
+            </span>
             <span className="text-xs font-black text-[#1F4E5F]">3 Squads • 24 Atletas</span>
           </div>
         </div>

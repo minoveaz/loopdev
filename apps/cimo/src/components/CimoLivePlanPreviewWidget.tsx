@@ -72,7 +72,11 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
   const scoreColor =
     score >= 85 ? 'text-[#7FB77E]' : score >= 70 ? 'text-[#1F4E5F]' : 'text-amber-600';
   const scoreBadgeBg =
-    score >= 85 ? 'bg-[#7FB77E]/15 text-[#2E7D32]' : score >= 70 ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]' : 'bg-amber-50 text-amber-700';
+    score >= 85
+      ? 'bg-[#7FB77E]/15 text-[#2E7D32]'
+      : score >= 70
+        ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]'
+        : 'bg-amber-50 text-amber-700';
 
   const sportIcon =
     formData.sport?.toLowerCase() === 'padel' ? (
@@ -130,7 +134,9 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
               type="button"
               onClick={() => setPreviewCardFormat('feed')}
               className={`px-2 py-0.5 rounded-md text-[10px] font-black transition-all cursor-pointer ${
-                previewCardFormat === 'feed' ? 'bg-white text-[#1F4E5F] shadow-2xs' : 'text-[#1F4E5F]/60'
+                previewCardFormat === 'feed'
+                  ? 'bg-white text-[#1F4E5F] shadow-2xs'
+                  : 'text-[#1F4E5F]/60'
               }`}
             >
               Feed
@@ -139,7 +145,9 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
               type="button"
               onClick={() => setPreviewCardFormat('story')}
               className={`px-2 py-0.5 rounded-md text-[10px] font-black transition-all cursor-pointer ${
-                previewCardFormat === 'story' ? 'bg-white text-[#1F4E5F] shadow-2xs' : 'text-[#1F4E5F]/60'
+                previewCardFormat === 'story'
+                  ? 'bg-white text-[#1F4E5F] shadow-2xs'
+                  : 'text-[#1F4E5F]/60'
               }`}
             >
               Story
@@ -150,7 +158,9 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
         {/* Tarjeta Mockup Realista de CIMO (Idéntica al Feed Principal) */}
         <div className="bg-white border border-[#1F4E5F]/15 rounded-3xl overflow-hidden shadow-xs flex flex-col transition-all hover:border-[#7FB77E]/50 group">
           {/* 1. Imagen de Portada con Badges y Título */}
-          <div className={`relative w-full bg-[#1F4E5F]/5 overflow-hidden ${previewCardFormat === 'story' ? 'aspect-[4/3]' : 'aspect-[16/9]'}`}>
+          <div
+            className={`relative w-full bg-[#1F4E5F]/5 overflow-hidden ${previewCardFormat === 'story' ? 'aspect-[4/3]' : 'aspect-[16/9]'}`}
+          >
             <img
               src={
                 formData.image ||
@@ -196,19 +206,24 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
                 </div>
                 <div className="flex items-center gap-1 font-black text-[#1F4E5F] shrink-0">
                   <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
-                  <span>{formData.date || 'Fecha'}, {formData.time || '19:30'}h</span>
+                  <span>
+                    {formData.date || 'Fecha'}, {formData.time || '19:30'}h
+                  </span>
                 </div>
               </div>
 
               {/* Pace / Level Line */}
               <div className="flex items-center gap-1.5 text-slate-600 font-medium">
                 <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                <span>Ritmo: <strong>{formData.level || 'Medio'}</strong></span>
+                <span>
+                  Ritmo: <strong>{formData.level || 'Medio'}</strong>
+                </span>
               </div>
 
               {/* Description preview */}
               <p className="text-xs font-medium text-slate-600 line-clamp-2 leading-relaxed mt-0.5">
-                {formData.description || 'Describe la ruta, el objetivo y el ritmo para tus compañeros del Crew.'}
+                {formData.description ||
+                  'Describe la ruta, el objetivo y el ritmo para tus compañeros del Crew.'}
               </p>
             </div>
 
@@ -218,7 +233,10 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
                 <div className="flex items-center gap-1.5 truncate">
                   <Coffee className="w-3.5 h-3.5 text-[#1F4E5F] shrink-0" />
                   <span className="truncate">
-                    <strong>Tercer Tiempo:</strong> {formData.thirdHalfLocation || formData.thirdHalfTitle || 'Café & Charla Post-Entreno'}
+                    <strong>Tercer Tiempo:</strong>{' '}
+                    {formData.thirdHalfLocation ||
+                      formData.thirdHalfTitle ||
+                      'Café & Charla Post-Entreno'}
                   </span>
                 </div>
                 <span className="text-[9px] font-black uppercase text-white bg-[#1F4E5F] px-1.5 py-0.2 rounded-md shrink-0">
@@ -275,7 +293,9 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
         <div className="flex flex-col gap-1.5 pt-1 text-[11px] font-bold">
           <div className="flex items-center justify-between">
             <span className="text-[#1F4E5F]/75">Descripción completa:</span>
-            <span className={hasGoodDescription ? 'text-[#7FB77E] font-black' : 'text-[#1F4E5F]/40'}>
+            <span
+              className={hasGoodDescription ? 'text-[#7FB77E] font-black' : 'text-[#1F4E5F]/40'}
+            >
               {hasGoodDescription ? '✓ +15%' : 'Pendiente'}
             </span>
           </div>
@@ -296,7 +316,9 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
 
           <div className="flex items-center justify-between">
             <span className="text-[#1F4E5F]/75">Foto real de portada:</span>
-            <span className={hasCustomOrRealPhoto ? 'text-[#7FB77E] font-black' : 'text-[#1F4E5F]/40'}>
+            <span
+              className={hasCustomOrRealPhoto ? 'text-[#7FB77E] font-black' : 'text-[#1F4E5F]/40'}
+            >
               {hasCustomOrRealPhoto ? '✓ +10%' : 'Pendiente'}
             </span>
           </div>
@@ -319,7 +341,8 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
             🔥 Horarios con más éxito en {formData.sport || 'este deporte'}:
           </span>
           <p className="text-[11px] text-[#1F4E5F]/70 font-medium leading-relaxed">
-            Las convocatorias entre las <strong>19:00h y 20:30h</strong> se llenan en menos de <strong>2 horas</strong> de media.
+            Las convocatorias entre las <strong>19:00h y 20:30h</strong> se llenan en menos de{' '}
+            <strong>2 horas</strong> de media.
           </p>
         </div>
 
@@ -329,7 +352,8 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
             <span>Atletas afines activos:</span>
           </span>
           <p className="text-[11px] text-[#1F4E5F]/75 font-medium leading-relaxed">
-            Hay <strong>~18 miembros de la comunidad</strong> con ritmo <em>{formData.level || 'intermedio'}</em> buscando quedadas en tu municipio esta semana.
+            Hay <strong>~18 miembros de la comunidad</strong> con ritmo{' '}
+            <em>{formData.level || 'intermedio'}</em> buscando quedadas en tu municipio esta semana.
           </p>
         </div>
       </div>

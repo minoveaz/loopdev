@@ -25,7 +25,9 @@ export const PublicSeoHead: React.FC<PublicSeoHeadProps> = ({ seo, brand }) => {
 
     const setLink = (rel: string, href?: string, hreflang?: string) => {
       if (!href) return;
-      const selector = hreflang ? `link[rel="${rel}"][hreflang="${hreflang}"]` : `link[rel="${rel}"]`;
+      const selector = hreflang
+        ? `link[rel="${rel}"][hreflang="${hreflang}"]`
+        : `link[rel="${rel}"]`;
       let element = document.querySelector(selector);
       if (!element) {
         element = document.createElement('link');

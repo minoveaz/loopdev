@@ -16,7 +16,9 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
 
   it('renders CimoCaptainBadgeInspector with captain stats, verified badge and weather', () => {
     const onNavProfile = vi.fn();
-    render(<CimoCaptainBadgeInspector activity={sampleActivity} onNavigateToProfile={onNavProfile} />);
+    render(
+      <CimoCaptainBadgeInspector activity={sampleActivity} onNavigateToProfile={onNavProfile} />,
+    );
 
     expect(screen.getByText('Capitán Verificado')).toBeDefined();
     expect(screen.getByText(sampleActivity.captain.name)).toBeDefined();
@@ -73,7 +75,7 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
           price: 'Gratis',
         }}
         currentUser={{ name: 'Alex Rivera' }}
-      />
+      />,
     );
 
     expect(screen.getByText('Co-Piloto del Capitán')).toBeDefined();
@@ -96,7 +98,7 @@ describe('CIMO 2.0 Contextual Support Zones (Anti-Hardcoding & Equal Height)', (
           sports: [{ sport: 'Running', level: 'Intermedio' }],
           weeklySchedule: {},
         }}
-      />
+      />,
     );
 
     expect(screen.getByText('Pasaporte Atlético Verificado')).toBeDefined();

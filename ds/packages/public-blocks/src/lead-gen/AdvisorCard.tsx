@@ -36,7 +36,8 @@ export const AdvisorCard: React.FC<AdvisorCardProps> = ({ advisor, onContact, cl
       </div>
 
       <p className="text-xs text-slate-600 leading-relaxed">
-        ¿Dudas sobre tu visado, requisitos o coberturas? Te ayudo de forma personalizada y sin compromiso.
+        ¿Dudas sobre tu visado, requisitos o coberturas? Te ayudo de forma personalizada y sin
+        compromiso.
       </p>
 
       <div className="grid grid-cols-2 gap-2 pt-1">

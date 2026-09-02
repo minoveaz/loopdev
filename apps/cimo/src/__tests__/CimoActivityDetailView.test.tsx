@@ -105,7 +105,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onBack={vi.fn()}
         onJoin={vi.fn()}
         onSendMessage={vi.fn()}
-      />
+      />,
     );
 
     // Visual Breadcrumbs navigation

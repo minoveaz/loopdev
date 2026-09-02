@@ -24,7 +24,10 @@ export interface CimoBadgesShowcaseWidgetProps {
 
 export const CimoBadgesShowcaseWidget: React.FC<CimoBadgesShowcaseWidgetProps> = () => {
   return (
-    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Insignias y Logros">
+    <aside
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      aria-label="Insignias y Logros"
+    >
       {/* 1. Cabecera */}
       <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
         <div className="flex items-center gap-1.5">
@@ -99,10 +102,14 @@ export const CimoBadgesShowcaseWidget: React.FC<CimoBadgesShowcaseWidgetProps> =
           <span className="text-[10px] font-black text-[#7FB77E]">82%</span>
         </div>
         <div className="w-full bg-[#EEF2F2] h-2 rounded-full overflow-hidden">
-          <div className="bg-gradient-to-r from-[#7FB77E] to-[#E0A96D] h-full rounded-full" style={{ width: '82%' }} />
+          <div
+            className="bg-gradient-to-r from-[#7FB77E] to-[#E0A96D] h-full rounded-full"
+            style={{ width: '82%' }}
+          />
         </div>
         <p className="text-[10px] text-[#1F4E5F]/70 font-medium leading-tight">
-          Te faltan <strong>2 entrenos liderados</strong> para desbloquear la insignia de Capitán Leyenda.
+          Te faltan <strong>2 entrenos liderados</strong> para desbloquear la insignia de Capitán
+          Leyenda.
         </p>
       </div>
 
@@ -112,7 +119,8 @@ export const CimoBadgesShowcaseWidget: React.FC<CimoBadgesShowcaseWidgetProps> =
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Pasaporte Certificado</h4>
           <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
-            Tus insignias y marcas son verificadas automáticamente tras cada entrenamiento completado.
+            Tus insignias y marcas son verificadas automáticamente tras cada entrenamiento
+            completado.
           </p>
         </div>
       </div>

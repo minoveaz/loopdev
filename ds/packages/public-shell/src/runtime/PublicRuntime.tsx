@@ -93,9 +93,7 @@ export const PublicRuntime: React.FC<PublicRuntimeProps> = ({
   );
 
   const mobilePrimaryRoutes = useMemo(() => {
-    return navigation.routes.filter((r) =>
-      navigation.mobilePrimaryRouteIds.includes(r.id),
-    );
+    return navigation.routes.filter((r) => navigation.mobilePrimaryRouteIds.includes(r.id));
   }, [navigation]);
 
   return (
@@ -130,14 +128,15 @@ export const PublicRuntime: React.FC<PublicRuntimeProps> = ({
             ) : (
               <PublicCanvas composition={composition}>
                 {/* Region: Sidebar Filters / Left Support Zone */}
-                {renderers.sidebarFilters && (() => {
-                  const region = composition.regions.find((r) => r.slot === 'sidebar-filters');
-                  return region ? (
-                    <PublicCanvasRegion id={region.id} regionSpec={region}>
-                      {resolveSlot(renderers.sidebarFilters, contextValue)}
-                    </PublicCanvasRegion>
-                  ) : null;
-                })()}
+                {renderers.sidebarFilters &&
+                  (() => {
+                    const region = composition.regions.find((r) => r.slot === 'sidebar-filters');
+                    return region ? (
+                      <PublicCanvasRegion id={region.id} regionSpec={region}>
+                        {resolveSlot(renderers.sidebarFilters, contextValue)}
+                      </PublicCanvasRegion>
+                    ) : null;
+                  })()}
 
                 {/* Region: Main Feed / Primary Work Area */}
                 {(() => {
@@ -150,14 +149,15 @@ export const PublicRuntime: React.FC<PublicRuntimeProps> = ({
                 })()}
 
                 {/* Region: Context Inspector / Right Support Zone */}
-                {renderers.contextInspector && (() => {
-                  const region = composition.regions.find((r) => r.slot === 'context-inspector');
-                  return region ? (
-                    <PublicCanvasRegion id={region.id} regionSpec={region}>
-                      {resolveSlot(renderers.contextInspector, contextValue)}
-                    </PublicCanvasRegion>
-                  ) : null;
-                })()}
+                {renderers.contextInspector &&
+                  (() => {
+                    const region = composition.regions.find((r) => r.slot === 'context-inspector');
+                    return region ? (
+                      <PublicCanvasRegion id={region.id} regionSpec={region}>
+                        {resolveSlot(renderers.contextInspector, contextValue)}
+                      </PublicCanvasRegion>
+                    ) : null;
+                  })()}
               </PublicCanvas>
             )}
 
@@ -175,10 +175,7 @@ export const PublicRuntime: React.FC<PublicRuntimeProps> = ({
 
             {/* 4. Overlays: Drawer, AuthModal, CookieBanner */}
             {renderers.drawer && (
-              <PublicDrawer
-                isOpen={isDrawerOpen}
-                onClose={() => setIsDrawerOpen(false)}
-              >
+              <PublicDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
                 {resolveSlot(renderers.drawer, contextValue)}
               </PublicDrawer>
             )}

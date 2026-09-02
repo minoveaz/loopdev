@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Check,
-  CheckCircle2,
-  MapPin,
-  Send,
-  Sparkles,
-  Users,
-  X,
-  Zap,
-} from 'lucide-react';
+import { Check, CheckCircle2, MapPin, Send, Sparkles, Users, X, Zap } from 'lucide-react';
 import type { CrewConnection } from '../data/mockCrewNetwork';
 
 export interface CimoInviteCrewModalProps {
@@ -147,16 +138,18 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                       />
                       <div className="truncate">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black truncate">
-                            {conn.athlete.name}
-                          </span>
+                          <span className="text-xs font-black truncate">{conn.athlete.name}</span>
                           {conn.athlete.isCaptain && (
-                            <span className={`text-[9px] font-black px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/10 text-[#7FB77E]'}`}>
+                            <span
+                              className={`text-[9px] font-black px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/10 text-[#7FB77E]'}`}
+                            >
                               Capitán
                             </span>
                           )}
                         </div>
-                        <span className={`text-[10px] block truncate mt-0.5 ${isSelected ? 'text-white/75' : 'text-[#1F4E5F]/60'}`}>
+                        <span
+                          className={`text-[10px] block truncate mt-0.5 ${isSelected ? 'text-white/75' : 'text-[#1F4E5F]/60'}`}
+                        >
                           {conn.stats.sharedWorkoutsCount} entrenos juntos • {conn.athlete.zone}
                         </span>
                       </div>
@@ -197,7 +190,8 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>
-                  Enviar {selectedIds.length > 0 ? `${selectedIds.length} ` : ''}Invitación{selectedIds.length === 1 ? '' : 'es'}
+                  Enviar {selectedIds.length > 0 ? `${selectedIds.length} ` : ''}Invitación
+                  {selectedIds.length === 1 ? '' : 'es'}
                 </span>
               </button>
             </div>

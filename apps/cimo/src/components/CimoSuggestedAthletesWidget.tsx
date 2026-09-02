@@ -24,7 +24,8 @@ const SUGGESTED_ATHLETES = [
     name: 'Marcos Herrera',
     sport: 'Running 5:10 min/km',
     location: 'Retiro, Madrid',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
     mutual: 'Amigo de Sofía Díaz',
   },
   {
@@ -32,7 +33,8 @@ const SUGGESTED_ATHLETES = [
     name: 'Carla Montero',
     sport: 'Pádel Nivel 3.5',
     location: 'Chamartín, Madrid',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200',
+    avatar:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200',
     mutual: 'En Squad Pádel 28036',
   },
   {
@@ -40,7 +42,8 @@ const SUGGESTED_ATHLETES = [
     name: 'David Ramos',
     sport: 'Running 4:45 min/km',
     location: 'Chamberí, Madrid',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
     mutual: '12 entrenos completados',
   },
   {
@@ -48,22 +51,47 @@ const SUGGESTED_ATHLETES = [
     name: 'Laura Valls',
     sport: 'Hiking Sierra 14K',
     location: 'Guadarrama, Madrid',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
     mutual: 'Capitana en CIMO',
   },
 ];
 
 const FREQUENT_TEAMMATES = [
-  { id: 'capt_1', name: 'Sofía Díaz', sport: 'Running', workouts: 14, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
-  { id: 'usr_2', name: 'Marco', sport: 'Running', workouts: 9, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200' },
-  { id: 'usr_3', name: 'Elena', sport: 'Hiking', workouts: 7, avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200' },
+  {
+    id: 'capt_1',
+    name: 'Sofía Díaz',
+    sport: 'Running',
+    workouts: 14,
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+  },
+  {
+    id: 'usr_2',
+    name: 'Marco',
+    sport: 'Running',
+    workouts: 9,
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+  },
+  {
+    id: 'usr_3',
+    name: 'Elena',
+    sport: 'Hiking',
+    workouts: 7,
+    avatar:
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200',
+  },
 ];
 
 export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetProps> = ({
   onNavigateToProfile,
 }) => {
   return (
-    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Atletas Recomendados">
+    <aside
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      aria-label="Atletas Recomendados"
+    >
       {/* 1. Atletas Sugeridos por Afinidad */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between pb-1.5 border-b border-[#1F4E5F]/8">
@@ -132,9 +160,7 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
                 <img src={tm.avatar} alt={tm.name} className="w-6 h-6 rounded-full object-cover" />
                 <span className="text-xs font-black text-[#1F4E5F]">{tm.name}</span>
               </div>
-              <span className="text-[10px] font-bold text-[#7FB77E]">
-                {tm.workouts} entrenos
-              </span>
+              <span className="text-[10px] font-bold text-[#7FB77E]">{tm.workouts} entrenos</span>
             </div>
           ))}
         </div>
@@ -146,7 +172,8 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Compromiso & Respeto</h4>
           <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
-            Entrenamientos seguros, grupos con ritmo compatible y puntualidad garantizada en cada sesión.
+            Entrenamientos seguros, grupos con ritmo compatible y puntualidad garantizada en cada
+            sesión.
           </p>
         </div>
       </div>

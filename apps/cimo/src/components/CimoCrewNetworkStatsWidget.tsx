@@ -20,7 +20,10 @@ import {
 
 export const CimoCrewNetworkStatsWidget: React.FC = () => {
   return (
-    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Estadísticas de Red">
+    <aside
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      aria-label="Estadísticas de Red"
+    >
       {/* 1. Cabecera de Red Deportiva */}
       <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
         <div className="flex items-center gap-1.5">
@@ -38,11 +41,15 @@ export const CimoCrewNetworkStatsWidget: React.FC = () => {
       <div className="grid grid-cols-2 gap-2">
         <div className="bg-white p-3 rounded-2xl border border-[#1F4E5F]/8 text-center shadow-2xs">
           <span className="text-xl font-black text-[#1F4E5F]">7</span>
-          <p className="text-[10px] font-black text-[#1F4E5F]/60 uppercase mt-0.5">Círculo Íntimo</p>
+          <p className="text-[10px] font-black text-[#1F4E5F]/60 uppercase mt-0.5">
+            Círculo Íntimo
+          </p>
         </div>
         <div className="bg-white p-3 rounded-2xl border border-[#1F4E5F]/8 text-center shadow-2xs">
           <span className="text-xl font-black text-[#7FB77E]">3</span>
-          <p className="text-[10px] font-black text-[#1F4E5F]/60 uppercase mt-0.5">Squads Activos</p>
+          <p className="text-[10px] font-black text-[#1F4E5F]/60 uppercase mt-0.5">
+            Squads Activos
+          </p>
         </div>
       </div>
 

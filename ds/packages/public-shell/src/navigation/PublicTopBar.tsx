@@ -45,7 +45,10 @@ export const PublicTopBar: React.FC<PublicTopBarProps> = ({
         {logoSlot ? (
           logoSlot
         ) : (
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => onNavigate?.(navigation?.defaultRouteId ?? 'home')}>
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => onNavigate?.(navigation?.defaultRouteId ?? 'home')}
+          >
             {theme.logos.fullSvg ? (
               <div
                 className="h-8 flex items-center"
@@ -66,7 +69,11 @@ export const PublicTopBar: React.FC<PublicTopBarProps> = ({
       ) : navigation?.routes ? (
         <nav className="hidden lg:flex items-center gap-1">
           {navigation.routes
-            .filter((route) => (route.visibility ?? ['desktop']).includes('desktop') && route.presentation !== 'action')
+            .filter(
+              (route) =>
+                (route.visibility ?? ['desktop']).includes('desktop') &&
+                route.presentation !== 'action',
+            )
             .map((route) => {
               const isActive = route.id === activeRouteId;
               return (
@@ -94,9 +101,7 @@ export const PublicTopBar: React.FC<PublicTopBarProps> = ({
       ) : null}
 
       {/* Right: Auth Action / CTA / Profile Slot */}
-      <div className="flex items-center gap-3">
-        {rightSlot}
-      </div>
+      <div className="flex items-center gap-3">{rightSlot}</div>
     </header>
   );
 };

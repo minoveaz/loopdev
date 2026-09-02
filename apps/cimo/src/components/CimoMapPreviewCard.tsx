@@ -83,9 +83,13 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
   }, [location, city, postalCode, coords, zoom]);
 
   return (
-    <div className={`bg-[#F7F7F7] border border-[#1F4E5F]/15 rounded-2xl overflow-hidden flex flex-col gap-0 shadow-2xs ${className}`}>
+    <div
+      className={`bg-[#F7F7F7] border border-[#1F4E5F]/15 rounded-2xl overflow-hidden flex flex-col gap-0 shadow-2xs ${className}`}
+    >
       {/* Interactive Map Embed */}
-      <div className={`relative w-full bg-slate-200 overflow-hidden transition-all duration-300 ${isExpanded ? 'h-80 sm:h-96' : 'aspect-[21/9] sm:aspect-[24/9]'}`}>
+      <div
+        className={`relative w-full bg-slate-200 overflow-hidden transition-all duration-300 ${isExpanded ? 'h-80 sm:h-96' : 'aspect-[21/9] sm:aspect-[24/9]'}`}
+      >
         <iframe
           key={`${mapEmbedUrl}-${zoom}`}
           title={`Mapa de ${location}`}
@@ -138,9 +142,7 @@ export const CimoMapPreviewCard: React.FC<CimoMapPreviewCardProps> = ({
       <div className="p-3 bg-white flex items-center justify-between gap-2 border-t border-[#1F4E5F]/10">
         <div className="flex items-center gap-2 min-w-0">
           <MapPin className="w-4 h-4 text-[#7FB77E] shrink-0" />
-          <span className="text-xs font-bold text-[#1F4E5F] truncate">
-            {resolvedAddress}
-          </span>
+          <span className="text-xs font-bold text-[#1F4E5F] truncate">{resolvedAddress}</span>
         </div>
 
         <a

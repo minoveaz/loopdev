@@ -106,7 +106,8 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
             {stepNumber}
           </span>
           <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-            Consejos e indicaciones del Capitán <span className="text-[#1F4E5F]/40 font-bold lowercase">(opcional)</span>
+            Consejos e indicaciones del Capitán{' '}
+            <span className="text-[#1F4E5F]/40 font-bold lowercase">(opcional)</span>
           </span>
         </div>
 
@@ -122,9 +123,7 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
               <span>Limpiar</span>
             </button>
           )}
-          <span className="text-[11px] font-bold text-[#1F4E5F]/50">
-            {value.length}/300
-          </span>
+          <span className="text-[11px] font-bold text-[#1F4E5F]/50">{value.length}/300</span>
         </div>
       </div>
 

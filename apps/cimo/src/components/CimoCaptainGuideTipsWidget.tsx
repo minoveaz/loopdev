@@ -14,7 +14,10 @@ import {
 
 export const CimoCaptainGuideTipsWidget: React.FC = () => {
   return (
-    <aside className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto" aria-label="Guía del Capitán">
+    <aside
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      aria-label="Guía del Capitán"
+    >
       {/* 1. Cabecera */}
       <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
         <div className="flex items-center gap-1.5">
@@ -40,7 +43,9 @@ export const CimoCaptainGuideTipsWidget: React.FC = () => {
               1
             </span>
             <div>
-              <h4 className="text-[11px] font-black text-[#1F4E5F]">Punto de encuentro inconfundible</h4>
+              <h4 className="text-[11px] font-black text-[#1F4E5F]">
+                Punto de encuentro inconfundible
+              </h4>
               <p className="text-[10px] text-[#1F4E5F]/65 mt-0.2 leading-tight">
                 Elige una estatua o puerta reconocible.
               </p>
@@ -112,7 +117,8 @@ export const CimoCaptainGuideTipsWidget: React.FC = () => {
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Rol de Capitán CIMO</h4>
           <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
-            Tus entrenos suman puntos de reputación y desbloquean insignias exclusivas en tu pasaporte.
+            Tus entrenos suman puntos de reputación y desbloquean insignias exclusivas en tu
+            pasaporte.
           </p>
         </div>
       </div>
