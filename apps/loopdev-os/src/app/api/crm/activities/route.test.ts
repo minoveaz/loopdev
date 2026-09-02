@@ -20,7 +20,7 @@ describe('CRM activities API', () => {
     listCrmActivities.mockResolvedValue({ items: [], nextCursor: null, hasMore: false });
   });
 
-  it('rejects invalid queries before authorization', async () => {
+  it('rejects invalid activity queries before authorization', async () => {
     const response = await GET(
       new Request('http://localhost/api/crm/activities?organizationId=bad'),
     );
@@ -28,7 +28,7 @@ describe('CRM activities API', () => {
     expect(authorizeCrm).not.toHaveBeenCalled();
   });
 
-  it('authorizes and forwards bounded cursor queries', async () => {
+  it('authorizes activity access and forwards bounded cursor queries', async () => {
     const response = await GET(
       new Request(
         `http://localhost/api/crm/activities?organizationId=${organizationId}&limit=10&cursor=abc`,

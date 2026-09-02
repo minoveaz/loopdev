@@ -1,7 +1,7 @@
 import { chromium } from '@playwright/test';
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3001';
-const route = '/composition-showcase?recipe=CertificationLab&component=CRMPrimitives';
+const route = '/launchpad';
 
 export async function runE2EPreflight() {
   let lastError;
@@ -9,7 +9,9 @@ export async function runE2EPreflight() {
     try {
       const response = await fetch(new URL(route, baseURL));
       if (!response.ok) {
-        throw new Error(`E2E preflight failed: ${response.status} ${response.statusText} for ${route}`);
+        throw new Error(
+          `E2E preflight failed: ${response.status} ${response.statusText} for ${route}`,
+        );
       }
       lastError = undefined;
       break;
@@ -26,8 +28,7 @@ export async function runE2EPreflight() {
   try {
     const page = await browser.newPage();
     await page.goto(new URL(route, baseURL).toString(), { waitUntil: 'domcontentloaded' });
-    await page.getByRole('heading', { name: 'Shared components', exact: true }).waitFor();
-    await page.getByTestId('crm-filter-dropdown-fixture').waitFor();
+    await page.getByRole('heading', { name: /Initialize your Work Context/i }).waitFor();
   } finally {
     await browser.close();
   }
