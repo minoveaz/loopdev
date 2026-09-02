@@ -1,9 +1,10 @@
 ---
 id: loopdev-frontend-quality-system
 title: LoopDev Frontend Quality System
-status: active
+status: closed
 created: 2026-08-08
 updated: 2026-09-02
+closed: 2026-09-02
 owner: governance
 branch: null
 areas: [governance, platform, apps, mobile, crm, marketing-studio, health]
@@ -18,8 +19,9 @@ branches:
   - loopdev-io-chore/ci-validation-optimization
   - chore/ci-lint-pipeline-optimization
   - loopdev-io-reconcile-frontend-quality-track
+  - chore/reconcile-frontend-quality-track
 phase: 5
-pull_requests: [162, 163, 164, 165, 166, 167, 168, 169]
+pull_requests: [162, 163, 164, 165, 166, 167, 168, 169, 170]
 issues: []
 packages: []
 release: not-required
@@ -49,8 +51,8 @@ El sistema de calidad se ejecuta por oleadas de certificación. Las ramas de cad
 | 4.1 — Flujo de certificación frontend | completada | CI con catálogo E2E, perfiles, Axe integrado y artefactos de evidencia |
 | 5 — Migración por suite               | completada | auditoría y evidencia de las cinco suites con alcance documentado      |
 
-La fase activa del track es la auditoría final y preparación de cierre; el estado
-permanece `active` hasta la aprobación explícita requerida por gobernanza.
+La auditoría final quedó completada y el track se cierra tras la aprobación
+explícita requerida por gobernanza.
 
 ## Decisiones aprobadas
 
@@ -76,6 +78,7 @@ permanece `active` hasta la aprobación explícita requerida por gobernanza.
 | #167 | `4a56dd4e` | 2026-09-02 19:01:42Z | 9 SUCCESS, 9 SKIPPED  |
 | #168 | `082aa0d5` | 2026-09-02 19:27:45Z | 11 SUCCESS, 5 SKIPPED |
 | #169 | `098b107a` | 2026-09-02 19:46:55Z | 8 SUCCESS, 8 SKIPPED  |
+| #170 | `1859c300` | 2026-09-02 20:26:06Z | 12 SUCCESS, 6 SKIPPED |
 
 Los checks `SKIPPED` se conservan como resultado del rollup de GitHub; no se
 reclasifican como false skip sin una observación representativa.
@@ -88,12 +91,12 @@ reclasifican como false skip sin una observación representativa.
 - [x] CI publica `playwright-report/` y `test-results/` con `if: always()` e ignora ausencias.
 - [x] Validaciones locales y evidencia remota de PRs registradas sin inventar thresholds.
 - [x] Riesgos residuales y alcance excluido documentados.
-- [ ] Obtener aprobación explícita del usuario antes de mover el track a `closed`.
+- [x] Obtener aprobación explícita del usuario antes de mover el track a `closed`; aprobada el 2026-09-02.
 
 ## Especificación migrada
 
 **Fecha:** 2026-08-08  
-**Estado:** En progreso
+**Estado:** Completado
 **Objetivo:** convertir los principios visuales de LoopDev en reglas ejecutables y pruebas repetibles para que todas las suites mantengan una identidad coherente en desktop, móvil, modo claro y modo oscuro.
 
 ## Avance registrado — 2026-08-08
@@ -160,6 +163,7 @@ El scan Axe desktop cubre login, launchpad y Sales Pipeline sin violaciones crí
 - Visuales: los jobs desktop y mobile usan el perfil `visual` del catálogo, sin listas paralelas.
 - Artefactos: los tres jobs E2E publican `playwright-report/` y `test-results/` con `if: always()` e `if-no-files-found: ignore`; el segundo incluye adjuntos Axe disponibles.
 - Exclusiones: Communications, DAM y Quant no reciben cambios en esta reconciliación.
+- Cierre: el PR #170 fue mergeado en `develop` el 2026-09-02 con todos sus checks concluidos.
 
 ## Evidencia de validación
 
@@ -178,7 +182,7 @@ El scan Axe desktop cubre login, launchpad y Sales Pipeline sin violaciones crí
 | Riesgo o bloqueo                                                                                                            | Impacto                                                  | Mitigación                                                                                                                             | Responsable | Estado  |
 | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
 | No hay duración ni observaciones representativas de CI remoto.                                                              | No permite afirmar rendimiento, false skips o flakiness. | Conservar los estados SUCCESS/SKIPPED de #162–#169 y obtener observaciones representativas antes de una auditoría operativa posterior. | governance  | abierto |
-| El runtime generó la rama `loopdev-io-reconcile-frontend-quality-track`, que no cumple el prefijo de entrega del validador. | No debe usarse para push o PR.                           | Mantener esta sesión sin push/PR y renombrar mediante el flujo de workspace antes de una entrega remota.                               | governance  | abierto |
+| El runtime generó la rama `loopdev-io-reconcile-frontend-quality-track`, que no cumple el prefijo de entrega del validador. | La rama local no satisface la convención. | La entrega se realizó mediante `chore/reconcile-frontend-quality-track` y el PR #170 fue mergeado; queda como limitación del runtime, no como bloqueo del track. | governance  | mitigado |
 
 ### Nomenclatura de superficies
 
@@ -682,17 +686,19 @@ La meta no es que todas las pantallas sean idénticas. La meta es que todas habl
 ## Handoff de sesión
 
 - **Fecha:** 2026-09-02.
-- **Rama de continuación:** `loopdev-io-reconcile-frontend-quality-track`.
-- **Commit de partida:** `098b107a`.
-- **Estado alcanzado:** Reconciliados metadatos, fases, evidencia de PRs #162–#169 y conteos Playwright; fallbacks y publicación de artefactos E2E/Axe ajustados.
-- **Decisiones, bloqueos y riesgos:** Se mantiene `active`; falta únicamente aprobación explícita para mover a `closed`. Communications, DAM y Quant permanecen fuera de alcance.
-- **Validación ejecutada:** catálogos E2E/CI, tests de selección multi-perfil, discovery Playwright por proyecto y validador de tracks.
-- **Siguiente acción concreta:** Solicitar aprobación explícita del usuario y, si se concede, mover el track a `tracks/closed/2026/`.
+- **Rama de continuación:** No aplica; `chore/reconcile-frontend-quality-track` fue mergeada mediante el PR #170.
+- **Commit de cierre:** `1859c300` (merge del PR #170 en `develop`).
+- **Estado alcanzado:** Track cerrado con fases 0–5 y 4.1 completadas, evidencia reconciliada y criterios verificados.
+- **Decisiones, bloqueos y riesgos:** Cierre aprobado explícitamente el 2026-09-02. Communications, DAM y Quant permanecen fuera de alcance; no quedan bloqueos de cierre.
+- **Validación ejecutada:** catálogos E2E/CI, tests de selección multi-perfil, discovery Playwright por proyecto, validadores de tracks y checks remotos del PR #170.
+- **Siguiente acción concreta:** Ninguna; mantener las validaciones y la matriz como evidencia histórica del track cerrado.
 
 ## Cierre
 
-Pendiente de aprobación explícita del usuario. No se ejecuta ninguna transición de
-estado en esta sesión.
+Track cerrado con aprobación explícita del usuario el 2026-09-02. El PR #170
+fue mergeado en `develop` con sus checks concluidos; no se introdujeron
+thresholds ni métricas sintéticas y no se modificaron Communications, DAM ni
+Quant.
 
 ## Registro de migración
 
