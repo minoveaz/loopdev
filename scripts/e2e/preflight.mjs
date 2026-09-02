@@ -9,7 +9,9 @@ export async function runE2EPreflight() {
     try {
       const response = await fetch(new URL(route, baseURL));
       if (!response.ok) {
-        throw new Error(`E2E preflight failed: ${response.status} ${response.statusText} for ${route}`);
+        throw new Error(
+          `E2E preflight failed: ${response.status} ${response.statusText} for ${route}`,
+        );
       }
       lastError = undefined;
       break;

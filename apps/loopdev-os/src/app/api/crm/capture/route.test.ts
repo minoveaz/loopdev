@@ -51,7 +51,12 @@ describe('CRM lead capture API', () => {
           firstName: 'Ana',
           email: 'ana@example.test',
           interest: 'seguro de salud',
-          source: { kind: 'campaign', provider: 'meta', externalId: 'meta-lead-1', campaign: 'salud-abril' },
+          source: {
+            kind: 'campaign',
+            provider: 'meta',
+            externalId: 'meta-lead-1',
+            campaign: 'salud-abril',
+          },
         }),
       }),
     );
@@ -77,7 +82,12 @@ describe('CRM lead capture API', () => {
           firstName: 'Ana',
           email: 'ana@example.test',
           interest: 'seguro de salud',
-          source: { kind: 'campaign', provider: 'meta', externalId: 'meta-lead-1', campaign: 'salud-abril' },
+          source: {
+            kind: 'campaign',
+            provider: 'meta',
+            externalId: 'meta-lead-1',
+            campaign: 'salud-abril',
+          },
         }),
       }),
     );

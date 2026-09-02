@@ -23,9 +23,7 @@ describe('CRM Tasks API', () => {
   });
 
   it('rejects invalid task queries before authorization', async () => {
-    const response = await GET(
-      new Request('http://localhost/api/crm/tasks?organizationId=bad'),
-    );
+    const response = await GET(new Request('http://localhost/api/crm/tasks?organizationId=bad'));
     expect(response.status).toBe(400);
     expect(authorizeCrm).not.toHaveBeenCalled();
   });

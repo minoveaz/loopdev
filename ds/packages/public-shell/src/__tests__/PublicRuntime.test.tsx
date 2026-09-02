@@ -33,7 +33,14 @@ const mockNavigation: PublicNavigation = {
   routes: [
     { id: 'feed', path: '/', label: 'Feed', icon: 'Home', presentation: 'tab' },
     { id: 'explore', path: '/explorar', label: 'Explorar', icon: 'Compass', presentation: 'tab' },
-    { id: 'chats', path: '/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 2, presentation: 'tab' },
+    {
+      id: 'chats',
+      path: '/chats',
+      label: 'Chats',
+      icon: 'MessageCircle',
+      badgeCount: 2,
+      presentation: 'tab',
+    },
     { id: 'profile', path: '/perfil', label: 'Perfil', icon: 'User', presentation: 'tab' },
   ],
 };
@@ -96,6 +103,8 @@ describe('PublicRuntime Orchestrator', () => {
     );
 
     expect(document.documentElement.style.getPropertyValue('--lpd-brand-primary')).toBe('#00B894');
-    expect(document.documentElement.style.getPropertyValue('--lpd-brand-secondary')).toBe('#1F4E5F');
+    expect(document.documentElement.style.getPropertyValue('--lpd-brand-secondary')).toBe(
+      '#1F4E5F',
+    );
   });
 });

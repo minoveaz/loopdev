@@ -15,7 +15,9 @@ async function openFilterDropdown(page) {
 }
 
 test.describe('FilterDropdown certification', () => {
-  test('smoke renders the CRM FilterDropdown fixture with an accessible Segment trigger', async ({ page }) => {
+  test('smoke renders the CRM FilterDropdown fixture with an accessible Segment trigger', async ({
+    page,
+  }) => {
     const fixture = await openFilterDropdown(page);
     await expect(fixture.getByRole('button', { name: 'Segment' })).toHaveAttribute(
       'aria-haspopup',
@@ -38,7 +40,9 @@ test.describe('FilterDropdown certification', () => {
   });
 
   for (const theme of ['light', 'dark']) {
-    test(`${theme} keeps the fixture within the configured viewport`, async ({ page }, testInfo) => {
+    test(`${theme} keeps the fixture within the configured viewport`, async ({
+      page,
+    }, testInfo) => {
       await page.goto('/composition-showcase?recipe=CertificationLab&component=CRMPrimitives');
       await page.evaluate((selectedTheme) => {
         window.localStorage.setItem('lpd-theme', selectedTheme);

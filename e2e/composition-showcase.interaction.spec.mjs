@@ -63,8 +63,12 @@ test('global avatar opens the shared profile context panel', async ({ page }) =>
   await profileTrigger.click();
 
   await expect(page.getByRole('complementary', { name: 'Context Panel' })).toBeVisible();
-  await expect(page.getByRole('complementary', { name: 'Context Panel' })).toContainText('Alex Morgan');
-  await expect(page.getByRole('complementary', { name: 'Context Panel' }).getByRole('menu')).toHaveCount(0);
+  await expect(page.getByRole('complementary', { name: 'Context Panel' })).toContainText(
+    'Alex Morgan',
+  );
+  await expect(
+    page.getByRole('complementary', { name: 'Context Panel' }).getByRole('menu'),
+  ).toHaveCount(0);
 });
 
 test('RecordWorkspace exposes keyboard focus and read-only action guards', async ({ page }) => {
@@ -87,7 +91,9 @@ test('BoardWorkspace disables card creation for forbidden access', async ({ page
   await expect(page.getByText('Board restricted')).toBeVisible();
 });
 
-test('DataWorkspace opens the selected workspace context and clears selection', async ({ page }) => {
+test('DataWorkspace opens the selected workspace context and clears selection', async ({
+  page,
+}) => {
   await page.goto('/composition-showcase?recipe=DataWorkspace');
   await page.getByText('Northstar Labs', { exact: true }).first().click();
 
@@ -110,7 +116,9 @@ test('ImmersiveWorkflow guards continuation for read-only and stale states', asy
   await expect(continueButton).toBeDisabled();
 });
 
-test('CertificationLab opens its component inventory and navigates to CRM primitives', async ({ page }) => {
+test('CertificationLab opens its component inventory and navigates to CRM primitives', async ({
+  page,
+}) => {
   await page.goto('/composition-showcase?recipe=CertificationLab');
   const toolbar = page.getByRole('toolbar', { name: 'Module toolbar' });
   await expect(toolbar.getByRole('button', { name: 'Open components' })).toBeVisible();
@@ -127,9 +135,7 @@ test('passes serious Axe checks for every reference recipe', async ({ page }) =>
     await page.goto(`/composition-showcase?recipe=${recipe}`);
     await expect(page.locator('main[data-showcase-state]')).toBeVisible();
 
-    const results = await new AxeBuilder({ page })
-      .disableRules(['color-contrast'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).disableRules(['color-contrast']).analyze();
     const seriousViolations = results.violations.filter((violation) =>
       ['critical', 'serious'].includes(violation.impact),
     );
@@ -149,9 +155,10 @@ test('reference recipes remain usable under data and content pressure', async ({
     clientWidth: element.clientWidth,
     scrollWidth: element.scrollWidth,
   }));
-  expect(dataDimensions.scrollWidth, 'long table filter text overflows the workspace').toBeLessThanOrEqual(
-    dataDimensions.clientWidth,
-  );
+  expect(
+    dataDimensions.scrollWidth,
+    'long table filter text overflows the workspace',
+  ).toBeLessThanOrEqual(dataDimensions.clientWidth);
 
   await page.goto('/composition-showcase?recipe=BoardWorkspace');
   const board = page.getByText('Customer success workflow');
@@ -160,28 +167,37 @@ test('reference recipes remain usable under data and content pressure', async ({
     clientWidth: element.clientWidth,
     scrollWidth: element.scrollWidth,
   }));
-  expect(boardDimensions.scrollWidth, 'board pressure escapes its owning canvas').toBeLessThanOrEqual(
-    boardDimensions.clientWidth,
-  );
+  expect(
+    boardDimensions.scrollWidth,
+    'board pressure escapes its owning canvas',
+  ).toBeLessThanOrEqual(boardDimensions.clientWidth);
 });
 
-test('reference recipe navigation and state changes stay within the performance budget', async ({ page }) => {
+test('reference recipe navigation and state changes stay within the performance budget', async ({
+  page,
+}) => {
   await page.goto('/composition-showcase?recipe=DataWorkspace');
   await expect(page.locator('main[data-showcase-state]')).toBeVisible();
   await page.getByLabel('Review state').selectOption('loading');
   await page.getByLabel('Review state').selectOption('ready');
-  const measures = await page.evaluate(() => performance.getEntriesByType('measure')
-    .filter((entry) => entry.name.startsWith('composition-showcase:'))
-    .map((entry) => entry.duration));
+  const measures = await page.evaluate(() =>
+    performance
+      .getEntriesByType('measure')
+      .filter((entry) => entry.name.startsWith('composition-showcase:'))
+      .map((entry) => entry.duration),
+  );
   expect(measures.length).toBeGreaterThan(0);
   expect(Math.max(...measures), 'composition measure budget exceeded').toBeLessThan(2000);
 });
 
-test('reference recipes use tokenized computed typography and no inline color literals', async ({ page }) => {
+test('reference recipes use tokenized computed typography and no inline color literals', async ({
+  page,
+}) => {
   await page.goto('/composition-showcase?recipe=SuiteOverview');
   const typography = await page.locator('main[data-showcase-state]').evaluate((root) => {
-    const textNode = [...root.querySelectorAll('h1, h2, h3, p, span, button, label')]
-      .find((element) => element.textContent?.trim());
+    const textNode = [...root.querySelectorAll('h1, h2, h3, p, span, button, label')].find(
+      (element) => element.textContent?.trim(),
+    );
     if (!textNode) return null;
     const style = getComputedStyle(textNode);
     const inlineColors = [...root.querySelectorAll('[style]')]
@@ -246,18 +262,24 @@ test('showcase audits light and dark semantic surfaces', async ({ page }) => {
   await page.reload();
   const themeButton = page.getByRole('button', { name: /toggle theme/i });
   await expect(themeButton).toBeVisible();
-  const lightIsDark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+  const lightIsDark = await page.evaluate(() =>
+    document.documentElement.classList.contains('dark'),
+  );
   expect(lightIsDark).toBe(false);
 
   await themeButton.click();
-  await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('dark'))).toBe(true);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')))
+    .toBe(true);
   await expect(page.getByRole('button', { name: /toggle theme/i })).toBeVisible();
 
   const darkIsPersisted = await page.evaluate(() => localStorage.getItem('lpd-theme'));
   expect(darkIsPersisted).toBe('dark');
 
   await page.reload();
-  await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('dark'))).toBe(true);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')))
+    .toBe(true);
   const darkColors = await page.locator('body').evaluate((element) => {
     return getComputedStyle(element).backgroundColor;
   });
@@ -268,14 +290,20 @@ test('showcase reports navigation and performance without sensitive data', async
   const events = [];
   await page.exposeFunction('captureShowcaseEvent', (event) => events.push(event));
   await page.addInitScript(() => {
-    window.addEventListener('loopdev:showcase:view', (event) => window.captureShowcaseEvent(event.detail));
-    window.addEventListener('loopdev:showcase:navigation', (event) => window.captureShowcaseEvent(event.detail));
+    window.addEventListener('loopdev:showcase:view', (event) =>
+      window.captureShowcaseEvent(event.detail),
+    );
+    window.addEventListener('loopdev:showcase:navigation', (event) =>
+      window.captureShowcaseEvent(event.detail),
+    );
   });
   await page.goto('/composition-showcase?recipe=RecordWorkspace');
   await page.getByText('SuiteOverview', { exact: true }).first().click();
   await expect(page).toHaveURL(/recipe=SuiteOverview/);
   await expect.poll(() => events.length).toBeGreaterThan(0);
-  const measures = await page.evaluate(() => performance.getEntriesByType('measure').map((entry) => entry.name));
+  const measures = await page.evaluate(() =>
+    performance.getEntriesByType('measure').map((entry) => entry.name),
+  );
   expect(measures.some((name) => name.includes('composition-showcase'))).toBe(true);
   expect(JSON.stringify(events)).not.toMatch(/password|token|email|access_token/i);
 });
