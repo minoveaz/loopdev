@@ -25,10 +25,7 @@ describe('SuiteCanvas', () => {
 
   it('exposes the supplied geometry preset without applying layout ownership locally', () => {
     render(
-      <SuiteCanvas
-        mode="board"
-        geometryPreset={SUITE_SHELL_MODE_PRESETS.board.canvasGeometry}
-      >
+      <SuiteCanvas mode="board" geometryPreset={SUITE_SHELL_MODE_PRESETS.board.canvasGeometry}>
         <div>Board content</div>
       </SuiteCanvas>,
     );
@@ -41,10 +38,7 @@ describe('SuiteCanvas', () => {
 
   it('applies the board geometry contract to the central content zone', () => {
     render(
-      <SuiteCanvas
-        mode="board"
-        geometryPreset={SUITE_SHELL_MODE_PRESETS.board.canvasGeometry}
-      >
+      <SuiteCanvas mode="board" geometryPreset={SUITE_SHELL_MODE_PRESETS.board.canvasGeometry}>
         <div>Board content</div>
       </SuiteCanvas>,
     );
@@ -81,23 +75,27 @@ describe('SuiteCanvas', () => {
     ['split', 8, '4', 'full', 'none', 'hidden'],
     ['board', 12, '4', 'wide', 'comfortable', 'zone-only'],
     ['full-bleed', 12, '4', 'full', 'none', 'hidden'],
-  ] as const)('exposes the complete geometry matrix for %s', (mode, columns, mobileColumns, maxWidth, padding, overflowX) => {
-    render(
-      <SuiteCanvas
-        mode={mode}
-        geometryPreset={SUITE_SHELL_MODE_PRESETS[mode].canvasGeometry}
-      >
-        <div>{mode} content</div>
-      </SuiteCanvas>,
-    );
+  ] as const)(
+    'exposes the complete geometry matrix for %s',
+    (mode, columns, mobileColumns, maxWidth, padding, overflowX) => {
+      render(
+        <SuiteCanvas mode={mode} geometryPreset={SUITE_SHELL_MODE_PRESETS[mode].canvasGeometry}>
+          <div>{mode} content</div>
+        </SuiteCanvas>,
+      );
 
-    const canvas = screen.getByRole('region', { name: 'SuiteCanvas' });
-    expect(canvas).toHaveAttribute('data-canvas-columns', String(columns));
-    expect(canvas).toHaveAttribute('data-canvas-mobile-columns', mobileColumns);
-    expect(canvas).toHaveAttribute('data-canvas-padding', padding);
-    expect(canvas).toHaveAttribute('data-canvas-overflow-x', overflowX);
-    expect(canvas.querySelector('.suite-canvas__content')).toHaveClass('min-w-0', 'overflow-y-auto');
-  });
+      const canvas = screen.getByRole('region', { name: 'SuiteCanvas' });
+      expect(canvas).toHaveAttribute('data-canvas-columns', String(columns));
+      expect(canvas).toHaveAttribute('data-canvas-mobile-columns', mobileColumns);
+      expect(canvas).toHaveAttribute('data-canvas-padding', padding);
+      expect(canvas).toHaveAttribute('data-canvas-overflow-x', overflowX);
+      expect(canvas.querySelector('.suite-canvas__content')).toHaveClass(
+        'min-w-0',
+        'overflow-y-auto',
+      );
+      expect(canvas.querySelector('.suite-canvas__content')).toHaveAttribute('tabindex', '0');
+    },
+  );
 
   it('keeps horizontal overflow inside the board content zone and preserves canvas scroll bounds', () => {
     render(

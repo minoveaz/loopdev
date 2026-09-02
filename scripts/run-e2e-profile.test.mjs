@@ -10,16 +10,16 @@ test('selects a domain without selecting unrelated domains', () => {
   const catalog = {
     specs: [
       {
-        file: 'marketing-studio.dam.spec.mjs',
-        domain: 'marketing-studio',
+        file: 'contacts-form.certification.spec.mjs',
+        domain: 'crm',
         profile: 'domain',
-        projects: ['desktop'],
+        projects: ['desktop', 'mobile', 'mobile-compact'],
       },
     ],
   };
 
-  assert.deepEqual(filesForSelection('domain:marketing-studio', catalog), [
-    'e2e/marketing-studio.dam.spec.mjs',
+  assert.deepEqual(filesForSelection('domain:crm', catalog), [
+    'e2e/contacts-form.certification.spec.mjs',
   ]);
 });
 

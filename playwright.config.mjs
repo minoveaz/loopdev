@@ -39,6 +39,7 @@ export default defineConfig({
       ...process.env,
       NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true',
       PLAYWRIGHT_E2E_AUTH_BYPASS: 'true',
+      NEXT_PUBLIC_CRM_CONTACTS_FIXTURE: 'true',
       NEXT_DIST_DIR: '.next-e2e',
       PORT: '3001',
     },

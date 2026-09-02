@@ -69,32 +69,38 @@ export const SuiteCanvas: React.FC<SuiteCanvasProps> = ({
 
   return (
     <section
-    aria-label="SuiteCanvas"
-    data-canvas-mode={mode}
-    data-canvas-geometry={SUITE_CANVAS_GEOMETRY[mode]}
-    data-canvas-geometry-preset={resolvedGeometryPreset.geometry}
-    data-canvas-columns={resolvedGeometryPreset.columns}
-    data-canvas-mobile-columns={resolvedGeometryPreset.mobileColumns}
-    data-canvas-padding={resolvedGeometryPreset.padding}
-    data-canvas-overflow-x={resolvedGeometryPreset.overflowX}
-    className={`suite-canvas ${modeClasses[mode]} bg-shell-canvas flex h-full min-h-0 min-w-0 w-full max-w-full flex-1 flex-col overflow-hidden max-lg:h-full max-lg:min-h-0 max-lg:overflow-x-hidden max-lg:overflow-y-hidden ${className}`}
-  >
-    {header ? <header className="suite-canvas__header shrink-0">{header}</header> : null}
-    {toolbar ? <div className="suite-canvas__toolbar shrink-0">{toolbar}</div> : null}
-    {localNav ? <nav className="suite-canvas__local-nav shrink-0">{localNav}</nav> : null}
-    {tabs ? <div className="suite-canvas__tabs shrink-0">{tabs}</div> : null}
-    <div className="suite-canvas__body relative flex h-full min-h-0 min-w-0 w-full max-w-full flex-1 overflow-hidden max-lg:h-full max-lg:flex-col max-lg:overflow-x-hidden max-lg:overflow-y-hidden">
-      {contextAside}
-      <div ref={contentRef} className={`suite-canvas__content min-h-0 min-w-0 w-full max-w-full flex-1 overflow-y-auto max-lg:overflow-x-hidden max-lg:overflow-y-auto ${geometryClasses} ${contentClassName}`}>
-        {children}
+      aria-label="SuiteCanvas"
+      data-canvas-mode={mode}
+      data-canvas-geometry={SUITE_CANVAS_GEOMETRY[mode]}
+      data-canvas-geometry-preset={resolvedGeometryPreset.geometry}
+      data-canvas-columns={resolvedGeometryPreset.columns}
+      data-canvas-mobile-columns={resolvedGeometryPreset.mobileColumns}
+      data-canvas-padding={resolvedGeometryPreset.padding}
+      data-canvas-overflow-x={resolvedGeometryPreset.overflowX}
+      className={`suite-canvas ${modeClasses[mode]} bg-shell-canvas flex h-full min-h-0 w-full min-w-0 max-w-full flex-1 flex-col overflow-hidden max-lg:h-full max-lg:min-h-0 max-lg:overflow-x-hidden max-lg:overflow-y-hidden ${className}`}
+    >
+      {header ? <header className="suite-canvas__header shrink-0">{header}</header> : null}
+      {toolbar ? <div className="suite-canvas__toolbar shrink-0">{toolbar}</div> : null}
+      {localNav ? <nav className="suite-canvas__local-nav shrink-0">{localNav}</nav> : null}
+      {tabs ? <div className="suite-canvas__tabs shrink-0">{tabs}</div> : null}
+      <div className="suite-canvas__body relative flex h-full min-h-0 w-full min-w-0 max-w-full flex-1 overflow-hidden max-lg:h-full max-lg:flex-col max-lg:overflow-x-hidden max-lg:overflow-y-hidden">
+        {contextAside}
+        <div
+          ref={contentRef}
+          tabIndex={0}
+          className={`suite-canvas__content min-h-0 w-full min-w-0 max-w-full flex-1 overflow-y-auto max-lg:overflow-y-auto max-lg:overflow-x-hidden ${geometryClasses} ${contentClassName}`}
+        >
+          {children}
+        </div>
+        {aside ? (
+          <aside
+            className={`suite-canvas__aside z-30 max-lg:static max-lg:w-full ${asidePresentation === 'overlay' ? 'absolute inset-y-0 right-0 shadow-[-4px_0_16px_rgba(15,23,42,0.08)]' : 'relative shrink-0'}`}
+          >
+            {aside}
+          </aside>
+        ) : null}
       </div>
-      {aside ? (
-        <aside className={`suite-canvas__aside z-30 max-lg:static max-lg:w-full ${asidePresentation === 'overlay' ? 'absolute inset-y-0 right-0 shadow-[-4px_0_16px_rgba(15,23,42,0.08)]' : 'relative shrink-0'}`}>
-          {aside}
-        </aside>
-      ) : null}
-    </div>
-    {footer ? <footer className="suite-canvas__footer shrink-0">{footer}</footer> : null}
+      {footer ? <footer className="suite-canvas__footer shrink-0">{footer}</footer> : null}
     </section>
   );
 };
