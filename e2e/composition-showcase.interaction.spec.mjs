@@ -37,7 +37,7 @@ const STATES = [
   'conflict',
 ];
 
-test('all recipes expose every shared review state', async ({ page }) => {
+test('renders every shared review state across all reference recipes', async ({ page }) => {
   for (const recipe of RECIPES) {
     await page.goto(`/composition-showcase?recipe=${recipe}`);
     const main = page.locator('main[data-showcase-state]');
@@ -122,7 +122,7 @@ test('CertificationLab opens its component inventory and navigates to CRM primit
   await expect(page.getByRole('heading', { name: 'Shared components' })).toBeVisible();
 });
 
-test('all reference recipes pass serious Axe checks', async ({ page }) => {
+test('passes serious Axe checks for every reference recipe', async ({ page }) => {
   for (const recipe of A11Y_RECIPES) {
     await page.goto(`/composition-showcase?recipe=${recipe}`);
     await expect(page.locator('main[data-showcase-state]')).toBeVisible();
@@ -202,7 +202,7 @@ test('reference recipes use tokenized computed typography and no inline color li
   expect(typography.inlineColors).toEqual([]);
 });
 
-test('showcase honors reduced motion preferences', async ({ page }) => {
+test('honors reduced-motion preferences across the composition showcase', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/composition-showcase?recipe=SuiteOverview');
   await expect(page.locator('#main-content')).toBeVisible();
