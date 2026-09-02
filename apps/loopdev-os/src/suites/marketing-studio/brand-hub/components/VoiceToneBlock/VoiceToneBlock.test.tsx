@@ -8,7 +8,7 @@ import type { ToneProfile } from '../../types';
 describe('VoiceToneBlock Composite', () => {
   const mockProfiles: ToneProfile[] = [
     { id: '1', name: 'Professional', description: 'D1', examples: { do: [], dont: [] } },
-    { id: '2', name: 'Witty', description: 'D2', examples: { do: [], dont: [] } }
+    { id: '2', name: 'Witty', description: 'D2', examples: { do: [], dont: [] } },
   ];
 
   it('renders all profiles in a grid', () => {
@@ -17,7 +17,7 @@ describe('VoiceToneBlock Composite', () => {
     expect(screen.getByText('Witty')).toBeDefined();
   });
 
-  it('shows skeletons when isLoading is true', () => {
+  it('renders loading skeleton cards while tone profiles are loading', () => {
     const { container } = render(<VoiceToneBlock profiles={[]} isLoading={true} />);
     // Skeletons in VoiceToneBlock are divs with h-64
     const skeletons = container.querySelectorAll('.h-64');

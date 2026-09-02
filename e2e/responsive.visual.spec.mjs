@@ -5,8 +5,10 @@ test.use({
 });
 
 for (const theme of ['light', 'dark']) {
-  test.describe(`responsive login ${theme}`, () => {
-    test(`matches the mobile visual baseline`, async ({ page }, testInfo) => {
+  test.describe(`responsive login ${theme} visual certification`, () => {
+    test(`matches the login visual baseline at the selected responsive viewport`, async ({
+      page,
+    }, testInfo) => {
       await page.addInitScript((selectedTheme) => {
         window.localStorage.setItem('lpd-theme', selectedTheme);
         document.documentElement.classList.toggle('dark', selectedTheme === 'dark');

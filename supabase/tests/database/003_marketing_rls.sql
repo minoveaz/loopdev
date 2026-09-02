@@ -51,10 +51,10 @@ values ('marketing-legacy-a', 'instagram', 'https://example.test/publication-a',
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8100-000000000001', true);
 set local role authenticated;
 
-select is((select count(*)::integer from public.marketing_campaign_records), 1, 'owner can read campaigns in own organization');
-select is((select count(*)::integer from public.marketing_links), 1, 'owner can read links in own organization');
-select is((select count(*)::integer from public.marketing_link_clicks), 1, 'owner can read clicks in own organization');
-select is((select count(*)::integer from public.marketing_campaign_publications), 1, 'owner can read publications in own organization');
+select is((select count(*)::integer from public.marketing_campaign_records), 1, 'marketing owner can read campaign records in own organization');
+select is((select count(*)::integer from public.marketing_links), 1, 'marketing owner can read links in own organization');
+select is((select count(*)::integer from public.marketing_link_clicks), 1, 'marketing owner can read link clicks in own organization');
+select is((select count(*)::integer from public.marketing_campaign_publications), 1, 'marketing owner can read campaign publications in own organization');
 select lives_ok($$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by) values ('00000000-0000-4000-9100-000000000001', '00000000-0000-4000-9200-000000000001', '00000000-0000-4000-9300-000000000001', 'Created by owner', 'RLS fixture', '00000000-0000-4000-8100-000000000001', '00000000-0000-4000-8100-000000000001') $$, 'owner can create campaign in own organization');
  select throws_ok(
    $$ insert into public.marketing_campaign_records (organization_id, brand_id, workspace_id, name, objective, created_by, updated_by)

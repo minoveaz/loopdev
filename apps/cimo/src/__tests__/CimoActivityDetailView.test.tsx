@@ -15,7 +15,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onBack={vi.fn()}
         onJoin={vi.fn()}
         onSendMessage={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Información del Plan')).toBeDefined();
@@ -34,7 +34,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onBack={vi.fn()}
         onJoin={vi.fn()}
         onSendMessage={onSend}
-      />
+      />,
     );
 
     // Switch to Chat tab
@@ -65,7 +65,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onBack={vi.fn()}
         onJoin={vi.fn()}
         onSendMessage={vi.fn()}
-      />
+      />,
     );
 
     const shareBtn = screen.getByRole('button', { name: /Compartir/i });
@@ -74,7 +74,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
     expect(navigator.clipboard.writeText).toHaveBeenCalled();
   });
 
-  it('navigates to member profile when clicking an attendee', () => {
+  it('navigates from activity detail to an attendee athlete profile', () => {
     const onNavigateProfile = vi.fn();
 
     render(
@@ -85,7 +85,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onJoin={vi.fn()}
         onSendMessage={vi.fn()}
         onNavigateToProfile={onNavigateProfile}
-      />
+      />,
     );
 
     const captainName = screen.getByText('Alex Rivera');
