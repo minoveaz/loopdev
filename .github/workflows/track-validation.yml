@@ -1,4 +1,4 @@
-name: Track validation
+name: Track inventory validation
 
 on:
   pull_request:

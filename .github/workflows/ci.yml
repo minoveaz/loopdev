@@ -1,4 +1,4 @@
-name: CI
+name: Domain-aware validation CI
 
 on:
   pull_request:

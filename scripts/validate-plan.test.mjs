@@ -12,7 +12,7 @@ function gitFixture(responses) {
   return (_command, args) => responses.get(args.join(' ')) ?? '';
 }
 
-test('explains a shell change and skips unrelated domains', () => {
+test('routes a shell change to shell controls and skips unrelated domains', () => {
   const plan = buildValidationPlan([
     'ds/packages/ui/src/components/composites/shell/SuiteShell.tsx',
   ]);
@@ -23,14 +23,14 @@ test('explains a shell change and skips unrelated domains', () => {
   assert.ok(plan.skipped.some((check) => check.id === 'mobile' && check.reason === 'not affected'));
 });
 
-test('selects the full fallback for workflow changes', () => {
+test('selects full certification when workflow configuration changes', () => {
   const plan = buildValidationPlan(['.github/workflows/ci.yml']);
 
   assert.equal(plan.fullFallback, true);
   assert.match(plan.fallbackReason, /workflow configuration/);
 });
 
-test('keeps cross-domain shell changes on full certification', () => {
+test('selects full certification for cross-domain shell changes', () => {
   const plan = buildValidationPlan([
     '.github/workflows/ci.yml',
     'apps/loopdev-mobile/package.json',
@@ -52,7 +52,7 @@ test('keeps cross-domain shell changes on full certification', () => {
   }
 });
 
-test('keeps documentation-only changes explainable without executable checks', () => {
+test('explains documentation-only changes without executable checks', () => {
   const plan = buildValidationPlan(['docs/testing-guide.md']);
 
   assert.deepEqual(plan.selected, []);
@@ -60,7 +60,7 @@ test('keeps documentation-only changes explainable without executable checks', (
   assert.ok(plan.note?.includes('no registered executable surface'));
 });
 
-test('keeps a documentation edit isolated from an earlier branch fallback', () => {
+test('isolates documentation worktree routing from an earlier branch fallback', () => {
   const worktreePlan = buildValidationPlan(['docs/testing-guide.md']);
   const branchPlan = buildValidationPlan(['pnpm-lock.yaml', 'docs/testing-guide.md']);
 
@@ -69,7 +69,7 @@ test('keeps a documentation edit isolated from an earlier branch fallback', () =
   assert.equal(branchPlan.fullFallback, true);
 });
 
-test('collects unstaged, staged, and untracked files once for worktree validation', () => {
+test('collects unique unstaged, staged, and untracked files for worktree validation', () => {
   const files = changedFilesFromWorktree(
     gitFixture(
       new Map([
@@ -91,7 +91,7 @@ test('collects unstaged, staged, and untracked files once for worktree validatio
   ]);
 });
 
-test('collects only the specified commit revision for commit validation', () => {
+test('collects only the specified revision for commit validation', () => {
   const files = changedFilesFromCommit(
     'HEAD~2',
     gitFixture(
@@ -104,7 +104,7 @@ test('collects only the specified commit revision for commit validation', () => 
   assert.deepEqual(files, ['docs/guide.md']);
 });
 
-test('renders selected and skipped protections without a skip override', () => {
+test('renders selected and skipped protections with no skip override', () => {
   const summary = renderGithubSummary(
     buildValidationPlan(['ds/packages/ui/src/components/composites/shell/SuiteShell.tsx']),
   );

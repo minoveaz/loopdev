@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { toolingTestFiles } from './run-tooling-tests.mjs';
 
-test('discovers only versioned tooling test files', () => {
+test('discovers only versioned tests under the scripts tooling surface', () => {
   const files = toolingTestFiles();
 
   assert.ok(files.length >= 18);

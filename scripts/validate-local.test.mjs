@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { commandsForPlan } from './validate-local.mjs';
 
-test('runs the conservative full certification for a changed fallback plan', () => {
+test('runs branch-level catalogs and CI for a changed fallback plan', () => {
   const commands = commandsForPlan({ fullFallback: true, selected: [] }, 'changed');
 
   assert.deepEqual(commands, [
@@ -13,19 +13,19 @@ test('runs the conservative full certification for a changed fallback plan', () 
   ]);
 });
 
-test('keeps a worktree documentation plan free of branch and functional controls', () => {
+test('keeps worktree documentation validation free of branch and functional controls', () => {
   const commands = commandsForPlan({ fullFallback: false, selected: [] }, 'worktree');
 
   assert.deepEqual(commands, []);
 });
 
-test('keeps a commit documentation plan free of branch and functional controls', () => {
+test('keeps commit documentation validation free of branch and functional controls', () => {
   const commands = commandsForPlan({ fullFallback: false, selected: [] }, 'commit');
 
   assert.deepEqual(commands, []);
 });
 
-test('runs full certification without branch preflight for a commit fallback', () => {
+test('runs catalogs and CI without branch preflight for a commit fallback', () => {
   const commands = commandsForPlan({ fullFallback: true, selected: [] }, 'commit');
 
   assert.deepEqual(commands, [
@@ -35,13 +35,13 @@ test('runs full certification without branch preflight for a commit fallback', (
   ]);
 });
 
-test('keeps branch validation preflight for documentation-only plans', () => {
+test('keeps branch-base preflight for documentation-only branch plans', () => {
   const commands = commandsForPlan({ fullFallback: false, selected: [] }, 'branch');
 
   assert.deepEqual(commands, [['validate:branch-base']]);
 });
 
-test('runs accumulated branch domains through their changed controls', () => {
+test('routes accumulated branch domains through their changed controls', () => {
   const commands = commandsForPlan(
     { fullFallback: false, selected: [{ id: 'shell' }, { id: 'packages' }] },
     'branch',
@@ -54,7 +54,7 @@ test('runs accumulated branch domains through their changed controls', () => {
   ]);
 });
 
-test('deduplicates controls selected by multiple changed domains', () => {
+test('deduplicates controls selected by overlapping changed domains', () => {
   const commands = commandsForPlan(
     { fullFallback: false, selected: [{ id: 'shell' }, { id: 'packages' }] },
     'changed',
@@ -67,13 +67,13 @@ test('deduplicates controls selected by multiple changed domains', () => {
   ]);
 });
 
-test('selects only the requested experience control', () => {
+test('selects only the requested shell experience control', () => {
   const commands = commandsForPlan({ fullFallback: false, selected: [] }, 'experience', 'shell');
 
   assert.deepEqual(commands, [['validate:branch-base'], ['test:shell:changed']]);
 });
 
-test('includes visual intent for changed web surfaces', () => {
+test('adds visual intent validation for changed web surfaces', () => {
   const commands = commandsForPlan({ fullFallback: false, selected: [{ id: 'web' }] }, 'changed');
 
   assert.deepEqual(commands, [
@@ -83,7 +83,7 @@ test('includes visual intent for changed web surfaces', () => {
   ]);
 });
 
-test('rejects an unknown domain instead of silently running broad validation', () => {
+test('rejects an unknown domain instead of silently widening validation', () => {
   assert.throws(
     () => commandsForPlan({ fullFallback: false, selected: [] }, 'domain', 'unknown'),
     /Unknown domain scope/,
