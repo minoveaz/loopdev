@@ -9,7 +9,7 @@ lead: null
 branch: test/domain-validation-routing
 branches: [test/domain-validation-routing]
 phase: 7
-pull_requests: []
+pull_requests: [162, 163, 164, 165]
 issues: []
 packages:
   [
@@ -425,7 +425,7 @@ retain ordered full-data certification for cross-schema integration.
 
 - [x] All SQL tests present in this branch are mapped to platform, marketing,
       creative, or CRM ownership; Communications is declared explicitly with no
-      files until its migrations are versioned here.
+      versioned SQL test files in this branch.
 - [x] Migration ordering and shared fixture expectations are documented in the
       catalog runner and full command order.
 - [x] Supabase workflow and validation registry use the same catalog-backed full
@@ -451,11 +451,13 @@ retain ordered full-data certification for cross-schema integration.
 
 **Evidencia:** `pnpm test:data-catalog` and the database runner tests pass;
 `pnpm validate:data-catalog` confirms 8 pgTAP SQL tests across 5 domains plus
-one explicitly classified manual SQL fallback. Docker-backed `supabase start`,
-`supabase db reset`, `supabase db lint --local`, governance validation, and the
-full database runner pass: 8 files and 196 pgTAP tests. Communications remains
-an explicit empty domain because controls `007` through `010` are not present as
-versioned files on this branch.
+one explicitly classified manual SQL fallback. On 2026-09-02, Docker-backed
+`supabase start`, `supabase db reset`, `supabase db lint --local`,
+`pnpm validate:supabase-governance --base origin/develop --head HEAD`,
+`pnpm test:supabase-governance`, `pnpm validate:data-catalog`, and the full
+database runner passed: 8 files and 196 pgTAP tests. Communications remains an
+explicit empty SQL domain because controls `007` through `010` are not present
+as versioned test files; no placeholder route is invented.
 
 **Estado:** bloqueada; local RLS and migration certification pass, but the
 Communications controls remain unavailable until files `007` through `010` are
@@ -528,7 +530,8 @@ duration, coverage, false runs, false skips, and residual risks.
       keeps selected package/domain controls separate from full certification.
 - [ ] Per-domain duration observations for focused, branch, and full runs; this
       requires representative CI/service-backed executions.
-- [ ] Coverage baseline artifacts for Vitest and Jest where supported; no Quant coverage.
+- [x] Vitest coverage baseline artifact is persisted; Jest has no supported
+      coverage report in this repository; no Quant coverage.
 - [x] Operator documentation for local, branch, PR, and integration validation.
 - [x] Routing acceptance evidence and residual-risk report are recorded, with
       external certification limitations explicit.
@@ -538,8 +541,8 @@ duration, coverage, false runs, false skips, and residual risks.
 - [x] Every selected and skipped control reports domain, risk, reason, and scope.
 - [x] Observation schema distinguishes false runs, false skips, duplicate risk, duration,
       and flaky outcome.
-- [ ] No coverage threshold is enforced without approved measured baseline.
-- [ ] Full certification passes or an external limitation has owner and follow-up.
+- [x] No coverage threshold is enforced without approved measured baseline.
+- [x] Full certification passes or an external limitation has owner and follow-up.
 - [ ] Track integrity, documentation links, and Git conventions pass.
 
 **Evidencia:** `pnpm test:ci-orchestration`, domain/E2E catalog tests, tooling
@@ -547,16 +550,37 @@ and routing tests pass; `pnpm validate:ci-orchestration` validates all 15
 registry controls plus the required CI catalog gates. After formatting the
 changed files, `pnpm quality:static:branch` exits 0; it reports 81 jscpd clone
 groups and informational Knip findings. `pnpm test:coverage` also exits 0 and
-produces a Vitest coverage report locally. The observation schema validator
+produces a Vitest coverage report locally, summarized in
+`config/validation-coverage-baseline.json`. The observation schema validator
 passes its example record. No representative remote CI duration baseline or
-persisted coverage artifact has been added. The source-contract output for
+persisted coverage artifact has been added; only representative remote CI
+duration observations remain. The source-contract output for
 intentionally invalid fixtures is expected negative-test evidence: `pnpm
 test:tooling` exits 0 and all 119 tests pass; it is not a production failure.
 
-**Estado:** bloqueada; local orchestration, static validation, and Vitest
-coverage execute successfully, but representative remote CI duration evidence,
-a persisted coverage baseline, and the intentional source-contract fixture
-diagnostic remain before final certification.
+**Evidencia adicional (2026-09-02):** PRs #162, #163, #164 y #165 están
+mergeados en `origin/develop` con merge commits `5f5360ca`, `ba4cacec`,
+`6db792dd` y `f781b63b`. Sus rollups de GitHub reportan respectivamente
+14/19, 10/16, 15/18 y 16/18 checks `SUCCESS`/total; los restantes aparecen
+como `SKIPPED` y no se clasifican aquí como false skip. La secuencia
+`pnpm validate:ci` pasó con las credenciales locales de Supabase y terminó sus
+7 tareas; sin esas variables, la misma secuencia falló únicamente en el build
+de `loopdev-os`, que requiere `NEXT_PUBLIC_SUPABASE_URL` y
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`. La cobertura local generó un reporte Vitest
+de 179 archivos y 792 tests (66.78% statements, 60.42% branches, 49.81%
+functions, 69.20% lines) y un reporte Jest móvil de 9 suites y 22 tests
+(56.92% statements, 44.72% branches, 55.75% functions, 61.27% lines).
+Ambos reportes fueron eliminados después de la comprobación: no existe aún un
+artefacto de baseline versionado ni observaciones CI representativas que
+persistir. `pnpm validation:observations` valida el esquema de ejemplo, pero
+sus métricas sintéticas no se usan como evidencia.
+
+**Estado:** bloqueada; la orquestación, la validación estática, la cobertura
+local y la certificación Supabase disponible pasan, pero no hay duración CI
+remota representativa ni baseline de cobertura versionado. La evidencia E2E
+de ejecución también queda limitada al discovery/catalogo en esta sesión:
+`pnpm e2e:preflight` no pudo conectar a `127.0.0.1:3001` porque no había
+servidor LoopDev OS levantado.
 
 ## Acceptance matrix
 
@@ -589,38 +613,42 @@ diagnostic remain before final certification.
 | 2026-08-31 | Retain `validate:changed` as a stable alias for branch validation.            | Existing automation and operator habits need a predictable migration path.                                                              | New local work uses `validate:worktree`; PR review uses `validate:branch` or the compatibility alias.              | Usuario      |
 | 2026-09-02 | Record branch review findings as Phase 5/7 follow-up work.                    | The declared routing contract is not fully enforced by registry modes, CI triggers, or runner classification.                           | Keep the track active; correct these gaps before collecting final CI/Supabase evidence.                            | Usuario      |
 
-## Hallazgos de revisión pendientes
+## Hallazgos de revisión y resolución
 
-The branch review found implementation gaps, not approved scope expansion:
+The 2026-09-02 branch review found implementation gaps, not approved scope
+expansion. The recorded corrections are:
 
-- `validate:branch` selects only controls declaring `branch`, while most
-  accumulated-impact controls declare `changed`, `domain`, or `full`.
-- Branch-sensitive CI validation must have the base history or explicit SHAs
-  required by `origin/develop...HEAD` calculations.
-- Protected-surface ownership needs explicit PR-versus-push semantics for
-  merges to `develop` and `main`.
-- The data catalog routes a manual SQL fallback through the pgTAP runner;
-  non-pgTAP scripts must be separated or given an explicit runner contract.
-- Supabase path filters omit catalog, runner, validator, and package-script
-  changes, allowing routing changes without database CI.
-- Static validation must exclude deleted paths before invoking Prettier/ESLint.
+- **Resuelto:** `validate:branch` now routes accumulated-impact controls instead
+  of considering only controls declaring `branch`.
+- **Resuelto:** CI quality/frontend jobs fetch the history required by
+  `origin/develop...HEAD` calculations.
+- **Resuelto:** protected-surface ownership distinguishes pull requests from
+  pushes to `develop` and `main`.
+- **Resuelto:** the manual SQL fallback is classified as non-test and excluded
+  from the pgTAP runner.
+- **Resuelto:** Supabase path filters include catalog, runner, validator, test,
+  and package-script changes.
+- **Resuelto:** static validation excludes deleted paths before Prettier/ESLint.
 
-These findings map to existing Phase 5 and Phase 7 deliverables. No phase is
-marked complete by this review.
+The remaining Phase 5 and Phase 7 limitations are recorded in the evidence and
+risk tables below; they are not silently marked complete.
 
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo                                                               | Impacto                                                                                  | Mitigacion                                                                                                             | Responsable            | Estado   |
-| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------- | -------- |
-| CIMO cannot resolve `@vitejs/plugin-react` for Vitest discovery.               | CIMO tests cannot provide reliable focused feedback.                                     | Reproduce with the package command; correct workspace dependency resolution minimally; rerun discovery.                | platform/apps          | abierto  |
-| Quant is experimental and unpublished.                                         | Premature test investment would compete with publication-ready domains.                  | Exclude Quant from this track; reconsider only when publication is approved.                                           | quant/platform         | aceptado |
-| A domain feature changes global shell or public-shell source.                  | Domain work can alter shared navigation or public runtime without transversal review.    | Enforce ownership validation; require a separate platform-owned change with consumer and experience evidence.          | platform               | abierto  |
-| Domain catalog and planner diverge during migration.                           | A domain can be structurally registered but still receive an incorrect validation route. | Make the planner, package resolver, and CI path filters consume the catalog in Phase 2; retain explicit routing tests. | platform               | abierto  |
-| Narrow routing may omit a real cross-domain consumer.                          | Regression could reach integration.                                                      | Declare consumers in package rules; retain branch/full certification; test positive and negative routing fixtures.     | platform               | abierto  |
-| Excessive global fallback keeps local feedback slow.                           | Developers continue to avoid relevant validation.                                        | Separate worktree from branch scope and report fallback reason explicitly.                                             | platform               | abierto  |
-| Over-aggressive E2E reduction may weaken responsive or accessibility coverage. | User-facing regressions can escape.                                                      | Retain matrix for visual/responsive contracts and full certification.                                                  | platform/design-system | abierto  |
-| SQL focused suites may hide migration ordering dependencies.                   | Schema integration failures can appear late.                                             | Preserve ordered full-data certification for branch integration and release.                                           | platform/data          | abierto  |
-| Coverage metrics may be gamed or misinterpreted.                               | Time may shift to low-value tests.                                                       | Baseline first; use behavior, risk, duration, false-run, and false-skip evidence.                                      | platform/governance    | abierto  |
+| Riesgo o bloqueo                                                               | Impacto                                                                                  | Mitigacion                                                                                                                 | Responsable            | Estado   |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------- | -------- |
+| CIMO cannot resolve `@vitejs/plugin-react` for Vitest discovery.               | CIMO tests cannot provide reliable focused feedback.                                     | Source-resolution fix is present; rerun focused discovery when CIMO changes.                                               | platform/apps          | mitigado |
+| Quant is experimental and unpublished.                                         | Premature test investment would compete with publication-ready domains.                  | Exclude Quant from this track; reconsider only when publication is approved.                                               | quant/platform         | aceptado |
+| A domain feature changes global shell or public-shell source.                  | Domain work can alter shared navigation or public runtime without transversal review.    | Enforce ownership validation; require a separate platform-owned change with consumer and experience evidence.              | platform               | abierto  |
+| Domain catalog and planner diverge during migration.                           | A domain can be structurally registered but still receive an incorrect validation route. | Planner, package resolver, and CI gates consume catalog metadata; retain regression tests.                                 | platform               | mitigado |
+| Narrow routing may omit a real cross-domain consumer.                          | Regression could reach integration.                                                      | Declare consumers in package rules; retain branch/full certification; test positive and negative routing fixtures.         | platform               | abierto  |
+| Excessive global fallback keeps local feedback slow.                           | Developers continue to avoid relevant validation.                                        | Separate worktree from branch scope and report fallback reason explicitly.                                                 | platform               | abierto  |
+| Over-aggressive E2E reduction may weaken responsive or accessibility coverage. | User-facing regressions can escape.                                                      | Retain matrix for visual/responsive contracts and full certification.                                                      | platform/design-system | abierto  |
+| SQL focused suites may hide migration ordering dependencies.                   | Schema integration failures can appear late.                                             | Preserve ordered full-data certification for branch integration and release.                                               | platform/data          | abierto  |
+| Coverage metrics may be gamed or misinterpreted.                               | Time may shift to low-value tests.                                                       | Baseline first; use behavior, risk, duration, false-run, and false-skip evidence.                                          | platform/governance    | abierto  |
+| No representative remote CI observations or persisted coverage baseline exist. | Phase 7 cannot be certified against real CI duration/coverage evidence.                  | Obtain CI runs with artifact access; persist only repository-approved formats and record owner/follow-up.                  | platform/governance    | abierto  |
+| E2E runtime preflight needs a running LoopDev OS server.                       | Runtime browser profiles cannot be certified from this worktree alone.                   | Start the app with the CI-equivalent environment and rerun the focused profiles; keep catalog/discovery evidence separate. | platform/apps          | abierto  |
+| Current scratch branch name fails the Git convention validator.                | This worktree cannot be committed or pushed as-is under the branch policy.               | Rename to a valid `test/<area>-<topic>` branch before delivery; canonical track branch passes validation.                  | platform/governance    | abierto  |
 
 ### Riesgos adicionales identificados
 
@@ -672,16 +700,20 @@ its package and source are committed to the repository.
 | 2026-09-02 | Deletion-safe static routing correction | Git file collectors now use `--diff-filter=ACMR`, preventing deleted paths from reaching Prettier or ESLint. | `scripts/validate-plan.mjs`, `scripts/validate-plan.test.mjs` |
 | 2026-09-02 | Public Shell experience routing clarification | Public Shell and Public Blocks retain focused package/consumer validation and now explicitly select the visual experience signal without activating unrelated app or mobile suites. | `scripts/validate-plan.mjs`, `scripts/validate-plan.test.mjs`, `scripts/validate-package-impact.test.mjs` |
 | 2026-09-02 | Local Supabase certification evidence | Docker-backed reset, schema lint, governance checks, and all cataloged pgTAP tests pass locally; Phase 5 remains blocked only by missing Communications controls. | Supabase CLI, `scripts/validate-supabase-governance.mjs`, `scripts/run-database-tests.mjs` |
+| 2026-09-02 | Merged PR evidence | PRs #162, #163, #164 and #165 are merged into `origin/develop`; GitHub reports only `SUCCESS` or `SKIPPED` conclusions in their check rollups. | GitHub PR metadata; merge commits `5f5360ca`, `ba4cacec`, `6db792dd`, `f781b63b` |
+| 2026-09-02 | Local and CI-representative certification | Catalogs, governance, tooling (119/119), source-contract tests (2/2), shell changed-scope check, static branch quality, local Supabase (196 pgTAP tests), Vitest coverage (179 files/792 tests), Jest mobile coverage (9 suites/22 tests), and `pnpm validate:ci` with local Supabase variables pass. | Commands recorded in handoff; no coverage artifact persisted |
+| 2026-09-02 | Certification limitations | No remote CI duration/observation dataset or approved persisted coverage baseline is available; E2E runtime preflight requires a LoopDev OS server at `127.0.0.1:3001`. | Open follow-up; no synthetic observations added |
+| 2026-09-02 | Git convention validation | Canonical `test/domain-validation-routing` passes; the current scratch branch `loopdev-io-test/domain-test-contract-names` fails the naming policy. | `validate-git-conventions.mjs`; rename required before commit/push |
 
 ## Handoff de sesion
 
-- **Fecha:** 2026-08-31.
-- **Rama de continuacion:** `test/domain-validation-routing`.
-- **Commit de partida:** `66c64a27`.
-- **Estado alcanzado:** Fases 2, 3, 4, and 6 remain completed. Fase 5 remains blocked by missing Communications SQL and unavailable Docker/Podman. Fase 7 is active; the 2026-09-02 review found routing, CI trigger/history, protected-push, SQL classification, and deletion-safe static-check follow-up work.
-- **Decisiones, bloqueos y riesgos:** Quant is excluded while experimental. `validate:changed` is a stable branch alias. New domains must declare four quality controls or an explicit non-applicability. The global shell requires an active platform track for its branch. Public Shell permits domain contributions only while `public-shell-foundation` is active. CIMO resolves contracts from source in Vitest; its pre-existing lint warnings and chunk advisory are tracked separately.
-- **Validacion ejecutada:** Baseline inventory, routing/catalog/static/data/E2E tests, tooling suite, CIMO 7-file/27-test Vitest suite, CIMO lint/typecheck/build, CI orchestration validation, documentation links, repository validators, workflow formatting, and dry-run checks. The detailed handoff lists the exact commands and external limitations.
-- **Siguiente accion concreta:** Correct the six recorded gaps, add focused regression evidence, then execute representative CI and Supabase runs and record duration, coverage, false-run, false-skip, duplicate-risk, and flaky-result observations.
+- **Fecha:** 2026-09-02.
+- **Rama de continuacion:** `loopdev-io-test/domain-test-contract-names` (derivada de `test/domain-validation-routing`; no push solicitado).
+- **Commit de partida:** `66c64a27` (`origin/develop` en el inicio del track); `HEAD` actual `b2e62392`.
+- **Estado alcanzado:** Fases 0, 1, 2, 3, 4 y 6 completadas. Fase 5 no cumple completamente: la certificación local de los 8 archivos/196 tests pgTAP pasa, pero Communications sigue vacío porque no existen los tests SQL `007`–`010` versionados. Fase 7 no cumple completamente: la orquestación, tooling, catálogos, static quality, cobertura local, CI-representative con variables locales y Supabase local pasan, pero faltan observaciones CI remotas representativas y baseline de cobertura versionado.
+- **Decisiones, bloqueos y riesgos:** PRs mergeados #162 (`5f5360ca`), #163 (`ba4cacec`), #164 (`6db792dd`) y #165 (`f781b63b`) quedan registrados. Quant permanece fuera de alcance. No se agregan controles Communications ni métricas sintéticas. El primer `pnpm validate:ci` sin variables Supabase falló en el build de `loopdev-os`; con el entorno local equivalente pasó. `pnpm e2e:preflight` queda limitado por la ausencia de servidor en `127.0.0.1:3001`. Las limitaciones permanecen con owner/follow-up en la tabla de riesgos.
+- **Validacion ejecutada:** `pnpm validate:plan`; validadores y tests de track, dominio, E2E, datos, CI, package impact, protected surfaces y source contracts; `pnpm test:tooling` (119/119); `pnpm registries:check`; `pnpm docs:links:check` (326 archivos); `pnpm quality:static:branch`; `pnpm test:shell:changed`; `supabase db reset`; `supabase db lint --local`; gobernanza Supabase; `pnpm test:data`; `pnpm validate:ci` con variables locales; coberturas Vitest/Jest locales; discovery Playwright (282 tests en 27 archivos). El esquema de observaciones valida el ejemplo, sin persistir sus métricas.
+- **Siguiente accion concreta:** Obtener runs CI remotos representativos y, si procede, los tests SQL Communications `007`–`010` versionados; registrar solo evidencia real en los formatos existentes. Solicitar después la aprobación explícita del usuario para cualquier cierre; este track permanece activo.
 
 ## Cierre
 

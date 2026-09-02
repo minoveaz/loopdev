@@ -1,0 +1,22 @@
+{
+  "generatedAt": "2026-09-02",
+  "runner": "vitest",
+  "scope": "repository",
+  "tests": {
+    "files": 179,
+    "passed": 792,
+    "failed": 0
+  },
+  "coverage": {
+    "lines": 69.2,
+    "statements": 66.78,
+    "functions": 49.82,
+    "branches": 15.8
+  },
+  "status": "informational",
+  "thresholdEnforced": false,
+  "notes": [
+    "Baseline is a measured reference for regression comparison.",
+    "No coverage threshold is enforced by this track."
+  ]
+}
