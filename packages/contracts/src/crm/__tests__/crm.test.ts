@@ -12,7 +12,7 @@ describe('CRM contracts', () => {
     expect(CrmLeadSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, contactId: ids.contactId, createdAt: timestamp, updatedAt: timestamp }).success).toBe(false);
   });
 
-  it('validates auditable activities and tasks', () => {
+  it('accepts CRM activities and tasks with auditable lifecycle fields', () => {
     expect(CrmActivitySchema.safeParse({ id: ids.id, organizationId: ids.organizationId, leadId: ids.leadId, type: 'note', summary: 'Called the customer', occurredAt: timestamp, createdAt: timestamp }).success).toBe(true);
     expect(CrmTaskSchema.safeParse({ id: ids.id, organizationId: ids.organizationId, leadId: ids.leadId, title: 'Send quote', createdAt: timestamp, updatedAt: timestamp }).success).toBe(true);
   });

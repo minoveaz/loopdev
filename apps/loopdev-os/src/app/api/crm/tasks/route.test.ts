@@ -22,7 +22,7 @@ describe('CRM Tasks API', () => {
     createTask.mockResolvedValue({ created: true, task: { id: 'task-1' } });
   });
 
-  it('rejects invalid queries before authorization', async () => {
+  it('rejects invalid task queries before authorization', async () => {
     const response = await GET(
       new Request('http://localhost/api/crm/tasks?organizationId=bad'),
     );

@@ -10,7 +10,7 @@ for (const route of accessibleRoutes) {
   test.describe(route.name, () => {
     test.use({ storageState: route.storageState });
 
-    test('has no serious accessibility violations', async ({ page }) => {
+    test(`has no serious accessibility violations on the ${route.name} route`, async ({ page }) => {
       await page.goto(route.path);
       await expect(page.locator('body')).toBeVisible();
 

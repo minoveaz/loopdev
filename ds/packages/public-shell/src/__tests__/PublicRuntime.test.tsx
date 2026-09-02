@@ -64,7 +64,7 @@ const mockComposition: PublicViewComposition = {
 };
 
 describe('PublicRuntime Orchestrator', () => {
-  it('renders all declared slots cleanly without inline layout code', () => {
+  it('mounts every declared public slot without inline layout markup', () => {
     render(
       <PublicRuntime
         brandTheme={mockTheme}
@@ -83,7 +83,7 @@ describe('PublicRuntime Orchestrator', () => {
     expect(screen.getByTestId('inspector-slot')).toBeDefined();
   });
 
-  it('injects brand CSS variables in the document root', () => {
+  it('applies the public brand theme variables to the document root', () => {
     render(
       <PublicRuntime
         brandTheme={mockTheme}

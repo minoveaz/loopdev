@@ -15,7 +15,7 @@ async function openFilterDropdown(page) {
 }
 
 test.describe('FilterDropdown certification', () => {
-  test('smoke renders one stable, accessible fixture', async ({ page }) => {
+  test('smoke renders the CRM FilterDropdown fixture with an accessible Segment trigger', async ({ page }) => {
     const fixture = await openFilterDropdown(page);
     await expect(fixture.getByRole('button', { name: 'Segment' })).toHaveAttribute(
       'aria-haspopup',
