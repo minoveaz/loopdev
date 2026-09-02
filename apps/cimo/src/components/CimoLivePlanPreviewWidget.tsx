@@ -87,6 +87,17 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
       <Flame className="w-3.5 h-3.5" />
     );
 
+  const safeImageSrc = React.useMemo(() => {
+    const raw = (formData.image || '').trim();
+    if (
+      raw &&
+      (raw.startsWith('https://') || raw.startsWith('http://') || raw.startsWith('data:image/'))
+    ) {
+      return raw;
+    }
+    return 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=800';
+  }, [formData.image]);
+
   return (
     <aside
       className={`flex flex-col gap-5 text-[#1F4E5F] w-full ${
@@ -162,10 +173,7 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
             className={`relative w-full bg-[#1F4E5F]/5 overflow-hidden ${previewCardFormat === 'story' ? 'aspect-[4/3]' : 'aspect-[16/9]'}`}
           >
             <img
-              src={
-                formData.image ||
-                'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=800'
-              }
+              src={safeImageSrc}
               alt={formData.title || 'Preview'}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
