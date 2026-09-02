@@ -98,6 +98,19 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
     return 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=800';
   }, [formData.image]);
 
+  const safeTitle = (formData.title || 'Título de tu entrenamiento').replace(/[<>&"']/g, '');
+  const safeLocation = (formData.location || 'Punto de encuentro').replace(/[<>&"']/g, '');
+  const safeDescription = (
+    formData.description || 'Describe la ruta, el objetivo y el ritmo para tus compañeros del Crew.'
+  ).replace(/[<>&"']/g, '');
+  const safeThirdHalf = (
+    formData.thirdHalfLocation ||
+    formData.thirdHalfTitle ||
+    'Café & Charla Post-Entreno'
+  ).replace(/[<>&"']/g, '');
+  const safeLevel = (formData.level || 'Intermedio').replace(/[<>&"']/g, '');
+  const safeSport = (formData.sport || 'Running').replace(/[<>&"']/g, '');
+
   return (
     <aside
       className={`flex flex-col gap-5 text-[#1F4E5F] w-full ${
@@ -174,7 +187,7 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
           >
             <img
               src={safeImageSrc}
-              alt={formData.title || 'Preview'}
+              alt={safeTitle}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -183,10 +196,10 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
             <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
               <span className="px-2.5 py-1 rounded-full font-black text-xs bg-white/95 text-[#1F4E5F] shadow-xs flex items-center gap-1.5 backdrop-blur-md">
                 {sportIcon}
-                <span className="capitalize">{formData.sport || 'Running'}</span>
+                <span className="capitalize">{safeSport}</span>
               </span>
               <span className="px-2 py-0.8 rounded-full text-[10px] font-black bg-black/60 text-white backdrop-blur-md border border-white/10">
-                {formData.level || 'Intermedio'}
+                {safeLevel}
               </span>
             </div>
 
@@ -198,7 +211,7 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
             {/* Title on the Cover Overlay */}
             <div className="absolute bottom-3 left-3.5 right-3.5 text-white">
               <h3 className="font-black text-base leading-tight drop-shadow-xs line-clamp-1">
-                {formData.title || 'Título de tu entrenamiento'}
+                {safeTitle}
               </h3>
             </div>
           </div>
@@ -210,7 +223,7 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
               <div className="flex items-center justify-between text-slate-600 font-bold gap-2">
                 <div className="flex items-center gap-1.5 truncate">
                   <MapPin className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
-                  <span className="truncate">{formData.location || 'Punto de encuentro'}</span>
+                  <span className="truncate">{safeLocation}</span>
                 </div>
                 <div className="flex items-center gap-1 font-black text-[#1F4E5F] shrink-0">
                   <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
@@ -224,14 +237,13 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
               <div className="flex items-center gap-1.5 text-slate-600 font-medium">
                 <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 <span>
-                  Ritmo: <strong>{formData.level || 'Medio'}</strong>
+                  Ritmo: <strong>{safeLevel}</strong>
                 </span>
               </div>
 
               {/* Description preview */}
               <p className="text-xs font-medium text-slate-600 line-clamp-2 leading-relaxed mt-0.5">
-                {formData.description ||
-                  'Describe la ruta, el objetivo y el ritmo para tus compañeros del Crew.'}
+                {safeDescription}
               </p>
             </div>
 
@@ -241,10 +253,7 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
                 <div className="flex items-center gap-1.5 truncate">
                   <Coffee className="w-3.5 h-3.5 text-[#1F4E5F] shrink-0" />
                   <span className="truncate">
-                    <strong>Tercer Tiempo:</strong>{' '}
-                    {formData.thirdHalfLocation ||
-                      formData.thirdHalfTitle ||
-                      'Café & Charla Post-Entreno'}
+                    <strong>Tercer Tiempo:</strong> {safeThirdHalf}
                   </span>
                 </div>
                 <span className="text-[9px] font-black uppercase text-white bg-[#1F4E5F] px-1.5 py-0.2 rounded-md shrink-0">
