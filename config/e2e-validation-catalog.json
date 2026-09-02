@@ -108,7 +108,7 @@
     {
       "file": "responsive.visual.spec.mjs",
       "domain": "web",
-      "profile": "responsive",
+      "profile": "visual",
       "projects": ["mobile", "mobile-compact"]
     },
     {

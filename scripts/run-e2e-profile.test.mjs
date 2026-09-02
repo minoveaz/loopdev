@@ -6,6 +6,26 @@ test('selects smoke files from the E2E catalog', () => {
   assert.deepEqual(filesForSelection('smoke'), ['e2e/shell.smoke.spec.mjs']);
 });
 
+test('selects multiple profiles from the E2E catalog', () => {
+  const catalog = {
+    specs: [
+      { file: 'shell.smoke.spec.mjs', profile: 'smoke' },
+      { file: 'shell.accessibility.spec.mjs', profile: 'accessibility' },
+      { file: 'shell.smoke.spec.mjs', profile: 'smoke' },
+    ],
+  };
+
+  assert.deepEqual(filesForSelection('profiles:smoke, accessibility', catalog), [
+    'e2e/shell.smoke.spec.mjs',
+    'e2e/shell.accessibility.spec.mjs',
+  ]);
+});
+
+test('rejects empty or unknown profile selections', () => {
+  assert.throws(() => filesForSelection('profiles:'), /at least one E2E profile/);
+  assert.throws(() => filesForSelection('profiles:smoke,tablet'), /Unknown E2E profile/);
+});
+
 test('selects a domain without selecting unrelated domains', () => {
   const catalog = {
     specs: [

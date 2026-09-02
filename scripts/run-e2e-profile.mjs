@@ -21,6 +21,27 @@ const playwrightCommand = isWindows ? 'playwright.cmd' : 'playwright';
 
 function filesForSelection(selection, catalog) {
   if (selection === 'full') return null;
+  if (selection.startsWith('profiles:')) {
+    const selectedProfiles = selection
+      .slice('profiles:'.length)
+      .split(',')
+      .map((profile) => profile.trim())
+      .filter(Boolean);
+    if (selectedProfiles.length === 0) {
+      throw new Error('Profile selection requires at least one E2E profile');
+    }
+    const unknownProfiles = selectedProfiles.filter((profile) => !profiles.has(profile));
+    if (unknownProfiles.length > 0) {
+      throw new Error(`Unknown E2E profile in profile selection: ${unknownProfiles.join(', ')}`);
+    }
+    return [
+      ...new Set(
+        selectedProfiles.flatMap((profile) =>
+          specsForProfile(profile, catalog).map((spec) => `e2e/${spec.file}`),
+        ),
+      ),
+    ];
+  }
   if (selection.startsWith('files:')) {
     const files = selection.slice('files:'.length).split(',').filter(Boolean);
     if (files.length === 0) throw new Error('File selection requires at least one E2E spec');
