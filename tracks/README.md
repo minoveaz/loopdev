@@ -49,7 +49,6 @@
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
 - [Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Universal Multi-Client Surface System](./active/platform/2026-08-28-public-shell-foundation.md) · `feature/public-shell-foundation` · fase 1
-- [Domain Validation Routing and Test Efficiency](./active/platform/2026-08-31-domain-validation-routing.md) · `test/domain-validation-routing` · fase 7
 
 ### Governance
 
@@ -86,3 +85,4 @@
 - [CRM shared foundation implementation](./closed/2026/2026-08-14-crm-shared-foundation.md) · `feature/crm-contacts-backend-foundation` · fase 1
 - [CRM UI foundation and composition](./closed/2026/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
 - [Reusable suite composition patterns](./closed/2026/platform/2026-08-18-reusable-suite-composition-patterns.md) · `feature/reusable-suite-composition-patterns` · fase 2
+- [Domain Validation Routing and Test Efficiency](./closed/2026/2026-08-31-domain-validation-routing.md) · `test/domain-validation-routing` · fase 7

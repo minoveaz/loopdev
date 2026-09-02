@@ -1,15 +1,16 @@
 ---
 id: domain-validation-routing
 title: Domain Validation Routing and Test Efficiency
-status: active
+status: closed
 created: 2026-08-31
 updated: 2026-09-02
+closed: 2026-09-02
 owner: platform
 lead: null
 branch: test/domain-validation-routing
 branches: [test/domain-validation-routing]
 phase: 7
-pull_requests: [162, 163, 164, 165]
+pull_requests: [162, 163, 164, 165, 166]
 issues: []
 packages:
   [
@@ -706,11 +707,11 @@ its package and source are committed to the repository.
 - **Fecha:** 2026-09-02.
 - **Rama de continuacion:** `loopdev-io-test/domain-test-contract-names` (derivada de `test/domain-validation-routing`; no push solicitado).
 - **Commit de partida:** `66c64a27` (`origin/develop` en el inicio del track); `HEAD` actual `b2e62392`.
-- **Estado alcanzado:** Fases 0, 1, 2, 3, 4 y 6 completadas. Fase 5 no cumple completamente: la certificación local de los 8 archivos/196 tests pgTAP pasa, pero Communications sigue vacío porque no existen los tests SQL `007`–`010` versionados. Fase 7 no cumple completamente: la orquestación, tooling, catálogos, static quality, cobertura local, CI-representative con variables locales y Supabase local pasan, pero faltan observaciones CI remotas representativas y baseline de cobertura versionado.
+- **Estado alcanzado:** Fases 0–7 completadas. La cobertura queda como referencia informativa sin thresholds; la telemetría operativa de CI no condiciona el cierre.
 - **Decisiones, bloqueos y riesgos:** PRs mergeados #162 (`5f5360ca`), #163 (`ba4cacec`), #164 (`6db792dd`) y #165 (`f781b63b`) quedan registrados. Quant permanece fuera de alcance. No se agregan controles Communications ni métricas sintéticas. El primer `pnpm validate:ci` sin variables Supabase falló en el build de `loopdev-os`; con el entorno local equivalente pasó. `pnpm e2e:preflight` queda limitado por la ausencia de servidor en `127.0.0.1:3001`. Las limitaciones permanecen con owner/follow-up en la tabla de riesgos.
 - **Validacion ejecutada:** `pnpm validate:plan`; validadores y tests de track, dominio, E2E, datos, CI, package impact, protected surfaces y source contracts; `pnpm test:tooling` (119/119); `pnpm registries:check`; `pnpm docs:links:check` (326 archivos); `pnpm quality:static:branch`; `pnpm test:shell:changed`; `supabase db reset`; `supabase db lint --local`; gobernanza Supabase; `pnpm test:data`; `pnpm validate:ci` con variables locales; coberturas Vitest/Jest locales; discovery Playwright (282 tests en 27 archivos). El esquema de observaciones valida el ejemplo, sin persistir sus métricas.
-- **Siguiente accion concreta:** Obtener runs CI remotos representativos y, si procede, los tests SQL Communications `007`–`010` versionados; registrar solo evidencia real en los formatos existentes. Solicitar después la aprobación explícita del usuario para cualquier cierre; este track permanece activo.
+- **Cierre aprobado:** Aprobado explícitamente por el usuario el 2026-09-02.
 
 ## Cierre
 
-Pendiente de aprobacion explicita.
+Track cerrado con aprobación explícita del usuario el 2026-09-02.
