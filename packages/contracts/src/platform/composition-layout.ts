@@ -9,9 +9,7 @@ export interface CompositionRegionLayout {
   mobileClass: 'stack' | 'full' | 'hidden';
 }
 
-export const resolveCompositionLayout = (
-  composition: ViewComposition,
-): CompositionRegionLayout[] =>
+export const resolveCompositionLayout = (composition: ViewComposition): CompositionRegionLayout[] =>
   composition.regions.map((region) => ({
     id: region.id,
     order: region.order,

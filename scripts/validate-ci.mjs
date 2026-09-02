@@ -32,9 +32,18 @@ const validationPhases = [
 function runStep([label, args]) {
   console.log(`\n==> ${label}: pnpm ${args.join(' ')}`);
   return new Promise((resolve, reject) => {
+    const env = {
+      ...process.env,
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy-anon-key-for-build-prerender',
+    };
+
     const child = spawn(pnpmCommand, args, {
       stdio: 'inherit',
       shell: isWindows,
+      env,
     });
 
     child.once('error', (error) => {
@@ -56,16 +65,14 @@ function runStep([label, args]) {
 
 async function runPhase(phase, executeStep = runStep) {
   console.log(`\n## ${phase.label}`);
-  const results = await Promise.allSettled(phase.steps.map(executeStep));
-  const failures = results
-    .filter((result) => result.status === 'rejected')
-    .map((result) => result.reason);
-
-  if (failures.length > 0) {
-    for (const failure of failures) console.error(`\n${failure.message}`);
-    return false;
+  for (const step of phase.steps) {
+    try {
+      await executeStep(step);
+    } catch (err) {
+      console.error(`\n${err.message}`);
+      return false;
+    }
   }
-
   return true;
 }
 

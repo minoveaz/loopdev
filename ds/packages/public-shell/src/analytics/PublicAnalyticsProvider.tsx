@@ -74,28 +74,31 @@ export const PublicAnalyticsProvider: React.FC<PublicAnalyticsProviderProps> = (
     });
   }, []);
 
-  const trackEvent = useCallback((event: PublicAnalyticsEvent) => {
-    if (typeof window === 'undefined') return;
+  const trackEvent = useCallback(
+    (event: PublicAnalyticsEvent) => {
+      if (typeof window === 'undefined') return;
 
-    const payload: Record<string, unknown> = {
-      event: event.eventName,
-      category: event.category,
-      label: event.label,
-      value: event.value,
-      currency: event.currency,
-      ...(event.metadata ?? {}),
-    };
+      const payload: Record<string, unknown> = {
+        event: event.eventName,
+        category: event.category,
+        label: event.label,
+        value: event.value,
+        currency: event.currency,
+        ...(event.metadata ?? {}),
+      };
 
-    if (event.conversionLabel && config.googleAdsId) {
-      payload.send_to = `${config.googleAdsId}/${event.conversionLabel}`;
-    }
+      if (event.conversionLabel && config.googleAdsId) {
+        payload.send_to = `${config.googleAdsId}/${event.conversionLabel}`;
+      }
 
-    if (window.gtag) {
-      window.gtag('event', event.eventName, payload);
-    } else if (window.dataLayer) {
-      window.dataLayer.push(payload);
-    }
-  }, [config.googleAdsId]);
+      if (window.gtag) {
+        window.gtag('event', event.eventName, payload);
+      } else if (window.dataLayer) {
+        window.dataLayer.push(payload);
+      }
+    },
+    [config.googleAdsId],
+  );
 
   return (
     <AnalyticsContext.Provider value={{ config, trackEvent, updateConsent, consentSettings }}>

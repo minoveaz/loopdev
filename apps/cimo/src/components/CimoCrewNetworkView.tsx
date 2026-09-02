@@ -70,12 +70,18 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
 }) => {
   const [squads, setSquads] = useState<SportsSquad[]>(INITIAL_SPORTS_SQUADS);
   const [connections, setConnections] = useState<CrewConnection[]>(INITIAL_CREW_CONNECTIONS);
-  const [selectedSportFilter, setSelectedSportFilter] = useState<'all' | 'running' | 'padel' | 'hiking'>('all');
+  const [selectedSportFilter, setSelectedSportFilter] = useState<
+    'all' | 'running' | 'padel' | 'hiking'
+  >('all');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Quick Meetup Proposal Modal State
   const [isProposeModalOpen, setIsProposeModalOpen] = useState(false);
-  const [proposeTarget, setProposeTarget] = useState<{ type: 'squad' | 'athlete'; name: string; sport: string } | null>(null);
+  const [proposeTarget, setProposeTarget] = useState<{
+    type: 'squad' | 'athlete';
+    name: string;
+    sport: string;
+  } | null>(null);
   const [proposeDay, setProposeDay] = useState('Mañana');
   const [proposeTime, setProposeTime] = useState('19:30');
   const [proposeNote, setProposeNote] = useState('');
@@ -132,7 +138,9 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
     e.preventDefault();
     if (!proposeTarget) return;
 
-    showToast(`Convocatoria enviada a "${proposeTarget.name}" (${proposeDay} a las ${proposeTime}).`);
+    showToast(
+      `Convocatoria enviada a "${proposeTarget.name}" (${proposeDay} a las ${proposeTime}).`,
+    );
     setIsProposeModalOpen(false);
   };
 
@@ -172,7 +180,8 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
               </span>
             </div>
             <p className="text-xs text-[#1F4E5F]/65 font-medium mt-0.5">
-              Micro-equipos habituales y círculo de entrenamiento para coordinar sesiones y tercer tiempo.
+              Micro-equipos habituales y círculo de entrenamiento para coordinar sesiones y tercer
+              tiempo.
             </p>
           </div>
         </div>
@@ -260,8 +269,8 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
               sq.sport === 'running'
                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                 : sq.sport === 'padel'
-                ? 'bg-cyan-50 text-cyan-700 border-cyan-200'
-                : 'bg-amber-50 text-amber-700 border-amber-200';
+                  ? 'bg-cyan-50 text-cyan-700 border-cyan-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200';
 
             return (
               <div
@@ -273,7 +282,9 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                 {/* 1. Header Row (Squad Identity & Meta) */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-[#1F4E5F]/8">
                   <div className="flex items-center gap-3.5">
-                    <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border ${sportStyle}`}>
+                    <div
+                      className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border ${sportStyle}`}
+                    >
                       {getSportVectorIcon(sq.sport, 'w-5 h-5')}
                     </div>
                     <div className="flex flex-col">
@@ -352,7 +363,8 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                         <span>Próximo Entreno</span>
                       </span>
                       <span className="text-xs sm:text-sm font-extrabold text-[#1F4E5F]">
-                        {callout.date}, {callout.time} — <span className="font-bold text-[#1F4E5F]/85">{callout.title}</span>
+                        {callout.date}, {callout.time} —{' '}
+                        <span className="font-bold text-[#1F4E5F]/85">{callout.title}</span>
                       </span>
                     </div>
 
@@ -377,11 +389,18 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                       {callout.hasThirdHalf && callout.thirdHalfVenue ? (
                         <div className="p-3.5 rounded-2xl bg-[#FFFBEB] border border-[#FDE68A] flex items-center gap-3 shadow-2xs">
                           <div className="w-8 h-8 rounded-xl bg-amber-100/80 text-amber-800 flex items-center justify-center shrink-0">
-                            {getThirdHalfVectorIcon(callout.thirdHalfType, 'w-4 h-4 text-amber-700')}
+                            {getThirdHalfVectorIcon(
+                              callout.thirdHalfType,
+                              'w-4 h-4 text-amber-700',
+                            )}
                           </div>
                           <div className="truncate">
                             <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 block">
-                              {callout.thirdHalfType === 'beer' ? 'Caña & Tapeo Post-Entreno' : callout.thirdHalfType === 'picnic' ? 'Picnic al Aire Libre' : 'Café & Desayuno Post-Entreno'}
+                              {callout.thirdHalfType === 'beer'
+                                ? 'Caña & Tapeo Post-Entreno'
+                                : callout.thirdHalfType === 'picnic'
+                                  ? 'Picnic al Aire Libre'
+                                  : 'Café & Desayuno Post-Entreno'}
                             </span>
                             <span className="text-xs font-extrabold text-[#78350F] truncate block">
                               {callout.thirdHalfVenue}
@@ -399,7 +418,8 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1.5">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-[#1F4E5F]/75">
-                          Asistencia ({callout.attendingMembers.length}/{callout.maxCapacity} confirmados):
+                          Asistencia ({callout.attendingMembers.length}/{callout.maxCapacity}{' '}
+                          confirmados):
                         </span>
                         <div className="flex items-center -space-x-1.5">
                           {callout.attendingMembers.map((m) => (
@@ -538,7 +558,9 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                         <span>{conn.stats.sharedWorkoutsCount} entrenos en común</span>
                       </span>
                       <span>•</span>
-                      <span className="text-[11px] text-[#1F4E5F]/50">Último: {conn.stats.lastWorkoutDate}</span>
+                      <span className="text-[11px] text-[#1F4E5F]/50">
+                        Último: {conn.stats.lastWorkoutDate}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -547,17 +569,27 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end shrink-0">
                   {/* Consolidated Sports & 3er T Chip with Vector Icons */}
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-[#F8FAFC] rounded-xl border border-slate-200 text-xs font-bold text-[#1F4E5F]/85">
-                    <span className="text-emerald-600">{getSportVectorIcon(primarySport?.sport ?? 'running', 'w-3.5 h-3.5')}</span>
+                    <span className="text-emerald-600">
+                      {getSportVectorIcon(primarySport?.sport ?? 'running', 'w-3.5 h-3.5')}
+                    </span>
                     <span>{primarySport?.paceOrMetric}</span>
                     <span className="text-slate-300">•</span>
-                    <span className="text-amber-600">{getThirdHalfVectorIcon(conn.preferredThirdHalf, 'w-3.5 h-3.5')}</span>
+                    <span className="text-amber-600">
+                      {getThirdHalfVectorIcon(conn.preferredThirdHalf, 'w-3.5 h-3.5')}
+                    </span>
                   </div>
 
                   {/* 1-Click Action Buttons */}
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => handleOpenPropose('athlete', conn.athlete.name, primarySport?.sport ?? 'running')}
+                      onClick={() =>
+                        handleOpenPropose(
+                          'athlete',
+                          conn.athlete.name,
+                          primarySport?.sport ?? 'running',
+                        )
+                      }
                       className="px-3 py-1.5 rounded-xl border border-[#7FB77E] text-[#7FB77E] hover:bg-[#7FB77E] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 active:scale-98"
                     >
                       <Zap className="w-3.5 h-3.5" />

@@ -66,20 +66,20 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
 
   const toggleFavorite = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((fId) => fId !== id) : [...prev, id]
-    );
+    setFavorites((prev) => (prev.includes(id) ? prev.filter((fId) => fId !== id) : [...prev, id]));
   };
 
   const todayCount = activities.filter((a) => a.date.toLowerCase().includes('hoy')).length;
   const weekendCount = activities.filter(
-    (a) => a.date.toLowerCase().includes('sábado') || a.date.toLowerCase().includes('domingo')
+    (a) => a.date.toLowerCase().includes('sábado') || a.date.toLowerCase().includes('domingo'),
   ).length;
 
   const displayedActivities = activities.filter((act) => {
     if (timeFilter === 'today') return act.date.toLowerCase().includes('hoy');
     if (timeFilter === 'weekend') {
-      return act.date.toLowerCase().includes('sábado') || act.date.toLowerCase().includes('domingo');
+      return (
+        act.date.toLowerCase().includes('sábado') || act.date.toLowerCase().includes('domingo')
+      );
     }
     return true;
   });
@@ -148,9 +148,7 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
               <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E] bg-[#7FB77E]/20 px-2 py-0.2 rounded-full">
                 Quedada Destacada
               </span>
-              <span className="text-xs font-bold text-slate-300">
-                Mañana • 07:30h
-              </span>
+              <span className="text-xs font-bold text-slate-300">Mañana • 07:30h</span>
             </div>
             <h3 className="text-sm sm:text-base font-black text-white mt-0.5">
               Rodaje 8.5K al amanecer en Retiro + Tercer Tiempo en Café Murillo
@@ -201,7 +199,8 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                     alt={act.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1000';
+                      (e.target as HTMLImageElement).src =
+                        'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1000';
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -250,7 +249,9 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                       </div>
                       <div className="flex items-center gap-1 font-black text-[#1F4E5F] shrink-0">
                         <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
-                        <span>{act.date}, {act.time}h</span>
+                        <span>
+                          {act.date}, {act.time}h
+                        </span>
                       </div>
                     </div>
 
@@ -258,21 +259,26 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                     {act.paceOrDetails && (
                       <div className="flex items-center gap-1.5 text-slate-600 font-medium">
                         <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                        <span>Ritmo: <strong>{act.paceOrDetails}</strong></span>
+                        <span>
+                          Ritmo: <strong>{act.paceOrDetails}</strong>
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  {/* 3. Compact 1-Line Third Half Pill (No nested boxes) */}
+                  {/* 3. Compact 1-Line Third Half Pill (Social Blue) */}
                   {act.thirdHalf?.enabled && (
-                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-amber-900 bg-[#FFFBEB] px-3 py-1.5 rounded-xl border border-[#FDE68A]">
+                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-[#1F4E5F] bg-[#EEF2F2]/70 px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15">
                       <div className="flex items-center gap-1.5 truncate">
-                        {getThirdHalfVectorIcon(act.thirdHalf.type, 'w-3.5 h-3.5 text-amber-700 shrink-0')}
+                        {getThirdHalfVectorIcon(
+                          act.thirdHalf.type,
+                          'w-3.5 h-3.5 text-[#1F4E5F] shrink-0',
+                        )}
                         <span className="truncate">
                           <strong>Tercer Tiempo:</strong> {act.thirdHalf.venue}
                         </span>
                       </div>
-                      <span className="text-[9px] font-black uppercase text-amber-800 bg-amber-200/80 px-1.5 py-0.2 rounded-md shrink-0">
+                      <span className="text-[9px] font-black uppercase text-white bg-[#1F4E5F] px-1.5 py-0.2 rounded-md shrink-0">
                         Social
                       </span>
                     </div>
@@ -304,8 +310,8 @@ export const CimoCuratedFeed: React.FC<CimoCuratedFeedProps> = ({
                         isJoined
                           ? 'bg-[#7FB77E] text-white shadow-xs'
                           : isFull
-                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
-                          : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95'
+                            ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
+                            : 'bg-[#7FB77E] hover:bg-[#6ea86d] text-white active:scale-95 shadow-xs'
                       }`}
                     >
                       {isJoined ? (

@@ -34,7 +34,9 @@ export const TestimonialsGrid: React.FC<TestimonialsGridProps> = ({
                   />
                 ))}
               </div>
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">"{t.content}"</p>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+                "{t.content}"
+              </p>
             </div>
 
             <div className="flex items-center gap-3 pt-4 border-t border-slate-100 mt-4">

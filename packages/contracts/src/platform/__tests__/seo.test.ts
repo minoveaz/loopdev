@@ -10,7 +10,8 @@ describe('Public SEO Contracts', () => {
   it('validates a complete SEO metadata block with Open Graph and Twitter Cards', () => {
     const validSeo = {
       title: 'Running 8K por Parque del Retiro | CIMO Crew Madrid',
-      description: 'Únete al Crew de running en Madrid. Rodaje de 8 km a ritmo 5:25 min/km saliendo desde Puerta de Alcalá.',
+      description:
+        'Únete al Crew de running en Madrid. Rodaje de 8 km a ritmo 5:25 min/km saliendo desde Puerta de Alcalá.',
       canonicalUrl: 'https://cimo.app/actividades/retiro-8k',
       hreflang: {
         es: 'https://cimo.app/actividades/retiro-8k',
@@ -78,7 +79,8 @@ describe('Public SEO Contracts', () => {
     const product = {
       '@type': 'Product',
       name: 'Seguro Médico para Visado de Estudiantes',
-      description: 'Póliza médica completa sin copagos ni carencias apta para consulados españoles.',
+      description:
+        'Póliza médica completa sin copagos ni carencias apta para consulados españoles.',
       image: 'https://vitablue.es/images/sanitas-estudiantes.jpg',
       brand: {
         '@type': 'Brand',
