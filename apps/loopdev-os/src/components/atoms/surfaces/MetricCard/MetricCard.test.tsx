@@ -9,7 +9,7 @@ import { describe, it, expect } from 'vitest';
 import { MetricCard } from './index';
 
 describe('MetricCard Component', () => {
-  it('renders correctly with required props', () => {
+  it('renders the metric value and label with required props', () => {
     render(<MetricCard label="SMA50" value={71000.45} />);
 
     const label = screen.getByText('SMA50');
@@ -19,35 +19,35 @@ describe('MetricCard Component', () => {
     expect(value).toBeInTheDocument();
   });
 
-  it('displays unit when provided', () => {
+  it('appends the configured unit to the primary value', () => {
     render(<MetricCard label="Price" value={71073.74} unit="$" />);
 
     const unit = screen.getByText('$');
     expect(unit).toBeInTheDocument();
   });
 
-  it('displays secondary value when provided', () => {
+  it('renders the optional secondary value', () => {
     render(<MetricCard label="SMA50" value={71000.45} secondaryValue={'+0.103%'} />);
 
     const secondary = screen.getByText('+0.103%');
     expect(secondary).toBeInTheDocument();
   });
 
-  it('displays description when provided', () => {
+  it('renders the optional metric description', () => {
     render(<MetricCard label="ATR" value={36.146} description="36 pips volatility" />);
 
     const description = screen.getByText('36 pips volatility');
     expect(description).toBeInTheDocument();
   });
 
-  it('shows loading skeleton when isLoading is true', () => {
+  it('renders a loading skeleton while the metric is loading', () => {
     const { container } = render(<MetricCard label="Price" value={0} isLoading={true} />);
 
     const skeleton = container.querySelector('.animate-pulse');
     expect(skeleton).toBeInTheDocument();
   });
 
-  it('displays correct status colors', () => {
+  it('maps metric status to the corresponding visual color', () => {
     const { container: normalContainer } = render(
       <MetricCard label="Test" value={1} status="normal" />,
     );
@@ -67,7 +67,7 @@ describe('MetricCard Component', () => {
     expect(successContainer).toBeInTheDocument();
   });
 
-  it('shows direction indicator when direction is provided', () => {
+  it('renders a direction indicator when direction is provided', () => {
     const { rerender } = render(<MetricCard label="Price" value={71000} direction="up" />);
 
     let indicator = screen.getByText('↑');
@@ -81,7 +81,7 @@ describe('MetricCard Component', () => {
     // neutral direction shouldn't show indicator
   });
 
-  it('handles numeric and string values', () => {
+  it('renders both numeric and string metric values', () => {
     const { rerender } = render(<MetricCard label="Price" value={71000.45} />);
 
     expect(screen.getByText('71000.45')).toBeInTheDocument();
@@ -90,7 +90,7 @@ describe('MetricCard Component', () => {
     expect(screen.getByText('NORMAL')).toBeInTheDocument();
   });
 
-  it('supports different size variants', () => {
+  it('renders the supported small and large size variants', () => {
     const { container: smContainer } = render(<MetricCard label="Test" value={1} size="sm" />);
     const { container: mdContainer } = render(<MetricCard label="Test" value={1} size="md" />);
     const { container: lgContainer } = render(<MetricCard label="Test" value={1} size="lg" />);
@@ -109,14 +109,14 @@ describe('MetricCard Component', () => {
     expect(card).toHaveClass('custom-test-class');
   });
 
-  it('has proper accessibility attributes', () => {
+  it('exposes the metric with the required accessibility attributes', () => {
     render(<MetricCard label="Price" value={71000} />);
 
     const card = screen.getByRole('status');
     expect(card).toHaveAttribute('aria-label');
   });
 
-  it('handles large and small numbers correctly', () => {
+  it('formats both large and small metric numbers correctly', () => {
     const { rerender } = render(<MetricCard label="Test" value={1000000.999} />);
 
     expect(screen.getByText('1000001.00')).toBeInTheDocument();

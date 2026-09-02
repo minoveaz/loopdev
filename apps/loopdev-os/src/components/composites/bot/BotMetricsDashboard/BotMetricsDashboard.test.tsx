@@ -101,7 +101,7 @@ describe('BotMetricsDashboard Component', () => {
     });
   });
 
-  it('shows error state when fetch fails', () => {
+  it('renders an error state when metrics loading fails', () => {
     vi.mocked(metricsHook.useStrategyMetrics).mockReturnValue({
       metrics: null,
       loading: false,
@@ -116,7 +116,7 @@ describe('BotMetricsDashboard Component', () => {
     expect(screen.getByText('Retry')).toBeInTheDocument();
   });
 
-  it('displays connection status indicator', () => {
+  it('renders the bot connection status indicator', () => {
     vi.mocked(metricsHook.useStrategyMetrics).mockReturnValue({
       metrics: mockMetrics,
       loading: false,
@@ -130,7 +130,7 @@ describe('BotMetricsDashboard Component', () => {
     expect(screen.getByText('Live')).toBeInTheDocument();
   });
 
-  it('displays health warnings when data is stale', async () => {
+  it('renders health warnings when metrics data is stale', async () => {
     const staleMetrics = {
       ...mockMetrics,
       last_updated: new Date(Date.now() - 60000).toISOString(), // 60 seconds old
@@ -227,7 +227,7 @@ describe('BotMetricsDashboard Component', () => {
     expect(dashboard?.className).toContain('custom-class');
   });
 
-  it('displays MetricGauge with RSI data', () => {
+  it('renders MetricGauge with the bot RSI metric', () => {
     vi.mocked(metricsHook.useStrategyMetrics).mockReturnValue({
       metrics: mockMetrics,
       loading: false,
@@ -241,7 +241,7 @@ describe('BotMetricsDashboard Component', () => {
     expect(screen.getByRole('status', { name: /RSI:/ })).toBeInTheDocument();
   });
 
-  it('displays MetricCards for price, SMA50, ATR, volatility', async () => {
+  it('renders MetricCards for price, SMA50, ATR, and volatility', async () => {
     vi.mocked(metricsHook.useStrategyMetrics).mockReturnValue({
       metrics: mockMetrics,
       loading: false,
