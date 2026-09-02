@@ -32,9 +32,16 @@ const validationPhases = [
 function runStep([label, args]) {
   console.log(`\n==> ${label}: pnpm ${args.join(' ')}`);
   return new Promise((resolve, reject) => {
+    const env = {
+      ...process.env,
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy-anon-key-for-build-prerender',
+    };
+
     const child = spawn(pnpmCommand, args, {
       stdio: 'inherit',
       shell: isWindows,
+      env,
     });
 
     child.once('error', (error) => {
