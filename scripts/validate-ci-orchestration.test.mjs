@@ -29,6 +29,8 @@ const workflow = [
   'pnpm test:protected-surfaces',
   'pnpm test:package-impact',
   'pnpm validate:plan',
+  'pnpm test:shell:changed',
+  'pnpm e2e:profile',
   '- name: Protect platform-owned shell surfaces',
   "if: github.event_name == 'pull_request'",
 ].join('\n');

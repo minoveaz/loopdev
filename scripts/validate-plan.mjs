@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import process from 'node:process';
 import { isBackendOnlyWebFile, resolveImpact } from './validate-package-impact.mjs';
+import { loadE2eCatalog } from './validate-e2e-catalog.mjs';
 import { routingForFile } from './validation-domain-catalog-utils.mjs';
 
 const checks = {
@@ -59,6 +60,11 @@ function isDocumentationOnly(file) {
 }
 
 function buildExperiencePlan(files) {
+  const catalog = loadE2eCatalog();
+  const changedSpecs = new Set(
+    files.filter((file) => file.startsWith('e2e/')).map((file) => file.slice('e2e/'.length)),
+  );
+  const catalogSpecs = catalog.specs.filter((spec) => changedSpecs.has(spec.file));
   const hasWebApplicationChange = files.some(
     (file) =>
       (file.startsWith('apps/loopdev-os/') &&
@@ -69,6 +75,7 @@ function buildExperiencePlan(files) {
   );
   const desktop =
     hasWebApplicationChange ||
+    catalogSpecs.some((spec) => spec.projects.includes('desktop') && spec.profile !== 'visual') ||
     files.some((file) =>
       [
         'e2e/authenticated.application.spec.mjs',
@@ -80,6 +87,7 @@ function buildExperiencePlan(files) {
     );
   const mobile =
     hasWebApplicationChange ||
+    catalogSpecs.some((spec) => spec.projects.includes('mobile') && spec.profile !== 'visual') ||
     files.some((file) =>
       [
         'e2e/authenticated.mobile.spec.mjs',
@@ -95,7 +103,25 @@ function buildExperiencePlan(files) {
       ),
     );
 
-  return { desktop, mobile, visual };
+  const targetedFiles = (project, excludedProfiles) =>
+    files.length > 0 && files.every((file) => file.startsWith('e2e/') && file.endsWith('.spec.mjs'))
+      ? catalogSpecs
+          .filter(
+            (spec) => spec.projects.includes(project) && !excludedProfiles.includes(spec.profile),
+          )
+          .map((spec) => `e2e/${spec.file}`)
+          .join(',')
+      : '';
+
+  return {
+    desktop,
+    mobile,
+    visual,
+    targeted: {
+      desktopFunctional: targetedFiles('desktop', ['visual']),
+      mobileFunctional: targetedFiles('mobile', ['visual']),
+    },
+  };
 }
 
 function buildValidationPlan(files) {
@@ -254,6 +280,8 @@ function buildGithubOutputs(plan) {
     `browser_desktop=${plan.experiences.desktop}`,
     `browser_mobile=${plan.experiences.mobile}`,
     `browser_visual=${plan.experiences.visual}`,
+    `e2e_desktop_functional=${plan.experiences.targeted.desktopFunctional}`,
+    `e2e_mobile_functional=${plan.experiences.targeted.mobileFunctional}`,
   ].join('\n');
 }
 

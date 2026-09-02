@@ -166,13 +166,23 @@ test('publishes stable outputs for workflow routing', () => {
 test('selects desktop, mobile, and visual experiences for UI changes', () => {
   const plan = buildValidationPlan(['ds/packages/ui/src/components/Button.tsx']);
 
-  assert.deepEqual(plan.experiences, { desktop: true, mobile: true, visual: true });
+  assert.deepEqual(plan.experiences, {
+    desktop: true,
+    mobile: true,
+    visual: true,
+    targeted: { desktopFunctional: '', mobileFunctional: '' },
+  });
 });
 
 test('selects visual experience for Public Shell changes without unrelated app suites', () => {
   const plan = buildValidationPlan(['ds/packages/public-shell/src/PublicRuntime.tsx']);
 
-  assert.deepEqual(plan.experiences, { desktop: false, mobile: false, visual: true });
+  assert.deepEqual(plan.experiences, {
+    desktop: false,
+    mobile: false,
+    visual: true,
+    targeted: { desktopFunctional: '', mobileFunctional: '' },
+  });
   assert.ok(plan.selected.some((check) => check.id === 'packages'));
   assert.equal(plan.fullFallback, false);
 });
@@ -180,5 +190,27 @@ test('selects visual experience for Public Shell changes without unrelated app s
 test('selects only mobile experience for a mobile browser spec', () => {
   const plan = buildValidationPlan(['e2e/authenticated.mobile.spec.mjs']);
 
-  assert.deepEqual(plan.experiences, { desktop: false, mobile: true, visual: false });
+  assert.deepEqual(plan.experiences, {
+    desktop: false,
+    mobile: true,
+    visual: false,
+    targeted: {
+      desktopFunctional: '',
+      mobileFunctional: 'e2e/authenticated.mobile.spec.mjs',
+    },
+  });
+});
+
+test('selects focused desktop and mobile E2E files without widening source coverage', () => {
+  const plan = buildValidationPlan(['e2e/button.certification.spec.mjs']);
+
+  assert.deepEqual(plan.experiences, {
+    desktop: true,
+    mobile: true,
+    visual: false,
+    targeted: {
+      desktopFunctional: 'e2e/button.certification.spec.mjs',
+      mobileFunctional: 'e2e/button.certification.spec.mjs',
+    },
+  });
 });

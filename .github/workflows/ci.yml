@@ -60,6 +60,8 @@ jobs:
       browser_desktop: ${{ steps.plan.outputs.browser_desktop }}
       browser_mobile: ${{ steps.plan.outputs.browser_mobile }}
       browser_visual: ${{ steps.plan.outputs.browser_visual }}
+      e2e_desktop_functional: ${{ steps.plan.outputs.e2e_desktop_functional }}
+      e2e_mobile_functional: ${{ steps.plan.outputs.e2e_mobile_functional }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -229,6 +231,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -263,6 +272,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -289,6 +305,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -300,6 +318,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -308,7 +333,10 @@ jobs:
         run: pnpm --filter @loopdev/contracts build
 
       - name: Validate shell interaction surface
-        run: pnpm test:shell
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: pnpm test:shell:changed
 
   quality:
     name: Lint, typecheck, tests and build
@@ -337,12 +365,16 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build shared contracts
-        run: pnpm --filter @loopdev/contracts build
 
       - name: CI validation
         run: pnpm validate:ci
@@ -373,6 +405,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build contracts
@@ -434,6 +473,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Cache Turbo artifacts
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -464,7 +510,16 @@ jobs:
         uses: ./.github/actions/setup-frontend-e2e
 
       - name: Run desktop functional and accessibility checks
-        if: needs.changes.outputs.browser_desktop == 'true'
+        if: needs.changes.outputs.browser_desktop == 'true' && needs.changes.outputs.e2e_desktop_functional != ''
+        run: >-
+          pnpm e2e:profile
+          files:${{ needs.changes.outputs.e2e_desktop_functional }}
+          --project=desktop --workers=1 --reporter=line
+
+      - name: Run desktop functional and accessibility checks
+        if: >-
+          needs.changes.outputs.browser_desktop == 'true' &&
+          needs.changes.outputs.e2e_desktop_functional == ''
         run: >-
           pnpm exec playwright test
           e2e/*.smoke.spec.mjs
@@ -544,7 +599,16 @@ jobs:
         uses: ./.github/actions/setup-frontend-e2e
 
       - name: Run authenticated mobile checks
-        if: needs.changes.outputs.browser_mobile == 'true'
+        if: needs.changes.outputs.browser_mobile == 'true' && needs.changes.outputs.e2e_mobile_functional != ''
+        run: >-
+          pnpm e2e:profile
+          files:${{ needs.changes.outputs.e2e_mobile_functional }}
+          --project=mobile --project=mobile-compact --workers=1 --reporter=line
+
+      - name: Run authenticated mobile checks
+        if: >-
+          needs.changes.outputs.browser_mobile == 'true' &&
+          needs.changes.outputs.e2e_mobile_functional == ''
         run: >-
           pnpm exec playwright test
           e2e/authenticated.mobile.spec.mjs
