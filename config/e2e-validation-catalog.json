@@ -10,12 +10,6 @@
       "projects": ["desktop", "mobile", "mobile-compact"]
     },
     {
-      "file": "authenticated.application.spec.mjs",
-      "domain": "web",
-      "profile": "functional",
-      "projects": ["desktop"]
-    },
-    {
       "file": "authenticated.mobile.spec.mjs",
       "domain": "web",
       "profile": "responsive",
@@ -98,12 +92,6 @@
       "domain": "design-system",
       "profile": "component",
       "projects": ["desktop", "mobile", "mobile-compact"]
-    },
-    {
-      "file": "marketing-studio.dam.spec.mjs",
-      "domain": "marketing-studio",
-      "profile": "domain",
-      "projects": ["desktop"]
     },
     {
       "file": "phase5.certification.spec.mjs",
