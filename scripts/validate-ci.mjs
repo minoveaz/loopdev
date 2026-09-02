@@ -65,16 +65,14 @@ function runStep([label, args]) {
 
 async function runPhase(phase, executeStep = runStep) {
   console.log(`\n## ${phase.label}`);
-  const results = await Promise.allSettled(phase.steps.map(executeStep));
-  const failures = results
-    .filter((result) => result.status === 'rejected')
-    .map((result) => result.reason);
-
-  if (failures.length > 0) {
-    for (const failure of failures) console.error(`\n${failure.message}`);
-    return false;
+  for (const step of phase.steps) {
+    try {
+      await executeStep(step);
+    } catch (err) {
+      console.error(`\n${err.message}`);
+      return false;
+    }
   }
-
   return true;
 }
 

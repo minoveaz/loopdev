@@ -89,11 +89,18 @@ export const CimoLivePlanPreviewWidget: React.FC<CimoLivePlanPreviewWidgetProps>
 
   const safeImageSrc = React.useMemo(() => {
     const raw = (formData.image || '').trim();
-    if (
-      raw &&
-      (raw.startsWith('https://') || raw.startsWith('http://') || raw.startsWith('data:image/'))
-    ) {
-      return raw;
+    if (!raw) {
+      return 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=800';
+    }
+    try {
+      const url = new URL(raw);
+      if (url.protocol === 'https:' || url.protocol === 'http:') {
+        return encodeURI(url.href);
+      }
+    } catch {
+      if (raw.startsWith('data:image/')) {
+        return encodeURI(raw);
+      }
     }
     return 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=800';
   }, [formData.image]);
