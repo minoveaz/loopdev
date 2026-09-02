@@ -1,9 +1,21 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildGithubOutputs, buildValidationPlan, renderGithubSummary } from './validate-plan.mjs';
+import {
+  buildGithubOutputs,
+  buildValidationPlan,
+  changedFilesFromCommit,
+  changedFilesFromWorktree,
+  renderGithubSummary,
+} from './validate-plan.mjs';
+
+function gitFixture(responses) {
+  return (_command, args) => responses.get(args.join(' ')) ?? '';
+}
 
 test('explains a shell change and skips unrelated domains', () => {
-  const plan = buildValidationPlan(['ds/packages/ui/src/components/composites/shell/SuiteShell.tsx']);
+  const plan = buildValidationPlan([
+    'ds/packages/ui/src/components/composites/shell/SuiteShell.tsx',
+  ]);
 
   assert.ok(plan.selected.some((check) => check.id === 'shell'));
   assert.ok(plan.selected.some((check) => check.id === 'packages'));
@@ -32,7 +44,10 @@ test('keeps cross-domain shell changes on full certification', () => {
 
   assert.equal(plan.fullFallback, true);
   for (const domain of ['mobile', 'shell', 'web', 'packages']) {
-    assert.ok(plan.selected.some((check) => check.id === domain), domain);
+    assert.ok(
+      plan.selected.some((check) => check.id === domain),
+      domain,
+    );
     assert.ok(!plan.skipped.some((check) => check.id === domain), domain);
   }
 });
@@ -43,6 +58,50 @@ test('keeps documentation-only changes explainable without executable checks', (
   assert.deepEqual(plan.selected, []);
   assert.equal(plan.fullFallback, false);
   assert.ok(plan.note?.includes('no registered executable surface'));
+});
+
+test('keeps a documentation edit isolated from an earlier branch fallback', () => {
+  const worktreePlan = buildValidationPlan(['docs/testing-guide.md']);
+  const branchPlan = buildValidationPlan(['pnpm-lock.yaml', 'docs/testing-guide.md']);
+
+  assert.deepEqual(worktreePlan.selected, []);
+  assert.equal(worktreePlan.fullFallback, false);
+  assert.equal(branchPlan.fullFallback, true);
+});
+
+test('collects unstaged, staged, and untracked files once for worktree validation', () => {
+  const files = changedFilesFromWorktree(
+    gitFixture(
+      new Map([
+        ['diff --name-only --diff-filter=ACMR', 'docs/guide.md\napps/cimo/src/App.tsx\n'],
+        [
+          'diff --name-only --cached --diff-filter=ACMR',
+          'apps/cimo/src/App.tsx\ntracks/active/apps/cimo.md\n',
+        ],
+        ['ls-files --others --exclude-standard', 'notes.txt\n'],
+      ]),
+    ),
+  );
+
+  assert.deepEqual(files, [
+    'apps/cimo/src/App.tsx',
+    'docs/guide.md',
+    'notes.txt',
+    'tracks/active/apps/cimo.md',
+  ]);
+});
+
+test('collects only the specified commit revision for commit validation', () => {
+  const files = changedFilesFromCommit(
+    'HEAD~2',
+    gitFixture(
+      new Map([
+        ['diff-tree --diff-filter=ACMR --no-commit-id --name-only -r HEAD~2', 'docs/guide.md\n'],
+      ]),
+    ),
+  );
+
+  assert.deepEqual(files, ['docs/guide.md']);
 });
 
 test('renders selected and skipped protections without a skip override', () => {
@@ -56,11 +115,11 @@ test('renders selected and skipped protections without a skip override', () => {
   assert.match(summary, /does not provide a skip override/);
 });
 
-test('selects mobile and package protections for mobile changes', () => {
+test('selects mobile protection without a global fallback for mobile changes', () => {
   const plan = buildValidationPlan(['apps/loopdev-mobile/src/App.tsx']);
 
   assert.ok(plan.selected.some((check) => check.id === 'mobile'));
-  assert.equal(plan.fullFallback, true);
+  assert.equal(plan.fullFallback, false);
 });
 
 test('selects database protection without treating Supabase changes as package impact', () => {
@@ -70,11 +129,20 @@ test('selects database protection without treating Supabase changes as package i
   assert.equal(plan.fullFallback, false);
 });
 
-test('selects web protection for application and browser fixture changes', () => {
+test('selects web protection without a global fallback for application changes', () => {
   const plan = buildValidationPlan(['apps/loopdev-os/src/app/page.tsx']);
 
   assert.ok(plan.selected.some((check) => check.id === 'web'));
-  assert.equal(plan.fullFallback, true);
+  assert.equal(plan.fullFallback, false);
+});
+
+test('selects only CIMO validation for a CIMO application change', () => {
+  const plan = buildValidationPlan(['apps/cimo/src/App.tsx']);
+
+  assert.ok(plan.selected.some((check) => check.id === 'cimo'));
+  assert.ok(!plan.selected.some((check) => check.id === 'mobile'));
+  assert.ok(!plan.selected.some((check) => check.id === 'web'));
+  assert.equal(plan.fullFallback, false);
 });
 
 test('keeps root and workflow changes on full certification', () => {
@@ -99,6 +167,14 @@ test('selects desktop, mobile, and visual experiences for UI changes', () => {
   const plan = buildValidationPlan(['ds/packages/ui/src/components/Button.tsx']);
 
   assert.deepEqual(plan.experiences, { desktop: true, mobile: true, visual: true });
+});
+
+test('selects visual experience for Public Shell changes without unrelated app suites', () => {
+  const plan = buildValidationPlan(['ds/packages/public-shell/src/PublicRuntime.tsx']);
+
+  assert.deepEqual(plan.experiences, { desktop: false, mobile: false, visual: true });
+  assert.ok(plan.selected.some((check) => check.id === 'packages'));
+  assert.equal(plan.fullFallback, false);
 });
 
 test('selects only mobile experience for a mobile browser spec', () => {

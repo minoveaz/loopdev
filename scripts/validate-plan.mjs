@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import process from 'node:process';
 import { isBackendOnlyWebFile, resolveImpact } from './validate-package-impact.mjs';
+import { routingForFile } from './validation-domain-catalog-utils.mjs';
 
 const checks = {
   governance: {
@@ -88,7 +89,11 @@ function buildExperiencePlan(files) {
     );
   const visual =
     files.some((file) => file.endsWith('.visual.spec.mjs')) ||
-    files.some((file) => file.startsWith('ds/packages/ui/'));
+    files.some((file) =>
+      ['ds/packages/ui/', 'ds/packages/public-shell/', 'ds/packages/public-blocks/'].some((path) =>
+        file.startsWith(path),
+      ),
+    );
 
   return { desktop, mobile, visual };
 }
@@ -106,6 +111,9 @@ function buildValidationPlan(files) {
       }
       continue;
     }
+
+    const catalogRouting = routingForFile(file);
+    if (catalogRouting?.routing.planDomain) changedDomains.add(catalogRouting.routing.planDomain);
 
     for (const [domain, check] of Object.entries(checks)) {
       if (
@@ -154,12 +162,42 @@ function buildValidationPlan(files) {
   };
 }
 
-function changedFilesFromGit() {
+function changedFilesFromGit(runGit = execFileSync) {
   const base = process.env.BASE_SHA ?? 'origin/develop';
   const head = process.env.HEAD_SHA ?? 'HEAD';
-  return execFileSync('git', ['diff', '--name-only', `${base}...${head}`], { encoding: 'utf8' })
+  return runGit('git', ['diff', '--name-only', '--diff-filter=ACMR', `${base}...${head}`], {
+    encoding: 'utf8',
+  })
     .split(/\r?\n/)
     .filter(Boolean);
+}
+
+function changedFilesFromCommit(revision = 'HEAD', runGit = execFileSync) {
+  return runGit(
+    'git',
+    ['diff-tree', '--diff-filter=ACMR', '--no-commit-id', '--name-only', '-r', revision],
+    {
+      encoding: 'utf8',
+    },
+  )
+    .split(/\r?\n/)
+    .filter(Boolean);
+}
+
+function changedFilesFromWorktree(runGit = execFileSync) {
+  const commands = [
+    ['diff', '--name-only', '--diff-filter=ACMR'],
+    ['diff', '--name-only', '--cached', '--diff-filter=ACMR'],
+    ['ls-files', '--others', '--exclude-standard'],
+  ];
+
+  return [
+    ...new Set(
+      commands.flatMap((args) =>
+        runGit('git', args, { encoding: 'utf8' }).split(/\r?\n/).filter(Boolean),
+      ),
+    ),
+  ].sort();
 }
 
 function printPlan(plan) {
@@ -228,14 +266,27 @@ function writeGithubOutputs(plan) {
 export {
   buildGithubOutputs,
   buildValidationPlan,
+  changedFilesFromCommit,
   changedFilesFromGit,
+  changedFilesFromWorktree,
   renderGithubSummary,
   writeGithubOutputs,
   writeGithubSummary,
 };
 
 if (process.argv[1]?.endsWith('validate-plan.mjs')) {
-  const plan = buildValidationPlan(changedFilesFromGit());
+  const scope = process.argv[2] ?? 'branch';
+  const revision = process.argv[3] ?? 'HEAD';
+  if (!['branch', 'commit', 'worktree'].includes(scope)) {
+    throw new Error(`Unknown plan scope: ${scope}`);
+  }
+  const files =
+    scope === 'worktree'
+      ? changedFilesFromWorktree()
+      : scope === 'commit'
+        ? changedFilesFromCommit(revision)
+        : changedFilesFromGit();
+  const plan = buildValidationPlan(files);
   printPlan(plan);
   writeGithubOutputs(plan);
   writeGithubSummary(plan);

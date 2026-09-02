@@ -6,6 +6,13 @@ if (fs.existsSync('.env.local')) {
 }
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3001';
+const e2eCatalog = JSON.parse(fs.readFileSync('config/e2e-validation-catalog.json', 'utf8'));
+
+function testMatchForProject(project) {
+  return e2eCatalog.specs
+    .filter((spec) => spec.projects.includes(project))
+    .map((spec) => `**/${spec.file}`);
+}
 
 export default defineConfig({
   testDir: './e2e',
@@ -40,49 +47,12 @@ export default defineConfig({
   projects: [
     {
       name: 'desktop',
-      testMatch: [
-        '**/*.smoke.spec.mjs',
-        '**/*.accessibility.spec.mjs',
-        '**/*.visual.spec.mjs',
-        '**/composition-showcase.interaction.spec.mjs',
-        '**/filters-actions.certification.spec.mjs',
-        '**/search-input.certification.spec.mjs',
-        '**/input.certification.spec.mjs',
-        '**/search-input.certification.spec.mjs',
-        '**/button.certification.spec.mjs',
-        '**/icon-button.certification.spec.mjs',
-        '**/filter-dropdown.certification.spec.mjs',
-        '**/crm-primitives.certification.spec.mjs',
-        '**/contacts-form.certification.spec.mjs',
-        '**/entity-table.certification.spec.mjs',
-        '**/activity-table.certification.spec.mjs',
-        '**/selection-table.certification.spec.mjs',
-        '**/command-dialog.certification.spec.mjs',
-        '**/shell-showcase.contract.spec.mjs',
-        '**/authenticated.application.spec.mjs',
-        '**/phase5.certification.spec.mjs',
-      ],
-      testIgnore: ['**/responsive.visual.spec.mjs'],
+      testMatch: testMatchForProject('desktop'),
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
     {
       name: 'mobile',
-      testMatch: [
-        '**/*.mobile-diagnostic.spec.mjs',
-        '**/*.visual.spec.mjs',
-        '**/authenticated.mobile.spec.mjs',
-        '**/input.certification.spec.mjs',
-        '**/search-input.certification.spec.mjs',
-        '**/button.certification.spec.mjs',
-        '**/icon-button.certification.spec.mjs',
-        '**/filter-dropdown.certification.spec.mjs',
-        '**/crm-primitives.certification.spec.mjs',
-        '**/contacts-form.certification.spec.mjs',
-        '**/entity-table.certification.spec.mjs',
-        '**/activity-table.certification.spec.mjs',
-        '**/selection-table.certification.spec.mjs',
-        '**/command-dialog.certification.spec.mjs',
-      ],
+      testMatch: testMatchForProject('mobile'),
       workers: 1,
       use: {
         ...devices['iPhone 13'],
@@ -92,21 +62,7 @@ export default defineConfig({
     },
     {
       name: 'mobile-compact',
-      testMatch: [
-        '**/*.mobile-diagnostic.spec.mjs',
-        '**/*.visual.spec.mjs',
-        '**/authenticated.mobile.spec.mjs',
-        '**/input.certification.spec.mjs',
-        '**/button.certification.spec.mjs',
-        '**/icon-button.certification.spec.mjs',
-        '**/filter-dropdown.certification.spec.mjs',
-        '**/crm-primitives.certification.spec.mjs',
-        '**/contacts-form.certification.spec.mjs',
-        '**/entity-table.certification.spec.mjs',
-        '**/activity-table.certification.spec.mjs',
-        '**/selection-table.certification.spec.mjs',
-        '**/command-dialog.certification.spec.mjs',
-      ],
+      testMatch: testMatchForProject('mobile-compact'),
       workers: 1,
       use: {
         ...devices['iPhone 13'],
