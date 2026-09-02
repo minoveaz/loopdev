@@ -104,11 +104,11 @@ test/domain-validation-routing` pasa para la rama canónica.
 
 ## Limitaciones con owner y follow-up
 
-| Limitación                                                                | Owner                 | Follow-up                                                                                                        |
-| ------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| No hay duración ni observaciones representativas de CI remoto.            | `platform/governance` | Obtener runs CI accesibles y registrar solo duración, false run/skip, duplicación y flakiness observados.        |
-| E2E runtime requiere servidor LoopDev OS.                                 | `platform/apps`       | Levantar el servidor con entorno equivalente a CI y repetir perfiles focalizados.                                |
-| La rama scratch actual no cumple la convención de nombres.                | `platform/governance` | Renombrar a `test/<area>-<topic>` antes de commit/push; la rama canónica sí pasa.                                |
+| Limitación                                                     | Owner                 | Follow-up                                                                                                 |
+| -------------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------- |
+| No hay duración ni observaciones representativas de CI remoto. | `platform/governance` | Obtener runs CI accesibles y registrar solo duración, false run/skip, duplicación y flakiness observados. |
+| E2E runtime requiere servidor LoopDev OS.                      | `platform/apps`       | Levantar el servidor con entorno equivalente a CI y repetir perfiles focalizados.                         |
+| La rama scratch actual no cumple la convención de nombres.     | `platform/governance` | Renombrar a `test/<area>-<topic>` antes de commit/push; la rama canónica sí pasa.                         |
 
 ## Siguiente acción
 
