@@ -36,7 +36,8 @@ function validateDataCatalog(catalog, availableFiles = []) {
   }
   for (const file of nonTestFiles) {
     if (!knownFiles.has(file)) errors.push(`non-test SQL '${file}' does not exist`);
-    if (assigned.has(file)) errors.push(`non-test SQL '${file}' cannot also be assigned to a domain`);
+    if (assigned.has(file))
+      errors.push(`non-test SQL '${file}' cannot also be assigned to a domain`);
   }
   return errors;
 }

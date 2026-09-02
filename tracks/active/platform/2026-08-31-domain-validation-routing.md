@@ -542,16 +542,21 @@ duration, coverage, false runs, false skips, and residual risks.
 - [ ] Full certification passes or an external limitation has owner and follow-up.
 - [ ] Track integrity, documentation links, and Git conventions pass.
 
-**Evidencia:** `pnpm test:ci-orchestration` passes 3 tests and
-`pnpm validate:ci-orchestration` validates all 15 registry controls plus the
-required CI catalog gates. The complete routing/catalog suite remains green;
-the branch static scan exits 0 with 81 jscpd clone groups and informational
-Knip findings. Duration and coverage baselines are intentionally not fabricated:
-they require representative CI runs, and full Supabase/RLS certification is
-blocked locally because Docker and Podman are unavailable.
+**Evidencia:** `pnpm test:ci-orchestration`, domain/E2E catalog tests, tooling
+and routing tests pass; `pnpm validate:ci-orchestration` validates all 15
+registry controls plus the required CI catalog gates. After formatting the
+changed files, `pnpm quality:static:branch` exits 0; it reports 81 jscpd clone
+groups and informational Knip findings. `pnpm test:coverage` also exits 0 and
+produces a Vitest coverage report locally. The observation schema validator
+passes its example record. No representative remote CI duration baseline or
+persisted coverage artifact has been added. The source-contract output for
+intentionally invalid fixtures is expected negative-test evidence: `pnpm
+test:tooling` exits 0 and all 119 tests pass; it is not a production failure.
 
-**Estado:** bloqueada; CI orchestration and evidence governance are implemented,
-but service-backed duration/coverage baselines and full certification remain.
+**Estado:** bloqueada; local orchestration, static validation, and Vitest
+coverage execute successfully, but representative remote CI duration evidence,
+a persisted coverage baseline, and the intentional source-contract fixture
+diagnostic remain before final certification.
 
 ## Acceptance matrix
 

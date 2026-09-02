@@ -74,7 +74,10 @@ test('collects unstaged, staged, and untracked files once for worktree validatio
     gitFixture(
       new Map([
         ['diff --name-only --diff-filter=ACMR', 'docs/guide.md\napps/cimo/src/App.tsx\n'],
-        ['diff --name-only --cached --diff-filter=ACMR', 'apps/cimo/src/App.tsx\ntracks/active/apps/cimo.md\n'],
+        [
+          'diff --name-only --cached --diff-filter=ACMR',
+          'apps/cimo/src/App.tsx\ntracks/active/apps/cimo.md\n',
+        ],
         ['ls-files --others --exclude-standard', 'notes.txt\n'],
       ]),
     ),
@@ -91,7 +94,11 @@ test('collects unstaged, staged, and untracked files once for worktree validatio
 test('collects only the specified commit revision for commit validation', () => {
   const files = changedFilesFromCommit(
     'HEAD~2',
-    gitFixture(new Map([['diff-tree --diff-filter=ACMR --no-commit-id --name-only -r HEAD~2', 'docs/guide.md\n']])),
+    gitFixture(
+      new Map([
+        ['diff-tree --diff-filter=ACMR --no-commit-id --name-only -r HEAD~2', 'docs/guide.md\n'],
+      ]),
+    ),
   );
 
   assert.deepEqual(files, ['docs/guide.md']);

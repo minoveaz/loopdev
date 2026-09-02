@@ -5,10 +5,7 @@
   "domains": {
     "platform": ["001_platform_core.sql", "002_platform_core_rls.sql"],
     "marketing": ["003_marketing_rls.sql", "004_content_engine_rls.sql"],
-    "creative": [
-      "005_creative_studio_rls.sql",
-      "006_creative_studio_storage_rls.sql"
-    ],
+    "creative": ["005_creative_studio_rls.sql", "006_creative_studio_storage_rls.sql"],
     "crm": ["005_crm_security.sql", "006_crm_tasks_contract.sql"],
     "communications": []
   },

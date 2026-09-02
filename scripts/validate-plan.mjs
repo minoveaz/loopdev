@@ -165,15 +165,21 @@ function buildValidationPlan(files) {
 function changedFilesFromGit(runGit = execFileSync) {
   const base = process.env.BASE_SHA ?? 'origin/develop';
   const head = process.env.HEAD_SHA ?? 'HEAD';
-  return runGit('git', ['diff', '--name-only', '--diff-filter=ACMR', `${base}...${head}`], { encoding: 'utf8' })
+  return runGit('git', ['diff', '--name-only', '--diff-filter=ACMR', `${base}...${head}`], {
+    encoding: 'utf8',
+  })
     .split(/\r?\n/)
     .filter(Boolean);
 }
 
 function changedFilesFromCommit(revision = 'HEAD', runGit = execFileSync) {
-  return runGit('git', ['diff-tree', '--diff-filter=ACMR', '--no-commit-id', '--name-only', '-r', revision], {
-    encoding: 'utf8',
-  })
+  return runGit(
+    'git',
+    ['diff-tree', '--diff-filter=ACMR', '--no-commit-id', '--name-only', '-r', revision],
+    {
+      encoding: 'utf8',
+    },
+  )
     .split(/\r?\n/)
     .filter(Boolean);
 }

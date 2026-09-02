@@ -50,7 +50,10 @@ test('rejects a workflow missing a catalog gate', () => {
 });
 
 test('rejects unscoped protected-surface ownership', () => {
-  const errors = validateCiOrchestration(registry, workflow.replace("\nif: github.event_name == 'pull_request'", ''));
+  const errors = validateCiOrchestration(
+    registry,
+    workflow.replace("\nif: github.event_name == 'pull_request'", ''),
+  );
 
   assert.ok(errors.some((error) => error.includes('protected-surface ownership')));
 });

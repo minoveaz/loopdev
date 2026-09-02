@@ -28,7 +28,11 @@ test('keeps a commit documentation plan free of branch and functional controls',
 test('runs full certification without branch preflight for a commit fallback', () => {
   const commands = commandsForPlan({ fullFallback: true, selected: [] }, 'commit');
 
-  assert.deepEqual(commands, [['validate:data-catalog'], ['validate:e2e-catalog'], ['validate:ci']]);
+  assert.deepEqual(commands, [
+    ['validate:data-catalog'],
+    ['validate:e2e-catalog'],
+    ['validate:ci'],
+  ]);
 });
 
 test('keeps branch validation preflight for documentation-only plans', () => {

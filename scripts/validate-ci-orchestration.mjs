@@ -47,7 +47,7 @@ function validateWorkflowContract(workflowSource) {
     .map((command) => `CI changes job must run '${command}'`);
   if (
     !workflowSource.includes('- name: Protect platform-owned shell surfaces') ||
-    !workflowSource.includes('if: github.event_name == \'pull_request\'')
+    !workflowSource.includes("if: github.event_name == 'pull_request'")
   ) {
     errors.push('protected-surface ownership must run only for pull requests');
   }
