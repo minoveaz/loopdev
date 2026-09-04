@@ -35,6 +35,16 @@ const shellTests = [
 ];
 
 function readChangedFiles() {
+  const base = process.env.BASE_SHA ?? process.env.GITHUB_BASE_SHA;
+  const head = process.env.HEAD_SHA ?? process.env.GITHUB_SHA;
+  if (base && head) {
+    return execFileSync('git', ['diff', '--name-only', `${base}...${head}`], { cwd: root })
+      .toString()
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .map((file) => file.replaceAll('\\', '/'));
+  }
+
   const files = new Set();
 
   const status = execFileSync('git', ['status', '--porcelain=v1', '-z'], { cwd: root });

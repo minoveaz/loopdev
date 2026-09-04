@@ -6,7 +6,7 @@ const shellRoutes = [
 ];
 
 for (const route of shellRoutes) {
-  test(`${route.name} renders without a browser error`, async ({ page }) => {
+  test(`${route.name} loads without emitting browser errors`, async ({ page }) => {
     const browserErrors = [];
     page.on('pageerror', (error) => browserErrors.push(error.message));
 
@@ -15,7 +15,9 @@ for (const route of shellRoutes) {
     expect(browserErrors).toEqual([]);
   });
 
-  test(`${route.name} has no horizontal overflow`, async ({ page }) => {
+  test(`${route.name} remains within the viewport without horizontal overflow`, async ({
+    page,
+  }) => {
     await page.goto(route.path);
 
     const hasNoOverflow = await page.locator('body').evaluate((element) => {

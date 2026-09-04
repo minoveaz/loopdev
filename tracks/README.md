@@ -4,9 +4,14 @@
 
 ## Planificados
 
+### CRM
+
+- [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0
+
 ### Marketing Studio
 
 - [Marketing Studio multi-tenant para LoopDev](./planned/marketing-studio/2026-08-09-marketing-studio-platform.md) · fase 0
+- [Definición de módulos iniciales de Marketing Studio](./planned/marketing-studio/2026-08-28-marketing-studio-module-definition.md) · `docs/marketing-studio-module-definitions` · fase 0
 
 ### Platform
 
@@ -18,7 +23,6 @@
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
-
 ## En curso
 
 ### CRM
@@ -26,9 +30,17 @@
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 1 · bloqueado
 
+### Marketing Studio
+
+- [Persistencia y Storage de Creative Studio](./active/marketing-studio/2026-08-27-creative-studio-persistence.md) · `feature/marketing-studio-creative-persistence` · fase 3 · bloqueado
+
 ### Mobile
 
 - [Fundación de la aplicación móvil de LoopDev](./active/mobile/2026-08-09-mobile-app-foundation.md) · fase 1
+
+### Apps
+
+- [CIMO Social Sports Platform, Strava/Airbnb 2.0 Architecture, Dedicated In-App Views, Crew Hub, Chat & Public Onboarding Landing](./active/apps/2026-08-29-cimo-social-sports-platform.md) · `feature/public-shell-foundation` · fase 1
 
 ### Platform
 
@@ -36,12 +48,11 @@
 - [Package lifecycle and release readiness](./active/platform/2026-08-12-package-lifecycle.md) · `chore/platform-package-impact-validation` · fase 1
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
+- [Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Universal Multi-Client Surface System](./active/platform/2026-08-28-public-shell-foundation.md) · `feature/public-shell-foundation` · fase 1
 
 ### Governance
 
-- [LoopDev Frontend Quality System](./active/governance/2026-08-08-loopdev-frontend-quality-system.md) · fase 1
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
-
 ## Cerrados
 
 ### 2026
@@ -73,3 +84,5 @@
 - [CRM shared foundation implementation](./closed/2026/2026-08-14-crm-shared-foundation.md) · `feature/crm-contacts-backend-foundation` · fase 1
 - [CRM UI foundation and composition](./closed/2026/2026-08-15-crm-ui-foundation.md) · `feature/crm-ui-foundation` · fase 1
 - [Reusable suite composition patterns](./closed/2026/platform/2026-08-18-reusable-suite-composition-patterns.md) · `feature/reusable-suite-composition-patterns` · fase 2
+- [LoopDev Frontend Quality System](./closed/2026/2026-08-08-loopdev-frontend-quality-system.md) · fase 5
+- [Domain Validation Routing and Test Efficiency](./closed/2026/2026-08-31-domain-validation-routing.md) · `test/domain-validation-routing` · fase 7

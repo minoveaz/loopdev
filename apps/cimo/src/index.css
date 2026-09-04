@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --lpd-brand-primary: #7fb77e;
+  --lpd-brand-primary-hover: #6ea26d;
+  --lpd-brand-secondary: #1f4e5f;
+  --lpd-brand-accent: #7fb77e;
+  --lpd-brand-background: #eef2f2;
+  --lpd-brand-surface: #ffffff;
+  --lpd-brand-text-main: #161d1a;
+  --lpd-brand-text-secondary: #6c757d;
+  --lpd-brand-font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--lpd-brand-font-family);
+}
+
+body {
+  margin: 0;
+  background-color: var(--lpd-brand-background);
+  color: var(--lpd-brand-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

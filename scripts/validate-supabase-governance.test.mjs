@@ -58,3 +58,11 @@ test('keeps the CRM hardening migration free of static governance violations', (
   );
   assert.deepEqual(validateSql(migration, 'crm-hardening.sql'), []);
 });
+
+test('accepts the Creative Studio policy contract without destructive policies', () => {
+  const migration = readFileSync(
+    resolve('supabase/migrations/20260827100000_marketing_creative_studio_persistence.sql'),
+    'utf8',
+  );
+  assert.deepEqual(validateSql(migration, 'creative-studio.sql'), []);
+});

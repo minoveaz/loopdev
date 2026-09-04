@@ -15,10 +15,10 @@ function run(args) {
   });
 }
 
-test('blocks an existing component before write mode', () => {
+test('requires duplicate review before write mode for an existing component', () => {
   assert.throws(
     () => run(['--name', 'PageHeader', '--type', 'composite', '--category', 'content', '--write']),
-    /target already exists/,
+    (error) => error.status === 2,
   );
 });
 
@@ -27,10 +27,14 @@ test('dry run does not create a new scaffold', () => {
   const target = path.join(root, 'apps/loopdev-os/src/suites/crm/widgets', name);
   try {
     const output = run([
-      '--name', name,
-      '--type', 'widget',
-      '--category', 'crm',
-      '--suite', 'apps/loopdev-os/src/suites/crm',
+      '--name',
+      name,
+      '--type',
+      'widget',
+      '--category',
+      'crm',
+      '--suite',
+      'apps/loopdev-os/src/suites/crm',
     ]);
     assert.match(output, /No files created/);
     assert.equal(fs.existsSync(target), false);
@@ -41,25 +45,25 @@ test('dry run does not create a new scaffold', () => {
 
 test('rejects a suite path outside the repository', () => {
   assert.throws(
-    () => run([
-      '--name', 'UnsafeWidget',
-      '--type', 'widget',
-      '--category', 'crm',
-      '--suite', '..',
-    ]),
+    () => run(['--name', 'UnsafeWidget', '--type', 'widget', '--category', 'crm', '--suite', '..']),
     /suite must stay inside the repository/,
   );
 });
 
 test('requires a documented decision before bypassing a registry match', () => {
   assert.throws(
-    () => run([
-      '--name', 'PageHeader',
-      '--type', 'composite',
-      '--category', 'content',
-      '--duplicate-review', 'docs/04-governance/COMPONENT_LIFECYCLE.md',
-      '--write',
-    ]),
+    () =>
+      run([
+        '--name',
+        'PageHeader',
+        '--type',
+        'composite',
+        '--category',
+        'content',
+        '--duplicate-review',
+        'docs/04-governance/COMPONENT_LIFECYCLE.md',
+        '--write',
+      ]),
     /target already exists|duplicate review must record/,
   );
 });

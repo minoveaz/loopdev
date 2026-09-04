@@ -22,6 +22,14 @@ runs:
         node-version: 20
         cache: pnpm
 
+    - name: Cache Turbo artifacts
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+        restore-keys: |
+          turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+
     - name: Install dependencies
       shell: bash
       run: pnpm install --frozen-lockfile

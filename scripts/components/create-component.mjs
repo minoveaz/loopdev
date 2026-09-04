@@ -41,7 +41,9 @@ function resolveInsideRoot(value, label) {
 }
 
 if (!name || !type || !category) {
-  fail('usage: pnpm component:new --name <PascalCase> --type <type> --category <category> [--suite <path>] [--write]');
+  fail(
+    'usage: pnpm component:new --name <PascalCase> --type <type> --category <category> [--suite <path>] [--write]',
+  );
 } else if (!validName.test(name)) {
   fail('name must be PascalCase and contain only letters and numbers');
 } else if (!types.has(type)) {
@@ -58,20 +60,29 @@ if (!name || !type || !category) {
   const registryMatches = entries.filter((entry) => {
     const entryName = String(entry.name || '');
     const entryId = String(entry.id || '');
-    return entryName.toLowerCase() === name.toLowerCase()
-      || entryId.includes(normalized)
-      || entryName.toLowerCase().includes(normalized.replaceAll('-', ' '));
+    return (
+      entryName.toLowerCase() === name.toLowerCase() ||
+      entryId.includes(normalized) ||
+      entryName.toLowerCase().includes(normalized.replaceAll('-', ' '))
+    );
   });
 
-  const sharedLayer = type === 'atom' ? 'atoms'
-    : type === 'shell' ? path.join('composites', 'shell')
-      : type === 'workspace' ? path.join('composites', 'workspace')
-        : 'composites';
+  const sharedLayer =
+    type === 'atom'
+      ? 'atoms'
+      : type === 'shell'
+        ? path.join('composites', 'shell')
+        : type === 'workspace'
+          ? path.join('composites', 'workspace')
+          : 'composites';
   const suiteRoot = sharedTypes.has(type) ? root : resolveInsideRoot(suite, 'suite');
-  const reviewPath = duplicateReview ? resolveInsideRoot(duplicateReview, 'duplicate review') : null;
+  const reviewPath = duplicateReview
+    ? resolveInsideRoot(duplicateReview, 'duplicate review')
+    : null;
   if (!suiteRoot) process.exitCode = 1;
   else if (duplicateReview && !reviewPath) process.exitCode = 1;
-  else if (duplicateReview && !fs.existsSync(reviewPath)) fail(`duplicate review does not exist: ${duplicateReview}`);
+  else if (duplicateReview && !fs.existsSync(reviewPath))
+    fail(`duplicate review does not exist: ${duplicateReview}`);
   else {
     const base = sharedTypes.has(type)
       ? path.join(root, 'ds/packages/ui/src/components', sharedLayer, category, name)
@@ -86,26 +97,31 @@ if (!name || !type || !category) {
     console.log(`- registry matches: ${registryMatches.length}`);
 
     if (registryMatches.length > 0 && !duplicateReview) {
-    console.log('Duplicate review required. Existing registry candidates:');
-    for (const entry of registryMatches) console.log(`- ${entry.id}: ${entry.implementation || 'no implementation'}`);
-    process.exitCode = 2;
-    } else if (registryMatches.length > 0 && !fs.readFileSync(reviewPath, 'utf8').match(/\b(reuse|variant|compose|create)\b/i)) {
-    fail('duplicate review must record a reuse, variant, compose, or create decision');
+      console.log('Duplicate review required. Existing registry candidates:');
+      for (const entry of registryMatches)
+        console.log(`- ${entry.id}: ${entry.implementation || 'no implementation'}`);
+      process.exitCode = 2;
+    } else if (
+      registryMatches.length > 0 &&
+      !fs.readFileSync(reviewPath, 'utf8').match(/\b(reuse|variant|compose|create)\b/i)
+    ) {
+      fail('duplicate review must record a reuse, variant, compose, or create decision');
     } else if (existing) {
-    fail(`target already exists: ${relativeBase}`);
+      fail(`target already exists: ${relativeBase}`);
     } else if (!write) {
-    console.log('No files created. Review references and rerun with --write after approval.');
+      console.log('No files created. Review references and rerun with --write after approval.');
     } else {
-    const files = {
-      'index.tsx': `import type { ${name}Props } from './types';\n\nexport function ${name}(_props: ${name}Props) {\n  return null;\n}\n\nexport type { ${name}Props } from './types';\n`,
-      'types.ts': `export interface ${name}Props {\n  // Define the approved public contract.\n}\n`,
-      [`${name}.test.tsx`]: `import { describe, expect, it } from 'vitest';\n\nimport { ${name} } from './index';\n\ndescribe('${name}', () => {\n  it('has an implementation contract', () => {\n    expect(${name}).toBeDefined();\n  });\n});\n`,
-      'certification/source-contract.md': `# Source contract: ${name}\n\n- Manifest entry: add this component to \\`scripts/certification/source-contract-manifest.json\\` before certification.\n- Implementation rule: consumer-owned data, copy, tokens and actions only.\n- Fixtures: keep representative data outside the implementation file.\n`,
-    };
-    fs.mkdirSync(base, { recursive: true });
-    for (const [file, content] of Object.entries(files)) fs.writeFileSync(path.join(base, file), content);
-    console.log(`Created scaffold at ${relativeBase}`);
-    console.log('Registry entry and implementation must be completed before certification.');
+      const files = {
+        'index.tsx': `import type { ${name}Props } from './types';\n\nexport function ${name}(_props: ${name}Props) {\n  return null;\n}\n\nexport type { ${name}Props } from './types';\n`,
+        'types.ts': `export interface ${name}Props {\n  // Define the approved public contract.\n}\n`,
+        [`${name}.test.tsx`]: `import { describe, expect, it } from 'vitest';\n\nimport { ${name} } from './index';\n\ndescribe('${name}', () => {\n  it('has an implementation contract', () => {\n    expect(${name}).toBeDefined();\n  });\n});\n`,
+        'certification/source-contract.md': `# Source contract: ${name}\n\n- Manifest entry: add this component to \`scripts/certification/source-contract-manifest.json\` before certification.\n- Implementation rule: consumer-owned data, copy, tokens and actions only.\n- Fixtures: keep representative data outside the implementation file.\n`,
+      };
+      fs.mkdirSync(base, { recursive: true });
+      for (const [file, content] of Object.entries(files))
+        fs.writeFileSync(path.join(base, file), content);
+      console.log(`Created scaffold at ${relativeBase}`);
+      console.log('Registry entry and implementation must be completed before certification.');
     }
   }
 }

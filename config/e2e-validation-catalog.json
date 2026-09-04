@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "projects": ["desktop", "mobile", "mobile-compact"],
+  "specs": [
+    {
+      "file": "activity-table.certification.spec.mjs",
+      "domain": "web",
+      "profile": "domain",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "authenticated.mobile.spec.mjs",
+      "domain": "web",
+      "profile": "responsive",
+      "projects": ["mobile", "mobile-compact"]
+    },
+    {
+      "file": "button.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "command-dialog.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "composition-showcase.interaction.spec.mjs",
+      "domain": "shell",
+      "profile": "functional",
+      "projects": ["desktop"]
+    },
+    {
+      "file": "composition-showcase.visual.spec.mjs",
+      "domain": "shell",
+      "profile": "visual",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "contacts-form.certification.spec.mjs",
+      "domain": "crm",
+      "profile": "domain",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "crm-primitives.certification.spec.mjs",
+      "domain": "crm",
+      "profile": "domain",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "dense-operational-table.visual.spec.mjs",
+      "domain": "design-system",
+      "profile": "visual",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "entity-table-golden.visual.spec.mjs",
+      "domain": "design-system",
+      "profile": "visual",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "entity-table.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "filter-dropdown.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "filters-actions.certification.spec.mjs",
+      "domain": "web",
+      "profile": "functional",
+      "projects": ["desktop"]
+    },
+    {
+      "file": "icon-button.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "input.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "phase5.certification.spec.mjs",
+      "domain": "web",
+      "profile": "functional",
+      "projects": ["desktop"]
+    },
+    {
+      "file": "quantitative-table.visual.spec.mjs",
+      "domain": "design-system",
+      "profile": "visual",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "responsive.visual.spec.mjs",
+      "domain": "web",
+      "profile": "visual",
+      "projects": ["mobile", "mobile-compact"]
+    },
+    {
+      "file": "search-input.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile"]
+    },
+    {
+      "file": "selection-table.certification.spec.mjs",
+      "domain": "design-system",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "shell.accessibility.spec.mjs",
+      "domain": "shell",
+      "profile": "accessibility",
+      "projects": ["desktop"]
+    },
+    {
+      "file": "shell.mobile-diagnostic.spec.mjs",
+      "domain": "shell",
+      "profile": "diagnostic",
+      "projects": ["mobile", "mobile-compact"]
+    },
+    {
+      "file": "shell.smoke.spec.mjs",
+      "domain": "shell",
+      "profile": "smoke",
+      "projects": ["desktop"]
+    },
+    {
+      "file": "shell.visual.spec.mjs",
+      "domain": "shell",
+      "profile": "visual",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
+      "file": "shell-showcase.contract.spec.mjs",
+      "domain": "shell",
+      "profile": "contract",
+      "projects": ["desktop"]
+    },
+    {
+      "file": "shell-showcase.visual.spec.mjs",
+      "domain": "shell",
+      "profile": "visual",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    }
+  ]
+}

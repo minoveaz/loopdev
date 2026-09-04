@@ -94,7 +94,7 @@ describe('CRM lead capture API', () => {
     expect(response.status).toBe(200);
   });
 
-  it('returns the authorization status without calling the service', async () => {
+  it('returns the lead-capture authorization status without calling the service', async () => {
     authorizeCrm.mockResolvedValue({ allowed: false, status: 401 });
     const response = await POST(
       new Request('http://localhost/api/crm/capture', {
