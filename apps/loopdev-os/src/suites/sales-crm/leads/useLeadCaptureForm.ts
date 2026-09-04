@@ -1,9 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useFeedback } from '@loopdev/ui';
-import { captureLead, createLeadNote, type LeadCaptureResult } from './api';
+import {
+  captureLead,
+  createLeadNote,
+  LeadApiError,
+  type LeadCaptureCompletion,
+  type LeadCaptureResult,
+} from './api';
 import {
   DEFAULT_LEAD_CAPTURE_VALUES,
   buildCaptureLeadCommand,
@@ -13,7 +20,7 @@ import {
 
 type UseLeadCaptureFormOptions = {
   organizationId: string;
-  onSuccess: (result: LeadCaptureResult) => void;
+  onSuccess: (result: LeadCaptureCompletion) => void;
 };
 
 /**
@@ -25,6 +32,7 @@ type UseLeadCaptureFormOptions = {
  */
 export function useLeadCaptureForm({ organizationId, onSuccess }: UseLeadCaptureFormOptions) {
   const feedback = useFeedback();
+  const [isRetryingInitialNote, setIsRetryingInitialNote] = useState(false);
   const form = useForm<LeadCaptureFormValues>({
     resolver: zodResolver(leadCaptureFormSchema),
     defaultValues: DEFAULT_LEAD_CAPTURE_VALUES,
@@ -32,23 +40,9 @@ export function useLeadCaptureForm({ organizationId, onSuccess }: UseLeadCapture
 
   const submit = async (values: LeadCaptureFormValues) => {
     const command = buildCaptureLeadCommand(organizationId, values);
+    let result: LeadCaptureResult;
     try {
-      const result = await captureLead(command);
-      if (values.note?.trim()) {
-        await createLeadNote({
-          organizationId,
-          relationType: 'lead',
-          relationId: result.lead.id,
-          body: values.note.trim(),
-          idempotencyKey: `lead-capture-note-${result.lead.id}`,
-        });
-      }
-      onSuccess(result);
-      feedback.success(
-        result.reused
-          ? 'Este Lead ya existía; se reutilizó el registro existente.'
-          : 'Lead capturado correctamente.',
-      );
+      result = await captureLead(command);
     } catch (error) {
       const code =
         error instanceof Error && 'code' in error ? (error as { code?: string }).code : undefined;
@@ -73,8 +67,66 @@ export function useLeadCaptureForm({ organizationId, onSuccess }: UseLeadCapture
         form.setError('root', { message: 'No se pudo capturar el Lead. Inténtalo de nuevo.' });
       }
       feedback.error('No se pudo capturar el Lead. Revisa el formulario e inténtalo de nuevo.');
+      return;
+    }
+
+    const noteBody = values.note?.trim();
+    if (!noteBody) {
+      onSuccess({ ...result, initialNote: { status: 'not-requested' } });
+      feedback.success(
+        result.reused
+          ? 'Este Lead ya existía; se reutilizó el registro existente.'
+          : 'Lead capturado correctamente.',
+      );
+      return;
+    }
+
+    const noteCommand = {
+      organizationId,
+      relationType: 'lead' as const,
+      relationId: result.lead.id,
+      body: noteBody,
+      idempotencyKey: `lead-capture-note-${result.lead.id}`,
+    };
+    try {
+      await createLeadNote(noteCommand);
+      onSuccess({ ...result, initialNote: { status: 'saved' } });
+      feedback.success(
+        result.reused
+          ? 'Este Lead ya existía; se reutilizó el registro existente y se guardó la nota.'
+          : 'Lead capturado correctamente con su nota inicial.',
+      );
+    } catch (error: unknown) {
+      const errorCode = error instanceof LeadApiError ? error.code : 'UNKNOWN';
+      onSuccess({
+        ...result,
+        initialNote: { status: 'failed', command: noteCommand, errorCode },
+      });
+      feedback.warning('El Lead se creó, pero la nota inicial quedó pendiente.');
     }
   };
 
-  return { form, submit };
+  const retryInitialNote = async (
+    completion: LeadCaptureCompletion,
+  ): Promise<LeadCaptureCompletion> => {
+    if (completion.initialNote.status !== 'failed') return completion;
+
+    setIsRetryingInitialNote(true);
+    try {
+      await createLeadNote(completion.initialNote.command);
+      feedback.success('Nota inicial guardada correctamente.');
+      return { ...completion, initialNote: { status: 'saved' } };
+    } catch (error: unknown) {
+      const errorCode = error instanceof LeadApiError ? error.code : 'UNKNOWN';
+      feedback.error('No se pudo guardar la nota inicial. El Lead ya está creado.');
+      return {
+        ...completion,
+        initialNote: { ...completion.initialNote, errorCode },
+      };
+    } finally {
+      setIsRetryingInitialNote(false);
+    }
+  };
+
+  return { form, submit, retryInitialNote, isRetryingInitialNote };
 }

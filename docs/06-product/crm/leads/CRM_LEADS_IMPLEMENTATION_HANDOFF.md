@@ -3,7 +3,7 @@ title: CRM Leads Implementation Handoff
 status: approved-for-handoff
 version: 1.0
 created: 2026-08-13
-updated: 2026-08-24
+updated: 2026-09-04
 owner: crm
 program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 implementation_issue: https://github.com/minoveaz/loopdev/issues/84
@@ -168,3 +168,14 @@ configuración ausente. Playwright de L1/L2/L3 y la revisión visual se mantiene
 el gate final, pendientes de aprobación visual del usuario. La infraestructura
 detectada no contiene journeys de Leads ni un proyecto tablet. Fase 5 sigue
 `in-progress`; no se declara completada ni certificada.
+
+## Hardening prioritario 2026-09-04
+
+- `20260907000000_crm_lead_assignment_scope.sql` incorpora preflight no-go, FK compuesto a
+  `organization_memberships`, validación de rol/estado, protección del ciclo de vida de la membresía
+  y RLS de escritura. Su ejecución y la nueva evidencia pgTAP quedan pendientes de Codespaces con
+  Supabase/Postgres; no se certifica RLS.
+- La conversión UI admite Leads `cualificado` y `convertido`, mientras el RPC conserva idempotencia
+  por producto normalizado y permite productos distintos.
+- Captura y nota exponen éxito parcial cuando Notes falla y permiten reintentar únicamente la nota
+  idempotente, sin volver a crear el Lead.

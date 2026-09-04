@@ -1,9 +1,9 @@
 ---
 title: CRM Leads UI integration contract
 status: approved
-version: 1.1
+version: 1.2
 created: 2026-08-22
-updated: 2026-08-24
+updated: 2026-09-04
 owner: crm
 program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 issue: https://github.com/minoveaz/loopdev/issues/84
@@ -73,12 +73,12 @@ localizarse sin alterar `status`, `source.kind` ni `stageKey`.
 
 ## Capabilities y errores
 
-| Capacidad          | Permiso requerido | Comportamiento UI                                              |
-| ------------------ | ----------------- | -------------------------------------------------------------- |
-| Leer lista/detalle | `crm.read`        | Mostrar `loading`, `empty`, `error` o `forbidden`              |
-| Editar/reasignar   | `crm.manage`      | Enviar `expectedUpdatedAt`; tratar conflicto como stale        |
-| Cambiar estado     | `crm.manage`      | Permitir solo estados manuales del contrato                    |
-| Capturar/converter | `crm.manage`      | Captura Fase 2; conversión Fase 4 solo para Lead `cualificado` |
+| Capacidad          | Permiso requerido | Comportamiento UI                                                 |
+| ------------------ | ----------------- | ----------------------------------------------------------------- |
+| Leer lista/detalle | `crm.read`        | Mostrar `loading`, `empty`, `error` o `forbidden`                 |
+| Editar/reasignar   | `crm.manage`      | Enviar `expectedUpdatedAt`; tratar conflicto como stale           |
+| Cambiar estado     | `crm.manage`      | Permitir solo estados manuales del contrato                       |
+| Capturar/converter | `crm.manage`      | Captura Fase 2; conversión para Lead `cualificado` o `convertido` |
 
 La UI conserva el envelope seguro del servidor y presenta estos códigos sin exponer detalles internos:
 `UNAUTHENTICATED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `VALIDATION_ERROR`,
@@ -91,6 +91,9 @@ La UI conserva el envelope seguro del servidor y presenta estos códigos sin exp
   nota inicial.
 - La nota se registra después de capturar el Lead mediante el endpoint existente de Notes; su clave
   determinista `lead-capture-note-{leadId}` hace idempotente el reintento.
+- Si Notes falla después de la captura, el resultado conserva `LeadCaptureCompletion` con
+  `initialNote.status=failed`, comunica que el Lead ya existe y permite reintentar únicamente el
+  mismo comando de nota. No vuelve a invocar `POST /api/crm/capture`.
 - El backend actual no persiste `utm_source` ni expone catálogo de usuarios para un selector de
   asignación. La UI no inventa esos contratos: muestra los tres campos UTM respaldados y acepta un
   UUID de usuario; `utm_source` queda diferido hasta ampliar el contrato de atribución.
@@ -153,7 +156,8 @@ No se añade un fallback silencioso para producción. Cualquier kill switch debe
 
 ## Evidencia de conversión (Fase 4)
 
-- `QualifiedLeadGuard` habilita la acción únicamente con `crm.manage` y estado `cualificado`.
+- `QualifiedLeadGuard` habilita la acción únicamente con `crm.manage` y estado `cualificado` o
+  `convertido`; este último permite otro producto, no una copia del mismo producto.
 - `CreateOpportunityFromLead` exige producto/interés, no expone un selector editable de Contacto y
   consume el endpoint existente de conversión.
 - La respuesta 201/200 se presenta como creada/existente; los 409 se presentan como conflicto con

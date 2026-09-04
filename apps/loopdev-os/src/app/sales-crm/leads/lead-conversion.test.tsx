@@ -32,14 +32,49 @@ const lead = {
 } as CrmLead;
 
 describe('Lead conversion UI', () => {
-  it('only enables conversion for a managed qualified Lead', () => {
+  it('enables conversion for managed qualified or converted Leads', () => {
     const onConvert = vi.fn();
     const { rerender } = render(<QualifiedLeadGuard lead={lead} canManage onConvert={onConvert} />);
     fireEvent.click(screen.getByRole('button', { name: 'Crear Opportunity' }));
     expect(onConvert).toHaveBeenCalledOnce();
+    rerender(
+      <QualifiedLeadGuard lead={{ status: 'convertido' }} canManage onConvert={onConvert} />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Crear Opportunity' }));
+    expect(onConvert).toHaveBeenCalledTimes(2);
     rerender(<QualifiedLeadGuard lead={{ status: 'nuevo' }} canManage onConvert={onConvert} />);
     expect(screen.queryByRole('button', { name: 'Crear Opportunity' })).not.toBeInTheDocument();
     expect(canConvertQualifiedLead({ status: 'cualificado' }, false)).toBe(false);
+  });
+
+  it('allows a converted Lead to submit another product', async () => {
+    createOpportunityFromLead.mockResolvedValue({
+      outcome: 'created',
+      opportunity: {
+        id: '00000000-0000-4000-9000-000000000005',
+        name: 'Seguro de salud',
+        stageKey: 'qualified',
+      },
+    });
+    render(
+      <CreateOpportunityFromLead
+        open
+        organizationId={lead.organizationId}
+        lead={{ ...lead, status: 'convertido' }}
+        onClose={vi.fn()}
+        onSuccess={vi.fn()}
+      />,
+    );
+
+    fireEvent.change(screen.getByRole('textbox', { name: 'Producto o interés' }), {
+      target: { value: 'Seguro de salud' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Crear Opportunity' }));
+
+    expect(await screen.findByText('Opportunity creada')).toBeInTheDocument();
+    expect(createOpportunityFromLead).toHaveBeenCalledWith(
+      expect.objectContaining({ productKey: 'Seguro de salud' }),
+    );
   });
 
   it('requires product/interés and does not expose an editable contact', async () => {

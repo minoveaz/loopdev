@@ -3,7 +3,7 @@ title: CRM Leads UI Implementation Plan
 status: approved
 version: 1.0
 created: 2026-08-22
-updated: 2026-08-24
+updated: 2026-09-04
 owner: crm
 program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 related_issue: https://github.com/minoveaz/loopdev/issues/84
@@ -172,6 +172,10 @@ asignaciones históricas sin membresía; staging debe auditar ese caso antes de 
 endpoints ni se activa Marketing/WhatsApp real.
 La revisión visual y Playwright quedan deliberadamente para el gate final.
 
+**Hardening 2026-09-04:** captura y nota ya no comparten un único estado de error. Si el Lead se
+persiste y Notes falla, ambas superficies muestran éxito parcial, conservan el Lead creado y
+reintentan solo la nota idempotente.
+
 **Salida técnica:** journeys L1 y L2 funcionales, incluyendo idempotencia visible al reintentar.
 
 ### Fase 3 — Previsualizacion y detalle
@@ -204,7 +208,7 @@ siguen pendientes como gate final.
 **Objetivo:** completar Lead -> Opportunity.
 
 - implementar `QualifiedLeadGuard`;
-- habilitar conversion solo en estado `cualificado`;
+- habilitar conversión en estado `cualificado` y, para productos adicionales, `convertido`;
 - construir `CreateOpportunityFromLead` con producto/interes obligatorio;
 - bloquear el `contactId` heredado;
 - mostrar resultado idempotente, oportunidad existente o conflicto;
@@ -222,6 +226,10 @@ Opportunities relacionadas y Contact 360. Evidence: `lead-conversion.test.tsx`,
 
 La revisión visual y Playwright quedan bloqueados hasta aprobación visual explícita del usuario; no
 se reclama certificación UI/UX ni se inventan endpoints. Contacts permanece fuera de alcance.
+
+**Hardening 2026-09-04:** la guardia UI se alinea con el RPC, que ya acepta `convertido`. El mismo
+producto sigue devolviendo la Opportunity existente y otro `productKey` crea una Opportunity
+adicional.
 
 ### Fase 5 — Certificacion
 

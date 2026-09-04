@@ -10,7 +10,7 @@ type QualifiedLeadGuardProps = {
 };
 
 export function canConvertQualifiedLead(lead: Pick<CrmLead, 'status'>, canManage: boolean) {
-  return canManage && lead.status === 'cualificado';
+  return canManage && (lead.status === 'cualificado' || lead.status === 'convertido');
 }
 
 export function QualifiedLeadGuard({ lead, canManage, onConvert }: QualifiedLeadGuardProps) {

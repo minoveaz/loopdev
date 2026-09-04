@@ -7,6 +7,11 @@ const organizationId = '00000000-0000-4000-9000-000000000001';
 const contactId = '00000000-0000-4000-9000-000000000002';
 const leadId = '00000000-0000-4000-9000-000000000003';
 const timestamp = '2026-08-24T00:00:00.000Z';
+const pushMock = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: pushMock, replace: vi.fn(), prefetch: vi.fn(), back: vi.fn() }),
+}));
 
 const contact = {
   id: contactId,
@@ -49,7 +54,10 @@ function renderDialog(props: Partial<React.ComponentProps<typeof QuickLeadCaptur
   return { onClose, onSuccess };
 }
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  pushMock.mockClear();
+});
 
 describe('QuickLeadCapture', () => {
   it('renders the contact, lead detail and attribution sections', () => {
@@ -183,6 +191,7 @@ describe('QuickLeadCapture', () => {
     fireEvent.change(screen.getByLabelText('Buscar contacto existente'), {
       target: { value: 'ana' },
     });
+
     fireEvent.click(await screen.findByText('Ana García'));
     fireEvent.change(screen.getByLabelText('Interés/producto *'), {
       target: { value: 'Seguro de hogar' },
@@ -215,6 +224,72 @@ describe('QuickLeadCapture', () => {
         utm: { medium: 'social' },
       },
     });
+  });
+
+  it('reports partial success and retries only the note when note creation fails', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ items: [contact], nextCursor: null, hasMore: false }), {
+          status: 200,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ contact, lead, attribution: null, reused: false }), {
+          status: 201,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ error: { code: 'CONFLICT', message: 'Note failed' } }), {
+          status: 409,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            id: '00000000-0000-4000-9000-000000000004',
+            organizationId,
+            tenantId: organizationId,
+            workspaceId: null,
+            brandId: null,
+            relationType: 'lead',
+            relationId: leadId,
+            authorId: '00000000-0000-4000-9000-000000000005',
+            body: 'Llamar mañana.',
+            permissions: { canEdit: true, canModerate: false },
+            version: 1,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          }),
+          { status: 201 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+    const { onSuccess, onClose } = renderDialog();
+
+    fireEvent.change(screen.getByLabelText('Buscar contacto existente'), {
+      target: { value: 'ana' },
+    });
+    fireEvent.click(await screen.findByText('Ana García'));
+    fireEvent.change(screen.getByLabelText('Interés/producto *'), {
+      target: { value: 'Seguro de hogar' },
+    });
+    fireEvent.change(screen.getByLabelText('Nota inicial'), {
+      target: { value: 'Llamar mañana.' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Capturar lead' }));
+
+    const partialHeading = await screen.findByText('Lead creado; nota inicial pendiente');
+    expect(partialHeading.closest('[role="alert"]')).toBeInTheDocument();
+    expect(onSuccess).toHaveBeenCalledWith(
+      expect.objectContaining({ initialNote: expect.objectContaining({ status: 'failed' }) }),
+    );
+    expect(onClose).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reintentar nota' }));
+    expect(await screen.findByText('La nota inicial quedó guardada.')).toBeInTheDocument();
+    expect(fetchMock.mock.calls.filter(([url]) => url === '/api/crm/capture')).toHaveLength(1);
+    expect(fetchMock.mock.calls.filter(([url]) => url === '/api/crm/notes')).toHaveLength(2);
   });
 
   it('shows a permission error and allows a safe retry without losing form state', async () => {

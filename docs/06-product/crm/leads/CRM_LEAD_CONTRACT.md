@@ -1,9 +1,9 @@
 ---
 title: CRM Lead Contract
 status: approved
-version: 1.1
+version: 1.2
 created: 2026-08-13
-updated: 2026-08-24
+updated: 2026-09-04
 owner: crm
 program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 issue: https://github.com/minoveaz/loopdev/issues/84
@@ -84,12 +84,16 @@ origin=lead_conversion)` and the command must be transactional.
 - The visible stage name/order may change without changing stable IDs, contracts or historical data.
 - Cross-tenant leads and references are never returned.
 - The application validates assignees against active organization membership, and the database
-  additionally enforces `(organization_id, assigned_to_user_id)` plus an RLS check for operational
-  roles.
+  additionally enforces `(organization_id, assigned_to_user_id)`, active operational roles and an
+  RLS write check. Applying that barrier is a no-go while historical assignments do not satisfy the
+  same organization/status/role invariant; the migration never repairs those rows silently.
 - The conversion command never accepts `contactId`; the transactional backend operation inherits
   the Lead's authorized Contact and rejects non-qualified status. A repeated normalized
   Lead/product conversion returns the existing Opportunity, while a successful new conversion
   returns the created Opportunity and reconciles the Lead status.
+- Initial-note persistence follows Lead capture. If the note fails after the Lead is created, the
+  result is partial success: the client retains the created Lead identity and retries only the
+  idempotent note command. It must not present the capture itself as failed or create another Lead.
 
 ## Errors
 

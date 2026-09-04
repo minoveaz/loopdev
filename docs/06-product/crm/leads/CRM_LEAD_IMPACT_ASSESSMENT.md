@@ -3,7 +3,7 @@ title: CRM Lead Impact Assessment
 status: approved
 version: 1.0
 created: 2026-08-13
-updated: 2026-08-24
+updated: 2026-09-04
 owner: crm
 program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 issue: https://github.com/minoveaz/loopdev/issues/84
@@ -59,6 +59,8 @@ Leads does not implement real Marketing or WhatsApp integrations in this slice.
 - Manual Pipeline Opportunities are incorrectly treated as the Lead conversion Opportunity.
 - The Lead is not moved to `convertido` after the first successful conversion, or is moved by a manual Pipeline Opportunity.
 - A visible stage rename changes the stable stage ID or historical records.
+- A failed initial note is presented as total capture failure and causes the user to submit a second
+  Lead instead of retrying only the note.
 
 ## Evidencia de Fase 4 UI
 

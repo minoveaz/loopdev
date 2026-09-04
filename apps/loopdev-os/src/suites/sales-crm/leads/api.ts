@@ -237,6 +237,16 @@ export type LeadCaptureResult = {
   reused: boolean;
 };
 
+export type LeadCaptureCompletion = LeadCaptureResult & {
+  initialNote:
+    | { status: 'not-requested' | 'saved' }
+    | {
+        status: 'failed';
+        command: CreateNoteCommand;
+        errorCode: LeadApiErrorCode;
+      };
+};
+
 /**
  * Implements CRM_LEADS_UI_CONTRACT.md capture surface: `POST /api/crm/capture`
  * accepts an existing `contactId` or a new-contact payload and is idempotent

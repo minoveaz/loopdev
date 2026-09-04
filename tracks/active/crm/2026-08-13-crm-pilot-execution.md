@@ -746,6 +746,18 @@ usuario; la UI/UX no se marca certificada. Contacts permanece fuera de alcance.
 parcialmente. No se declara completada ni certificada: Playwright, revisión visual,
 aislamiento remoto y staging/UAT siguen pendientes o bloqueados.
 
+### Hardening prioritario de Leads — 2026-09-04
+
+| Bloqueo                           | Cambio factual                                                                                                                                                                                                                | Evidencia local / gate                                                                                                                                                                         |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Asignación cross-organization     | Se añade `20260907000000_crm_lead_assignment_scope.sql` con preflight no-go para datos existentes, FK compuesto a la membresía canónica, validación de rol/estado, protección ante suspensión/degradación y RLS de escritura. | `005_crm_security.sql` amplía la matriz para mismo tenant operativo, cross-organization, viewer, suspended y ciclo de vida. Ejecución Supabase/pgTAP pendiente Codespaces; RLS no certificada. |
+| Conversión posterior por producto | `QualifiedLeadGuard` y el diálogo admiten `cualificado` y `convertido`. El RPC existente conserva la unicidad por Lead/producto normalizado: mismo producto reutiliza; producto distinto crea.                                | Vitest focalizado de conversión pasa localmente; `006_crm_tasks_contract.sql` añade el caso RPC del segundo producto, pendiente de pgTAP en Codespaces.                                        |
+| Captura + nota                    | `LeadCaptureCompletion` separa captura de nota. Un fallo de Notes conserva el Lead creado, anuncia éxito parcial y ofrece reintento exclusivo de la nota idempotente en captura rápida y workspace.                           | Vitest focalizado cubre fallo, estado accesible y recuperación sin una segunda llamada a `/api/crm/capture`.                                                                                   |
+
+Los gates Playwright, revisión visual, Supabase/pgTAP remoto, aislamiento remoto,
+staging y UAT permanecen pendientes. El estado UI/UX continúa `in-progress` y no
+se declara certificación.
+
 ## Handoff de sesion
 
 - **Fecha:** 2026-08-24.

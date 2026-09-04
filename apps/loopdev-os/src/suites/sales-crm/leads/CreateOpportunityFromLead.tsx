@@ -28,7 +28,7 @@ export function CreateOpportunityFromLead({
     { kind: 'success'; conversion: LeadConversionResult } | { kind: 'conflict'; message: string }
   >();
 
-  if (!open || (lead.status !== 'cualificado' && !result)) return null;
+  if (!open || (!['cualificado', 'convertido'].includes(lead.status) && !result)) return null;
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,7 +53,7 @@ export function CreateOpportunityFromLead({
         error instanceof LeadApiError && error.code === 'CONFLICT'
           ? 'El Lead cambió mientras lo convertías. Actualiza los datos y vuelve a intentarlo.'
           : error instanceof LeadApiError && error.code === 'INVALID_STATUS_TRANSITION'
-            ? 'Solo se pueden convertir Leads cualificados.'
+            ? 'Solo se pueden convertir Leads cualificados o ya convertidos.'
             : error instanceof LeadApiError
               ? error.message
               : 'No se pudo convertir el Lead.';
@@ -68,7 +68,7 @@ export function CreateOpportunityFromLead({
       isOpen={open}
       onClose={onClose}
       title="Crear Opportunity desde Lead"
-      description="Convierte el interés cualificado sin duplicar el Lead ni el Contacto."
+      description="Crea una Opportunity por producto sin duplicar el Lead ni el Contacto."
       presentation="form"
       size="md"
       closeLabel="Cerrar conversión de Lead"

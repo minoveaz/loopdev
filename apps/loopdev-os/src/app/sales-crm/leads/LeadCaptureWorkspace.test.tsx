@@ -182,6 +182,7 @@ describe('LeadCaptureWorkspace', () => {
     fireEvent.change(screen.getByLabelText('Buscar contacto existente'), {
       target: { value: 'ana' },
     });
+
     fireEvent.click(await screen.findByText('Ana García'));
     fireEvent.change(screen.getByLabelText('Interés/producto *'), {
       target: { value: 'Seguro de hogar' },
@@ -197,5 +198,43 @@ describe('LeadCaptureWorkspace', () => {
         'El origen y el ID externo ya estaban registrados; se devolvió el Lead existente en lugar de duplicarlo.',
       ),
     ).toBeInTheDocument();
+  });
+
+  it('keeps the created Lead result visible when the initial note fails', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ items: [contact], nextCursor: null, hasMore: false }), {
+          status: 200,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ contact, lead, attribution: null, reused: false }), {
+          status: 201,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ error: { code: 'UNKNOWN', message: 'Unavailable' } }), {
+          status: 500,
+        }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+    renderWorkspace();
+
+    fireEvent.change(screen.getByLabelText('Buscar contacto existente'), {
+      target: { value: 'ana' },
+    });
+    fireEvent.click(await screen.findByText('Ana García'));
+    fireEvent.change(screen.getByLabelText('Interés/producto *'), {
+      target: { value: 'Seguro de hogar' },
+    });
+    fireEvent.change(screen.getByLabelText('Nota inicial'), {
+      target: { value: 'Llamar mañana.' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Capturar lead' }));
+
+    expect(await screen.findByText('Lead creado; nota inicial pendiente')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reintentar nota' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Capturar lead' })).not.toBeInTheDocument();
   });
 });

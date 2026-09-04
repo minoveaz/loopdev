@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button, FormActions, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
-import type { LeadCaptureResult } from './api';
+import type { LeadCaptureCompletion } from './api';
 import { LeadCaptureResultPanel } from './LeadCaptureResultPanel';
 import { LeadForm } from './LeadForm';
 import { useLeadCaptureForm } from './useLeadCaptureForm';
@@ -27,8 +27,8 @@ export function LeadCaptureWorkspace() {
     'crm.manage',
   ]);
   const canManage = hasPermission('crm.manage');
-  const [result, setResult] = useState<LeadCaptureResult | null>(null);
-  const { form, submit } = useLeadCaptureForm({
+  const [result, setResult] = useState<LeadCaptureCompletion | null>(null);
+  const { form, submit, retryInitialNote, isRetryingInitialNote } = useLeadCaptureForm({
     organizationId: activeOrganizationId ?? '',
     onSuccess: setResult,
   });
@@ -68,6 +68,8 @@ export function LeadCaptureWorkspace() {
         {result ? (
           <LeadCaptureResultPanel
             result={result}
+            isRetryingInitialNote={isRetryingInitialNote}
+            onRetryInitialNote={async () => setResult(await retryInitialNote(result))}
             onCreateAnother={() => {
               setResult(null);
               form.reset();

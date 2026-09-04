@@ -1,9 +1,9 @@
 ---
 title: CRM Leads UX Specification
 status: approved
-version: 1.2
+version: 1.3
 created: 2026-08-13
-updated: 2026-08-24
+updated: 2026-09-04
 owner: crm
 program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 ---
@@ -163,6 +163,11 @@ duplicados e idempotencia de `provider + externalId`. Tras el éxito se ofrece a
 crear una tarea, registrar una nota o volver a la lista. El error conserva valores no sensibles,
 permite reintento seguro y no expone detalles internos.
 
+La nota inicial se persiste después del Lead mediante el comando idempotente de Notes. Si esa
+segunda operación falla, la captura se presenta como éxito parcial: el Lead queda identificado como
+creado, la nota queda pendiente y la única recuperación ofrecida es reintentar la nota. La UI no
+vuelve a enviar la captura completa.
+
 Las conexiones reales de Marketing y WhatsApp no se activan en el piloto. Referral, social y partner
 sí forman parte del catálogo de origen y pueden capturarse manualmente o mediante fixtures. Provider,
 externalId y atribución quedan preparados para H2 y sus identificadores deben ser idempotentes.
@@ -257,7 +262,7 @@ Opportunity manual creada desde Pipeline no cambia por sí sola el estado del Le
 ### Implementación de Fase 4
 
 `QualifiedLeadGuard` muestra la acción de conversión únicamente cuando el usuario tiene
-`crm.manage` y el Lead está en `cualificado`. `CreateOpportunityFromLead` exige producto/interés y
+`crm.manage` y el Lead está en `cualificado` o `convertido`. `CreateOpportunityFromLead` exige producto/interés y
 mantiene el Contacto heredado del Lead fuera de edición. Consume `POST /api/crm/leads/conversion`
 sin crear un endpoint paralelo.
 
