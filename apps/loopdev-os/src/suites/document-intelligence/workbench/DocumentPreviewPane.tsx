@@ -10,6 +10,27 @@ import type { DocumentSide } from './types';
 const ALLOWED_MIME_CAPTION = 'JPEG, PNG o PDF · máx. 10 MB · almacenamiento temporal';
 const ZOOM_STEPS = [1, 1.25, 1.5, 2, 2.5, 3] as const;
 
+export function calculatePdfPageFit(
+  pageWidth: number,
+  pageHeight: number,
+  containerWidth: number,
+  containerHeight: number,
+  padding = 32,
+) {
+  const availableWidth = Math.max(containerWidth - padding, 1);
+  const availableHeight = Math.max(containerHeight - padding, 1);
+  const scale = Math.min(
+    availableWidth / Math.max(pageWidth, 1),
+    availableHeight / Math.max(pageHeight, 1),
+  );
+
+  return {
+    scale,
+    width: pageWidth * scale,
+    height: pageHeight * scale,
+  };
+}
+
 interface CropDialogProps {
   file: File;
   previewUrl: string;
@@ -112,11 +133,29 @@ function PdfCanvasPreview({
   useEffect(() => {
     const element = viewportRef.current;
     if (!element) return;
+    const measure = () => {
+      const rect = element.getBoundingClientRect();
+      setViewport({
+        width: Math.max(rect.width, element.clientWidth),
+        height: Math.max(rect.height, element.clientHeight),
+      });
+    };
     const observer = new ResizeObserver(([entry]) => {
-      setViewport({ width: entry.contentRect.width, height: entry.contentRect.height });
+      const rect = element.getBoundingClientRect();
+      setViewport({
+        width: Math.max(entry.contentRect.width, rect.width, element.clientWidth),
+        height: Math.max(entry.contentRect.height, rect.height, element.clientHeight),
+      });
     });
     observer.observe(element);
-    return () => observer.disconnect();
+    const frame =
+      typeof window.requestAnimationFrame === 'function'
+        ? window.requestAnimationFrame(measure)
+        : undefined;
+    return () => {
+      observer.disconnect();
+      if (frame !== undefined) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
@@ -135,11 +174,13 @@ function PdfCanvasPreview({
         const page = await pdf.getPage(1);
         if (cancelled || !canvasRef.current) return;
         const baseViewport = page.getViewport({ scale: 1 });
-        const scale = Math.min(
-          Math.max(viewport.width - 32, 1) / baseViewport.width,
-          Math.max(viewport.height - 32, 1) / baseViewport.height,
+        const pageFit = calculatePdfPageFit(
+          baseViewport.width,
+          baseViewport.height,
+          viewport.width,
+          viewport.height,
         );
-        const pageViewport = page.getViewport({ scale: Math.max(scale, 0.1) });
+        const pageViewport = page.getViewport({ scale: pageFit.scale });
         const devicePixelRatio = window.devicePixelRatio || 1;
         const canvas = canvasRef.current;
         canvas.width = Math.ceil(pageViewport.width * devicePixelRatio);
@@ -172,12 +213,13 @@ function PdfCanvasPreview({
         <iframe
           src={`${previewUrl}#toolbar=0&navpanes=0&scrollbar=0`}
           title={title}
-          className="border-border-subtle bg-surface-elevated h-full min-h-[260px] w-full max-w-xl rounded-lg border"
+          className="border-border-subtle bg-surface-elevated h-full min-h-[260px] w-full rounded-lg border"
         />
       ) : (
         <canvas
           ref={canvasRef}
           aria-label={title}
+          data-pdf-preview-canvas="true"
           className="bg-surface-elevated block rounded-lg shadow-sm"
         />
       )}

@@ -2,10 +2,20 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { DocumentPreviewPane } from './DocumentPreviewPane';
+import { calculatePdfPageFit, DocumentPreviewPane } from './DocumentPreviewPane';
 import { WorkbenchPrototypeProvider } from './workbench-context';
 
 describe('DocumentPreviewPane', () => {
+  it('fits the PDF page to the available viewport without collapsing to a thumbnail', () => {
+    const fit = calculatePdfPageFit(612, 792, 360, 500);
+
+    expect(fit.scale).toBeCloseTo(0.5359, 3);
+    expect(fit.width).toBeCloseTo(328, 0);
+    expect(fit.height).toBeCloseTo(424.5, 0);
+    expect(fit.height / fit.width).toBeCloseTo(792 / 612, 3);
+    expect(fit.height).toBeGreaterThan(400);
+  });
+
   it('centers the empty intake group and keeps actions responsive without overflow', () => {
     render(
       <WorkbenchPrototypeProvider>
