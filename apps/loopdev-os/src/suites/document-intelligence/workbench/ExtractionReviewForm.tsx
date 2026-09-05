@@ -34,11 +34,6 @@ export function ExtractionReviewForm() {
 
   const form = useForm<ReviewFormValues>({ values: defaultValues });
 
-  const invalidValidations = useMemo(
-    () => (result?.validations ?? []).filter((validation) => !validation.valid),
-    [result],
-  );
-
   if (!result) return null;
 
   return (
@@ -50,7 +45,6 @@ export function ExtractionReviewForm() {
     >
       {WORKBENCH_FIELD_ORDER.map((field) => {
         const confidence = result.fieldConfidence[field];
-        const fieldError = invalidValidations.find((validation) => validation.field === field);
         const confidenceBadge =
           confidence !== undefined ? (
             <Badge status={confidenceStatus(confidence)} variant="outline" showDot={false}>
@@ -68,7 +62,6 @@ export function ExtractionReviewForm() {
                   aria-describedby={describedBy}
                   placeholder="No detectado"
                   rows={3}
-                  error={fieldError?.message}
                   fullWidth
                 />
               ) : (
@@ -77,7 +70,6 @@ export function ExtractionReviewForm() {
                   id={id}
                   aria-describedby={describedBy}
                   placeholder="No detectado"
-                  error={fieldError?.message}
                   endIcon={confidenceBadge}
                   fullWidth
                 />
@@ -88,20 +80,15 @@ export function ExtractionReviewForm() {
       })}
 
       <LpdText size="nano" className="text-text-muted">
-        Las fechas se normalizan a DD/MM/YYYY en servidor (Fase 2). La edición local no persiste
-        datos de identidad.
+        Los campos ausentes permanecen vacíos y editables. Las validaciones de negocio se conectarán
+        en una fase posterior.
       </LpdText>
 
       <div className="border-border-subtle flex flex-wrap items-center justify-end gap-2 border-t pt-4">
         <Button type="button" variant="ghost" size="sm" onClick={resetWorkbench}>
           Extraer nuevo
         </Button>
-        <Button
-          type="button"
-          variant="danger"
-          size="sm"
-          onClick={() => completeReview('rejected')}
-        >
+        <Button type="button" variant="danger" size="sm" onClick={() => completeReview('rejected')}>
           Rechazar
         </Button>
         <Button type="submit" variant="primary" size="sm" startIcon="check_circle">

@@ -2556,179 +2556,145 @@
       "documentation": [],
       "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
+    },
+    {
+      "id": "document-intelligence-workbench",
+      "name": "DocumentIntelligenceWorkbench",
+      "domain": "frontend",
+      "type": "widget",
+      "category": "document-intelligence",
+      "status": "experimental",
+      "suite": "document-intelligence",
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "ai-platform",
+      "phase": null,
+      "dependencies": [
+        "technical-surface-v1",
+        "technical-card-v1",
+        "empty-state-v1",
+        "button-v2",
+        "badge-v1",
+        "icon-v1"
+      ],
+      "contracts": [],
+      "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentIntelligenceWorkbench.tsx",
+      "tests": [
+        "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx",
+        "apps/loopdev-os/src/app/document-intelligence/routes.test.ts"
+      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
+      "evidence_gaps": [
+        "visual-review",
+        "responsive-browser-evidence",
+        "technical-certification",
+        "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
+      ]
+    },
+    {
+      "id": "document-preview-pane",
+      "name": "DocumentPreviewPane",
+      "domain": "frontend",
+      "type": "feature",
+      "category": "document-intelligence",
+      "status": "experimental",
+      "suite": "document-intelligence",
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "ai-platform",
+      "phase": null,
+      "dependencies": [
+        "technical-surface-v1",
+        "button-v2",
+        "icon-button-v1",
+        "badge-v1",
+        "icon-v1"
+      ],
+      "contracts": [],
+      "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentPreviewPane.tsx",
+      "tests": [
+        "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentPreviewPane.test.tsx",
+        "apps/loopdev-os/src/suites/document-intelligence/workbench/file-validation.test.ts"
+      ],
+      "documentation": [
+        "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentPreviewPane/UI_UX_SPEC.md",
+        "docs/06-product/document-intelligence/workbench-composition.md"
+      ],
+      "evidence_gaps": ["visual-review", "responsive-browser-evidence", "technical-certification"]
+    },
+    {
+      "id": "extraction-review-form",
+      "name": "ExtractionReviewForm",
+      "domain": "frontend",
+      "type": "feature",
+      "category": "document-intelligence",
+      "status": "experimental",
+      "suite": "document-intelligence",
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "ai-platform",
+      "phase": null,
+      "dependencies": ["input-v1", "button-v2", "badge-v1"],
+      "contracts": [],
+      "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/ExtractionReviewForm.tsx",
+      "tests": [
+        "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx"
+      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
+      "evidence_gaps": [
+        "visual-review",
+        "responsive-browser-evidence",
+        "technical-certification",
+        "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
+      ]
+    },
+    {
+      "id": "usage-cost-panel",
+      "name": "UsageCostPanel",
+      "domain": "frontend",
+      "type": "feature",
+      "category": "document-intelligence",
+      "status": "experimental",
+      "suite": "document-intelligence",
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "ai-platform",
+      "phase": null,
+      "dependencies": ["badge-v1", "divider-v1"],
+      "contracts": [],
+      "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/UsageCostPanel.tsx",
+      "tests": [
+        "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx"
+      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
+      "evidence_gaps": [
+        "visual-review",
+        "responsive-browser-evidence",
+        "technical-certification",
+        "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
+      ]
+    },
+    {
+      "id": "workbench-inspector",
+      "name": "WorkbenchInspector",
+      "domain": "frontend",
+      "type": "feature",
+      "category": "document-intelligence",
+      "status": "experimental",
+      "suite": "document-intelligence",
+      "source_registry": "docs/registries/frontend-components.json",
+      "owner": "ai-platform",
+      "phase": null,
+      "dependencies": ["technical-status-badge-v1", "badge-v1", "divider-v1"],
+      "contracts": [],
+      "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/WorkbenchInspector.tsx",
+      "tests": [
+        "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx"
+      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
+      "evidence_gaps": [
+        "visual-review",
+        "responsive-browser-evidence",
+        "technical-certification",
+        "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
+      ]
     }
-,
-{
-  "id": "document-intelligence-workbench",
-  "name": "DocumentIntelligenceWorkbench",
-  "domain": "frontend",
-  "type": "widget",
-  "category": "document-intelligence",
-  "status": "experimental",
-  "suite": "document-intelligence",
-  "source_registry": "docs/registries/frontend-components.json",
-  "owner": "ai-platform",
-  "phase": null,
-  "dependencies": [
-    "technical-surface-v1",
-    "technical-card-v1",
-    "empty-state-v1",
-    "button-v2",
-    "badge-v1",
-    "icon-v1"
-  ],
-  "contracts": [],
-  "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentIntelligenceWorkbench.tsx",
-  "tests": [],
-  "documentation": [
-    "docs/06-product/document-intelligence/workbench-composition.md"
-  ],
-  "evidence_gaps": [
-    "contracts",
-    "tests",
-    "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
-  ]
-},
-{
-  "id": "document-preview-pane",
-  "name": "DocumentPreviewPane",
-  "domain": "frontend",
-  "type": "feature",
-  "category": "document-intelligence",
-  "status": "experimental",
-  "suite": "document-intelligence",
-  "source_registry": "docs/registries/frontend-components.json",
-  "owner": "ai-platform",
-  "phase": null,
-  "dependencies": [
-    "technical-surface-v1",
-    "button-v2",
-    "icon-button-v1",
-    "badge-v1",
-    "icon-v1"
-  ],
-  "contracts": [],
-  "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentPreviewPane.tsx",
-  "tests": [],
-  "documentation": [
-    "docs/06-product/document-intelligence/workbench-composition.md"
-  ],
-  "evidence_gaps": [
-    "contracts",
-    "tests",
-    "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
-  ]
-},
-{
-  "id": "extraction-review-form",
-  "name": "ExtractionReviewForm",
-  "domain": "frontend",
-  "type": "feature",
-  "category": "document-intelligence",
-  "status": "experimental",
-  "suite": "document-intelligence",
-  "source_registry": "docs/registries/frontend-components.json",
-  "owner": "ai-platform",
-  "phase": null,
-  "dependencies": [
-    "input-v1",
-    "button-v2",
-    "badge-v1"
-  ],
-  "contracts": [],
-  "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/ExtractionReviewForm.tsx",
-  "tests": [],
-  "documentation": [
-    "docs/06-product/document-intelligence/workbench-composition.md"
-  ],
-  "evidence_gaps": [
-    "contracts",
-    "tests",
-    "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
-  ]
-},
-{
-  "id": "validation-summary-list",
-  "name": "ValidationSummaryList",
-  "domain": "frontend",
-  "type": "feature",
-  "category": "document-intelligence",
-  "status": "experimental",
-  "suite": "document-intelligence",
-  "source_registry": "docs/registries/frontend-components.json",
-  "owner": "ai-platform",
-  "phase": null,
-  "dependencies": [
-    "badge-v1",
-    "empty-state-v1"
-  ],
-  "contracts": [],
-  "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/ValidationSummaryList.tsx",
-  "tests": [],
-  "documentation": [
-    "docs/06-product/document-intelligence/workbench-composition.md"
-  ],
-  "evidence_gaps": [
-    "contracts",
-    "tests",
-    "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
-  ]
-},
-{
-  "id": "usage-cost-panel",
-  "name": "UsageCostPanel",
-  "domain": "frontend",
-  "type": "feature",
-  "category": "document-intelligence",
-  "status": "experimental",
-  "suite": "document-intelligence",
-  "source_registry": "docs/registries/frontend-components.json",
-  "owner": "ai-platform",
-  "phase": null,
-  "dependencies": [
-    "badge-v1",
-    "divider-v1"
-  ],
-  "contracts": [],
-  "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/UsageCostPanel.tsx",
-  "tests": [],
-  "documentation": [
-    "docs/06-product/document-intelligence/workbench-composition.md"
-  ],
-  "evidence_gaps": [
-    "contracts",
-    "tests",
-    "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
-  ]
-},
-{
-  "id": "workbench-inspector",
-  "name": "WorkbenchInspector",
-  "domain": "frontend",
-  "type": "feature",
-  "category": "document-intelligence",
-  "status": "experimental",
-  "suite": "document-intelligence",
-  "source_registry": "docs/registries/frontend-components.json",
-  "owner": "ai-platform",
-  "phase": null,
-  "dependencies": [
-    "technical-status-badge-v1",
-    "badge-v1",
-    "divider-v1"
-  ],
-  "contracts": [],
-  "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/WorkbenchInspector.tsx",
-  "tests": [],
-  "documentation": [
-    "docs/06-product/document-intelligence/workbench-composition.md"
-  ],
-  "evidence_gaps": [
-    "contracts",
-    "tests",
-    "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
-  ]
-}
   ],
   "schema": "docs/registries/REGISTRY_SCHEMA.md",
   "entry_schema_version": "1.0",

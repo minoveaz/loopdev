@@ -1,16 +1,16 @@
 ---
 title: Document Intelligence Workbench — composición RecordWorkspace (prototipo Fase 0)
-status: pending-visual-review
+status: ready-for-review
 owner: ai-platform
 reviewed_at: pendiente
-track: tracks/planned/ai-platform/2026-09-05-document-intelligence-poc-migration.md
+track: tracks/active/ai-platform/2026-09-05-document-intelligence-poc-migration.md
 issue: 176
 ---
 
 # Document Intelligence — especificación de composición RecordWorkspace
 
-Prototipo navegable guiado por fixtures, sin provider real ni lógica migrada de VitaBlue.
-Su aprobación visual es el gate que desbloquea la Fase 3 (workbench definitivo).
+Workbench navegable guiado por fixtures e intake cliente, sin provider real, backend ni lógica
+copiada de VitaBlue. La aprobación visual sigue siendo un gate independiente y pendiente.
 
 ## Identity
 
@@ -31,12 +31,12 @@ Su aprobación visual es el gate que desbloquea la Fase 3 (workbench definitivo)
     (obligatorias, sin variantes locales).
   - Header: `ModuleHeader` vía `moduleHeaderRenderers` de `SuiteRuntime` — breadcrumbs
     (`Document Intelligence / Document extraction`) y badge de estado del flujo.
-  - Tabs: control local dentro del canvas (`Datos extraídos / Validación / Uso y coste`) con
-    `role="tablist"` compuesto desde `Button`. Gap G4: no existe `Tabs` compartido.
+  - Tabs: control local dentro del canvas (`Datos extraídos / Uso y coste`) con `role="tablist"`
+    compuesto desde `Button`. Las validaciones de negocio visibles quedan diferidas.
   - Record: área principal en grid — preview/preparación del documento a la izquierda y panel de
     revisión con tabs a la derecha (`xl:grid-cols-2`, apilado en pantallas menores).
   - Inspector: `ModuleContextPanel` vía `moduleContextPanelRenderers` — estado del flujo,
-    clasificación, resumen de validación y uso/coste.
+    clasificación y uso/coste.
 - **Surface sequence:** canvas → surface (`TechnicalSurface variant="surface"`) → elevated
   (placeholder del documento, `bg-surface-elevated`).
 - **Background variant:** `plain` (canvas por defecto del preset `workspace`).
@@ -48,30 +48,28 @@ Su aprobación visual es el gate que desbloquea la Fase 3 (workbench definitivo)
   `Badge`, `TechnicalStatusBadge`, `EmptyState`, `Icon`, `LpdText`, `Divider`.
 - **Domain-specific components (suite-local, prototipo):**
   `DocumentIntelligenceWorkbench`, `DocumentPreviewPane`, `ExtractionReviewForm`,
-  `ValidationSummaryList`, `UsageCostPanel`, `WorkbenchInspector`, `workbench-context`.
+  `UsageCostPanel`, `WorkbenchInspector`, `workbench-context`.
 
 ## Flujo operativo conservado
 
 La migración conserva el flujo operativo validado en VitaBlue:
-`historial → upload/preview → processing feedback → review`.
+`historial operativo → upload/preview → processing feedback → review`.
 En LoopDev se adapta a `AppShell`, los contratos tenant-aware, el aislamiento por tenancy y los
 componentes certificados de LoopDev. El workbench permanece como nombre interno de la composición
 `RecordWorkspace`, no como una superficie pública ni una ruta.
 
-`preparation → processing → review | review-with-warnings → (approve/reject)` y `error`
+`preparation → processing → review → (approve/reject)` y `error`
 recuperable (reintentar / cambiar documento / extraer nuevo). El cleanup (revocar previews,
 liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el POC.
 
-- **Preparation:** dropzone placeholder con allowlist de MIME (caption), "Usar documento de
-  demostración" y "Pegar desde portapapeles" (ambos cargan el fixture en el prototipo). Con el
-  documento cargado: toggle anverso/reverso, rotar, zoom (placeholder interactivo), "Iniciar
-  extracción" y "Simular error del proveedor".
+- **Preparation:** dropzone real con allowlist MIME/tamaño, selector, drag/drop, portapapeles y
+  fixture. Con el documento cargado: toggle anverso/reverso, rotar, zoom/reset, pan mouse/touch,
+  crop de imagen, abrir en pestaña, "Iniciar extracción" y error recuperable.
 - **Processing:** `EmptyState variant="ai"` con `loadingMessages` (preparar → clasificar →
   extraer → normalizar).
 - **Review:** formulario `Form`/`FormField` con todos los campos nullables, badge de confianza
-  por campo y errores inline desde las validaciones deterministas.
-- **Review-with-warnings:** banner de avisos (`TechnicalCard` con acento warning) + contador en la
-  tab de validación.
+  por campo y decisión básica approve/reject. No muestra `ValidationSummaryList` ni validaciones
+  de negocio.
 - **Error:** `EmptyState status="error"` con acciones de recuperación.
 
 ## Behavior and states
@@ -86,8 +84,8 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 - **Primary/secondary actions:** aprobar (primary), rechazar (danger), extraer nuevo (ghost),
   reintentar (primary), cambiar documento (outline).
 - **Keyboard/focus/Escape behavior:** tabs con `role="tablist"/"tab"` y `aria-selected`; controles
-  del preview con `aria-pressed`; foco gestionado por los componentes DS. Auditoría de teclado
-  completa pendiente para la Fase 3.
+  del preview con `aria-pressed`; el crop tiene cancelar explícito; foco gestionado por los
+  componentes DS. Auditoría de teclado completa pendiente.
 - **Portal/overlay behavior:** sin portales propios; el context panel de plataforma sigue sus
   contratos existentes.
 
@@ -120,20 +118,20 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 - **Focus order and restoration:** pendiente de auditoría en Fase 3.
 - **Contrast and reduced motion:** tokens semánticos; la transformación de rotación/zoom usa
   `transition-transform` — revisar `prefers-reduced-motion` en Fase 3.
-- **Screen-reader semantics:** regiones con `aria-label`, `role="status"` en el banner de avisos,
+- **Screen-reader semantics:** regiones con `aria-label`, estados de procesamiento/error,
   tablist/tabs/tabpanel, badges con texto no solo color.
 
 ## Gaps de componentes (reuse/create)
 
-| Gap | Necesidad | Decisión propuesta | Fase |
-| --- | --- | --- | --- |
-| G1 | Dropzone con allowlist MIME, tamaño y portapapeles | Crear composite DS (`composites/forms` o suite feature) tras diseño-audit | 3 |
-| G2 | Visor documental (zoom/rotate/crop, PDF) | Crear componente suite-local; evaluar promoción con segundo consumidor | 3 |
-| G3 | Stepper/progreso por pasos | Reusar `EmptyState ai` por ahora; evaluar `Stepper` compartido | 3 |
-| G4 | Tabs compartidos | Crear atom/composite `Tabs` en DS (hoy control local con `Button`) | 3 |
-| G5 | Input de fecha `DD/MM/YYYY` | Extender `Input` con máscara o variante | 3 |
-| G6 | Overlay de inspector en tablet | Extender preset/presentación de `ModuleContextPanel` vía `platform-shell` | 3 |
-| G7 | Banner de alertas | Componer `TechnicalCard`+`Icon` (hecho); evaluar `AlertBanner` si hay segundo consumidor | diferido |
+| Gap | Necesidad                                          | Decisión propuesta                                                        | Fase     |
+| --- | -------------------------------------------------- | ------------------------------------------------------------------------- | -------- |
+| G1  | Dropzone con allowlist MIME, tamaño y portapapeles | Implementado como feature suite-local con controles DS                    | 0-4      |
+| G2  | Visor documental (zoom/rotate/crop, PDF)           | Implementado como componente suite-local con PDF.js + iframe fallback     | 0-4      |
+| G3  | Stepper/progreso por pasos                         | Reusar `EmptyState ai` y mensajes de fixture                              | 0-4      |
+| G4  | Tabs compartidos                                   | Crear atom/composite `Tabs` en DS (hoy control local con `Button`)        | 3        |
+| G5  | Input de fecha `DD/MM/YYYY`                        | Extender `Input` con máscara o variante                                   | 3        |
+| G6  | Overlay de inspector en tablet                     | Extender preset/presentación de `ModuleContextPanel` vía `platform-shell` | 3        |
+| G7  | Banner de alertas                                  | No requerido en este bloque; reevaluar con validaciones visibles          | diferido |
 
 Componentes reutilizados sin cambios: `ModuleHeader`, `ModuleContextPanel`, `SuiteRuntime`,
 `Form`, `Input`, `Textarea`, `Button`, `IconButton`, `Badge`, `TechnicalStatusBadge`,
@@ -146,14 +144,13 @@ Referencias inspeccionadas (duplicate review): `SalesCrmShell` + `config.ts` (pa
 
 ## Validation and exceptions
 
-- **Contract tests:** pendientes (Fase 1 para contratos; Fase 3 para composición).
-- **Interaction tests:** pendientes; `pnpm test:shell` antes del commit de Fase 3.
-- **Visual/browser checks:** typecheck ✅, eslint ✅, smoke de rutas `/document-intelligence`,
-  `/document-intelligence/new` y `/document-intelligence/:documentId` con `next dev` (HTTP 200,
-  shell + chunks correctos; el
-  contenido requiere sesión, igual que el resto de la app). **Revisión visual presencial
-  pendiente — gate de esta especificación.**
+- **Contract tests:** `packages/contracts/src/documents/__tests__/documents.test.ts`.
+- **Interaction tests:** tests focalizados de preview, contexto y rutas; `pnpm test:shell:changed`
+  y `pnpm test:shell` quedan como validación de cierre.
+- **Visual/browser checks:** typecheck previsto, smoke de rutas y lint quedan registrados con los
+  comandos reales de cierre. **Revisión visual presencial pendiente — gate de esta especificación.**
 - **Performance budget:** sin listas virtualizadas; composición ligera.
 - **Exception IDs and approval evidence:** ninguna.
 - **Deferred validation:** Playwright responsive/interacción (tras aprobación visual), auditoría
-  de teclado y `prefers-reduced-motion`, tests de composición.
+  de teclado y `prefers-reduced-motion`, provider/backend real, historial permanente y
+  validaciones de negocio visibles.

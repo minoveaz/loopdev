@@ -1,4 +1,5 @@
 import type { PrototypeExtractionResult } from './types';
+import type { PrototypeDocumentHistoryItem } from './types';
 
 export const WORKBENCH_FIELD_LABELS: Record<string, string> = {
   fullName: 'Nombre completo',
@@ -19,7 +20,7 @@ export const WORKBENCH_FIELD_ORDER = Object.keys(WORKBENCH_FIELD_LABELS);
 
 /**
  * Fixture de DNI español con avisos: un checksum inválido y un campo con baja
- * confianza, para recorrer el estado `review-with-warnings` sin provider.
+ * confianza, para recorrer la revisión sin provider.
  */
 export const SPANISH_DNI_FIXTURE_RESULT: PrototypeExtractionResult = {
   classification: { type: 'spanish-dni', confidence: 0.98 },
@@ -78,3 +79,16 @@ export const PROTOTYPE_EXTRACTION_ERROR = {
   message:
     'El proveedor no devolvió una extracción válida. Puedes reintentar o cambiar el documento.',
 };
+
+export const DOCUMENT_INTELLIGENCE_HISTORY_FIXTURE: PrototypeDocumentHistoryItem[] = [
+  {
+    id: 'fixture-spanish-dni',
+    fileName: 'dni-demo.png',
+    mimeType: 'image/png',
+    documentType: 'spanish-dni',
+    flowState: 'review',
+    provider: 'fixture',
+    updatedAt: '2026-09-05T10:30:00.000Z',
+    isFixture: true,
+  },
+];

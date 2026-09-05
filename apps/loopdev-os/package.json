@@ -25,6 +25,7 @@
     "libphonenumber-js": "^1.13.11",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
+    "pdfjs-dist": "^5.4.54",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.85.0",

@@ -9,7 +9,6 @@ const FLOW_STATE_LABELS: Record<WorkbenchFlowState, string> = {
   preparation: 'Preparación',
   processing: 'Procesando',
   review: 'Revisión',
-  'review-with-warnings': 'Revisión con avisos',
   error: 'Error recuperable',
 };
 
@@ -23,13 +22,11 @@ const DOCUMENT_TYPE_LABELS: Record<string, string> = {
 
 /**
  * Contenido del `ModuleContextPanel` del workbench: estado del flujo,
- * clasificación, resumen de validación y uso/coste. La zona la posee la shell;
+ * clasificación y uso/coste. La zona la posee la shell;
  * este componente solo aporta el contenido contextual del módulo.
  */
 export function WorkbenchInspector() {
   const { flowState, result, error } = useWorkbenchPrototype();
-
-  const warningCount = result?.validations.filter((validation) => !validation.valid).length ?? 0;
 
   return (
     <div className="flex flex-col gap-4">
@@ -39,15 +36,7 @@ export function WorkbenchInspector() {
         </LpdText>
         <TechnicalStatusBadge
           label={FLOW_STATE_LABELS[flowState]}
-          severity={
-            flowState === 'error'
-              ? 'danger'
-              : flowState === 'review-with-warnings'
-                ? 'warning'
-                : flowState === 'review'
-                  ? 'success'
-                  : 'info'
-          }
+          severity={flowState === 'error' ? 'danger' : flowState === 'review' ? 'success' : 'info'}
           withPulse={flowState === 'processing'}
         />
         {error ? (
@@ -73,32 +62,6 @@ export function WorkbenchInspector() {
         ) : (
           <LpdText size="xs" className="text-text-muted">
             Sin clasificación todavía.
-          </LpdText>
-        )}
-      </section>
-
-      <Divider />
-
-      <section aria-label="Resumen de validación" className="flex flex-col gap-2">
-        <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest">
-          Validación
-        </LpdText>
-        {result ? (
-          <div className="flex items-center justify-between gap-3">
-            <LpdText size="xs">
-              {result.validations.length} reglas evaluadas
-            </LpdText>
-            <Badge
-              status={warningCount > 0 ? 'error' : 'success'}
-              variant="outline"
-              showDot={false}
-            >
-              {warningCount > 0 ? `${warningCount} avisos` : 'Sin avisos'}
-            </Badge>
-          </div>
-        ) : (
-          <LpdText size="xs" className="text-text-muted">
-            Las reglas deterministas se evalúan tras la extracción.
           </LpdText>
         )}
       </section>

@@ -8,18 +8,30 @@
  */
 
 export type PrototypeIdentityDocumentType =
-  | 'passport'
-  | 'spanish-dni'
-  | 'spanish-nie'
-  | 'national-id'
-  | 'unknown';
+  'passport' | 'spanish-dni' | 'spanish-nie' | 'national-id' | 'unknown';
 
-export type WorkbenchFlowState =
-  | 'preparation'
-  | 'processing'
-  | 'review'
-  | 'review-with-warnings'
-  | 'error';
+export type WorkbenchFlowState = 'preparation' | 'processing' | 'review' | 'error';
+
+export type DocumentSide = 'front' | 'back';
+
+export interface PrototypeDocumentFile {
+  file: File | null;
+  name: string;
+  mimeType: 'image/jpeg' | 'image/png' | 'application/pdf' | null;
+  size: number;
+  side: DocumentSide;
+}
+
+export interface PrototypeDocumentHistoryItem {
+  id: string;
+  fileName: string;
+  mimeType: string;
+  documentType: PrototypeIdentityDocumentType;
+  flowState: WorkbenchFlowState;
+  provider: 'fixture' | 'gemini';
+  updatedAt: string;
+  isFixture?: boolean;
+}
 
 export interface PrototypeFieldValidation {
   field: string;

@@ -35,7 +35,6 @@ const FLOW_STATUS: Record<
   preparation: { label: 'PREPARACIÓN', severity: 'info' },
   processing: { label: 'PROCESANDO', severity: 'info' },
   review: { label: 'REVISIÓN', severity: 'success' },
-  'review-with-warnings': { label: 'REVISIÓN · AVISOS', severity: 'warning' },
   error: { label: 'ERROR RECUPERABLE', severity: 'danger' },
 };
 
@@ -69,8 +68,7 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
   } = useOrganization();
   const activeModuleId =
     DOCUMENT_INTELLIGENCE_SUITE_CONFIG.modules.find((module) => module.route === pathname)
-      ?.moduleId ??
-    (pathname.startsWith('/document-intelligence/') ? 'workbench' : undefined);
+      ?.moduleId ?? (pathname.startsWith('/document-intelligence/') ? 'workbench' : undefined);
 
   return (
     <SuiteRuntime

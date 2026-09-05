@@ -4,10 +4,6 @@
 
 ## Planificados
 
-### AI Platform
-
-- [Migración del POC operativo de Document Intelligence desde VitaBlue](./planned/ai-platform/2026-09-05-document-intelligence-poc-migration.md) · `loopdev-io-document-intelligence-migration` · fase 0
-
 ### CRM
 
 - [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0
@@ -28,6 +24,10 @@
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
 ## En curso
+
+### AI Platform
+
+- [Migración del POC operativo de Document Intelligence desde VitaBlue](./active/ai-platform/2026-09-05-document-intelligence-poc-migration.md) · `loopdev-io-document-intelligence-migration` · fase 4
 
 ### CRM
 
