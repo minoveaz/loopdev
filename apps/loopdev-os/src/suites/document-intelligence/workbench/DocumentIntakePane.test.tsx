@@ -2,7 +2,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { DocumentPreviewPane } from './DocumentPreviewPane';
+import { DocumentIntakePane } from './DocumentIntakePane';
 
 const frontFile = {
   file: new File(['front'], 'front.png', { type: 'image/png' }),
@@ -33,14 +33,16 @@ vi.mock('./workbench-context', () => ({
   useWorkbenchPrototype: () => contextValue,
 }));
 
-describe('DocumentPreviewPane side state', () => {
-  it('returns to anverso when the active reverso is removed', () => {
-    const createObjectURL = vi.fn(() => 'blob:document-side');
-    const revokeObjectURL = vi.fn();
-    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
+describe('DocumentIntakePane', () => {
+  it('delegates document rendering to the shared viewer and returns to front when back is removed', () => {
+    vi.stubGlobal('URL', {
+      ...URL,
+      createObjectURL: vi.fn(() => 'blob:document-side'),
+      revokeObjectURL: vi.fn(),
+    });
+    const { rerender } = render(<DocumentIntakePane />);
 
-    const { rerender } = render(<DocumentPreviewPane />);
-
+    expect(screen.getByRole('button', { name: 'Ajustar' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Reverso' }));
     expect(screen.getByRole('button', { name: 'Reverso' })).toHaveAttribute('aria-pressed', 'true');
 
@@ -48,10 +50,26 @@ describe('DocumentPreviewPane side state', () => {
       ...contextValue,
       documentFiles: { front: frontFile, back: null },
     };
-    rerender(<DocumentPreviewPane />);
+    rerender(<DocumentIntakePane />);
 
     expect(screen.queryByRole('button', { name: 'Reverso' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Anverso' })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByLabelText('Seleccionar anverso')).toBeInTheDocument();
+  });
+
+  it('keeps the intake allowlist and rejects unsupported files before the context', () => {
+    contextValue = {
+      ...contextValue,
+      documentLoaded: false,
+      documentFiles: { front: null, back: null },
+    };
+    render(<DocumentIntakePane />);
+
+    const input = screen.getByLabelText('Seleccionar documento');
+    expect(input).toHaveAttribute('accept', 'image/jpeg,image/png,application/pdf');
+    fireEvent.change(input, {
+      target: { files: [new File(['text'], 'notes.txt', { type: 'text/plain' })] },
+    });
+    expect(screen.getByRole('alert')).toHaveTextContent(/JPEG\/PNG.*PDF/i);
   });
 });

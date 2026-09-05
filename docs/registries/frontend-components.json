@@ -2591,16 +2591,15 @@
       ]
     },
     {
-      "id": "document-preview-pane",
-      "name": "DocumentPreviewPane",
+      "id": "document-viewer-v1",
+      "name": "DocumentViewer",
       "domain": "frontend",
-      "type": "feature",
-      "category": "document-intelligence",
+      "type": "composite",
+      "category": "workspace",
       "status": "experimental",
-      "suite": "document-intelligence",
       "source_registry": "docs/registries/frontend-components.json",
-      "owner": "ai-platform",
-      "phase": null,
+      "owner": "frontend-platform",
+      "phase": 4,
       "dependencies": [
         "technical-surface-v1",
         "button-v2",
@@ -2608,17 +2607,38 @@
         "badge-v1",
         "icon-v1"
       ],
-      "contracts": [],
-      "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentPreviewPane.tsx",
+      "contracts": [
+        "packages/document-viewer/src/types.ts",
+        "packages/document-viewer/src/presets.ts"
+      ],
+      "implementation": "packages/document-viewer/src/DocumentViewer.tsx",
       "tests": [
-        "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentPreviewPane.test.tsx",
-        "apps/loopdev-os/src/suites/document-intelligence/workbench/file-validation.test.ts"
+        "packages/document-viewer/src/DocumentViewer.test.tsx",
+        "e2e/document-viewer.certification.spec.mjs"
       ],
       "documentation": [
-        "apps/loopdev-os/src/suites/document-intelligence/workbench/DocumentPreviewPane/UI_UX_SPEC.md",
-        "docs/06-product/document-intelligence/workbench-composition.md"
+        "packages/document-viewer/src/UI_UX_SPEC.md",
+        "tracks/active/ai-platform/2026-09-05-document-intelligence-poc-migration.md"
       ],
-      "evidence_gaps": ["visual-review", "responsive-browser-evidence", "technical-certification"]
+      "certification": {
+        "front": "in-progress",
+        "ui_ux": {
+          "status": "ready-for-review",
+          "evidence": [
+            "packages/document-viewer/src/UI_UX_SPEC.md",
+            "packages/document-viewer/src/DocumentViewer.test.tsx",
+            "e2e/document-viewer.certification.spec.mjs"
+          ]
+        },
+        "technical": {
+          "status": "in-progress",
+          "evidence": [
+            "packages/document-viewer/src/DocumentViewer.test.tsx",
+            "pnpm certification:source-contracts"
+          ]
+        }
+      },
+      "evidence_gaps": ["visual-review", "pdf-fallback-browser-evidence"]
     },
     {
       "id": "extraction-review-form",

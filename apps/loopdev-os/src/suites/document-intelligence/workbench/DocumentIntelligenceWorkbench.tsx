@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button, EmptyState, TechnicalSurface } from '@loopdev/ui';
 
-import { DocumentPreviewPane } from './DocumentPreviewPane';
+import { DocumentIntakePane } from './DocumentIntakePane';
 import { ExtractionReviewForm } from './ExtractionReviewForm';
 import { UsageCostPanel } from './UsageCostPanel';
 import { useWorkbenchPrototype } from './workbench-context';
@@ -83,7 +83,7 @@ export function DocumentIntelligenceWorkbench() {
               : 'grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-2'
           }
         >
-          <DocumentPreviewPane />
+          <DocumentIntakePane />
 
           {flowState === 'review' ? (
             <TechnicalSurface variant="surface" className="flex min-h-0 flex-col rounded-xl">

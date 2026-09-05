@@ -31,7 +31,7 @@ copiada de VitaBlue. La aprobación visual sigue siendo un gate independiente y 
     (obligatorias, sin variantes locales).
   - Header: `ModuleHeader` vía `moduleHeaderRenderers` de `SuiteRuntime`; los segmentos se derivan
     de `SuiteConfig.modules[].breadcrumbs`. Desktop conserva `Document Intelligence /
-    Document extraction`; móvil usa solo el módulo activo mediante la variante contractual
+Document extraction`; móvil usa solo el módulo activo mediante la variante contractual
     `mobileSegments`, sin duplicar landmarks ni hardcodear labels en la suite.
   - Tabs: control local dentro del canvas (`Datos extraídos / Uso y coste`) con `role="tablist"`
     compuesto desde `Button`. Las validaciones de negocio visibles quedan diferidas.
@@ -49,11 +49,13 @@ copiada de VitaBlue. La aprobación visual sigue siendo un gate independiente y 
   `TechnicalCard`, `Button`, `IconButton`, `Input`, `Textarea`, `Form`/`FormField`,
   `Badge`, `TechnicalStatusBadge`, `EmptyState`, `Icon`, `LpdText`, `Divider`.
 - **Domain-specific components (suite-local, prototipo):**
-  `DocumentIntelligenceWorkbench`, `DocumentPreviewPane`, `ExtractionReviewForm`,
+  `DocumentIntelligenceWorkbench`, `DocumentIntakePane`, `ExtractionReviewForm`,
   `UsageCostPanel`, `WorkbenchInspector`, `workbench-context`.
-- **Preview responsive:** `DocumentPreviewPane` separa selector de cara/metadata y controles de
-  inspección en dos filas; en móvil el footer convierte upload y extracción en acciones de ancho
-  completo para evitar recorte u overflow.
+- **Shared capability:** `@loopdev/document-viewer` owns native image/PDF rendering, explicit
+  `contain`/`width`/`actual` fit modes, zoom, pan, rotation, reset, fallback and object URL cleanup.
+- **Preview responsive:** `DocumentIntakePane` owns selector de cara/metadata and intake actions;
+  `@loopdev/document-viewer` owns the responsive inspection toolbar and bounded viewport. On mobile
+  the footer converts upload and extraction into full-width actions without page overflow.
 
 ## Flujo operativo conservado
 
@@ -128,15 +130,15 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 
 ## Gaps de componentes (reuse/create)
 
-| Gap | Necesidad                                          | Decisión propuesta                                                        | Fase     |
-| --- | -------------------------------------------------- | ------------------------------------------------------------------------- | -------- |
-| G1  | Dropzone con allowlist MIME, tamaño y portapapeles | Implementado como feature suite-local con controles DS                    | 0-4      |
-| G2  | Visor documental (zoom/rotate/crop, PDF)           | Implementado como componente suite-local con PDF.js + iframe fallback     | 0-4      |
-| G3  | Stepper/progreso por pasos                         | Reusar `EmptyState ai` y mensajes de fixture                              | 0-4      |
-| G4  | Tabs compartidos                                   | Crear atom/composite `Tabs` en DS (hoy control local con `Button`)        | 3        |
-| G5  | Input de fecha `DD/MM/YYYY`                        | Extender `Input` con máscara o variante                                   | 3        |
-| G6  | Overlay de inspector en tablet                     | Extender preset/presentación de `ModuleContextPanel` vía `platform-shell` | 3        |
-| G7  | Banner de alertas                                  | No requerido en este bloque; reevaluar con validaciones visibles          | diferido |
+| Gap | Necesidad                                          | Decisión propuesta                                                                 | Fase     |
+| --- | -------------------------------------------------- | ---------------------------------------------------------------------------------- | -------- |
+| G1  | Dropzone con allowlist MIME, tamaño y portapapeles | Implementado como feature suite-local con controles DS                             | 0-4      |
+| G2  | Visor documental (fit/zoom/rotate/pan, PDF)        | Extraído a `@loopdev/document-viewer` con PDF.js legacy + iframe/download fallback | 0-4      |
+| G3  | Stepper/progreso por pasos                         | Reusar `EmptyState ai` y mensajes de fixture                                       | 0-4      |
+| G4  | Tabs compartidos                                   | Crear atom/composite `Tabs` en DS (hoy control local con `Button`)                 | 3        |
+| G5  | Input de fecha `DD/MM/YYYY`                        | Extender `Input` con máscara o variante                                            | 3        |
+| G6  | Overlay de inspector en tablet                     | Extender preset/presentación de `ModuleContextPanel` vía `platform-shell`          | 3        |
+| G7  | Banner de alertas                                  | No requerido en este bloque; reevaluar con validaciones visibles                   | diferido |
 
 Componentes reutilizados sin cambios: `ModuleHeader`, `ModuleContextPanel`, `SuiteRuntime`,
 `Form`, `Input`, `Textarea`, `Button`, `IconButton`, `Badge`, `TechnicalStatusBadge`,
