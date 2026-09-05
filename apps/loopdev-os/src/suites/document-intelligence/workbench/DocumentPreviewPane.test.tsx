@@ -38,7 +38,11 @@ describe('DocumentPreviewPane', () => {
       target: { files: [new File(['image'], 'front.png', { type: 'image/png' })] },
     });
     expect(screen.getByText(/IMAGEN/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Alejar documento' })).toHaveClass('h-8', 'w-8');
+    expect(screen.getByRole('button', { name: 'Ampliar documento' })).toHaveClass('h-8', 'w-8');
+    expect(screen.getByRole('button', { name: 'Girar 90 grados' })).toHaveClass('h-8', 'w-8');
     fireEvent.click(screen.getByRole('button', { name: 'Abrir en pestaña nueva' }));
+    expect(screen.getByRole('button', { name: 'Abrir en pestaña nueva' })).toHaveClass('h-8', 'w-8');
     expect(open).toHaveBeenCalledWith('blob:document-preview', '_blank', 'noopener,noreferrer');
   });
 });

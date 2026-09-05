@@ -402,7 +402,7 @@ export function DocumentPreviewPane() {
         <div className="flex items-center gap-1">
           <IconButton
             icon="zoom_out"
-            size="sm"
+            size="md"
             variant="ghost"
             ariaLabel="Alejar documento"
             onClick={() => setZoomIndex((value) => Math.max(value - 1, 0))}
@@ -413,7 +413,7 @@ export function DocumentPreviewPane() {
           </Button>
           <IconButton
             icon="zoom_in"
-            size="sm"
+            size="md"
             variant="ghost"
             ariaLabel="Ampliar documento"
             onClick={() => setZoomIndex((value) => Math.min(value + 1, ZOOM_STEPS.length - 1))}
@@ -421,7 +421,7 @@ export function DocumentPreviewPane() {
           />
           <IconButton
             icon="rotate_right"
-            size="sm"
+            size="md"
             variant="ghost"
             ariaLabel="Girar 90 grados"
             onClick={() => setRotation((value) => (value + 90) % 360)}
@@ -429,7 +429,7 @@ export function DocumentPreviewPane() {
           />
           <IconButton
             icon="open_in_new"
-            size="sm"
+            size="md"
             variant="ghost"
             ariaLabel="Abrir en pestaña nueva"
             onClick={openInTab}
