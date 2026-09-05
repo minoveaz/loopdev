@@ -434,7 +434,7 @@ export function DocumentPreviewPane() {
           data-preview-toolbar-row="document-controls"
           role="group"
           aria-label="Controles de vista previa"
-          className={`divide-border-subtle border-border-subtle grid w-full divide-x overflow-hidden rounded-md border sm:flex sm:w-auto sm:divide-x-0 sm:overflow-visible sm:rounded-none sm:border-0 ${isPdf ? 'grid-cols-5' : 'grid-cols-6'}`}
+          className={`divide-border-subtle border-border-subtle grid w-full divide-x overflow-hidden rounded-md border sm:flex sm:w-auto sm:divide-x-0 sm:overflow-visible sm:rounded-none sm:border-0 ${isPdf ? 'grid-cols-[minmax(44px,1fr)_minmax(56px,1.25fr)_repeat(3,minmax(44px,1fr))]' : 'grid-cols-[minmax(44px,1fr)_minmax(56px,1.25fr)_repeat(4,minmax(44px,1fr))]'}`}
         >
           <IconButton
             icon="zoom_out"
@@ -448,7 +448,7 @@ export function DocumentPreviewPane() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-11 w-full rounded-none px-2 sm:h-8 sm:w-auto"
+            className="h-11 w-full min-w-0 overflow-visible whitespace-nowrap rounded-none px-2 sm:h-8 sm:w-auto"
             onClick={resetView}
             disabled={!currentFile}
           >

@@ -19,9 +19,11 @@
 - Platform target: `web-only`
 - Loaded mobile toolbar: the secondary controls use six equal grid cells for
   zoom out, reset percentage, zoom in, rotate, crop and open-tab (five cells
-  when crop is unavailable for PDF). Each cell has a minimum 44px touch target,
-  subtle separators and an accessible label; from `sm` upward the same controls
-  return to the compact desktop row.
+  when crop is unavailable for PDF). The reset percentage cell receives a
+  slightly wider minimum so values such as `100%` and `150%` remain fully
+  visible without ellipsis. Each cell has a minimum 44px touch target, subtle
+  separators and an accessible label; from `sm` upward the same controls return
+  to the compact desktop row.
 
 ## Quick reference
 

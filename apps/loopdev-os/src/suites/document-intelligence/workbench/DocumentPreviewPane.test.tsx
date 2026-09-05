@@ -103,7 +103,15 @@ describe('DocumentPreviewPane', () => {
     expect(document.querySelector('[data-preview-toolbar-row="document-selector"]')).toBeTruthy();
     expect(document.querySelector('[data-preview-toolbar-row="document-controls"]')).toBeTruthy();
     const controls = document.querySelector('[data-preview-toolbar-row="document-controls"]');
-    expect(controls).toHaveClass('grid-cols-6', 'divide-x', 'sm:flex');
+    expect(controls).toHaveClass(
+      'grid-cols-[minmax(44px,1fr)_minmax(56px,1.25fr)_repeat(4,minmax(44px,1fr))]',
+      'divide-x',
+      'sm:flex',
+    );
+    const zoomReset = screen.getByRole('button', { name: '100%' });
+    expect(zoomReset).toHaveTextContent('100%');
+    expect(zoomReset).not.toHaveClass('truncate');
+    expect(zoomReset).toHaveClass('min-w-0', 'overflow-visible', 'whitespace-nowrap');
     expect(screen.getByRole('button', { name: 'Alejar documento' })).toHaveClass('h-11', 'w-full');
     expect(screen.getByRole('button', { name: 'Abrir en pestaña nueva' })).toHaveClass(
       'h-11',
