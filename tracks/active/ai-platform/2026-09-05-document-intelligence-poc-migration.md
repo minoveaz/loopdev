@@ -3,7 +3,7 @@ id: document-intelligence-poc-migration
 title: Migración del POC operativo de Document Intelligence desde VitaBlue
 status: active
 created: 2026-09-05
-updated: 2026-09-06
+updated: 2026-09-05
 owner: ai-platform
 lead: null
 branch: loopdev-io-document-intelligence-migration
@@ -379,6 +379,7 @@ documentado el rollout fixture y el rollback sin datos permanentes.
 | 2026-09-06 | Corrección del content layer certificado de `TechnicalSurface` para preservar altura completa en `SuiteSidebar`             | ✅                                                                                              | `TechnicalSurface.test.tsx`; `SuiteSidebar.test.tsx`                                            |
 | 2026-09-06 | Launchpad conserva rail con iconos en desktop y fuerza `SuiteSidebar` expandido con `headerSlot` contextual en tablet/móvil | ✅                                                                                              | `LaunchpadShell.tsx`; `SuiteSidebar` API; `LaunchpadShell.test.tsx`                             |
 | 2026-09-05 | Tests focalizados de Document Intelligence                                                                                  | ✅ 8 tests                                                                                      | preview, validación MIME/tamaño, contexto, decisiones y rutas                                   |
+| 2026-09-05 | Preparación sin placeholder de revisión ni inspector contextual por defecto                                                  | ✅                                                                                              | `DocumentIntelligenceWorkbench.test.tsx`; `DocumentIntelligenceShell.test.tsx`                |
 | 2026-09-05 | `pnpm test`                                                                                                                 | ✅                                                                                              | Vitest completo                                                                                 |
 | 2026-09-05 | `pnpm test:shell`                                                                                                           | ✅ 41 tests + typecheck UI                                                                      | shell canónico                                                                                  |
 | 2026-09-05 | `pnpm registries:check` + `node scripts/tracks/validate-tracks.mjs`                                                         | ✅                                                                                              | registry y dashboard sincronizados                                                              |
@@ -393,9 +394,10 @@ la especificación, el historial de Git ni la conversación.
 
 - **Fecha:** 2026-09-05.
 - **Rama de continuación:** `loopdev-io-document-intelligence-migration`.
-- **Commit de partida:** `81712ca1`.
+- **Commit de partida:** `11572c06`.
 - **Estado alcanzado:** Fases 0-4 implementadas con contratos, fixtures, home/lista persistida,
-  intake real cliente, preview PDF/imagen y revisión básica; commit `0cd8c3fc`.
+  intake real cliente, preview PDF/imagen y revisión básica; la preparación ocupa solo el preview
+  y el inspector contextual permanece oculto hasta revisión/error.
 - **Decisiones, bloqueos y riesgos:** provider real/Gemini, Edge Function, storage tenant-scoped,
   validaciones de negocio visibles, historial permanente y certificación visual quedan fuera.
 - **Validación ejecutada:** typecheck/build de contratos y `loopdev-os`, tests focalizados y completos,

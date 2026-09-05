@@ -38,6 +38,12 @@ const FLOW_STATUS: Record<
   error: { label: 'ERROR RECUPERABLE', severity: 'danger' },
 };
 
+export function shouldShowWorkbenchContextPanel(
+  flowState: ReturnType<typeof useWorkbenchPrototype>['flowState'],
+) {
+  return flowState === 'review' || flowState === 'error';
+}
+
 function WorkbenchModuleHeader() {
   const { flowState } = useWorkbenchPrototype();
   const status = FLOW_STATUS[flowState] ?? FLOW_STATUS.preparation;
@@ -59,6 +65,7 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
   const router = useRouter();
   const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<Exclude<NavMode, 'hidden'>>('expanded');
+  const { flowState } = useWorkbenchPrototype();
   const {
     organizations,
     activeOrganization,
@@ -76,6 +83,9 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
       activeModuleId={activeModuleId}
       moduleHeaderRenderers={{ workbench: () => <WorkbenchModuleHeader /> }}
       moduleContextPanelRenderers={{ workbench: () => <WorkbenchInspector /> }}
+      moduleContextPanelVisibility={{
+        workbench: shouldShowWorkbenchContextPanel(flowState),
+      }}
       leftSlot={<BrandLogo variant="isotype" size="sm" className="shrink-0" />}
       centerSlot={
         <CommandBarTrigger

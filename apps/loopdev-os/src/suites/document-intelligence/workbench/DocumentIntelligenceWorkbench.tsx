@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, EmptyState, Icon, LpdText, TechnicalSurface } from '@loopdev/ui';
+import { Button, EmptyState, TechnicalSurface } from '@loopdev/ui';
 
 import { DocumentPreviewPane } from './DocumentPreviewPane';
 import { ExtractionReviewForm } from './ExtractionReviewForm';
@@ -76,26 +76,16 @@ export function DocumentIntelligenceWorkbench() {
       ) : null}
 
       {flowState === 'preparation' || flowState === 'review' ? (
-        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-2">
+        <div
+          className={
+            flowState === 'preparation'
+              ? 'min-h-0 flex-1'
+              : 'grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-2'
+          }
+        >
           <DocumentPreviewPane />
 
-          {flowState === 'preparation' ? (
-            <TechnicalSurface
-              variant="surface"
-              className="flex min-h-[280px] flex-col items-center justify-center gap-3 rounded-xl p-8 text-center"
-            >
-              <span aria-hidden="true" className="text-text-muted">
-                <Icon name="fact_check" size="lg" />
-              </span>
-              <LpdText size="sm" weight="semibold">
-                Revisión de campos
-              </LpdText>
-              <LpdText size="xs" className="text-text-muted max-w-sm">
-                Tras la extracción podrás revisar y editar cada campo antes de aprobar. Los campos
-                no legibles se muestran vacíos, nunca inventados.
-              </LpdText>
-            </TechnicalSurface>
-          ) : (
+          {flowState === 'review' ? (
             <TechnicalSurface variant="surface" className="flex min-h-0 flex-col rounded-xl">
               <div
                 role="tablist"
@@ -125,7 +115,7 @@ export function DocumentIntelligenceWorkbench() {
                 {activeTab === 'usage' ? <UsageCostPanel /> : null}
               </div>
             </TechnicalSurface>
-          )}
+          ) : null}
         </div>
       ) : null}
     </div>
