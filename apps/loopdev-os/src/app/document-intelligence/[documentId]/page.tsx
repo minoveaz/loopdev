@@ -2,6 +2,6 @@
 
 import { DocumentIntelligenceWorkbench } from '@/suites/document-intelligence/workbench/DocumentIntelligenceWorkbench';
 
-export default function DocumentIntelligenceWorkbenchPage() {
+export default function DocumentExtractionPage() {
   return <DocumentIntelligenceWorkbench />;
 }

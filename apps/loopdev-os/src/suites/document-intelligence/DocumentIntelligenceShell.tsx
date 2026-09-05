@@ -47,7 +47,7 @@ function WorkbenchModuleHeader() {
     <ModuleHeader
       segments={[
         { id: 'suite', label: 'Document Intelligence', href: '/document-intelligence' },
-        { id: 'module', label: 'Extraction workbench', isActive: true },
+        { id: 'module', label: 'Document extraction', isActive: true },
       ]}
       statusLabel={status.label}
       statusSeverity={status.severity}
@@ -67,9 +67,10 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
     setActiveOrganizationId,
     isLoading: isLoadingOrganizations,
   } = useOrganization();
-  const activeModuleId = DOCUMENT_INTELLIGENCE_SUITE_CONFIG.modules.find(
-    (module) => module.route === pathname,
-  )?.moduleId;
+  const activeModuleId =
+    DOCUMENT_INTELLIGENCE_SUITE_CONFIG.modules.find((module) => module.route === pathname)
+      ?.moduleId ??
+    (pathname.startsWith('/document-intelligence/') ? 'workbench' : undefined);
 
   return (
     <SuiteRuntime

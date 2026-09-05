@@ -19,18 +19,18 @@ export default function DocumentIntelligenceHomePage() {
         <Heading as="h1" size="2xl" weight="semibold" className="text-text-main mt-3">
           Extracción inteligente de documentos
         </Heading>
-        <p className="text-text-muted mx-auto mt-3 max-w-xl text-lpd-sm leading-relaxed">
-          Workbench operativo para preparar documentos de identidad, ejecutar la extracción en
-          servidor y revisar los campos antes de aprobar. Prototipo navegable guiado por fixtures.
+        <p className="text-text-muted text-lpd-sm mx-auto mt-3 max-w-xl leading-relaxed">
+          Flujo operativo para preparar documentos de identidad, ejecutar la extracción en servidor
+          y revisar los campos antes de aprobar. Prototipo navegable guiado por fixtures.
         </p>
         <div className="mt-6 flex justify-center">
           <Button
             variant="primary"
             size="md"
             startIcon="document_scanner"
-            onClick={() => router.push('/document-intelligence/workbench')}
+            onClick={() => router.push('/document-intelligence/new')}
           >
-            Abrir workbench
+            Nueva extracción
           </Button>
         </div>
       </TechnicalSurface>

@@ -101,7 +101,7 @@ Estado del POC en VitaBlue (fuente de verdad funcional):
 | 2026-09-05 | Migrar el flujo operativo actual del POC, no el producto completo de VitaBlue. | El issue #176 limita la primera entrega al flujo validado. | Hub, perfiles, reglas configurables e historiales quedan fuera y se documentan como frontera futura. | Usuario (solicitud explícita) |
 | 2026-09-05 | Migrar las reglas deterministas actuales (checksums DNI/NIE, caducidad, coherencia MRZ, mayoría de edad) como validación fija no configurable. | El issue incluye validación local pero excluye el motor configurable. | Las reglas viajan como código fijo con tests; el motor configurable queda diferido. | Usuario (selección en planificación) |
 | 2026-09-05 | Excluir historial de extracciones y perfiles de exportación de la primera entrega. | El issue excluye historial permanente y no menciona exportación. | Se documentan como frontera de consumidor futuro; no hay persistencia de identidad por defecto. | Usuario (selección en planificación) |
-| 2026-09-05 | Registrar el workbench como nueva suite `document-intelligence` en `apps/loopdev-os`, owner `ai-platform`. | No existe aún una suite AI Platform y el issue exige workbench nativo sobre la shell de plataforma. | Se usa `SuiteShell` y recipe canónico; no se crea navegación paralela ni se copia el backoffice de VitaBlue. | Usuario (selección en planificación) |
+| 2026-09-05 | Registrar Document Intelligence como nueva suite en `apps/loopdev-os`, owner `ai-platform`, con superficies `DocumentIntelligenceHome` (`/document-intelligence`), `NewDocumentExtraction` (`/document-intelligence/new`) y `DocumentExtraction` (`/document-intelligence/:documentId`). | No existe aún una suite AI Platform y el issue exige el flujo operativo nativo sobre la shell de plataforma. | `RecordWorkspace`/`workbench` queda como concepto interno de composición; no se expone `/workbench`. Se usa `SuiteRuntime` y no se copia el backoffice de VitaBlue. | Usuario (actualización explícita) |
 | 2026-09-05 | Mantener Gemini server-side tras una Edge Function de Supabase con credenciales solo en servidor. | Requisito explícito del issue y práctica validada en el POC. | Ninguna credencial de provider ni documento fuente llega al cliente; el contrato de la función es la única frontera. | Usuario (solicitud explícita en issue) |
 | 2026-09-05 | Recipe canónico del workbench: `RecordWorkspace` (canvas mode `workspace`). El área principal combina documento-preview y revisión; el inspector contextual muestra estado, validación y uso/coste. Responsive: inspector como overlay en tablet y región única en móvil. | El flujo operativo es un registro/proceso activo con entidad principal (documento en revisión) y contexto lateral; encaja con el recipe `RecordWorkspace` del inventario de modos de Platform Shell. | Gate de la implementación visual: la Fase 0 solo se cierra con esta composición; la Fase 3 implementa exactamente esta estructura y sus transformaciones responsive. | Usuario (aprobación explícita vía sesión Migración Backoffice) |
 | 2026-09-06 | Launchpad reutiliza `SuiteSidebar` en modo `rail` para mostrar las capabilities declaradas por `PlatformToolEntry`; no existe un rail transversal paralelo. | La navegación y su control de colapso permanecen en el renderer canónico de Platform Shell. El acceso se filtra por `state` y `requiredPermission` antes de construir el schema de Launchpad. | Se retira el renderer independiente y el slot específico de `AppShell`; `SuiteSidebar` queda como única superficie de navegación. La ruta inicial es `/document-intelligence`; Gemini/backend siguen fuera de esta fase. | Usuario (solicitud explícita) |
@@ -196,8 +196,9 @@ aceptación antes de escribir código de producto.
 - [x] Este track en `tracks/planned/ai-platform/`.
 - [x] Especificación de composición de la suite (desktop/tablet/mobile):
       `docs/06-product/document-intelligence/workbench-composition.md`.
-- [x] Prototipo navegable guiado por fixtures en `apps/loopdev-os` (rutas `/document-intelligence`
-      y `/document-intelligence/workbench`), sin provider real ni lógica migrada de VitaBlue.
+- [x] Prototipo navegable guiado por fixtures en `apps/loopdev-os` (rutas
+      `/document-intelligence`, `/document-intelligence/new` y
+      `/document-intelligence/:documentId`), sin provider real ni lógica migrada de VitaBlue.
 - [x] Contrato `PlatformToolEntry`, `SuiteSidebar` colapsado por defecto y registro inicial de
       Document Intelligence en Launchpad, sin duplicar shells ni alterar la suite.
 - [ ] Aprobación visual explícita del prototipo por el usuario (gate para Fase 3).
@@ -331,7 +332,7 @@ fixtures y provider real conmutable.
 | 2026-09-05 | `node scripts/tracks/validate-tracks.mjs` + dashboard | ✅ | tracks/README.md |
 | 2026-09-05 | Typecheck `loopdev-os` (`tsc --noEmit`) | ✅ | suites/document-intelligence, app/document-intelligence |
 | 2026-09-05 | eslint de la suite y rutas nuevas | ✅ (0 errores, 0 warnings) | apps/loopdev-os |
-| 2026-09-05 | Smoke `next dev`: `/document-intelligence` y `/document-intelligence/workbench` | ✅ HTTP 200, compilación limpia | requiere sesión para el contenido, igual que el resto de la app |
+| 2026-09-05 | Smoke `next dev`: `/document-intelligence`, `/document-intelligence/new` y `/document-intelligence/:documentId` | ✅ HTTP 200, compilación limpia | requiere sesión para el contenido, igual que el resto de la app |
 | 2026-09-05 | `pnpm test:shell:changed` | ✅ sin cambios en superficie shell | scripts/check-shell.mjs |
 | 2026-09-05 | `pnpm registries:check` | ✅ | docs/registries/frontend-components.json (+6 entradas experimental) |
 | 2026-09-06 | `pnpm --filter @loopdev/contracts build` + typecheck `@loopdev/ui` | ✅ | `PlatformToolEntry`, `SuiteSidebar`, Launchpad |

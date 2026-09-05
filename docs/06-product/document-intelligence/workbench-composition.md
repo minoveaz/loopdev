@@ -7,7 +7,7 @@ track: tracks/planned/ai-platform/2026-09-05-document-intelligence-poc-migration
 issue: 176
 ---
 
-# Document Intelligence Workbench — especificación de composición
+# Document Intelligence — especificación de composición RecordWorkspace
 
 Prototipo navegable guiado por fixtures, sin provider real ni lógica migrada de VitaBlue.
 Su aprobación visual es el gate que desbloquea la Fase 3 (workbench definitivo).
@@ -15,9 +15,12 @@ Su aprobación visual es el gate que desbloquea la Fase 3 (workbench definitivo)
 ## Identity
 
 - **Suite:** `document-intelligence` (`apps/loopdev-os/src/suites/document-intelligence/`)
-- **Module/view:** `workbench` (`Extraction workbench`)
+- **Public surfaces:**
+  - `DocumentIntelligenceHome`: `/document-intelligence`
+  - `NewDocumentExtraction`: `/document-intelligence/new`
+  - `DocumentExtraction`: `/document-intelligence/:documentId`
+- **Internal composition:** `workbench` / `RecordWorkspace` (no es nomenclatura de ruta pública)
 - **Owner:** `ai-platform`
-- **Route:** `/document-intelligence/workbench` (landing: `/document-intelligence`)
 - **Canvas mode:** `workspace`
 - **Visual recipe:** `RecordWorkspace` (header, tabs, record, inspector)
 
@@ -27,7 +30,7 @@ Su aprobación visual es el gate que desbloquea la Fase 3 (workbench definitivo)
   - `PlatformHeader`, `SuiteSidebar`, `PlatformContextPanel`, `SuiteCanvas`: shell de plataforma
     (obligatorias, sin variantes locales).
   - Header: `ModuleHeader` vía `moduleHeaderRenderers` de `SuiteRuntime` — breadcrumbs
-    (`Document Intelligence / Extraction workbench`) y badge de estado del flujo.
+    (`Document Intelligence / Document extraction`) y badge de estado del flujo.
   - Tabs: control local dentro del canvas (`Datos extraídos / Validación / Uso y coste`) con
     `role="tablist"` compuesto desde `Button`. Gap G4: no existe `Tabs` compartido.
   - Record: área principal en grid — preview/preparación del documento a la izquierda y panel de
@@ -47,7 +50,13 @@ Su aprobación visual es el gate que desbloquea la Fase 3 (workbench definitivo)
   `DocumentIntelligenceWorkbench`, `DocumentPreviewPane`, `ExtractionReviewForm`,
   `ValidationSummaryList`, `UsageCostPanel`, `WorkbenchInspector`, `workbench-context`.
 
-## Flujo operativo representado
+## Flujo operativo conservado
+
+La migración conserva el flujo operativo validado en VitaBlue:
+`historial → upload/preview → processing feedback → review`.
+En LoopDev se adapta a `AppShell`, los contratos tenant-aware, el aislamiento por tenancy y los
+componentes certificados de LoopDev. El workbench permanece como nombre interno de la composición
+`RecordWorkspace`, no como una superficie pública ni una ruta.
 
 `preparation → processing → review | review-with-warnings → (approve/reject)` y `error`
 recuperable (reintentar / cambiar documento / extraer nuevo). El cleanup (revocar previews,
@@ -85,7 +94,8 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 ## Data and security
 
 - **Permissions/capabilities:** pendiente de definición (`documents.read`, acción de extracción).
-- **Active-route fallback:** módulos `overview` y `workbench` en el `NavigationSchema` declarativo.
+- **Active-route fallback:** módulos `overview` y `workbench` (identificador interno) en el
+  `NavigationSchema` declarativo; sus superficies públicas son `/new` y `/:documentId`.
 - **Organization isolation:** el shell muestra el `OrganizationSwitcher`; la Fase 2 añade el
   namespacing por tenant/actor en storage temporal y la validación server-side.
 - **Pagination/filter/sort contract:** no aplica (un documento activo por sesión).
@@ -138,8 +148,9 @@ Referencias inspeccionadas (duplicate review): `SalesCrmShell` + `config.ts` (pa
 
 - **Contract tests:** pendientes (Fase 1 para contratos; Fase 3 para composición).
 - **Interaction tests:** pendientes; `pnpm test:shell` antes del commit de Fase 3.
-- **Visual/browser checks:** typecheck ✅, eslint ✅, smoke de rutas `/document-intelligence` y
-  `/document-intelligence/workbench` con `next dev` (HTTP 200, shell + chunks correctos; el
+- **Visual/browser checks:** typecheck ✅, eslint ✅, smoke de rutas `/document-intelligence`,
+  `/document-intelligence/new` y `/document-intelligence/:documentId` con `next dev` (HTTP 200,
+  shell + chunks correctos; el
   contenido requiere sesión, igual que el resto de la app). **Revisión visual presencial
   pendiente — gate de esta especificación.**
 - **Performance budget:** sin listas virtualizadas; composición ligera.
