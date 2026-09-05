@@ -44,8 +44,7 @@ function validateRegistries(registries) {
   return entries;
 }
 
-function renderCatalog(registries, entries) {
-  const generatedAt = new Date().toISOString().slice(0, 10);
+export function renderCatalog(registries, entries) {
   const grouped = new Map();
 
   for (const entry of entries) {
@@ -58,7 +57,7 @@ function renderCatalog(registries, entries) {
     '# LoopDev Registry Catalog',
     '',
     '> Generated file. Do not edit manually.',
-    `> Generated on ${generatedAt} from \`docs/registries/index.json\`.`,
+    '> Generated from `docs/registries/index.json`.',
     '',
     'The domain registries are the sources of truth. This catalog is a read-only',
     'view for navigation, audits, and cross-domain discovery.',
@@ -100,22 +99,34 @@ function renderCatalog(registries, entries) {
   return `${lines.join('\n').trimEnd()}\n`;
 }
 
-const registries = index.registries
-  .filter((registry) => registry.path.endsWith('.json'))
-  .map((registry) => readJson(registry.path));
-const entries = validateRegistries(registries);
-const output = await prettier.format(renderCatalog(registries, entries), {
-  parser: 'markdown',
-});
+export async function generateCatalog({ check = false } = {}) {
+  const registries = index.registries
+    .filter((registry) => registry.path.endsWith('.json'))
+    .map((registry) => readJson(registry.path));
+  const entries = validateRegistries(registries);
+  const output = await prettier.format(renderCatalog(registries, entries), {
+    parser: 'markdown',
+  });
 
-if (process.argv.includes('--check')) {
-  const current = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : '';
-  if (current !== output) {
-    console.error('Registry catalog is out of date. Run pnpm registries:generate.');
-    process.exit(1);
+  if (check) {
+    const current = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : '';
+    if (current !== output) {
+      throw new Error('Registry catalog is out of date. Run pnpm registries:generate.');
+    }
+    return output;
   }
-  console.log('Registry catalog is up to date.');
-} else {
+
   fs.writeFileSync(outputPath, output);
   console.log(`Generated ${path.relative(root, outputPath)} from ${entries.length} entries.`);
+  return output;
+}
+
+if (process.argv[1]?.endsWith('generate-registry-catalog.mjs')) {
+  try {
+    await generateCatalog({ check: process.argv.includes('--check') });
+    if (process.argv.includes('--check')) console.log('Registry catalog is up to date.');
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
 }
