@@ -486,6 +486,23 @@ documentado el rollout fixture y el rollback sin datos permanentes.
 - **UI/UX gate:** `ready-for-review`; visual review and forced PDF fallback browser evidence remain
   registry gaps.
 
+### Validación de continuación (extracción compartida)
+
+- El smoke Playwright real del consumidor `/document-intelligence/new` pasa en
+  `desktop`, `mobile` y `mobile-compact` (9/9): fit explícito, zoom/reset,
+  rotación, overflow y render PDF.js con canvas visible.
+- Los fixtures públicos del paquete cubren PDF, JPEG y PNG con bytes de archivo
+  reales; `createDocumentViewerFixtures()` queda disponible para pruebas y
+  consumidores de certificación.
+- Validación focalizada vigente: `@loopdev/document-viewer` (6 tests), `DocumentIntakePane`
+  y `DocumentIntelligenceWorkbench` (3 tests), build de `loopdev-os`,
+  `registries:check` y `certification:source-contracts`.
+- La ejecución global de Vitest conserva un fallo histórico de
+  `src/app/document-intelligence/routes.test.ts` cuando se invoca desde el
+  proyecto agregado (resuelve el `cwd` como `apps/loopdev-os` y duplica el
+  prefijo); las rutas sí están presentes y `next build` las genera. No se
+  modifica ese test no relacionado en esta extracción.
+
 ## Handoff de sesión
 
 - **Fecha:** 2026-09-05.

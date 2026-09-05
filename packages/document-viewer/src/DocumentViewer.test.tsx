@@ -5,7 +5,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { DocumentViewer } from './DocumentViewer';
 import { calculateDocumentFit } from './engines';
-import { DOCUMENT_VIEWER_FIXTURE_LABELS, createDocumentViewerFixture } from './fixtures';
+import {
+  DOCUMENT_VIEWER_FIXTURE_LABELS,
+  createDocumentViewerFixture,
+  createDocumentViewerFixtures,
+} from './fixtures';
 
 describe('DocumentViewer', () => {
   const createObjectURL = vi.fn(() => 'blob:document-viewer');
@@ -19,6 +23,15 @@ describe('DocumentViewer', () => {
     expect(calculateDocumentFit(612, 792, 360, 500, 'contain').scale).toBeCloseTo(0.5359, 3);
     expect(calculateDocumentFit(612, 792, 360, 500, 'width').scale).toBeCloseTo(0.5359, 3);
     expect(calculateDocumentFit(612, 792, 360, 500, 'actual').scale).toBe(1);
+  });
+
+  it('provides PDF, JPEG and PNG fixture documents', () => {
+    const fixtures = createDocumentViewerFixtures();
+    expect(fixtures.pdf.file.size).toBeGreaterThan(100);
+    expect(fixtures.jpeg.file.size).toBeGreaterThan(100);
+    expect(fixtures.png.file.size).toBeGreaterThan(50);
+    expect(fixtures.jpeg.file.type).toBe('image/jpeg');
+    expect(fixtures.png.file.type).toBe('image/png');
   });
 
   it('renders the native image engine and complete inspection toolbar', () => {
