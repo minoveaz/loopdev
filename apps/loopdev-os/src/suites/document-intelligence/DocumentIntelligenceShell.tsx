@@ -35,6 +35,7 @@ const FLOW_STATUS: Record<
 > = {
   preparation: { label: 'PREPARACIÓN', severity: 'info' },
   processing: { label: 'PROCESANDO', severity: 'info' },
+  'loading-results': { label: 'PREPARANDO RESULTADOS', severity: 'info' },
   review: { label: 'REVISIÓN', severity: 'success' },
   error: { label: 'ERROR RECUPERABLE', severity: 'danger' },
 };
@@ -82,7 +83,7 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
   const router = useRouter();
   const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<Exclude<NavMode, 'hidden'>>('expanded');
-  const { flowState } = useWorkbenchPrototype();
+  const { flowState, isContextPanelOpen, closeContextPanel } = useWorkbenchPrototype();
   const {
     organizations,
     activeOrganization,
@@ -101,8 +102,9 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
       moduleHeaderRenderers={{ workbench: (module) => <WorkbenchModuleHeader module={module} /> }}
       moduleContextPanelRenderers={{ workbench: () => <WorkbenchInspector /> }}
       moduleContextPanelVisibility={{
-        workbench: shouldShowWorkbenchContextPanel(flowState),
+        workbench: shouldShowWorkbenchContextPanel(flowState) && isContextPanelOpen,
       }}
+      moduleContextPanelOnClose={closeContextPanel}
       leftSlot={<BrandLogo variant="isotype" size="sm" className="shrink-0" />}
       centerSlot={
         <CommandBarTrigger

@@ -3,6 +3,23 @@
   "policy": "zero-hardcode-v1",
   "components": [
     {
+      "id": "ai-feedback-surface-v1",
+      "name": "AIFeedbackSurface",
+      "implementation": "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/index.tsx",
+      "sourceFiles": [
+        "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/types.ts"
+      ],
+      "fixturePaths": [],
+      "forbiddenPatterns": [
+        "raw-palette-class",
+        "domain-copy",
+        "default-visible-copy",
+        "hardcoded-data-array",
+        "raw-z-index",
+        "inline-visual-style"
+      ]
+    },
+    {
       "id": "command-dialog-v1",
       "name": "CommandDialog",
       "implementation": "ds/packages/ui/src/components/composites/utilities/CommandDialog/index.tsx",

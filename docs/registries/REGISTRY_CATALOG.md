@@ -11,10 +11,10 @@ view for navigation, audits, and cross-domain discovery.
 | Domain         | Entries |
 | -------------- | ------: |
 | backend        |       5 |
-| frontend       |      90 |
+| frontend       |      91 |
 | infrastructure |       5 |
 | product        |       5 |
-| **Total**      | **105** |
+| **Total**      | **106** |
 
 ## Entries
 
@@ -34,6 +34,7 @@ view for navigation, audits, and cross-domain discovery.
 | --------------------------------- | ----------------------------- | ----------------- | ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `activity-feed-v1`                | ActivityFeed                  | frontend-platform | composite   | stable       | documentation                                                                                                                                                                                                                                                                                                |
 | `activity-table-v1`               | ActivityTable                 | frontend-platform | composition | certified    | —                                                                                                                                                                                                                                                                                                            |
+| `ai-feedback-surface-v1`          | AIFeedbackSurface             | frontend-platform | composite   | experimental | visual-review, responsive-browser-evidence, second-consumer, technical-certification                                                                                                                                                                                                                         |
 | `ai-loader-v1`                    | AILoader                      | frontend-platform | atom        | stable       | —                                                                                                                                                                                                                                                                                                            |
 | `app-shell-v1.1`                  | AppShell                      | frontend-platform | composite   | stable       | —                                                                                                                                                                                                                                                                                                            |
 | `badge-v1`                        | Badge                         | frontend-platform | atom        | stable       | —                                                                                                                                                                                                                                                                                                            |
@@ -145,7 +146,7 @@ view for navigation, audits, and cross-domain discovery.
 
 ## Source registries
 
-- [docs/registries/frontend-components.json](./frontend-components.json) — 90 entries
+- [docs/registries/frontend-components.json](./frontend-components.json) — 91 entries
 - [docs/registries/backend-capabilities.json](./backend-capabilities.json) — 5 entries
 - [docs/registries/infrastructure-capabilities.json](./infrastructure-capabilities.json) — 5 entries
 - [docs/registries/product-modules.json](./product-modules.json) — 5 entries

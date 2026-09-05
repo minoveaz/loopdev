@@ -48,4 +48,32 @@ describe('ExtractionReviewForm', () => {
       'ICAO / Internacional',
     ]);
   });
+
+  it('copies the current value from an individual field action', async () => {
+    vi.useFakeTimers();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+
+    render(
+      <WorkbenchPrototypeProvider>
+        <ReviewHarness />
+      </WorkbenchPrototypeProvider>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'fixture' }));
+    fireEvent.click(screen.getByRole('button', { name: 'extract' }));
+    act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Copiar Nombre(s)' }));
+    });
+
+    expect(writeText).toHaveBeenCalledWith('María');
+    expect(screen.getByRole('status')).toHaveTextContent('Nombre(s) copiado');
+  });
 });

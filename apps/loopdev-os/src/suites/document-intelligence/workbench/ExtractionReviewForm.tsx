@@ -7,6 +7,7 @@ import {
   Button,
   Form,
   FormField,
+  IconButton,
   Input,
   LpdText,
   Select,
@@ -115,6 +116,12 @@ export function ExtractionReviewForm() {
     window.setTimeout(() => setCopyFeedback(null), 1800);
   };
 
+  const copyField = async (field: ExportProfileField, label: string) => {
+    await navigator.clipboard.writeText(String(currentFields[field] ?? ''));
+    setCopyFeedback(`${label} copiado`);
+    window.setTimeout(() => setCopyFeedback(null), 1800);
+  };
+
   return (
     <Form
       form={form}
@@ -179,22 +186,45 @@ export function ExtractionReviewForm() {
             >
               {({ field: controllerField, id, describedBy }) =>
                 field === 'mrz' ? (
-                  <Textarea
-                    {...controllerField}
-                    id={id}
-                    aria-describedby={describedBy}
-                    placeholder="No detectado"
-                    rows={3}
-                    fullWidth
-                    onChange={(event) => updateField(field, event.target.value)}
-                  />
+                  <div className="relative">
+                    <Textarea
+                      {...controllerField}
+                      id={id}
+                      aria-describedby={describedBy}
+                      placeholder="No detectado"
+                      rows={3}
+                      fullWidth
+                      onChange={(event) => updateField(field, event.target.value)}
+                    />
+                    <IconButton
+                      icon="content_copy"
+                      variant="ghost"
+                      size="sm"
+                      ariaLabel={`Copiar ${label}`}
+                      tooltip={`Copiar ${label}`}
+                      className="absolute right-2 top-2"
+                      onClick={() => void copyField(field, label)}
+                    />
+                  </div>
                 ) : (
                   <Input
                     {...controllerField}
                     id={id}
                     aria-describedby={describedBy}
                     placeholder="No detectado"
-                    endIcon={confidenceBadge}
+                    endIcon={
+                      <div className="flex items-center gap-1">
+                        {confidenceBadge}
+                        <IconButton
+                          icon="content_copy"
+                          variant="ghost"
+                          size="sm"
+                          ariaLabel={`Copiar ${label}`}
+                          tooltip={`Copiar ${label}`}
+                          onClick={() => void copyField(field, label)}
+                        />
+                      </div>
+                    }
                     fullWidth
                     onChange={(event) => updateField(field, event.target.value)}
                   />

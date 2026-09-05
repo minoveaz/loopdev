@@ -8,6 +8,7 @@ import type { WorkbenchFlowState } from './types';
 const FLOW_STATE_LABELS: Record<WorkbenchFlowState, string> = {
   preparation: 'Preparación',
   processing: 'Procesando',
+  'loading-results': 'Preparando resultados',
   review: 'Revisión',
   error: 'Error recuperable',
 };
@@ -37,7 +38,7 @@ export function WorkbenchInspector() {
         <TechnicalStatusBadge
           label={FLOW_STATE_LABELS[flowState]}
           severity={flowState === 'error' ? 'danger' : flowState === 'review' ? 'success' : 'info'}
-          withPulse={flowState === 'processing'}
+          withPulse={flowState === 'processing' || flowState === 'loading-results'}
         />
         {error ? (
           <LpdText size="xs" className="text-text-muted">

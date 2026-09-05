@@ -11,6 +11,37 @@
   ],
   "entries": [
     {
+      "id": "ai-feedback-surface-v1",
+      "name": "AIFeedbackSurface",
+      "domain": "frontend",
+      "type": "composite",
+      "category": "feedback",
+      "status": "experimental",
+      "owner": "frontend-platform",
+      "phase": 2,
+      "dependencies": [
+        "technical-surface-v1",
+        "technical-status-badge-v1",
+        "technical-canvas-v1"
+      ],
+      "contracts": [
+        "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/types.ts"
+      ],
+      "implementation": "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface",
+      "tests": [
+        "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/AIFeedbackSurface.test.tsx"
+      ],
+      "documentation": [
+        "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/UI_UX_SPEC.md"
+      ],
+      "evidence_gaps": [
+        "visual-review",
+        "responsive-browser-evidence",
+        "second-consumer",
+        "technical-certification"
+      ]
+    },
+    {
       "id": "select-v1",
       "name": "Select",
       "domain": "frontend",

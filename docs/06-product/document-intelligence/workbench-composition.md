@@ -33,13 +33,14 @@ copiada de VitaBlue. La aprobación visual sigue siendo un gate independiente y 
     de `SuiteConfig.modules[].breadcrumbs`. Desktop conserva `Document Intelligence /
 Document extraction`; móvil usa solo el módulo activo mediante la variante contractual
     `mobileSegments`, sin duplicar landmarks ni hardcodear labels en la suite.
-  - Tabs: control local dentro del canvas (`Datos extraídos / Uso y coste`) con `role="tablist"`
-    compuesto desde `Button`. `Datos extraídos` conserva perfiles de salida para aseguradoras;
-    las validaciones de negocio globales pertenecen al inspector contextual.
+  - Tabs: control local dentro del canvas (`Datos extraídos / Validaciones / Uso y coste`) con
+    `role="tablist"` compuesto desde `Button`. `Datos extraídos` conserva perfiles de salida para
+    aseguradoras; `Validaciones` abre el `ModuleContextPanel` contextual.
   - Record: área principal en grid — preview/preparación del documento a la izquierda y panel de
     revisión con tabs a la derecha (`xl:grid-cols-2`, apilado en pantallas menores).
-  - Inspector: `ModuleContextPanel` vía `moduleContextPanelRenderers` — estado del flujo,
-    clasificación y uso/coste.
+  - Inspector: `ModuleContextPanel` vía `moduleContextPanelRenderers`, oculto por defecto para
+    priorizar el canvas. La pestaña `Validaciones` solicita abrirlo con estado del flujo,
+    clasificación y uso/coste; el cierre devuelve el panel a estado oculto.
 - **Surface sequence:** canvas → surface (`TechnicalSurface variant="surface"`) → elevated
   (placeholder del documento, `bg-surface-elevated`).
 - **Background variant:** `plain` (canvas por defecto del preset `workspace`).
@@ -73,8 +74,10 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 - **Preparation:** dropzone real con allowlist MIME/tamaño, selector, drag/drop, portapapeles y
   fixture. Con el documento cargado: toggle anverso/reverso, rotar, zoom/reset, pan mouse/touch,
   crop de imagen, abrir en pestaña, "Iniciar extracción" y error recuperable.
-- **Processing:** `EmptyState variant="ai"` con `loadingMessages` (preparar → clasificar →
-  extraer → normalizar).
+- **Processing:** superficie de canvas completo con cabecera de proceso, estado `PROCESANDO`,
+  indicador de actividad, progreso por etapas (preparar → clasificar → extraer → normalizar) y
+  contexto de privacidad. Evita concentrar el feedback en una tarjeta pequeña y dejar un área
+  blanca sin función.
 - **Review:** formulario `Form`/`FormField` con perfil `Aseguradora 1` seleccionado por defecto,
   selector tipado para `Aseguradora 1`, `Aseguradora 2` e `ICAO / Internacional`, campos nullables,
   badge de confianza por campo, copia de campos/JSON y decisión básica approve/reject. El cambio de
@@ -84,7 +87,8 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 
 ## Behavior and states
 
-- **Loading:** `EmptyState variant="ai" isLoading` durante `processing`.
+- **Loading:** composición de proceso activa durante `processing`; ocupa la región disponible y
+  mantiene una jerarquía estable mientras avanza la extracción.
 - **Empty:** dropzone inicial y panel de revisión vacío con explicación.
 - **Error:** estado `error` con mensaje tipado (`502` del fixture) y tres acciones de recuperación.
 - **Forbidden:** pendiente — los permisos (`documents.*`) se definen en Fase 2/3; el prototipo no

@@ -43,7 +43,7 @@ diagnostics.
 RecordWorkspace record
 └── Datos extraídos
     ├── Formato de datos selector + copy actions
-    ├── profile-specific editable field grid
+    ├── profile-specific editable field grid with per-field copy actions
     └── review decision actions
 ```
 
@@ -65,14 +65,17 @@ logic remain consumer-owned.
 | --- | --- | --- | --- | --- |
 | Select profile | Change destination format | Opens the single-select menu and selects one profile | Trigger is focusable; selection uses the DS `Select` contract | Field anatomy and description update |
 | Edit field | Correct extracted value | Input or textarea editing | Native field order and labels | Existing confidence badge remains visible |
+| Copy field | Copy one value for a destination form | Copy icon at the end of each field, including MRZ | Icon button is keyboard activatable and has a field-specific name | Status text confirms the field copied |
 | Sync surnames | Keep grouped and separated values coherent | Editing either representation updates the other | Same field focus is retained | Canonical values stay in the form state |
 | Copy fields | Paste into destination system | Button action | Button is keyboard activatable | Status text confirms copy |
 | Copy JSON | Copy selected profile fields for technical use | Button action | Button is keyboard activatable | Status text confirms copy |
 
 The selector is single-select: choosing an option closes the menu and keeps
 focus on the trigger. There is no clear action because one profile is always
-required. Copy feedback uses a status announcement. Empty values remain empty
-and are formatted as `—` only in copied text.
+required. Each field exposes a copy action that copies only its current value;
+the general `Copiar campos` and `Copiar JSON` actions remain available for
+whole-profile export. Copy feedback uses a status announcement. Empty values
+are copied as an empty string and remain visually empty.
 
 ## Responsive and state contract
 
@@ -115,3 +118,4 @@ organization profiles, persistence, and profile permissions reopen this spec.
 | Date | Version | Change |
 | --- | --- | --- |
 | 2026-09-05 | 1.1 | Added typed insurer and ICAO profile views with copy formatting and surname synchronization. |
+| 2026-09-06 | 1.2 | Added accessible per-field copy actions while retaining whole-profile copy actions. |

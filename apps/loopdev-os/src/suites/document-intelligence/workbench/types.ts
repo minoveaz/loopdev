@@ -10,7 +10,12 @@
 export type PrototypeIdentityDocumentType =
   'passport' | 'spanish-dni' | 'spanish-nie' | 'national-id' | 'unknown';
 
-export type WorkbenchFlowState = 'preparation' | 'processing' | 'review' | 'error';
+export type WorkbenchFlowState =
+  | 'preparation'
+  | 'processing'
+  | 'loading-results'
+  | 'review'
+  | 'error';
 
 export type DocumentSide = 'front' | 'back';
 

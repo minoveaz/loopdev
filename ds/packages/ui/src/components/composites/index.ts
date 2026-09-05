@@ -66,3 +66,4 @@ export * from './visualizations';
 
 // trading
 export * from './trading';
+export * from './feedback/AIFeedbackSurface';

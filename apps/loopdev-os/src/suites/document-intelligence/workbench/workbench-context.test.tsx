@@ -16,6 +16,9 @@ function Harness() {
       <button type="button" onClick={() => workbench.startExtraction('success')}>
         extract
       </button>
+      <button type="button" onClick={workbench.markProcessingVisualComplete}>
+        processing complete
+      </button>
       <button type="button" onClick={() => workbench.completeReview('approved')}>
         approve
       </button>
@@ -43,7 +46,18 @@ describe('WorkbenchPrototypeProvider', () => {
     expect(screen.getByTestId('state')).toHaveTextContent('processing');
 
     act(() => {
-      vi.advanceTimersByTime(1600);
+      vi.advanceTimersByTime(7400);
+    });
+    expect(screen.getByTestId('state')).toHaveTextContent('processing');
+
+    fireEvent.click(screen.getByRole('button', { name: 'processing complete' }));
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+    expect(screen.getByTestId('state')).toHaveTextContent('loading-results');
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
     });
     expect(screen.getByTestId('state')).toHaveTextContent('review');
     fireEvent.click(screen.getByRole('button', { name: 'approve' }));

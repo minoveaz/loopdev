@@ -28,7 +28,8 @@ import type {
   WorkbenchFlowState,
 } from './types';
 
-const SIMULATED_PROCESSING_MS = 1600;
+const SIMULATED_PROCESSING_MS = 7400;
+const RESULTS_TRANSITION_MS = 3000;
 const HISTORY_STORAGE_KEY = 'loopdev.document-intelligence.operational-history.v1';
 
 interface WorkbenchPrototypeContextValue {
@@ -40,6 +41,7 @@ interface WorkbenchPrototypeContextValue {
   documentFiles: { front: PrototypeDocumentFile | null; back: PrototypeDocumentFile | null };
   history: PrototypeDocumentHistoryItem[];
   fileError: string | null;
+  isContextPanelOpen: boolean;
   loadDemoDocument: (documentId?: string) => void;
   selectDocumentFile: (file: File, side?: 'front' | 'back') => boolean;
   startExtraction: (
@@ -52,7 +54,10 @@ interface WorkbenchPrototypeContextValue {
   ) => void;
   retryExtraction: () => void;
   resetWorkbench: () => void;
+  openContextPanel: () => void;
+  closeContextPanel: () => void;
   completeReview: (decision: 'approved' | 'rejected') => void;
+  markProcessingVisualComplete: () => void;
 }
 
 const WorkbenchPrototypeContext = createContext<WorkbenchPrototypeContextValue | null>(null);
@@ -112,7 +117,11 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
     DOCUMENT_INTELLIGENCE_HISTORY_FIXTURE,
   );
   const [fileError, setFileError] = useState<string | null>(null);
+  const [isContextPanelOpen, setIsContextPanelOpen] = useState(false);
   const processingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [providerReady, setProviderReady] = useState(false);
+  const [visualProcessingComplete, setVisualProcessingComplete] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -131,6 +140,10 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       clearTimeout(processingTimer.current);
       processingTimer.current = null;
     }
+    if (transitionTimer.current) {
+      clearTimeout(transitionTimer.current);
+      transitionTimer.current = null;
+    }
   }, []);
 
   useEffect(() => clearTimer, [clearTimer]);
@@ -147,7 +160,10 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       setDocumentFiles({ front: null, back: null });
       setResult(null);
       setError(null);
+      setProviderReady(false);
+      setVisualProcessingComplete(false);
       setFileError(null);
+      setIsContextPanelOpen(false);
       setFlowState('preparation');
       setHistory((current) => {
         if (current.some((item) => item.id === documentId)) return current;
@@ -176,6 +192,9 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       setDocumentLoaded(true);
       setResult(null);
       setError(null);
+      setProviderReady(false);
+      setVisualProcessingComplete(false);
+      setIsContextPanelOpen(false);
       setFlowState('preparation');
       setHistory((current) => {
         const nextItem: PrototypeDocumentHistoryItem = {
@@ -204,6 +223,9 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       clearTimer();
       setError(null);
       setResult(null);
+      setProviderReady(false);
+      setVisualProcessingComplete(false);
+      setIsContextPanelOpen(false);
       setFlowState('processing');
       if (activeDocumentId)
         updateHistory(activeDocumentId, {
@@ -238,15 +260,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
           })
           .then((nextResult) => {
             setResult(nextResult);
-            setFlowState('review');
-            if (activeDocumentId) {
-              updateHistory(activeDocumentId, {
-                flowState: 'review',
-                documentType: nextResult.classification.type,
-                provider: nextResult.provider,
-                updatedAt: new Date().toISOString(),
-              });
-            }
+            setProviderReady(true);
           })
           .catch((nextError: DocumentExtractionError) => {
             setError({
@@ -276,19 +290,50 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
           return;
         }
         setResult(SPANISH_DNI_FIXTURE_RESULT);
-        setFlowState('review');
-        if (activeDocumentId) {
-          updateHistory(activeDocumentId, {
-            flowState: 'review',
-            documentType: SPANISH_DNI_FIXTURE_RESULT.classification.type,
-            provider: SPANISH_DNI_FIXTURE_RESULT.provider,
-            updatedAt: new Date().toISOString(),
-          });
-        }
+        setProviderReady(true);
       }, SIMULATED_PROCESSING_MS);
     },
     [activeDocumentId, clearTimer, updateHistory],
   );
+
+  const markProcessingVisualComplete = useCallback(() => {
+    setVisualProcessingComplete(true);
+  }, []);
+
+  useEffect(() => {
+    if (flowState !== 'processing' || !providerReady || !visualProcessingComplete) return;
+
+    setFlowState('loading-results');
+  }, [flowState, providerReady, visualProcessingComplete]);
+
+  useEffect(() => {
+    if (flowState !== 'loading-results') return;
+
+    transitionTimer.current = setTimeout(() => {
+      setFlowState('review');
+      if (activeDocumentId && result) {
+        updateHistory(activeDocumentId, {
+          flowState: 'review',
+          documentType: result.classification.type,
+          provider: result.provider,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+      transitionTimer.current = null;
+    }, RESULTS_TRANSITION_MS);
+
+    return () => {
+      if (transitionTimer.current) {
+        clearTimeout(transitionTimer.current);
+        transitionTimer.current = null;
+      }
+    };
+  }, [
+    activeDocumentId,
+    flowState,
+    result,
+    updateHistory,
+  ]);
 
   const retryExtraction = useCallback(() => {
     startExtraction('success');
@@ -301,7 +346,10 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
     setDocumentFiles({ front: null, back: null });
     setResult(null);
     setError(null);
+    setProviderReady(false);
+    setVisualProcessingComplete(false);
     setFileError(null);
+    setIsContextPanelOpen(false);
     setFlowState('preparation');
   }, [clearTimer]);
 
@@ -318,6 +366,9 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
     [activeDocumentId, resetWorkbench, updateHistory],
   );
 
+  const openContextPanel = useCallback(() => setIsContextPanelOpen(true), []);
+  const closeContextPanel = useCallback(() => setIsContextPanelOpen(false), []);
+
   const value = useMemo<WorkbenchPrototypeContextValue>(
     () => ({
       flowState,
@@ -328,12 +379,16 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       documentFiles,
       history,
       fileError,
+      isContextPanelOpen,
       loadDemoDocument,
       selectDocumentFile,
       startExtraction,
       retryExtraction,
       resetWorkbench,
+      openContextPanel,
+      closeContextPanel,
       completeReview,
+      markProcessingVisualComplete,
     }),
     [
       flowState,
@@ -344,12 +399,16 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       documentFiles,
       history,
       fileError,
+      isContextPanelOpen,
       loadDemoDocument,
       selectDocumentFile,
       startExtraction,
       retryExtraction,
       resetWorkbench,
+      openContextPanel,
+      closeContextPanel,
       completeReview,
+      markProcessingVisualComplete,
     ],
   );
 

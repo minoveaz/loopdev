@@ -3,7 +3,7 @@ id: document-intelligence-poc-migration
 title: Migración del POC operativo de Document Intelligence desde VitaBlue
 status: active
 created: 2026-09-05
-updated: 2026-09-05
+updated: 2026-09-06
 owner: ai-platform
 lead: null
 branch: feature/document-intelligence-viewer
@@ -118,6 +118,11 @@ Estado del POC en VitaBlue (fuente de verdad funcional):
 | 2026-09-05 | Se retira `ValidationSummaryList` y cualquier validación de negocio visible del workbench.                                                                                                                                                                                               | La revisión solicitada es editable/nullables con decisión básica; las validaciones visibles se difieren.                                                                                             | El resultado puede transportar validaciones para el futuro, pero no se renderizan ni bloquean aprobar/rechazar.                                                                                                          | Usuario (solicitud explícita)                                  |
 | 2026-09-05 | Integrar en `ExtractionReviewForm` los tres formatos operativos de VitaBlue, con `Aseguradora 1` seleccionado por defecto.                                                                                                               | Los operadores necesitan copiar nombres, apellidos y datos documentales con la anatomía exigida por cada portal, sin duplicar el modelo canónico.                                                                 | El selector y el formateo son suite-locales; los apellidos agrupados/separados se sincronizan; la configuración persistente queda fuera.                                                                                  | Usuario (aprobación explícita)                                 |
 | 2026-09-05 | Mantener el diagnóstico global en `Extraction context` y fuera del grid de campos.                                                                                                                                                    | Evita contaminar la superficie de edición/copia y conserva la separación entre corrección local y validación de negocio.                                                                                       | La ampliación de severidad/categoría/regla y su renderizado se planifica como slice posterior; no bloquea aprobar/rechazar en este slice.                                                                                | Usuario (decisión explícita)                                   |
+| 2026-09-06 | Mantener `Extraction context` oculto por defecto y abrirlo desde la pestaña `Validaciones` del Workbench, nunca desde `SuiteSidebar`.                                                                                                   | El inspector es contenido del módulo y no debe introducir controles de dominio en la navegación de la suite.                                                                                                  | `ModuleContextPanel` conserva estado, clasificación y uso/coste; la pestaña controla su apertura y el panel mantiene cierre explícito.                                                                               | Usuario (decisión explícita)                                   |
+| 2026-09-06 | Crear `AIFeedbackSurface` como composite compartido experimental para feedback/procesamiento de IA, conservando la identidad morada/neural y separándolo de `EmptyState`. | `EmptyState` representa ausencia de resultados y no debe asumir procesos de canvas completo, etapas o progreso. | Document Intelligence es el primer consumidor; copy, etapas, progreso y acciones permanecen en el consumidor. La certificación visual, el segundo consumidor y la promoción quedan pendientes. | Usuario (aprobación explícita) |
+| 2026-09-06 | Ajustar `AIFeedbackSurface` a una única superficie de proceso con avance temporal por etapas y terminal de escritura para la etapa activa; el consumidor declara duraciones y puede usar modo controlado mediante `progress`. | La primera composición dejaba un plano visual vacío y mostraba `66%` estático, sin comunicar el avance real del procesamiento. | `autoAdvance`, `stepDurationMs`, `tickMs`, `onProgressChange` y `onStepChange` forman parte del contrato; Document Intelligence usa cuatro etapas que recorren 0–100% en 7,4 s para el fixture. | Usuario (feedback explícito) |
+| 2026-09-06 | Mantener las fases dentro del bloque central, inmediatamente debajo de la barra de progreso. | Refuerza que las fases son parte del proceso activo y evita separar la timeline del terminal, el porcentaje y la barra que explican su avance. | La timeline conserva sus estados, semántica accesible y transformación responsive, pero cambia su posición dentro de `ai-feedback-surface-plane`. | Usuario (solicitud explícita) |
+| 2026-09-06 | Coordinar la salida del feedback mediante final visual al 100%, transición con `LogoSpinner` y entrada posterior a revisión. | El cambio directo de `processing` a `review` podía ocultar el 100%, no dejar visibles todas las fases completadas y producir un salto brusco de layout. | `AIFeedbackSurface` mantiene el estado completado durante 600 ms y emite `onComplete`; el Workbench espera al provider y muestra `loading-results` centrado durante 3000 ms antes de `review`. | Usuario (aprobación explícita) |
 
 ## Arquitectura y contratos
 
@@ -581,6 +586,7 @@ queda pendiente de levantar Supabase/Postgres.
 | 2026-09-06 | Launchpad conserva rail con iconos en desktop y fuerza `SuiteSidebar` expandido con `headerSlot` contextual en tablet/móvil | ✅                                                                                                                                                                                            | `LaunchpadShell.tsx`; `SuiteSidebar` API; `LaunchpadShell.test.tsx`                                                    |
 | 2026-09-05 | Tests focalizados de Document Intelligence                                                                                  | ✅ 8 tests                                                                                                                                                                                    | preview, validación MIME/tamaño, contexto, decisiones y rutas                                                          |
 | 2026-09-05 | Tests focalizados de perfiles y formulario (`export-profiles`, `ExtractionReviewForm`, `DocumentIntelligenceWorkbench`)     | ✅ 5 tests                                                                                                                                                                                    | catálogo tipado, `Aseguradora 1` por defecto y selector estructural                                                  |
+| 2026-09-06 | Copia individual por campo en `ExtractionReviewForm`                                                                          | ✅ 6 tests                                                                                                                                                                                    | `IconButton` accesible en campos simples y MRZ; feedback `role="status"`                                          |
 | 2026-09-05 | UI/UX spec del formulario de revisión                                                                                         | ✅ contrato documentado; aprobación visual pendiente                                                                                                                                          | `ExtractionReviewForm.UI_UX_SPEC.md`; responsive y menú Radix pendientes de revisión en navegador                   |
 | 2026-09-05 | Preparación sin placeholder de revisión ni inspector contextual por defecto                                                 | ✅                                                                                                                                                                                            | `DocumentIntelligenceWorkbench.test.tsx`; `DocumentIntelligenceShell.test.tsx`                                         |
 | 2026-09-05 | Historial de extracciones migrado a `ResponsiveTable` con columnas claras y representación móvil semántica                  | ✅                                                                                                                                                                                            | `apps/loopdev-os/src/app/document-intelligence/page.tsx`; `page.test.tsx`                                              |
@@ -606,6 +612,23 @@ queda pendiente de levantar Supabase/Postgres.
 | 2026-09-05 | `pnpm --filter loopdev-os build`                                                                                            | ✅                                                                                                                                                                                            | Next production build; rutas `/document-intelligence`, `/new` y `/:documentId` generadas                               |
 
 ## Component duplicate review
+
+- **Requested shared pattern:** `AIFeedbackSurface` / AI processing feedback surface.
+- **Candidates reviewed:** `EmptyState variant="ai"`, `AILoader`, `TechnicalCanvas`,
+  `TechnicalSurface` and the existing suite-local processing composition.
+- **Reuse decision:** create a shared composite that composes the existing
+  technical primitives. `EmptyState` remains unchanged because its contract is
+  terminal/empty result feedback; `AILoader` remains a lower-level textual
+  indicator.
+- **Rejected alternatives:** extending `EmptyState` with stages and a full
+  workspace layout would conflate loading with empty-state semantics; keeping
+  the purple block in Document Intelligence would duplicate the pattern and
+  block future consumers.
+- **Owner and consumers:** `frontend-platform`; Document Intelligence first,
+  CRM/Marketing Studio/Operations planned.
+- **Evidence:** `ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface`
+  and registry entry `ai-feedback-surface-v1`. Status is experimental with visual,
+  responsive-browser, second-consumer and technical-certification gaps.
 
 - **Requested name:** `DocumentViewer` / `@loopdev/document-viewer`.
 - **Reference components reviewed:** previous suite-local `DocumentPreviewPane`, Marketing Studio
