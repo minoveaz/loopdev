@@ -17,7 +17,7 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
             refetchOnReconnect: true,
           },
         },
-      })
+      }),
   );
   const isMounted = useSyncExternalStore(
     () => () => undefined,

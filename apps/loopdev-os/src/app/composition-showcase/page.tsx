@@ -2548,16 +2548,16 @@ export default function CompositionShowcasePage() {
         }}
         rightSlot={
           isVisualCertification ? undefined : (
-          <div className="flex items-center gap-2">
-            <PlatformHeaderControls
-              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-              activeContext={contextMode}
-              onOpenNotifications={() => setContextMode('notifications')}
-              onOpenHelp={() => setContextMode('help')}
-              onOpenAI={() => setContextMode('assistant')}
-            />
-          </div>
+            <div className="flex items-center gap-2">
+              <PlatformHeaderControls
+                notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+                unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+                activeContext={contextMode}
+                onOpenNotifications={() => setContextMode('notifications')}
+                onOpenHelp={() => setContextMode('help')}
+                onOpenAI={() => setContextMode('assistant')}
+              />
+            </div>
           )
         }
         mobileSidebarActions={
@@ -2584,20 +2584,20 @@ export default function CompositionShowcasePage() {
         }
         profileSlot={
           isVisualCertification ? undefined : (
-          <UserMenu
-            userName="Alex Morgan"
-            userEmail="showcase@loopdev.local"
-            userRole="Tenant_Admin"
-            tenantName="Showcase Workspace"
-            userSrc="https://i.pravatar.cc/64?img=12"
-            timezoneOptions={[{ label: 'Auto detect', isActive: true }]}
-            onOpenChange={(open) => {
-              if (open) setContextMode(null);
-            }}
-            onAvatarClick={() => setContextMode('profile')}
-            onProfileClick={() => setContextMode('profile')}
-            onLogout={() => undefined}
-          />
+            <UserMenu
+              userName="Alex Morgan"
+              userEmail="showcase@loopdev.local"
+              userRole="Tenant_Admin"
+              tenantName="Showcase Workspace"
+              userSrc="https://i.pravatar.cc/64?img=12"
+              timezoneOptions={[{ label: 'Auto detect', isActive: true }]}
+              onOpenChange={(open) => {
+                if (open) setContextMode(null);
+              }}
+              onAvatarClick={() => setContextMode('profile')}
+              onProfileClick={() => setContextMode('profile')}
+              onLogout={() => undefined}
+            />
           )
         }
         appShellProps={{
