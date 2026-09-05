@@ -10,6 +10,10 @@ import {
   useState,
 } from 'react';
 import type { ReactNode } from 'react';
+import type {
+  DocumentExtractionError,
+  DocumentExtractionResult,
+} from '@loopdev/contracts';
 
 import {
   DOCUMENT_INTELLIGENCE_HISTORY_FIXTURE,
@@ -38,7 +42,14 @@ interface WorkbenchPrototypeContextValue {
   fileError: string | null;
   loadDemoDocument: (documentId?: string) => void;
   selectDocumentFile: (file: File, side?: 'front' | 'back') => boolean;
-  startExtraction: (scenario: 'success' | 'error') => void;
+  startExtraction: (
+    scenario: 'success' | 'error',
+    realExtraction?: {
+      organizationId: string;
+      front: File;
+      back?: File;
+    },
+  ) => void;
   retryExtraction: () => void;
   resetWorkbench: () => void;
   completeReview: (decision: 'approved' | 'rejected') => void;
@@ -61,6 +72,30 @@ function readHistory(): PrototypeDocumentHistoryItem[] {
   } catch {
     return DOCUMENT_INTELLIGENCE_HISTORY_FIXTURE;
   }
+
+}
+
+function toPrototypeResult(result: DocumentExtractionResult): PrototypeExtractionResult {
+  return {
+    classification: {
+      type: result.classification.type,
+      confidence: result.classification.confidence ?? 0,
+    },
+    fields: result.fields,
+    fieldConfidence: {},
+    validations: result.validations.map((validation) => ({
+      field: validation.field,
+      valid: validation.valid,
+      message: validation.message ?? '',
+    })),
+    provider: result.provider,
+    usage: result.usage ?? {
+      promptTokens: 0,
+      outputTokens: 0,
+      totalTokens: 0,
+      estimatedCostUsd: 0,
+    },
+  };
 }
 
 export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }) {
@@ -161,7 +196,11 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
   );
 
   const startExtraction = useCallback(
-    (scenario: 'success' | 'error') => {
+    (scenario: 'success' | 'error', realExtraction?: {
+      organizationId: string;
+      front: File;
+      back?: File;
+    }) => {
       clearTimer();
       setError(null);
       setResult(null);
@@ -171,6 +210,60 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
           flowState: 'processing',
           updatedAt: new Date().toISOString(),
         });
+      if (realExtraction) {
+        const body = new FormData();
+        body.append('front', realExtraction.front);
+        if (realExtraction.back) body.append('back', realExtraction.back);
+        void fetch('/api/document-intelligence/extract', {
+          method: 'POST',
+          headers: { 'x-loopdev-organization-id': realExtraction.organizationId },
+          body,
+        })
+          .then(async (response) => {
+            const payload = await response.json() as {
+              classification?: DocumentExtractionResult['classification'];
+              fields?: DocumentExtractionResult['fields'];
+              validations?: DocumentExtractionResult['validations'];
+              provider?: DocumentExtractionResult['provider'];
+              usage?: DocumentExtractionResult['usage'];
+              error?: DocumentExtractionError;
+            };
+            if (!response.ok || payload.error) {
+              throw payload.error ?? {
+                status: response.status,
+                message: 'No se pudo completar la extracción.',
+              };
+            }
+            return toPrototypeResult(payload as DocumentExtractionResult);
+          })
+          .then((nextResult) => {
+            setResult(nextResult);
+            setFlowState('review');
+            if (activeDocumentId) {
+              updateHistory(activeDocumentId, {
+                flowState: 'review',
+                documentType: nextResult.classification.type,
+                provider: nextResult.provider,
+                updatedAt: new Date().toISOString(),
+              });
+            }
+          })
+          .catch((nextError: DocumentExtractionError) => {
+            setError({
+              status: nextError.status ?? 502,
+              message: nextError.message ?? 'No se pudo completar la extracción.',
+            });
+            setFlowState('error');
+            if (activeDocumentId) {
+              updateHistory(activeDocumentId, {
+                flowState: 'error',
+                updatedAt: new Date().toISOString(),
+              });
+            }
+          });
+        return;
+      }
+
       processingTimer.current = setTimeout(() => {
         if (scenario === 'error') {
           setError(PROTOTYPE_EXTRACTION_ERROR);

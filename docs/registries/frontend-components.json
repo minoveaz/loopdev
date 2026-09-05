@@ -2587,6 +2587,7 @@
         "visual-review",
         "responsive-browser-evidence",
         "technical-certification",
+        "profile contract visual review; see apps/loopdev-os/src/suites/document-intelligence/workbench/ExtractionReviewForm.UI_UX_SPEC.md",
         "Prototipo Fase 0 pendiente de aprobación visual; ver gaps G1-G7 en la especificación de composición."
       ]
     },

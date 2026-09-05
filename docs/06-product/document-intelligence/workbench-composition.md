@@ -34,7 +34,8 @@ copiada de VitaBlue. La aprobación visual sigue siendo un gate independiente y 
 Document extraction`; móvil usa solo el módulo activo mediante la variante contractual
     `mobileSegments`, sin duplicar landmarks ni hardcodear labels en la suite.
   - Tabs: control local dentro del canvas (`Datos extraídos / Uso y coste`) con `role="tablist"`
-    compuesto desde `Button`. Las validaciones de negocio visibles quedan diferidas.
+    compuesto desde `Button`. `Datos extraídos` conserva perfiles de salida para aseguradoras;
+    las validaciones de negocio globales pertenecen al inspector contextual.
   - Record: área principal en grid — preview/preparación del documento a la izquierda y panel de
     revisión con tabs a la derecha (`xl:grid-cols-2`, apilado en pantallas menores).
   - Inspector: `ModuleContextPanel` vía `moduleContextPanelRenderers` — estado del flujo,
@@ -74,9 +75,11 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
   crop de imagen, abrir en pestaña, "Iniciar extracción" y error recuperable.
 - **Processing:** `EmptyState variant="ai"` con `loadingMessages` (preparar → clasificar →
   extraer → normalizar).
-- **Review:** formulario `Form`/`FormField` con todos los campos nullables, badge de confianza
-  por campo y decisión básica approve/reject. No muestra `ValidationSummaryList` ni validaciones
-  de negocio.
+- **Review:** formulario `Form`/`FormField` con perfil `Aseguradora 1` seleccionado por defecto,
+  selector tipado para `Aseguradora 1`, `Aseguradora 2` e `ICAO / Internacional`, campos nullables,
+  badge de confianza por campo, copia de campos/JSON y decisión básica approve/reject. El cambio de
+  perfil reorganiza la vista sin duplicar el modelo canónico; los apellidos agrupados y separados
+  se sincronizan. No muestra `ValidationSummaryList` ni validaciones de negocio dentro del grid.
 - **Error:** `EmptyState status="error"` con acciones de recuperación.
 
 ## Behavior and states
@@ -138,7 +141,8 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 | G4  | Tabs compartidos                                   | Crear atom/composite `Tabs` en DS (hoy control local con `Button`)                 | 3        |
 | G5  | Input de fecha `DD/MM/YYYY`                        | Extender `Input` con máscara o variante                                            | 3        |
 | G6  | Overlay de inspector en tablet                     | Extender preset/presentación de `ModuleContextPanel` vía `platform-shell`          | 3        |
-| G7  | Banner de alertas                                  | No requerido en este bloque; reevaluar con validaciones visibles                   | diferido |
+| G7  | Banner de alertas                                  | No requerido dentro del formulario; el diagnóstico global se compone en `Extraction context` | diferido |
+| G8  | Perfiles de salida de aseguradora                  | Compuesto en `ExtractionReviewForm` con catálogo tipado y copia por perfil            | 5 |
 
 Componentes reutilizados sin cambios: `ModuleHeader`, `ModuleContextPanel`, `SuiteRuntime`,
 `Form`, `Input`, `Textarea`, `Button`, `IconButton`, `Badge`, `TechnicalStatusBadge`,
@@ -161,3 +165,18 @@ Referencias inspeccionadas (duplicate review): `SalesCrmShell` + `config.ts` (pa
 - **Deferred validation:** Playwright responsive/interacción (tras aprobación visual), auditoría
   de teclado y `prefers-reduced-motion`, provider/backend real, historial permanente y
   validaciones de negocio visibles.
+
+## Perfilado de salida y decisión de composición
+
+- **Catálogo:** `apps/loopdev-os/src/suites/document-intelligence/workbench/export-profiles.ts`.
+- **Owner:** la feature de revisión; no se promueve a `@loopdev/ui` porque contiene semántica de
+  destinos documentales y copy operativo de aseguradoras.
+- **Perfil inicial:** `aseguradora-1`, con primer apellido y segundo apellido separados.
+- **Perfil agrupado:** `aseguradora-2`, con apellidos en un único campo.
+- **Perfil internacional:** `icao-internacional`, con etiquetas ICAO, país emisor y MRZ.
+- **Sincronización:** editar cualquiera de las representaciones de apellidos actualiza la otra,
+  incluyendo partículas compuestas como `DE LA` y `DEL`.
+- **Separación de responsabilidades:** el formulario conserva edición y exportación; `Extraction
+  context` queda reservado para estado, clasificación, validaciones globales y uso/coste.
+- **Evidencia:** `export-profiles.test.ts`, `ExtractionReviewForm.test.tsx` y
+  `ExtractionReviewForm.UI_UX_SPEC.md`. La revisión visual responsive sigue siendo un gate pendiente.

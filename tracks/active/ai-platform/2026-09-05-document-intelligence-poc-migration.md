@@ -8,7 +8,7 @@ owner: ai-platform
 lead: null
 branch: feature/document-intelligence-viewer
 branches: []
-phase: 4
+phase: 5
 pull_requests: []
 issues: [176]
 packages: [@loopdev/contracts, @loopdev/document-viewer, loopdev-os]
@@ -89,10 +89,12 @@ Estado del POC en VitaBlue (fuente de verdad funcional):
 - Motor de reglas deterministas o semánticas configurable y validaciones de negocio visibles en
   la revisión; el contrato conserva el espacio para una fase posterior.
 - Autenticidad, fraude, liveness o verificación legal.
-- Backend real, Edge Function, Gemini, storage tenant-scoped y credenciales de provider.
+- Backend real, Edge Function, Gemini, storage tenant-scoped y credenciales de provider en las
+  Fases 0-4; quedan planificados y acotados en la Fase 5, no implementados en este bloque.
 - Procesamiento por lotes e historial permanente de extracciones.
-- Perfiles de exportación; quedan documentados como frontera de consumidor futuro (p. ej.
-  Marketing Studio).
+- Perfiles de exportación persistentes o configurables; el formulario incorpora únicamente el
+  catálogo operativo fijo requerido por el POC (`Aseguradora 1`, `Aseguradora 2` e
+  `ICAO / Internacional`).
 - Integración con Marketing Studio más allá de definir la frontera de consumo futura.
 - Ciclo de vida completo de Document Intelligence Core (retención, auditoría, versionado de
   documento) más allá del intake temporal seguro necesario para el flujo operativo.
@@ -111,8 +113,11 @@ Estado del POC en VitaBlue (fuente de verdad funcional):
 | 2026-09-06 | Launchpad reutiliza `SuiteSidebar` en modo `rail` para mostrar las capabilities declaradas por `PlatformToolEntry`; no existe un rail transversal paralelo.                                                                                                                              | La navegación y su control de colapso permanecen en el renderer canónico de Platform Shell. El acceso se filtra por `state` y `requiredPermission` antes de construir el schema de Launchpad.        | Se retira el renderer independiente y el slot específico de `AppShell`; `SuiteSidebar` queda como única superficie de navegación. La ruta inicial es `/document-intelligence`; Gemini/backend siguen fuera de esta fase. | Usuario (solicitud explícita)                                  |
 | 2026-09-06 | Launchpad usa `AppShell` directamente como owner de layout, con `PlatformHeader` en `headerSlot` y `SuiteSidebar` en `navSlot`; no se formaliza como suite mediante `SuiteRuntime`.                                                                                                      | Launchpad es una landing de plataforma sin módulo activo ni canvas de suite, pero necesita los contratos globales de header, navegación, drawer, foco y scroll.                                      | Se elimina `LaunchpadFrame`, sus widths/heights/footer/drawer/responsive locales y cualquier segundo owner geométrico. `PlatformToolEntry` queda limitado al contrato de capabilities.                                   | Usuario (implementación aprobada de la auditoría comparativa)  |
 | 2026-09-05 | Este bloque completa las Fases 0-4 con provider fixture e intake cliente; backend/Gemini real queda fuera.                                                                                                                                                                               | La solicitud exige preview y flujo verificable sin copiar la implementación server-side ni conectar provider.                                                                                        | Fase 2 se satisface como frontera de contrato/feedback de fixture; backend, storage tenant-scoped y validaciones de negocio visibles quedan diferidos.                                                                   | Usuario (solicitud explícita)                                  |
+| 2026-09-05 | Se abre la Fase 5 para trasladar el backend real de VitaBlue a LoopDev: Edge Function, Storage temporal/RLS, `GEMINI_API_KEY`, conexión del intake, tenant/auth, cleanup, errores y pruebas.                                                                                                  | El usuario autoriza continuar sobre la rama existente, pero solicita primero registrar el plan sin editar código ni habilitar Gemini.                                                              | Fase 5 queda `planned`; Fases 0-4 conservan fixture como fallback y no cambia el comportamiento actual.                                                                                                                | Usuario (solicitud explícita)                              |
 | 2026-09-05 | Se incluye historial operativo local y persistencia de metadatos, pero no historial permanente.                                                                                                                                                                                          | La home necesita recuperar fixtures y sesiones recientes sin convertir el POC en un sistema de retención.                                                                                            | `localStorage` conserva metadatos no sensibles; archivos y datos de identidad no se persisten.                                                                                                                           | Usuario (solicitud explícita)                                  |
 | 2026-09-05 | Se retira `ValidationSummaryList` y cualquier validación de negocio visible del workbench.                                                                                                                                                                                               | La revisión solicitada es editable/nullables con decisión básica; las validaciones visibles se difieren.                                                                                             | El resultado puede transportar validaciones para el futuro, pero no se renderizan ni bloquean aprobar/rechazar.                                                                                                          | Usuario (solicitud explícita)                                  |
+| 2026-09-05 | Integrar en `ExtractionReviewForm` los tres formatos operativos de VitaBlue, con `Aseguradora 1` seleccionado por defecto.                                                                                                               | Los operadores necesitan copiar nombres, apellidos y datos documentales con la anatomía exigida por cada portal, sin duplicar el modelo canónico.                                                                 | El selector y el formateo son suite-locales; los apellidos agrupados/separados se sincronizan; la configuración persistente queda fuera.                                                                                  | Usuario (aprobación explícita)                                 |
+| 2026-09-05 | Mantener el diagnóstico global en `Extraction context` y fuera del grid de campos.                                                                                                                                                    | Evita contaminar la superficie de edición/copia y conserva la separación entre corrección local y validación de negocio.                                                                                       | La ampliación de severidad/categoría/regla y su renderizado se planifica como slice posterior; no bloquea aprobar/rechazar en este slice.                                                                                | Usuario (decisión explícita)                                   |
 
 ## Arquitectura y contratos
 
@@ -126,11 +131,12 @@ Estado del POC en VitaBlue (fuente de verdad funcional):
   documento-preview y revisión; el inspector contextual (zona `PlatformContextPanel`) muestra
   estado, clasificación y uso/coste; en tablet el inspector pasa a overlay y en móvil la composición
   colapsa a región única.
-- **Frontera futura**: la subida a storage privado, invocación de la Edge Function y cleanup
-  server-side permanecen como contrato diferido; este bloque solo revoca object URLs del navegador.
-- **Provider diferido**: Edge Function `extract-identity-document`, credenciales
+- **Frontera Fase 5**: la subida a Storage privado, invocación de la Edge Function y cleanup
+  server-side se implementarán detrás del contrato existente; este bloque solo revoca object URLs
+  del navegador.
+- **Provider diferido a Fase 5**: Edge Function `extract-identity-document`, credenciales
   (`GEMINI_API_KEY`), auth por sesión, validación de referencias y normalización server-side no se
-  conectan en este bloque.
+  conectan en esta actualización.
 
 ### Contratos (`packages/contracts/src/documents`)
 
@@ -189,8 +195,8 @@ acción de apertura; en móvil usa filas semánticas apiladas sin depender de ov
 
 ## Branch strategy
 
-`branch: feature/document-intelligence-viewer` para todo el bloque Fases 0-4. No se crean
-ramas adicionales: el usuario solicitó preservar esta rama de migración existente.
+`branch: feature/document-intelligence-viewer` para las Fases 0-5. No se crean ramas adicionales:
+el usuario solicitó preservar esta rama de migración existente.
 
 ## Fases
 
@@ -347,6 +353,174 @@ documentado el rollout fixture y el rollback sin datos permanentes.
 
 **Estado:** completada con validación CI pendiente de repetición
 
+### Fase 5: Backend real y extracción tenant-aware
+
+**Estado:** en curso; inventario completado y primera migración de Storage creada sin commit.
+
+**Evidencia inicial (2026-09-05):** LoopDev ya dispone de `organizations`,
+`organization_memberships` y `is_organization_member()`. Se añadieron sin commit la migración
+`20260905100000_document_intelligence_temp_storage.sql`, la Edge Function
+`supabase/functions/extract-identity-document/index.ts` y el servicio server-side
+`apps/loopdev-os/src/services/document-intelligence/extraction.ts`, la route handler
+`apps/loopdev-os/src/app/api/document-intelligence/extract/route.ts` y pruebas focalizadas de
+path/service/auth/tenant/multipart/cleanup. La validación de gobernanza Supabase,
+`supabase db lint --local`, TypeScript, 7 archivos/14 tests focalizados y `git diff --check`
+pasan.
+
+**Resumen de cierre provisional de Fase 5 (2026-09-05):** la frontera backend local está definida
+y ejecutable con Storage privado, RLS por organización/actor, Edge Function, servicio server-side,
+route handler multipart y cleanup defensivo. La fase no se considera cerrada hasta completar los
+gates remotos indicados abajo; no se añade alcance adicional en esta actualización.
+
+**Gaps de cierre pendientes (explícitos):**
+
+- [ ] Validar en el proyecto Supabase remoto de LoopDev el bucket/policies y
+      `GEMINI_API_KEY` por entorno; no se ha usado ninguna clave real ni se ha probado Gemini remoto.
+- [ ] Ejecutar Playwright autenticado con una organización de test en desktop, tablet y móvil,
+      verificando upload front/back, estados `processing` → `review/error`, ausencia de secretos y
+      cleanup observable.
+- [ ] Ejecutar una prueba RLS negativa con usuarios de dos organizaciones que demuestre que no
+      pueden leer, subir ni eliminar objetos temporales cruzados.
+- [ ] Con credencial PostgreSQL válida del mismo proyecto remoto, reparar el historial y aplicar
+      las migraciones pendientes hasta `20260905100000_document_intelligence_temp_storage.sql`.
+      La auditoría read-only confirmó las ocho tablas de `20260829000000`, sus columnas base,
+      constraints estructurales, índices, RLS y grants; el remoto también contiene endurecimientos
+      posteriores (`*_id_organization_key`, FKs compuestos y policies `*_communications_*`), por
+      lo que no se creó una migración correctiva que pudiera reintroducir policies menos restrictivas.
+      `20260829000000` y las migraciones `20260830`/`20260831` quedaron reconciliadas; el
+      historial remoto las muestra aplicadas. `db push` avanzó hasta `20260901000000` y se
+      detuvo porque `crm_contacts_id_organization_key` ya existe (`SQLSTATE 42P07`). La
+      migración `20260901000000` y las posteriores, incluida `20260905100000`, siguen pendientes.
+
+**Diagnóstico de drift (2026-09-05):** `20260829000000_communications_core_foundation.sql`
+combina `create table if not exists` con `alter table ... add constraint` no idempotentes. El
+remoto ya contiene `communication_accounts_brand_fkey`, pero la lista de migraciones no marca
+`20260829000000` como aplicada. La auditoría remota exhaustiva encontró la estructura fundacional
+presente y compatible, con políticas posteriores más restrictivas ya materializadas. La reparación
+queda bloqueada exclusivamente por la credencial PostgreSQL rechazada; no se modifica la migración
+histórica ni se crea una migración correctiva innecesaria.
+
+**Resultado de la secuencia autorizada (2026-09-05):** tras cargar una credencial válida en la
+terminal, `migration repair` para `20260829000000` funcionó y `migration list` confirmó también
+`20260830000000` y `20260831000000` aplicadas. `db push` pidió confirmación una vez, comenzó
+`20260901000000_communications_tenant_integrity.sql` y se detuvo de forma no destructiva en
+`crm_contacts_id_organization_key` ya existente (`SQLSTATE 42P07`). No se alcanzó Storage/RLS.
+La Edge Function `extract-identity-document` ya quedó desplegada y verificada como versión 12
+en una ejecución anterior; esto no implica que el bucket ni `20260905100000` estén aplicados.
+El wrapper terminó con `zsh: read-only variable: status` al intentar guardar el código de salida,
+sin efecto sobre Supabase.
+
+**Auditoría de `20260901000000` (2026-09-05):** consulta remota read-only completada. Se
+esperaban 15 constraints de integridad de organización y se encontraron los 15, sin faltantes ni
+definiciones divergentes: cinco `UNIQUE (id, organization_id)` y diez FKs compuestos con las
+tablas/columnas esperadas. La migración tampoco figura en `supabase_migrations.schema_migrations`,
+por lo que el fallo de `db push` es únicamente de idempotencia/historial; no hay una diferencia
+estructural que requiera migración correctiva. El siguiente paso seguro es marcar
+`20260901000000` como aplicada y volver a ejecutar el push serializado; no se ha ejecutado ese
+repair ni ningún cambio remoto en esta auditoría.
+
+**Reconciliación y despliegue remoto (2026-09-05):** tras la auditoría, `20260901000000` y
+`20260902000000` se marcaron como aplicadas porque sus objetos ya estaban presentes y coincidían
+con las migraciones locales. `supabase db push --linked --yes` aplicó correctamente
+`20260903000000`, `20260904000000`, `20260905000000`,
+`20260905100000_document_intelligence_temp_storage.sql` y `20260906000000`; la lista remota
+ahora coincide con todas las migraciones locales. La Edge Function se desplegó en el proyecto
+`sukjcsylkljiyvfklxvj` y quedó `ACTIVE` en versión 12. La variable de contraseña fue eliminada
+de la terminal al finalizar.
+
+**Ajuste de navegación y revisión (2026-09-05):** el workbench conserva el identificador
+`activeDocumentId` generado al cargar/subir el documento y ahora cambia de
+`/document-intelligence/new` a `/document-intelligence/{documentId}` al entrar en revisión. En
+`review`, el preview queda solo lectura y no muestra acciones de carga ni de inicio de extracción;
+esas acciones permanecen exclusivas de `preparation`. El build de LoopDev OS y las pruebas
+focalizadas de rutas, página e intake pasan.
+
+**Objetivo:** trasladar el flujo server-side operativo de VitaBlue a LoopDev sin copiar su
+backoffice ni relajar el aislamiento por organización: Edge Function de extracción, Storage
+temporal privado, autenticación de sesión, `GEMINI_API_KEY` server-side, conexión explícita desde
+`DocumentIntakePane`, cleanup determinista y errores tipados compatibles con
+`@loopdev/contracts`.
+
+**Definition of Ready**
+
+- [ ] Fases 0-4 revisadas y sus gaps de certificación visual/CI aceptados o cerrados.
+- [ ] Contrato request/response de `@loopdev/contracts` confirmado como frontera única entre intake y
+      provider; ningún tipo de VitaBlue se importa directamente.
+- [ ] Decisión de despliegue Supabase para LoopDev confirmada: proyecto, entorno, bucket,
+      migraciones/RLS y nombres de secretos.
+- [ ] `security-review` aprobado para auth, tenant isolation, Storage/RLS, PII, logs, límites y
+      coste antes de habilitar el provider real.
+
+**Referencia funcional a trasladar**
+
+- VitaBlue: `supabase/functions/extract-identity-document/index.ts`.
+- Flujo observado: `Authorization` → `auth.getUser()` → validación de payload/MIME/tamaño/path →
+  descarga desde bucket privado → envío inline a Gemini 2.5 Flash con `responseSchema` →
+  normalización de campos/fechas/bounding boxes/usage → respuesta tipada → `finally` con borrado
+  de una o dos referencias temporales.
+- La implementación LoopDev debe conservar el comportamiento funcional necesario, pero adaptar
+  nombres, organización/tenant, contratos, observabilidad y políticas de seguridad de LoopDev.
+
+**Entregables**
+
+- [ ] Edge Function `extract-identity-document` reubicada en la superficie Supabase de LoopDev,
+      con CORS allowlist de LoopDev, `OPTIONS`, método `POST` y respuestas JSON sin filtrar secretos
+      ni PII sensible en logs.
+- [ ] Storage temporal privado para `image/jpeg`, `image/png` y `application/pdf`, límite de
+      10 MB, path no adivinable y ligado a `organization_id` + `user_id`/actor; políticas RLS y
+      Storage impiden lectura/escritura cruzada entre organizaciones.
+- [ ] Secreto `GEMINI_API_KEY` configurado únicamente en el entorno server-side de la función;
+      ninguna clave de Gemini llega al navegador, bundle Next, respuesta o telemetría.
+- [ ] Contrato de invocación desde `DocumentIntakePane`: subida temporal de front/back, referencias
+      firmadas o server-owned, llamada autenticada a la función, transición `processing` →
+      `review`/`error` y eliminación de referencias en éxito, error y cancelación.
+- [ ] Errores 400/401/404/413/415/502/503 alineados con los contratos existentes, mensajes
+      accionables para el usuario y detalles técnicos solo en logs server-side controlados.
+- [ ] Cleanup garantizado con `finally`, incluyendo fallo de Gemini, JSON inválido, timeout,
+      cancelación y documentos de una o dos caras; no se persisten originales ni resultados fuera
+      de la política aprobada.
+- [ ] Uso/coste (`promptTokens`, `outputTokens`, `totalTokens`, `estimatedCostUsd`) validado,
+      acotado y visible solo a través del contrato de uso del workbench.
+
+**Pruebas y criterios de aceptación**
+
+- [ ] Tests unitarios de validación de payload, MIME, límite, path traversal, pertenencia a
+      organización, normalización nullable/fechas/bounding boxes y clasificación desconocida.
+- [ ] Tests de Edge Function con sesión válida, sesión ausente/inválida, secreto ausente, storage
+      faltante, provider 4xx/5xx/timeout, JSON inválido, front-only y front/back.
+- [ ] Tests de Storage/RLS que demuestren aislamiento positivo y negativo entre dos organizaciones,
+      permisos de actor y eliminación posterior al procesamiento.
+- [ ] Tests de integración del `DocumentIntakePane` contra el adapter real/mock server-side:
+      upload → extracción → revisión; retry; cambio de documento; error recuperable; cleanup.
+- [ ] Playwright con auth/organización real de test para desktop, tablet y móvil, sin claves reales:
+      no exposición de secretos, estados estables, errores visibles, no overflow y no archivos
+      temporales remanentes.
+- [ ] `security-review`, `pnpm validate:domain -- data`, `pnpm validate:experience
+      -- document-intelligence`, tests de contratos, registry y validaciones CI aprobadas antes
+      del rollout.
+
+**Rollout / rollback**
+
+- Rollout por entorno: función y bucket primero en desarrollo, luego staging, después producción;
+  provider real detrás de una capability/feature flag tenant-aware con fixture como fallback.
+- Observabilidad mínima: conteo de invocaciones, latencia, códigos de error, tokens/coste agregado y
+  cleanup fallido; nunca registrar documento, base64, prompt completo ni respuesta PII.
+- Rollback: desactivar la capability del provider, volver al flujo fixture sin borrar contratos ni
+  rutas; mantener cleanup defensivo de objetos ya creados y retirar la función/bucket solo después
+  de confirmar que no quedan referencias temporales.
+
+**Dependencias y riesgos específicos**
+
+- Supabase project/configuración LoopDev, migración de bucket/policies, secretos por entorno y
+  cliente autenticado disponible para `apps/loopdev-os`.
+- Contratos de `@loopdev/contracts` y límites de payload estables antes de conectar el intake.
+- Riesgos: fuga de PII por logs o Storage, bypass de RLS/path, coste descontrolado de Gemini,
+  limpieza incompleta, divergencia de normalización y degradación silenciosa al fallback fixture.
+
+**Estado de fase:** `in_progress`; el bucket y las políticas RLS están preparados, pero Gemini,
+la Edge Function y la conexión del intake todavía no están habilitados. La validación local de SQL
+queda pendiente de levantar Supabase/Postgres.
+
 ## Registro de cambios de enfoque
 
 | Fecha      | Cambio                                                                                                                                                                                                                                                        | Motivo                                                                                                                                                    | Impacto en alcance/fases                                                                                                                   | Aprobado por                                     |
@@ -372,8 +546,8 @@ documentado el rollout fixture y el rollback sin datos permanentes.
 
 | Riesgo o bloqueo                       | Impacto                                  | Mitigación                                                                         | Responsable | Estado  |
 | -------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------- | ----------- | ------- |
-| Credenciales de Gemini mal gestionadas | Exposición de PII y coste no controlado  | Credenciales solo server-side; revisión `security-review` en Fase 2                | ai-platform | Abierto |
-| PII en storage temporal                | Fuga de datos de identidad               | Bucket privado, path por actor, cleanup en `finally`, sin persistencia por defecto | ai-platform | Abierto |
+| Credenciales de Gemini mal gestionadas | Exposición de PII y coste no controlado | Credenciales solo server-side; revisión `security-review` antes de Fase 5                | ai-platform | Abierto |
+| PII en storage temporal                | Fuga de datos de identidad               | Bucket privado, RLS por organización/actor, cleanup en `finally`, sin persistencia por defecto | ai-platform | Abierto |
 | Deriva de la shell de plataforma       | Composición fuera de estándar            | Recipe canónico aprobado en Fase 0; `pnpm test:shell` en Fase 3                    | platform    | Abierto |
 | Divergencia fixture/provider           | El flujo con fixtures no predice el real | Contrato único `DocumentExtractionResult` para ambos providers; tests de contrato  | ai-platform | Abierto |
 | Coste por run sin visibilidad          | Gasto no atribuible                      | Telemetría `usage` obligatoria en el contrato y visible en el workbench            | ai-platform | Abierto |
@@ -406,6 +580,8 @@ documentado el rollout fixture y el rollback sin datos permanentes.
 | 2026-09-06 | Corrección del content layer certificado de `TechnicalSurface` para preservar altura completa en `SuiteSidebar`             | ✅                                                                                                                                                                                            | `TechnicalSurface.test.tsx`; `SuiteSidebar.test.tsx`                                                                   |
 | 2026-09-06 | Launchpad conserva rail con iconos en desktop y fuerza `SuiteSidebar` expandido con `headerSlot` contextual en tablet/móvil | ✅                                                                                                                                                                                            | `LaunchpadShell.tsx`; `SuiteSidebar` API; `LaunchpadShell.test.tsx`                                                    |
 | 2026-09-05 | Tests focalizados de Document Intelligence                                                                                  | ✅ 8 tests                                                                                                                                                                                    | preview, validación MIME/tamaño, contexto, decisiones y rutas                                                          |
+| 2026-09-05 | Tests focalizados de perfiles y formulario (`export-profiles`, `ExtractionReviewForm`, `DocumentIntelligenceWorkbench`)     | ✅ 5 tests                                                                                                                                                                                    | catálogo tipado, `Aseguradora 1` por defecto y selector estructural                                                  |
+| 2026-09-05 | UI/UX spec del formulario de revisión                                                                                         | ✅ contrato documentado; aprobación visual pendiente                                                                                                                                          | `ExtractionReviewForm.UI_UX_SPEC.md`; responsive y menú Radix pendientes de revisión en navegador                   |
 | 2026-09-05 | Preparación sin placeholder de revisión ni inspector contextual por defecto                                                 | ✅                                                                                                                                                                                            | `DocumentIntelligenceWorkbench.test.tsx`; `DocumentIntelligenceShell.test.tsx`                                         |
 | 2026-09-05 | Historial de extracciones migrado a `ResponsiveTable` con columnas claras y representación móvil semántica                  | ✅                                                                                                                                                                                            | `apps/loopdev-os/src/app/document-intelligence/page.tsx`; `page.test.tsx`                                              |
 | 2026-09-05 | Dropzone de preparación centrada, con jerarquía ampliada y acciones responsive sin overflow móvil                           | ✅                                                                                                                                                                                            | `DocumentPreviewPane.tsx`; `DocumentPreviewPane.test.tsx`; `DocumentPreviewPane/UI_UX_SPEC.md`                         |

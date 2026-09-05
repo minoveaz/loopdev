@@ -10,11 +10,15 @@ export default function DocumentExtractionPage({
 }: {
   params: Promise<{ documentId: string }>;
 }) {
-  const { loadDemoDocument } = useWorkbenchPrototype();
+  const { activeDocumentId, documentLoaded, loadDemoDocument } = useWorkbenchPrototype();
 
   useEffect(() => {
-    void params.then(({ documentId }) => loadDemoDocument(documentId));
-  }, [loadDemoDocument, params]);
+    void params.then(({ documentId }) => {
+      if (activeDocumentId !== documentId || !documentLoaded) {
+        loadDemoDocument(documentId);
+      }
+    });
+  }, [activeDocumentId, documentLoaded, loadDemoDocument, params]);
 
   return <DocumentIntelligenceWorkbench />;
 }

@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Icon, LpdText, TechnicalSurface } from '@loopdev/ui';
 import {
   DocumentViewer,
   type DocumentViewerDocument,
   type DocumentViewerLabels,
 } from '@loopdev/document-viewer';
+import { OrganizationContext } from '@/providers/OrganizationProvider';
 
 import { ALLOWED_DOCUMENT_MIME_TYPES, validateDocumentFile } from './file-validation';
 import { useWorkbenchPrototype } from './workbench-context';
@@ -145,6 +146,8 @@ export function DocumentIntakePane() {
     startExtraction,
     flowState,
   } = useWorkbenchPrototype();
+  const organizationContext = useContext(OrganizationContext);
+  const activeOrganizationId = organizationContext?.activeOrganizationId ?? null;
   const [side, setSide] = useState<DocumentSide>('front');
   const [fileError, setFileError] = useState<string | null>(null);
   const [cropOpen, setCropOpen] = useState(false);
@@ -359,27 +362,37 @@ export function DocumentIntakePane() {
         </TechnicalSurface>
       )}
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <Button
-          variant="outline"
-          size="sm"
-          startIcon="upload_file"
-          className="w-full sm:w-auto"
-          onClick={() => inputRef.current?.click()}
-        >
-          Subir {activeSide === 'front' ? 'anverso' : 'reverso'}
-        </Button>
-        <Button
-          variant="primary"
-          size="sm"
-          startIcon="document_scanner"
-          className="w-full sm:w-auto"
-          isLoading={flowState === 'processing'}
-          onClick={() => startExtraction('success')}
-        >
-          Iniciar extracción
-        </Button>
-      </div>
+      {flowState === 'preparation' ? (
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <Button
+            variant="outline"
+            size="sm"
+            startIcon="upload_file"
+            className="w-full sm:w-auto"
+            onClick={() => inputRef.current?.click()}
+          >
+            Subir {activeSide === 'front' ? 'anverso' : 'reverso'}
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            startIcon="document_scanner"
+            onClick={() => {
+              if (!current?.file || !activeOrganizationId) {
+                startExtraction('success');
+                return;
+              }
+              startExtraction('success', {
+                organizationId: activeOrganizationId,
+                front: documentFiles.front?.file ?? current.file,
+                back: documentFiles.back?.file ?? undefined,
+              });
+            }}
+          >
+            Iniciar extracción
+          </Button>
+        </div>
+      ) : null}
       {fileError ? (
         <p role="alert" className="text-lpd-xs text-danger">
           {fileError}
