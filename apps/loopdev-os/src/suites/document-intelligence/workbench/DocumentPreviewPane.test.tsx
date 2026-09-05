@@ -102,6 +102,13 @@ describe('DocumentPreviewPane', () => {
 
     expect(document.querySelector('[data-preview-toolbar-row="document-selector"]')).toBeTruthy();
     expect(document.querySelector('[data-preview-toolbar-row="document-controls"]')).toBeTruthy();
+    const controls = document.querySelector('[data-preview-toolbar-row="document-controls"]');
+    expect(controls).toHaveClass('grid-cols-6', 'divide-x', 'sm:flex');
+    expect(screen.getByRole('button', { name: 'Alejar documento' })).toHaveClass('h-11', 'w-full');
+    expect(screen.getByRole('button', { name: 'Abrir en pestaña nueva' })).toHaveClass(
+      'h-11',
+      'w-full',
+    );
     expect(screen.getByRole('button', { name: /Iniciar extracción/ })).toHaveClass('w-full');
   });
 

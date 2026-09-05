@@ -434,17 +434,24 @@ export function DocumentPreviewPane() {
           data-preview-toolbar-row="document-controls"
           role="group"
           aria-label="Controles de vista previa"
-          className="flex w-full flex-wrap items-center justify-start gap-1 sm:justify-end"
+          className={`divide-border-subtle border-border-subtle grid w-full divide-x overflow-hidden rounded-md border sm:flex sm:w-auto sm:divide-x-0 sm:overflow-visible sm:rounded-none sm:border-0 ${isPdf ? 'grid-cols-5' : 'grid-cols-6'}`}
         >
           <IconButton
             icon="zoom_out"
             size="md"
             variant="ghost"
             ariaLabel="Alejar documento"
+            className="h-11 w-full rounded-none sm:h-8 sm:w-8"
             onClick={() => setZoomIndex((value) => Math.max(value - 1, 0))}
             disabled={!currentFile}
           />
-          <Button variant="ghost" size="sm" onClick={resetView} disabled={!currentFile}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-11 w-full rounded-none px-2 sm:h-8 sm:w-auto"
+            onClick={resetView}
+            disabled={!currentFile}
+          >
             {Math.round(ZOOM_STEPS[zoomIndex] * 100)}%
           </Button>
           <IconButton
@@ -452,6 +459,7 @@ export function DocumentPreviewPane() {
             size="md"
             variant="ghost"
             ariaLabel="Ampliar documento"
+            className="h-11 w-full rounded-none sm:h-8 sm:w-8"
             onClick={() => setZoomIndex((value) => Math.min(value + 1, ZOOM_STEPS.length - 1))}
             disabled={!currentFile}
           />
@@ -460,6 +468,7 @@ export function DocumentPreviewPane() {
             size="md"
             variant="ghost"
             ariaLabel="Girar 90 grados"
+            className="h-11 w-full rounded-none sm:h-8 sm:w-8"
             onClick={() => setRotation((value) => (value + 90) % 360)}
             disabled={!currentFile}
           />
@@ -470,6 +479,7 @@ export function DocumentPreviewPane() {
               variant="ghost"
               ariaLabel="Recortar documento"
               tooltip="Recortar documento"
+              className="h-11 w-full rounded-none sm:h-8 sm:w-8"
               onClick={() => setCropOpen(true)}
             />
           ) : null}
@@ -478,6 +488,7 @@ export function DocumentPreviewPane() {
             size="md"
             variant="ghost"
             ariaLabel="Abrir en pestaña nueva"
+            className="h-11 w-full rounded-none sm:h-8 sm:w-8"
             onClick={openInTab}
             disabled={!previewUrl}
           />
