@@ -8,6 +8,7 @@ import {
   detectPdfContentBounds,
   DocumentPreviewPane,
   PDF_FALLBACK_CLASS_NAME,
+  PDF_INITIAL_SCALE_CAP,
   PDF_PREVIEW_DOWNLOAD_LABEL,
   PDF_PREVIEW_ERROR_TITLE,
 } from './DocumentPreviewPane';
@@ -31,6 +32,8 @@ describe('DocumentPreviewPane', () => {
     expect(fit.autoFitScale).toBeGreaterThan(fit.baseFitScale);
     expect(fit.userZoom).toBe(1);
     expect(fit.width).toBeGreaterThan(240);
+    expect(PDF_INITIAL_SCALE_CAP).toBe(2.5);
+    expect(DocumentPreviewPane.toString()).toContain('pdfAutoFitScale');
   });
 
   it('keeps the PDF fallback surface full-size when PDF.js cannot render', () => {

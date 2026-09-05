@@ -10,6 +10,7 @@ import type { DocumentSide } from './types';
 
 const ALLOWED_MIME_CAPTION = 'JPEG, PNG o PDF · máx. 10 MB · almacenamiento temporal';
 const ZOOM_STEPS = [1, 1.25, 1.5, 2, 2.5, 3] as const;
+export const PDF_INITIAL_SCALE_CAP = 2.5;
 export const PDF_FALLBACK_CLASS_NAME =
   'border-border-subtle bg-surface-elevated h-full min-h-[260px] w-full rounded-lg border';
 export const PDF_PREVIEW_ERROR_TITLE = 'No se pudo mostrar la vista previa del PDF.';
@@ -80,10 +81,28 @@ export interface PdfContentBounds {
 
 export function detectPdfContentBounds(
   imageData: Pick<ImageData, 'data' | 'width' | 'height'>,
-  backgroundThreshold = 245,
+  backgroundThreshold = 220,
   margin = 12,
 ): PdfContentBounds {
   const { data, width, height } = imageData;
+  const rowCounts = new Uint32Array(height);
+  const columnCounts = new Uint32Array(width);
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const index = (y * width + x) * 4;
+      const isNonWhite =
+        data[index + 3] > 8 &&
+        (data[index] < backgroundThreshold ||
+          data[index + 1] < backgroundThreshold ||
+          data[index + 2] < backgroundThreshold);
+      if (isNonWhite) {
+        rowCounts[y] += 1;
+        columnCounts[x] += 1;
+      }
+    }
+  }
+
   let left = width;
   let top = height;
   let right = -1;
@@ -93,12 +112,14 @@ export function detectPdfContentBounds(
     for (let x = 0; x < width; x += 1) {
       const index = (y * width + x) * 4;
       const alpha = data[index + 3];
-      const isNonWhite =
+      const isContent =
         alpha > 8 &&
         (data[index] < backgroundThreshold ||
           data[index + 1] < backgroundThreshold ||
           data[index + 2] < backgroundThreshold);
-      if (!isNonWhite) continue;
+      const isSparseContent =
+        rowCounts[y] < width * 0.5 && columnCounts[x] < height * 0.5;
+      if (!isContent || !isSparseContent) continue;
       left = Math.min(left, x);
       top = Math.min(top, y);
       right = Math.max(right, x + 1);
@@ -219,10 +240,12 @@ function PdfCanvasPreview({
   file,
   previewUrl,
   title,
+  onAutoFitScaleChange,
 }: {
   file: File;
   previewUrl: string;
   title: string;
+  onAutoFitScaleChange: (scale: number) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -264,6 +287,7 @@ function PdfCanvasPreview({
     let destroyLoadingTask: (() => void) | undefined;
     setRenderError(false);
     setIframeError(false);
+    onAutoFitScaleChange(1);
 
     const render = async () => {
       try {
@@ -329,10 +353,10 @@ function PdfCanvasPreview({
           cropWidth,
           cropHeight,
         );
-        canvas.width = Math.ceil(autoFit.width * devicePixelRatio);
-        canvas.height = Math.ceil(autoFit.height * devicePixelRatio);
-        canvas.style.width = `${autoFit.width}px`;
-        canvas.style.height = `${autoFit.height}px`;
+        canvas.width = Math.ceil(pageViewport.width * devicePixelRatio);
+        canvas.height = Math.ceil(pageViewport.height * devicePixelRatio);
+        canvas.style.width = `${pageViewport.width}px`;
+        canvas.style.height = `${pageViewport.height}px`;
         context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(
@@ -343,8 +367,14 @@ function PdfCanvasPreview({
           cropHeight,
           0,
           0,
-          autoFit.width,
-          autoFit.height,
+          pageViewport.width,
+          pageViewport.height,
+        );
+        onAutoFitScaleChange(
+          Math.min(
+            autoFit.autoFitScale / Math.max(autoFit.baseFitScale, 0.001),
+            PDF_INITIAL_SCALE_CAP,
+          ),
         );
       } catch {
         if (!cancelled) setRenderError(true);
@@ -356,7 +386,7 @@ function PdfCanvasPreview({
       cancelled = true;
       destroyLoadingTask?.();
     };
-  }, [file, viewport]);
+  }, [file, onAutoFitScaleChange, viewport]);
 
   return (
     <div ref={viewportRef} className="flex h-full min-h-[260px] w-full items-center justify-center">
@@ -416,6 +446,7 @@ export function DocumentPreviewPane() {
   const [side, setSide] = useState<DocumentSide>('front');
   const [rotation, setRotation] = useState(0);
   const [userZoomIndex, setUserZoomIndex] = useState(0);
+  const [pdfAutoFitScale, setPdfAutoFitScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -439,6 +470,7 @@ export function DocumentPreviewPane() {
 
   const resetView = () => {
     setUserZoomIndex(0);
+    setPdfAutoFitScale(1);
     setRotation(0);
     setPan({ x: 0, y: 0 });
   };
@@ -447,6 +479,7 @@ export function DocumentPreviewPane() {
     if (side !== 'back' || documentFiles.back) return;
     setSide('front');
     setUserZoomIndex(0);
+    setPdfAutoFitScale(1);
     setRotation(0);
     setPan({ x: 0, y: 0 });
     setCropOpen(false);
@@ -722,7 +755,7 @@ export function DocumentPreviewPane() {
           <div
             className="flex w-full min-w-0 origin-center items-center justify-center"
             style={{
-              transform: `translate3d(${pan.x}px, ${pan.y}px, 0) rotate(${rotation}deg) scale(${ZOOM_STEPS[userZoomIndex]})`,
+              transform: `translate3d(${pan.x}px, ${pan.y}px, 0) rotate(${rotation}deg) scale(${(isPdf ? pdfAutoFitScale : 1) * ZOOM_STEPS[userZoomIndex]})`,
             }}
           >
             {isPdf ? (
@@ -730,6 +763,7 @@ export function DocumentPreviewPane() {
                 file={currentFile}
                 previewUrl={previewUrl}
                 title={currentFile.name}
+                onAutoFitScaleChange={setPdfAutoFitScale}
               />
             ) : (
               <img
