@@ -1,7 +1,7 @@
 # LoopDev Registry Catalog
 
 > Generated file. Do not edit manually.
-> Generated on 2026-09-02 from `docs/registries/index.json`.
+> Generated from `docs/registries/index.json`.
 
 The domain registries are the sources of truth. This catalog is a read-only
 view for navigation, audits, and cross-domain discovery.
