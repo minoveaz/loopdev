@@ -9,8 +9,8 @@
 - Last reviewed: `2026-09-05`
 - Consumers: `/document-intelligence/new`, `/document-intelligence/:documentId`
 - Related track: `tracks/active/ai-platform/2026-09-05-document-intelligence-poc-migration.md`
-- Spec version: `1.2`
-- Contract version: `document-preview-pane/v1.2`
+- Spec version: `1.3`
+- Contract version: `document-preview-pane/v1.3`
 - Compatible since: `2026-09-05`
 - Empty intake composition: the full dropzone group is vertically and horizontally
   centered inside the `TechnicalSurface`; the upload icon and hierarchy use the
@@ -92,7 +92,7 @@ LoopDev tokens, and no tenant-specific colors.
 | `documentLoaded=false` | No file is selected | Dashed intake surface | Select, drag/drop, paste, or use fixture | File input has an accessible name and allowlist |
 | `front` / `back` | Active document side | `Reverso` appears only when a second-side file exists; otherwise `Anverso` is the only control | Switching side keeps the viewer context; removing the active back file returns to front | `aria-pressed` communicates active side and no unavailable side receives focus |
 | image file | Browser-local image | `<img>` inside transformed viewport | Pan, zoom, rotate, crop, open tab | File name is the image alternative |
-| PDF file | Browser-local PDF | PDF.js legacy build with a bundler-resolved worker; the first render derives `baseFitScale`, then a conservative non-white bounding-box pass derives `autoFitScale`. The resulting `autoFitScale/baseFitScale` is applied to the base canvas (bounded at the approved 250% visual reference) rather than hidden in the label. Normal and blank pages retain page fit; iframe fallback fills the viewport on render failure | Same view controls except crop; `userZoom` starts at `1.0`/`100%`, reset returns to the visual base, and zoom/pan remain relative to it | Canvas/iframe has the file name and preserves content aspect ratio |
+| PDF file | Browser-local PDF | PDF.js legacy build with a bundler-resolved worker; `baseScale = min((viewportWidth-padding)/pageWidth, (viewportHeight-padding)/pageHeight)` from `page.getViewport({ scale: 1 })`, then canvas CSS pixels and DPR bitmap rendering. Normal page fit is preserved; iframe fallback fills the viewport on render failure | Same view controls except crop; `userZoom` starts at `1.0`/`100%`, reset returns to base fit, and zoom/pan/rotation apply only to the user transform | Canvas/iframe has the file name and preserves page aspect ratio |
 | `processing` | Extraction is running | Action shows loading state | Consumer controls the flow timer | Loading state is announced by workbench |
 | validation error | Intake rejected | Alert copy below controls | Correct file and retry | `role=alert`, no color-only feedback |
 

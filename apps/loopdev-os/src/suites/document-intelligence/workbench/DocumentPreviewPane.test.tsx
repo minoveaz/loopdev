@@ -4,11 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   calculatePdfPageFit,
-  calculatePdfAutoFitScale,
-  detectPdfContentBounds,
   DocumentPreviewPane,
   PDF_FALLBACK_CLASS_NAME,
-  PDF_INITIAL_SCALE_CAP,
   PDF_PREVIEW_DOWNLOAD_LABEL,
   PDF_PREVIEW_ERROR_TITLE,
 } from './DocumentPreviewPane';
@@ -25,51 +22,9 @@ describe('DocumentPreviewPane', () => {
     expect(fit.height).toBeGreaterThan(400);
   });
 
-  it('separates the PDF visual base fit from the user zoom percentage', () => {
-    const fit = calculatePdfAutoFitScale(0.2, 240, 640, 600, 700);
-
-    expect(fit.baseFitScale).toBe(0.2);
-    expect(fit.autoFitScale).toBeGreaterThan(fit.baseFitScale);
-    expect(fit.userZoom).toBe(1);
-    expect(fit.width).toBeGreaterThan(240);
-    expect(PDF_INITIAL_SCALE_CAP).toBe(2.5);
-    expect(DocumentPreviewPane.toString()).toContain('pdfAutoFitScale');
-  });
-
   it('keeps the PDF fallback surface full-size when PDF.js cannot render', () => {
     expect(PDF_FALLBACK_CLASS_NAME).toContain('w-full');
     expect(PDF_FALLBACK_CLASS_NAME).not.toContain('max-w-xl');
-  });
-
-  it('auto-crops only PDFs with clearly excessive whitespace around visible content', () => {
-    const width = 100;
-    const height = 100;
-    const data = new Uint8ClampedArray(width * height * 4).fill(255);
-    for (let y = 40; y < 60; y += 1) {
-      for (let x = 40; x < 60; x += 1) {
-        const index = (y * width + x) * 4;
-        data[index] = 20;
-        data[index + 1] = 20;
-        data[index + 2] = 20;
-        data[index + 3] = 255;
-      }
-    }
-
-    const cropped = detectPdfContentBounds({ data, width, height }, 245, 4);
-    expect(cropped.autoCropped).toBe(true);
-    expect(cropped.left).toBe(36);
-    expect(cropped.top).toBe(36);
-    expect(cropped.right).toBe(64);
-    expect(cropped.bottom).toBe(64);
-
-    const normal = detectPdfContentBounds(
-      { data: new Uint8ClampedArray(width * height * 4).fill(255), width, height },
-      245,
-      4,
-    );
-    expect(normal.autoCropped).toBe(false);
-    expect(normal.right).toBe(width);
-    expect(normal.bottom).toBe(height);
   });
 
   it('provides an actionable download boundary when both PDF previews fail', () => {

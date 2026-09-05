@@ -10,7 +10,6 @@ import type { DocumentSide } from './types';
 
 const ALLOWED_MIME_CAPTION = 'JPEG, PNG o PDF · máx. 10 MB · almacenamiento temporal';
 const ZOOM_STEPS = [1, 1.25, 1.5, 2, 2.5, 3] as const;
-export const PDF_INITIAL_SCALE_CAP = 2.5;
 export const PDF_FALLBACK_CLASS_NAME =
   'border-border-subtle bg-surface-elevated h-full min-h-[260px] w-full rounded-lg border';
 export const PDF_PREVIEW_ERROR_TITLE = 'No se pudo mostrar la vista previa del PDF.';
@@ -44,110 +43,6 @@ export function calculatePdfPageFit(
     scale,
     width: pageWidth * scale,
     height: pageHeight * scale,
-  };
-}
-
-export function calculatePdfAutoFitScale(
-  baseFitScale: number,
-  contentWidth: number,
-  contentHeight: number,
-  containerWidth: number,
-  containerHeight: number,
-  padding = 32,
-) {
-  const contentFit = calculatePdfPageFit(
-    contentWidth,
-    contentHeight,
-    containerWidth,
-    containerHeight,
-    padding,
-  );
-
-  return {
-    baseFitScale,
-    autoFitScale: contentFit.scale,
-    userZoom: 1,
-    ...contentFit,
-  };
-}
-
-export interface PdfContentBounds {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-  autoCropped: boolean;
-}
-
-export function detectPdfContentBounds(
-  imageData: Pick<ImageData, 'data' | 'width' | 'height'>,
-  backgroundThreshold = 220,
-  margin = 12,
-): PdfContentBounds {
-  const { data, width, height } = imageData;
-  const rowCounts = new Uint32Array(height);
-  const columnCounts = new Uint32Array(width);
-
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      const index = (y * width + x) * 4;
-      const isNonWhite =
-        data[index + 3] > 8 &&
-        (data[index] < backgroundThreshold ||
-          data[index + 1] < backgroundThreshold ||
-          data[index + 2] < backgroundThreshold);
-      if (isNonWhite) {
-        rowCounts[y] += 1;
-        columnCounts[x] += 1;
-      }
-    }
-  }
-
-  let left = width;
-  let top = height;
-  let right = -1;
-  let bottom = -1;
-
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      const index = (y * width + x) * 4;
-      const alpha = data[index + 3];
-      const isContent =
-        alpha > 8 &&
-        (data[index] < backgroundThreshold ||
-          data[index + 1] < backgroundThreshold ||
-          data[index + 2] < backgroundThreshold);
-      const isSparseContent =
-        rowCounts[y] < width * 0.5 && columnCounts[x] < height * 0.5;
-      if (!isContent || !isSparseContent) continue;
-      left = Math.min(left, x);
-      top = Math.min(top, y);
-      right = Math.max(right, x + 1);
-      bottom = Math.max(bottom, y + 1);
-    }
-  }
-
-  if (right < 0 || bottom < 0) {
-    return { left: 0, top: 0, right: width, bottom: height, autoCropped: false };
-  }
-
-  const contentWidth = right - left;
-  const contentHeight = bottom - top;
-  const contentCoverage = (contentWidth * contentHeight) / Math.max(width * height, 1);
-  const hasExcessiveWhitespace =
-    contentCoverage < 0.72 &&
-    (contentWidth / Math.max(width, 1) < 0.86 || contentHeight / Math.max(height, 1) < 0.86);
-
-  if (!hasExcessiveWhitespace) {
-    return { left: 0, top: 0, right: width, bottom: height, autoCropped: false };
-  }
-
-  return {
-    left: Math.max(0, left - margin),
-    top: Math.max(0, top - margin),
-    right: Math.min(width, right + margin),
-    bottom: Math.min(height, bottom + margin),
-    autoCropped: true,
   };
 }
 
@@ -240,12 +135,10 @@ function PdfCanvasPreview({
   file,
   previewUrl,
   title,
-  onAutoFitScaleChange,
 }: {
   file: File;
   previewUrl: string;
   title: string;
-  onAutoFitScaleChange: (scale: number) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -287,7 +180,6 @@ function PdfCanvasPreview({
     let destroyLoadingTask: (() => void) | undefined;
     setRenderError(false);
     setIframeError(false);
-    onAutoFitScaleChange(1);
 
     const render = async () => {
       try {
@@ -322,60 +214,6 @@ function PdfCanvasPreview({
           viewport: pageViewport,
           transform: [devicePixelRatio, 0, 0, devicePixelRatio, 0, 0],
         }).promise;
-
-        const contentBounds = detectPdfContentBounds(
-          context.getImageData(0, 0, canvas.width, canvas.height),
-        );
-        if (!contentBounds.autoCropped) return;
-
-        const cropWidth = contentBounds.right - contentBounds.left;
-        const cropHeight = contentBounds.bottom - contentBounds.top;
-        const autoFit = calculatePdfAutoFitScale(
-          pageFit.scale,
-          cropWidth / devicePixelRatio,
-          cropHeight / devicePixelRatio,
-          viewport.width,
-          viewport.height,
-        );
-        const croppedCanvas = document.createElement('canvas');
-        croppedCanvas.width = cropWidth;
-        croppedCanvas.height = cropHeight;
-        const croppedContext = croppedCanvas.getContext('2d');
-        if (!croppedContext) throw new Error('PDF crop canvas context unavailable');
-        croppedContext.drawImage(
-          canvas,
-          contentBounds.left,
-          contentBounds.top,
-          cropWidth,
-          cropHeight,
-          0,
-          0,
-          cropWidth,
-          cropHeight,
-        );
-        canvas.width = Math.ceil(pageViewport.width * devicePixelRatio);
-        canvas.height = Math.ceil(pageViewport.height * devicePixelRatio);
-        canvas.style.width = `${pageViewport.width}px`;
-        canvas.style.height = `${pageViewport.height}px`;
-        context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(
-          croppedCanvas,
-          0,
-          0,
-          cropWidth,
-          cropHeight,
-          0,
-          0,
-          pageViewport.width,
-          pageViewport.height,
-        );
-        onAutoFitScaleChange(
-          Math.min(
-            autoFit.autoFitScale / Math.max(autoFit.baseFitScale, 0.001),
-            PDF_INITIAL_SCALE_CAP,
-          ),
-        );
       } catch {
         if (!cancelled) setRenderError(true);
       }
@@ -386,7 +224,7 @@ function PdfCanvasPreview({
       cancelled = true;
       destroyLoadingTask?.();
     };
-  }, [file, onAutoFitScaleChange, viewport]);
+  }, [file, viewport]);
 
   return (
     <div ref={viewportRef} className="flex h-full min-h-[260px] w-full items-center justify-center">
@@ -446,7 +284,6 @@ export function DocumentPreviewPane() {
   const [side, setSide] = useState<DocumentSide>('front');
   const [rotation, setRotation] = useState(0);
   const [userZoomIndex, setUserZoomIndex] = useState(0);
-  const [pdfAutoFitScale, setPdfAutoFitScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -470,7 +307,6 @@ export function DocumentPreviewPane() {
 
   const resetView = () => {
     setUserZoomIndex(0);
-    setPdfAutoFitScale(1);
     setRotation(0);
     setPan({ x: 0, y: 0 });
   };
@@ -479,7 +315,6 @@ export function DocumentPreviewPane() {
     if (side !== 'back' || documentFiles.back) return;
     setSide('front');
     setUserZoomIndex(0);
-    setPdfAutoFitScale(1);
     setRotation(0);
     setPan({ x: 0, y: 0 });
     setCropOpen(false);
@@ -755,7 +590,7 @@ export function DocumentPreviewPane() {
           <div
             className="flex w-full min-w-0 origin-center items-center justify-center"
             style={{
-              transform: `translate3d(${pan.x}px, ${pan.y}px, 0) rotate(${rotation}deg) scale(${(isPdf ? pdfAutoFitScale : 1) * ZOOM_STEPS[userZoomIndex]})`,
+              transform: `translate3d(${pan.x}px, ${pan.y}px, 0) rotate(${rotation}deg) scale(${ZOOM_STEPS[userZoomIndex]})`,
             }}
           >
             {isPdf ? (
@@ -763,7 +598,6 @@ export function DocumentPreviewPane() {
                 file={currentFile}
                 previewUrl={previewUrl}
                 title={currentFile.name}
-                onAutoFitScaleChange={setPdfAutoFitScale}
               />
             ) : (
               <img
