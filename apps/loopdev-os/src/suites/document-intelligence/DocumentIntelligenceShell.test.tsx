@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { shouldShowWorkbenchContextPanel } from './DocumentIntelligenceShell';
+import {
+  getWorkbenchHeaderSegments,
+  shouldShowWorkbenchContextPanel,
+} from './DocumentIntelligenceShell';
+import { DOCUMENT_INTELLIGENCE_SUITE_CONFIG } from './config';
 
 describe('DocumentIntelligenceShell context panel visibility', () => {
   it('keeps the preparation and processing surfaces focused on the document', () => {
@@ -11,5 +15,22 @@ describe('DocumentIntelligenceShell context panel visibility', () => {
   it('shows extraction context only once review or recovery needs it', () => {
     expect(shouldShowWorkbenchContextPanel('review')).toBe(true);
     expect(shouldShowWorkbenchContextPanel('error')).toBe(true);
+  });
+
+  it('derives desktop and mobile breadcrumbs from the active SuiteConfig module', () => {
+    const module = DOCUMENT_INTELLIGENCE_SUITE_CONFIG.modules.find(
+      ({ moduleId }) => moduleId === 'workbench',
+    );
+    if (!module) throw new Error('Document Intelligence workbench module is not configured');
+
+    const { desktopSegments, mobileSegments } = getWorkbenchHeaderSegments(module);
+
+    expect(desktopSegments.map(({ label }) => label)).toEqual([
+      'Document Intelligence',
+      'Document extraction',
+    ]);
+    expect(mobileSegments).toEqual([
+      { id: 'workbench', label: 'Document extraction', isActive: true },
+    ]);
   });
 });

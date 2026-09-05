@@ -69,7 +69,7 @@ or future server extraction flow.
 SuiteCanvas / RecordWorkspace
 └── transparent record wrapper
     └── TechnicalSurface
-        ├── intake and side toolbar
+        ├── intake and two-row responsive side toolbar
         ├── document viewport
         └── action footer (upload, extract)
 ```
@@ -135,14 +135,14 @@ cancel never mutates the source.
 | Context | Density | Content scale | Behavior |
 | --- | --- | --- | --- |
 | Workspace desktop | Comfortable | Full toolbar and dual record columns | Viewport owns internal overflow |
-| Tablet | Comfortable | Wrapping toolbar | Parent may move inspector to overlay |
-| Mobile | Compact | Controls wrap; side buttons remain reachable | Preview remains a single inspectable canvas; no page overflow |
+| Tablet | Comfortable | Selector row followed by wrapping controls row | Parent may move inspector to overlay |
+| Mobile | Compact | Compact side/file row followed by wrapping controls row; footer actions become full-width | Preview remains a single inspectable canvas; no page overflow |
 
 | Viewport | Layout | Transformation | Overflow rule | Acceptance evidence |
 | --- | --- | --- | --- | --- |
 | Desktop | Surface fills record column | Toolbar stays above viewport | Internal viewport only | Focused component test + browser review |
-| Tablet | Surface compresses with record | Toolbar wraps | No horizontal page overflow | `validate:experience` and Playwright follow-up |
-| Mobile | Single-column record | Actions wrap below viewport | Document viewport may pan, page may not overflow | Mobile interaction evidence pending |
+| Tablet | Surface compresses with record | Selector and controls remain separate rows | No horizontal page overflow | Focused responsive test; browser review pending |
+| Mobile | Single-column record | Selector row, controls row and stacked full-width footer actions | Document viewport may pan, page may not overflow | Focused responsive test; browser review pending |
 
 ## Accessibility contract
 

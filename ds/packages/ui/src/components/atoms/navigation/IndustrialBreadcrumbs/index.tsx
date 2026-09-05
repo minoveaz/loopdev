@@ -10,12 +10,9 @@ import { IndustrialBreadcrumbsProps } from './types';
  * @description Átomo de navegación jerárquica con capas de profundidad.
  * Fix: Eliminación de bordes claros en modo oscuro.
  */
-export const IndustrialBreadcrumbs: React.FC<IndustrialBreadcrumbsProps> = ({ 
-  segments, 
-  className = '' 
-}) => {
+function BreadcrumbPath({ segments }: { segments: IndustrialBreadcrumbsProps['segments'] }) {
   return (
-    <nav className={cn("flex items-center gap-1 overflow-hidden", className)} aria-label="Breadcrumb">
+    <>
       {segments.map((segment, idx) => (
         <React.Fragment key={segment.id}>
           <div 
@@ -49,12 +46,35 @@ export const IndustrialBreadcrumbs: React.FC<IndustrialBreadcrumbsProps> = ({
           </div>
           
           {idx < segments.length - 1 && (
-            <span className="relative z-10 text-[10px] font-sans text-primary opacity-40 px-0.5 select-none">
+            <span className="text-primary relative z-10 select-none px-0.5 font-sans text-[10px] opacity-40">
               /
             </span>
           )}
         </React.Fragment>
       ))}
+    </>
+  );
+}
+
+export const IndustrialBreadcrumbs: React.FC<IndustrialBreadcrumbsProps> = ({
+  segments,
+  mobileSegments,
+  className = '',
+}) => {
+  return (
+    <nav className={cn('flex items-center gap-1 overflow-hidden', className)} aria-label="Breadcrumb">
+      {mobileSegments ? (
+        <>
+          <span className="flex min-w-0 items-center gap-1 lg:hidden">
+            <BreadcrumbPath segments={mobileSegments} />
+          </span>
+          <span className="hidden min-w-0 items-center gap-1 lg:flex">
+            <BreadcrumbPath segments={segments} />
+          </span>
+        </>
+      ) : (
+        <BreadcrumbPath segments={segments} />
+      )}
     </nav>
   );
 };

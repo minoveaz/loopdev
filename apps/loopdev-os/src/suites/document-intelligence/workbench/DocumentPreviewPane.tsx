@@ -394,9 +394,12 @@ export function DocumentPreviewPane() {
         className="sr-only"
         aria-label={`Seleccionar ${activeSide === 'front' ? 'anverso' : 'reverso'}`}
       />
-      <div className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2">
-        <div className="flex min-w-0 items-center gap-2">
-          <div role="group" aria-label="Cara del documento" className="flex gap-1">
+      <div className="border-border-subtle flex flex-col gap-2 border-b px-4 py-2">
+        <div
+          data-preview-toolbar-row="document-selector"
+          className="flex w-full min-w-0 items-center justify-between gap-2"
+        >
+          <div role="group" aria-label="Cara del documento" className="flex shrink-0 gap-1">
             <Button
               variant={activeSide === 'front' ? 'primary' : 'ghost'}
               size="sm"
@@ -416,13 +419,23 @@ export function DocumentPreviewPane() {
               </Button>
             ) : null}
           </div>
-          <Badge status="neutral" variant="outline" showDot={false}>
+          <Badge
+            status="neutral"
+            variant="outline"
+            showDot={false}
+            className="min-w-0 truncate"
+          >
             {currentFile
               ? `${getFileExtension(current?.mimeType ?? null)} · ${Math.round((current?.size ?? 0) / 1024)} KB`
               : 'Fixture'}
           </Badge>
         </div>
-        <div className="flex items-center gap-1">
+        <div
+          data-preview-toolbar-row="document-controls"
+          role="group"
+          aria-label="Controles de vista previa"
+          className="flex w-full flex-wrap items-center justify-start gap-1 sm:justify-end"
+        >
           <IconButton
             icon="zoom_out"
             size="md"
@@ -519,22 +532,24 @@ export function DocumentPreviewPane() {
         ) : null}
       </div>
 
-      <div className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-t px-4 py-3">
-        <div className="flex flex-wrap gap-2">
+      <div className="border-border-subtle flex flex-col items-stretch gap-2 border-t px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto">
           <Button
             variant="outline"
             size="sm"
             startIcon="upload_file"
+            className="w-full sm:w-auto"
             onClick={() => inputRef.current?.click()}
           >
             Subir {activeSide === 'front' ? 'anverso' : 'reverso'}
           </Button>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto">
           <Button
             variant="primary"
             size="sm"
             startIcon="document_scanner"
+            className="w-full sm:w-auto"
             isLoading={flowState === 'processing'}
             onClick={() => startExtraction('success')}
           >

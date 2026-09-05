@@ -29,8 +29,10 @@ copiada de VitaBlue. La aprobación visual sigue siendo un gate independiente y 
 - **Regions and owners:**
   - `PlatformHeader`, `SuiteSidebar`, `PlatformContextPanel`, `SuiteCanvas`: shell de plataforma
     (obligatorias, sin variantes locales).
-  - Header: `ModuleHeader` vía `moduleHeaderRenderers` de `SuiteRuntime` — breadcrumbs
-    (`Document Intelligence / Document extraction`) y badge de estado del flujo.
+  - Header: `ModuleHeader` vía `moduleHeaderRenderers` de `SuiteRuntime`; los segmentos se derivan
+    de `SuiteConfig.modules[].breadcrumbs`. Desktop conserva `Document Intelligence /
+    Document extraction`; móvil usa solo el módulo activo mediante la variante contractual
+    `mobileSegments`, sin duplicar landmarks ni hardcodear labels en la suite.
   - Tabs: control local dentro del canvas (`Datos extraídos / Uso y coste`) con `role="tablist"`
     compuesto desde `Button`. Las validaciones de negocio visibles quedan diferidas.
   - Record: área principal en grid — preview/preparación del documento a la izquierda y panel de
@@ -49,6 +51,9 @@ copiada de VitaBlue. La aprobación visual sigue siendo un gate independiente y 
 - **Domain-specific components (suite-local, prototipo):**
   `DocumentIntelligenceWorkbench`, `DocumentPreviewPane`, `ExtractionReviewForm`,
   `UsageCostPanel`, `WorkbenchInspector`, `workbench-context`.
+- **Preview responsive:** `DocumentPreviewPane` separa selector de cara/metadata y controles de
+  inspección en dos filas; en móvil el footer convierte upload y extracción en acciones de ancho
+  completo para evitar recorte u overflow.
 
 ## Flujo operativo conservado
 

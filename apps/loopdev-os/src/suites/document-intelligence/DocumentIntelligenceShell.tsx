@@ -16,6 +16,7 @@ import {
   type PlatformContextPanelMode,
 } from '@loopdev/ui';
 import type { NavMode, NavRouteRef } from '@loopdev/contracts';
+import type { ModuleConfig } from '@loopdev/contracts';
 import { CircleHelp } from 'lucide-react';
 
 import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
@@ -44,16 +45,32 @@ export function shouldShowWorkbenchContextPanel(
   return flowState === 'review' || flowState === 'error';
 }
 
-function WorkbenchModuleHeader() {
+export function getWorkbenchHeaderSegments(module: ModuleConfig) {
+  const [suiteLabel, moduleLabel] = module.breadcrumbs ?? [module.label];
+  const desktopSegments = [
+    {
+      id: 'suite',
+      label: suiteLabel,
+      href: DOCUMENT_INTELLIGENCE_SUITE_CONFIG.identity.route?.routeId,
+    },
+    { id: module.moduleId, label: moduleLabel, isActive: true },
+  ];
+
+  return {
+    desktopSegments,
+    mobileSegments: [{ id: module.moduleId, label: moduleLabel, isActive: true }],
+  };
+}
+
+function WorkbenchModuleHeader({ module }: { module: ModuleConfig }) {
   const { flowState } = useWorkbenchPrototype();
   const status = FLOW_STATUS[flowState] ?? FLOW_STATUS.preparation;
+  const { desktopSegments, mobileSegments } = getWorkbenchHeaderSegments(module);
 
   return (
     <ModuleHeader
-      segments={[
-        { id: 'suite', label: 'Document Intelligence', href: '/document-intelligence' },
-        { id: 'module', label: 'Document extraction', isActive: true },
-      ]}
+      segments={desktopSegments}
+      mobileSegments={mobileSegments}
       statusLabel={status.label}
       statusSeverity={status.severity}
     />
@@ -81,7 +98,7 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
     <SuiteRuntime
       config={{ ...DOCUMENT_INTELLIGENCE_SUITE_CONFIG, navMode }}
       activeModuleId={activeModuleId}
-      moduleHeaderRenderers={{ workbench: () => <WorkbenchModuleHeader /> }}
+      moduleHeaderRenderers={{ workbench: (module) => <WorkbenchModuleHeader module={module} /> }}
       moduleContextPanelRenderers={{ workbench: () => <WorkbenchInspector /> }}
       moduleContextPanelVisibility={{
         workbench: shouldShowWorkbenchContextPanel(flowState),

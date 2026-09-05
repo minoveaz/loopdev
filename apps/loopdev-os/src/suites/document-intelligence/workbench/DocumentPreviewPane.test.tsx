@@ -86,6 +86,25 @@ describe('DocumentPreviewPane', () => {
     expect(open).toHaveBeenCalledWith('blob:document-preview', '_blank', 'noopener,noreferrer');
   });
 
+  it('keeps the loaded preview toolbar in two responsive rows', () => {
+    const createObjectURL = vi.fn(() => 'blob:document-preview');
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL: vi.fn() });
+
+    render(
+      <WorkbenchPrototypeProvider>
+        <DocumentPreviewPane />
+      </WorkbenchPrototypeProvider>,
+    );
+
+    fireEvent.change(screen.getByLabelText('Seleccionar documento'), {
+      target: { files: [new File(['image'], 'front.png', { type: 'image/png' })] },
+    });
+
+    expect(document.querySelector('[data-preview-toolbar-row="document-selector"]')).toBeTruthy();
+    expect(document.querySelector('[data-preview-toolbar-row="document-controls"]')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Iniciar extracción/ })).toHaveClass('w-full');
+  });
+
   it('does not expose image crop controls for PDF documents', () => {
     const createObjectURL = vi.fn(() => 'blob:document-pdf');
     const revokeObjectURL = vi.fn();

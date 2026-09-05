@@ -24,6 +24,19 @@ describe('ModuleHeader Composite', () => {
     expect(screen.getByText(/Acme Corp/i)).toBeInTheDocument();
   });
 
+  it('renders the compact breadcrumb contract on mobile and the full path on desktop', () => {
+    render(
+      <ModuleHeader
+        {...MODULE_HEADER_FIXTURES.moduleMode}
+        mobileSegments={[{ id: 'contacts', label: 'Contacts', isActive: true }]}
+      />,
+    );
+
+    expect(screen.getAllByRole('navigation', { name: 'Breadcrumb' })).toHaveLength(1);
+    expect(screen.getByText('Contacts')).toBeInTheDocument();
+    expect(screen.getByText('Brand Hub')).toBeInTheDocument();
+  });
+
   it('triggers sidebar toggle', () => {
     const onToggle = vi.fn();
     const props = {
