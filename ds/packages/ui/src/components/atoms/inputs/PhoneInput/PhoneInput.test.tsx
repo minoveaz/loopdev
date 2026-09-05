@@ -31,23 +31,13 @@ describe('PhoneInput', () => {
     );
 
     expect(screen.getByLabelText('Country code')).toBeInTheDocument();
-    expect(screen.getByLabelText('Phone number')).toHaveAttribute(
-      'aria-describedby',
-      'phone-help',
-    );
+    expect(screen.getByLabelText('Phone number')).toHaveAttribute('aria-describedby', 'phone-help');
     expect(screen.getByLabelText('Phone number')).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('forwards focus to the native phone input', () => {
     const ref = createRef<HTMLInputElement>();
-    render(
-      <PhoneInput
-        ref={ref}
-        id="phone"
-        label="Phone number"
-        {...copy}
-      />,
-    );
+    render(<PhoneInput ref={ref} id="phone" label="Phone number" {...copy} />);
 
     act(() => ref.current?.focus());
     expect(screen.getByLabelText('Phone number')).toHaveFocus();
@@ -55,12 +45,7 @@ describe('PhoneInput', () => {
 
   it('uses paired semantic tokens for the field, value, placeholder, trigger and focus', () => {
     const { container } = render(
-      <PhoneInput
-        id="phone"
-        label="Phone number"
-        placeholder="Enter a phone number"
-        {...copy}
-      />,
+      <PhoneInput id="phone" label="Phone number" placeholder="Enter a phone number" {...copy} />,
     );
     const input = screen.getByLabelText('Phone number');
     const field = container.querySelector('.lpd-phone-input');

@@ -111,4 +111,27 @@ describe('CRM lead capture API', () => {
     expect(response.status).toBe(401);
     expect(captureLead).not.toHaveBeenCalled();
   });
+
+  it('redacts assignment failures as a forbidden CRM operation', async () => {
+    captureLead.mockRejectedValue(new Error('CRM lead assignee is not allowed'));
+    const response = await POST(
+      new Request('http://localhost/api/crm/capture', {
+        method: 'POST',
+        body: JSON.stringify({
+          organizationId,
+          contactId,
+          interest: 'seguro de salud',
+          source: { kind: 'manual' },
+        }),
+      }),
+    );
+    expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({
+      error: {
+        code: 'FORBIDDEN',
+        message: 'CRM lead assignee is not allowed',
+        traceId: expect.any(String),
+      },
+    });
+  });
 });
