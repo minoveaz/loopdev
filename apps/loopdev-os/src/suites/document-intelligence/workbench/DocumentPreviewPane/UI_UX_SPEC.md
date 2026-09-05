@@ -232,6 +232,9 @@ Do not place a permanent history list inside the preview surface.
 
 - One active file per side; no list virtualization is required.
 - PDF rendering is first-page only, uses the locally bundled worker and is cancelled/destroyed on file/viewport changes.
+- The transformed document wrapper must remain `w-full min-w-0` so the PDF
+  viewport observer measures the canvas surface rather than the intrinsic
+  canvas size; this prevents a 1px thumbnail feedback loop.
 - Object URLs are revoked on replacement and unmount.
 - Consumer may emit extraction-start and review-decision telemetry; file contents,
   names and identity fields must never be sent to analytics.

@@ -12,6 +12,8 @@ const ALLOWED_MIME_CAPTION = 'JPEG, PNG o PDF · máx. 10 MB · almacenamiento t
 const ZOOM_STEPS = [1, 1.25, 1.5, 2, 2.5, 3] as const;
 export const PDF_FALLBACK_CLASS_NAME =
   'border-border-subtle bg-surface-elevated h-full min-h-[260px] w-full rounded-lg border';
+export const PDF_PREVIEW_ERROR_TITLE = 'No se pudo mostrar la vista previa del PDF.';
+export const PDF_PREVIEW_DOWNLOAD_LABEL = 'Descargar documento';
 const pdfWorkerUrl = new URL(
   'pdfjs-dist/legacy/build/pdf.worker.mjs',
   import.meta.url,
@@ -142,6 +144,7 @@ function PdfCanvasPreview({
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const [renderError, setRenderError] = useState(false);
+  const [iframeError, setIframeError] = useState(false);
 
   useEffect(() => {
     const element = viewportRef.current;
@@ -176,6 +179,7 @@ function PdfCanvasPreview({
     let cancelled = false;
     let destroyLoadingTask: (() => void) | undefined;
     setRenderError(false);
+    setIframeError(false);
 
     const render = async () => {
       try {
@@ -225,11 +229,33 @@ function PdfCanvasPreview({
   return (
     <div ref={viewportRef} className="flex h-full min-h-[260px] w-full items-center justify-center">
       {renderError ? (
-        <iframe
-          src={`${previewUrl}#toolbar=0&navpanes=0&scrollbar=0`}
-          title={title}
-          className={PDF_FALLBACK_CLASS_NAME}
-        />
+        iframeError ? (
+          <div
+            role="alert"
+            className="bg-surface-elevated text-text-muted flex h-full min-h-[260px] w-full flex-col items-center justify-center gap-3 rounded-lg border p-6 text-center"
+          >
+            <LpdText size="sm" className="text-text-main">
+              {PDF_PREVIEW_ERROR_TITLE}
+            </LpdText>
+            <LpdText size="xs">
+              Descarga el documento para abrirlo con el visor del sistema.
+            </LpdText>
+            <a
+              href={previewUrl}
+              download={title}
+              className="text-primary focus-visible:ring-primary/40 rounded-md px-3 py-2 text-sm font-semibold underline focus-visible:outline-none focus-visible:ring-2"
+            >
+              {PDF_PREVIEW_DOWNLOAD_LABEL}
+            </a>
+          </div>
+        ) : (
+          <iframe
+            src={`${previewUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+            title={title}
+            onError={() => setIframeError(true)}
+            className={PDF_FALLBACK_CLASS_NAME}
+          />
+        )
       ) : (
         <canvas
           ref={canvasRef}
@@ -562,7 +588,7 @@ export function DocumentPreviewPane() {
       >
         {previewUrl && currentFile ? (
           <div
-            className="flex origin-center items-center justify-center"
+            className="flex w-full min-w-0 origin-center items-center justify-center"
             style={{
               transform: `translate3d(${pan.x}px, ${pan.y}px, 0) rotate(${rotation}deg) scale(${ZOOM_STEPS[zoomIndex]})`,
             }}

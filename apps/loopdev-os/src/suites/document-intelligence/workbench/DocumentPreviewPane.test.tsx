@@ -6,6 +6,8 @@ import {
   calculatePdfPageFit,
   DocumentPreviewPane,
   PDF_FALLBACK_CLASS_NAME,
+  PDF_PREVIEW_DOWNLOAD_LABEL,
+  PDF_PREVIEW_ERROR_TITLE,
 } from './DocumentPreviewPane';
 import { WorkbenchPrototypeProvider } from './workbench-context';
 
@@ -23,6 +25,16 @@ describe('DocumentPreviewPane', () => {
   it('keeps the PDF fallback surface full-size when PDF.js cannot render', () => {
     expect(PDF_FALLBACK_CLASS_NAME).toContain('w-full');
     expect(PDF_FALLBACK_CLASS_NAME).not.toContain('max-w-xl');
+  });
+
+  it('provides an actionable download boundary when both PDF previews fail', () => {
+    expect(PDF_PREVIEW_DOWNLOAD_LABEL).toBe('Descargar documento');
+    expect(PDF_PREVIEW_ERROR_TITLE).toContain('vista previa del PDF');
+  });
+
+  it('keeps the transformed document wrapper full-width for PDF viewport measurement', () => {
+    const source = DocumentPreviewPane.toString();
+    expect(source).toContain('flex w-full min-w-0 origin-center');
   });
 
   it('centers the empty intake group and keeps actions responsive without overflow', () => {
