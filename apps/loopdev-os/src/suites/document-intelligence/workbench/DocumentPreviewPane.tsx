@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Icon, IconButton, LpdText, TechnicalSurface } from '@loopdev/ui';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 import { ALLOWED_DOCUMENT_MIME_TYPES, validateDocumentFile } from './file-validation';
 import { useWorkbenchPrototype } from './workbench-context';
@@ -9,6 +10,18 @@ import type { DocumentSide } from './types';
 
 const ALLOWED_MIME_CAPTION = 'JPEG, PNG o PDF · máx. 10 MB · almacenamiento temporal';
 const ZOOM_STEPS = [1, 1.25, 1.5, 2, 2.5, 3] as const;
+export const PDF_FALLBACK_CLASS_NAME =
+  'border-border-subtle bg-surface-elevated h-full min-h-[260px] w-full rounded-lg border';
+const pdfWorkerUrl = new URL(
+  'pdfjs-dist/legacy/build/pdf.worker.mjs',
+  import.meta.url,
+).toString();
+
+if (typeof window !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    pdfWorkerUrl ||
+    `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+}
 
 export function calculatePdfPageFit(
   pageWidth: number,
@@ -166,9 +179,11 @@ function PdfCanvasPreview({
 
     const render = async () => {
       try {
-        const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
-        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
-        const loadingTask = pdfjsLib.getDocument({ data: await file.arrayBuffer() });
+        const loadingTask = pdfjsLib.getDocument({
+          data: new Uint8Array(await file.arrayBuffer()),
+          cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/cmaps/`,
+          cMapPacked: true,
+        });
         destroyLoadingTask = () => loadingTask.destroy();
         const pdf = await loadingTask.promise;
         const page = await pdf.getPage(1);
@@ -213,7 +228,7 @@ function PdfCanvasPreview({
         <iframe
           src={`${previewUrl}#toolbar=0&navpanes=0&scrollbar=0`}
           title={title}
-          className="border-border-subtle bg-surface-elevated h-full min-h-[260px] w-full rounded-lg border"
+          className={PDF_FALLBACK_CLASS_NAME}
         />
       ) : (
         <canvas

@@ -2,7 +2,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { calculatePdfPageFit, DocumentPreviewPane } from './DocumentPreviewPane';
+import {
+  calculatePdfPageFit,
+  DocumentPreviewPane,
+  PDF_FALLBACK_CLASS_NAME,
+} from './DocumentPreviewPane';
 import { WorkbenchPrototypeProvider } from './workbench-context';
 
 describe('DocumentPreviewPane', () => {
@@ -14,6 +18,11 @@ describe('DocumentPreviewPane', () => {
     expect(fit.height).toBeCloseTo(424.5, 0);
     expect(fit.height / fit.width).toBeCloseTo(792 / 612, 3);
     expect(fit.height).toBeGreaterThan(400);
+  });
+
+  it('keeps the PDF fallback surface full-size when PDF.js cannot render', () => {
+    expect(PDF_FALLBACK_CLASS_NAME).toContain('w-full');
+    expect(PDF_FALLBACK_CLASS_NAME).not.toContain('max-w-xl');
   });
 
   it('centers the empty intake group and keeps actions responsive without overflow', () => {

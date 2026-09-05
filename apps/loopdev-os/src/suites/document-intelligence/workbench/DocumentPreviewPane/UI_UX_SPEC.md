@@ -92,7 +92,7 @@ LoopDev tokens, and no tenant-specific colors.
 | `documentLoaded=false` | No file is selected | Dashed intake surface | Select, drag/drop, paste, or use fixture | File input has an accessible name and allowlist |
 | `front` / `back` | Active document side | `Reverso` appears only when a second-side file exists; otherwise `Anverso` is the only control | Switching side keeps the viewer context; removing the active back file returns to front | `aria-pressed` communicates active side and no unavailable side receives focus |
 | image file | Browser-local image | `<img>` inside transformed viewport | Pan, zoom, rotate, crop, open tab | File name is the image alternative |
-| PDF file | Browser-local PDF | PDF.js first-page canvas fit-contain using the measured viewport; iframe fallback fills the viewport on render failure | Same view controls except crop | Canvas/iframe has the file name and preserves page aspect ratio |
+| PDF file | Browser-local PDF | PDF.js legacy build with a bundler-resolved worker, first-page canvas fit-contain using the measured viewport; iframe fallback fills the viewport on render failure | Same view controls except crop | Canvas/iframe has the file name and preserves page aspect ratio |
 | `processing` | Extraction is running | Action shows loading state | Consumer controls the flow timer | Loading state is announced by workbench |
 | validation error | Intake rejected | Alert copy below controls | Correct file and retry | `role=alert`, no color-only feedback |
 
@@ -231,7 +231,7 @@ Do not place a permanent history list inside the preview surface.
 ## Performance and observability
 
 - One active file per side; no list virtualization is required.
-- PDF rendering is first-page only and cancelled on file/viewport changes.
+- PDF rendering is first-page only, uses the locally bundled worker and is cancelled/destroyed on file/viewport changes.
 - Object URLs are revoked on replacement and unmount.
 - Consumer may emit extraction-start and review-decision telemetry; file contents,
   names and identity fields must never be sent to analytics.
