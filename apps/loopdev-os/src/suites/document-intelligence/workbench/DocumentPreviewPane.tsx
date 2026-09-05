@@ -319,54 +319,56 @@ export function DocumentPreviewPane() {
           className="sr-only"
           aria-label="Seleccionar documento"
         />
-        <div className="flex h-full min-h-0 w-full max-w-2xl flex-col items-center justify-center gap-6">
-          <span aria-hidden="true" className="text-primary/70">
-            <Icon name="upload_file" size="xl" />
-          </span>
-          <div className="space-y-2">
-            <LpdText size="lg" weight="semibold">
-              Arrastra un documento aquí
-            </LpdText>
-            <LpdText size="sm" className="text-text-muted block leading-relaxed">
-              {ALLOWED_MIME_CAPTION}
+        <div className="flex w-full flex-1 items-center justify-center">
+          <div className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center gap-6 text-center">
+            <span aria-hidden="true" className="text-primary/70">
+              <Icon name="upload_file" size="xl" />
+            </span>
+            <div className="space-y-2">
+              <LpdText size="lg" weight="semibold">
+                Arrastra un documento aquí
+              </LpdText>
+              <LpdText size="sm" className="text-text-muted block leading-relaxed">
+                {ALLOWED_MIME_CAPTION}
+              </LpdText>
+            </div>
+            <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <Button
+                variant="primary"
+                size="sm"
+                startIcon="description"
+                className="w-full sm:w-auto"
+                onClick={() => inputRef.current?.click()}
+              >
+                Seleccionar documento
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                startIcon="content_paste"
+                className="w-full sm:w-auto"
+                onClick={() => void pasteFromClipboard()}
+              >
+                Pegar desde portapapeles
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full sm:w-auto"
+                onClick={() => loadDemoDocument()}
+              >
+                Usar fixture
+              </Button>
+            </div>
+            {fileError ? (
+              <p role="alert" className="text-lpd-xs text-danger">
+                {fileError}
+              </p>
+            ) : null}
+            <LpdText size="xs" className="text-text-muted block leading-relaxed">
+              La referencia se conserva solo durante esta sesión operativa.
             </LpdText>
           </div>
-          <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <Button
-              variant="primary"
-              size="sm"
-              startIcon="description"
-              className="w-full sm:w-auto"
-              onClick={() => inputRef.current?.click()}
-            >
-              Seleccionar documento
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              startIcon="content_paste"
-              className="w-full sm:w-auto"
-              onClick={() => void pasteFromClipboard()}
-            >
-              Pegar desde portapapeles
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full sm:w-auto"
-              onClick={() => loadDemoDocument()}
-            >
-              Usar fixture
-            </Button>
-          </div>
-          {fileError ? (
-            <p role="alert" className="text-lpd-xs text-danger">
-              {fileError}
-            </p>
-          ) : null}
-          <LpdText size="xs" className="text-text-muted block leading-relaxed">
-            La referencia se conserva solo durante esta sesión operativa.
-          </LpdText>
         </div>
       </TechnicalSurface>
     );

@@ -13,8 +13,14 @@ describe('DocumentPreviewPane', () => {
       </WorkbenchPrototypeProvider>,
     );
 
-    expect(screen.getByText('Arrastra un documento aquí')).toHaveClass('text-lpd-lg');
+    const title = screen.getByText('Arrastra un documento aquí');
+    const group = title.parentElement?.parentElement;
+    const centeringWrapper = group?.parentElement;
+
+    expect(title).toHaveClass('text-lpd-lg');
     expect(screen.getByText(/JPEG, PNG.*PDF/i)).toHaveClass('text-lpd-sm');
+    expect(group).toHaveClass('mx-auto', 'max-w-2xl', 'text-center');
+    expect(centeringWrapper).toHaveClass('w-full', 'flex-1', 'items-center', 'justify-center');
     expect(screen.getByRole('button', { name: /Seleccionar documento/ })).toHaveClass('w-full');
     expect(screen.getByRole('button', { name: /Pegar desde portapapeles/ })).toHaveClass('w-full');
     expect(screen.getByRole('button', { name: 'Usar fixture' })).toHaveClass('w-full');
