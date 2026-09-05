@@ -208,7 +208,8 @@ export function DocumentPreviewPane() {
   const inputRef = useRef<HTMLInputElement>(null);
   const dragOrigin = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
 
-  const current = documentFiles[side];
+  const activeSide: DocumentSide = side === 'back' && !documentFiles.back ? 'front' : side;
+  const current = documentFiles[activeSide];
   const currentFile = current?.file ?? null;
   const previewUrl = useMemo(
     () => (currentFile ? URL.createObjectURL(currentFile) : null),
@@ -227,6 +228,15 @@ export function DocumentPreviewPane() {
     setPan({ x: 0, y: 0 });
   };
 
+  useEffect(() => {
+    if (side !== 'back' || documentFiles.back) return;
+    setSide('front');
+    setZoomIndex(0);
+    setRotation(0);
+    setPan({ x: 0, y: 0 });
+    setCropOpen(false);
+  }, [documentFiles.back, side]);
+
   const acceptFile = (file: File) => {
     const validationError = validateDocumentFile(file);
     if (validationError) {
@@ -235,7 +245,7 @@ export function DocumentPreviewPane() {
     }
     setFileError(null);
     resetView();
-    selectDocumentFile(file, side);
+    selectDocumentFile(file, activeSide);
   };
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -382,27 +392,29 @@ export function DocumentPreviewPane() {
         accept={ALLOWED_DOCUMENT_MIME_TYPES.join(',')}
         onChange={onInputChange}
         className="sr-only"
-        aria-label={`Seleccionar ${side === 'front' ? 'anverso' : 'reverso'}`}
+        aria-label={`Seleccionar ${activeSide === 'front' ? 'anverso' : 'reverso'}`}
       />
       <div className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2">
         <div className="flex min-w-0 items-center gap-2">
           <div role="group" aria-label="Cara del documento" className="flex gap-1">
             <Button
-              variant={side === 'front' ? 'primary' : 'ghost'}
+              variant={activeSide === 'front' ? 'primary' : 'ghost'}
               size="sm"
-              aria-pressed={side === 'front'}
+              aria-pressed={activeSide === 'front'}
               onClick={() => setSide('front')}
             >
               Anverso
             </Button>
-            <Button
-              variant={side === 'back' ? 'primary' : 'ghost'}
-              size="sm"
-              aria-pressed={side === 'back'}
-              onClick={() => setSide('back')}
-            >
-              Reverso
-            </Button>
+            {documentFiles.back ? (
+              <Button
+                variant={activeSide === 'back' ? 'primary' : 'ghost'}
+                size="sm"
+                aria-pressed={activeSide === 'back'}
+                onClick={() => setSide('back')}
+              >
+                Reverso
+              </Button>
+            ) : null}
           </div>
           <Badge status="neutral" variant="outline" showDot={false}>
             {currentFile
@@ -515,7 +527,7 @@ export function DocumentPreviewPane() {
             startIcon="upload_file"
             onClick={() => inputRef.current?.click()}
           >
-            Subir {side === 'front' ? 'anverso' : 'reverso'}
+            Subir {activeSide === 'front' ? 'anverso' : 'reverso'}
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">

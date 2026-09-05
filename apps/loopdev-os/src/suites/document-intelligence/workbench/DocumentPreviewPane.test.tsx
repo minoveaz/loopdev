@@ -41,6 +41,19 @@ describe('DocumentPreviewPane', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(/JPEG\/PNG.*PDF/i);
   });
 
+  it('does not render a reverso control when the document has no second side', () => {
+    render(
+      <WorkbenchPrototypeProvider>
+        <DocumentPreviewPane />
+      </WorkbenchPrototypeProvider>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Usar fixture' }));
+
+    expect(screen.getByRole('button', { name: 'Anverso' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.queryByRole('button', { name: 'Reverso' })).not.toBeInTheDocument();
+  });
+
   it('renders real uploaded image controls and opens its object URL in a new tab', () => {
     const open = vi.fn();
     vi.stubGlobal('open', open);

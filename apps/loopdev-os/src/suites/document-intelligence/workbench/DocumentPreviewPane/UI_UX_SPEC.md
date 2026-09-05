@@ -53,6 +53,8 @@ or future server extraction flow.
 - Image preview and PDF.js first-page canvas rendering with an iframe fallback.
 - Front/back selection, zoom/reset, rotation, pointer pan, image crop and
   open-in-new-tab affordances.
+- The second-side control is conditional on an available back file; removing
+  the active back file resets the viewer to the front side.
 - Object URL lifecycle and local viewer state.
 
 ### Does not own
@@ -81,7 +83,7 @@ LoopDev tokens, and no tenant-specific colors.
 | Prop/state | Meaning | Visual behavior | Interaction | Accessibility |
 | --- | --- | --- | --- | --- |
 | `documentLoaded=false` | No file is selected | Dashed intake surface | Select, drag/drop, paste, or use fixture | File input has an accessible name and allowlist |
-| `front` / `back` | Active document side | Side control is persistent in the toolbar | Switching side keeps the viewer context | `aria-pressed` communicates active side |
+| `front` / `back` | Active document side | `Reverso` appears only when a second-side file exists; otherwise `Anverso` is the only control | Switching side keeps the viewer context; removing the active back file returns to front | `aria-pressed` communicates active side and no unavailable side receives focus |
 | image file | Browser-local image | `<img>` inside transformed viewport | Pan, zoom, rotate, crop, open tab | File name is the image alternative |
 | PDF file | Browser-local PDF | PDF.js canvas; iframe on render failure | Same view controls except crop | Canvas/iframe has the file name |
 | `processing` | Extraction is running | Action shows loading state | Consumer controls the flow timer | Loading state is announced by workbench |
