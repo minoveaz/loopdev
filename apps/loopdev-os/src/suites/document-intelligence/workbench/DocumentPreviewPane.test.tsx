@@ -6,6 +6,20 @@ import { DocumentPreviewPane } from './DocumentPreviewPane';
 import { WorkbenchPrototypeProvider } from './workbench-context';
 
 describe('DocumentPreviewPane', () => {
+  it('centers the empty intake group and keeps actions responsive without overflow', () => {
+    render(
+      <WorkbenchPrototypeProvider>
+        <DocumentPreviewPane />
+      </WorkbenchPrototypeProvider>,
+    );
+
+    expect(screen.getByText('Arrastra un documento aquí')).toHaveClass('text-lpd-lg');
+    expect(screen.getByText(/JPEG, PNG.*PDF/i)).toHaveClass('text-lpd-sm');
+    expect(screen.getByRole('button', { name: /Seleccionar documento/ })).toHaveClass('w-full');
+    expect(screen.getByRole('button', { name: /Pegar desde portapapeles/ })).toHaveClass('w-full');
+    expect(screen.getByRole('button', { name: 'Usar fixture' })).toHaveClass('w-full');
+  });
+
   it('validates MIME and size before accepting a document', () => {
     render(
       <WorkbenchPrototypeProvider>

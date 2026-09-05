@@ -12,6 +12,10 @@
 - Spec version: `1.0`
 - Contract version: `document-preview-pane/v1`
 - Compatible since: `2026-09-05`
+- Empty intake composition: the full dropzone group is vertically and horizontally
+  centered inside the `TechnicalSurface`; the upload icon and hierarchy use the
+  comfortable workspace scale, while action buttons stack full-width on narrow
+  viewports and return to an inline group from `sm` upward.
 - Platform target: `web-only`
 
 ## Quick reference
