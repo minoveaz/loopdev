@@ -1,7 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Badge, Button, EmptyState, Heading, LpdText, TechnicalSurface } from '@loopdev/ui';
+import {
+  Badge,
+  Button,
+  EmptyState,
+  Heading,
+  LpdText,
+  ResponsiveTable,
+  TechnicalSurface,
+} from '@loopdev/ui';
+import type { ResponsiveTableColumn, ResponsiveTableProps } from '@loopdev/ui';
 
 import { useWorkbenchPrototype } from '@/suites/document-intelligence/workbench/workbench-context';
 import type { PrototypeDocumentHistoryItem } from '@/suites/document-intelligence/workbench/types';
@@ -14,41 +23,121 @@ const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   unknown: 'Sin clasificar',
 };
 
-function HistoryRow({ item, onOpen }: { item: PrototypeDocumentHistoryItem; onOpen: () => void }) {
+function formatUpdatedAt(value: string) {
+  return new Date(value).toLocaleString('es-ES');
+}
+
+function statusFor(item: PrototypeDocumentHistoryItem) {
+  return {
+    status: item.flowState === 'error' ? ('error' as const) : item.flowState === 'review' ? ('success' as const) : ('neutral' as const),
+    label: item.flowState === 'error' ? 'Recuperable' : item.flowState === 'review' ? 'Revisado' : 'En preparación',
+  };
+}
+
+function HistoryMobileRow({
+  item,
+  onOpen,
+}: {
+  item: PrototypeDocumentHistoryItem;
+  onOpen: () => void;
+}) {
+  const status = statusFor(item);
+
   return (
-    <li className="border-border-subtle flex flex-wrap items-center justify-between gap-3 border-b px-4 py-4 last:border-b-0">
+    <article
+      aria-label={item.fileName}
+      className="border-border-subtle bg-background-subtle flex flex-col gap-3 rounded-lg border p-4"
+    >
       <div className="min-w-0">
-        <LpdText size="sm" weight="semibold" className="truncate">
+        <LpdText size="sm" weight="semibold" className="break-words">
           {item.fileName}
         </LpdText>
-        <LpdText size="xs" className="text-text-muted">
-          {DOCUMENT_TYPE_LABELS[item.documentType] ?? DOCUMENT_TYPE_LABELS.unknown} ·{' '}
-          {new Date(item.updatedAt).toLocaleString('es-ES')}
+        <LpdText size="xs" className="text-text-muted mt-1">
+          {item.mimeType} · {formatUpdatedAt(item.updatedAt)}
         </LpdText>
       </div>
-      <div className="flex items-center gap-2">
-        <Badge
-          status={
-            item.flowState === 'error'
-              ? 'error'
-              : item.flowState === 'review'
-                ? 'success'
-                : 'neutral'
-          }
-          variant="outline"
-          showDot={false}
-        >
-          {item.flowState === 'error'
-            ? 'Recuperable'
-            : item.flowState === 'review'
-              ? 'Revisado'
-              : 'En preparación'}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Badge status={status.status} variant="outline" showDot={false}>
+          {status.label}
         </Badge>
         <Button variant="ghost" size="sm" onClick={onOpen}>
           Abrir
         </Button>
       </div>
-    </li>
+    </article>
+  );
+}
+
+function HistoryTable({
+  rows,
+  onOpen,
+}: {
+  rows: PrototypeDocumentHistoryItem[];
+  onOpen: (item: PrototypeDocumentHistoryItem) => void;
+}) {
+  const columns: ResponsiveTableColumn<PrototypeDocumentHistoryItem>[] = [
+    {
+      key: 'fileName',
+      header: 'Documento',
+      render: (item) => (
+        <div className="min-w-0">
+          <LpdText size="sm" weight="semibold" className="break-words">
+            {item.fileName}
+          </LpdText>
+          <LpdText size="xs" className="text-text-muted mt-1">
+            {item.mimeType}
+          </LpdText>
+        </div>
+      ),
+      sortAccessor: (item) => item.fileName,
+    },
+    {
+      key: 'documentType',
+      header: 'Tipo / clasificación',
+      render: (item) => DOCUMENT_TYPE_LABELS[item.documentType] ?? DOCUMENT_TYPE_LABELS.unknown,
+    },
+    {
+      key: 'flowState',
+      header: 'Estado',
+      render: (item) => {
+        const status = statusFor(item);
+        return (
+          <Badge status={status.status} variant="outline" showDot={false}>
+            {status.label}
+          </Badge>
+        );
+      },
+    },
+    {
+      key: 'updatedAt',
+      header: 'Actualizado',
+      render: (item) => formatUpdatedAt(item.updatedAt),
+      sortAccessor: (item) => item.updatedAt,
+      className: 'whitespace-nowrap',
+    },
+  ];
+
+  const renderMobileRow: NonNullable<
+    ResponsiveTableProps<PrototypeDocumentHistoryItem>['renderMobileRow']
+  > = (item) => <HistoryMobileRow item={item} onOpen={() => onOpen(item)} />;
+
+  return (
+    <ResponsiveTable
+      surface={false}
+      caption="Historial operativo de extracciones"
+      columns={columns}
+      rows={rows}
+      getRowKey={(item) => item.id}
+      rowActions={(item) => (
+        <Button variant="ghost" size="sm" onClick={() => onOpen(item)}>
+          Abrir
+        </Button>
+      )}
+      renderMobileRow={renderMobileRow}
+      mobileHeaders={{ record: 'Documento', status: 'Estado', actions: 'Acción' }}
+      pageSize={0}
+      className="[&_tbody_td]:py-4 [&_tbody_td]:align-top"
+    />
   );
 }
 
@@ -64,14 +153,14 @@ export default function DocumentIntelligenceHomePage() {
   return (
     <div className="bg-shell-canvas flex min-h-full flex-1 flex-col gap-6 p-6 sm:p-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
+        <div className="min-w-0 space-y-2">
           <p className="text-primary text-lpd-xs font-semibold uppercase tracking-[0.18em]">
             Document Intelligence
           </p>
           <Heading as="h1" size="2xl" weight="semibold" className="text-text-main mt-3">
             Extracciones operativas
           </Heading>
-          <LpdText size="sm" className="text-text-muted mt-2 max-w-2xl">
+          <LpdText size="sm" className="text-text-muted block max-w-2xl leading-relaxed">
             Prepara un documento, revisa los campos extraídos y decide cómo continuar. La lista
             conserva el estado operativo local; el historial permanente pertenece a una fase futura.
           </LpdText>
@@ -88,7 +177,7 @@ export default function DocumentIntelligenceHomePage() {
 
       <TechnicalSurface variant="surface" className="w-full overflow-hidden rounded-xl">
         <div className="border-border-subtle flex items-center justify-between gap-3 border-b px-4 py-3">
-          <div>
+          <div className="min-w-0 space-y-1">
             <LpdText size="sm" weight="semibold">
               Historial operativo
             </LpdText>
@@ -101,18 +190,13 @@ export default function DocumentIntelligenceHomePage() {
           </Badge>
         </div>
         {history.length > 0 ? (
-          <ul aria-label="Historial operativo de extracciones">
-            {history.map((item) => (
-              <HistoryRow
-                key={item.id}
-                item={item}
-                onOpen={() => {
-                  loadDemoDocument(item.id);
-                  router.push(`/document-intelligence/${item.id}`);
-                }}
-              />
-            ))}
-          </ul>
+          <HistoryTable
+            rows={history}
+            onOpen={(item) => {
+              loadDemoDocument(item.id);
+              router.push(`/document-intelligence/${item.id}`);
+            }}
+          />
         ) : (
           <EmptyState
             variant="ghost"

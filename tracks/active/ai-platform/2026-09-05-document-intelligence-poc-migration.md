@@ -175,7 +175,9 @@ Gaps resueltos en este bloque: dropzone con allowlist MIME y tamaño (G1), visor
 zoom/rotate/crop/PDF con fallback (G2), feedback de procesamiento fixture (G3). Gaps diferidos:
 `Tabs` compartido (G4), input de fecha `DD/MM/YYYY` (G5), presentación overlay del
 `ModuleContextPanel` en tablet (G6, requiere revisión con `platform-shell`; prohibido mutar el
-shell desde la suite) y validaciones de negocio visibles.
+shell desde la suite) y validaciones de negocio visibles. La home de historial reutiliza
+`ResponsiveTable` con columnas explícitas de documento, tipo/clasificación, estado, actualización y
+acción de apertura; en móvil usa filas semánticas apiladas sin depender de overflow horizontal.
 
 ## Branch strategy
 
@@ -380,6 +382,7 @@ documentado el rollout fixture y el rollback sin datos permanentes.
 | 2026-09-06 | Launchpad conserva rail con iconos en desktop y fuerza `SuiteSidebar` expandido con `headerSlot` contextual en tablet/móvil | ✅                                                                                              | `LaunchpadShell.tsx`; `SuiteSidebar` API; `LaunchpadShell.test.tsx`                             |
 | 2026-09-05 | Tests focalizados de Document Intelligence                                                                                  | ✅ 8 tests                                                                                      | preview, validación MIME/tamaño, contexto, decisiones y rutas                                   |
 | 2026-09-05 | Preparación sin placeholder de revisión ni inspector contextual por defecto                                                  | ✅                                                                                              | `DocumentIntelligenceWorkbench.test.tsx`; `DocumentIntelligenceShell.test.tsx`                |
+| 2026-09-05 | Historial de extracciones migrado a `ResponsiveTable` con columnas claras y representación móvil semántica                  | ✅                                                                                              | `apps/loopdev-os/src/app/document-intelligence/page.tsx`; `page.test.tsx`                    |
 | 2026-09-05 | `pnpm test`                                                                                                                 | ✅                                                                                              | Vitest completo                                                                                 |
 | 2026-09-05 | `pnpm test:shell`                                                                                                           | ✅ 41 tests + typecheck UI                                                                      | shell canónico                                                                                  |
 | 2026-09-05 | `pnpm registries:check` + `node scripts/tracks/validate-tracks.mjs`                                                         | ✅                                                                                              | registry y dashboard sincronizados                                                              |
