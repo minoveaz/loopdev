@@ -66,6 +66,8 @@ import { CRMPrimitivesCatalog } from './CRMPrimitivesCatalog';
 import { DataTablesCatalog } from './DataTablesCatalog';
 import type { ActivityRow } from '@/components/composites/data-tables/ActivityTable';
 
+const isVisualCertification = process.env.NEXT_PUBLIC_VISUAL_CERTIFICATION === 'true';
+
 const FIXTURES: Record<string, ViewComposition> = {
   SuiteOverview: SUITE_OVERVIEW_COMPOSITION,
   DataWorkspace: DATA_WORKSPACE_COMPOSITION,
@@ -2545,16 +2547,18 @@ export default function CompositionShowcasePage() {
           ),
         }}
         rightSlot={
-          <div className="flex items-center gap-2">
-            <PlatformHeaderControls
-              notifications={NOTIFICATION_CENTER_FIXTURES.recent}
-              unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
-              activeContext={contextMode}
-              onOpenNotifications={() => setContextMode('notifications')}
-              onOpenHelp={() => setContextMode('help')}
-              onOpenAI={() => setContextMode('assistant')}
-            />
-          </div>
+          isVisualCertification ? undefined : (
+            <div className="flex items-center gap-2">
+              <PlatformHeaderControls
+                notifications={NOTIFICATION_CENTER_FIXTURES.recent}
+                unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
+                activeContext={contextMode}
+                onOpenNotifications={() => setContextMode('notifications')}
+                onOpenHelp={() => setContextMode('help')}
+                onOpenAI={() => setContextMode('assistant')}
+              />
+            </div>
+          )
         }
         mobileSidebarActions={
           <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
@@ -2579,20 +2583,22 @@ export default function CompositionShowcasePage() {
           </div>
         }
         profileSlot={
-          <UserMenu
-            userName="Alex Morgan"
-            userEmail="showcase@loopdev.local"
-            userRole="Tenant_Admin"
-            tenantName="Showcase Workspace"
-            userSrc="https://i.pravatar.cc/64?img=12"
-            timezoneOptions={[{ label: 'Auto detect', isActive: true }]}
-            onOpenChange={(open) => {
-              if (open) setContextMode(null);
-            }}
-            onAvatarClick={() => setContextMode('profile')}
-            onProfileClick={() => setContextMode('profile')}
-            onLogout={() => undefined}
-          />
+          isVisualCertification ? undefined : (
+            <UserMenu
+              userName="Alex Morgan"
+              userEmail="showcase@loopdev.local"
+              userRole="Tenant_Admin"
+              tenantName="Showcase Workspace"
+              userSrc="https://i.pravatar.cc/64?img=12"
+              timezoneOptions={[{ label: 'Auto detect', isActive: true }]}
+              onOpenChange={(open) => {
+                if (open) setContextMode(null);
+              }}
+              onAvatarClick={() => setContextMode('profile')}
+              onProfileClick={() => setContextMode('profile')}
+              onLogout={() => undefined}
+            />
+          )
         }
         appShellProps={{
           onToggleLeftSidebar: () =>
