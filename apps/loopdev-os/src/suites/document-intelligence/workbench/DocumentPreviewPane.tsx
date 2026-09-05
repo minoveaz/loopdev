@@ -46,6 +46,66 @@ export function calculatePdfPageFit(
   };
 }
 
+export interface PdfContentBounds {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  autoCropped: boolean;
+}
+
+export function detectPdfContentBounds(
+  imageData: Pick<ImageData, 'data' | 'width' | 'height'>,
+  backgroundThreshold = 245,
+  margin = 12,
+): PdfContentBounds {
+  const { data, width, height } = imageData;
+  let left = width;
+  let top = height;
+  let right = -1;
+  let bottom = -1;
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const index = (y * width + x) * 4;
+      const alpha = data[index + 3];
+      const isNonWhite =
+        alpha > 8 &&
+        (data[index] < backgroundThreshold ||
+          data[index + 1] < backgroundThreshold ||
+          data[index + 2] < backgroundThreshold);
+      if (!isNonWhite) continue;
+      left = Math.min(left, x);
+      top = Math.min(top, y);
+      right = Math.max(right, x + 1);
+      bottom = Math.max(bottom, y + 1);
+    }
+  }
+
+  if (right < 0 || bottom < 0) {
+    return { left: 0, top: 0, right: width, bottom: height, autoCropped: false };
+  }
+
+  const contentWidth = right - left;
+  const contentHeight = bottom - top;
+  const contentCoverage = (contentWidth * contentHeight) / Math.max(width * height, 1);
+  const hasExcessiveWhitespace =
+    contentCoverage < 0.72 &&
+    (contentWidth / Math.max(width, 1) < 0.86 || contentHeight / Math.max(height, 1) < 0.86);
+
+  if (!hasExcessiveWhitespace) {
+    return { left: 0, top: 0, right: width, bottom: height, autoCropped: false };
+  }
+
+  return {
+    left: Math.max(0, left - margin),
+    top: Math.max(0, top - margin),
+    right: Math.min(width, right + margin),
+    bottom: Math.min(height, bottom + margin),
+    autoCropped: true,
+  };
+}
+
 interface CropDialogProps {
   file: File;
   previewUrl: string;
@@ -199,21 +259,68 @@ function PdfCanvasPreview({
           viewport.width,
           viewport.height,
         );
-        const pageViewport = page.getViewport({ scale: pageFit.scale });
         const devicePixelRatio = window.devicePixelRatio || 1;
         const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        if (!context) throw new Error('PDF canvas context unavailable');
+        const pageViewport = page.getViewport({ scale: pageFit.scale });
         canvas.width = Math.ceil(pageViewport.width * devicePixelRatio);
         canvas.height = Math.ceil(pageViewport.height * devicePixelRatio);
         canvas.style.width = `${pageViewport.width}px`;
         canvas.style.height = `${pageViewport.height}px`;
-        const context = canvas.getContext('2d');
-        if (!context) throw new Error('PDF canvas context unavailable');
         await page.render({
           canvas,
           canvasContext: context,
           viewport: pageViewport,
           transform: [devicePixelRatio, 0, 0, devicePixelRatio, 0, 0],
         }).promise;
+
+        const contentBounds = detectPdfContentBounds(
+          context.getImageData(0, 0, canvas.width, canvas.height),
+        );
+        if (!contentBounds.autoCropped) return;
+
+        const cropWidth = contentBounds.right - contentBounds.left;
+        const cropHeight = contentBounds.bottom - contentBounds.top;
+        const croppedFit = calculatePdfPageFit(
+          cropWidth / devicePixelRatio,
+          cropHeight / devicePixelRatio,
+          viewport.width,
+          viewport.height,
+        );
+        const croppedCanvas = document.createElement('canvas');
+        croppedCanvas.width = cropWidth;
+        croppedCanvas.height = cropHeight;
+        const croppedContext = croppedCanvas.getContext('2d');
+        if (!croppedContext) throw new Error('PDF crop canvas context unavailable');
+        croppedContext.drawImage(
+          canvas,
+          contentBounds.left,
+          contentBounds.top,
+          cropWidth,
+          cropHeight,
+          0,
+          0,
+          cropWidth,
+          cropHeight,
+        );
+        canvas.width = Math.ceil(croppedFit.width * devicePixelRatio);
+        canvas.height = Math.ceil(croppedFit.height * devicePixelRatio);
+        canvas.style.width = `${croppedFit.width}px`;
+        canvas.style.height = `${croppedFit.height}px`;
+        context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(
+          croppedCanvas,
+          0,
+          0,
+          cropWidth,
+          cropHeight,
+          0,
+          0,
+          croppedFit.width,
+          croppedFit.height,
+        );
       } catch {
         if (!cancelled) setRenderError(true);
       }

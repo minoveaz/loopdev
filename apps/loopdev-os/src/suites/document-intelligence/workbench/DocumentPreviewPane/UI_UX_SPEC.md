@@ -9,8 +9,8 @@
 - Last reviewed: `2026-09-05`
 - Consumers: `/document-intelligence/new`, `/document-intelligence/:documentId`
 - Related track: `tracks/active/ai-platform/2026-09-05-document-intelligence-poc-migration.md`
-- Spec version: `1.0`
-- Contract version: `document-preview-pane/v1`
+- Spec version: `1.1`
+- Contract version: `document-preview-pane/v1.1`
 - Compatible since: `2026-09-05`
 - Empty intake composition: the full dropzone group is vertically and horizontally
   centered inside the `TechnicalSurface`; the upload icon and hierarchy use the
@@ -92,7 +92,7 @@ LoopDev tokens, and no tenant-specific colors.
 | `documentLoaded=false` | No file is selected | Dashed intake surface | Select, drag/drop, paste, or use fixture | File input has an accessible name and allowlist |
 | `front` / `back` | Active document side | `Reverso` appears only when a second-side file exists; otherwise `Anverso` is the only control | Switching side keeps the viewer context; removing the active back file returns to front | `aria-pressed` communicates active side and no unavailable side receives focus |
 | image file | Browser-local image | `<img>` inside transformed viewport | Pan, zoom, rotate, crop, open tab | File name is the image alternative |
-| PDF file | Browser-local PDF | PDF.js legacy build with a bundler-resolved worker, first-page canvas fit-contain using the measured viewport; iframe fallback fills the viewport on render failure | Same view controls except crop | Canvas/iframe has the file name and preserves page aspect ratio |
+| PDF file | Browser-local PDF | PDF.js legacy build with a bundler-resolved worker; first render fits the measured page viewport, then a conservative non-white bounding-box pass auto-fits pages with excessive surrounding whitespace. Normal and blank pages retain page fit; iframe fallback fills the viewport on render failure | Same view controls except crop; zoom/pan/reset remain relative to the visual result | Canvas/iframe has the file name and preserves content aspect ratio |
 | `processing` | Extraction is running | Action shows loading state | Consumer controls the flow timer | Loading state is announced by workbench |
 | validation error | Intake rejected | Alert copy below controls | Correct file and retry | `role=alert`, no color-only feedback |
 
