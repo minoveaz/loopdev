@@ -2,14 +2,17 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(47);
+select plan(61);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
   ('00000000-0000-4000-8700-000000000001', 'authenticated', 'authenticated', 'crm-security-a@example.test', '', now()),
   ('00000000-0000-4000-8700-000000000002', 'authenticated', 'authenticated', 'crm-security-b@example.test', '', now()),
   ('00000000-0000-4000-8700-000000000003', 'authenticated', 'authenticated', 'crm-security-viewer@example.test', '', now()),
-  ('00000000-0000-4000-8700-000000000004', 'authenticated', 'authenticated', 'crm-security-suspended@example.test', '', now());
+  ('00000000-0000-4000-8700-000000000004', 'authenticated', 'authenticated', 'crm-security-suspended@example.test', '', now()),
+  ('00000000-0000-4000-8700-000000000005', 'authenticated', 'authenticated', 'crm-security-agent@example.test', '', now()),
+  ('00000000-0000-4000-8700-000000000006', 'authenticated', 'authenticated', 'crm-security-admin@example.test', '', now()),
+  ('00000000-0000-4000-8700-000000000007', 'authenticated', 'authenticated', 'crm-security-agent-two@example.test', '', now());
 
 insert into public.organizations (id, name, slug)
 values
@@ -21,7 +24,10 @@ values
   ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000001', 'owner'),
   ('00000000-0000-4000-9700-000000000002', '00000000-0000-4000-8700-000000000002', 'viewer'),
   ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000003', 'viewer'),
-  ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000004', 'agent');
+  ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000004', 'agent'),
+  ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000005', 'agent'),
+  ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000006', 'admin'),
+  ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000007', 'agent');
 
 update public.organization_memberships
    set status = 'suspended'
@@ -169,6 +175,107 @@ select throws_ok(
   '23514',
   'CRM Lead assignments must be cleared before membership suspension or role downgrade',
   'an assigned operational membership cannot be suspended'
+);
+select lives_ok(
+  $$ update public.crm_leads
+        set assigned_to_user_id = null
+      where id = '00000000-0000-4000-9b00-000000000001' $$,
+  'an owner can clear a Lead assignment before membership suspension'
+);
+select lives_ok(
+  $$ update public.organization_memberships
+        set status = 'suspended'
+      where organization_id = '00000000-0000-4000-9700-000000000001'
+        and user_id = '00000000-0000-4000-8700-000000000003' $$,
+  'an owner can suspend an unassigned membership'
+);
+select is(
+  (select status from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9700-000000000001'
+      and user_id = '00000000-0000-4000-8700-000000000003'),
+  'suspended',
+  'the owner membership lifecycle update is applied'
+);
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8700-000000000006', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set status = 'suspended'
+      where organization_id = '00000000-0000-4000-9700-000000000001'
+        and user_id = '00000000-0000-4000-8700-000000000005' $$,
+  'an admin with organization.manage can suspend a same-organization member'
+);
+select is(
+  (select status from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9700-000000000001'
+      and user_id = '00000000-0000-4000-8700-000000000005'),
+  'suspended',
+  'the admin membership lifecycle update is applied'
+);
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8700-000000000007', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set status = 'suspended'
+      where organization_id = '00000000-0000-4000-9700-000000000001'
+        and user_id = '00000000-0000-4000-8700-000000000006' $$,
+  'an agent cannot manage membership lifecycle'
+);
+select is(
+  (select status from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9700-000000000001'
+      and user_id = '00000000-0000-4000-8700-000000000006'),
+  'active',
+  'an agent cannot change membership status'
+);
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8700-000000000001', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set status = 'suspended'
+      where organization_id = '00000000-0000-4000-9700-000000000002'
+        and user_id = '00000000-0000-4000-8700-000000000002' $$,
+  'an owner cannot update a membership in another organization'
+);
+select is(
+  (select count(*)::integer from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9700-000000000002'
+      and user_id = '00000000-0000-4000-8700-000000000002'),
+  0,
+  'a cross-organization membership is hidden by RLS'
+);
+select throws_ok(
+  $$ update public.organization_memberships
+        set organization_id = '00000000-0000-4000-9700-000000000002'
+      where organization_id = '00000000-0000-4000-9700-000000000001'
+        and user_id = '00000000-0000-4000-8700-000000000006' $$,
+  'permission denied for table organization_memberships',
+  'organization managers cannot change membership organization scope'
+);
+select lives_ok(
+  $$ update public.crm_leads
+        set assigned_to_user_id = '00000000-0000-4000-8700-000000000006'
+      where id = '00000000-0000-4000-9b00-000000000001' $$,
+  'an owner can assign a Lead to an active admin'
+);
+select throws_ok(
+  $$ update public.organization_memberships
+        set role = 'viewer'
+      where organization_id = '00000000-0000-4000-9700-000000000001'
+        and user_id = '00000000-0000-4000-8700-000000000006' $$,
+  '23514',
+  'CRM Lead assignments must be cleared before membership suspension or role downgrade',
+  'an assigned operational membership cannot be downgraded'
+);
+select lives_ok(
+  $$ update public.crm_leads
+        set assigned_to_user_id = null
+      where id = '00000000-0000-4000-9b00-000000000001' $$,
+  'an owner can clear a Lead assignment before role downgrade'
+);
+select lives_ok(
+  $$ update public.organization_memberships
+        set role = 'viewer'
+      where organization_id = '00000000-0000-4000-9700-000000000001'
+        and user_id = '00000000-0000-4000-8700-000000000006' $$,
+  'an admin can downgrade an unassigned membership'
 );
 select lives_ok(
   $$ insert into public.crm_leads (organization_id, contact_id, workspace_id, stage, source)
