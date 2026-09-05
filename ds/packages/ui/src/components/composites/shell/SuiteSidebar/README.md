@@ -30,6 +30,8 @@ import { SuiteSidebar, marketingStudioSchema } from '@loopdev/ui';
 | --- | --- | --- |
 | `schema` | `NavigationSchema` | Definición de identidad, grupos y módulos. |
 | `navMode` | `'expanded' \| 'rail'` | Densidad visual del sidebar. |
+| `mobileMode` | `boolean` | Fuerza la presentación expandida cuando el sidebar vive dentro del drawer responsive. |
+| `headerSlot` | `ReactNode` | Título o contexto del sidebar; se muestra solo en la presentación expandida. |
 | `activeModuleId` | `string` | ID del módulo que tendrá el indicador de actividad. |
 | `accessMap` | `AccessMap` | Diccionario de permisos (`enabled`, `disabled`, `hidden`, `coming-soon`, `forbidden`, `read-only`). |
 | `telemetry` | `TelemetryMap` | Mapa de badges para notificaciones. |

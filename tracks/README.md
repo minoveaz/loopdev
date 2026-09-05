@@ -4,6 +4,10 @@
 
 ## Planificados
 
+### AI Platform
+
+- [Migración del POC operativo de Document Intelligence desde VitaBlue](./planned/ai-platform/2026-09-05-document-intelligence-poc-migration.md) · `loopdev-io-document-intelligence-migration` · fase 0
+
 ### CRM
 
 - [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0

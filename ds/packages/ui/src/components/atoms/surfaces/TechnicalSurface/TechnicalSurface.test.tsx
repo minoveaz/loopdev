@@ -21,6 +21,7 @@ describe('TechnicalSurface', () => {
     expect(root).toHaveAttribute('data-surface-variant', 'glass');
     expect(root).toHaveAttribute('data-surface-depth', 'overlay');
     expect(root).toHaveAttribute('data-surface-overflow', 'visible');
+    expect(root?.firstElementChild).toHaveClass('h-full', 'min-h-0');
   });
 
   it('renders optional grid and hover aura layers', () => {

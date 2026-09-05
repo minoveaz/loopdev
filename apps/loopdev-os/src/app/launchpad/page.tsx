@@ -1,30 +1,31 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Heading,
   LpdText,
-  TechnicalText,
   Icon,
-  BrandLogo,
   UIKitIllustration,
   SuiteCard,
-  ThemeToggle,
-  SystemStatus,
-  UserMenu,
   BlueprintBackground,
-  TechnicalSurface,
 } from '@loopdev/ui';
-import { Moon, Sun, Monitor, LogOut, ArrowRight } from 'lucide-react';
-import { ContextSwitcher } from '@/components/layout/ContextSwitcher';
+import type { NavMode } from '@loopdev/contracts';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { useWorkspace } from '@/hooks/useWorkspace';
 import { useOrganization } from '@/hooks/useOrganization';
 import { resolveAccessState } from '@/core/access/accessState';
 import { AccessStatePanel } from '@/components/layout/AccessStatePanel';
+import { LaunchpadShell } from '@/components/layout/LaunchpadShell';
+import {
+  PLATFORM_TOOL_ENTRIES,
+  resolvePlatformTools,
+} from '@/core/platform/platformTools';
 
 export default function LaunchpadPage() {
+  const router = useRouter();
+  const [platformNavMode, setPlatformNavMode] = useState<Exclude<NavMode, 'hidden'>>('rail');
   const {
     user,
     memberships,
@@ -50,7 +51,19 @@ export default function LaunchpadPage() {
       isLoadingWorkspaces ||
       !hasPermission(permission) ||
       !isSuiteEnabled(suite));
-
+  const platformTools = resolvePlatformTools(PLATFORM_TOOL_ENTRIES, {
+    hasPermission,
+    isLoading: isLoadingPermissions,
+    isPlatformScope: Boolean(isPlatformScope),
+  });
+  const platformAccessMap = Object.fromEntries(
+    PLATFORM_TOOL_ENTRIES.map((entry) => [
+      entry.id,
+      platformTools.some((visibleEntry) => visibleEntry.id === entry.id)
+        ? entry.state ?? 'enabled'
+        : 'hidden',
+    ]),
+  );
   const accessState = resolveAccessState({
     isAuthLoading,
     hasSession: Boolean(user),
@@ -72,68 +85,39 @@ export default function LaunchpadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-shell-canvas transition-colors duration-300 flex flex-col font-sans selection:bg-primary/30 relative overflow-hidden">
-      {/* 1. Technical Atmosphere (Standardized) */}
-      <BlueprintBackground
-        variant="monochrome"
-        intensity="high"
-        className="fixed inset-0 pointer-events-none"
-      />
-
-      {/* 2. Asymmetric Header */}
-      <TechnicalSurface
-        variant="canvas"
-        depth="flat"
-        className="relative z-10 p-4 sm:p-8 border-b border-border-technical backdrop-blur-md"
-      >
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="flex items-center gap-6">
-            <BrandLogo variant="full" size="md" />
-            <SystemStatus state="operational" id={user?.id} label="ID" />
-            <div className="h-8 w-px bg-border-technical hidden md:block"></div>
-            <div>
-              <LpdText size="sm" weight="bold" className="text-slate-900 dark:text-white">
-                Welcome,{' '}
-                <span className="text-primary font-black">{user?.email?.split('@')[0]}</span>
-              </LpdText>
-            </div>
-          </div>
-
-          {/* System Status & Theme Toggle */}
-          <div className="flex items-center gap-4">
-            <ContextSwitcher />
-            <ThemeToggle variant="technical" size="md" />
-            <UserMenu
-              userName={user?.email?.split('@')[0] ?? 'User'}
-              userEmail={user?.email}
-              userRole={isPlatformAdministrator ? 'Platform Owner' : 'Member'}
-              onLogout={signOut}
-            />
-          </div>
-        </div>
-      </TechnicalSurface>
-
-      {/* 3. Main Launchpad Grid */}
-      <main
-        id="main-content"
-        className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 lg:p-24"
-      >
-        <div className="w-full max-w-6xl">
+    <LaunchpadShell
+      userEmail={user?.email}
+      userId={user?.id}
+      isPlatformAdministrator={isPlatformAdministrator}
+      signOut={signOut}
+      platformToolsAvailable={platformTools.length > 0}
+      platformAccessMap={platformAccessMap}
+      navMode={platformNavMode}
+      onNavModeChange={setPlatformNavMode}
+      onNavigate={(route) => router.push(route.routeId)}
+    >
+      <div className="relative h-full min-h-0 overflow-y-auto">
+        <BlueprintBackground
+          variant="monochrome"
+          intensity="high"
+          className="pointer-events-none fixed inset-0"
+        />
+        <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col items-center justify-center p-8 lg:p-12">
           <div className="mb-16">
             <LpdText
               size="nano"
               weight="black"
-              className="text-primary tracking-[0.5em] uppercase mb-4"
+              className="text-primary mb-4 uppercase tracking-[0.5em]"
             >
               Core_Suites_Available
             </LpdText>
-            <Heading size="3xl" weight="bold" className="text-text-main tracking-tight max-w-2xl">
+            <Heading size="3xl" weight="bold" className="text-text-main max-w-2xl tracking-tight">
               Initialize your <span className="text-primary font-black">Work Context</span> to start
               building.
             </Heading>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {shouldShowSuite('marketing') && (
               <SuiteCard
                 title="Marketing Studio"
@@ -186,37 +170,7 @@ export default function LaunchpadPage() {
             )}
           </div>
         </div>
-      </main>
-
-      {/* Footer Branding */}
-      <footer className="relative z-10 p-8 border-t border-border-technical flex flex-wrap gap-4 justify-between items-center">
-        <TechnicalText size="nano" className="text-text-muted uppercase tracking-widest">
-          © 2026 LoopDev Systems Architecture
-        </TechnicalText>
-        <nav aria-label="Launchpad resources" className="flex gap-4">
-          <TechnicalText
-            size="nano"
-            as="span"
-            className="text-text-muted hover:text-primary cursor-pointer transition-colors uppercase tracking-widest"
-          >
-            Documentation
-          </TechnicalText>
-          <TechnicalText
-            size="nano"
-            as="span"
-            className="text-text-muted uppercase tracking-widest"
-          >
-            /
-          </TechnicalText>
-          <TechnicalText
-            size="nano"
-            as="span"
-            className="text-text-muted hover:text-primary cursor-pointer transition-colors uppercase tracking-widest"
-          >
-            API Status
-          </TechnicalText>
-        </nav>
-      </footer>
-    </div>
+      </div>
+    </LaunchpadShell>
   );
 }

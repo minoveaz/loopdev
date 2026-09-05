@@ -10,6 +10,22 @@ export type LayoutContext = 'normal' | 'focus' | 'inmersive';
 export type ModuleAccessState =
   'enabled' | 'disabled' | 'hidden' | 'coming-soon' | 'forbidden' | 'read-only';
 
+/**
+ * Platform-owned transversal tools are not suite modules. They may launch a
+ * cross-suite capability while retaining the same access-state vocabulary.
+ */
+export interface PlatformToolEntry {
+  id: string;
+  label: string;
+  /** Name of the registered Lucide icon. */
+  icon: string;
+  route: NavRouteRef;
+  priority: number;
+  tooltip?: string;
+  requiredPermission?: string;
+  state?: ModuleAccessState;
+}
+
 export type NavItemKind = 'module' | 'link' | 'action';
 
 export type NavBadgeKind = 'count' | 'dot' | 'text';

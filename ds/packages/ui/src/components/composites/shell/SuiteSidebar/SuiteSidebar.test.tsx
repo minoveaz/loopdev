@@ -122,6 +122,23 @@ describe('SuiteSidebar', () => {
       expect(screen.queryByText('Brand Hub')).not.toBeInTheDocument();
     });
 
+    it('oculta Suite Dashboard solo cuando se desactiva explícitamente', () => {
+      render(
+        <SuiteSidebar
+          schema={MARKETING_STUDIO_SCHEMA}
+          navMode="expanded"
+          showSuiteHome={false}
+          accessMap={{}}
+          onNavModeChange={vi.fn()}
+          onNavigate={vi.fn()}
+        />,
+      );
+
+      expect(screen.queryByRole('menuitem', { name: 'Suite Dashboard' })).not.toBeInTheDocument();
+      expect(screen.getByText('Brand Hub')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Sidebar control' })).toBeInTheDocument();
+    });
+
     it('mantiene el módulo activo con su indicador de página', () => {
       render(
         <SuiteSidebar
@@ -240,6 +257,28 @@ describe('SuiteSidebar', () => {
     const control = screen.getByRole('button', { name: 'Sidebar control' });
     expect(control).toHaveAttribute('aria-haspopup', 'menu');
     expect(onNavModeChange).not.toHaveBeenCalled();
+  });
+
+  it('keeps the behavior control after the flexible navigation region', () => {
+    const { container } = render(
+      <SuiteSidebar
+        schema={MARKETING_STUDIO_SCHEMA}
+        navMode="rail"
+        accessMap={{}}
+        onNavigate={vi.fn()}
+      />,
+    );
+
+    const sidebar = Array.from(container.querySelectorAll('.flex.h-full.flex-col'))
+      .filter((element) => element.querySelector('footer'))
+      .at(-1);
+    const flexibleNavigation = container.querySelector('.min-h-0.flex-1');
+    const footer = container.querySelector('footer');
+    expect(sidebar).toHaveClass('flex', 'flex-col');
+    expect(sidebar).toContainElement(flexibleNavigation);
+    expect(flexibleNavigation).toHaveClass('overflow-y-auto');
+    expect(footer?.parentElement).toBe(sidebar);
+    expect(footer).toHaveClass('mt-auto', 'shrink-0');
   });
 
   it('has no accessibility violations in expanded mode', async () => {
