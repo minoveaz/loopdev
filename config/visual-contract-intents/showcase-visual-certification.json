@@ -1,0 +1,16 @@
+{
+  "kind": "visual-contract-change",
+  "surfaces": [
+    "apps/loopdev-os/src/app/composition-showcase",
+    "apps/loopdev-os/src/providers/QueryProvider",
+    "e2e/entity-table-golden.visual.spec.mjs",
+    "e2e/dense-operational-table.visual.spec.mjs"
+  ],
+  "userIntent": "Certify Linux EntityTable and DenseOperationalTable baselines using an isolated showcase harness without development overlays.",
+  "evidence": {
+    "functional": "EntityTable and DenseOperationalTable tests pass for desktop, mobile, and compact mobile projects.",
+    "accessibility": "DenseOperationalTable Axe checks pass in its operational region.",
+    "visual": "Four Linux baselines were reviewed and contain no Next.js Dev Tools, TanStack Query Devtools, UserMenu, avatar, error overlay, or loading state."
+  },
+  "approvedBy": "design-system"
+}
