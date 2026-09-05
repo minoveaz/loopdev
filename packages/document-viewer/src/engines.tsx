@@ -86,9 +86,18 @@ function PdfCanvasEngine({
 }) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const size = useElementSize(viewportRef);
   const [renderError, setRenderError] = useState(false);
   const [iframeError, setIframeError] = useState(false);
+
+  useEffect(() => {
+    if (!renderError || iframeError || !iframeRef.current) return;
+    const iframe = iframeRef.current;
+    const handleIframeError = () => setIframeError(true);
+    iframe.addEventListener('error', handleIframeError);
+    return () => iframe.removeEventListener('error', handleIframeError);
+  }, [iframeError, renderError]);
 
   useEffect(() => {
     if (!size.width || !size.height || !canvasRef.current) return;
@@ -170,6 +179,7 @@ function PdfCanvasEngine({
           </div>
         ) : (
           <iframe
+            ref={iframeRef}
             src={`${url}#toolbar=0&navpanes=0&scrollbar=0`}
             title={labels.pdfFallbackTitle}
             onError={() => setIframeError(true)}
