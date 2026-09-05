@@ -1,6 +1,6 @@
 begin;
 
-select plan(56);
+select plan(72);
 
 -- Fixtures are created by the postgres test session and rolled back at the end.
 -- This keeps the suite independent from the users present in Supabase Dev.
@@ -12,7 +12,9 @@ values
   ('00000000-0000-4000-8000-000000000003', 'authenticated', 'authenticated', 'platform-core-admin@example.test', '', now()),
   ('00000000-0000-4000-8000-000000000004', 'authenticated', 'authenticated', 'platform-core-agent@example.test', '', now()),
   ('00000000-0000-4000-8000-000000000005', 'authenticated', 'authenticated', 'platform-core-external@example.test', '', now()),
-  ('00000000-0000-4000-8000-000000000006', 'authenticated', 'authenticated', 'platform-core-platform-owner@example.test', '', now());
+  ('00000000-0000-4000-8000-000000000006', 'authenticated', 'authenticated', 'platform-core-platform-owner@example.test', '', now()),
+  ('00000000-0000-4000-8000-000000000007', 'authenticated', 'authenticated', 'platform-core-viewer@example.test', '', now()),
+  ('00000000-0000-4000-8000-000000000008', 'authenticated', 'authenticated', 'platform-core-viewer-two@example.test', '', now());
 
 insert into public.platform_administrators (user_id, role)
 values ('00000000-0000-4000-8000-000000000006', 'owner');
@@ -27,7 +29,9 @@ values
   ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000001', 'owner'),
   ('00000000-0000-4000-9000-000000000002', '00000000-0000-4000-8000-000000000002', 'viewer'),
   ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000003', 'admin'),
-  ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000004', 'agent');
+  ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000004', 'agent'),
+  ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000007', 'viewer'),
+  ('00000000-0000-4000-9000-000000000001', '00000000-0000-4000-8000-000000000008', 'viewer');
 
 insert into public.brands (id, organization_id, name)
 values
@@ -185,6 +189,10 @@ select ok(
   'owner receives the CRM management permission'
 );
 select ok(
+  public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'organization.manage'),
+  'owner receives the organization management permission'
+);
+select ok(
   exists (select 1 from public.permissions where key = 'communications.send'),
   'the permission catalog contains communication capabilities'
 );
@@ -208,11 +216,122 @@ select ok(
   public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'members.manage'),
   'admin receives membership management access'
 );
+select ok(
+  public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'organization.manage'),
+  'admin receives the organization management permission'
+);
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000004', true);
 select ok(
   not public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'members.manage'),
   'agent is denied membership management access'
+);
+select ok(
+  not public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'organization.manage'),
+  'agent is denied the organization management permission'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000008', true);
+select ok(
+  not public.has_organization_permission('00000000-0000-4000-9000-000000000001', 'organization.manage'),
+  'viewer is denied the organization management permission'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set role = 'viewer'
+      where organization_id = '00000000-0000-4000-9000-000000000001'
+        and user_id = '00000000-0000-4000-8000-000000000004' $$,
+  'an owner can update role for a membership in their organization'
+);
+select is(
+  (select role from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9000-000000000001'
+      and user_id = '00000000-0000-4000-8000-000000000004'),
+  'viewer',
+  'the owner membership role update is applied'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000003', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set status = 'suspended'
+      where organization_id = '00000000-0000-4000-9000-000000000001'
+        and user_id = '00000000-0000-4000-8000-000000000007' $$,
+  'an admin can update status for a membership in their organization'
+);
+select is(
+  (select status from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9000-000000000001'
+      and user_id = '00000000-0000-4000-8000-000000000007'),
+  'suspended',
+  'the admin membership status update is applied'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000004', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set status = 'revoked'
+      where organization_id = '00000000-0000-4000-9000-000000000001'
+        and user_id = '00000000-0000-4000-8000-000000000003' $$,
+  'an agent cannot update membership status'
+);
+select is(
+  (select status from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9000-000000000001'
+      and user_id = '00000000-0000-4000-8000-000000000003'),
+  'active',
+  'an agent membership update is filtered by RLS'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000008', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set role = 'owner'
+      where organization_id = '00000000-0000-4000-9000-000000000001'
+        and user_id = '00000000-0000-4000-8000-000000000003' $$,
+  'a viewer cannot update membership role'
+);
+select is(
+  (select role from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9000-000000000001'
+      and user_id = '00000000-0000-4000-8000-000000000003'),
+  'admin',
+  'a viewer membership update is filtered by RLS'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
+select lives_ok(
+  $$ update public.organization_memberships
+        set status = 'suspended'
+      where organization_id = '00000000-0000-4000-9000-000000000002'
+        and user_id = '00000000-0000-4000-8000-000000000002' $$,
+  'an owner cannot update a membership in another organization'
+);
+select is(
+  (select count(*)::integer from public.organization_memberships
+    where organization_id = '00000000-0000-4000-9000-000000000002'
+      and user_id = '00000000-0000-4000-8000-000000000002'),
+  0,
+  'cross-organization membership remains hidden by RLS'
+);
+
+select throws_ok(
+  $$ update public.organization_memberships
+        set organization_id = '00000000-0000-4000-9000-000000000002'
+      where organization_id = '00000000-0000-4000-9000-000000000001'
+        and user_id = '00000000-0000-4000-8000-000000000003' $$,
+  'permission denied for table organization_memberships',
+  'organization managers cannot change membership organization scope'
+);
+select throws_ok(
+  $$ update public.organization_memberships
+        set created_at = now()
+      where organization_id = '00000000-0000-4000-9000-000000000001'
+        and user_id = '00000000-0000-4000-8000-000000000003' $$,
+  'permission denied for table organization_memberships',
+  'organization managers cannot update columns outside membership lifecycle'
 );
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-000000000001', true);
