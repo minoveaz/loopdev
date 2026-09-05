@@ -61,8 +61,40 @@ describe('DocumentPreviewPane', () => {
     expect(screen.getByRole('button', { name: 'Alejar documento' })).toHaveClass('h-8', 'w-8');
     expect(screen.getByRole('button', { name: 'Ampliar documento' })).toHaveClass('h-8', 'w-8');
     expect(screen.getByRole('button', { name: 'Girar 90 grados' })).toHaveClass('h-8', 'w-8');
+    expect(screen.getByRole('button', { name: 'Recortar documento' })).toHaveClass('h-8', 'w-8');
+    expect(screen.getByRole('button', { name: 'Recortar documento' })).toHaveAttribute(
+      'title',
+      'Recortar documento',
+    );
+    expect(screen.queryByRole('button', { name: /Simular error/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Iniciar extracción/ })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Abrir en pestaña nueva' }));
     expect(screen.getByRole('button', { name: 'Abrir en pestaña nueva' })).toHaveClass('h-8', 'w-8');
     expect(open).toHaveBeenCalledWith('blob:document-preview', '_blank', 'noopener,noreferrer');
+  });
+
+  it('does not expose image crop controls for PDF documents', () => {
+    const createObjectURL = vi.fn(() => 'blob:document-pdf');
+    const revokeObjectURL = vi.fn();
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    );
+
+    render(
+      <WorkbenchPrototypeProvider>
+        <DocumentPreviewPane />
+      </WorkbenchPrototypeProvider>,
+    );
+
+    fireEvent.change(screen.getByLabelText('Seleccionar documento'), {
+      target: { files: [new File(['pdf'], 'document.pdf', { type: 'application/pdf' })] },
+    });
+
+    expect(screen.queryByRole('button', { name: 'Recortar documento' })).not.toBeInTheDocument();
   });
 });

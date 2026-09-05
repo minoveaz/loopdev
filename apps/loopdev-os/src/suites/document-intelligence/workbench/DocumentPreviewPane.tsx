@@ -438,6 +438,16 @@ export function DocumentPreviewPane() {
             onClick={() => setRotation((value) => (value + 90) % 360)}
             disabled={!currentFile}
           />
+          {!isPdf && currentFile ? (
+            <IconButton
+              icon="crop"
+              size="md"
+              variant="ghost"
+              ariaLabel="Recortar documento"
+              tooltip="Recortar documento"
+              onClick={() => setCropOpen(true)}
+            />
+          ) : null}
           <IconButton
             icon="open_in_new"
             size="md"
@@ -507,11 +517,6 @@ export function DocumentPreviewPane() {
           >
             Subir {side === 'front' ? 'anverso' : 'reverso'}
           </Button>
-          {currentFile && !isPdf ? (
-            <Button variant="ghost" size="sm" startIcon="crop" onClick={() => setCropOpen(true)}>
-              Recortar
-            </Button>
-          ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
           <Button
@@ -522,9 +527,6 @@ export function DocumentPreviewPane() {
             onClick={() => startExtraction('success')}
           >
             Iniciar extracción
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => startExtraction('error')}>
-            Simular error
           </Button>
         </div>
       </div>

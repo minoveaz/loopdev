@@ -69,7 +69,7 @@ SuiteCanvas / RecordWorkspace
     └── TechnicalSurface
         ├── intake and side toolbar
         ├── document viewport
-        └── action footer (upload, crop, extract)
+        └── action footer (upload, extract)
 ```
 
 The parent owns the grid and scrolling. The preview surface owns only its
@@ -97,7 +97,7 @@ LoopDev tokens, and no tenant-specific colors.
 | Zoom/reset | Inspect detail | Toolbar buttons | Tab then Enter/Space | Not applicable | Percentage updates in button label |
 | Pan | Move a zoomed document | Pointer/touch drag | Not applicable; controls remain reachable | Not applicable | Cursor changes while dragging |
 | Rotate | Correct orientation | Toolbar button | Tab then Enter/Space | Not applicable | Rotation is applied in 90° increments |
-| Crop image | Remove scan margins | Crop dialog and range | Range and buttons are keyboard reachable | Cancel closes without mutation | New JPEG replaces active side |
+| Crop image | Remove scan margins | Image-only toolbar icon and crop dialog | Range and buttons are keyboard reachable | Cancel closes without mutation | New JPEG replaces active side |
 | Open tab | Inspect outside workbench | Toolbar button | Tab then Enter/Space | Browser owns close | Uses the active object URL |
 
 Crop is an explicit modal-like dialog owned by the feature. It does not create
