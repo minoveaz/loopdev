@@ -79,6 +79,10 @@ export const SALES_CRM_SUITE_CONFIG: SuiteConfig = {
       },
     },
     {
+      // Canvas mode is resolved per pathname in SalesCrmShell (see
+      // shellRouting.ts): the list uses `split`, the capture workflow at
+      // `/sales-crm/leads/new` uses `full-bleed`, and both keep this same
+      // `leads` module active for sidebar highlighting.
       moduleId: 'leads',
       label: 'Leads',
       route: '/sales-crm/leads',

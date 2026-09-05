@@ -2,12 +2,14 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(41);
+select plan(47);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
   ('00000000-0000-4000-8700-000000000001', 'authenticated', 'authenticated', 'crm-security-a@example.test', '', now()),
-  ('00000000-0000-4000-8700-000000000002', 'authenticated', 'authenticated', 'crm-security-b@example.test', '', now());
+  ('00000000-0000-4000-8700-000000000002', 'authenticated', 'authenticated', 'crm-security-b@example.test', '', now()),
+  ('00000000-0000-4000-8700-000000000003', 'authenticated', 'authenticated', 'crm-security-viewer@example.test', '', now()),
+  ('00000000-0000-4000-8700-000000000004', 'authenticated', 'authenticated', 'crm-security-suspended@example.test', '', now());
 
 insert into public.organizations (id, name, slug)
 values
@@ -17,7 +19,14 @@ values
 insert into public.organization_memberships (organization_id, user_id, role)
 values
   ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000001', 'owner'),
-  ('00000000-0000-4000-9700-000000000002', '00000000-0000-4000-8700-000000000002', 'viewer');
+  ('00000000-0000-4000-9700-000000000002', '00000000-0000-4000-8700-000000000002', 'viewer'),
+  ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000003', 'viewer'),
+  ('00000000-0000-4000-9700-000000000001', '00000000-0000-4000-8700-000000000004', 'agent');
+
+update public.organization_memberships
+   set status = 'suspended'
+ where organization_id = '00000000-0000-4000-9700-000000000001'
+   and user_id = '00000000-0000-4000-8700-000000000004';
 
 insert into public.brands (id, organization_id, name)
 values
@@ -49,6 +58,10 @@ select ok(pg_temp.has_policy_for('crm_contacts', 'insert'), 'CRM contacts expose
 select ok(pg_temp.has_policy_for('crm_contacts', 'update'), 'CRM contacts expose an UPDATE policy');
 select ok(pg_temp.has_policy_for('crm_contacts', 'delete'), 'CRM contacts expose a DELETE policy');
 select ok(pg_temp.has_scoped_fk('crm_leads', 'crm_contacts'), 'CRM leads enforce contact organization ownership');
+select ok(
+  pg_temp.has_scoped_fk('crm_leads', 'organization_memberships'),
+  'CRM leads enforce assignee organization membership'
+);
 select ok(pg_temp.has_scoped_fk('crm_contact_companies', 'crm_contacts'), 'contact companies enforce contact organization ownership');
 select ok(pg_temp.has_policy_for('crm_audit_events', 'select'), 'CRM audit events expose a SELECT policy');
 select ok(pg_temp.has_policy_for('crm_audit_events', 'insert'), 'CRM audit events expose an INSERT policy');
@@ -117,6 +130,45 @@ select lives_ok(
 select lives_ok(
   $$ update public.crm_leads set status = 'cualificado' where id = '00000000-0000-4000-9b00-000000000001' $$,
   'crm_leads accepts the CRM_LEAD_CONTRACT.md approved status vocabulary'
+);
+select lives_ok(
+  $$ update public.crm_leads
+        set assigned_to_user_id = '00000000-0000-4000-8700-000000000001'
+      where id = '00000000-0000-4000-9b00-000000000001' $$,
+  'CRM Lead assignment accepts an active operational member in the same organization'
+);
+select throws_ok(
+  $$ update public.crm_leads
+        set assigned_to_user_id = '00000000-0000-4000-8700-000000000002'
+      where id = '00000000-0000-4000-9b00-000000000001' $$,
+  '23514',
+  'CRM Lead assignee must be an active operational member of the same organization',
+  'CRM Lead assignment rejects a member from another organization'
+);
+select throws_ok(
+  $$ update public.crm_leads
+        set assigned_to_user_id = '00000000-0000-4000-8700-000000000003'
+      where id = '00000000-0000-4000-9b00-000000000001' $$,
+  '23514',
+  'CRM Lead assignee must be an active operational member of the same organization',
+  'CRM Lead assignment rejects a same-organization viewer'
+);
+select throws_ok(
+  $$ update public.crm_leads
+        set assigned_to_user_id = '00000000-0000-4000-8700-000000000004'
+      where id = '00000000-0000-4000-9b00-000000000001' $$,
+  '23514',
+  'CRM Lead assignee must be an active operational member of the same organization',
+  'CRM Lead assignment rejects a suspended operational member'
+);
+select throws_ok(
+  $$ update public.organization_memberships
+        set status = 'suspended'
+      where organization_id = '00000000-0000-4000-9700-000000000001'
+        and user_id = '00000000-0000-4000-8700-000000000001' $$,
+  '23514',
+  'CRM Lead assignments must be cleared before membership suspension or role downgrade',
+  'an assigned operational membership cannot be suspended'
 );
 select lives_ok(
   $$ insert into public.crm_leads (organization_id, contact_id, workspace_id, stage, source)
