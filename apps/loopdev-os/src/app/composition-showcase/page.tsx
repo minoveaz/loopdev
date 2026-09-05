@@ -66,6 +66,8 @@ import { CRMPrimitivesCatalog } from './CRMPrimitivesCatalog';
 import { DataTablesCatalog } from './DataTablesCatalog';
 import type { ActivityRow } from '@/components/composites/data-tables/ActivityTable';
 
+const isVisualCertification = process.env.NEXT_PUBLIC_VISUAL_CERTIFICATION === 'true';
+
 const FIXTURES: Record<string, ViewComposition> = {
   SuiteOverview: SUITE_OVERVIEW_COMPOSITION,
   DataWorkspace: DATA_WORKSPACE_COMPOSITION,
@@ -2545,6 +2547,7 @@ export default function CompositionShowcasePage() {
           ),
         }}
         rightSlot={
+          isVisualCertification ? undefined : (
           <div className="flex items-center gap-2">
             <PlatformHeaderControls
               notifications={NOTIFICATION_CENTER_FIXTURES.recent}
@@ -2555,6 +2558,7 @@ export default function CompositionShowcasePage() {
               onOpenAI={() => setContextMode('assistant')}
             />
           </div>
+          )
         }
         mobileSidebarActions={
           <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
@@ -2579,6 +2583,7 @@ export default function CompositionShowcasePage() {
           </div>
         }
         profileSlot={
+          isVisualCertification ? undefined : (
           <UserMenu
             userName="Alex Morgan"
             userEmail="showcase@loopdev.local"
@@ -2593,6 +2598,7 @@ export default function CompositionShowcasePage() {
             onProfileClick={() => setContextMode('profile')}
             onLogout={() => undefined}
           />
+          )
         }
         appShellProps={{
           onToggleLeftSidebar: () =>

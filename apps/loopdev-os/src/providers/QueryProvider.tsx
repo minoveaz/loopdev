@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState, useSyncExternalStore, ReactNode } from 'react';
 
+const isVisualCertification = process.env.NEXT_PUBLIC_VISUAL_CERTIFICATION === 'true';
+
 export default function QueryProvider({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -26,7 +28,7 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {isMounted && process.env.NODE_ENV === 'development' ? (
+      {isMounted && process.env.NODE_ENV === 'development' && !isVisualCertification ? (
         <ReactQueryDevtools initialIsOpen={false} />
       ) : null}
     </QueryClientProvider>
