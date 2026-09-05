@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   calculatePdfPageFit,
+  calculatePdfAutoFitScale,
   detectPdfContentBounds,
   DocumentPreviewPane,
   PDF_FALLBACK_CLASS_NAME,
@@ -21,6 +22,15 @@ describe('DocumentPreviewPane', () => {
     expect(fit.height).toBeCloseTo(424.5, 0);
     expect(fit.height / fit.width).toBeCloseTo(792 / 612, 3);
     expect(fit.height).toBeGreaterThan(400);
+  });
+
+  it('separates the PDF visual base fit from the user zoom percentage', () => {
+    const fit = calculatePdfAutoFitScale(0.2, 240, 640, 600, 700);
+
+    expect(fit.baseFitScale).toBe(0.2);
+    expect(fit.autoFitScale).toBeGreaterThan(fit.baseFitScale);
+    expect(fit.userZoom).toBe(1);
+    expect(fit.width).toBeGreaterThan(240);
   });
 
   it('keeps the PDF fallback surface full-size when PDF.js cannot render', () => {

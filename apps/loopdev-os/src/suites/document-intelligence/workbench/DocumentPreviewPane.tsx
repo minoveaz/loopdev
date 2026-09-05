@@ -46,6 +46,30 @@ export function calculatePdfPageFit(
   };
 }
 
+export function calculatePdfAutoFitScale(
+  baseFitScale: number,
+  contentWidth: number,
+  contentHeight: number,
+  containerWidth: number,
+  containerHeight: number,
+  padding = 32,
+) {
+  const contentFit = calculatePdfPageFit(
+    contentWidth,
+    contentHeight,
+    containerWidth,
+    containerHeight,
+    padding,
+  );
+
+  return {
+    baseFitScale,
+    autoFitScale: contentFit.scale,
+    userZoom: 1,
+    ...contentFit,
+  };
+}
+
 export interface PdfContentBounds {
   left: number;
   top: number;
@@ -282,7 +306,8 @@ function PdfCanvasPreview({
 
         const cropWidth = contentBounds.right - contentBounds.left;
         const cropHeight = contentBounds.bottom - contentBounds.top;
-        const croppedFit = calculatePdfPageFit(
+        const autoFit = calculatePdfAutoFitScale(
+          pageFit.scale,
           cropWidth / devicePixelRatio,
           cropHeight / devicePixelRatio,
           viewport.width,
@@ -304,10 +329,10 @@ function PdfCanvasPreview({
           cropWidth,
           cropHeight,
         );
-        canvas.width = Math.ceil(croppedFit.width * devicePixelRatio);
-        canvas.height = Math.ceil(croppedFit.height * devicePixelRatio);
-        canvas.style.width = `${croppedFit.width}px`;
-        canvas.style.height = `${croppedFit.height}px`;
+        canvas.width = Math.ceil(autoFit.width * devicePixelRatio);
+        canvas.height = Math.ceil(autoFit.height * devicePixelRatio);
+        canvas.style.width = `${autoFit.width}px`;
+        canvas.style.height = `${autoFit.height}px`;
         context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(
@@ -318,8 +343,8 @@ function PdfCanvasPreview({
           cropHeight,
           0,
           0,
-          croppedFit.width,
-          croppedFit.height,
+          autoFit.width,
+          autoFit.height,
         );
       } catch {
         if (!cancelled) setRenderError(true);
@@ -390,7 +415,7 @@ export function DocumentPreviewPane() {
   } = useWorkbenchPrototype();
   const [side, setSide] = useState<DocumentSide>('front');
   const [rotation, setRotation] = useState(0);
-  const [zoomIndex, setZoomIndex] = useState(0);
+  const [userZoomIndex, setUserZoomIndex] = useState(0);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -413,7 +438,7 @@ export function DocumentPreviewPane() {
   }, [previewUrl]);
 
   const resetView = () => {
-    setZoomIndex(0);
+    setUserZoomIndex(0);
     setRotation(0);
     setPan({ x: 0, y: 0 });
   };
@@ -421,7 +446,7 @@ export function DocumentPreviewPane() {
   useEffect(() => {
     if (side !== 'back' || documentFiles.back) return;
     setSide('front');
-    setZoomIndex(0);
+    setUserZoomIndex(0);
     setRotation(0);
     setPan({ x: 0, y: 0 });
     setCropOpen(false);
@@ -632,7 +657,7 @@ export function DocumentPreviewPane() {
             variant="ghost"
             ariaLabel="Alejar documento"
             className="h-11 w-full rounded-none sm:h-8 sm:w-8"
-            onClick={() => setZoomIndex((value) => Math.max(value - 1, 0))}
+            onClick={() => setUserZoomIndex((value) => Math.max(value - 1, 0))}
             disabled={!currentFile}
           />
           <Button
@@ -642,7 +667,7 @@ export function DocumentPreviewPane() {
             onClick={resetView}
             disabled={!currentFile}
           >
-            {Math.round(ZOOM_STEPS[zoomIndex] * 100)}%
+            {Math.round(ZOOM_STEPS[userZoomIndex] * 100)}%
           </Button>
           <IconButton
             icon="zoom_in"
@@ -650,7 +675,7 @@ export function DocumentPreviewPane() {
             variant="ghost"
             ariaLabel="Ampliar documento"
             className="h-11 w-full rounded-none sm:h-8 sm:w-8"
-            onClick={() => setZoomIndex((value) => Math.min(value + 1, ZOOM_STEPS.length - 1))}
+            onClick={() => setUserZoomIndex((value) => Math.min(value + 1, ZOOM_STEPS.length - 1))}
             disabled={!currentFile}
           />
           <IconButton
@@ -697,7 +722,7 @@ export function DocumentPreviewPane() {
           <div
             className="flex w-full min-w-0 origin-center items-center justify-center"
             style={{
-              transform: `translate3d(${pan.x}px, ${pan.y}px, 0) rotate(${rotation}deg) scale(${ZOOM_STEPS[zoomIndex]})`,
+              transform: `translate3d(${pan.x}px, ${pan.y}px, 0) rotate(${rotation}deg) scale(${ZOOM_STEPS[userZoomIndex]})`,
             }}
           >
             {isPdf ? (
