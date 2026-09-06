@@ -68,17 +68,17 @@ No se ejecutan `DROP`, `TRUNCATE` ni operaciones destructivas como parte de F5.
 
 ## Evidencia y bloqueos
 
-| Bloque | Evidencia versionable | Evidencia externa requerida | Estado |
-| --- | --- | --- | --- |
-| #76 required gate | workflow, script y tests del gate | branch protection con check required | bloqueado externo |
-| #77 checks loopdev-os | comandos y artefactos de CI | ejecución CI verde sobre el PR | pendiente |
-| #78 Auth/RLS E2E | catálogo y comandos reproducibles | dos organizaciones en Supabase staging, sin bypass | bloqueado externo |
-| #79 staging | migraciones y secuencia de reset | Render Blueprint/promoción protegida y proyecto staging | bloqueado externo |
-| #80 health/logs/Sentry | contrato de campos y runbook | DSN, alertas y owner configurados | bloqueado externo |
-| #81 backup/restore | procedimiento y criterios de checksum | PITR/restore drill real y rollback de deploy | bloqueado externo |
-| #90 fixtures/simulaciones | inventario y prohibición del gate | eliminación validada en rutas críticas | pendiente |
-| #91 accesibilidad | comandos Axe/Playwright existentes | ejecución sobre staging autenticado | pendiente |
-| #92 UAT | checklist P0/P1 y criterios | defectos y aprobación de usuario | fuera de F5 |
+| Bloque                    | Evidencia versionable                 | Evidencia externa requerida                             | Estado            |
+| ------------------------- | ------------------------------------- | ------------------------------------------------------- | ----------------- |
+| #76 required gate         | workflow, script y tests del gate     | branch protection con check required                    | bloqueado externo |
+| #77 checks loopdev-os     | comandos y artefactos de CI           | ejecución CI verde sobre el PR                          | pendiente         |
+| #78 Auth/RLS E2E          | catálogo y comandos reproducibles     | dos organizaciones en Supabase staging, sin bypass      | bloqueado externo |
+| #79 staging               | migraciones y secuencia de reset      | Render Blueprint/promoción protegida y proyecto staging | bloqueado externo |
+| #80 health/logs/Sentry    | contrato de campos y runbook          | DSN, alertas y owner configurados                       | bloqueado externo |
+| #81 backup/restore        | procedimiento y criterios de checksum | PITR/restore drill real y rollback de deploy            | bloqueado externo |
+| #90 fixtures/simulaciones | inventario y prohibición del gate     | eliminación validada en rutas críticas                  | pendiente         |
+| #91 accesibilidad         | comandos Axe/Playwright existentes    | ejecución sobre staging autenticado                     | pendiente         |
+| #92 UAT                   | checklist P0/P1 y criterios           | defectos y aprobación de usuario                        | fuera de F5       |
 
 Un bloque solo puede pasar a `certificado` cuando su evidencia externa esté adjunta al
 PR o a la Issue correspondiente. F5 no cierra Issues ni cambia el estado del track sin
