@@ -18,6 +18,7 @@ import type { NavMode, NavRouteRef } from '@loopdev/contracts';
 import { CircleHelp } from 'lucide-react';
 
 import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
+import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import {
   PlatformHeaderActionButton,
@@ -80,6 +81,7 @@ export function SalesCrmShell({ children }: { children: ReactNode }) {
 function SalesCrmRuntime({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, isPlatformAdministrator, signOut } = useAuth();
   const { selectedLead, clearSelectedLead } = useLeadsRuntime();
   const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<Exclude<NavMode, 'hidden'>>('expanded');
@@ -87,6 +89,7 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
     organizations,
     activeOrganization,
     activeOrganizationId,
+    activeMembership,
     setActiveOrganizationId,
     isLoading: isLoadingOrganizations,
   } = useOrganization();
@@ -180,16 +183,21 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
             }}
             profileSlot={
               <UserMenu
-                userName="CRM User"
-                userEmail="crm@loopdev.local"
-                userRole="CRM Member"
+                userName={user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
+                userEmail={user?.email}
+                userRole={
+                  activeMembership?.role || (isPlatformAdministrator ? 'Platform Owner' : 'Member')
+                }
                 tenantName={activeOrganization?.name}
                 onOpenChange={(open) => {
                   if (open) setContextMode(null);
                 }}
                 onAvatarClick={() => setContextMode('profile')}
                 onProfileClick={() => setContextMode('profile')}
-                onLogout={() => undefined}
+                onLogout={async () => {
+                  await signOut();
+                  router.push('/login');
+                }}
               />
             }
             mobileSidebarActions={

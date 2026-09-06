@@ -2610,6 +2610,12 @@ export default function CompositionShowcasePage() {
               notifications={NOTIFICATION_CENTER_FIXTURES.recent}
               unreadCount={NOTIFICATION_CENTER_FIXTURES.recent.filter(({ read }) => !read).length}
               onClose={() => setContextMode(null)}
+              user={{
+                name: 'Alex Morgan',
+                email: 'showcase@loopdev.local',
+                role: 'TENANT_ADMIN',
+                tenantName: 'Showcase Workspace',
+              }}
             />
           ) : undefined,
         }}

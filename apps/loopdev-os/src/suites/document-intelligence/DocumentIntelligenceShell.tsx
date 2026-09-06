@@ -20,6 +20,7 @@ import type { ModuleConfig } from '@loopdev/contracts';
 import { CircleHelp } from 'lucide-react';
 
 import { ContextPanelHost } from '@/components/layout/ContextPanelHost';
+import { useAuth } from '@/hooks/useAuth';
 import { useOrganization } from '@/hooks/useOrganization';
 import {
   PlatformHeaderActionButton,
@@ -81,6 +82,7 @@ function WorkbenchModuleHeader({ module }: { module: ModuleConfig }) {
 export function DocumentIntelligenceShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, isPlatformAdministrator, signOut } = useAuth();
   const [contextMode, setContextMode] = useState<PlatformContextPanelMode | null>(null);
   const [navMode, setNavMode] = useState<Exclude<NavMode, 'hidden'>>('expanded');
   const { flowState, isContextPanelOpen, closeContextPanel } = useWorkbenchPrototype();
@@ -88,6 +90,7 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
     organizations,
     activeOrganization,
     activeOrganizationId,
+    activeMembership,
     setActiveOrganizationId,
     isLoading: isLoadingOrganizations,
   } = useOrganization();
@@ -149,16 +152,21 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
       }}
       profileSlot={
         <UserMenu
-          userName="Document Intelligence User"
-          userEmail="di@loopdev.local"
-          userRole="Organization Member"
+          userName={user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
+          userEmail={user?.email}
+          userRole={
+            activeMembership?.role || (isPlatformAdministrator ? 'Platform Owner' : 'Member')
+          }
           tenantName={activeOrganization?.name}
           onOpenChange={(open) => {
             if (open) setContextMode(null);
           }}
           onAvatarClick={() => setContextMode('profile')}
           onProfileClick={() => setContextMode('profile')}
-          onLogout={() => undefined}
+          onLogout={async () => {
+            await signOut();
+            router.push('/login');
+          }}
         />
       }
       mobileSidebarActions={

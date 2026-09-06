@@ -32,20 +32,24 @@ export type OrganizationContextType = {
 export const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
 
 export function OrganizationProvider({ children }: { children: ReactNode }) {
-  const { user, memberships, isPlatformAdministrator } = useAuth();
+  const { user, memberships, isPlatformAdministrator, isLoading: isAuthLoading } = useAuth();
   const [organizations, setOrganizations] = useState<Contracts.Organization[]>(
     isE2EAuthBypassEnabled ? [e2eOrganization] : [],
   );
   const [activeOrganizationId, setActiveOrganizationIdState] = useState<string | null>(
     isE2EAuthBypassEnabled ? e2eOrganization.id : null,
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(!isE2EAuthBypassEnabled);
 
   useEffect(() => {
     let isMounted = true;
 
     const loadOrganizations = async () => {
       if (isE2EAuthBypassEnabled) return;
+      if (isAuthLoading) {
+        setIsLoading(true);
+        return;
+      }
       if (!user) {
         setOrganizations([]);
         setActiveOrganizationIdState(null);
@@ -104,7 +108,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
     return () => {
       isMounted = false;
     };
-  }, [isPlatformAdministrator, memberships, user]);
+  }, [isPlatformAdministrator, memberships, user, isAuthLoading]);
 
   useEffect(() => {
     if (activeOrganizationId) {

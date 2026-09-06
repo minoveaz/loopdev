@@ -23,7 +23,6 @@
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
-
 ## En curso
 
 ### AI Platform
@@ -57,11 +56,11 @@
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
 - [Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Universal Multi-Client Surface System](./active/platform/2026-08-28-public-shell-foundation.md) · `feature/public-shell-foundation` · fase 1
+- [Estandarización del Drawer de Usuario y Contexto de Plataforma](./active/platform/2026-09-06-platform-user-drawer-context.md) · `feature/platform-shell-user-context-standardization` · fase 1
 
 ### Governance
 
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
-
 ## Cerrados
 
 ### 2026
