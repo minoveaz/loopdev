@@ -128,7 +128,7 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
             }}
             moduleContextPanelOnClose={clearSelectedLead}
             moduleContextSidebarMobileVisibility={mobileSurface === 'list' ? 'visible' : 'hidden'}
-            moduleContextPanelMobileVisibility={mobileSurface === 'context' ? 'visible' : 'hidden'}
+            moduleContextPanelVisibility={{ communications: mobileSurface === 'context' }}
             leftSlot={<BrandLogo variant="isotype" size="sm" className="shrink-0" />}
             centerSlot={
               <CommandBarTrigger

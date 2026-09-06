@@ -35,7 +35,6 @@ export interface SuiteRuntimeProps {
   moduleContextSidebarCollapsed?: boolean;
   moduleContextSidebarShowCollapsedTrigger?: boolean;
   moduleContextSidebarMobileVisibility?: 'visible' | 'hidden';
-  moduleContextPanelMobileVisibility?: 'visible' | 'hidden';
   moduleContextSidebarOnCollapsedChange?: (collapsed: boolean) => void;
   children?: ReactNode;
   leftSlot: ReactNode;
@@ -45,8 +44,7 @@ export interface SuiteRuntimeProps {
   mobileSidebarActions?: ReactNode;
   platformHeaderProps?: SuiteShellProps['platformHeaderProps'];
   onNavigate: (route: NavRouteRef) => void;
-  contextualSidebarAction?:
-    SuiteSidebarContextualAction | ReactNode | ((isRail: boolean) => ReactNode);
+  contextualSidebarAction?: SuiteSidebarContextualAction | ReactNode | ((isRail: boolean) => ReactNode);
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   appShellProps?: SuiteShellProps['appShellProps'];
   scrollResetKey?: string;
