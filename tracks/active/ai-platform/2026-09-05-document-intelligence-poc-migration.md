@@ -394,6 +394,15 @@ gates remotos indicados abajo; no se añade alcance adicional en esta actualizac
       lo que no se creó una migración correctiva que pudiera reintroducir policies menos restrictivas.
       `20260829000000` y las migraciones `20260830`/`20260831` quedaron reconciliadas; el
       historial remoto las muestra aplicadas. `db push` avanzó hasta `20260901000000` y se
+
+      **Validación remota de Fase 5 (2026-09-06):** se desplegó `extract-identity-document` como versión
+      14 con `GEMINI_API_KEY` y `DOCUMENT_INTELLIGENCE_ALLOWED_ORIGINS` configurados en Supabase. Dos
+      usuarios de prueba pertenecientes a organizaciones distintas validaron Storage/RLS: sus propias
+      subidas y borrados respondieron `200`, mientras que las operaciones cruzadas respondieron `400`.
+      Una extracción autenticada contra Gemini respondió `200` con provider `gemini` y clasificación
+      `unknown` para un fixture PNG no documental; la referencia temporal dejó de ser descargable
+      después del procesamiento (`400`), confirmando cleanup automático. No se registran documentos ni
+      respuestas PII en la evidencia. `db push` avanzó hasta `20260901000000` y se
       detuvo porque `crm_contacts_id_organization_key` ya existe (`SQLSTATE 42P07`). La
       migración `20260901000000` y las posteriores, incluida `20260905100000`, siguen pendientes.
 
