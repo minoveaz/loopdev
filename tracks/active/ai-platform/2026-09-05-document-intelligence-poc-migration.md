@@ -708,9 +708,10 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 - **Commit de partida:** `63b00b42` (`develop` tras squash de #181).
 - **Estado alcanzado:** Fases 0-4 integradas en `develop`; Fase 5 reanudada para endurecer la
   frontera server-side. Bucket privado, RLS, Edge Function, route handler multipart y cleanup ya
-  existen; este slice añade timeout explícito del provider y parseo tipado de respuestas inválidas.
-- **Decisiones, bloqueos y riesgos:** no se usan credenciales reales en local; faltan pruebas
-  negativas RLS, E2E autenticado con provider real y confirmación por entorno de `GEMINI_API_KEY`.
+  existen; la Edge Function quedó desplegada como versión 14 con timeout explícito del provider,
+  parseo tipado de respuestas inválidas y el secreto de allowed origins configurado para local.
+- **Decisiones, bloqueos y riesgos:** `GEMINI_API_KEY` permanece solo en Supabase; faltan pruebas
+  negativas RLS y E2E autenticado con usuarios de dos organizaciones y provider real.
 - **Validación ejecutada:** tests shell/workbench, validación estática, `validate:branch`,
   `deno check --no-config` de la Edge Function, `supabase db lint --local` y governance Supabase;
   el E2E autenticado local requiere credenciales de test y un servidor LoopDev levantado.
