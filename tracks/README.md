@@ -25,10 +25,6 @@
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
 ## En curso
 
-### AI Platform
-
-- [Migración del POC operativo de Document Intelligence desde VitaBlue](./active/ai-platform/2026-09-05-document-intelligence-poc-migration.md) · `chore/document-intelligence-phase5-closure` · fase 5
-
 ### CRM
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
@@ -93,3 +89,4 @@
 - [Reusable suite composition patterns](./closed/2026/platform/2026-08-18-reusable-suite-composition-patterns.md) · `feature/reusable-suite-composition-patterns` · fase 2
 - [LoopDev Frontend Quality System](./closed/2026/2026-08-08-loopdev-frontend-quality-system.md) · fase 5
 - [Domain Validation Routing and Test Efficiency](./closed/2026/2026-08-31-domain-validation-routing.md) · `test/domain-validation-routing` · fase 7
+- [Migración del POC operativo de Document Intelligence desde VitaBlue](./closed/2026/2026-09-05-document-intelligence-poc-migration.md) · `chore/document-intelligence-phase5-closure` · fase 5
