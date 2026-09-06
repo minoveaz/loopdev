@@ -9,6 +9,14 @@
 > are run against a release candidate. The synthetic inbox fixture is for local/E2E reproduction
 > only and is never evidence of a live WhatsApp/WABA integration.
 
+> **Implemented route scope (2026-09-06):** This branch adds the productive Pipeline board at
+> `/sales-crm/pipeline`, the Tasks inbox at `/sales-crm/tasks` and My Day overview at
+> `/sales-crm/tasks/today`, plus Customer 360 at `/sales-crm/contacts/:contactId`. Customer 360
+> remains a Contact detail surface and is not a navigation module. The approved Pipeline
+> list/detail/create, Task detail/create and Customer 360 split/overview compositions remain
+> follow-up surfaces until their route contracts and browser gates are complete; this branch does
+> not claim those surfaces are certified.
+
 ## Certification matrix
 
 | Slice           | API evidence                                                                                       | UI evidence                           | Persistence/security gate                    | Status            |
