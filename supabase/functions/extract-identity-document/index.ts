@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { MAX_DOCUMENT_BYTES, parseDocumentReference, SUPPORTED_MIME_TYPES } from './validation.ts';
 
 const BUCKET = 'document-intelligence-temp';
+const PROVIDER_TIMEOUT_MS = 30_000;
 const DOCUMENT_TYPES = [
   'passport',
   'spanish-dni',
@@ -279,33 +280,43 @@ Deno.serve(async (request) => {
     parts.push({
       text: 'Extract this identity document as JSON. Never infer absent values; return null for unreadable fields. Dates must use DD/MM/YYYY. If two sides are provided, correlate them as one document.',
     });
-    const providerResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [
-              {
-                text: 'You are an identity document OCR service. Extract documentType, issuingCountry, fullName, givenNames, surnames, firstSurname, secondSurname, documentNumber, birthDate, nationality, sex, issueDate, expiryDate, birthplace, supportNumber, address and mrz.',
-              },
-            ],
-          },
-          contents: [{ parts }],
-          generationConfig: {
-            temperature: 0,
-            responseMimeType: 'application/json',
-            responseSchema: extractionSchema,
-          },
-        }),
-      },
-    );
+    const providerController = new AbortController();
+    const providerTimeout = setTimeout(() => providerController.abort(), PROVIDER_TIMEOUT_MS);
+    let providerResponse: Response;
+    try {
+      providerResponse = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: providerController.signal,
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [
+                {
+                  text: 'You are an identity document OCR service. Extract documentType, issuingCountry, fullName, givenNames, surnames, firstSurname, secondSurname, documentNumber, birthDate, nationality, sex, issueDate, expiryDate, birthplace, supportNumber, address and mrz.',
+                },
+              ],
+            },
+            contents: [{ parts }],
+            generationConfig: {
+              temperature: 0,
+              responseMimeType: 'application/json',
+              responseSchema: extractionSchema,
+            },
+          }),
+        },
+      );
+    } catch {
+      return errorResponse(request, 'provider-timeout', 'The extraction provider timed out.', 502);
+    } finally {
+      clearTimeout(providerTimeout);
+    }
     if (!providerResponse.ok) {
       return errorResponse(request, 'provider-failed', 'The extraction provider failed.', 502);
     }
 
-    const providerPayload = (await providerResponse.json()) as {
+    let providerPayload: {
       candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
       usageMetadata?: {
         promptTokenCount?: number;
@@ -313,6 +324,16 @@ Deno.serve(async (request) => {
         totalTokenCount?: number;
       };
     };
+    try {
+      providerPayload = (await providerResponse.json()) as typeof providerPayload;
+    } catch {
+      return errorResponse(
+        request,
+        'provider-failed',
+        'The provider returned invalid extraction data.',
+        502,
+      );
+    }
     const text = providerPayload.candidates?.[0]?.content?.parts?.find(
       (part) => typeof part.text === 'string',
     )?.text;

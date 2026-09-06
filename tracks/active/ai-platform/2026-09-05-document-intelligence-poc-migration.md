@@ -6,10 +6,10 @@ created: 2026-09-05
 updated: 2026-09-06
 owner: ai-platform
 lead: null
-branch: feature/document-intelligence-viewer
+branch: feature/document-intelligence-backend
 branches: []
 phase: 5
-pull_requests: []
+pull_requests: [181]
 issues: [176]
 packages: [@loopdev/contracts, @loopdev/document-viewer, loopdev-os]
 release: not-required
@@ -520,9 +520,10 @@ temporal privado, autenticación de sesión, `GEMINI_API_KEY` server-side, conex
 - Riesgos: fuga de PII por logs o Storage, bypass de RLS/path, coste descontrolado de Gemini,
   limpieza incompleta, divergencia de normalización y degradación silenciosa al fallback fixture.
 
-**Estado de fase:** `in_progress`; el bucket y las políticas RLS están preparados, pero Gemini,
-la Edge Function y la conexión del intake todavía no están habilitados. La validación local de SQL
-queda pendiente de levantar Supabase/Postgres.
+**Estado de fase:** `in_progress`; el bucket, las políticas RLS, la Edge Function y la conexión
+server-side están implementados y desplegados en el proyecto remoto. La fase continúa abierta para
+completar la validación negativa multi-organización, la prueba autenticada end-to-end y la
+certificación de secretos, límites, timeout y cleanup con provider real.
 
 ## Registro de cambios de enfoque
 
@@ -702,24 +703,18 @@ queda pendiente de levantar Supabase/Postgres.
 
 ## Handoff de sesión
 
-- **Fecha:** 2026-09-05.
-- **Rama de continuación:** `feature/document-intelligence-viewer`.
-- **Commit de partida:** `edae4f76`.
-- **Estado alcanzado:** shared `@loopdev/document-viewer` implemented and Document Intelligence
-  migrated; package contracts, fixtures, tests, browser coverage, registry and source-contract
-  records updated.
-- **Decisiones, bloqueos y riesgos:** explicit fit modes only (`contain`, `width`, `actual`);
-  no auto-crop or hidden/fixed multipliers; PDF cMaps use the existing versioned CDN URL while the
-  legacy worker is bundled through Next. Provider/backend, permanent history and native renderer
-  remain out of scope. Visual review is the remaining certification gap.
-- **Validación ejecutada:** focused y full Vitest/Axe, consumer tests, shared package y Next webpack
-  build, full y changed shell, static controls, registry/catalog, track, ownership/design,
-  source-contracts, `validate:plan`, lint y Playwright desktop/mobile/mobile-compact (9/9).
-  `validate:experience`
-  y `validate:changed` quedan bloqueados únicamente por el preflight de base histórica
-  (`origin/develop` no es ancestro de HEAD).
-- **Siguiente acción concreta:** inspect the complete diff, stage only intended files, then commit
-  with the requested Conventional Commit trailer.
+- **Fecha:** 2026-09-06.
+- **Rama de continuación:** `feature/document-intelligence-backend`.
+- **Commit de partida:** `63b00b42` (`develop` tras squash de #181).
+- **Estado alcanzado:** Fases 0-4 integradas en `develop`; Fase 5 reanudada para endurecer la
+  frontera server-side. Bucket privado, RLS, Edge Function, route handler multipart y cleanup ya
+  existen; este slice añade timeout explícito del provider y parseo tipado de respuestas inválidas.
+- **Decisiones, bloqueos y riesgos:** no se usan credenciales reales en local; faltan pruebas
+  negativas RLS, E2E autenticado con provider real y confirmación por entorno de `GEMINI_API_KEY`.
+- **Validación ejecutada:** tests shell/workbench, validación estática y `validate:branch` del
+  estado integrado; el E2E autenticado local requiere levantar el servidor y credenciales de test.
+- **Siguiente acción concreta:** añadir cobertura ejecutable para timeout/provider-invalid y preparar
+  la matriz de pruebas RLS/E2E sin exponer PII ni secretos.
 
 ## Cierre
 
