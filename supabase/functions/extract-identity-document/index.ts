@@ -1,3 +1,5 @@
+/// <reference lib="deno.ns" />
+
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { MAX_DOCUMENT_BYTES, parseDocumentReference, SUPPORTED_MIME_TYPES } from './validation.ts';
 
@@ -67,12 +69,13 @@ function corsHeaders(request: Request): HeadersInit {
     ? configuredOrigins.includes(origin) ||
       /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
     : false;
-  return {
-    ...(isAllowed ? { 'Access-Control-Allow-Origin': origin } : {}),
+  const headers: Record<string, string> = {
     'Access-Control-Allow-Headers': 'authorization, apikey, x-client-info, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     Vary: 'Origin',
   };
+  if (isAllowed && origin) headers['Access-Control-Allow-Origin'] = origin;
+  return headers;
 }
 
 function jsonResponse(request: Request, body: unknown, status = 200): Response {

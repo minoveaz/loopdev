@@ -711,8 +711,9 @@ certificación de secretos, límites, timeout y cleanup con provider real.
   existen; este slice añade timeout explícito del provider y parseo tipado de respuestas inválidas.
 - **Decisiones, bloqueos y riesgos:** no se usan credenciales reales en local; faltan pruebas
   negativas RLS, E2E autenticado con provider real y confirmación por entorno de `GEMINI_API_KEY`.
-- **Validación ejecutada:** tests shell/workbench, validación estática y `validate:branch` del
-  estado integrado; el E2E autenticado local requiere levantar el servidor y credenciales de test.
+- **Validación ejecutada:** tests shell/workbench, validación estática, `validate:branch`,
+  `deno check --no-config` de la Edge Function, `supabase db lint --local` y governance Supabase;
+  el E2E autenticado local requiere credenciales de test y un servidor LoopDev levantado.
 - **Siguiente acción concreta:** añadir cobertura ejecutable para timeout/provider-invalid y preparar
   la matriz de pruebas RLS/E2E sin exponer PII ni secretos.
 
