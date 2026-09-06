@@ -91,9 +91,14 @@ function CropDialog({ file, previewUrl, onCancel, onApply }: CropDialogProps) {
       <div className="mx-auto flex h-full max-w-3xl items-center justify-center">
         <div className="border-border-subtle bg-surface-elevated flex max-h-full w-full flex-col overflow-hidden rounded-xl border shadow-lg">
           <div className="border-border-subtle border-b px-5 py-4">
-            <h2 id="crop-document-title" className="text-lpd-sm text-text-main font-semibold">
+            <LpdText
+              as="h2"
+              id="crop-document-title"
+              size="sm"
+              className="text-text-main font-semibold"
+            >
               Recortar imagen
-            </h2>
+            </LpdText>
             <LpdText size="xs" className="text-text-muted">
               Ajusta el área central antes de continuar con la extracción.
             </LpdText>

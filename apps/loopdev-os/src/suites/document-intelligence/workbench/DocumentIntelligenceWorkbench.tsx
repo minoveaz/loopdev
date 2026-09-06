@@ -151,10 +151,10 @@ export function DocumentIntelligenceWorkbench() {
               >
                 {WORKBENCH_TABS.map((tab) => (
                   <Button
+                    variant={activeTab === tab.id ? 'primary' : 'ghost'}
                     key={tab.id}
                     role="tab"
                     aria-selected={activeTab === tab.id}
-                    variant={activeTab === tab.id ? 'primary' : 'ghost'}
                     size="sm"
                     onClick={() => {
                       setActiveTab(tab.id);
