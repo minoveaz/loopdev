@@ -26,7 +26,12 @@ describe('resolveSalesCrmActiveModuleId', () => {
 
   it('keeps Pipeline active for opportunity workspace and create routes', () => {
     expect(resolveSalesCrmActiveModuleId(modules, '/sales-crm/opportunities/new')).toBe('pipeline');
-    expect(resolveSalesCrmActiveModuleId(modules, '/sales-crm/opportunities/00000000-0000-4000-9000-000000000002')).toBe('pipeline');
+    expect(
+      resolveSalesCrmActiveModuleId(
+        modules,
+        '/sales-crm/opportunities/00000000-0000-4000-9000-000000000002',
+      ),
+    ).toBe('pipeline');
   });
 });
 
@@ -57,9 +62,13 @@ describe('resolveSalesCrmCanvasMode', () => {
 
   it('resolves the remaining approved CRM canvas recipes', () => {
     expect(resolveSalesCrmCanvasMode('/sales-crm/pipeline/list')).toBe('data');
-    expect(resolveSalesCrmCanvasMode('/sales-crm/opportunities/00000000-0000-4000-9000-000000000002')).toBe('workspace');
+    expect(
+      resolveSalesCrmCanvasMode('/sales-crm/opportunities/00000000-0000-4000-9000-000000000002'),
+    ).toBe('workspace');
     expect(resolveSalesCrmCanvasMode('/sales-crm/opportunities/new')).toBe('full-bleed');
-    expect(resolveSalesCrmCanvasMode('/sales-crm/tasks/00000000-0000-4000-9000-000000000002')).toBe('workspace');
+    expect(resolveSalesCrmCanvasMode('/sales-crm/tasks/00000000-0000-4000-9000-000000000002')).toBe(
+      'workspace',
+    );
     expect(resolveSalesCrmCanvasMode('/sales-crm/tasks/new')).toBe('full-bleed');
   });
 });

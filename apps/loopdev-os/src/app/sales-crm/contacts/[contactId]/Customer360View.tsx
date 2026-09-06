@@ -101,7 +101,11 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
                 aria-selected={canvasView === viewId}
                 onClick={() => setCanvasView(viewId)}
               >
-                {viewId === 'record' ? 'Workspace' : viewId === 'split' ? 'Context preview' : 'Overview'}
+                {viewId === 'record'
+                  ? 'Workspace'
+                  : viewId === 'split'
+                    ? 'Context preview'
+                    : 'Overview'}
               </Button>
             ))}
           </div>
@@ -132,188 +136,262 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
         ) : null}
         {view && !isLoading ? (
           <>
-          {canvasView === 'overview' ? (
-            <TechnicalSurface variant="surface" radius="md" border="technical" className="mb-4">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <Heading as="h2" size="lg" weight="semibold">Operational summary</Heading>
-                  <p className="text-text-muted mt-1 text-sm">A concise, authorized view of health and next steps.</p>
-                </div>
-                <Badge status={view.tasks.some((task) => task.status !== 'completed' && task.dueAt && new Date(task.dueAt).getTime() < Date.now()) ? 'error' : 'success'} variant="outline" showDot>
-                  {view.tasks.some((task) => task.status !== 'completed' && task.dueAt && new Date(task.dueAt).getTime() < Date.now()) ? 'Needs attention' : 'Healthy activity'}
-                </Badge>
-              </div>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                <SummaryMetric label="Leads" value={String(view.leads.length)} />
-                <SummaryMetric label="Opportunities" value={String(view.opportunities.length)} />
-                <SummaryMetric label="Open tasks" value={String(view.tasks.filter((task) => task.status !== 'completed' && task.status !== 'cancelled').length)} />
-                <SummaryMetric label="Notes" value={String(view.notes.length)} />
-                <SummaryMetric label="Activity events" value={String(view.timeline.length)} />
-                <SummaryMetric label="Last update" value={date(view.contact.updatedAt)} />
-              </div>
-              <ContextBar label="Next step" value={view.tasks.find((task) => task.status !== 'completed')?.title ?? 'No open task'} trailing={<Link href={`/sales-crm/tasks/new?relationType=contact&relationId=${contactId}`} className="text-primary text-xs underline-offset-2 hover:underline">Create task</Link>} className="mt-4" />
-            </TechnicalSurface>
-          ) : null}
-          {canvasView === 'split' ? (
-            <TechnicalSurface variant="surface" radius="md" border="subtle" className="mb-4 p-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div><p className="text-text-muted text-xs uppercase tracking-widest">Context preview</p><p className="text-text-main mt-1 font-medium">{contactName(view)} · {view.opportunities.length} opportunities · {view.tasks.length} tasks</p></div>
-                <div className="flex flex-wrap gap-3"><Link href={`/sales-crm/contacts/${contactId}`} className="text-primary text-sm underline-offset-2 hover:underline">Open full contact</Link><Link href={`/sales-crm/tasks/new?relationType=contact&relationId=${contactId}`} className="text-primary text-sm underline-offset-2 hover:underline">Create task</Link></div>
-              </div>
-            </TechnicalSurface>
-          ) : null}
-          <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,0.8fr)]">
-            <div className="space-y-4">
-              <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
+            {canvasView === 'overview' ? (
+              <TechnicalSurface variant="surface" radius="md" border="technical" className="mb-4">
+                <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <Heading as="h2" size="lg" weight="semibold">
-                      {contactName(view)}
+                      Operational summary
                     </Heading>
                     <p className="text-text-muted mt-1 text-sm">
-                      {view.contact.companyName ?? 'No company'}
+                      A concise, authorized view of health and next steps.
                     </p>
                   </div>
-                  <Badge status="success" variant="outline" showDot={false}>
-                    Authorized profile
+                  <Badge
+                    status={
+                      view.tasks.some(
+                        (task) =>
+                          task.status !== 'completed' &&
+                          task.dueAt &&
+                          new Date(task.dueAt).getTime() < Date.now(),
+                      )
+                        ? 'error'
+                        : 'success'
+                    }
+                    variant="outline"
+                    showDot
+                  >
+                    {view.tasks.some(
+                      (task) =>
+                        task.status !== 'completed' &&
+                        task.dueAt &&
+                        new Date(task.dueAt).getTime() < Date.now(),
+                    )
+                      ? 'Needs attention'
+                      : 'Healthy activity'}
                   </Badge>
                 </div>
-                <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                  <div>
-                    <dt className="text-text-muted">Email</dt>
-                    <dd className="text-text-main mt-1">{view.contact.email ?? 'No email'}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-text-muted">Phone</dt>
-                    <dd className="text-text-main mt-1">{view.contact.phone ?? 'No phone'}</dd>
-                  </div>
-                </dl>
-              </TechnicalSurface>
-              <RelationshipSection title="Leads" count={view.leads.length}>
-                {view.leads.length ? (
-                  view.leads.map((lead) => (
-                    <div
-                      key={lead.id}
-                      className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
-                    >
-                      <span className="text-text-main text-sm">
-                        {lead.interest ?? 'Lead'} · {lead.status}
-                      </span>
-                      <Link
-                        className="text-primary text-xs underline-offset-2 hover:underline"
-                        href={`/sales-crm/leads/${lead.id}`}
-                      >
-                        Open lead
-                      </Link>
-                    </div>
-                  ))
-                ) : (
-                  <EmptyRelationship text="No related leads." />
-                )}
-              </RelationshipSection>
-              <RelationshipSection title="Opportunities" count={view.opportunities.length}>
-                {view.opportunities.length ? (
-                  view.opportunities.map((opportunity) => (
-                    <div
-                      key={opportunity.id}
-                      className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
-                    >
-                      <Link className="text-primary text-sm underline-offset-2 hover:underline" href={`/sales-crm/opportunities/${opportunity.id}`}>
-                        {opportunity.name} · {opportunity.stageKey}
-                      </Link>
-                      <Badge
-                        status={
-                          opportunity.stageKey === 'won'
-                            ? 'success'
-                            : opportunity.stageKey === 'lost'
-                              ? 'error'
-                              : 'primary'
-                        }
-                        variant="outline"
-                        showDot={false}
-                      >
-                        {opportunity.currency} {opportunity.amount ?? '—'}
-                      </Badge>
-                    </div>
-                  ))
-                ) : (
-                  <EmptyRelationship text="No related opportunities." />
-                )}
-              </RelationshipSection>
-              <RelationshipSection title="Tasks" count={view.tasks.length}>
-                {view.tasks.length ? (
-                  view.tasks.map((task) => (
-                    <div
-                      key={task.id}
-                      className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
-                    >
-                      <Link className="text-primary text-sm underline-offset-2 hover:underline" href={`/sales-crm/tasks/${task.id}`}>{task.title}</Link>
-                      <Badge
-                        status={task.status === 'completed' ? 'success' : 'neutral'}
-                        variant="outline"
-                        showDot={false}
-                      >
-                        {task.status.replace('_', ' ')}
-                      </Badge>
-                    </div>
-                  ))
-                ) : (
-                  <EmptyRelationship text="No related tasks." />
-                )}
-              </RelationshipSection>
-            </div>
-            <div className="space-y-4">
-              <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <Heading as="h2" size="lg" weight="semibold">
-                    Timeline
-                  </Heading>
-                  <span className="text-text-muted text-xs">{view.timeline.length} events</span>
-                </div>
-                {view.timeline.length ? (
-                  <ol className="mt-3 space-y-3">
-                    {view.timeline.map((item) =>
-                      item.kind === 'event' ? (
-                        <li
-                          key={item.source.sourceId}
-                          className="border-border-subtle border-l-2 pl-3"
-                        >
-                          <p className="text-text-main text-sm">{item.event.summary}</p>
-                          <p className="text-text-muted mt-1 text-xs">
-                            {date(item.event.occurredAt)}
-                          </p>
-                        </li>
-                      ) : null,
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  <SummaryMetric label="Leads" value={String(view.leads.length)} />
+                  <SummaryMetric label="Opportunities" value={String(view.opportunities.length)} />
+                  <SummaryMetric
+                    label="Open tasks"
+                    value={String(
+                      view.tasks.filter(
+                        (task) => task.status !== 'completed' && task.status !== 'cancelled',
+                      ).length,
                     )}
-                  </ol>
-                ) : (
-                  <EmptyRelationship text="No activity yet." />
-                )}
+                  />
+                  <SummaryMetric label="Notes" value={String(view.notes.length)} />
+                  <SummaryMetric label="Activity events" value={String(view.timeline.length)} />
+                  <SummaryMetric label="Last update" value={date(view.contact.updatedAt)} />
+                </div>
+                <ContextBar
+                  label="Next step"
+                  value={
+                    view.tasks.find((task) => task.status !== 'completed')?.title ?? 'No open task'
+                  }
+                  trailing={
+                    <Link
+                      href={`/sales-crm/tasks/new?relationType=contact&relationId=${contactId}`}
+                      className="text-primary text-xs underline-offset-2 hover:underline"
+                    >
+                      Create task
+                    </Link>
+                  }
+                  className="mt-4"
+                />
               </TechnicalSurface>
-              <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
-                <Heading as="h2" size="lg" weight="semibold">
-                  Authorized notes
-                </Heading>
-                {view.notes.length ? (
-                  <ul className="mt-3 space-y-3">
-                    {view.notes.map((note) => (
-                      <li
-                        key={note.id}
-                        className="border-border-subtle border-b pb-3 last:border-0"
+            ) : null}
+            {canvasView === 'split' ? (
+              <TechnicalSurface variant="surface" radius="md" border="subtle" className="mb-4 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-text-muted text-xs uppercase tracking-widest">
+                      Context preview
+                    </p>
+                    <p className="text-text-main mt-1 font-medium">
+                      {contactName(view)} · {view.opportunities.length} opportunities ·{' '}
+                      {view.tasks.length} tasks
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      href={`/sales-crm/contacts/${contactId}`}
+                      className="text-primary text-sm underline-offset-2 hover:underline"
+                    >
+                      Open full contact
+                    </Link>
+                    <Link
+                      href={`/sales-crm/tasks/new?relationType=contact&relationId=${contactId}`}
+                      className="text-primary text-sm underline-offset-2 hover:underline"
+                    >
+                      Create task
+                    </Link>
+                  </div>
+                </div>
+              </TechnicalSurface>
+            ) : null}
+            <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,0.8fr)]">
+              <div className="space-y-4">
+                <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <Heading as="h2" size="lg" weight="semibold">
+                        {contactName(view)}
+                      </Heading>
+                      <p className="text-text-muted mt-1 text-sm">
+                        {view.contact.companyName ?? 'No company'}
+                      </p>
+                    </div>
+                    <Badge status="success" variant="outline" showDot={false}>
+                      Authorized profile
+                    </Badge>
+                  </div>
+                  <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                    <div>
+                      <dt className="text-text-muted">Email</dt>
+                      <dd className="text-text-main mt-1">{view.contact.email ?? 'No email'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-text-muted">Phone</dt>
+                      <dd className="text-text-main mt-1">{view.contact.phone ?? 'No phone'}</dd>
+                    </div>
+                  </dl>
+                </TechnicalSurface>
+                <RelationshipSection title="Leads" count={view.leads.length}>
+                  {view.leads.length ? (
+                    view.leads.map((lead) => (
+                      <div
+                        key={lead.id}
+                        className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
                       >
-                        <p className="text-text-main whitespace-pre-wrap text-sm">
-                          {note.body ?? 'Note content is restricted.'}
-                        </p>
-                        <p className="text-text-muted mt-1 text-xs">{date(note.createdAt)}</p>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <EmptyRelationship text="No notes available." />
-                )}
-              </TechnicalSurface>
+                        <span className="text-text-main text-sm">
+                          {lead.interest ?? 'Lead'} · {lead.status}
+                        </span>
+                        <Link
+                          className="text-primary text-xs underline-offset-2 hover:underline"
+                          href={`/sales-crm/leads/${lead.id}`}
+                        >
+                          Open lead
+                        </Link>
+                      </div>
+                    ))
+                  ) : (
+                    <EmptyRelationship text="No related leads." />
+                  )}
+                </RelationshipSection>
+                <RelationshipSection title="Opportunities" count={view.opportunities.length}>
+                  {view.opportunities.length ? (
+                    view.opportunities.map((opportunity) => (
+                      <div
+                        key={opportunity.id}
+                        className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
+                      >
+                        <Link
+                          className="text-primary text-sm underline-offset-2 hover:underline"
+                          href={`/sales-crm/opportunities/${opportunity.id}`}
+                        >
+                          {opportunity.name} · {opportunity.stageKey}
+                        </Link>
+                        <Badge
+                          status={
+                            opportunity.stageKey === 'won'
+                              ? 'success'
+                              : opportunity.stageKey === 'lost'
+                                ? 'error'
+                                : 'primary'
+                          }
+                          variant="outline"
+                          showDot={false}
+                        >
+                          {opportunity.currency} {opportunity.amount ?? '—'}
+                        </Badge>
+                      </div>
+                    ))
+                  ) : (
+                    <EmptyRelationship text="No related opportunities." />
+                  )}
+                </RelationshipSection>
+                <RelationshipSection title="Tasks" count={view.tasks.length}>
+                  {view.tasks.length ? (
+                    view.tasks.map((task) => (
+                      <div
+                        key={task.id}
+                        className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
+                      >
+                        <Link
+                          className="text-primary text-sm underline-offset-2 hover:underline"
+                          href={`/sales-crm/tasks/${task.id}`}
+                        >
+                          {task.title}
+                        </Link>
+                        <Badge
+                          status={task.status === 'completed' ? 'success' : 'neutral'}
+                          variant="outline"
+                          showDot={false}
+                        >
+                          {task.status.replace('_', ' ')}
+                        </Badge>
+                      </div>
+                    ))
+                  ) : (
+                    <EmptyRelationship text="No related tasks." />
+                  )}
+                </RelationshipSection>
+              </div>
+              <div className="space-y-4">
+                <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <Heading as="h2" size="lg" weight="semibold">
+                      Timeline
+                    </Heading>
+                    <span className="text-text-muted text-xs">{view.timeline.length} events</span>
+                  </div>
+                  {view.timeline.length ? (
+                    <ol className="mt-3 space-y-3">
+                      {view.timeline.map((item) =>
+                        item.kind === 'event' ? (
+                          <li
+                            key={item.source.sourceId}
+                            className="border-border-subtle border-l-2 pl-3"
+                          >
+                            <p className="text-text-main text-sm">{item.event.summary}</p>
+                            <p className="text-text-muted mt-1 text-xs">
+                              {date(item.event.occurredAt)}
+                            </p>
+                          </li>
+                        ) : null,
+                      )}
+                    </ol>
+                  ) : (
+                    <EmptyRelationship text="No activity yet." />
+                  )}
+                </TechnicalSurface>
+                <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
+                  <Heading as="h2" size="lg" weight="semibold">
+                    Authorized notes
+                  </Heading>
+                  {view.notes.length ? (
+                    <ul className="mt-3 space-y-3">
+                      {view.notes.map((note) => (
+                        <li
+                          key={note.id}
+                          className="border-border-subtle border-b pb-3 last:border-0"
+                        >
+                          <p className="text-text-main whitespace-pre-wrap text-sm">
+                            {note.body ?? 'Note content is restricted.'}
+                          </p>
+                          <p className="text-text-muted mt-1 text-xs">{date(note.createdAt)}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <EmptyRelationship text="No notes available." />
+                  )}
+                </TechnicalSurface>
+              </div>
             </div>
-          </div>
           </>
         ) : null}
       </main>
@@ -322,7 +400,12 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
 }
 
 function SummaryMetric({ label, value }: { label: string; value: string }) {
-  return <div className="border-border-subtle bg-background-subtle rounded-md border p-3"><p className="text-text-muted text-xs">{label}</p><p className="text-text-main mt-1 text-lg font-semibold">{value}</p></div>;
+  return (
+    <div className="border-border-subtle bg-background-subtle rounded-md border p-3">
+      <p className="text-text-muted text-xs">{label}</p>
+      <p className="text-text-main mt-1 text-lg font-semibold">{value}</p>
+    </div>
+  );
 }
 
 function RelationshipSection({

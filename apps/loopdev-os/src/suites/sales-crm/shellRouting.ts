@@ -57,7 +57,11 @@ export function resolveSalesCrmCanvasMode(pathname: string): SuiteCanvasMode {
   if (pathname === PIPELINE_ROUTE) return 'board';
   if (pathname === PIPELINE_LIST_ROUTE) return 'data';
   if (pathname === OPPORTUNITY_CREATE_ROUTE || pathname === TASK_CREATE_ROUTE) return 'full-bleed';
-  if (pathname.startsWith(OPPORTUNITY_DETAIL_ROUTE) || (pathname.startsWith(TASK_DETAIL_ROUTE) && pathname !== TASKS_TODAY_ROUTE)) return 'workspace';
+  if (
+    pathname.startsWith(OPPORTUNITY_DETAIL_ROUTE) ||
+    (pathname.startsWith(TASK_DETAIL_ROUTE) && pathname !== TASKS_TODAY_ROUTE)
+  )
+    return 'workspace';
   if (pathname === TASKS_TODAY_ROUTE) return 'overview';
   if (pathname === TASKS_ROUTE) return 'split';
   return 'data';

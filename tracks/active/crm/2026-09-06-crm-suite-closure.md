@@ -15,8 +15,9 @@ branches:
   - loopdev-io-crm-suite-closure-plan
 phase: 4
 pull_requests: [114, 119, 121, 126, 128, 129, 130, 134, 159, 160, 173, 178]
-issues: [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 87, 88, 89, 90, 91, 92, 94, 157, 190]
-packages: ["@loopdev/contracts", "loopdev-os", "supabase"]
+issues:
+  [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 87, 88, 89, 90, 91, 92, 94, 157, 190]
+packages: ['@loopdev/contracts', 'loopdev-os', 'supabase']
 release: pilot
 areas: [crm, platform, governance]
 dependencies: [execution-roadmap-governance]
@@ -61,11 +62,11 @@ integrarse en ese orden.
 
 ## Decisiones aprobadas
 
-| Fecha | Decisión | Motivo | Impacto | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-09-06 | `origin/develop@6255ec36` es la única base de integración | Evitar duplicación y pérdida entre ramas CRM | Todas las ramas funcionales deben partir de `develop` actualizado | User |
-| 2026-09-06 | PR #178 es la autoridad para Leads frontend | Sustituye los intentos anteriores #175 y ramas WIP | Las ramas Leads antiguas solo se revisan para rescate | User |
-| 2026-09-06 | Communications Core precede a Inbox | La UI no debe crear una segunda persistencia | Inbox se rebasea después de integrar Core | User |
+| Fecha      | Decisión                                                  | Motivo                                             | Impacto                                                           | Aprobado por |
+| ---------- | --------------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------- | ------------ |
+| 2026-09-06 | `origin/develop@6255ec36` es la única base de integración | Evitar duplicación y pérdida entre ramas CRM       | Todas las ramas funcionales deben partir de `develop` actualizado | User         |
+| 2026-09-06 | PR #178 es la autoridad para Leads frontend               | Sustituye los intentos anteriores #175 y ramas WIP | Las ramas Leads antiguas solo se revisan para rescate             | User         |
+| 2026-09-06 | Communications Core precede a Inbox                       | La UI no debe crear una segunda persistencia       | Inbox se rebasea después de integrar Core                         | User         |
 
 ## Arquitectura y contratos
 
@@ -95,16 +96,19 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** establecer una fuente única de verdad y clasificar todas las ramas, PRs e Issues.
 
 **Definition of Ready**
+
 - [x] `develop` y `origin/develop` están identificados.
 - [x] Existe matriz módulo/Issue/PR/rama/SHA/evidencia.
 - [x] Las ramas Leads antiguas están clasificadas como rescate o históricas.
 
 **Entregables**
+
 - [x] Track actualizado con el estado real.
 - [x] Matriz de consolidación.
 - [x] Lista de ramas autorizadas.
 
 **Validación**
+
 - [ ] `git status --short --branch`
 - [ ] Comparación de ramas contra `origin/develop`.
 - [ ] Revisión de PRs e Issues CRM.
@@ -119,16 +123,19 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** eliminar duplicación y rescatar solo cambios no integrados.
 
 **Definition of Ready**
+
 - [x] F0 cerrada con matriz versionada.
 - [x] `origin/develop@6255ec36` confirmado como base.
 - [x] Ramas Leads históricas clasificadas como superseded.
 
 **Entregables**
+
 - [x] Auditoría de las dos ramas frontend antiguas de Leads.
 - [x] Contratos, servicios, APIs y migraciones alineados.
 - [x] Ramas históricas marcadas como superseded.
 
 **Validación**
+
 - [x] `@loopdev/contracts` build/typecheck.
 - [x] Tests API/UI de Leads, Contacts, Pipeline, Tasks y Customer 360.
 - [x] `git diff origin/develop...<rama>` revisado.
@@ -143,6 +150,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** cerrar Issues #70–#78 con evidencia reproducible.
 
 **Entregables**
+
 - [x] RLS separado por verbo y permiso implementado en `origin/develop`.
 - [x] Integridad cross-tenant en relaciones CRM/Communications implementada.
 - [x] Audit Events y Activities append-only implementados.
@@ -150,6 +158,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 - [x] Matriz pgTAP de roles y dos organizaciones versionada.
 
 **Validación**
+
 - [x] `supabase/tests/database/005_crm_security.sql` — 47/47.
 - [x] `supabase/tests/database/006_crm_tasks_contract.sql` — 30/30.
 - [x] Reset Supabase desde cero sobre snapshot limpio de `origin/develop`.
@@ -168,14 +177,16 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** certificar Contacts, Leads, Pipeline, Tasks y Customer 360.
 
 **Entregables**
+
 - [x] Cerrar #82, #84, #85, #87 y #88 con evidencia.
 - [x] Recorrido persistente Contact → Lead → Opportunity → Task/Note → Customer 360.
 - [x] Approved CRM route compositions delivered: Pipeline board/list/preview/detail/create,
-  Tasks inbox/My Day/context/detail/create, and Customer 360 workspace/preview/overview within
-  Contact detail. No Customer 360 navigation module was added.
+      Tasks inbox/My Day/context/detail/create, and Customer 360 workspace/preview/overview within
+      Contact detail. No Customer 360 navigation module was added.
 - [ ] Eliminar fixtures y simulaciones de rutas críticas.
 
 **Validación**
+
 - [x] API, UI, accesibilidad y E2E autenticado.
 - [x] Idempotencia de captura y Tasks.
 - [x] Auditoría de asignaciones y cambios de etapa.
@@ -187,6 +198,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** entregar WhatsApp tenant-safe y su Inbox sin duplicar persistencia.
 
 **Entregables**
+
 - [x] Webhook firmado y deduplicado.
 - [x] Resolución de Contact y ventana outbound.
 - [x] Templates, delivery states, retries, retención y kill switch.
@@ -194,6 +206,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 - [x] Communications Core e Inbox integrados en `develop` mediante PR #191 y #193.
 
 **Validación**
+
 - [x] Tests de webhook, provider, worker y permisos.
 - [x] E2E Core antes de integrar Inbox.
 - [x] E2E CRM + Inbox después de integrar Inbox.
@@ -205,6 +218,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** probar el sistema fuera del entorno local.
 
 **Entregables**
+
 - [ ] Required CI gate.
 - [ ] Staging reproducible.
 - [ ] Logs, alertas y métricas.
@@ -212,6 +226,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 - [ ] Certificación UX y accesibilidad.
 
 **Validación**
+
 - [ ] Issues #76–#81 y #90–#92 con evidencia.
 - [ ] Migraciones aplicadas en staging limpio.
 - [ ] Smoke y E2E con Auth/RLS reales.
@@ -223,12 +238,14 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** validar el flujo operativo con usuarios autorizados y dataset sintético.
 
 **Entregables**
+
 - [ ] Usuarios, roles, organización y marcas confirmados.
 - [ ] Casos UAT ejecutados.
 - [ ] P0/P1 corregidos o aprobados explícitamente.
 - [ ] Informe UAT firmado.
 
 **Validación**
+
 - [ ] Contact, Lead, Pipeline, Tasks, Customer 360 y WhatsApp.
 - [ ] Casos negativos cross-tenant.
 - [ ] Kill switch y rollback.
@@ -240,6 +257,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Objetivo:** tomar la decisión formal de go-live y cerrar el programa.
 
 **Entregables**
+
 - [ ] Canary de una organización.
 - [ ] Smoke post-deploy.
 - [ ] Métricas de observación.
@@ -247,6 +265,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 - [ ] Cierre o defer explícito de Issues y tracks.
 
 **Validación**
+
 - [ ] Cero P0.
 - [ ] P1 aceptados con workaround documentado.
 - [ ] Rollback ensayado.
@@ -256,21 +275,21 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 
 ## Registro de cambios de enfoque
 
-| Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-09-06 | El cierre se organiza como programa de consolidación y release | El código core está mayoritariamente integrado; el riesgo está en evidencia y duplicación | Se priorizan F0–F2 antes de nuevas features | User |
-| 2026-09-06 | F0 queda activo con matriz versionada y ramas clasificadas | Las ramas antiguas de Leads aún requieren comparación de rescate | No se archivan esas ramas hasta completar la revisión de diffs | User |
-| 2026-09-06 | F2 cerrada y F3 activada | El usuario aprobó explícitamente el cierre tras 77/77 assertions pgTAP | Se inicia certificación funcional CRM Core | User |
+| Fecha      | Cambio                                                         | Motivo                                                                                    | Impacto en alcance/fases                                       | Aprobado por |
+| ---------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------ |
+| 2026-09-06 | El cierre se organiza como programa de consolidación y release | El código core está mayoritariamente integrado; el riesgo está en evidencia y duplicación | Se priorizan F0–F2 antes de nuevas features                    | User         |
+| 2026-09-06 | F0 queda activo con matriz versionada y ramas clasificadas     | Las ramas antiguas de Leads aún requieren comparación de rescate                          | No se archivan esas ramas hasta completar la revisión de diffs | User         |
+| 2026-09-06 | F2 cerrada y F3 activada                                       | El usuario aprobó explícitamente el cierre tras 77/77 assertions pgTAP                    | Se inicia certificación funcional CRM Core                     | User         |
 
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
-| --- | --- | --- | --- | --- |
-| Ramas Leads WIP solapadas con #178 | Pérdida o cherry-pick duplicado | Comparación y rescate antes de archivar | crm | abierto |
-| RLS genérico para `for all` | Mutaciones con permisos incorrectos | Separar políticas por verbo y probar dos tenants | crm/platform | mitigado en F2 |
-| Communications Core e Inbox paralelos | Persistencias y contratos divergentes | Integrar Core antes de Inbox | crm | abierto |
-| Staging/E2E real pendiente | No se puede declarar go-live | Completar Issues #76–#81 | platform/governance | abierto |
-| Track histórico ausente en `origin/develop` | #185 referencia rutas que no existen en la rama integrada | Publicar este track normalizado y regenerar el dashboard | crm/governance | resuelto en esta rama; pendiente de integración |
+| Riesgo o bloqueo                            | Impacto                                                   | Mitigación                                               | Responsable         | Estado                                          |
+| ------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------- | ------------------- | ----------------------------------------------- |
+| Ramas Leads WIP solapadas con #178          | Pérdida o cherry-pick duplicado                           | Comparación y rescate antes de archivar                  | crm                 | abierto                                         |
+| RLS genérico para `for all`                 | Mutaciones con permisos incorrectos                       | Separar políticas por verbo y probar dos tenants         | crm/platform        | mitigado en F2                                  |
+| Communications Core e Inbox paralelos       | Persistencias y contratos divergentes                     | Integrar Core antes de Inbox                             | crm                 | abierto                                         |
+| Staging/E2E real pendiente                  | No se puede declarar go-live                              | Completar Issues #76–#81                                 | platform/governance | abierto                                         |
+| Track histórico ausente en `origin/develop` | #185 referencia rutas que no existen en la rama integrada | Publicar este track normalizado y regenerar el dashboard | crm/governance      | resuelto en esta rama; pendiente de integración |
 
 ## Criterios de cierre
 
@@ -283,18 +302,18 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 
 ## Evidencia de validación
 
-| Fecha | Validación | Resultado | Referencia |
-| --- | --- | --- | --- |
-| 2026-09-06 | F4 post-merge | Communications + Inbox certificados sobre `origin/develop@2efa92a0`; 47/47 tests, pgTAP 59/59 y gates completos | PR #191, PR #193, comentarios #157/#185 |
-| 2026-09-06 | F0: matriz y clasificación de ramas | Completado salvo rescue diff review de Leads | `docs/06-product/crm/CRM_SUITE_CLOSURE_MATRIX.md` |
-| 2026-09-06 | F1: alineación de contratos y superficies CRM | Completado; validaciones de contracts y tests focalizados correctos | `docs/06-product/crm/CRM_SUITE_CONTRACT_ALIGNMENT.md`, Issue #190 |
-| 2026-09-06 | F2: certificación de seguridad | Hardening SQL y matriz pgTAP revisados | `docs/06-product/crm/CRM_SUITE_SECURITY_ALIGNMENT.md` |
-| 2026-09-06 | F2: validación runtime | Reset limpio de `origin/develop@6255ec36`; tests 005 (47) y 006 (30) pasan | `docs/06-product/crm/CRM_SUITE_SECURITY_ALIGNMENT.md` |
-| 2026-09-06 | F3: inicio de certificación funcional | Matriz de API, UI, servicios, E2E y recorrido CRM creada | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, Issue #188 |
-| 2026-09-06 | F3: ejecución ampliada | 220/220 tests de dominio y Contacts E2E 1/1 pasan; CRM matrix 18/18 ya certificada | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, Issue #188 |
-| 2026-09-06 | F3: revisión de cobertura | No existe E2E persistente multi-entidad; API/servicios usan mocks fuera de dominio | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md` |
-| 2026-09-06 | F3: recorrido persistente | Contact capture y Lead qualification pasan; Lead conversion API devuelve 500 aunque el RPC SQL directo pasa | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, Issue #188 |
-| 2026-09-06 | F3: corrección y recorrido completo | Fix `c5aece7`; Contact → Lead → Opportunity → Task → Note → Customer 360 pasa; cross-tenant devuelve 403; Issues #82, #84, #85, #87 y #88 cerradas | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md` |
+| Fecha      | Validación                                    | Resultado                                                                                                                                                                            | Referencia                                                                                               |
+| ---------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| 2026-09-06 | F4 post-merge                                 | Communications + Inbox certificados sobre `origin/develop@2efa92a0`; 47/47 tests, pgTAP 59/59 y gates completos                                                                      | PR #191, PR #193, comentarios #157/#185                                                                  |
+| 2026-09-06 | F0: matriz y clasificación de ramas           | Completado salvo rescue diff review de Leads                                                                                                                                         | `docs/06-product/crm/CRM_SUITE_CLOSURE_MATRIX.md`                                                        |
+| 2026-09-06 | F1: alineación de contratos y superficies CRM | Completado; validaciones de contracts y tests focalizados correctos                                                                                                                  | `docs/06-product/crm/CRM_SUITE_CONTRACT_ALIGNMENT.md`, Issue #190                                        |
+| 2026-09-06 | F2: certificación de seguridad                | Hardening SQL y matriz pgTAP revisados                                                                                                                                               | `docs/06-product/crm/CRM_SUITE_SECURITY_ALIGNMENT.md`                                                    |
+| 2026-09-06 | F2: validación runtime                        | Reset limpio de `origin/develop@6255ec36`; tests 005 (47) y 006 (30) pasan                                                                                                           | `docs/06-product/crm/CRM_SUITE_SECURITY_ALIGNMENT.md`                                                    |
+| 2026-09-06 | F3: inicio de certificación funcional         | Matriz de API, UI, servicios, E2E y recorrido CRM creada                                                                                                                             | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, Issue #188                                  |
+| 2026-09-06 | F3: ejecución ampliada                        | 220/220 tests de dominio y Contacts E2E 1/1 pasan; CRM matrix 18/18 ya certificada                                                                                                   | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, Issue #188                                  |
+| 2026-09-06 | F3: revisión de cobertura                     | No existe E2E persistente multi-entidad; API/servicios usan mocks fuera de dominio                                                                                                   | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`                                              |
+| 2026-09-06 | F3: recorrido persistente                     | Contact capture y Lead qualification pasan; Lead conversion API devuelve 500 aunque el RPC SQL directo pasa                                                                          | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, Issue #188                                  |
+| 2026-09-06 | F3: corrección y recorrido completo           | Fix `c5aece7`; Contact → Lead → Opportunity → Task → Note → Customer 360 pasa; cross-tenant devuelve 403; Issues #82, #84, #85, #87 y #88 cerradas                                   | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`                                              |
 | 2026-09-06 | F3: approved CRM route composition completion | Productive board/list/split/workspace/full-bleed/overview routes implemented with existing contracts/APIs; focused UI tests and typecheck pass; browser/staging gates remain pending | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, `apps/loopdev-os/src/suites/sales-crm/crm/` |
 
 ## Handoff de sesión

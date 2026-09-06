@@ -90,9 +90,48 @@ describe('Pipeline page', () => {
   it('supports the opportunity table and split preview composition', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn()
-        .mockResolvedValueOnce(new Response(JSON.stringify([{ id: 'stage', organizationId, key: 'qualified', name: 'Qualified', active: true, terminalType: 'open', createdAt: '2026-09-01T00:00:00.000Z', updatedAt: '2026-09-01T00:00:00.000Z' }])))
-        .mockResolvedValueOnce(new Response(JSON.stringify({ items: [{ id: 'opportunity', organizationId, contactId: 'contact', name: 'Family cover', productKey: 'health', stageKey: 'qualified', origin: 'manual', amount: 500, currency: 'EUR', version: 1, createdAt: '2026-09-01T00:00:00.000Z', updatedAt: '2026-09-01T00:00:00.000Z' }], nextCursor: null, hasMore: false }))),
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify([
+              {
+                id: 'stage',
+                organizationId,
+                key: 'qualified',
+                name: 'Qualified',
+                active: true,
+                terminalType: 'open',
+                createdAt: '2026-09-01T00:00:00.000Z',
+                updatedAt: '2026-09-01T00:00:00.000Z',
+              },
+            ]),
+          ),
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              items: [
+                {
+                  id: 'opportunity',
+                  organizationId,
+                  contactId: 'contact',
+                  name: 'Family cover',
+                  productKey: 'health',
+                  stageKey: 'qualified',
+                  origin: 'manual',
+                  amount: 500,
+                  currency: 'EUR',
+                  version: 1,
+                  createdAt: '2026-09-01T00:00:00.000Z',
+                  updatedAt: '2026-09-01T00:00:00.000Z',
+                },
+              ],
+              nextCursor: null,
+              hasMore: false,
+            }),
+          ),
+        ),
     );
     render(<PipelineWorkspace mode="list" />);
     expect((await screen.findAllByText('Family cover')).length).toBeGreaterThan(0);
