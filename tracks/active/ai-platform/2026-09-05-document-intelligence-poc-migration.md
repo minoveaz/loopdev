@@ -620,11 +620,13 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 | 2026-09-05 | `pnpm --filter loopdev-os build`                                                                                            | ✅                                                                                                                                                                                            | Next production build; rutas `/document-intelligence`, `/new` y `/:documentId` generadas                               |
 | 2026-09-06 | Cobertura Fase 5 backend/workbench: MIME/tamaño front/back, timeout provider, JSON inválido, retry real y cleanup           | ✅ 17 tests focalizados (`route`, `extraction`, `file-validation`, `workbench-context`)                                                                                                       | `apps/loopdev-os/src/app/api/document-intelligence/extract/route.test.ts`; `.../extraction.test.ts`; `.../workbench-*` |
 | 2026-09-06 | `pnpm test:shell:changed`                                                                                                   | ✅ Shell Interaction Surface unchanged (skip esperado)                                                                                                                                        | `scripts/check-shell.mjs --changed-only`                                                                               |
-| 2026-09-06 | Playwright autenticado real contra Supabase dev (`PLAYWRIGHT_E2E_AUTH_BYPASS=false`)                                        | ⚠️ bloqueado: faltan `E2E_TEST_EMAIL` y `E2E_TEST_PASSWORD` en `.env.local` del root de workspace                                                                                             | `e2e/auth.setup.mjs` (global setup)                                                                                    |
+| 2026-09-06 | Playwright autenticado real contra Supabase dev (`PLAYWRIGHT_E2E_AUTH_BYPASS=false`)                                        | ⚠️ login y viewport 2/2 por organización; Workbench detenido por `No organization access` en navegador, aunque REST autenticado devuelve membership activo                                  | `e2e/auth.setup.mjs`; `e2e/authenticated.mobile.spec.mjs`; `OrganizationProvider.tsx`                             |
 | 2026-09-06 | Playwright responsive reproducible local (`phase5` + `authenticated.mobile`)                                                | ✅ 4/4 (`desktop`, `mobile`, `mobile-compact`) con bypass de auth de Playwright                                                                                                               | `e2e/phase5.certification.spec.mjs`; `e2e/authenticated.mobile.spec.mjs`                                               |
 | 2026-09-06 | Playwright `document-viewer` matrix local                                                                                   | ✅ 9/9 (`desktop`, `mobile`, `mobile-compact`); el primer 404 provenía de un servidor E2E stale en el puerto 3001                                                                             | `e2e/document-viewer.certification.spec.mjs`                                                                           |
 | 2026-09-06 | `pnpm validate:worktree`                                                                                                    | ✅                                                                                                                                                                                            | salida `validate-local.mjs worktree`                                                                                   |
-| 2026-09-06 | `supabase functions deploy extract-identity-document --no-verify-jwt`                                                       | ⚠️ bloqueado localmente: falta `SUPABASE_ACCESS_TOKEN`; la versión remota 14 permanece activa y este endurecimiento queda pendiente de despliegue                                             | CLI Supabase                                                                                                           |
+| 2026-09-06 | `supabase functions deploy extract-identity-document --no-verify-jwt`                                                       | ✅ versión remota 15 activa; SHA `8bf4d83b`; `verify_jwt=false` y autenticación interna conservada                                                                                              | CLI Supabase                                                                                                           |
+| 2026-09-06 | Matriz RLS automatizada de Storage temporal                                                                                 | ✅ 8/8 local: bucket privado, policies de upload/read/delete, acceso propio y rechazo cross-org                                                                                              | `supabase/tests/database/007_document_intelligence_storage_rls.sql`                                                   |
+| 2026-09-06 | Revisión final de seguridad                                                                                                 | ✅ sin vulnerabilidades de alta confianza; residual: la limpieza depende de Storage API y la matriz remota no se automatiza desde CI                                                        | revisión de seguridad; route, Edge Function, migration y contratos                                                   |
 
 ## Component duplicate review
 
@@ -725,22 +727,22 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 - **Estado alcanzado:** Fases 0-4 integradas en `develop`; Fase 5 endurecida en la rama de
   continuación y publicada para revisión en el PR #192. Bucket privado, RLS, Edge Function,
   route handler multipart, retry real y cleanup ya existen; la Edge Function desplegada sigue
-  siendo la versión 14, con timeout explícito del provider, parseo tipado de respuestas inválidas
+  siendo la versión 15, con timeout explícito del provider, parseo tipado de respuestas inválidas
   y el secreto de allowed origins configurado para local.
 - **Decisiones, bloqueos y riesgos:** `GEMINI_API_KEY` permanece solo en Supabase. La revisión de
   seguridad no encontró vulnerabilidades de alta confianza y confirmó auth, membership, RLS,
-  paths privados, errores sanitizados y cleanup sin PII. Aún falta desplegar la última revisión
-  cuando haya `SUPABASE_ACCESS_TOKEN`; el E2E autenticado real requiere `E2E_TEST_EMAIL` y
-  `E2E_TEST_PASSWORD` temporales. La matriz negativa de dos organizaciones todavía no tiene una
-  prueba automatizada versionada.
+  paths privados, errores sanitizados y cleanup sin PII. El smoke autenticado del Workbench está
+  bloqueado por la discrepancia entre membership REST activo y `No organization access` en el
+  navegador; el E2E de login/viewport pasa para ambas organizaciones. La matriz negativa RLS ya
+  tiene prueba automatizada local.
 - **Validación ejecutada:** tests focalizados de route/provider/workbench, `validate:branch`,
   `validate:full`, `validate:changed`, `validate:plan`, `docs:links:check`,
   `registries:check`, `deno check --no-config`, `supabase db lint --local`, governance Supabase,
   `git diff --check` y Playwright responsive del visor (9/9); no se incorporan credenciales ni
   artefactos generados.
-- **Siguiente acción concreta:** desplegar la revisión final de la Edge Function con token de
-  gestión disponible, ejecutar la matriz E2E autenticada con las dos organizaciones de prueba,
-  automatizar la matriz negativa RLS y actualizar la evidencia antes de cerrar la Fase 5.
+- **Siguiente acción concreta:** corregir la resolución de sesión/membership del Workbench en el
+  harness autenticado, repetir el smoke front/back con ambas organizaciones y cerrar la Fase 5
+  solo cuando ese flujo y su evidencia queden completos.
 
 ## Cierre
 
