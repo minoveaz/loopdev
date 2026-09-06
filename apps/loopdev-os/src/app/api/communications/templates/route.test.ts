@@ -24,7 +24,9 @@ describe('Communications templates API', () => {
   });
 
   it('rejects an invalid organization before authorization', async () => {
-    const response = await GET(request('http://localhost/api/communications/templates?organizationId=invalid'));
+    const response = await GET(
+      request('http://localhost/api/communications/templates?organizationId=invalid'),
+    );
 
     expect(response.status).toBe(400);
     expect(authorizeCommunications).not.toHaveBeenCalled();
@@ -33,7 +35,9 @@ describe('Communications templates API', () => {
   it('returns unauthorized when there is no authenticated user', async () => {
     authorizeCommunications.mockResolvedValue({ allowed: false, status: 401 });
 
-    const response = await GET(request(`http://localhost/api/communications/templates?organizationId=${organizationId}`));
+    const response = await GET(
+      request(`http://localhost/api/communications/templates?organizationId=${organizationId}`),
+    );
 
     expect(response.status).toBe(401);
     expect(listCommunicationTemplates).not.toHaveBeenCalled();
@@ -42,7 +46,9 @@ describe('Communications templates API', () => {
   it('returns forbidden when the user lacks communications read permission', async () => {
     authorizeCommunications.mockResolvedValue({ allowed: false, status: 403 });
 
-    const response = await GET(request(`http://localhost/api/communications/templates?organizationId=${organizationId}`));
+    const response = await GET(
+      request(`http://localhost/api/communications/templates?organizationId=${organizationId}`),
+    );
 
     expect(response.status).toBe(403);
     expect(authorizeCommunications).toHaveBeenCalledWith(organizationId, 'communications.read');
@@ -50,19 +56,23 @@ describe('Communications templates API', () => {
   });
 
   it('returns approved templates from Core after authorization', async () => {
-    const templates = [{
-      id: '00000000-0000-4000-9000-000000000004',
-      organizationId,
-      channel: 'whatsapp',
-      externalTemplateId: 'proposal_follow_up',
-      language: 'es',
-      name: 'proposal_follow_up',
-      body: 'Hola {{firstName}}',
-      parameterNames: ['firstName'],
-    }];
+    const templates = [
+      {
+        id: '00000000-0000-4000-9000-000000000004',
+        organizationId,
+        channel: 'whatsapp',
+        externalTemplateId: 'proposal_follow_up',
+        language: 'es',
+        name: 'proposal_follow_up',
+        body: 'Hola {{firstName}}',
+        parameterNames: ['firstName'],
+      },
+    ];
     listCommunicationTemplates.mockResolvedValue(templates);
 
-    const response = await GET(request(`http://localhost/api/communications/templates?organizationId=${organizationId}`));
+    const response = await GET(
+      request(`http://localhost/api/communications/templates?organizationId=${organizationId}`),
+    );
 
     expect(response.status).toBe(200);
     expect(authorizeCommunications).toHaveBeenCalledWith(organizationId, 'communications.read');

@@ -82,6 +82,7 @@ export function CommunicationsInboxProvider({
     modelForDataSource(initialModel ?? loadingModel(organizationId ?? ''), dataSource),
   );
   const [conversations, setConversations] = useState(model.conversations);
+  const [loadedKey, setLoadedKey] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | undefined>(model.conversations[0]?.id);
   const [filter, setFilter] = useState<InboxContextValue['filter']>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,14 +94,18 @@ export function CommunicationsInboxProvider({
   const [templates, setTemplates] = useState<InboxTemplate[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [templateParameters, setTemplateParameters] = useState<Record<string, string>>({});
+  const requestKey = `${organizationId ?? ''}:${reloadVersion}`;
+  const isLoading = !useFixtureModel && Boolean(organizationId) && loadedKey !== requestKey;
+  const renderedModel = isLoading ? loadingModel(organizationId ?? '') : model;
+  const renderedConversations = useMemo(
+    () => (isLoading ? [] : conversations),
+    [conversations, isLoading],
+  );
 
   useEffect(() => {
     if (useFixtureModel || !organizationId) return;
 
     let isMounted = true;
-    setModel(loadingModel(organizationId));
-    setConversations([]);
-    setSelectedId(undefined);
 
     void dataSource
       .load(organizationId)
@@ -109,16 +114,20 @@ export function CommunicationsInboxProvider({
         setModel(modelForDataSource(nextModel, dataSource));
         setConversations(nextModel.conversations);
         setSelectedId(nextModel.conversations[0]?.id);
+        setLoadedKey(requestKey);
       })
       .catch(() => {
         if (!isMounted) return;
         setModel({ ...loadingModel(organizationId), presentation: 'error' });
+        setConversations([]);
+        setSelectedId(undefined);
+        setLoadedKey(requestKey);
       });
 
     return () => {
       isMounted = false;
     };
-  }, [dataSource, organizationId, reloadVersion, useFixtureModel]);
+  }, [dataSource, organizationId, requestKey, useFixtureModel]);
 
   useEffect(() => {
     if (!dataSource.loadTemplates) return;
@@ -144,7 +153,7 @@ export function CommunicationsInboxProvider({
 
   const visibleConversations = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
-    return conversations.filter((conversation) => {
+    return renderedConversations.filter((conversation) => {
       const matchesFilter = filter === 'all' || conversation.status === filter;
       const matchesQuery =
         !normalizedQuery ||
@@ -153,22 +162,29 @@ export function CommunicationsInboxProvider({
           .includes(normalizedQuery);
       return matchesFilter && matchesQuery;
     });
-  }, [conversations, filter, searchQuery]);
+  }, [filter, renderedConversations, searchQuery]);
 
-  const selectedConversation = conversations.find(({ id }) => id === selectedId);
+  const selectedConversation = renderedConversations.find(({ id }) => id === selectedId);
 
   useEffect(() => {
     const template = templates.find(({ id }) => id === selectedTemplateId);
     const contextParameters = templateParametersFromContext(template, selectedConversation);
     if (!Object.keys(contextParameters).length) return;
-    setTemplateParameters((current) => {
-      const next = { ...current };
-      for (const [name, value] of Object.entries(contextParameters)) {
-        if (!next[name]?.trim()) next[name] = value;
-      }
-      return next;
+    let isMounted = true;
+    queueMicrotask(() => {
+      if (!isMounted) return;
+      setTemplateParameters((current) => {
+        const next = { ...current };
+        for (const [name, value] of Object.entries(contextParameters)) {
+          if (!next[name]?.trim()) next[name] = value;
+        }
+        return next;
+      });
     });
-  }, [selectedConversation?.id, selectedTemplateId, templates]);
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedConversation, selectedTemplateId, templates]);
 
   const updateSelected = (update: (conversation: InboxConversation) => InboxConversation) => {
     setConversations((current) =>
@@ -191,7 +207,7 @@ export function CommunicationsInboxProvider({
   };
 
   const value: InboxContextValue = {
-    model,
+    model: renderedModel,
     conversations: visibleConversations,
     selectedConversation,
     filter,
@@ -250,7 +266,8 @@ export function CommunicationsInboxProvider({
     sendTemplate: () => {
       if (!selectedConversation || !selectedTemplateId || !dataSource.sendTemplate) return;
       void applyAction(
-        () => dataSource.sendTemplate!(selectedConversation, selectedTemplateId, templateParameters),
+        () =>
+          dataSource.sendTemplate!(selectedConversation, selectedTemplateId, templateParameters),
         copy.actionNotice.replySent,
       );
     },

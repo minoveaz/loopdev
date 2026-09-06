@@ -8,7 +8,7 @@ import {
   MoreHorizontal,
   UsersRound,
 } from 'lucide-react';
-import { Badge, Button, EmptyState, Heading, UserAvatar } from '@loopdev/ui';
+import { Badge, Button, EmptyState, Heading, IconButton, UserAvatar } from '@loopdev/ui';
 import { InboxComposer } from './InboxComposer';
 import { useInbox } from './useCommunicationsInbox';
 import type { CommunicationMessageStatus, InboxMessage } from './types';
@@ -105,14 +105,15 @@ export function CommunicationsInboxThread() {
     >
       <header className="border-border-technical flex shrink-0 items-center justify-between gap-3 border-b px-4 py-3 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
-          <button
-            type="button"
-            className="text-text-muted hover:bg-shell-surface flex size-8 shrink-0 items-center justify-center rounded-md lg:hidden"
-            aria-label={copy.backToConversationsLabel}
+          <IconButton
+            variant="ghost"
+            size="sm"
+            className="shrink-0 lg:hidden"
+            ariaLabel={copy.backToConversationsLabel}
             onClick={showMobileList}
           >
             <ArrowLeft size={17} aria-hidden="true" />
-          </button>
+          </IconButton>
           <UserAvatar
             name={selectedConversation.contactName}
             initials={selectedConversation.contactInitials}
@@ -144,21 +145,18 @@ export function CommunicationsInboxThread() {
               ? selectedConversation.assignedToName
               : copy.assignToSelfLabel}
           </Button>
-          <button
-            type="button"
-            aria-label={copy.moreActionsLabel}
-            className="text-text-muted hover:bg-shell-surface flex size-8 items-center justify-center rounded-md"
-          >
+          <IconButton variant="ghost" size="sm" ariaLabel={copy.moreActionsLabel}>
             <MoreHorizontal size={18} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            aria-label={copy.openContextLabel}
+          </IconButton>
+          <IconButton
+            variant="ghost"
+            size="sm"
+            ariaLabel={copy.openContextLabel}
             onClick={showMobileContext}
-            className="text-text-muted hover:bg-shell-surface flex size-8 items-center justify-center rounded-md lg:hidden"
+            className="lg:hidden"
           >
             <UsersRound size={17} aria-hidden="true" />
-          </button>
+          </IconButton>
         </div>
       </header>
       <div className="border-border-subtle bg-shell-surface flex shrink-0 items-center justify-between gap-3 border-b px-4 py-2 text-xs sm:px-6">

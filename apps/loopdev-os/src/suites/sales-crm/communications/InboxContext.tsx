@@ -32,15 +32,17 @@ export function CommunicationsInboxContext() {
 
   return (
     <div className={`space-y-5 p-4 ${mobileSurface !== 'context' ? 'max-lg:hidden' : ''}`}>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="sm"
         aria-label={copy.backToThreadLabel}
         onClick={showMobileThread}
-        className="text-text-muted hover:text-text-main inline-flex items-center gap-2 text-xs font-semibold lg:hidden"
+        className="text-text-muted hover:text-text-main text-xs font-semibold lg:hidden"
       >
         <ArrowLeft size={14} aria-hidden="true" />
         {copy.backToThreadLabel}
-      </button>
+      </Button>
       <div className="flex items-center gap-3">
         <UserAvatar
           name={selectedConversation.contactName}

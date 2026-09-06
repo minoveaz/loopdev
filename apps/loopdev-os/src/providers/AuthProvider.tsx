@@ -51,7 +51,9 @@ const getSupabaseInstance = () => {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(isE2EAuthBypassEnabled ? e2eUser : null);
-  const [session, setSession] = useState<Session | null>(isE2EAuthBypassEnabled ? e2eSession : null);
+  const [session, setSession] = useState<Session | null>(
+    isE2EAuthBypassEnabled ? e2eSession : null,
+  );
   const [memberships, setMemberships] = useState<OrganizationMembership[]>(
     isE2EAuthBypassEnabled ? [e2eMembership] : [],
   );

@@ -120,9 +120,7 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
             moduleContextPanelRenderers={{
               communications: () => <CommunicationsInboxContext />,
               leads: () =>
-                shouldShowLeadContextPanel(pathname) && selectedLead ? (
-                  <LeadContextPanel />
-                ) : null,
+                shouldShowLeadContextPanel(pathname) && selectedLead ? <LeadContextPanel /> : null,
             }}
             moduleContextPanelLabels={{
               communications: 'CRM context',

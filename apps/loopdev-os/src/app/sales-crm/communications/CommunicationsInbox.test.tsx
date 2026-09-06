@@ -77,11 +77,15 @@ describe('Communications Inbox', () => {
 
     await waitFor(() => expect(screen.getByRole('button', { name: 'Template' })).toBeEnabled());
     fireEvent.click(screen.getByRole('button', { name: 'Template' }));
-    const templateSelect = await screen.findByRole('button', { name: 'Approved WhatsApp template' });
+    const templateSelect = await screen.findByRole('button', {
+      name: 'Approved WhatsApp template',
+    });
     fireEvent.click(templateSelect);
     const templateOptions = screen.getAllByText('Proposal follow-up');
     fireEvent.click(templateOptions[templateOptions.length - 1]);
-    expect(screen.getByRole('textbox', { name: 'Template parameter firstName' })).toHaveValue('Ana');
+    expect(screen.getByRole('textbox', { name: 'Template parameter firstName' })).toHaveValue(
+      'Ana',
+    );
     fireEvent.click(screen.getByRole('button', { name: /Send reply/ }));
 
     await waitFor(() => {
@@ -105,7 +109,11 @@ describe('Communications Inbox', () => {
     };
     renderInbox(expiredModel);
 
-    expect(screen.getByText('The WhatsApp reply window has expired. Use an approved template to restart the conversation.')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'The WhatsApp reply window has expired. Use an approved template to restart the conversation.',
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: 'Reply message' })).toBeDisabled();
     await waitFor(() => expect(screen.getByRole('button', { name: 'Template' })).toBeEnabled());
     expect(screen.getByRole('button', { name: /Send reply/ })).toBeDisabled();

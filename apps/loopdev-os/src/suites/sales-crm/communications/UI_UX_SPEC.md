@@ -99,15 +99,15 @@ The visual surfaces are split into `InboxList`, `InboxThread`, `InboxComposer`,
 `InboxState`. They consume the provider contract and do not resolve
 organizations, permissions, persistence or provider credentials.
 
-| Prop/state     | Meaning                                                           | Visual behavior                                       | Interaction                                              | Accessibility                                           |
-| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------- |
-| `initialModel` | Optional authorized initial read model                            | Renders immediately when supplied; otherwise loading  | Consumer controls server-side hydration                  | Model states use semantic regions                       |
-| `dataSource`   | Typed read and mutation adapter                                   | Loads data and exposes only supported actions         | Provider owns request lifecycle and local action updates | Unsupported capabilities are unavailable, not focusable |
-| `copy`         | Visible labels, status names, action labels and accessible text   | Keeps domain copy outside visual components           | Consumer can localize or adapt wording                   | Labels and announcements remain explicit                |
-| `formatters`   | Date and time presentation                                        | Formats timestamps without changing the model         | Consumer owns locale and timezone policy                 | Dates retain machine-readable values where rendered     |
-| `actorLabel`   | Current actor display name                                        | Names local outbound messages and assignment feedback | Consumer supplies the authorized actor context           | Author identity is readable in the timeline             |
-| `presentation` | `ready`, `loading`, `empty`, `forbidden`, `error` or policy state | Selects a complete state while preserving geometry    | Retry is exposed through the provider                    | `role=status` or `role=alert` is used by urgency        |
-| template parameters | Values required by the approved template | Known CRM values are prefilled; unresolved values remain editable inputs | Consumer owns the context mapping and manual edits | Each parameter has an associated accessible label |
+| Prop/state          | Meaning                                                           | Visual behavior                                                          | Interaction                                              | Accessibility                                           |
+| ------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------------- |
+| `initialModel`      | Optional authorized initial read model                            | Renders immediately when supplied; otherwise loading                     | Consumer controls server-side hydration                  | Model states use semantic regions                       |
+| `dataSource`        | Typed read and mutation adapter                                   | Loads data and exposes only supported actions                            | Provider owns request lifecycle and local action updates | Unsupported capabilities are unavailable, not focusable |
+| `copy`              | Visible labels, status names, action labels and accessible text   | Keeps domain copy outside visual components                              | Consumer can localize or adapt wording                   | Labels and announcements remain explicit                |
+| `formatters`        | Date and time presentation                                        | Formats timestamps without changing the model                            | Consumer owns locale and timezone policy                 | Dates retain machine-readable values where rendered     |
+| `actorLabel`        | Current actor display name                                        | Names local outbound messages and assignment feedback                    | Consumer supplies the authorized actor context           | Author identity is readable in the timeline             |
+| `presentation`      | `ready`, `loading`, `empty`, `forbidden`, `error` or policy state | Selects a complete state while preserving geometry                       | Retry is exposed through the provider                    | `role=status` or `role=alert` is used by urgency        |
+| template parameters | Values required by the approved template                          | Known CRM values are prefilled; unresolved values remain editable inputs | Consumer owns the context mapping and manual edits       | Each parameter has an associated accessible label       |
 
 ## Interaction model
 
@@ -120,35 +120,35 @@ the user changes them. Unknown parameters remain manual inputs. No clear action
 is needed because an empty template selection returns the composer to its
 disabled state.
 
-| Capability                 | User intent               | Pointer/touch             | Keyboard/focus                                             | Escape/close                              | Feedback                                    |
-| -------------------------- | ------------------------- | ------------------------- | ---------------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
-| Select conversation        | Open a thread             | Activate a row            | Tab to row, Enter or Space activates                       | No overlay; selection remains             | Selected row and thread heading update      |
-| Change status filter       | Narrow triage list        | Activate one filter       | Arrow keys within filter group, Enter commits              | No overlay                                | Result count and list update                |
-| Toggle Reply/Template/Internal note | Choose audience or approved outbound format | Activate the mode control | Tab and arrow keys; mode is single-select | No overlay | Composer label and send action change |
-| Select approved template | Choose a policy-compliant outbound template | Open the shared Select and choose one option | Arrow keys and Enter within the menu | Escape restores prior selection | Parameter fields and send action update |
-| Assign to self             | Claim work                | Activate assign action    | Button activation with Enter or Space                      | No overlay                                | Pending then assignment event               |
-| Send reply or note         | Submit a composed message | Activate send             | Ctrl/Cmd+Enter submits when valid; Enter creates a newline | Draft remains available                   | Queued, sent, failed or policy feedback     |
-| Change lifecycle           | Progress or close work    | Activate status action    | Button/menu trigger is keyboard reachable                  | Destructive confirmation closes on Escape | Timeline event and status badge update      |
-| Mobile context             | Inspect CRM information   | Navigate to context view  | Back returns to thread and restores focus                  | No overlay                                | Context heading identifies the current view |
+| Capability                          | User intent                                 | Pointer/touch                                | Keyboard/focus                                             | Escape/close                              | Feedback                                    |
+| ----------------------------------- | ------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
+| Select conversation                 | Open a thread                               | Activate a row                               | Tab to row, Enter or Space activates                       | No overlay; selection remains             | Selected row and thread heading update      |
+| Change status filter                | Narrow triage list                          | Activate one filter                          | Arrow keys within filter group, Enter commits              | No overlay                                | Result count and list update                |
+| Toggle Reply/Template/Internal note | Choose audience or approved outbound format | Activate the mode control                    | Tab and arrow keys; mode is single-select                  | No overlay                                | Composer label and send action change       |
+| Select approved template            | Choose a policy-compliant outbound template | Open the shared Select and choose one option | Arrow keys and Enter within the menu                       | Escape restores prior selection           | Parameter fields and send action update     |
+| Assign to self                      | Claim work                                  | Activate assign action                       | Button activation with Enter or Space                      | No overlay                                | Pending then assignment event               |
+| Send reply or note                  | Submit a composed message                   | Activate send                                | Ctrl/Cmd+Enter submits when valid; Enter creates a newline | Draft remains available                   | Queued, sent, failed or policy feedback     |
+| Change lifecycle                    | Progress or close work                      | Activate status action                       | Button/menu trigger is keyboard reachable                  | Destructive confirmation closes on Escape | Timeline event and status badge update      |
+| Mobile context                      | Inspect CRM information                     | Navigate to context view                     | Back returns to thread and restores focus                  | No overlay                                | Context heading identifies the current view |
 
 ## State model
 
-| State            | Entry condition                                          | Required UI                                               | Allowed actions                            | Accessibility                                     |
-| ---------------- | -------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------- |
-| `ready`          | Authorized data is available                             | List, selected thread and context                         | Contract-authorized actions                | Active conversation and headings are exposed      |
-| `loading`        | Initial or refreshed read model is pending               | Stable skeleton list, thread and context geometry         | No mutation until data is ready            | Loading status is announced without layout shift  |
-| `skeleton`       | Placeholder rendering is explicitly requested            | Same geometry as `loading`                                | None                                       | Skeletons are hidden from assistive technology    |
-| `empty`          | No authorized conversations exist                        | Empty explanation and recovery action if available        | Change view or refresh                     | Empty region has a meaningful heading             |
-| `filtered-empty` | Active filter has no matches                             | Empty result with clear-filters action                    | Clear filters                              | Clear action has an accessible name               |
-| `no-selection`   | List exists but no conversation is selected              | Instructional neutral canvas                              | Select a conversation                      | Status is understandable without visual placement |
-| `error`          | Read or action request failed                            | Normalized error and retry path                           | Retry, preserve safe draft                 | Error uses `role=alert` when actionable           |
-| `forbidden`      | Actor lacks read scope                                   | No conversation data; access explanation                  | Navigate away or retry after access change | Sensitive content is absent from DOM              |
-| `read-only`      | Actor can read but cannot mutate                         | Full thread and context, no mutation controls             | Navigation and reading only                | Hidden actions are not focusable                  |
-| `paused`         | Core account or organization kill switch blocks outbound | History remains; reply and retry are disabled with reason | Read, inspect and allowed non-send actions | Pause is communicated as text, not color only     |
-| `window-expired` | WhatsApp free-text window is closed                      | Free text disabled; approved template path when supplied | Select valid template and fill parameters or read | Disabled reason is associated with composer |
-| `send-failure`   | Core/provider returns normalized failure                 | Draft retained and failure shown                          | Correct or explicitly retry                | Failure announcement includes recovery guidance   |
-| `conflict`       | Version changed since read                               | Affected context refresh notice                           | Reload current state; no silent overwrite  | Conflict is announced and focus moves to recovery |
-| `offline`        | Network is unavailable                                   | Read cache or unavailable state as supplied by consumer   | Retry; no false success                    | Offline status is visible and announced           |
+| State            | Entry condition                                          | Required UI                                               | Allowed actions                                   | Accessibility                                     |
+| ---------------- | -------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| `ready`          | Authorized data is available                             | List, selected thread and context                         | Contract-authorized actions                       | Active conversation and headings are exposed      |
+| `loading`        | Initial or refreshed read model is pending               | Stable skeleton list, thread and context geometry         | No mutation until data is ready                   | Loading status is announced without layout shift  |
+| `skeleton`       | Placeholder rendering is explicitly requested            | Same geometry as `loading`                                | None                                              | Skeletons are hidden from assistive technology    |
+| `empty`          | No authorized conversations exist                        | Empty explanation and recovery action if available        | Change view or refresh                            | Empty region has a meaningful heading             |
+| `filtered-empty` | Active filter has no matches                             | Empty result with clear-filters action                    | Clear filters                                     | Clear action has an accessible name               |
+| `no-selection`   | List exists but no conversation is selected              | Instructional neutral canvas                              | Select a conversation                             | Status is understandable without visual placement |
+| `error`          | Read or action request failed                            | Normalized error and retry path                           | Retry, preserve safe draft                        | Error uses `role=alert` when actionable           |
+| `forbidden`      | Actor lacks read scope                                   | No conversation data; access explanation                  | Navigate away or retry after access change        | Sensitive content is absent from DOM              |
+| `read-only`      | Actor can read but cannot mutate                         | Full thread and context, no mutation controls             | Navigation and reading only                       | Hidden actions are not focusable                  |
+| `paused`         | Core account or organization kill switch blocks outbound | History remains; reply and retry are disabled with reason | Read, inspect and allowed non-send actions        | Pause is communicated as text, not color only     |
+| `window-expired` | WhatsApp free-text window is closed                      | Free text disabled; approved template path when supplied  | Select valid template and fill parameters or read | Disabled reason is associated with composer       |
+| `send-failure`   | Core/provider returns normalized failure                 | Draft retained and failure shown                          | Correct or explicitly retry                       | Failure announcement includes recovery guidance   |
+| `conflict`       | Version changed since read                               | Affected context refresh notice                           | Reload current state; no silent overwrite         | Conflict is announced and focus moves to recovery |
+| `offline`        | Network is unavailable                                   | Read cache or unavailable state as supplied by consumer   | Retry; no false success                           | Offline status is visible and announced           |
 
 ## Content and localization contract
 
@@ -366,11 +366,11 @@ server API boundary instead.
 
 ## Spec history
 
-| Date       | Version | Change                                            | Impact                                                                 | Reviewer |
-| ---------- | ------- | ------------------------------------------------- | ---------------------------------------------------------------------- | -------- |
-| 2026-08-30 | 0.1     | Initial widget contract for mock-backed CRM Inbox | Establishes ownership, states, responsive and future-consumer boundary | Pending  |
-| 2026-08-30 | 0.2     | Adds approved-template interaction and authorized action boundary | Covers template parameters, expired-window behavior and Core handoff | Pending  |
-| 2026-08-31 | 0.3     | Prefills known template parameters from CRM contact context | Keeps Meta parameter validation while removing repeated manual entry | Pending  |
+| Date       | Version | Change                                                            | Impact                                                                 | Reviewer |
+| ---------- | ------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------- | -------- |
+| 2026-08-30 | 0.1     | Initial widget contract for mock-backed CRM Inbox                 | Establishes ownership, states, responsive and future-consumer boundary | Pending  |
+| 2026-08-30 | 0.2     | Adds approved-template interaction and authorized action boundary | Covers template parameters, expired-window behavior and Core handoff   | Pending  |
+| 2026-08-31 | 0.3     | Prefills known template parameters from CRM contact context       | Keeps Meta parameter validation while removing repeated manual entry   | Pending  |
 
 ## Reopen triggers
 

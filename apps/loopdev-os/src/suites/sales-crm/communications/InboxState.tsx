@@ -86,11 +86,7 @@ export function InboxState({ state }: { state: InboxPresentationState }) {
   }
   if (state === 'offline') {
     return (
-      <EmptyState
-        title={copy.offlineTitle}
-        description={copy.offlineDescription}
-        icon="wifi_off"
-      />
+      <EmptyState title={copy.offlineTitle} description={copy.offlineDescription} icon="wifi_off" />
     );
   }
   return null;

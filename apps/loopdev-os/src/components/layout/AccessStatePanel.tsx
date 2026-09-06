@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Heading } from '@loopdev/ui';
+import { Button, Heading } from '@loopdev/ui';
 import type { AccessState } from '@/core/access/accessState';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -56,13 +56,16 @@ export function AccessStatePanel({
           {message.action}
         </Link>
         {state !== 'session-expired' && (
-          <button
+          <Button
             type="button"
-            className="text-primary mt-3 block w-full text-sm font-semibold underline-offset-4 hover:underline"
+            variant="ghost"
+            size="sm"
+            fullWidth
+            className="text-primary mt-3 text-sm font-semibold underline-offset-4 hover:underline"
             onClick={signOut}
           >
             Sign out and use another account
-          </button>
+          </Button>
         )}
       </section>
     </main>

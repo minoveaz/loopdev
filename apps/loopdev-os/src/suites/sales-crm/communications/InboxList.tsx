@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react';
-import { EmptyState, Input, UserAvatar } from '@loopdev/ui';
+import { Button, EmptyState, Input, UserAvatar } from '@loopdev/ui';
 import { InboxState } from './InboxState';
 import { useInbox } from './useCommunicationsInbox';
 
@@ -43,21 +43,23 @@ export function CommunicationsInboxList() {
           startIcon={<Search size={15} aria-hidden="true" />}
         />
         <div
-          className="mt-3 grid grid-cols-4 gap-1 rounded-lg bg-shell-surface p-1"
+          className="bg-shell-surface mt-3 grid grid-cols-4 gap-1 rounded-lg p-1"
           aria-label={copy.filtersLabel}
           role="group"
         >
           {copy.filters.map((item) => (
-            <button
+            <Button
               key={item.id}
               type="button"
+              variant="ghost"
+              size="sm"
               aria-pressed={filter === item.id}
               onClick={() => setFilter(item.id)}
-              className={`focus-visible:outline-primary min-h-8 rounded-md px-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 ${filter === item.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-text-muted hover:bg-background hover:text-text-main'}`}
+              className={`focus-visible:outline-primary min-h-8 rounded-md px-1 text-xs transition-colors focus-visible:outline focus-visible:outline-2 ${filter === item.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-text-muted hover:bg-background hover:text-text-main'}`}
             >
               <span>{item.label}</span>
               <span className="text-[10px] opacity-75">{filterCounts[item.id]}</span>
-            </button>
+            </Button>
           ))}
         </div>
         <p className="text-text-muted mt-3 text-[11px]" aria-live="polite">
@@ -83,12 +85,14 @@ export function CommunicationsInboxList() {
           const selected = conversation.id === selectedConversation?.id;
           return (
             <div key={conversation.id} role="listitem">
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="md"
                 aria-current={selected ? 'page' : undefined}
                 aria-label={`${conversation.contactName}, ${copy.statusLabel(conversation.status)}, ${conversation.preview ?? copy.noMessagesLabel}`}
                 onClick={() => selectConversation(conversation.id)}
-                className={`border-border-subtle focus-visible:outline-primary flex w-full min-w-0 gap-3 border-b px-3 py-2.5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${selected ? 'border-l-2 border-l-primary bg-primary/10 pl-[10px]' : 'hover:bg-shell-surface'}`}
+                className={`border-border-subtle focus-visible:outline-primary flex w-full min-w-0 gap-3 border-b px-3 py-2.5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${selected ? 'border-l-primary bg-primary/10 border-l-2 pl-[10px]' : 'hover:bg-shell-surface'}`}
               >
                 <UserAvatar
                   name={conversation.contactName}
@@ -122,7 +126,7 @@ export function CommunicationsInboxList() {
                     ) : null}
                   </span>
                 </span>
-              </button>
+              </Button>
             </div>
           );
         })}

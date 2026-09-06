@@ -1,4 +1,7 @@
-import { CommunicationInboxModelSchema, CommunicationInboxTemplateSchema } from '@loopdev/contracts';
+import {
+  CommunicationInboxModelSchema,
+  CommunicationInboxTemplateSchema,
+} from '@loopdev/contracts';
 import { COMMUNICATIONS_INBOX_MODEL, COMMUNICATIONS_INBOX_TEMPLATES } from './inbox.fixture';
 import type {
   ComposerMode,
@@ -110,7 +113,10 @@ export function createFixtureInboxDataSource(actorLabel: string): InboxDataSourc
       const template = COMMUNICATIONS_INBOX_TEMPLATES.find(({ id }) => id === templateId);
       const now = new Date().toISOString();
       const body = template
-        ? template.body.replace(/{{\s*([^}]+)\s*}}/g, (_, name: string) => templateParameters[name] ?? '')
+        ? template.body.replace(
+            /{{\s*([^}]+)\s*}}/g,
+            (_, name: string) => templateParameters[name] ?? '',
+          )
         : templateId;
       return replaceConversation(conversation, {
         preview: body,

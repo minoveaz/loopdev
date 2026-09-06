@@ -52,7 +52,8 @@ export const COMMUNICATIONS_INBOX_COPY: InboxCopy = {
   expiredWindowTitle: 'Reply window expired',
   retryLabel: 'Retry',
   sendFailureTitle: 'Message not sent',
-  sendFailureDescription: 'The message could not be delivered. Review the conversation and try again.',
+  sendFailureDescription:
+    'The message could not be delivered. Review the conversation and try again.',
   conflictTitle: 'Conversation changed',
   conflictDescription: 'This conversation was updated elsewhere. Refresh before continuing.',
   offlineTitle: 'You are offline',

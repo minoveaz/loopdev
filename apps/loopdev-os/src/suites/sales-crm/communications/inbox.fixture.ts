@@ -74,7 +74,7 @@ export const COMMUNICATIONS_INBOX_FIXTURES: InboxConversation[] = [
     assignedToUserId: null,
     lastActivityAt: '2026-08-30T14:24:00.000Z',
     lastInboundAt: '2026-08-30T14:24:00.000Z',
-    windowExpiresAt: '2026-08-31T14:24:00.000Z',
+    windowExpiresAt: '2099-01-01T00:00:00.000Z',
     createdAt: '2026-08-30T13:50:00.000Z',
     updatedAt: '2026-08-30T14:24:00.000Z',
     contactName: 'Ana Garcia',

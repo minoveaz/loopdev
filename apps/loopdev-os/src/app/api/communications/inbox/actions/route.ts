@@ -33,45 +33,58 @@ export async function POST(request: Request) {
     parsed.data.organizationId,
     permissionByAction[parsed.data.action],
   );
-  if (!access.allowed) return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
+  if (!access.allowed)
+    return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
 
   try {
     switch (parsed.data.action) {
       case 'assign':
-        return NextResponse.json(await assignConversationToSelf({
-          organizationId: parsed.data.organizationId,
-          conversationId: parsed.data.conversationId,
-          userId: access.userId,
-        }));
+        return NextResponse.json(
+          await assignConversationToSelf({
+            organizationId: parsed.data.organizationId,
+            conversationId: parsed.data.conversationId,
+            userId: access.userId,
+          }),
+        );
       case 'reply':
-        return NextResponse.json(await sendWhatsAppConversationText({
-          organizationId: parsed.data.organizationId,
-          conversationId: parsed.data.conversationId,
-          body: parsed.data.body,
-        }));
+        return NextResponse.json(
+          await sendWhatsAppConversationText({
+            organizationId: parsed.data.organizationId,
+            conversationId: parsed.data.conversationId,
+            body: parsed.data.body,
+          }),
+        );
       case 'note':
-        return NextResponse.json(await createInternalNote({
-          organizationId: parsed.data.organizationId,
-          conversationId: parsed.data.conversationId,
-          body: parsed.data.body,
-          authorId: access.userId,
-        }), { status: 201 });
+        return NextResponse.json(
+          await createInternalNote({
+            organizationId: parsed.data.organizationId,
+            conversationId: parsed.data.conversationId,
+            body: parsed.data.body,
+            authorId: access.userId,
+          }),
+          { status: 201 },
+        );
       case 'template':
-        return NextResponse.json(await sendWhatsAppConversationTemplate({
-          organizationId: parsed.data.organizationId,
-          conversationId: parsed.data.conversationId,
-          templateId: parsed.data.templateId,
-          templateParameters: parsed.data.templateParameters,
-        }));
+        return NextResponse.json(
+          await sendWhatsAppConversationTemplate({
+            organizationId: parsed.data.organizationId,
+            conversationId: parsed.data.conversationId,
+            templateId: parsed.data.templateId,
+            templateParameters: parsed.data.templateParameters,
+          }),
+        );
       case 'status':
-        return NextResponse.json(await changeConversationStatus({
-          organizationId: parsed.data.organizationId,
-          conversationId: parsed.data.conversationId,
-          status: parsed.data.status,
-        }));
+        return NextResponse.json(
+          await changeConversationStatus({
+            organizationId: parsed.data.organizationId,
+            conversationId: parsed.data.conversationId,
+            status: parsed.data.status,
+          }),
+        );
     }
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unable to update communication conversation';
+    const message =
+      error instanceof Error ? error.message : 'Unable to update communication conversation';
     return NextResponse.json({ error: message }, { status: errorStatus(message) });
   }
 }

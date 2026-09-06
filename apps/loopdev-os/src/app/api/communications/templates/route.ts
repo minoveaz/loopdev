@@ -11,9 +11,12 @@ export async function GET(request: Request) {
   });
   if (!parsed.success) return NextResponse.json({ error: 'Invalid organization' }, { status: 400 });
   const access = await authorizeCommunications(parsed.data.organizationId, 'communications.read');
-  if (!access.allowed) return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
+  if (!access.allowed)
+    return NextResponse.json({ error: 'Unauthorized' }, { status: access.status });
   try {
-    return NextResponse.json({ templates: await listCommunicationTemplates(parsed.data.organizationId) });
+    return NextResponse.json({
+      templates: await listCommunicationTemplates(parsed.data.organizationId),
+    });
   } catch {
     return NextResponse.json({ error: 'Unable to list communication templates' }, { status: 500 });
   }
