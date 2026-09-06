@@ -85,6 +85,7 @@ export const CrmContactSchema = z.object({
   email: z.string().email().nullable().optional(),
   phone: z.string().trim().min(3).max(32).nullable().optional(),
   companyName: z.string().trim().max(160).nullable().optional(),
+  identityStatus: z.enum(['verified', 'pending_identity_review']).default('verified'),
   createdAt: TimestampSchema,
   updatedAt: TimestampSchema,
 });
@@ -119,6 +120,23 @@ export const CrmCreateContactCommandSchema = z
     path: ['email'],
   });
 export type CrmCreateContactCommand = z.infer<typeof CrmCreateContactCommandSchema>;
+
+export const CrmResolveWhatsAppInboundContactCommandSchema = z.object({
+  organizationId: IdSchema,
+  phone: z.string().regex(/^\+[1-9]\d{6,14}$/),
+  profileName: z.string().trim().min(1).max(120).nullable().optional(),
+});
+export type CrmResolveWhatsAppInboundContactCommand = z.infer<
+  typeof CrmResolveWhatsAppInboundContactCommandSchema
+>;
+
+export const CrmInboundContactResolutionSchema = z.object({
+  contactId: IdSchema,
+  organizationId: IdSchema,
+  identityStatus: z.enum(['verified', 'pending_identity_review']),
+  created: z.boolean(),
+});
+export type CrmInboundContactResolution = z.infer<typeof CrmInboundContactResolutionSchema>;
 
 export const CrmUpdateContactCommandSchema = z.object({
   organizationId: IdSchema,
@@ -333,7 +351,12 @@ const PipelineStageShape = {
   // the product contract terminology; persistence is organization-scoped.
   tenantId: IdSchema.optional(),
   workspaceId: IdSchema.nullable().optional(),
-  key: z.string().trim().min(1).max(80).regex(/^[a-z0-9][a-z0-9_-]*$/),
+  key: z
+    .string()
+    .trim()
+    .min(1)
+    .max(80)
+    .regex(/^[a-z0-9][a-z0-9_-]*$/),
   name: z.string().trim().min(1).max(80).optional(),
   label: z.string().trim().min(1).max(80).optional(),
   stageOrder: z.number().int().nonnegative().optional(),
@@ -465,7 +488,10 @@ export const CrmCreateManualOpportunityCommandSchema = z.object({
   productKey: z.string().trim().min(1).max(160),
   name: z.string().trim().min(1).max(160),
   amount: z.number().nonnegative().nullable().optional(),
-  currency: z.string().regex(/^[A-Z]{3}$/).default('EUR'),
+  currency: z
+    .string()
+    .regex(/^[A-Z]{3}$/)
+    .default('EUR'),
   probability: z.number().int().min(0).max(100).nullable().optional(),
   expectedCloseDate: z.string().date().nullable().optional(),
   expectedCloseAt: TimestampSchema.nullable().optional(),
@@ -485,9 +511,7 @@ export const CrmMoveOpportunityStageCommandSchema = z.object({
   origin: StageChangeOriginSchema.default('record'),
   actorUserId: IdSchema.nullable().optional(),
 });
-export type CrmMoveOpportunityStageCommand = z.infer<
-  typeof CrmMoveOpportunityStageCommandSchema
->;
+export type CrmMoveOpportunityStageCommand = z.infer<typeof CrmMoveOpportunityStageCommandSchema>;
 
 export const CrmReopenOpportunityCommandSchema = z.object({
   organizationId: IdSchema,
@@ -497,9 +521,7 @@ export const CrmReopenOpportunityCommandSchema = z.object({
   reason: z.string().trim().min(1).max(500),
   actorUserId: IdSchema.nullable().optional(),
 });
-export type CrmReopenOpportunityCommand = z.infer<
-  typeof CrmReopenOpportunityCommandSchema
->;
+export type CrmReopenOpportunityCommand = z.infer<typeof CrmReopenOpportunityCommandSchema>;
 
 export const CrmUpdateOpportunityCommandSchema = z.object({
   organizationId: IdSchema,
@@ -508,22 +530,28 @@ export const CrmUpdateOpportunityCommandSchema = z.object({
   brandId: IdSchema.nullable().optional(),
   productKey: z.string().trim().min(1).max(160).optional(),
   amount: z.number().nonnegative().nullable().optional(),
-  currency: z.string().regex(/^[A-Z]{3}$/).optional(),
+  currency: z
+    .string()
+    .regex(/^[A-Z]{3}$/)
+    .optional(),
   probability: z.number().int().min(0).max(100).nullable().optional(),
   expectedCloseDate: z.string().date().nullable().optional(),
   expectedCloseAt: TimestampSchema.nullable().optional(),
   assignedUserId: IdSchema.nullable().optional(),
   expectedVersion: z.number().int().positive(),
 });
-export type CrmUpdateOpportunityCommand = z.infer<
-  typeof CrmUpdateOpportunityCommandSchema
->;
+export type CrmUpdateOpportunityCommand = z.infer<typeof CrmUpdateOpportunityCommandSchema>;
 
 export const CrmConfigurePipelineStageCommandSchema = z.object({
   organizationId: IdSchema,
   stageId: IdSchema.optional(),
   workspaceId: IdSchema.nullable().optional(),
-  key: z.string().trim().min(1).max(80).regex(/^[a-z0-9][a-z0-9_-]*$/),
+  key: z
+    .string()
+    .trim()
+    .min(1)
+    .max(80)
+    .regex(/^[a-z0-9][a-z0-9_-]*$/),
   name: z.string().trim().min(1).max(80),
   stageOrder: z.number().int().nonnegative(),
   active: z.boolean().default(true),
@@ -537,9 +565,7 @@ export type CrmConfigurePipelineStageCommand = z.infer<
 export const CrmOpportunityCommandEnvelopeSchema = <T extends z.ZodTypeAny>(data: T) =>
   z.object({
     data: data.nullable(),
-    error: z
-      .object({ code: OpportunityErrorCodeSchema, message: z.string() })
-      .nullable(),
+    error: z.object({ code: OpportunityErrorCodeSchema, message: z.string() }).nullable(),
     requestId: z.string().min(1),
   });
 

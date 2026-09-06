@@ -396,6 +396,19 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(vitest@4.0.16(@types/node@20.19.27)(jiti@2.7.0)(jsdom@27.4.0)(lightningcss@1.32.0)(terser@5.44.1)(yaml@2.9.0))
 
+  apps/loopdev-worker:
+    dependencies:
+      '@loopdev/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+    devDependencies:
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.16(@types/node@25.0.3)(jiti@2.7.0)(jsdom@27.4.0)(lightningcss@1.32.0)(terser@5.44.1)(yaml@2.9.0)
+
   ds/apps/estar-protegidos:
     dependencies:
       next:
@@ -14798,11 +14811,11 @@ snapshots:
   vite@6.4.1(@types/node@20.19.27)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.44.1)(yaml@2.9.0):
     dependencies:
       esbuild: 0.25.12
-      fdir: 6.5.0(picomatch@4.0.5)
-      picomatch: 4.0.5
+      fdir: 6.5.0(picomatch@4.0.3)
+      picomatch: 4.0.3
       postcss: 8.5.26
       rollup: 4.54.0
-      tinyglobby: 0.2.17
+      tinyglobby: 0.2.15
     optionalDependencies:
       '@types/node': 20.19.27
       fsevents: 2.3.3

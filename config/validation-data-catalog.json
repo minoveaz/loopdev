@@ -7,7 +7,12 @@
     "marketing": ["003_marketing_rls.sql", "004_content_engine_rls.sql"],
     "creative": ["005_creative_studio_rls.sql", "006_creative_studio_storage_rls.sql"],
     "crm": ["005_crm_security.sql", "006_crm_tasks_contract.sql"],
-    "communications": []
+    "communications": [
+      "007_communications_core_security.sql",
+      "008_communications_accounts_templates.sql",
+      "009_communications_inbound_delivery.sql",
+      "010_communications_worker_controls.sql"
+    ]
   },
   "nonTestFiles": {
     "006_creative_studio_storage_local.sql": "manual local storage fallback; run with psql"

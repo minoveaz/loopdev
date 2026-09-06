@@ -50,32 +50,32 @@ The first success signal is that an authorized CRM agent can operate an inbound 
 
 ### Adjacent suites and ownership
 
-| Capability | Owning area | Boundary |
-| --- | --- | --- |
-| Contacts, leads, opportunities, activities and commercial consent | CRM | CRM supplies canonical references and consumes conversation context. |
-| Accounts, providers, webhooks, conversation state and delivery | Communications Core | Core enforces policy and exposes public operations. |
-| Provider connections and secrets | Integration Hub / Communications Core | Server-side adapters and credential references only; no suite owns tokens. |
-| Campaign intent, audiences and marketing metrics | Marketing Studio | Marketing requests authorized communications through contracts; it does not own transport. |
-| Tenant membership, base access and audit foundation | Platform Core | Platform resolves actor and organization server-side. |
+| Capability                                                        | Owning area                           | Boundary                                                                                   |
+| ----------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Contacts, leads, opportunities, activities and commercial consent | CRM                                   | CRM supplies canonical references and consumes conversation context.                       |
+| Accounts, providers, webhooks, conversation state and delivery    | Communications Core                   | Core enforces policy and exposes public operations.                                        |
+| Provider connections and secrets                                  | Integration Hub / Communications Core | Server-side adapters and credential references only; no suite owns tokens.                 |
+| Campaign intent, audiences and marketing metrics                  | Marketing Studio                      | Marketing requests authorized communications through contracts; it does not own transport. |
+| Tenant membership, base access and audit foundation               | Platform Core                         | Platform resolves actor and organization server-side.                                      |
 
 ## Module map
 
 ### Initial modules
 
-| Module | Purpose | Priority | Dependency | Definition status |
-| --- | --- | --- | --- | --- |
-| Communications Core | Normalize secure, tenant-safe communication operations and WhatsApp Cloud adaptation. | Foundation | Platform Core, CRM canonical contacts, Meta Cloud API | Proposed |
-| CRM Communications Inbox | Let CRM users triage, inspect and act on authorized WhatsApp conversations. | First vertical | Communications Core, CRM contacts and Shell recipes | Proposed |
+| Module                   | Purpose                                                                               | Priority       | Dependency                                            | Definition status |
+| ------------------------ | ------------------------------------------------------------------------------------- | -------------- | ----------------------------------------------------- | ----------------- |
+| Communications Core      | Normalize secure, tenant-safe communication operations and WhatsApp Cloud adaptation. | Foundation     | Platform Core, CRM canonical contacts, Meta Cloud API | Proposed          |
+| CRM Communications Inbox | Let CRM users triage, inspect and act on authorized WhatsApp conversations.           | First vertical | Communications Core, CRM contacts and Shell recipes   | Proposed          |
 
 ### Future modules
 
-| Module | Reason to defer | Dependency or gate |
-| --- | --- | --- |
-| Additional channel adapters | No approved provider or operational model. | Provider contract, security review and operational readiness. |
-| Media and attachments | Require Storage controls and lifecycle decisions. | Approved media contract and security gates. |
-| Team routing, saved views and macros | Not necessary to validate the first agent workflow. | Assignment, permissions and audit contract. |
-| Marketing and transactional sends | Different consent, audience, billing and recovery requirements. | Marketing/Workflow contracts and compliance approval. |
-| Independent Communications suite | Portfolio boundary is not approved and one consumer does not justify it. | Two real consumers or an approved portfolio decision. |
+| Module                               | Reason to defer                                                          | Dependency or gate                                            |
+| ------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| Additional channel adapters          | No approved provider or operational model.                               | Provider contract, security review and operational readiness. |
+| Media and attachments                | Require Storage controls and lifecycle decisions.                        | Approved media contract and security gates.                   |
+| Team routing, saved views and macros | Not necessary to validate the first agent workflow.                      | Assignment, permissions and audit contract.                   |
+| Marketing and transactional sends    | Different consent, audience, billing and recovery requirements.          | Marketing/Workflow contracts and compliance approval.         |
+| Independent Communications suite     | Portfolio boundary is not approved and one consumer does not justify it. | Two real consumers or an approved portfolio decision.         |
 
 ## Experience
 
@@ -95,7 +95,7 @@ Every business record is scoped by `organization_id`. Organization context and p
 
 ### Roles and permissions
 
-The initial model separates `communications.read`, reply/internal-note, assignment, lifecycle and account-management permissions. Agent may read and operate conversations assigned within an authorized workspace and assign an eligible conversation to self. Manager may operate and reassign conversations within authorized workspaces. Viewer is read-only. Organization administrator configures accounts outside the routine inbox. Export remains deferred.
+The initial model separates `communications.read`, reply/internal-note, assignment, lifecycle and `communications.manage-accounts` permissions. Agent may read and operate conversations assigned within an authorized workspace and assign an eligible conversation to self. Manager may operate and reassign conversations within authorized workspaces. Viewer is read-only. Organization administrator configures accounts outside the routine inbox. Export remains deferred.
 
 ### Events and integrations
 
@@ -113,13 +113,13 @@ The existing contract package, migration foundation and WhatsApp webhook are evi
 
 ## Phases and readiness
 
-| Phase | Objective | Deliverables | Validation | Exit criteria |
-| --- | --- | --- | --- | --- |
-| Definition | Define Core and Inbox packages. | Two complete proposed packages and track evidence. | Links, track and cross-document review. | Scope and open decisions are explicit. |
-| Foundation | Align public contracts, permissions and persistence. | Approved Core contract and security design. | Contract, RLS and isolation validation. | No provider or tenant boundary is ambiguous. |
-| First vertical | Integrate WhatsApp end to end in CRM. | Inbox, inbound, outbound, delivery and template lifecycle. | Focused experience, provider, security and E2E checks. | All enabled WhatsApp states are auditable and policy-enforced. |
-| Integrations | Add gated adapters and operations. | Provider-specific contracts and runbooks. | Provider, retry and incident validation. | Each channel meets its own gate. |
-| Readiness | Approve rollout. | Evidence, monitoring, kill switch and rollback plan. | Required release validation. | User approval is recorded. |
+| Phase          | Objective                                            | Deliverables                                               | Validation                                             | Exit criteria                                                  |
+| -------------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------- |
+| Definition     | Define Core and Inbox packages.                      | Two complete proposed packages and track evidence.         | Links, track and cross-document review.                | Scope and open decisions are explicit.                         |
+| Foundation     | Align public contracts, permissions and persistence. | Approved Core contract and security design.                | Contract, RLS and isolation validation.                | No provider or tenant boundary is ambiguous.                   |
+| First vertical | Integrate WhatsApp end to end in CRM.                | Inbox, inbound, outbound, delivery and template lifecycle. | Focused experience, provider, security and E2E checks. | All enabled WhatsApp states are auditable and policy-enforced. |
+| Integrations   | Add gated adapters and operations.                   | Provider-specific contracts and runbooks.                  | Provider, retry and incident validation.               | Each channel meets its own gate.                               |
+| Readiness      | Approve rollout.                                     | Evidence, monitoring, kill switch and rollback plan.       | Required release validation.                           | User approval is recorded.                                     |
 
 ## Decisions, risks and dependencies
 
