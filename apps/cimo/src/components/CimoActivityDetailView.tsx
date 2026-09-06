@@ -1,23 +1,39 @@
 import React, { useState } from 'react';
 import {
+  Activity,
+  Apple,
   ArrowLeft,
+  Beer,
+  Bike,
   Calendar,
   Check,
+  CheckCircle2,
   ChevronRight,
   Clock,
   Coffee,
+  Droplets,
+  FileText,
+  Flame,
+  Footprints,
   Heart,
   MapPin,
   MessageSquare,
   Send,
   Share2,
   ShieldCheck,
+  ShoppingBag,
   Sparkles,
+  Sun,
+  Timer,
   Users,
+  Wrench,
+  X,
   Zap,
 } from 'lucide-react';
+import { TennisBallIcon } from './CimoCreatePlanView';
 import { CrewAvatarGroup, type ActivityCardData, type ChatMessage } from '@loopdev/public-blocks';
 import { CimoMapPreviewCard } from './CimoMapPreviewCard';
+import { CimoActivitySeoHead } from './CimoActivitySeoHead';
 
 export interface CimoActivityDetailViewProps {
   activity: ActivityCardData;
@@ -58,18 +74,38 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
     setInputText('');
   };
 
+  const city = activity.location.split(',')[1]?.trim() || 'Madrid';
+
   return (
     <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6 text-[#1F4E5F]">
-      {/* Top Bar with Back Button & Share */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#1F4E5F]/10">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex items-center gap-2 text-xs font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver a Explorar</span>
-        </button>
+      {/* 🧭 SEO Head & Breadcrumbs */}
+      <CimoActivitySeoHead activity={activity} />
+
+      {/* Top Bar with Breadcrumbs & Back Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#1F4E5F]/10">
+        <div className="flex items-center gap-2 text-xs">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-1.5 font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors cursor-pointer mr-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Volver a Explorar</span>
+          </button>
+          <span className="text-[#1F4E5F]/30">•</span>
+          <nav
+            aria-label="Migas de pan"
+            className="flex items-center gap-1 text-[11px] font-bold text-[#1F4E5F]/60 flex-wrap"
+          >
+            <span className="hover:text-[#1F4E5F] cursor-pointer" onClick={onBack}>
+              CIMO
+            </span>
+            <span>›</span>
+            <span>{city}</span>
+            <span>›</span>
+            <span className="capitalize text-[#7FB77E]">{activity.sport}</span>
+          </nav>
+        </div>
 
         <div className="flex items-center gap-2">
           <button
@@ -78,7 +114,11 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             aria-label="Compartir entreno"
             className="px-3 py-1.5 rounded-full bg-[#F7F7F7] hover:bg-[#7FB77E]/15 text-[#1F4E5F] transition-colors flex items-center gap-1.5 text-xs font-black cursor-pointer border border-[#1F4E5F]/10"
           >
-            {shareCopied ? <Check className="w-3.5 h-3.5 text-[#7FB77E]" /> : <Share2 className="w-3.5 h-3.5" />}
+            {shareCopied ? (
+              <Check className="w-3.5 h-3.5 text-[#7FB77E]" />
+            ) : (
+              <Share2 className="w-3.5 h-3.5" />
+            )}
             <span>{shareCopied ? '¡Enlace copiado!' : 'Compartir'}</span>
           </button>
           <button
@@ -150,13 +190,16 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
       {activeTab === 'details' ? (
         <div className="flex flex-col gap-6">
           {/* Captain Card */}
-          <div className="p-4 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div
+            onClick={() => onNavigateToProfile?.(activity.captain.id)}
+            className="p-4 bg-[#F7F7F7] hover:bg-[#7FB77E]/10 rounded-3xl border border-[#1F4E5F]/5 hover:border-[#7FB77E]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer transition-all group"
+          >
             <div className="flex items-center gap-3">
               {activity.captain.avatarUrl ? (
                 <img
                   src={activity.captain.avatarUrl}
                   alt={activity.captain.name}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-[#1F4E5F]/20 shadow-xs"
+                  className="w-14 h-14 rounded-full object-cover border-2 border-[#1F4E5F]/20 shadow-xs group-hover:border-[#7FB77E]"
                 />
               ) : (
                 <div className="w-14 h-14 rounded-full bg-[#1F4E5F] text-white font-black text-lg flex items-center justify-center">
@@ -173,7 +216,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
-                  {activity.captain.bio ?? 'Organizador activo en CIMO. Apasionado por entrenar en grupo y con buen rollo.'}
+                  {activity.captain.bio ??
+                    'Organizador activo en CIMO. Apasionado por entrenar en grupo y con buen rollo.'}
                 </p>
               </div>
             </div>
@@ -190,103 +234,351 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </div>
           </div>
 
-          {/* Captain Instructions (if present) */}
-          {activity.instructions && (
-            <div className="p-4 bg-[#7FB77E]/10 border border-[#7FB77E]/20 rounded-2xl flex items-start gap-3">
-              <div className="p-2 rounded-xl bg-[#7FB77E] text-white shrink-0">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div className="flex flex-col gap-0.5 min-w-0">
-                <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
-                  Instrucciones del Capitán ({activity.captain.name})
-                </span>
-                <p className="text-xs text-[#1F4E5F] font-bold leading-relaxed">
-                  "{activity.instructions}"
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Technical Details & Itinerary */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 bg-white rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E]">
-                Ritmo & Requisitos
+          {/* ⚡ Métricas Clave del Plan (Tipografía Clara y Legible) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-4 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/8 flex flex-col justify-center">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#7FB77E] block mb-1">
+                Ritmo & Exigencia
               </span>
-              <p className="text-xs font-bold text-[#1F4E5F]">
-                ⚡ {activity.paceOrDetails ?? 'Ritmo cómodo adaptado al nivel de grupo.'}
-              </p>
-              <p className="text-[11px] text-[#1F4E5F]/70 mt-1">
-                Llevar calzado adecuado y ropa cómoda. Se recomienda llegar 5 minutos antes.
+              <p className="text-sm font-black text-[#1F4E5F]">
+                {activity.paceOrDetails ?? 'Ritmo cómodo y adaptado al grupo'}
               </p>
             </div>
 
-            <div className="p-4 bg-white rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E]">
-                Itinerario Previsto
+            <div className="p-4 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/8 flex flex-col justify-center">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#7FB77E] block mb-1">
+                Nivel Recomendado
               </span>
-              <ul className="text-[11px] text-[#1F4E5F]/80 flex flex-col gap-1.5 font-medium">
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">1.</span>
-                  <span>Encuentro en {activity.location}</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">2.</span>
-                  <span>Calentamiento y presentación (5 min)</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">3.</span>
-                  <span>Entrenamiento principal en grupo</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="text-[#7FB77E] font-black">4.</span>
-                  <span>{activity.thirdHalf?.enabled ? 'Estiramientos y Tercer Tiempo social' : 'Estiramientos y cierre deportivo'}</span>
-                </li>
-              </ul>
+              <p className="text-sm font-black text-[#1F4E5F]">{activity.level}</p>
+            </div>
+
+            <div className="p-4 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/8 flex flex-col justify-center">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#7FB77E] block mb-1">
+                Fecha & Horario
+              </span>
+              <p className="text-sm font-black text-[#1F4E5F]">
+                {activity.date} a las {activity.time}h
+              </p>
             </div>
           </div>
 
-          {/* ☕ Tercer Tiempo Post-Entreno (Optional Social Experience) */}
-          {activity.thirdHalf?.enabled ? (
-            <div className="p-4 sm:p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/25 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          {/* 📖 Acerca del Entrenamiento / Qué Haremos */}
+          {activity.description && (
+            <div className="p-6 bg-white rounded-3xl border border-[#1F4E5F]/10 flex flex-col gap-2.5 shadow-2xs">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#7FB77E]" />
+                <span>Acerca de este entrenamiento</span>
+              </span>
+              <p className="text-sm sm:text-base text-[#1F4E5F]/90 font-normal leading-relaxed">
+                {activity.description}
+              </p>
+            </div>
+          )}
+
+          {/* 💬 Instrucciones del Capitán (Bloque Editorial Destacado) */}
+          {activity.instructions ? (
+            <div className="p-5 bg-gradient-to-br from-[#7FB77E]/15 via-[#7FB77E]/5 to-transparent border border-[#7FB77E]/30 rounded-3xl flex flex-col gap-2 shadow-2xs">
+              <div className="flex items-center gap-2 text-[#7FB77E]">
+                <Sparkles className="w-4 h-4 text-[#7FB77E]" />
+                <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
+                  Instrucciones & Claves del Capitán ({activity.captain.name})
+                </span>
+              </div>
+              <p className="text-sm sm:text-base font-semibold text-[#1F4E5F] leading-relaxed italic">
+                "{activity.instructions}"
+              </p>
+            </div>
+          ) : null}
+
+          {/* 🎒 Qué debes traer & Material Recomendado (100% Vectorial sin Emojis OS) */}
+          <div className="p-5 bg-white rounded-3xl border border-[#1F4E5F]/10 flex flex-col gap-3 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4 text-[#7FB77E]" />
+                <span>Qué debes traer para esta sesión</span>
+              </span>
+              <span className="text-[10px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+                Checklist Recomendado
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1">
+              {activity.sport === 'hiking' ? (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Footprints className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Calzado Trail
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Suela con agarre
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Agua (1.5L)
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Mínimo sugerido
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Cortavientos
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Capa de abrigo
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Apple className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Snack / Fruta
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Frutos secos
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Sun className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Protección Solar
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Gorra y crema
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : activity.sport === 'padel' ? (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <TennisBallIcon className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Pala de Pádel
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Propia o alquilada
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Footprints className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Calzado Pádel
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Suela espiga / clay
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Botella de Agua
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Para cambios de lado
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Bolas Incluidas
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Las pone el capitán
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : activity.sport === 'cycling' ? (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Bike className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Bici a Punto
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Presión y frenos
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Casco Obligatorio
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Homologado
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Bidón de Agua
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Con sales o agua
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Wrench className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Cámara / Bomba
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Kit de repuesto
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Footprints className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Calzado Técnico
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Zapatillas adecuadas
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Flame className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Ropa Cómoda
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Tejido transpirable
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Droplets className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Hidratación
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Botella de agua
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#EEF2F2]/50 rounded-2xl border border-[#1F4E5F]/5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+                      <Zap className="w-4 h-4 text-[#1F4E5F]" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1F4E5F] block truncate">
+                        Buena Energía
+                      </span>
+                      <span className="text-[10px] text-[#1F4E5F]/60 font-medium block truncate">
+                        Ganas de entrenar
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Tercer Tiempo Post-Entreno (CIMO Social Blue) */}
+          {activity.thirdHalf?.enabled && (
+            <div className="p-5 bg-gradient-to-r from-[#1F4E5F]/10 via-[#1F4E5F]/5 to-transparent border border-[#1F4E5F]/20 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-900 flex items-center justify-center text-2xl shrink-0 shadow-2xs">
-                  {activity.thirdHalf.type === 'beer'
-                    ? '🍻'
-                    : activity.thirdHalf.type === 'smoothie'
-                    ? '🥤'
-                    : activity.thirdHalf.type === 'picnic'
-                    ? '🌿'
-                    : '☕'}
+                <div className="w-12 h-12 rounded-2xl bg-[#1F4E5F]/15 text-[#1F4E5F] flex items-center justify-center shrink-0 shadow-2xs">
+                  {activity.thirdHalf.type === 'beer' ? (
+                    <Beer className="w-6 h-6 text-[#1F4E5F]" />
+                  ) : activity.thirdHalf.type === 'smoothie' ? (
+                    <Sparkles className="w-6 h-6 text-[#1F4E5F]" />
+                  ) : activity.thirdHalf.type === 'picnic' ? (
+                    <Sun className="w-6 h-6 text-[#1F4E5F]" />
+                  ) : (
+                    <Coffee className="w-6 h-6 text-[#1F4E5F]" />
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-black uppercase tracking-wider text-amber-900">
+                    <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
                       Tercer Tiempo Organizado
                     </span>
-                    <span className="text-[10px] font-black text-amber-800 bg-amber-500/20 px-2 py-0.5 rounded-full">
-                      Social
+                    <span className="text-[10px] font-black text-white bg-[#1F4E5F] px-2 py-0.5 rounded-full">
+                      Social & Recovery
                     </span>
                   </div>
-                  <h4 className="text-sm font-black text-[#1F4E5F] mt-0.5">
+                  <h4 className="text-base font-black text-[#1F4E5F] mt-0.5">
                     {activity.thirdHalf.venue || 'Cafetería cercana'}
                   </h4>
-                  <p className="text-xs text-[#1F4E5F]/75 font-medium mt-1 leading-relaxed">
-                    {activity.thirdHalf.notes || 'Espacio para charlar, rehidratarnos y comentar el entreno tras estirar.'}
-                  </p>
+                  {activity.thirdHalf.notes && (
+                    <p className="text-xs sm:text-sm text-[#1F4E5F]/75 font-medium mt-1 leading-relaxed">
+                      {activity.thirdHalf.notes}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              <div className="px-3.5 py-1.5 rounded-xl bg-white/80 border border-amber-500/20 text-[11px] font-bold text-amber-900 shrink-0 shadow-2xs">
-                ☕ Post-Entreno (~30-40 min)
+              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-[#1F4E5F]/20 text-xs font-bold text-[#1F4E5F] shrink-0 shadow-2xs flex items-center gap-1.5">
+                <Coffee className="w-3.5 h-3.5 text-[#1F4E5F]" />
+                <span>Post-Entreno (~30-40 min)</span>
               </div>
-            </div>
-          ) : (
-            <div className="p-3 bg-[#F7F7F7] border border-[#1F4E5F]/10 rounded-2xl flex items-center gap-2.5 text-xs text-[#1F4E5F]/70 font-medium">
-              <span className="text-base">⚡</span>
-              <span>
-                <strong>Plan Deportivo Puro:</strong> Este entreno está enfocado 100% en la sesión física sin tercer tiempo posterior organizado.
-              </span>
             </div>
           )}
 
@@ -297,54 +589,33 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             </span>
             <CimoMapPreviewCard
               location={activity.location}
-              city={activity.location.includes('Barcelona') ? 'Barcelona' : activity.location.includes('Valencia') ? 'Valencia' : 'Madrid'}
+              city={
+                activity.location.includes('Barcelona')
+                  ? 'Barcelona'
+                  : activity.location.includes('Valencia')
+                    ? 'Valencia'
+                    : 'Madrid'
+              }
               postalCode={activity.postalCode}
             />
-          </div>
-
-          {/* Attendees / The Crew */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
-                El Crew ({activity.currentMembers.length} de {activity.maxMembers} plazas ocupadas)
-              </span>
-              <span className="text-xs font-bold text-[#7FB77E]">
-                {activity.maxMembers - activity.currentMembers.length} plazas disponibles
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {activity.currentMembers.map((m) => (
-                <div
-                  key={m.id}
-                  onClick={() => onNavigateToProfile?.(m.id)}
-                  className="p-3 bg-[#F7F7F7] hover:bg-[#7FB77E]/10 rounded-2xl border border-[#1F4E5F]/5 hover:border-[#7FB77E]/30 flex items-center gap-2.5 transition-all cursor-pointer group"
-                >
-                  {m.avatarUrl ? (
-                    <img
-                      src={m.avatarUrl}
-                      alt={m.name}
-                      className="w-8 h-8 rounded-full object-cover border border-[#1F4E5F]/15 shrink-0 group-hover:scale-105 transition-transform"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] font-black text-xs flex items-center justify-center shrink-0">
-                      {m.name.charAt(0)}
-                    </div>
-                  )}
-                  <div className="truncate">
-                    <span className="text-xs font-bold text-[#1F4E5F] block truncate group-hover:text-[#7FB77E] transition-colors">{m.name}</span>
-                    <span className="text-[9px] text-[#7FB77E] font-black uppercase block">
-                      {m.isCaptain ? 'Capitán' : 'Miembro'}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       ) : (
         /* Embedded Crew Chat */
         <div className="flex flex-col h-96 bg-[#F7F7F7] rounded-3xl p-4 border border-[#1F4E5F]/5">
+          {/* Ephemeral Chat Expiration Header */}
+          <div className="mb-3 px-3 py-2 bg-white rounded-2xl border border-[#7FB77E]/20 flex items-center justify-between shadow-2xs">
+            <div className="flex items-center gap-2 min-w-0">
+              <Clock className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+              <span className="text-[11px] font-black text-[#1F4E5F] truncate">
+                Chat Temporal del Evento
+              </span>
+            </div>
+            <span className="text-[9px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.5 rounded-full shrink-0">
+              ⏳ Cierra 24h tras el entreno
+            </span>
+          </div>
+
           <div className="flex-1 overflow-y-auto space-y-3 pr-1">
             {chatMessages.length === 0 ? (
               <div className="h-full flex items-center justify-center text-xs text-[#1F4E5F]/50">
@@ -366,7 +637,9 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
                   )}
                   <div className="flex-1 bg-white p-3 rounded-2xl shadow-2xs border border-[#1F4E5F]/5">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-extrabold text-[#1F4E5F]">{msg.senderName}</span>
+                      <span className="text-xs font-extrabold text-[#1F4E5F]">
+                        {msg.senderName}
+                      </span>
                       <span className="text-[10px] text-[#1F4E5F]/40">{msg.timestamp}</span>
                     </div>
                     <p className="text-xs text-[#1F4E5F]/90 leading-relaxed">{msg.text}</p>
@@ -395,8 +668,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
         </div>
       )}
 
-      {/* Sticky Bottom Action CTA */}
-      <div className="pt-4 border-t border-[#1F4E5F]/10 flex items-center justify-between gap-4">
+      {/* Mobile/Tablet Sticky Bottom Action CTA (Hidden on Desktop) */}
+      <div className="pt-4 border-t border-[#1F4E5F]/10 flex lg:hidden items-center justify-between gap-4">
         <div>
           <span className="text-xs font-black text-[#1F4E5F] block">
             {activity.date} a las {activity.time}h
@@ -414,8 +687,8 @@ export const CimoActivityDetailView: React.FC<CimoActivityDetailViewProps> = ({
             isJoined
               ? 'bg-[#7FB77E] text-white shadow-xs'
               : isFull
-              ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-              : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white active:scale-95'
+                ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
+                : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white active:scale-95'
           }`}
         >
           {isJoined ? (

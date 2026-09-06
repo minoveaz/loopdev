@@ -6,7 +6,17 @@ import {
   type ActivityCardData,
   type ChatMessage,
 } from '@loopdev/public-blocks';
-import { Calendar, Check, CheckCircle2, ChevronRight, Clock, MapPin, MessageSquare, Star, Users } from 'lucide-react';
+import {
+  Calendar,
+  Check,
+  CheckCircle2,
+  ChevronRight,
+  Clock,
+  MapPin,
+  MessageSquare,
+  Star,
+  Users,
+} from 'lucide-react';
 
 export interface CimoCrewDetailInspectorProps {
   activity: ActivityCardData | null;
@@ -61,7 +71,9 @@ export const CimoCrewDetailInspector: React.FC<CimoCrewDetailInspectorProps> = (
       <div className="space-y-1.5 text-xs text-[#1F4E5F]/80 pb-3 border-b border-[#F7F7F7]">
         <div className="flex items-center gap-2">
           <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
-          <span className="font-bold">{activity.date} a las {activity.time} h</span>
+          <span className="font-bold">
+            {activity.date} a las {activity.time} h
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
@@ -86,8 +98,8 @@ export const CimoCrewDetailInspector: React.FC<CimoCrewDetailInspectorProps> = (
             isJoined
               ? 'bg-[#7FB77E] text-white shadow-xs'
               : isFull
-              ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-              : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white shadow-xs'
+                ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
+                : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white shadow-xs'
           }`}
         >
           {isJoined ? (

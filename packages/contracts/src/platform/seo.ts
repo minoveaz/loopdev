@@ -135,8 +135,14 @@ export type PublicTwitterCard = z.infer<typeof PublicTwitterCardSchema>;
 
 // --- 3. Metadatos SEO Canónicos ---
 export const PublicSeoMetadataSchema = z.object({
-  title: z.string().min(10, 'Title must be at least 10 chars').max(80, 'Title should not exceed 80 chars'),
-  description: z.string().min(50, 'Description must be at least 50 chars').max(200, 'Description should not exceed 200 chars'),
+  title: z
+    .string()
+    .min(10, 'Title must be at least 10 chars')
+    .max(80, 'Title should not exceed 80 chars'),
+  description: z
+    .string()
+    .min(50, 'Description must be at least 50 chars')
+    .max(200, 'Description should not exceed 200 chars'),
   canonicalUrl: z.string().url().optional(),
   hreflang: z.record(z.string()).optional(), // e.g. { es: '/...', en: '/en/...' }
   openGraph: PublicOpenGraphSchema,
@@ -160,7 +166,9 @@ export const PublicRouteDefinitionSchema = z.object({
   alternate: z.string().optional(),
   indexable: z.boolean().default(true),
   sitemap: z.boolean().default(true),
-  changefreq: z.enum(['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']).default('weekly'),
+  changefreq: z
+    .enum(['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])
+    .default('weekly'),
   priority: z.number().min(0).max(1).default(0.8),
   redirectTo: z.string().optional(),
 });

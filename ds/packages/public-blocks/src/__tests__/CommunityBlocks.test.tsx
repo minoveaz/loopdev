@@ -48,7 +48,13 @@ describe('Community Blocks (CIMO)', () => {
     render(
       <ChatStreamWidget
         messages={[
-          { id: '1', senderId: 'user-1', senderName: 'Sofía', text: '¡Nos vemos en 10 min!', timestamp: '19:20' },
+          {
+            id: '1',
+            senderId: 'user-1',
+            senderName: 'Sofía',
+            text: '¡Nos vemos en 10 min!',
+            timestamp: '19:20',
+          },
         ]}
         onSendMessage={handleSend}
       />,

@@ -33,8 +33,14 @@ describe('Lead-Gen & B2B Blocks (VitaBlue & LoopDev)', () => {
     render(
       <FaqSection
         faqs={[
-          { question: '¿El seguro tiene carencias?', answer: 'No, no tiene periodos de carencia para visados.' },
-          { question: '¿Incluye repatriación?', answer: 'Sí, incluye cobertura completa de repatriación.' },
+          {
+            question: '¿El seguro tiene carencias?',
+            answer: 'No, no tiene periodos de carencia para visados.',
+          },
+          {
+            question: '¿Incluye repatriación?',
+            answer: 'Sí, incluye cobertura completa de repatriación.',
+          },
         ]}
       />,
     );

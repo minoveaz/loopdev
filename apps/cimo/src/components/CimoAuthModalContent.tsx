@@ -27,7 +27,10 @@ export const CimoAuthModalContent: React.FC<CimoAuthModalContentProps> = ({ onSu
       {step === 'email' ? (
         <form onSubmit={handleSendCode} className="flex flex-col gap-3">
           <div>
-            <label htmlFor="cimo-auth-email" className="text-xs font-bold text-slate-700 block mb-1">
+            <label
+              htmlFor="cimo-auth-email"
+              className="text-xs font-bold text-slate-700 block mb-1"
+            >
               Introduce tu correo electrónico
             </label>
             <div className="relative">

@@ -47,8 +47,22 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
   const [activeTab, setActiveTab] = useState<'convocatorias' | 'members' | 'chat'>('convocatorias');
   const [shareCopied, setShareCopied] = useState(false);
   const [messages, setMessages] = useState([
-    { id: '1', sender: 'Sofía Díaz', text: '¡Mañana rodaje suave por El Retiro a las 07:30h!', time: '18:40', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
-    { id: '2', sender: 'Marco Rossi', text: 'Allí estaré. Llevo bidón de isotónico.', time: '19:05', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200' },
+    {
+      id: '1',
+      sender: 'Sofía Díaz',
+      text: '¡Mañana rodaje suave por El Retiro a las 07:30h!',
+      time: '18:40',
+      avatar:
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+    },
+    {
+      id: '2',
+      sender: 'Marco Rossi',
+      text: 'Allí estaré. Llevo bidón de isotónico.',
+      time: '19:05',
+      avatar:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+    },
   ]);
   const [newMessage, setNewMessage] = useState('');
 
@@ -68,7 +82,8 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
         sender: 'Tú (Alex)',
         text: newMessage.trim(),
         time: 'Ahora',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+        avatar:
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
       },
     ]);
     setNewMessage('');
@@ -92,7 +107,11 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
           onClick={handleShareSquad}
           className="inline-flex items-center gap-2 text-xs font-bold bg-[#1F4E5F] text-white hover:bg-[#1F4E5F]/90 px-4 py-2 rounded-2xl transition-all cursor-pointer shadow-2xs"
         >
-          {shareCopied ? <Check className="w-4 h-4 text-[#7FB77E]" /> : <Share2 className="w-4 h-4" />}
+          {shareCopied ? (
+            <Check className="w-4 h-4 text-[#7FB77E]" />
+          ) : (
+            <Share2 className="w-4 h-4" />
+          )}
           <span>{shareCopied ? '¡Enlace copiado!' : 'Compartir Squad (WhatsApp)'}</span>
         </button>
       </div>
@@ -122,7 +141,8 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
               </h1>
 
               <p className="text-xs text-white/80 font-medium mt-1">
-                Frecuencia: <strong className="text-white">{squad.recurringSchedule}</strong> • Ritmo: <strong className="text-[#7FB77E]">{squad.typicalPaceOrLevel}</strong>
+                Frecuencia: <strong className="text-white">{squad.recurringSchedule}</strong> •
+                Ritmo: <strong className="text-[#7FB77E]">{squad.typicalPaceOrLevel}</strong>
               </p>
             </div>
           </div>
@@ -189,14 +209,17 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
                   Próxima Sesión Oficial
                 </span>
                 <span className="text-xs font-bold text-[#1F4E5F]">
-                  {squad.activeCallout.attendingMembers.length}/{squad.activeCallout.maxCapacity} confirmados
+                  {squad.activeCallout.attendingMembers.length}/{squad.activeCallout.maxCapacity}{' '}
+                  confirmados
                 </span>
               </div>
 
               <div>
                 <h3 className="text-lg font-black text-[#1F4E5F]">{squad.activeCallout.title}</h3>
                 <p className="text-xs text-[#1F4E5F]/70 mt-1 flex items-center gap-2">
-                  <span>📅 {squad.activeCallout.date} a las {squad.activeCallout.time}</span>
+                  <span>
+                    📅 {squad.activeCallout.date} a las {squad.activeCallout.time}
+                  </span>
                   <span>•</span>
                   <span>📍 {squad.activeCallout.meetingPoint}</span>
                 </p>
@@ -263,7 +286,9 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
                       </span>
                     )}
                   </div>
-                  <span className="text-[10px] text-[#1F4E5F]/60 font-medium">Miembro habitual</span>
+                  <span className="text-[10px] text-[#1F4E5F]/60 font-medium">
+                    Miembro habitual
+                  </span>
                 </div>
               </div>
 
@@ -280,7 +305,11 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
           <div className="flex flex-col gap-3 min-h-[220px] max-h-[360px] overflow-y-auto pr-1">
             {messages.map((m) => (
               <div key={m.id} className="flex items-start gap-2.5">
-                <img src={m.avatar} alt={m.sender} className="w-8 h-8 rounded-full object-cover shrink-0" />
+                <img
+                  src={m.avatar}
+                  alt={m.sender}
+                  className="w-8 h-8 rounded-full object-cover shrink-0"
+                />
                 <div className="bg-[#F7F7F7] border border-[#1F4E5F]/5 p-3 rounded-2xl max-w-lg">
                   <div className="flex items-center justify-between gap-3 text-[10px]">
                     <strong className="text-[#1F4E5F] font-black">{m.sender}</strong>
@@ -292,7 +321,10 @@ export const CimoSquadHubView: React.FC<CimoSquadHubViewProps> = ({
             ))}
           </div>
 
-          <form onSubmit={handleSendMessage} className="flex items-center gap-2 pt-3 border-t border-[#1F4E5F]/10">
+          <form
+            onSubmit={handleSendMessage}
+            className="flex items-center gap-2 pt-3 border-t border-[#1F4E5F]/10"
+          >
             <input
               type="text"
               value={newMessage}

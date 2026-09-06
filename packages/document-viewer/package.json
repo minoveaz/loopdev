@@ -1,0 +1,46 @@
+{
+  "name": "@loopdev/document-viewer",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./fixtures": {
+      "types": "./src/fixtures.tsx",
+      "import": "./src/fixtures.tsx"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "autoprefixer": "10.4.20",
+    "jsdom": "^27.4.0",
+    "tailwindcss": "^3.4.17",
+    "vite": "^5.4.0",
+    "vitest": "^4.0.16",
+    "vitest-axe": "^0.1.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@loopdev/ui": "workspace:^",
+    "pdfjs-dist": "^5.7.284"
+  }
+}

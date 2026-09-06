@@ -59,6 +59,21 @@ test('keeps the CRM hardening migration free of static governance violations', (
   assert.deepEqual(validateSql(migration, 'crm-hardening.sql'), []);
 });
 
+test('keeps the CRM Lead assignment barrier explicit and organization-scoped', () => {
+  const migration = readFileSync(
+    resolve('supabase/migrations/20260907000000_crm_lead_assignment_scope.sql'),
+    'utf8',
+  );
+  assert.deepEqual(validateSql(migration, 'crm-lead-assignment-scope.sql'), []);
+  assert.match(migration, /NO-GO preflight/);
+  assert.match(
+    migration,
+    /foreign key \(organization_id, assigned_to_user_id\)[\s\S]*organization_memberships\(organization_id, user_id\)/,
+  );
+  assert.match(migration, /membership\.status = 'active'/);
+  assert.match(migration, /membership\.role in \('owner', 'admin', 'agent'\)/);
+});
+
 test('accepts the Creative Studio policy contract without destructive policies', () => {
   const migration = readFileSync(
     resolve('supabase/migrations/20260827100000_marketing_creative_studio_persistence.sql'),

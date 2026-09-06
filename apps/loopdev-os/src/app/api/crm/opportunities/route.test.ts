@@ -84,7 +84,7 @@ describe('CRM opportunities API', () => {
     );
   });
 
-  it('returns authorization failures without touching the service', async () => {
+  it('returns opportunity authorization failures without touching the service', async () => {
     authorizeCrm.mockResolvedValue({ allowed: false, status: 403 });
     const response = await GET(
       new Request(`http://localhost/api/crm/opportunities?organizationId=${organizationId}`),

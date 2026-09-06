@@ -11,13 +11,7 @@ describe('CimoProfileView (Capa 1, 2 & 5: Pasaporte Deportivo, Ficha Técnica y 
   it('renders own profile with [Editar Perfil] button and stats grid', () => {
     const onEdit = vi.fn();
 
-    render(
-      <CimoProfileView
-        user={ownUser}
-        isOwnProfile={true}
-        onEditProfile={onEdit}
-      />
-    );
+    render(<CimoProfileView user={ownUser} isOwnProfile={true} onEditProfile={onEdit} />);
 
     expect(screen.getByText('Alex Rivera')).toBeDefined();
     expect(screen.getByText('Tus Entrenos Activos y Liderados')).toBeDefined();
@@ -30,12 +24,7 @@ describe('CimoProfileView (Capa 1, 2 & 5: Pasaporte Deportivo, Ficha Técnica y 
   });
 
   it('renders another athlete profile with [Contactar] button instead of [Editar]', () => {
-    render(
-      <CimoProfileView
-        user={otherUser}
-        isOwnProfile={false}
-      />
-    );
+    render(<CimoProfileView user={otherUser} isOwnProfile={false} />);
 
     expect(screen.getByText('Sofía Díaz')).toBeDefined();
     expect(screen.queryByRole('button', { name: /Editar Perfil/i })).toBeNull();
@@ -43,12 +32,7 @@ describe('CimoProfileView (Capa 1, 2 & 5: Pasaporte Deportivo, Ficha Técnica y 
   });
 
   it('switches to Deportes tab to view weekly schedule and technical sheet', () => {
-    render(
-      <CimoProfileView
-        user={ownUser}
-        isOwnProfile={true}
-      />
-    );
+    render(<CimoProfileView user={ownUser} isOwnProfile={true} />);
 
     const sportsTab = screen.getByRole('button', { name: /Deportes & Ritmos/i });
     fireEvent.click(sportsTab);
@@ -58,12 +42,7 @@ describe('CimoProfileView (Capa 1, 2 & 5: Pasaporte Deportivo, Ficha Técnica y 
   });
 
   it('switches to Insignias tab and displays athlete badges', () => {
-    render(
-      <CimoProfileView
-        user={ownUser}
-        isOwnProfile={true}
-      />
-    );
+    render(<CimoProfileView user={ownUser} isOwnProfile={true} />);
 
     const badgesTab = screen.getByRole('button', { name: /Insignias/i });
     fireEvent.click(badgesTab);
@@ -79,12 +58,7 @@ describe('CimoProfileView (Capa 1, 2 & 5: Pasaporte Deportivo, Ficha Técnica y 
       coverUrl: 'https://invalid-broken-url.example/broken.jpg',
     };
 
-    render(
-      <CimoProfileView
-        user={brokenUser}
-        isOwnProfile={true}
-      />
-    );
+    render(<CimoProfileView user={brokenUser} isOwnProfile={true} />);
 
     const coverImg = screen.getByAltText('Cover') as HTMLImageElement;
     expect(coverImg).toBeDefined();

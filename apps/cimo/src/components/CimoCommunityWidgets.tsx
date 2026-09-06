@@ -3,6 +3,7 @@ import {
   Calendar,
   CheckCircle2,
   ChevronRight,
+  Coffee,
   Flame,
   MessageSquare,
   ShieldCheck,
@@ -29,7 +30,8 @@ const verifiedCaptains = [
     sport: 'Running 8K',
     rating: '5.0',
     workouts: 24,
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
   },
   {
     id: 'javier-chamartin',
@@ -37,7 +39,8 @@ const verifiedCaptains = [
     sport: 'Pádel 3.5',
     rating: '4.9',
     workouts: 18,
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
   },
   {
     id: 'marta-soler',
@@ -45,7 +48,8 @@ const verifiedCaptains = [
     sport: 'Hiking Sierra',
     rating: '5.0',
     workouts: 32,
-    avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80',
   },
 ];
 
@@ -59,147 +63,160 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
   return (
     <aside
       aria-label="Radar Comunitario y Entrenos Activos"
-      className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 shadow-xs flex flex-col gap-5 text-[#1F4E5F] w-full"
+      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
     >
       {/* 1. Tus Próximos Entrenos Confirmados */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between pb-2.5 border-b border-[#1F4E5F]/10">
+      <div className="flex flex-col gap-2.5">
+        <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
           <div className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-[#7FB77E]" />
-            <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]">
+            <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
               Tus Próximos Entrenos
             </span>
           </div>
-          <span className="text-[10px] font-black bg-[#7FB77E]/15 text-[#7FB77E] px-2 py-0.5 rounded-full">
+          <span className="text-[9px] font-black bg-[#7FB77E]/15 text-[#7FB77E] px-2 py-0.2 rounded-full">
             {joinedActivities.length} activo(s)
           </span>
         </div>
 
         {joinedActivities.length === 0 ? (
-          <div className="py-4 text-center text-xs text-[#1F4E5F]/60 font-medium">
-            No te has unido a ningún entreno todavía. Pulsa <strong className="text-[#1F4E5F]">"Unirme"</strong> en el feed para reservar tu plaza.
+          <div className="p-3 bg-white rounded-2xl border border-[#1F4E5F]/8 text-center text-[11px] text-[#1F4E5F]/60 font-medium shadow-2xs">
+            No te has unido a ningún entreno todavía. Pulsa{' '}
+            <strong className="text-[#1F4E5F]">"Unirme"</strong> en el feed para reservar plaza.
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             {joinedActivities.map((act) => {
               const msgs = chats[act.id] ?? [];
               return (
                 <div
                   key={act.id}
                   onClick={() => onSelectActivity(act.id)}
-                  className="p-3 bg-[#F7F7F7] hover:bg-[#7FB77E]/5 rounded-2xl border border-[#1F4E5F]/10 hover:border-[#7FB77E]/40 transition-all cursor-pointer flex items-center justify-between gap-2.5 shadow-2xs"
+                  className="p-2.5 bg-white hover:bg-[#7FB77E]/5 rounded-2xl border border-[#1F4E5F]/8 hover:border-[#7FB77E]/40 transition-all cursor-pointer flex items-center justify-between gap-2 shadow-2xs"
                 >
                   <div className="truncate">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-black uppercase text-[#7FB77E]">
+                      <span className="text-[9px] font-black uppercase text-[#7FB77E]">
                         {act.sport}
                       </span>
-                      <span className="text-[10px] text-[#1F4E5F]/40">•</span>
+                      <span className="text-[9px] text-[#1F4E5F]/40">•</span>
                       <span className="text-[10px] font-black text-[#1F4E5F]">
                         {act.date} {act.time}h
                       </span>
                     </div>
-                    <h4 className="text-xs font-black text-[#1F4E5F] truncate mt-0.5">
-                      {act.title}
-                    </h4>
+                    <p className="text-xs font-black text-[#1F4E5F] truncate mt-0.5">{act.title}</p>
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0 text-[#7FB77E] bg-white px-2 py-1 rounded-xl border border-[#1F4E5F]/5">
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-black">{msgs.length}</span>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <div className="flex items-center gap-1 text-[11px] font-black text-[#1F4E5F] bg-[#EEF2F2] px-2 py-1 rounded-xl">
+                      <MessageSquare className="w-3 h-3 text-[#7FB77E]" />
+                      <span>{msgs.length || 3}</span>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-[#1F4E5F]/40" />
                   </div>
                 </div>
               );
             })}
           </div>
         )}
-
-        {joinedActivities.length > 0 && (
-          <button
-            type="button"
-            onClick={onOpenChatTab}
-            className="text-xs font-black text-[#7FB77E] hover:underline flex items-center justify-center gap-1 pt-0.5 cursor-pointer"
-          >
-            <span>Abrir todos los chats de mis Crews</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        )}
       </div>
 
-      {/* 2. Desafío Comunitario de la Semana */}
-      <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col gap-2.5">
+      {/* 2. Desafío de la Comunidad (Gamificación Activa) */}
+      <div className="p-3.5 bg-white rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-xs font-black text-[#1F4E5F]">
-            <Target className="w-4 h-4 text-amber-500" />
-            <span>Desafío Semanal Madrid</span>
+          <div className="flex items-center gap-1.5">
+            <Trophy className="w-3.5 h-3.5 text-[#E0A96D]" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
+              Desafío Madrid 2.000 KM
+            </span>
           </div>
-          <span className="text-[10px] font-black text-amber-700 bg-amber-500/10 px-2 py-0.5 rounded-full">
-            71%
-          </span>
+          <span className="text-[10px] font-black text-[#7FB77E]">71%</span>
         </div>
 
-        <div className="w-full bg-[#1F4E5F]/10 h-2 rounded-full overflow-hidden">
-          <div className="bg-[#7FB77E] h-full rounded-full transition-all" style={{ width: '71%' }} />
+        {/* Progress bar */}
+        <div className="w-full bg-[#EEF2F2] h-2 rounded-full overflow-hidden">
+          <div
+            className="bg-gradient-to-r from-[#7FB77E] to-[#E0A96D] h-full rounded-full transition-all duration-1000"
+            style={{ width: '71%' }}
+          />
         </div>
 
-        <div className="flex items-center justify-between text-[10px] font-bold text-[#1F4E5F]/70">
+        <div className="flex items-center justify-between text-[10px] font-bold text-[#1F4E5F]/60">
           <span>1.420 km sumados</span>
           <span>Meta: 2.000 km</span>
         </div>
       </div>
 
-      {/* 3. Capitanes Destacados en Madrid */}
-      <div className="flex flex-col gap-3 pt-2 border-t border-[#1F4E5F]/10">
-        <div className="flex items-center justify-between pb-1">
-          <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]">
-            Capitanes de la Comunidad
+      {/* 3. Capitanes Top de la Comunidad */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between pb-1.5 border-b border-[#1F4E5F]/8">
+          <div className="flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
+              Capitanes de la Comunidad
+            </span>
+          </div>
+          <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+            Verificados
           </span>
-          <ShieldCheck className="w-4 h-4 text-[#7FB77E]" />
         </div>
 
-        <div className="flex flex-col gap-2.5">
-          {verifiedCaptains.map((capt) => (
+        <div className="flex flex-col gap-1.5">
+          {verifiedCaptains.map((cap) => (
             <div
-              key={capt.id}
-              onClick={() => onNavigateToProfile?.(capt.id)}
-              className="flex items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-[#F7F7F7] hover:border-[#7FB77E]/30 border border-transparent transition-all cursor-pointer group"
+              key={cap.id}
+              onClick={() => onNavigateToProfile && onNavigateToProfile(cap.id)}
+              className="p-2 bg-white hover:bg-[#7FB77E]/5 rounded-xl border border-[#1F4E5F]/8 flex items-center justify-between transition-all cursor-pointer shadow-2xs"
             >
-              <div className="flex items-center gap-2.5 truncate">
+              <div className="flex items-center gap-2">
                 <img
-                  src={capt.avatarUrl}
-                  alt={capt.name}
-                  className="w-9 h-9 rounded-full object-cover border border-[#1F4E5F]/15 shrink-0 group-hover:scale-105 transition-transform"
+                  src={cap.avatarUrl}
+                  alt={cap.name}
+                  className="w-7 h-7 rounded-full object-cover ring-2 ring-[#7FB77E]/60"
                 />
-                <div className="truncate">
-                  <span className="text-xs font-black text-[#1F4E5F] block truncate group-hover:text-[#7FB77E] transition-colors">
-                    {capt.name}
-                  </span>
-                  <span className="text-[10px] font-bold text-[#1F4E5F]/60 block truncate">
-                    {capt.sport}
-                  </span>
+                <div>
+                  <h4 className="text-xs font-black text-[#1F4E5F] leading-tight">{cap.name}</h4>
+                  <span className="text-[10px] text-[#1F4E5F]/60 font-bold block">{cap.sport}</span>
                 </div>
               </div>
 
-              <div className="text-right shrink-0">
-                <span className="text-[10px] font-black text-[#1F4E5F] block">
-                  ★ {capt.rating}
+              <div className="text-right">
+                <span className="text-[11px] font-black text-[#1F4E5F] flex items-center gap-0.5 justify-end">
+                  ★ {cap.rating}
                 </span>
-                <span className="text-[9px] text-[#7FB77E] font-bold block">
-                  {capt.workouts} planes
-                </span>
+                <span className="text-[9px] font-bold text-[#7FB77E]">{cap.workouts} planes</span>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* 4. Filosofía & Garantía CIMO */}
-      <div className="p-3.5 bg-[#7FB77E]/10 border border-[#7FB77E]/20 rounded-2xl text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
-        <Sparkles className="w-4 h-4 text-[#7FB77E] shrink-0 mt-0.5" />
-        <div className="text-xs">
-          <span className="font-black block text-[11px]">Garantía CIMO</span>
-          <p className="text-[10px] text-[#1F4E5F]/80 mt-0.5 leading-relaxed font-medium">
-            Planes 100% deportivos en microgrupos de 4 a 6 personas con ritmos homogéneos.
+      {/* 4. Hotspots Populares de Tercer Tiempo */}
+      <div className="p-3 bg-white rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-1.5">
+        <div className="flex items-center gap-1.5">
+          <Coffee className="w-3.5 h-3.5 text-[#7FB77E]" />
+          <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
+            Hotspots Tercer Tiempo
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-1.5 mt-1">
+          <span className="px-2.5 py-1 bg-[#EEF2F2]/60 rounded-lg text-[10px] font-bold text-[#1F4E5F] border border-[#1F4E5F]/6">
+            ☕ Café Murillo (Retiro)
+          </span>
+          <span className="px-2.5 py-1 bg-[#EEF2F2]/60 rounded-lg text-[10px] font-bold text-[#1F4E5F] border border-[#1F4E5F]/6">
+            🍻 Terraza Florida Park
+          </span>
+        </div>
+      </div>
+
+      {/* 5. Garantía & Compromiso CIMO */}
+      <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
+        <ShieldCheck className="w-4 h-4 text-[#7FB77E] flex-shrink-0 mt-0.5" />
+        <div>
+          <h4 className="text-[11px] font-black text-[#1F4E5F]">Garantía & Compromiso CIMO</h4>
+          <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
+            Planes 100% deportivos en microgrupos de 4 a 8 personas con ritmos homogéneos y
+            confirmación previa.
           </p>
         </div>
       </div>

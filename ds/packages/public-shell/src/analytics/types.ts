@@ -1,4 +1,8 @@
-import type { PublicAnalyticsConfig, PublicAnalyticsEvent, PublicConsentModeSettings } from '@loopdev/contracts';
+import type {
+  PublicAnalyticsConfig,
+  PublicAnalyticsEvent,
+  PublicConsentModeSettings,
+} from '@loopdev/contracts';
 import type { ReactNode } from 'react';
 
 export interface AnalyticsContextValue {

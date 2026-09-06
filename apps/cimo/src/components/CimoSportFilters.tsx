@@ -20,7 +20,10 @@ const sportsList = [
 ];
 
 const daysList = ['Todos', 'Hoy', 'Mañana', 'Sábado', 'Domingo'];
-const levelsList = ['Todos', ...CIMO_LEVELS_CATALOG.filter((l) => l.id !== 'Cualquier nivel').map((l) => l.id)];
+const levelsList = [
+  'Todos',
+  ...CIMO_LEVELS_CATALOG.filter((l) => l.id !== 'Cualquier nivel').map((l) => l.id),
+];
 
 export const CimoSportFilters: React.FC<CimoSportFiltersProps> = ({
   selectedSport,
@@ -51,7 +54,10 @@ export const CimoSportFilters: React.FC<CimoSportFiltersProps> = ({
 
       {/* Search Input */}
       <div>
-        <label htmlFor="cimo-search-input" className="text-[11px] font-extrabold text-[#1F4E5F]/70 uppercase tracking-wider block mb-1.5">
+        <label
+          htmlFor="cimo-search-input"
+          className="text-[11px] font-extrabold text-[#1F4E5F]/70 uppercase tracking-wider block mb-1.5"
+        >
           Buscar por zona o club
         </label>
         <div className="relative">

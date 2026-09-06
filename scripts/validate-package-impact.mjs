@@ -5,6 +5,7 @@ import { appendFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { routingForFile } from './validation-domain-catalog-utils.mjs';
 
 const isWindows = process.platform === 'win32';
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
@@ -16,7 +17,7 @@ const packageRules = [
     path: 'packages/contracts/',
     packageName: '@loopdev/contracts',
     scripts: ['lint', 'typecheck', 'build'],
-    globalFallback: true,
+    globalFallback: false,
     consumers: [
       ['@loopdev/ui', 'build'],
       ['loopdev-os', 'build'],
@@ -93,6 +94,29 @@ const packageRules = [
     scripts: ['lint', 'typecheck'],
     globalFallback: true,
   },
+  {
+    id: 'public-shell',
+    path: 'ds/packages/public-shell/',
+    packageName: '@loopdev/public-shell',
+    scripts: ['lint', 'typecheck', 'test', 'build'],
+    consumers: [
+      ['@loopdev/contracts', 'build'],
+      ['@loopdev/ui', 'build'],
+      ['cimo', 'build'],
+      ['loopdev-os', 'build'],
+    ],
+  },
+  {
+    id: 'public-blocks',
+    path: 'ds/packages/public-blocks/',
+    packageName: '@loopdev/public-blocks',
+    scripts: ['lint', 'typecheck', 'test', 'build'],
+    consumers: [
+      ['@loopdev/contracts', 'build'],
+      ['@loopdev/public-shell', 'build'],
+      ['cimo', 'build'],
+    ],
+  },
 ];
 
 const globalPrefixes = [
@@ -149,6 +173,10 @@ function getChangedFiles(base, head) {
 }
 
 function findPackageRule(file) {
+  const catalogRouting = routingForFile(file);
+  if (catalogRouting?.routing.packageRule) {
+    return packageRules.find((rule) => rule.id === catalogRouting.routing.packageRule);
+  }
   return packageRules.find((rule) => file.startsWith(rule.path));
 }
 
@@ -175,27 +203,39 @@ function isBackendOnlyWebFile(file) {
 
 function resolveImpact(files) {
   const rules = new Map();
+  const domainIds = new Set();
   let globalFallback = false;
   let mobile = false;
   let frontend = false;
 
   for (const file of files) {
     if (file.startsWith('supabase/')) continue;
+    if (isDocumentation(file)) continue;
 
-    if (file.startsWith('apps/loopdev-mobile/')) {
-      mobile = true;
+    const catalogRouting = routingForFile(file);
+    if (catalogRouting) {
+      if (catalogRouting.routing.mobile) mobile = true;
+      if (catalogRouting.routing.frontend) frontend = true;
+      if (catalogRouting.routing.packageImpact && !catalogRouting.routing.packageRule) {
+        domainIds.add(catalogRouting.domain.id);
+      }
+      if (catalogRouting.routing.packageRule) {
+        const rule = findPackageRule(file);
+        if (!rule) {
+          throw new Error(
+            `Missing package rule '${catalogRouting.routing.packageRule}' for domain '${catalogRouting.domain.id}'`,
+          );
+        }
+        rules.set(rule.id, rule);
+        if (rule.globalFallback || isPackageManifest(file)) globalFallback = true;
+      }
       continue;
     }
 
-    if (
-      (file.startsWith('apps/loopdev-os/') && !isBackendOnlyWebFile(file)) ||
-      file.startsWith('e2e/')
-    ) {
+    if (file.startsWith('e2e/')) {
       frontend = true;
       continue;
     }
-
-    if (isDocumentation(file)) continue;
 
     const rule = findPackageRule(file);
     if (rule) {
@@ -220,10 +260,11 @@ function resolveImpact(files) {
 
   return {
     changedFiles: files,
+    domainIds: [...domainIds],
     packageIds: [...rules.keys()],
     packageRules: packageRules.filter((rule) => rules.has(rule.id)),
     globalFallback,
-    hasTargetedValidation: rules.size > 0,
+    hasTargetedValidation: rules.size > 0 || domainIds.size > 0,
     mobile,
     frontend,
   };
@@ -235,7 +276,7 @@ function addCommand(commands, packageName, script, extraArgs = []) {
   if (!commands.has(key)) commands.set(key, args);
 }
 
-function buildCommands(packageRules, skippedConsumers = new Set()) {
+function buildCommands(packageRules, skippedConsumers = new Set(), domainIds = []) {
   const commands = new Map();
 
   for (const rule of packageRules) {
@@ -248,6 +289,10 @@ function buildCommands(packageRules, skippedConsumers = new Set()) {
       if (skippedConsumers.has(consumer)) continue;
       addCommand(commands, consumer, script);
     }
+  }
+
+  for (const id of domainIds) {
+    addCommand(commands, 'loopdev-monorepo', 'validate:domain-controls', [id, '--include-build']);
   }
 
   return [...commands.values()];
@@ -264,6 +309,7 @@ function writeGithubOutput(impact) {
       `mobile=${impact.mobile}`,
       `frontend=${impact.frontend}`,
       `package_ids=${impact.packageIds.join(',')}`,
+      `domain_ids=${impact.domainIds.join(',')}`,
     ].join('\n') + '\n',
   );
 }
@@ -278,7 +324,7 @@ function main() {
   const skippedConsumers = new Set(getOptionValues('--skip-consumer'));
   const files = getChangedFiles(base, head);
   const impact = resolveImpact(files);
-  const commands = buildCommands(impact.packageRules, skippedConsumers);
+  const commands = buildCommands(impact.packageRules, skippedConsumers, impact.domainIds);
 
   writeGithubOutput(impact);
 
@@ -286,6 +332,7 @@ function main() {
   console.log(`Package impact head: ${head}`);
   console.log(`Changed files: ${files.length}`);
   console.log(`Targeted packages: ${impact.packageIds.join(', ') || 'none'}`);
+  console.log(`Targeted domains: ${impact.domainIds.join(', ') || 'none'}`);
   console.log(`Global fallback: ${impact.globalFallback}`);
   console.log(`Mobile validation: ${impact.mobile}`);
   console.log(`Skipped consumers: ${[...skippedConsumers].join(', ') || 'none'}`);
@@ -300,9 +347,18 @@ function main() {
     console.log(`\n==> ${formatCommand(args)}`);
     if (dryRun) continue;
 
+    const env = {
+      ...process.env,
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy-anon-key-for-build-prerender',
+    };
+
     const result = spawnSync(pnpmCommand, args, {
       stdio: 'inherit',
       shell: isWindows,
+      env,
     });
 
     if (result.error) {

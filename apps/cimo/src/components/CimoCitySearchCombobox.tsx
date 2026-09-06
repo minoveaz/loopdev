@@ -88,10 +88,14 @@ export const CimoCitySearchCombobox: React.FC<CimoCitySearchComboboxProps> = ({
               }`}
             >
               <div className="flex items-center gap-2 min-w-0">
-                <MapPin className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#7FB77E]' : 'text-[#7FB77E]'}`} />
+                <MapPin
+                  className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#7FB77E]' : 'text-[#7FB77E]'}`}
+                />
                 <div className="truncate">
                   <span className="text-xs font-extrabold block truncate">{c.name}</span>
-                  <span className={`text-[10px] block truncate ${isSelected ? 'text-white/70' : 'text-[#1F4E5F]/50'}`}>
+                  <span
+                    className={`text-[10px] block truncate ${isSelected ? 'text-white/70' : 'text-[#1F4E5F]/50'}`}
+                  >
                     {c.province} • {c.region}
                   </span>
                 </div>
@@ -111,7 +115,9 @@ export const CimoCitySearchCombobox: React.FC<CimoCitySearchComboboxProps> = ({
             <Plus className="w-4 h-4 text-[#7FB77E] shrink-0" />
             <div className="truncate">
               <span className="text-xs font-black block truncate">Usar "{query.trim()}"</span>
-              <span className="text-[10px] text-[#1F4E5F]/50 block">Municipio personalizado de España</span>
+              <span className="text-[10px] text-[#1F4E5F]/50 block">
+                Municipio personalizado de España
+              </span>
             </div>
           </button>
         )}

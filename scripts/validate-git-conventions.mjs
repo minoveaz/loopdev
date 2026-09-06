@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 const allowedBranchPrefixes = ['feature/', 'fix/', 'chore/', 'docs/', 'test/'];
+const generatedBranchPrefix = 'loopdev-io-';
 const conventionalCommitPattern =
   /^(feat|fix|chore|docs|test|refactor|perf)\([a-z0-9][a-z0-9._/-]*\)!?: .+/;
 
@@ -28,7 +29,10 @@ const commitMessageFile = getOption('--commit-msg');
 const range = getOption('--range');
 const errors = [];
 
-const [branchPrefix, ...branchSegments] = branch.split('/');
+const logicalBranch = branch.startsWith(generatedBranchPrefix)
+  ? branch.slice(generatedBranchPrefix.length)
+  : branch;
+const [branchPrefix, ...branchSegments] = logicalBranch.split('/');
 const hasValidBranchName =
   allowedBranchPrefixes.includes(`${branchPrefix}/`) &&
   branchSegments.length === 1 &&

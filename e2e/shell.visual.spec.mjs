@@ -7,7 +7,7 @@ for (const theme of ['light', 'dark']) {
     test.describe(`${route.name} ${theme}`, () => {
       test.use({ storageState: route.storageState });
 
-      test(`matches the visual baseline`, async ({ page }, testInfo) => {
+      test(`matches the ${route.name} ${theme} visual baseline`, async ({ page }, testInfo) => {
         await page.addInitScript((selectedTheme) => {
           window.localStorage.setItem('lpd-theme', selectedTheme);
           document.documentElement.classList.toggle('dark', selectedTheme === 'dark');

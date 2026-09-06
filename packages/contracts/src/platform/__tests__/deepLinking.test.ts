@@ -42,7 +42,9 @@ describe('LoopDev Deep Linking Standard Contract', () => {
     expect(createProfileDeepLink('alexrivera')).toBe('#/app/profile/alexrivera');
     expect(createProfileDeepLink('@sofiadiaz')).toBe('#/app/profile/sofiadiaz');
     expect(createActivityDeepLink('act_849201')).toBe('#/app/activity/act_849201');
-    expect(createSquadDeepLink('retiro-morning-runners')).toBe('#/app/squad/retiro-morning-runners');
+    expect(createSquadDeepLink('retiro-morning-runners')).toBe(
+      '#/app/squad/retiro-morning-runners',
+    );
     expect(createChatDeepLink('chat_retiro_8k')).toBe('#/app/chats/chat_retiro_8k');
     expect(createChatDeepLink()).toBe('#/app/chats');
   });
@@ -56,7 +58,9 @@ describe('LoopDev Deep Linking Standard Contract', () => {
 
   it('transforms plain titles with accents into clean kebab-case slugs', () => {
     expect(slugifyText('Retiro Morning Runners')).toBe('retiro-morning-runners');
-    expect(slugifyText('Cuarteto Pádel Chamartín & Amigos!')).toBe('cuarteto-padel-chamartin-amigos');
+    expect(slugifyText('Cuarteto Pádel Chamartín & Amigos!')).toBe(
+      'cuarteto-padel-chamartin-amigos',
+    );
     expect(slugifyText('  Ruta Sierra de Guadarrama  ')).toBe('ruta-sierra-de-guadarrama');
     expect(slugifyText('')).toBe('');
   });
@@ -83,7 +87,9 @@ describe('LoopDev Deep Linking Standard Contract', () => {
     expect(semanticSlug).toBe('running-8k-por-parque-del-retiro-act_1');
 
     // Deep link with semantic slug
-    expect(createActivityDeepLink('act_1', 'Running 8K por Parque del Retiro')).toBe('#/app/activity/running-8k-por-parque-del-retiro-act_1');
+    expect(createActivityDeepLink('act_1', 'Running 8K por Parque del Retiro')).toBe(
+      '#/app/activity/running-8k-por-parque-del-retiro-act_1',
+    );
 
     // Extract raw activity ID from semantic slug
     expect(extractActivityIdFromSlug('running-8k-por-parque-del-retiro-act_1')).toBe('act_1');

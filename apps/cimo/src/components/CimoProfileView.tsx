@@ -44,7 +44,8 @@ export interface CimoProfileViewProps {
   onUpdateUser?: (updated: ExtendedUserProfileData) => void;
 }
 
-const DEFAULT_COVER = 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400';
+const DEFAULT_COVER =
+  'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400';
 
 const SPORT_EMOJIS: Record<string, string> = {
   running: '🏃',
@@ -62,16 +63,19 @@ const COMMUNITY_REVIEWS = [
   {
     id: 'rev_1',
     author: 'Lucía Morales',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
+    avatar:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
     date: 'Hace 3 días',
     sport: '🏃 Running 8K',
     rating: 5,
-    comment: 'Alex es un capitán de 10. Marcó un ritmo súper cómodo de 5:15 min/km y nos guió por las mejores sombras del Retiro.',
+    comment:
+      'Alex es un capitán de 10. Marcó un ritmo súper cómodo de 5:15 min/km y nos guió por las mejores sombras del Retiro.',
   },
   {
     id: 'rev_2',
     author: 'Carlos Gómez',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
     date: 'Hace 1 semana',
     sport: '🎾 Pádel Mixto',
     rating: 5,
@@ -80,11 +84,13 @@ const COMMUNITY_REVIEWS = [
   {
     id: 'rev_3',
     author: 'Elena Rivas',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
     date: 'Hace 2 semanas',
     sport: '🥾 Hiking Navacerrada',
     rating: 5,
-    comment: 'Ruta espectacular y muy bien organizada. Trajo botiquín y recomendaciones claras en todo momento.',
+    comment:
+      'Ruta espectacular y muy bien organizada. Trajo botiquín y recomendaciones claras en todo momento.',
   },
 ];
 
@@ -202,7 +208,10 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                 type="button"
                 onClick={() => {
                   if (user.phoneWhatsapp) {
-                    window.open(`https://wa.me/${user.phoneWhatsapp.replace(/[^0-9]/g, '')}`, '_blank');
+                    window.open(
+                      `https://wa.me/${user.phoneWhatsapp.replace(/[^0-9]/g, '')}`,
+                      '_blank',
+                    );
                   }
                 }}
                 className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all flex items-center gap-1.5 shadow-sm cursor-pointer active:scale-95"
@@ -220,7 +229,10 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             {/* Avatar with Captain Ring */}
             <div className="relative inline-block">
               <img
-                src={user.avatarUrl ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400'}
+                src={
+                  user.avatarUrl ??
+                  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400'
+                }
                 alt={user.name}
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white shadow-xl bg-white"
               />
@@ -256,9 +268,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                 {user.name}
               </h1>
               {user.handle && (
-                <span className="text-xs font-bold text-[#1F4E5F]/50">
-                  {user.handle}
-                </span>
+                <span className="text-xs font-bold text-[#1F4E5F]/50">{user.handle}</span>
               )}
             </div>
 
@@ -273,7 +283,8 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
             </div>
 
             <p className="text-xs sm:text-sm text-[#1F4E5F]/80 font-medium leading-relaxed max-w-2xl">
-              {user.bio ?? 'Apasionado del running matutino y las partidas de pádel. ¡Siempre buscando sumar nuevos kilómetros y conectar con gente activa!'}
+              {user.bio ??
+                'Apasionado del running matutino y las partidas de pádel. ¡Siempre buscando sumar nuevos kilómetros y conectar con gente activa!'}
             </p>
 
             {/* Social & Contact Channels Badges */}
@@ -337,9 +348,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
             <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center">
               <Timer className="w-5 h-5 text-[#7FB77E] mb-1" />
-              <span className="text-xl font-black text-[#1F4E5F]">
-                {user.totalKm ?? 184} km
-              </span>
+              <span className="text-xl font-black text-[#1F4E5F]">{user.totalKm ?? 184} km</span>
               <span className="text-[10px] font-bold text-[#1F4E5F]/60 uppercase tracking-wider">
                 Distancia Acumulada
               </span>
@@ -351,9 +360,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
               className="p-4 bg-[#F7F7F7] hover:bg-white hover:border-[#7FB77E] hover:shadow-xs transition-all rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center cursor-pointer active:scale-95"
             >
               <Users className="w-5 h-5 text-[#7FB77E] mb-1" />
-              <span className="text-xl font-black text-[#1F4E5F]">
-                7
-              </span>
+              <span className="text-xl font-black text-[#1F4E5F]">7</span>
               <span className="text-[10px] font-bold text-[#1F4E5F]/60 uppercase tracking-wider">
                 Mi Red de Crew →
               </span>
@@ -361,9 +368,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
             <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/10 flex flex-col items-center text-center">
               <Trophy className="w-5 h-5 text-[#7FB77E] mb-1" />
-              <span className="text-xl font-black text-[#1F4E5F]">
-                99%
-              </span>
+              <span className="text-xl font-black text-[#1F4E5F]">99%</span>
               <span className="text-[10px] font-bold text-[#1F4E5F]/60 uppercase tracking-wider">
                 Tasa de Asistencia
               </span>
@@ -541,9 +546,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="text-2xl">{emoji}</span>
-                          <span className="text-base font-black text-[#1F4E5F]">
-                            {s.sport}
-                          </span>
+                          <span className="text-base font-black text-[#1F4E5F]">{s.sport}</span>
                         </div>
                         <span className="text-[11px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
                           {s.level}
@@ -552,7 +555,10 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
                       <div className="flex items-center gap-1.5 text-xs font-bold text-[#1F4E5F]/70 pt-2 border-t border-[#1F4E5F]/10">
                         <Timer className="w-4 h-4 text-[#7FB77E] shrink-0" />
-                        <span>Ritmo habitual: <strong className="text-[#1F4E5F]">{s.pace ?? '5:15 min/km'}</strong></span>
+                        <span>
+                          Ritmo habitual:{' '}
+                          <strong className="text-[#1F4E5F]">{s.pace ?? '5:15 min/km'}</strong>
+                        </span>
                       </div>
                     </div>
                   );
@@ -599,9 +605,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                         <span className="text-xs font-black text-[#1F4E5F]">
                           {dayName.slice(0, 3)}
                         </span>
-                        {isAvailable && (
-                          <span className="w-2 h-2 rounded-full bg-[#7FB77E]" />
-                        )}
+                        {isAvailable && <span className="w-2 h-2 rounded-full bg-[#7FB77E]" />}
                       </div>
 
                       <div className="flex flex-col gap-1 text-[10px] font-bold">
@@ -620,9 +624,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
                             <Sunset className="w-3 h-3 text-indigo-600 shrink-0" /> Tardes
                           </span>
                         )}
-                        {!isAvailable && (
-                          <span className="text-[#1F4E5F]/40 italic">Descanso</span>
-                        )}
+                        {!isAvailable && <span className="text-[#1F4E5F]/40 italic">Descanso</span>}
                       </div>
                     </div>
                   );
@@ -718,7 +720,10 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
 
                 <div className="p-4 bg-white/10 rounded-2xl border border-white/15 backdrop-blur-xs">
                   <p className="text-xs text-white/90 font-medium leading-relaxed italic">
-                    "{user.defaultCaptainNotes ?? '💧 Traer agua • ⏰ Llegar 5 min antes • 🧘 Estiramientos al terminar'}"
+                    "
+                    {user.defaultCaptainNotes ??
+                      '💧 Traer agua • ⏰ Llegar 5 min antes • 🧘 Estiramientos al terminar'}
+                    "
                   </p>
                 </div>
               </div>
@@ -730,9 +735,7 @@ export const CimoProfileView: React.FC<CimoProfileViewProps> = ({
         {activeTab === 'badges' && (
           <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
             <div>
-              <h2 className="text-lg font-black text-[#1F4E5F]">
-                Insignias de la Comunidad CIMO
-              </h2>
+              <h2 className="text-lg font-black text-[#1F4E5F]">Insignias de la Comunidad CIMO</h2>
               <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
                 Logros desbloqueados por tu constancia, puntualidad y liderazgo de entrenos.
               </p>

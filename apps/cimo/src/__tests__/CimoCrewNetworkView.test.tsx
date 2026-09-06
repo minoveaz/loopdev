@@ -5,11 +5,7 @@ import { CimoCrewNetworkView } from '../components/CimoCrewNetworkView';
 
 describe('CimoCrewNetworkView (Capa 1 & 2: Mi Crew, Squads y Conexiones)', () => {
   it('renders Bloque 1 (Tus Squads Habituales) and Bloque 2 (Tu Círculo Íntimo)', () => {
-    render(
-      <CimoCrewNetworkView
-        onBackToExplore={vi.fn()}
-      />
-    );
+    render(<CimoCrewNetworkView onBackToExplore={vi.fn()} />);
 
     expect(screen.getByText('Mi Red de Crew')).toBeDefined();
     expect(screen.getByText('Tus Squads Habituales')).toBeDefined();
@@ -18,11 +14,7 @@ describe('CimoCrewNetworkView (Capa 1 & 2: Mi Crew, Squads y Conexiones)', () =>
   });
 
   it('filters squads and connections by sport tabs (Running, Pádel, Hiking)', () => {
-    render(
-      <CimoCrewNetworkView
-        onBackToExplore={vi.fn()}
-      />
-    );
+    render(<CimoCrewNetworkView onBackToExplore={vi.fn()} />);
 
     const padelFilterBtn = screen.getByRole('button', { name: /Pádel/i });
     fireEvent.click(padelFilterBtn);
@@ -33,12 +25,7 @@ describe('CimoCrewNetworkView (Capa 1 & 2: Mi Crew, Squads y Conexiones)', () =>
   it('navigates to Squad Hub when clicking Hub button on a squad', () => {
     const onNavigateSquad = vi.fn();
 
-    render(
-      <CimoCrewNetworkView
-        onBackToExplore={vi.fn()}
-        onNavigateToSquad={onNavigateSquad}
-      />
-    );
+    render(<CimoCrewNetworkView onBackToExplore={vi.fn()} onNavigateToSquad={onNavigateSquad} />);
 
     const hubBtns = screen.getAllByRole('button', { name: /Hub/i });
     expect(hubBtns.length).toBeGreaterThan(0);
@@ -51,10 +38,7 @@ describe('CimoCrewNetworkView (Capa 1 & 2: Mi Crew, Squads y Conexiones)', () =>
     const onNavigateProfile = vi.fn();
 
     render(
-      <CimoCrewNetworkView
-        onBackToExplore={vi.fn()}
-        onNavigateToProfile={onNavigateProfile}
-      />
+      <CimoCrewNetworkView onBackToExplore={vi.fn()} onNavigateToProfile={onNavigateProfile} />,
     );
 
     const sofiaDiazName = screen.getByText('Sofía Díaz');

@@ -54,10 +54,10 @@ select lives_ok($$ insert into public.marketing_creative_assets (
   'image/png',
   1024,
   repeat('a', 64)
-) $$, 'owner creates source asset');
+) $$, 'creative owner creates a source asset in the tenant storage scope');
 
-select is((select count(*)::integer from public.marketing_creative_assets), 1, 'owner reads source asset');
-select is((select used_bytes::integer from public.marketing_creative_storage_usage), 1024, 'usage is accounted');
+select is((select count(*)::integer from public.marketing_creative_assets), 1, 'creative owner reads the source asset in the tenant');
+select is((select used_bytes::integer from public.marketing_creative_storage_usage), 1024, 'creative storage usage accounts for the source asset bytes');
 select lives_ok($$ insert into public.marketing_creative_assets (
   organization_id, brand_id, workspace_id, project_id, kind, source_asset_id, compressed, storage_path, mime_type, size_bytes, content_hash
 ) values (
@@ -72,15 +72,15 @@ select lives_ok($$ insert into public.marketing_creative_assets (
   'image/png',
   100,
   repeat('b', 64)
-) $$, 'owner creates compressed thumbnail');
+) $$, 'creative owner creates a compressed thumbnail linked to the source asset');
 select throws_ok($$ update public.marketing_creative_projects set draft_document = '{"image":"data:image/png;base64,AAAA"}'::jsonb $$,
   'Creative project drafts must use Storage references and remain within the project size limit',
-  'inline data is rejected');
-select is((select count(*)::integer from public.marketing_creative_assets), 2, 'thumbnail remains in the tenant');
-select is((select count(*)::integer from public.marketing_creative_assets where kind = 'source'), 1, 'source remains deduplicated');
+  'creative project drafts reject inline data URLs');
+select is((select count(*)::integer from public.marketing_creative_assets), 2, 'compressed thumbnail remains in the tenant asset set');
+select is((select count(*)::integer from public.marketing_creative_assets where kind = 'source'), 1, 'source asset remains deduplicated after thumbnail creation');
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8400-000000000002', true);
-select is((select count(*)::integer from public.marketing_creative_assets), 0, 'viewer cannot read another organization assets');
+select is((select count(*)::integer from public.marketing_creative_assets), 0, 'creative viewer cannot read assets from another organization');
 select throws_ok($$ insert into public.marketing_creative_assets (
   organization_id, brand_id, workspace_id, kind, storage_path, mime_type, size_bytes, content_hash
 ) values (
@@ -92,10 +92,10 @@ select throws_ok($$ insert into public.marketing_creative_assets (
   'image/png',
   1024,
   repeat('c', 64)
-) $$, 'new row violates row-level security policy for table "marketing_creative_assets"', 'viewer cannot create assets');
+) $$, 'new row violates row-level security policy for table "marketing_creative_assets"', 'creative viewer cannot create assets in another organization');
 select throws_ok($$ delete from public.marketing_creative_assets $$,
   'permission denied for table marketing_creative_assets',
-  'viewer cannot delete assets');
+  'creative viewer cannot delete tenant assets');
 
 select * from finish();
 rollback;

@@ -8,7 +8,7 @@ import { MODULE_HEADER_FIXTURES } from './fixtures';
 describe('ModuleHeader Composite', () => {
   it('renders title and status correctly', () => {
     render(<ModuleHeader {...MODULE_HEADER_FIXTURES.moduleMode} />);
-    
+
     expect(screen.getByText(/Brand Hub/i)).toBeInTheDocument();
     expect(screen.getByText(/SYSTEM_ACTIVE/i)).toBeInTheDocument();
     expect(screen.getByRole('banner', { name: 'Module header' })).toHaveAttribute(
@@ -19,23 +19,36 @@ describe('ModuleHeader Composite', () => {
 
   it('renders breadcrumbs', () => {
     render(<ModuleHeader {...MODULE_HEADER_FIXTURES.brandMode} />);
-    
+
     expect(screen.getByText(/Marketing/i)).toBeInTheDocument();
     expect(screen.getByText(/Acme Corp/i)).toBeInTheDocument();
+  });
+
+  it('renders the compact breadcrumb contract on mobile and the full path on desktop', () => {
+    render(
+      <ModuleHeader
+        {...MODULE_HEADER_FIXTURES.moduleMode}
+        mobileSegments={[{ id: 'contacts', label: 'Contacts', isActive: true }]}
+      />,
+    );
+
+    expect(screen.getAllByRole('navigation', { name: 'Breadcrumb' })).toHaveLength(1);
+    expect(screen.getByText('Contacts')).toBeInTheDocument();
+    expect(screen.getByText('Brand Hub')).toBeInTheDocument();
   });
 
   it('triggers sidebar toggle', () => {
     const onToggle = vi.fn();
     const props = {
       ...MODULE_HEADER_FIXTURES.moduleMode,
-      sidebarToggle: { isOpen: true, onToggle }
+      sidebarToggle: { isOpen: true, onToggle },
     };
-    
+
     render(<ModuleHeader {...props} />);
-    
+
     const toggleBtn = screen.getByRole('button', { name: 'Toggle module context' });
     fireEvent.click(toggleBtn);
-    
+
     expect(onToggle).toHaveBeenCalled();
   });
 

@@ -2,37 +2,38 @@ import { describe, it, expect } from 'vitest';
 import { TypographySystemSchema, FontDefinitionSchema } from '../typography.schema';
 
 describe('Typography Schema Contracts', () => {
-  
   describe('FontDefinitionSchema', () => {
-    it('should validate a valid google font definition', () => {
+    it('accepts a Google Font definition with source metadata and variants', () => {
       const validFont = {
         family: 'Inter',
         type: 'sans',
         source: 'google',
         sourceUrl: 'https://fonts.google.com',
-        variants: [{ weight: 400, style: 'normal' }]
+        variants: [{ weight: 400, style: 'normal' }],
       };
-      
+
       const result = FontDefinitionSchema.safeParse(validFont);
       expect(result.success).toBe(true);
     });
 
-    it('should reject invalid weights (out of 100-900 range)', () => {
+    it('rejects font variants with weights outside the 100-900 range', () => {
       const invalidFont = {
         family: 'BadFont',
         type: 'sans',
         source: 'system',
-        variants: [{ weight: 2000, style: 'normal' }] // Invalid weight
+        variants: [{ weight: 2000, style: 'normal' }], // Invalid weight
       };
-      
+
       const result = FontDefinitionSchema.safeParse(invalidFont);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toContain('Number must be less than or equal to 900');
+        expect(result.error.issues[0].message).toContain(
+          'Number must be less than or equal to 900',
+        );
       }
     });
 
-    it('should enforce required fields', () => {
+    it('rejects font definitions missing type and source fields', () => {
       const incompleteFont = {
         family: 'Inter',
         // Missing type and source
@@ -43,24 +44,24 @@ describe('Typography Schema Contracts', () => {
   });
 
   describe('TypographySystemSchema', () => {
-    it('should validate a complete system configuration', () => {
+    it('accepts a typography system with primary font and scale settings', () => {
       const validSystem = {
         primary: {
           family: 'Inter',
           type: 'sans',
           source: 'google',
-          variants: []
+          variants: [],
         },
         baseSize: 16,
         scaleRatio: 1.25,
-        lineHeightBase: 1.5
+        lineHeightBase: 1.5,
       };
 
       const result = TypographySystemSchema.safeParse(validSystem);
       expect(result.success).toBe(true);
     });
 
-    it('should reject baseSize smaller than accessibility floor (12px)', () => {
+    it('rejects typography systems below the 12px accessibility floor', () => {
       const unsafeSystem = {
         primary: { family: 'Inter', type: 'sans', source: 'system', variants: [] },
         baseSize: 10, // Too small
@@ -70,9 +71,9 @@ describe('Typography Schema Contracts', () => {
       expect(result.success).toBe(false);
     });
 
-    it('should provide default values for optional fields', () => {
+    it('applies defaults for typography scale and AI optimization settings', () => {
       const minimalSystem = {
-        primary: { family: 'Inter', type: 'sans', source: 'system', variants: [] }
+        primary: { family: 'Inter', type: 'sans', source: 'system', variants: [] },
       };
 
       const result = TypographySystemSchema.parse(minimalSystem);
@@ -81,5 +82,4 @@ describe('Typography Schema Contracts', () => {
       expect(result.aiOptimized).toBe(true); // Default
     });
   });
-
 });

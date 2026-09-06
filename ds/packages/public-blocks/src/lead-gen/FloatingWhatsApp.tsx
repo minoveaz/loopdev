@@ -14,7 +14,10 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
   const href = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
 
   return (
-    <aside aria-label="Contacto por WhatsApp" className="fixed bottom-20 sm:bottom-6 right-6 z-40 flex items-center gap-3">
+    <aside
+      aria-label="Contacto por WhatsApp"
+      className="fixed bottom-20 sm:bottom-6 right-6 z-40 flex items-center gap-3"
+    >
       {tooltipText && (
         <div className="hidden md:block bg-white text-slate-800 text-xs font-semibold px-3 py-1.5 rounded-xl shadow-lg border border-slate-100 animate-in fade-in slide-in-from-right-3">
           {tooltipText}

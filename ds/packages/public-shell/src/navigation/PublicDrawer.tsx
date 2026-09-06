@@ -5,12 +5,7 @@ import { clsx } from 'clsx';
 import { X } from 'lucide-react';
 import type { PublicDrawerProps } from './types';
 
-export const PublicDrawer: React.FC<PublicDrawerProps> = ({
-  isOpen,
-  onClose,
-  title,
-  children,
-}) => {
+export const PublicDrawer: React.FC<PublicDrawerProps> = ({ isOpen, onClose, title, children }) => {
   useEffect(() => {
     if (!isOpen) return;
 

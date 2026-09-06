@@ -6,7 +6,9 @@ const shellRoutes = [
 ];
 
 for (const route of shellRoutes) {
-  test(`${route.name} renders for mobile inspection`, async ({ page }, testInfo) => {
+  test(`${route.name} renders with attached mobile diagnostic evidence`, async ({
+    page,
+  }, testInfo) => {
     testInfo.annotations.push({
       type: 'diagnostic',
       description: 'Mobile is not yet a certified product requirement.',

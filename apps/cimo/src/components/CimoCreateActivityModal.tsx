@@ -33,7 +33,9 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
   const [location, setLocation] = useState('');
   const [date, setDate] = useState('Hoy');
   const [time, setTime] = useState('19:00');
-  const [level, setLevel] = useState<'Principiante' | 'Intermedio' | 'Avanzado' | 'Todos los niveles'>('Intermedio');
+  const [level, setLevel] = useState<
+    'Principiante' | 'Intermedio' | 'Avanzado' | 'Todos los niveles'
+  >('Intermedio');
   const [paceOrDetails, setPaceOrDetails] = useState('');
   const [maxMembers, setMaxMembers] = useState(5);
 
@@ -109,7 +111,10 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
 
           {/* Title Input */}
           <div>
-            <label htmlFor="create-plan-title" className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1">
+            <label
+              htmlFor="create-plan-title"
+              className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1"
+            >
               Título del entreno
             </label>
             <input
@@ -125,7 +130,10 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
 
           {/* Location Input */}
           <div>
-            <label htmlFor="create-plan-location" className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1">
+            <label
+              htmlFor="create-plan-location"
+              className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1"
+            >
               Punto de encuentro y Zona
             </label>
             <div className="relative">
@@ -145,7 +153,10 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
           {/* Date & Time Row */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="create-plan-day" className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1">
+              <label
+                htmlFor="create-plan-day"
+                className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1"
+              >
                 Día
               </label>
               <select
@@ -163,7 +174,10 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
             </div>
 
             <div>
-              <label htmlFor="create-plan-time" className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1">
+              <label
+                htmlFor="create-plan-time"
+                className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1"
+              >
                 Hora de inicio
               </label>
               <input
@@ -180,7 +194,10 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
           {/* Level & Max Members */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="create-plan-level" className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1">
+              <label
+                htmlFor="create-plan-level"
+                className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1"
+              >
                 Nivel
               </label>
               <select
@@ -198,7 +215,10 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
             </div>
 
             <div>
-              <label htmlFor="create-plan-max-members" className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1">
+              <label
+                htmlFor="create-plan-max-members"
+                className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1"
+              >
                 Cupo (4-8 personas)
               </label>
               <input
@@ -215,7 +235,10 @@ export const CimoCreateActivityModal: React.FC<CimoCreateActivityModalProps> = (
 
           {/* Pace details */}
           <div>
-            <label htmlFor="create-plan-pace" className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1">
+            <label
+              htmlFor="create-plan-pace"
+              className="text-[11px] font-extrabold uppercase tracking-wider text-[#1F4E5F]/70 block mb-1"
+            >
               Ritmo o detalles adicionales (opcional)
             </label>
             <input

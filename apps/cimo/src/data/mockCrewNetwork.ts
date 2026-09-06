@@ -77,10 +77,31 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
     typicalPaceOrLevel: '5:15 min/km',
     recurringSchedule: 'Martes & Jueves • 07:30h',
     members: [
-      { id: 'usr_me', name: 'Tú (Alex)', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200', isCaptain: true },
-      { id: 'capt_1', name: 'Sofía Díaz', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
-      { id: 'usr_2', name: 'Marco Rossi', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200' },
-      { id: 'usr_3', name: 'Elena Ramos', avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200' },
+      {
+        id: 'usr_me',
+        name: 'Tú (Alex)',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+        isCaptain: true,
+      },
+      {
+        id: 'capt_1',
+        name: 'Sofía Díaz',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+      },
+      {
+        id: 'usr_2',
+        name: 'Marco Rossi',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+      },
+      {
+        id: 'usr_3',
+        name: 'Elena Ramos',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200',
+      },
     ],
     activeCallout: {
       id: 'call_1',
@@ -90,9 +111,24 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
       meetingPoint: 'Puerta de Alcalá',
       myRsvp: 'going',
       attendingMembers: [
-        { id: 'usr_me', name: 'Tú', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
-        { id: 'capt_1', name: 'Sofía', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
-        { id: 'usr_2', name: 'Marco', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200' },
+        {
+          id: 'usr_me',
+          name: 'Tú',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+        },
+        {
+          id: 'capt_1',
+          name: 'Sofía',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+        },
+        {
+          id: 'usr_2',
+          name: 'Marco',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+        },
       ],
       maxCapacity: 5,
       hasThirdHalf: true,
@@ -110,10 +146,31 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
     typicalPaceOrLevel: 'Nivel 3.5 Playtomic',
     recurringSchedule: 'Viernes • 19:00h',
     members: [
-      { id: 'usr_me', name: 'Tú (Alex)', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
-      { id: 'capt_2', name: 'Javier Chamartín', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200', isCaptain: true },
-      { id: 'usr_4', name: 'Lucía Méndez', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200' },
-      { id: 'usr_5', name: 'Carlos Villa', avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200' },
+      {
+        id: 'usr_me',
+        name: 'Tú (Alex)',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+      },
+      {
+        id: 'capt_2',
+        name: 'Javier Chamartín',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+        isCaptain: true,
+      },
+      {
+        id: 'usr_4',
+        name: 'Lucía Méndez',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
+      },
+      {
+        id: 'usr_5',
+        name: 'Carlos Villa',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200',
+      },
     ],
     activeCallout: {
       id: 'call_2',
@@ -123,9 +180,24 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
       meetingPoint: 'Pista 4 Cubierta, Club Chamartín',
       myRsvp: 'none',
       attendingMembers: [
-        { id: 'capt_2', name: 'Javier', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
-        { id: 'usr_4', name: 'Lucía', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200' },
-        { id: 'usr_5', name: 'Carlos', avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200' },
+        {
+          id: 'capt_2',
+          name: 'Javier',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+        },
+        {
+          id: 'usr_4',
+          name: 'Lucía',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
+        },
+        {
+          id: 'usr_5',
+          name: 'Carlos',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200',
+        },
       ],
       maxCapacity: 4,
       hasThirdHalf: true,
@@ -143,9 +215,25 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
     typicalPaceOrLevel: 'Media Montaña (12-16 km)',
     recurringSchedule: 'Fines de semana',
     members: [
-      { id: 'usr_me', name: 'Tú (Alex)', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200' },
-      { id: 'capt_3', name: 'Marta Navacerrada', avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200', isCaptain: true },
-      { id: 'capt_1', name: 'Sofía Díaz', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
+      {
+        id: 'usr_me',
+        name: 'Tú (Alex)',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+      },
+      {
+        id: 'capt_3',
+        name: 'Marta Navacerrada',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200',
+        isCaptain: true,
+      },
+      {
+        id: 'capt_1',
+        name: 'Sofía Díaz',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+      },
     ],
     activeCallout: {
       id: 'call_3',
@@ -155,8 +243,18 @@ export const INITIAL_SPORTS_SQUADS: SportsSquad[] = [
       meetingPoint: 'Parking Cantocochino, Manzanares el Real',
       myRsvp: 'maybe',
       attendingMembers: [
-        { id: 'capt_3', name: 'Marta', avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200' },
-        { id: 'capt_1', name: 'Sofía', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' },
+        {
+          id: 'capt_3',
+          name: 'Marta',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200',
+        },
+        {
+          id: 'capt_1',
+          name: 'Sofía',
+          avatarUrl:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+        },
       ],
       maxCapacity: 6,
       hasThirdHalf: true,
@@ -179,7 +277,8 @@ export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
       id: 'capt_1',
       name: 'Sofía Díaz',
       age: 27,
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400',
       city: 'Madrid',
       zone: 'Retiro / Salamanca',
       bio: 'Maratoniana en progreso. Me encanta rodar a primera hora y rematar con un buen café de especialidad.',
@@ -211,7 +310,8 @@ export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
       id: 'capt_2',
       name: 'Javier Chamartín',
       age: 31,
-      avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
       city: 'Madrid',
       zone: 'Chamartín',
       bio: 'Fanático del pádel y de organizar partidas dinámicas con buen tercer tiempo en terraza.',
@@ -242,7 +342,8 @@ export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
       id: 'capt_3',
       name: 'Marta Navacerrada',
       age: 29,
-      avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400',
       city: 'Madrid',
       zone: 'Sierra de Guadarrama',
       bio: 'Guía de senderismo y apasionada de las cumbres. Desconectar en la montaña es mi religión.',
@@ -273,7 +374,8 @@ export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
       id: 'usr_2',
       name: 'Marco Rossi',
       age: 29,
-      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400',
       city: 'Madrid',
       zone: 'Chamberí / Moncloa',
       bio: 'Corredor constante. Buscando compañeros para series en pista de atletismo y tiradas de domingo.',
@@ -304,7 +406,8 @@ export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
       id: 'usr_3',
       name: 'Elena Ramos',
       age: 26,
-      avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400',
       city: 'Madrid',
       zone: 'Retiro',
       bio: 'Arquitecta y deportista casual. Me apunté a CIMO para tener constancia y no fallar los martes.',
@@ -334,15 +437,14 @@ export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
       id: 'usr_4',
       name: 'Lucía Méndez',
       age: 28,
-      avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=400',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=400',
       city: 'Madrid',
       zone: 'Pozuelo de Alarcón',
       bio: 'Jugadora de revés en pádel. Buscando partidas competitivas y bien coordinadas.',
       isCaptain: false,
     },
-    sports: [
-      { sport: 'padel', level: 'Intermedio', paceOrMetric: 'Nivel 3.5' },
-    ],
+    sports: [{ sport: 'padel', level: 'Intermedio', paceOrMetric: 'Nivel 3.5' }],
     stats: {
       sharedWorkoutsCount: 1,
       sharedThirdHalfsCount: 1,
@@ -363,7 +465,8 @@ export const INITIAL_CREW_CONNECTIONS: CrewConnection[] = [
       id: 'usr_5',
       name: 'Carlos Villa',
       age: 30,
-      avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400',
       city: 'Madrid',
       zone: 'Las Rozas',
       bio: 'Pádel los fines de semana y senderismo cuando el tiempo acompaña.',

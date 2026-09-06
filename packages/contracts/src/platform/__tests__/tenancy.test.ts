@@ -19,7 +19,7 @@ const timestamps = {
 };
 
 describe('Platform Core tenancy contracts', () => {
-  it('accepts a complete organization', () => {
+  it('accepts an organization with valid identity and lifecycle fields', () => {
     expect(
       OrganizationSchema.safeParse({
         id: ids.organization,
@@ -55,7 +55,7 @@ describe('Platform Core tenancy contracts', () => {
     expect(OrganizationRoleSchema.safeParse('member').success).toBe(false);
   });
 
-  it('validates organization memberships', () => {
+  it('accepts a membership with a supported role and organization identity', () => {
     expect(
       OrganizationMembershipSchema.safeParse({
         organizationId: ids.organization,
@@ -66,7 +66,7 @@ describe('Platform Core tenancy contracts', () => {
     ).toBe(true);
   });
 
-  it('validates permission keys and scopes', () => {
+  it('accepts valid permission keys and rejects malformed keys', () => {
     expect(
       PermissionSchema.safeParse({
         key: 'crm.manage',
@@ -85,7 +85,7 @@ describe('Platform Core tenancy contracts', () => {
     ).toBe(false);
   });
 
-  it('links a role to a permission', () => {
+  it('associates a supported role with a permission key', () => {
     expect(
       RolePermissionSchema.parse({
         role: 'admin',
