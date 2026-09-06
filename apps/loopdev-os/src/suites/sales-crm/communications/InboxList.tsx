@@ -73,13 +73,17 @@ export function CommunicationsInboxList() {
       >
         <InboxState state={model.presentation} />
         {model.presentation === 'ready' && conversations.length === 0 ? (
-          <EmptyState
-            title={copy.noMatchesTitle}
-            description={copy.noMatchesDescription}
-            icon="search_off"
-            size="sm"
-            variant="ghost"
-          />
+          model.conversations.length === 0 && !searchQuery.trim() && filter === 'all' ? (
+            <InboxState state="empty" />
+          ) : (
+            <EmptyState
+              title={copy.noMatchesTitle}
+              description={copy.noMatchesDescription}
+              icon="search_off"
+              size="sm"
+              variant="ghost"
+            />
+          )
         ) : null}
         {conversations.map((conversation) => {
           const selected = conversation.id === selectedConversation?.id;

@@ -52,10 +52,13 @@ import {
 import { COMMUNICATIONS_INBOX_MODEL } from './communications/inbox.fixture';
 
 const COMMUNICATIONS_INBOX_DATA_SOURCE =
+  process.env.NEXT_PUBLIC_CRM_COMMUNICATIONS_FIXTURE === 'true' ||
   process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true'
     ? createFixtureInboxDataSource(COMMUNICATIONS_INBOX_ACTOR_LABEL)
     : communicationsInboxApiDataSource;
-const USE_COMMUNICATIONS_INBOX_FIXTURE = process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true';
+const USE_COMMUNICATIONS_INBOX_FIXTURE =
+  process.env.NEXT_PUBLIC_CRM_COMMUNICATIONS_FIXTURE === 'true' ||
+  process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true';
 
 function CommunicationsInboxRuntime({
   children,

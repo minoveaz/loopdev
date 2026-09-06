@@ -42,7 +42,12 @@ describe('resolveSalesCrmCanvasMode', () => {
 
   it('falls back to data for every other Sales & CRM route', () => {
     expect(resolveSalesCrmCanvasMode('/sales-crm/contacts')).toBe('data');
-    expect(resolveSalesCrmCanvasMode('/sales-crm/pipeline')).toBe('data');
+    expect(resolveSalesCrmCanvasMode('/sales-crm/tasks')).toBe('data');
+  });
+
+  it('uses board for Pipeline and overview for My day', () => {
+    expect(resolveSalesCrmCanvasMode('/sales-crm/pipeline')).toBe('board');
+    expect(resolveSalesCrmCanvasMode('/sales-crm/tasks/today')).toBe('overview');
   });
 });
 

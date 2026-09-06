@@ -16,6 +16,10 @@ import type { SuiteCanvasMode } from '@loopdev/ui';
 export const LEADS_LIST_ROUTE = '/sales-crm/leads';
 export const LEADS_CAPTURE_ROUTE = '/sales-crm/leads/new';
 export const LEADS_DETAIL_ROUTE = '/sales-crm/leads/';
+export const CONTACT_DETAIL_ROUTE = '/sales-crm/contacts/';
+export const PIPELINE_ROUTE = '/sales-crm/pipeline';
+export const TASKS_ROUTE = '/sales-crm/tasks';
+export const TASKS_TODAY_ROUTE = '/sales-crm/tasks/today';
 
 export type SalesCrmModuleRoute = { moduleId: string; route: string };
 
@@ -38,9 +42,12 @@ export function resolveSalesCrmActiveModuleId(
  */
 export function resolveSalesCrmCanvasMode(pathname: string): SuiteCanvasMode {
   if (pathname === LEADS_CAPTURE_ROUTE) return 'full-bleed';
+  if (pathname.startsWith(CONTACT_DETAIL_ROUTE)) return 'workspace';
   if (pathname.startsWith(LEADS_DETAIL_ROUTE) && pathname !== LEADS_CAPTURE_ROUTE)
     return 'workspace';
   if (pathname === LEADS_LIST_ROUTE) return 'split';
+  if (pathname === PIPELINE_ROUTE) return 'board';
+  if (pathname === TASKS_TODAY_ROUTE) return 'overview';
   return 'data';
 }
 

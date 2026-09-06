@@ -1,4 +1,5 @@
 import { ArrowLeft, UsersRound } from 'lucide-react';
+import Link from 'next/link';
 import { Button, EmptyState, Heading, UserAvatar } from '@loopdev/ui';
 import { useInbox } from './useCommunicationsInbox';
 
@@ -100,6 +101,12 @@ export function CommunicationsInboxContext() {
         </div>
       </section>
       <div className="space-y-2">
+        <Link
+          href={`/sales-crm/contacts/${selectedConversation.contactId}`}
+          className="border-border-subtle text-primary flex min-h-9 w-full items-center justify-center rounded-md border px-3 text-xs font-medium underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+        >
+          Open Customer 360
+        </Link>
         <Button
           type="button"
           fullWidth

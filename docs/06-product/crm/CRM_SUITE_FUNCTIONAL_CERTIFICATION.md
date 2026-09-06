@@ -3,6 +3,12 @@
 **Phase:** F3 — completed
 **Base:** `origin/develop@6255ec367c245067ec92f4bf1a7a74f91c0cb53f`
 
+> **UI completion note (2026-09-06):** This historical matrix does not certify the newly completed
+> Pipeline, Tasks or Customer 360 route composition. Visual certification remains pending until the
+> authenticated desktop/mobile browser gates, accessibility checks and staging readiness gates below
+> are run against a release candidate. The synthetic inbox fixture is for local/E2E reproduction
+> only and is never evidence of a live WhatsApp/WABA integration.
+
 ## Certification matrix
 
 | Slice           | API evidence                                                                                       | UI evidence                           | Persistence/security gate                    | Status            |
