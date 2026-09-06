@@ -6,7 +6,7 @@ created: 2026-09-05
 updated: 2026-09-06
 owner: ai-platform
 lead: null
-branch: feature/document-intelligence-backend
+branch: chore/document-intelligence-phase5-closure
 branches: []
 phase: 5
 pull_requests: [181, 192]
@@ -720,23 +720,27 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 ## Handoff de sesión
 
 - **Fecha:** 2026-09-06.
-- **Rama de continuación:** `feature/document-intelligence-backend`.
+- **Rama de continuación:** `chore/document-intelligence-phase5-closure`.
 - **Commit de partida:** `63b00b42` (`develop` tras squash de #181).
 - **Estado alcanzado:** Fases 0-4 integradas en `develop`; Fase 5 endurecida en la rama de
   continuación y publicada para revisión en el PR #192. Bucket privado, RLS, Edge Function,
   route handler multipart, retry real y cleanup ya existen; la Edge Function desplegada sigue
   siendo la versión 14, con timeout explícito del provider, parseo tipado de respuestas inválidas
   y el secreto de allowed origins configurado para local.
-- **Decisiones, bloqueos y riesgos:** `GEMINI_API_KEY` permanece solo en Supabase. La última
-  revisión local de la Edge Function aún requiere despliegue cuando haya `SUPABASE_ACCESS_TOKEN`;
-  el E2E autenticado real requiere `E2E_TEST_EMAIL` y `E2E_TEST_PASSWORD` temporales en el entorno
-  local. Las pruebas remotas de Storage/RLS, Gemini y cleanup base ya están registradas.
+- **Decisiones, bloqueos y riesgos:** `GEMINI_API_KEY` permanece solo en Supabase. La revisión de
+  seguridad no encontró vulnerabilidades de alta confianza y confirmó auth, membership, RLS,
+  paths privados, errores sanitizados y cleanup sin PII. Aún falta desplegar la última revisión
+  cuando haya `SUPABASE_ACCESS_TOKEN`; el E2E autenticado real requiere `E2E_TEST_EMAIL` y
+  `E2E_TEST_PASSWORD` temporales. La matriz negativa de dos organizaciones todavía no tiene una
+  prueba automatizada versionada.
 - **Validación ejecutada:** tests focalizados de route/provider/workbench, `validate:branch`,
-  `deno check --no-config` de la Edge Function, `supabase db lint --local`, governance Supabase
-  y Playwright responsive del visor (9/9); no se incorporan credenciales ni artefactos generados.
+  `validate:full`, `validate:changed`, `validate:plan`, `docs:links:check`,
+  `registries:check`, `deno check --no-config`, `supabase db lint --local`, governance Supabase,
+  `git diff --check` y Playwright responsive del visor (9/9); no se incorporan credenciales ni
+  artefactos generados.
 - **Siguiente acción concreta:** desplegar la revisión final de la Edge Function con token de
   gestión disponible, ejecutar la matriz E2E autenticada con las dos organizaciones de prueba,
-  completar la revisión de seguridad y actualizar la evidencia antes de cerrar la Fase 5.
+  automatizar la matriz negativa RLS y actualizar la evidencia antes de cerrar la Fase 5.
 
 ## Cierre
 
