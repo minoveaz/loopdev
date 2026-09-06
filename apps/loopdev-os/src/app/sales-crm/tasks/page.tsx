@@ -128,7 +128,15 @@ export default function TasksPage() {
         sortable: true,
         render: (task) => (
           <div className="min-w-0">
-            <button type="button" className="text-text-main truncate text-left font-medium hover:underline" onClick={() => setSelectedId(task.id)}>{task.title}</button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-text-main truncate text-left font-medium hover:underline"
+              onClick={() => setSelectedId(task.id)}
+            >
+              {task.title}
+            </Button>
             <p className="text-text-muted truncate text-xs">{task.type ?? task.relationType}</p>
           </div>
         ),
@@ -187,8 +195,20 @@ export default function TasksPage() {
         }
         rightSlot={
           <div className="flex flex-wrap items-center gap-3">
-            <Link href="/sales-crm/tasks/today" className="text-primary text-sm font-medium underline-offset-2 hover:underline">My day</Link>
-            {canManage ? <Link href="/sales-crm/tasks/new" className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium">New task</Link> : null}
+            <Link
+              href="/sales-crm/tasks/today"
+              className="text-primary text-sm font-medium underline-offset-2 hover:underline"
+            >
+              My day
+            </Link>
+            {canManage ? (
+              <Link
+                href="/sales-crm/tasks/new"
+                className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+              >
+                New task
+              </Link>
+            ) : null}
           </div>
         }
         ariaLabel="Tasks header"
@@ -240,33 +260,96 @@ export default function TasksPage() {
             getRowKey={(task) => task.id}
             loading={isLoading}
             loadingState="Loading tasks"
-            emptyState={query || status !== 'all' ? 'No tasks match these filters.' : 'No tasks yet.'}
+            emptyState={
+              query || status !== 'all' ? 'No tasks match these filters.' : 'No tasks yet.'
+            }
             errorState={undefined}
             paginationVariant="compact"
             hidePageSizeSelector
             rowActions={(task) =>
               canManage && task.status !== 'completed' && task.status !== 'cancelled' ? (
                 <div className="flex flex-wrap gap-2">
-                  <Button type="button" size="sm" variant="secondary" onClick={() => setSelectedId(task.id)}>Preview</Button>
-                  <Button type="button" size="sm" variant="secondary" disabled={pendingId === task.id} onClick={() => void completeTask(task)}>Complete</Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => setSelectedId(task.id)}
+                  >
+                    Preview
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    disabled={pendingId === task.id}
+                    onClick={() => void completeTask(task)}
+                  >
+                    Complete
+                  </Button>
                 </div>
-              ) : <Button type="button" size="sm" variant="secondary" onClick={() => setSelectedId(task.id)}>Preview</Button>
+              ) : (
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => setSelectedId(task.id)}
+                >
+                  Preview
+                </Button>
+              )
             }
             renderMobileRow={(task) => (
               <div className="border-border-subtle bg-background rounded-lg border p-3">
                 <div className="flex items-start justify-between gap-2">
-                  <button type="button" className="text-text-main min-w-0 truncate text-left font-medium hover:underline" onClick={() => setSelectedId(task.id)}>{task.title}</button>
-                  <Badge status={task.status === 'completed' ? 'success' : isOverdue(task) ? 'error' : 'neutral'} variant="outline" showDot={false}>{task.status.replace('_', ' ')}</Badge>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-text-main min-w-0 truncate text-left font-medium hover:underline"
+                    onClick={() => setSelectedId(task.id)}
+                  >
+                    {task.title}
+                  </Button>
+                  <Badge
+                    status={
+                      task.status === 'completed'
+                        ? 'success'
+                        : isOverdue(task)
+                          ? 'error'
+                          : 'neutral'
+                    }
+                    variant="outline"
+                    showDot={false}
+                  >
+                    {task.status.replace('_', ' ')}
+                  </Badge>
                 </div>
-                <p className="text-text-muted mt-1 text-xs">{task.relationType} · {formatDate(task.dueAt)}</p>
-                {canManage && task.status !== 'completed' && task.status !== 'cancelled' ? <Button type="button" size="sm" variant="secondary" className="mt-3" disabled={pendingId === task.id} onClick={() => void completeTask(task)}>Complete</Button> : null}
+                <p className="text-text-muted mt-1 text-xs">
+                  {task.relationType} · {formatDate(task.dueAt)}
+                </p>
+                {canManage && task.status !== 'completed' && task.status !== 'cancelled' ? (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    className="mt-3"
+                    disabled={pendingId === task.id}
+                    onClick={() => void completeTask(task)}
+                  >
+                    Complete
+                  </Button>
+                ) : null}
               </div>
             )}
           />
-          {selectedId ? (() => {
-            const selected = visibleTasks.find((task) => task.id === selectedId);
-            return selected ? <TaskPreview task={selected} onClose={() => setSelectedId(null)} /> : null;
-          })() : null}
+          {selectedId
+            ? (() => {
+                const selected = visibleTasks.find((task) => task.id === selectedId);
+                return selected ? (
+                  <TaskPreview task={selected} onClose={() => setSelectedId(null)} />
+                ) : null;
+              })()
+            : null}
         </div>
       </main>
     </div>
