@@ -194,6 +194,17 @@ describe('Communications Inbox', () => {
     expect(screen.getByText('Try another search or clear the status filter.')).toBeInTheDocument();
   });
 
+  it('shows the empty inbox state when the authorized inbox has no conversations', () => {
+    renderInbox({
+      ...COMMUNICATIONS_INBOX_MODEL,
+      conversations: [],
+      presentation: 'ready',
+    });
+
+    expect(screen.getByRole('heading', { name: 'No conversations yet' })).toBeInTheDocument();
+    expect(screen.getByText('New WhatsApp conversations will appear here.')).toBeInTheDocument();
+  });
+
   it.each([
     ['paused', 'WhatsApp account paused'],
     ['window-expired', 'Reply window expired'],

@@ -104,6 +104,9 @@ export const SALES_CRM_SUITE_CONFIG: SuiteConfig = {
       route: '/sales-crm/pipeline',
       breadcrumbs: ['Sales & CRM', 'Pipeline'],
       capabilities: ['mobile-navigation'],
+      shell: {
+        canvasMode: 'board',
+      },
     },
     {
       moduleId: 'tasks',
@@ -111,6 +114,9 @@ export const SALES_CRM_SUITE_CONFIG: SuiteConfig = {
       route: '/sales-crm/tasks',
       breadcrumbs: ['Sales & CRM', 'Tasks'],
       capabilities: ['mobile-navigation'],
+      shell: {
+        canvasMode: 'split',
+      },
     },
     {
       moduleId: 'communications',

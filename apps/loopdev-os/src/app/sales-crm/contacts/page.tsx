@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button, Heading, ModuleHeader, type ResponsiveTableColumn } from '@loopdev/ui';
 import type { CrmContact, CrmContactPage } from '@loopdev/contracts';
@@ -124,7 +125,14 @@ export default function ContactsPage() {
       });
 
     return () => controller.abort();
-  }, [activeCursor, activeOrganizationId, canRead, contactsRefreshKey, isLoadingPermissions, query]);
+  }, [
+    activeCursor,
+    activeOrganizationId,
+    canRead,
+    contactsRefreshKey,
+    isLoadingPermissions,
+    query,
+  ]);
 
   const goNext = () => {
     if (!nextCursor) return;
@@ -295,7 +303,21 @@ export default function ContactsPage() {
               <p className="text-text-muted truncate text-xs">
                 {contact.companyName ?? 'No company'}
               </p>
+              <Link
+                href={`/sales-crm/contacts/${contact.id}`}
+                className="text-primary inline-flex text-xs font-medium underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+              >
+                Open Customer 360
+              </Link>
             </article>
+          )}
+          rowActions={(contact) => (
+            <Link
+              href={`/sales-crm/contacts/${contact.id}`}
+              className="text-primary text-xs font-medium underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+            >
+              Open 360
+            </Link>
           )}
         />
       </main>
