@@ -36,9 +36,7 @@ export function ContextPanelHost({
     user?.email?.split('@')[0] ||
     'Authenticated User';
   const email = user?.email || 'user@loopdev.local';
-  const role =
-    activeMembership?.role ||
-    (isPlatformAdministrator ? 'PLATFORM_OWNER' : 'MEMBER');
+  const role = activeMembership?.role || (isPlatformAdministrator ? 'PLATFORM_OWNER' : 'MEMBER');
   const tenantName = activeOrganization?.name;
 
   let detectedTimezone = 'UTC';
@@ -70,12 +68,8 @@ export function ContextPanelHost({
       {mode === 'profile' ? (
         <div className="flex flex-col gap-4 overflow-y-auto p-4">
           <div className="border-border-technical flex flex-col gap-1.5 border-b pb-4">
-            <span className="text-text-main text-lg font-bold dark:text-white">
-              {displayName}
-            </span>
-            <span className="text-text-muted text-xs truncate">
-              {email}
-            </span>
+            <span className="text-text-main text-lg font-bold dark:text-white">{displayName}</span>
+            <span className="text-text-muted text-xs truncate">{email}</span>
             <div className="mt-1 flex items-center gap-2">
               <span className="border-primary/20 bg-primary/10 text-primary flex shrink-0 items-center rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                 {role}

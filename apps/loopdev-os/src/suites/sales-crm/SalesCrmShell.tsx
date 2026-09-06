@@ -185,7 +185,9 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
               <UserMenu
                 userName={user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
                 userEmail={user?.email}
-                userRole={activeMembership?.role || (isPlatformAdministrator ? 'Platform Owner' : 'Member')}
+                userRole={
+                  activeMembership?.role || (isPlatformAdministrator ? 'Platform Owner' : 'Member')
+                }
                 tenantName={activeOrganization?.name}
                 onOpenChange={(open) => {
                   if (open) setContextMode(null);

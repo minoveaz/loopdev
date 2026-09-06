@@ -34,9 +34,7 @@ export function ContextSwitcher() {
         <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
           Active organization
         </span>
-        <span className="text-xs font-medium text-text-muted">
-          No organization assigned
-        </span>
+        <span className="text-xs font-medium text-text-muted">No organization assigned</span>
       </div>
     );
   }
@@ -49,9 +47,7 @@ export function ContextSwitcher() {
         <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
           Active organization · {role}
         </span>
-        <span className="text-sm font-semibold text-text-main">
-          {organizations[0].name}
-        </span>
+        <span className="text-sm font-semibold text-text-main">{organizations[0].name}</span>
       </div>
     );
   }
