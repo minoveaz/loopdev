@@ -500,9 +500,7 @@ temporal privado, autenticación de sesión, `GEMINI_API_KEY` server-side, conex
 - [ ] Playwright con auth/organización real de test para desktop, tablet y móvil, sin claves reales:
       no exposición de secretos, estados estables, errores visibles, no overflow y no archivos
       temporales remanentes.
-- [ ] `security-review`, `pnpm validate:domain -- data`, `pnpm validate:experience
-  -- document-intelligence`, tests de contratos, registry y validaciones CI aprobadas antes
-      del rollout.
+- [ ] Validar security, data/experience, contratos, registry y CI antes del rollout.
 
 **Rollout / rollback**
 

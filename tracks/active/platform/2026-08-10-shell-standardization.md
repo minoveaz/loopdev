@@ -12,12 +12,7 @@ blocked_by: []
 supersedes: []
 migration_source: conductor/tracks/2026-08-10-shell-standardization.md
 lead: null
-branches:
-  [
-    feature/shell-standardization,
-    feature/suiteshell-composition,
-    feature/document-intelligence-viewer,
-  ]
+branches: feature/shell-standardization, feature/suiteshell-composition, feature/document-intelligence-viewer
 phase: 4
 pull_requests: []
 issues: []
