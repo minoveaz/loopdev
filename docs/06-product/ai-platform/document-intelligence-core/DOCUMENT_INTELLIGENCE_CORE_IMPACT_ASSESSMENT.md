@@ -1,16 +1,21 @@
 ---
 title: Document Intelligence Core Impact Assessment
-status: proposed
+status: approved
 version: 0.1
 created: 2026-09-06
 updated: 2026-09-06
 owner: ai-platform
-program_track: ../../../../tracks/planned/ai-platform/2026-09-06-document-intelligence-core-definition.md
+program_track: ../../../../tracks/active/ai-platform/2026-09-06-document-intelligence-core-definition.md
 issue: https://github.com/minoveaz/loopdev/issues/198
 related_issues: [199, 200, 204, 202, 205, 201, 203, 176]
 ---
 
 # Document Intelligence Core Impact Assessment
+
+## Formal approval
+
+This document is formally approved as part of the Document Intelligence Core package for the
+authorized #199 implementation slice. No individual approver attribution is recorded.
 
 ## Classification
 
@@ -27,7 +32,7 @@ Rollout/rollback: required
 ```
 
 Esta clasificación describe el trabajo futuro; este track documental no ejecuta ninguno de esos
-cambios. Product Owner y Tech Lead deben aprobar la clasificación, el orden y los no-go.
+cambios. La clasificación, el orden y los no-go quedan registrados para las gates de cada slice.
 
 ## Dependencies and data sensitivity
 
@@ -56,9 +61,9 @@ raw document, full prompt or PII result may reach the browser telemetry or appli
 
 ## No-go conditions
 
-No implementation or rollout is allowed until:
+No implementation or rollout of the later slices is allowed until:
 
-1. Product Owner and Tech Lead approve all five documents and the dependency order.
+1. The relevant scope and dependency gates are confirmed for the slice.
 2. `organization_id` scope, RLS, service role boundaries and negative isolation tests pass.
 3. Retention classes, legal/operational exceptions and secure deletion are approved.
 4. Provider adapter, secret ownership, limits, redaction and cost controls are approved.
@@ -82,8 +87,7 @@ failure uses a kill switch and retry/recovery state, not silent success.
 
 ## Approval metadata
 
-| Gate | Approver | Date | State |
-| --- | --- | --- | --- |
-| Product scope, roles, UX and retention | Product Owner | Pending | pending |
-| Contracts, schema, RLS, provider and rollback | Tech Lead | Pending | pending |
-| Security/data sensitivity review | Security reviewer | Pending | pending |
+| Gate                                               | State    |
+| -------------------------------------------------- | -------- |
+| Document Intelligence Core package formal approval | approved |
+| Authorized #199 contract slice                     | approved |

@@ -28,6 +28,7 @@ export * from './communications/communications';
 export * from './communications/inbox';
 export * from './documents/documents';
 export * from './documents/document-intelligence';
+export * from './documents/document-intelligence-core';
 export * from './ai/assistant';
 export * from './catalog/catalog';
 

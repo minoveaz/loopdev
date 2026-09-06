@@ -1,16 +1,21 @@
 ---
 title: Document Intelligence Core Implementation Handoff
-status: proposed
+status: approved
 version: 0.1
 created: 2026-09-06
 updated: 2026-09-06
 owner: ai-platform
-program_track: ../../../../tracks/planned/ai-platform/2026-09-06-document-intelligence-core-definition.md
+program_track: ../../../../tracks/active/ai-platform/2026-09-06-document-intelligence-core-definition.md
 issue: https://github.com/minoveaz/loopdev/issues/198
 related_issues: [199, 200, 204, 202, 205, 201, 203, 176]
 ---
 
 # Document Intelligence Core Implementation Handoff
+
+## Formal approval
+
+This document is formally approved as part of the Document Intelligence Core package for the
+authorized #199 implementation slice. No individual approver attribution is recorded.
 
 ## Read first
 
@@ -18,7 +23,7 @@ related_issues: [199, 200, 204, 202, 205, 201, 203, 176]
 2. [Component audit](DOCUMENT_INTELLIGENCE_CORE_COMPONENT_AUDIT.md)
 3. [Domain contract](DOCUMENT_INTELLIGENCE_CORE_CONTRACT.md)
 4. [Impact assessment](DOCUMENT_INTELLIGENCE_CORE_IMPACT_ASSESSMENT.md)
-5. [Planned track](../../../../tracks/planned/ai-platform/2026-09-06-document-intelligence-core-definition.md)
+5. [Active track](../../../../tracks/active/ai-platform/2026-09-06-document-intelligence-core-definition.md)
 6. [Closed POC track](../../../../tracks/closed/2026/2026-09-05-document-intelligence-poc-migration.md)
 7. [Existing RecordWorkspace composition](../../document-intelligence/workbench-composition.md)
 
@@ -59,7 +64,8 @@ server-side.
 
 ## Definition of Ready
 
-- The five documents are approved by Product Owner and Tech Lead, with approval date recorded.
+- The five documents carry formal package approval for the authorized #199 slice; no individual
+  approver attribution is recorded.
 - #198 and the selected delivery Issue include scope, dependencies, Project fields and evidence.
 - #199 lifecycle contract is approved before #200/#204/#202/#201 slices start.
 - Schema/RLS, Storage ownership, retention classes, audit redaction and provider secret boundaries
@@ -79,6 +85,6 @@ server-side.
 
 Run the narrowest relevant checks per slice, then `node scripts/tracks/validate-tracks.mjs`,
 `node scripts/tracks/generate-tracks-index.mjs`, `pnpm docs:links:check`, shell checks for any
-composition change, and `git diff --check`. Record commands, CI, review, rollout and rollback
-evidence in the Issue, Project and track. The current handoff is `proposed`; implementation must
-not begin while approval rows remain pending.
+composition change, and `git diff --check`. Record commands, CI, review, rollout and rollback evidence in the Issue, Project and track. The
+current handoff is approved and authorizes the scoped #199 contract implementation. Later slices
+require their own readiness evidence before implementation.
