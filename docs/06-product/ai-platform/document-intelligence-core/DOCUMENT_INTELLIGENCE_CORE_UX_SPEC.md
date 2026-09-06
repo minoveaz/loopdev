@@ -1,29 +1,34 @@
 ---
 title: Document Intelligence Core UX Specification
-status: proposed
+status: approved
 version: 0.1
 created: 2026-09-06
 updated: 2026-09-06
 owner: ai-platform
-program_track: ../../../../tracks/planned/ai-platform/2026-09-06-document-intelligence-core-definition.md
+program_track: ../../../../tracks/active/ai-platform/2026-09-06-document-intelligence-core-definition.md
 issue: https://github.com/minoveaz/loopdev/issues/198
 related_issues: [199, 200, 204, 202, 205, 201, 203, 176]
 ---
 
 # Document Intelligence Core UX Specification
 
+## Formal approval
+
+This document is formally approved as part of the Document Intelligence Core package for the
+authorized #199 implementation slice. No individual approver attribution is recorded.
+
 ## Purpose and status
 
-Esta especificación `proposed` define la evolución cross-suite del módulo existente de Document
+Esta especificación aprobada define la evolución cross-suite del módulo existente de Document
 Intelligence después del POC cerrado en #176. No autoriza rutas, migraciones, provider ni cambios de
-RLS. Las aprobaciones de Product Owner y Tech Lead están pendientes.
+RLS fuera del alcance autorizado.
 
 ## Navigation and native Canvas composition
 
-| Surface | Proposed route | Canvas recipe | Ownership |
-| --- | --- | --- | --- |
-| Extraction history | `/document-intelligence` | `DataWorkspace` | Module widget over authorized Core query |
-| New extraction | `/document-intelligence/new` | Existing `RecordWorkspace` evolution | Existing module flow |
+| Surface              | Proposed route                       | Canvas recipe                        | Ownership                                           |
+| -------------------- | ------------------------------------ | ------------------------------------ | --------------------------------------------------- |
+| Extraction history   | `/document-intelligence`             | `DataWorkspace`                      | Module widget over authorized Core query            |
+| New extraction       | `/document-intelligence/new`         | Existing `RecordWorkspace` evolution | Existing module flow                                |
 | Versioned extraction | `/document-intelligence/:documentId` | Existing `RecordWorkspace` evolution | Existing module flow plus persisted version context |
 
 Las rutas actuales del POC se conservan como baseline; el historial no crea `/history` ni un
@@ -35,13 +40,13 @@ clients o reglas de dominio.
 
 ## Roles and visible actions
 
-| Role (pending final permission map) | Read history | Open version | Edit/review | Approve/reject | Configure rules |
-| --- | --- | --- | --- | --- | --- |
-| Operator | authorized scope | yes | if assigned | if granted | no |
-| Reviewer | authorized scope | yes | yes | yes | no |
-| Manager | workspace scope | yes | if granted | if granted | maybe, pending |
-| Org admin | organization scope | yes | policy-dependent | policy-dependent | yes, pending |
-| Viewer | read-only | yes | no | no | no |
+| Role (permission map governed by implementation gates) | Read history       | Open version | Edit/review      | Approve/reject   | Configure rules  |
+| ------------------------------------------------------ | ------------------ | ------------ | ---------------- | ---------------- | ---------------- |
+| Operator                                               | authorized scope   | yes          | if assigned      | if granted       | no               |
+| Reviewer                                               | authorized scope   | yes          | yes              | yes              | no               |
+| Manager                                                | workspace scope    | yes          | if granted       | if granted       | policy-dependent |
+| Org admin                                              | organization scope | yes          | policy-dependent | policy-dependent | policy-dependent |
+| Viewer                                                 | read-only          | yes          | no               | no               | no               |
 
 La autorización final, assignments y permisos `documents.*` deben aprobarse antes de implementación;
 la UI no infiere permisos por rol nominal.
@@ -91,6 +96,6 @@ and an expired document shows cleanup status instead of a download or destructiv
 ## Explicit exclusions and approval gate
 
 Fraud, authenticity, liveness, legal verification, batch operations, public sharing, manual
-permanent deletion and consumer-specific business workflows are excluded. Product Owner must approve
-scope, roles, copy, retention visibility and journeys; Tech Lead must approve shell composition,
-contract states, tenancy and recovery. Both approvals are pending.
+permanent deletion and consumer-specific business workflows are excluded. Scope, roles, copy,
+retention visibility, journeys, shell composition, contract states, tenancy and recovery remain
+implementation gates for the relevant later slices.

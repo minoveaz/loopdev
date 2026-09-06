@@ -4,10 +4,6 @@
 
 ## Planificados
 
-### AI Platform
-
-- [Definición de Document Intelligence Core](./planned/ai-platform/2026-09-06-document-intelligence-core-definition.md) · `docs/ai-platform-document-intelligence-core` · fase 0
-
 ### CRM
 
 - [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0
@@ -27,8 +23,11 @@
 
 - [CI validation scope and required checks](./planned/governance/2026-08-12-ci-validation-scope.md) · `chore/ci-validation-scope-track` · fase 3
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
-
 ## En curso
+
+### AI Platform
+
+- [Definición de Document Intelligence Core](./active/ai-platform/2026-09-06-document-intelligence-core-definition.md) · `loopdev-io-feature/ai-platform-document-intelligenc` · fase 1
 
 ### CRM
 
@@ -62,7 +61,6 @@
 ### Governance
 
 - [Track Governance and Migration](./active/governance/2026-08-12-track-governance.md) · `feature/track-governance` · fase 1
-
 ## Cerrados
 
 ### 2026

@@ -17,6 +17,12 @@ type ContextPanelHostProps = {
   notifications: NotificationItem[];
   unreadCount: number;
   onClose: () => void;
+  user?: {
+    name?: string;
+    email?: string;
+    role?: string;
+    tenantName?: string;
+  };
 };
 
 export function ContextPanelHost({
@@ -24,20 +30,28 @@ export function ContextPanelHost({
   notifications,
   unreadCount,
   onClose,
+  user: userProp,
 }: ContextPanelHostProps) {
   const router = useRouter();
-  const { user, isPlatformAdministrator, signOut } = useAuth();
+  const { user: authUser, isPlatformAdministrator, signOut } = useAuth();
   const { activeOrganization, activeMembership } = useOrganization();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const displayName =
-    user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    user?.email?.split('@')[0] ||
-    'Authenticated User';
-  const email = user?.email || 'user@loopdev.local';
-  const role = activeMembership?.role || (isPlatformAdministrator ? 'PLATFORM_OWNER' : 'MEMBER');
-  const tenantName = activeOrganization?.name;
+    userProp?.name ||
+    authUser?.user_metadata?.full_name ||
+    authUser?.user_metadata?.name ||
+    authUser?.email?.split('@')[0] ||
+    (authUser ? 'Authenticated User' : 'Alex Morgan');
+  const email = userProp?.email || authUser?.email || 'showcase@loopdev.local';
+  const role =
+    userProp?.role ||
+    activeMembership?.role ||
+    (isPlatformAdministrator ? 'PLATFORM_OWNER' : authUser ? 'MEMBER' : 'TENANT_ADMIN');
+  const tenantName =
+    userProp?.tenantName ||
+    activeOrganization?.name ||
+    (authUser ? undefined : 'Showcase Workspace');
 
   let detectedTimezone = 'UTC';
   try {

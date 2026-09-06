@@ -1,30 +1,42 @@
 ---
 title: Document Intelligence Core Contract
-status: proposed
+status: approved
 version: 0.1
 created: 2026-09-06
 updated: 2026-09-06
 owner: ai-platform
-program_track: ../../../../tracks/planned/ai-platform/2026-09-06-document-intelligence-core-definition.md
+program_track: ../../../../tracks/active/ai-platform/2026-09-06-document-intelligence-core-definition.md
 issue: https://github.com/minoveaz/loopdev/issues/198
 related_issues: [199, 200, 204, 202, 205, 201, 203, 176]
 ---
 
 # Document Intelligence Core Contract
 
+## Formal approval
+
+This document is formally approved as part of the Document Intelligence Core package for the
+authorized #199 implementation slice. No individual approver attribution is recorded.
+
 ## Scope and compatibility
 
-Este contrato `proposed` amplía de forma aditiva los tipos existentes en
+Este contrato aprobado amplía de forma aditiva los tipos existentes en
 `packages/contracts/src/documents`. El POC sigue siendo consumidor válido; ningún campo existente
-se renombra o cambia silenciosamente. La decisión final de versionado y compatibilidad pertenece al
-Tech Lead y está pendiente.
+se renombra o cambia silenciosamente. El versionado y la compatibilidad futura deben conservar esta
+frontera aditiva.
 
 ## Read and input models
 
 ```ts
 type DocumentStatus =
-  | 'temporary' | 'uploaded' | 'processing' | 'review'
-  | 'approved' | 'rejected' | 'failed' | 'expired' | 'deleted';
+  | 'temporary'
+  | 'uploaded'
+  | 'processing'
+  | 'review'
+  | 'approved'
+  | 'rejected'
+  | 'failed'
+  | 'expired'
+  | 'deleted';
 type ExtractionStatus = 'queued' | 'processing' | 'review' | 'approved' | 'rejected' | 'failed';
 type ValidationSeverity = 'info' | 'warning' | 'error';
 
@@ -50,6 +62,8 @@ type DocumentVersion = {
   checksum: string | null;
   extractionId: string | null;
   createdAt: string;
+  updatedAt: string;
+  concurrencyToken: string;
   createdBy: string | null;
   version: number;
 };
@@ -59,6 +73,8 @@ type ExtractionRecord = {
   documentVersionId: string;
   organizationId: string;
   status: ExtractionStatus;
+  attempt: number;
+  previousAttemptId: string | null;
   provider: string;
   providerVersion: string;
   schemaVersion: string;
@@ -66,7 +82,9 @@ type ExtractionRecord = {
   validationSummary: ValidationSummary;
   usage: UsageSummary | null;
   createdAt: string;
+  updatedAt: string;
   completedAt: string | null;
+  concurrencyToken: string;
   version: number;
 };
 
@@ -101,18 +119,18 @@ type UsageSummary = {
 
 ## Commands and queries
 
-| Operation | Input | Result |
-| --- | --- | --- |
-| `listDocumentHistory` | organization/workspace scope, allowlisted filters, cursor, limit, order | Authorized page and next cursor |
-| `getDocument` | document/version ID, expected scope | Document, version, extraction and safe audit summary |
-| `createDocument` | metadata intent, idempotency key | Draft document/version |
-| `startExtraction` | version ID, provider capability, idempotency key | Queued extraction |
-| `retryExtraction` | extraction ID, expected version, idempotency key | New attempt linked to same version |
-| `updateExtractionReview` | extraction ID, field patch, expected version | Updated review or `CONFLICT` |
-| `approveExtraction` / `rejectExtraction` | extraction ID, reason, expected version | Decision and audit event |
-| `reopenExtraction` | extraction/version ID, reason, idempotency key | Authorized review state |
-| `evaluateValidations` | extraction/version ID, rule-set version | Versioned `ValidationSummary` |
-| `requestCleanup` | document/version ID, reason, idempotency key | Cleanup job state; no synchronous destructive guarantee |
+| Operation                                | Input                                                                   | Result                                                  |
+| ---------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| `listDocumentHistory`                    | organization/workspace scope, allowlisted filters, cursor, limit, order | Authorized page and next cursor                         |
+| `getDocument`                            | document/version ID, expected scope                                     | Document, version, extraction and safe audit summary    |
+| `createDocument`                         | metadata intent, idempotency key                                        | Draft document/version                                  |
+| `startExtraction`                        | version ID, provider capability, idempotency key                        | Queued extraction                                       |
+| `retryExtraction`                        | extraction ID, expected version, idempotency key                        | New attempt linked to same version                      |
+| `updateExtractionReview`                 | extraction ID, field patch, expected version                            | Updated review or `CONFLICT`                            |
+| `approveExtraction` / `rejectExtraction` | extraction ID, reason, expected version                                 | Decision and audit event                                |
+| `reopenExtraction`                       | extraction/version ID, reason, idempotency key                          | New review attempt linked to the prior extraction       |
+| `evaluateValidations`                    | extraction/version ID, rule-set version                                 | Versioned `ValidationSummary`                           |
+| `requestCleanup`                         | document/version ID, reason, idempotency key                            | Cleanup job state; no synchronous destructive guarantee |
 
 All mutations resolve actor, `organization_id`, workspace and permission server-side. Client-supplied
 tenant IDs are constraints to verify, not authority.
@@ -134,16 +152,18 @@ Stable codes include `UNAUTHENTICATED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_ER
 `INTERNAL_ERROR`. Error messages are actionable but do not disclose cross-tenant existence,
 secrets, prompts, raw provider responses or PII.
 
-Transitions are allowlisted; retries create an auditable attempt and cannot mutate an approved
-version in place. Commands carry an idempotency key scoped to organization and operation. Expected
-version protects concurrent review; dedupe uses an organization-scoped checksum/reference policy
-that is pending approval.
+Transitions are allowlisted; approved, rejected and failed extraction attempts are terminal.
+Retries and reopen operations create an auditable new attempt and cannot mutate a prior extraction
+or approved version in place. Commands carry an idempotency key scoped to organization and
+operation. Expected version protects concurrent review; dedupe uses an organization-scoped
+checksum/reference policy defined by the persistence slice. Record envelopes must preserve the
+document, version and extraction organization and ownership relationships.
 
 ## Permissions and public compatibility
 
-Proposed capabilities are `documents.read`, `documents.create`, `documents.extract`,
+Approved capabilities are `documents.read`, `documents.create`, `documents.extract`,
 `documents.review`, `documents.approve`, `documents.configure-validation`,
-`documents.audit.read` and `documents.cleanup.manage`. Final mapping is pending Platform Core and
-Product approval. Public consumers must use versioned contracts and opaque references; no suite may
-import provider-specific types. Audit, retention and provider schemas are internal behind the Core
-adapter.
+`documents.audit.read` and `documents.cleanup.manage`. The final mapping is governed by the
+Platform Core and Product authorization gates for each implementation slice. Public consumers must
+use versioned contracts and opaque references; no suite may import provider-specific types. Audit,
+retention and provider schemas are internal behind the Core adapter.
