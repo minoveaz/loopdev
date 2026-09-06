@@ -11,10 +11,10 @@ view for navigation, audits, and cross-domain discovery.
 | Domain         | Entries |
 | -------------- | ------: |
 | backend        |       5 |
-| frontend       |     100 |
+| frontend       |     101 |
 | infrastructure |       5 |
 | product        |       5 |
-| **Total**      | **115** |
+| **Total**      | **116** |
 
 ## Entries
 
@@ -49,6 +49,7 @@ view for navigation, audits, and cross-domain discovery.
 | `checkbox-v1`                         | Checkbox                      | frontend-platform | atom        | stable       | —                                                                                                                                                                                                                                                                                                            |
 | `command-bar-trigger-v1`              | CommandBarTrigger             | frontend-platform | atom        | stable       | —                                                                                                                                                                                                                                                                                                            |
 | `command-dialog-v1`                   | CommandDialog                 | frontend-platform | composite   | stable       | —                                                                                                                                                                                                                                                                                                            |
+| `communications-inbox-widget-v1`      | CommunicationsInboxWidget     | sales-crm         | widget      | in-progress  | ui-ux-certification, accessibility-test-runtime, responsive-visual-review, persistent-mutation-adapters                                                                                                                                                                                                      |
 | `context-path-v1`                     | ContextPath                   | frontend-platform | composite   | stable       | —                                                                                                                                                                                                                                                                                                            |
 | `crm-create-opportunity-from-lead-v1` | CreateOpportunityFromLead     | sales-crm         | feature     | experimental | visual-review, playwright                                                                                                                                                                                                                                                                                    |
 | `crm-lead-context-panel-v1`           | LeadContextPanel              | sales-crm         | composite   | experimental | visual-review, playwright                                                                                                                                                                                                                                                                                    |
@@ -155,7 +156,7 @@ view for navigation, audits, and cross-domain discovery.
 
 ## Source registries
 
-- [docs/registries/frontend-components.json](./frontend-components.json) — 100 entries
+- [docs/registries/frontend-components.json](./frontend-components.json) — 101 entries
 - [docs/registries/backend-capabilities.json](./backend-capabilities.json) — 5 entries
 - [docs/registries/infrastructure-capabilities.json](./infrastructure-capabilities.json) — 5 entries
 - [docs/registries/product-modules.json](./product-modules.json) — 5 entries

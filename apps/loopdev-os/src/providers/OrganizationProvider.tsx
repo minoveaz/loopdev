@@ -1,28 +1,29 @@
 'use client';
 
 import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { OrganizationSchema, type Organization, type OrganizationMembership } from '@loopdev/contracts';
+import * as Contracts from '@loopdev/contracts';
 import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
 const ACTIVE_ORGANIZATION_STORAGE_KEY = 'loopdev.activeOrganizationId';
 const isE2EAuthBypassEnabled = process.env.NEXT_PUBLIC_E2E_AUTH_BYPASS === 'true';
 const e2eOrganization = {
-  id: 'e2e-organization',
+  id: '00000000-0000-4000-9000-000000000010',
   name: 'E2E Organization',
   slug: 'e2e',
   legacyTenantId: null,
   isActive: true,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
-} as Organization;
-const normalizeTimestamp = (value: unknown) => Array.isArray(value) ? String(value[0]) : String(value);
+} as Contracts.Organization;
+const normalizeTimestamp = (value: unknown) =>
+  Array.isArray(value) ? String(value[0]) : String(value);
 
 export type OrganizationContextType = {
-  organizations: Organization[];
-  memberships: OrganizationMembership[];
-  activeOrganization: Organization | null;
-  activeMembership: OrganizationMembership | null;
+  organizations: Contracts.Organization[];
+  memberships: Contracts.OrganizationMembership[];
+  activeOrganization: Contracts.Organization | null;
+  activeMembership: Contracts.OrganizationMembership | null;
   activeOrganizationId: string | null;
   setActiveOrganizationId: (organizationId: string) => void;
   isLoading: boolean;
@@ -32,7 +33,7 @@ export const OrganizationContext = createContext<OrganizationContextType | undef
 
 export function OrganizationProvider({ children }: { children: ReactNode }) {
   const { user, memberships, isPlatformAdministrator } = useAuth();
-  const [organizations, setOrganizations] = useState<Organization[]>(
+  const [organizations, setOrganizations] = useState<Contracts.Organization[]>(
     isE2EAuthBypassEnabled ? [e2eOrganization] : [],
   );
   const [activeOrganizationId, setActiveOrganizationIdState] = useState<string | null>(
@@ -60,7 +61,8 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
         .from('organizations')
         .select('id, name, slug, legacy_tenant_id, is_active, created_at, updated_at')
         .eq('is_active', true);
-      if (!isPlatformAdministrator && organizationIds.length > 0) query = query.in('id', organizationIds);
+      if (!isPlatformAdministrator && organizationIds.length > 0)
+        query = query.in('id', organizationIds);
       const { data, error } = await query;
 
       if (!isMounted) return;
@@ -73,22 +75,21 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const parsedOrganizations = (data ?? [])
-        .map((row) => {
-          const organization = {
-            id: row.id,
-            name: row.name,
-            slug: row.slug,
-            legacyTenantId: row.legacy_tenant_id,
-            isActive: row.is_active,
-            createdAt: normalizeTimestamp(row.created_at),
-            updatedAt: normalizeTimestamp(row.updated_at),
-          };
-          const result = OrganizationSchema.safeParse(organization);
-          if (result.success) return result.data;
-          console.warn('Organization schema mismatch:', result.error.flatten().fieldErrors);
-          return organization as Organization;
-        });
+      const parsedOrganizations = (data ?? []).map((row) => {
+        const organization = {
+          id: row.id,
+          name: row.name,
+          slug: row.slug,
+          legacyTenantId: row.legacy_tenant_id,
+          isActive: row.is_active,
+          createdAt: normalizeTimestamp(row.created_at),
+          updatedAt: normalizeTimestamp(row.updated_at),
+        };
+        const result = Contracts.OrganizationSchema.safeParse(organization);
+        if (result.success) return result.data;
+        console.warn('Organization schema mismatch:', result.error.flatten().fieldErrors);
+        return organization as Contracts.Organization;
+      });
 
       const preferredOrganization = parsedOrganizations.find(({ slug }) => slug === 'loopdev');
       setOrganizations(parsedOrganizations);
@@ -139,7 +140,11 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
     [resolvedActiveOrganizationId, organizations],
   );
   const activeMembership = useMemo(
-    () => memberships.find(({ organizationId, status }) => organizationId === resolvedActiveOrganizationId && status === 'active') ?? null,
+    () =>
+      memberships.find(
+        ({ organizationId, status }) =>
+          organizationId === resolvedActiveOrganizationId && status === 'active',
+      ) ?? null,
     [resolvedActiveOrganizationId, memberships],
   );
 

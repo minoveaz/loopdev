@@ -30,6 +30,14 @@ begin
     (target_organization_id, agent_id, 'agent', 'active')
   on conflict (organization_id, user_id) do update set status = 'active';
 
+  insert into public.organization_memberships (organization_id, user_id, role, status)
+  select target_organization_id, id, 'owner', 'active'
+  from auth.users
+  where lower(email) = 'admin@localhost.com'
+  on conflict (organization_id, user_id) do update
+    set role = excluded.role,
+        status = excluded.status;
+
   -- S1: qualified lead that becomes a won opportunity.
   insert into public.crm_contacts
     (id, organization_id, first_name, last_name, email, phone, company_name)

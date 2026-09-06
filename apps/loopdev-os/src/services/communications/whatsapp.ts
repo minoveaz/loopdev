@@ -210,6 +210,10 @@ export function resolveWhatsAppTemplateParameters(
   return parameterNames.map((name) => parameters[name]);
 }
 
+export function renderWhatsAppTemplateBody(body: string, parameters: Record<string, string>) {
+  return body.replace(/{{\s*([\w.-]+)\s*}}/g, (_, name: string) => parameters[name] ?? '');
+}
+
 export function normalizeWhatsAppTemplate(value: unknown): WhatsAppTemplateRecord | null {
   const template = objectValue(value);
   const id = stringValue(template?.id);
