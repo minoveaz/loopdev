@@ -9,13 +9,15 @@
 > are run against a release candidate. The synthetic inbox fixture is for local/E2E reproduction
 > only and is never evidence of a live WhatsApp/WABA integration.
 
-> **Implemented route scope (2026-09-06):** This branch adds the productive Pipeline board at
-> `/sales-crm/pipeline`, the Tasks inbox at `/sales-crm/tasks` and My Day overview at
-> `/sales-crm/tasks/today`, plus Customer 360 at `/sales-crm/contacts/:contactId`. Customer 360
-> remains a Contact detail surface and is not a navigation module. The approved Pipeline
-> list/detail/create, Task detail/create and Customer 360 split/overview compositions remain
-> follow-up surfaces until their route contracts and browser gates are complete; this branch does
-> not claim those surfaces are certified.
+> **Implemented route scope (2026-09-06):** This branch delivers the approved productive
+> compositions: Pipeline board and split preview at `/sales-crm/pipeline`, opportunity table at
+> `/sales-crm/pipeline/list`, opportunity workspace/create at
+> `/sales-crm/opportunities/:opportunityId` and `/sales-crm/opportunities/new`, Tasks inbox and
+> split preview at `/sales-crm/tasks`, My Day at `/sales-crm/tasks/today`, task workspace/create at
+> `/sales-crm/tasks/:taskId` and `/sales-crm/tasks/new`, and Customer 360 workspace, context
+> preview and overview modes within `/sales-crm/contacts/:contactId`. Customer 360 remains a
+> Contact detail surface and is not a navigation module. Browser and staging gates below remain
+> pending; route implementation is not production certification.
 
 ## Certification matrix
 
@@ -26,6 +28,17 @@
 | Pipeline        | `opportunities/route.test.ts`                                                                      | pipeline shell/components             | stage constraints and tenant FKs             | pending execution |
 | Tasks and Notes | `tasks/route.test.ts`, `notes/route.test.ts`                                                       | task/note surfaces                    | actor attribution and timeline append-only   | pending execution |
 | Customer 360    | `contacts/[contactId]/customer-360/route.test.ts`                                                  | customer workspace surfaces           | deduplicated activity projection             | pending execution |
+
+## Route composition evidence
+
+| Composition | Implemented surface | Evidence |
+| --- | --- | --- |
+| Pipeline `board` + `split` | `/sales-crm/pipeline` with `KanbanBoard`, accessible stage menu and preview | `apps/loopdev-os/src/app/sales-crm/pipeline/PipelineWorkspace.tsx` |
+| Pipeline `data` | `/sales-crm/pipeline/list` with `ResponsiveTable`, filters and preview | `apps/loopdev-os/src/app/sales-crm/pipeline/list/page.tsx` |
+| Opportunity `workspace` + `full-bleed` | `/sales-crm/opportunities/:opportunityId`, `/sales-crm/opportunities/new` | `apps/loopdev-os/src/suites/sales-crm/crm/OpportunityRecordView.tsx`, `OpportunityForm.tsx` |
+| Tasks `data` + `split` | `/sales-crm/tasks` with `ResponsiveTable`, preview and authorized completion | `apps/loopdev-os/src/app/sales-crm/tasks/page.tsx` |
+| Tasks `overview` + `workspace` + `full-bleed` | My Day, task detail and create routes | `apps/loopdev-os/src/suites/sales-crm/crm/TaskWorkspace.tsx` |
+| Customer 360 `workspace` + `split` + `overview` | Contact detail modes with health/activity summary and contextual task actions | `apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/Customer360View.tsx` |
 
 ## Required end-to-end journey
 
@@ -71,6 +84,8 @@
 | Persisted Contact → Lead                           | PASS — capture 201 and qualification 200       | Authenticated local Supabase journey                                                                           |
 | Persisted Lead → Opportunity conversion            | PASS after fix `c5aece7`                       | `POST /api/crm/leads/conversion` returns 201; RPC was invoked unbound (`supabase.rpc` lost its client context) |
 | Persisted Opportunity → Task → Note → Customer 360 | PASS                                           | Task create 201, completion 200, Note create 201, Customer 360 read 200; cross-tenant read denied 403          |
+| CRM route composition focused tests       | PASS — 17 tests                                | `pnpm --filter loopdev-os exec vitest run src/app/sales-crm/pipeline/page.test.tsx src/app/sales-crm/tasks/page.test.tsx src/app/sales-crm/contacts/[contactId]/Customer360View.test.tsx src/app/sales-crm/shellRouting.test.ts` |
+| CRM route typecheck/build                 | PASS                                          | `pnpm --filter loopdev-os exec tsc --noEmit`; `NEXT_PUBLIC_SUPABASE_URL=... NEXT_PUBLIC_SUPABASE_ANON_KEY=... pnpm --filter loopdev-os build` |
 
 The frontend certification includes responsive desktop/mobile/compact layouts, overflow checks,
 selection/menu behavior, command-bar contracts, light/dark themes and the Contacts form/table

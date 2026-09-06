@@ -15,6 +15,7 @@ import type { Task, TaskPage, TaskStatus } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
+import { TaskPreview } from '@/suites/sales-crm/crm';
 
 const PAGE_SIZE = 100;
 
@@ -44,6 +45,7 @@ export default function TasksPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const loadTasks = async (signal?: AbortSignal) => {
     if (!activeOrganizationId) return;
@@ -126,7 +128,7 @@ export default function TasksPage() {
         sortable: true,
         render: (task) => (
           <div className="min-w-0">
-            <p className="text-text-main truncate font-medium">{task.title}</p>
+            <button type="button" className="text-text-main truncate text-left font-medium hover:underline" onClick={() => setSelectedId(task.id)}>{task.title}</button>
             <p className="text-text-muted truncate text-xs">{task.type ?? task.relationType}</p>
           </div>
         ),
@@ -184,12 +186,10 @@ export default function TasksPage() {
           </Heading>
         }
         rightSlot={
-          <Link
-            href="/sales-crm/tasks/today"
-            className="text-primary text-sm font-medium underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-          >
-            My day
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/sales-crm/tasks/today" className="text-primary text-sm font-medium underline-offset-2 hover:underline">My day</Link>
+            {canManage ? <Link href="/sales-crm/tasks/new" className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium">New task</Link> : null}
+          </div>
         }
         ariaLabel="Tasks header"
       />
@@ -232,62 +232,42 @@ export default function TasksPage() {
             </Button>
           </div>
         ) : null}
-        <ResponsiveTable
-          caption="CRM tasks"
-          columns={columns}
-          rows={visibleTasks}
-          getRowKey={(task) => task.id}
-          loading={isLoading}
-          loadingState="Loading tasks"
-          emptyState={query || status !== 'all' ? 'No tasks match these filters.' : 'No tasks yet.'}
-          errorState={undefined}
-          paginationVariant="compact"
-          hidePageSizeSelector
-          rowActions={(task) =>
-            canManage && task.status !== 'completed' && task.status !== 'cancelled' ? (
-              <Button
-                type="button"
-                size="sm"
-                variant="secondary"
-                disabled={pendingId === task.id}
-                onClick={() => void completeTask(task)}
-              >
-                Complete
-              </Button>
-            ) : null
-          }
-          renderMobileRow={(task) => (
-            <div className="border-border-subtle bg-background rounded-lg border p-3">
-              <div className="flex items-start justify-between gap-2">
-                <p className="text-text-main min-w-0 truncate font-medium">{task.title}</p>
-                <Badge
-                  status={
-                    task.status === 'completed' ? 'success' : isOverdue(task) ? 'error' : 'neutral'
-                  }
-                  variant="outline"
-                  showDot={false}
-                >
-                  {task.status.replace('_', ' ')}
-                </Badge>
+        <div className={selectedId ? 'grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]' : ''}>
+          <ResponsiveTable
+            caption="CRM tasks"
+            columns={columns}
+            rows={visibleTasks}
+            getRowKey={(task) => task.id}
+            loading={isLoading}
+            loadingState="Loading tasks"
+            emptyState={query || status !== 'all' ? 'No tasks match these filters.' : 'No tasks yet.'}
+            errorState={undefined}
+            paginationVariant="compact"
+            hidePageSizeSelector
+            rowActions={(task) =>
+              canManage && task.status !== 'completed' && task.status !== 'cancelled' ? (
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" size="sm" variant="secondary" onClick={() => setSelectedId(task.id)}>Preview</Button>
+                  <Button type="button" size="sm" variant="secondary" disabled={pendingId === task.id} onClick={() => void completeTask(task)}>Complete</Button>
+                </div>
+              ) : <Button type="button" size="sm" variant="secondary" onClick={() => setSelectedId(task.id)}>Preview</Button>
+            }
+            renderMobileRow={(task) => (
+              <div className="border-border-subtle bg-background rounded-lg border p-3">
+                <div className="flex items-start justify-between gap-2">
+                  <button type="button" className="text-text-main min-w-0 truncate text-left font-medium hover:underline" onClick={() => setSelectedId(task.id)}>{task.title}</button>
+                  <Badge status={task.status === 'completed' ? 'success' : isOverdue(task) ? 'error' : 'neutral'} variant="outline" showDot={false}>{task.status.replace('_', ' ')}</Badge>
+                </div>
+                <p className="text-text-muted mt-1 text-xs">{task.relationType} · {formatDate(task.dueAt)}</p>
+                {canManage && task.status !== 'completed' && task.status !== 'cancelled' ? <Button type="button" size="sm" variant="secondary" className="mt-3" disabled={pendingId === task.id} onClick={() => void completeTask(task)}>Complete</Button> : null}
               </div>
-              <p className="text-text-muted mt-1 text-xs">
-                {task.relationType} · {formatDate(task.dueAt)}
-              </p>
-              {canManage && task.status !== 'completed' && task.status !== 'cancelled' ? (
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="secondary"
-                  className="mt-3"
-                  disabled={pendingId === task.id}
-                  onClick={() => void completeTask(task)}
-                >
-                  Complete
-                </Button>
-              ) : null}
-            </div>
-          )}
-        />
+            )}
+          />
+          {selectedId ? (() => {
+            const selected = visibleTasks.find((task) => task.id === selectedId);
+            return selected ? <TaskPreview task={selected} onClose={() => setSelectedId(null)} /> : null;
+          })() : null}
+        </div>
       </main>
     </div>
   );

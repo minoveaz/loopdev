@@ -1,7 +1,5 @@
-'use client';
-
-import TasksPage from '../page';
+import { MyDayPage } from '@/suites/sales-crm/crm';
 
 export default function TasksTodayPage() {
-  return <TasksPage />;
+  return <MyDayPage />;
 }

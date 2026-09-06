@@ -1,6 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import PipelinePage from './page';
+import PipelineWorkspace from './PipelineWorkspace';
 
 const organizationId = '00000000-0000-4000-9000-000000000001';
 const permission = vi.hoisted(() => ({ allowed: true }));
@@ -84,5 +85,18 @@ describe('Pipeline page', () => {
     render(<PipelinePage />);
     expect(screen.getByText('You do not have permission to view Pipeline.')).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('supports the opportunity table and split preview composition', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn()
+        .mockResolvedValueOnce(new Response(JSON.stringify([{ id: 'stage', organizationId, key: 'qualified', name: 'Qualified', active: true, terminalType: 'open', createdAt: '2026-09-01T00:00:00.000Z', updatedAt: '2026-09-01T00:00:00.000Z' }])))
+        .mockResolvedValueOnce(new Response(JSON.stringify({ items: [{ id: 'opportunity', organizationId, contactId: 'contact', name: 'Family cover', productKey: 'health', stageKey: 'qualified', origin: 'manual', amount: 500, currency: 'EUR', version: 1, createdAt: '2026-09-01T00:00:00.000Z', updatedAt: '2026-09-01T00:00:00.000Z' }], nextCursor: null, hasMore: false }))),
+    );
+    render(<PipelineWorkspace mode="list" />);
+    expect((await screen.findAllByText('Family cover')).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Preview' })[0]);
+    expect(screen.getByRole('heading', { name: 'Preview' })).toBeInTheDocument();
   });
 });

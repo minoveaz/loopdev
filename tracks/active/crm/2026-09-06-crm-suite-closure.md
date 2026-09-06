@@ -170,6 +170,9 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 **Entregables**
 - [x] Cerrar #82, #84, #85, #87 y #88 con evidencia.
 - [x] Recorrido persistente Contact → Lead → Opportunity → Task/Note → Customer 360.
+- [x] Approved CRM route compositions delivered: Pipeline board/list/preview/detail/create,
+  Tasks inbox/My Day/context/detail/create, and Customer 360 workspace/preview/overview within
+  Contact detail. No Customer 360 navigation module was added.
 - [ ] Eliminar fixtures y simulaciones de rutas críticas.
 
 **Validación**
@@ -292,6 +295,7 @@ pueden continuar como rescate o implementación explícitamente autorizada:
 | 2026-09-06 | F3: revisión de cobertura | No existe E2E persistente multi-entidad; API/servicios usan mocks fuera de dominio | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md` |
 | 2026-09-06 | F3: recorrido persistente | Contact capture y Lead qualification pasan; Lead conversion API devuelve 500 aunque el RPC SQL directo pasa | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, Issue #188 |
 | 2026-09-06 | F3: corrección y recorrido completo | Fix `c5aece7`; Contact → Lead → Opportunity → Task → Note → Customer 360 pasa; cross-tenant devuelve 403; Issues #82, #84, #85, #87 y #88 cerradas | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md` |
+| 2026-09-06 | F3: approved CRM route composition completion | Productive board/list/split/workspace/full-bleed/overview routes implemented with existing contracts/APIs; focused UI tests and typecheck pass; browser/staging gates remain pending | `docs/06-product/crm/CRM_SUITE_FUNCTIONAL_CERTIFICATION.md`, `apps/loopdev-os/src/suites/sales-crm/crm/` |
 
 ## Handoff de sesión
 

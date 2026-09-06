@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { Badge, Button, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
-import type { Customer360RecordView } from '@loopdev/contracts';
+import { Badge, Button, ContextBar, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
+import type { Customer360CanvasView, Customer360RecordView } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 
@@ -23,6 +23,7 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
   const [view, setView] = useState<Customer360RecordView | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [canvasView, setCanvasView] = useState<Customer360CanvasView>('record');
 
   const loadCustomer360 = async (signal?: AbortSignal) => {
     if (!activeOrganizationId) return;
@@ -88,6 +89,23 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
             </Heading>
           </div>
         }
+        rightSlot={
+          <div role="tablist" aria-label="Customer 360 view">
+            {(['record', 'split', 'overview'] as const).map((viewId) => (
+              <Button
+                key={viewId}
+                type="button"
+                size="sm"
+                variant={canvasView === viewId ? 'primary' : 'ghost'}
+                role="tab"
+                aria-selected={canvasView === viewId}
+                onClick={() => setCanvasView(viewId)}
+              >
+                {viewId === 'record' ? 'Workspace' : viewId === 'split' ? 'Context preview' : 'Overview'}
+              </Button>
+            ))}
+          </div>
+        }
         ariaLabel="Customer 360 header"
       />
       <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
@@ -113,6 +131,37 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
           </div>
         ) : null}
         {view && !isLoading ? (
+          <>
+          {canvasView === 'overview' ? (
+            <TechnicalSurface variant="surface" radius="md" border="technical" className="mb-4">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <Heading as="h2" size="lg" weight="semibold">Operational summary</Heading>
+                  <p className="text-text-muted mt-1 text-sm">A concise, authorized view of health and next steps.</p>
+                </div>
+                <Badge status={view.tasks.some((task) => task.status !== 'completed' && task.dueAt && new Date(task.dueAt).getTime() < Date.now()) ? 'error' : 'success'} variant="outline" showDot>
+                  {view.tasks.some((task) => task.status !== 'completed' && task.dueAt && new Date(task.dueAt).getTime() < Date.now()) ? 'Needs attention' : 'Healthy activity'}
+                </Badge>
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                <SummaryMetric label="Leads" value={String(view.leads.length)} />
+                <SummaryMetric label="Opportunities" value={String(view.opportunities.length)} />
+                <SummaryMetric label="Open tasks" value={String(view.tasks.filter((task) => task.status !== 'completed' && task.status !== 'cancelled').length)} />
+                <SummaryMetric label="Notes" value={String(view.notes.length)} />
+                <SummaryMetric label="Activity events" value={String(view.timeline.length)} />
+                <SummaryMetric label="Last update" value={date(view.contact.updatedAt)} />
+              </div>
+              <ContextBar label="Next step" value={view.tasks.find((task) => task.status !== 'completed')?.title ?? 'No open task'} trailing={<Link href={`/sales-crm/tasks/new?relationType=contact&relationId=${contactId}`} className="text-primary text-xs underline-offset-2 hover:underline">Create task</Link>} className="mt-4" />
+            </TechnicalSurface>
+          ) : null}
+          {canvasView === 'split' ? (
+            <TechnicalSurface variant="surface" radius="md" border="subtle" className="mb-4 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div><p className="text-text-muted text-xs uppercase tracking-widest">Context preview</p><p className="text-text-main mt-1 font-medium">{contactName(view)} · {view.opportunities.length} opportunities · {view.tasks.length} tasks</p></div>
+                <div className="flex flex-wrap gap-3"><Link href={`/sales-crm/contacts/${contactId}`} className="text-primary text-sm underline-offset-2 hover:underline">Open full contact</Link><Link href={`/sales-crm/tasks/new?relationType=contact&relationId=${contactId}`} className="text-primary text-sm underline-offset-2 hover:underline">Create task</Link></div>
+              </div>
+            </TechnicalSurface>
+          ) : null}
           <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,0.8fr)]">
             <div className="space-y-4">
               <TechnicalSurface variant="surface" radius="md" border="technical" className="p-4">
@@ -169,9 +218,9 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
                       key={opportunity.id}
                       className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
                     >
-                      <span className="text-text-main text-sm">
+                      <Link className="text-primary text-sm underline-offset-2 hover:underline" href={`/sales-crm/opportunities/${opportunity.id}`}>
                         {opportunity.name} · {opportunity.stageKey}
-                      </span>
+                      </Link>
                       <Badge
                         status={
                           opportunity.stageKey === 'won'
@@ -198,7 +247,7 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
                       key={task.id}
                       className="border-border-subtle flex flex-wrap items-center justify-between gap-2 border-b py-3 last:border-0"
                     >
-                      <span className="text-text-main text-sm">{task.title}</span>
+                      <Link className="text-primary text-sm underline-offset-2 hover:underline" href={`/sales-crm/tasks/${task.id}`}>{task.title}</Link>
                       <Badge
                         status={task.status === 'completed' ? 'success' : 'neutral'}
                         variant="outline"
@@ -265,10 +314,15 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
               </TechnicalSurface>
             </div>
           </div>
+          </>
         ) : null}
       </main>
     </div>
   );
+}
+
+function SummaryMetric({ label, value }: { label: string; value: string }) {
+  return <div className="border-border-subtle bg-background-subtle rounded-md border p-3"><p className="text-text-muted text-xs">{label}</p><p className="text-text-main mt-1 text-lg font-semibold">{value}</p></div>;
 }
 
 function RelationshipSection({

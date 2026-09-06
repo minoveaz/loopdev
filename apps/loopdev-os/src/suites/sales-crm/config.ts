@@ -115,7 +115,7 @@ export const SALES_CRM_SUITE_CONFIG: SuiteConfig = {
       breadcrumbs: ['Sales & CRM', 'Tasks'],
       capabilities: ['mobile-navigation'],
       shell: {
-        canvasMode: 'data',
+        canvasMode: 'split',
       },
     },
     {
