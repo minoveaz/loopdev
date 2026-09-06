@@ -1,15 +1,16 @@
 ---
 id: document-intelligence-poc-migration
 title: Migración del POC operativo de Document Intelligence desde VitaBlue
-status: active
+status: closed
 created: 2026-09-05
 updated: 2026-09-06
+closed: 2026-09-06
 owner: ai-platform
 lead: null
 branch: chore/document-intelligence-phase5-closure
 branches: []
 phase: 5
-pull_requests: [181, 192]
+pull_requests: [181, 192, 194]
 issues: [176]
 packages: [@loopdev/contracts, @loopdev/document-viewer, loopdev-os]
 release: not-required
@@ -559,19 +560,19 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 
 | Riesgo o bloqueo                       | Impacto                                  | Mitigación                                                                                     | Responsable | Estado  |
 | -------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- | ------- |
-| Credenciales de Gemini mal gestionadas | Exposición de PII y coste no controlado  | Credenciales solo server-side; revisión `security-review` antes de Fase 5                      | ai-platform | Abierto |
-| PII en storage temporal                | Fuga de datos de identidad               | Bucket privado, RLS por organización/actor, cleanup en `finally`, sin persistencia por defecto | ai-platform | Abierto |
-| Deriva de la shell de plataforma       | Composición fuera de estándar            | Recipe canónico aprobado en Fase 0; `pnpm test:shell` en Fase 3                                | platform    | Abierto |
-| Divergencia fixture/provider           | El flujo con fixtures no predice el real | Contrato único `DocumentExtractionResult` para ambos providers; tests de contrato              | ai-platform | Abierto |
-| Coste por run sin visibilidad          | Gasto no atribuible                      | Telemetría `usage` obligatoria en el contrato y visible en el workbench                        | ai-platform | Abierto |
+| Credenciales de Gemini mal gestionadas | Exposición de PII y coste no controlado  | Credenciales solo server-side; revisión `security-review` antes de Fase 5                      | ai-platform | Residual |
+| PII en storage temporal                | Fuga de datos de identidad               | Bucket privado, RLS por organización/actor, cleanup en `finally`, sin persistencia por defecto | ai-platform | Residual |
+| Deriva de la shell de plataforma       | Composición fuera de estándar            | Recipe canónico aprobado en Fase 0; `pnpm test:shell` en Fase 3                                | platform    | Residual |
+| Divergencia fixture/provider           | El flujo con fixtures no predice el real | Contrato único `DocumentExtractionResult` para ambos providers; tests de contrato              | ai-platform | Residual |
+| Coste por run sin visibilidad          | Gasto no atribuible                      | Telemetría `usage` obligatoria en el contrato y visible en el workbench                        | ai-platform | Residual |
 
 ## Criterios de cierre
 
-- [ ] Outcome verificable cumplido.
-- [ ] Fases requeridas cerradas o diferidas explícitamente.
-- [ ] Validaciones ejecutadas con evidencia.
-- [ ] Riesgos residuales documentados.
-- [ ] Cierre aprobado explícitamente por el usuario.
+- [x] Outcome verificable cumplido.
+- [x] Fases requeridas cerradas o diferidas explícitamente.
+- [x] Validaciones ejecutadas con evidencia.
+- [x] Riesgos residuales documentados.
+- [x] Cierre aprobado explícitamente por el usuario el 2026-09-06.
 
 ## Evidencia de validación
 
@@ -748,4 +749,6 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 
 ## Cierre
 
-Pendiente de aprobación explícita.
+Track cerrado con aprobación explícita del usuario el 2026-09-06, después del merge del PR #194.
+El POC operativo queda listo para evolución futura hacia Document Intelligence Core (persistencia,
+historial, auditoría y retención), fuera del alcance de este track.
