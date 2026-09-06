@@ -58,6 +58,11 @@ interface WorkbenchPrototypeContextValue {
 }
 
 const WorkbenchPrototypeContext = createContext<WorkbenchPrototypeContextValue | null>(null);
+type RealExtractionInput = {
+  organizationId: string;
+  front: File;
+  back?: File;
+};
 
 function createDocumentId() {
   return globalThis.crypto?.randomUUID?.() ?? `document-${Date.now()}`;
@@ -116,6 +121,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
   const [isContextPanelOpen, setIsContextPanelOpen] = useState(false);
   const processingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastRealExtraction = useRef<RealExtractionInput | null>(null);
   const [providerReady, setProviderReady] = useState(false);
   const [visualProcessingComplete, setVisualProcessingComplete] = useState(false);
 
@@ -160,6 +166,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       setVisualProcessingComplete(false);
       setFileError(null);
       setIsContextPanelOpen(false);
+      lastRealExtraction.current = null;
       setFlowState('preparation');
       setHistory((current) => {
         if (current.some((item) => item.id === documentId)) return current;
@@ -191,6 +198,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
       setProviderReady(false);
       setVisualProcessingComplete(false);
       setIsContextPanelOpen(false);
+      lastRealExtraction.current = null;
       setFlowState('preparation');
       setHistory((current) => {
         const nextItem: PrototypeDocumentHistoryItem = {
@@ -231,6 +239,9 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
           flowState: 'processing',
           updatedAt: new Date().toISOString(),
         });
+      if (realExtraction) {
+        lastRealExtraction.current = realExtraction;
+      }
       if (realExtraction) {
         const body = new FormData();
         body.append('front', realExtraction.front);
@@ -342,7 +353,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
   }, [activeDocumentId, flowState, result, updateHistory]);
 
   const retryExtraction = useCallback(() => {
-    startExtraction('success');
+    startExtraction('success', lastRealExtraction.current ?? undefined);
   }, [startExtraction]);
 
   const resetWorkbench = useCallback(() => {
@@ -356,6 +367,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
     setVisualProcessingComplete(false);
     setFileError(null);
     setIsContextPanelOpen(false);
+    lastRealExtraction.current = null;
     setFlowState('preparation');
   }, [clearTimer]);
 

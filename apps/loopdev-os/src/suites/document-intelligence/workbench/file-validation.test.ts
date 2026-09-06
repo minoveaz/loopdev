@@ -21,4 +21,15 @@ describe('Document Intelligence file intake', () => {
     });
     expect(validateDocumentFile(oversized)).toMatch(/10 MB/);
   });
+
+  it('accepts the 10 MB boundary and rejects values above it', () => {
+    const atLimit = new File([new Uint8Array(MAX_DOCUMENT_FILE_SIZE)], 'limit.jpg', {
+      type: 'image/jpeg',
+    });
+    expect(validateDocumentFile(atLimit)).toBeNull();
+    const aboveLimit = new File([new Uint8Array(MAX_DOCUMENT_FILE_SIZE + 1)], 'too-large.jpg', {
+      type: 'image/jpeg',
+    });
+    expect(validateDocumentFile(aboveLimit)).toMatch(/10 MB/);
+  });
 });

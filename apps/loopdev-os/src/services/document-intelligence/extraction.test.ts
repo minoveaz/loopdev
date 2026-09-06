@@ -81,4 +81,41 @@ describe('extractIdentityDocument', () => {
       details: { code: 'provider-unavailable', status: 503 },
     });
   });
+
+  it('falls back to a safe provider error when the function returns invalid JSON', async () => {
+    invoke.mockResolvedValueOnce({
+      data: null,
+      error: {
+        context: new Response('not-json', {
+          status: 502,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      },
+    });
+
+    const extraction = extractIdentityDocument(request);
+    await expect(extraction).rejects.toBeInstanceOf(DocumentExtractionServiceError);
+    await expect(extraction).rejects.toMatchObject({
+      details: {
+        code: 'provider-failed',
+        status: 502,
+        message: 'Document extraction failed.',
+      },
+    });
+  });
+
+  it('falls back to a safe provider error when invoke has no JSON response context', async () => {
+    invoke.mockResolvedValueOnce({
+      data: null,
+      error: { context: 'network-failure' },
+    });
+
+    const extraction = extractIdentityDocument(request);
+    await expect(extraction).rejects.toMatchObject({
+      details: {
+        code: 'provider-failed',
+        status: 502,
+      },
+    });
+  });
 });
