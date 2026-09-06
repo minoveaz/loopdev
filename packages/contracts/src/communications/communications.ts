@@ -18,13 +18,9 @@ export const CommunicationConversationStatusSchema = z.enum([
   'snoozed',
   'closed',
 ]);
-export type CommunicationConversationStatus = z.infer<
-  typeof CommunicationConversationStatusSchema
->;
+export type CommunicationConversationStatus = z.infer<typeof CommunicationConversationStatusSchema>;
 export const CommunicationMessageDirectionSchema = z.enum(['inbound', 'outbound']);
-export type CommunicationMessageDirection = z.infer<
-  typeof CommunicationMessageDirectionSchema
->;
+export type CommunicationMessageDirection = z.infer<typeof CommunicationMessageDirectionSchema>;
 export const CommunicationMessageStatusSchema = z.enum([
   'queued',
   'sent',
