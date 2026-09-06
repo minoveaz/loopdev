@@ -3,6 +3,20 @@
   "version": 1,
   "domains": [
     {
+      "id": "communications-worker",
+      "owner": "crm",
+      "paths": ["apps/loopdev-worker/"],
+      "manifest": "apps/loopdev-worker/package.json",
+      "validationScopes": ["worktree", "commit", "branch"],
+      "routing": { "planDomain": "crm", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
       "id": "cimo",
       "owner": "apps",
       "paths": ["apps/cimo/"],
