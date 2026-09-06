@@ -10,10 +10,7 @@ import {
   useState,
 } from 'react';
 import type { ReactNode } from 'react';
-import type {
-  DocumentExtractionError,
-  DocumentExtractionResult,
-} from '@loopdev/contracts';
+import type { DocumentExtractionError, DocumentExtractionResult } from '@loopdev/contracts';
 
 import {
   DOCUMENT_INTELLIGENCE_HISTORY_FIXTURE,
@@ -77,7 +74,6 @@ function readHistory(): PrototypeDocumentHistoryItem[] {
   } catch {
     return DOCUMENT_INTELLIGENCE_HISTORY_FIXTURE;
   }
-
 }
 
 function toPrototypeResult(result: DocumentExtractionResult): PrototypeExtractionResult {
@@ -215,11 +211,14 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
   );
 
   const startExtraction = useCallback(
-    (scenario: 'success' | 'error', realExtraction?: {
-      organizationId: string;
-      front: File;
-      back?: File;
-    }) => {
+    (
+      scenario: 'success' | 'error',
+      realExtraction?: {
+        organizationId: string;
+        front: File;
+        back?: File;
+      },
+    ) => {
       clearTimer();
       setError(null);
       setResult(null);
@@ -242,7 +241,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
           body,
         })
           .then(async (response) => {
-            const payload = await response.json() as {
+            const payload = (await response.json()) as {
               classification?: DocumentExtractionResult['classification'];
               fields?: DocumentExtractionResult['fields'];
               validations?: DocumentExtractionResult['validations'];
@@ -251,10 +250,12 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
               error?: DocumentExtractionError;
             };
             if (!response.ok || payload.error) {
-              throw payload.error ?? {
-                status: response.status,
-                message: 'No se pudo completar la extracción.',
-              };
+              throw (
+                payload.error ?? {
+                  status: response.status,
+                  message: 'No se pudo completar la extracción.',
+                }
+              );
             }
             return toPrototypeResult(payload as DocumentExtractionResult);
           })
@@ -338,12 +339,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
         transitionTimer.current = null;
       }
     };
-  }, [
-    activeDocumentId,
-    flowState,
-    result,
-    updateHistory,
-  ]);
+  }, [activeDocumentId, flowState, result, updateHistory]);
 
   const retryExtraction = useCallback(() => {
     startExtraction('success');

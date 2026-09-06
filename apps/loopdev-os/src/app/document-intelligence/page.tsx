@@ -29,8 +29,18 @@ function formatUpdatedAt(value: string) {
 
 function statusFor(item: PrototypeDocumentHistoryItem) {
   return {
-    status: item.flowState === 'error' ? ('error' as const) : item.flowState === 'review' ? ('success' as const) : ('neutral' as const),
-    label: item.flowState === 'error' ? 'Recuperable' : item.flowState === 'review' ? 'Revisado' : 'En preparación',
+    status:
+      item.flowState === 'error'
+        ? ('error' as const)
+        : item.flowState === 'review'
+          ? ('success' as const)
+          : ('neutral' as const),
+    label:
+      item.flowState === 'error'
+        ? 'Recuperable'
+        : item.flowState === 'review'
+          ? 'Revisado'
+          : 'En preparación',
   };
 }
 

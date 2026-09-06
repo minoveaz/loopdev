@@ -38,9 +38,7 @@ async function parseFunctionError(error: unknown): Promise<DocumentExtractionErr
   try {
     const payload: unknown = await context.clone().json();
     return DocumentExtractionErrorSchema.parse(
-      (payload && typeof payload === 'object' && 'error' in payload)
-        ? payload.error
-        : payload,
+      payload && typeof payload === 'object' && 'error' in payload ? payload.error : payload,
     );
   } catch {
     return fallbackError();

@@ -62,7 +62,9 @@ describe('TechnicalSurface', () => {
   });
 
   it('exposes the explicit interaction contract without changing static surfaces', () => {
-    const { container, rerender } = render(<TechnicalSurface interaction="interactive">Interactive</TechnicalSurface>);
+    const { container, rerender } = render(
+      <TechnicalSurface interaction="interactive">Interactive</TechnicalSurface>,
+    );
     expect(container.firstElementChild).toHaveClass('cursor-pointer');
 
     rerender(<TechnicalSurface interaction="static">Static</TechnicalSurface>);
@@ -71,7 +73,12 @@ describe('TechnicalSurface', () => {
 
   it('exposes the complete semantic surface contract for governance', () => {
     const { container } = render(
-      <TechnicalSurface radius="md" border="technical" borderWidth="medium" interaction="interactive">
+      <TechnicalSurface
+        radius="md"
+        border="technical"
+        borderWidth="medium"
+        interaction="interactive"
+      >
         Contract surface
       </TechnicalSurface>,
     );

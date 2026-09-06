@@ -21,7 +21,8 @@ describe('DocumentIntelligenceShell context panel visibility', () => {
     const workbenchModule = DOCUMENT_INTELLIGENCE_SUITE_CONFIG.modules.find(
       ({ moduleId }) => moduleId === 'workbench',
     );
-    if (!workbenchModule) throw new Error('Document Intelligence workbench module is not configured');
+    if (!workbenchModule)
+      throw new Error('Document Intelligence workbench module is not configured');
 
     const { desktopSegments, mobileSegments } = getWorkbenchHeaderSegments(workbenchModule);
 

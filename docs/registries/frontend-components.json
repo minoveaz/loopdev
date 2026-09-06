@@ -24,17 +24,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/utilities/ActivityFeed/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/utilities/ActivityFeed/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/utilities/ActivityFeed",
       "tests": [
         "ds/packages/ui/src/components/composites/utilities/ActivityFeed/ActivityFeed.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -64,9 +60,7 @@
         },
         "source_contract": {
           "status": "verified",
-          "evidence": [
-            "scripts/certification/source-contract-manifest.json"
-          ]
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
         },
         "overall": "certified"
       },
@@ -76,20 +70,14 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "phase": 1,
-      "dependencies": [
-        "responsive-table-v1"
-      ],
-      "contracts": [
-        "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.tsx"
-      ],
+      "dependencies": ["responsive-table-v1"],
+      "contracts": ["apps/loopdev-os/src/components/composites/data-tables/ActivityTable.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.tsx",
       "tests": [
         "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.test.tsx",
         "e2e/activity-table.certification.spec.mjs"
       ],
-      "documentation": [
-        "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"
-      ],
+      "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
     {
@@ -101,14 +89,8 @@
       "status": "experimental",
       "owner": "frontend-platform",
       "phase": 2,
-      "dependencies": [
-        "technical-surface-v1",
-        "technical-status-badge-v1",
-        "technical-canvas-v1"
-      ],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/types.ts"
-      ],
+      "dependencies": ["technical-surface-v1", "technical-status-badge-v1", "technical-canvas-v1"],
+      "contracts": ["ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface",
       "tests": [
         "ds/packages/ui/src/components/composites/feedback/AIFeedbackSurface/AIFeedbackSurface.test.tsx"
@@ -137,16 +119,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/AILoader/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/AILoader/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/AILoader",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/indicators/AILoader/AILoader.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/indicators/AILoader/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/indicators/AILoader/AILoader.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/indicators/AILoader/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -164,16 +140,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/shell/AppShell/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/shell/AppShell/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/shell/AppShell",
-      "tests": [
-        "ds/packages/ui/src/components/composites/shell/AppShell/AppShell.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/shell/AppShell/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/composites/shell/AppShell/AppShell.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/composites/shell/AppShell/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -196,9 +166,7 @@
         },
         "technical": {
           "status": "certified",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/indicators/Badge/Badge.test.tsx"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/indicators/Badge/Badge.test.tsx"]
         },
         "source_contract": {
           "status": "certified",
@@ -214,12 +182,8 @@
       "dependencies": [],
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/Badge",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/indicators/Badge/Badge.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/indicators/Badge/Badge.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -237,9 +201,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/foundations/BlueprintBackground/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/foundations/BlueprintBackground/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/foundations/BlueprintBackground",
       "tests": [
         "ds/packages/ui/src/components/atoms/foundations/BlueprintBackground/BlueprintBackground.test.tsx"
@@ -264,16 +226,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/BrandLogo/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/BrandLogo/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/BrandLogo",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/BrandLogo/BrandLogo.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/BrandLogo/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/BrandLogo/BrandLogo.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/BrandLogo/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -322,9 +278,7 @@
         "performance": {
           "applicability": "required",
           "status": "passed",
-          "evidence": [
-            "e2e/button.certification.spec.mjs"
-          ]
+          "evidence": ["e2e/button.certification.spec.mjs"]
         },
         "resilience": {
           "applicability": "not-applicable",
@@ -344,17 +298,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/inputs/Button/index.tsx"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/inputs/Button/index.tsx"],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/Button",
       "tests": [
         "ds/packages/ui/src/components/atoms/inputs/Button/Button.test.tsx",
         "ds/packages/ui/src/components/atoms/inputs/Button/ButtonRBAC.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/inputs/Button/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/inputs/Button/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -417,9 +367,7 @@
         "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ClaimsGovernanceBlock/ClaimsGovernanceBlock.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
     },
     {
@@ -449,9 +397,7 @@
         "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorContextBar/ColorContextBar.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
     },
     {
@@ -481,9 +427,7 @@
         "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/ColorTokenCard/ColorTokenCard.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
     },
     {
@@ -500,9 +444,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/CertificationStamp/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/CertificationStamp/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/CertificationStamp",
       "tests": [
         "ds/packages/ui/src/components/atoms/indicators/CertificationStamp/CertificationStamp.test.tsx"
@@ -530,9 +472,7 @@
         },
         "technical": {
           "status": "certified",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/inputs/Checkbox/Checkbox.test.tsx"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Checkbox/Checkbox.test.tsx"]
         },
         "source_contract": {
           "status": "certified",
@@ -548,12 +488,8 @@
       "dependencies": [],
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/Checkbox",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/inputs/Checkbox/Checkbox.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/inputs/Checkbox/UI_UX_SPEC.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/inputs/Checkbox/Checkbox.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/inputs/Checkbox/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
     {
@@ -591,9 +527,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger",
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/CommandBarTrigger/CommandBarTrigger.test.tsx"
@@ -640,9 +574,7 @@
       },
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
-      "dependencies": [
-        "command-bar-trigger-v1"
-      ],
+      "dependencies": ["command-bar-trigger-v1"],
       "contracts": [
         "ds/packages/ui/src/components/composites/utilities/CommandDialog/types.ts",
         "ds/packages/ui/src/components/composites/utilities/CommandDialog/UI_UX_SPEC.md"
@@ -676,9 +608,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/navigation/ContextPath/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/navigation/ContextPath/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/navigation/ContextPath",
       "tests": [
         "ds/packages/ui/src/components/composites/navigation/ContextPath/ContextPath.test.tsx"
@@ -736,10 +666,7 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
       "id": "crm-create-opportunity-from-lead-v1",
       "name": "CreateOpportunityFromLead",
@@ -763,16 +690,10 @@
       "suite": "sales-crm",
       "owner": "sales-crm",
       "dependencies": [],
-      "contracts": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/types.ts"
-      ],
+      "contracts": ["apps/loopdev-os/src/suites/sales-crm/leads/types.ts"],
       "implementation": "apps/loopdev-os/src/suites/sales-crm/leads/LeadContextPanel.tsx",
-      "tests": [
-        "apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx"
-      ],
-      "documentation": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/UI_UX_SPEC.md"
-      ],
+      "tests": ["apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx"],
+      "documentation": ["apps/loopdev-os/src/suites/sales-crm/leads/UI_UX_SPEC.md"],
       "certification": {
         "ui_ux": {
           "status": "in-progress",
@@ -802,14 +723,9 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
-      "source_evidence": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/LeadContextPanel.tsx"
-      ]
+      "source_evidence": ["apps/loopdev-os/src/suites/sales-crm/leads/LeadContextPanel.tsx"]
     },
     {
       "id": "crm-lead-filters-v1",
@@ -821,19 +737,11 @@
       "phase": 1,
       "suite": "sales-crm",
       "owner": "sales-crm",
-      "dependencies": [
-        "filter-dropdown-v1"
-      ],
-      "contracts": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/types.ts"
-      ],
+      "dependencies": ["filter-dropdown-v1"],
+      "contracts": ["apps/loopdev-os/src/suites/sales-crm/leads/types.ts"],
       "implementation": "apps/loopdev-os/src/suites/sales-crm/leads/LeadFilters.tsx",
-      "tests": [
-        "apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx"
-      ],
-      "documentation": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/UI_UX_SPEC.md"
-      ],
+      "tests": ["apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx"],
+      "documentation": ["apps/loopdev-os/src/suites/sales-crm/leads/UI_UX_SPEC.md"],
       "certification": {
         "ui_ux": {
           "status": "in-progress",
@@ -863,14 +771,9 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
-      "source_evidence": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/LeadFilters.tsx"
-      ]
+      "source_evidence": ["apps/loopdev-os/src/suites/sales-crm/leads/LeadFilters.tsx"]
     },
     {
       "id": "crm-lead-list-widget-v1",
@@ -882,10 +785,7 @@
       "phase": 1,
       "suite": "sales-crm",
       "owner": "sales-crm",
-      "dependencies": [
-        "responsive-table-v1",
-        "filter-dropdown-v1"
-      ],
+      "dependencies": ["responsive-table-v1", "filter-dropdown-v1"],
       "contracts": [
         "apps/loopdev-os/src/suites/sales-crm/leads/types.ts",
         "packages/contracts/src/crm/crm.ts"
@@ -931,14 +831,9 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
-      "source_evidence": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/LeadListWidget.tsx"
-      ]
+      "source_evidence": ["apps/loopdev-os/src/suites/sales-crm/leads/LeadListWidget.tsx"]
     },
     {
       "id": "crm-lead-record-preview-v1",
@@ -996,10 +891,7 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
       "source_evidence": [
         "apps/loopdev-os/src/suites/sales-crm/leads/LeadRecordPreview.tsx",
@@ -1016,9 +908,7 @@
       "phase": 3,
       "suite": "sales-crm",
       "owner": "sales-crm",
-      "dependencies": [
-        "crm-lead-record-preview-v1"
-      ],
+      "dependencies": ["crm-lead-record-preview-v1"],
       "contracts": [
         "apps/loopdev-os/src/suites/sales-crm/leads/types.ts",
         "packages/contracts/src/crm/crm.ts",
@@ -1065,10 +955,7 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
       "source_evidence": [
         "apps/loopdev-os/src/suites/sales-crm/leads/LeadRecordView.tsx",
@@ -1085,19 +972,11 @@
       "phase": 1,
       "suite": "sales-crm",
       "owner": "sales-crm",
-      "dependencies": [
-        "responsive-table-v1"
-      ],
-      "contracts": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/types.ts"
-      ],
+      "dependencies": ["responsive-table-v1"],
+      "contracts": ["apps/loopdev-os/src/suites/sales-crm/leads/types.ts"],
       "implementation": "apps/loopdev-os/src/suites/sales-crm/leads/LeadTable.tsx",
-      "tests": [
-        "apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx"
-      ],
-      "documentation": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/UI_UX_SPEC.md"
-      ],
+      "tests": ["apps/loopdev-os/src/app/sales-crm/leads/leads-components.test.tsx"],
+      "documentation": ["apps/loopdev-os/src/suites/sales-crm/leads/UI_UX_SPEC.md"],
       "certification": {
         "ui_ux": {
           "status": "in-progress",
@@ -1127,14 +1006,9 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
-      "source_evidence": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/LeadTable.tsx"
-      ]
+      "source_evidence": ["apps/loopdev-os/src/suites/sales-crm/leads/LeadTable.tsx"]
     },
     {
       "domain": "frontend",
@@ -1182,20 +1056,13 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
       "id": "crm-opportunity-result-panel-v1",
       "name": "OpportunityResultPanel",
       "implementation": "apps/loopdev-os/src/suites/sales-crm/leads/OpportunityResultPanel.tsx",
-      "tests": [
-        "apps/loopdev-os/src/app/sales-crm/leads/lead-conversion.test.tsx"
-      ],
-      "source_evidence": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/OpportunityResultPanel.tsx"
-      ]
+      "tests": ["apps/loopdev-os/src/app/sales-crm/leads/lead-conversion.test.tsx"],
+      "source_evidence": ["apps/loopdev-os/src/suites/sales-crm/leads/OpportunityResultPanel.tsx"]
     },
     {
       "domain": "frontend",
@@ -1243,20 +1110,13 @@
         },
         "overall": "in-progress"
       },
-      "evidence_gaps": [
-        "visual-review",
-        "playwright"
-      ],
+      "evidence_gaps": ["visual-review", "playwright"],
       "source_registry": "docs/registries/frontend-components.json",
       "id": "crm-qualified-lead-guard-v1",
       "name": "QualifiedLeadGuard",
       "implementation": "apps/loopdev-os/src/suites/sales-crm/leads/QualifiedLeadGuard.tsx",
-      "tests": [
-        "apps/loopdev-os/src/app/sales-crm/leads/lead-conversion.test.tsx"
-      ],
-      "source_evidence": [
-        "apps/loopdev-os/src/suites/sales-crm/leads/QualifiedLeadGuard.tsx"
-      ]
+      "tests": ["apps/loopdev-os/src/app/sales-crm/leads/lead-conversion.test.tsx"],
+      "source_evidence": ["apps/loopdev-os/src/suites/sales-crm/leads/QualifiedLeadGuard.tsx"]
     },
     {
       "id": "dense-operational-table-v1",
@@ -1284,9 +1144,7 @@
         },
         "source_contract": {
           "status": "verified",
-          "evidence": [
-            "scripts/certification/source-contract-manifest.json"
-          ]
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
         },
         "overall": "certified"
       },
@@ -1296,9 +1154,7 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "phase": 1,
-      "dependencies": [
-        "responsive-table-v1"
-      ],
+      "dependencies": ["responsive-table-v1"],
       "contracts": [
         "apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.tsx"
       ],
@@ -1307,9 +1163,7 @@
         "apps/loopdev-os/src/components/composites/data-tables/DenseOperationalTable.test.tsx",
         "e2e/dense-operational-table.visual.spec.mjs"
       ],
-      "documentation": [
-        "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"
-      ],
+      "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
     {
@@ -1326,17 +1180,11 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/Divider/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/Divider/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/Divider",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/Divider/Divider.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/Divider/Divider.test.tsx"],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -1364,9 +1212,7 @@
         "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx",
         "apps/loopdev-os/src/app/document-intelligence/routes.test.ts"
       ],
-      "documentation": [
-        "docs/06-product/document-intelligence/workbench-composition.md"
-      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
       "evidence_gaps": [
         "visual-review",
         "responsive-browser-evidence",
@@ -1423,10 +1269,7 @@
           ]
         }
       },
-      "evidence_gaps": [
-        "visual-review",
-        "pdf-fallback-browser-evidence"
-      ]
+      "evidence_gaps": ["visual-review", "pdf-fallback-browser-evidence"]
     },
     {
       "id": "empty-state-v1",
@@ -1450,13 +1293,9 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/feedback/EmptyState/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/feedback/EmptyState/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/feedback/EmptyState",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/feedback/EmptyState/EmptyState.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/feedback/EmptyState/EmptyState.test.tsx"],
       "documentation": [
         "ds/packages/ui/src/components/atoms/feedback/EmptyState/README.md",
         "ds/packages/ui/src/components/atoms/feedback/EmptyState/UI_UX_SPEC.md"
@@ -1478,16 +1317,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal",
       "tests": [
         "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/EngineeringSeal.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/indicators/EngineeringSeal/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1532,20 +1367,11 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "phase": 1,
-      "dependencies": [
-        "filters-actions-v1",
-        "responsive-table-v1"
-      ],
-      "contracts": [
-        "apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx"
-      ],
+      "dependencies": ["filters-actions-v1", "responsive-table-v1"],
+      "contracts": ["apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx",
-      "tests": [
-        "apps/loopdev-os/src/components/composites/data-tables/EntityTable.test.tsx"
-      ],
-      "documentation": [
-        "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"
-      ],
+      "tests": ["apps/loopdev-os/src/components/composites/data-tables/EntityTable.test.tsx"],
+      "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
     {
@@ -1562,16 +1388,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/ExitHatch/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/ExitHatch/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/ExitHatch",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/ExitHatch/ExitHatch.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/ExitHatch/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/ExitHatch/ExitHatch.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/ExitHatch/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1586,19 +1406,13 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "ai-platform",
       "phase": null,
-      "dependencies": [
-        "input-v1",
-        "button-v2",
-        "badge-v1"
-      ],
+      "dependencies": ["input-v1", "button-v2", "badge-v1"],
       "contracts": [],
       "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/ExtractionReviewForm.tsx",
       "tests": [
         "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx"
       ],
-      "documentation": [
-        "docs/06-product/document-intelligence/workbench-composition.md"
-      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
       "evidence_gaps": [
         "visual-review",
         "responsive-browser-evidence",
@@ -1638,31 +1452,23 @@
         },
         "responsive": {
           "status": "verified",
-          "evidence": [
-            "e2e/filter-dropdown.certification.spec.mjs"
-          ]
+          "evidence": ["e2e/filter-dropdown.certification.spec.mjs"]
         },
         "theme": {
           "status": "verified",
-          "evidence": [
-            "e2e/filter-dropdown.certification.spec.mjs"
-          ]
+          "evidence": ["e2e/filter-dropdown.certification.spec.mjs"]
         },
         "overall": "certified"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/FilterDropdown",
       "tests": [
         "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/FilterDropdown.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/inputs/FilterDropdown/UI_UX_SPEC.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/inputs/FilterDropdown/UI_UX_SPEC.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1684,22 +1490,14 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "phase": 1,
-      "dependencies": [
-        "responsive-table-v1",
-        "filter-dropdown-v1",
-        "section-header-v1"
-      ],
-      "contracts": [
-        "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx"
-      ],
+      "dependencies": ["responsive-table-v1", "filter-dropdown-v1", "section-header-v1"],
+      "contracts": ["apps/loopdev-os/src/components/composites/data/FiltersActions.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx",
       "tests": [
         "apps/loopdev-os/src/components/composites/data/FiltersActions.test.tsx",
         "e2e/filters-actions.certification.spec.mjs"
       ],
-      "documentation": [
-        "apps/loopdev-os/src/components/composites/data/UI_UX_SPEC.md"
-      ],
+      "documentation": ["apps/loopdev-os/src/components/composites/data/UI_UX_SPEC.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/registries/frontend-components.json"
     },
@@ -1717,16 +1515,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/inputs/IconButton/index.tsx"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/inputs/IconButton/index.tsx"],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/IconButton",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/inputs/IconButton/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/inputs/IconButton/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1746,12 +1538,8 @@
       "dependencies": [],
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/Icon",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/Icon/Icon.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/Icon/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/Icon/Icon.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/Icon/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1769,16 +1557,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/IdentityBar/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/IdentityBar/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/IdentityBar",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/IdentityBar/IdentityBar.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/IdentityBar/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/IdentityBar/IdentityBar.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/IdentityBar/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -1800,11 +1582,7 @@
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/Illustrations",
       "tests": [],
       "documentation": [],
-      "evidence_gaps": [
-        "contracts",
-        "tests",
-        "documentation"
-      ],
+      "evidence_gaps": ["contracts", "tests", "documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -1823,14 +1601,9 @@
       "dependencies": [],
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/InfraStamp",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/indicators/InfraStamp/InfraStamp.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/indicators/InfraStamp/InfraStamp.test.tsx"],
       "documentation": [],
-      "evidence_gaps": [
-        "contracts",
-        "documentation"
-      ],
+      "evidence_gaps": ["contracts", "documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -1861,9 +1634,7 @@
         "security": {
           "applicability": "required",
           "status": "passed",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"]
         },
         "data_state": {
           "applicability": "required",
@@ -1876,9 +1647,7 @@
         "performance": {
           "applicability": "required",
           "status": "passed",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md"]
         },
         "resilience": {
           "applicability": "not-applicable",
@@ -1888,22 +1657,16 @@
         "maintainability_testing": {
           "applicability": "required",
           "status": "passed",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"]
         },
         "overall": "certified"
       },
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/inputs/Input/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/inputs/Input/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/Input",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/inputs/Input/Input.test.tsx"],
       "documentation": [
         "ds/packages/ui/src/components/atoms/inputs/Input/README.md",
         "ds/packages/ui/src/components/atoms/inputs/Input/UI_UX_SPEC.md"
@@ -1925,17 +1688,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/workspace/InspectorPanel/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/workspace/InspectorPanel/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/workspace/InspectorPanel",
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/InspectorPanel/InspectorPanel.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -1954,14 +1713,9 @@
       "dependencies": [],
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/Label",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/Label/Label.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/Label/Label.test.tsx"],
       "documentation": [],
-      "evidence_gaps": [
-        "contracts",
-        "documentation"
-      ],
+      "evidence_gaps": ["contracts", "documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -1986,13 +1740,9 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/feedback/LoadingState/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/feedback/LoadingState/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/feedback/LoadingState",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/feedback/LoadingState/LoadingState.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/feedback/LoadingState/LoadingState.test.tsx"],
       "documentation": [
         "ds/packages/ui/src/components/atoms/feedback/LoadingState/README.md",
         "ds/packages/ui/src/components/atoms/feedback/LoadingState/UI_UX_SPEC.md"
@@ -2014,16 +1764,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/LogoSpinner/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/LogoSpinner/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/LogoSpinner",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/indicators/LogoSpinner/LogoSpinner.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/indicators/LogoSpinner/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/indicators/LogoSpinner/LogoSpinner.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/indicators/LogoSpinner/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2041,17 +1785,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/workspace/ModuleCard/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/workspace/ModuleCard/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleCard",
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/ModuleCard/ModuleCard.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2081,9 +1821,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/workspace/ModuleHeader/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/workspace/ModuleHeader/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleHeader",
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx"
@@ -2091,10 +1829,7 @@
       "documentation": [
         "ds/packages/ui/src/components/composites/workspace/ModuleHeader/UI_UX_SPEC.md"
       ],
-      "evidence_gaps": [
-        "visual-review",
-        "axe-browser-evidence"
-      ],
+      "evidence_gaps": ["visual-review", "axe-browser-evidence"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2111,17 +1846,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/workspace/ModuleSidebar/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/workspace/ModuleSidebar/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleSidebar",
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/ModuleSidebar/ModuleSidebar.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2151,9 +1882,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/workspace/ModuleToolbar/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleToolbar",
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx"
@@ -2161,10 +1890,7 @@
       "documentation": [
         "ds/packages/ui/src/components/composites/workspace/ModuleToolbar/UI_UX_SPEC.md"
       ],
-      "evidence_gaps": [
-        "visual-review",
-        "axe-browser-evidence"
-      ],
+      "evidence_gaps": ["visual-review", "axe-browser-evidence"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2181,9 +1907,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/workspace/ModuleWorkspace/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace",
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/ModuleWorkspace/ModuleWorkspace.test.tsx"
@@ -2212,13 +1936,8 @@
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/foundations/Motion",
       "tests": [],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/foundations/Motion/README.md"
-      ],
-      "evidence_gaps": [
-        "contracts",
-        "tests"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/foundations/Motion/README.md"],
+      "evidence_gaps": ["contracts", "tests"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2248,9 +1967,7 @@
         "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/NarrativeBlock/NarrativeBlock.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
     },
     {
@@ -2267,17 +1984,11 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/navigation/NavGroup/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/navigation/NavGroup/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/navigation/NavGroup",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/navigation/NavGroup/NavGroup.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/navigation/NavGroup/NavGroup.test.tsx"],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2294,16 +2005,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem",
       "tests": [
         "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/NavSidebarItem.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/navigation/NavSidebarItem/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2356,13 +2063,9 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/content/PageHeader/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/content/PageHeader/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/content/PageHeader",
-      "tests": [
-        "ds/packages/ui/src/components/composites/content/PageHeader/PageHeader.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/composites/content/PageHeader/PageHeader.test.tsx"],
       "documentation": [
         "ds/packages/ui/src/components/composites/content/PageHeader/README.md",
         "ds/packages/ui/src/components/composites/content/PageHeader/UI_UX_SPEC.md"
@@ -2384,17 +2087,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/QualityShield/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/QualityShield/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/QualityShield",
       "tests": [
         "ds/packages/ui/src/components/atoms/indicators/QualityShield/QualityShield.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2423,9 +2122,7 @@
         },
         "source_contract": {
           "status": "verified",
-          "evidence": [
-            "scripts/certification/source-contract-manifest.json"
-          ]
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
         },
         "overall": "certified"
       },
@@ -2435,20 +2132,14 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "phase": 1,
-      "dependencies": [
-        "responsive-table-v1"
-      ],
-      "contracts": [
-        "apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.tsx"
-      ],
+      "dependencies": ["responsive-table-v1"],
+      "contracts": ["apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.tsx",
       "tests": [
         "apps/loopdev-os/src/components/composites/data-tables/QuantitativeTable.test.tsx",
         "e2e/quantitative-table.visual.spec.mjs"
       ],
-      "documentation": [
-        "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"
-      ],
+      "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
     {
@@ -2465,9 +2156,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/utilities/QuickActionMenu/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/utilities/QuickActionMenu/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/utilities/QuickActionMenu",
       "tests": [
         "ds/packages/ui/src/components/composites/utilities/QuickActionMenu/QuickActionMenu.test.tsx"
@@ -2509,13 +2198,8 @@
       },
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
-      "dependencies": [
-        "empty-state-v1",
-        "loading-state-v1"
-      ],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/content/ResponsiveTable/types.ts"
-      ],
+      "dependencies": ["empty-state-v1", "loading-state-v1"],
+      "contracts": ["ds/packages/ui/src/components/composites/content/ResponsiveTable/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/content/ResponsiveTable",
       "tests": [
         "ds/packages/ui/src/components/composites/content/ResponsiveTable/ResponsiveTable.test.tsx"
@@ -2577,17 +2261,11 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/ScrollArea/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/ScrollArea/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/ScrollArea",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/ScrollArea/ScrollArea.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/ScrollArea/ScrollArea.test.tsx"],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2612,9 +2290,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/content/SectionHeader/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/content/SectionHeader/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/content/SectionHeader",
       "tests": [
         "ds/packages/ui/src/components/composites/content/SectionHeader/SectionHeader.test.tsx"
@@ -2645,9 +2321,7 @@
         },
         "technical": {
           "status": "certified",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/inputs/Select/Select.test.tsx"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/Select/Select.test.tsx"]
         },
         "source_contract": {
           "status": "certified",
@@ -2663,12 +2337,8 @@
       "dependencies": [],
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/Select",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/inputs/Select/Select.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/inputs/Select/UI_UX_SPEC.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/inputs/Select/Select.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/inputs/Select/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
     {
@@ -2697,9 +2367,7 @@
         },
         "source_contract": {
           "status": "verified",
-          "evidence": [
-            "scripts/certification/source-contract-manifest.json"
-          ]
+          "evidence": ["scripts/certification/source-contract-manifest.json"]
         },
         "overall": "certified"
       },
@@ -2709,19 +2377,11 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "frontend-platform",
       "phase": 1,
-      "dependencies": [
-        "responsive-table-v1"
-      ],
-      "contracts": [
-        "apps/loopdev-os/src/components/composites/data-tables/SelectionTable.tsx"
-      ],
+      "dependencies": ["responsive-table-v1"],
+      "contracts": ["apps/loopdev-os/src/components/composites/data-tables/SelectionTable.tsx"],
       "implementation": "apps/loopdev-os/src/components/composites/data-tables/SelectionTable.tsx",
-      "tests": [
-        "apps/loopdev-os/src/components/composites/data-tables/SelectionTable.test.tsx"
-      ],
-      "documentation": [
-        "apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"
-      ],
+      "tests": ["apps/loopdev-os/src/components/composites/data-tables/SelectionTable.test.tsx"],
+      "documentation": ["apps/loopdev-os/src/components/composites/data-tables/UI_UX_SPEC.md"],
       "evidence_gaps": []
     },
     {
@@ -2738,16 +2398,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/shell/SidebarFooter/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/shell/SidebarFooter/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/shell/SidebarFooter",
       "tests": [
         "ds/packages/ui/src/components/composites/shell/SidebarFooter/SidebarFooter.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/shell/SidebarFooter/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/composites/shell/SidebarFooter/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2765,16 +2421,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/shell/SidebarIdentity/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/shell/SidebarIdentity/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/shell/SidebarIdentity",
       "tests": [
         "ds/packages/ui/src/components/composites/shell/SidebarIdentity/SidebarIdentity.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/shell/SidebarIdentity/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/composites/shell/SidebarIdentity/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2797,9 +2449,7 @@
         },
         "technical": {
           "status": "certified",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/feedback/Skeleton/Skeleton.test.tsx"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/Skeleton.test.tsx"]
         },
         "source_contract": {
           "status": "certified",
@@ -2813,16 +2463,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/feedback/Skeleton/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/feedback/Skeleton",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/feedback/Skeleton/Skeleton.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/feedback/Skeleton/UI_UX_SPEC.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/Skeleton.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/feedback/Skeleton/UI_UX_SPEC.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2840,17 +2484,11 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/Spinner/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/Spinner/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/Spinner",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/indicators/Spinner/Spinner.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/indicators/Spinner/Spinner.test.tsx"],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2867,16 +2505,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/StatusPulse/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/StatusPulse/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/StatusPulse",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/indicators/StatusPulse/StatusPulse.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/indicators/StatusPulse/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/indicators/StatusPulse/StatusPulse.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/indicators/StatusPulse/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2894,16 +2526,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/utilities/SuiteCard/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/utilities/SuiteCard/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/utilities/SuiteCard",
-      "tests": [
-        "ds/packages/ui/src/components/composites/utilities/SuiteCard/SuiteCard.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/utilities/SuiteCard/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/composites/utilities/SuiteCard/SuiteCard.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/composites/utilities/SuiteCard/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2921,16 +2547,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/shell/SuiteHeader/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/shell/SuiteHeader/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/shell/SuiteHeader",
-      "tests": [
-        "ds/packages/ui/src/components/composites/shell/SuiteHeader/SuiteHeader.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/shell/SuiteHeader/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/composites/shell/SuiteHeader/SuiteHeader.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/composites/shell/SuiteHeader/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -2948,17 +2568,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/workspace/SuiteHomeLayout/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/workspace/SuiteHomeLayout/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/workspace/SuiteHomeLayout",
       "tests": [
         "ds/packages/ui/src/components/composites/workspace/SuiteHomeLayout/SuiteHomeLayout.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -2975,16 +2591,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/shell/SuiteSidebar/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/shell/SuiteSidebar/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/shell/SuiteSidebar",
       "tests": [
         "ds/packages/ui/src/components/composites/shell/SuiteSidebar/SuiteSidebar.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/shell/SuiteSidebar/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/composites/shell/SuiteSidebar/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3002,16 +2614,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/shell/SuiteSwitcher/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/shell/SuiteSwitcher/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/shell/SuiteSwitcher",
       "tests": [
         "ds/packages/ui/src/components/composites/shell/SuiteSwitcher/SuiteSwitcher.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/shell/SuiteSwitcher/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/composites/shell/SuiteSwitcher/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3029,17 +2637,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/utilities/SystemNoticeRail/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/utilities/SystemNoticeRail/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/utilities/SystemNoticeRail",
       "tests": [
         "ds/packages/ui/src/components/composites/utilities/SystemNoticeRail/SystemNoticeRail.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -3056,19 +2660,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/SystemStatus/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/SystemStatus/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/SystemStatus",
       "tests": [
         "ds/packages/ui/src/components/atoms/indicators/SystemStatus/SystemStatus.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/indicators/SystemStatus/README.md"
-      ],
-      "evidence_gaps": [
-        "contracts"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/indicators/SystemStatus/README.md"],
+      "evidence_gaps": ["contracts"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -3098,9 +2696,7 @@
         "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/TokenGroupSection/TokenGroupSection.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
     },
     {
@@ -3157,9 +2753,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/foundations/TechnicalCanvas/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/foundations/TechnicalCanvas/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/foundations/TechnicalCanvas",
       "tests": [
         "ds/packages/ui/src/components/atoms/foundations/TechnicalCanvas/TechnicalCanvas.test.tsx",
@@ -3196,9 +2790,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalCard/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalCard/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalCard",
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/TechnicalCard/TechnicalCard.test.tsx"
@@ -3224,16 +2816,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown",
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/TechnicalDropdown.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalDropdown/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3265,9 +2853,7 @@
         "security": {
           "applicability": "required",
           "status": "passed",
-          "evidence": [
-            "ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"
-          ]
+          "evidence": ["ds/packages/ui/src/components/atoms/inputs/IconButton/IconButton.test.tsx"]
         },
         "data_state": {
           "applicability": "required",
@@ -3280,9 +2866,7 @@
         "performance": {
           "applicability": "required",
           "status": "passed",
-          "evidence": [
-            "e2e/icon-button.certification.spec.mjs"
-          ]
+          "evidence": ["e2e/icon-button.certification.spec.mjs"]
         },
         "resilience": {
           "applicability": "not-applicable",
@@ -3302,17 +2886,13 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/TechnicalIsotype/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/TechnicalIsotype/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/TechnicalIsotype",
       "tests": [
         "ds/packages/ui/src/components/atoms/indicators/TechnicalIsotype/TechnicalIsotype.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -3329,16 +2909,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel",
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/TechnicalLabel.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalLabel/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3356,16 +2932,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem",
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/TechnicalMenuItem.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalMenuItem/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3397,16 +2969,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge",
       "tests": [
         "ds/packages/ui/src/components/atoms/indicators/TechnicalStatusBadge/TechnicalStatusBadge.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/indicators/Badge/UI_UX_SPEC.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3432,9 +3000,7 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface",
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/TechnicalSurface.test.tsx"
@@ -3460,16 +3026,12 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip",
       "tests": [
         "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/TechnicalTooltip.test.tsx"
       ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/README.md"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/TechnicalTooltip/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3487,16 +3049,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/inputs/ThemeToggle/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/inputs/ThemeToggle/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/inputs/ThemeToggle",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/inputs/ThemeToggle/ThemeToggle.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/inputs/ThemeToggle/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/inputs/ThemeToggle/ThemeToggle.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/inputs/ThemeToggle/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3515,17 +3071,11 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/feedback/Toast/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/feedback/Toast/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/feedback/Toast",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/feedback/Toast/Toast.test.tsx"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/feedback/Toast/Toast.test.tsx"],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
     {
@@ -3542,16 +3092,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/foundations/Typography/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/foundations/Typography/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/foundations/Typography",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/foundations/Typography/Typography.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/foundations/Typography/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/foundations/Typography/Typography.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/foundations/Typography/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3566,18 +3110,13 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "ai-platform",
       "phase": null,
-      "dependencies": [
-        "badge-v1",
-        "divider-v1"
-      ],
+      "dependencies": ["badge-v1", "divider-v1"],
       "contracts": [],
       "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/UsageCostPanel.tsx",
       "tests": [
         "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx"
       ],
-      "documentation": [
-        "docs/06-product/document-intelligence/workbench-composition.md"
-      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
       "evidence_gaps": [
         "visual-review",
         "responsive-browser-evidence",
@@ -3607,16 +3146,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/atoms/surfaces/UserAvatar/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/atoms/surfaces/UserAvatar/types.ts"],
       "implementation": "ds/packages/ui/src/components/atoms/surfaces/UserAvatar",
-      "tests": [
-        "ds/packages/ui/src/components/atoms/surfaces/UserAvatar/UserAvatar.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/surfaces/UserAvatar/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/atoms/surfaces/UserAvatar/UserAvatar.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/atoms/surfaces/UserAvatar/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3634,16 +3167,10 @@
       "source_registry": "docs/archive/registries/2026-08-13/COMPONENT_REGISTRY.operations.legacy.json",
       "owner": "frontend-platform",
       "dependencies": [],
-      "contracts": [
-        "ds/packages/ui/src/components/composites/navigation/UserMenu/types.ts"
-      ],
+      "contracts": ["ds/packages/ui/src/components/composites/navigation/UserMenu/types.ts"],
       "implementation": "ds/packages/ui/src/components/composites/navigation/UserMenu",
-      "tests": [
-        "ds/packages/ui/src/components/composites/navigation/UserMenu/UserMenu.test.tsx"
-      ],
-      "documentation": [
-        "ds/packages/ui/src/components/composites/navigation/UserMenu/README.md"
-      ],
+      "tests": ["ds/packages/ui/src/components/composites/navigation/UserMenu/UserMenu.test.tsx"],
+      "documentation": ["ds/packages/ui/src/components/composites/navigation/UserMenu/README.md"],
       "evidence_gaps": [],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     },
@@ -3674,9 +3201,7 @@
         "apps/loopdev-os/src/suites/marketing-studio/brand-hub/components/VoiceToneBlock/VoiceToneBlock.test.tsx"
       ],
       "documentation": [],
-      "evidence_gaps": [
-        "documentation"
-      ],
+      "evidence_gaps": ["documentation"],
       "source_registry_original": "docs/02-frontend/COMPONENT_REGISTRY.json"
     },
     {
@@ -3690,19 +3215,13 @@
       "source_registry": "docs/registries/frontend-components.json",
       "owner": "ai-platform",
       "phase": null,
-      "dependencies": [
-        "technical-status-badge-v1",
-        "badge-v1",
-        "divider-v1"
-      ],
+      "dependencies": ["technical-status-badge-v1", "badge-v1", "divider-v1"],
       "contracts": [],
       "implementation": "apps/loopdev-os/src/suites/document-intelligence/workbench/WorkbenchInspector.tsx",
       "tests": [
         "apps/loopdev-os/src/suites/document-intelligence/workbench/workbench-context.test.tsx"
       ],
-      "documentation": [
-        "docs/06-product/document-intelligence/workbench-composition.md"
-      ],
+      "documentation": ["docs/06-product/document-intelligence/workbench-composition.md"],
       "evidence_gaps": [
         "visual-review",
         "responsive-browser-evidence",
@@ -3727,13 +3246,8 @@
       "contracts": [],
       "implementation": "ds/packages/ui/src/components/atoms/foundations/ZIndex",
       "tests": [],
-      "documentation": [
-        "ds/packages/ui/src/components/atoms/foundations/ZIndex/README.md"
-      ],
-      "evidence_gaps": [
-        "contracts",
-        "tests"
-      ],
+      "documentation": ["ds/packages/ui/src/components/atoms/foundations/ZIndex/README.md"],
+      "evidence_gaps": ["contracts", "tests"],
       "source_registry_original": "docs/05-operations/COMPONENT_REGISTRY.json"
     }
   ],

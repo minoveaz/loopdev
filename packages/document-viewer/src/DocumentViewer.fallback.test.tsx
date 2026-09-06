@@ -27,10 +27,13 @@ describe('DocumentViewer PDF fallback', () => {
 
   it('shows an actionable terminal error when PDF.js and iframe fallback fail', async () => {
     vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
-    vi.stubGlobal('ResizeObserver', class {
-      observe() {}
-      disconnect() {}
-    });
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    );
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
       width: 640,
       height: 480,
@@ -65,10 +68,9 @@ describe('DocumentViewer PDF fallback', () => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
     expect(screen.getByText(DOCUMENT_VIEWER_FIXTURE_LABELS.pdfRenderError)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: DOCUMENT_VIEWER_FIXTURE_LABELS.download })).toHaveAttribute(
-      'href',
-      'blob:document-viewer-fallback',
-    );
+    expect(
+      screen.getByRole('link', { name: DOCUMENT_VIEWER_FIXTURE_LABELS.download }),
+    ).toHaveAttribute('href', 'blob:document-viewer-fallback');
     expect(document.querySelector('[data-document-viewer-pdf-canvas="true"]')).toBeNull();
   });
 });

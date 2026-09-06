@@ -10,8 +10,16 @@
 @layer components {
   .ai-feedback-surface {
     background:
-      radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--lpd-color-innovation-purple) 18%, transparent), transparent 42%),
-      linear-gradient(135deg, color-mix(in srgb, var(--lpd-color-innovation-soft) 100%, transparent), var(--lpd-shell-canvas));
+      radial-gradient(
+        circle at 18% 12%,
+        color-mix(in srgb, var(--lpd-color-innovation-purple) 18%, transparent),
+        transparent 42%
+      ),
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--lpd-color-innovation-soft) 100%, transparent),
+        var(--lpd-shell-canvas)
+      );
     border: 1px solid color-mix(in srgb, var(--lpd-color-innovation-purple) 30%, transparent);
   }
 
@@ -72,7 +80,9 @@
     align-items: center;
     gap: 0.6rem;
     color: var(--lpd-color-text-muted);
-    transition: color 200ms ease, opacity 200ms ease;
+    transition:
+      color 200ms ease,
+      opacity 200ms ease;
   }
 
   .ai-feedback-timeline-step-active {
@@ -121,8 +131,15 @@
   }
 
   @keyframes ai-feedback-node-pulse {
-    0%, 100% { box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--lpd-color-innovation-purple) 12%, transparent); }
-    50% { box-shadow: 0 0 0 0.5rem color-mix(in srgb, var(--lpd-color-innovation-purple) 3%, transparent); }
+    0%,
+    100% {
+      box-shadow: 0 0 0 0.25rem
+        color-mix(in srgb, var(--lpd-color-innovation-purple) 12%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 0.5rem
+        color-mix(in srgb, var(--lpd-color-innovation-purple) 3%, transparent);
+    }
   }
 
   @media (max-width: 640px) {
@@ -159,7 +176,9 @@
   }
 
   .empty-state-grid-pattern {
-    background-image: linear-gradient(to right, var(--lpd-color-brand-primary) 1px, transparent 1px), linear-gradient(to bottom, var(--lpd-color-brand-primary) 1px, transparent 1px);
+    background-image:
+      linear-gradient(to right, var(--lpd-color-brand-primary) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--lpd-color-brand-primary) 1px, transparent 1px);
     background-size: 40px 40px;
     opacity: 0.03;
   }
@@ -214,11 +233,11 @@
     --grid-line-color: rgba(51, 65, 85, 0.08);
     --dot-color: rgba(51, 65, 85, 0.15);
     --lpd-color-border-technical: rgba(0, 0, 0, 0.05);
-    
+
     /* Semantic Shell Colors (Light Mode - Industrial Upgrade) */
     --lpd-shell-canvas: #f1f5f9; /* Slate 100 para profundidad */
     --lpd-shell-surface: #ffffff; /* Blanco puro para tarjetas */
-    --lpd-color-bg-surface-elevated: #ffffff; 
+    --lpd-color-bg-surface-elevated: #ffffff;
     --lpd-color-bg-primary-subtle: #e0eaff; /* Azul tenue sólido para Light Mode */
     --lpd-color-overlay-backdrop: rgba(15, 23, 42, 0.78);
     /* Typography: Now inherited from @loopdev/tokens */
@@ -229,18 +248,19 @@
     --grid-line-color: rgba(255, 255, 255, 0.04);
     --dot-color: rgba(255, 255, 255, 0.1);
     --lpd-color-border-technical: rgba(255, 255, 255, 0.05);
-    
+
     /* Semantic Shell Colors (Dark Mode - Lab Standard) */
     --lpd-shell-canvas: #0f1115;
     --lpd-shell-surface: #181b21;
     --lpd-color-bg-surface-elevated: #181b21; /* Gris carbón para tarjetas */
     --lpd-color-bg-primary-subtle: rgba(19, 91, 236, 0.15); /* Azul profundo tenue para Dark Mode */
     --lpd-color-overlay-backdrop: rgba(0, 0, 0, 0.68);
-    
+
     color: var(--lpd-color-text-base);
   }
 
-  html, body {
+  html,
+  body {
     margin: 0;
     padding: 0;
     font-family: var(--lpd-font-sans), sans-serif;
@@ -264,35 +284,58 @@
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
   }
 
-  .bg-grid-40 { 
-    background-size: 40px 40px; 
-    background-image: linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px); 
+  .bg-grid-40 {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
   }
 
-  .bg-grid-20 { 
-    background-size: 20px 20px; 
-    background-image: linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px); 
+  .bg-grid-20 {
+    background-size: 20px 20px;
+    background-image:
+      linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
   }
 
-  code, pre {
+  code,
+  pre {
     font-family: var(--lpd-font-mono), monospace;
   }
 
   @keyframes shimmer {
-    100% { transform: translateX(100%); }
+    100% {
+      transform: translateX(100%);
+    }
   }
 
   @keyframes pulse-soft {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
   }
 
   @keyframes badge-pulse-industrial {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(0.9); }
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(0.9);
+    }
   }
 
   .animate-shimmer {
@@ -315,8 +358,9 @@
 
   .bg-blueprint-grid {
     background-size: 20px 20px;
-    background-image: linear-gradient(to right, rgba(19, 91, 236, 0.1) 1px, transparent 1px), 
-                      linear-gradient(to bottom, rgba(19, 91, 236, 0.1) 1px, transparent 1px);
+    background-image:
+      linear-gradient(to right, rgba(19, 91, 236, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(19, 91, 236, 0.1) 1px, transparent 1px);
   }
 
   .glass-panel-industrial {

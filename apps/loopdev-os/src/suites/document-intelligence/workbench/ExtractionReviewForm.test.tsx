@@ -42,11 +42,9 @@ describe('ExtractionReviewForm', () => {
     expect(screen.getByRole('button', { name: 'Formato de datos' })).toHaveTextContent(
       'Aseguradora 1',
     );
-    expect(Array.from(document.querySelectorAll('select option')).map((option) => option.textContent)).toEqual([
-      'Aseguradora 1',
-      'Aseguradora 2',
-      'ICAO / Internacional',
-    ]);
+    expect(
+      Array.from(document.querySelectorAll('select option')).map((option) => option.textContent),
+    ).toEqual(['Aseguradora 1', 'Aseguradora 2', 'ICAO / Internacional']);
   });
 
   it('copies the current value from an individual field action', async () => {

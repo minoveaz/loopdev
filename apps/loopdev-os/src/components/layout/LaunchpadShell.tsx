@@ -62,9 +62,7 @@ export function LaunchpadShell({
         navigationMode: navMode,
         isLeftSidebarOpen: navMode === 'expanded',
       }}
-      onToggleLeftSidebar={() =>
-        onNavModeChange(navMode === 'expanded' ? 'rail' : 'expanded')
-      }
+      onToggleLeftSidebar={() => onNavModeChange(navMode === 'expanded' ? 'rail' : 'expanded')}
       navSlot={
         platformToolsAvailable ? (
           <SuiteSidebar
@@ -89,9 +87,7 @@ export function LaunchpadShell({
           hasMobileNavigation={platformToolsAvailable}
           identitySlot={<BrandLogo variant="full" size="md" />}
           contextSlot={<ContextSwitcher />}
-          environmentSlot={
-            <SystemStatus state="operational" id={userId} label="ID" />
-          }
+          environmentSlot={<SystemStatus state="operational" id={userId} label="ID" />}
           controlsSlot={<ThemeToggle variant="technical" size="md" />}
           profileSlot={
             <UserMenu

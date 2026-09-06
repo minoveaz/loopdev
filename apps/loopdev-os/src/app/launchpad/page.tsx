@@ -18,10 +18,7 @@ import { useOrganization } from '@/hooks/useOrganization';
 import { resolveAccessState } from '@/core/access/accessState';
 import { AccessStatePanel } from '@/components/layout/AccessStatePanel';
 import { LaunchpadShell } from '@/components/layout/LaunchpadShell';
-import {
-  PLATFORM_TOOL_ENTRIES,
-  resolvePlatformTools,
-} from '@/core/platform/platformTools';
+import { PLATFORM_TOOL_ENTRIES, resolvePlatformTools } from '@/core/platform/platformTools';
 
 export default function LaunchpadPage() {
   const router = useRouter();
@@ -60,7 +57,7 @@ export default function LaunchpadPage() {
     PLATFORM_TOOL_ENTRIES.map((entry) => [
       entry.id,
       platformTools.some((visibleEntry) => visibleEntry.id === entry.id)
-        ? entry.state ?? 'enabled'
+        ? (entry.state ?? 'enabled')
         : 'hidden',
     ]),
   );

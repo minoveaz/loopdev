@@ -1,9 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import {
-  MAX_DOCUMENT_BYTES,
-  parseDocumentReference,
-  SUPPORTED_MIME_TYPES,
-} from './validation.ts';
+import { MAX_DOCUMENT_BYTES, parseDocumentReference, SUPPORTED_MIME_TYPES } from './validation.ts';
 
 const BUCKET = 'document-intelligence-temp';
 const DOCUMENT_TYPES = [
@@ -67,8 +63,8 @@ function corsHeaders(request: Request): HeadersInit {
     .map((value) => value.trim())
     .filter(Boolean);
   const isAllowed = origin
-    ? configuredOrigins.includes(origin)
-      || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+    ? configuredOrigins.includes(origin) ||
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
     : false;
   return {
     ...(isAllowed ? { 'Access-Control-Allow-Origin': origin } : {}),
@@ -168,7 +164,13 @@ Deno.serve(async (request) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
   if (!authorization || !supabaseUrl || !supabaseAnonKey) {
-    return errorResponse(request, 'unauthorized', 'An authenticated session is required.', 401, false);
+    return errorResponse(
+      request,
+      'unauthorized',
+      'An authenticated session is required.',
+      401,
+      false,
+    );
   }
 
   const client = createClient(supabaseUrl, supabaseAnonKey, {
@@ -182,22 +184,32 @@ Deno.serve(async (request) => {
 
   const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
   if (!geminiApiKey) {
-    return errorResponse(request, 'provider-unavailable', 'Document extraction is not configured.', 503);
+    return errorResponse(
+      request,
+      'provider-unavailable',
+      'Document extraction is not configured.',
+      503,
+    );
   }
 
   let payload: Payload;
   try {
-    payload = await request.json() as Payload;
+    payload = (await request.json()) as Payload;
   } catch {
     return errorResponse(request, 'invalid-payload', 'The request body must be valid JSON.', 400);
   }
 
   if (
-    !isString(payload.fileName, 240)
-    || !isString(payload.mimeType, 64)
-    || !SUPPORTED_MIME_TYPES.has(payload.mimeType)
+    !isString(payload.fileName, 240) ||
+    !isString(payload.mimeType, 64) ||
+    !SUPPORTED_MIME_TYPES.has(payload.mimeType)
   ) {
-    return errorResponse(request, 'unsupported-media', 'The front document MIME type is not supported.', 415);
+    return errorResponse(
+      request,
+      'unsupported-media',
+      'The front document MIME type is not supported.',
+      415,
+    );
   }
   const front = parseDocumentReference(payload.documentReference, userId);
   if (!front) {
@@ -206,16 +218,31 @@ Deno.serve(async (request) => {
   if (!isString(payload.backFileName, 240) && payload.backFileName !== undefined) {
     return errorResponse(request, 'invalid-payload', 'The back document name is invalid.', 400);
   }
-  if (payload.backMimeType !== undefined && (
-    !isString(payload.backMimeType, 64) || !SUPPORTED_MIME_TYPES.has(payload.backMimeType)
-  )) {
-    return errorResponse(request, 'unsupported-media', 'The back document MIME type is not supported.', 415);
+  if (
+    payload.backMimeType !== undefined &&
+    (!isString(payload.backMimeType, 64) || !SUPPORTED_MIME_TYPES.has(payload.backMimeType))
+  ) {
+    return errorResponse(
+      request,
+      'unsupported-media',
+      'The back document MIME type is not supported.',
+      415,
+    );
   }
-  const back = payload.backDocumentReference === undefined
-    ? null
-    : parseDocumentReference(payload.backDocumentReference, userId);
-  if (payload.backDocumentReference !== undefined && (!back || back.organizationId !== front.organizationId)) {
-    return errorResponse(request, 'invalid-payload', 'The document references must belong to one organization and actor.', 400);
+  const back =
+    payload.backDocumentReference === undefined
+      ? null
+      : parseDocumentReference(payload.backDocumentReference, userId);
+  if (
+    payload.backDocumentReference !== undefined &&
+    (!back || back.organizationId !== front.organizationId)
+  ) {
+    return errorResponse(
+      request,
+      'invalid-payload',
+      'The document references must belong to one organization and actor.',
+      400,
+    );
   }
 
   const { data: membership, error: membershipError } = await client
@@ -236,9 +263,15 @@ Deno.serve(async (request) => {
       ...(back ? [[back.path, payload.backMimeType ?? payload.mimeType]] : []),
     ] as Array<[string, string]>) {
       const { data, error } = await client.storage.from(BUCKET).download(path);
-      if (error || !data) return errorResponse(request, 'not-found', 'The document could not be loaded.', 404);
+      if (error || !data)
+        return errorResponse(request, 'not-found', 'The document could not be loaded.', 404);
       if (data.size > MAX_DOCUMENT_BYTES) {
-        return errorResponse(request, 'file-too-large', 'The document exceeds the 10 MB limit.', 413);
+        return errorResponse(
+          request,
+          'file-too-large',
+          'The document exceeds the 10 MB limit.',
+          413,
+        );
       }
       parts.push({ inlineData: { mimeType, data: await toBase64(data) } });
     }
@@ -253,9 +286,11 @@ Deno.serve(async (request) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           systemInstruction: {
-            parts: [{
-              text: 'You are an identity document OCR service. Extract documentType, issuingCountry, fullName, givenNames, surnames, firstSurname, secondSurname, documentNumber, birthDate, nationality, sex, issueDate, expiryDate, birthplace, supportNumber, address and mrz.',
-            }],
+            parts: [
+              {
+                text: 'You are an identity document OCR service. Extract documentType, issuingCountry, fullName, givenNames, surnames, firstSurname, secondSurname, documentNumber, birthDate, nationality, sex, issueDate, expiryDate, birthplace, supportNumber, address and mrz.',
+              },
+            ],
           },
           contents: [{ parts }],
           generationConfig: {
@@ -270,7 +305,7 @@ Deno.serve(async (request) => {
       return errorResponse(request, 'provider-failed', 'The extraction provider failed.', 502);
     }
 
-    const providerPayload = await providerResponse.json() as {
+    const providerPayload = (await providerResponse.json()) as {
       candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
       usageMetadata?: {
         promptTokenCount?: number;
@@ -278,14 +313,27 @@ Deno.serve(async (request) => {
         totalTokenCount?: number;
       };
     };
-    const text = providerPayload.candidates?.[0]?.content?.parts
-      ?.find((part) => typeof part.text === 'string')?.text;
-    if (!text) return errorResponse(request, 'provider-failed', 'The provider returned no extraction.', 502);
+    const text = providerPayload.candidates?.[0]?.content?.parts?.find(
+      (part) => typeof part.text === 'string',
+    )?.text;
+    if (!text)
+      return errorResponse(request, 'provider-failed', 'The provider returned no extraction.', 502);
 
     try {
-      return jsonResponse(request, normalizeExtraction(JSON.parse(text) as Record<string, unknown>, providerPayload.usageMetadata));
+      return jsonResponse(
+        request,
+        normalizeExtraction(
+          JSON.parse(text) as Record<string, unknown>,
+          providerPayload.usageMetadata,
+        ),
+      );
     } catch {
-      return errorResponse(request, 'provider-failed', 'The provider returned invalid extraction data.', 502);
+      return errorResponse(
+        request,
+        'provider-failed',
+        'The provider returned invalid extraction data.',
+        502,
+      );
     }
   } finally {
     await client.storage.from(BUCKET).remove(pathsToCleanup);

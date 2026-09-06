@@ -49,11 +49,11 @@ RecordWorkspace record
 
 The default profile is `aseguradora-1`:
 
-| Profile | Visible identity shape | Copy output |
-| --- | --- | --- |
-| `aseguradora-1` | Nombre(s), primer apellido, segundo apellido | Insurer fields separated |
-| `aseguradora-2` | Nombre(s), apellidos | Insurer/CRM grouped surnames |
-| `icao-internacional` | Surnames, Given Names, issuing country, MRZ | ICAO labels and fields |
+| Profile              | Visible identity shape                       | Copy output                  |
+| -------------------- | -------------------------------------------- | ---------------------------- |
+| `aseguradora-1`      | Nombre(s), primer apellido, segundo apellido | Insurer fields separated     |
+| `aseguradora-2`      | Nombre(s), apellidos                         | Insurer/CRM grouped surnames |
+| `icao-internacional` | Surnames, Given Names, issuing country, MRZ  | ICAO labels and fields       |
 
 Profile definitions are typed in `export-profiles.ts`. They contain labels,
 field order, descriptions, and output selection; fixture data and provider
@@ -61,14 +61,14 @@ logic remain consumer-owned.
 
 ## Interaction and accessibility
 
-| Capability | User intent | Pointer/touch | Keyboard/focus | State feedback |
-| --- | --- | --- | --- | --- |
-| Select profile | Change destination format | Opens the single-select menu and selects one profile | Trigger is focusable; selection uses the DS `Select` contract | Field anatomy and description update |
-| Edit field | Correct extracted value | Input or textarea editing | Native field order and labels | Existing confidence badge remains visible |
-| Copy field | Copy one value for a destination form | Copy icon at the end of each field, including MRZ | Icon button is keyboard activatable and has a field-specific name | Status text confirms the field copied |
-| Sync surnames | Keep grouped and separated values coherent | Editing either representation updates the other | Same field focus is retained | Canonical values stay in the form state |
-| Copy fields | Paste into destination system | Button action | Button is keyboard activatable | Status text confirms copy |
-| Copy JSON | Copy selected profile fields for technical use | Button action | Button is keyboard activatable | Status text confirms copy |
+| Capability     | User intent                                    | Pointer/touch                                        | Keyboard/focus                                                    | State feedback                            |
+| -------------- | ---------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------- |
+| Select profile | Change destination format                      | Opens the single-select menu and selects one profile | Trigger is focusable; selection uses the DS `Select` contract     | Field anatomy and description update      |
+| Edit field     | Correct extracted value                        | Input or textarea editing                            | Native field order and labels                                     | Existing confidence badge remains visible |
+| Copy field     | Copy one value for a destination form          | Copy icon at the end of each field, including MRZ    | Icon button is keyboard activatable and has a field-specific name | Status text confirms the field copied     |
+| Sync surnames  | Keep grouped and separated values coherent     | Editing either representation updates the other      | Same field focus is retained                                      | Canonical values stay in the form state   |
+| Copy fields    | Paste into destination system                  | Button action                                        | Button is keyboard activatable                                    | Status text confirms copy                 |
+| Copy JSON      | Copy selected profile fields for technical use | Button action                                        | Button is keyboard activatable                                    | Status text confirms copy                 |
 
 The selector is single-select: choosing an option closes the menu and keeps
 focus on the trigger. There is no clear action because one profile is always
@@ -79,11 +79,11 @@ are copied as an empty string and remain visually empty.
 
 ## Responsive and state contract
 
-| Viewport | Behavior |
-| --- | --- |
-| Desktop | Selector and copy actions share the form header; fields use two columns. |
-| Tablet | Header actions wrap without horizontal overflow; fields remain readable. |
-| Mobile | Header actions wrap to full-width-friendly controls; fields collapse to one column. |
+| Viewport | Behavior                                                                            |
+| -------- | ----------------------------------------------------------------------------------- |
+| Desktop  | Selector and copy actions share the form header; fields use two columns.            |
+| Tablet   | Header actions wrap without horizontal overflow; fields remain readable.            |
+| Mobile   | Header actions wrap to full-width-friendly controls; fields collapse to one column. |
 
 Applicable states are `ready`, `read-only` (future consumer), `disabled`
 (provider or permission boundary), and `error` (copy failure must surface to
@@ -115,7 +115,7 @@ organization profiles, persistence, and profile permissions reopen this spec.
 
 ## History
 
-| Date | Version | Change |
-| --- | --- | --- |
-| 2026-09-05 | 1.1 | Added typed insurer and ICAO profile views with copy formatting and surname synchronization. |
-| 2026-09-06 | 1.2 | Added accessible per-field copy actions while retaining whole-profile copy actions. |
+| Date       | Version | Change                                                                                       |
+| ---------- | ------- | -------------------------------------------------------------------------------------------- |
+| 2026-09-05 | 1.1     | Added typed insurer and ICAO profile views with copy formatting and surname synchronization. |
+| 2026-09-06 | 1.2     | Added accessible per-field copy actions while retaining whole-profile copy actions.          |

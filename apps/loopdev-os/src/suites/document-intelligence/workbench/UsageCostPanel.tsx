@@ -35,7 +35,11 @@ export function UsageCostPanel() {
         <LpdText size="xs" className="text-text-muted">
           Proveedor
         </LpdText>
-        <Badge status={result.provider === 'fixture' ? 'neutral' : 'primary'} variant="outline" showDot={false}>
+        <Badge
+          status={result.provider === 'fixture' ? 'neutral' : 'primary'}
+          variant="outline"
+          showDot={false}
+        >
           {result.provider === 'fixture' ? 'Fixture' : 'Gemini'}
         </Badge>
       </div>

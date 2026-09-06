@@ -23,10 +23,34 @@ const WORKBENCH_TABS: Array<{ id: WorkbenchTab; label: string }> = [
 ];
 
 const PROCESSING_STEPS = [
-  { id: 'prepare', label: 'Preparar documento', description: 'Validando el archivo temporal', typingMessage: 'Validando el archivo temporal', durationMs: 1400 },
-  { id: 'classify', label: 'Clasificar documento', description: 'Identificando el tipo documental', typingMessage: 'Identificando el tipo documental', durationMs: 1800 },
-  { id: 'extract', label: 'Extraer identidad', description: 'Leyendo campos y evidencias', typingMessage: 'Leyendo campos y evidencias', durationMs: 2600 },
-  { id: 'normalize', label: 'Normalizar resultado', description: 'Preparando la revisión manual', typingMessage: 'Preparando la revisión manual', durationMs: 1600 },
+  {
+    id: 'prepare',
+    label: 'Preparar documento',
+    description: 'Validando el archivo temporal',
+    typingMessage: 'Validando el archivo temporal',
+    durationMs: 1400,
+  },
+  {
+    id: 'classify',
+    label: 'Clasificar documento',
+    description: 'Identificando el tipo documental',
+    typingMessage: 'Identificando el tipo documental',
+    durationMs: 1800,
+  },
+  {
+    id: 'extract',
+    label: 'Extraer identidad',
+    description: 'Leyendo campos y evidencias',
+    typingMessage: 'Leyendo campos y evidencias',
+    durationMs: 2600,
+  },
+  {
+    id: 'normalize',
+    label: 'Normalizar resultado',
+    description: 'Preparando la revisión manual',
+    typingMessage: 'Preparando la revisión manual',
+    durationMs: 1600,
+  },
 ];
 
 /**

@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  DocumentExtractionServiceError,
-  extractIdentityDocument,
-} from './extraction';
+import { DocumentExtractionServiceError, extractIdentityDocument } from './extraction';
 
 const invoke = vi.fn();
 
@@ -16,7 +13,8 @@ vi.mock('@/lib/supabase/server', () => ({
 const request = {
   fileName: 'front.png',
   mimeType: 'image/png' as const,
-  documentReference: 'organizations/11111111-1111-4111-8111-111111111111/22222222-2222-4222-8222-222222222222/33333333-3333-4333-8333-333333333333.png',
+  documentReference:
+    'organizations/11111111-1111-4111-8111-111111111111/22222222-2222-4222-8222-222222222222/33333333-3333-4333-8333-333333333333.png',
 };
 
 afterEach(() => invoke.mockReset());
@@ -63,14 +61,17 @@ describe('extractIdentityDocument', () => {
     invoke.mockResolvedValueOnce({
       data: null,
       error: {
-        context: new Response(JSON.stringify({
-          error: {
-            code: 'provider-unavailable',
-            status: 503,
-            message: 'Document extraction is not configured.',
-            recoverable: true,
-          },
-        }), { status: 503 }),
+        context: new Response(
+          JSON.stringify({
+            error: {
+              code: 'provider-unavailable',
+              status: 503,
+              message: 'Document extraction is not configured.',
+              recoverable: true,
+            },
+          }),
+          { status: 503 },
+        ),
       },
     });
 

@@ -12,7 +12,9 @@ import { TechnicalCanvas } from '../../foundations/TechnicalCanvas';
  * @category Foundations
  * @phase 1
  */
-export const TechnicalSurface: React.FC<TechnicalSurfaceProps & { withHoverAura?: boolean }> = (props) => {
+export const TechnicalSurface: React.FC<TechnicalSurfaceProps & { withHoverAura?: boolean }> = (
+  props,
+) => {
   const {
     children,
     withGrid = false,
@@ -52,9 +54,7 @@ export const TechnicalSurface: React.FC<TechnicalSurfaceProps & { withHoverAura?
       )}
 
       {/* 3. Content Layer */}
-      <div className="relative z-10 flex h-full min-h-0 w-full min-w-0 flex-col">
-        {children}
-      </div>
+      <div className="relative z-10 flex h-full min-h-0 w-full min-w-0 flex-col">{children}</div>
     </div>
   );
 };

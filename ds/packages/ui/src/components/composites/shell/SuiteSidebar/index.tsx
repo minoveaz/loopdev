@@ -10,7 +10,10 @@ import { NavSidebarItem } from '../../../atoms';
 const isSuiteSidebarContextualAction = (
   action: SuiteSidebarProps['contextualAction'],
 ): action is SuiteSidebarContextualAction =>
-  typeof action === 'object' && action !== null && 'type' in action && action.type === 'contextual-action';
+  typeof action === 'object' &&
+  action !== null &&
+  'type' in action &&
+  action.type === 'contextual-action';
 
 /**
  * @component SuiteSidebar (Context Controller v1.0)
@@ -30,26 +33,31 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
   const shouldExpandOnHover = props.navMode === 'hover' && !props.mobileMode;
   const renderAsRail = isRail && !(shouldExpandOnHover && (isHoverExpanded || isControlMenuOpen));
   const ContextualActionIcon = isSuiteSidebarContextualAction(props.contextualAction)
-    ? (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; className?: string; 'aria-hidden'?: boolean }>>)[
-        props.contextualAction.icon
-      ] ?? LucideIcons.HelpCircle
+    ? ((
+        LucideIcons as unknown as Record<
+          string,
+          React.ComponentType<{ size?: number; className?: string; 'aria-hidden'?: boolean }>
+        >
+      )[props.contextualAction.icon] ?? LucideIcons.HelpCircle)
     : null;
   const contextualAction =
-    typeof props.contextualAction === 'function'
-      ? props.contextualAction(renderAsRail)
-      : isSuiteSidebarContextualAction(props.contextualAction)
-        ? (
-            <button
-              type="button"
-              aria-label={props.contextualAction.label}
-              onClick={props.contextualAction.onAction}
-              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors hover:text-white"
-            >
-              {ContextualActionIcon ? <ContextualActionIcon aria-hidden={true} size={18} className="shrink-0" /> : null}
-              {!renderAsRail ? <span className="truncate">{props.contextualAction.label}</span> : null}
-            </button>
-          )
-        : props.contextualAction;
+    typeof props.contextualAction === 'function' ? (
+      props.contextualAction(renderAsRail)
+    ) : isSuiteSidebarContextualAction(props.contextualAction) ? (
+      <button
+        type="button"
+        aria-label={props.contextualAction.label}
+        onClick={props.contextualAction.onAction}
+        className="text-primary border-primary/30 bg-primary/10 hover:bg-primary flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors hover:text-white"
+      >
+        {ContextualActionIcon ? (
+          <ContextualActionIcon aria-hidden={true} size={18} className="shrink-0" />
+        ) : null}
+        {!renderAsRail ? <span className="truncate">{props.contextualAction.label}</span> : null}
+      </button>
+    ) : (
+      props.contextualAction
+    );
   const clearHoverCollapse = () => {
     if (hoverCollapseTimer.current) {
       clearTimeout(hoverCollapseTimer.current);
@@ -116,7 +124,9 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
         {contextualAction ? (
           <div
             className={`shrink-0 pb-3 ${
-              renderAsRail ? 'flex w-full items-center justify-center overflow-visible px-0' : 'px-4'
+              renderAsRail
+                ? 'flex w-full items-center justify-center overflow-visible px-0'
+                : 'px-4'
             }`}
           >
             {contextualAction}
@@ -147,9 +157,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
         </div>
 
         {props.mobileMode && props.mobileActions ? (
-          <div className="border-border-technical border-t px-4 py-3">
-            {props.mobileActions}
-          </div>
+          <div className="border-border-technical border-t px-4 py-3">{props.mobileActions}</div>
         ) : null}
 
         {/* Sidebar behavior selector */}

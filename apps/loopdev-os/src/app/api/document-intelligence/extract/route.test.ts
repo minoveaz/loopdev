@@ -10,13 +10,7 @@ const mocks = vi.hoisted(() => ({
   remove: vi.fn(),
   invokeExtraction: vi.fn(),
 }));
-const {
-  getUser,
-  membershipMaybeSingle,
-  upload,
-  remove,
-  invokeExtraction,
-} = mocks;
+const { getUser, membershipMaybeSingle, upload, remove, invokeExtraction } = mocks;
 
 const supabase = {
   auth: { getUser },
@@ -37,9 +31,9 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 
 vi.mock('@/services/document-intelligence/extraction', async () => {
-  const actual = await vi.importActual<typeof import('@/services/document-intelligence/extraction')>(
-    '@/services/document-intelligence/extraction',
-  );
+  const actual = await vi.importActual<
+    typeof import('@/services/document-intelligence/extraction')
+  >('@/services/document-intelligence/extraction');
   return {
     ...actual,
     extractIdentityDocument: mocks.invokeExtraction,
@@ -90,7 +84,10 @@ const extractionResult = {
 beforeEach(() => {
   vi.clearAllMocks();
   getUser.mockResolvedValue({ data: { user: { id: userId } }, error: null });
-  membershipMaybeSingle.mockResolvedValue({ data: { organization_id: organizationId }, error: null });
+  membershipMaybeSingle.mockResolvedValue({
+    data: { organization_id: organizationId },
+    error: null,
+  });
   upload.mockResolvedValue({ error: null });
   remove.mockResolvedValue({ error: null });
   invokeExtraction.mockResolvedValue(extractionResult);
@@ -100,9 +97,11 @@ describe('POST /api/document-intelligence/extract', () => {
   it('rejects missing authentication before reading multipart data', async () => {
     getUser.mockResolvedValueOnce({ data: { user: null }, error: new Error('unauthorized') });
 
-    const response = await POST(requestWithFiles({
-      front: new File(['front'], 'front.png', { type: 'image/png' }),
-    }));
+    const response = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.png', { type: 'image/png' }),
+      }),
+    );
 
     expect(response.status).toBe(401);
     expect(upload).not.toHaveBeenCalled();
@@ -111,9 +110,11 @@ describe('POST /api/document-intelligence/extract', () => {
   it('rejects an organization without an authenticated membership', async () => {
     membershipMaybeSingle.mockResolvedValueOnce({ data: null, error: null });
 
-    const response = await POST(requestWithFiles({
-      front: new File(['front'], 'front.png', { type: 'image/png' }),
-    }));
+    const response = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.png', { type: 'image/png' }),
+      }),
+    );
 
     expect(response.status).toBe(404);
     expect(upload).not.toHaveBeenCalled();
@@ -130,12 +131,14 @@ describe('POST /api/document-intelligence/extract', () => {
     expect(payload.provider).toBe('gemini');
     expect(DocumentExtractionResultSchema.parse(payload).provider).toBe('gemini');
     expect(upload).toHaveBeenCalledTimes(2);
-    expect(invokeExtraction).toHaveBeenCalledWith(expect.objectContaining({
-      fileName: 'front.png',
-      backFileName: 'back.png',
-      mimeType: 'image/png',
-      backMimeType: 'image/png',
-    }));
+    expect(invokeExtraction).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fileName: 'front.png',
+        backFileName: 'back.png',
+        mimeType: 'image/png',
+        backMimeType: 'image/png',
+      }),
+    );
     expect(remove).toHaveBeenCalledWith([
       expect.stringMatching(new RegExp(`^organizations/${organizationId}/${userId}/.+\\.png$`)),
       expect.stringMatching(new RegExp(`^organizations/${organizationId}/${userId}/.+\\.png$`)),
@@ -143,16 +146,20 @@ describe('POST /api/document-intelligence/extract', () => {
   });
 
   it('cleans an uploaded front object when the extraction service fails', async () => {
-    invokeExtraction.mockRejectedValueOnce(new DocumentExtractionServiceError({
-      code: 'provider-failed',
-      status: 502,
-      message: 'The extraction provider failed.',
-      recoverable: true,
-    }));
+    invokeExtraction.mockRejectedValueOnce(
+      new DocumentExtractionServiceError({
+        code: 'provider-failed',
+        status: 502,
+        message: 'The extraction provider failed.',
+        recoverable: true,
+      }),
+    );
 
-    const response = await POST(requestWithFiles({
-      front: new File(['front'], 'front.pdf', { type: 'application/pdf' }),
-    }));
+    const response = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.pdf', { type: 'application/pdf' }),
+      }),
+    );
 
     expect(response.status).toBe(502);
     expect(DocumentExtractionErrorSchema.parse((await response.json()).error).code).toBe(

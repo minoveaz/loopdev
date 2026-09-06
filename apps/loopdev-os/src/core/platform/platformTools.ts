@@ -58,9 +58,7 @@ export function resolvePlatformTools(
     .filter((entry) => entry.state !== 'hidden' && entry.state !== 'forbidden')
     .filter(
       (entry) =>
-        isPlatformScope ||
-        !entry.requiredPermission ||
-        hasPermission(entry.requiredPermission),
+        isPlatformScope || !entry.requiredPermission || hasPermission(entry.requiredPermission),
     )
     .sort((left, right) => left.priority - right.priority);
 }

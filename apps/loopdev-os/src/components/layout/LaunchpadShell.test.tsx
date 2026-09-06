@@ -36,9 +36,7 @@ describe('LaunchpadShell', () => {
     expect(mobileNavigationTrigger).toHaveAttribute('aria-controls', 'app-shell-nav');
     expect(screen.queryByText('Platform tools')).not.toBeInTheDocument();
     expect(screen.queryByRole('menuitem', { name: 'Suite Dashboard' })).not.toBeInTheDocument();
-    expect(
-      screen.getByRole('menuitem', { name: 'Document Intelligence' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Document Intelligence' })).toBeInTheDocument();
     expect(screen.getByTestId('launchpad-content')).toBeInTheDocument();
   });
 

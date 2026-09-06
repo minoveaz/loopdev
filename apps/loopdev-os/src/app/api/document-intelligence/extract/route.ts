@@ -30,7 +30,12 @@ function validateFile(file: File): string | null {
 export async function POST(request: Request) {
   const organizationId = request.headers.get('x-loopdev-organization-id');
   if (!organizationId || !UUID.test(organizationId)) {
-    return errorResponse(400, 'invalid-payload', 'A valid organization context is required.', false);
+    return errorResponse(
+      400,
+      'invalid-payload',
+      'A valid organization context is required.',
+      false,
+    );
   }
 
   const supabase = await createServerSupabaseClient();
@@ -76,11 +81,8 @@ export async function POST(request: Request) {
   const references: string[] = [];
   try {
     const upload = async (file: File) => {
-      const extension = file.type === 'application/pdf'
-        ? 'pdf'
-        : file.type === 'image/jpeg'
-          ? 'jpg'
-          : 'png';
+      const extension =
+        file.type === 'application/pdf' ? 'pdf' : file.type === 'image/jpeg' ? 'jpg' : 'png';
       const path = `organizations/${organizationId}/${userId}/${crypto.randomUUID()}.${extension}`;
       const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
         contentType: file.type,

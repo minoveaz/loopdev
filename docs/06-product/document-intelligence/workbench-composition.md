@@ -137,16 +137,16 @@ liberar temporales) es implícito al aprobar/rechazar/resetear, igual que en el 
 
 ## Gaps de componentes (reuse/create)
 
-| Gap | Necesidad                                          | Decisión propuesta                                                                 | Fase     |
-| --- | -------------------------------------------------- | ---------------------------------------------------------------------------------- | -------- |
-| G1  | Dropzone con allowlist MIME, tamaño y portapapeles | Implementado como feature suite-local con controles DS                             | 0-4      |
-| G2  | Visor documental (fit/zoom/rotate/pan, PDF)        | Extraído a `@loopdev/document-viewer` con PDF.js legacy + iframe/download fallback | 0-4      |
-| G3  | Stepper/progreso por pasos                         | Reusar `EmptyState ai` y mensajes de fixture                                       | 0-4      |
-| G4  | Tabs compartidos                                   | Crear atom/composite `Tabs` en DS (hoy control local con `Button`)                 | 3        |
-| G5  | Input de fecha `DD/MM/YYYY`                        | Extender `Input` con máscara o variante                                            | 3        |
-| G6  | Overlay de inspector en tablet                     | Extender preset/presentación de `ModuleContextPanel` vía `platform-shell`          | 3        |
+| Gap | Necesidad                                          | Decisión propuesta                                                                           | Fase     |
+| --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------- |
+| G1  | Dropzone con allowlist MIME, tamaño y portapapeles | Implementado como feature suite-local con controles DS                                       | 0-4      |
+| G2  | Visor documental (fit/zoom/rotate/pan, PDF)        | Extraído a `@loopdev/document-viewer` con PDF.js legacy + iframe/download fallback           | 0-4      |
+| G3  | Stepper/progreso por pasos                         | Reusar `EmptyState ai` y mensajes de fixture                                                 | 0-4      |
+| G4  | Tabs compartidos                                   | Crear atom/composite `Tabs` en DS (hoy control local con `Button`)                           | 3        |
+| G5  | Input de fecha `DD/MM/YYYY`                        | Extender `Input` con máscara o variante                                                      | 3        |
+| G6  | Overlay de inspector en tablet                     | Extender preset/presentación de `ModuleContextPanel` vía `platform-shell`                    | 3        |
 | G7  | Banner de alertas                                  | No requerido dentro del formulario; el diagnóstico global se compone en `Extraction context` | diferido |
-| G8  | Perfiles de salida de aseguradora                  | Compuesto en `ExtractionReviewForm` con catálogo tipado y copia por perfil            | 5 |
+| G8  | Perfiles de salida de aseguradora                  | Compuesto en `ExtractionReviewForm` con catálogo tipado y copia por perfil                   | 5        |
 
 Componentes reutilizados sin cambios: `ModuleHeader`, `ModuleContextPanel`, `SuiteRuntime`,
 `Form`, `Input`, `Textarea`, `Button`, `IconButton`, `Badge`, `TechnicalStatusBadge`,
@@ -181,6 +181,6 @@ Referencias inspeccionadas (duplicate review): `SalesCrmShell` + `config.ts` (pa
 - **Sincronización:** editar cualquiera de las representaciones de apellidos actualiza la otra,
   incluyendo partículas compuestas como `DE LA` y `DEL`.
 - **Separación de responsabilidades:** el formulario conserva edición y exportación; `Extraction
-  context` queda reservado para estado, clasificación, validaciones globales y uso/coste.
+context` queda reservado para estado, clasificación, validaciones globales y uso/coste.
 - **Evidencia:** `export-profiles.test.ts`, `ExtractionReviewForm.test.tsx` y
   `ExtractionReviewForm.UI_UX_SPEC.md`. La revisión visual responsive sigue siendo un gate pendiente.

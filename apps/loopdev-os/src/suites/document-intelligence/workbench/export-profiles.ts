@@ -103,7 +103,10 @@ export function splitSurnames(value: string | null): {
   return { firstSurname: parts[0], secondSurname: parts.slice(1).join(' ') };
 }
 
-export function buildSurnames(firstSurname: string | null, secondSurname: string | null): string | null {
+export function buildSurnames(
+  firstSurname: string | null,
+  secondSurname: string | null,
+): string | null {
   const value = [firstSurname?.trim(), secondSurname?.trim()].filter(Boolean).join(' ');
   return value || null;
 }
@@ -113,9 +116,7 @@ export function formatFieldsForProfile(
   profileId: ExportProfileId,
 ): string {
   const profile = getExportProfile(profileId);
-  return profile.fields
-    .map(({ field, label }) => `${label}: ${fields[field] ?? '—'}`)
-    .join('\n');
+  return profile.fields.map(({ field, label }) => `${label}: ${fields[field] ?? '—'}`).join('\n');
 }
 
 export function selectFieldsForProfile(

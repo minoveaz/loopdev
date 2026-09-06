@@ -104,10 +104,13 @@ export function AIFeedbackSurface({
     }
 
     if (completionNotified.current || !onComplete) return undefined;
-    const timer = window.setTimeout(() => {
-      completionNotified.current = true;
-      onComplete();
-    }, Math.max(0, completionHoldMs));
+    const timer = window.setTimeout(
+      () => {
+        completionNotified.current = true;
+        onComplete();
+      },
+      Math.max(0, completionHoldMs),
+    );
 
     return () => window.clearTimeout(timer);
   }, [autoAdvance, completionHoldMs, elapsedMs, onComplete, totalDuration]);
@@ -127,7 +130,10 @@ export function AIFeedbackSurface({
       <div className="relative z-10 flex min-h-0 flex-1 flex-col">
         <div className="ai-feedback-surface-header flex items-center justify-between gap-4 border-b px-5 py-4">
           <div className="min-w-0">
-            <LpdText size="xs" className="text-innovation-purple font-mono uppercase tracking-[0.16em]">
+            <LpdText
+              size="xs"
+              className="text-innovation-purple font-mono uppercase tracking-[0.16em]"
+            >
               {statusLabel}
             </LpdText>
             <LpdText as="h2" size="lg" className="text-text-main mt-1 font-semibold">
@@ -178,7 +184,10 @@ export function AIFeedbackSurface({
               {hasProgress && (
                 <div className="mt-8">
                   <div className="flex items-center justify-between gap-3">
-                    <LpdText size="xs" className="text-text-muted font-mono uppercase tracking-[0.12em]">
+                    <LpdText
+                      size="xs"
+                      className="text-text-muted font-mono uppercase tracking-[0.12em]"
+                    >
                       Progreso del proceso
                     </LpdText>
                     <LpdText size="sm" className="text-innovation-purple font-mono font-semibold">

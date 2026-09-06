@@ -51,12 +51,12 @@ consumer. The composite does not decide when result data is rendered.
 
 ## State and interaction contract
 
-| State | Status | UI | Recovery |
-| --- | --- | --- | --- |
-| Processing | required | Purple neural surface, active message, optional progress and stages | Consumer action only |
-| Success | applicable | Semantic success badge and completed stages | Consumer action only |
-| Error | applicable | Semantic danger badge and error stage | Consumer retry/action |
-| Paused | applicable | Semantic warning badge and stable content | Consumer resume/cancel |
+| State      | Status     | UI                                                                  | Recovery               |
+| ---------- | ---------- | ------------------------------------------------------------------- | ---------------------- |
+| Processing | required   | Purple neural surface, active message, optional progress and stages | Consumer action only   |
+| Success    | applicable | Semantic success badge and completed stages                         | Consumer action only   |
+| Error      | applicable | Semantic danger badge and error stage                               | Consumer retry/action  |
+| Paused     | applicable | Semantic warning badge and stable content                           | Consumer resume/cancel |
 
 The component has no popup, focus trap or dismiss behavior. Actions follow
 normal document order and are activated by their native controls.
