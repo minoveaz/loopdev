@@ -56,6 +56,7 @@
 - [Platform Shell and SuiteCanvas mode inventory](./active/platform/2026-08-14-platform-shell-mode-inventory.md) · `docs/platform-shell-mode-inventory` · fase 1
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
 - [Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Universal Multi-Client Surface System](./active/platform/2026-08-28-public-shell-foundation.md) · `feature/public-shell-foundation` · fase 1
+- [Estandarización del Drawer de Usuario y Contexto de Plataforma](./active/platform/2026-09-06-platform-user-drawer-and-context-standardization.md) · `feature/platform-shell-user-context-standardization` · fase 1
 
 ### Governance
 

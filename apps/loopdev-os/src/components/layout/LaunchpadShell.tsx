@@ -14,6 +14,7 @@ import {
 import type { AccessMap, NavMode, NavRouteRef } from '@loopdev/contracts';
 
 import { ContextSwitcher } from './ContextSwitcher';
+import { ContextPanelHost } from './ContextPanelHost';
 import { PLATFORM_TOOL_NAVIGATION_SCHEMA } from '@/core/platform/platformTools';
 
 interface LaunchpadShellProps {
@@ -43,6 +44,7 @@ export function LaunchpadShell({
 }: LaunchpadShellProps) {
   const displayName = userEmail?.split('@')[0] ?? 'User';
   const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 1024px)');
@@ -59,8 +61,21 @@ export function LaunchpadShell({
         navBehavior: 'auto',
         navigationMode: navMode,
         isLeftSidebarOpen: navMode === 'expanded',
+        isRightSidebarOpen: isProfileOpen,
+        activeOverlay: isProfileOpen ? 'context' : null,
       }}
       onToggleLeftSidebar={() => onNavModeChange(navMode === 'expanded' ? 'rail' : 'expanded')}
+      onRequestCloseContext={() => setIsProfileOpen(false)}
+      contextSlot={
+        isProfileOpen ? (
+          <ContextPanelHost
+            mode="profile"
+            notifications={[]}
+            unreadCount={0}
+            onClose={() => setIsProfileOpen(false)}
+          />
+        ) : undefined
+      }
       navSlot={
         platformToolsAvailable ? (
           <SuiteSidebar
@@ -92,6 +107,8 @@ export function LaunchpadShell({
               userName={displayName}
               userEmail={userEmail}
               userRole={isPlatformAdministrator ? 'Platform Owner' : 'Member'}
+              onAvatarClick={() => setIsProfileOpen((prev) => !prev)}
+              onProfileClick={() => setIsProfileOpen(true)}
               onLogout={signOut}
             />
           }
