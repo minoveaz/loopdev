@@ -129,6 +129,9 @@ jobs:
       - name: Validate domain testing catalog
         run: pnpm test:domain-catalog && pnpm validate:domain-catalog
 
+      - name: Enforce CRM F5 operations gate
+        run: pnpm test:crm:f5-operations && pnpm validate:crm-f5-operations
+
       - name: Validate E2E testing catalog
         run: pnpm test:e2e-catalog && pnpm validate:e2e-catalog
 

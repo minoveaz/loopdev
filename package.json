@@ -82,6 +82,8 @@
     "test:supabase-governance": "node --test scripts/validate-supabase-governance.test.mjs",
     "test:crm:bootstrap": "node scripts/crm-backend-bootstrap.mjs",
     "test:crm:backend-http": "node scripts/test-crm-backend-http.mjs",
+    "validate:crm-f5-operations": "node scripts/validate-crm-f5-operations.mjs",
+    "test:crm:f5-operations": "node --test scripts/validate-crm-f5-operations.test.mjs",
     "registries:generate": "node scripts/registries/generate-registry-catalog.mjs",
     "registries:check": "node scripts/registries/generate-registry-catalog.mjs --check",
     "docs:links:check": "node scripts/docs/check-markdown-links.mjs",
