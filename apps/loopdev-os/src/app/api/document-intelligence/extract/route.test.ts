@@ -120,6 +120,36 @@ describe('POST /api/document-intelligence/extract', () => {
     expect(upload).not.toHaveBeenCalled();
   });
 
+  it('rejects unsupported MIME and oversized payloads before upload', async () => {
+    const unsupportedResponse = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.txt', { type: 'text/plain' }),
+      }),
+    );
+
+    expect(unsupportedResponse.status).toBe(415);
+    expect(DocumentExtractionErrorSchema.parse((await unsupportedResponse.json()).error).code).toBe(
+      'unsupported-media',
+    );
+    expect(upload).not.toHaveBeenCalled();
+
+    const oversizedBack = new File([new Uint8Array(10 * 1024 * 1024 + 1)], 'back.pdf', {
+      type: 'application/pdf',
+    });
+    const oversizedResponse = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.png', { type: 'image/png' }),
+        back: oversizedBack,
+      }),
+    );
+
+    expect(oversizedResponse.status).toBe(413);
+    expect(DocumentExtractionErrorSchema.parse((await oversizedResponse.json()).error).code).toBe(
+      'file-too-large',
+    );
+    expect(upload).not.toHaveBeenCalled();
+  });
+
   it('uploads both multipart sides, invokes the contract service, and cleans both paths', async () => {
     const front = new File(['front'], 'front.png', { type: 'image/png' });
     const back = new File(['back'], 'back.png', { type: 'image/png' });
@@ -168,5 +198,61 @@ describe('POST /api/document-intelligence/extract', () => {
     expect(remove).toHaveBeenCalledWith([
       expect.stringMatching(new RegExp(`^organizations/${organizationId}/${userId}/.+\\.pdf$`)),
     ]);
+  });
+
+  it('keeps the extraction response when cleanup removal fails', async () => {
+    remove.mockRejectedValueOnce(new Error('cleanup-failed'));
+    const response = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.png', { type: 'image/png' }),
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(DocumentExtractionResultSchema.parse(await response.json()).provider).toBe('gemini');
+  });
+
+  it('cleans already-uploaded files if a later upload fails', async () => {
+    upload.mockResolvedValueOnce({ error: null });
+    upload.mockResolvedValueOnce({ error: new Error('upload-failed') });
+
+    const response = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.png', { type: 'image/png' }),
+        back: new File(['back'], 'back.png', { type: 'image/png' }),
+      }),
+    );
+
+    expect(response.status).toBe(502);
+    expect(DocumentExtractionErrorSchema.parse((await response.json()).error).code).toBe(
+      'provider-failed',
+    );
+    expect(remove).toHaveBeenCalledWith([
+      expect.stringMatching(new RegExp(`^organizations/${organizationId}/${userId}/.+\\.png$`)),
+    ]);
+  });
+
+  it('returns a typed provider timeout error from the extraction service', async () => {
+    invokeExtraction.mockRejectedValueOnce(
+      new DocumentExtractionServiceError({
+        code: 'provider-failed',
+        status: 502,
+        message: 'The extraction provider timed out.',
+        recoverable: true,
+      }),
+    );
+
+    const response = await POST(
+      requestWithFiles({
+        front: new File(['front'], 'front.png', { type: 'image/png' }),
+      }),
+    );
+
+    expect(response.status).toBe(502);
+    expect(DocumentExtractionErrorSchema.parse((await response.json()).error)).toMatchObject({
+      code: 'provider-failed',
+      message: 'The extraction provider timed out.',
+      recoverable: true,
+    });
   });
 });

@@ -1,7 +1,10 @@
+/// <reference lib="deno.ns" />
+
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { MAX_DOCUMENT_BYTES, parseDocumentReference, SUPPORTED_MIME_TYPES } from './validation.ts';
 
 const BUCKET = 'document-intelligence-temp';
+const PROVIDER_TIMEOUT_MS = 30_000;
 const DOCUMENT_TYPES = [
   'passport',
   'spanish-dni',
@@ -66,12 +69,13 @@ function corsHeaders(request: Request): HeadersInit {
     ? configuredOrigins.includes(origin) ||
       /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
     : false;
-  return {
-    ...(isAllowed ? { 'Access-Control-Allow-Origin': origin } : {}),
+  const headers: Record<string, string> = {
     'Access-Control-Allow-Headers': 'authorization, apikey, x-client-info, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     Vary: 'Origin',
   };
+  if (isAllowed && origin) headers['Access-Control-Allow-Origin'] = origin;
+  return headers;
 }
 
 function jsonResponse(request: Request, body: unknown, status = 200): Response {
@@ -279,33 +283,46 @@ Deno.serve(async (request) => {
     parts.push({
       text: 'Extract this identity document as JSON. Never infer absent values; return null for unreadable fields. Dates must use DD/MM/YYYY. If two sides are provided, correlate them as one document.',
     });
-    const providerResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [
-              {
-                text: 'You are an identity document OCR service. Extract documentType, issuingCountry, fullName, givenNames, surnames, firstSurname, secondSurname, documentNumber, birthDate, nationality, sex, issueDate, expiryDate, birthplace, supportNumber, address and mrz.',
-              },
-            ],
-          },
-          contents: [{ parts }],
-          generationConfig: {
-            temperature: 0,
-            responseMimeType: 'application/json',
-            responseSchema: extractionSchema,
-          },
-        }),
-      },
-    );
+    const providerController = new AbortController();
+    const providerTimeout = setTimeout(() => providerController.abort(), PROVIDER_TIMEOUT_MS);
+    let providerResponse: Response;
+    try {
+      providerResponse = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: providerController.signal,
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [
+                {
+                  text: 'You are an identity document OCR service. Extract documentType, issuingCountry, fullName, givenNames, surnames, firstSurname, secondSurname, documentNumber, birthDate, nationality, sex, issueDate, expiryDate, birthplace, supportNumber, address and mrz.',
+                },
+              ],
+            },
+            contents: [{ parts }],
+            generationConfig: {
+              temperature: 0,
+              responseMimeType: 'application/json',
+              responseSchema: extractionSchema,
+            },
+          }),
+        },
+      );
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return errorResponse(request, 'provider-failed', 'The extraction provider timed out.', 502);
+      }
+      return errorResponse(request, 'provider-failed', 'The extraction provider failed.', 502);
+    } finally {
+      clearTimeout(providerTimeout);
+    }
     if (!providerResponse.ok) {
       return errorResponse(request, 'provider-failed', 'The extraction provider failed.', 502);
     }
 
-    const providerPayload = (await providerResponse.json()) as {
+    let providerPayload: {
       candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
       usageMetadata?: {
         promptTokenCount?: number;
@@ -313,6 +330,16 @@ Deno.serve(async (request) => {
         totalTokenCount?: number;
       };
     };
+    try {
+      providerPayload = (await providerResponse.json()) as typeof providerPayload;
+    } catch {
+      return errorResponse(
+        request,
+        'provider-failed',
+        'The provider returned invalid extraction data.',
+        502,
+      );
+    }
     const text = providerPayload.candidates?.[0]?.content?.parts?.find(
       (part) => typeof part.text === 'string',
     )?.text;
@@ -336,6 +363,13 @@ Deno.serve(async (request) => {
       );
     }
   } finally {
-    await client.storage.from(BUCKET).remove(pathsToCleanup);
+    try {
+      await client.storage.from(BUCKET).remove(pathsToCleanup);
+    } catch (error) {
+      console.error('Document extraction temporary cleanup failed', {
+        referenceCount: pathsToCleanup.length,
+        error: error instanceof Error ? error.message : 'unknown-error',
+      });
+    }
   }
 });
