@@ -310,8 +310,11 @@ Deno.serve(async (request) => {
           }),
         },
       );
-    } catch {
-      return errorResponse(request, 'provider-timeout', 'The extraction provider timed out.', 502);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return errorResponse(request, 'provider-failed', 'The extraction provider timed out.', 502);
+      }
+      return errorResponse(request, 'provider-failed', 'The extraction provider failed.', 502);
     } finally {
       clearTimeout(providerTimeout);
     }
@@ -360,6 +363,13 @@ Deno.serve(async (request) => {
       );
     }
   } finally {
-    await client.storage.from(BUCKET).remove(pathsToCleanup);
+    try {
+      await client.storage.from(BUCKET).remove(pathsToCleanup);
+    } catch (error) {
+      console.error('Document extraction temporary cleanup failed', {
+        referenceCount: pathsToCleanup.length,
+        error: error instanceof Error ? error.message : 'unknown-error',
+      });
+    }
   }
 });

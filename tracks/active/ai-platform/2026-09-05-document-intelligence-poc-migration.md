@@ -394,17 +394,17 @@ gates remotos indicados abajo; no se añade alcance adicional en esta actualizac
       lo que no se creó una migración correctiva que pudiera reintroducir policies menos restrictivas.
       `20260829000000` y las migraciones `20260830`/`20260831` quedaron reconciliadas; el
       historial remoto las muestra aplicadas. `db push` avanzó hasta `20260901000000` y se
-
-      **Validación remota de Fase 5 (2026-09-06):** se desplegó `extract-identity-document` como versión
-      14 con `GEMINI_API_KEY` y `DOCUMENT_INTELLIGENCE_ALLOWED_ORIGINS` configurados en Supabase. Dos
-      usuarios de prueba pertenecientes a organizaciones distintas validaron Storage/RLS: sus propias
-      subidas y borrados respondieron `200`, mientras que las operaciones cruzadas respondieron `400`.
-      Una extracción autenticada contra Gemini respondió `200` con provider `gemini` y clasificación
-      `unknown` para un fixture PNG no documental; la referencia temporal dejó de ser descargable
-      después del procesamiento (`400`), confirmando cleanup automático. No se registran documentos ni
-      respuestas PII en la evidencia. `db push` avanzó hasta `20260901000000` y se
       detuvo porque `crm_contacts_id_organization_key` ya existe (`SQLSTATE 42P07`). La
       migración `20260901000000` y las posteriores, incluida `20260905100000`, siguen pendientes.
+
+**Validación remota de Fase 5 (2026-09-06):** se desplegó `extract-identity-document` como versión
+14 con `GEMINI_API_KEY` y `DOCUMENT_INTELLIGENCE_ALLOWED_ORIGINS` configurados en Supabase. Dos
+usuarios de prueba pertenecientes a organizaciones distintas validaron Storage/RLS: sus propias
+subidas y borrados respondieron `200`, mientras que las operaciones cruzadas respondieron `400`.
+Una extracción autenticada contra Gemini respondió `200` con provider `gemini` y clasificación
+`unknown` para un fixture PNG no documental; la referencia temporal dejó de ser descargable
+después del procesamiento (`400`), confirmando cleanup automático. No se registran documentos ni
+respuestas PII en la evidencia.
 
 **Diagnóstico de drift (2026-09-05):** `20260829000000_communications_core_foundation.sql`
 combina `create table if not exists` con `alter table ... add constraint` no idempotentes. El
@@ -618,6 +618,13 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 | 2026-09-05 | `pnpm validate:changed`                                                                                                     | ⚠️ bloqueado por base histórica: `origin/develop` no es ancestro de HEAD                                                                                                                      | no relacionado con el cambio                                                                                           |
 | 2026-09-05 | `pnpm validate:ci`                                                                                                          | ⚠️ lint del efecto corregido; el segundo intento alcanza el frontend quality gate pero queda bloqueado por paths eliminados/movidos del diff de rama y formato histórico fuera de este cambio | `ValidationSummaryList.tsx` eliminado y track movido a `tracks/active`                                                 |
 | 2026-09-05 | `pnpm --filter loopdev-os build`                                                                                            | ✅                                                                                                                                                                                            | Next production build; rutas `/document-intelligence`, `/new` y `/:documentId` generadas                               |
+| 2026-09-06 | Cobertura Fase 5 backend/workbench: MIME/tamaño front/back, timeout provider, JSON inválido, retry real y cleanup           | ✅ 17 tests focalizados (`route`, `extraction`, `file-validation`, `workbench-context`)                                                                                                       | `apps/loopdev-os/src/app/api/document-intelligence/extract/route.test.ts`; `.../extraction.test.ts`; `.../workbench-*` |
+| 2026-09-06 | `pnpm test:shell:changed`                                                                                                   | ✅ Shell Interaction Surface unchanged (skip esperado)                                                                                                                                        | `scripts/check-shell.mjs --changed-only`                                                                               |
+| 2026-09-06 | Playwright autenticado real contra Supabase dev (`PLAYWRIGHT_E2E_AUTH_BYPASS=false`)                                        | ⚠️ bloqueado: faltan `E2E_TEST_EMAIL` y `E2E_TEST_PASSWORD` en `.env.local` del root de workspace                                                                                             | `e2e/auth.setup.mjs` (global setup)                                                                                    |
+| 2026-09-06 | Playwright responsive reproducible local (`phase5` + `authenticated.mobile`)                                                | ✅ 4/4 (`desktop`, `mobile`, `mobile-compact`) con bypass de auth de Playwright                                                                                                               | `e2e/phase5.certification.spec.mjs`; `e2e/authenticated.mobile.spec.mjs`                                               |
+| 2026-09-06 | Playwright `document-viewer` matrix local                                                                                   | ✅ 9/9 (`desktop`, `mobile`, `mobile-compact`); el primer 404 provenía de un servidor E2E stale en el puerto 3001                                                                             | `e2e/document-viewer.certification.spec.mjs`                                                                           |
+| 2026-09-06 | `pnpm validate:worktree`                                                                                                    | ✅                                                                                                                                                                                            | salida `validate-local.mjs worktree`                                                                                   |
+| 2026-09-06 | `supabase functions deploy extract-identity-document --no-verify-jwt`                                                       | ⚠️ bloqueado localmente: falta `SUPABASE_ACCESS_TOKEN`; la versión remota 14 permanece activa y este endurecimiento queda pendiente de despliegue                                             | CLI Supabase                                                                                                           |
 
 ## Component duplicate review
 

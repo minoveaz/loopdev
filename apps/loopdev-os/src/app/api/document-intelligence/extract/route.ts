@@ -121,7 +121,13 @@ export async function POST(request: Request) {
     return errorResponse(502, 'provider-failed', 'Document extraction failed.');
   } finally {
     if (references.length > 0) {
-      await supabase.storage.from(BUCKET).remove(references);
+      try {
+        await supabase.storage.from(BUCKET).remove(references);
+      } catch {
+        console.error('Document extraction temporary cleanup failed', {
+          referenceCount: references.length,
+        });
+      }
     }
   }
 }
