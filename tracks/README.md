@@ -4,6 +4,10 @@
 
 ## Planificados
 
+### AI Platform
+
+- [Definición de Document Intelligence Core](./planned/ai-platform/2026-09-06-document-intelligence-core-definition.md) · `docs/ai-platform-document-intelligence-core` · fase 0
+
 ### CRM
 
 - [Definición de Communications Core y CRM Communications Inbox](./planned/crm/2026-08-29-communications-core-crm-inbox-definition.md) · `docs/crm-communications-inbox-chatwoot-guide` · fase 0
