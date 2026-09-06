@@ -12,7 +12,13 @@ function ReviewHarness() {
       <button type="button" onClick={() => workbench.loadDemoDocument()}>
         fixture
       </button>
-      <button type="button" onClick={() => workbench.startExtraction('success')}>
+      <button
+        type="button"
+        onClick={() => {
+          workbench.startExtraction('success');
+          workbench.markProcessingVisualComplete();
+        }}
+      >
         extract
       </button>
       {workbench.flowState === 'review' ? <ExtractionReviewForm /> : null}
@@ -25,7 +31,7 @@ afterEach(() => {
 });
 
 describe('ExtractionReviewForm', () => {
-  it('starts with Aseguradora 1 and exposes the three profile formats', () => {
+  it('starts with Aseguradora 1 and exposes the three profile formats', async () => {
     vi.useFakeTimers();
     render(
       <WorkbenchPrototypeProvider>
@@ -35,8 +41,14 @@ describe('ExtractionReviewForm', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'fixture' }));
     fireEvent.click(screen.getByRole('button', { name: 'extract' }));
-    act(() => {
-      vi.advanceTimersByTime(1600);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(7400);
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
     });
 
     expect(screen.getByRole('button', { name: 'Formato de datos' })).toHaveTextContent(
@@ -63,8 +75,14 @@ describe('ExtractionReviewForm', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'fixture' }));
     fireEvent.click(screen.getByRole('button', { name: 'extract' }));
-    act(() => {
-      vi.advanceTimersByTime(1600);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(7400);
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
     });
 
     await act(async () => {
