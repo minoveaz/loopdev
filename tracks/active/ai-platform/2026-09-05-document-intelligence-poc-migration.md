@@ -9,7 +9,7 @@ lead: null
 branch: feature/document-intelligence-backend
 branches: []
 phase: 5
-pull_requests: [181]
+pull_requests: [181, 192]
 issues: [176]
 packages: [@loopdev/contracts, @loopdev/document-viewer, loopdev-os]
 release: not-required
@@ -722,17 +722,21 @@ certificación de secretos, límites, timeout y cleanup con provider real.
 - **Fecha:** 2026-09-06.
 - **Rama de continuación:** `feature/document-intelligence-backend`.
 - **Commit de partida:** `63b00b42` (`develop` tras squash de #181).
-- **Estado alcanzado:** Fases 0-4 integradas en `develop`; Fase 5 reanudada para endurecer la
-  frontera server-side. Bucket privado, RLS, Edge Function, route handler multipart y cleanup ya
-  existen; la Edge Function quedó desplegada como versión 14 con timeout explícito del provider,
-  parseo tipado de respuestas inválidas y el secreto de allowed origins configurado para local.
-- **Decisiones, bloqueos y riesgos:** `GEMINI_API_KEY` permanece solo en Supabase; faltan pruebas
-  negativas RLS y E2E autenticado con usuarios de dos organizaciones y provider real.
-- **Validación ejecutada:** tests shell/workbench, validación estática, `validate:branch`,
-  `deno check --no-config` de la Edge Function, `supabase db lint --local` y governance Supabase;
-  el E2E autenticado local requiere credenciales de test y un servidor LoopDev levantado.
-- **Siguiente acción concreta:** añadir cobertura ejecutable para timeout/provider-invalid y preparar
-  la matriz de pruebas RLS/E2E sin exponer PII ni secretos.
+- **Estado alcanzado:** Fases 0-4 integradas en `develop`; Fase 5 endurecida en la rama de
+  continuación y publicada para revisión en el PR #192. Bucket privado, RLS, Edge Function,
+  route handler multipart, retry real y cleanup ya existen; la Edge Function desplegada sigue
+  siendo la versión 14, con timeout explícito del provider, parseo tipado de respuestas inválidas
+  y el secreto de allowed origins configurado para local.
+- **Decisiones, bloqueos y riesgos:** `GEMINI_API_KEY` permanece solo en Supabase. La última
+  revisión local de la Edge Function aún requiere despliegue cuando haya `SUPABASE_ACCESS_TOKEN`;
+  el E2E autenticado real requiere `E2E_TEST_EMAIL` y `E2E_TEST_PASSWORD` temporales en el entorno
+  local. Las pruebas remotas de Storage/RLS, Gemini y cleanup base ya están registradas.
+- **Validación ejecutada:** tests focalizados de route/provider/workbench, `validate:branch`,
+  `deno check --no-config` de la Edge Function, `supabase db lint --local`, governance Supabase
+  y Playwright responsive del visor (9/9); no se incorporan credenciales ni artefactos generados.
+- **Siguiente acción concreta:** desplegar la revisión final de la Edge Function con token de
+  gestión disponible, ejecutar la matriz E2E autenticada con las dos organizaciones de prueba,
+  completar la revisión de seguridad y actualizar la evidencia antes de cerrar la Fase 5.
 
 ## Cierre
 
