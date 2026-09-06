@@ -3,7 +3,7 @@ id: shell-standardization
 title: Estandarización del shell de LoopDev OS
 status: active
 created: 2026-08-10
-updated: 2026-08-12
+updated: 2026-09-06
 owner: platform
 branch: null
 areas: []
@@ -12,7 +12,7 @@ blocked_by: []
 supersedes: []
 migration_source: conductor/tracks/2026-08-10-shell-standardization.md
 lead: null
-branches: [feature/shell-standardization, feature/suiteshell-composition]
+branches: [feature/shell-standardization, feature/suiteshell-composition, feature/document-intelligence-viewer]
 phase: 4
 pull_requests: []
 issues: []

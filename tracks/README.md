@@ -27,7 +27,7 @@
 
 ### AI Platform
 
-- [Migración del POC operativo de Document Intelligence desde VitaBlue](./active/ai-platform/2026-09-05-document-intelligence-poc-migration.md) · `loopdev-io-document-intelligence-migration` · fase 4
+- [Migración del POC operativo de Document Intelligence desde VitaBlue](./active/ai-platform/2026-09-05-document-intelligence-poc-migration.md) · `feature/document-intelligence-viewer` · fase 5
 
 ### CRM
 

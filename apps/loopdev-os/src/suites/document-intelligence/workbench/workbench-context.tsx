@@ -303,7 +303,17 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
   useEffect(() => {
     if (flowState !== 'processing' || !providerReady || !visualProcessingComplete) return;
 
-    setFlowState('loading-results');
+    transitionTimer.current = setTimeout(() => {
+      setFlowState('loading-results');
+      transitionTimer.current = null;
+    }, 0);
+
+    return () => {
+      if (transitionTimer.current) {
+        clearTimeout(transitionTimer.current);
+        transitionTimer.current = null;
+      }
+    };
   }, [flowState, providerReady, visualProcessingComplete]);
 
   useEffect(() => {

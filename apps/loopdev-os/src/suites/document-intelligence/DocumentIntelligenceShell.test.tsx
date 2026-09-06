@@ -18,12 +18,12 @@ describe('DocumentIntelligenceShell context panel visibility', () => {
   });
 
   it('derives desktop and mobile breadcrumbs from the active SuiteConfig module', () => {
-    const module = DOCUMENT_INTELLIGENCE_SUITE_CONFIG.modules.find(
+    const workbenchModule = DOCUMENT_INTELLIGENCE_SUITE_CONFIG.modules.find(
       ({ moduleId }) => moduleId === 'workbench',
     );
-    if (!module) throw new Error('Document Intelligence workbench module is not configured');
+    if (!workbenchModule) throw new Error('Document Intelligence workbench module is not configured');
 
-    const { desktopSegments, mobileSegments } = getWorkbenchHeaderSegments(module);
+    const { desktopSegments, mobileSegments } = getWorkbenchHeaderSegments(workbenchModule);
 
     expect(desktopSegments.map(({ label }) => label)).toEqual([
       'Document Intelligence',

@@ -43,7 +43,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
               type="button"
               aria-label={props.contextualAction.label}
               onClick={props.contextualAction.onAction}
-              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors hover:text-white"
             >
               {ContextualActionIcon ? <ContextualActionIcon aria-hidden={true} size={18} className="shrink-0" /> : null}
               {!renderAsRail ? <span className="truncate">{props.contextualAction.label}</span> : null}
@@ -92,19 +92,26 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
       className={`${containerClasses} ${shouldExpandOnHover ? `sidebar-hover-surface ${isHoverExpanded || isControlMenuOpen ? '!w-56' : '!w-16'}` : ''} border-border-technical bg-shell-canvas h-full !rounded-none border-r`}
     >
       <div className="flex h-full flex-col">
-        {/* Suite dashboard */}
-        <div className="shrink-0 px-4 py-3" role="menu" aria-label="Suite home">
-          <NavSidebarItem
-            icon="LayoutDashboard"
-            label="Suite Dashboard"
-            isRail={renderAsRail}
-            revealOnHover={shouldExpandOnHover}
-            isActive={!activeModuleId}
-            onNavigate={onNavigate}
-            route={suite.route || { routeId: '/' }}
-            accentColor={suite.accentColor}
-          />
-        </div>
+        {props.headerSlot && !renderAsRail ? (
+          <div className="border-border-technical shrink-0 border-b px-4 py-3">
+            {props.headerSlot}
+          </div>
+        ) : null}
+
+        {props.showSuiteHome !== false ? (
+          <div className="shrink-0 px-4 py-3" role="menu" aria-label="Suite home">
+            <NavSidebarItem
+              icon="LayoutDashboard"
+              label="Suite Dashboard"
+              isRail={renderAsRail}
+              revealOnHover={shouldExpandOnHover}
+              isActive={!activeModuleId}
+              onNavigate={onNavigate}
+              route={suite.route || { routeId: '/' }}
+              accentColor={suite.accentColor}
+            />
+          </div>
+        ) : null}
 
         {contextualAction ? (
           <div
@@ -119,33 +126,35 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
         <div className="mx-4 h-[0.5px] shrink-0 bg-black/5 dark:bg-white/10" />
 
         {/* Navigation groups (scrollable) */}
-        <ScrollArea visibility={renderAsRail ? 'hidden' : 'auto'} className="flex-1">
-          <nav className="space-y-8 p-4 pb-8">
-            {visibleGroups.map((group) => (
-              <NavSidebarGroup
-                key={group.id}
-                group={group}
-                isRail={renderAsRail}
-                revealOnHover={shouldExpandOnHover}
-                activeModuleId={activeModuleId}
-                accessMap={accessMap}
-                telemetry={telemetry}
-                onNavigate={onNavigate}
-                accentColor={suite.accentColor}
-              />
-            ))}
-          </nav>
-        </ScrollArea>
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <ScrollArea visibility={renderAsRail ? 'hidden' : 'auto'} className="h-full">
+            <nav className="space-y-8 p-4 pb-8">
+              {visibleGroups.map((group) => (
+                <NavSidebarGroup
+                  key={group.id}
+                  group={group}
+                  isRail={renderAsRail}
+                  revealOnHover={shouldExpandOnHover}
+                  activeModuleId={activeModuleId}
+                  accessMap={accessMap}
+                  telemetry={telemetry}
+                  onNavigate={onNavigate}
+                  accentColor={suite.accentColor}
+                />
+              ))}
+            </nav>
+          </ScrollArea>
+        </div>
 
         {props.mobileMode && props.mobileActions ? (
-          <div className="border-t border-border-technical px-4 py-3">
+          <div className="border-border-technical border-t px-4 py-3">
             {props.mobileActions}
           </div>
         ) : null}
 
         {/* Sidebar behavior selector */}
-        <div className="hidden lg:block">
-          <SidebarFooter
+        <SidebarFooter
+          className="hidden lg:block"
           isRail={renderAsRail}
           navMode={props.navMode === 'hover' ? 'hover' : isRail ? 'rail' : 'expanded'}
           onMenuTrigger={() => {
@@ -168,8 +177,7 @@ export const SuiteSidebar: React.FC<SuiteSidebarProps> = (props) => {
             }
           }}
           onNavModeChange={onNavModeChange}
-          />
-        </div>
+        />
       </div>
     </TechnicalSurface>
   );
