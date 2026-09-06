@@ -2,12 +2,13 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(14);
+select plan(15);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
   ('00000000-0000-4b00-8f00-000000000001', 'authenticated', 'authenticated', 'document-cleanup-a@example.test', '', now()),
-  ('00000000-0000-4b00-8f00-000000000002', 'authenticated', 'authenticated', 'document-cleanup-b@example.test', '', now());
+  ('00000000-0000-4b00-8f00-000000000002', 'authenticated', 'authenticated', 'document-cleanup-b@example.test', '', now()),
+  ('00000000-0000-4b00-8f00-000000000003', 'authenticated', 'authenticated', 'document-cleanup-multi-org@example.test', '', now());
 
 insert into public.organizations (id, name, slug)
 values
@@ -17,7 +18,9 @@ values
 insert into public.organization_memberships (organization_id, user_id, role)
 values
   ('00000000-0000-4b00-9000-000000000001', '00000000-0000-4b00-8f00-000000000001', 'owner'),
-  ('00000000-0000-4b00-9000-000000000002', '00000000-0000-4b00-8f00-000000000002', 'owner');
+  ('00000000-0000-4b00-9000-000000000002', '00000000-0000-4b00-8f00-000000000002', 'owner'),
+  ('00000000-0000-4b00-9000-000000000001', '00000000-0000-4b00-8f00-000000000003', 'owner'),
+  ('00000000-0000-4b00-9000-000000000002', '00000000-0000-4b00-8f00-000000000003', 'owner');
 
 insert into public.document_intelligence_documents (id, organization_id, status, retention_class, concurrency_token)
 values
@@ -86,6 +89,15 @@ select is(
   (select status from public.document_intelligence_cleanup_jobs where id = '00000000-0000-4b00-9200-000000000002'),
   'completed',
   'cleanup completion is durable'
+);
+select pg_temp.set_authenticated_user('00000000-0000-4b00-8f00-000000000003');
+select throws_ok(
+  $$ update public.document_intelligence_cleanup_jobs
+     set organization_id = '00000000-0000-4b00-9000-000000000002',
+         document_id = '00000000-0000-4b00-9100-000000000002'
+     where id = '00000000-0000-4b00-9200-000000000001' $$,
+  'document_intelligence organization_id is immutable',
+  'a multi-organization member cannot move a cleanup job'
 );
 
 select * from finish();

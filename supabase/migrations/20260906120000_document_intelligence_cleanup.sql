@@ -59,6 +59,10 @@ to authenticated
 using (public.has_organization_role(organization_id, array['owner', 'admin', 'agent']))
 with check (public.has_organization_role(organization_id, array['owner', 'admin', 'agent']));
 
+create trigger document_intelligence_cleanup_jobs_organization_immutable
+before update on public.document_intelligence_cleanup_jobs
+for each row execute procedure public.prevent_document_intelligence_organization_change();
+
 create trigger document_intelligence_cleanup_jobs_updated_at
 before update on public.document_intelligence_cleanup_jobs
 for each row execute procedure public.handle_updated_at();

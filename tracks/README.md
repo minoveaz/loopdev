@@ -28,7 +28,7 @@
 
 ### AI Platform
 
-- [Definición de Document Intelligence Core](./active/ai-platform/2026-09-06-document-intelligence-core-definition.md) · `loopdev-io-feature/ai-platform-document-intelligenc` · fase 7
+- [Definición de Document Intelligence Core](./active/ai-platform/2026-09-06-document-intelligence-core-definition.md) · `loopdev-io-feature/ai-platform-document-intelligenc` · fase 1
 
 ### CRM
 

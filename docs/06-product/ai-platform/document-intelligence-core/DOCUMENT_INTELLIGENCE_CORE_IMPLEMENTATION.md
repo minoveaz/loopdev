@@ -15,6 +15,13 @@ slices. It is intentionally contract- and boundary-focused: it does not add a
 UI route, a shell owner, a real provider, secrets, or a platform-wide
 persistence abstraction.
 
+## Current track state
+
+Phase 1 (#199) is the only completed phase. The remaining slices have initial
+implementation evidence in this document and its referenced migrations/tests,
+but remain in validation and are not represented as completed phases. Final
+track closure awaits a consolidated PR and complete evidence.
+
 ## Shared contracts
 
 The public Zod contracts are exported from

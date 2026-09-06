@@ -67,7 +67,8 @@ server-side.
 - The five documents carry formal package approval for the authorized #199 slice; no individual
   approver attribution is recorded.
 - #198 and the selected delivery Issue include scope, dependencies, Project fields and evidence.
-- #199 lifecycle contract is approved before #200/#204/#202/#201 slices start.
+- #199 lifecycle contract is approved; later slices may have implementation evidence but remain
+  subject to their own validation and are not closed by this handoff.
 - Schema/RLS, Storage ownership, retention classes, audit redaction and provider secret boundaries
   are reviewed; negative isolation tests are planned.
 - Rollout, capability flag, kill switch, fixture fallback and forward-only rollback are accepted.
@@ -86,5 +87,8 @@ server-side.
 Run the narrowest relevant checks per slice, then `node scripts/tracks/validate-tracks.mjs`,
 `node scripts/tracks/generate-tracks-index.mjs`, `pnpm docs:links:check`, shell checks for any
 composition change, and `git diff --check`. Record commands, CI, review, rollout and rollback evidence in the Issue, Project and track. The
-current handoff is approved and authorizes the scoped #199 contract implementation. Later slices
-require their own readiness evidence before implementation.
+current handoff is formally approved and authorizes the scoped #199 contract implementation.
+Phase 0 approval is complete. The current branch also contains initial implementation evidence for
+#200, #204, #202, #205, #201 and #203, but those phases remain in validation and are not complete.
+Final track closure awaits a consolidated PR and complete evidence; it is not blocked by missing
+Phase 0 approval.

@@ -86,6 +86,19 @@ alter table public.document_intelligence_versions
   references public.document_intelligence_extractions(id, organization_id)
   on delete set null;
 
+create or replace function public.prevent_document_intelligence_organization_change()
+returns trigger
+language plpgsql
+as $$
+begin
+  if new.organization_id is distinct from old.organization_id then
+    raise exception 'document_intelligence organization_id is immutable';
+  end if;
+
+  return new;
+end;
+$$;
+
 create index if not exists document_intelligence_documents_history_idx
   on public.document_intelligence_documents (organization_id, created_at desc, id desc);
 create index if not exists document_intelligence_documents_workspace_idx
@@ -104,6 +117,18 @@ to authenticated;
 alter table public.document_intelligence_documents enable row level security;
 alter table public.document_intelligence_versions enable row level security;
 alter table public.document_intelligence_extractions enable row level security;
+
+create trigger document_intelligence_documents_organization_immutable
+before update on public.document_intelligence_documents
+for each row execute procedure public.prevent_document_intelligence_organization_change();
+
+create trigger document_intelligence_versions_organization_immutable
+before update on public.document_intelligence_versions
+for each row execute procedure public.prevent_document_intelligence_organization_change();
+
+create trigger document_intelligence_extractions_organization_immutable
+before update on public.document_intelligence_extractions
+for each row execute procedure public.prevent_document_intelligence_organization_change();
 
 create policy "document intelligence members can view documents"
 on public.document_intelligence_documents

@@ -8,7 +8,7 @@ owner: ai-platform
 lead: null
 branch: loopdev-io-feature/ai-platform-document-intelligenc
 branches: []
-phase: 7
+phase: 1
 pull_requests: []
 issues: [198, 199, 200, 204, 202, 205, 201, 203, 176]
 packages:
@@ -231,17 +231,21 @@ política concreta de dedupe queda deliberadamente para persistencia (#200).
 
 **Validación**
 
-- [x] Lint/migración local, contract/repository tests y pruebas RLS negativas.
+- [ ] Validación consolidada de migración local, contract/repository tests y pruebas RLS negativas.
+      La validación focalizada está ejecutándose; la evidencia final de cierre del slice permanece
+      abierta.
 
-**Evidencia:** Contratos de persistencia en
+**Evidencia inicial:** Contratos de persistencia en
 `packages/contracts/src/documents/document-intelligence-persistence.ts`, migración
 `supabase/migrations/20260906100000_document_intelligence_core_persistence.sql` y pruebas
 positivas/negativas en `supabase/tests/database/008_document_intelligence_core_rls.sql`.
 `organization_id` es obligatorio y canónico; las relaciones documento/workspace, versión/documento
 y extracción/versión usan claves foráneas compuestas. Las políticas separan lectura de escritura y
-el test ai-platform confirma aislamiento entre dos organizaciones.
+el test ai-platform incluye aislamiento entre dos organizaciones y el rechazo de cambios de
+`organization_id` por miembros de varias organizaciones. La consolidación de la evidencia del
+slice sigue abierta.
 
-**Estado:** completada
+**Estado:** implementada; en validación
 
 ### Fase 3: Historial y reapertura (#204)
 
@@ -250,7 +254,8 @@ en la UI.
 
 **Definition of Ready**
 
-- [x] #199 y #200 cerrados con evidencia.
+- [x] #199 implementado y #200 implementado con evidencia inicial; ninguno se considera cerrado
+      por gobernanza del track.
 - [x] La consulta usa `DataWorkspace`/`RecordWorkspace` como boundary de contrato, sin crear shell,
       ruta o owner visual nuevo.
 - [x] La reapertura conserva la versión y crea un intento enlazado, sin mutar el intento previo.
@@ -262,16 +267,17 @@ en la UI.
 
 **Validación**
 
-- [x] Tests de query/paginación y autorización; responsive/accessibility y
+- [ ] Consolidación de tests de query/paginación y autorización; responsive/accessibility y
       `pnpm test:shell:changed` no aplican porque no hubo UI ni shell.
 
-**Evidencia:** Contratos de consulta y reapertura en
+**Evidencia inicial:** Contratos de consulta y reapertura en
 `packages/contracts/src/documents/document-intelligence-history.ts`, con filtros allowlisted,
 cursor opaco, orden estable `createdAt + id` y boundary repository tipado. Las pruebas específicas
 verifican límites, rechazo de offsets no declarados y reapertura como nuevo intento inmutable sobre
-la versión seleccionada; no se añade shell, ruta ni navegación paralela.
+la versión seleccionada; no se añade shell, ruta ni navegación paralela. La validación consolidada
+del slice sigue abierta.
 
-**Estado:** completada
+**Estado:** implementada; en validación
 
 ### Fase 4: Auditoría (#202)
 
@@ -290,17 +296,18 @@ la versión seleccionada; no se añade shell, ruta ni navegación paralela.
 
 **Validación**
 
-- [x] Tests de inmutabilidad, scope, orden y redacción de datos sensibles.
+- [ ] Consolidación de tests de inmutabilidad, scope, orden y redacción de datos sensibles.
 
-**Evidencia:** Eventos append-only y boundary de consulta definidos en
+**Evidencia inicial:** Eventos append-only y boundary de consulta definidos en
 `packages/contracts/src/documents/document-intelligence-audit.ts`, con actor tipado, organización,
 timestamp, correlación e idempotencia. La metadata permite únicamente valores escalares y rechaza
 claves de PII/payload/provider. La migración
 `supabase/migrations/20260906110000_document_intelligence_audit.sql` revoca UPDATE/DELETE, instala
 trigger de inmutabilidad, FKs compuestas y RLS; `009_document_intelligence_audit.sql` confirma
-append positivo, aislamiento negativo y mutaciones rechazadas.
+append positivo, aislamiento negativo y mutaciones rechazadas. La validación consolidada del slice
+sigue abierta.
 
-**Estado:** completada
+**Estado:** implementada; en validación
 
 ### Fase 5: Retención y cleanup (#205)
 
@@ -309,7 +316,8 @@ clases aprobadas.
 
 **Definition of Ready**
 
-- [x] Persistencia/RLS y auditoría aprobadas con validación dirigida.
+- [x] Persistencia/RLS y auditoría implementadas con evidencia inicial; la validación dirigida
+      consolidada sigue abierta.
 - [x] Las clases se limitan a temporales, documentos persistidos y resultados de extracción; legal
       hold queda como estado de exclusión operativa y no como decisión de retención.
 
@@ -321,17 +329,19 @@ clases aprobadas.
 
 **Validación**
 
-- [x] Tests de reloj lógico, retry, fallos parciales, Storage boundary y auditoría.
+- [ ] Consolidación de tests de reloj lógico, retry, fallos parciales, Storage boundary y
+      auditoría.
 
-**Evidencia:** Clases y decisiones de retención, estados de cleanup, idempotencia, retry y
+**Evidencia inicial:** Clases y decisiones de retención, estados de cleanup, idempotencia, retry y
 recuperación están tipadas en
 `packages/contracts/src/documents/document-intelligence-retention.ts`. La migración
 `supabase/migrations/20260906120000_document_intelligence_cleanup.sql` añade únicamente estado
 operativo por organización, con FK compuesta, RLS sin DELETE y tests de reloj lógico, retry,
 completado y aislamiento en `010_document_intelligence_cleanup.sql`. No se ejecuta ningún worker,
-Storage destructivo ni política legal fuera del contrato.
+Storage destructivo ni política legal fuera del contrato. La validación consolidada del slice sigue
+abierta.
 
-**Estado:** completada
+**Estado:** implementada; en validación
 
 ### Fase 6: Provider adapter y observabilidad (#201)
 
@@ -351,17 +361,18 @@ exponer contenido.
 
 **Validación**
 
-- [x] Contract/provider tests, timeout/retry tests, redaction review y observabilidad.
+- [ ] Consolidación de contract/provider tests, timeout/retry tests, redaction review y
+      observabilidad.
 
-**Evidencia:** Adapter server-side y observabilidad están definidos en
+**Evidencia inicial:** Adapter server-side y observabilidad están definidos en
 `packages/contracts/src/documents/document-intelligence-provider.ts`. Los contratos transportan
 solo referencias versionadas de prompt/response schema, capability, timeout, modelo, tokens,
 latencia y coste entero en micros USD; no incluyen secretos, prompts ni respuestas completas en
 errores. `sanitizeDocumentProviderError` devuelve mensajes allowlisted y conserva únicamente la
-correlación. Las pruebas cubren timeout sanitizado, telemetría y compatibilidad de versiones; no
-se implementa provider real.
+correlación. Las pruebas cubren timeout sanitizado, telemetría y compatibilidad de versiones; no se
+implementa provider real. La validación consolidada del slice sigue abierta.
 
-**Estado:** completada
+**Estado:** implementada; en validación
 
 ### Fase 7: Validaciones configurables (#203)
 
@@ -369,7 +380,8 @@ se implementa provider real.
 
 **Definition of Ready**
 
-- [x] Lifecycle, persistencia e historial aprobados.
+- [x] Lifecycle, persistencia e historial implementados con evidencia inicial; la validación
+      consolidada sigue abierta.
 - [x] Ownership de reglas, versionado y permisos de configuración acotados al contrato server-side;
       fraude, autenticidad y liveness siguen fuera de alcance.
 
@@ -380,15 +392,17 @@ se implementa provider real.
 
 **Validación**
 
-- [x] Tests de reglas, versiones, explainability, permisos y regresión con fixtures del POC.
+- [ ] Consolidación de tests de reglas, versiones, explainability, permisos y regresión con
+      fixtures del POC.
 
-**Evidencia:** Reglas versionadas, ownership organizacional, permisos `read/evaluate/manage`,
+**Evidencia inicial:** Reglas versionadas, ownership organizacional, permisos `read/evaluate/manage`,
 severidad, warnings y resultados explicables están definidos en
 `packages/contracts/src/documents/document-intelligence-validation.ts`. Las fixtures de regresión
 cubren checksum, MRZ, expiración y coherencia; se rechazan categorías fuera de alcance y permisos
-incorrectos. No se implementan fraude, autenticidad ni liveness.
+incorrectos. No se implementan fraude, autenticidad ni liveness. La validación consolidada del
+slice sigue abierta.
 
-**Estado:** completada
+**Estado:** implementada; en validación
 
 ## Registro de cambios de enfoque
 
@@ -418,50 +432,56 @@ incorrectos. No se implementan fraude, autenticidad ni liveness.
 - [ ] Tech Lead aprueba contratos, RLS, provider boundary, observabilidad y rollback.
 - [ ] Cada Issue derivado tiene readiness, dependencia y evidencia antes de implementar.
 - [ ] Validaciones documentales pasan y el dashboard de tracks se genera sin editarlo manualmente.
-- [ ] El cierre de este track queda pendiente de aprobación explícita del usuario.
+- [ ] El track permanece activo porque las Fases 2–7 están implementadas y en validación; la
+      aprobación formal de Fase 0 está completa y el cierre final espera un PR consolidado y su
+      evidencia completa.
 
 ## Evidencia de validación
 
-| Fecha      | Validación                                        | Resultado                                                                                       | Referencia                                                             |
-| ---------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| 2026-09-06 | `git branch --show-current`                       | ✅ Rama documental confirmada.                                                                  | `docs/ai-platform-document-intelligence-core`                          |
-| 2026-09-06 | Revisión cruzada documental                       | ✅ Alcance, Issues, arquitectura y estados `proposed` alineados.                                | Este track y `docs/06-product/ai-platform/document-intelligence-core/` |
-| 2026-09-06 | `node scripts/tracks/validate-tracks.mjs`         | ✅ Track válido.                                                                                | —                                                                      |
-| 2026-09-06 | `node scripts/tracks/generate-tracks-index.mjs`   | ✅ Dashboard regenerado.                                                                        | `tracks/README.md`                                                     |
-| 2026-09-06 | `pnpm docs:links:check`                           | ✅ 347 archivos Markdown escaneados sin enlaces rotos.                                          | —                                                                      |
-| 2026-09-06 | `git diff --check`                                | ✅ Ejecutado durante cada slice.                                                                | —                                                                      |
-| 2026-09-06 | Tests focalizados de contratos                    | ✅ 28 tests de los siete slices y compatibilidad pasan.                                         | `packages/contracts/src/documents/__tests__/`                          |
-| 2026-09-06 | `pnpm --filter @loopdev/contracts typecheck`      | ✅ Sin errores.                                                                                 | `@loopdev/contracts`                                                   |
-| 2026-09-06 | `pnpm --filter @loopdev/contracts build`          | ✅ CJS, ESM y declaraciones generadas correctamente.                                            | `@loopdev/contracts`                                                   |
-| 2026-09-06 | `pnpm contracts:ownership:check`                  | ✅ Sin redeclaraciones locales de contratos compartidos.                                        | `scripts/check-contract-type-ownership.mjs`                            |
-| 2026-09-06 | `pnpm test:data:domain -- ai-platform`            | ✅ 62 tests SQL; Storage, persistencia, auditoría y cleanup pasan.                              | `supabase/tests/database/007-010_*.sql`                                |
-| 2026-09-06 | Gobernanza de migraciones cambiadas               | ✅ Las tres migraciones pasan `validate-supabase-governance`.                                   | `supabase/migrations/202609061*.sql`                                   |
-| 2026-09-06 | `pnpm format:check`, `pnpm docs:links:check`      | ✅ Formato y 347 enlaces Markdown pasan.                                                        | Implementación y documentación del Core                                |
-| 2026-09-06 | `pnpm registries:check`, `pnpm validate:worktree` | ✅ Catálogo y controles de worktree pasan.                                                      | Controles de repositorio                                               |
-| 2026-09-06 | `pnpm quality:static:worktree`                    | ✅ Prettier y ESLint de archivos cambiados pasan.                                               | Controles estáticos                                                    |
-| 2026-09-06 | `pnpm validate:full`                              | ⚠️ 228/229 archivos de tests pasan; falla timeout ajeno en `@loopdev/ui` `PhoneInput.test.tsx`. | Limitación preexistente/no relacionada                                 |
+| Fecha      | Validación                                        | Resultado                                                                                                                   | Referencia                                                             |
+| ---------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 2026-09-06 | `git branch --show-current`                       | ✅ Rama documental confirmada.                                                                                              | `docs/ai-platform-document-intelligence-core`                          |
+| 2026-09-06 | Revisión cruzada documental                       | ✅ Alcance, Issues, arquitectura y estados de Fase 0/Fase 1/Fases 2–7 alineados.                                            | Este track y `docs/06-product/ai-platform/document-intelligence-core/` |
+| 2026-09-06 | `node scripts/tracks/validate-tracks.mjs`         | ✅ Track válido.                                                                                                            | —                                                                      |
+| 2026-09-06 | `node scripts/tracks/generate-tracks-index.mjs`   | ✅ Dashboard regenerado.                                                                                                    | `tracks/README.md`                                                     |
+| 2026-09-06 | `pnpm docs:links:check`                           | ✅ 347 archivos Markdown escaneados sin enlaces rotos.                                                                      | —                                                                      |
+| 2026-09-06 | `git diff --check`                                | ✅ Ejecutado durante cada slice.                                                                                            | —                                                                      |
+| 2026-09-06 | Tests focalizados de contratos                    | ✅ 32 tests de documentos, lifecycle, persistencia, historial, auditoría, provider, retención y validación pasan.           | `packages/contracts/src/documents/__tests__/`                          |
+| 2026-09-06 | `pnpm --filter @loopdev/contracts typecheck`      | ✅ Sin errores.                                                                                                             | `@loopdev/contracts`                                                   |
+| 2026-09-06 | `pnpm --filter @loopdev/contracts build`          | ✅ CJS, ESM y declaraciones generadas correctamente.                                                                        | `@loopdev/contracts`                                                   |
+| 2026-09-06 | `pnpm contracts:ownership:check`                  | ✅ Sin redeclaraciones locales de contratos compartidos.                                                                    | `scripts/check-contract-type-ownership.mjs`                            |
+| 2026-09-06 | `pnpm test:data:domain -- ai-platform`            | ✅ 66 tests SQL; Storage, persistencia, auditoría y cleanup pasan, incluidos negativos de inmutabilidad multi-organización. | `supabase/tests/database/007-010_*.sql`                                |
+| 2026-09-06 | Gobernanza de migraciones cambiadas               | ✅ Las tres migraciones pasan `validate-supabase-governance`.                                                               | `supabase/migrations/202609061*.sql`                                   |
+| 2026-09-06 | `pnpm format:check`, `pnpm docs:links:check`      | ✅ Formato y 347 enlaces Markdown pasan.                                                                                    | Implementación y documentación del Core                                |
+| 2026-09-06 | `pnpm registries:check`, `pnpm validate:worktree` | ✅ Catálogo y controles de worktree pasan.                                                                                  | Controles de repositorio                                               |
+| 2026-09-06 | `pnpm quality:static:worktree`                    | ✅ Prettier y ESLint de archivos cambiados pasan.                                                                           | Controles estáticos                                                    |
+| 2026-09-06 | `pnpm validate:full`                              | ⚠️ 228/229 archivos de tests pasan; falla timeout ajeno en `@loopdev/ui` `PhoneInput.test.tsx`.                             | Limitación preexistente/no relacionada                                 |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-09-06.
 - **Rama de continuación:** `loopdev-io-feature/ai-platform-document-intelligenc`.
-- **Commit de partida:** `6e3ecd80`.
-- **Estado alcanzado:** Slices #199, #200, #204, #202, #205, #201 y #203 implementados
-  secuencialmente como contratos y límites mínimos; persistencia/RLS se limita a las tres tablas
-  Core, auditoría append-only y estado de cleanup. No se implementaron rutas, UI, providers reales,
-  secretos ni persistencia de plataforma general.
-- **Decisiones, bloqueos y riesgos:** `organization_id`, adapter server-side, historial como
-  contrato de `RecordWorkspace`, clases acotadas y reglas sin fraude/autenticidad/liveness quedan
-  dentro de la autorización de esta sesión. El worker de cleanup, providers reales, rutas/UI y
-  aprobación explícita de cierre siguen fuera de esta entrega.
+- **Commit de partida:** `26bee8c5`.
+- **Estado alcanzado:** Fase 1 (#199) es la única fase completada. Las Fases 2–7 tienen
+  implementación inicial como contratos y límites mínimos; permanecen en validación y no se
+  consideran completadas. Persistencia/RLS se limita a las tres tablas Core, auditoría
+  append-only y estado de cleanup. No se implementaron rutas, UI, providers reales, secretos ni
+  persistencia de plataforma general.
+- **Decisiones, bloqueos y riesgos:** `organization_id`, incluida su inmutabilidad en UPDATE para
+  documentos, versiones, extracciones y cleanup, sigue siendo server-authoritative. Adapter
+  server-side, historial como contrato de `RecordWorkspace`, clases acotadas y reglas sin
+  fraude/autenticidad/liveness quedan dentro del alcance implementado. El worker de cleanup,
+  providers reales, rutas/UI y el cierre consolidado siguen fuera de esta entrega.
 - **Validación ejecutada:** suite focalizada de 28 tests de contratos, typecheck/build de
   `@loopdev/contracts`, 62 tests SQL del dominio `ai-platform`, gobernanza de migraciones
   cambiadas, catálogo de datos, formato, docs links, ownership, static worktree y
   `git diff --check`. `pnpm validate:full` queda limitado por el timeout ajeno descrito en la
   evidencia.
-- **Siguiente acción concreta:** revisar el diff final y crear el commit único autorizado sin
-  incluir artefactos generados de build.
+- **Siguiente acción concreta:** consolidar el PR y la evidencia restante de las Fases 2–7 antes
+  de solicitar el cierre del track.
 
 ## Cierre
 
-Pendiente de aprobación explícita. El track cerrado del POC no se reabre.
+La aprobación formal de Fase 0 está completa. El track permanece activo porque las Fases 2–7
+siguen en implementación/validación; el cierre final espera un PR consolidado y evidencia
+completa. El track cerrado del POC no se reabre.

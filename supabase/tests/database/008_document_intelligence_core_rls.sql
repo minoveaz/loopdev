@@ -2,12 +2,13 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(25);
+select plan(28);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
   ('00000000-0000-4b00-8100-000000000001', 'authenticated', 'authenticated', 'document-core-a@example.test', '', now()),
-  ('00000000-0000-4b00-8100-000000000002', 'authenticated', 'authenticated', 'document-core-b@example.test', '', now());
+  ('00000000-0000-4b00-8100-000000000002', 'authenticated', 'authenticated', 'document-core-b@example.test', '', now()),
+  ('00000000-0000-4b00-8100-000000000003', 'authenticated', 'authenticated', 'document-core-multi-org@example.test', '', now());
 
 insert into public.organizations (id, name, slug)
 values
@@ -17,7 +18,9 @@ values
 insert into public.organization_memberships (organization_id, user_id, role)
 values
   ('00000000-0000-4b00-8200-000000000001', '00000000-0000-4b00-8100-000000000001', 'owner'),
-  ('00000000-0000-4b00-8200-000000000002', '00000000-0000-4b00-8100-000000000002', 'owner');
+  ('00000000-0000-4b00-8200-000000000002', '00000000-0000-4b00-8100-000000000002', 'owner'),
+  ('00000000-0000-4b00-8200-000000000001', '00000000-0000-4b00-8100-000000000003', 'owner'),
+  ('00000000-0000-4b00-8200-000000000002', '00000000-0000-4b00-8100-000000000003', 'owner');
 
 insert into public.workspaces (id, organization_id, suite_key, name, slug)
 values
@@ -113,6 +116,32 @@ select throws_ok(
   'insert or update on table "document_intelligence_documents" violates foreign key constraint "document_intelligence_documents_current_version_fkey"',
   'a document cannot point at another document version'
 );
+select pg_temp.set_authenticated_user('00000000-0000-4b00-8100-000000000003');
+select throws_ok(
+  $$ update public.document_intelligence_documents
+     set organization_id = '00000000-0000-4b00-8200-000000000002',
+         workspace_id = '00000000-0000-4b00-8300-000000000002'
+     where id = '00000000-0000-4b00-8400-000000000001' $$,
+  'document_intelligence organization_id is immutable',
+  'a multi-organization member cannot move a document'
+);
+select throws_ok(
+  $$ update public.document_intelligence_versions
+     set organization_id = '00000000-0000-4b00-8200-000000000002',
+         document_id = '00000000-0000-4b00-8400-000000000002'
+     where id = '00000000-0000-4b00-8500-000000000001' $$,
+  'document_intelligence organization_id is immutable',
+  'a multi-organization member cannot move a document version'
+);
+select throws_ok(
+  $$ update public.document_intelligence_extractions
+     set organization_id = '00000000-0000-4b00-8200-000000000002',
+         document_version_id = '00000000-0000-4b00-8500-000000000002'
+     where id = '00000000-0000-4b00-8600-000000000001' $$,
+  'document_intelligence organization_id is immutable',
+  'a multi-organization member cannot move an extraction'
+);
+select pg_temp.set_authenticated_user('00000000-0000-4b00-8100-000000000001');
 select is(
   (select count(*)::integer
    from public.document_intelligence_documents
