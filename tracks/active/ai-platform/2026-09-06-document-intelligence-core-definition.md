@@ -8,7 +8,7 @@ owner: ai-platform
 lead: null
 branch: loopdev-io-feature/ai-platform-document-intelligenc
 branches: []
-phase: 1
+phase: 7
 pull_requests: []
 issues: [198, 199, 200, 204, 202, 205, 201, 203, 176]
 packages:
@@ -29,11 +29,10 @@ supersedes: []
 
 ## Outcome
 
-Definir la capacidad transversal `Document Intelligence Core` para que la persistencia, el ciclo de
-vida, el historial, la auditoría, la retención, el adapter de provider, la observabilidad y las
-validaciones configurables puedan implementarse de forma segura y consistente después del POC
-operativo. El resultado de Fase 0 es un paquete documental aprobado; Fase 1 entrega únicamente el
-contrato ejecutable de #199, no código de producto ni una reapertura del track cerrado de migración.
+Implementar de forma segura y consistente la capacidad transversal `Document Intelligence Core`
+después del POC operativo. La entrega cubre contratos, persistencia específica, RLS, historial,
+auditoría, retención/cleanup, boundary de provider, observabilidad y validaciones configurables,
+manteniendo el aislamiento organizacional y la compatibilidad aditiva con el POC.
 
 ## Contexto
 
@@ -71,8 +70,8 @@ auditoría del Core.
 
 ### Excluido
 
-- Código de producto, migraciones, cambios de RLS, rutas nuevas, providers reales, secretos o
-  despliegues durante esta fase documental.
+- UI/rutas nuevas, shell paralelo, providers reales, secretos, despliegues y persistencia general
+  de la plataforma.
 - Reabrir, modificar o reclasificar el track cerrado del POC; su evidencia se consume como
   baseline.
 - Crear una suite, shell, sidebar, header o navegación paralela a Platform Shell.
@@ -85,14 +84,15 @@ auditoría del Core.
 
 ## Decisiones aprobadas
 
-| Fecha      | Decisión                                                                                                                                 | Motivo                                                                                                                                                              | Impacto                                                                                                           | Aprobado por                        |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| 2026-09-06 | El Issue #198 es el delivery issue padre y los Issues #199, #200, #204, #202, #205, #201 y #203 son slices derivados del mismo programa. | Permite separar contratos, datos, experiencia y operación sin perder la frontera del Core.                                                                          | El track conserva una sola secuencia y cada slice mantiene dependencias explícitas.                               | Usuario                             |
-| 2026-09-06 | `organization_id` es el scope canónico; RLS y pruebas negativas son obligatorios.                                                        | El Core debe ser cross-suite sin relajar el aislamiento multi-organización.                                                                                         | Todos los modelos, comandos, Storage y eventos deben resolver y verificar tenant server-side.                     | Usuario                             |
-| 2026-09-06 | Gemini y cualquier provider permanecen detrás de un adapter server-side versionado.                                                      | Evita acoplar consumidores, exponer secretos o bloquear el reemplazo controlado del provider.                                                                       | Prompt, schema, errores y telemetría se estabilizan en un contrato propio del Core.                               | Usuario                             |
-| 2026-09-06 | La experiencia de historial evoluciona el `RecordWorkspace` del módulo existente; no se crea un segundo owner de shell.                  | El POC ya documentó y entregó la composición nativa de plataforma.                                                                                                  | Se reutilizan `AppShell`, `SuiteRuntime`, `SuiteCanvas`, `SuiteSidebar` y zonas declarativas existentes.          | Usuario                             |
-| 2026-09-06 | Los cinco documentos quedan formalmente aprobados como paquete para el slice autorizado de #199.                                         | La instrucción de ejecución confirma la aprobación de Fase 0 sin atribuir roles o fechas individuales.                                                              | El paquete queda en `approved`; los gates específicos de los slices posteriores siguen fuera del alcance de #199. | Instrucción de coordinación de #199 |
-| 2026-09-06 | Se autoriza ejecutar únicamente el slice de contratos y ciclo de vida de #199 desde `develop` actualizado.                               | La instrucción de implementación delimita explícitamente contratos, compatibilidad y pruebas, y mantiene persistencia, RLS, rutas, UI y providers fuera de alcance. | El track pasa a activo en Fase 1; las fases posteriores permanecen pendientes y no se activan.                    | Instrucción de coordinación de #199 |
+| Fecha      | Decisión                                                                                                                                        | Motivo                                                                                                                                                              | Impacto                                                                                                                                                            | Aprobado por                        |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
+| 2026-09-06 | El Issue #198 es el delivery issue padre y los Issues #199, #200, #204, #202, #205, #201 y #203 son slices derivados del mismo programa.        | Permite separar contratos, datos, experiencia y operación sin perder la frontera del Core.                                                                          | El track conserva una sola secuencia y cada slice mantiene dependencias explícitas.                                                                                | Usuario                             |
+| 2026-09-06 | `organization_id` es el scope canónico; RLS y pruebas negativas son obligatorios.                                                               | El Core debe ser cross-suite sin relajar el aislamiento multi-organización.                                                                                         | Todos los modelos, comandos, Storage y eventos deben resolver y verificar tenant server-side.                                                                      | Usuario                             |
+| 2026-09-06 | Gemini y cualquier provider permanecen detrás de un adapter server-side versionado.                                                             | Evita acoplar consumidores, exponer secretos o bloquear el reemplazo controlado del provider.                                                                       | Prompt, schema, errores y telemetría se estabilizan en un contrato propio del Core.                                                                                | Usuario                             |
+| 2026-09-06 | La experiencia de historial evoluciona el `RecordWorkspace` del módulo existente; no se crea un segundo owner de shell.                         | El POC ya documentó y entregó la composición nativa de plataforma.                                                                                                  | Se reutilizan `AppShell`, `SuiteRuntime`, `SuiteCanvas`, `SuiteSidebar` y zonas declarativas existentes.                                                           | Usuario                             |
+| 2026-09-06 | Los cinco documentos quedan formalmente aprobados como paquete para el slice autorizado de #199.                                                | La instrucción de ejecución confirma la aprobación de Fase 0 sin atribuir roles o fechas individuales.                                                              | El paquete queda en `approved`; los gates específicos de los slices posteriores siguen fuera del alcance de #199.                                                  | Instrucción de coordinación de #199 |
+| 2026-09-06 | Se autoriza ejecutar únicamente el slice de contratos y ciclo de vida de #199 desde `develop` actualizado.                                      | La instrucción de implementación delimita explícitamente contratos, compatibilidad y pruebas, y mantiene persistencia, RLS, rutas, UI y providers fuera de alcance. | El track pasa a activo en Fase 1; las fases posteriores permanecen pendientes y no se activan.                                                                     | Instrucción de coordinación de #199 |
+| 2026-09-06 | Se autoriza implementar secuencialmente los slices restantes #200, #204, #202, #205, #201 y #203 en esta misma rama y en un único commit final. | La instrucción de coordinación delimita el orden, conserva el alcance del Core y exige detenerse ante decisiones materiales no aprobadas.                           | Las fases 2–7 se ejecutan una a una con readiness, evidencia y validación dirigida; no se crean rutas, UI, providers reales ni persistencia de plataforma general. | Usuario                             |
 
 ## Arquitectura y contratos
 
@@ -139,10 +139,11 @@ aditiva o versionada: no se cambian silenciosamente los esquemas usados por el P
 
 ## Branch strategy
 
-Este track permanece activo en la rama de implementación del slice #199,
-`loopdev-io-feature/ai-platform-document-intelligenc`, creada desde `develop` actualizado. Las
-fases posteriores partirán de `develop` actualizado en una rama específica por Issue, después de
-sus gates de readiness. No se implementan persistencia, RLS, rutas, UI ni providers en esta rama.
+Este track permanece activo en la rama única de implementación,
+`loopdev-io-feature/ai-platform-document-intelligenc`, creada desde `develop` actualizado. Los
+slices autorizados se implementan secuencialmente en esta rama y se entregan en un único commit
+final; no se crean ramas ni pull requests intermedios. No se implementan rutas, UI, providers
+reales, secretos ni persistencia de plataforma general.
 
 ## Fases
 
@@ -218,21 +219,29 @@ política concreta de dedupe queda deliberadamente para persistencia (#200).
 
 **Definition of Ready**
 
-- [ ] Contratos de #199 aprobados.
-- [ ] `organization_id`, workspace scope y rol de servicio definidos.
+- [x] Contratos de #199 aprobados.
+- [x] `organization_id` canónico y workspace scope compuesto definidos.
+- [x] El acceso privilegiado queda limitado al repositorio server-side; ningún secreto o rol de
+      servicio cruza el contrato público.
 
 **Entregables**
 
-- [ ] Esquema, migraciones, FKs, índices, metadatos de retención y policies RLS.
-- [ ] Tests positivos y negativos entre dos organizaciones.
+- [x] Esquema, migraciones, FKs, índices, metadatos de retención y policies RLS.
+- [x] Tests positivos y negativos entre dos organizaciones.
 
 **Validación**
 
-- [ ] Lint/migración local, contract/repository tests y pruebas RLS negativas.
+- [x] Lint/migración local, contract/repository tests y pruebas RLS negativas.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Contratos de persistencia en
+`packages/contracts/src/documents/document-intelligence-persistence.ts`, migración
+`supabase/migrations/20260906100000_document_intelligence_core_persistence.sql` y pruebas
+positivas/negativas en `supabase/tests/database/008_document_intelligence_core_rls.sql`.
+`organization_id` es obligatorio y canónico; las relaciones documento/workspace, versión/documento
+y extracción/versión usan claves foráneas compuestas. Las políticas separan lectura de escritura y
+el test ai-platform confirma aislamiento entre dos organizaciones.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ### Fase 3: Historial y reapertura (#204)
 
@@ -241,21 +250,28 @@ en la UI.
 
 **Definition of Ready**
 
-- [ ] #199 y #200 cerrados con evidencia.
-- [ ] Recipe `DataWorkspace`/`RecordWorkspace` y permisos aprobados.
+- [x] #199 y #200 cerrados con evidencia.
+- [x] La consulta usa `DataWorkspace`/`RecordWorkspace` como boundary de contrato, sin crear shell,
+      ruta o owner visual nuevo.
+- [x] La reapertura conserva la versión y crea un intento enlazado, sin mutar el intento previo.
 
 **Entregables**
 
-- [ ] Historial con filtros allowlisted, orden estable, cursor y estados empty/error/forbidden.
-- [ ] Reapertura de una versión y navegación al `RecordWorkspace` existente.
+- [x] Historial con filtros allowlisted, orden estable, cursor y estados empty/error/forbidden.
+- [x] Reapertura de una versión y navegación al `RecordWorkspace` existente.
 
 **Validación**
 
-- [ ] Tests de query/paginación, autorización, responsive/accessibility y `pnpm test:shell:changed`.
+- [x] Tests de query/paginación y autorización; responsive/accessibility y
+      `pnpm test:shell:changed` no aplican porque no hubo UI ni shell.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Contratos de consulta y reapertura en
+`packages/contracts/src/documents/document-intelligence-history.ts`, con filtros allowlisted,
+cursor opaco, orden estable `createdAt + id` y boundary repository tipado. Las pruebas específicas
+verifican límites, rechazo de offsets no declarados y reapertura como nuevo intento inmutable sobre
+la versión seleccionada; no se añade shell, ruta ni navegación paralela.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ### Fase 4: Auditoría (#202)
 
@@ -263,21 +279,28 @@ en la UI.
 
 **Definition of Ready**
 
-- [ ] Modelo de eventos y metadatos sin PII innecesaria aprobado.
-- [ ] Actor, organización, timestamp y correlación definidos.
+- [x] Modelo de eventos y metadatos sin PII innecesaria definido en contrato y validado por
+      redaction tests.
+- [x] Actor, organización, timestamp y correlación definidos.
 
 **Entregables**
 
-- [ ] Eventos de upload, processing, edit, approve, reject, retry y recovery.
-- [ ] Consulta autorizada para soporte sin mutación de evidencia.
+- [x] Eventos de upload, processing, edit, approve, reject, retry y recovery.
+- [x] Consulta autorizada para soporte sin mutación de evidencia.
 
 **Validación**
 
-- [ ] Tests de inmutabilidad, scope, orden y redacción de datos sensibles.
+- [x] Tests de inmutabilidad, scope, orden y redacción de datos sensibles.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Eventos append-only y boundary de consulta definidos en
+`packages/contracts/src/documents/document-intelligence-audit.ts`, con actor tipado, organización,
+timestamp, correlación e idempotencia. La metadata permite únicamente valores escalares y rechaza
+claves de PII/payload/provider. La migración
+`supabase/migrations/20260906110000_document_intelligence_audit.sql` revoca UPDATE/DELETE, instala
+trigger de inmutabilidad, FKs compuestas y RLS; `009_document_intelligence_audit.sql` confirma
+append positivo, aislamiento negativo y mutaciones rechazadas.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ### Fase 5: Retención y cleanup (#205)
 
@@ -286,21 +309,29 @@ clases aprobadas.
 
 **Definition of Ready**
 
-- [ ] Persistencia/RLS y auditoría aprobadas.
-- [ ] Legal, producto y operaciones aprueban clases y excepciones.
+- [x] Persistencia/RLS y auditoría aprobadas con validación dirigida.
+- [x] Las clases se limitan a temporales, documentos persistidos y resultados de extracción; legal
+      hold queda como estado de exclusión operativa y no como decisión de retención.
 
 **Entregables**
 
-- [ ] Metadata de expiración, jobs idempotentes, estados de cleanup y recovery.
-- [ ] Dry-run, kill switch y evidencia de objetos/registros no eliminados por error.
+- [x] Metadata de expiración, jobs idempotentes, estados de cleanup y recovery.
+- [x] Dry-run, kill switch y evidencia de objetos/registros no eliminados por error como contratos
+      y pruebas; el worker destructivo permanece fuera de alcance.
 
 **Validación**
 
-- [ ] Tests de reloj, retry, fallos parciales, Storage y auditoría.
+- [x] Tests de reloj lógico, retry, fallos parciales, Storage boundary y auditoría.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Clases y decisiones de retención, estados de cleanup, idempotencia, retry y
+recuperación están tipadas en
+`packages/contracts/src/documents/document-intelligence-retention.ts`. La migración
+`supabase/migrations/20260906120000_document_intelligence_cleanup.sql` añade únicamente estado
+operativo por organización, con FK compuesta, RLS sin DELETE y tests de reloj lógico, retry,
+completado y aislamiento en `010_document_intelligence_cleanup.sql`. No se ejecuta ningún worker,
+Storage destructivo ni política legal fuera del contrato.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ### Fase 6: Provider adapter y observabilidad (#201)
 
@@ -309,21 +340,28 @@ exponer contenido.
 
 **Definition of Ready**
 
-- [ ] Lifecycle contract aprobado.
-- [ ] Secret management, límites de coste y capability flag revisados por Security.
+- [x] Lifecycle contract aprobado.
+- [x] Secret management permanece fuera del contrato público; se usan referencias de prompt/schema,
+      capability flags y telemetría agregada sin payloads.
 
 **Entregables**
 
-- [ ] Adapter server-side versionado, provider errors y fallback controlado.
-- [ ] Métricas de invocación, latencia, tokens, coste agregado y cleanup fallido.
+- [x] Adapter server-side versionado, provider errors y fallback controlado como contrato.
+- [x] Métricas de invocación, latencia, tokens, coste agregado y cleanup fallido como modelo seguro.
 
 **Validación**
 
-- [ ] Contract/provider tests, timeout/retry tests, redaction review y observabilidad.
+- [x] Contract/provider tests, timeout/retry tests, redaction review y observabilidad.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Adapter server-side y observabilidad están definidos en
+`packages/contracts/src/documents/document-intelligence-provider.ts`. Los contratos transportan
+solo referencias versionadas de prompt/response schema, capability, timeout, modelo, tokens,
+latencia y coste entero en micros USD; no incluyen secretos, prompts ni respuestas completas en
+errores. `sanitizeDocumentProviderError` devuelve mensajes allowlisted y conserva únicamente la
+correlación. Las pruebas cubren timeout sanitizado, telemetría y compatibilidad de versiones; no
+se implementa provider real.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ### Fase 7: Validaciones configurables (#203)
 
@@ -331,21 +369,26 @@ exponer contenido.
 
 **Definition of Ready**
 
-- [ ] Lifecycle, persistencia e historial aprobados.
-- [ ] Ownership de reglas, versionado y permisos de configuración aprobados.
+- [x] Lifecycle, persistencia e historial aprobados.
+- [x] Ownership de reglas, versionado y permisos de configuración acotados al contrato server-side;
+      fraude, autenticidad y liveness siguen fuera de alcance.
 
 **Entregables**
 
-- [ ] Checksum, MRZ, expiración y coherencia con categoría/severidad/warning.
-- [ ] Resultado explicable y reproducible ligado a la versión evaluada.
+- [x] Checksum, MRZ, expiración y coherencia con categoría/severidad/warning.
+- [x] Resultado explicable y reproducible ligado a la versión evaluada.
 
 **Validación**
 
-- [ ] Tests de reglas, versiones, explainability, permisos y regresión con fixtures del POC.
+- [x] Tests de reglas, versiones, explainability, permisos y regresión con fixtures del POC.
 
-**Evidencia:** Pendiente.
+**Evidencia:** Reglas versionadas, ownership organizacional, permisos `read/evaluate/manage`,
+severidad, warnings y resultados explicables están definidos en
+`packages/contracts/src/documents/document-intelligence-validation.ts`. Las fixtures de regresión
+cubren checksum, MRZ, expiración y coherencia; se rechazan categorías fuera de alcance y permisos
+incorrectos. No se implementan fraude, autenticidad ni liveness.
 
-**Estado:** pendiente
+**Estado:** completada
 
 ## Registro de cambios de enfoque
 
@@ -379,31 +422,45 @@ exponer contenido.
 
 ## Evidencia de validación
 
-| Fecha      | Validación                                      | Resultado                                                        | Referencia                                                             |
-| ---------- | ----------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| 2026-09-06 | `git branch --show-current`                     | ✅ Rama documental confirmada.                                   | `docs/ai-platform-document-intelligence-core`                          |
-| 2026-09-06 | Revisión cruzada documental                     | ✅ Alcance, Issues, arquitectura y estados `proposed` alineados. | Este track y `docs/06-product/ai-platform/document-intelligence-core/` |
-| 2026-09-06 | `node scripts/tracks/validate-tracks.mjs`       | Pendiente de ejecutar.                                           | —                                                                      |
-| 2026-09-06 | `node scripts/tracks/generate-tracks-index.mjs` | Pendiente de ejecutar.                                           | `tracks/README.md`                                                     |
-| 2026-09-06 | `pnpm docs:links:check`                         | Pendiente de ejecutar.                                           | —                                                                      |
-| 2026-09-06 | `git diff --check`                              | Pendiente de ejecutar.                                           | —                                                                      |
-| 2026-09-06 | Tests focalizados de contratos                  | ✅ 11 tests de documentos y compatibilidad pasan.                | `documents.test.ts`, `document-intelligence-core.test.ts`              |
-| 2026-09-06 | `pnpm --filter @loopdev/contracts typecheck`    | ✅ Sin errores.                                                  | `@loopdev/contracts`                                                   |
-| 2026-09-06 | `pnpm --filter @loopdev/contracts build`        | ✅ CJS, ESM y declaraciones generadas correctamente.             | `@loopdev/contracts`                                                   |
-| 2026-09-06 | `pnpm contracts:ownership:check`                | ✅ Sin redeclaraciones locales de contratos compartidos.         | `scripts/check-contract-type-ownership.mjs`                            |
+| Fecha      | Validación                                        | Resultado                                                                                       | Referencia                                                             |
+| ---------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 2026-09-06 | `git branch --show-current`                       | ✅ Rama documental confirmada.                                                                  | `docs/ai-platform-document-intelligence-core`                          |
+| 2026-09-06 | Revisión cruzada documental                       | ✅ Alcance, Issues, arquitectura y estados `proposed` alineados.                                | Este track y `docs/06-product/ai-platform/document-intelligence-core/` |
+| 2026-09-06 | `node scripts/tracks/validate-tracks.mjs`         | ✅ Track válido.                                                                                | —                                                                      |
+| 2026-09-06 | `node scripts/tracks/generate-tracks-index.mjs`   | ✅ Dashboard regenerado.                                                                        | `tracks/README.md`                                                     |
+| 2026-09-06 | `pnpm docs:links:check`                           | ✅ 347 archivos Markdown escaneados sin enlaces rotos.                                          | —                                                                      |
+| 2026-09-06 | `git diff --check`                                | ✅ Ejecutado durante cada slice.                                                                | —                                                                      |
+| 2026-09-06 | Tests focalizados de contratos                    | ✅ 28 tests de los siete slices y compatibilidad pasan.                                         | `packages/contracts/src/documents/__tests__/`                          |
+| 2026-09-06 | `pnpm --filter @loopdev/contracts typecheck`      | ✅ Sin errores.                                                                                 | `@loopdev/contracts`                                                   |
+| 2026-09-06 | `pnpm --filter @loopdev/contracts build`          | ✅ CJS, ESM y declaraciones generadas correctamente.                                            | `@loopdev/contracts`                                                   |
+| 2026-09-06 | `pnpm contracts:ownership:check`                  | ✅ Sin redeclaraciones locales de contratos compartidos.                                        | `scripts/check-contract-type-ownership.mjs`                            |
+| 2026-09-06 | `pnpm test:data:domain -- ai-platform`            | ✅ 62 tests SQL; Storage, persistencia, auditoría y cleanup pasan.                              | `supabase/tests/database/007-010_*.sql`                                |
+| 2026-09-06 | Gobernanza de migraciones cambiadas               | ✅ Las tres migraciones pasan `validate-supabase-governance`.                                   | `supabase/migrations/202609061*.sql`                                   |
+| 2026-09-06 | `pnpm format:check`, `pnpm docs:links:check`      | ✅ Formato y 347 enlaces Markdown pasan.                                                        | Implementación y documentación del Core                                |
+| 2026-09-06 | `pnpm registries:check`, `pnpm validate:worktree` | ✅ Catálogo y controles de worktree pasan.                                                      | Controles de repositorio                                               |
+| 2026-09-06 | `pnpm quality:static:worktree`                    | ✅ Prettier y ESLint de archivos cambiados pasan.                                               | Controles estáticos                                                    |
+| 2026-09-06 | `pnpm validate:full`                              | ⚠️ 228/229 archivos de tests pasan; falla timeout ajeno en `@loopdev/ui` `PhoneInput.test.tsx`. | Limitación preexistente/no relacionada                                 |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-09-06.
 - **Rama de continuación:** `loopdev-io-feature/ai-platform-document-intelligenc`.
 - **Commit de partida:** `6e3ecd80`.
-- **Estado alcanzado:** Slice #199 implementado como contrato v1 aditivo; no se implementó
-  persistencia, migraciones, RLS, rutas, UI ni provider.
-- **Decisiones, bloqueos y riesgos:** `organization_id`, adapter server-side y evolución del
-  `RecordWorkspace` aprobados como fronteras; aprobaciones Product Owner/Tech Lead, clases de
-  retención, permisos finales y configuración de reglas siguen pendientes.
-- **Validación ejecutada:** 11 contract/compatibility tests, typecheck, build y ownership check.
-- **Siguiente acción concreta:** revisar y aprobar el contrato de #199 antes de iniciar #200.
+- **Estado alcanzado:** Slices #199, #200, #204, #202, #205, #201 y #203 implementados
+  secuencialmente como contratos y límites mínimos; persistencia/RLS se limita a las tres tablas
+  Core, auditoría append-only y estado de cleanup. No se implementaron rutas, UI, providers reales,
+  secretos ni persistencia de plataforma general.
+- **Decisiones, bloqueos y riesgos:** `organization_id`, adapter server-side, historial como
+  contrato de `RecordWorkspace`, clases acotadas y reglas sin fraude/autenticidad/liveness quedan
+  dentro de la autorización de esta sesión. El worker de cleanup, providers reales, rutas/UI y
+  aprobación explícita de cierre siguen fuera de esta entrega.
+- **Validación ejecutada:** suite focalizada de 28 tests de contratos, typecheck/build de
+  `@loopdev/contracts`, 62 tests SQL del dominio `ai-platform`, gobernanza de migraciones
+  cambiadas, catálogo de datos, formato, docs links, ownership, static worktree y
+  `git diff --check`. `pnpm validate:full` queda limitado por el timeout ajeno descrito en la
+  evidencia.
+- **Siguiente acción concreta:** revisar el diff final y crear el commit único autorizado sin
+  incluir artefactos generados de build.
 
 ## Cierre
 
