@@ -8,8 +8,12 @@ import { fileURLToPath } from 'node:url';
 
 const repositoryRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const BUSINESS_TABLE_PATTERN =
-  /^(crm_|communication_|catalog_|marketing_|content_|quant_|strategy_|insurance_|operations_)/i;
-const APPEND_ONLY_TABLES = new Set(['crm_activities', 'crm_audit_events']);
+  /^(crm_|communication_|catalog_|marketing_|content_|quant_|strategy_|insurance_|operations_|document_intelligence_)/i;
+const APPEND_ONLY_TABLES = new Set([
+  'crm_activities',
+  'crm_audit_events',
+  'document_intelligence_audit_events',
+]);
 const POLICY_VERBS_BY_TABLE = new Map([
   ['marketing_creative_projects', ['select', 'insert', 'update']],
   ['marketing_creative_project_versions', ['select', 'insert']],
@@ -21,6 +25,7 @@ const POLICY_VERBS_BY_TABLE = new Map([
   ['communication_account_onboardings', ['select', 'insert', 'update']],
   ['communication_organization_controls', ['select', 'insert', 'update']],
   ['communication_retention_runs', ['select']],
+  ['document_intelligence_cleanup_jobs', ['select', 'insert', 'update']],
 ]);
 const VERBS = ['select', 'insert', 'update', 'delete'];
 

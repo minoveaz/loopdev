@@ -28,6 +28,13 @@ export * from './communications/communications';
 export * from './communications/inbox';
 export * from './documents/documents';
 export * from './documents/document-intelligence';
+export * from './documents/document-intelligence-core';
+export * from './documents/document-intelligence-persistence';
+export * from './documents/document-intelligence-history';
+export * from './documents/document-intelligence-audit';
+export * from './documents/document-intelligence-retention';
+export * from './documents/document-intelligence-provider';
+export * from './documents/document-intelligence-validation';
 export * from './ai/assistant';
 export * from './catalog/catalog';
 
