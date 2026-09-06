@@ -66,6 +66,18 @@ describe('Platform Core tenancy contracts', () => {
     ).toBe(true);
   });
 
+  it('accepts membership timestamps returned by Postgres with a UTC offset', () => {
+    expect(
+      OrganizationMembershipSchema.safeParse({
+        organizationId: ids.organization,
+        userId: ids.user,
+        role: 'owner',
+        status: 'active',
+        createdAt: '2026-09-06T14:39:01.826932+00:00',
+      }).success,
+    ).toBe(true);
+  });
+
   it('accepts valid permission keys and rejects malformed keys', () => {
     expect(
       PermissionSchema.safeParse({

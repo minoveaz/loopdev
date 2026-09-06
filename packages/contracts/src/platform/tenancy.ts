@@ -87,7 +87,8 @@ export const OrganizationMembershipSchema = z.object({
   userId: z.string().uuid(),
   role: OrganizationRoleSchema,
   status: OrganizationMembershipStatusSchema.default('active'),
-  createdAt: z.string().datetime(),
+  // Postgres timestamptz responses may include an explicit UTC offset.
+  createdAt: z.string().datetime({ offset: true }),
 });
 
 export type OrganizationMembership = z.infer<typeof OrganizationMembershipSchema>;
