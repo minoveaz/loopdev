@@ -35,7 +35,13 @@ export type WhatsAppDispatchResult = {
 
 export class WhatsAppDispatchError extends Error {
   constructor(
-    readonly code: 'ACCOUNT_UNAVAILABLE' | 'OUTBOUND_PAUSED' | 'MESSAGE_WINDOW_EXPIRED' | 'TEMPLATE_REQUIRED' | 'TEMPLATE_FORBIDDEN' | 'VALIDATION_ERROR',
+    readonly code:
+      | 'ACCOUNT_UNAVAILABLE'
+      | 'OUTBOUND_PAUSED'
+      | 'MESSAGE_WINDOW_EXPIRED'
+      | 'TEMPLATE_REQUIRED'
+      | 'TEMPLATE_FORBIDDEN'
+      | 'VALIDATION_ERROR',
     message: string,
   ) {
     super(message);
@@ -86,13 +92,19 @@ export async function dispatchWhatsAppMessage(
 
 function assertAccountCanSend(organizationId: string, account: DispatchAccount) {
   if (account.organizationId !== organizationId) {
-    throw new WhatsAppDispatchError('ACCOUNT_UNAVAILABLE', 'WhatsApp account does not belong to the organization');
+    throw new WhatsAppDispatchError(
+      'ACCOUNT_UNAVAILABLE',
+      'WhatsApp account does not belong to the organization',
+    );
   }
   if (account.status !== 'connected') {
     throw new WhatsAppDispatchError('ACCOUNT_UNAVAILABLE', 'WhatsApp account is not connected');
   }
   if (!account.outboundEnabled) {
-    throw new WhatsAppDispatchError('OUTBOUND_PAUSED', 'WhatsApp outbound is paused for this account');
+    throw new WhatsAppDispatchError(
+      'OUTBOUND_PAUSED',
+      'WhatsApp outbound is paused for this account',
+    );
   }
 }
 
@@ -102,11 +114,25 @@ function assertTemplateCanSend(
   template: DispatchTemplate,
   parameters: Record<string, string>,
 ) {
-  if (template.organizationId !== organizationId || template.accountId !== accountId || template.status !== 'approved') {
-    throw new WhatsAppDispatchError('TEMPLATE_FORBIDDEN', 'WhatsApp template is not approved for this account');
+  if (
+    template.organizationId !== organizationId ||
+    template.accountId !== accountId ||
+    template.status !== 'approved'
+  ) {
+    throw new WhatsAppDispatchError(
+      'TEMPLATE_FORBIDDEN',
+      'WhatsApp template is not approved for this account',
+    );
   }
   const parameterNames = new Set(template.parameterNames);
-  if (parameterNames.size !== template.parameterNames.length || Object.keys(parameters).length !== parameterNames.size || Object.keys(parameters).some((name) => !parameterNames.has(name))) {
-    throw new WhatsAppDispatchError('VALIDATION_ERROR', 'WhatsApp template parameters do not match the approved template');
+  if (
+    parameterNames.size !== template.parameterNames.length ||
+    Object.keys(parameters).length !== parameterNames.size ||
+    Object.keys(parameters).some((name) => !parameterNames.has(name))
+  ) {
+    throw new WhatsAppDispatchError(
+      'VALIDATION_ERROR',
+      'WhatsApp template parameters do not match the approved template',
+    );
   }
 }

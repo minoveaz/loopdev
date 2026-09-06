@@ -80,12 +80,14 @@ function hasRls(sql, tableName) {
 
 function policiesForTable(sql, tableName) {
   const escaped = tableName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return [...sql.matchAll(
-    new RegExp(
-      `create\\s+policy\\s+[^;]+?\\s+on\\s+(?:public\\.)?${escaped}\\s+for\\s+(select|insert|update|delete|all)\\b`,
-      'gi',
+  return [
+    ...sql.matchAll(
+      new RegExp(
+        `create\\s+policy\\s+[^;]+?\\s+on\\s+(?:public\\.)?${escaped}\\s+for\\s+(select|insert|update|delete|all)\\b`,
+        'gi',
+      ),
     ),
-  )].map((match) => match[1].toLowerCase());
+  ].map((match) => match[1].toLowerCase());
 }
 
 function hasScopedForeignKey(body, parentTable) {
@@ -97,16 +99,15 @@ function hasScopedForeignKey(body, parentTable) {
 }
 
 function directBusinessReferences(body) {
-  return [...body.matchAll(
-    /references\s+(?:public\.)?("?[a-z_][a-z0-9_]*"?)\s*\(\s*id\s*\)/gi,
-  )]
+  return [...body.matchAll(/references\s+(?:public\.)?("?[a-z_][a-z0-9_]*"?)\s*\(\s*id\s*\)/gi)]
     .map((match) => normalizeIdentifier(match[1]))
     .filter((tableName) => BUSINESS_TABLE_PATTERN.test(tableName));
 }
 
 function grantIssues(sql) {
   const issues = [];
-  const grantPattern = /\bgrant\s+([^;]+?)\s+on\s+(?:table\s+)?(?:public\.)?("?[\w]+"?)\s+to\s+([^;]+);/gi;
+  const grantPattern =
+    /\bgrant\s+([^;]+?)\s+on\s+(?:table\s+)?(?:public\.)?("?[\w]+"?)\s+to\s+([^;]+);/gi;
   for (const match of sql.matchAll(grantPattern)) {
     const privileges = match[1].trim().toLowerCase();
     const tableName = normalizeIdentifier(match[2]);
@@ -185,11 +186,13 @@ function changedFiles(base, head) {
 }
 
 function allMigrationFiles(directory = 'supabase/migrations') {
-  return readdirSync(resolve(repositoryRoot, directory), { withFileTypes: true }).flatMap((entry) => {
-    const relativePath = `${directory}/${entry.name}`;
-    if (entry.isDirectory()) return allMigrationFiles(relativePath);
-    return entry.name.endsWith('.sql') ? [relativePath] : [];
-  });
+  return readdirSync(resolve(repositoryRoot, directory), { withFileTypes: true }).flatMap(
+    (entry) => {
+      const relativePath = `${directory}/${entry.name}`;
+      if (entry.isDirectory()) return allMigrationFiles(relativePath);
+      return entry.name.endsWith('.sql') ? [relativePath] : [];
+    },
+  );
 }
 
 export function validateFiles(files) {
@@ -203,9 +206,7 @@ function main(args) {
   const all = args.includes('--all');
   const base = optionValue(args, '--base') ?? process.env.BASE_SHA ?? 'origin/develop';
   const head = optionValue(args, '--head') ?? process.env.HEAD_SHA ?? 'HEAD';
-  const files = all
-    ? allMigrationFiles()
-    : changedFiles(base, head);
+  const files = all ? allMigrationFiles() : changedFiles(base, head);
   const issues = validateFiles(files);
 
   console.log(`Supabase governance migrations checked: ${files.length}`);
@@ -217,4 +218,5 @@ function main(args) {
   return 0;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) process.exitCode = main(process.argv.slice(2));
+if (process.argv[1] === fileURLToPath(import.meta.url))
+  process.exitCode = main(process.argv.slice(2));

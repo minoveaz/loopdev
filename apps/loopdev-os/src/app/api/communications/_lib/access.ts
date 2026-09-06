@@ -6,7 +6,9 @@ export async function authorizeCommunications(
   permission: CommunicationPermissionKey,
 ) {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return { allowed: false as const, status: 401 as const };
   const { data, error } = await supabase.rpc('has_organization_permission', {
     target_organization_id: organizationId,

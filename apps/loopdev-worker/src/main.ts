@@ -1,4 +1,8 @@
-import { processCommunicationsJob, type CommunicationsJobHandlers, type CommunicationsJobQueue } from './communicationsWorker.js';
+import {
+  processCommunicationsJob,
+  type CommunicationsJobHandlers,
+  type CommunicationsJobQueue,
+} from './communicationsWorker.js';
 
 export async function startCommunicationsWorker(
   queue: CommunicationsJobQueue,
@@ -6,7 +10,9 @@ export async function startCommunicationsWorker(
   log: (record: Record<string, unknown>) => void,
 ): Promise<void> {
   let running = true;
-  const stop = () => { running = false; };
+  const stop = () => {
+    running = false;
+  };
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
 

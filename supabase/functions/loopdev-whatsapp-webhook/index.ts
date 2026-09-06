@@ -14,12 +14,21 @@ const supabase = createClient(
 const timingSafeEqual = (left: Uint8Array, right: Uint8Array) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
-const hexToBytes = (hex: string) => new Uint8Array(hex.match(/.{1,2}/g)?.map((byte) => parseInt(byte, 16)) ?? []);
+const hexToBytes = (hex: string) =>
+  new Uint8Array(hex.match(/.{1,2}/g)?.map((byte) => parseInt(byte, 16)) ?? []);
 
 async function verifySignature(body: string, header: string | null) {
   if (!appSecret || !header?.startsWith('sha256=')) return false;
-  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(appSecret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const digest = new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(body)));
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(appSecret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+  const digest = new Uint8Array(
+    await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(body)),
+  );
   return timingSafeEqual(digest, hexToBytes(header.slice(7)));
 }
 
@@ -31,7 +40,9 @@ const normalizePhone = (value: string) => {
 
 const timestamp = (value: unknown) => {
   const seconds = Number(value);
-  return Number.isFinite(seconds) ? new Date(seconds * 1000).toISOString() : new Date().toISOString();
+  return Number.isFinite(seconds)
+    ? new Date(seconds * 1000).toISOString()
+    : new Date().toISOString();
 };
 
 const eventKey = (kind: string, id: string) => `${kind}:${id}`;
@@ -48,62 +59,112 @@ async function persistInboundMessage(
   message: Record<string, any>,
 ) {
   const phone = normalizePhone(String(message.from));
-  const profileName = value.contacts?.find((contact: Record<string, any>) => contact.wa_id === message.from)?.profile?.name;
-  const contactResult = await supabase.rpc('crm_resolve_whatsapp_inbound_contact', {
-    p_organization_id: account.organization_id,
-    p_phone: phone,
-    p_profile_name: profileName ?? null,
-  }).single();
-  if (contactResult.error || !contactResult.data) throw contactResult.error ?? new Error('Unable to resolve CRM contact');
+  const profileName = value.contacts?.find(
+    (contact: Record<string, any>) => contact.wa_id === message.from,
+  )?.profile?.name;
+  const contactResult = await supabase
+    .rpc('crm_resolve_whatsapp_inbound_contact', {
+      p_organization_id: account.organization_id,
+      p_phone: phone,
+      p_profile_name: profileName ?? null,
+    })
+    .single();
+  if (contactResult.error || !contactResult.data)
+    throw contactResult.error ?? new Error('Unable to resolve CRM contact');
   const contactId = contactResult.data.contact_id;
 
-  const channelResult = await supabase.from('communication_channels').select('id')
-    .eq('organization_id', account.organization_id).eq('account_id', account.id)
-    .eq('channel', 'whatsapp').eq('address', phone).maybeSingle();
+  const channelResult = await supabase
+    .from('communication_channels')
+    .select('id')
+    .eq('organization_id', account.organization_id)
+    .eq('account_id', account.id)
+    .eq('channel', 'whatsapp')
+    .eq('address', phone)
+    .maybeSingle();
   if (channelResult.error) throw channelResult.error;
   let channelId = channelResult.data?.id;
   if (!channelId) {
-    const createdChannel = await supabase.from('communication_channels').insert({
-      organization_id: account.organization_id, account_id: account.id, contact_id: contactId,
-      channel: 'whatsapp', address: phone, display_name: profileName ?? null, is_primary: true,
-    }).select('id').single();
+    const createdChannel = await supabase
+      .from('communication_channels')
+      .insert({
+        organization_id: account.organization_id,
+        account_id: account.id,
+        contact_id: contactId,
+        channel: 'whatsapp',
+        address: phone,
+        display_name: profileName ?? null,
+        is_primary: true,
+      })
+      .select('id')
+      .single();
     if (createdChannel.error?.code === '23505') {
-      const existingChannel = await supabase.from('communication_channels').select('id')
-        .eq('organization_id', account.organization_id).eq('account_id', account.id)
-        .eq('channel', 'whatsapp').eq('address', phone).single();
+      const existingChannel = await supabase
+        .from('communication_channels')
+        .select('id')
+        .eq('organization_id', account.organization_id)
+        .eq('account_id', account.id)
+        .eq('channel', 'whatsapp')
+        .eq('address', phone)
+        .single();
       if (existingChannel.error) throw existingChannel.error;
       channelId = existingChannel.data.id;
     } else if (createdChannel.error) throw createdChannel.error;
     else channelId = createdChannel.data.id;
   }
 
-  const conversationResult = await supabase.from('communication_conversations').select('id')
-    .eq('organization_id', account.organization_id).eq('contact_id', contactId)
-    .eq('channel_id', channelId).in('status', ['open', 'pending']).order('updated_at', { ascending: false }).limit(1).maybeSingle();
+  const conversationResult = await supabase
+    .from('communication_conversations')
+    .select('id')
+    .eq('organization_id', account.organization_id)
+    .eq('contact_id', contactId)
+    .eq('channel_id', channelId)
+    .in('status', ['open', 'pending'])
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
   if (conversationResult.error) throw conversationResult.error;
   let conversationId = conversationResult.data?.id;
   if (!conversationId) {
     const lastActivityAt = timestamp(message.timestamp);
-    const createdConversation = await supabase.from('communication_conversations').insert({
-      organization_id: account.organization_id, contact_id: contactId, channel_id: channelId,
-      channel: 'whatsapp', status: 'open', last_inbound_at: lastActivityAt, last_activity_at: lastActivityAt,
-      window_expires_at: new Date(Date.parse(lastActivityAt) + 24 * 60 * 60 * 1000).toISOString(),
-    }).select('id').single();
+    const createdConversation = await supabase
+      .from('communication_conversations')
+      .insert({
+        organization_id: account.organization_id,
+        contact_id: contactId,
+        channel_id: channelId,
+        channel: 'whatsapp',
+        status: 'open',
+        last_inbound_at: lastActivityAt,
+        last_activity_at: lastActivityAt,
+        window_expires_at: new Date(Date.parse(lastActivityAt) + 24 * 60 * 60 * 1000).toISOString(),
+      })
+      .select('id')
+      .single();
     if (createdConversation.error) throw createdConversation.error;
     conversationId = createdConversation.data.id;
   } else {
     const lastActivityAt = timestamp(message.timestamp);
-    const updatedConversation = await supabase.from('communication_conversations').update({
-      last_inbound_at: lastActivityAt, last_activity_at: lastActivityAt,
-      window_expires_at: new Date(Date.parse(lastActivityAt) + 24 * 60 * 60 * 1000).toISOString(),
-      updated_at: new Date().toISOString(),
-    }).eq('id', conversationId).select('id').single();
+    const updatedConversation = await supabase
+      .from('communication_conversations')
+      .update({
+        last_inbound_at: lastActivityAt,
+        last_activity_at: lastActivityAt,
+        window_expires_at: new Date(Date.parse(lastActivityAt) + 24 * 60 * 60 * 1000).toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', conversationId)
+      .select('id')
+      .single();
     if (updatedConversation.error) throw updatedConversation.error;
   }
 
   const createdMessage = await supabase.from('communication_messages').insert({
-    organization_id: account.organization_id, conversation_id: conversationId,
-    external_id: message.id, direction: 'inbound', status: 'delivered', body: messageBody(message),
+    organization_id: account.organization_id,
+    conversation_id: conversationId,
+    external_id: message.id,
+    direction: 'inbound',
+    status: 'delivered',
+    body: messageBody(message),
   });
   if (createdMessage.error && createdMessage.error.code !== '23505') throw createdMessage.error;
 }
@@ -111,7 +172,10 @@ async function persistInboundMessage(
 Deno.serve(async (request) => {
   if (request.method === 'GET') {
     const url = new URL(request.url);
-    if (url.searchParams.get('hub.mode') === 'subscribe' && url.searchParams.get('hub.verify_token') === verifyToken) {
+    if (
+      url.searchParams.get('hub.mode') === 'subscribe' &&
+      url.searchParams.get('hub.verify_token') === verifyToken
+    ) {
       return new Response(url.searchParams.get('hub.challenge') ?? '', { status: 200 });
     }
     return new Response('Forbidden', { status: 403 });
@@ -142,8 +206,11 @@ Deno.serve(async (request) => {
         const value = change.value;
         const phoneNumberId = value?.metadata?.phone_number_id;
         if (!phoneNumberId) continue;
-        const { data: account, error: accountError } = await supabase.from('communication_accounts')
-          .select('id, organization_id').eq('external_account_id', phoneNumberId).maybeSingle();
+        const { data: account, error: accountError } = await supabase
+          .from('communication_accounts')
+          .select('id, organization_id')
+          .eq('external_account_id', phoneNumberId)
+          .maybeSingle();
         if (accountError) throw accountError;
         if (!account) {
           console.warn('WhatsApp account not configured', {
@@ -156,30 +223,48 @@ Deno.serve(async (request) => {
         for (const status of value.statuses ?? []) {
           if (!status.id) continue;
           const result = await supabase.from('communication_webhook_events').insert({
-            organization_id: account.organization_id, account_id: account.id,
-            external_event_id: eventKey('status', status.id), external_message_id: status.id,
+            organization_id: account.organization_id,
+            account_id: account.id,
+            external_event_id: eventKey('status', status.id),
+            external_message_id: status.id,
             payload_version: 'whatsapp-cloud-v1',
           });
           if (result.error?.code === '23505') duplicates += 1;
           else if (result.error) throw result.error;
           else processed += 1;
-          const messageResult = await supabase.from('communication_messages').select('id')
-            .eq('organization_id', account.organization_id).eq('external_id', status.id).maybeSingle();
+          const messageResult = await supabase
+            .from('communication_messages')
+            .select('id')
+            .eq('organization_id', account.organization_id)
+            .eq('external_id', status.id)
+            .maybeSingle();
           if (messageResult.error) throw messageResult.error;
           if (messageResult.data) {
             const statusResult = await supabase.from('communication_message_statuses').insert({
-              organization_id: account.organization_id, message_id: messageResult.data.id,
-              status: status.status, provider_timestamp: timestamp(status.timestamp),
+              organization_id: account.organization_id,
+              message_id: messageResult.data.id,
+              status: status.status,
+              provider_timestamp: timestamp(status.timestamp),
             });
             if (statusResult.error && statusResult.error.code !== '23505') throw statusResult.error;
-            const updateResult = await supabase.from('communication_messages').update({
-              status: status.status, updated_at: new Date().toISOString(),
-            }).eq('organization_id', account.organization_id).eq('id', messageResult.data.id);
+            const updateResult = await supabase
+              .from('communication_messages')
+              .update({
+                status: status.status,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('organization_id', account.organization_id)
+              .eq('id', messageResult.data.id);
             if (updateResult.error) throw updateResult.error;
           }
-          const processedEvent = await supabase.from('communication_webhook_events').update({
-            processing_status: 'processed', processed_at: new Date().toISOString(),
-          }).eq('organization_id', account.organization_id).eq('account_id', account.id)
+          const processedEvent = await supabase
+            .from('communication_webhook_events')
+            .update({
+              processing_status: 'processed',
+              processed_at: new Date().toISOString(),
+            })
+            .eq('organization_id', account.organization_id)
+            .eq('account_id', account.id)
             .eq('external_event_id', eventKey('status', status.id));
           if (processedEvent.error) throw processedEvent.error;
         }
@@ -187,17 +272,24 @@ Deno.serve(async (request) => {
         for (const message of value.messages ?? []) {
           if (!message.id || !message.from) continue;
           const result = await supabase.from('communication_webhook_events').insert({
-            organization_id: account.organization_id, account_id: account.id,
-            external_event_id: eventKey('message', message.id), external_message_id: message.id,
+            organization_id: account.organization_id,
+            account_id: account.id,
+            external_event_id: eventKey('message', message.id),
+            external_message_id: message.id,
             payload_version: 'whatsapp-cloud-v1',
           });
           if (result.error?.code === '23505') duplicates += 1;
           else if (result.error) throw result.error;
           else processed += 1;
           await persistInboundMessage(account, value, message);
-          await supabase.from('communication_webhook_events').update({
-            processing_status: 'processed', processed_at: new Date().toISOString(),
-          }).eq('organization_id', account.organization_id).eq('account_id', account.id)
+          await supabase
+            .from('communication_webhook_events')
+            .update({
+              processing_status: 'processed',
+              processed_at: new Date().toISOString(),
+            })
+            .eq('organization_id', account.organization_id)
+            .eq('account_id', account.id)
             .eq('external_event_id', eventKey('message', message.id));
         }
       }
