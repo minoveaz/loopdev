@@ -42,9 +42,7 @@ export function LaunchpadShell({
   onNavigate,
 }: LaunchpadShellProps) {
   const displayName = userEmail?.split('@')[0] ?? 'User';
-  const [isMobileViewport, setIsMobileViewport] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 1024px)').matches,
-  );
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 1024px)');
