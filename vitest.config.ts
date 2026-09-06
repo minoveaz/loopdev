@@ -42,11 +42,6 @@ export default defineConfig({
           name: 'loopdev-os',
           environment: 'jsdom',
           setupFiles: [path.resolve(root, 'ds/packages/ui/vitest.setup.ts')],
-          server: {
-            deps: {
-              inline: true,
-            },
-          },
           root: path.resolve(root, 'apps/loopdev-os'),
           include: ['src/{app,components,core,lib,services,suites}/**/*.{test,spec}.{ts,tsx}'],
         },
