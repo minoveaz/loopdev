@@ -20,14 +20,10 @@ export interface SuiteSidebarProps {
   navMode: NavMode;
   /** Fuerza el contenido expandido cuando el sidebar se usa como drawer mobile */
   mobileMode?: boolean;
-  /** Contenido contextual del encabezado, visible en la presentación expandida. */
-  headerSlot?: ReactNode;
   /** Contexto de enfoque global de la aplicación */
   context?: LayoutContext;
   /** ID del módulo activo (para Momentum y Focus) */
   activeModuleId?: string;
-  /** Controls whether the suite dashboard entry is rendered. Suites keep it by default. */
-  showSuiteHome?: boolean;
   /** Mapa de permisos en tiempo real */
   accessMap: AccessMap;
   /** Mapa de telemetría para badges */
