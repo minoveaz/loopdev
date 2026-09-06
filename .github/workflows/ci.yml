@@ -555,6 +555,7 @@ jobs:
       NEXT_PUBLIC_E2E_AUTH_BYPASS: 'true'
       PLAYWRIGHT_E2E_AUTH_BYPASS: 'true'
       NEXT_PUBLIC_CRM_CONTACTS_FIXTURE: 'true'
+      NEXT_PUBLIC_VISUAL_CERTIFICATION: 'true'
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
@@ -629,7 +630,7 @@ jobs:
       - name: Run mobile visual checks
         if: needs.changes.outputs.browser_visual == 'true'
         run: >-
-          pnpm e2e:profile visual
+          NEXT_PUBLIC_VISUAL_CERTIFICATION=true pnpm e2e:profile visual
           --project=mobile --project=mobile-compact --workers=1 --reporter=line
 
       - name: Upload mobile E2E and Axe evidence

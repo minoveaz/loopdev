@@ -1,9 +1,12 @@
 import path from 'node:path';
 import type { NextConfig } from 'next';
 
+const isVisualCertification = process.env.NEXT_PUBLIC_VISUAL_CERTIFICATION === 'true';
+
 const nextConfig: NextConfig = {
   /* config options here */
   distDir: process.env.NEXT_DIST_DIR ?? '.next',
+  devIndicators: isVisualCertification ? false : undefined,
   reactCompiler: true,
   turbopack: {
     root: path.join(__dirname, '../..'),
