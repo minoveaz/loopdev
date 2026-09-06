@@ -25,6 +25,10 @@
 - [LoopDev 2026 execution roadmap governance](./planned/governance/2026-08-13-execution-roadmap-governance.md) · `docs/2026-execution-roadmap` · fase 0
 ## En curso
 
+### AI Platform
+
+- [Migración del POC operativo de Document Intelligence desde VitaBlue](./active/ai-platform/2026-09-05-document-intelligence-poc-migration.md) · `feature/document-intelligence-viewer` · fase 5
+
 ### CRM
 
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6

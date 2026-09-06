@@ -19,7 +19,6 @@ export * from './platform/seo';
 export * from './platform/telemetry';
 export * from './platform/deepLinking';
 
-
 // Export CRM contracts
 export * from './crm/crm';
 export * from './crm/customer-workspace';
@@ -27,6 +26,7 @@ export * from './crm/tasks';
 export * from './crm/customer-360';
 export * from './communications/communications';
 export * from './documents/documents';
+export * from './documents/document-intelligence';
 export * from './ai/assistant';
 export * from './catalog/catalog';
 

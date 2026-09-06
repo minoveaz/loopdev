@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname, '../..'),
   },
-  transpilePackages: ['@loopdev/ui', '@loopdev/contracts'],
+  transpilePackages: ['@loopdev/ui', '@loopdev/contracts', '@loopdev/document-viewer'],
   // Optimizaciones para ambientes con memoria limitada (Codespace 8GB)
   onDemandEntries: {
     maxInactiveAge: 25 * 1000, // Limpiar páginas no usadas más rápido

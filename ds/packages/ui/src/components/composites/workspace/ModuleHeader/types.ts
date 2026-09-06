@@ -22,6 +22,9 @@ export interface ModuleHeaderProps {
   /** Ruta de breadcrumbs jerárquicos { SUITE / MODULE / VIEW } */
   segments: BreadcrumbSegment[];
 
+  /** Variante compacta para viewport móvil, normalmente solo el módulo activo. */
+  mobileSegments?: BreadcrumbSegment[];
+
   /** Texto del estado (ej: 'Live') */
   statusLabel?: string;
 

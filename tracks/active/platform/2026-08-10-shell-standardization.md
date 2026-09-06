@@ -3,7 +3,7 @@ id: shell-standardization
 title: Estandarización del shell de LoopDev OS
 status: active
 created: 2026-08-10
-updated: 2026-08-12
+updated: 2026-09-06
 owner: platform
 branch: null
 areas: []
@@ -12,7 +12,7 @@ blocked_by: []
 supersedes: []
 migration_source: conductor/tracks/2026-08-10-shell-standardization.md
 lead: null
-branches: [feature/shell-standardization, feature/suiteshell-composition]
+branches: feature/shell-standardization, feature/suiteshell-composition, feature/document-intelligence-viewer
 phase: 4
 pull_requests: []
 issues: []
@@ -310,17 +310,17 @@ La matriz identifica la composición actual, la responsabilidad que debe consoli
 de cada superficie. Se actualizará durante la auditoría de layouts y servirá como contrato de
 migración, no como un compromiso de reescritura inmediata.
 
-| Superficie       | Composición actual                                                                                                               | Duplicaciones o riesgos                                                                                           | Destino                                                         | Estado                 |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------- |
-| OS global        | `AppShell` + providers globales                                                                                                  | Verificar guards, tenancy, overlays y contexto común                                                              | `AppShell`                                                      | Por auditar            |
+| Superficie       | Composición actual                                                                                                               | Duplicaciones o riesgos                                                                                           | Destino                                                         | Estado                                       |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------- |
+| OS global        | `AppShell` + providers globales                                                                                                  | Verificar guards, tenancy, overlays y contexto común                                                              | `AppShell`                                                      | Por auditar                                  |
 | Marketing Studio | `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `MobileSuiteNav`                                          | Módulo activo, viewport, overlays, permisos y navegación resueltos en el layout                                   | `AppShell` + `SuiteShell`                                       | `SuiteShell` disponible; migración pendiente |
-| Brand Hub        | Provider propio + `ModuleWorkspace` + `ModuleSidebar` + `ModuleHeader` + flyout + inspector                                      | Datos de marca, breadcrumbs, permisos, navegación interna y estado de paneles mezclados con la composición visual | `SuiteShell` + `ModuleShell` + `ModuleWorkspace`                | Referencia de módulo   |
-| DAM              | Provider propio + `ModuleWorkspace` + `ModuleSidebar` + `ModuleHeader` + toolbar + inspector                                     | Selección de asset, offline-first, toolbar, navegación y estados estructurales requieren contrato común           | `SuiteShell` + `ModuleShell` + `ModuleWorkspace`                | Referencia offline     |
-| Campaigns        | Ruta y layout de Marketing Studio por auditar                                                                                    | Navegación y estados pueden divergir del resto de Marketing Studio                                                | `SuiteShell` + `ModuleShell`                                    | Pendiente de auditoría |
-| Content Engine   | Ruta prevista en la navegación, superficie por auditar                                                                           | Disponibilidad y estado `disabled` deben tener representación común                                               | `SuiteShell` + `ModuleShell`                                    | Pendiente de auditoría |
-| Sales CRM        | `SalesCrmProvider` + `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `ModuleWorkspace`                    | Suite, módulo, notificaciones, inspector de leads y permisos están acoplados                                      | `SuiteShell` + `ModuleShell` + `ModuleWorkspace` cuando aplique | Migración posterior    |
-| Health OS        | `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `MobileSuiteNav` + `ModuleWorkspace`                      | Identidad de suite, permisos, responsive, tenant y composición de módulo están mezclados                          | `SuiteShell` + `ModuleShell`                                    | Migración posterior    |
-| Quant Ops        | `QuantOpsProvider` + `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `MobileSuiteNav` + `ModuleWorkspace` | Navegación, permisos, responsive, tenant y estado del inspector de bots están mezclados                           | `SuiteShell` + `ModuleShell`                                    | Migración posterior    |
+| Brand Hub        | Provider propio + `ModuleWorkspace` + `ModuleSidebar` + `ModuleHeader` + flyout + inspector                                      | Datos de marca, breadcrumbs, permisos, navegación interna y estado de paneles mezclados con la composición visual | `SuiteShell` + `ModuleShell` + `ModuleWorkspace`                | Referencia de módulo                         |
+| DAM              | Provider propio + `ModuleWorkspace` + `ModuleSidebar` + `ModuleHeader` + toolbar + inspector                                     | Selección de asset, offline-first, toolbar, navegación y estados estructurales requieren contrato común           | `SuiteShell` + `ModuleShell` + `ModuleWorkspace`                | Referencia offline                           |
+| Campaigns        | Ruta y layout de Marketing Studio por auditar                                                                                    | Navegación y estados pueden divergir del resto de Marketing Studio                                                | `SuiteShell` + `ModuleShell`                                    | Pendiente de auditoría                       |
+| Content Engine   | Ruta prevista en la navegación, superficie por auditar                                                                           | Disponibilidad y estado `disabled` deben tener representación común                                               | `SuiteShell` + `ModuleShell`                                    | Pendiente de auditoría                       |
+| Sales CRM        | `SalesCrmProvider` + `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `ModuleWorkspace`                    | Suite, módulo, notificaciones, inspector de leads y permisos están acoplados                                      | `SuiteShell` + `ModuleShell` + `ModuleWorkspace` cuando aplique | Migración posterior                          |
+| Health OS        | `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `MobileSuiteNav` + `ModuleWorkspace`                      | Identidad de suite, permisos, responsive, tenant y composición de módulo están mezclados                          | `SuiteShell` + `ModuleShell`                                    | Migración posterior                          |
+| Quant Ops        | `QuantOpsProvider` + `SuitePermissionGuard` + `AppShell` + `SuiteSidebar` + `SuiteHeader` + `MobileSuiteNav` + `ModuleWorkspace` | Navegación, permisos, responsive, tenant y estado del inspector de bots están mezclados                           | `SuiteShell` + `ModuleShell`                                    | Migración posterior                          |
 
 La auditoría deberá usar únicamente archivos fuente rastreados, principalmente `src`, y excluir
 `.next`, `.turbo`, `node_modules`, `test-results` y otros artefactos generados.

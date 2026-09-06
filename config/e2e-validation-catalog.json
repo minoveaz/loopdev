@@ -58,6 +58,12 @@
       "projects": ["desktop", "mobile", "mobile-compact"]
     },
     {
+      "file": "document-viewer.certification.spec.mjs",
+      "domain": "web",
+      "profile": "component",
+      "projects": ["desktop", "mobile", "mobile-compact"]
+    },
+    {
       "file": "entity-table-golden.visual.spec.mjs",
       "domain": "design-system",
       "profile": "visual",
