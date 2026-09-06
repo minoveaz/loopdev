@@ -52,8 +52,8 @@ select lives_ok(
   'first provider event is persisted'
 );
 select throws_ok(
-  $$ insert into public.communication_webhook_events (organization_id, account_id, external_event_id, external_message_id, payload_version) values ('00000000-0000-4000-ac00-000000000001', '00000000-0000-4000-cc00-000000000001', 'message:wamid.delivery-a', 'wamid.delivery-a', 'whatsapp-cloud-v1') $$,
-  'duplicate key value violates unique constraint "communication_webhook_events_organization_id_account_id_external_event_id_key"',
+  $$ insert into public.communication_webhook_events (organization_id, account_id, external_event_id, external_message_id, payload_version) values ('00000000-0000-4000-ac00-000000000001', '00000000-0000-4000-cc00-000000000001', 'message:wamid.delivery-a', 'wamid.delivery-b', 'whatsapp-cloud-v1') $$,
+  'duplicate key value violates unique constraint "communication_webhook_events_organization_id_account_id_ext_key"',
   'duplicate provider event is rejected by the idempotency key'
 );
 select lives_ok(

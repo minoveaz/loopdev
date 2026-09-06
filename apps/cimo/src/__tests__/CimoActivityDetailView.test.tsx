@@ -15,13 +15,13 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onBack={vi.fn()}
         onJoin={vi.fn()}
         onSendMessage={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Información del Plan')).toBeDefined();
-    expect(screen.getByText('Itinerario Previsto')).toBeDefined();
+    expect(screen.getByText('Ritmo & Exigencia')).toBeDefined();
     expect(screen.getByText('Tercer Tiempo Organizado')).toBeDefined();
-    expect(screen.getByText('Alex Rivera')).toBeDefined();
+    expect(screen.getByText(mockActivity.captain.name)).toBeDefined();
   });
 
   it('allows sending messages to the crew chat in real-time', () => {
@@ -34,12 +34,15 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onBack={vi.fn()}
         onJoin={vi.fn()}
         onSendMessage={onSend}
-      />
+      />,
     );
 
     // Switch to Chat tab
     const chatTab = screen.getByRole('button', { name: /Chat del Crew/i });
     fireEvent.click(chatTab);
+
+    expect(screen.getByText('Chat Temporal del Evento')).toBeDefined();
+    expect(screen.getByText(/Cierra 24h tras el entreno/i)).toBeDefined();
 
     const input = screen.getByPlaceholderText(/Escribe un mensaje al Crew/i);
     fireEvent.change(input, { target: { value: '¡Nos vemos mañana en el Retiro!' } });
@@ -65,7 +68,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onBack={vi.fn()}
         onJoin={vi.fn()}
         onSendMessage={vi.fn()}
-      />
+      />,
     );
 
     const shareBtn = screen.getByRole('button', { name: /Compartir/i });
@@ -74,7 +77,7 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
     expect(navigator.clipboard.writeText).toHaveBeenCalled();
   });
 
-  it('navigates to member profile when clicking an attendee', () => {
+  it('navigates from activity detail to an attendee athlete profile', () => {
     const onNavigateProfile = vi.fn();
 
     render(
@@ -85,12 +88,37 @@ describe('CimoActivityDetailView (Capa 1, 2 & 5: Vista Inmersiva, Chat, Mapa y R
         onJoin={vi.fn()}
         onSendMessage={vi.fn()}
         onNavigateToProfile={onNavigateProfile}
-      />
+      />,
     );
 
-    const captainName = screen.getByText('Alex Rivera');
+    const captainName = screen.getByText(mockActivity.captain.name);
     fireEvent.click(captainName);
 
     expect(onNavigateProfile).toHaveBeenCalled();
+  });
+
+  it('renders Breadcrumbs navigation and injects Schema.org JSON-LD structured data', () => {
+    render(
+      <CimoActivityDetailView
+        activity={mockActivity}
+        chatMessages={[]}
+        onBack={vi.fn()}
+        onJoin={vi.fn()}
+        onSendMessage={vi.fn()}
+      />,
+    );
+
+    // Visual Breadcrumbs navigation
+    expect(screen.getByRole('navigation', { name: /Migas de pan/i })).toBeDefined();
+
+    // Check JSON-LD scripts in head
+    const sportsScript = document.getElementById('cimo-schema-sports-event');
+    expect(sportsScript).toBeDefined();
+    expect(sportsScript?.textContent).toContain('SportsEvent');
+    expect(sportsScript?.textContent).toContain(mockActivity.title);
+
+    const breadcrumbsScript = document.getElementById('cimo-schema-breadcrumbs');
+    expect(breadcrumbsScript).toBeDefined();
+    expect(breadcrumbsScript?.textContent).toContain('BreadcrumbList');
   });
 });

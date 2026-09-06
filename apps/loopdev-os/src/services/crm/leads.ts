@@ -23,6 +23,16 @@ import type {
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { findOrCreateContact, getContactById } from './core';
 
+export class LeadServiceError extends Error {
+  constructor(
+    message: string,
+    public readonly code: 'FORBIDDEN' | 'CONFLICT' | 'IDEMPOTENCY_CONFLICT',
+  ) {
+    super(message);
+    this.name = 'LeadServiceError';
+  }
+}
+
 type LeadRow = {
   id: string;
   organization_id: string;
@@ -76,6 +86,26 @@ const MANUAL_TARGET_STATUSES = new Set([
   'estancado',
   'inactivo',
 ]);
+
+export function isLeadAssigneeRoleAllowed(role: string | null | undefined, status = 'active') {
+  return status === 'active' && ['owner', 'admin', 'agent'].includes(String(role));
+}
+
+async function assignedUserAllowed(organizationId: string, userId: string | null) {
+  if (!userId) return true;
+  const supabase = await createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from('organization_memberships')
+    .select('role, status')
+    .eq('organization_id', organizationId)
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (error) throw new Error('Unable to resolve CRM assignee');
+  return isLeadAssigneeRoleAllowed(
+    (data as { role?: string; status?: string } | null)?.role,
+    (data as { role?: string; status?: string } | null)?.status,
+  );
+}
 
 function mapLeadStatus(status: string): CrmLead['status'] {
   if (status === 'active') return 'nuevo';
@@ -194,6 +224,9 @@ export async function getLead(organizationId: string, leadId: string): Promise<C
 
 export async function createLead(input: CrmCreateLeadCommand): Promise<CrmLead> {
   const parsed = CrmCreateLeadCommandSchema.parse(input);
+  if (!(await assignedUserAllowed(parsed.organizationId, parsed.assignedUserId ?? null))) {
+    throw new LeadServiceError('CRM lead assignee is not allowed', 'FORBIDDEN');
+  }
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from('crm_leads')
@@ -212,7 +245,12 @@ export async function createLead(input: CrmCreateLeadCommand): Promise<CrmLead> 
     })
     .select(leadColumns)
     .single();
-  if (error) throw new Error('Unable to create CRM lead');
+  if (error) {
+    if (error.code === '23505') {
+      throw new LeadServiceError('CRM lead capture conflict', 'CONFLICT');
+    }
+    throw new Error('Unable to create CRM lead');
+  }
   return mapLead(data as unknown as LeadRow);
 }
 
@@ -224,6 +262,13 @@ export async function createLead(input: CrmCreateLeadCommand): Promise<CrmLead> 
 export async function captureLead(command: CrmCaptureLeadCommand, actingUserId: string) {
   const parsed = CrmCaptureLeadCommandSchema.parse(command);
   const supabase = await createServerSupabaseClient();
+  const assignedUserId = parsed.assignedUserId ?? actingUserId;
+
+  // Validate the assignee before resolving or creating a Contact. This keeps
+  // rejected cross-organization assignments side-effect free.
+  if (!(await assignedUserAllowed(parsed.organizationId, assignedUserId))) {
+    throw new LeadServiceError('CRM lead assignee is not allowed', 'FORBIDDEN');
+  }
 
   if (parsed.source.externalId) {
     const { data: existingLead, error: existingLeadError } = await supabase
@@ -262,15 +307,45 @@ export async function captureLead(command: CrmCaptureLeadCommand, actingUserId: 
         companyName: parsed.companyName,
       });
 
-  const lead = await createLead({
-    organizationId: parsed.organizationId,
-    contactId: contact.id,
-    brandId: parsed.brandId,
-    workspaceId: parsed.workspaceId,
-    interest: parsed.interest,
-    assignedUserId: parsed.assignedUserId ?? actingUserId,
-    source: parsed.source,
-  });
+  let lead: CrmLead;
+  try {
+    lead = await createLead({
+      organizationId: parsed.organizationId,
+      contactId: contact.id,
+      brandId: parsed.brandId,
+      workspaceId: parsed.workspaceId,
+      interest: parsed.interest,
+      assignedUserId,
+      source: parsed.source,
+    });
+  } catch (error) {
+    // The pre-read above cannot prevent two requests from racing. Reconcile a
+    // unique-key winner with the same safe replay used by the fast path.
+    if (
+      !(error instanceof LeadServiceError) ||
+      error.code !== 'CONFLICT' ||
+      !parsed.source.externalId
+    ) {
+      throw error;
+    }
+    const { data: racedLead, error: racedLeadError } = await supabase
+      .from('crm_leads')
+      .select(leadColumns)
+      .eq('organization_id', parsed.organizationId)
+      .eq('source', parsed.source.kind)
+      .eq('external_lead_id', parsed.source.externalId)
+      .maybeSingle();
+    if (racedLeadError || !racedLead) throw error;
+    lead = mapLead(racedLead as unknown as LeadRow);
+    const racedContact = await getContactById(parsed.organizationId, lead.contactId);
+    if (!racedContact) throw new Error('Unable to resolve existing CRM contact');
+    return {
+      contact: racedContact,
+      lead,
+      attribution: null,
+      reused: true as const,
+    };
+  }
 
   const { data: attribution, error } = await supabase
     .from('crm_lead_attributions')
@@ -300,6 +375,12 @@ export async function captureLead(command: CrmCaptureLeadCommand, actingUserId: 
 
 export async function updateLead(input: CrmUpdateLeadCommand): Promise<CrmLead> {
   const parsed = CrmUpdateLeadCommandSchema.parse(input);
+  if (
+    parsed.assignedUserId !== undefined &&
+    !(await assignedUserAllowed(parsed.organizationId, parsed.assignedUserId))
+  ) {
+    throw new LeadServiceError('CRM lead assignee is not allowed', 'FORBIDDEN');
+  }
   const supabase = await createServerSupabaseClient();
   const changes = {
     ...(parsed.interest !== undefined ? { interest: parsed.interest } : {}),

@@ -42,12 +42,14 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
   className,
 }) => {
   const canvasContext = useContext(PublicCanvasContext);
-  const spec =
-    regionSpec ??
-    canvasContext?.composition.regions.find((r) => r.id === id);
+  const spec = regionSpec ?? canvasContext?.composition.regions.find((r) => r.id === id);
 
   if (!spec) {
-    return <div id={id} className={clsx('col-span-12', className)}>{children}</div>;
+    return (
+      <div id={id} className={clsx('col-span-12 min-w-0 max-w-full', className)}>
+        {children}
+      </div>
+    );
   }
 
   const colSpan = Math.min(12, Math.max(1, spec.colSpan));
@@ -65,7 +67,11 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
 
   // Responsive Mobile Resolution
   let mobileClass = 'col-span-12';
-  if (spec.responsive?.mobile === 'hidden' || spec.responsive?.mobile === 'sheet' || spec.responsive?.mobile === 'modal') {
+  if (
+    spec.responsive?.mobile === 'hidden' ||
+    spec.responsive?.mobile === 'sheet' ||
+    spec.responsive?.mobile === 'modal'
+  ) {
     mobileClass = 'hidden lg:block';
   } else if (spec.responsive?.mobile === 'stack') {
     mobileClass = 'col-span-12';
@@ -76,17 +82,27 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
     spec.overflow === 'auto-y'
       ? 'overflow-y-auto'
       : spec.overflow === 'hidden'
-      ? 'overflow-hidden'
-      : spec.overflow === 'auto-x'
-      ? 'overflow-x-auto'
-      : 'overflow-visible';
+        ? 'overflow-hidden'
+        : spec.overflow === 'auto-x'
+          ? 'overflow-x-auto'
+          : 'overflow-visible';
 
-  const sizingClass =
-    spec.sizing === 'fill'
-      ? 'h-full min-h-0'
-      : spec.sizing === 'fixed'
-      ? 'flex-shrink-0'
-      : 'h-auto';
+  const isStretch =
+    canvasContext?.composition.grid.alignment === 'stretch' || spec.sizing === 'fill';
+  const sizingClass = isStretch
+    ? 'h-full min-h-0 min-w-0 max-w-full flex flex-col'
+    : spec.sizing === 'fixed'
+      ? 'flex-shrink-0 min-w-0 max-w-full'
+      : 'h-auto min-w-0 max-w-full';
+
+  const placementClass =
+    spec.placement === 'sticky-top'
+      ? 'lg:sticky lg:top-20 lg:self-start z-10'
+      : spec.placement === 'fixed-bottom'
+        ? 'fixed bottom-0 left-0 right-0 z-20'
+        : spec.placement === 'floating'
+          ? 'fixed z-30'
+          : '';
 
   return (
     <section
@@ -98,6 +114,7 @@ export const PublicCanvasRegion: React.FC<PublicCanvasRegionProps> = ({
         desktopClass,
         overflowClass,
         sizingClass,
+        placementClass,
         className,
       )}
     >

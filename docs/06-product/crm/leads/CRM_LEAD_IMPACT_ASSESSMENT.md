@@ -3,9 +3,9 @@ title: CRM Lead Impact Assessment
 status: approved
 version: 1.0
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-09-04
 owner: crm
-program_track: tracks/planned/crm/2026-08-13-crm-pilot-execution.md
+program_track: tracks/active/crm/2026-08-13-crm-pilot-execution.md
 issue: https://github.com/minoveaz/loopdev/issues/84
 ---
 
@@ -59,3 +59,32 @@ Leads does not implement real Marketing or WhatsApp integrations in this slice.
 - Manual Pipeline Opportunities are incorrectly treated as the Lead conversion Opportunity.
 - The Lead is not moved to `convertido` after the first successful conversion, or is moved by a manual Pipeline Opportunity.
 - A visible stage rename changes the stable stage ID or historical records.
+- A failed initial note is presented as total capture failure and causes the user to submit a second
+  Lead instead of retrying only the note.
+
+## Evidencia de Fase 4 UI
+
+- `QualifiedLeadGuard` gates the action by `crm.manage` and `cualificado`.
+- `CreateOpportunityFromLead` validates mandatory product/interés, inherits the Lead Contact and
+  uses the existing conversion API/RPC without a new endpoint.
+- 201/200/409 outcomes are represented as created/existing/conflict, with safe retry and refresh of
+  Lead, Opportunities and Contact 360.
+- Technical tests, accessibility checks, typecheck, ownership, registry and links pass. Visual
+  review and Playwright are explicitly deferred pending user approval.
+
+## Evidencia de Fase 5
+
+- La cobertura local de view models, adapters y mutaciones pasa `99/99`; la
+  suite completa serial pasa `862/862`.
+- Permisos, asignación a miembros activos, conflictos, idempotencia, semántica de tabla, dialog/sheet, foco,
+  teclado y ARIA están cubiertos por tests focalizados y Axe.
+- Typecheck, lint, shell, frontend quality gate, registry, source-contracts, ownership, links,
+  governance de tracks/Supabase y `git diff --check` pasan. `validate:changed` se detiene en el build
+  por las variables Supabase ausentes.
+- El build y `validate:ci` están bloqueados por las variables Supabase ausentes;
+  pgTAP cross-tenant por Docker/Postgres local no disponible. La migración de
+  alcance de asignaciones añade FK compuesto y política RLS para miembros
+  operativos activos; su ejecución remota queda pendiente.
+- Staging readiness/UAT de producto está `NOT READY` sin release candidate.
+  Playwright y revisión visual quedan para el gate final y no se marca la fase
+  como certificada.

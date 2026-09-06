@@ -47,19 +47,24 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
 }) => {
   const [name, setName] = useState(user.name);
   const [city, setCity] = useState(user.city ?? 'Madrid, España');
-  const [bio, setBio] = useState(user.bio ?? 'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros!');
+  const [bio, setBio] = useState(
+    user.bio ??
+      'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros!',
+  );
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? AVATAR_PRESETS[0]);
-  const [selectedSports, setSelectedSports] = useState<Array<{ sport: string; level: string; pace?: string }>>(
+  const [selectedSports, setSelectedSports] = useState<
+    Array<{ sport: string; level: string; pace?: string }>
+  >(
     user.sports ?? [
       { sport: 'Running', level: 'Intermedio (5-10K)', pace: '5:15 min/km' },
       { sport: 'Pádel', level: 'Nivel 3.5', pace: 'Derecha/Revés' },
       { sport: 'Hiking', level: 'Rutas 10-15 km', pace: 'Medio' },
-    ]
+    ],
   );
 
   if (!isOpen) return null;
 
-  const handleToggleSport = (sportItem: typeof AVAILABLE_SPORTS[0]) => {
+  const handleToggleSport = (sportItem: (typeof AVAILABLE_SPORTS)[0]) => {
     if (selectedSports.some((s) => s.sport === sportItem.id)) {
       setSelectedSports(selectedSports.filter((s) => s.sport !== sportItem.id));
     } else {
@@ -72,7 +77,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
 
   const handleUpdateSportPace = (sportName: string, newPace: string) => {
     setSelectedSports((prev) =>
-      prev.map((s) => (s.sport === sportName ? { ...s, pace: newPace } : s))
+      prev.map((s) => (s.sport === sportName ? { ...s, pace: newPace } : s)),
     );
   };
 
@@ -135,10 +140,16 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
                       type="button"
                       onClick={() => setAvatarUrl(preset)}
                       className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
-                        avatarUrl === preset ? 'border-[#7FB77E] ring-2 ring-[#7FB77E]/30 scale-110' : 'border-transparent opacity-70 hover:opacity-100'
+                        avatarUrl === preset
+                          ? 'border-[#7FB77E] ring-2 ring-[#7FB77E]/30 scale-110'
+                          : 'border-transparent opacity-70 hover:opacity-100'
                       }`}
                     >
-                      <img src={preset} alt={`Preset ${idx}`} className="w-full h-full object-cover" />
+                      <img
+                        src={preset}
+                        alt={`Preset ${idx}`}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>
@@ -242,9 +253,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
                 Bio Deportiva & Motivación
               </label>
-              <span className="text-[10px] font-bold text-[#1F4E5F]/50">
-                {bio.length}/200
-              </span>
+              <span className="text-[10px] font-bold text-[#1F4E5F]/50">{bio.length}/200</span>
             </div>
             <textarea
               rows={3}

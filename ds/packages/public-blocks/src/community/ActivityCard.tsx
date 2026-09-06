@@ -66,9 +66,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
 
         {/* Title & Location on Image */}
         <div className="absolute bottom-3 left-3 right-3 text-white">
-          <h3 className="font-extrabold text-base leading-tight drop-shadow-xs">
-            {data.title}
-          </h3>
+          <h3 className="font-extrabold text-base leading-tight drop-shadow-xs">{data.title}</h3>
           <div className="flex items-center gap-1.5 text-xs text-white/90 mt-1">
             <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
             <span className="truncate">{data.location}</span>
@@ -143,8 +141,8 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               isUserInCrew
                 ? 'bg-[#7FB77E] text-white shadow-[#7FB77E]/20'
                 : isFull
-                ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-                : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95 shadow-[#1F4E5F]/15',
+                  ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
+                  : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95 shadow-[#1F4E5F]/15',
             )}
           >
             {isUserInCrew ? (

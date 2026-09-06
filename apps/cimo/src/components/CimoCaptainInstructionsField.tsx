@@ -5,15 +5,40 @@ export interface CimoCaptainInstructionsFieldProps {
   value: string;
   onChange: (val: string) => void;
   sport?: string;
+  stepNumber?: string | number;
   className?: string;
 }
 
 const quickChipsBySport: Record<string, string[]> = {
-  running: ['💧 Traer agua', '⏰ Llegar 5 min antes', '👟 Calzado de asfalto/trail', '🧘 Estiramientos al terminar'],
-  padel: ['🎾 Traer pala propia', '🪙 Pista a medias (3€ aprox)', '⏰ Estar en recepción 10 min antes', '🎾 Bolas nuevas'],
-  hiking: ['🥾 Calzado de montaña', '💧 Mínimo 1.5L de agua', '🧥 Cortavientos / Abrigo', '🥪 Snack / Fruta'],
-  crossfit: ['💧 Botella de agua y toalla', '⏰ Calentamiento previo 10 min', '🏋️ Magnesio'],
-  cycling: ['⛑️ Casco obligatorio', '🔧 Kit de pinchazos y bomba', '💧 2 bidones de agua', '💡 Luces delantera/trasera'],
+  hiking: [
+    'Quedamos en el aparcamiento principal',
+    'Llegar 10 min antes para organizar el grupo',
+    'Ruta circular con paradas de reagrupación',
+    'Aparcamiento gratuito en la zona',
+  ],
+  running: [
+    'Quedamos en el punto de acceso principal',
+    'Llegar 5 min antes para calentar',
+    'Rodaje continuo por zonas sombreadas',
+    '5 min de estiramientos post-entreno',
+  ],
+  padel: [
+    'Pista ya reservada por el capitán',
+    'Estar en recepción 10 min antes',
+    'Coste de pista compartido entre 4',
+    'Pelotas nuevas y calentamiento',
+  ],
+  cycling: [
+    'Punto de salida en la rotonda o gasolinera',
+    'Salida puntual a la hora acordada',
+    'Ritmo de grupeta con relevos suaves',
+    'Parada intermedia en fuente',
+  ],
+  crossfit: [
+    'Estar 10 min antes en la entrada',
+    'Sesión guiada y adaptada por niveles',
+    'Estiramientos y cierre deportivo',
+  ],
 };
 
 const TEMPLATE_STORAGE_KEY = 'cimo_captain_instructions_preset';
@@ -22,6 +47,7 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
   value,
   onChange,
   sport = 'running',
+  stepNumber = 7,
   className = '',
 }) => {
   const chips = quickChipsBySport[sport] ?? quickChipsBySport.running;
@@ -76,11 +102,12 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
       {/* Unified Step Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="w-6 h-6 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] text-xs font-black flex items-center justify-center shrink-0">
-            6
+          <span className="w-6 h-6 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-xs font-black flex items-center justify-center shrink-0">
+            {stepNumber}
           </span>
           <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
-            Instrucciones del Capitán <span className="text-[#1F4E5F]/40 font-bold lowercase">(opcional)</span>
+            Consejos e indicaciones del Capitán{' '}
+            <span className="text-[#1F4E5F]/40 font-bold lowercase">(opcional)</span>
           </span>
         </div>
 
@@ -96,9 +123,7 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
               <span>Limpiar</span>
             </button>
           )}
-          <span className="text-[11px] font-bold text-[#1F4E5F]/50">
-            {value.length}/300
-          </span>
+          <span className="text-[11px] font-bold text-[#1F4E5F]/50">{value.length}/300</span>
         </div>
       </div>
 
@@ -106,7 +131,7 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-black text-[#1F4E5F]/60 uppercase tracking-wider">
-            Recomendaciones rápidas en 1 clic
+            Ideas rápidas con 1 clic
           </span>
 
           {savedTemplate && (

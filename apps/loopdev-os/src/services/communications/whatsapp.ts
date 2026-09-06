@@ -9,7 +9,12 @@ export type WhatsAppInboundEvent =
       senderName: string;
       messageType: 'text' | 'image' | 'document' | 'audio' | 'video' | 'location' | 'interactive';
       body: string | null;
-      media: { providerMediaId: string; mimeType: string | null; fileName: string | null; caption: string | null } | null;
+      media: {
+        providerMediaId: string;
+        mimeType: string | null;
+        fileName: string | null;
+        caption: string | null;
+      } | null;
       referral: Record<string, unknown> | null;
       providerTimestamp: string;
       raw: Record<string, unknown>;
@@ -23,17 +28,27 @@ export type WhatsAppInboundEvent =
       raw: Record<string, unknown>;
     };
 
-const messageTypes = new Set(['text', 'image', 'document', 'audio', 'video', 'location', 'interactive']);
+const messageTypes = new Set([
+  'text',
+  'image',
+  'document',
+  'audio',
+  'video',
+  'location',
+  'interactive',
+]);
 const statuses = new Set(['sent', 'delivered', 'read', 'failed']);
-type WhatsAppMessageType = 'text' | 'image' | 'document' | 'audio' | 'video' | 'location' | 'interactive';
+type WhatsAppMessageType =
+  'text' | 'image' | 'document' | 'audio' | 'video' | 'location' | 'interactive';
 type WhatsAppStatus = 'sent' | 'delivered' | 'read' | 'failed';
 
 type JsonObject = Record<string, unknown>;
 
-const isObject = (value: unknown): value is JsonObject => typeof value === 'object' && value !== null;
-const objectValue = (value: unknown): JsonObject | null => isObject(value) ? value : null;
+const isObject = (value: unknown): value is JsonObject =>
+  typeof value === 'object' && value !== null;
+const objectValue = (value: unknown): JsonObject | null => (isObject(value) ? value : null);
 
-const stringValue = (value: unknown) => typeof value === 'string' ? value : null;
+const stringValue = (value: unknown) => (typeof value === 'string' ? value : null);
 
 export function normalizeWhatsAppPhone(value: string) {
   const digits = value.replace(/\D/g, '');
@@ -94,7 +109,10 @@ export async function sendWhatsAppText(input: {
       }),
     },
   );
-  const payload = await response.json().catch(() => null) as { messages?: Array<{ id?: string }>; error?: { message?: string } } | null;
+  const payload = (await response.json().catch(() => null)) as {
+    messages?: Array<{ id?: string }>;
+    error?: { message?: string };
+  } | null;
   if (!response.ok || !payload?.messages?.[0]?.id) {
     throwWhatsAppProviderError(response.status, payload?.error?.message);
   }
@@ -126,20 +144,30 @@ export async function sendWhatsAppTemplate(input: {
           name: input.templateName,
           language: { code: input.language },
           components: input.parameters.length
-            ? [{ type: 'body', parameters: input.parameters.map((text) => ({ type: 'text', text })) }]
+            ? [
+                {
+                  type: 'body',
+                  parameters: input.parameters.map((text) => ({ type: 'text', text })),
+                },
+              ]
             : [],
         },
       }),
     },
   );
-  const payload = await response.json().catch(() => null) as { messages?: Array<{ id?: string }>; error?: { message?: string } } | null;
+  const payload = (await response.json().catch(() => null)) as {
+    messages?: Array<{ id?: string }>;
+    error?: { message?: string };
+  } | null;
   if (!response.ok || !payload?.messages?.[0]?.id) {
     throwWhatsAppProviderError(response.status, payload?.error?.message);
   }
   return { providerMessageId: payload.messages[0].id, status: 'accepted' };
 }
 
-export function createWhatsAppCloudProvider(resolveCredentials: (accountId: string) => Promise<WhatsAppCloudCredentials>): MessagingProvider {
+export function createWhatsAppCloudProvider(
+  resolveCredentials: (accountId: string) => Promise<WhatsAppCloudCredentials>,
+): MessagingProvider {
   return {
     async sendText(input) {
       const credentials = await resolveCredentials(input.accountId);
@@ -164,16 +192,22 @@ export function createWhatsAppCloudProvider(resolveCredentials: (accountId: stri
   };
 }
 
-export function resolveWhatsAppTemplateParameters(parameterNames: string[], parameters: Record<string, string>): string[] {
+export function resolveWhatsAppTemplateParameters(
+  parameterNames: string[],
+  parameters: Record<string, string>,
+): string[] {
   const expected = new Set(parameterNames);
-  if (expected.size !== parameterNames.length || Object.keys(parameters).length !== expected.size || Object.keys(parameters).some((name) => !expected.has(name))) {
-    throw new WhatsAppProviderError('PROVIDER_REJECTED', 'WhatsApp template parameters do not match the approved template');
+  if (
+    expected.size !== parameterNames.length ||
+    Object.keys(parameters).length !== expected.size ||
+    Object.keys(parameters).some((name) => !expected.has(name))
+  ) {
+    throw new WhatsAppProviderError(
+      'PROVIDER_REJECTED',
+      'WhatsApp template parameters do not match the approved template',
+    );
   }
   return parameterNames.map((name) => parameters[name]);
-}
-
-export function renderWhatsAppTemplateBody(body: string, parameters: Record<string, string>) {
-  return body.replace(/{{\s*([\w.-]+)\s*}}/g, (_, name: string) => parameters[name] ?? '');
 }
 
 export function normalizeWhatsAppTemplate(value: unknown): WhatsAppTemplateRecord | null {
@@ -183,24 +217,57 @@ export function normalizeWhatsAppTemplate(value: unknown): WhatsAppTemplateRecor
   const language = stringValue(template?.language);
   const category = stringValue(template?.category)?.toLowerCase();
   const status = stringValue(template?.status)?.toLowerCase();
-  if (!id || !name || !language || !category || !status || !['authentication', 'marketing', 'utility'].includes(category)) return null;
-  const components = Array.isArray(template?.components) ? template.components.filter(isObject) : [];
-  const body = components.find((component) => stringValue(component.type)?.toLowerCase() === 'body');
+  if (
+    !id ||
+    !name ||
+    !language ||
+    !category ||
+    !status ||
+    !['authentication', 'marketing', 'utility'].includes(category)
+  )
+    return null;
+  const components = Array.isArray(template?.components)
+    ? template.components.filter(isObject)
+    : [];
+  const body = components.find(
+    (component) => stringValue(component.type)?.toLowerCase() === 'body',
+  );
   const bodyText = stringValue(body?.text);
   if (!bodyText || !['draft', 'approved', 'rejected', 'archived'].includes(status)) return null;
   const parameterNames = [...bodyText.matchAll(/{{\s*([\w.-]+)\s*}}/g)].map((match) => match[1]);
-  return { id, name, language, category: category as WhatsAppTemplateRecord['category'], status: status as WhatsAppTemplateRecord['status'], body: bodyText, parameterNames };
+  return {
+    id,
+    name,
+    language,
+    category: category as WhatsAppTemplateRecord['category'],
+    status: status as WhatsAppTemplateRecord['status'],
+    body: bodyText,
+    parameterNames,
+  };
 }
 
 function throwWhatsAppProviderError(status: number, message?: string): never {
-  if (status === 429) throw new WhatsAppProviderError('PROVIDER_RATE_LIMITED', message ?? 'WhatsApp provider rate limit reached');
-  if (status >= 500) throw new WhatsAppProviderError('PROVIDER_UNAVAILABLE', message ?? 'WhatsApp provider is unavailable');
-  throw new WhatsAppProviderError('PROVIDER_REJECTED', message ?? 'WhatsApp provider rejected the message');
+  if (status === 429)
+    throw new WhatsAppProviderError(
+      'PROVIDER_RATE_LIMITED',
+      message ?? 'WhatsApp provider rate limit reached',
+    );
+  if (status >= 500)
+    throw new WhatsAppProviderError(
+      'PROVIDER_UNAVAILABLE',
+      message ?? 'WhatsApp provider is unavailable',
+    );
+  throw new WhatsAppProviderError(
+    'PROVIDER_REJECTED',
+    message ?? 'WhatsApp provider rejected the message',
+  );
 }
 
 function timestamp(value: unknown) {
   const seconds = Number(value);
-  return Number.isFinite(seconds) ? new Date(seconds * 1000).toISOString() : new Date().toISOString();
+  return Number.isFinite(seconds)
+    ? new Date(seconds * 1000).toISOString()
+    : new Date().toISOString();
 }
 
 function messageBody(message: JsonObject) {
@@ -208,11 +275,14 @@ function messageBody(message: JsonObject) {
   const content = objectValue(message[type ?? '']);
   if (type === 'text') return content ? stringValue(content.body) : null;
   if (type === 'interactive') {
-    const buttonReply = isObject(content?.button_reply) ? stringValue(content.button_reply.title) : null;
+    const buttonReply = isObject(content?.button_reply)
+      ? stringValue(content.button_reply.title)
+      : null;
     const listReply = isObject(content?.list_reply) ? stringValue(content.list_reply.title) : null;
     return buttonReply ?? listReply;
   }
-  if (type === 'location') return content ? stringValue(content.name) ?? stringValue(content.address) : null;
+  if (type === 'location')
+    return content ? (stringValue(content.name) ?? stringValue(content.address)) : null;
   return content ? stringValue(content.caption) : null;
 }
 
@@ -220,8 +290,14 @@ function mediaFor(message: JsonObject) {
   const type = stringValue(message.type);
   const media = objectValue(message[type ?? '']);
   const providerMediaId = media ? stringValue(media.id) : null;
-  if (!providerMediaId || !['image', 'document', 'audio', 'video'].includes(type ?? '')) return null;
-  return { providerMediaId, mimeType: stringValue(media?.mime_type), fileName: stringValue(media?.filename), caption: stringValue(media?.caption) };
+  if (!providerMediaId || !['image', 'document', 'audio', 'video'].includes(type ?? ''))
+    return null;
+  return {
+    providerMediaId,
+    mimeType: stringValue(media?.mime_type),
+    fileName: stringValue(media?.filename),
+    caption: stringValue(media?.caption),
+  };
 }
 
 export function parseWhatsAppWebhook(payload: unknown): WhatsAppInboundEvent[] {
@@ -242,7 +318,14 @@ export function parseWhatsAppWebhook(payload: unknown): WhatsAppInboundEvent[] {
         const id = stringValue(status.id);
         const statusValue = stringValue(status.status);
         if (!id || !statusValue || !statuses.has(statusValue)) continue;
-        events.push({ kind: 'status', externalMessageId: id, phoneNumberId, status: statusValue as WhatsAppStatus, providerTimestamp: timestamp(status.timestamp), raw: status });
+        events.push({
+          kind: 'status',
+          externalMessageId: id,
+          phoneNumberId,
+          status: statusValue as WhatsAppStatus,
+          providerTimestamp: timestamp(status.timestamp),
+          raw: status,
+        });
       }
       for (const message of Array.isArray(value.messages) ? value.messages.filter(isObject) : []) {
         const id = stringValue(message.id);
@@ -250,7 +333,19 @@ export function parseWhatsAppWebhook(payload: unknown): WhatsAppInboundEvent[] {
         const type = stringValue(message.type);
         if (!id || !from || !type) continue;
         const messageType = messageTypes.has(type) ? type : 'text';
-        events.push({ kind: 'message', externalMessageId: id, phoneNumberId, fromPhone: normalizeWhatsAppPhone(from), senderName, messageType: messageType as WhatsAppMessageType, body: messageBody(message), media: mediaFor(message), referral: isObject(message.referral) ? message.referral : null, providerTimestamp: timestamp(message.timestamp), raw: message });
+        events.push({
+          kind: 'message',
+          externalMessageId: id,
+          phoneNumberId,
+          fromPhone: normalizeWhatsAppPhone(from),
+          senderName,
+          messageType: messageType as WhatsAppMessageType,
+          body: messageBody(message),
+          media: mediaFor(message),
+          referral: isObject(message.referral) ? message.referral : null,
+          providerTimestamp: timestamp(message.timestamp),
+          raw: message,
+        });
       }
     }
   }

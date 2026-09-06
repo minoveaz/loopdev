@@ -1,14 +1,16 @@
 import type { ExtendedUserProfileData } from '../components/CimoEditProfileView';
 
 export const MOCK_COMMUNITY_ATHLETES: Record<string, ExtendedUserProfileData> = {
-  'alexrivera': {
+  alexrivera: {
     name: 'Alex Rivera',
     email: 'alex.rivera@example.com',
     handle: '@alexrivera',
     city: 'Madrid, España',
     neighborhood: 'Retiro / Chamberí',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
-    coverUrl: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
+    coverUrl:
+      'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1400',
     bio: 'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros y conectar con gente activa!',
     sports: [
       { sport: 'Running', level: 'Intermedio (5-10K)', pace: '5:15 min/km' },
@@ -44,8 +46,10 @@ export const MOCK_COMMUNITY_ATHLETES: Record<string, ExtendedUserProfileData> = 
     handle: '@sofiadiaz_runs',
     city: 'Madrid, España',
     neighborhood: 'Retiro / Salamanca',
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400',
-    coverUrl: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&q=80&w=1400',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400',
+    coverUrl:
+      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&q=80&w=1400',
     bio: 'Capitana de Running en El Retiro. Corro medias maratones y lidero grupos matutinos los martes y jueves a ritmo constante.',
     sports: [
       { sport: 'Running', level: 'Avanzado (10-21K)', pace: '4:45 - 5:00 min/km' },
@@ -79,8 +83,10 @@ export const MOCK_COMMUNITY_ATHLETES: Record<string, ExtendedUserProfileData> = 
     handle: '@javi_padel35',
     city: 'Madrid, España',
     neighborhood: 'Chamartín / Bernabéu',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
-    coverUrl: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1400',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
+    coverUrl:
+      'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&q=80&w=1400',
     bio: 'Jugador habitual de pádel nivel 3.5 Playtomic. Organizo partidos entre semana por la tarde y pozos americanos los fines de semana.',
     sports: [
       { sport: 'Pádel', level: 'Intermedio Playtomic 3.5', pace: 'Revés agresivo / volea' },
@@ -113,8 +119,10 @@ export const MOCK_COMMUNITY_ATHLETES: Record<string, ExtendedUserProfileData> = 
     handle: '@marta_hikingsierra',
     city: 'Madrid, España',
     neighborhood: 'Sierra de Guadarrama / Collado Villalba',
-    avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400',
-    coverUrl: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1400',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400',
+    coverUrl:
+      'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1400',
     bio: 'Guía de media montaña y apasionada del trekking por la Sierra de Guadarrama. Cero prisas, paisajes brutales y respeto a la naturaleza.',
     sports: [
       { sport: 'Hiking', level: 'Avanzado / Guía', pace: '12-25 km • +1000m' },
@@ -130,11 +138,7 @@ export const MOCK_COMMUNITY_ATHLETES: Record<string, ExtendedUserProfileData> = 
       Domingo: ['morning'],
     },
     groupSizePreference: 'medium',
-    goals: [
-      '🌿 Rutas de montaña seguras',
-      '🥪 Picnic en cumbres',
-      '📸 Fotografía de naturaleza',
-    ],
+    goals: ['🌿 Rutas de montaña seguras', '🥪 Picnic en cumbres', '📸 Fotografía de naturaleza'],
     isCaptainAvailable: true,
     defaultCaptainNotes: '🥾 Botas de trekking obligatorias • 1.5L agua mínima • Cortavientos.',
     phoneWhatsapp: '+34 644 112 233',
@@ -147,8 +151,11 @@ export function getAthleteProfileById(idOrHandle?: string | null): ExtendedUserP
   if (!idOrHandle) return MOCK_COMMUNITY_ATHLETES['alexrivera'];
   const clean = idOrHandle.toLowerCase().replace('@', '');
   if (MOCK_COMMUNITY_ATHLETES[clean]) return MOCK_COMMUNITY_ATHLETES[clean];
-  if (clean === 'capt_1' || clean === 'sofia' || clean.includes('sofia')) return MOCK_COMMUNITY_ATHLETES['sofia-diaz'];
-  if (clean === 'capt_2' || clean === 'javier' || clean.includes('javi')) return MOCK_COMMUNITY_ATHLETES['javier-chamartin'];
-  if (clean === 'capt_3' || clean === 'marta' || clean.includes('marta')) return MOCK_COMMUNITY_ATHLETES['marta-soler'];
+  if (clean === 'capt_1' || clean === 'sofia' || clean.includes('sofia'))
+    return MOCK_COMMUNITY_ATHLETES['sofia-diaz'];
+  if (clean === 'capt_2' || clean === 'javier' || clean.includes('javi'))
+    return MOCK_COMMUNITY_ATHLETES['javier-chamartin'];
+  if (clean === 'capt_3' || clean === 'marta' || clean.includes('marta'))
+    return MOCK_COMMUNITY_ATHLETES['marta-soler'];
   return MOCK_COMMUNITY_ATHLETES['alexrivera'];
 }

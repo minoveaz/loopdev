@@ -2,7 +2,7 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(28);
+select plan(30);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
@@ -71,7 +71,7 @@ select lives_ok($$
     '00000000-0000-4100-8700-000000000002',
     'tasks-create-001', 'fingerprint-001', 'tasks-create-001', 'fingerprint-001'
   )
-$$, 'authorized task creation succeeds');
+$$, 'authorized CRM task creation succeeds within the organization scope');
 
 select is(
   (select count(*)::integer from public.crm_timeline_events
@@ -88,7 +88,7 @@ select lives_ok($$
          last_operation_key = 'tasks-complete-001',
          last_operation_fingerprint = 'fingerprint-002'
    where id = '00000000-0000-4100-a400-000000000001'
-$$, 'authorized task completion succeeds');
+$$, 'authorized CRM task completion updates status and succeeds');
 
 select is(
   (select count(*)::integer from public.crm_timeline_events
@@ -131,7 +131,7 @@ select lives_ok($$
     'Confidential note body', 'private', 'notes-create-001',
     'note-fingerprint-001', 'notes-create-001', 'note-fingerprint-001'
   )
-$$, 'authorized note creation succeeds');
+$$, 'authorized CRM note creation succeeds within the organization scope');
 
 select is(
   (select count(*)::integer from public.crm_timeline_events
@@ -214,6 +214,23 @@ select is(
   )->>'created'),
   'false',
   'conversion retry reconciles without duplicate opportunity'
+);
+select is(
+  (public.crm_convert_lead(
+    '00000000-0000-4100-9700-000000000001',
+    '00000000-0000-4100-9b00-000000000001',
+    'Second Product',
+    'Second Converted Opportunity'
+  )->>'created'),
+  'true',
+  'a converted lead can create a conversion opportunity for another product'
+);
+select is(
+  (select count(*)::integer from public.crm_opportunities
+   where lead_id = '00000000-0000-4100-9b00-000000000001'
+     and origin = 'lead_conversion'),
+  2,
+  'converted lead keeps one conversion opportunity per normalized product'
 );
 
 select is(

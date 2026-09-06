@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
+  createPublicContextualTriptychComposition,
   PublicBrandThemeSchema,
   PublicNavigationSchema,
   PublicPageSpecSchema,
@@ -7,6 +8,23 @@ import {
 } from '../public-shell';
 
 describe('Public Shell Contracts', () => {
+  it('validates a standard 3-column contextual triptych composition with equal-height stretch', () => {
+    const triptych = createPublicContextualTriptychComposition({
+      idPrefix: 'cimo-test',
+      leftColSpan: 3,
+      mainColSpan: 6,
+      rightColSpan: 3,
+      gap: 'md',
+      maxWidth: 'full',
+      alignment: 'stretch',
+    });
+
+    const parsed = PublicViewCompositionSchema.safeParse(triptych);
+    expect(parsed.success).toBe(true);
+    expect(triptych.recipe).toBe('PublicContextualTriptych');
+    expect(triptych.grid.alignment).toBe('stretch');
+    expect(triptych.regions).toHaveLength(3);
+  });
   it('validates a bounded 3-column public social feed composition (CIMO pattern)', () => {
     const validCimoComposition = {
       recipe: 'PublicSocialFeed',
@@ -87,9 +105,7 @@ describe('Public Shell Contracts', () => {
     const exceedingColSpan = {
       recipe: 'PublicSocialFeed',
       grid: { columns: 12, gap: 'md' },
-      regions: [
-        { id: 'invalid-col', slot: 'main-feed', component: 'Feed', colSpan: 14 },
-      ],
+      regions: [{ id: 'invalid-col', slot: 'main-feed', component: 'Feed', colSpan: 14 }],
     };
 
     const result = PublicViewCompositionSchema.safeParse(exceedingColSpan);
@@ -155,9 +171,29 @@ describe('Public Shell Contracts', () => {
       mobilePrimaryRouteIds: ['feed', 'explore', 'chats', 'profile'],
       routes: [
         { id: 'feed', path: '/', label: 'Feed', icon: 'Home', presentation: 'tab' },
-        { id: 'explore', path: '/explorar', label: 'Explorar', icon: 'Compass', presentation: 'tab' },
-        { id: 'chats', path: '/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 3, presentation: 'tab' },
-        { id: 'profile', path: '/perfil', label: 'Perfil', icon: 'User', requiresAuth: true, presentation: 'tab' },
+        {
+          id: 'explore',
+          path: '/explorar',
+          label: 'Explorar',
+          icon: 'Compass',
+          presentation: 'tab',
+        },
+        {
+          id: 'chats',
+          path: '/chats',
+          label: 'Chats',
+          icon: 'MessageCircle',
+          badgeCount: 3,
+          presentation: 'tab',
+        },
+        {
+          id: 'profile',
+          path: '/perfil',
+          label: 'Perfil',
+          icon: 'User',
+          requiresAuth: true,
+          presentation: 'tab',
+        },
       ],
     };
 
@@ -172,17 +208,13 @@ describe('Public Shell Contracts', () => {
       composition: {
         recipe: 'PublicSocialFeed',
         grid: { columns: 12, gap: 'md', maxWidth: '7xl' },
-        regions: [
-          { id: 'main', slot: 'main-feed', component: 'FeedBlock', colSpan: 12 },
-        ],
+        regions: [{ id: 'main', slot: 'main-feed', component: 'FeedBlock', colSpan: 12 }],
       },
       navigation: {
         brandId: 'cimo',
         defaultRouteId: 'feed',
         mobilePrimaryRouteIds: ['feed'],
-        routes: [
-          { id: 'feed', path: '/', label: 'Feed', icon: 'Home' },
-        ],
+        routes: [{ id: 'feed', path: '/', label: 'Feed', icon: 'Home' }],
       },
       theme: {
         id: 'cimo',

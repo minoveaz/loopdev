@@ -175,7 +175,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
   const [neighborhood, setNeighborhood] = useState(user.neighborhood ?? 'Retiro / Chamberí');
   const [bio, setBio] = useState(
     user.bio ??
-      'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros y conectar con gente activa!'
+      'Apasionado del running matutino y las partidas de pádel. ¡Siempre dispuesto a sumar nuevos kilómetros y conectar con gente activa!',
   );
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? AVATAR_PRESETS[0]);
   const [coverUrl, setCoverUrl] = useState(user.coverUrl ?? COVER_PRESETS[0].url);
@@ -187,7 +187,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
       { sport: 'Running', level: 'Intermedio (5-10K)', pace: '5:15 min/km' },
       { sport: 'Pádel', level: 'Nivel 3.5 (Intermedio)', pace: 'Drive / Revés' },
       { sport: 'Hiking', level: 'Rutas 10-15 km', pace: 'Desnivel medio' },
-    ]
+    ],
   );
 
   // Day-by-Day Schedule Matrix (Record<day, DayTimeSlot[]>)
@@ -200,40 +200,47 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
       Viernes: [],
       Sábado: ['morning'],
       Domingo: ['morning'],
-    }
+    },
   );
 
   // Community & Social Preferences
   const [groupSizePreference, setGroupSizePreference] = useState<'micro' | 'medium'>(
-    user.groupSizePreference ?? 'micro'
+    user.groupSizePreference ?? 'micro',
   );
   const [goals, setGoals] = useState<string[]>(
     user.goals ?? [
       '🤝 Conocer deportistas activos',
       '☕ Café / Caña post-entreno (Tercer Tiempo)',
       '🔥 Mantener constancia semanal',
-    ]
+    ],
   );
 
   // Contact Channels
   const [phoneWhatsapp, setPhoneWhatsapp] = useState(user.phoneWhatsapp ?? '+34 612 345 678');
   const [phonePrivacy, setPhonePrivacy] = useState(user.phonePrivacy ?? true);
-  const [linkedinUrl, setLinkedinUrl] = useState(user.linkedinUrl ?? 'https://linkedin.com/in/alexrivera-sport');
-  const [stravaUrl, setStravaUrl] = useState(user.stravaUrl ?? 'https://strava.com/athletes/alexrivera');
-  const [instagramHandle, setInstagramHandle] = useState(user.instagramHandle ?? '@alex_rivera_cimo');
+  const [linkedinUrl, setLinkedinUrl] = useState(
+    user.linkedinUrl ?? 'https://linkedin.com/in/alexrivera-sport',
+  );
+  const [stravaUrl, setStravaUrl] = useState(
+    user.stravaUrl ?? 'https://strava.com/athletes/alexrivera',
+  );
+  const [instagramHandle, setInstagramHandle] = useState(
+    user.instagramHandle ?? '@alex_rivera_cimo',
+  );
 
   // Captain Mode
   const [isCaptainAvailable, setIsCaptainAvailable] = useState<boolean>(
-    user.isCaptainAvailable ?? true
+    user.isCaptainAvailable ?? true,
   );
   const [defaultCaptainNotes, setDefaultCaptainNotes] = useState<string>(
-    user.defaultCaptainNotes ?? '💧 Traer agua • ⏰ Llegar 5 min antes • 🧘 Estiramientos al terminar'
+    user.defaultCaptainNotes ??
+      '💧 Traer agua • ⏰ Llegar 5 min antes • 🧘 Estiramientos al terminar',
   );
 
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   // Sports toggle
-  const handleToggleSport = (catalogSport: typeof ALL_SPORTS_CATALOG[0]) => {
+  const handleToggleSport = (catalogSport: (typeof ALL_SPORTS_CATALOG)[0]) => {
     if (sports.some((s) => s.sport === catalogSport.id)) {
       setSports(sports.filter((s) => s.sport !== catalogSport.id));
     } else {
@@ -249,9 +256,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
   };
 
   const handleUpdateSportField = (sportName: string, field: 'pace' | 'level', val: string) => {
-    setSports((prev) =>
-      prev.map((s) => (s.sport === sportName ? { ...s, [field]: val } : s))
-    );
+    setSports((prev) => prev.map((s) => (s.sport === sportName ? { ...s, [field]: val } : s)));
   };
 
   // Day-by-Day Schedule Slot Toggle
@@ -361,7 +366,8 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
             Edita tu Perfil & Pasaporte de Atleta
           </h1>
           <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1 font-medium leading-relaxed">
-            Configura tu disponibilidad exacta por día, canales de contacto y marcas deportivas para unirte a los mejores Crews.
+            Configura tu disponibilidad exacta por día, canales de contacto y marcas deportivas para
+            unirte a los mejores Crews.
           </p>
         </div>
       </div>
@@ -536,9 +542,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
                 Bio Deportiva & Lema
               </label>
-              <span className="text-[10px] font-bold text-[#1F4E5F]/50">
-                {bio.length}/250
-              </span>
+              <span className="text-[10px] font-bold text-[#1F4E5F]/50">{bio.length}/250</span>
             </div>
             <textarea
               rows={3}
@@ -566,7 +570,8 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
           </div>
 
           <p className="text-xs text-[#1F4E5F]/70 font-medium -mt-2">
-            Selecciona los deportes que practicas y define tus marcas reales de ritmo y nivel para que los capitanes sepan que encajas en su plan.
+            Selecciona los deportes que practicas y define tus marcas reales de ritmo y nivel para
+            que los capitanes sepan que encajas en su plan.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -622,9 +627,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                         <input
                           type="text"
                           value={userSportObj?.pace ?? cat.defaultPace}
-                          onChange={(e) =>
-                            handleUpdateSportField(cat.id, 'pace', e.target.value)
-                          }
+                          onChange={(e) => handleUpdateSportField(cat.id, 'pace', e.target.value)}
                           placeholder="Ej: 5:15 min/km o Nivel 3.5 Playtomic"
                           className="w-full px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15 bg-white text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#7FB77E]"
                         />
@@ -637,9 +640,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                         <input
                           type="text"
                           value={userSportObj?.level ?? cat.defaultLevel}
-                          onChange={(e) =>
-                            handleUpdateSportField(cat.id, 'level', e.target.value)
-                          }
+                          onChange={(e) => handleUpdateSportField(cat.id, 'level', e.target.value)}
                           placeholder="Ej: Intermedio (5-10K)"
                           className="w-full px-3 py-1.5 rounded-xl border border-[#1F4E5F]/15 bg-white text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#7FB77E]"
                         />
@@ -757,9 +758,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
                                 isSlotActive ? 'text-[#7FB77E]' : 'text-[#1F4E5F]/60'
                               }`}
                             />
-                            <span className="text-xs font-black leading-tight">
-                              {slot.label}
-                            </span>
+                            <span className="text-xs font-black leading-tight">{slot.label}</span>
                           </div>
                           <span
                             className={`text-[9px] font-extrabold ${

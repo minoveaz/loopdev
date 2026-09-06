@@ -18,12 +18,13 @@ export type PublicViewportMode = z.infer<typeof PublicViewportModeSchema>;
 
 // --- 3. Recetas Canónicas de Composición Pública ---
 export const PublicCompositionRecipeSchema = z.enum([
-  'PublicB2BLanding',       // LoopDev Web: Hero B2B (12) + Suites Showcase (6-6) + Pricing/Testimonials (4-4-4) + CTA (12)
-  'PublicSocialFeed',       // CIMO App: 3-Col: Filtros (3) | Feed (6) | Inspector de Crew/Plan (3)
-  'PublicDiscoverySplit',   // 2-Col Split: Listado/Cards (5) | Mapa / Calendario interactivo (7)
-  'PublicDetailWorkspace',  // Hero (12) + Detalle/Itinerario (8) | Acción de Unión / Capitán (4)
-  'PublicPortalOverview',   // VitaBlue: Hero (12) + Grid de Productos (4-4-4) + Asesor & FAQ (12)
-  'PublicWorkflowCanvas',   // Stepper centrado (12, max-w-xl) para Auth / Onboarding / Feedback
+  'PublicContextualTriptych', // Estándar de 3 Bloques Contextuales con Altura Igualada (3-6-3 / Left Support | Work Area | Right Support)
+  'PublicB2BLanding', // LoopDev Web: Hero B2B (12) + Suites Showcase (6-6) + Pricing/Testimonials (4-4-4) + CTA (12)
+  'PublicSocialFeed', // CIMO App: 3-Col: Filtros (3) | Feed (6) | Inspector de Crew/Plan (3)
+  'PublicDiscoverySplit', // 2-Col Split: Listado/Cards (5) | Mapa / Calendario interactivo (7)
+  'PublicDetailWorkspace', // Hero (12) + Detalle/Itinerario (8) | Acción de Unión / Capitán (4)
+  'PublicPortalOverview', // VitaBlue: Hero (12) + Grid de Productos (4-4-4) + Asesor & FAQ (12)
+  'PublicWorkflowCanvas', // Stepper centrado (12, max-w-xl) para Auth / Onboarding / Feedback
 ]);
 
 export type PublicCompositionRecipe = z.infer<typeof PublicCompositionRecipeSchema>;
@@ -83,6 +84,8 @@ export const PublicGridSchema = z.object({
   columns: z.literal(12),
   gap: z.enum(['none', 'sm', 'md', 'lg']).default('md'),
   maxWidth: z.enum(['sm', 'md', 'lg', 'xl', '2xl', '7xl', 'full']).default('7xl'),
+  alignment: z.enum(['start', 'stretch', 'center']).default('stretch'),
+  scrollMode: z.enum(['viewport-contained', 'page-flow']).default('viewport-contained'),
 });
 
 export type PublicGrid = z.infer<typeof PublicGridSchema>;
@@ -145,13 +148,17 @@ export const PublicBrandThemeSchema = z.object({
   name: z.string().min(1),
   colors: z.object({
     primary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
-    primaryHover: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
+    primaryHover: z
+      .string()
+      .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     secondary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     accent: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     background: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     surface: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
     textMain: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
-    textSecondary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
+    textSecondary: z
+      .string()
+      .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex color'),
   }),
   logos: z.object({
     markSvg: z.string().min(1),
@@ -176,3 +183,63 @@ export const PublicPageSpecSchema = z.object({
 });
 
 export type PublicPageSpec = z.infer<typeof PublicPageSpecSchema>;
+
+/**
+ * Generador Canónico de Composición de 3 Bloques Contextuales con Altura Igualada.
+ * Utilizado para crear interfaces tipo Tríptico (Left Support | Primary Work Area | Right Support).
+ */
+export function createPublicContextualTriptychComposition(options?: {
+  idPrefix?: string;
+  leftColSpan?: number;
+  mainColSpan?: number;
+  rightColSpan?: number;
+  gap?: 'none' | 'sm' | 'md' | 'lg';
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '7xl' | 'full';
+  alignment?: 'start' | 'stretch' | 'center';
+  scrollMode?: 'viewport-contained' | 'page-flow';
+}): PublicViewComposition {
+  const left = options?.leftColSpan ?? 3;
+  const main = options?.mainColSpan ?? 6;
+  const right = options?.rightColSpan ?? 3;
+  const prefix = options?.idPrefix ?? 'triptych';
+
+  return {
+    recipe: 'PublicContextualTriptych',
+    grid: {
+      columns: 12,
+      gap: options?.gap ?? 'md',
+      maxWidth: options?.maxWidth ?? 'full',
+      alignment: options?.alignment ?? 'stretch',
+      scrollMode: options?.scrollMode ?? 'viewport-contained',
+    },
+    regions: [
+      {
+        id: `${prefix}-left-support`,
+        slot: 'sidebar-filters',
+        component: 'LeftSupportZone',
+        colSpan: left,
+        sizing: 'fill',
+        overflow: 'auto-y',
+        responsive: { tablet: 'drawer', mobile: 'sheet' },
+      },
+      {
+        id: `${prefix}-primary-work-area`,
+        slot: 'main-feed',
+        component: 'PrimaryWorkArea',
+        colSpan: main,
+        sizing: 'fill',
+        overflow: 'auto-y',
+        responsive: { tablet: 'preserve', mobile: 'stack' },
+      },
+      {
+        id: `${prefix}-right-support`,
+        slot: 'context-inspector',
+        component: 'RightSupportZone',
+        colSpan: right,
+        sizing: 'fill',
+        overflow: 'auto-y',
+        responsive: { tablet: 'drawer', mobile: 'hidden' },
+      },
+    ],
+  };
+}

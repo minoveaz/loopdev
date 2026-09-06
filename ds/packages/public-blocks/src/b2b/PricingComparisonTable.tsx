@@ -40,12 +40,16 @@ export const PricingComparisonTable: React.FC<PricingComparisonTableProps> = ({
               <p className="text-xs text-slate-500 mt-1">{tier.description}</p>
 
               <div className="mt-4 mb-6 flex items-baseline gap-1">
-                <span className="text-3xl sm:text-4xl font-extrabold text-slate-900">{tier.price}</span>
+                <span className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                  {tier.price}
+                </span>
                 {tier.period && <span className="text-xs text-slate-500">/{tier.period}</span>}
               </div>
 
               <div className="border-t border-slate-100 pt-5 flex flex-col gap-3">
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Incluye:</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Incluye:
+                </p>
                 {tier.features.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700">
                     <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />

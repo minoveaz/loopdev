@@ -2,9 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { RulesEngineSchema, RuleDefinitionSchema } from '../rules.schema';
 
 describe('Rules Engine Schema Contracts', () => {
-  
   describe('RuleDefinitionSchema', () => {
-    it('should validate a valid visual contrast rule', () => {
+    it('accepts a visual contrast rule with enforcement and approval metadata', () => {
       const validRule = {
         id: 'r1',
         name: 'Contrast Check',
@@ -17,16 +16,16 @@ describe('Rules Engine Schema Contracts', () => {
         explain: {
           why: 'Reason',
           risk: 'Risk',
-          howToFix: 'Fix'
+          howToFix: 'Fix',
         },
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
-      
+
       const result = RuleDefinitionSchema.safeParse(validRule);
       expect(result.success).toBe(true);
     });
 
-    it('should reject invalid operators', () => {
+    it('rejects rule definitions with unsupported logic operators', () => {
       const invalidRule = {
         id: 'r2',
         name: 'Bad Rule',
@@ -35,7 +34,7 @@ describe('Rules Engine Schema Contracts', () => {
         logic: { metric: 'words', operator: 'INVALID_OP', threshold: 10 }, // Invalid op
         enforcement: { severity: 'WARN' },
         explain: { why: 'W', risk: 'R', howToFix: 'F' },
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
       const result = RuleDefinitionSchema.safeParse(invalidRule);
       expect(result.success).toBe(false);
@@ -43,16 +42,16 @@ describe('Rules Engine Schema Contracts', () => {
   });
 
   describe('RulesEngineSchema', () => {
-    it('should provide default global policies', () => {
+    it('applies default publish-blocking and acknowledgment policies', () => {
       const minimalEngine = {
-        rules: []
+        rules: [],
       };
       const result = RulesEngineSchema.parse(minimalEngine);
       expect(result.globalPolicy.blockAlwaysPreventsPublish).toBe(true);
       expect(result.globalPolicy.warnRequiresAcknowledgment).toBe(true);
     });
 
-    it('should validate a complete engine with multiple rules', () => {
+    it('accepts a rules engine containing configured rule definitions', () => {
       const engine = {
         rules: [
           {
@@ -65,13 +64,12 @@ describe('Rules Engine Schema Contracts', () => {
             enforcement: { severity: 'BLOCK', blockPublish: true, requiresAck: true },
             approval: { required: false },
             explain: { why: 'y', risk: 'r', howToFix: 'h' },
-            updatedAt: new Date().toISOString()
-          }
-        ]
+            updatedAt: new Date().toISOString(),
+          },
+        ],
       };
       const result = RulesEngineSchema.safeParse(engine);
       expect(result.success).toBe(true);
     });
   });
-
 });

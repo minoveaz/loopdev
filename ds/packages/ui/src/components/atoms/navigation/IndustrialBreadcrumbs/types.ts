@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface BreadcrumbSegment {
   id: string;
   label: string;
@@ -11,6 +9,8 @@ interface BreadcrumbSegment {
 export interface IndustrialBreadcrumbsProps {
   /** Array de segmentos de la ruta */
   segments: BreadcrumbSegment[];
+  /** Variante compacta para móvil, normalmente solo el módulo activo */
+  mobileSegments?: BreadcrumbSegment[];
   /** Clase CSS adicional */
   className?: string;
 }

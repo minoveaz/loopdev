@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "domains": [
+    {
+      "id": "communications-worker",
+      "owner": "crm",
+      "paths": ["apps/loopdev-worker/"],
+      "manifest": "apps/loopdev-worker/package.json",
+      "validationScopes": ["worktree", "commit", "branch"],
+      "routing": { "planDomain": "crm", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "cimo",
+      "owner": "apps",
+      "paths": ["apps/cimo/"],
+      "manifest": "apps/cimo/package.json",
+      "validationScopes": ["worktree", "commit", "branch"],
+      "routing": { "planDomain": "cimo", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "loopdev-os",
+      "owner": "platform",
+      "paths": ["apps/loopdev-os/"],
+      "manifest": "apps/loopdev-os/package.json",
+      "routing": {
+        "planDomain": "web",
+        "frontend": true,
+        "excludePaths": [
+          "apps/loopdev-os/src/app/api/",
+          "apps/loopdev-os/src/services/",
+          "apps/loopdev-os/src/types/"
+        ]
+      },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "command": "pnpm exec tsc -p apps/loopdev-os/tsconfig.json --noEmit" },
+        "unit": {
+          "command": "pnpm exec vitest run --config vitest.config.ts --project loopdev-os"
+        },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "mobile",
+      "owner": "mobile",
+      "paths": ["apps/loopdev-mobile/"],
+      "manifest": "apps/loopdev-mobile/package.json",
+      "routing": { "planDomain": "mobile", "mobile": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "notApplicable": "Expo build is a release pipeline concern." }
+      }
+    },
+    {
+      "id": "contracts",
+      "owner": "platform",
+      "paths": ["packages/contracts/"],
+      "manifest": "packages/contracts/package.json",
+      "routing": { "packageRule": "contracts", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "command": "pnpm exec vitest run --config vitest.config.ts --project contracts" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "ui",
+      "owner": "platform",
+      "paths": ["ds/packages/ui/"],
+      "manifest": "ds/packages/ui/package.json",
+      "routing": { "packageRule": "ui", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "ui-native",
+      "owner": "platform",
+      "paths": ["ds/packages/ui-native/"],
+      "manifest": "ds/packages/ui-native/package.json",
+      "routing": { "packageRule": "ui-native", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "notApplicable": "Native behavior is validated through the mobile consumer." },
+        "build": { "notApplicable": "Native primitives are compiled by their consumer." }
+      }
+    },
+    {
+      "id": "design-contracts",
+      "owner": "platform",
+      "paths": ["ds/packages/design-contracts/"],
+      "manifest": "ds/packages/design-contracts/package.json",
+      "routing": { "packageRule": "design-contracts", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "notApplicable": "Contracts are validated by their consumers." },
+        "build": { "notApplicable": "Contracts are type-only source packages." }
+      }
+    },
+    {
+      "id": "tokens",
+      "owner": "platform",
+      "paths": ["ds/packages/tokens/"],
+      "manifest": "ds/packages/tokens/package.json",
+      "routing": { "packageRule": "tokens", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "notApplicable": "Tokens are validated through package consumers." },
+        "build": { "notApplicable": "Tokens are consumed as source." }
+      }
+    },
+    {
+      "id": "tailwind-config",
+      "owner": "platform",
+      "paths": ["ds/packages/tailwind-config/"],
+      "manifest": "ds/packages/tailwind-config/package.json",
+      "routing": { "packageRule": "tailwind-config", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "notApplicable": "Configuration is validated through consumers." },
+        "build": { "notApplicable": "Configuration is consumed as source." }
+      }
+    },
+    {
+      "id": "eslint-config",
+      "owner": "platform",
+      "paths": ["ds/packages/eslint-config/"],
+      "manifest": "ds/packages/eslint-config/package.json",
+      "routing": { "packageRule": "eslint-config", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "notApplicable": "Configuration is validated through consumers." },
+        "build": { "notApplicable": "Configuration is consumed as source." }
+      }
+    },
+    {
+      "id": "tsconfig",
+      "owner": "platform",
+      "paths": ["ds/packages/tsconfig/"],
+      "manifest": "ds/packages/tsconfig/package.json",
+      "routing": { "packageRule": "tsconfig", "packageImpact": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "notApplicable": "Configuration is validated through consumers." },
+        "build": { "notApplicable": "Configuration is consumed as source." }
+      }
+    },
+    {
+      "id": "public-shell",
+      "owner": "platform",
+      "paths": ["ds/packages/public-shell/"],
+      "manifest": "ds/packages/public-shell/package.json",
+      "routing": { "packageRule": "public-shell", "packageImpact": true, "advisory": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "public-blocks",
+      "owner": "platform",
+      "paths": ["ds/packages/public-blocks/"],
+      "manifest": "ds/packages/public-blocks/package.json",
+      "routing": { "packageRule": "public-blocks", "packageImpact": true, "advisory": true },
+      "controls": {
+        "lint": { "script": "lint" },
+        "typecheck": { "script": "typecheck" },
+        "unit": { "script": "test" },
+        "build": { "script": "build" }
+      }
+    },
+    {
+      "id": "tooling",
+      "owner": "platform",
+      "paths": ["scripts/"],
+      "manifest": "package.json",
+      "routing": { "planDomain": "governance", "packageImpact": true },
+      "controls": {
+        "lint": {
+          "notApplicable": "Tooling is validated by its Node test runner and static scope checks."
+        },
+        "typecheck": { "notApplicable": "Tooling scripts are JavaScript modules." },
+        "unit": { "command": "pnpm test:tooling" },
+        "build": { "notApplicable": "Tooling scripts are not a published package." }
+      }
+    }
+  ],
+  "protectedSurfaces": [
+    {
+      "id": "platform-shell",
+      "owner": "platform",
+      "paths": [
+        "apps/loopdev-os/src/app/layout.tsx",
+        "apps/loopdev-os/src/app/shell-showcase/",
+        "ds/packages/ui/src/components/composites/shell/",
+        "ds/packages/ui/src/components/composites/utilities/PlatformContextPanel/"
+      ]
+    },
+    {
+      "id": "public-shell",
+      "owner": "platform",
+      "allowedDuringActiveTracks": ["public-shell-foundation"],
+      "paths": ["ds/packages/public-shell/"]
+    }
+  ]
+}

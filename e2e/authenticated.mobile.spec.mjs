@@ -2,12 +2,12 @@ import { test, expect } from '@playwright/test';
 
 test.use({ storageState: 'playwright/.auth/user.json' });
 
-const authenticatedRoutes = [
-  { name: 'launchpad', path: '/launchpad' },
-];
+const authenticatedRoutes = [{ name: 'launchpad', path: '/launchpad' }];
 
 for (const route of authenticatedRoutes) {
-  test(`${route.name} is usable on mobile when authenticated`, async ({ page }, testInfo) => {
+  test(`authenticated ${route.name} keeps controls within the mobile viewport`, async ({
+    page,
+  }, testInfo) => {
     const browserErrors = [];
     page.on('pageerror', (error) => browserErrors.push(error.message));
 

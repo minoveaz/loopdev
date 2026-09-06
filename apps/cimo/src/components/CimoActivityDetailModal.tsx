@@ -76,14 +76,18 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-[#7FB77E]" />
               <div>
-                <span className="text-[10px] uppercase font-extrabold text-[#1F4E5F]/60 block">Fecha</span>
+                <span className="text-[10px] uppercase font-extrabold text-[#1F4E5F]/60 block">
+                  Fecha
+                </span>
                 <span className="text-xs font-bold text-[#1F4E5F]">{activity.date}</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-[#7FB77E]" />
               <div>
-                <span className="text-[10px] uppercase font-extrabold text-[#1F4E5F]/60 block">Hora</span>
+                <span className="text-[10px] uppercase font-extrabold text-[#1F4E5F]/60 block">
+                  Hora
+                </span>
                 <span className="text-xs font-bold text-[#1F4E5F]">{activity.time} h</span>
               </div>
             </div>
@@ -152,9 +156,13 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
                     </div>
                   )}
                   <div className="truncate">
-                    <span className="text-xs font-bold text-[#1F4E5F] block truncate">{member.name}</span>
+                    <span className="text-xs font-bold text-[#1F4E5F] block truncate">
+                      {member.name}
+                    </span>
                     {member.isCaptain && (
-                      <span className="text-[9px] font-black text-[#7FB77E] uppercase">Capitán</span>
+                      <span className="text-[9px] font-black text-[#7FB77E] uppercase">
+                        Capitán
+                      </span>
                     )}
                   </div>
                 </div>
@@ -166,7 +174,9 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
         {/* Modal Footer CTA */}
         <div className="p-4 border-t border-[#1F4E5F]/10 bg-white flex items-center justify-between shrink-0">
           <div>
-            <span className="text-[10px] font-bold text-[#1F4E5F]/60 block uppercase">Participación</span>
+            <span className="text-[10px] font-bold text-[#1F4E5F]/60 block uppercase">
+              Participación
+            </span>
             <span className="text-xs font-extrabold text-[#7FB77E]">100% Gratis</span>
           </div>
 
@@ -181,8 +191,8 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
               isJoined
                 ? 'bg-[#7FB77E] text-white'
                 : isFull
-                ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-                : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95',
+                  ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
+                  : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95',
             )}
           >
             {isJoined ? (

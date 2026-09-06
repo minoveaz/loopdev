@@ -4,6 +4,8 @@ import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import process from 'node:process';
 import { isBackendOnlyWebFile, resolveImpact } from './validate-package-impact.mjs';
+import { loadE2eCatalog } from './validate-e2e-catalog.mjs';
+import { routingForFile } from './validation-domain-catalog-utils.mjs';
 
 const checks = {
   governance: {
@@ -58,6 +60,11 @@ function isDocumentationOnly(file) {
 }
 
 function buildExperiencePlan(files) {
+  const catalog = loadE2eCatalog();
+  const changedSpecs = new Set(
+    files.filter((file) => file.startsWith('e2e/')).map((file) => file.slice('e2e/'.length)),
+  );
+  const catalogSpecs = catalog.specs.filter((spec) => changedSpecs.has(spec.file));
   const hasWebApplicationChange = files.some(
     (file) =>
       (file.startsWith('apps/loopdev-os/') &&
@@ -68,6 +75,7 @@ function buildExperiencePlan(files) {
   );
   const desktop =
     hasWebApplicationChange ||
+    catalogSpecs.some((spec) => spec.projects.includes('desktop') && spec.profile !== 'visual') ||
     files.some((file) =>
       [
         'e2e/authenticated.application.spec.mjs',
@@ -79,6 +87,7 @@ function buildExperiencePlan(files) {
     );
   const mobile =
     hasWebApplicationChange ||
+    catalogSpecs.some((spec) => spec.projects.includes('mobile') && spec.profile !== 'visual') ||
     files.some((file) =>
       [
         'e2e/authenticated.mobile.spec.mjs',
@@ -88,9 +97,31 @@ function buildExperiencePlan(files) {
     );
   const visual =
     files.some((file) => file.endsWith('.visual.spec.mjs')) ||
-    files.some((file) => file.startsWith('ds/packages/ui/'));
+    files.some((file) =>
+      ['ds/packages/ui/', 'ds/packages/public-shell/', 'ds/packages/public-blocks/'].some((path) =>
+        file.startsWith(path),
+      ),
+    );
 
-  return { desktop, mobile, visual };
+  const targetedFiles = (project, excludedProfiles) =>
+    files.length > 0 && files.every((file) => file.startsWith('e2e/') && file.endsWith('.spec.mjs'))
+      ? catalogSpecs
+          .filter(
+            (spec) => spec.projects.includes(project) && !excludedProfiles.includes(spec.profile),
+          )
+          .map((spec) => `e2e/${spec.file}`)
+          .join(',')
+      : '';
+
+  return {
+    desktop,
+    mobile,
+    visual,
+    targeted: {
+      desktopFunctional: targetedFiles('desktop', ['visual']),
+      mobileFunctional: targetedFiles('mobile', ['visual']),
+    },
+  };
 }
 
 function buildValidationPlan(files) {
@@ -106,6 +137,9 @@ function buildValidationPlan(files) {
       }
       continue;
     }
+
+    const catalogRouting = routingForFile(file);
+    if (catalogRouting?.routing.planDomain) changedDomains.add(catalogRouting.routing.planDomain);
 
     for (const [domain, check] of Object.entries(checks)) {
       if (
@@ -154,12 +188,42 @@ function buildValidationPlan(files) {
   };
 }
 
-function changedFilesFromGit() {
+function changedFilesFromGit(runGit = execFileSync) {
   const base = process.env.BASE_SHA ?? 'origin/develop';
   const head = process.env.HEAD_SHA ?? 'HEAD';
-  return execFileSync('git', ['diff', '--name-only', `${base}...${head}`], { encoding: 'utf8' })
+  return runGit('git', ['diff', '--name-only', '--diff-filter=ACMR', `${base}...${head}`], {
+    encoding: 'utf8',
+  })
     .split(/\r?\n/)
     .filter(Boolean);
+}
+
+function changedFilesFromCommit(revision = 'HEAD', runGit = execFileSync) {
+  return runGit(
+    'git',
+    ['diff-tree', '--diff-filter=ACMR', '--no-commit-id', '--name-only', '-r', revision],
+    {
+      encoding: 'utf8',
+    },
+  )
+    .split(/\r?\n/)
+    .filter(Boolean);
+}
+
+function changedFilesFromWorktree(runGit = execFileSync) {
+  const commands = [
+    ['diff', '--name-only', '--diff-filter=ACMR'],
+    ['diff', '--name-only', '--cached', '--diff-filter=ACMR'],
+    ['ls-files', '--others', '--exclude-standard'],
+  ];
+
+  return [
+    ...new Set(
+      commands.flatMap((args) =>
+        runGit('git', args, { encoding: 'utf8' }).split(/\r?\n/).filter(Boolean),
+      ),
+    ),
+  ].sort();
 }
 
 function printPlan(plan) {
@@ -216,6 +280,8 @@ function buildGithubOutputs(plan) {
     `browser_desktop=${plan.experiences.desktop}`,
     `browser_mobile=${plan.experiences.mobile}`,
     `browser_visual=${plan.experiences.visual}`,
+    `e2e_desktop_functional=${plan.experiences.targeted.desktopFunctional}`,
+    `e2e_mobile_functional=${plan.experiences.targeted.mobileFunctional}`,
   ].join('\n');
 }
 
@@ -228,14 +294,27 @@ function writeGithubOutputs(plan) {
 export {
   buildGithubOutputs,
   buildValidationPlan,
+  changedFilesFromCommit,
   changedFilesFromGit,
+  changedFilesFromWorktree,
   renderGithubSummary,
   writeGithubOutputs,
   writeGithubSummary,
 };
 
 if (process.argv[1]?.endsWith('validate-plan.mjs')) {
-  const plan = buildValidationPlan(changedFilesFromGit());
+  const scope = process.argv[2] ?? 'branch';
+  const revision = process.argv[3] ?? 'HEAD';
+  if (!['branch', 'commit', 'worktree'].includes(scope)) {
+    throw new Error(`Unknown plan scope: ${scope}`);
+  }
+  const files =
+    scope === 'worktree'
+      ? changedFilesFromWorktree()
+      : scope === 'commit'
+        ? changedFilesFromCommit(revision)
+        : changedFilesFromGit();
+  const plan = buildValidationPlan(files);
   printPlan(plan);
   writeGithubOutputs(plan);
   writeGithubSummary(plan);

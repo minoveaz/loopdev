@@ -1,8 +1,9 @@
-import type {
-  PublicBrandTheme,
-  PublicNavigation,
-  PublicSeoMetadata,
-  PublicViewComposition,
+import {
+  createPublicContextualTriptychComposition,
+  type PublicBrandTheme,
+  type PublicNavigation,
+  type PublicSeoMetadata,
+  type PublicViewComposition,
 } from '@loopdev/contracts';
 
 export const cimoBrandTheme: PublicBrandTheme = {
@@ -25,7 +26,7 @@ export const cimoBrandTheme: PublicBrandTheme = {
       <circle cx="64" cy="30" r="8" fill="#7FB77E" />
       <path d="M 64 44 C 78 44 86 56 86 68 C 86 80 72 84 58 74 C 46 65 38 52 30 52" stroke="#7FB77E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
     </svg>`,
-    fullSvg: `<svg viewBox="0 18 215 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-auto">
+    fullSvg: `<svg viewBox="0 18 215 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 sm:h-9 md:h-10 w-auto">
       <g transform="translate(0, -2) scale(0.85)">
         <circle cx="36" cy="30" r="8" fill="#1F4E5F" />
         <path d="M 36 44 C 22 44 14 56 14 68 C 14 80 28 84 42 74 C 54 65 62 52 70 52" stroke="#1F4E5F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
@@ -46,67 +47,129 @@ export const cimoNavigation: PublicNavigation = {
   defaultRouteId: 'feed',
   mobilePrimaryRouteIds: ['feed', 'crew', 'chats', 'profile'],
   routes: [
-    { id: 'feed', path: '/app/home', label: 'Feed', icon: 'Home', requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'crew', path: '/app/crew', label: 'Mi Crew', icon: 'Users', badgeCount: 7, requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'chats', path: '/app/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 3, requiresAuth: false, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
-    { id: 'profile', path: '/app/profile', label: 'Perfil', icon: 'User', requiresAuth: true, visibility: ['mobile', 'tablet', 'desktop'], presentation: 'tab' },
+    {
+      id: 'feed',
+      path: '/app/home',
+      label: 'Feed',
+      icon: 'Home',
+      requiresAuth: false,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
+    {
+      id: 'crew',
+      path: '/app/crew',
+      label: 'Mi Crew',
+      icon: 'Users',
+      badgeCount: 7,
+      requiresAuth: false,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
+    {
+      id: 'chats',
+      path: '/app/chats',
+      label: 'Chats',
+      icon: 'MessageCircle',
+      badgeCount: 3,
+      requiresAuth: false,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
+    {
+      id: 'profile',
+      path: '/app/profile',
+      label: 'Perfil',
+      icon: 'User',
+      requiresAuth: true,
+      visibility: ['mobile', 'tablet', 'desktop'],
+      presentation: 'tab',
+    },
   ],
 };
 
-export const CIMO_FEED_COMPOSITION: PublicViewComposition = {
-  recipe: 'PublicSocialFeed',
+export const CIMO_FEED_COMPOSITION: PublicViewComposition =
+  createPublicContextualTriptychComposition({
+    idPrefix: 'cimo',
+    leftColSpan: 3,
+    mainColSpan: 6,
+    rightColSpan: 3,
+    gap: 'lg',
+    maxWidth: 'full',
+    alignment: 'stretch',
+  });
+
+export const CIMO_ACTIVITY_DETAIL_COMPOSITION: PublicViewComposition = {
+  recipe: 'PublicContextualTriptych',
   grid: {
     columns: 12,
     gap: 'lg',
     maxWidth: 'full',
+    alignment: 'stretch',
+    scrollMode: 'viewport-contained',
   },
   regions: [
     {
-      id: 'cimo-filters-col',
-      slot: 'sidebar-filters',
-      component: 'CimoSportFilters',
-      colSpan: 3,
-      sizing: 'fill',
-      overflow: 'auto-y',
-      responsive: {
-        tablet: 'drawer',
-        mobile: 'sheet',
-      },
-    },
-    {
-      id: 'cimo-feed-col',
+      id: 'cimo-primary-work-area',
       slot: 'main-feed',
-      component: 'CimoActivitiesFeed',
-      colSpan: 6,
+      component: 'PrimaryWorkArea',
+      colSpan: 8,
       sizing: 'fill',
       overflow: 'auto-y',
-      responsive: {
-        tablet: 'preserve',
-        mobile: 'stack',
-      },
+      responsive: { tablet: 'preserve', mobile: 'stack' },
     },
     {
-      id: 'cimo-inspector-col',
+      id: 'cimo-right-support',
       slot: 'context-inspector',
-      component: 'CimoCrewDetailInspector',
-      colSpan: 3,
+      component: 'RightSupportZone',
+      colSpan: 4,
       sizing: 'fill',
       overflow: 'auto-y',
-      responsive: {
-        tablet: 'stack',
-        mobile: 'modal',
-      },
+      responsive: { tablet: 'drawer', mobile: 'hidden' },
+    },
+  ],
+};
+
+export const CIMO_CREATE_PLAN_COMPOSITION: PublicViewComposition = {
+  recipe: 'PublicContextualTriptych',
+  grid: {
+    columns: 12,
+    gap: 'lg',
+    maxWidth: 'full',
+    alignment: 'stretch',
+    scrollMode: 'viewport-contained',
+  },
+  regions: [
+    {
+      id: 'cimo-primary-work-area',
+      slot: 'main-feed',
+      component: 'PrimaryWorkArea',
+      colSpan: 8,
+      sizing: 'fill',
+      overflow: 'auto-y',
+      responsive: { tablet: 'preserve', mobile: 'stack' },
+    },
+    {
+      id: 'cimo-right-support',
+      slot: 'context-inspector',
+      component: 'RightSupportZone',
+      colSpan: 4,
+      sizing: 'fill',
+      overflow: 'auto-y',
+      responsive: { tablet: 'drawer', mobile: 'hidden' },
     },
   ],
 };
 
 export const cimoSeoConfig: PublicSeoMetadata = {
   title: 'CIMO | Conoce personas entrenando y crea tu Crew deportivo',
-  description: 'Únete a planes deportivos grupales en Madrid y otras ciudades: running, pádel, crossfit, ciclismo y más.',
+  description:
+    'Únete a planes deportivos grupales en Madrid y otras ciudades: running, pádel, crossfit, ciclismo y más.',
   canonicalUrl: 'https://minoveaz.github.io/CIMO/',
   openGraph: {
     title: 'CIMO | Conoce personas entrenando',
-    description: 'Encuentra compañeros para entrenar, únete a microgrupos (Crews) y comparte tus deportes favoritos.',
+    description:
+      'Encuentra compañeros para entrenar, únete a microgrupos (Crews) y comparte tus deportes favoritos.',
     image: 'https://minoveaz.github.io/CIMO/cimo-mark.svg',
     type: 'website',
     locale: 'es_ES',

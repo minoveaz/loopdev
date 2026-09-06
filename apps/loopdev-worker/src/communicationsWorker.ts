@@ -1,7 +1,4 @@
-import {
-  CommunicationWorkerJobSchema,
-  type CommunicationWorkerJob,
-} from '@loopdev/contracts';
+import { CommunicationWorkerJobSchema, type CommunicationWorkerJob } from '@loopdev/contracts';
 
 export type CommunicationsJobQueue = {
   receive(): Promise<unknown | null>;
@@ -78,13 +75,18 @@ export function buildPurgeDryRun(
   now: Date,
 ): { eligibleIds: string[]; dryRun: true } {
   return {
-    eligibleIds: records.filter((record) => isRetentionEligible(record, now)).map((record) => record.id),
+    eligibleIds: records
+      .filter((record) => isRetentionEligible(record, now))
+      .map((record) => record.id),
     dryRun: true,
   };
 }
 
 export class WorkerJobError extends Error {
-  constructor(readonly code: string, message: string) {
+  constructor(
+    readonly code: string,
+    message: string,
+  ) {
     super(message);
   }
 }
@@ -114,7 +116,10 @@ function workerLogRecord(
 }
 
 function readJobId(value: unknown): string {
-  return typeof value === 'object' && value !== null && 'id' in value && typeof value.id === 'string'
+  return typeof value === 'object' &&
+    value !== null &&
+    'id' in value &&
+    typeof value.id === 'string'
     ? value.id
     : 'unknown';
 }

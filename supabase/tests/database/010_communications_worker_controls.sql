@@ -2,7 +2,7 @@ begin;
 
 \ir helpers/rls_helpers.sql
 
-select plan(14);
+select plan(15);
 
 insert into auth.users (id, aud, role, email, encrypted_password, email_confirmed_at)
 values
@@ -50,9 +50,13 @@ select is((select outbound_enabled from public.communication_organization_contro
 
 set local role authenticated;
 select pg_temp.set_authenticated_user('00000000-0000-4000-8d00-000000000002');
-select throws_ok(
+select lives_ok(
   $$ update public.communication_organization_controls set outbound_enabled = false where organization_id = '00000000-0000-4000-ad00-000000000002' $$,
-  'new row violates row-level security policy for table "communication_organization_controls"',
+  'viewer update is filtered by RLS'
+);
+select is(
+  (select outbound_enabled from public.communication_organization_controls where organization_id = '00000000-0000-4000-ad00-000000000002'),
+  true,
   'viewer cannot change own organization control'
 );
 select is((select count(*)::integer from public.communication_organization_controls), 1, 'viewer reads controls from own organization only');

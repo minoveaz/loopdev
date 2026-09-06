@@ -33,7 +33,14 @@ const mockNavigation: PublicNavigation = {
   routes: [
     { id: 'feed', path: '/', label: 'Feed', icon: 'Home', presentation: 'tab' },
     { id: 'explore', path: '/explorar', label: 'Explorar', icon: 'Compass', presentation: 'tab' },
-    { id: 'chats', path: '/chats', label: 'Chats', icon: 'MessageCircle', badgeCount: 2, presentation: 'tab' },
+    {
+      id: 'chats',
+      path: '/chats',
+      label: 'Chats',
+      icon: 'MessageCircle',
+      badgeCount: 2,
+      presentation: 'tab',
+    },
     { id: 'profile', path: '/perfil', label: 'Perfil', icon: 'User', presentation: 'tab' },
   ],
 };
@@ -64,7 +71,7 @@ const mockComposition: PublicViewComposition = {
 };
 
 describe('PublicRuntime Orchestrator', () => {
-  it('renders all declared slots cleanly without inline layout code', () => {
+  it('mounts every declared public slot without inline layout markup', () => {
     render(
       <PublicRuntime
         brandTheme={mockTheme}
@@ -83,7 +90,7 @@ describe('PublicRuntime Orchestrator', () => {
     expect(screen.getByTestId('inspector-slot')).toBeDefined();
   });
 
-  it('injects brand CSS variables in the document root', () => {
+  it('applies the public brand theme variables to the document root', () => {
     render(
       <PublicRuntime
         brandTheme={mockTheme}
@@ -96,6 +103,8 @@ describe('PublicRuntime Orchestrator', () => {
     );
 
     expect(document.documentElement.style.getPropertyValue('--lpd-brand-primary')).toBe('#00B894');
-    expect(document.documentElement.style.getPropertyValue('--lpd-brand-secondary')).toBe('#1F4E5F');
+    expect(document.documentElement.style.getPropertyValue('--lpd-brand-secondary')).toBe(
+      '#1F4E5F',
+    );
   });
 });

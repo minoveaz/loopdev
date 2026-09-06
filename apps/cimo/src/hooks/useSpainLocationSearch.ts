@@ -41,7 +41,11 @@ export function useSpainLocationSearch(query: string, city: string) {
         const vName = clean(v.name);
         const vAddr = clean(v.address);
         const vCity = clean(v.city);
-        return vName.includes(q) || vAddr.includes(q) || (city && vCity.includes(clean(city)) && vName.includes(q));
+        return (
+          vName.includes(q) ||
+          vAddr.includes(q) ||
+          (city && vCity.includes(clean(city)) && vName.includes(q))
+        );
       }).map((v) => ({
         name: v.name,
         address: v.address,
@@ -67,7 +71,9 @@ export function useSpainLocationSearch(query: string, city: string) {
               const coords = f.geometry?.coordinates || [];
               const placeName = props.name || props.street || query;
               const placeCity = props.city || props.county || props.state || city || 'España';
-              const street = props.street ? `${props.street}${props.housenumber ? ' ' + props.housenumber : ''}` : '';
+              const street = props.street
+                ? `${props.street}${props.housenumber ? ' ' + props.housenumber : ''}`
+                : '';
               const postcode = props.postcode || '';
               const fullAddr = [street, placeCity, postcode].filter(Boolean).join(', ');
 

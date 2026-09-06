@@ -11,16 +11,13 @@ export const CommunicationChannelSchema = z.enum([
   'sms',
   'phone',
 ]);
-export type CommunicationChannel = z.infer<typeof CommunicationChannelSchema>;
 export const CommunicationConversationStatusSchema = z.enum([
   'open',
   'pending',
   'snoozed',
   'closed',
 ]);
-export type CommunicationConversationStatus = z.infer<typeof CommunicationConversationStatusSchema>;
 export const CommunicationMessageDirectionSchema = z.enum(['inbound', 'outbound']);
-export type CommunicationMessageDirection = z.infer<typeof CommunicationMessageDirectionSchema>;
 export const CommunicationMessageStatusSchema = z.enum([
   'queued',
   'sent',
@@ -28,7 +25,6 @@ export const CommunicationMessageStatusSchema = z.enum([
   'read',
   'failed',
 ]);
-export type CommunicationMessageStatus = z.infer<typeof CommunicationMessageStatusSchema>;
 export const CommunicationAccountStatusSchema = z.enum([
   'pending',
   'connected',

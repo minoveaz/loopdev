@@ -18,6 +18,20 @@ export default defineConfig({
       {
         resolve: {
           alias: {
+            '@loopdev/ui': path.resolve(root, 'ds/packages/ui/src/index.ts'),
+          },
+        },
+        test: {
+          name: 'document-viewer',
+          root: path.resolve(root, 'packages/document-viewer'),
+          environment: 'jsdom',
+          setupFiles: [path.resolve(root, 'ds/packages/ui/vitest.setup.ts')],
+          include: ['src/**/*.{test,spec}.{ts,tsx}'],
+        },
+      },
+      {
+        resolve: {
+          alias: {
             '@': path.resolve(root, 'apps/loopdev-os/src'),
             '@loopdev/contracts': path.resolve(root, 'packages/contracts/src/index.ts'),
             '@loopdev/tokens': path.resolve(root, 'ds/packages/tokens/src/index.ts'),
@@ -34,7 +48,7 @@ export default defineConfig({
             },
           },
           root: path.resolve(root, 'apps/loopdev-os'),
-          include: ['src/{app,components,core,lib,services}/**/*.{test,spec}.{ts,tsx}'],
+          include: ['src/{app,components,core,lib,services,suites}/**/*.{test,spec}.{ts,tsx}'],
         },
       },
     ],
