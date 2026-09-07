@@ -15,6 +15,12 @@ import type { CrmOpportunity, PipelineStage, TimelinePage } from '@loopdev/contr
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import {
+  crmOpportunity,
+  crmPipelineStages,
+  moveCrmOpportunityStage,
+} from '@/suites/sales-crm/runtimeAdapter';
 
 type OpportunityRecordViewProps = { opportunityId: string };
 
@@ -36,6 +42,7 @@ function date(value: string | null | undefined) {
 
 export function OpportunityRecordView({ opportunityId }: OpportunityRecordViewProps) {
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
     'crm.manage',
@@ -54,33 +61,27 @@ export function OpportunityRecordView({ opportunityId }: OpportunityRecordViewPr
     setError(null);
     try {
       const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
-      const [opportunityResponse, timelineResponse, stagesResponse] = await Promise.all([
-        fetch(`/api/crm/opportunities/${encodeURIComponent(opportunityId)}?${scope}`, { signal }),
-        fetch(
+      const [nextOpportunity, nextStages] = await Promise.all([
+        crmOpportunity(mode, activeOrganizationId, opportunityId, signal),
+        crmPipelineStages(mode, activeOrganizationId, signal),
+      ]);
+      if (!nextOpportunity) throw new Error('This opportunity could not be found.');
+      setOpportunity(nextOpportunity);
+      if (mode === 'real') {
+        const timelineResponse = await fetch(
           `/api/crm/timeline?${scope}&relationType=opportunity&relationId=${encodeURIComponent(opportunityId)}&limit=25`,
           { signal },
-        ),
-        fetch(`/api/crm/pipeline/stages?${scope}`, { signal }),
-      ]);
-      if (!opportunityResponse.ok) {
-        if (opportunityResponse.status === 403)
-          throw new Error('You do not have permission to view this opportunity.');
-        if (opportunityResponse.status === 404)
-          throw new Error('This opportunity could not be found.');
-        throw new Error('Opportunity could not be loaded.');
-      }
-      setOpportunity((await opportunityResponse.json()) as CrmOpportunity);
-      if (timelineResponse.ok) {
-        const page = (await timelineResponse.json()) as TimelinePage;
-        setTimeline(page.items);
+        );
+        if (timelineResponse.ok) {
+          const page = (await timelineResponse.json()) as TimelinePage;
+          setTimeline(page.items);
+        } else {
+          setTimeline([]);
+        }
       } else {
         setTimeline([]);
       }
-      if (stagesResponse.ok) {
-        setStages(
-          ((await stagesResponse.json()) as PipelineStage[]).filter((stage) => stage.active),
-        );
-      }
+      setStages(nextStages.filter((stage) => stage.active));
     } catch (requestError: unknown) {
       if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
       setError(
@@ -95,7 +96,7 @@ export function OpportunityRecordView({ opportunityId }: OpportunityRecordViewPr
     const controller = new AbortController();
     void load(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, opportunityId]);
+  }, [activeOrganizationId, opportunityId, mode]);
 
   async function move(nextStageKey: string) {
     if (
@@ -108,21 +109,14 @@ export function OpportunityRecordView({ opportunityId }: OpportunityRecordViewPr
     setIsPending(true);
     setError(null);
     try {
-      const response = await fetch(`/api/crm/opportunities/${opportunity.id}/stage`, {
-        method: 'PATCH',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          organizationId: activeOrganizationId,
-          stageKey: nextStageKey,
-          expectedVersion: opportunity.version,
-          origin: 'record',
-        }),
+      const updated = await moveCrmOpportunityStage(mode, {
+        organizationId: activeOrganizationId,
+        opportunityId: opportunity.id,
+        stageKey: nextStageKey,
+        expectedVersion: opportunity.version,
+        origin: 'record',
       });
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error ?? 'Opportunity stage could not be updated.');
-      }
-      setOpportunity((await response.json()) as CrmOpportunity);
+      setOpportunity(updated);
     } catch (requestError: unknown) {
       setError(
         requestError instanceof Error

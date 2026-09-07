@@ -3,10 +3,16 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Heading, ModuleHeader, Select, TechnicalSurface } from '@loopdev/ui';
-import type { CrmContact, CrmContactPage, PipelineStage } from '@loopdev/contracts';
+import type { CrmContact, PipelineStage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import {
+  createCrmOpportunity,
+  crmContacts,
+  crmPipelineStages,
+} from '@/suites/sales-crm/runtimeAdapter';
 
 function contactLabel(contact: CrmContact) {
   return (
@@ -17,6 +23,7 @@ function contactLabel(contact: CrmContact) {
 export function OpportunityForm() {
   const router = useRouter();
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
     'crm.manage',
@@ -42,18 +49,11 @@ export function OpportunityForm() {
       return;
     }
     const controller = new AbortController();
-    const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}&limit=100`;
     Promise.all([
-      fetch(`/api/crm/contacts?${scope}`, { signal: controller.signal }),
-      fetch(`/api/crm/pipeline/stages?organizationId=${encodeURIComponent(activeOrganizationId)}`, {
-        signal: controller.signal,
-      }),
+      crmContacts(mode, activeOrganizationId, '', controller.signal),
+      crmPipelineStages(mode, activeOrganizationId, controller.signal),
     ])
-      .then(async ([contactsResponse, stagesResponse]) => {
-        if (!contactsResponse.ok || !stagesResponse.ok)
-          throw new Error('Form options could not be loaded.');
-        const contactsPage = (await contactsResponse.json()) as CrmContactPage;
-        const nextStages = (await stagesResponse.json()) as PipelineStage[];
+      .then(([contactsPage, nextStages]) => {
         setContacts(contactsPage.items);
         const activeStages = nextStages.filter((stage) => stage.active);
         setStages(activeStages);
@@ -75,7 +75,7 @@ export function OpportunityForm() {
         if (!controller.signal.aborted) setIsLoading(false);
       });
     return () => controller.abort();
-  }, [activeOrganizationId, isLoadingPermissions]);
+  }, [activeOrganizationId, isLoadingPermissions, mode]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -83,28 +83,17 @@ export function OpportunityForm() {
     setIsSaving(true);
     setError(null);
     try {
-      const response = await fetch('/api/crm/opportunities', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'idempotency-key': `crm-ui-opportunity-${crypto.randomUUID()}`,
-        },
-        body: JSON.stringify({
-          organizationId: activeOrganizationId,
-          contactId,
-          productKey,
-          name,
-          currency,
-          amount: amount ? Number(amount) : null,
-          probability: probability ? Number(probability) : null,
-          expectedCloseDate: expectedCloseDate || null,
-        }),
+      const opportunity = await createCrmOpportunity(mode, {
+        organizationId: activeOrganizationId,
+        contactId,
+        productKey,
+        name,
+        currency,
+        amount: amount ? Number(amount) : null,
+        probability: probability ? Number(probability) : null,
+        expectedCloseDate: expectedCloseDate || null,
+        idempotencyKey: `crm-ui-opportunity-${crypto.randomUUID()}`,
       });
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error ?? 'Opportunity could not be created.');
-      }
-      const opportunity = (await response.json()) as { id?: string };
       router.push(
         opportunity.id ? `/sales-crm/opportunities/${opportunity.id}` : '/sales-crm/pipeline',
       );

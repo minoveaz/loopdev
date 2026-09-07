@@ -116,8 +116,9 @@ local CRM seed with schema-valid UUIDs and local mutations. Sandbox state is
 persisted in versioned browser storage so a page refresh does not discard the
 current workflow. Preview uses the same local fixtures without mutation
 support. Contacts, Leads,
-Pipeline and Customer 360 use the adapter for this slice; Customer 360 no
-longer fills individual sections from a second simulation fixture.
+Pipeline, Customer 360, Opportunities and Tasks use the adapter for this
+slice; Customer 360 no longer fills individual sections from a second
+simulation fixture.
 
 Implemented files:
 

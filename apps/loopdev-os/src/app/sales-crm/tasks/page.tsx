@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Badge,
   Button,
   Heading,
   ModuleHeader,
@@ -19,7 +18,6 @@ import {
   Check,
   CheckCircle2,
   CheckSquare,
-  ChevronDown,
   Clock,
   Eye,
   FileText,
@@ -36,17 +34,13 @@ import {
   User,
   X,
 } from 'lucide-react';
-import type {
-  Task,
-  TaskPage,
-  TaskPriority,
-  TaskRelationType,
-  TaskStatus,
-} from '@loopdev/contracts';
+import type { Task, TaskPriority, TaskRelationType, TaskStatus } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { TaskPreview } from '@/suites/sales-crm/crm';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { completeCrmTask, crmTasks } from '@/suites/sales-crm/runtimeAdapter';
 
 const PAGE_SIZE = 100;
 
@@ -321,6 +315,7 @@ function TaskStatusButton({
 
 export default function TasksPage() {
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
     'crm.manage',
@@ -341,12 +336,11 @@ export default function TasksPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `/api/crm/tasks?organizationId=${encodeURIComponent(activeOrganizationId)}&limit=${PAGE_SIZE}`,
-        { signal },
+      const page = await crmTasks(
+        mode,
+        { organizationId: activeOrganizationId, limit: PAGE_SIZE },
+        signal,
       );
-      if (!response.ok) throw new Error('Tasks could not be loaded.');
-      const page = (await response.json()) as TaskPage;
       setTasks(page.items);
     } catch (requestError: unknown) {
       if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
@@ -364,7 +358,7 @@ export default function TasksPage() {
     const controller = new AbortController();
     void loadTasks(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, canRead, isLoadingPermissions]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, mode]);
 
   const slaCounts = useMemo(() => {
     let today = 0;
@@ -416,20 +410,12 @@ export default function TasksPage() {
     setPendingId(task.id);
     setError(null);
     try {
-      const response = await fetch(`/api/crm/tasks/${task.id}/complete`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          organizationId: activeOrganizationId,
-          expectedVersion: task.version,
-          idempotencyKey: `crm-ui-complete-${task.id}-${task.version}`,
-        }),
+      const updated = await completeCrmTask(mode, {
+        organizationId: activeOrganizationId,
+        taskId: task.id,
+        expectedVersion: task.version,
+        idempotencyKey: `crm-ui-complete-${task.id}-${task.version}`,
       });
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error ?? 'Task could not be completed.');
-      }
-      const updated = (await response.json()) as Task;
       setTasks((current) => current.map((item) => (item.id === updated.id ? updated : item)));
     } catch (requestError: unknown) {
       setError(

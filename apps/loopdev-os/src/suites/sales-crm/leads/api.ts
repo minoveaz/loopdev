@@ -26,7 +26,15 @@ import type {
   CreateNoteCommand,
   NoteRead,
 } from '@loopdev/contracts';
-import { crmContacts, crmCustomer360, crmLeads, updateCrmLead, moveCrmLead, createCrmOpportunityFromLead, createCrmLead } from '../runtimeAdapter';
+import {
+  crmContacts,
+  crmCustomer360,
+  crmLeads,
+  updateCrmLead,
+  moveCrmLead,
+  createCrmOpportunityFromLead,
+  createCrmLead,
+} from '../runtimeAdapter';
 import type { PlatformEnvironmentMode } from '@loopdev/contracts';
 
 export type LeadApiErrorCode =
@@ -71,7 +79,11 @@ async function readLeadApiError(response: Response, fallback: string): Promise<L
   return new LeadApiError(message, code, response.status);
 }
 
-export async function getLeads(input: CrmLeadQuery, signal?: AbortSignal, mode: PlatformEnvironmentMode = 'real'): Promise<CrmLeadPage> {
+export async function getLeads(
+  input: CrmLeadQuery,
+  signal?: AbortSignal,
+  mode: PlatformEnvironmentMode = 'real',
+): Promise<CrmLeadPage> {
   if (mode !== 'real') return crmLeads(mode, input.organizationId, input);
   const query = CrmLeadQuerySchema.parse(input);
   const params = new URLSearchParams({
@@ -140,15 +152,18 @@ export async function getLeadCustomer360(
   return parsed.data;
 }
 
-export async function updateLead(input: {
-  organizationId: string;
-  leadId: string;
-  interest?: string | null;
-  assignedUserId?: string | null;
-  brandId?: string | null;
-  workspaceId?: string | null;
-  expectedUpdatedAt: string;
-}, mode: PlatformEnvironmentMode = 'real'): Promise<CrmLead> {
+export async function updateLead(
+  input: {
+    organizationId: string;
+    leadId: string;
+    interest?: string | null;
+    assignedUserId?: string | null;
+    brandId?: string | null;
+    workspaceId?: string | null;
+    expectedUpdatedAt: string;
+  },
+  mode: PlatformEnvironmentMode = 'real',
+): Promise<CrmLead> {
   if (mode !== 'real') {
     try {
       return updateCrmLead(mode, input.organizationId, input.leadId, {
@@ -156,7 +171,11 @@ export async function updateLead(input: {
         assignedUserId: input.assignedUserId ?? null,
       });
     } catch (error) {
-      throw new LeadApiError(error instanceof Error ? error.message : 'Unable to update the lead.', mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND', mode === 'preview' ? 403 : 404);
+      throw new LeadApiError(
+        error instanceof Error ? error.message : 'Unable to update the lead.',
+        mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND',
+        mode === 'preview' ? 403 : 404,
+      );
     }
   }
   const response = await fetch('/api/crm/leads', {
@@ -171,17 +190,24 @@ export async function updateLead(input: {
   return parsed.data;
 }
 
-export async function moveLeadStatus(input: {
-  organizationId: string;
-  leadId: string;
-  status: CrmLead['status'];
-  expectedUpdatedAt: string;
-}, mode: PlatformEnvironmentMode = 'real'): Promise<CrmLead> {
+export async function moveLeadStatus(
+  input: {
+    organizationId: string;
+    leadId: string;
+    status: CrmLead['status'];
+    expectedUpdatedAt: string;
+  },
+  mode: PlatformEnvironmentMode = 'real',
+): Promise<CrmLead> {
   if (mode !== 'real') {
     try {
       return moveCrmLead(mode, input.organizationId, input.leadId, input.status);
     } catch (error) {
-      throw new LeadApiError(error instanceof Error ? error.message : 'Unable to change the lead status.', mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND', mode === 'preview' ? 403 : 404);
+      throw new LeadApiError(
+        error instanceof Error ? error.message : 'Unable to change the lead status.',
+        mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND',
+        mode === 'preview' ? 403 : 404,
+      );
     }
   }
   const response = await fetch('/api/crm/leads/status', {
@@ -211,17 +237,26 @@ export async function createOpportunityFromLead(
   input: CrmCreateOpportunityFromLeadCommand,
   mode: PlatformEnvironmentMode = 'real',
 ): Promise<LeadConversionResult> {
-  const command = CrmCreateOpportunityFromLeadCommandSchema.parse(input);
   if (mode !== 'real') {
     try {
       return {
-        opportunity: createCrmOpportunityFromLead(mode, command.organizationId, command.leadId, command.productKey),
+        opportunity: createCrmOpportunityFromLead(
+          mode,
+          input.organizationId,
+          input.leadId,
+          input.productKey,
+        ),
         outcome: 'created',
       };
     } catch (error) {
-      throw new LeadApiError(error instanceof Error ? error.message : 'Unable to convert the lead.', mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND', mode === 'preview' ? 403 : 404);
+      throw new LeadApiError(
+        error instanceof Error ? error.message : 'Unable to convert the lead.',
+        mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND',
+        mode === 'preview' ? 403 : 404,
+      );
     }
   }
+  const command = CrmCreateOpportunityFromLeadCommandSchema.parse(input);
   const response = await fetch('/api/crm/leads/conversion', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

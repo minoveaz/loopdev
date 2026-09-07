@@ -2,10 +2,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CrmContactSchema, CrmLeadSchema, NoteReadSchema } from '@loopdev/contracts';
 import {
   captureLead,
+  createOpportunityFromLead,
   createLeadNote,
   LeadApiError,
   searchLeadContacts,
 } from '@/suites/sales-crm/leads/api';
+import { CRM_SEED_IDS, resetCrmRuntime } from '@/suites/sales-crm/runtimeAdapter';
 
 const organizationId = '00000000-0000-4000-9000-000000000001';
 const contactId = '00000000-0000-4000-9000-000000000002';
@@ -37,7 +39,10 @@ const lead = CrmLeadSchema.parse({
   updatedAt: timestamp,
 });
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  resetCrmRuntime();
+  vi.unstubAllGlobals();
+});
 
 describe('captureLead', () => {
   const command = {
@@ -173,6 +178,27 @@ describe('searchLeadContacts', () => {
     await expect(searchLeadContacts({ organizationId, query: 'ana', limit: 10 })).rejects.toEqual(
       expect.objectContaining<Partial<LeadApiError>>({ code: 'FORBIDDEN', status: 403 }),
     );
+  });
+});
+
+describe('createOpportunityFromLead', () => {
+  it('routes local conversion before strict organization UUID parsing and without remote writes', async () => {
+    resetCrmRuntime();
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await createOpportunityFromLead(
+      {
+        organizationId: 'default-organization',
+        leadId: CRM_SEED_IDS.lead,
+        productKey: 'local-product',
+        name: 'Local product',
+      },
+      'sandbox',
+    );
+
+    expect(result.opportunity.leadId).toBe(CRM_SEED_IDS.lead);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
 
