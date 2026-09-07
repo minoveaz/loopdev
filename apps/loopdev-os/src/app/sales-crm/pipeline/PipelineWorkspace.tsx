@@ -19,6 +19,8 @@ import type { CrmOpportunity, PipelineStage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { crmContacts, crmPipeline, moveCrmOpportunity } from '@/suites/sales-crm/runtimeAdapter';
 
 const PAGE_SIZE = 100;
 type OpportunityPage = { items: CrmOpportunity[]; nextCursor: string | null; hasMore: boolean };
@@ -42,7 +44,7 @@ function formatDate(value: string | null | undefined) {
     : 'No close date';
 }
 
-export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
+export default function PipelinePage({ mode: viewMode = 'board' }: PipelinePageProps) {
   const { activeOrganizationId } = useOrganization();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
@@ -50,6 +52,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
   ]);
   const canRead = hasPermission('crm.read');
   const canManage = hasPermission('crm.manage');
+  const { mode } = usePlatformRuntime();
   const [stages, setStages] = useState<PipelineStage[]>([]);
   const [opportunities, setOpportunities] = useState<CrmOpportunity[]>([]);
   const [contactsMap, setContactsMap] = useState<Map<string, ContactLookup>>(new Map());
@@ -73,22 +76,20 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     setError(null);
     try {
       const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
-      const [stagesResponse, opportunitiesResponse] = await Promise.all([
-        fetch(`/api/crm/pipeline/stages?${scope}`, { signal }),
-        fetch(`/api/crm/opportunities?${scope}&limit=${PAGE_SIZE}`, { signal }),
-      ]);
-      if (!stagesResponse.ok || !opportunitiesResponse.ok)
-        throw new Error('Pipeline could not be loaded.');
-      const nextStages = (await stagesResponse.json()) as PipelineStage[];
-      const nextOpportunities = (await opportunitiesResponse.json()) as OpportunityPage;
-      setStages(nextStages.filter((stage) => stage.active));
-      setOpportunities(nextOpportunities.items);
+      const pipeline = await crmPipeline(mode, activeOrganizationId);
+      setStages(pipeline.stages.filter((stage) => stage.active));
+      setOpportunities(pipeline.opportunities);
 
       // Resolve contact names for human-readable display
-      const contactsPromise = fetch(`/api/crm/contacts?${scope}&limit=100`, { signal });
+      const contactsPromise =
+        mode === 'real'
+          ? fetch(`/api/crm/contacts?${scope}&limit=100`, { signal }).then((res) =>
+              res && res.ok ? res.json() : null,
+            )
+          : crmContacts(mode, activeOrganizationId);
       if (contactsPromise && typeof contactsPromise.then === 'function') {
         void contactsPromise
-          .then((res) => (res && res.ok ? res.json() : null))
+          .then((res) => (mode === 'real' ? res : res))
           .then(
             (
               page: {
@@ -138,7 +139,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     const controller = new AbortController();
     void loadBoard(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, canRead, isLoadingPermissions]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, mode]);
 
   const visibleOpportunities = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
@@ -165,6 +166,13 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     setPendingId(opportunity.id);
     setError(null);
     try {
+      if (mode !== 'real') {
+        const updated = moveCrmOpportunity(mode, activeOrganizationId, opportunity.id, nextStageKey);
+        setOpportunities((current) =>
+          current.map((item) => (item.id === updated.id ? updated : item)),
+        );
+        return;
+      }
       const response = await fetch(`/api/crm/opportunities/${opportunity.id}/stage`, {
         method: 'PATCH',
         headers: { 'content-type': 'application/json' },
@@ -257,22 +265,22 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
 
   return (
     <SuiteCanvas
-      mode={mode === 'list' ? 'data' : 'board'}
+      mode={viewMode === 'list' ? 'data' : 'board'}
       header={
         <ModuleHeader
           segments={[{ id: 'pipeline', label: 'Pipeline', href: '/sales-crm/pipeline' }]}
           leftSlot={
             <Heading as="h1" size="lg" weight="semibold">
-              {mode === 'list' ? 'Opportunity list' : 'Pipeline'}
+              {viewMode === 'list' ? 'Opportunity list' : 'Pipeline'}
             </Heading>
           }
           rightSlot={
             <div className="flex flex-wrap items-center gap-2.5">
               <Link
-                href={mode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
+                href={viewMode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
                 className="text-primary text-xs font-medium px-2.5 py-1.5 rounded-lg border border-border-subtle bg-surface hover:bg-surface-hover transition-colors"
               >
-                {mode === 'list' ? 'Board view' : 'List view'}
+                {viewMode === 'list' ? 'Board view' : 'List view'}
               </Link>
               {canManage ? (
                 <Link
@@ -366,7 +374,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
             }
           >
             <div className="min-w-0">
-              {mode === 'list' ? (
+              {viewMode === 'list' ? (
                 <ResponsiveTable
                   caption="CRM opportunities"
                   columns={tableColumns}

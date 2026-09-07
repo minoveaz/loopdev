@@ -119,6 +119,8 @@ de validación antes de implementar.
 - [x] `docs/03-platform/PLATFORM_SANDBOX_RUNTIME.md`.
 - [x] Este track registrado en `tracks/planned/platform/`.
 - [x] Contratos públicos, store local y provider base implementados sin conectar CRM.
+- [x] Persistencia local versionada del modo preparada para el selector.
+- [x] Selector visible compuesto con `TechnicalDropdown`, sin crear una primitiva paralela.
 - [ ] Tests técnicos focalizados del primer slice.
 - [ ] Decisión de implementación aprobada para Fase 1.
 
@@ -164,16 +166,23 @@ de validación antes de implementar.
 | 2026-09-07 | `pnpm --filter loopdev-os exec tsc --noEmit` | Correcto tras reconstruir `@loopdev/contracts` | Provider y layout |
 | 2026-09-07 | ESLint focalizado | 0 errores; 2 warnings preexistentes de fuente Next | Provider, store y layout |
 | 2026-09-07 | `node scripts/tracks/validate-tracks.mjs` | Correcto | Track y dashboard |
+| 2026-09-07 | `pnpm --filter @loopdev/contracts typecheck` | Correcto | Contratos CRM/runtime |
+| 2026-09-07 | `pnpm --filter loopdev-os exec tsc --noEmit` | Correcto | Adaptador y consumidores CRM |
+| 2026-09-07 | `pnpm --filter loopdev-os exec vitest run src/suites/sales-crm/runtimeAdapter.test.ts src/core/platform/runtimeStore.test.ts` | 5/5 correctos | Seguridad de modo, UUIDs y mutación local |
+| 2026-09-07 | ESLint focalizado de consumidores CRM | 0 errores; warnings existentes de PipelineWorkspace | Adaptador y routing de Contacts/Leads/Pipeline/Customer 360 |
+| 2026-09-07 | Corrección del seed y del comando `createLead` local | Contacto sin Lead/Opportunity, namespace organización/workspace, Customer 360 rechaza IDs desconocidos | CRM adapter |
+| 2026-09-07 | Tests focalizados posteriores a la corrección | 6/6 correctos; typecheck y lint correctos | `runtimeAdapter.test.ts` |
+| 2026-09-07 | Revisión de notas iniciales en captura de Lead | Real conserva `POST /api/crm/notes`; Sandbox/Preview dejan la nota como pendiente local sin request remoto | `useLeadCaptureForm.ts` |
 
 ## Handoff de sesión
 
 - **Fecha:** 2026-09-07.
 - **Rama de continuación:** `feature/crm-untitled-ui-integration`.
 - **Commit de partida:** `95f61f49`.
-- **Estado alcanzado:** Issue #218 ampliada; inventario, contrato inicial, store local y provider base implementados.
-- **Decisiones, bloqueos y riesgos:** Selector visible autorizado; CRM es piloto; no se modifica Real ni RLS. Fase 0 requiere validar el track.
-- **Validación ejecutada:** Pendiente.
-- **Siguiente acción concreta:** Ejecutar typecheck y tests focalizados del primer slice antes de abrir la siguiente integración.
+- **Estado alcanzado:** CRM consume explícitamente Real/Sandbox/Preview para Contacts, Leads, Pipeline y Customer 360; Sandbox mantiene estado local por organización y Preview bloquea mutaciones.
+- **Decisiones, bloqueos y riesgos:** Selector visible autorizado; no se modifican sus archivos. Real conserva las rutas Supabase y no se cambia RLS/API. Las mutaciones secundarias de CRM fuera de este slice aún requieren migración.
+- **Validación ejecutada:** Typecheck de contracts y loopdev-os; tests focalizados runtime/store (5/5); ESLint focalizado sin errores.
+- **Siguiente acción concreta:** Extender el adaptador a Tasks, Communications y mutaciones CRM restantes, con aprobación de Fase 1.
 
 ## Cierre
 

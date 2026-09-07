@@ -104,17 +104,27 @@ type PlatformSeedPack = {
 
 ## Current implementation slice
 
-The first implementation slice intentionally contains only the public runtime
-contracts, a framework-independent local store, and a provider mounted at the
-platform boundary. The provider starts in `real` mode and does not replace the
-legacy simulation toggle yet. This keeps the change reversible while CRM
-adapters and the visible selector are developed separately.
+The first implementation slice contains the public runtime contracts, a
+framework-independent local store, a provider mounted at the platform
+boundary, and a visible environment selector composed with the existing
+`TechnicalDropdown`. The provider starts in `real` mode and persists only the
+selected mode under a versioned platform key.
+
+The CRM pilot now consumes the selected mode through a suite-owned adapter:
+Real delegates to the existing Supabase API routes, Sandbox uses a namespaced
+in-memory CRM seed with schema-valid UUIDs and local mutations, and Preview
+uses the same local fixtures without mutation support. Contacts, Leads,
+Pipeline and Customer 360 use the adapter for this slice; Customer 360 no
+longer fills individual sections from a second simulation fixture.
 
 Implemented files:
 
 - `packages/contracts/src/platform/runtime.ts`
 - `apps/loopdev-os/src/core/platform/runtimeStore.ts`
 - `apps/loopdev-os/src/providers/PlatformRuntimeProvider.tsx`
+- `apps/loopdev-os/src/components/layout/PlatformEnvironmentSelector.tsx`
+- `apps/loopdev-os/src/suites/sales-crm/runtimeAdapter.ts`
+- `apps/loopdev-os/src/suites/sales-crm/runtimeAdapter.test.ts`
 
 ## Sequencing
 

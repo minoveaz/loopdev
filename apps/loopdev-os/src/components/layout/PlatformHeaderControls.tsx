@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { CircleHelp, FlaskConical, Lightbulb } from 'lucide-react';
+import { CircleHelp, Lightbulb } from 'lucide-react';
 import {
   BrandLogo,
   IconButton,
@@ -10,7 +10,7 @@ import {
   type NotificationItem,
   ThemeToggle,
 } from '@loopdev/ui';
-import { useSimulation } from '@/providers/SimulationProvider';
+import { PlatformEnvironmentSelector } from './PlatformEnvironmentSelector';
 
 interface PlatformHeaderActionButtonProps {
   label: string;
@@ -72,48 +72,12 @@ export function PlatformHeaderControls({
   onRemoveNotification = () => undefined,
   onClearNotifications = () => undefined,
 }: PlatformHeaderControlsProps) {
-  const { isSimulationActive, toggleSimulation } = useSimulation();
-
   return (
     <div className="flex items-center gap-1.5">
       <div className="hidden items-center gap-1.5 lg:flex">
         <ThemeToggle variant="technical" size="md" />
 
-        {/* Global Simulation / Mock Mode Toggle */}
-        <button
-          type="button"
-          onClick={toggleSimulation}
-          title={
-            isSimulationActive
-              ? 'Modo Simulación ACTIVO (haz clic para desactivar)'
-              : 'Activar Modo Simulación (datos mock para pruebas de UX y layout)'
-          }
-          aria-label="Toggle simulation mode"
-          aria-pressed={isSimulationActive}
-          className={`group relative flex h-9 items-center gap-1.5 rounded-full px-2.5 text-xs font-semibold transition-all duration-200 border focus-visible:outline-none focus-visible:ring-2 ${
-            isSimulationActive
-              ? 'border-amber-500/50 bg-amber-500/15 text-amber-600 dark:text-amber-400 shadow-sm shadow-amber-500/10'
-              : 'border-black/10 dark:border-white/10 text-text-muted bg-white/50 dark:bg-black/20 hover:border-amber-500/30 hover:text-amber-600 dark:hover:text-amber-400'
-          }`}
-        >
-          <FlaskConical
-            size={15}
-            className={`transition-transform duration-200 group-hover:rotate-12 ${
-              isSimulationActive
-                ? 'text-amber-500 fill-amber-500/20'
-                : 'text-text-muted group-hover:text-amber-500'
-            }`}
-          />
-          <span className="hidden xl:inline tracking-tight font-medium">
-            {isSimulationActive ? 'Simulación' : 'Simular'}
-          </span>
-          <span
-            className={`flex h-2 w-2 rounded-full ${
-              isSimulationActive ? 'bg-amber-500 animate-pulse' : 'bg-text-muted/30'
-            }`}
-            aria-hidden="true"
-          />
-        </button>
+        <PlatformEnvironmentSelector />
 
         <PlatformHeaderActionButton
           label="Open help center"

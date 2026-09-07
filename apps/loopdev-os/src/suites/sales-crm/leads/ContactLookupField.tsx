@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button, Input } from '@loopdev/ui';
 import type { CrmContact } from '@loopdev/contracts';
 import { LeadApiError, searchLeadContacts } from './api';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 export type ContactLookupValue = { id: string; label: string } | null;
 
@@ -34,6 +35,7 @@ export function ContactLookupField({
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<CrmContact[]>([]);
   const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'forbidden'>('idle');
+  const { mode } = usePlatformRuntime();
 
   useEffect(() => {
     if (value) return;
@@ -44,7 +46,7 @@ export function ContactLookupField({
     const controller = new AbortController();
     const timeout = window.setTimeout(() => {
       setStatus('loading');
-      searchLeadContacts({ organizationId, query: trimmed, limit: 10 }, controller.signal)
+      searchLeadContacts({ organizationId, query: trimmed, limit: 10 }, controller.signal, mode)
         .then((page) => {
           setResults(page.items);
           setStatus('idle');
@@ -62,7 +64,7 @@ export function ContactLookupField({
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [organizationId, query, value]);
+  }, [mode, organizationId, query, value]);
 
   if (value) {
     return (

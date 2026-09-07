@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import {
   PlatformEnvironmentModeSchema,
   type PlatformEnvironmentMode,
@@ -24,22 +24,35 @@ function policiesForMode(mode: PlatformEnvironmentMode) {
   return { network: { reads: 'local', writes: 'local' } as const, persistence: 'local' as const };
 }
 
+const MODE_STORAGE_KEY = 'loopdev:platform-runtime-mode:v1';
+
+function readStoredMode(): PlatformEnvironmentMode {
+  if (typeof window === 'undefined') return 'real';
+  const storedMode = window.localStorage.getItem(MODE_STORAGE_KEY);
+  return storedMode === null ? 'real' : PlatformEnvironmentModeSchema.parse(storedMode);
+}
+
 export function PlatformRuntimeProvider({ children }: { children: ReactNode }) {
-  const [mode, setModeState] = useState<PlatformEnvironmentMode>('real');
+  const [mode, setModeState] = useState<PlatformEnvironmentMode>(readStoredMode);
   const policies = policiesForMode(mode);
 
+  const setMode = useCallback((nextMode: PlatformEnvironmentMode) => {
+    const parsedMode = PlatformEnvironmentModeSchema.parse(nextMode);
+    setModeState(parsedMode);
+    window.localStorage.setItem(MODE_STORAGE_KEY, parsedMode);
+  }, []);
+  const reset = useCallback(() => {
+    setModeState('real');
+    window.localStorage.removeItem(MODE_STORAGE_KEY);
+  }, []);
   const value = useMemo(
     () => ({
       mode,
       ...policies,
-      setMode: (nextMode: PlatformEnvironmentMode) => {
-        setModeState(PlatformEnvironmentModeSchema.parse(nextMode));
-      },
-      reset: () => {
-        setModeState('real');
-      },
+      setMode,
+      reset,
     }),
-    [mode, policies],
+    [mode, policies, reset, setMode],
   );
 
   return <PlatformRuntimeContext.Provider value={value}>{children}</PlatformRuntimeContext.Provider>;

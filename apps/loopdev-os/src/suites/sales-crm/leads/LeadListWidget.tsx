@@ -14,6 +14,7 @@ import { LeadFilters } from './LeadFilters';
 import { LeadTable } from './LeadTable';
 import { mapLeadsToRowViewModels } from './mapper';
 import { useLeadsRuntime } from './runtime';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 import type { LeadFilterKey, LeadFilterValues, LeadListState, LeadRowViewModel } from './types';
 
 const PAGE_SIZE = 25;
@@ -26,6 +27,7 @@ export function LeadListWidget() {
     'crm.manage',
   ]);
   const { selectedLead, selectLead, clearSelectedLead } = useLeadsRuntime();
+  const { mode } = usePlatformRuntime();
   const [rawLeads, setRawLeads] = useState<CrmLead[]>([]);
   const [contactsMap, setContactsMap] = useState<Map<string, CrmContact>>(new Map());
   const [brandsMap, setBrandsMap] = useState<Map<string, string>>(new Map());
@@ -75,11 +77,19 @@ export function LeadListWidget() {
       return () => window.clearTimeout(resetTimeout);
     }
 
+    if (mode !== 'real') {
+      const resetTimeout = window.setTimeout(() => {
+        setBrandsMap(new Map());
+        setWorkspacesMap(new Map());
+      }, 0);
+      return () => window.clearTimeout(resetTimeout);
+    }
+
     let isMounted = true;
     const supabase = createClient();
 
     Promise.allSettled([
-      searchLeadContacts({ organizationId: activeOrganizationId, limit: 100 }),
+      searchLeadContacts({ organizationId: activeOrganizationId, limit: 100 }, undefined, mode),
       supabase.from('brands').select('id, name').eq('organization_id', activeOrganizationId),
       supabase.from('workspaces').select('id, name').eq('organization_id', activeOrganizationId),
     ]).then(([contactsRes, brandsRes, workspacesRes]) => {
@@ -109,7 +119,7 @@ export function LeadListWidget() {
     return () => {
       isMounted = false;
     };
-  }, [activeOrganizationId]);
+  }, [activeOrganizationId, mode]);
 
   useEffect(() => {
     if (!activeOrganizationId || isLoadingPermissions || !canRead) {
@@ -135,7 +145,7 @@ export function LeadListWidget() {
       ...(filters.workspaceId ? { workspaceId: filters.workspaceId } : {}),
     };
 
-    getLeads(queryInput, controller.signal)
+    getLeads(queryInput, controller.signal, mode)
       .then((page) => {
         setRawLeads(page.items);
         setNextCursor(page.nextCursor);
@@ -170,6 +180,7 @@ export function LeadListWidget() {
     filters.workspaceId,
     isLoadingPermissions,
     reloadToken,
+    mode,
   ]);
 
   const rows = useMemo(

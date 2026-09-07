@@ -26,6 +26,8 @@ import type {
   CreateNoteCommand,
   NoteRead,
 } from '@loopdev/contracts';
+import { crmContacts, crmCustomer360, crmLeads, updateCrmLead, moveCrmLead, createCrmOpportunityFromLead, createCrmLead } from '../runtimeAdapter';
+import type { PlatformEnvironmentMode } from '@loopdev/contracts';
 
 export type LeadApiErrorCode =
   | 'UNAUTHENTICATED'
@@ -69,8 +71,9 @@ async function readLeadApiError(response: Response, fallback: string): Promise<L
   return new LeadApiError(message, code, response.status);
 }
 
-export async function getLeads(input: CrmLeadQuery, signal?: AbortSignal): Promise<CrmLeadPage> {
+export async function getLeads(input: CrmLeadQuery, signal?: AbortSignal, mode: PlatformEnvironmentMode = 'real'): Promise<CrmLeadPage> {
   const query = CrmLeadQuerySchema.parse(input);
+  if (mode !== 'real') return crmLeads(mode, query.organizationId, query);
   const params = new URLSearchParams({
     organizationId: query.organizationId,
     limit: String(query.limit),
@@ -95,7 +98,14 @@ export async function getLeadById(
   organizationId: string,
   leadId: string,
   signal?: AbortSignal,
+  mode: PlatformEnvironmentMode = 'real',
 ): Promise<CrmLead> {
+  if (mode !== 'real') {
+    const result = await crmLeads(mode, organizationId);
+    const lead = result.items.find((item) => item.id === leadId);
+    if (!lead) throw new LeadApiError('Unable to load the lead.', 'NOT_FOUND', 404);
+    return lead;
+  }
   const response = await fetch(
     `/api/crm/leads/${encodeURIComponent(leadId)}?organizationId=${encodeURIComponent(organizationId)}`,
     { signal },
@@ -110,7 +120,9 @@ export async function getLeadCustomer360(
   organizationId: string,
   contactId: string,
   signal?: AbortSignal,
+  mode: PlatformEnvironmentMode = 'real',
 ): Promise<Customer360RecordView> {
+  if (mode !== 'real') return crmCustomer360(mode, organizationId, contactId);
   const params = new URLSearchParams({
     organizationId,
     contactId,
@@ -136,7 +148,17 @@ export async function updateLead(input: {
   brandId?: string | null;
   workspaceId?: string | null;
   expectedUpdatedAt: string;
-}): Promise<CrmLead> {
+}, mode: PlatformEnvironmentMode = 'real'): Promise<CrmLead> {
+  if (mode !== 'real') {
+    try {
+      return updateCrmLead(mode, input.organizationId, input.leadId, {
+        interest: input.interest ?? null,
+        assignedUserId: input.assignedUserId ?? null,
+      });
+    } catch (error) {
+      throw new LeadApiError(error instanceof Error ? error.message : 'Unable to update the lead.', mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND', mode === 'preview' ? 403 : 404);
+    }
+  }
   const response = await fetch('/api/crm/leads', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -154,7 +176,14 @@ export async function moveLeadStatus(input: {
   leadId: string;
   status: CrmLead['status'];
   expectedUpdatedAt: string;
-}): Promise<CrmLead> {
+}, mode: PlatformEnvironmentMode = 'real'): Promise<CrmLead> {
+  if (mode !== 'real') {
+    try {
+      return moveCrmLead(mode, input.organizationId, input.leadId, input.status);
+    } catch (error) {
+      throw new LeadApiError(error instanceof Error ? error.message : 'Unable to change the lead status.', mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND', mode === 'preview' ? 403 : 404);
+    }
+  }
   const response = await fetch('/api/crm/leads/status', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -180,8 +209,19 @@ export type LeadConversionResult = {
  */
 export async function createOpportunityFromLead(
   input: CrmCreateOpportunityFromLeadCommand,
+  mode: PlatformEnvironmentMode = 'real',
 ): Promise<LeadConversionResult> {
   const command = CrmCreateOpportunityFromLeadCommandSchema.parse(input);
+  if (mode !== 'real') {
+    try {
+      return {
+        opportunity: createCrmOpportunityFromLead(mode, command.organizationId, command.leadId, command.productKey),
+        outcome: 'created',
+      };
+    } catch (error) {
+      throw new LeadApiError(error instanceof Error ? error.message : 'Unable to convert the lead.', mode === 'preview' ? 'FORBIDDEN' : 'NOT_FOUND', mode === 'preview' ? 403 : 404);
+    }
+  }
   const response = await fetch('/api/crm/leads/conversion', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -208,8 +248,10 @@ export async function createOpportunityFromLead(
 export async function searchLeadContacts(
   input: CrmContactQuery,
   signal?: AbortSignal,
+  mode: PlatformEnvironmentMode = 'real',
 ): Promise<CrmContactPage> {
   const query = CrmContactQuerySchema.parse(input);
+  if (mode !== 'real') return crmContacts(mode, query.organizationId, query.query);
   const params = new URLSearchParams({
     organizationId: query.organizationId,
     limit: String(query.limit),
@@ -256,8 +298,10 @@ export type LeadCaptureCompletion = LeadCaptureResult & {
 export async function captureLead(
   input: CrmCaptureLeadCommand,
   signal?: AbortSignal,
+  mode: PlatformEnvironmentMode = 'real',
 ): Promise<LeadCaptureResult> {
   const command = CrmCaptureLeadCommandSchema.parse(input);
+  if (mode !== 'real') return createCrmLead(mode, command);
   const response = await fetch('/api/crm/capture', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
