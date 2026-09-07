@@ -10,6 +10,11 @@ export type LeadRowViewModel = {
   id: string;
   organizationId?: string;
   contactId: string;
+  contactName?: string;
+  contactCompany?: string | null;
+  contactEmail?: string | null;
+  brandName?: string | null;
+  workspaceName?: string | null;
   status: CrmLead['status'];
   statusLabel: string;
   sourceKind: CrmLead['source']['kind'];

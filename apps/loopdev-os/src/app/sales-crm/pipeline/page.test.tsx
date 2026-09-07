@@ -64,6 +64,22 @@ describe('Pipeline page', () => {
             hasMore: false,
           }),
         ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            items: [
+              {
+                id: '00000000-0000-4000-9000-000000000012',
+                firstName: 'Ana',
+                lastName: 'García',
+                companyName: 'Acme Corp',
+              },
+            ],
+            nextCursor: null,
+            hasMore: false,
+          }),
+        ),
       );
     vi.stubGlobal('fetch', fetchMock);
 
@@ -71,11 +87,12 @@ describe('Pipeline page', () => {
 
     expect(await screen.findByRole('heading', { name: 'Qualified' })).toBeInTheDocument();
     expect(screen.getByText('Family cover')).toBeInTheDocument();
+    expect(await screen.findByText('Ana García')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Open Customer 360' })).toHaveAttribute(
       'href',
       '/sales-crm/contacts/00000000-0000-4000-9000-000000000012',
     );
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3));
   });
 
   it('shows a forbidden state without requesting CRM data', () => {

@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Heading, ModuleHeader, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
 import { Plus } from 'lucide-react';
-import type { CrmLead } from '@loopdev/contracts';
+import type { CrmContact, CrmLead } from '@loopdev/contracts';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
-import { getLeads, LeadApiError } from './api';
+import { createClient } from '@/lib/supabase/client';
+import { getLeads, LeadApiError, searchLeadContacts } from './api';
 import { LeadFilters } from './LeadFilters';
 import { LeadTable } from './LeadTable';
 import { mapLeadsToRowViewModels } from './mapper';
@@ -26,6 +27,10 @@ export function LeadListWidget() {
   ]);
   const { selectedLead, selectLead, clearSelectedLead } = useLeadsRuntime();
   const [rows, setRows] = useState<LeadRowViewModel[]>([]);
+  const [rawLeads, setRawLeads] = useState<CrmLead[]>([]);
+  const [contactsMap, setContactsMap] = useState<Map<string, CrmContact>>(new Map());
+  const [brandsMap, setBrandsMap] = useState<Map<string, string>>(new Map());
+  const [workspacesMap, setWorkspacesMap] = useState<Map<string, string>>(new Map());
   const [queryDraft, setQueryDraft] = useState('');
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<LeadFilterValues>({});
@@ -63,6 +68,48 @@ export function LeadListWidget() {
   useEffect(() => () => clearSelectedLead(), [clearSelectedLead]);
 
   useEffect(() => {
+    if (!activeOrganizationId) {
+      setContactsMap(new Map());
+      setBrandsMap(new Map());
+      setWorkspacesMap(new Map());
+      return;
+    }
+
+    let isMounted = true;
+    const supabase = createClient();
+
+    Promise.allSettled([
+      searchLeadContacts({ organizationId: activeOrganizationId, limit: 100 }),
+      supabase.from('brands').select('id, name').eq('organization_id', activeOrganizationId),
+      supabase.from('workspaces').select('id, name').eq('organization_id', activeOrganizationId),
+    ]).then(([contactsRes, brandsRes, workspacesRes]) => {
+      if (!isMounted) return;
+
+      if (contactsRes.status === 'fulfilled' && contactsRes.value?.items) {
+        const cMap = new Map<string, CrmContact>();
+        contactsRes.value.items.forEach((contact) => cMap.set(contact.id, contact));
+        setContactsMap(cMap);
+      }
+
+      if (brandsRes.status === 'fulfilled' && brandsRes.value?.data) {
+        const bMap = new Map<string, string>();
+        brandsRes.value.data.forEach((b: { id: string; name: string }) => bMap.set(b.id, b.name));
+        setBrandsMap(bMap);
+      }
+
+      if (workspacesRes.status === 'fulfilled' && workspacesRes.value?.data) {
+        const wMap = new Map<string, string>();
+        workspacesRes.value.data.forEach((w: { id: string; name: string }) => wMap.set(w.id, w.name));
+        setWorkspacesMap(wMap);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeOrganizationId]);
+
+  useEffect(() => {
     if (!activeOrganizationId || isLoadingPermissions || !canRead) {
       const timeout = window.setTimeout(
         () => setState(!activeOrganizationId || isLoadingPermissions ? 'loading' : 'forbidden'),
@@ -88,7 +135,8 @@ export function LeadListWidget() {
 
     getLeads(queryInput, controller.signal)
       .then((page) => {
-        setRows(mapLeadsToRowViewModels(page.items));
+        setRawLeads(page.items);
+        setRows(mapLeadsToRowViewModels(page.items, contactsMap, brandsMap, workspacesMap));
         setNextCursor(page.nextCursor);
         setHasMore(page.hasMore);
         setState(page.items.length === 0 ? 'empty' : 'ready');
@@ -123,11 +171,22 @@ export function LeadListWidget() {
     reloadToken,
   ]);
 
+  useEffect(() => {
+    if (rawLeads.length > 0) {
+      setRows(mapLeadsToRowViewModels(rawLeads, contactsMap, brandsMap, workspacesMap));
+    }
+  }, [rawLeads, contactsMap, brandsMap, workspacesMap]);
+
   const visibleRows = useMemo(() => {
     const normalized = query.toLocaleLowerCase();
     if (!normalized) return rows;
     return rows.filter((lead) =>
       [
+        lead.contactName,
+        lead.contactCompany,
+        lead.contactEmail,
+        lead.brandName,
+        lead.workspaceName,
         lead.contactId,
         lead.statusLabel,
         lead.sourceLabel,

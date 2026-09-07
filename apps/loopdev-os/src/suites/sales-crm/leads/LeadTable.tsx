@@ -31,12 +31,18 @@ export function LeadTable({
     {
       key: 'contact',
       header: 'Contacto',
-      render: (lead) => (
-        <div className="min-w-0">
-          <p className="text-text-main truncate font-medium">{lead.contactId}</p>
-          <p className="text-text-muted truncate text-xs">Contact 360 disponible</p>
-        </div>
-      ),
+      render: (lead) => {
+        const displayName = lead.contactName || lead.contactId;
+        const subtext = lead.contactCompany || lead.contactEmail || 'Contact 360 disponible';
+        return (
+          <div className="min-w-0">
+            <p className="text-text-main truncate font-semibold hover:text-primary transition-colors">
+              {displayName}
+            </p>
+            <p className="text-text-muted truncate text-xs">{subtext}</p>
+          </div>
+        );
+      },
     },
     {
       key: 'status',
@@ -59,11 +65,23 @@ export function LeadTable({
       render: (lead) => lead.assignedUserId ?? 'Sin asignar',
     },
     { key: 'updatedAt', header: 'Última actividad', render: (lead) => formatDate(lead.updatedAt) },
-    { key: 'brandId', header: 'Marca', render: (lead) => lead.brandId ?? 'Sin marca' },
+    {
+      key: 'brandId',
+      header: 'Marca',
+      render: (lead) => (
+        <span className="text-text-main text-xs font-medium">
+          {lead.brandName ?? (lead.brandId ? 'Marca comercial' : 'Sin marca')}
+        </span>
+      ),
+    },
     {
       key: 'workspaceId',
       header: 'Workspace',
-      render: (lead) => lead.workspaceId ?? 'Sin workspace',
+      render: (lead) => (
+        <span className="text-text-muted text-xs">
+          {lead.workspaceName ?? (lead.workspaceId ? 'Sales CRM' : 'General')}
+        </span>
+      ),
     },
     {
       key: 'duplicateReviewId',
@@ -110,23 +128,27 @@ export function LeadTable({
           Abrir
         </Button>
       )}
-      renderMobileRow={(lead) => (
-        <Button
-          type="button"
-          variant="secondary"
-          className="border-border-subtle bg-surface-light dark:bg-surface-dark h-auto w-full justify-start rounded-lg border p-3 text-left shadow-sm"
-          onClick={() => onMobileSelect(lead)}
-          aria-label={`Abrir Lead ${lead.contactId}`}
-        >
-          <span className="text-text-main block truncate font-medium">{lead.contactId}</span>
-          <span className="text-text-muted mt-1 block text-xs">
-            {lead.statusLabel} · {lead.sourceLabel}
-          </span>
-          <span className="text-text-muted mt-1 block truncate text-xs">
-            {lead.assignedUserId ?? 'Sin asignar'} · {formatDate(lead.updatedAt)}
-          </span>
-        </Button>
-      )}
+      renderMobileRow={(lead) => {
+        const displayName = lead.contactName || lead.contactId;
+        return (
+          <Button
+            type="button"
+            variant="secondary"
+            className="border-border-subtle bg-surface-light dark:bg-surface-dark h-auto w-full justify-start rounded-lg border p-3 text-left shadow-sm"
+            onClick={() => onMobileSelect(lead)}
+            aria-label={`Abrir Lead ${displayName}`}
+          >
+            <span className="text-text-main block truncate font-medium">{displayName}</span>
+            <span className="text-text-muted mt-1 block text-xs">
+              {lead.statusLabel} · {lead.sourceLabel}
+              {lead.contactCompany ? ` · ${lead.contactCompany}` : ''}
+            </span>
+            <span className="text-text-muted mt-1 block truncate text-xs">
+              {lead.assignedUserId ?? 'Sin asignar'} · {formatDate(lead.updatedAt)}
+            </span>
+          </Button>
+        );
+      }}
       paginationVariant="compact"
       hidePageSizeSelector
       className="min-w-0"

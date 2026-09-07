@@ -21,6 +21,7 @@ import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 
 const PAGE_SIZE = 100;
 type OpportunityPage = { items: CrmOpportunity[]; nextCursor: string | null; hasMore: boolean };
+type ContactLookup = { name: string; email?: string | null; company?: string | null };
 export type PipelinePageProps = { mode?: 'board' | 'list' };
 
 function stageName(stage: PipelineStage) {
@@ -50,6 +51,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
   const canManage = hasPermission('crm.manage');
   const [stages, setStages] = useState<PipelineStage[]>([]);
   const [opportunities, setOpportunities] = useState<CrmOpportunity[]>([]);
+  const [contactsMap, setContactsMap] = useState<Map<string, ContactLookup>>(new Map());
   const [query, setQuery] = useState('');
   const [stageFilter, setStageFilter] = useState('all');
   const [mobileActiveStageKey, setMobileActiveStageKey] = useState<string | null>(null);
@@ -80,6 +82,31 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
       const nextOpportunities = (await opportunitiesResponse.json()) as OpportunityPage;
       setStages(nextStages.filter((stage) => stage.active));
       setOpportunities(nextOpportunities.items);
+
+      // Resolve contact names for human-readable display
+      const contactsPromise = fetch(`/api/crm/contacts?${scope}&limit=100`, { signal });
+      if (contactsPromise && typeof contactsPromise.then === 'function') {
+        void contactsPromise
+          .then((res) => (res && res.ok ? res.json() : null))
+          .then((page: { items?: Array<{ id: string; firstName?: string; lastName?: string; companyName?: string | null; email?: string | null }> } | null) => {
+            if (!page?.items) return;
+            const map = new Map<string, ContactLookup>();
+            page.items.forEach((c) => {
+              const fullName =
+                [c.firstName, c.lastName].filter(Boolean).join(' ').trim() ||
+                c.companyName ||
+                c.email ||
+                c.id;
+              map.set(c.id, {
+                name: fullName,
+                email: c.email,
+                company: c.companyName,
+              });
+            });
+            setContactsMap(map);
+          })
+          .catch(() => {});
+      }
     } catch (requestError: unknown) {
       if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
       setError(
@@ -104,10 +131,13 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     const normalized = query.trim().toLocaleLowerCase();
     return opportunities.filter((opportunity) => {
       const matchesStage = stageFilter === 'all' || opportunity.stageKey === stageFilter;
+      const contactInfo = contactsMap.get(opportunity.contactId);
       const haystack = [
         opportunity.name,
         opportunity.productKey,
         opportunity.contactId,
+        contactInfo?.name,
+        contactInfo?.company,
         opportunity.assignedUserId,
       ]
         .filter(Boolean)
@@ -115,7 +145,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
         .toLocaleLowerCase();
       return matchesStage && (!normalized || haystack.includes(normalized));
     });
-  }, [opportunities, query, stageFilter]);
+  }, [contactsMap, opportunities, query, stageFilter]);
 
   const moveOpportunity = async (opportunity: CrmOpportunity, nextStageKey: string) => {
     if (!activeOrganizationId || nextStageKey === opportunity.stageKey || !canManage) return;
@@ -164,7 +194,25 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
         sortAccessor: (opportunity) => opportunity.name,
       },
       { key: 'stage', header: 'Stage', render: (opportunity) => opportunity.stageKey },
-      { key: 'contact', header: 'Contact', render: (opportunity) => opportunity.contactId },
+      {
+        key: 'contact',
+        header: 'Contact',
+        render: (opportunity) => {
+          const contact = contactsMap.get(opportunity.contactId);
+          return (
+            <div className="min-w-0">
+              <p className="text-text-main truncate font-medium">
+                {contact?.name || opportunity.contactId}
+              </p>
+              {contact?.company || contact?.email ? (
+                <p className="text-text-muted truncate text-xs">
+                  {contact.company || contact.email}
+                </p>
+              ) : null}
+            </div>
+          );
+        },
+      },
       { key: 'amount', header: 'Amount', render: (opportunity) => opportunityAmount(opportunity) },
       {
         key: 'origin',
@@ -178,7 +226,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
         render: (opportunity) => formatDate(opportunity.expectedCloseAt),
       },
     ],
-    [],
+    [contactsMap],
   );
 
   const selectedOpportunity = selectedId
@@ -334,23 +382,31 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                       </Link>
                     </div>
                   )}
-                  renderMobileRow={(opportunity) => (
-                    <div className="border-border-subtle bg-background rounded-lg border p-3">
-                      <p className="text-text-main font-medium">{opportunity.name}</p>
-                      <p className="text-text-muted mt-1 text-xs">
-                        {opportunity.stageKey} · {opportunityAmount(opportunity)}
-                      </p>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="secondary"
-                        className="mt-3"
-                        onClick={() => setSelectedId(opportunity.id)}
-                      >
-                        Preview
-                      </Button>
-                    </div>
-                  )}
+                  renderMobileRow={(opportunity) => {
+                    const contact = contactsMap.get(opportunity.contactId);
+                    return (
+                      <div className="border-border-subtle bg-background rounded-lg border p-3">
+                        <p className="text-text-main font-medium">{opportunity.name}</p>
+                        <p className="text-text-muted mt-1 text-xs">
+                          {opportunity.stageKey} · {opportunityAmount(opportunity)}
+                        </p>
+                        {contact ? (
+                          <p className="text-text-muted mt-0.5 truncate text-xs">
+                            {contact.name} {contact.company ? `(${contact.company})` : ''}
+                          </p>
+                        ) : null}
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          className="mt-3"
+                          onClick={() => setSelectedId(opportunity.id)}
+                        >
+                          Preview
+                        </Button>
+                      </div>
+                    );
+                  }}
                 />
               ) : (
                 <KanbanBoard
@@ -420,9 +476,13 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                       <p className="text-text-muted mt-1 truncate text-xs">
                         {opportunity.productKey} · {opportunityAmount(opportunity)}
                       </p>
-                      <p className="text-text-muted mt-1 truncate text-xs">
-                        Contact {opportunity.contactId.slice(0, 8)} ·{' '}
-                        {formatDate(opportunity.expectedCloseAt)}
+                      <p className="text-text-muted mt-1 flex items-center gap-1.5 truncate text-xs">
+                        <User className="h-3.5 w-3.5 shrink-0 opacity-70" />
+                        <span className="truncate font-medium text-text-main">
+                          {contactsMap.get(opportunity.contactId)?.name || `Contact ${opportunity.contactId.slice(0, 8)}`}
+                        </span>
+                        <span>·</span>
+                        <span>{formatDate(opportunity.expectedCloseAt)}</span>
                       </p>
                       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                         <Link
@@ -487,7 +547,11 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                 <p className="text-text-muted mt-1 text-sm">
                   {selectedOpportunity.productKey} · {opportunityAmount(selectedOpportunity)}
                 </p>
-                <p className="text-text-muted mt-3 text-xs">
+                <p className="text-text-muted mt-2 text-xs">
+                  <span className="font-medium text-text-main">Contact:</span>{' '}
+                  {contactsMap.get(selectedOpportunity.contactId)?.name || selectedOpportunity.contactId}
+                </p>
+                <p className="text-text-muted mt-1 text-xs">
                   Stage: {selectedOpportunity.stageKey}
                 </p>
                 <Link

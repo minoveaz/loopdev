@@ -1,4 +1,4 @@
-import type { CrmLead } from '@loopdev/contracts';
+import type { CrmContact, CrmLead } from '@loopdev/contracts';
 import type { LeadRowViewModel } from './types';
 
 const STATUS_LABELS: Record<CrmLead['status'], string> = {
@@ -27,11 +27,28 @@ export function getLeadSourceLabel(source: CrmLead['source']['kind']) {
   return SOURCE_LABELS[source];
 }
 
-export function mapLeadToRowViewModel(lead: CrmLead): LeadRowViewModel {
+export function mapLeadToRowViewModel(
+  lead: CrmLead,
+  contactsMap?: Map<string, CrmContact>,
+  brandsMap?: Map<string, string>,
+  workspacesMap?: Map<string, string>,
+): LeadRowViewModel {
+  const contact = contactsMap?.get(lead.contactId);
+  const contactName = contact
+    ? [contact.firstName, contact.lastName].filter(Boolean).join(' ') || contact.email || contact.phone || lead.contactId
+    : undefined;
+  const contactCompany = contact?.companyName ?? null;
+  const contactEmail = contact?.email ?? null;
+
   return {
     id: lead.id,
     organizationId: lead.organizationId,
     contactId: lead.contactId,
+    contactName,
+    contactCompany,
+    contactEmail,
+    brandName: lead.brandId ? brandsMap?.get(lead.brandId) ?? null : null,
+    workspaceName: lead.workspaceId ? workspacesMap?.get(lead.workspaceId) ?? null : null,
     status: lead.status,
     statusLabel: getLeadStatusLabel(lead.status),
     sourceKind: lead.source.kind,
@@ -47,6 +64,11 @@ export function mapLeadToRowViewModel(lead: CrmLead): LeadRowViewModel {
   };
 }
 
-export function mapLeadsToRowViewModels(leads: CrmLead[]) {
-  return leads.map(mapLeadToRowViewModel);
+export function mapLeadsToRowViewModels(
+  leads: CrmLead[],
+  contactsMap?: Map<string, CrmContact>,
+  brandsMap?: Map<string, string>,
+  workspacesMap?: Map<string, string>,
+) {
+  return leads.map((l) => mapLeadToRowViewModel(l, contactsMap, brandsMap, workspacesMap));
 }
