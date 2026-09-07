@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { FileText, Plus } from 'lucide-react';
 import { Button } from '@loopdev/ui';
-import type { Customer360RecordView } from '@loopdev/contracts';
 import { formatDate } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
+import type { NoteDisplayItem } from '../customer360DisplayTypes';
 
 interface NotesPanelProps {
-  displayedNotes: Array<any>;
+  displayedNotes: NoteDisplayItem[];
   isNotesSimulated?: boolean;
 }
 
@@ -57,8 +57,7 @@ export function NotesPanel({
       {displayedNotes.length ? (
         <div className="space-y-3 pt-2 min-w-0 w-full">
           {displayedNotes.map((note) => {
-            const isSimulated =
-              'isSimulated' in note && Boolean((note as Record<string, unknown>).isSimulated);
+            const isSimulated = Boolean(note.isSimulated);
             return (
               <div
                 key={note.id}
@@ -71,7 +70,7 @@ export function NotesPanel({
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-semibold text-text-main">
-                      {note.author?.name ?? 'LoopDev Team Member'}
+                      LoopDev Team Member
                     </span>
                     {isSimulated && <SimulatedBadge />}
                   </div>

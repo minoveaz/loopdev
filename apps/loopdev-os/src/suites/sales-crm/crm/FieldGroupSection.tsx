@@ -5,9 +5,8 @@ import {
   CrmFieldGroupKey,
   CRM_FIELD_GROUPS,
   CRM_FIELD_CATALOG,
-  CrmFieldDefinition,
 } from '@loopdev/contracts';
-import { Input, Select, PhoneInput } from '@loopdev/ui';
+import { Input, Select } from '@loopdev/ui';
 import {
   User,
   Mail,
@@ -31,8 +30,8 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 interface FieldGroupSectionProps {
   groupKey: CrmFieldGroupKey;
-  values: Record<string, any>;
-  onChange: (fieldKey: string, value: any) => void;
+  values: Record<string, unknown>;
+  onChange: (fieldKey: string, value: string) => void;
   visibleFields?: string[];
   requiredFields?: string[];
   className?: string;
@@ -83,7 +82,9 @@ export function FieldGroupSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         {groupFields.map((field) => {
           const isRequired = requiredFields.includes(field.key);
-          const currentValue = values[field.key] ?? '';
+          const value = values[field.key];
+          const currentValue =
+            typeof value === 'string' || typeof value === 'number' ? value : '';
 
           if (field.inputType === 'select') {
             return (
@@ -158,7 +159,7 @@ export function FieldGroupSection({
                   type="number"
                   size="sm"
                   value={currentValue}
-                  onChange={(e) => onChange(field.key, e.target.value ? Number(e.target.value) : '')}
+                  onChange={(e) => onChange(field.key, e.target.value)}
                   placeholder={field.placeholder}
                   className="h-9 text-xs"
                 />

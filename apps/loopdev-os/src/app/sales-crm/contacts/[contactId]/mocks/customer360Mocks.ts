@@ -1,3 +1,11 @@
+import type {
+  ContactLeadSummary,
+  NoteDisplayItem,
+  OpportunityDisplayItem,
+  TaskDisplayItem,
+  TimelineDisplayItem,
+} from '../components/customer360DisplayTypes';
+
 export const MOCK_OPPORTUNITIES = [
   {
     id: 'sim-opp-1',
@@ -15,7 +23,7 @@ export const MOCK_OPPORTUNITIES = [
     currency: 'EUR',
     isSimulated: true,
   },
-];
+] satisfies OpportunityDisplayItem[];
 
 export const MOCK_TASKS = [
   {
@@ -32,7 +40,7 @@ export const MOCK_TASKS = [
     priority: 'medium',
     isSimulated: true,
   },
-];
+] satisfies TaskDisplayItem[];
 
 export const MOCK_TIMELINE = [
   {
@@ -62,7 +70,7 @@ export const MOCK_TIMELINE = [
     },
     isSimulated: true,
   },
-];
+] satisfies TimelineDisplayItem[];
 
 export const MOCK_NOTES = [
   {
@@ -71,7 +79,7 @@ export const MOCK_NOTES = [
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
     isSimulated: true,
   },
-];
+] satisfies NoteDisplayItem[];
 
 export const MOCK_LEADS = [
   {
@@ -81,4 +89,4 @@ export const MOCK_LEADS = [
     source: { kind: 'web_form' },
     isSimulated: true,
   },
-];
+] satisfies ContactLeadSummary[];

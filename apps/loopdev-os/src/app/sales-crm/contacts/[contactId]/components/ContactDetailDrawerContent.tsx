@@ -19,7 +19,7 @@ export function ContactDetailDrawerContent({
   onClose,
   onContactUpdated,
 }: ContactDetailDrawerContentProps) {
-  const [formData, setFormData] = useState<Record<string, any>>({
+  const [formData, setFormData] = useState<Record<string, string>>({
     firstName: contact.firstName || '',
     lastName: contact.lastName || '',
     secondLastName: contact.secondLastName || '',
@@ -49,7 +49,7 @@ export function ContactDetailDrawerContent({
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleFieldChange = (fieldKey: string, value: any) => {
+  const handleFieldChange = (fieldKey: string, value: string) => {
     setFormData((prev) => ({ ...prev, [fieldKey]: value }));
   };
 

@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 import { Briefcase, ChevronRight, Plus } from 'lucide-react';
-import type { Customer360RecordView } from '@loopdev/contracts';
 import { formatCurrency } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
+import type { OpportunityDisplayItem } from '../customer360DisplayTypes';
 
 interface OpportunitiesPanelProps {
   name: string;
-  displayedOpportunities: Array<any>;
+  displayedOpportunities: OpportunityDisplayItem[];
   isOpportunitiesSimulated?: boolean;
 }
 
@@ -38,8 +38,7 @@ export function OpportunitiesPanel({
       {displayedOpportunities.length ? (
         <div className="grid gap-3 sm:grid-cols-2 min-w-0 w-full">
           {displayedOpportunities.map((opp) => {
-            const isSimulated =
-              'isSimulated' in opp && Boolean((opp as Record<string, unknown>).isSimulated);
+            const isSimulated = Boolean(opp.isSimulated);
             return (
               <div
                 key={opp.id}

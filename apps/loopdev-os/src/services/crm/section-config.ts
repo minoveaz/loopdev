@@ -2,7 +2,6 @@ import {
   CrmSectionFieldConfig,
   CrmSectionFieldConfigSchema,
   DEFAULT_SECTION_FIELD_CONFIGS,
-  CRM_FIELD_CATALOG,
 } from '@loopdev/contracts';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
@@ -13,17 +12,29 @@ interface SectionConfigRow {
   required_fields: string[];
 }
 
+interface SectionConfigQuery {
+  eq(column: string, value: string): SectionConfigQuery;
+  select(columns: string): SectionConfigQuery;
+  maybeSingle(): Promise<{ data: SectionConfigRow | null; error: { message: string } | null }>;
+  upsert(values: Record<string, unknown>, options: { onConflict: string }): SectionConfigQuery;
+  single(): Promise<{ data: SectionConfigRow | null; error: { message: string } | null }>;
+}
+
+interface SectionConfigClient {
+  from(table: 'crm_section_field_configs'): SectionConfigQuery;
+}
+
 export async function getSectionFieldConfig(
   organizationId: string,
   sectionKey: string
 ): Promise<CrmSectionFieldConfig> {
   const supabase = await createServerSupabaseClient();
-  const { data, error } = (await (supabase as any)
+  const { data, error } = await (supabase as unknown as SectionConfigClient)
     .from('crm_section_field_configs')
     .select('section_key, enabled_groups, visible_fields, required_fields')
     .eq('organization_id', organizationId)
     .eq('section_key', sectionKey)
-    .maybeSingle()) as { data: SectionConfigRow | null; error: any };
+    .maybeSingle();
 
   if (error) {
     console.warn(`[getSectionFieldConfig] Error loading config for ${sectionKey}, falling back to defaults`, error);
@@ -60,7 +71,7 @@ export async function saveSectionFieldConfig(
   const parsed = CrmSectionFieldConfigSchema.parse(config);
   const supabase = await createServerSupabaseClient();
 
-  const { data, error } = (await (supabase as any)
+  const { data, error } = await (supabase as unknown as SectionConfigClient)
     .from('crm_section_field_configs')
     .upsert(
       {
@@ -74,7 +85,7 @@ export async function saveSectionFieldConfig(
       { onConflict: 'organization_id, section_key' }
     )
     .select('section_key, enabled_groups, visible_fields, required_fields')
-    .single()) as { data: SectionConfigRow | null; error: any };
+    .single();
 
   if (error || !data) {
     throw new Error(`Unable to save section field config: ${error?.message ?? 'no data returned'}`);

@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { ListTodo, Plus, ChevronRight } from 'lucide-react';
-import type { Customer360RecordView } from '@loopdev/contracts';
 import { formatDate } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
+import type { TaskDisplayItem } from '../customer360DisplayTypes';
 
 interface TasksPanelProps {
   name: string;
   contactId: string;
-  displayedTasks: Array<any>;
+  displayedTasks: TaskDisplayItem[];
   isTasksSimulated?: boolean;
 }
 
@@ -39,8 +39,7 @@ export function TasksPanel({
       {displayedTasks.length ? (
         <div className="space-y-2.5 min-w-0 w-full">
           {displayedTasks.map((task) => {
-            const isSimulated =
-              'isSimulated' in task && Boolean((task as Record<string, unknown>).isSimulated);
+            const isSimulated = Boolean(task.isSimulated);
             return (
               <div
                 key={task.id}
@@ -55,7 +54,7 @@ export function TasksPanel({
                     className={`h-2.5 w-2.5 rounded-full shrink-0 ${
                       task.status === 'completed'
                         ? 'bg-emerald-500'
-                        : task.priority === 'high'
+                        : task.priority === 'high' || task.priority === 'urgent'
                           ? 'bg-rose-500 animate-pulse'
                           : 'bg-amber-500'
                     }`}
@@ -75,9 +74,9 @@ export function TasksPanel({
                 <div className="flex items-center gap-2 shrink-0">
                   <span
                     className={`rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-                      task.priority === 'high'
+                      task.priority === 'high' || task.priority === 'urgent'
                         ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400'
-                        : task.priority === 'medium'
+                        : task.priority === 'normal'
                           ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400'
                           : 'bg-surface-muted text-text-muted'
                     }`}

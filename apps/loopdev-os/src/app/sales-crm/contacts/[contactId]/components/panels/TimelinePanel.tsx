@@ -1,12 +1,12 @@
 'use client';
 
-import { Clock, Send, Sparkles } from 'lucide-react';
-import type { Customer360RecordView } from '@loopdev/contracts';
+import { Clock } from 'lucide-react';
 import { formatDate } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
+import type { TimelineDisplayItem } from '../customer360DisplayTypes';
 
 interface TimelinePanelProps {
-  displayedTimeline: Array<any>;
+  displayedTimeline: TimelineDisplayItem[];
   isTimelineSimulated?: boolean;
 }
 
@@ -30,12 +30,8 @@ export function TimelinePanel({
       {displayedTimeline.length ? (
         <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-border-subtle flex-1 min-w-0 w-full">
           {displayedTimeline.map((item, index) => {
-            const isSimulated =
-              'isSimulated' in item && Boolean((item as Record<string, unknown>).isSimulated);
-            const key =
-              item.kind === 'event'
-                ? `${item.source.sourceId}-${index}`
-                : `${item.source.sourceId}-${index}`;
+            const isSimulated = Boolean(item.isSimulated);
+            const key = `${item.source.sourceId}-${index}`;
 
             return (
               <div key={key} className="relative group min-w-0 w-full">

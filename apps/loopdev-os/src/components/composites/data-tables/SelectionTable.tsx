@@ -172,6 +172,7 @@ export function SelectionTable({
       >
         <Select
           label="New owner"
+          aria-label="Select owner"
           value={nextOwner}
           onChange={(event) => setNextOwner(event.target.value)}
         >

@@ -187,7 +187,7 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
             >
               <ContactDetailsPanel
                 view={view}
-                displayedLeads={displayedLeads as any}
+                displayedLeads={displayedLeads}
                 isLeadsSimulated={isLeadsSimulated}
                 isSimulationActive={isSimulationActive}
                 copiedEmail={copiedEmail}
@@ -225,7 +225,7 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
                   <div className="lg:hidden flex-1 flex flex-col min-w-0 w-full">
                     <ContactDetailsPanel
                       view={view}
-                      displayedLeads={displayedLeads as any}
+                      displayedLeads={displayedLeads}
                       isLeadsSimulated={isLeadsSimulated}
                       isSimulationActive={isSimulationActive}
                       copiedEmail={copiedEmail}

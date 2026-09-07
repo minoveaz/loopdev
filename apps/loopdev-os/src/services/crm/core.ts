@@ -74,7 +74,7 @@ function mapContact(row: ContactRow): CrmContact {
     secondaryEmail: row.secondary_email,
     phone: row.phone,
     secondaryPhone: row.secondary_phone,
-    preferredChannel: row.preferred_channel as any,
+    preferredChannel: row.preferred_channel as CrmContact['preferredChannel'],
     preferredLanguage: row.preferred_language ?? 'es',
     documentType: row.document_type,
     documentNumber: row.document_number,
@@ -251,7 +251,7 @@ export async function createContact(input: CrmCreateContactCommand): Promise<Crm
     companyName: parsed.companyName,
     jobTitle: parsed.jobTitle,
     department: parsed.department,
-    attributes: parsed.attributes as any,
+    attributes: parsed.attributes ?? {},
   });
 }
 

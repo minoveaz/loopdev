@@ -30,8 +30,11 @@ export function useContactsData({
   const [activeCursor, setActiveCursor] = useState<string | undefined>();
 
   useEffect(() => {
-    setActiveCursor(undefined);
-    setCursorHistory([]);
+    const resetTimeout = window.setTimeout(() => {
+      setActiveCursor(undefined);
+      setCursorHistory([]);
+    }, 0);
+    return () => window.clearTimeout(resetTimeout);
   }, [query, organizationId]);
 
   useEffect(() => {
@@ -44,8 +47,10 @@ export function useContactsData({
     if (query) params.set('query', query);
     if (activeCursor) params.set('cursor', activeCursor);
 
-    setIsLoading(true);
-    setError(null);
+    const loadingTimeout = window.setTimeout(() => {
+      setIsLoading(true);
+      setError(null);
+    }, 0);
 
     const useFixture = process.env.NEXT_PUBLIC_CRM_CONTACTS_FIXTURE === 'true';
     if (useFixture || !organizationId) {
@@ -55,11 +60,16 @@ export function useContactsData({
         cursor: activeCursor,
         limit: PAGE_SIZE,
       });
-      setContacts(page.items);
-      setNextCursor(page.nextCursor);
-      setHasMore(page.hasMore);
-      setIsLoading(false);
-      return;
+      const fixtureTimeout = window.setTimeout(() => {
+        setContacts(page.items);
+        setNextCursor(page.nextCursor);
+        setHasMore(page.hasMore);
+        setIsLoading(false);
+      }, 0);
+      return () => {
+        window.clearTimeout(loadingTimeout);
+        window.clearTimeout(fixtureTimeout);
+      };
     }
 
     fetch(`/api/crm/contacts?${params.toString()}`, { signal: controller.signal })

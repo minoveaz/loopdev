@@ -26,7 +26,6 @@ export function LeadListWidget() {
     'crm.manage',
   ]);
   const { selectedLead, selectLead, clearSelectedLead } = useLeadsRuntime();
-  const [rows, setRows] = useState<LeadRowViewModel[]>([]);
   const [rawLeads, setRawLeads] = useState<CrmLead[]>([]);
   const [contactsMap, setContactsMap] = useState<Map<string, CrmContact>>(new Map());
   const [brandsMap, setBrandsMap] = useState<Map<string, string>>(new Map());
@@ -69,10 +68,12 @@ export function LeadListWidget() {
 
   useEffect(() => {
     if (!activeOrganizationId) {
-      setContactsMap(new Map());
-      setBrandsMap(new Map());
-      setWorkspacesMap(new Map());
-      return;
+      const resetTimeout = window.setTimeout(() => {
+        setContactsMap(new Map());
+        setBrandsMap(new Map());
+        setWorkspacesMap(new Map());
+      }, 0);
+      return () => window.clearTimeout(resetTimeout);
     }
 
     let isMounted = true;
@@ -136,7 +137,6 @@ export function LeadListWidget() {
     getLeads(queryInput, controller.signal)
       .then((page) => {
         setRawLeads(page.items);
-        setRows(mapLeadsToRowViewModels(page.items, contactsMap, brandsMap, workspacesMap));
         setNextCursor(page.nextCursor);
         setHasMore(page.hasMore);
         setState(page.items.length === 0 ? 'empty' : 'ready');
@@ -171,11 +171,10 @@ export function LeadListWidget() {
     reloadToken,
   ]);
 
-  useEffect(() => {
-    if (rawLeads.length > 0) {
-      setRows(mapLeadsToRowViewModels(rawLeads, contactsMap, brandsMap, workspacesMap));
-    }
-  }, [rawLeads, contactsMap, brandsMap, workspacesMap]);
+  const rows = useMemo(
+    () => mapLeadsToRowViewModels(rawLeads, contactsMap, brandsMap, workspacesMap),
+    [rawLeads, contactsMap, brandsMap, workspacesMap],
+  );
 
   const visibleRows = useMemo(() => {
     const normalized = query.toLocaleLowerCase();

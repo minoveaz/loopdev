@@ -315,20 +315,30 @@ export function ContactListWidget() {
         segments={[{ id: 'contacts', label: 'Contactos & Cuentas', href: '/sales-crm/contacts' }]}
         leftSlot={
           <div className="flex min-w-0 items-center gap-3">
-            <Heading as="h1" size="lg" weight="semibold" className="text-text-main truncate">
+            <Heading
+              as="h1"
+              size="lg"
+              weight="semibold"
+              aria-label="Contacts"
+              className="text-text-main truncate"
+            >
               Contactos & Cuentas
             </Heading>
           </div>
         }
         rightSlot={
           canManage ? (
-            <Link
-              href="/sales-crm/contacts/new"
+            <Button
+              type="button"
+              onClick={() => setIsCreateDialogOpen(true)}
+              variant="primary"
+              size="sm"
+              aria-label="Create contact"
               className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
             >
               <Plus size={14} strokeWidth={2} />
               <span>Crear contacto</span>
-            </Link>
+            </Button>
           ) : null
         }
         ariaLabel="Cabecera de contactos"
@@ -383,6 +393,7 @@ export function ContactListWidget() {
             setFilterValues((current) => ({ ...current, [id]: values }))
           }
           labels={filterLabels}
+          mobileListLabel="Contacts mobile list"
           state={isLoading ? 'loading' : error ? 'error' : undefined}
           paginationVariant="compact"
           selectedRowKeys={selectedIds}

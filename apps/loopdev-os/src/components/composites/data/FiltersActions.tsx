@@ -66,6 +66,7 @@ export interface FiltersActionsProps<Row extends Record<string, unknown>> {
   selectedRowKey?: React.Key;
   selectOnRowClick?: boolean;
   showAllColumnsOnMobile?: boolean;
+  mobileListLabel?: string;
   onRowClick?: (row: Row, index: number) => void;
   renderMobileRow?: (row: Row, index: number) => React.ReactNode;
   rowActions?: (row: Row, index: number) => React.ReactNode;
@@ -98,6 +99,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
   selectedRowKey,
   selectOnRowClick = false,
   showAllColumnsOnMobile = false,
+  mobileListLabel,
   onRowClick,
   renderMobileRow,
   rowActions,
@@ -344,6 +346,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
           <ResponsiveTable
             surface={false}
             caption={labels.title}
+            mobileListLabel={mobileListLabel}
             columns={columns}
             rows={rows}
             getRowKey={getRowKey}

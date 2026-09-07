@@ -10,16 +10,15 @@ import {
   User,
   MapPin,
   Briefcase,
-  Phone,
   Mail,
-  ShieldAlert,
 } from 'lucide-react';
 import type { Customer360RecordView } from '@loopdev/contracts';
 import { SimulatedBadge } from '../sharedComponents';
+import type { ContactLeadSummary } from '../customer360DisplayTypes';
 
 interface ContactDetailsPanelProps {
   view: Customer360RecordView;
-  displayedLeads: Array<Record<string, unknown> & { id: string; status: string; interest?: string; source?: { kind: string } }>;
+  displayedLeads: ContactLeadSummary[];
   isLeadsSimulated?: boolean;
   isSimulationActive?: boolean;
   copiedEmail: boolean;
@@ -32,7 +31,6 @@ export function ContactDetailsPanel({
   view,
   displayedLeads,
   isLeadsSimulated,
-  isSimulationActive,
   copiedEmail,
   copiedPhone,
   copyToClipboard,
