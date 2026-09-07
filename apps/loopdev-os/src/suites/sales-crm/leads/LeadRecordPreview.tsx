@@ -7,6 +7,7 @@ import { CreateOpportunityFromLead } from './CreateOpportunityFromLead';
 import { getLeadSourceLabel, getLeadStatusLabel } from './mapper';
 import { QualifiedLeadGuard } from './QualifiedLeadGuard';
 import type { LeadDetailViewModel, LeadRowViewModel } from './types';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 type LeadRecordPreviewProps = {
   lead: LeadRowViewModel;
@@ -39,6 +40,7 @@ export function LeadRecordPreview({
   const headingRef = useRef<HTMLDivElement>(null);
   const [detail, setDetail] = useState<LeadDetailViewModel | null>(initialDetail ?? null);
   const [isConversionOpen, setIsConversionOpen] = useState(false);
+  const { mode } = usePlatformRuntime();
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -50,9 +52,9 @@ export function LeadRecordPreview({
       return;
     }
     const controller = new AbortController();
-    getLeadById(organizationId, lead.id, controller.signal)
+    getLeadById(organizationId, lead.id, controller.signal, mode)
       .then((loadedLead) =>
-        getLeadCustomer360(organizationId, loadedLead.contactId, controller.signal).then(
+        getLeadCustomer360(organizationId, loadedLead.contactId, controller.signal, mode).then(
           (context) => ({
             lead: loadedLead,
             contact: context.contact,
@@ -82,7 +84,7 @@ export function LeadRecordPreview({
         }));
       });
     return () => controller.abort();
-  }, [initialDetail, lead, organizationId]);
+  }, [initialDetail, lead, mode, organizationId]);
 
   const matchingDetail = detail?.lead.id === lead.id ? detail : null;
   const detailForRender = matchingDetail ?? initialDetail;
@@ -112,8 +114,8 @@ export function LeadRecordPreview({
           },
     );
     try {
-      const loadedLead = await getLeadById(organizationId, lead.id);
-      const context = await getLeadCustomer360(organizationId, loadedLead.contactId);
+      const loadedLead = await getLeadById(organizationId, lead.id, undefined, mode);
+      const context = await getLeadCustomer360(organizationId, loadedLead.contactId, undefined, mode);
       setDetail({
         lead: loadedLead,
         contact: context.contact,
@@ -134,7 +136,7 @@ export function LeadRecordPreview({
           error instanceof LeadApiError ? error.message : 'No se pudo actualizar el Lead.',
       }));
     }
-  }, [lead, organizationId]);
+  }, [lead, mode, organizationId]);
 
   return (
     <div className="flex min-h-0 flex-col gap-4 p-4" data-testid="lead-record-preview">
