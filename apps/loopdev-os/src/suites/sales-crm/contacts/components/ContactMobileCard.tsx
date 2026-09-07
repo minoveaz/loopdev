@@ -47,10 +47,10 @@ export function ContactMobileCard({
             statusDotColor={contact.identityStatus === 'verified' ? 'emerald' : 'amber'}
           />
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0 truncate">
               <Link
                 href={`/sales-crm/contacts/${contact.id}`}
-                className="font-medium text-text-main truncate text-sm hover:underline hover:text-primary"
+                className="font-medium text-text-main text-sm hover:underline hover:text-primary"
               >
                 {fullName}
               </Link>
