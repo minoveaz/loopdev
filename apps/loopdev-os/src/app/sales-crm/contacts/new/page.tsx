@@ -18,10 +18,12 @@ import { User, Building2, Mail, Briefcase, ShieldCheck, ArrowLeft, UserPlus } fr
 import { useOrganization } from '@/hooks/useOrganization';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import type { CrmContact } from '@loopdev/contracts';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 export default function NewContactPage() {
   const router = useRouter();
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const feedback = useFeedback();
 
   const [firstName, setFirstName] = useState('');
@@ -56,6 +58,16 @@ export default function NewContactPage() {
 
     if (phone.trim() && !isValidPhoneNumber(phone)) {
       setErrorMessage('El número de teléfono no es válido.');
+      return;
+    }
+
+    if (mode !== 'real') {
+      const message =
+        mode === 'preview'
+          ? 'Preview is read-only. Contact creation is disabled.'
+          : 'Contact creation is not available in this sandbox slice yet.';
+      setErrorMessage(message);
+      feedback.warning(message);
       return;
     }
 

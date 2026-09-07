@@ -17,6 +17,7 @@ import {
 } from '@loopdev/ui';
 import type { FormSectionDefinition } from '@loopdev/ui';
 import type { CrmContact } from '@loopdev/contracts';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 const contactFormSchema = z
   .object({
@@ -72,6 +73,7 @@ export function ContactFormDialog({
   onClose,
   onSuccess,
 }: ContactFormDialogProps) {
+  const { mode } = usePlatformRuntime();
   const feedback = useFeedback();
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -85,6 +87,15 @@ export function ContactFormDialog({
   });
 
   const submit = async (values: ContactFormValues) => {
+    if (mode !== 'real') {
+      feedback.warning(
+        mode === 'preview'
+          ? 'Preview is read-only. Contact creation is disabled.'
+          : 'Contact creation is not available in this sandbox slice yet.',
+      );
+      return;
+    }
+
     const response = await fetch('/api/crm/contacts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

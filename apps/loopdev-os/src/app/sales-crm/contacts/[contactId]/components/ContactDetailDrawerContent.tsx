@@ -5,6 +5,7 @@ import type { CrmContact } from '@loopdev/contracts';
 import { Button } from '@loopdev/ui';
 import { Check } from 'lucide-react';
 import { FieldGroupSection } from '@/suites/sales-crm/crm/FieldGroupSection';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 interface ContactDetailDrawerContentProps {
   contact: CrmContact;
@@ -19,6 +20,7 @@ export function ContactDetailDrawerContent({
   onClose,
   onContactUpdated,
 }: ContactDetailDrawerContentProps) {
+  const { mode } = usePlatformRuntime();
   const [formData, setFormData] = useState<Record<string, string>>({
     firstName: contact.firstName || '',
     lastName: contact.lastName || '',
@@ -55,6 +57,14 @@ export function ContactDetailDrawerContent({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (mode !== 'real') {
+      setErrorMessage(
+        mode === 'preview'
+          ? 'Preview is read-only. Contact updates are disabled.'
+          : 'Contact updates are not available in this sandbox slice yet.',
+      );
+      return;
+    }
     setIsSaving(true);
     setErrorMessage(null);
 
