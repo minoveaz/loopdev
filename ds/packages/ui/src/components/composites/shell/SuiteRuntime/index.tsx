@@ -69,22 +69,28 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   const canvasMode = shellUsage?.canvasMode ?? canvasProps?.mode;
   const modePreset = SUITE_SHELL_MODE_PRESETS[canvasMode ?? 'overview'];
   const moduleContextLabel = activeModule
-    ? (moduleContextLabels?.[activeModule.moduleId] ?? shellUsage?.moduleContextSidebar?.label ?? activeModule.label)
+    ? (moduleContextLabels?.[activeModule.moduleId] ??
+      shellUsage?.moduleContextSidebar?.label ??
+      activeModule.label)
     : 'Module context';
-  const moduleContextWidth = activeModule
-    ? modePreset.contextSidebarWidth
-    : undefined;
+  const moduleContextWidth = activeModule ? modePreset.contextSidebarWidth : undefined;
   const moduleContextCollapsible = modePreset.contextSidebarHasCollapseControl;
-  const moduleContextDefaultCollapsed = activeModule?.shell?.moduleContextSidebar?.defaultCollapsed ?? false;
-  const moduleContextCollapsedPresentation = activeModule?.shell?.moduleContextSidebar?.collapsedPresentation ?? 'rail';
-  const moduleContextCollapseIcon = resolveShellZoneIcon(activeModule?.shell?.moduleContextSidebar?.collapseIcon);
-  const moduleContextExpandIcon = resolveShellZoneIcon(activeModule?.shell?.moduleContextSidebar?.expandIcon);
+  const moduleContextDefaultCollapsed =
+    activeModule?.shell?.moduleContextSidebar?.defaultCollapsed ?? false;
+  const moduleContextCollapsedPresentation =
+    activeModule?.shell?.moduleContextSidebar?.collapsedPresentation ?? 'rail';
+  const moduleContextCollapseIcon = resolveShellZoneIcon(
+    activeModule?.shell?.moduleContextSidebar?.collapseIcon,
+  );
+  const moduleContextExpandIcon = resolveShellZoneIcon(
+    activeModule?.shell?.moduleContextSidebar?.expandIcon,
+  );
   const moduleContextPanelLabel = activeModule
-    ? (moduleContextPanelLabels?.[activeModule.moduleId] ?? shellUsage?.moduleContextPanel?.label ?? activeModule.label)
+    ? (moduleContextPanelLabels?.[activeModule.moduleId] ??
+      shellUsage?.moduleContextPanel?.label ??
+      activeModule.label)
     : 'Module context';
-  const moduleContextPanelWidth = activeModule
-    ? modePreset.contextPanelWidth
-    : undefined;
+  const moduleContextPanelWidth = activeModule ? modePreset.contextPanelWidth : undefined;
   const moduleContextPanelPresentation = activeModule
     ? modePreset.contextPanelPresentation
     : 'inline';
@@ -156,7 +162,9 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
               collapsed={moduleContextSidebarCollapsed}
               showCollapsedTrigger={moduleContextSidebarShowCollapsedTrigger}
               collapsedPresentation={moduleContextCollapsedPresentation}
-              className={moduleContextSidebarMobileVisibility === 'hidden' ? 'max-lg:hidden' : undefined}
+              className={
+                moduleContextSidebarMobileVisibility === 'hidden' ? 'max-lg:hidden' : undefined
+              }
               onCollapsedChange={moduleContextSidebarOnCollapsedChange}
               defaultCollapsed={moduleContextDefaultCollapsed}
               collapseIcon={moduleContextCollapseIcon}

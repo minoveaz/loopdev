@@ -23,36 +23,41 @@ export function useCustomer360Data(contactId: string) {
 
   const { isSimulationActive, toggleSimulation } = useSimulation();
 
-  const loadCustomer360 = useCallback(async (signal?: AbortSignal) => {
-    if (!activeOrganizationId) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const params = new URLSearchParams({
-        organizationId: activeOrganizationId,
-        view: 'record',
-        sections: 'profile,leads,opportunities,tasks,notes,timeline',
-      });
-      const response = await fetch(
-        `/api/crm/contacts/${encodeURIComponent(contactId)}/customer-360?${params.toString()}`,
-        { signal },
-      );
-      if (!response.ok) {
-        if (response.status === 403)
-          throw new Error('You do not have permission to view this customer.');
-        if (response.status === 404) throw new Error('This contact could not be found.');
-        throw new Error('Customer 360 could not be loaded.');
+  const loadCustomer360 = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!activeOrganizationId) return;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const params = new URLSearchParams({
+          organizationId: activeOrganizationId,
+          view: 'record',
+          sections: 'profile,leads,opportunities,tasks,notes,timeline',
+        });
+        const response = await fetch(
+          `/api/crm/contacts/${encodeURIComponent(contactId)}/customer-360?${params.toString()}`,
+          { signal },
+        );
+        if (!response.ok) {
+          if (response.status === 403)
+            throw new Error('You do not have permission to view this customer.');
+          if (response.status === 404) throw new Error('This contact could not be found.');
+          throw new Error('Customer 360 could not be loaded.');
+        }
+        setView((await response.json()) as Customer360RecordView);
+      } catch (requestError: unknown) {
+        if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
+        setError(
+          requestError instanceof Error
+            ? requestError.message
+            : 'Customer 360 could not be loaded.',
+        );
+      } finally {
+        if (!signal?.aborted) setIsLoading(false);
       }
-      setView((await response.json()) as Customer360RecordView);
-    } catch (requestError: unknown) {
-      if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-      setError(
-        requestError instanceof Error ? requestError.message : 'Customer 360 could not be loaded.',
-      );
-    } finally {
-      if (!signal?.aborted) setIsLoading(false);
-    }
-  }, [activeOrganizationId, contactId]);
+    },
+    [activeOrganizationId, contactId],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -121,7 +126,8 @@ export function useCustomer360Data(contactId: string) {
     return 0;
   }, [view?.tasks, isSimulationActive]);
 
-  const isOpportunitiesSimulated = !view?.opportunities?.length && displayedOpportunities.length > 0;
+  const isOpportunitiesSimulated =
+    !view?.opportunities?.length && displayedOpportunities.length > 0;
   const isTasksSimulated = !view?.tasks?.length && displayedTasks.length > 0;
   const isTimelineSimulated = !view?.timeline?.length && displayedTimeline.length > 0;
   const isNotesSimulated = !view?.notes?.length && displayedNotes.length > 0;

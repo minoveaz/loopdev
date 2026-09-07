@@ -113,7 +113,9 @@ export const ModuleContextPanel: React.FC<ModuleContextPanelProps> = ({
               </h2>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              {headerSlot ? <div className="flex min-w-0 shrink-0 items-center">{headerSlot}</div> : null}
+              {headerSlot ? (
+                <div className="flex min-w-0 shrink-0 items-center">{headerSlot}</div>
+              ) : null}
               {onClose ? (
                 <button
                   type="button"

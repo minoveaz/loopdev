@@ -1,154 +1,37 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-18",
+  "generatedAt": "2026-09-07",
   "findings": [
     {
-      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
-      "line": 195,
-      "rule": "implicitButtonVariant",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/Customer360View.tsx",
+      "line": 147,
+      "rule": "tokenUsage",
       "contractKind": "immutable",
-      "primaryRisk": "action semantics and theme safety",
-      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
-      "snippet": "<Button key={id} size={size}>"
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<div className=\"flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed border-amber-500/50 bg-amber-500/10 px-4 py-2.5 text-xs text-amber-700 dark:text-a"
     },
     {
-      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
-      "line": 202,
-      "rule": "implicitButtonVariant",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/Customer360View.tsx",
+      "line": 149,
+      "rule": "tokenUsage",
       "contractKind": "immutable",
-      "primaryRisk": "action semantics and theme safety",
-      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
-      "snippet": "<Button startIcon=\"add\">"
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<FlaskConical className=\"h-4 w-4 text-amber-500 shrink-0\" />"
     },
     {
-      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
-      "line": 204,
-      "rule": "implicitButtonVariant",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/Customer360View.tsx",
+      "line": 153,
+      "rule": "tokenUsage",
       "contractKind": "immutable",
-      "primaryRisk": "action semantics and theme safety",
-      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
-      "snippet": "<Button isLoading>"
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"rounded bg-amber-500/20 px-1 py-0.5 font-mono font-bold\">"
     },
     {
-      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
-      "line": 205,
-      "rule": "implicitButtonVariant",
-      "contractKind": "immutable",
-      "primaryRisk": "action semantics and theme safety",
-      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
-      "snippet": "<Button disabled>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
-      "line": 257,
-      "rule": "implicitButtonVariant",
-      "contractKind": "immutable",
-      "primaryRisk": "action semantics and theme safety",
-      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
-      "snippet": "<Button size=\"sm\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/CRMPrimitivesCatalog.tsx",
-      "line": 288,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<div><h3 className=\"font-mono text-sm uppercase tracking-[0.12em]\">{item.name}</h3><p className=\"mt-1 text-xs text-text-muted\">{item.usage}</p></div>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/DataTablesCatalog.tsx",
-      "line": 20,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 id={`${title.replaceAll(' ', '-').toLowerCase()}-heading`} className=\"text-lg font-semibold text-text-main\">{title}</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/DataTablesCatalog.tsx",
-      "line": 34,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h1 className=\"mt-2 text-2xl font-semibold text-text-main\">Data tables and filters</h1>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 487,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main mt-3 text-lg font-semibold\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 835,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main mt-2 text-xl font-semibold\">Northstar Labs</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 936,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h3 className=\"text-text-main mt-1 text-lg font-semibold\">Recent account work</h3>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 985,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main mt-1 text-lg font-semibold\">Customer success workflow</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1132,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main mt-1 text-lg font-semibold\">Accounts</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1200,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main mt-2 text-xl font-semibold\">Northstar Labs</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1241,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main mt-2 text-2xl font-semibold\">Launch campaign pipeline</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1529,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">Certification Lab</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1533,
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/Customer360View.tsx",
+      "line": 159,
       "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
       "primaryRisk": "approved interaction primitive",
@@ -156,214 +39,106 @@
       "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1569,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">{component?.label}</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1600,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h1 className=\"mt-2 text-2xl font-semibold text-text-main\">UI Foundation</h1>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1607,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 id=\"technical-canvas-examples\" className=\"text-lg font-semibold text-text-main\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1616,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 id=\"technical-surface-examples\" className=\"text-lg font-semibold text-text-main\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1625,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 id=\"technical-card-examples\" className=\"text-lg font-semibold text-text-main\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 1665,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h1 className=\"mt-2 text-2xl font-semibold text-text-main\">{selected}</h1>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 2082,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 2130,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"mt-2 text-lg font-semibold text-text-main\">{selectedWorkspace}</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 2350,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/composition-showcase/page.tsx",
-      "line": 2403,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h1 className=\"font-mono text-xs uppercase tracking-[0.16em]\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/shell-showcase/page.tsx",
-      "line": 569,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/shell-showcase/page.tsx",
-      "line": 786,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/shell-showcase/page.tsx",
-      "line": 802,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 40,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main font-semibold\">{name}</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 104,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-text-main font-semibold\">Nesting and contrast combinations</h2>"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 167,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<div className=\"mt-5\"><span className=\"text-accent font-mono text-xs uppercase\">{state}</span><h2 className=\"text-text-main mt-2 text-xl font-semibold\">{activeState.title}</h2><p c"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 172,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "{stateItems.map((item) => <button key={item} type=\"button\" title={`Show ${item} state`} aria-pressed={state === item} onClick={() => onStateChange(item)} className={`rounded-md bor"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 192,
-      "rule": "typography",
-      "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<div className=\"flex items-center justify-between gap-3\"><h2 className=\"text-text-main font-semibold\">{viewport}</h2><span className=\"text-accent text-xs\">Review target</span></div"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 222,
-      "rule": "forcedTheme",
-      "contractKind": "evolving",
-      "primaryRisk": "approved theme behavior",
-      "message": "Theme ownership belongs to the official theme provider, not a suite route.",
-      "snippet": "root.classList.add('dark');"
-    },
-    {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 222,
-      "rule": "themeIsolation",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/Customer360View.tsx",
+      "line": 162,
+      "rule": "tokenUsage",
       "contractKind": "immutable",
-      "primaryRisk": "cross-tenant theme leakage",
-      "message": "Suite code must not mutate global theme classes or LoopDev color variables.",
-      "snippet": "root.classList.add('dark');"
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className=\"shrink-0 font-medium underline hover:text-amber-900 dark:hover:text-amber-100 transition-colors\""
     },
     {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 223,
-      "rule": "forcedTheme",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/Customer360View.tsx",
+      "line": 314,
+      "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
-      "primaryRisk": "approved theme behavior",
-      "message": "Theme ownership belongs to the official theme provider, not a suite route.",
-      "snippet": "root.classList.remove('light');"
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 223,
-      "rule": "themeIsolation",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/ContactDetailDrawerContent.tsx",
+      "line": 132,
+      "rule": "tokenUsage",
       "contractKind": "immutable",
-      "primaryRisk": "cross-tenant theme leakage",
-      "message": "Suite code must not mutate global theme classes or LoopDev color variables.",
-      "snippet": "root.classList.remove('light');"
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className=\"flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 text-xs text-emerald-700 dark:text-emerald-300 font-medium animate-in fade-in\""
     },
     {
-      "file": "apps/loopdev-os/src/app/visual-system-showcase/page.tsx",
-      "line": 230,
-      "rule": "typography",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerDesktopTabs.tsx",
+      "line": 37,
+      "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
-      "primaryRisk": "approved typography direction",
-      "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<header className=\"mb-6 flex flex-wrap items-start justify-between gap-4\"><div><p className=\"text-text-muted font-mono text-xs uppercase tracking-[0.18em]\">LoopDev visual certifica"
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerDesktopTabs.tsx",
+      "line": 59,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerDesktopTabs.tsx",
+      "line": 81,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerDesktopTabs.tsx",
+      "line": 103,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 90,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"hidden sm:inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 119,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className=\"flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs shadow-"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 129,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className=\"flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs shadow-xs active:sc"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 136,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
       "line": 186,
       "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
@@ -372,8 +147,53 @@
       "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/components/composites/data/FiltersActions.tsx",
-      "line": 387,
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 228,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<ListTodo className=\"h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 230,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<p className=\"mt-0.5 sm:mt-1 text-sm sm:text-2xl font-bold text-amber-500 tracking-tight whitespace-nowrap\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 241,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<UserCheck className=\"h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 243,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<p className=\"mt-0.5 sm:mt-1 text-sm sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight whitespace-nowrap\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerHero.tsx",
+      "line": 254,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<Clock className=\"h-3.5 w-3.5 sm:h-4 sm:w-4 text-purple-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerMobileTabBar.tsx",
+      "line": 24,
       "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
       "primaryRisk": "approved interaction primitive",
@@ -381,8 +201,8 @@
       "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/components/composites/data-tables/ActivityTable.tsx",
-      "line": 89,
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerMobileTabBar.tsx",
+      "line": 37,
       "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
       "primaryRisk": "approved interaction primitive",
@@ -390,62 +210,98 @@
       "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/components/composites/data-tables/EntityTable.tsx",
-      "line": 103,
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerMobileTabBar.tsx",
+      "line": 64,
       "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
       "primaryRisk": "approved interaction primitive",
       "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button type=\"button\" className=\"min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary\" onClick={() => { if ("
+      "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/components/composites/data-tables/SelectionTable.tsx",
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerMobileTabBar.tsx",
+      "line": 91,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerMobileTabBar.tsx",
+      "line": 118,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerQuickActionSheet.tsx",
+      "line": 38,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerQuickActionSheet.tsx",
+      "line": 62,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<div className=\"p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerQuickActionSheet.tsx",
+      "line": 68,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerQuickActionSheet.tsx",
+      "line": 76,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<div className=\"p-2.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerQuickActionSheet.tsx",
+      "line": 88,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<div className=\"p-2.5 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/CustomerQuickActionSheet.tsx",
       "line": 100,
       "rule": "tokenUsage",
       "contractKind": "immutable",
       "primaryRisk": "uncontrolled design token usage",
       "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
-      "snippet": "actions={<><Button variant=\"ghost\" size=\"sm\" onClick={() => setIsAssignOwnerOpen(false)}>Cancel</Button><Button variant=\"primary\" size=\"sm\" disabled={!nextOwner} className=\"disable"
+      "snippet": "<div className=\"p-2.5 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400\">"
     },
     {
-      "file": "apps/loopdev-os/src/components/layout/ContextPanelHost.tsx",
-      "line": 27,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button key={item} type=\"button\" className=\"border-border-technical text-text-main rounded-md border px-3 py-3 text-left hover:bg-primary/10 hover:text-primary\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/components/layout/ContextPanelHost.tsx",
-      "line": 34,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button key={timezone} type=\"button\" className=\"text-text-main block w-full rounded px-3 py-2 text-left text-sm hover:bg-primary/10 hover:text-primary\">"
-    },
-    {
-      "file": "apps/loopdev-os/src/components/layout/ContextPanelHost.tsx",
-      "line": 39,
-      "rule": "approvedInteractivePrimitive",
-      "contractKind": "evolving",
-      "primaryRisk": "approved interaction primitive",
-      "message": "Review whether the approved Button or IconButton primitive should be used.",
-      "snippet": "<button type=\"button\" className=\"text-danger border-border-technical border-t pt-3 text-left\">Sign Out</button>"
-    },
-    {
-      "file": "apps/loopdev-os/src/suites/showcase/zoneRenderers.tsx",
-      "line": 32,
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/ContactDetailsPanel.tsx",
+      "line": 45,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
       "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Media Library</h2>"
+      "snippet": "<h3 className=\"text-sm font-semibold text-text-main\">Ficha del Cliente</h3>"
     },
     {
-      "file": "apps/loopdev-os/src/suites/showcase/zoneRenderers.tsx",
-      "line": 43,
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/ContactDetailsPanel.tsx",
+      "line": 47,
       "rule": "approvedInteractivePrimitive",
       "contractKind": "evolving",
       "primaryRisk": "approved interaction primitive",
@@ -453,13 +309,517 @@
       "snippet": "<button"
     },
     {
-      "file": "apps/loopdev-os/src/suites/showcase/zoneRenderers.tsx",
-      "line": 74,
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/ContactDetailsPanel.tsx",
+      "line": 53,
+      "rule": "emojiIconography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved icon language",
+      "message": "UI iconography must use the approved LoopDev Icon primitive, not emoji.",
+      "snippet": "<span aria-hidden=\"true\">✎</span>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/ContactDetailsPanel.tsx",
+      "line": 107,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/ContactDetailsPanel.tsx",
+      "line": 131,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/ContactDetailsPanel.tsx",
+      "line": 211,
       "rule": "typography",
       "contractKind": "evolving",
       "primaryRisk": "approved typography direction",
       "message": "Heading uses local typography styling; review Heading primitive usage.",
-      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Media Details</h2>"
+      "snippet": "<h3 className=\"text-sm font-semibold text-text-main\">Leads Asociados</h3>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/NotesPanel.tsx",
+      "line": 40,
+      "rule": "implicitButtonVariant",
+      "contractKind": "immutable",
+      "primaryRisk": "action semantics and theme safety",
+      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
+      "snippet": "<Button\n            size=\"sm\"\n            disabled={!quickNote.trim()}\n            onClick={() =>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/NotesPanel.tsx",
+      "line": 22,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h3 className=\"text-sm font-semibold text-text-main\">Internal Notes</h3>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/OpportunitiesPanel.tsx",
+      "line": 20,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h3 className=\"text-sm font-semibold text-text-main truncate\">Commercial Deals</h3>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/OpportunitiesPanel.tsx",
+      "line": 51,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h4 className=\"font-semibold text-sm text-text-main truncate\">{opp.name}</h4>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/TasksPanel.tsx",
+      "line": 21,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h3 className=\"text-sm font-semibold text-text-main\">Tasks & Follow-ups</h3>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/panels/TimelinePanel.tsx",
+      "line": 18,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h3 className=\"text-sm font-semibold text-text-main\">Activity Timeline</h3>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/sharedComponents.tsx",
+      "line": 9,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className={`inline-flex items-center gap-1 rounded bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300 uppercase track"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/[contactId]/components/sharedComponents.tsx",
+      "line": 34,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h4 className=\"text-sm font-semibold text-text-main\">{title}</h4>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/new/page.tsx",
+      "line": 176,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Identidad del Contacto</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/new/page.tsx",
+      "line": 245,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<div className=\"flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/new/page.tsx",
+      "line": 249,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Canales de Comunicación</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/new/page.tsx",
+      "line": 300,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<div className=\"flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/new/page.tsx",
+      "line": 304,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Empresa & Razón Social</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/new/page.tsx",
+      "line": 351,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h2 className=\"text-sm font-semibold text-text-main\">Ciclo de Vida del Contacto</h2>"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/contacts/new/page.tsx",
+      "line": 389,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 106,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "icon = <Sparkles className=\"size-3 text-amber-500 shrink-0\" />;"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 109,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "icon = <TrendingUp className=\"size-3 text-emerald-500 shrink-0\" />;"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 132,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "icon = <Phone className=\"size-3 text-blue-500 shrink-0\" />;"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 135,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "icon = <Mail className=\"size-3 text-purple-500 shrink-0\" />;"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 138,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "icon = <Calendar className=\"size-3 text-amber-500 shrink-0\" />;"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 141,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "icon = <FileText className=\"size-3 text-emerald-500 shrink-0\" />;"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 144,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "icon = <CheckCircle2 className=\"size-3 text-indigo-500 shrink-0\" />;"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 160,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1.5 rounded-md border border-red-500/25 bg-red-500/10 px-2 py-0.5 text-[11px] font-semibold text-red-600 dark:text-red-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 161,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<AlertCircle className=\"size-3 text-red-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 167,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1.5 rounded-md border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:text-amber-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 168,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<SignalHigh className=\"size-3 text-amber-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 199,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1.5 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 206,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1.5 rounded-md border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-medium text-blue-600 dark:text-blue-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 221,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1.5 rounded-md border border-rose-500/25 bg-rose-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 222,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<AlertCircle className=\"size-3 text-rose-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 247,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1.5 rounded-md border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 248,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<Clock className=\"size-3 text-rose-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 256,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<span className=\"inline-flex items-center gap-1.5 rounded-md border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-600 dark:text-amber-400\">"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 257,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "<Calendar className=\"size-3 text-amber-500 shrink-0\" />"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 289,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className=\"flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-xs mt-0.5\""
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 298,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 460,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 567,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/app/sales-crm/tasks/page.tsx",
+      "line": 605,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/components/layout/PlatformHeaderControls.tsx",
+      "line": 83,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/ContactListWidget.tsx",
+      "line": 318,
+      "rule": "implicitButtonVariant",
+      "contractKind": "immutable",
+      "primaryRisk": "action semantics and theme safety",
+      "message": "Product buttons must declare an explicit variant so theme changes cannot make text or icons unreadable.",
+      "snippet": "<Button\n              type=\"button\"\n              onClick={() =>"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/ContactListWidget.tsx",
+      "line": 348,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactBulkActionsBar.tsx",
+      "line": 69,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className=\"h-8 gap-1.5 text-xs px-2.5 text-emerald-700 dark:text-emerald-300\""
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactBulkActionsBar.tsx",
+      "line": 78,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactDirectChannels.tsx",
+      "line": 59,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactDirectChannels.tsx",
+      "line": 90,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactDirectChannels.tsx",
+      "line": 115,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactIdentityBadge.tsx",
+      "line": 27,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className={`inline-flex items-center rounded-full font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/80 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-e"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactIdentityBadge.tsx",
+      "line": 31,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className=\"w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse\""
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactIdentityBadge.tsx",
+      "line": 46,
+      "rule": "tokenUsage",
+      "contractKind": "immutable",
+      "primaryRisk": "uncontrolled design token usage",
+      "message": "Use LoopDev semantic design tokens instead of direct palette utilities or inline color values.",
+      "snippet": "className={`inline-flex items-center rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/4"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactMobileCapa2.tsx",
+      "line": 64,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/contacts/components/ContactMobileCard.tsx",
+      "line": 72,
+      "rule": "approvedInteractivePrimitive",
+      "contractKind": "evolving",
+      "primaryRisk": "approved interaction primitive",
+      "message": "Review whether the approved Button or IconButton primitive should be used.",
+      "snippet": "<button"
+    },
+    {
+      "file": "apps/loopdev-os/src/suites/sales-crm/crm/FieldGroupSection.tsx",
+      "line": 67,
+      "rule": "typography",
+      "contractKind": "evolving",
+      "primaryRisk": "approved typography direction",
+      "message": "Heading uses local typography styling; review Heading primitive usage.",
+      "snippet": "<h3 className=\"text-xs font-bold uppercase tracking-wider text-text-main\">"
     }
   ]
 }

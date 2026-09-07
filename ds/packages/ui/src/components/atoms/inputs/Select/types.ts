@@ -23,6 +23,12 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   placeholder?: string;
   /** Habilita buscador en tiempo real dentro del desplegable */
   searchable?: boolean;
+  /** Placeholder para el campo de búsqueda */
+  searchPlaceholder?: string;
+  /** Mensaje cuando no hay resultados de búsqueda */
+  emptyMessage?: string;
+  /** Label accesible para el botón de limpiar */
+  clearLabel?: string;
   /** Permite limpiar la selección */
   clearable?: boolean;
   /** Icono o elemento visual a la izquierda del valor */

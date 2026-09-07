@@ -16,13 +16,13 @@
 
 import { randomUUID } from 'node:crypto';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'http://127.0.0.1:54321';
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-if (!supabaseUrl || !serviceRoleKey) {
-  throw new Error(
-    'NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required to seed CRM demo data',
-  );
+if (!serviceRoleKey) {
+  console.error('SUPABASE_SERVICE_ROLE_KEY is required to run the seed script.');
+  process.exit(1);
 }
 
 const headers = {
@@ -46,29 +46,150 @@ async function api(path, method = 'GET', body = null) {
 
 // Stage templates
 const STAGES = [
-  { stage_key: 'lead', label: 'Lead Nuevo', position: 0, active: true, terminal_type: 'open', is_terminal: false },
-  { stage_key: 'contactado', label: 'Contactado', position: 1, active: true, terminal_type: 'open', is_terminal: false },
-  { stage_key: 'qualified', label: 'Cualificado', position: 2, active: true, terminal_type: 'open', is_terminal: false },
-  { stage_key: 'propuesta', label: 'Propuesta', position: 3, active: true, terminal_type: 'open', is_terminal: false },
-  { stage_key: 'negociacion', label: 'Negociación', position: 4, active: true, terminal_type: 'open', is_terminal: false },
-  { stage_key: 'won', label: 'Ganado', position: 5, active: true, terminal_type: 'won', is_terminal: true },
-  { stage_key: 'lost', label: 'Perdido', position: 6, active: true, terminal_type: 'lost', is_terminal: true },
+  {
+    stage_key: 'lead',
+    label: 'Lead Nuevo',
+    position: 0,
+    active: true,
+    terminal_type: 'open',
+    is_terminal: false,
+  },
+  {
+    stage_key: 'contactado',
+    label: 'Contactado',
+    position: 1,
+    active: true,
+    terminal_type: 'open',
+    is_terminal: false,
+  },
+  {
+    stage_key: 'qualified',
+    label: 'Cualificado',
+    position: 2,
+    active: true,
+    terminal_type: 'open',
+    is_terminal: false,
+  },
+  {
+    stage_key: 'propuesta',
+    label: 'Propuesta',
+    position: 3,
+    active: true,
+    terminal_type: 'open',
+    is_terminal: false,
+  },
+  {
+    stage_key: 'negociacion',
+    label: 'Negociación',
+    position: 4,
+    active: true,
+    terminal_type: 'open',
+    is_terminal: false,
+  },
+  {
+    stage_key: 'won',
+    label: 'Ganado',
+    position: 5,
+    active: true,
+    terminal_type: 'won',
+    is_terminal: true,
+  },
+  {
+    stage_key: 'lost',
+    label: 'Perdido',
+    position: 6,
+    active: true,
+    terminal_type: 'lost',
+    is_terminal: true,
+  },
 ];
 
 // Contacts templates
 const CONTACTS_DATA = [
-  { first_name: 'Ana', last_name: 'García López', email: 'ana.garcia@acmeindustries.es', phone: '+34610000001', company_name: 'Acme Industries' },
-  { first_name: 'Carlos', last_name: 'Martín Sanz', email: 'carlos.martin@northstarhealth.es', phone: '+34610000002', company_name: 'Northstar Health' },
-  { first_name: 'Lucía', last_name: 'Fernández Ruiz', email: 'lucia.fernandez@studiomeridian.com', phone: '+34610000003', company_name: 'Studio Meridian' },
-  { first_name: 'Diego', last_name: 'Navarro Gil', email: 'diego.navarro@techcorp.es', phone: '+34610000004', company_name: 'TechCorp Solutions' },
-  { first_name: 'Marta', last_name: 'Ortega Vidal', email: 'marta.ortega@grupoinnova.es', phone: '+34610000005', company_name: 'Grupo Innova' },
-  { first_name: 'José', last_name: 'Lorenzo Marín', email: 'jose.lorenzo@lorenzoconsulting.com', phone: '+34610000006', company_name: 'Lorenzo Consulting' },
-  { first_name: 'Sofía', last_name: 'Molina Cano', email: 'sofia.molina@solucionesdigitales.es', phone: '+34610000007', company_name: 'Soluciones Digitales' },
-  { first_name: 'Pablo', last_name: 'Castro Rey', email: 'pablo.castro@reyasociados.es', phone: '+34610000008', company_name: 'Rey & Asociados' },
-  { first_name: 'Elena', last_name: 'Suárez Díaz', email: 'elena.suarez@medtechglobal.com', phone: '+34610000011', company_name: 'MedTech Global' },
-  { first_name: 'Raúl', last_name: 'Iglesias Prat', email: 'raul.iglesias@iglesiaslogistics.es', phone: '+34610000012', company_name: 'Iglesias Logistics' },
-  { first_name: 'Laura', last_name: 'Blanco Soler', email: 'laura.blanco@blancomedia.com', phone: '+34610000013', company_name: 'Blanco Media' },
-  { first_name: 'Alberto', last_name: 'Ramos Serra', email: 'alberto.ramos@ramosseguros.es', phone: '+34610000014', company_name: 'Ramos Seguros' },
+  {
+    first_name: 'Ana',
+    last_name: 'García López',
+    email: 'ana.garcia@acmeindustries.es',
+    phone: '+34610000001',
+    company_name: 'Acme Industries',
+  },
+  {
+    first_name: 'Carlos',
+    last_name: 'Martín Sanz',
+    email: 'carlos.martin@northstarhealth.es',
+    phone: '+34610000002',
+    company_name: 'Northstar Health',
+  },
+  {
+    first_name: 'Lucía',
+    last_name: 'Fernández Ruiz',
+    email: 'lucia.fernandez@studiomeridian.com',
+    phone: '+34610000003',
+    company_name: 'Studio Meridian',
+  },
+  {
+    first_name: 'Diego',
+    last_name: 'Navarro Gil',
+    email: 'diego.navarro@techcorp.es',
+    phone: '+34610000004',
+    company_name: 'TechCorp Solutions',
+  },
+  {
+    first_name: 'Marta',
+    last_name: 'Ortega Vidal',
+    email: 'marta.ortega@grupoinnova.es',
+    phone: '+34610000005',
+    company_name: 'Grupo Innova',
+  },
+  {
+    first_name: 'José',
+    last_name: 'Lorenzo Marín',
+    email: 'jose.lorenzo@lorenzoconsulting.com',
+    phone: '+34610000006',
+    company_name: 'Lorenzo Consulting',
+  },
+  {
+    first_name: 'Sofía',
+    last_name: 'Molina Cano',
+    email: 'sofia.molina@solucionesdigitales.es',
+    phone: '+34610000007',
+    company_name: 'Soluciones Digitales',
+  },
+  {
+    first_name: 'Pablo',
+    last_name: 'Castro Rey',
+    email: 'pablo.castro@reyasociados.es',
+    phone: '+34610000008',
+    company_name: 'Rey & Asociados',
+  },
+  {
+    first_name: 'Elena',
+    last_name: 'Suárez Díaz',
+    email: 'elena.suarez@medtechglobal.com',
+    phone: '+34610000011',
+    company_name: 'MedTech Global',
+  },
+  {
+    first_name: 'Raúl',
+    last_name: 'Iglesias Prat',
+    email: 'raul.iglesias@iglesiaslogistics.es',
+    phone: '+34610000012',
+    company_name: 'Iglesias Logistics',
+  },
+  {
+    first_name: 'Laura',
+    last_name: 'Blanco Soler',
+    email: 'laura.blanco@blancomedia.com',
+    phone: '+34610000013',
+    company_name: 'Blanco Media',
+  },
+  {
+    first_name: 'Alberto',
+    last_name: 'Ramos Serra',
+    email: 'alberto.ramos@ramosseguros.es',
+    phone: '+34610000014',
+    company_name: 'Ramos Seguros',
+  },
 ];
 
 async function seedOrganization(org) {
@@ -103,7 +224,9 @@ async function seedOrganization(org) {
       is_terminal: s.is_terminal,
     };
     // Check if stage already exists
-    const existing = await api(`/crm_pipeline_stages?organization_id=eq.${org.id}&stage_key=eq.${s.stage_key}`);
+    const existing = await api(
+      `/crm_pipeline_stages?organization_id=eq.${org.id}&stage_key=eq.${s.stage_key}`,
+    );
     if (existing.length > 0) {
       await api(`/crm_pipeline_stages?id=eq.${existing[0].id}`, 'PATCH', stagePayload);
       console.log(`  ✓ Updated stage: ${s.label} (${s.stage_key})`);
@@ -140,14 +263,65 @@ async function seedOrganization(org) {
   // 5. Create Leads
   console.log(`\n3. Creating Leads...`);
   const LEADS_PLAN = [
-    { contactIdx: 0, status: 'nuevo', stage: 'lead', source: 'manual', interest: 'Seguro de salud para directivos' },
-    { contactIdx: 1, status: 'contactado', stage: 'contacted', source: 'campaign', campaign: 'Campaña Salud 2026', interest: 'Póliza colectiva PYME' },
-    { contactIdx: 2, status: 'cualificado', stage: 'proposal', source: 'whatsapp_simulated', interest: 'Plan familiar ampliado' },
-    { contactIdx: 3, status: 'convertido', stage: 'won', source: 'campaign', campaign: 'Meta Ads Retargeting', interest: 'Protección integral' },
-    { contactIdx: 4, status: 'nuevo', stage: 'lead', source: 'referral', interest: 'Consultoría de cobertura' },
-    { contactIdx: 5, status: 'cualificado', stage: 'proposal', source: 'partner', interest: 'Seguro médico corporativo' },
-    { contactIdx: 6, status: 'contactado', stage: 'contacted', source: 'manual', interest: 'Ampliación dental y óptica' },
-    { contactIdx: 7, status: 'convertido', stage: 'won', source: 'campaign', campaign: 'Google Search Paid', interest: 'Póliza ejecutiva sénior' },
+    {
+      contactIdx: 0,
+      status: 'nuevo',
+      stage: 'lead',
+      source: 'manual',
+      interest: 'Seguro de salud para directivos',
+    },
+    {
+      contactIdx: 1,
+      status: 'contactado',
+      stage: 'contacted',
+      source: 'campaign',
+      campaign: 'Campaña Salud 2026',
+      interest: 'Póliza colectiva PYME',
+    },
+    {
+      contactIdx: 2,
+      status: 'cualificado',
+      stage: 'proposal',
+      source: 'whatsapp_simulated',
+      interest: 'Plan familiar ampliado',
+    },
+    {
+      contactIdx: 3,
+      status: 'convertido',
+      stage: 'won',
+      source: 'campaign',
+      campaign: 'Meta Ads Retargeting',
+      interest: 'Protección integral',
+    },
+    {
+      contactIdx: 4,
+      status: 'nuevo',
+      stage: 'lead',
+      source: 'referral',
+      interest: 'Consultoría de cobertura',
+    },
+    {
+      contactIdx: 5,
+      status: 'cualificado',
+      stage: 'proposal',
+      source: 'partner',
+      interest: 'Seguro médico corporativo',
+    },
+    {
+      contactIdx: 6,
+      status: 'contactado',
+      stage: 'contacted',
+      source: 'manual',
+      interest: 'Ampliación dental y óptica',
+    },
+    {
+      contactIdx: 7,
+      status: 'convertido',
+      stage: 'won',
+      source: 'campaign',
+      campaign: 'Google Search Paid',
+      interest: 'Póliza ejecutiva sénior',
+    },
   ];
 
   const createdLeads = [];
@@ -156,7 +330,9 @@ async function seedOrganization(org) {
     const contact = createdContacts[plan.contactIdx];
     if (!contact) continue;
 
-    const existing = await api(`/crm_leads?organization_id=eq.${org.id}&contact_id=eq.${contact.id}`);
+    const existing = await api(
+      `/crm_leads?organization_id=eq.${org.id}&contact_id=eq.${contact.id}`,
+    );
     if (existing.length > 0) {
       createdLeads.push(existing[0]);
       console.log(`  ✓ Lead exists for contact: ${contact.first_name}`);
@@ -345,7 +521,9 @@ async function seedOrganization(org) {
     const lead = createdLeads[opp.leadIdx] || null;
     if (!contact) continue;
 
-    const existing = await api(`/crm_opportunities?organization_id=eq.${org.id}&name=eq.${encodeURIComponent(opp.name)}`);
+    const existing = await api(
+      `/crm_opportunities?organization_id=eq.${org.id}&name=eq.${encodeURIComponent(opp.name)}`,
+    );
     if (existing.length > 0) {
       createdOpps.push(existing[0]);
       console.log(`  ✓ Opportunity exists: ${opp.name}`);
@@ -468,7 +646,9 @@ async function seedOrganization(org) {
     const relationId = task.getRelationId();
     if (!relationId) continue;
 
-    const existing = await api(`/crm_tasks?organization_id=eq.${org.id}&title=eq.${encodeURIComponent(task.title)}`);
+    const existing = await api(
+      `/crm_tasks?organization_id=eq.${org.id}&title=eq.${encodeURIComponent(task.title)}`,
+    );
     if (existing.length > 0) {
       console.log(`  ✓ Task exists: ${task.title}`);
     } else {
@@ -497,7 +677,9 @@ async function seedOrganization(org) {
   console.log(`\n6. Creating Notes & Activities for Customer 360...`);
   for (let i = 0; i < Math.min(createdContacts.length, 3); i++) {
     const contact = createdContacts[i];
-    const existingNotes = await api(`/crm_notes?organization_id=eq.${org.id}&contact_id=eq.${contact.id}`);
+    const existingNotes = await api(
+      `/crm_notes?organization_id=eq.${org.id}&contact_id=eq.${contact.id}`,
+    );
     if (existingNotes.length === 0) {
       await api(`/crm_notes`, 'POST', {
         id: randomUUID(),
@@ -510,7 +692,7 @@ async function seedOrganization(org) {
         body: `Nota comercial: El cliente ${contact.first_name} tiene gran interés en la cobertura dental y hospitalaria para su familia. Mantener seguimiento prioritario.`,
         visibility: 'team',
         version: 1,
-      }).catch(err => console.log('    (Note skip: ' + err.message + ')'));
+      }).catch((err) => console.log('    (Note skip: ' + err.message + ')'));
       console.log(`  + Created note for ${contact.first_name}`);
     }
   }
@@ -523,7 +705,7 @@ async function main() {
   console.log(`Supabase URL: ${supabaseUrl}`);
 
   const orgs = await api(`/organizations?is_active=eq.true`);
-  console.log(`Found ${orgs.length} active organizations: ${orgs.map(o => o.name).join(', ')}`);
+  console.log(`Found ${orgs.length} active organizations: ${orgs.map((o) => o.name).join(', ')}`);
 
   for (const org of orgs) {
     if (org.slug === 'loopdev' || org.slug === 'estar-protegidos') {
@@ -536,7 +718,7 @@ async function main() {
   console.log(`========================================`);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('\n❌ Seeding failed:', err);
   process.exit(1);
 });

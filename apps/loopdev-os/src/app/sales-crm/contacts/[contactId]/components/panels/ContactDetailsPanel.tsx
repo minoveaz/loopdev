@@ -67,7 +67,9 @@ export function ContactDetailsPanel({
           <div className="flex justify-between items-center py-0.5">
             <span className="text-text-muted">Nombre legal:</span>
             <span className="font-medium text-text-main">
-              {[contact.firstName, contact.lastName, contact.secondLastName].filter(Boolean).join(' ') || 'Sin especificar'}
+              {[contact.firstName, contact.lastName, contact.secondLastName]
+                .filter(Boolean)
+                .join(' ') || 'Sin especificar'}
             </span>
           </div>
           {contact.documentNumber && (
@@ -193,7 +195,9 @@ export function ContactDetailsPanel({
             {contact.addressLine1 && <p className="font-medium">{contact.addressLine1}</p>}
             {contact.addressLine2 && <p className="text-text-muted">{contact.addressLine2}</p>}
             <p className="text-text-muted">
-              {[contact.postalCode, contact.city, contact.stateProvince, contact.country].filter(Boolean).join(', ')}
+              {[contact.postalCode, contact.city, contact.stateProvince, contact.country]
+                .filter(Boolean)
+                .join(', ')}
             </p>
           </div>
         </div>
@@ -220,7 +224,7 @@ export function ContactDetailsPanel({
         {displayedLeads.length ? (
           <div className="space-y-2 pt-1">
             {displayedLeads.map((lead) => {
-              const isSimulated = 'isSimulated' in lead && Boolean((lead as Record<string, unknown>).isSimulated);
+              const isSimulated = Boolean(lead.isSimulated);
               return (
                 <div
                   key={lead.id}

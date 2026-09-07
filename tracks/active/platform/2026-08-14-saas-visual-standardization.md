@@ -7,7 +7,12 @@ updated: 2026-08-17
 owner: platform
 lead: null
 branch: null
-branches: [docs/platform-shell-mode-inventory, feature/crm-ui-foundation, fix/platform-header-theming-launchpad]
+branches:
+  [
+    docs/platform-shell-mode-inventory,
+    feature/crm-ui-foundation,
+    fix/platform-header-theming-launchpad,
+  ]
 phase: 2
 pull_requests: []
 issues: []
@@ -59,11 +64,11 @@ before broad CRM and suite view implementation.
 
 ## Decisiones aprobadas
 
-| Fecha | Decisión | Motivo | Impacto | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-14 | Use shared tokens, primitives and recipes instead of suite-local visual CSS systems. | Preserve cross-SaaS consistency while allowing domain composition. | New variants require shared ownership and evidence. | Usuario |
-| 2026-08-14 | Keep structural Canvas modes separate from visual surface recipes. | Prevent layout contracts from becoming decoration contracts. | Views declare both a Canvas mode and a visual recipe. | Usuario |
-| 2026-08-17 | Adopt the **SuiteCanvas Declarative Composition System**: pages declare semantic regions and grid intent; shared runtime and canvas presets own geometry, surfaces, responsive behavior and overflow. | Prevent page-local pixel layouts and visual drift while preserving domain-specific composition. | Extend the composition contract with governed grid placement where needed; reject arbitrary pixel coordinates and platform overrides. | Usuario |
+| Fecha      | Decisión                                                                                                                                                                                              | Motivo                                                                                          | Impacto                                                                                                                               | Aprobado por |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 2026-08-14 | Use shared tokens, primitives and recipes instead of suite-local visual CSS systems.                                                                                                                  | Preserve cross-SaaS consistency while allowing domain composition.                              | New variants require shared ownership and evidence.                                                                                   | Usuario      |
+| 2026-08-14 | Keep structural Canvas modes separate from visual surface recipes.                                                                                                                                    | Prevent layout contracts from becoming decoration contracts.                                    | Views declare both a Canvas mode and a visual recipe.                                                                                 | Usuario      |
+| 2026-08-17 | Adopt the **SuiteCanvas Declarative Composition System**: pages declare semantic regions and grid intent; shared runtime and canvas presets own geometry, surfaces, responsive behavior and overflow. | Prevent page-local pixel layouts and visual drift while preserving domain-specific composition. | Extend the composition contract with governed grid placement where needed; reject arbitrary pixel coordinates and platform overrides. | Usuario      |
 
 ### Nombre industrial y definición
 
@@ -218,34 +223,34 @@ Estas prioridades amplían la implementación de la Fase 2 y son el orden de
 trabajo aprobado antes de iniciar CRM:
 
 1. **Aplicar superficies del DS a las composiciones:** migrar los contenedores
-  principales de `composition-showcase` a `TechnicalSurface`, usando el
-  contrato de `variant`, `depth`, `radius`, `border`, `borderWidth` y
-  `withGrid`. Estado: **contrato endurecido; migración de contenedores locales
-  pendiente**.
+   principales de `composition-showcase` a `TechnicalSurface`, usando el
+   contrato de `variant`, `depth`, `radius`, `border`, `borderWidth` y
+   `withGrid`. Estado: **contrato endurecido; migración de contenedores locales
+   pendiente**.
 2. **Completar fixtures reales por recipe:** pendiente sólo la ampliación de
-  estados y revisión de `CreativeEditor`; `SplitWorkspace` e
-  `ImmersiveWorkflow` ya tienen fixtures de referencia.
+   estados y revisión de `CreativeEditor`; `SplitWorkspace` e
+   `ImmersiveWorkflow` ya tienen fixtures de referencia.
 3. **Aplicar estados reutilizables a cada recipe:** loading, empty, error,
-  forbidden, read-only, offline, stale y conflict.
+   forbidden, read-only, offline, stale y conflict.
 4. **Normalizar iconos y acciones:** usar `ICON_REGISTRY`, `Button` e
-  `IconButton` sin controles HTML o nombres de iconos locales. Estado:
-  **parcialmente certificado**, con búsquedas y acciones discretas del
-  showcase normalizadas.
+   `IconButton` sin controles HTML o nombres de iconos locales. Estado:
+   **parcialmente certificado**, con búsquedas y acciones discretas del
+   showcase normalizadas.
 5. **Certificar interacción:** hover, focus, active, disabled, loading de
-  botones, permisos, teclado y reduced motion. Estado: **certificado para
-  referencias**, con cobertura Playwright de estados, foco y reduced motion.
+   botones, permisos, teclado y reduced motion. Estado: **certificado para
+   referencias**, con cobertura Playwright de estados, foco y reduced motion.
 6. **Ejecutar revisión responsive real:** desktop 1440, tablet 1024 y mobile
-  390, comprobando regiones contenidas, transformaciones y scroll interno.
+   390, comprobando regiones contenidas, transformaciones y scroll interno.
 7. **Completar auditoría light/dark:** superficies, bordes, grillas,
-  overlays, glass y estados semánticos. Estado: **certificado para
-  referencias**; el control de tema persiste y valida superficies semánticas.
+   overlays, glass y estados semánticos. Estado: **certificado para
+   referencias**; el control de tema persiste y valida superficies semánticas.
 8. **Añadir tests de contrato:** TechnicalSurface, estados, responsive,
-  icon registry y acciones contextuales. Estado: **parcialmente cubierto**;
-  existen contratos de recipes, superficies/cards/controles/tablas y tests
-  Playwright de interacción.
+   icon registry y acciones contextuales. Estado: **parcialmente cubierto**;
+   existen contratos de recipes, superficies/cards/controles/tablas y tests
+   Playwright de interacción.
 9. **Registrar evidencia de navegador:** screenshots autenticados y resultados
-  visuales para cerrar el readiness gate. Estado: **10 pruebas Playwright
-  autenticadas pasadas**.
+   visuales para cerrar el readiness gate. Estado: **10 pruebas Playwright
+   autenticadas pasadas**.
 
 **Progreso registrado:** el punto 1 avanzó el 2026-08-14 con la migración de la
 pestaña `Surfaces`, la configuración de `TechnicalSurface` en el DS y la
@@ -277,25 +282,25 @@ turns the fifteen cross-SaaS concerns into evidence requirements for the first
 CRM screen and prevents CRM from becoming the place where platform behavior is
 discovered for the first time.
 
-| Area | Required evidence | Status |
-| --- | --- | --- |
-| Shell zones | Mandatory and optional zone contract consumed by a module definition | ready |
-| Declarative composition | Recipe, canvas mode, rows, columns, placement, sizing and overflow are declared | ready for references |
-| CreativeEditor | Full-bleed reference with contextual zones, preview, transport and timeline | ready |
-| SuiteOverview | Reference fixture consumes the same contract | ready for visual review |
-| DataWorkspace | Reference reviewed for filters, table, pagination and density | fixture ready; visual review pending |
-| RecordWorkspace | Reference reviewed for record, tabs, activity and inspector behavior | fixture ready; interaction review pending |
-| BoardWorkspace | Reference reviewed for board density, cards, metrics and horizontal flow | fixture ready; interaction review pending |
-| Functional states | Loading, empty, error, forbidden, read-only, offline, stale and conflict fixtures | reference coverage |
-| Responsive | Desktop, tablet, mobile, touch and sidebar/panel transformations | reference coverage ready |
-| Accessibility | Keyboard path, focus restoration, semantics, contrast and reduced motion | reference coverage ready |
-| Typography | Font families, sizes, weights, line-height and text expansion use tokens | pending |
-| Color and surfaces | Semantic canvas, surface, elevated, overlay, accent and attention tokens | pending |
-| Permissions | Hidden, disabled, forbidden, read-only and active-route fallback behavior | reference coverage ready |
-| Data density | Table, filters, pagination, sorting, selection, formatting and large-data rules | pending |
-| Performance | List, grid, animation, canvas and interaction budgets | reference marks ready; budgets pending |
-| Observability | Navigation, context, state, errors, permission and latency events without sensitive data | reference events ready |
-| Exceptions | Owner, rationale, approval, scope, review date and removal plan | partially ready |
+| Area                    | Required evidence                                                                        | Status                                    |
+| ----------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Shell zones             | Mandatory and optional zone contract consumed by a module definition                     | ready                                     |
+| Declarative composition | Recipe, canvas mode, rows, columns, placement, sizing and overflow are declared          | ready for references                      |
+| CreativeEditor          | Full-bleed reference with contextual zones, preview, transport and timeline              | ready                                     |
+| SuiteOverview           | Reference fixture consumes the same contract                                             | ready for visual review                   |
+| DataWorkspace           | Reference reviewed for filters, table, pagination and density                            | fixture ready; visual review pending      |
+| RecordWorkspace         | Reference reviewed for record, tabs, activity and inspector behavior                     | fixture ready; interaction review pending |
+| BoardWorkspace          | Reference reviewed for board density, cards, metrics and horizontal flow                 | fixture ready; interaction review pending |
+| Functional states       | Loading, empty, error, forbidden, read-only, offline, stale and conflict fixtures        | reference coverage                        |
+| Responsive              | Desktop, tablet, mobile, touch and sidebar/panel transformations                         | reference coverage ready                  |
+| Accessibility           | Keyboard path, focus restoration, semantics, contrast and reduced motion                 | reference coverage ready                  |
+| Typography              | Font families, sizes, weights, line-height and text expansion use tokens                 | pending                                   |
+| Color and surfaces      | Semantic canvas, surface, elevated, overlay, accent and attention tokens                 | pending                                   |
+| Permissions             | Hidden, disabled, forbidden, read-only and active-route fallback behavior                | reference coverage ready                  |
+| Data density            | Table, filters, pagination, sorting, selection, formatting and large-data rules          | pending                                   |
+| Performance             | List, grid, animation, canvas and interaction budgets                                    | reference marks ready; budgets pending    |
+| Observability           | Navigation, context, state, errors, permission and latency events without sensitive data | reference events ready                    |
+| Exceptions              | Owner, rationale, approval, scope, review date and removal plan                          | partially ready                           |
 
 ### Entry criteria
 
@@ -337,10 +342,10 @@ breakpoints.
 
 Estas composiciones no deben converger en una misma caja visual:
 
-| Composición | Intención | Geometría | Overflow | Superficie |
-| --- | --- | --- | --- | --- |
-| `BoardWorkspace` | Operación por columnas y comparación de trabajo | Canvas `board` con padding estable, columnas de ancho mínimo y separación controlada | Scroll horizontal exclusivo del board; el shell nunca adquiere overflow horizontal | Surface bounded, borde técnico y densidad operativa |
-| `ImmersiveWorkflow` | Ejecución continua de un flujo | Canvas `full-bleed`, ocupa el área disponible y reduce el marco exterior | Sin scroll horizontal del shell; el contenido interno controla cualquier overflow específico | Superficie continua, sin card contenedora equivalente al board |
+| Composición         | Intención                                       | Geometría                                                                            | Overflow                                                                                     | Superficie                                                     |
+| ------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `BoardWorkspace`    | Operación por columnas y comparación de trabajo | Canvas `board` con padding estable, columnas de ancho mínimo y separación controlada | Scroll horizontal exclusivo del board; el shell nunca adquiere overflow horizontal           | Surface bounded, borde técnico y densidad operativa            |
+| `ImmersiveWorkflow` | Ejecución continua de un flujo                  | Canvas `full-bleed`, ocupa el área disponible y reduce el marco exterior             | Sin scroll horizontal del shell; el contenido interno controla cualquier overflow específico | Superficie continua, sin card contenedora equivalente al board |
 
 La diferencia visible actual es intencional en escala, marco, margen y densidad,
 pero el overflow observado en `BoardWorkspace` debe quedar encapsulado en su
@@ -349,61 +354,61 @@ clases locales del shell.
 
 #### Contratos de geometría por nivel
 
-| Nivel | Owner | Puede definir | No puede definir |
-| --- | --- | --- | --- |
-| Plataforma | `AppShell`, `PlatformHeader`, `SuiteSidebar`, `SuiteRuntime` | Header fijo, rail, overlays, z-index, altura disponible y regla de scroll único | Contenido de módulo o visuales de una receta |
-| Composición | `SuiteCanvas`, presets de modo y recetas certificadas | Modo, zonas, grid semántica, padding de canvas, overflow de una zona autorizada | Colores, fondos, alturas estructurales, widths del shell o anatomía de headers |
-| Dominio | Página y módulos | Datos, labels, estados, acciones permitidas y contenido de slots | Shell paralelo, superficies ad hoc, bordes/márgenes estructurales y breakpoints de plataforma |
+| Nivel       | Owner                                                        | Puede definir                                                                   | No puede definir                                                                              |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Plataforma  | `AppShell`, `PlatformHeader`, `SuiteSidebar`, `SuiteRuntime` | Header fijo, rail, overlays, z-index, altura disponible y regla de scroll único | Contenido de módulo o visuales de una receta                                                  |
+| Composición | `SuiteCanvas`, presets de modo y recetas certificadas        | Modo, zonas, grid semántica, padding de canvas, overflow de una zona autorizada | Colores, fondos, alturas estructurales, widths del shell o anatomía de headers                |
+| Dominio     | Página y módulos                                             | Datos, labels, estados, acciones permitidas y contenido de slots                | Shell paralelo, superficies ad hoc, bordes/márgenes estructurales y breakpoints de plataforma |
 
 #### Checklist de endurecimiento
 
 - [x] **Shell global:** fijar altura de `PlatformHeader`, anchos de
-  `SuiteSidebar` expandido/rail, posición estable en hover, z-index de
-  overlays, altura disponible de `SuiteCanvas` y una sola superficie de
-  scroll vertical.
+      `SuiteSidebar` expandido/rail, posición estable en hover, z-index de
+      overlays, altura disponible de `SuiteCanvas` y una sola superficie de
+      scroll vertical.
 - [x] **`ModuleHeader`:** fijar altura, padding horizontal, grid de tres slots,
-  posición del status, ancho/truncado de breadcrumbs, acción derecha sin
-  desplazar el contexto izquierdo y transformación móvil.
+      posición del status, ancho/truncado de breadcrumbs, acción derecha sin
+      desplazar el contexto izquierdo y transformación móvil.
 - [x] **`ModuleToolbar`:** reservar `contextSlot`, fijar ancho máximo de
-  `ModuleSearch`, altura, gaps, modo de dos filas, regla móvil y controles
-  permitidos en `centerSlot`.
+      `ModuleSearch`, altura, gaps, modo de dos filas, regla móvil y controles
+      permitidos en `centerSlot`.
 - [x] **`ModuleContextSidebar`:** definir ancho abierto, rail colapsada,
-  header, trigger, separación header/content/footer y transición desktop,
-  hover y drawer móvil.
+      header, trigger, separación header/content/footer y transición desktop,
+      hover y drawer móvil.
 - [x] **`ModuleContextPanel`:** fijar ancho, header obligatorio, cierre,
-  footer fijo, scroll interno y preset responsive (`inline` en desktop,
-  `drawer` full-canvas en móvil).
+      footer fijo, scroll interno y preset responsive (`inline` en desktop,
+      `drawer` full-canvas en móvil).
 - [x] **`SuiteCanvas`:** formalizar por modo `overview`, `data`, `workspace`,
-  `split`, `board` y `full-bleed` el ancho máximo, padding, gaps, overflow,
-  responsive behavior y zonas compatibles.
+      `split`, `board` y `full-bleed` el ancho máximo, padding, gaps, overflow,
+      responsive behavior y zonas compatibles.
 - [ ] **Tablas:** fijar densidad, alturas de header/fila, padding, mínimo,
-  sticky header, truncado, columna de acciones y scroll horizontal exclusivo
-  de la tabla.
+      sticky header, truncado, columna de acciones y scroll horizontal exclusivo
+      de la tabla.
 - [ ] **Cards y superficies:** consumir variantes certificadas para radio,
-  borde, fondo, sombra, padding, header/footer y densidad; prohibir
-  combinaciones locales de clases para superficies de plataforma.
+      borde, fondo, sombra, padding, header/footer y densidad; prohibir
+      combinaciones locales de clases para superficies de plataforma.
 - [ ] **Controles:** fijar alturas, radios, icon sizes, gaps, focus ring,
-  disabled, labels truncados y variantes para botones, `IconButton`, toolbar,
-  footer y acciones de tabla.
+      disabled, labels truncados y variantes para botones, `IconButton`, toolbar,
+      footer y acciones de tabla.
 - [ ] **Breakpoints:** definir transformaciones compartidas para rail,
-  sidebar, panel, header, toolbar, tablas y canvas; las páginas no podrán
-  redefinir zonas de plataforma con clases responsive locales.
+      sidebar, panel, header, toolbar, tablas y canvas; las páginas no podrán
+      redefinir zonas de plataforma con clases responsive locales.
 - [ ] **Estados estructurales:** normalizar dimensiones y spacing de loading,
-  empty, error, forbidden, read-only, stale y conflict.
+      empty, error, forbidden, read-only, stale y conflict.
 
 **Progreso de implementación**
 
 - [x] **Paso 1:** crear `SuiteCanvasGeometryPreset` y los tipos semánticos
-  asociados (`SuiteCanvasGridColumns`, `SuiteCanvasPadding`,
-  `SuiteCanvasMaxWidth`, `SuiteCanvasOverflowX`) en
-  `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/types.ts`.
+      asociados (`SuiteCanvasGridColumns`, `SuiteCanvasPadding`,
+      `SuiteCanvasMaxWidth`, `SuiteCanvasOverflowX`) en
+      `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/types.ts`.
 - [x] **Paso 2:** añadir presets concretos de geometría a
-  `SUITE_SHELL_MODE_PRESETS`.
+      `SUITE_SHELL_MODE_PRESETS`.
 - [x] **Paso 3:** pasar el preset desde `SuiteRuntime` a `SuiteCanvas`.
 - [x] **Paso 4:** aplicar clases certificadas de geometría en `SuiteCanvas`.
 - [x] **Paso 5:** añadir cobertura técnica de `board`, `full-bleed`, overflow,
-  columnas desktop/móvil, padding y ancho máximo. La evidencia de navegador
-  para geometría real queda pendiente antes de cerrar la fase.
+      columnas desktop/móvil, padding y ancho máximo. La evidencia de navegador
+      para geometría real queda pendiente antes de cerrar la fase.
 
 #### Slice actual: `ModuleHeader` y `ModuleToolbar`
 
@@ -455,17 +460,17 @@ móvil sin overflow horizontal y sin violaciones Axe críticas/serias.
 
 - [ ] Header, rail, canvas y overlays conservan posición entre recetas.
 - [ ] El contenido central tiene scroll vertical único y no existe overflow
-  horizontal del shell.
+      horizontal del shell.
 - [ ] `BoardWorkspace` permite scroll horizontal únicamente dentro del board.
 - [ ] `ImmersiveWorkflow` ocupa el canvas full-bleed sin adoptar la caja,
-  borde o margen del board.
+      borde o margen del board.
 - [ ] Desktop y móvil mantienen la misma jerarquía; sidebar y panel son
-  drawers full-canvas en móvil.
+      drawers full-canvas en móvil.
 - [ ] Dos composiciones con la misma zona alinean `ModuleHeader`, search,
-  toolbar, superficies, bordes y márgenes sin ajustes locales.
+      toolbar, superficies, bordes y márgenes sin ajustes locales.
 - [ ] Una página nueva puede declarar receta, zonas, contenido, labels y
-  estados, pero no colores, fondos, tamaños, widths, headers, botones,
-  scroll, overlays ni breakpoints de plataforma.
+      estados, pero no colores, fondos, tamaños, widths, headers, botones,
+      scroll, overlays ni breakpoints de plataforma.
 
 **Estado:** implementación y certificación visual completadas. El contrato tipado, los presets
 de los seis modos, la propagación `SuiteRuntime -> SuiteCanvas`, la aplicación
@@ -484,24 +489,24 @@ gates for all new SaaS views.
 
 ## Registro de cambios de enfoque
 
-| Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-08-17 | Crear `SuiteCanvasGeometryPreset` como contrato tipado inicial. | Separar la intención geométrica de la aplicación visual y preparar presets por modo. | Completa el paso 1 de la Fase 2A; no cambia todavía el render. | Usuario |
-| 2026-08-17 | Añadir presets geométricos por modo a `SUITE_SHELL_MODE_PRESETS`. | Mantener la geometría declarativa junto al contrato de `SuiteRuntime` antes de conectarla al render. | Completa el paso 2 de la Fase 2A; los pasos 3 a 5 siguen pendientes. | Usuario |
-| 2026-08-17 | Conectar `SuiteRuntime` con `SuiteCanvas` mediante `geometryPreset`. | Hacer que el runtime sea la única fuente de la intención geométrica del módulo sin aplicar todavía clases locales. | Completa el paso 3 de la Fase 2A; la aplicación visual queda para el paso 4. | Usuario |
-| 2026-08-17 | Aplicar el preset geométrico en `SuiteCanvas`. | Centralizar max-width, padding, gap y overflow en el canvas; mantener la colocación de regiones en `CompositionGrid` o la receta consumidora. | Completa el paso 4 de la Fase 2A; la cobertura específica de geometría y responsive continúa en el paso 5. | Usuario |
-| 2026-08-17 | Completar la matriz técnica de geometría de `SuiteCanvas`. | Verificar los seis modos, columnas desktop/móvil, padding, ancho, overflow y límites de scroll antes de la revisión de navegador. | Completa la cobertura técnica del paso 5; queda pendiente Playwright para confirmar posiciones y overflow en viewport real. | Usuario |
-| 2026-08-17 | Endurecer `ModuleHeader` y `ModuleToolbar` como siguiente slice de Fase 2A. | Alinear altura, padding, slots, contexto, selección y transformación móvil con el contrato de Platform Shell. | Implementación y tests focalizados iniciados; certificación visual/Axe pendiente. | Usuario |
-| 2026-08-17 | Unificar el breakpoint tablet del shell en `1024px` y reservar explícitamente el gutter del botón de navegación en `PlatformHeader`. | Evitar que el drawer aparezca inerte o que el botón de hamburguesa cubra el logo en iPad; mantener el header fijo sin espacio superior duplicado. | `AppShell` y `PlatformHeader` quedan alineados para tablet; la cobertura queda separada en commits de implementación y E2E. | Usuario |
+| Fecha      | Cambio                                                                                                                               | Motivo                                                                                                                                            | Impacto en alcance/fases                                                                                                    | Aprobado por |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 2026-08-17 | Crear `SuiteCanvasGeometryPreset` como contrato tipado inicial.                                                                      | Separar la intención geométrica de la aplicación visual y preparar presets por modo.                                                              | Completa el paso 1 de la Fase 2A; no cambia todavía el render.                                                              | Usuario      |
+| 2026-08-17 | Añadir presets geométricos por modo a `SUITE_SHELL_MODE_PRESETS`.                                                                    | Mantener la geometría declarativa junto al contrato de `SuiteRuntime` antes de conectarla al render.                                              | Completa el paso 2 de la Fase 2A; los pasos 3 a 5 siguen pendientes.                                                        | Usuario      |
+| 2026-08-17 | Conectar `SuiteRuntime` con `SuiteCanvas` mediante `geometryPreset`.                                                                 | Hacer que el runtime sea la única fuente de la intención geométrica del módulo sin aplicar todavía clases locales.                                | Completa el paso 3 de la Fase 2A; la aplicación visual queda para el paso 4.                                                | Usuario      |
+| 2026-08-17 | Aplicar el preset geométrico en `SuiteCanvas`.                                                                                       | Centralizar max-width, padding, gap y overflow en el canvas; mantener la colocación de regiones en `CompositionGrid` o la receta consumidora.     | Completa el paso 4 de la Fase 2A; la cobertura específica de geometría y responsive continúa en el paso 5.                  | Usuario      |
+| 2026-08-17 | Completar la matriz técnica de geometría de `SuiteCanvas`.                                                                           | Verificar los seis modos, columnas desktop/móvil, padding, ancho, overflow y límites de scroll antes de la revisión de navegador.                 | Completa la cobertura técnica del paso 5; queda pendiente Playwright para confirmar posiciones y overflow en viewport real. | Usuario      |
+| 2026-08-17 | Endurecer `ModuleHeader` y `ModuleToolbar` como siguiente slice de Fase 2A.                                                          | Alinear altura, padding, slots, contexto, selección y transformación móvil con el contrato de Platform Shell.                                     | Implementación y tests focalizados iniciados; certificación visual/Axe pendiente.                                           | Usuario      |
+| 2026-08-17 | Unificar el breakpoint tablet del shell en `1024px` y reservar explícitamente el gutter del botón de navegación en `PlatformHeader`. | Evitar que el drawer aparezca inerte o que el botón de hamburguesa cubra el logo en iPad; mantener el header fijo sin espacio superior duplicado. | `AppShell` y `PlatformHeader` quedan alineados para tablet; la cobertura queda separada en commits de implementación y E2E. | Usuario      |
 
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
-| --- | --- | --- | --- | --- |
-| Suites create local visual systems | Visual drift and duplicated maintenance | Shared recipes, ownership and exception gates | platform | open |
-| Technical backgrounds reduce data readability | Cognitive load and accessibility regressions | Contrast, density and usage constraints | platform | open |
-| Canvas modes become coupled to decoration | Inflexible structural contracts | Keep modes and recipes independent | platform | mitigated |
-| Visual validation is subjective | Inconsistent review outcomes | Token checks, focused tests and reference compositions | governance | open |
+| Riesgo o bloqueo                              | Impacto                                      | Mitigación                                             | Responsable | Estado    |
+| --------------------------------------------- | -------------------------------------------- | ------------------------------------------------------ | ----------- | --------- |
+| Suites create local visual systems            | Visual drift and duplicated maintenance      | Shared recipes, ownership and exception gates          | platform    | open      |
+| Technical backgrounds reduce data readability | Cognitive load and accessibility regressions | Contrast, density and usage constraints                | platform    | open      |
+| Canvas modes become coupled to decoration     | Inflexible structural contracts              | Keep modes and recipes independent                     | platform    | mitigated |
+| Visual validation is subjective               | Inconsistent review outcomes                 | Token checks, focused tests and reference compositions | governance  | open      |
 
 ## Criterios de cierre
 
@@ -515,49 +520,49 @@ gates for all new SaaS views.
 
 ## Evidencia de validación
 
-| Fecha | Validación | Resultado | Referencia |
-| --- | --- | --- | --- |
-| 2026-08-14 | Vitest completo | 139 archivos y 557 tests pasaron | `pnpm test` |
-| 2026-08-14 | Build de LoopDev OS | Compilación, TypeScript y generación de páginas pasaron | `pnpm --filter loopdev-os build` |
-| 2026-08-14 | Showcase runtime | `/composition-showcase` respondió HTTP 200 en desarrollo | `http://localhost:3000/composition-showcase` |
-| 2026-08-14 | Enlaces y formato | Sin errores de formato; enlaces Markdown válidos | `git diff --check`, `pnpm docs:links:check` |
-| 2026-08-14 | CreativeEditor layout contract | Regions now declare rows, placement, sizing and overflow; shell zones remain separate | `packages/contracts/src/platform/composition.ts`, `CompositionGrid/fixtures.ts` |
-| 2026-08-14 | Automated readiness validation | 139 test files and 557 tests passed; LoopDev OS production build passed; browser review requires an authenticated session | `pnpm test`, `pnpm --filter loopdev-os build`, `/composition-showcase` |
-| 2026-08-14 | TechnicalSurface contract | 5 focused tests passed, including semantic radius, border tone, width, grid and accessibility | `ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/TechnicalSurface.test.tsx` |
-| 2026-08-14 | Shared recipe state fixtures | All composition regions now expose loading, empty, error, forbidden, read-only, offline, stale and conflict treatments | `apps/loopdev-os/src/app/composition-showcase/page.tsx` |
-| 2026-08-14 | Declarative reference fixtures | SuiteOverview now renders through CompositionGrid; DataWorkspace has filters, table and pagination; 2 focused contract tests passed | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `ds/packages/ui/src/components/composites/workspace/CompositionGrid/fixtures.test.ts` |
-| 2026-08-14 | Browser responsive review | Authenticated Playwright review passed for SuiteOverview and CreativeEditor at 1440, 1024 and 390; no horizontal overflow detected | `e2e/composition-showcase.visual.spec.mjs` |
-| 2026-08-14 | Record and board reference fixtures | RecordWorkspace and BoardWorkspace render declarative regions with representative content, shared states and responsive overflow handling; 4 contract tests passed | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `ds/packages/ui/src/components/composites/workspace/CompositionGrid/fixtures.test.ts`, `e2e/composition-showcase.visual.spec.mjs` |
-| 2026-08-14 | Interaction and accessibility certification | Keyboard focus, read-only/forbidden action guards and reduced motion passed; 3 Playwright tests passed | `e2e/composition-showcase.interaction.spec.mjs`, `apps/loopdev-os/src/app/globals.css` |
-| 2026-08-14 | Split, immersive and editor certification | SplitWorkspace and ImmersiveWorkflow now render domain fixtures; CreativeEditor exposes active tool, loading transport and focusable timeline; 8 Playwright tests passed across responsive and interaction specs | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `e2e/composition-showcase.visual.spec.mjs`, `e2e/composition-showcase.interaction.spec.mjs` |
-| 2026-08-14 | Cross-cutting readiness certification | Light/dark toggle, semantic theme audit, navigation fallback, performance marks and sensitive-data-free observability passed in 10 authenticated Playwright tests | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `e2e/composition-showcase.interaction.spec.mjs` |
-| 2026-08-17 | `SuiteCanvasGeometryPreset` contract | New semantic geometry types compiled cleanly; existing SuiteCanvas behavior preserved with 15 focused tests passing | `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/types.ts`, `SuiteCanvas.test.tsx` |
-| 2026-08-17 | `SuiteShellModePreset` geometry values | All six canvas modes expose typed geometry presets; split, board and full-bleed assertions pass | `ds/packages/ui/src/components/composites/shell/SuiteRuntime/presets.ts`, `SuiteRuntime.test.tsx`; `pnpm exec vitest run ds/packages/ui/src/components/composites/shell/SuiteRuntime/SuiteRuntime.test.tsx` |
-| 2026-08-17 | `SuiteRuntime` to `SuiteCanvas` geometry propagation | Runtime passes the active mode preset and SuiteCanvas exposes its semantic geometry without local layout application; 23 focused tests passed | `ds/packages/ui/src/components/composites/shell/SuiteRuntime/index.tsx`, `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/index.tsx`, `SuiteRuntime.test.tsx`, `SuiteCanvas.test.tsx` |
-| 2026-08-17 | `SuiteCanvas` geometry application | Board applies wide/zone-only geometry and full-bleed removes bounded width and exterior padding; 25 focused tests pass | `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/types.ts`, `SuiteCanvas/index.tsx`, `SuiteCanvas.test.tsx`, `SuiteRuntime.test.tsx` |
-| 2026-08-17 | `SuiteCanvas` geometry matrix | Six modes, desktop/mobile columns, padding, max-width and board scroll isolation covered; 32 focused tests pass | `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/SuiteCanvas.test.tsx`, `SuiteRuntime.test.tsx`; `pnpm exec vitest run ...` |
-| 2026-08-17 | Browser geometry review | Composition showcase visual matrix passed 9/9 scenarios across desktop, mobile and mobile-compact. `CreativeEditor` is intentionally excluded from mobile validation under its desktop/tablet-only product scope. | `e2e/composition-showcase.visual.spec.mjs`; `PLAYWRIGHT_E2E_AUTH_BYPASS=true NEXT_PUBLIC_E2E_AUTH_BYPASS=true pnpm exec playwright test e2e/composition-showcase.visual.spec.mjs --project=desktop --project=mobile --project=mobile-compact --workers=1` |
-| 2026-08-17 | CreativeEditor mobile scope | CreativeEditor is desktop/tablet-only for the current reference phase; mobile composition validation excludes it instead of forcing an unsuitable video-editor adaptation. Reopen when a dedicated mobile editing product contract exists. | `e2e/composition-showcase.visual.spec.mjs`, `docs/03-platform/CREATIVE_EDITOR_DESIGN_HANDOFF.md` |
-| 2026-08-17 | ModuleHeader / ModuleToolbar focused contract | 8 focused tests pass; stable slot grid, explicit accessible names, tokenized heights and two-row mobile toolbar contract are covered. Shell browser matrix and Axe base evidence now pass; detailed visual assertions remain open. | `ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx`, `ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx`, `e2e/shell-showcase.visual.spec.mjs` |
-| 2026-08-17 | Shell showcase browser certification | 12 Playwright tests passed across desktop, tablet and mobile projects: shell containment, compact `UserMenu` profile trigger and no critical/serious Axe violations. | `e2e/shell-showcase.visual.spec.mjs`; `PLAYWRIGHT_E2E_AUTH_BYPASS=true NEXT_PUBLIC_E2E_AUTH_BYPASS=true pnpm exec playwright test e2e/shell-showcase.visual.spec.mjs --project=desktop --project=mobile --project=mobile-compact --workers=1` |
-| 2026-08-17 | iPad shell navigation breakpoint | The navigation toggle remains visible beside the LoopDev logo at the 1024px iPad boundary; the PlatformHeader reserves the mobile navigation gutter through that breakpoint. Focused browser check passed. | `ds/packages/ui/src/components/composites/shell/AppShell/index.tsx`, `PlatformHeader/index.tsx`, `e2e/shell-showcase.visual.spec.mjs` |
-| 2026-08-17 | Tablet navigation regression fix | `AppShell` treats `1024px` as the mobile/overlay boundary, `PlatformHeader` gives the navigation gutter priority over `md:px-5`, and the top header remains fixed without an extra upper gap. AppShell and PlatformHeader focused tests passed (16 total); the iPad geometry E2E passed (1 test). | Commits `ce35e9e` and `155b060`; `AppShell.test.tsx`, `PlatformHeader.test.tsx`, `e2e/shell-showcase.visual.spec.mjs` |
-| 2026-08-17 | ImmersiveWorkflow declarative composition | Migrated the showcase workflow regions from page-local grid classes to `IMMERSIVE_WORKFLOW_COMPOSITION` rendered through `CompositionGrid`; visual review approved the resulting workflow, actions and status placement. | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `ds/packages/ui/src/components/composites/workspace/CompositionGrid/fixtures.ts`; 4 fixture tests and 3 desktop visual tests passed |
-| 2026-08-17 | Showcase surfaces and cards audit | The six reference recipes use `TechnicalSurface` for primary surfaces and the certification catalog uses `TechnicalCard`; remaining local border/background/padding classes are confined to legitimate internal content such as timeline, board columns, badges, state indicators and certification examples. No structural page surface migration is required in this slice. | `apps/loopdev-os/src/app/composition-showcase/page.tsx`; `TechnicalSurface.test.tsx` and `TechnicalCard` certification coverage |
-| 2026-08-17 | Board forbidden-state regression | `BoardWorkspace` forbidden interaction passed after restoring the missing `EmptyState` import in the showcase. | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `e2e/composition-showcase.interaction.spec.mjs` |
-| 2026-08-17 | Internal surfaces, controls and tables contract | TechnicalSurface, TechnicalCard, Button and IconButton expose semantic contract markers without changing baseline classes; ResponsiveTable exposes density/pagination/scroll ownership and locks sorting/pagination in non-interactive states. 52 focused tests pass. | `ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface`, `TechnicalCard`, `Button`, `IconButton`, `ds/packages/ui/src/components/composites/content/ResponsiveTable` |
-| 2026-08-17 | EntityTable responsive certification | 19 Playwright tests passed across desktop, mobile and mobile-compact; 2 theme-toggle checks skipped on mobile because the control is intentionally hidden. Table overflow is isolated to the table zone and the page remains contained. | `e2e/entity-table.certification.spec.mjs`; `PLAYWRIGHT_E2E_AUTH_BYPASS=true NEXT_PUBLIC_E2E_AUTH_BYPASS=true pnpm exec playwright test e2e/entity-table.certification.spec.mjs --project=desktop --project=mobile --project=mobile-compact --workers=1` |
-| 2026-08-17 | Component and registry governance | UI/UX specs added for both workspace composites; registry catalog regenerated and checks passed; contract ownership and source-contract checks passed. | `ModuleHeader/UI_UX_SPEC.md`, `ModuleToolbar/UI_UX_SPEC.md`, `pnpm registries:check`, `pnpm docs:links:check`, `pnpm contracts:ownership:check`, `pnpm certification:source-contracts` |
-| 2026-08-17 | Shell validation | 36 focused shell tests passed. Typecheck remains blocked by existing errors in `Select` and the already-modified `SuiteSidebar` Lucide typing; no errors were reported in the ModuleHeader/ModuleToolbar slice. | `pnpm test:shell:changed` |
-| 2026-08-17 | ModuleContextSidebar header overflow | The visible scrollbar in the shell showcase was horizontal header overflow caused by the long context label and `overflow-x-auto`; the shared header now contains overflow and truncates the label while preserving intentional vertical content scrolling. 6 focused tests pass. | `ds/packages/ui/src/components/composites/shell/ModuleContextSidebar/index.tsx`, `ModuleContextSidebar.test.tsx` |
-| 2026-08-17 | ModuleContextSidebar / ModuleContextPanel contract | Headers contain overflow, content is the only configurable scroll zone, footer remains outside scrolling, and semantic width/presentation evidence is exposed. 13 focused tests pass. | `ds/packages/ui/src/components/composites/shell/ModuleContextSidebar/`, `ds/packages/ui/src/components/composites/shell/ModuleContextPanel/` |
-| 2026-08-18 | CRM reference composition geometry | DataWorkspace, RecordWorkspace and BoardWorkspace pass the composition visual matrix `9/9` across desktop, tablet, mobile and mobile-compact; RecordWorkspace read-only focus and BoardWorkspace forbidden action guards pass `2/2`. | `e2e/composition-showcase.visual.spec.mjs`, `e2e/composition-showcase.interaction.spec.mjs`; E2E run with explicit auth bypass |
-| 2026-08-18 | Complete reference recipe viewport coverage | All eight registered recipes, including CertificationLab, are included in the visual matrix: 22 recipe/viewport checks pass across desktop, mobile and mobile-compact. CreativeEditor remains excluded from mobile by contract. | `e2e/composition-showcase.visual.spec.mjs`; explicit auth-bypass Playwright run |
-| 2026-08-18 | Shared review-state certification | All eight recipes expose and accept the nine shared review states, covering 72 recipe/state combinations. The matrix also caught and fixed a real `loading` crash caused by the missing `LoadingState` import. | `e2e/composition-showcase.interaction.spec.mjs`; focused matrix `1/1`, full composition validation `12/12` |
-| 2026-08-18 | Recipe-specific state actions | DataWorkspace selection/clear, ImmersiveWorkflow read-only/stale continuation guards and CertificationLab CRM navigation pass dedicated interaction checks `3/3`. | `e2e/composition-showcase.interaction.spec.mjs`; full interaction suite `12/12` |
-| 2026-08-18 | Cross-cutting Axe, stress, performance and typography checks | All eight recipes pass serious/critical Axe checks after correcting contextual-action and static-card ARIA defects. DataWorkspace long-filter pressure and BoardWorkspace overflow isolation pass. Showcase state-change measurements remain under the `2000 ms` app budget, and computed typography/inline color checks pass. | `e2e/composition-showcase.interaction.spec.mjs`; focused cross-cutting run `4/4` |
-| 2026-08-18 | Production build and global typecheck baseline | `loopdev-os` production build passed compilation, TypeScript, page data collection, 35 static pages and optimization. Monorepo typecheck passed all 11 Turbo tasks. Runtime composition measurements remain under `2000 ms`; build timing observed at approximately 4–6 seconds after cache warm-up. | `pnpm --filter loopdev-os build`, `pnpm typecheck` |
-| 2026-08-18 | Global certification closure | 692 of 692 tests passed across 153 files. `FilterDropdown` now renders the selected-count indicator independently of `onClear`, and its Radix interaction/Axe expectations pass `6/6`. `SelectionTable` expectations now account for the desktop and mobile render trees. Global typecheck passes all 11 Turbo tasks and the `loopdev-os` production build passes. | `pnpm test`, `pnpm typecheck`, `pnpm --filter loopdev-os build`, focused `FilterDropdown` and `SelectionTable` suites |
+| Fecha      | Validación                                                   | Resultado                                                                                                                                                                                                                                                                                                                                                                     | Referencia                                                                                                                                                                                                                                                |
+| ---------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-08-14 | Vitest completo                                              | 139 archivos y 557 tests pasaron                                                                                                                                                                                                                                                                                                                                              | `pnpm test`                                                                                                                                                                                                                                               |
+| 2026-08-14 | Build de LoopDev OS                                          | Compilación, TypeScript y generación de páginas pasaron                                                                                                                                                                                                                                                                                                                       | `pnpm --filter loopdev-os build`                                                                                                                                                                                                                          |
+| 2026-08-14 | Showcase runtime                                             | `/composition-showcase` respondió HTTP 200 en desarrollo                                                                                                                                                                                                                                                                                                                      | `http://localhost:3000/composition-showcase`                                                                                                                                                                                                              |
+| 2026-08-14 | Enlaces y formato                                            | Sin errores de formato; enlaces Markdown válidos                                                                                                                                                                                                                                                                                                                              | `git diff --check`, `pnpm docs:links:check`                                                                                                                                                                                                               |
+| 2026-08-14 | CreativeEditor layout contract                               | Regions now declare rows, placement, sizing and overflow; shell zones remain separate                                                                                                                                                                                                                                                                                         | `packages/contracts/src/platform/composition.ts`, `CompositionGrid/fixtures.ts`                                                                                                                                                                           |
+| 2026-08-14 | Automated readiness validation                               | 139 test files and 557 tests passed; LoopDev OS production build passed; browser review requires an authenticated session                                                                                                                                                                                                                                                     | `pnpm test`, `pnpm --filter loopdev-os build`, `/composition-showcase`                                                                                                                                                                                    |
+| 2026-08-14 | TechnicalSurface contract                                    | 5 focused tests passed, including semantic radius, border tone, width, grid and accessibility                                                                                                                                                                                                                                                                                 | `ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface/TechnicalSurface.test.tsx`                                                                                                                                                                 |
+| 2026-08-14 | Shared recipe state fixtures                                 | All composition regions now expose loading, empty, error, forbidden, read-only, offline, stale and conflict treatments                                                                                                                                                                                                                                                        | `apps/loopdev-os/src/app/composition-showcase/page.tsx`                                                                                                                                                                                                   |
+| 2026-08-14 | Declarative reference fixtures                               | SuiteOverview now renders through CompositionGrid; DataWorkspace has filters, table and pagination; 2 focused contract tests passed                                                                                                                                                                                                                                           | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `ds/packages/ui/src/components/composites/workspace/CompositionGrid/fixtures.test.ts`                                                                                                            |
+| 2026-08-14 | Browser responsive review                                    | Authenticated Playwright review passed for SuiteOverview and CreativeEditor at 1440, 1024 and 390; no horizontal overflow detected                                                                                                                                                                                                                                            | `e2e/composition-showcase.visual.spec.mjs`                                                                                                                                                                                                                |
+| 2026-08-14 | Record and board reference fixtures                          | RecordWorkspace and BoardWorkspace render declarative regions with representative content, shared states and responsive overflow handling; 4 contract tests passed                                                                                                                                                                                                            | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `ds/packages/ui/src/components/composites/workspace/CompositionGrid/fixtures.test.ts`, `e2e/composition-showcase.visual.spec.mjs`                                                                |
+| 2026-08-14 | Interaction and accessibility certification                  | Keyboard focus, read-only/forbidden action guards and reduced motion passed; 3 Playwright tests passed                                                                                                                                                                                                                                                                        | `e2e/composition-showcase.interaction.spec.mjs`, `apps/loopdev-os/src/app/globals.css`                                                                                                                                                                    |
+| 2026-08-14 | Split, immersive and editor certification                    | SplitWorkspace and ImmersiveWorkflow now render domain fixtures; CreativeEditor exposes active tool, loading transport and focusable timeline; 8 Playwright tests passed across responsive and interaction specs                                                                                                                                                              | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `e2e/composition-showcase.visual.spec.mjs`, `e2e/composition-showcase.interaction.spec.mjs`                                                                                                      |
+| 2026-08-14 | Cross-cutting readiness certification                        | Light/dark toggle, semantic theme audit, navigation fallback, performance marks and sensitive-data-free observability passed in 10 authenticated Playwright tests                                                                                                                                                                                                             | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `e2e/composition-showcase.interaction.spec.mjs`                                                                                                                                                  |
+| 2026-08-17 | `SuiteCanvasGeometryPreset` contract                         | New semantic geometry types compiled cleanly; existing SuiteCanvas behavior preserved with 15 focused tests passing                                                                                                                                                                                                                                                           | `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/types.ts`, `SuiteCanvas.test.tsx`                                                                                                                                                         |
+| 2026-08-17 | `SuiteShellModePreset` geometry values                       | All six canvas modes expose typed geometry presets; split, board and full-bleed assertions pass                                                                                                                                                                                                                                                                               | `ds/packages/ui/src/components/composites/shell/SuiteRuntime/presets.ts`, `SuiteRuntime.test.tsx`; `pnpm exec vitest run ds/packages/ui/src/components/composites/shell/SuiteRuntime/SuiteRuntime.test.tsx`                                               |
+| 2026-08-17 | `SuiteRuntime` to `SuiteCanvas` geometry propagation         | Runtime passes the active mode preset and SuiteCanvas exposes its semantic geometry without local layout application; 23 focused tests passed                                                                                                                                                                                                                                 | `ds/packages/ui/src/components/composites/shell/SuiteRuntime/index.tsx`, `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/index.tsx`, `SuiteRuntime.test.tsx`, `SuiteCanvas.test.tsx`                                                      |
+| 2026-08-17 | `SuiteCanvas` geometry application                           | Board applies wide/zone-only geometry and full-bleed removes bounded width and exterior padding; 25 focused tests pass                                                                                                                                                                                                                                                        | `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/types.ts`, `SuiteCanvas/index.tsx`, `SuiteCanvas.test.tsx`, `SuiteRuntime.test.tsx`                                                                                                       |
+| 2026-08-17 | `SuiteCanvas` geometry matrix                                | Six modes, desktop/mobile columns, padding, max-width and board scroll isolation covered; 32 focused tests pass                                                                                                                                                                                                                                                               | `ds/packages/ui/src/components/composites/workspace/SuiteCanvas/SuiteCanvas.test.tsx`, `SuiteRuntime.test.tsx`; `pnpm exec vitest run ...`                                                                                                                |
+| 2026-08-17 | Browser geometry review                                      | Composition showcase visual matrix passed 9/9 scenarios across desktop, mobile and mobile-compact. `CreativeEditor` is intentionally excluded from mobile validation under its desktop/tablet-only product scope.                                                                                                                                                             | `e2e/composition-showcase.visual.spec.mjs`; `PLAYWRIGHT_E2E_AUTH_BYPASS=true NEXT_PUBLIC_E2E_AUTH_BYPASS=true pnpm exec playwright test e2e/composition-showcase.visual.spec.mjs --project=desktop --project=mobile --project=mobile-compact --workers=1` |
+| 2026-08-17 | CreativeEditor mobile scope                                  | CreativeEditor is desktop/tablet-only for the current reference phase; mobile composition validation excludes it instead of forcing an unsuitable video-editor adaptation. Reopen when a dedicated mobile editing product contract exists.                                                                                                                                    | `e2e/composition-showcase.visual.spec.mjs`, `docs/03-platform/CREATIVE_EDITOR_DESIGN_HANDOFF.md`                                                                                                                                                          |
+| 2026-08-17 | ModuleHeader / ModuleToolbar focused contract                | 8 focused tests pass; stable slot grid, explicit accessible names, tokenized heights and two-row mobile toolbar contract are covered. Shell browser matrix and Axe base evidence now pass; detailed visual assertions remain open.                                                                                                                                            | `ds/packages/ui/src/components/composites/workspace/ModuleHeader/ModuleHeader.test.tsx`, `ds/packages/ui/src/components/composites/workspace/ModuleToolbar/ModuleToolbar.test.tsx`, `e2e/shell-showcase.visual.spec.mjs`                                  |
+| 2026-08-17 | Shell showcase browser certification                         | 12 Playwright tests passed across desktop, tablet and mobile projects: shell containment, compact `UserMenu` profile trigger and no critical/serious Axe violations.                                                                                                                                                                                                          | `e2e/shell-showcase.visual.spec.mjs`; `PLAYWRIGHT_E2E_AUTH_BYPASS=true NEXT_PUBLIC_E2E_AUTH_BYPASS=true pnpm exec playwright test e2e/shell-showcase.visual.spec.mjs --project=desktop --project=mobile --project=mobile-compact --workers=1`             |
+| 2026-08-17 | iPad shell navigation breakpoint                             | The navigation toggle remains visible beside the LoopDev logo at the 1024px iPad boundary; the PlatformHeader reserves the mobile navigation gutter through that breakpoint. Focused browser check passed.                                                                                                                                                                    | `ds/packages/ui/src/components/composites/shell/AppShell/index.tsx`, `PlatformHeader/index.tsx`, `e2e/shell-showcase.visual.spec.mjs`                                                                                                                     |
+| 2026-08-17 | Tablet navigation regression fix                             | `AppShell` treats `1024px` as the mobile/overlay boundary, `PlatformHeader` gives the navigation gutter priority over `md:px-5`, and the top header remains fixed without an extra upper gap. AppShell and PlatformHeader focused tests passed (16 total); the iPad geometry E2E passed (1 test).                                                                             | Commits `ce35e9e` and `155b060`; `AppShell.test.tsx`, `PlatformHeader.test.tsx`, `e2e/shell-showcase.visual.spec.mjs`                                                                                                                                     |
+| 2026-08-17 | ImmersiveWorkflow declarative composition                    | Migrated the showcase workflow regions from page-local grid classes to `IMMERSIVE_WORKFLOW_COMPOSITION` rendered through `CompositionGrid`; visual review approved the resulting workflow, actions and status placement.                                                                                                                                                      | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `ds/packages/ui/src/components/composites/workspace/CompositionGrid/fixtures.ts`; 4 fixture tests and 3 desktop visual tests passed                                                              |
+| 2026-08-17 | Showcase surfaces and cards audit                            | The six reference recipes use `TechnicalSurface` for primary surfaces and the certification catalog uses `TechnicalCard`; remaining local border/background/padding classes are confined to legitimate internal content such as timeline, board columns, badges, state indicators and certification examples. No structural page surface migration is required in this slice. | `apps/loopdev-os/src/app/composition-showcase/page.tsx`; `TechnicalSurface.test.tsx` and `TechnicalCard` certification coverage                                                                                                                           |
+| 2026-08-17 | Board forbidden-state regression                             | `BoardWorkspace` forbidden interaction passed after restoring the missing `EmptyState` import in the showcase.                                                                                                                                                                                                                                                                | `apps/loopdev-os/src/app/composition-showcase/page.tsx`, `e2e/composition-showcase.interaction.spec.mjs`                                                                                                                                                  |
+| 2026-08-17 | Internal surfaces, controls and tables contract              | TechnicalSurface, TechnicalCard, Button and IconButton expose semantic contract markers without changing baseline classes; ResponsiveTable exposes density/pagination/scroll ownership and locks sorting/pagination in non-interactive states. 52 focused tests pass.                                                                                                         | `ds/packages/ui/src/components/atoms/surfaces/TechnicalSurface`, `TechnicalCard`, `Button`, `IconButton`, `ds/packages/ui/src/components/composites/content/ResponsiveTable`                                                                              |
+| 2026-08-17 | EntityTable responsive certification                         | 19 Playwright tests passed across desktop, mobile and mobile-compact; 2 theme-toggle checks skipped on mobile because the control is intentionally hidden. Table overflow is isolated to the table zone and the page remains contained.                                                                                                                                       | `e2e/entity-table.certification.spec.mjs`; `PLAYWRIGHT_E2E_AUTH_BYPASS=true NEXT_PUBLIC_E2E_AUTH_BYPASS=true pnpm exec playwright test e2e/entity-table.certification.spec.mjs --project=desktop --project=mobile --project=mobile-compact --workers=1`   |
+| 2026-08-17 | Component and registry governance                            | UI/UX specs added for both workspace composites; registry catalog regenerated and checks passed; contract ownership and source-contract checks passed.                                                                                                                                                                                                                        | `ModuleHeader/UI_UX_SPEC.md`, `ModuleToolbar/UI_UX_SPEC.md`, `pnpm registries:check`, `pnpm docs:links:check`, `pnpm contracts:ownership:check`, `pnpm certification:source-contracts`                                                                    |
+| 2026-08-17 | Shell validation                                             | 36 focused shell tests passed. Typecheck remains blocked by existing errors in `Select` and the already-modified `SuiteSidebar` Lucide typing; no errors were reported in the ModuleHeader/ModuleToolbar slice.                                                                                                                                                               | `pnpm test:shell:changed`                                                                                                                                                                                                                                 |
+| 2026-08-17 | ModuleContextSidebar header overflow                         | The visible scrollbar in the shell showcase was horizontal header overflow caused by the long context label and `overflow-x-auto`; the shared header now contains overflow and truncates the label while preserving intentional vertical content scrolling. 6 focused tests pass.                                                                                             | `ds/packages/ui/src/components/composites/shell/ModuleContextSidebar/index.tsx`, `ModuleContextSidebar.test.tsx`                                                                                                                                          |
+| 2026-08-17 | ModuleContextSidebar / ModuleContextPanel contract           | Headers contain overflow, content is the only configurable scroll zone, footer remains outside scrolling, and semantic width/presentation evidence is exposed. 13 focused tests pass.                                                                                                                                                                                         | `ds/packages/ui/src/components/composites/shell/ModuleContextSidebar/`, `ds/packages/ui/src/components/composites/shell/ModuleContextPanel/`                                                                                                              |
+| 2026-08-18 | CRM reference composition geometry                           | DataWorkspace, RecordWorkspace and BoardWorkspace pass the composition visual matrix `9/9` across desktop, tablet, mobile and mobile-compact; RecordWorkspace read-only focus and BoardWorkspace forbidden action guards pass `2/2`.                                                                                                                                          | `e2e/composition-showcase.visual.spec.mjs`, `e2e/composition-showcase.interaction.spec.mjs`; E2E run with explicit auth bypass                                                                                                                            |
+| 2026-08-18 | Complete reference recipe viewport coverage                  | All eight registered recipes, including CertificationLab, are included in the visual matrix: 22 recipe/viewport checks pass across desktop, mobile and mobile-compact. CreativeEditor remains excluded from mobile by contract.                                                                                                                                               | `e2e/composition-showcase.visual.spec.mjs`; explicit auth-bypass Playwright run                                                                                                                                                                           |
+| 2026-08-18 | Shared review-state certification                            | All eight recipes expose and accept the nine shared review states, covering 72 recipe/state combinations. The matrix also caught and fixed a real `loading` crash caused by the missing `LoadingState` import.                                                                                                                                                                | `e2e/composition-showcase.interaction.spec.mjs`; focused matrix `1/1`, full composition validation `12/12`                                                                                                                                                |
+| 2026-08-18 | Recipe-specific state actions                                | DataWorkspace selection/clear, ImmersiveWorkflow read-only/stale continuation guards and CertificationLab CRM navigation pass dedicated interaction checks `3/3`.                                                                                                                                                                                                             | `e2e/composition-showcase.interaction.spec.mjs`; full interaction suite `12/12`                                                                                                                                                                           |
+| 2026-08-18 | Cross-cutting Axe, stress, performance and typography checks | All eight recipes pass serious/critical Axe checks after correcting contextual-action and static-card ARIA defects. DataWorkspace long-filter pressure and BoardWorkspace overflow isolation pass. Showcase state-change measurements remain under the `2000 ms` app budget, and computed typography/inline color checks pass.                                                | `e2e/composition-showcase.interaction.spec.mjs`; focused cross-cutting run `4/4`                                                                                                                                                                          |
+| 2026-08-18 | Production build and global typecheck baseline               | `loopdev-os` production build passed compilation, TypeScript, page data collection, 35 static pages and optimization. Monorepo typecheck passed all 11 Turbo tasks. Runtime composition measurements remain under `2000 ms`; build timing observed at approximately 4–6 seconds after cache warm-up.                                                                          | `pnpm --filter loopdev-os build`, `pnpm typecheck`                                                                                                                                                                                                        |
+| 2026-08-18 | Global certification closure                                 | 692 of 692 tests passed across 153 files. `FilterDropdown` now renders the selected-count indicator independently of `onClear`, and its Radix interaction/Axe expectations pass `6/6`. `SelectionTable` expectations now account for the desktop and mobile render trees. Global typecheck passes all 11 Turbo tasks and the `loopdev-os` production build passes.            | `pnpm test`, `pnpm typecheck`, `pnpm --filter loopdev-os build`, focused `FilterDropdown` and `SelectionTable` suites                                                                                                                                     |
 
 ## Handoff de sesión
 

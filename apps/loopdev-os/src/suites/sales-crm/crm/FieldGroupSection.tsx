@@ -1,11 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-  CrmFieldGroupKey,
-  CRM_FIELD_GROUPS,
-  CRM_FIELD_CATALOG,
-} from '@loopdev/contracts';
+import { CrmFieldGroupKey, CRM_FIELD_GROUPS, CRM_FIELD_CATALOG } from '@loopdev/contracts';
 import { Input, Select } from '@loopdev/ui';
 import {
   User,
@@ -54,9 +50,7 @@ export function FieldGroupSection({
 
   // Filter fields belonging to this group and visible
   const groupFields = Object.values(CRM_FIELD_CATALOG).filter(
-    (field) =>
-      field.group === groupKey &&
-      (!visibleFields || visibleFields.includes(field.key))
+    (field) => field.group === groupKey && (!visibleFields || visibleFields.includes(field.key)),
   );
 
   if (groupFields.length === 0) return null;
@@ -73,9 +67,7 @@ export function FieldGroupSection({
           <h3 className="text-xs font-bold uppercase tracking-wider text-text-main">
             {meta.label}
           </h3>
-          {!isCompact && (
-            <p className="text-[11px] text-text-muted mt-0.5">{meta.description}</p>
-          )}
+          {!isCompact && <p className="text-[11px] text-text-muted mt-0.5">{meta.description}</p>}
         </div>
       </div>
 
@@ -83,8 +75,7 @@ export function FieldGroupSection({
         {groupFields.map((field) => {
           const isRequired = requiredFields.includes(field.key);
           const value = values[field.key];
-          const currentValue =
-            typeof value === 'string' || typeof value === 'number' ? value : '';
+          const currentValue = typeof value === 'string' || typeof value === 'number' ? value : '';
 
           if (field.inputType === 'select') {
             return (

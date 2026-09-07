@@ -30,7 +30,10 @@ export function CustomerDesktopTabs({
 }: CustomerDesktopTabsProps) {
   return (
     <div className="shrink-0 border-b border-border-subtle bg-surface-muted/20 px-4 sm:px-6 hidden lg:block">
-      <nav className="-mb-px flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar" aria-label="Customer workspace tabs">
+      <nav
+        className="-mb-px flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar"
+        aria-label="Customer workspace tabs"
+      >
         <button
           type="button"
           onClick={() => onSelectTab('timeline')}

@@ -43,7 +43,8 @@ export interface SuiteShellProps {
   };
   mobileBottomSlot?: AppShellProps['mobileBottomSlot'];
   onNavigate: (route: NavRouteRef) => void;
-  contextualSidebarAction?: SuiteSidebarContextualAction | ReactNode | ((isRail: boolean) => ReactNode);
+  contextualSidebarAction?:
+    SuiteSidebarContextualAction | ReactNode | ((isRail: boolean) => ReactNode);
   onNavModeChange?: (mode: Exclude<NavMode, 'hidden'>) => void;
   isHeaderInert?: boolean;
   appShellProps?: Pick<

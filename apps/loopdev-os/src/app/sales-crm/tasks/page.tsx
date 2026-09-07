@@ -36,7 +36,13 @@ import {
   User,
   X,
 } from 'lucide-react';
-import type { Task, TaskPage, TaskPriority, TaskRelationType, TaskStatus } from '@loopdev/contracts';
+import type {
+  Task,
+  TaskPage,
+  TaskPriority,
+  TaskRelationType,
+  TaskStatus,
+} from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
@@ -306,7 +312,9 @@ function TaskStatusButton({
       } disabled:cursor-not-allowed disabled:opacity-50`}
       title={canManage ? 'Marcar como completada' : 'Tarea pendiente'}
     >
-      <Check className={`size-3 stroke-[2.5] transition-transform group-hover/chk:scale-100 ${isInProgress ? 'scale-0' : 'scale-75'}`} />
+      <Check
+        className={`size-3 stroke-[2.5] transition-transform group-hover/chk:scale-100 ${isInProgress ? 'scale-0' : 'scale-75'}`}
+      />
     </button>
   );
 }
@@ -397,7 +405,8 @@ export default function TasksPage() {
 
       // Query filter
       if (!normalized) return true;
-      const searchable = `${task.title} ${task.type ?? ''} ${task.relationType} ${getRelationLabel(task.relationType)}`.toLocaleLowerCase();
+      const searchable =
+        `${task.title} ${task.type ?? ''} ${task.relationType} ${getRelationLabel(task.relationType)}`.toLocaleLowerCase();
       return searchable.includes(normalized);
     });
   }, [query, slaFilter, status, tasks]);
@@ -635,7 +644,12 @@ export default function TasksPage() {
 
         {/* Task Table Container */}
         <div className={selectedId ? 'grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]' : ''}>
-          <TechnicalSurface variant="surface" radius="lg" border="subtle" className="overflow-hidden p-0 shadow-xs">
+          <TechnicalSurface
+            variant="surface"
+            radius="lg"
+            border="subtle"
+            className="overflow-hidden p-0 shadow-xs"
+          >
             <ResponsiveTable
               caption="Tareas CRM"
               columns={columns}
@@ -699,7 +713,9 @@ export default function TasksPage() {
                           canManage={canManage}
                         />
                         <div className="min-w-0 flex-1">
-                          <p className={`text-sm font-semibold text-text-main leading-snug ${isDone ? 'line-through text-text-muted/60' : ''}`}>
+                          <p
+                            className={`text-sm font-semibold text-text-main leading-snug ${isDone ? 'line-through text-text-muted/60' : ''}`}
+                          >
                             {task.title}
                           </p>
                         </div>

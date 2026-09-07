@@ -34,7 +34,11 @@ export const leadCaptureFormSchema = z
     contactLabel: z.string().optional(),
     firstName: z.string().trim().max(120, 'First name must be 120 characters or fewer.').optional(),
     lastName: z.string().trim().max(120, 'Last name must be 120 characters or fewer.').optional(),
-    secondLastName: z.string().trim().max(120, 'Second last name must be 120 characters or fewer.').optional(),
+    secondLastName: z
+      .string()
+      .trim()
+      .max(120, 'Second last name must be 120 characters or fewer.')
+      .optional(),
     email: z.string().trim().email('Enter a valid email address.').optional().or(z.literal('')),
     phone: z
       .string()

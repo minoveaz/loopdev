@@ -26,7 +26,7 @@ interface SectionConfigClient {
 
 export async function getSectionFieldConfig(
   organizationId: string,
-  sectionKey: string
+  sectionKey: string,
 ): Promise<CrmSectionFieldConfig> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await (supabase as unknown as SectionConfigClient)
@@ -37,7 +37,10 @@ export async function getSectionFieldConfig(
     .maybeSingle();
 
   if (error) {
-    console.warn(`[getSectionFieldConfig] Error loading config for ${sectionKey}, falling back to defaults`, error);
+    console.warn(
+      `[getSectionFieldConfig] Error loading config for ${sectionKey}, falling back to defaults`,
+      error,
+    );
   }
 
   if (data) {
@@ -66,7 +69,7 @@ export async function getSectionFieldConfig(
 
 export async function saveSectionFieldConfig(
   organizationId: string,
-  config: CrmSectionFieldConfig
+  config: CrmSectionFieldConfig,
 ): Promise<CrmSectionFieldConfig> {
   const parsed = CrmSectionFieldConfigSchema.parse(config);
   const supabase = await createServerSupabaseClient();
@@ -82,7 +85,7 @@ export async function saveSectionFieldConfig(
         required_fields: parsed.requiredFields,
         updated_at: new Date().toISOString(),
       },
-      { onConflict: 'organization_id, section_key' }
+      { onConflict: 'organization_id, section_key' },
     )
     .select('section_key, enabled_groups, visible_fields, required_fields')
     .single();

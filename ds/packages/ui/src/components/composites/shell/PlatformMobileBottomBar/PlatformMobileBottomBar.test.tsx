@@ -7,7 +7,9 @@ describe('PlatformMobileBottomBar - AI-First Global Mobile Bar', () => {
   it('renders all 5 canonical buttons with accessible labels', () => {
     render(<PlatformMobileBottomBar />);
 
-    expect(screen.getByRole('toolbar', { name: 'Barra de navegación principal móvil' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('toolbar', { name: 'Barra de navegación principal móvil' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Abrir navegación de módulos' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Buscar en la plataforma' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Acción rápida' })).toBeInTheDocument();
@@ -52,11 +54,23 @@ describe('PlatformMobileBottomBar - AI-First Global Mobile Bar', () => {
   it('reflects the activeContext through aria-pressed', () => {
     const { rerender } = render(<PlatformMobileBottomBar activeContext="ai" />);
 
-    expect(screen.getByRole('button', { name: 'Abrir asistente de IA' })).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByRole('button', { name: 'Abrir navegación de módulos' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: 'Abrir asistente de IA' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.getByRole('button', { name: 'Abrir navegación de módulos' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
 
     rerender(<PlatformMobileBottomBar activeContext="navigation" />);
-    expect(screen.getByRole('button', { name: 'Abrir asistente de IA' })).toHaveAttribute('aria-pressed', 'false');
-    expect(screen.getByRole('button', { name: 'Abrir navegación de módulos' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'Abrir asistente de IA' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    expect(screen.getByRole('button', { name: 'Abrir navegación de módulos' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
   });
 });

@@ -16,7 +16,7 @@ export function useContactEnrichment(contacts: CrmContact[]) {
       // Deterministic generation based on contact id
       const seed = contact.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const dealCount = (seed % 4) + (idx % 2 === 0 ? 1 : 0);
-      const totalPipelineValue = dealCount > 0 ? (seed % 9 + 1) * 3500 : 0;
+      const totalPipelineValue = dealCount > 0 ? ((seed % 9) + 1) * 3500 : 0;
       const leadScore = 40 + (seed % 55);
 
       map.set(contact.id, {

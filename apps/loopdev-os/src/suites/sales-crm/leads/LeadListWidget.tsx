@@ -40,7 +40,6 @@ export function LeadListWidget() {
   const [state, setState] = useState<LeadListState>('loading');
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [reloadToken, setReloadToken] = useState(0);
-  const [isQuickCaptureOpen, setIsQuickCaptureOpen] = useState(false);
 
   const canRead = hasPermission('crm.read');
   const canManage = hasPermission('crm.manage');
@@ -100,7 +99,9 @@ export function LeadListWidget() {
 
       if (workspacesRes.status === 'fulfilled' && workspacesRes.value?.data) {
         const wMap = new Map<string, string>();
-        workspacesRes.value.data.forEach((w: { id: string; name: string }) => wMap.set(w.id, w.name));
+        workspacesRes.value.data.forEach((w: { id: string; name: string }) =>
+          wMap.set(w.id, w.name),
+        );
         setWorkspacesMap(wMap);
       }
     });
@@ -255,12 +256,7 @@ export function LeadListWidget() {
       }
     >
       <div className="w-full space-y-4">
-        <TechnicalSurface
-          variant="surface"
-          radius="md"
-          border="technical"
-          className="w-full p-4"
-        >
+        <TechnicalSurface variant="surface" radius="md" border="technical" className="w-full p-4">
           <LeadFilters
             query={queryDraft}
             onQueryChange={setQueryDraft}

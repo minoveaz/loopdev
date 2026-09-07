@@ -2,7 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, FormActions, Heading, ModuleHeader, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
+import {
+  Button,
+  FormActions,
+  Heading,
+  ModuleHeader,
+  SuiteCanvas,
+  TechnicalSurface,
+} from '@loopdev/ui';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import type { LeadCaptureCompletion } from './api';

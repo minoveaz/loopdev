@@ -50,7 +50,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>((props, 
     return options.filter(
       (opt) =>
         opt.label.toLowerCase().includes(q) ||
-        (opt.description && opt.description.toLowerCase().includes(q))
+        (opt.description && opt.description.toLowerCase().includes(q)),
     );
   }, [options, searchable, searchQuery]);
 
@@ -94,7 +94,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>((props, 
     'flex flex-col gap-1.5',
     fullWidth ? 'w-full' : 'w-fit',
     disabled && 'opacity-60 cursor-not-allowed',
-    className
+    className,
   );
 
   const triggerClasses = cn(
@@ -106,7 +106,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>((props, 
     size === 'md' && 'min-h-10 px-3 py-1.5 text-sm',
     size === 'lg' && 'min-h-11 px-3.5 py-2 text-base',
     disabled && 'cursor-not-allowed bg-secondary/40',
-    triggerClassName
+    triggerClassName,
   );
 
   return (
@@ -197,7 +197,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>((props, 
                 className={cn(
                   'text-text-muted shrink-0 opacity-70 transition-transform duration-200',
                   isOpen && 'rotate-180',
-                  size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'
+                  size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4',
                 )}
                 aria-hidden="true"
               />
@@ -269,7 +269,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>((props, 
                       className={cn(
                         'flex min-h-9 w-full cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-left text-sm text-text-main dark:text-neutral-200 outline-none transition-colors data-[highlighted]:bg-secondary/80 data-[highlighted]:text-text-main',
                         isSelected && 'font-medium text-primary bg-primary/5 dark:bg-primary/10',
-                        option.disabled && 'opacity-40 cursor-not-allowed'
+                        option.disabled && 'opacity-40 cursor-not-allowed',
                       )}
                     >
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
@@ -279,7 +279,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>((props, 
                             'flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors',
                             isSelected
                               ? 'bg-primary border-primary text-white'
-                              : 'border-border-subtle bg-background'
+                              : 'border-border-subtle bg-background',
                           )}
                         >
                           {isSelected && <Check className="h-3 w-3 stroke-[3]" />}

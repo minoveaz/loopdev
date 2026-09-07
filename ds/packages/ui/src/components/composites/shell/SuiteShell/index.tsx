@@ -111,20 +111,20 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
         mobileBottomSlot !== undefined
           ? mobileBottomSlot
           : mobileNavigation
-          ? (openMobileNav) => (
-              <MobileSuiteNav
-                items={mobileNavigation.items}
-                onNavigate={(item) => {
-                  if (!item.path) {
-                    mobileNavigation.onOpenNavigation?.();
-                    openMobileNav();
-                    return;
-                  }
-                  mobileNavigation.onNavigate(item);
-                }}
-              />
-            )
-          : undefined
+            ? (openMobileNav) => (
+                <MobileSuiteNav
+                  items={mobileNavigation.items}
+                  onNavigate={(item) => {
+                    if (!item.path) {
+                      mobileNavigation.onOpenNavigation?.();
+                      openMobileNav();
+                      return;
+                    }
+                    mobileNavigation.onNavigate(item);
+                  }}
+                />
+              )
+            : undefined
       }
     >
       <div className="flex h-full min-h-0 min-w-0 w-full max-w-full flex-1 overflow-hidden max-lg:flex-col max-lg:overflow-x-hidden max-lg:overflow-y-hidden lg:h-full">

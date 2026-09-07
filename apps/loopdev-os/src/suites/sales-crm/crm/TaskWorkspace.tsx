@@ -3,7 +3,16 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Badge, Button, ContextBar, Heading, ModuleHeader, Select, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
+import {
+  Badge,
+  Button,
+  ContextBar,
+  Heading,
+  ModuleHeader,
+  Select,
+  SuiteCanvas,
+  TechnicalSurface,
+} from '@loopdev/ui';
 import type {
   Task,
   TaskPage,
@@ -236,193 +245,193 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
         />
       }
     >
-        {isLoading ? (
-          <div role="status" className="text-text-muted p-8 text-center text-sm">
-            Loading task…
-          </div>
-        ) : null}
-        {error ? (
-          <div
-            role="alert"
-            className="border-status-error/40 bg-status-error/10 text-status-error mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border p-3 text-sm"
-          >
-            <span>{error}</span>
-            <Button type="button" size="sm" variant="secondary" onClick={() => void load()}>
-              Retry
-            </Button>
-          </div>
-        ) : null}
-        {task && !isLoading ? (
-          <div className="mx-auto grid max-w-5xl gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,0.7fr)]">
-            <TechnicalSurface variant="surface" radius="md" border="technical" className="p-5">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  {isEditing ? (
-                    <input
-                      aria-label="Task title"
-                      value={draftTitle}
-                      onChange={(event) => setDraftTitle(event.target.value)}
-                      className="border-border-subtle bg-background text-text-main min-h-10 w-full rounded-md border px-3 text-lg font-semibold"
-                    />
-                  ) : (
-                    <Heading as="h2" size="lg" weight="semibold">
-                      {task.title}
-                    </Heading>
-                  )}
-                  <p className="text-text-muted mt-1 text-sm">{task.type ?? 'General task'}</p>
-                </div>
-                <Badge
-                  status={
-                    task.status === 'completed'
-                      ? 'success'
-                      : task.priority === 'urgent'
-                        ? 'error'
-                        : 'neutral'
-                  }
-                  variant="outline"
-                  showDot={false}
-                >
-                  {taskStatus(task.status)}
-                </Badge>
-              </div>
-              <ContextBar
-                label="Related record"
-                value={task.relationType}
-                trailing={
-                  <Link
-                    href={relationHref(task)}
-                    className="text-primary text-xs underline-offset-2 hover:underline"
-                  >
-                    Open record
-                  </Link>
-                }
-                className="mt-5"
-              />
-              {isEditing ? (
-                <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                  <Select
-                    label="Priority"
-                    value={draftPriority}
-                    onValueChange={(val) => setDraftPriority(val as TaskPriority)}
-                    options={priorities.map((item) => ({ value: item, label: item.toUpperCase() }))}
+      {isLoading ? (
+        <div role="status" className="text-text-muted p-8 text-center text-sm">
+          Loading task…
+        </div>
+      ) : null}
+      {error ? (
+        <div
+          role="alert"
+          className="border-status-error/40 bg-status-error/10 text-status-error mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border p-3 text-sm"
+        >
+          <span>{error}</span>
+          <Button type="button" size="sm" variant="secondary" onClick={() => void load()}>
+            Retry
+          </Button>
+        </div>
+      ) : null}
+      {task && !isLoading ? (
+        <div className="mx-auto grid max-w-5xl gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,0.7fr)]">
+          <TechnicalSurface variant="surface" radius="md" border="technical" className="p-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                {isEditing ? (
+                  <input
+                    aria-label="Task title"
+                    value={draftTitle}
+                    onChange={(event) => setDraftTitle(event.target.value)}
+                    className="border-border-subtle bg-background text-text-main min-h-10 w-full rounded-md border px-3 text-lg font-semibold"
                   />
-                  <label className="text-text-muted text-xs font-medium">
-                    Due date
-                    <input
-                      type="datetime-local"
-                      value={draftDueAt}
-                      onChange={(event) => setDraftDueAt(event.target.value)}
-                      className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm"
-                    />
-                  </label>
-                  <label className="text-text-muted text-xs font-medium sm:col-span-2">
-                    Description
-                    <textarea
-                      value={draftDescription}
-                      onChange={(event) => setDraftDescription(event.target.value)}
-                      className="border-border-subtle bg-background text-text-main mt-1 min-h-28 w-full rounded-md border px-3 py-2 text-sm"
-                    />
-                  </label>
+                ) : (
+                  <Heading as="h2" size="lg" weight="semibold">
+                    {task.title}
+                  </Heading>
+                )}
+                <p className="text-text-muted mt-1 text-sm">{task.type ?? 'General task'}</p>
+              </div>
+              <Badge
+                status={
+                  task.status === 'completed'
+                    ? 'success'
+                    : task.priority === 'urgent'
+                      ? 'error'
+                      : 'neutral'
+                }
+                variant="outline"
+                showDot={false}
+              >
+                {taskStatus(task.status)}
+              </Badge>
+            </div>
+            <ContextBar
+              label="Related record"
+              value={task.relationType}
+              trailing={
+                <Link
+                  href={relationHref(task)}
+                  className="text-primary text-xs underline-offset-2 hover:underline"
+                >
+                  Open record
+                </Link>
+              }
+              className="mt-5"
+            />
+            {isEditing ? (
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <Select
+                  label="Priority"
+                  value={draftPriority}
+                  onValueChange={(val) => setDraftPriority(val as TaskPriority)}
+                  options={priorities.map((item) => ({ value: item, label: item.toUpperCase() }))}
+                />
+                <label className="text-text-muted text-xs font-medium">
+                  Due date
+                  <input
+                    type="datetime-local"
+                    value={draftDueAt}
+                    onChange={(event) => setDraftDueAt(event.target.value)}
+                    className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm"
+                  />
+                </label>
+                <label className="text-text-muted text-xs font-medium sm:col-span-2">
+                  Description
+                  <textarea
+                    value={draftDescription}
+                    onChange={(event) => setDraftDescription(event.target.value)}
+                    className="border-border-subtle bg-background text-text-main mt-1 min-h-28 w-full rounded-md border px-3 py-2 text-sm"
+                  />
+                </label>
+              </div>
+            ) : (
+              <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+                <div>
+                  <dt className="text-text-muted">Priority</dt>
+                  <dd className="text-text-main mt-1 font-medium">{task.priority}</dd>
                 </div>
-              ) : (
-                <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
-                  <div>
-                    <dt className="text-text-muted">Priority</dt>
-                    <dd className="text-text-main mt-1 font-medium">{task.priority}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-text-muted">Due</dt>
-                    <dd className="text-text-main mt-1 font-medium">{formatDate(task.dueAt)}</dd>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <dt className="text-text-muted">Description</dt>
-                    <dd className="text-text-main mt-1 whitespace-pre-wrap">
-                      {task.description ?? 'No description.'}
-                    </dd>
-                  </div>
-                </dl>
-              )}
-              <div className="mt-6 flex flex-wrap gap-2">
-                {canManage && !isEditing ? (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    disabled={isPending}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit task
-                  </Button>
-                ) : null}
-                {canManage && isEditing ? (
-                  <>
-                    <Button
-                      type="button"
-                      variant="primary"
-                      disabled={isPending || !draftTitle.trim()}
-                      onClick={() => void saveEdit()}
-                    >
-                      Save changes
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      disabled={isPending}
-                      onClick={() => setIsEditing(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : null}
-                {canManage &&
-                task.status !== 'completed' &&
-                task.status !== 'cancelled' &&
-                !isEditing ? (
+                <div>
+                  <dt className="text-text-muted">Due</dt>
+                  <dd className="text-text-main mt-1 font-medium">{formatDate(task.dueAt)}</dd>
+                </div>
+                <div className="sm:col-span-2">
+                  <dt className="text-text-muted">Description</dt>
+                  <dd className="text-text-main mt-1 whitespace-pre-wrap">
+                    {task.description ?? 'No description.'}
+                  </dd>
+                </div>
+              </dl>
+            )}
+            <div className="mt-6 flex flex-wrap gap-2">
+              {canManage && !isEditing ? (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={isPending}
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit task
+                </Button>
+              ) : null}
+              {canManage && isEditing ? (
+                <>
                   <Button
                     type="button"
                     variant="primary"
-                    disabled={isPending}
-                    onClick={() => void changeStatus('complete')}
+                    disabled={isPending || !draftTitle.trim()}
+                    onClick={() => void saveEdit()}
                   >
-                    Complete task
+                    Save changes
                   </Button>
-                ) : null}
-                {canManage && task.status === 'completed' && !isEditing ? (
                   <Button
                     type="button"
                     variant="secondary"
                     disabled={isPending}
-                    onClick={() => void changeStatus('reopen')}
+                    onClick={() => setIsEditing(false)}
                   >
-                    Reopen task
+                    Cancel
                   </Button>
-                ) : null}
-                <Link
-                  href={`/sales-crm/tasks/new?relationType=${task.relationType}&relationId=${task.relationId}`}
-                  className="border-border-subtle text-text-main rounded-md border px-3 py-2 text-sm"
+                </>
+              ) : null}
+              {canManage &&
+              task.status !== 'completed' &&
+              task.status !== 'cancelled' &&
+              !isEditing ? (
+                <Button
+                  type="button"
+                  variant="primary"
+                  disabled={isPending}
+                  onClick={() => void changeStatus('complete')}
                 >
-                  Create related task
-                </Link>
-              </div>
-            </TechnicalSurface>
-            <TechnicalSurface variant="surface" radius="md" border="technical" className="p-5">
-              <Heading as="h2" size="lg" weight="semibold">
-                Task activity
-              </Heading>
-              {timeline.length ? (
-                <ol className="mt-4 space-y-3">
-                  {timeline.map((event) => (
-                    <li key={event.id} className="border-border-subtle border-l-2 pl-3">
-                      <p className="text-text-main text-sm">{event.summary}</p>
-                      <p className="text-text-muted mt-1 text-xs">{formatDate(event.occurredAt)}</p>
-                    </li>
-                  ))}
-                </ol>
-              ) : (
-                <p className="text-text-muted mt-4 text-sm">No activity recorded yet.</p>
-              )}
-            </TechnicalSurface>
-          </div>
-        ) : null}
+                  Complete task
+                </Button>
+              ) : null}
+              {canManage && task.status === 'completed' && !isEditing ? (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={isPending}
+                  onClick={() => void changeStatus('reopen')}
+                >
+                  Reopen task
+                </Button>
+              ) : null}
+              <Link
+                href={`/sales-crm/tasks/new?relationType=${task.relationType}&relationId=${task.relationId}`}
+                className="border-border-subtle text-text-main rounded-md border px-3 py-2 text-sm"
+              >
+                Create related task
+              </Link>
+            </div>
+          </TechnicalSurface>
+          <TechnicalSurface variant="surface" radius="md" border="technical" className="p-5">
+            <Heading as="h2" size="lg" weight="semibold">
+              Task activity
+            </Heading>
+            {timeline.length ? (
+              <ol className="mt-4 space-y-3">
+                {timeline.map((event) => (
+                  <li key={event.id} className="border-border-subtle border-l-2 pl-3">
+                    <p className="text-text-main text-sm">{event.summary}</p>
+                    <p className="text-text-muted mt-1 text-xs">{formatDate(event.occurredAt)}</p>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="text-text-muted mt-4 text-sm">No activity recorded yet.</p>
+            )}
+          </TechnicalSurface>
+        </div>
+      ) : null}
     </SuiteCanvas>
   );
 }

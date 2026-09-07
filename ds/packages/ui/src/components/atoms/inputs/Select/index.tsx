@@ -28,8 +28,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
     defaultValue,
     onChange,
     onValueChange,
-    placeholder = 'Selecciona una opción',
+    placeholder,
     searchable = false,
+    searchPlaceholder,
+    emptyMessage,
+    clearLabel,
     clearable = false,
     leadingIcon,
     error,
@@ -50,17 +53,30 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
 
     const childElements = React.Children.toArray(children).filter(React.isValidElement);
     return childElements.map((child) => {
-      const p = child.props as { value?: string; children?: React.ReactNode; disabled?: boolean };
+      const p = child.props as { value?: unknown; children?: React.ReactNode; disabled?: boolean };
+      const val = String(p.value ?? '');
+      let labelText = val;
+      if (typeof p.children === 'string') {
+        labelText = p.children;
+      } else if (typeof p.children === 'number') {
+        labelText = String(p.children);
+      } else if (Array.isArray(p.children)) {
+        labelText = p.children
+          .map((c) => (typeof c === 'string' || typeof c === 'number' ? String(c) : ''))
+          .join('');
+      }
       return {
-        value: String(p.value ?? ''),
-        label: typeof p.children === 'string' ? p.children : String(p.value ?? ''),
+        value: val,
+        label: labelText || val,
         disabled: p.disabled,
       };
     });
   }, [children, optionsProp]);
 
   const initialValue = String(
-    value ?? defaultValue ?? (normalizedOptions[0]?.value && !placeholder ? normalizedOptions[0].value : '')
+    value ??
+      defaultValue ??
+      (normalizedOptions[0]?.value && !placeholder ? normalizedOptions[0].value : ''),
   );
   const [selectedValue, setSelectedValue] = useState(initialValue);
   const currentValue = value !== undefined ? String(value) : selectedValue;
@@ -73,7 +89,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
     return normalizedOptions.filter(
       (opt) =>
         opt.label.toLowerCase().includes(q) ||
-        (opt.description && opt.description.toLowerCase().includes(q))
+        (opt.description && opt.description.toLowerCase().includes(q)),
     );
   }, [normalizedOptions, searchable, searchQuery]);
 
@@ -101,11 +117,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
     'flex flex-col gap-1.5',
     fullWidth ? 'w-full' : 'w-fit',
     disabled && 'opacity-60 cursor-not-allowed',
-    className
+    className,
   );
 
   const triggerClasses = cn(
-    'group relative flex w-full items-center justify-between gap-2 bg-surface-light dark:bg-surface-dark border rounded-lg text-text-main dark:text-neutral-100 shadow-xs outline-none transition-all duration-150',
+    'group relative flex w-full items-center justify-between gap-2 bg-surface-light dark:bg-surface-dark border rounded-lg text-text-main shadow-xs outline-none transition-all duration-150',
     error
       ? 'border-status-error focus-visible:ring-4 focus-visible:ring-status-error/10'
       : 'border-border-subtle hover:border-primary/50 focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10',
@@ -113,7 +129,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
     size === 'md' && 'h-10 px-3.5 text-sm font-normal',
     size === 'lg' && 'h-11 px-4 text-base font-normal',
     disabled && 'cursor-not-allowed bg-secondary/40',
-    triggerClassName
+    triggerClassName,
   );
 
   return (
@@ -124,7 +140,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
           htmlFor={selectId}
           textSize="sm"
           textWeight="medium"
-          className="text-text-main dark:text-neutral-200 normal-case tracking-normal"
+          className="text-text-main normal-case tracking-normal"
         >
           {label}
           {rest.required && <span className="text-status-error ml-0.5">*</span>}
@@ -153,13 +169,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
                 className={cn(
                   'truncate',
                   selectedOption && selectedOption.value !== ''
-                    ? 'text-text-main dark:text-white'
-                    : 'text-text-muted'
+                    ? 'text-text-main'
+                    : 'text-text-muted',
                 )}
               >
-                {selectedOption && selectedOption.value !== ''
-                  ? selectedOption.label
-                  : placeholder}
+                {selectedOption && selectedOption.value !== '' ? selectedOption.label : placeholder}
               </span>
             </div>
 
@@ -173,7 +187,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
                     if (e.key === 'Enter' || e.key === ' ') handleClear(e as any);
                   }}
                   className="rounded p-0.5 text-text-muted hover:text-text-main hover:bg-secondary transition-colors"
-                  title="Limpiar"
+                  aria-label={clearLabel || 'Clear'}
                 >
                   <X className="h-3.5 w-3.5" />
                 </span>
@@ -182,7 +196,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
                 className={cn(
                   'text-text-muted shrink-0 opacity-70 transition-transform duration-200',
                   isOpen && 'rotate-180',
-                  size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'
+                  size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4',
                 )}
                 aria-hidden="true"
               />
@@ -196,7 +210,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
             align="start"
             sideOffset={6}
             avoidCollisions
-            className="z-[9999] w-[var(--radix-dropdown-menu-trigger-width)] min-w-[220px] max-h-72 overflow-y-auto rounded-xl border border-border-subtle bg-surface-light p-1 shadow-lg dark:bg-surface-dark dark:border-neutral-800 animate-in fade-in-80 duration-150"
+            className="z-[9999] w-[var(--radix-dropdown-menu-trigger-width)] min-w-[220px] max-h-72 overflow-y-auto rounded-xl border border-border-subtle bg-surface-light p-1 shadow-lg dark:bg-surface-dark animate-in fade-in-80 duration-150"
           >
             {searchable ? (
               <div className="sticky top-0 z-10 bg-surface-light dark:bg-surface-dark p-1.5 pb-2 border-b border-border-subtle/60">
@@ -205,7 +219,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
                   <input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Buscar..."
+                    placeholder={searchPlaceholder}
                     onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => e.stopPropagation()}
                     className="w-full rounded-md border border-border-subtle bg-background py-1.5 pl-8 pr-3 text-xs text-text-main placeholder:text-text-muted outline-none focus:border-primary"
@@ -216,9 +230,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
 
             <div className="py-1">
               {filteredOptions.length === 0 ? (
-                <div className="px-3 py-4 text-center text-xs text-text-muted">
-                  No se encontraron opciones
-                </div>
+                emptyMessage ? (
+                  <div className="px-3 py-4 text-center text-xs text-text-muted">
+                    {emptyMessage}
+                  </div>
+                ) : null
               ) : (
                 filteredOptions.map((option) => {
                   const isSelected = option.value === currentValue;
@@ -228,9 +244,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) =>
                       disabled={option.disabled}
                       onSelect={() => handleSelect(option.value)}
                       className={cn(
-                        'flex min-h-9 w-full cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-left text-sm text-text-main dark:text-neutral-200 outline-none transition-colors data-[highlighted]:bg-secondary/80 data-[highlighted]:text-text-main',
+                        'flex min-h-9 w-full cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-left text-sm text-text-main outline-none transition-colors data-[highlighted]:bg-secondary/80 data-[highlighted]:text-text-main',
                         isSelected && 'font-medium text-primary bg-primary/5 dark:bg-primary/10',
-                        option.disabled && 'opacity-40 cursor-not-allowed'
+                        option.disabled && 'opacity-40 cursor-not-allowed',
                       )}
                     >
                       <div className="flex items-center gap-2 min-w-0 flex-1">

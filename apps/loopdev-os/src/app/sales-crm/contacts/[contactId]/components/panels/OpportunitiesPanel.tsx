@@ -12,10 +12,7 @@ interface OpportunitiesPanelProps {
   isOpportunitiesSimulated?: boolean;
 }
 
-export function OpportunitiesPanel({
-  name,
-  displayedOpportunities,
-}: OpportunitiesPanelProps) {
+export function OpportunitiesPanel({ name, displayedOpportunities }: OpportunitiesPanelProps) {
   return (
     <div className="space-y-4 flex-1 flex flex-col min-w-0 w-full overflow-x-hidden">
       <div className="flex items-center justify-between gap-2 pb-3 border-b border-border-subtle">
@@ -51,12 +48,12 @@ export function OpportunitiesPanel({
                 <div className="flex items-start justify-between gap-2 min-w-0">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <h4 className="font-semibold text-sm text-text-main truncate">
-                        {opp.name}
-                      </h4>
+                      <h4 className="font-semibold text-sm text-text-main truncate">{opp.name}</h4>
                       {isSimulated && <SimulatedBadge />}
                     </div>
-                    <span className="text-xs text-text-muted block mt-0.5">Stage: {opp.stageKey}</span>
+                    <span className="text-xs text-text-muted block mt-0.5">
+                      Stage: {opp.stageKey}
+                    </span>
                   </div>
                   <span
                     className={`rounded-full px-2 py-0.5 text-[11px] font-semibold shrink-0 ${

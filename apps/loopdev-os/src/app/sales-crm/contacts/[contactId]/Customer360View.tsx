@@ -3,7 +3,13 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { ChevronRight, AlertCircle, FlaskConical } from 'lucide-react';
-import { Button, ModuleHeader, ModuleContextPanel, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
+import {
+  Button,
+  ModuleHeader,
+  ModuleContextPanel,
+  SuiteCanvas,
+  TechnicalSurface,
+} from '@loopdev/ui';
 
 import { useCustomer360Data } from './hooks/useCustomer360Data';
 import { contactName } from './components/types';
@@ -142,9 +148,12 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
               <div className="flex items-center gap-2">
                 <FlaskConical className="h-4 w-4 text-amber-500 shrink-0" />
                 <span>
-                  <strong>Modo Simulación Activo:</strong> Los elementos con borde discontinuo y etiqueta{' '}
-                  <span className="rounded bg-amber-500/20 px-1 py-0.5 font-mono font-bold">SIM</span> son
-                  datos proyectados para verificar la experiencia visual y geométrica del OS.
+                  <strong>Modo Simulación Activo:</strong> Los elementos con borde discontinuo y
+                  etiqueta{' '}
+                  <span className="rounded bg-amber-500/20 px-1 py-0.5 font-mono font-bold">
+                    SIM
+                  </span>{' '}
+                  son datos proyectados para verificar la experiencia visual y geométrica del OS.
                 </span>
               </div>
               <button
@@ -265,10 +274,7 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
 
                 {/* Notes tab */}
                 {activeTab === 'notes' ? (
-                  <NotesPanel
-                    displayedNotes={displayedNotes}
-                    isNotesSimulated={isNotesSimulated}
-                  />
+                  <NotesPanel displayedNotes={displayedNotes} isNotesSimulated={isNotesSimulated} />
                 ) : null}
               </div>
             </TechnicalSurface>

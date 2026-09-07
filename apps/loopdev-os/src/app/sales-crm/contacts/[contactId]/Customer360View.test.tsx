@@ -112,7 +112,9 @@ describe('Customer 360 view', () => {
 
     render(<Customer360View contactId="00000000-0000-4000-9000-000000000002" />);
 
-    expect((await screen.findAllByRole('heading', { name: 'Ana Garcia' })).length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole('heading', { name: 'Ana Garcia' })).length).toBeGreaterThan(
+      0,
+    );
 
     // Initial state: drawer is not visible
     expect(screen.queryByLabelText('Ficha Técnica · Ana Garcia')).not.toBeInTheDocument();

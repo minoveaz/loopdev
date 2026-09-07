@@ -10,9 +10,7 @@ const QuerySchema = z.object({
 });
 
 export async function GET(request: Request) {
-  const parsed = QuerySchema.safeParse(
-    Object.fromEntries(new URL(request.url).searchParams)
-  );
+  const parsed = QuerySchema.safeParse(Object.fromEntries(new URL(request.url).searchParams));
   if (!parsed.success) {
     return NextResponse.json({ error: 'Invalid query parameters' }, { status: 400 });
   }

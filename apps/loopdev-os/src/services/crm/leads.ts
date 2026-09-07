@@ -402,7 +402,9 @@ export async function updateLead(input: CrmUpdateLeadCommand): Promise<CrmLead> 
   const changes = {
     ...(parsed.interest !== undefined ? { interest: parsed.interest } : {}),
     ...(parsed.estimatedBudget !== undefined ? { estimated_budget: parsed.estimatedBudget } : {}),
-    ...(parsed.purchaseTimeline !== undefined ? { purchase_timeline: parsed.purchaseTimeline } : {}),
+    ...(parsed.purchaseTimeline !== undefined
+      ? { purchase_timeline: parsed.purchaseTimeline }
+      : {}),
     ...(parsed.leadScore !== undefined ? { lead_score: parsed.leadScore } : {}),
     ...(parsed.assignedUserId !== undefined ? { assigned_to_user_id: parsed.assignedUserId } : {}),
     ...(parsed.brandId !== undefined ? { brand_id: parsed.brandId } : {}),

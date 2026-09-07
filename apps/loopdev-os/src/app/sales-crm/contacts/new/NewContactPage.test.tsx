@@ -60,8 +60,12 @@ describe('NewContactPage (/sales-crm/contacts/new Full-Canvas)', () => {
 
     fireEvent.change(screen.getByLabelText(/nombre \*/i), { target: { value: 'Elena' } });
     fireEvent.change(screen.getByLabelText(/apellidos/i), { target: { value: 'Márquez' } });
-    fireEvent.change(screen.getByLabelText(/correo electrónico directo/i), { target: { value: 'elena@empresa.com' } });
-    fireEvent.change(screen.getByLabelText(/nombre de la empresa/i), { target: { value: 'Acme Iberia' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico directo/i), {
+      target: { value: 'elena@empresa.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/nombre de la empresa/i), {
+      target: { value: 'Acme Iberia' },
+    });
 
     const submitButtons = screen.getAllByRole('button', { name: /crear contacto/i });
     fireEvent.click(submitButtons[0]);

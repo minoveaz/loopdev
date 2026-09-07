@@ -12,24 +12,14 @@ describe('MultiSelect Primitive', () => {
 
   it('has no accessibility violations with default configuration', async () => {
     const { container } = render(
-      <MultiSelect
-        label="Technologies"
-        options={options}
-        defaultValue={['react']}
-      />
+      <MultiSelect label="Technologies" options={options} defaultValue={['react']} />,
     );
 
     expect(await axe(container)).toHaveNoViolations();
   });
 
   it('renders selected tags properly', () => {
-    render(
-      <MultiSelect
-        label="Technologies"
-        options={options}
-        value={['react', 'vue']}
-      />
-    );
+    render(<MultiSelect label="Technologies" options={options} value={['react', 'vue']} />);
 
     expect(screen.getByText('React')).toBeDefined();
     expect(screen.getByText('Vue')).toBeDefined();
@@ -38,12 +28,7 @@ describe('MultiSelect Primitive', () => {
   it('allows removing a tag via its close button', () => {
     const onChange = vi.fn();
     render(
-      <MultiSelect
-        label="Technologies"
-        options={options}
-        value={['react']}
-        onChange={onChange}
-      />
+      <MultiSelect label="Technologies" options={options} value={['react']} onChange={onChange} />,
     );
 
     const removeBtn = screen.getByLabelText('Remove React');

@@ -35,7 +35,10 @@ export function mapLeadToRowViewModel(
 ): LeadRowViewModel {
   const contact = contactsMap?.get(lead.contactId);
   const contactName = contact
-    ? [contact.firstName, contact.lastName].filter(Boolean).join(' ') || contact.email || contact.phone || lead.contactId
+    ? [contact.firstName, contact.lastName].filter(Boolean).join(' ') ||
+      contact.email ||
+      contact.phone ||
+      lead.contactId
     : undefined;
   const contactCompany = contact?.companyName ?? null;
   const contactEmail = contact?.email ?? null;
@@ -47,8 +50,8 @@ export function mapLeadToRowViewModel(
     contactName,
     contactCompany,
     contactEmail,
-    brandName: lead.brandId ? brandsMap?.get(lead.brandId) ?? null : null,
-    workspaceName: lead.workspaceId ? workspacesMap?.get(lead.workspaceId) ?? null : null,
+    brandName: lead.brandId ? (brandsMap?.get(lead.brandId) ?? null) : null,
+    workspaceName: lead.workspaceId ? (workspacesMap?.get(lead.workspaceId) ?? null) : null,
     status: lead.status,
     statusLabel: getLeadStatusLabel(lead.status),
     sourceKind: lead.source.kind,

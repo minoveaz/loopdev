@@ -89,23 +89,35 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
       if (contactsPromise && typeof contactsPromise.then === 'function') {
         void contactsPromise
           .then((res) => (res && res.ok ? res.json() : null))
-          .then((page: { items?: Array<{ id: string; firstName?: string; lastName?: string; companyName?: string | null; email?: string | null }> } | null) => {
-            if (!page?.items) return;
-            const map = new Map<string, ContactLookup>();
-            page.items.forEach((c) => {
-              const fullName =
-                [c.firstName, c.lastName].filter(Boolean).join(' ').trim() ||
-                c.companyName ||
-                c.email ||
-                c.id;
-              map.set(c.id, {
-                name: fullName,
-                email: c.email,
-                company: c.companyName,
+          .then(
+            (
+              page: {
+                items?: Array<{
+                  id: string;
+                  firstName?: string;
+                  lastName?: string;
+                  companyName?: string | null;
+                  email?: string | null;
+                }>;
+              } | null,
+            ) => {
+              if (!page?.items) return;
+              const map = new Map<string, ContactLookup>();
+              page.items.forEach((c) => {
+                const fullName =
+                  [c.firstName, c.lastName].filter(Boolean).join(' ').trim() ||
+                  c.companyName ||
+                  c.email ||
+                  c.id;
+                map.set(c.id, {
+                  name: fullName,
+                  email: c.email,
+                  company: c.companyName,
+                });
               });
-            });
-            setContactsMap(map);
-          })
+              setContactsMap(map);
+            },
+          )
           .catch(() => {});
       }
     } catch (requestError: unknown) {
@@ -480,7 +492,8 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                       <p className="text-text-muted mt-1 flex items-center gap-1.5 truncate text-xs">
                         <User className="h-3.5 w-3.5 shrink-0 opacity-70" />
                         <span className="truncate font-medium text-text-main">
-                          {contactsMap.get(opportunity.contactId)?.name || `Contact ${opportunity.contactId.slice(0, 8)}`}
+                          {contactsMap.get(opportunity.contactId)?.name ||
+                            `Contact ${opportunity.contactId.slice(0, 8)}`}
                         </span>
                         <span>·</span>
                         <span>{formatDate(opportunity.expectedCloseAt)}</span>
@@ -548,7 +561,8 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                 </p>
                 <p className="text-text-muted mt-2 text-xs">
                   <span className="font-medium text-text-main">Contact:</span>{' '}
-                  {contactsMap.get(selectedOpportunity.contactId)?.name || selectedOpportunity.contactId}
+                  {contactsMap.get(selectedOpportunity.contactId)?.name ||
+                    selectedOpportunity.contactId}
                 </p>
                 <p className="text-text-muted mt-1 text-xs">
                   Stage: {selectedOpportunity.stageKey}

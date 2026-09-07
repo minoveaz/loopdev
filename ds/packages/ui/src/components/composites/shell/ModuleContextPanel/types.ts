@@ -1,10 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ModuleContextSidebarWidth } from '../ModuleContextSidebar/types';
 
-export type ModuleContextPanelWidth =
-  | ModuleContextSidebarWidth
-  | 'drawer'
-  | 'drawer-wide';
+export type ModuleContextPanelWidth = ModuleContextSidebarWidth | 'drawer' | 'drawer-wide';
 export type ModuleContextPanelPresentation = 'inline' | 'overlay';
 
 export interface ModuleContextPanelProps {

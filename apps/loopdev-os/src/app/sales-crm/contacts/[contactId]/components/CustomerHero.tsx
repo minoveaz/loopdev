@@ -59,9 +59,7 @@ export function CustomerHero({
       variant="surface"
       border="subtle"
       radius="xl"
-      className={`shrink-0 p-4 sm:p-6 ${
-        isMobileOnlyTab ? 'block' : 'hidden lg:block'
-      }`}
+      className={`shrink-0 p-4 sm:p-6 ${isMobileOnlyTab ? 'block' : 'hidden lg:block'}`}
     >
       <div className="flex flex-col gap-4 lg:gap-6 lg:flex-row lg:items-center lg:justify-between">
         {/* Profile Identity */}
@@ -81,7 +79,12 @@ export function CustomerHero({
 
             <div className="space-y-0.5 sm:space-y-1 min-w-0">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
-                <Heading as="h1" size="xl" weight="bold" className="text-text-main truncate text-lg sm:text-3xl">
+                <Heading
+                  as="h1"
+                  size="xl"
+                  weight="bold"
+                  className="text-text-main truncate text-lg sm:text-3xl"
+                >
                   {name}
                 </Heading>
                 <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800">

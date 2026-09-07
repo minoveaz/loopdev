@@ -17,7 +17,8 @@ export function ContactIdentityBadge({
 }: ContactIdentityBadgeProps) {
   const isVerified = status === 'verified';
 
-  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-[11px] gap-1' : 'px-2.5 py-1 text-xs gap-1.5';
+  const sizeClasses =
+    size === 'sm' ? 'px-2 py-0.5 text-[11px] gap-1' : 'px-2.5 py-1 text-xs gap-1.5';
   const iconSize = size === 'sm' ? 12 : 14;
 
   if (isVerified) {
@@ -26,8 +27,15 @@ export function ContactIdentityBadge({
         className={`inline-flex items-center rounded-full font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/80 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40 ${sizeClasses} ${className}`}
         title="Identidad verificada"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-        <ShieldCheck size={iconSize} strokeWidth={2} className="text-emerald-600 dark:text-emerald-400" />
+        <span
+          className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
+          aria-hidden="true"
+        />
+        <ShieldCheck
+          size={iconSize}
+          strokeWidth={2}
+          className="text-emerald-600 dark:text-emerald-400"
+        />
         <span>Verificado</span>
       </span>
     );

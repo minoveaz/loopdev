@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { CrmContact, CrmContactPage } from '@loopdev/contracts';
 import { getContactsDesignFixturePage } from '../contacts-design.fixture';
 
@@ -29,57 +29,50 @@ export function useContactsData({
   const [error, setError] = useState<string | null>(null);
   const [activeCursor, setActiveCursor] = useState<string | undefined>();
 
-  useEffect(() => {
-    const resetTimeout = window.setTimeout(() => {
-      setActiveCursor(undefined);
-      setCursorHistory([]);
-    }, 0);
-    return () => window.clearTimeout(resetTimeout);
-  }, [query, organizationId]);
+  const [prevQuery, setPrevQuery] = useState(query);
+  const [prevOrg, setPrevOrg] = useState(organizationId);
 
-  useEffect(() => {
-    const orgId = organizationId || 'default-organization';
-    const controller = new AbortController();
-    const params = new URLSearchParams({
-      organizationId: orgId,
-      limit: String(PAGE_SIZE),
-    });
-    if (query) params.set('query', query);
-    if (activeCursor) params.set('cursor', activeCursor);
+  if (query !== prevQuery || organizationId !== prevOrg) {
+    setPrevQuery(query);
+    setPrevOrg(organizationId);
+    setActiveCursor(undefined);
+    setCursorHistory([]);
+  }
 
-    const loadingTimeout = window.setTimeout(() => {
+  const loadContacts = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!canRead || isLoadingPermissions) return;
+      const orgId = organizationId || 'default-organization';
+      const params = new URLSearchParams({
+        organizationId: orgId,
+        limit: String(PAGE_SIZE),
+      });
+      if (query) params.set('query', query);
+      if (activeCursor) params.set('cursor', activeCursor);
+
       setIsLoading(true);
       setError(null);
-    }, 0);
 
-    const useFixture = process.env.NEXT_PUBLIC_CRM_CONTACTS_FIXTURE === 'true';
-    if (useFixture || !organizationId) {
-      const page = getContactsDesignFixturePage({
-        organizationId: orgId,
-        query,
-        cursor: activeCursor,
-        limit: PAGE_SIZE,
-      });
-      const fixtureTimeout = window.setTimeout(() => {
+      const useFixture = process.env.NEXT_PUBLIC_CRM_CONTACTS_FIXTURE === 'true';
+      if (useFixture || !organizationId) {
+        const page = getContactsDesignFixturePage({
+          organizationId: orgId,
+          query,
+          cursor: activeCursor,
+          limit: PAGE_SIZE,
+        });
         setContacts(page.items);
         setNextCursor(page.nextCursor);
         setHasMore(page.hasMore);
         setIsLoading(false);
-      }, 0);
-      return () => {
-        window.clearTimeout(loadingTimeout);
-        window.clearTimeout(fixtureTimeout);
-      };
-    }
+        return;
+      }
 
-    fetch(`/api/crm/contacts?${params.toString()}`, { signal: controller.signal })
-      .then(async (response) => {
+      try {
+        const response = await fetch(`/api/crm/contacts?${params.toString()}`, { signal });
         if (!response.ok) throw new Error('Contacts could not be loaded.');
-        return (await response.json()) as CrmContactPage;
-      })
-      .then((page) => {
+        const page = (await response.json()) as CrmContactPage;
         if (page.items.length === 0) {
-          // Fallback to design fixtures if tenant has 0 contacts yet
           const fixturePage = getContactsDesignFixturePage({
             organizationId: orgId,
             query,
@@ -94,10 +87,8 @@ export function useContactsData({
           setNextCursor(page.nextCursor);
           setHasMore(page.hasMore);
         }
-      })
-      .catch((requestError: unknown) => {
+      } catch (requestError: unknown) {
         if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-        // Graceful fallback to fixture on network/auth error in dev
         const fixturePage = getContactsDesignFixturePage({
           organizationId: orgId,
           query,
@@ -107,13 +98,18 @@ export function useContactsData({
         setContacts(fixturePage.items);
         setNextCursor(fixturePage.nextCursor);
         setHasMore(fixturePage.hasMore);
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setIsLoading(false);
-      });
+      } finally {
+        if (!signal?.aborted) setIsLoading(false);
+      }
+    },
+    [activeCursor, canRead, isLoadingPermissions, organizationId, query],
+  );
 
+  useEffect(() => {
+    const controller = new AbortController();
+    void loadContacts(controller.signal);
     return () => controller.abort();
-  }, [activeCursor, organizationId, canRead, refreshKey, isLoadingPermissions, query]);
+  }, [loadContacts, refreshKey]);
 
   const goNext = () => {
     if (!nextCursor) return;

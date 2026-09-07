@@ -21,12 +21,37 @@ export function ContactMobileCapa2({
   onSelectSegment,
   counts,
 }: ContactMobileCapa2Props) {
-  const segments: { id: ContactSegmentFilter; label: string; count: number; icon: React.ReactNode }[] = [
+  const segments: {
+    id: ContactSegmentFilter;
+    label: string;
+    count: number;
+    icon: React.ReactNode;
+  }[] = [
     { id: 'all', label: 'Todos', count: counts.all, icon: <Users size={13} strokeWidth={1.75} /> },
-    { id: 'with_deals', label: 'Con Deals', count: counts.withDeals, icon: <Flame size={13} strokeWidth={1.75} /> },
-    { id: 'verified', label: 'Verificados', count: counts.verified, icon: <ShieldCheck size={13} strokeWidth={1.75} /> },
-    { id: 'pending', label: 'Pendientes', count: counts.pending, icon: <Clock size={13} strokeWidth={1.75} /> },
-    { id: 'with_phone', label: 'Con Móvil', count: counts.withPhone, icon: <Phone size={13} strokeWidth={1.75} /> },
+    {
+      id: 'with_deals',
+      label: 'Con Deals',
+      count: counts.withDeals,
+      icon: <Flame size={13} strokeWidth={1.75} />,
+    },
+    {
+      id: 'verified',
+      label: 'Verificados',
+      count: counts.verified,
+      icon: <ShieldCheck size={13} strokeWidth={1.75} />,
+    },
+    {
+      id: 'pending',
+      label: 'Pendientes',
+      count: counts.pending,
+      icon: <Clock size={13} strokeWidth={1.75} />,
+    },
+    {
+      id: 'with_phone',
+      label: 'Con Móvil',
+      count: counts.withPhone,
+      icon: <Phone size={13} strokeWidth={1.75} />,
+    },
   ];
 
   return (
@@ -50,9 +75,7 @@ export function ContactMobileCapa2({
                 <span>{seg.label}</span>
                 <span
                   className={`ml-0.5 rounded-full px-1.5 py-0.2 text-[10px] font-semibold ${
-                    isActive
-                      ? 'bg-white/20 text-white'
-                      : 'bg-surface-active text-text-muted'
+                    isActive ? 'bg-white/20 text-white' : 'bg-surface-active text-text-muted'
                   }`}
                 >
                   {seg.count}

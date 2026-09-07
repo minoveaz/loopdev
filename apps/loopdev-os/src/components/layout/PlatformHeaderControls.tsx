@@ -135,7 +135,13 @@ export function PlatformHeaderControls({
           <Lightbulb
             size={16}
             aria-hidden="true"
-            className={activeContext === 'notifications' ? 'text-white' : unreadCount > 0 ? 'text-danger group-hover:text-danger' : 'group-hover:text-primary'}
+            className={
+              activeContext === 'notifications'
+                ? 'text-white'
+                : unreadCount > 0
+                  ? 'text-danger group-hover:text-danger'
+                  : 'group-hover:text-primary'
+            }
           />
           {unreadCount > 0 && (
             <span className="bg-danger absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-center text-[9px] font-bold text-white">

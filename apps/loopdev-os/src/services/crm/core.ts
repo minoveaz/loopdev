@@ -264,11 +264,19 @@ export async function updateContact(input: CrmUpdateContactCommand): Promise<Crm
     ...(parsed.secondLastName !== undefined ? { second_last_name: parsed.secondLastName } : {}),
     ...(parsed.preferredName !== undefined ? { preferred_name: parsed.preferredName } : {}),
     ...(parsed.email !== undefined ? { email: normalizeEmail(parsed.email) } : {}),
-    ...(parsed.secondaryEmail !== undefined ? { secondary_email: normalizeEmail(parsed.secondaryEmail) } : {}),
+    ...(parsed.secondaryEmail !== undefined
+      ? { secondary_email: normalizeEmail(parsed.secondaryEmail) }
+      : {}),
     ...(parsed.phone !== undefined ? { phone: normalizePhone(parsed.phone) } : {}),
-    ...(parsed.secondaryPhone !== undefined ? { secondary_phone: normalizePhone(parsed.secondaryPhone) } : {}),
-    ...(parsed.preferredChannel !== undefined ? { preferred_channel: parsed.preferredChannel } : {}),
-    ...(parsed.preferredLanguage !== undefined ? { preferred_language: parsed.preferredLanguage } : {}),
+    ...(parsed.secondaryPhone !== undefined
+      ? { secondary_phone: normalizePhone(parsed.secondaryPhone) }
+      : {}),
+    ...(parsed.preferredChannel !== undefined
+      ? { preferred_channel: parsed.preferredChannel }
+      : {}),
+    ...(parsed.preferredLanguage !== undefined
+      ? { preferred_language: parsed.preferredLanguage }
+      : {}),
     ...(parsed.documentType !== undefined ? { document_type: parsed.documentType } : {}),
     ...(parsed.documentNumber !== undefined ? { document_number: parsed.documentNumber } : {}),
     ...(parsed.birthDate !== undefined ? { birth_date: parsed.birthDate } : {}),

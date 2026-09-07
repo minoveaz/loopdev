@@ -14,15 +14,7 @@ import {
   ModuleHeader,
   useFeedback,
 } from '@loopdev/ui';
-import {
-  User,
-  Building2,
-  Mail,
-  Briefcase,
-  ShieldCheck,
-  ArrowLeft,
-  UserPlus,
-} from 'lucide-react';
+import { User, Building2, Mail, Briefcase, ShieldCheck, ArrowLeft, UserPlus } from 'lucide-react';
 import { useOrganization } from '@/hooks/useOrganization';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import type { CrmContact } from '@loopdev/contracts';
@@ -182,13 +174,18 @@ export default function NewContactPage() {
                 </div>
                 <div>
                   <h2 className="text-sm font-semibold text-text-main">Identidad del Contacto</h2>
-                  <p className="text-xs text-text-muted">Nombre y apellidos para identificar al registro</p>
+                  <p className="text-xs text-text-muted">
+                    Nombre y apellidos para identificar al registro
+                  </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-firstname" className="text-xs font-semibold text-text-main">
+                  <label
+                    htmlFor="contact-firstname"
+                    className="text-xs font-semibold text-text-main"
+                  >
                     Nombre <span className="text-status-error">*</span>
                   </label>
                   <Input
@@ -204,7 +201,10 @@ export default function NewContactPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-lastname" className="text-xs font-semibold text-text-main">
+                  <label
+                    htmlFor="contact-lastname"
+                    className="text-xs font-semibold text-text-main"
+                  >
                     Apellidos
                   </label>
                   <Input
@@ -247,7 +247,9 @@ export default function NewContactPage() {
                 </div>
                 <div>
                   <h2 className="text-sm font-semibold text-text-main">Canales de Comunicación</h2>
-                  <p className="text-xs text-text-muted">Introduce al menos un correo o número de contacto</p>
+                  <p className="text-xs text-text-muted">
+                    Introduce al menos un correo o número de contacto
+                  </p>
                 </div>
               </div>
 
@@ -300,7 +302,9 @@ export default function NewContactPage() {
                 </div>
                 <div>
                   <h2 className="text-sm font-semibold text-text-main">Empresa & Razón Social</h2>
-                  <p className="text-xs text-text-muted">Vincular a una cuenta comercial u organización</p>
+                  <p className="text-xs text-text-muted">
+                    Vincular a una cuenta comercial u organización
+                  </p>
                 </div>
               </div>
 
@@ -365,8 +369,11 @@ export default function NewContactPage() {
               </div>
 
               <div className="rounded-xl border border-border-subtle bg-surface-muted/30 p-3 text-xs text-text-muted space-y-1 leading-relaxed">
-                <span className="font-semibold text-text-main block">Sincronización Automática</span>
-                Este contacto se indexará inmediatamente en el buscador global y estará disponible para asociar tratos, tareas y notas.
+                <span className="font-semibold text-text-main block">
+                  Sincronización Automática
+                </span>
+                Este contacto se indexará inmediatamente en el buscador global y estará disponible
+                para asociar tratos, tareas y notas.
               </div>
             </TechnicalSurface>
 
@@ -385,7 +392,8 @@ export default function NewContactPage() {
                 </span>
               </div>
               <p className="text-xs text-text-muted leading-relaxed">
-                Los datos ingresados se auditan conforme a la normativa de protección de datos (RGPD) y quedarán vinculados a tu organización activa.
+                Los datos ingresados se auditan conforme a la normativa de protección de datos
+                (RGPD) y quedarán vinculados a tu organización activa.
               </p>
             </TechnicalSurface>
 

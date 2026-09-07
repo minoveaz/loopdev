@@ -152,36 +152,17 @@ export function ContactDetailDrawerContent({
       />
 
       {/* 3. Grupo: Ubicación & Dirección */}
-      <FieldGroupSection
-        groupKey="location"
-        values={formData}
-        onChange={handleFieldChange}
-      />
+      <FieldGroupSection groupKey="location" values={formData} onChange={handleFieldChange} />
 
       {/* 4. Grupo: Profesional & Empresa */}
-      <FieldGroupSection
-        groupKey="professional"
-        values={formData}
-        onChange={handleFieldChange}
-      />
+      <FieldGroupSection groupKey="professional" values={formData} onChange={handleFieldChange} />
 
       {/* Footer desktop actions */}
       <div className="hidden sm:flex items-center justify-end gap-3 pt-4 border-t border-border-subtle sticky bottom-0 bg-surface-light dark:bg-surface-dark pb-2">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={onClose}
-          disabled={isSaving}
-        >
+        <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={isSaving}>
           Cancelar
         </Button>
-        <Button
-          type="submit"
-          variant="primary"
-          size="sm"
-          disabled={isSaving}
-        >
+        <Button type="submit" variant="primary" size="sm" disabled={isSaving}>
           {isSaving ? 'Guardando...' : 'Guardar cambios'}
         </Button>
       </div>

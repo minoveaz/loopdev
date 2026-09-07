@@ -2,7 +2,15 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Badge, Button, ContextBar, Heading, ModuleHeader, Select, TechnicalSurface } from '@loopdev/ui';
+import {
+  Badge,
+  Button,
+  ContextBar,
+  Heading,
+  ModuleHeader,
+  Select,
+  TechnicalSurface,
+} from '@loopdev/ui';
 import type { CrmOpportunity, PipelineStage, TimelinePage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';

@@ -7,7 +7,12 @@ import { Building2, ArrowUpRight, TrendingUp, CheckSquare, Square } from 'lucide
 import { ContactAvatar } from './ContactAvatar';
 import { ContactIdentityBadge } from './ContactIdentityBadge';
 import { ContactDirectChannels } from './ContactDirectChannels';
-import { contactFullName, formatRelativeActivity, formatCurrencyAmount, type EnrichedContactMeta } from '../types';
+import {
+  contactFullName,
+  formatRelativeActivity,
+  formatCurrencyAmount,
+  type EnrichedContactMeta,
+} from '../types';
 
 interface ContactMobileCardProps {
   contact: CrmContact;
@@ -88,10 +93,15 @@ export function ContactMobileCard({
       <div className="flex items-center justify-between rounded-lg border border-border-subtle/80 bg-surface/50 px-3 py-2 text-xs">
         <div className="flex items-center gap-1.5 text-text-muted">
           <TrendingUp size={13} strokeWidth={1.75} className="text-primary" />
-          <span>Tratos: <strong className="text-text-main font-semibold">{meta.dealCount}</strong></span>
+          <span>
+            Tratos: <strong className="text-text-main font-semibold">{meta.dealCount}</strong>
+          </span>
         </div>
         <div className="text-text-muted">
-          Valor: <strong className="text-text-main font-semibold">{formatCurrencyAmount(meta.totalPipelineValue)}</strong>
+          Valor:{' '}
+          <strong className="text-text-main font-semibold">
+            {formatCurrencyAmount(meta.totalPipelineValue)}
+          </strong>
         </div>
         <div className="text-[11px] text-text-muted">
           {formatRelativeActivity(contact.updatedAt)}
@@ -100,11 +110,7 @@ export function ContactMobileCard({
 
       {/* Bottom row: Direct communication channels + 360 Link */}
       <div className="flex items-center justify-between gap-2 pt-1 border-t border-border-subtle/60">
-        <ContactDirectChannels
-          email={contact.email}
-          phone={contact.phone}
-          variant="buttons"
-        />
+        <ContactDirectChannels email={contact.email} phone={contact.phone} variant="buttons" />
         <Link
           href={`/sales-crm/contacts/${contact.id}`}
           className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"

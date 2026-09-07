@@ -12,9 +12,7 @@ interface NotesPanelProps {
   isNotesSimulated?: boolean;
 }
 
-export function NotesPanel({
-  displayedNotes,
-}: NotesPanelProps) {
+export function NotesPanel({ displayedNotes }: NotesPanelProps) {
   const [quickNote, setQuickNote] = useState('');
 
   return (

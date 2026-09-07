@@ -26,13 +26,41 @@ export function getContactInitials(name: string): string {
  */
 export function getAvatarColorStyles(seed: string): { bg: string; text: string; border: string } {
   const palettes = [
-    { bg: 'bg-blue-50 dark:bg-blue-950/40', text: 'text-blue-700 dark:text-blue-300', border: 'border-blue-200/60 dark:border-blue-800/40' },
-    { bg: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-700 dark:text-indigo-300', border: 'border-indigo-200/60 dark:border-indigo-800/40' },
-    { bg: 'bg-violet-50 dark:bg-violet-950/40', text: 'text-violet-700 dark:text-violet-300', border: 'border-violet-200/60 dark:border-violet-800/40' },
-    { bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-700 dark:text-emerald-300', border: 'border-emerald-200/60 dark:border-emerald-800/40' },
-    { bg: 'bg-teal-50 dark:bg-teal-950/40', text: 'text-teal-700 dark:text-teal-300', border: 'border-teal-200/60 dark:border-teal-800/40' },
-    { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-800 dark:text-amber-300', border: 'border-amber-200/60 dark:border-amber-800/40' },
-    { bg: 'bg-rose-50 dark:bg-rose-950/40', text: 'text-rose-700 dark:text-rose-300', border: 'border-rose-200/60 dark:border-rose-800/40' },
+    {
+      bg: 'bg-blue-50 dark:bg-blue-950/40',
+      text: 'text-blue-700 dark:text-blue-300',
+      border: 'border-blue-200/60 dark:border-blue-800/40',
+    },
+    {
+      bg: 'bg-indigo-50 dark:bg-indigo-950/40',
+      text: 'text-indigo-700 dark:text-indigo-300',
+      border: 'border-indigo-200/60 dark:border-indigo-800/40',
+    },
+    {
+      bg: 'bg-violet-50 dark:bg-violet-950/40',
+      text: 'text-violet-700 dark:text-violet-300',
+      border: 'border-violet-200/60 dark:border-violet-800/40',
+    },
+    {
+      bg: 'bg-emerald-50 dark:bg-emerald-950/40',
+      text: 'text-emerald-700 dark:text-emerald-300',
+      border: 'border-emerald-200/60 dark:border-emerald-800/40',
+    },
+    {
+      bg: 'bg-teal-50 dark:bg-teal-950/40',
+      text: 'text-teal-700 dark:text-teal-300',
+      border: 'border-teal-200/60 dark:border-teal-800/40',
+    },
+    {
+      bg: 'bg-amber-50 dark:bg-amber-950/40',
+      text: 'text-amber-800 dark:text-amber-300',
+      border: 'border-amber-200/60 dark:border-amber-800/40',
+    },
+    {
+      bg: 'bg-rose-50 dark:bg-rose-950/40',
+      text: 'text-rose-700 dark:text-rose-300',
+      border: 'border-rose-200/60 dark:border-rose-800/40',
+    },
   ];
 
   let hash = 0;

@@ -43,12 +43,17 @@ export function CustomerMobileTabBar({
               : 'text-text-muted hover:text-text-main active:bg-surface-muted/60'
           }`}
         >
-          <Clock className="h-3.5 w-3.5 shrink-0" strokeWidth={activeTab === 'timeline' ? 2 : 1.75} />
+          <Clock
+            className="h-3.5 w-3.5 shrink-0"
+            strokeWidth={activeTab === 'timeline' ? 2 : 1.75}
+          />
           <span className="truncate">Historial</span>
           {timelineCount > 0 && (
             <span
               className={`text-[9px] px-1 py-0.2 rounded-full leading-tight font-medium shrink-0 ${
-                activeTab === 'timeline' ? 'bg-white/25 text-white' : 'bg-surface-muted text-text-muted'
+                activeTab === 'timeline'
+                  ? 'bg-white/25 text-white'
+                  : 'bg-surface-muted text-text-muted'
               }`}
             >
               {timelineCount}
@@ -65,12 +70,17 @@ export function CustomerMobileTabBar({
               : 'text-text-muted hover:text-text-main active:bg-surface-muted/60'
           }`}
         >
-          <Briefcase className="h-3.5 w-3.5 shrink-0" strokeWidth={activeTab === 'opportunities' ? 2 : 1.75} />
+          <Briefcase
+            className="h-3.5 w-3.5 shrink-0"
+            strokeWidth={activeTab === 'opportunities' ? 2 : 1.75}
+          />
           <span className="truncate">Tratos</span>
           {opportunitiesCount > 0 && (
             <span
               className={`text-[9px] px-1 py-0.2 rounded-full leading-tight font-medium shrink-0 ${
-                activeTab === 'opportunities' ? 'bg-white/25 text-white' : 'bg-surface-muted text-text-muted'
+                activeTab === 'opportunities'
+                  ? 'bg-white/25 text-white'
+                  : 'bg-surface-muted text-text-muted'
               }`}
             >
               {opportunitiesCount}
@@ -87,7 +97,10 @@ export function CustomerMobileTabBar({
               : 'text-text-muted hover:text-text-main active:bg-surface-muted/60'
           }`}
         >
-          <ListTodo className="h-3.5 w-3.5 shrink-0" strokeWidth={activeTab === 'tasks' ? 2 : 1.75} />
+          <ListTodo
+            className="h-3.5 w-3.5 shrink-0"
+            strokeWidth={activeTab === 'tasks' ? 2 : 1.75}
+          />
           <span className="truncate">Tareas</span>
           {openTasksCount > 0 && (
             <span
@@ -111,7 +124,10 @@ export function CustomerMobileTabBar({
               : 'text-text-muted hover:text-text-main active:bg-surface-muted/60'
           }`}
         >
-          <FileText className="h-3.5 w-3.5 shrink-0" strokeWidth={activeTab === 'notes' ? 2 : 1.75} />
+          <FileText
+            className="h-3.5 w-3.5 shrink-0"
+            strokeWidth={activeTab === 'notes' ? 2 : 1.75}
+          />
           <span className="truncate">Notas</span>
         </button>
       </div>

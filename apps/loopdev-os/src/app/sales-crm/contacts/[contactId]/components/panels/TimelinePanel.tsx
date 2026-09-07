@@ -10,9 +10,7 @@ interface TimelinePanelProps {
   isTimelineSimulated?: boolean;
 }
 
-export function TimelinePanel({
-  displayedTimeline,
-}: TimelinePanelProps) {
+export function TimelinePanel({ displayedTimeline }: TimelinePanelProps) {
   return (
     <div className="space-y-6 flex-1 flex flex-col min-w-0 w-full">
       <div className="flex items-center justify-between pb-3 border-b border-border-subtle">

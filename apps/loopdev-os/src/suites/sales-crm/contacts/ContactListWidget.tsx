@@ -31,6 +31,8 @@ import { ContactBulkActionsBar } from './components/ContactBulkActionsBar';
 import { useContactsData } from './hooks/useContactsData';
 import { useContactEnrichment } from './hooks/useContactEnrichment';
 
+const CHANNEL_OPTIONS = ['Available', 'Missing'];
+
 export function ContactListWidget() {
   const router = useRouter();
   const pathname = usePathname();
@@ -77,12 +79,7 @@ export function ContactListWidget() {
     return () => window.clearTimeout(timeoutId);
   }, [draftQuery, pathname, queryParam, router, searchParams]);
 
-  const {
-    contacts,
-    setContacts,
-    isLoading,
-    error,
-  } = useContactsData({
+  const { contacts, setContacts, isLoading, error } = useContactsData({
     organizationId: activeOrganizationId,
     canRead,
     isLoadingPermissions,
@@ -191,11 +188,7 @@ export function ContactListWidget() {
         key: 'channels',
         header: 'Canales directos',
         render: (contact) => (
-          <ContactDirectChannels
-            email={contact.email}
-            phone={contact.phone}
-            variant="inline"
-          />
+          <ContactDirectChannels email={contact.email} phone={contact.phone} variant="inline" />
         ),
       },
       {
@@ -246,7 +239,9 @@ export function ContactListWidget() {
         sortable: true,
         render: (contact) => (
           <div className="text-xs text-text-muted">
-            <p className="text-text-main font-medium">{formatRelativeActivity(contact.updatedAt)}</p>
+            <p className="text-text-main font-medium">
+              {formatRelativeActivity(contact.updatedAt)}
+            </p>
             <p className="text-[11px] text-text-muted">Actualizado</p>
           </div>
         ),
@@ -264,13 +259,11 @@ export function ContactListWidget() {
     [contacts],
   );
 
-  const channelOptions = ['Available', 'Missing'];
-
   const filters = useMemo<FiltersActionsFilter[]>(
     () => [
       { id: 'companyName', label: 'Empresa', options: filterOptions, multiple: true },
-      { id: 'emailState', label: 'Email', options: channelOptions, multiple: false },
-      { id: 'phoneState', label: 'Teléfono', options: channelOptions, multiple: false },
+      { id: 'emailState', label: 'Email', options: CHANNEL_OPTIONS, multiple: false },
+      { id: 'phoneState', label: 'Teléfono', options: CHANNEL_OPTIONS, multiple: false },
     ],
     [filterOptions],
   );
@@ -315,13 +308,7 @@ export function ContactListWidget() {
         segments={[{ id: 'contacts', label: 'Contactos & Cuentas', href: '/sales-crm/contacts' }]}
         leftSlot={
           <div className="flex min-w-0 items-center gap-3">
-            <Heading
-              as="h1"
-              size="lg"
-              weight="semibold"
-              aria-label="Contacts"
-              className="text-text-main truncate"
-            >
+            <Heading as="h1" size="lg" weight="semibold" className="text-text-main truncate">
               Contactos & Cuentas
             </Heading>
           </div>
@@ -371,7 +358,9 @@ export function ContactListWidget() {
                 <span>{seg.label}</span>
                 <span
                   className={`rounded-full px-1.5 py-0.2 text-[10px] ${
-                    isActive ? 'bg-primary text-primary-foreground font-semibold' : 'bg-surface-subtle text-text-muted'
+                    isActive
+                      ? 'bg-primary text-primary-foreground font-semibold'
+                      : 'bg-surface-subtle text-text-muted'
                   }`}
                 >
                   {seg.count}

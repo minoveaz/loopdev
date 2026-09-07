@@ -11,13 +11,14 @@ import { useOrganization } from './useOrganization';
 export function useCrmSectionConfig(sectionKey: string) {
   const { activeOrganizationId } = useOrganization();
   const defaultConfig = useMemo(
-    () => DEFAULT_SECTION_FIELD_CONFIGS[sectionKey] ?? {
-      sectionKey,
-      enabledGroups: ['identity', 'contact_channels'],
-      visibleFields: ['firstName', 'lastName', 'email', 'phone'],
-      requiredFields: ['firstName'],
-    },
-    [sectionKey]
+    () =>
+      DEFAULT_SECTION_FIELD_CONFIGS[sectionKey] ?? {
+        sectionKey,
+        enabledGroups: ['identity', 'contact_channels'],
+        visibleFields: ['firstName', 'lastName', 'email', 'phone'],
+        requiredFields: ['firstName'],
+      },
+    [sectionKey],
   );
 
   const [config, setConfig] = useState<CrmSectionFieldConfig>(defaultConfig);
@@ -31,7 +32,7 @@ export function useCrmSectionConfig(sectionKey: string) {
       setIsLoading(true);
       try {
         const res = await fetch(
-          `/api/crm/config/sections?organizationId=${activeOrganizationId}&sectionKey=${sectionKey}`
+          `/api/crm/config/sections?organizationId=${activeOrganizationId}&sectionKey=${sectionKey}`,
         );
         if (res.ok) {
           const data = await res.json();
@@ -40,7 +41,10 @@ export function useCrmSectionConfig(sectionKey: string) {
           }
         }
       } catch (err) {
-        console.warn(`[useCrmSectionConfig] Error loading config for ${sectionKey}, using defaults:`, err);
+        console.warn(
+          `[useCrmSectionConfig] Error loading config for ${sectionKey}, using defaults:`,
+          err,
+        );
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -57,21 +61,21 @@ export function useCrmSectionConfig(sectionKey: string) {
     (groupKey: CrmFieldGroupKey) => {
       return config.enabledGroups.includes(groupKey);
     },
-    [config.enabledGroups]
+    [config.enabledGroups],
   );
 
   const isFieldVisible = useCallback(
     (fieldKey: string) => {
       return config.visibleFields.includes(fieldKey);
     },
-    [config.visibleFields]
+    [config.visibleFields],
   );
 
   const isFieldRequired = useCallback(
     (fieldKey: string) => {
       return config.requiredFields.includes(fieldKey);
     },
-    [config.requiredFields]
+    [config.requiredFields],
   );
 
   return {

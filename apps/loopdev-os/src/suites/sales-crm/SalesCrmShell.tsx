@@ -248,9 +248,15 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
                   /* Dispatch custom event or open quick action sheet */
                   window.dispatchEvent(new CustomEvent('loopdev:quick-action'));
                 }}
-                onOpenAI={() => setContextMode((current) => (current === 'assistant' ? null : 'assistant'))}
-                onOpenProfile={() => setContextMode((current) => (current === 'profile' ? null : 'profile'))}
-                activeContext={contextMode === 'assistant' ? 'ai' : contextMode === 'profile' ? 'profile' : null}
+                onOpenAI={() =>
+                  setContextMode((current) => (current === 'assistant' ? null : 'assistant'))
+                }
+                onOpenProfile={() =>
+                  setContextMode((current) => (current === 'profile' ? null : 'profile'))
+                }
+                activeContext={
+                  contextMode === 'assistant' ? 'ai' : contextMode === 'profile' ? 'profile' : null
+                }
               />
             )}
             onNavigate={(route: NavRouteRef) => router.push(route.routeId)}
