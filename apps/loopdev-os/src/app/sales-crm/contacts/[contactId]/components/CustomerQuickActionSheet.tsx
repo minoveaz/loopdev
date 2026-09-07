@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ListTodo, Briefcase, PhoneCall, Mail, X } from 'lucide-react';
+import { ListTodo, Briefcase, PhoneCall, Mail, X, UserCheck } from 'lucide-react';
 
 interface CustomerQuickActionSheetProps {
   isOpen: boolean;
@@ -10,6 +10,7 @@ interface CustomerQuickActionSheetProps {
   contactId: string;
   phone?: string | null;
   email?: string | null;
+  onEditContact?: () => void;
 }
 
 export function CustomerQuickActionSheet({
@@ -19,6 +20,7 @@ export function CustomerQuickActionSheet({
   contactId,
   phone,
   email,
+  onEditContact,
 }: CustomerQuickActionSheetProps) {
   if (!isOpen) return null;
 
@@ -62,6 +64,21 @@ export function CustomerQuickActionSheet({
             </div>
             <span className="text-xs font-medium text-text-main">Nuevo Trato</span>
           </Link>
+          {onEditContact && (
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onEditContact();
+              }}
+              className="flex flex-col items-center gap-2 p-3 rounded-xl border border-border-subtle bg-surface-muted/20 hover:border-primary/40 text-center transition-all"
+            >
+              <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                <UserCheck className="h-5 w-5" />
+              </div>
+              <span className="text-xs font-medium text-text-main">Editar Ficha</span>
+            </button>
+          )}
           {phone ? (
             <a
               href={`tel:${phone}`}

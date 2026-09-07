@@ -68,11 +68,15 @@ export function ContactDetailDrawerContent({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col h-full space-y-6">
+    <form
+      id="customer-360-contact-edit-form"
+      onSubmit={handleSubmit}
+      className="flex flex-col h-full space-y-4 sm:space-y-6 pb-16 sm:pb-0"
+    >
       {errorMessage && (
         <div
           role="alert"
-          className="rounded-lg border border-status-error/40 bg-status-error/10 p-3 text-xs text-status-error"
+          className="rounded-xl border border-status-error/40 bg-status-error/10 p-3.5 text-xs text-status-error font-medium"
         >
           {errorMessage}
         </div>
@@ -81,15 +85,15 @@ export function ContactDetailDrawerContent({
       {saveSuccess && (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-3 text-xs text-emerald-700 dark:text-emerald-300 font-medium"
+          className="flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 text-xs text-emerald-700 dark:text-emerald-300 font-medium animate-in fade-in"
         >
           <Check size={16} className="text-emerald-600" />
           <span>¡Contacto actualizado con éxito!</span>
         </div>
       )}
 
-      {/* Sección 1: Identidad Personal */}
-      <section className="space-y-3">
+      {/* Sección 1: Identidad Personal (iOS Grouped Inset Card) */}
+      <section className="rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] sm:bg-transparent sm:border-0 p-4 sm:p-0 space-y-3">
         <div className="flex items-center gap-2 border-b border-border-subtle pb-1.5">
           <User size={14} className="text-primary" />
           <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
@@ -107,7 +111,8 @@ export function ContactDetailDrawerContent({
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
-              size="sm"
+              size="md"
+              className="h-11 sm:h-9 text-base sm:text-xs"
               placeholder="Ej. Camilo"
             />
           </div>
@@ -120,15 +125,16 @@ export function ContactDetailDrawerContent({
               id="drawer-lastname"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              size="sm"
+              size="md"
+              className="h-11 sm:h-9 text-base sm:text-xs"
               placeholder="Ej. Vega"
             />
           </div>
         </div>
       </section>
 
-      {/* Sección 2: Canales de Contacto */}
-      <section className="space-y-3">
+      {/* Sección 2: Canales de Contacto (iOS Grouped Inset Card) */}
+      <section className="rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] sm:bg-transparent sm:border-0 p-4 sm:p-0 space-y-3">
         <div className="flex items-center gap-2 border-b border-border-subtle pb-1.5">
           <Mail size={14} className="text-primary" />
           <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
@@ -146,7 +152,8 @@ export function ContactDetailDrawerContent({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              size="sm"
+              size="md"
+              className="h-11 sm:h-9 text-base sm:text-xs"
               startIcon={<Mail size={14} className="text-text-muted" />}
               placeholder="nombre@empresa.com"
             />
@@ -161,7 +168,8 @@ export function ContactDetailDrawerContent({
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              size="sm"
+              size="md"
+              className="h-11 sm:h-9 text-base sm:text-xs"
               startIcon={<Phone size={14} className="text-text-muted" />}
               placeholder="+34 600 000 000"
             />
@@ -169,8 +177,8 @@ export function ContactDetailDrawerContent({
         </div>
       </section>
 
-      {/* Sección 3: Empresa y Cuenta */}
-      <section className="space-y-3">
+      {/* Sección 3: Empresa y Cuenta (iOS Grouped Inset Card) */}
+      <section className="rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] sm:bg-transparent sm:border-0 p-4 sm:p-0 space-y-3">
         <div className="flex items-center gap-2 border-b border-border-subtle pb-1.5">
           <Building2 size={14} className="text-primary" />
           <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
@@ -186,24 +194,25 @@ export function ContactDetailDrawerContent({
             id="drawer-company"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
-            size="sm"
+            size="md"
+            className="h-11 sm:h-9 text-base sm:text-xs"
             startIcon={<Building2 size={14} className="text-text-muted" />}
             placeholder="Ej. BBVA, Acme Corp..."
           />
         </div>
       </section>
 
-      {/* Sección 4: Verificación & Seguridad */}
-      <section className="space-y-2 rounded-xl border border-border-subtle bg-surface/40 p-3.5">
+      {/* Sección 4: Verificación & Seguridad (iOS Grouped Inset Card) */}
+      <section className="space-y-2 rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] p-4">
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium text-text-muted">Estado de Verificación</span>
           {contact.identityStatus === 'verified' ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
               <ShieldCheck size={13} className="text-emerald-600" />
               <span>Verificado</span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
               <Clock size={13} className="text-amber-600" />
               <span>Revisión pendiente</span>
             </span>
@@ -214,11 +223,21 @@ export function ContactDetailDrawerContent({
         </p>
       </section>
 
-      {/* Spacer */}
-      <div className="flex-1 min-h-4" />
+      {/* Mobile-only bottom submit button */}
+      <div className="sm:hidden pt-2">
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          className="w-full h-11 text-sm font-semibold rounded-xl"
+          disabled={isSaving}
+        >
+          {isSaving ? 'Guardando...' : 'Guardar cambios'}
+        </Button>
+      </div>
 
-      {/* Footer Actions */}
-      <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-border-subtle">
+      {/* Desktop Footer Actions */}
+      <div className="hidden sm:flex items-center justify-end gap-2.5 pt-4 border-t border-border-subtle">
         <Button
           type="button"
           variant="secondary"

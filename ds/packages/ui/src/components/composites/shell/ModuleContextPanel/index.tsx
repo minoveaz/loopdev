@@ -68,29 +68,58 @@ export const ModuleContextPanel: React.FC<ModuleContextPanelProps> = ({
             : `z-30 h-full shrink-0 self-stretch max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:h-full max-lg:w-full max-lg:border-b max-lg:border-l-0 ${widthClasses[width]}`
         } ${className}`}
       >
-        {/* Header with Untitled UI subtle border and crisp typography */}
+        {/* Header with iOS native pattern on mobile and Untitled UI on desktop */}
         <div
-          className={`border-border-subtle bg-slate-50/70 dark:bg-white/5 flex min-h-14 min-w-0 shrink-0 items-center justify-between gap-3 overflow-hidden border-b px-5 py-3 ${
+          className={`border-border-subtle bg-slate-50/70 dark:bg-white/5 flex min-h-14 min-w-0 shrink-0 items-center justify-between gap-3 overflow-hidden border-b px-4 sm:px-5 py-3 ${
             headerRows > 1 ? 'flex-wrap' : ''
           }`}
         >
-          <div className="flex min-w-0 flex-col">
-            <h2 className="text-text-main min-w-0 truncate text-sm font-semibold tracking-tight">
-              {label}
-            </h2>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            {headerSlot ? <div className="flex min-w-0 shrink-0 items-center">{headerSlot}</div> : null}
+          {/* 1. Mobile iOS Navigation Bar (< sm) */}
+          <div className="flex sm:hidden w-full items-center justify-between">
             {onClose ? (
               <button
                 type="button"
-                aria-label={`Close ${label}`}
+                aria-label={`Cancel ${label}`}
                 onClick={onClose}
-                className="text-text-muted hover:bg-slate-100 dark:hover:bg-white/10 hover:text-text-main focus-visible:ring-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border-subtle/80 bg-white dark:bg-surface-dark transition-colors focus-visible:outline-none focus-visible:ring-2"
+                className="text-primary text-sm font-medium hover:opacity-70 active:opacity-40 transition-opacity py-1 px-0.5"
               >
-                <X size={15} strokeWidth={1.75} aria-hidden="true" />
+                Cancelar
               </button>
-            ) : null}
+            ) : (
+              <div className="w-14" />
+            )}
+
+            <h2 className="text-text-main truncate text-sm font-semibold tracking-tight text-center px-2">
+              {label}
+            </h2>
+
+            {headerSlot ? (
+              <div className="flex items-center justify-end">{headerSlot}</div>
+            ) : (
+              <div className="w-14" />
+            )}
+          </div>
+
+          {/* 2. Desktop Layout (>= sm) */}
+          <div className="hidden sm:flex min-w-0 flex-1 items-center justify-between gap-3">
+            <div className="flex min-w-0 flex-col">
+              <h2 className="text-text-main min-w-0 truncate text-sm font-semibold tracking-tight">
+                {label}
+              </h2>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {headerSlot ? <div className="flex min-w-0 shrink-0 items-center">{headerSlot}</div> : null}
+              {onClose ? (
+                <button
+                  type="button"
+                  aria-label={`Close ${label}`}
+                  onClick={onClose}
+                  className="text-text-muted hover:bg-slate-100 dark:hover:bg-white/10 hover:text-text-main focus-visible:ring-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border-subtle/80 bg-white dark:bg-surface-dark transition-colors focus-visible:outline-none focus-visible:ring-2"
+                >
+                  <X size={15} strokeWidth={1.75} aria-hidden="true" />
+                </button>
+              ) : null}
+            </div>
           </div>
         </div>
 

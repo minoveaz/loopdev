@@ -42,9 +42,10 @@ export function ContactDetailsPanel({
             <button
               type="button"
               onClick={onEditContact}
-              className="text-xs font-medium text-primary hover:underline"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline px-2.5 py-1 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors active:scale-95"
             >
-              Editar datos ✎
+              <span>Editar datos</span>
+              <span aria-hidden="true">✎</span>
             </button>
           ) : (
             <span className="text-xs text-text-muted">Verified</span>

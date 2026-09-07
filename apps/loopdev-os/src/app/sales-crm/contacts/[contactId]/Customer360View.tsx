@@ -291,11 +291,12 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
             contactId={contactId}
             phone={view.contact.phone}
             email={view.contact.email}
+            onEditContact={() => setIsEditDrawerOpen(true)}
           />
         </div>
       ) : null}
 
-      {/* Slide-Over Drawer (Untitled UI Drawer Pattern via ModuleContextPanel) */}
+      {/* Slide-Over Drawer (Untitled UI Drawer on Desktop / Native iOS Modal on Mobile) */}
       {view && activeOrganizationId && (
         <ModuleContextPanel
           label={`Ficha Técnica · ${name}`}
@@ -303,6 +304,15 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
           onClose={() => setIsEditDrawerOpen(false)}
           presentation="overlay"
           width="drawer"
+          headerSlot={
+            <button
+              type="submit"
+              form="customer-360-contact-edit-form"
+              className="sm:hidden text-primary font-bold text-sm hover:opacity-80 active:opacity-50 transition-opacity"
+            >
+              Guardar
+            </button>
+          }
         >
           <ContactDetailDrawerContent
             contact={view.contact}

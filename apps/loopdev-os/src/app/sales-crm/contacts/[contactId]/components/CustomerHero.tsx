@@ -108,11 +108,12 @@ export function CustomerHero({
           </div>
 
           {/* Mobile Direct Action Buttons (Thumb zone) */}
-          <div className="flex items-center gap-1.5 lg:hidden shrink-0">
+          <div className="flex items-center gap-2 lg:hidden shrink-0">
             {view.contact.phone ? (
               <a
                 href={`tel:${view.contact.phone}`}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs shadow-xs active:scale-95 transition-transform"
+                aria-label="Llamar al contacto"
+                className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs shadow-xs active:scale-95 transition-transform"
                 title="Llamar"
               >
                 <Phone className="h-4 w-4" />
@@ -121,7 +122,8 @@ export function CustomerHero({
             {view.contact.email ? (
               <a
                 href={`mailto:${view.contact.email}`}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs shadow-xs active:scale-95 transition-transform"
+                aria-label="Enviar correo"
+                className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs shadow-xs active:scale-95 transition-transform"
                 title="Email"
               >
                 <Mail className="h-4 w-4" />
@@ -131,7 +133,8 @@ export function CustomerHero({
               <button
                 type="button"
                 onClick={onEditContact}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface-light dark:bg-surface-dark border border-border-subtle text-text-muted text-xs shadow-xs active:scale-95 transition-transform"
+                aria-label="Editar contacto"
+                className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs shadow-xs active:scale-95 transition-transform"
                 title="Editar contacto"
               >
                 <Edit3 className="h-4 w-4" />
