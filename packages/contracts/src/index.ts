@@ -18,6 +18,7 @@ export * from './platform/public-shell';
 export * from './platform/seo';
 export * from './platform/telemetry';
 export * from './platform/deepLinking';
+export * from './platform/runtime';
 
 // Export CRM contracts
 export * from './crm/crm';

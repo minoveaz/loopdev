@@ -10,6 +10,7 @@ import { TransitionOverlay } from '@/components/layout/TransitionOverlay';
 import { OrganizationThemeProvider } from '@/providers/OrganizationThemeProvider';
 import { AppFeedbackProvider } from '@/providers/AppFeedbackProvider';
 import { SimulationProvider } from '@/providers/SimulationProvider';
+import { PlatformRuntimeProvider } from '@/providers/PlatformRuntimeProvider';
 
 // Importamos los estilos globales de nuestro Design System
 import '@loopdev/ui/styles/globals.css';
@@ -44,9 +45,11 @@ export default function RootLayout({
                   <PermissionProvider>
                     <BrandProvider>
                       <WorkspaceProvider>
-                        <OrganizationRouteGuard>
-                          <OrganizationThemeProvider>{children}</OrganizationThemeProvider>
-                        </OrganizationRouteGuard>
+                        <PlatformRuntimeProvider>
+                          <OrganizationRouteGuard>
+                            <OrganizationThemeProvider>{children}</OrganizationThemeProvider>
+                          </OrganizationRouteGuard>
+                        </PlatformRuntimeProvider>
                       </WorkspaceProvider>
                     </BrandProvider>
                   </PermissionProvider>

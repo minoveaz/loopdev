@@ -18,6 +18,7 @@
 - [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
 - [Reinicio de suites y limpieza de superficies heredadas](./planned/platform/2026-08-14-suite-reset.md) · `chore/platform-shell-deprecation` · fase 0
 - [Evaluacion de dependencias externas para CRM y suites](./planned/platform/2026-08-19-external-dependency-evaluation.md) · fase 0
+- [Platform Sandbox Runtime](./planned/platform/2026-09-07-platform-sandbox-runtime.md) · fase 0
 
 ### Governance
 
@@ -34,7 +35,7 @@
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 1 · bloqueado
 - [Implementación de Communications Core para WhatsApp CRM](./active/crm/2026-08-29-communications-core-implementation.md) · `feature/communications-core-implementation` · fase 0
-- [Implementacion de CRM Communications Inbox](./active/crm/2026-08-30-communications-inbox-implementation.md) · `feature/crm-communications-inbox-implementation` · fase 0
+- [Implementacion de CRM Communications Inbox](./active/crm/2026-08-30-communications-inbox-implementation.md) · `feature/crm-communications-inbox-implementation` · fase 0 · bloqueado
 - [CRM Suite closure and pilot release](./active/crm/2026-09-06-crm-suite-closure.md) · `loopdev-io-crm-suite-closure-plan` · fase 4 · bloqueado
 
 ### Marketing Studio
