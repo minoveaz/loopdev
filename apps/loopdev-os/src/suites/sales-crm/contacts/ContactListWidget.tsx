@@ -305,11 +305,11 @@ export function ContactListWidget() {
   return (
     <div className="bg-shell-canvas flex min-h-full flex-1 flex-col relative pb-36 lg:pb-6">
       <ModuleHeader
-        segments={[{ id: 'contacts', label: 'Contactos & Cuentas', href: '/sales-crm/contacts' }]}
+        segments={[{ id: 'contacts', label: 'Contacts', href: '/sales-crm/contacts' }]}
         leftSlot={
           <div className="flex min-w-0 items-center gap-3">
             <Heading as="h1" size="lg" weight="semibold" className="text-text-main truncate">
-              Contactos & Cuentas
+              Contacts
             </Heading>
           </div>
         }

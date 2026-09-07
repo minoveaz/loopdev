@@ -61,7 +61,7 @@ describe('ContactsPage (Pantalla 2: Contactos & Cuentas)', () => {
       </FeedbackProvider>,
     );
 
-    expect(screen.getByRole('heading', { name: 'Contactos & Cuentas' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Contacts' })).toBeInTheDocument();
     expect((await screen.findAllByText('Carlos Santana')).length).toBeGreaterThan(0);
     expect((await screen.findAllByText('Santana Logistics')).length).toBeGreaterThan(0);
   });
