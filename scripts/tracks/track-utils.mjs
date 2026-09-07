@@ -3,7 +3,22 @@ import path from 'node:path';
 
 export const TRACKS_ROOT = path.resolve('tracks');
 export const TRACK_STATUSES = ['planned', 'active', 'closed'];
-export const REQUIRED_FIELDS = ['id', 'title', 'status', 'created', 'updated', 'owner', 'lead', 'branch', 'branches', 'phase', 'pull_requests', 'issues', 'packages', 'release'];
+export const REQUIRED_FIELDS = [
+  'id',
+  'title',
+  'status',
+  'created',
+  'updated',
+  'owner',
+  'lead',
+  'branch',
+  'branches',
+  'phase',
+  'pull_requests',
+  'issues',
+  'packages',
+  'release',
+];
 
 export async function getTrackFiles() {
   const files = [];
@@ -25,7 +40,9 @@ async function collectMarkdownFiles(directory, files) {
 
 export async function getDomains() {
   const content = await fs.readFile(path.join(TRACKS_ROOT, 'domains.md'), 'utf8');
-  return new Set([...content.matchAll(/^\| ([a-z0-9]+(?:-[a-z0-9]+)*) \|/gm)].map((match) => match[1]));
+  return new Set(
+    [...content.matchAll(/^\| ([a-z0-9]+(?:-[a-z0-9]+)*) \|/gm)].map((match) => match[1]),
+  );
 }
 
 export function parseFrontmatter(content) {
@@ -33,11 +50,24 @@ export function parseFrontmatter(content) {
   if (!match) return null;
 
   const metadata = {};
+  let currentKey = null;
   for (const line of match[1].split(/\r?\n/)) {
     const field = line.match(/^([a-z_]+):\s*(.*)$/);
-    if (!field) continue;
-    const [, key, rawValue] = field;
-    metadata[key] = rawValue === 'null' ? null : rawValue.replace(/^['"]|['"]$/g, '');
+    if (field) {
+      const [, key, rawValue] = field;
+      currentKey = key;
+      metadata[key] = rawValue === 'null' ? null : rawValue.replace(/^['"]|['"]$/g, '');
+    } else if (currentKey && /^\s+/.test(line)) {
+      // Continuation of a multiline field (e.g. array or list)
+      const trimmed = line.trim();
+      if (trimmed) {
+        if (metadata[currentKey]) {
+          metadata[currentKey] += ' ' + trimmed;
+        } else {
+          metadata[currentKey] = trimmed;
+        }
+      }
+    }
   }
   return { metadata, body: content.slice(match[0].length).replace(/^\r?\n/, '') };
 }
