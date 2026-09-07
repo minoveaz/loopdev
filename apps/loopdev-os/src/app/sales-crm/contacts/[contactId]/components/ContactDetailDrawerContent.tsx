@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import type { CrmContact } from '@loopdev/contracts';
-import { Button, Input, PhoneInput } from '@loopdev/ui';
-import { Building2, User, Mail, Phone, ShieldCheck, Clock, FileText, Check } from 'lucide-react';
+import { Button } from '@loopdev/ui';
+import { Check } from 'lucide-react';
+import { FieldGroupSection } from '@/suites/sales-crm/crm/FieldGroupSection';
 
 interface ContactDetailDrawerContentProps {
   contact: CrmContact;
@@ -18,14 +19,39 @@ export function ContactDetailDrawerContent({
   onClose,
   onContactUpdated,
 }: ContactDetailDrawerContentProps) {
-  const [firstName, setFirstName] = useState(contact.firstName || '');
-  const [lastName, setLastName] = useState(contact.lastName || '');
-  const [email, setEmail] = useState(contact.email || '');
-  const [phone, setPhone] = useState(contact.phone || '');
-  const [companyName, setCompanyName] = useState(contact.companyName || '');
+  const [formData, setFormData] = useState<Record<string, any>>({
+    firstName: contact.firstName || '',
+    lastName: contact.lastName || '',
+    secondLastName: contact.secondLastName || '',
+    preferredName: contact.preferredName || '',
+    documentType: contact.documentType || '',
+    documentNumber: contact.documentNumber || '',
+    birthDate: contact.birthDate || '',
+    gender: contact.gender || '',
+    email: contact.email || '',
+    secondaryEmail: contact.secondaryEmail || '',
+    phone: contact.phone || '',
+    secondaryPhone: contact.secondaryPhone || '',
+    preferredChannel: contact.preferredChannel || '',
+    preferredLanguage: contact.preferredLanguage || 'es',
+    addressLine1: contact.addressLine1 || '',
+    addressLine2: contact.addressLine2 || '',
+    city: contact.city || '',
+    stateProvince: contact.stateProvince || '',
+    postalCode: contact.postalCode || '',
+    country: contact.country || 'ES',
+    companyName: contact.companyName || '',
+    jobTitle: contact.jobTitle || '',
+    department: contact.department || '',
+  });
+
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleFieldChange = (fieldKey: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [fieldKey]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,11 +65,29 @@ export function ContactDetailDrawerContent({
         body: JSON.stringify({
           organizationId,
           contactId: contact.id,
-          firstName: firstName.trim(),
-          lastName: lastName.trim() || null,
-          email: email.trim() || null,
-          phone: phone.trim() || null,
-          companyName: companyName.trim() || null,
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim() || null,
+          secondLastName: formData.secondLastName?.trim() || null,
+          preferredName: formData.preferredName?.trim() || null,
+          documentType: formData.documentType || null,
+          documentNumber: formData.documentNumber?.trim() || null,
+          birthDate: formData.birthDate || null,
+          gender: formData.gender || null,
+          email: formData.email.trim() || null,
+          secondaryEmail: formData.secondaryEmail?.trim() || null,
+          phone: formData.phone.trim() || null,
+          secondaryPhone: formData.secondaryPhone?.trim() || null,
+          preferredChannel: formData.preferredChannel || null,
+          preferredLanguage: formData.preferredLanguage || 'es',
+          addressLine1: formData.addressLine1?.trim() || null,
+          addressLine2: formData.addressLine2?.trim() || null,
+          city: formData.city?.trim() || null,
+          stateProvince: formData.stateProvince?.trim() || null,
+          postalCode: formData.postalCode?.trim() || null,
+          country: formData.country?.trim() || 'ES',
+          companyName: formData.companyName.trim() || null,
+          jobTitle: formData.jobTitle?.trim() || null,
+          department: formData.department?.trim() || null,
           expectedUpdatedAt: contact.updatedAt,
         }),
       });
@@ -71,7 +115,7 @@ export function ContactDetailDrawerContent({
     <form
       id="customer-360-contact-edit-form"
       onSubmit={handleSubmit}
-      className="flex flex-col h-full space-y-4 sm:space-y-6 pb-16 sm:pb-0"
+      className="flex flex-col h-full space-y-4 sm:space-y-6 pb-20 sm:pb-0"
     >
       {errorMessage && (
         <div
@@ -92,155 +136,40 @@ export function ContactDetailDrawerContent({
         </div>
       )}
 
-      {/* Sección 1: Identidad Personal (iOS Grouped Inset Card) */}
-      <section className="rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] sm:bg-transparent sm:border-0 p-4 sm:p-0 space-y-3">
-        <div className="flex items-center gap-2 border-b border-border-subtle pb-1.5">
-          <User size={14} className="text-primary" />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
-            Identidad del Cliente
-          </h3>
-        </div>
+      {/* 1. Grupo: Identidad Personal */}
+      <FieldGroupSection
+        groupKey="identity"
+        values={formData}
+        onChange={handleFieldChange}
+        requiredFields={['firstName']}
+      />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="space-y-1">
-            <label htmlFor="drawer-firstname" className="text-xs font-medium text-text-main">
-              Nombre <span className="text-status-error">*</span>
-            </label>
-            <Input
-              id="drawer-firstname"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-              size="md"
-              className="h-11 sm:h-9 text-base sm:text-xs"
-              placeholder="Ej. Camilo"
-            />
-          </div>
+      {/* 2. Grupo: Canales de Contacto */}
+      <FieldGroupSection
+        groupKey="contact_channels"
+        values={formData}
+        onChange={handleFieldChange}
+      />
 
-          <div className="space-y-1">
-            <label htmlFor="drawer-lastname" className="text-xs font-medium text-text-main">
-              Apellidos
-            </label>
-            <Input
-              id="drawer-lastname"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              size="md"
-              className="h-11 sm:h-9 text-base sm:text-xs"
-              placeholder="Ej. Vega"
-            />
-          </div>
-        </div>
-      </section>
+      {/* 3. Grupo: Ubicación & Dirección */}
+      <FieldGroupSection
+        groupKey="location"
+        values={formData}
+        onChange={handleFieldChange}
+      />
 
-      {/* Sección 2: Canales de Contacto (iOS Grouped Inset Card) */}
-      <section className="rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] sm:bg-transparent sm:border-0 p-4 sm:p-0 space-y-3">
-        <div className="flex items-center gap-2 border-b border-border-subtle pb-1.5">
-          <Mail size={14} className="text-primary" />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
-            Canales de Comunicación
-          </h3>
-        </div>
+      {/* 4. Grupo: Profesional & Empresa */}
+      <FieldGroupSection
+        groupKey="professional"
+        values={formData}
+        onChange={handleFieldChange}
+      />
 
-        <div className="space-y-3">
-          <div className="space-y-1">
-            <label htmlFor="drawer-email" className="text-xs font-medium text-text-main">
-              Correo Electrónico
-            </label>
-            <Input
-              id="drawer-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              size="md"
-              className="h-11 sm:h-9 text-base sm:text-xs"
-              startIcon={<Mail size={14} className="text-text-muted" />}
-              placeholder="nombre@empresa.com"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label htmlFor="drawer-phone" className="text-xs font-medium text-text-main">
-              Teléfono Directo
-            </label>
-            <Input
-              id="drawer-phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              size="md"
-              className="h-11 sm:h-9 text-base sm:text-xs"
-              startIcon={<Phone size={14} className="text-text-muted" />}
-              placeholder="+34 600 000 000"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Sección 3: Empresa y Cuenta (iOS Grouped Inset Card) */}
-      <section className="rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] sm:bg-transparent sm:border-0 p-4 sm:p-0 space-y-3">
-        <div className="flex items-center gap-2 border-b border-border-subtle pb-1.5">
-          <Building2 size={14} className="text-primary" />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
-            Empresa & Cuenta
-          </h3>
-        </div>
-
-        <div className="space-y-1">
-          <label htmlFor="drawer-company" className="text-xs font-medium text-text-main">
-            Empresa / Razón Social
-          </label>
-          <Input
-            id="drawer-company"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-            size="md"
-            className="h-11 sm:h-9 text-base sm:text-xs"
-            startIcon={<Building2 size={14} className="text-text-muted" />}
-            placeholder="Ej. BBVA, Acme Corp..."
-          />
-        </div>
-      </section>
-
-      {/* Sección 4: Verificación & Seguridad (iOS Grouped Inset Card) */}
-      <section className="space-y-2 rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] p-4">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-text-muted">Estado de Verificación</span>
-          {contact.identityStatus === 'verified' ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-              <ShieldCheck size={13} className="text-emerald-600" />
-              <span>Verificado</span>
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
-              <Clock size={13} className="text-amber-600" />
-              <span>Revisión pendiente</span>
-            </span>
-          )}
-        </div>
-        <p className="text-[11px] text-text-muted leading-relaxed">
-          Los datos fiscales y bancarios vinculados a este registro quedan bloqueados ante modificaciones no autorizadas conforme al protocolo de cumplimiento.
-        </p>
-      </section>
-
-      {/* Mobile-only bottom submit button */}
-      <div className="sm:hidden pt-2">
-        <Button
-          type="submit"
-          variant="primary"
-          size="md"
-          className="w-full h-11 text-sm font-semibold rounded-xl"
-          disabled={isSaving}
-        >
-          {isSaving ? 'Guardando...' : 'Guardar cambios'}
-        </Button>
-      </div>
-
-      {/* Desktop Footer Actions */}
-      <div className="hidden sm:flex items-center justify-end gap-2.5 pt-4 border-t border-border-subtle">
+      {/* Footer desktop actions */}
+      <div className="hidden sm:flex items-center justify-end gap-3 pt-4 border-t border-border-subtle sticky bottom-0 bg-surface-light dark:bg-surface-dark pb-2">
         <Button
           type="button"
-          variant="secondary"
+          variant="outline"
           size="sm"
           onClick={onClose}
           disabled={isSaving}

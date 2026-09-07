@@ -35,6 +35,8 @@ export * from './inputs/SearchInput';
 export * from './inputs/ThemeToggle';
 export * from './inputs/Select';
 export * from './inputs/Select/types';
+export * from './inputs/MultiSelect';
+export * from './inputs/MultiSelect/types';
 export * from './inputs/Checkbox';
 export * from './inputs/FilterDropdown';
 export * from './inputs/Textarea';

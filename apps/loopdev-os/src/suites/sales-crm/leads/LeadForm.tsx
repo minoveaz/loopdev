@@ -75,17 +75,53 @@ export function LeadForm({ formId, organizationId, form, onSubmit }: LeadFormPro
         ),
       },
       {
+        name: 'estimatedBudget',
+        label: 'Presupuesto estimado (€)',
+        render: ({ field, invalid, id, describedBy }) => (
+          <Input
+            {...field}
+            id={id}
+            type="number"
+            aria-describedby={describedBy}
+            aria-invalid={invalid}
+            placeholder="Ej. 2500"
+          />
+        ),
+      },
+      {
+        name: 'purchaseTimeline',
+        label: 'Plazo de compra',
+        render: ({ field, id, describedBy }) => (
+          <Select
+            {...field}
+            id={id}
+            aria-describedby={describedBy}
+            onValueChange={field.onChange}
+            options={[
+              { value: '', label: 'Seleccionar plazo...' },
+              { value: 'immediate', label: 'Inmediato (< 1 mes)' },
+              { value: '1_3_months', label: '1 a 3 meses' },
+              { value: '3_6_months', label: '3 a 6 meses' },
+              { value: 'evaluating', label: 'Sólo explorando' },
+            ]}
+          />
+        ),
+      },
+      {
         name: 'sourceKind',
         label: 'Origen',
         required: true,
         render: ({ field, id, describedBy }) => (
-          <Select {...field} id={id} aria-describedby={describedBy}>
-            {LEAD_SOURCE_KINDS.map((kind) => (
-              <option key={kind} value={kind}>
-                {getLeadSourceLabel(kind)}
-              </option>
-            ))}
-          </Select>
+          <Select
+            {...field}
+            id={id}
+            aria-describedby={describedBy}
+            onValueChange={field.onChange}
+            options={LEAD_SOURCE_KINDS.map((kind) => ({
+              value: kind,
+              label: getLeadSourceLabel(kind),
+            }))}
+          />
         ),
       },
       {

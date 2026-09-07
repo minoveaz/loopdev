@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Badge, Button, ContextBar, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
+import { Badge, Button, ContextBar, Heading, ModuleHeader, Select, TechnicalSurface } from '@loopdev/ui';
 import type { CrmOpportunity, PipelineStage, TimelinePage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
@@ -201,19 +201,19 @@ export function OpportunityRecordView({ opportunityId }: OpportunityRecordViewPr
                   value={opportunity.stageKey}
                   trailing={
                     canManage && stages.length > 1 ? (
-                      <select
+                      <Select
+                        size="sm"
+                        fullWidth={false}
+                        triggerClassName="h-7 min-h-7 text-xs px-2 py-0.5"
                         aria-label="Opportunity stage"
                         disabled={isPending}
                         value={opportunity.stageKey}
-                        onChange={(event) => void move(event.target.value)}
-                        className="border-border-subtle bg-background text-text-main min-h-8 rounded border px-2 text-xs"
-                      >
-                        {stages.map((stage) => (
-                          <option key={stage.key} value={stage.key}>
-                            {stage.name ?? stage.label ?? stage.key}
-                          </option>
-                        ))}
-                      </select>
+                        onValueChange={(val) => void move(val)}
+                        options={stages.map((stage) => ({
+                          value: stage.key,
+                          label: stage.name ?? stage.label ?? stage.key,
+                        }))}
+                      />
                     ) : null
                   }
                   className="mt-4"

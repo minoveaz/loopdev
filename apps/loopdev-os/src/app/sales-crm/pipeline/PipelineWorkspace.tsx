@@ -9,6 +9,7 @@ import {
   KanbanBoard,
   ModuleHeader,
   ResponsiveTable,
+  Select,
   SuiteCanvas,
   TechnicalSurface,
   type ResponsiveTableColumn,
@@ -288,21 +289,21 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                 placeholder="Name, product or contact"
               />
             </label>
-            <label className="text-xs font-medium text-text-muted">
-              Stage
-              <select
-                value={stageFilter}
-                onChange={(event) => setStageFilter(event.target.value)}
-                className="border-border-subtle bg-background text-text-main mt-1 min-h-9 min-w-40 rounded-md border px-3 text-sm"
-              >
-                <option value="all">All stages</option>
-                {stages.map((stage) => (
-                  <option key={stage.key} value={stage.key}>
-                    {stageName(stage)}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <Select
+              label="Stage"
+              size="sm"
+              fullWidth={false}
+              className="min-w-44"
+              value={stageFilter}
+              onValueChange={setStageFilter}
+              options={[
+                { value: 'all', label: 'All stages' },
+                ...stages.map((stage) => ({
+                  value: stage.key,
+                  label: stageName(stage),
+                })),
+              ]}
+            />
           </div>
         </TechnicalSurface>
         {error ? (
@@ -498,24 +499,22 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                           Open Customer 360
                         </Link>
                         {canManage && stages.length > 1 ? (
-                          <label className="text-text-muted text-xs">
-                            Move{' '}
-                            <select
-                              aria-label={`Move ${opportunity.name}`}
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-text-muted text-xs">Move</span>
+                            <Select
+                              size="sm"
+                              fullWidth={false}
+                              triggerClassName="h-7 min-h-7 text-xs px-2 py-0.5"
                               disabled={pendingId === opportunity.id}
                               value={opportunity.stageKey}
-                              onChange={(event) =>
-                                void moveOpportunity(opportunity, event.target.value)
-                              }
-                              className="border-border-subtle bg-background text-text-main ml-1 min-h-8 max-w-28 rounded border px-1 text-xs"
-                            >
-                              {stages.map((target) => (
-                                <option key={target.key} value={target.key}>
-                                  {stageName(target)}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
+                              onValueChange={(val) => void moveOpportunity(opportunity, val)}
+                              aria-label={`Move ${opportunity.name}`}
+                              options={stages.map((target) => ({
+                                value: target.key,
+                                label: stageName(target),
+                              }))}
+                            />
+                          </div>
                         ) : null}
                       </div>
                     </TechnicalSurface>

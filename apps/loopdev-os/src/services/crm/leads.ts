@@ -45,7 +45,11 @@ type LeadRow = {
   external_lead_id: string | null;
   campaign: string | null;
   interest: string | null;
+  estimated_budget?: number | null;
+  purchase_timeline?: string | null;
+  lead_score?: number | null;
   assigned_to_user_id: string | null;
+  attributes?: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 };
@@ -73,7 +77,7 @@ type OpportunityRow = {
 };
 
 const leadColumns =
-  'id, organization_id, contact_id, brand_id, workspace_id, status, source, source_provider, external_lead_id, campaign, interest, assigned_to_user_id, created_at, updated_at';
+  'id, organization_id, contact_id, brand_id, workspace_id, status, source, source_provider, external_lead_id, campaign, interest, estimated_budget, purchase_timeline, lead_score, assigned_to_user_id, attributes, created_at, updated_at';
 const opportunityColumns =
   'id, organization_id, lead_id, workspace_id, brand_id, contact_id, name, stage, stage_key, origin, product_key, amount, currency, probability, expected_close_at, assigned_to_user_id, version, created_at, updated_at';
 
@@ -136,6 +140,9 @@ function mapLead(row: LeadRow): CrmLead {
     contactId: row.contact_id,
     status: mapLeadStatus(row.status),
     interest: row.interest,
+    estimatedBudget: row.estimated_budget ?? null,
+    purchaseTimeline: row.purchase_timeline ?? null,
+    leadScore: row.lead_score ?? null,
     assignedUserId: row.assigned_to_user_id,
     source: {
       kind: mapLeadSource(row.source),
@@ -144,6 +151,7 @@ function mapLead(row: LeadRow): CrmLead {
       campaign: row.campaign,
       utm: {},
     },
+    attributes: row.attributes ?? {},
     // Duplicate review is prepared in the Contact contract only; this slice
     // never links a review from the Lead read model yet.
     duplicateReviewId: null,
@@ -241,7 +249,11 @@ export async function createLead(input: CrmCreateLeadCommand): Promise<CrmLead> 
       external_lead_id: parsed.source.externalId ?? null,
       campaign: parsed.source.campaign ?? null,
       interest: parsed.interest ?? null,
+      estimated_budget: parsed.estimatedBudget ?? null,
+      purchase_timeline: parsed.purchaseTimeline ?? null,
+      lead_score: parsed.leadScore ?? null,
       assigned_to_user_id: parsed.assignedUserId ?? null,
+      attributes: parsed.attributes ?? {},
     })
     .select(leadColumns)
     .single();
@@ -302,6 +314,7 @@ export async function captureLead(command: CrmCaptureLeadCommand, actingUserId: 
         organizationId: parsed.organizationId,
         firstName: parsed.firstName ?? '',
         lastName: parsed.lastName,
+        secondLastName: parsed.secondLastName,
         email: parsed.email,
         phone: parsed.phone,
         companyName: parsed.companyName,
@@ -315,8 +328,12 @@ export async function captureLead(command: CrmCaptureLeadCommand, actingUserId: 
       brandId: parsed.brandId,
       workspaceId: parsed.workspaceId,
       interest: parsed.interest,
+      estimatedBudget: parsed.estimatedBudget,
+      purchaseTimeline: parsed.purchaseTimeline,
+      leadScore: parsed.leadScore,
       assignedUserId,
       source: parsed.source,
+      attributes: parsed.attributes,
     });
   } catch (error) {
     // The pre-read above cannot prevent two requests from racing. Reconcile a
@@ -384,9 +401,13 @@ export async function updateLead(input: CrmUpdateLeadCommand): Promise<CrmLead> 
   const supabase = await createServerSupabaseClient();
   const changes = {
     ...(parsed.interest !== undefined ? { interest: parsed.interest } : {}),
+    ...(parsed.estimatedBudget !== undefined ? { estimated_budget: parsed.estimatedBudget } : {}),
+    ...(parsed.purchaseTimeline !== undefined ? { purchase_timeline: parsed.purchaseTimeline } : {}),
+    ...(parsed.leadScore !== undefined ? { lead_score: parsed.leadScore } : {}),
     ...(parsed.assignedUserId !== undefined ? { assigned_to_user_id: parsed.assignedUserId } : {}),
     ...(parsed.brandId !== undefined ? { brand_id: parsed.brandId } : {}),
     ...(parsed.workspaceId !== undefined ? { workspace_id: parsed.workspaceId } : {}),
+    ...(parsed.attributes !== undefined ? { attributes: parsed.attributes } : {}),
     updated_at: new Date().toISOString(),
   };
   const { data, error } = await supabase

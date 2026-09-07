@@ -129,11 +129,13 @@ export function CommunicationsInboxProvider({
     };
   }, [dataSource, organizationId, requestKey, useFixtureModel]);
 
+  const effectiveOrgId = organizationId || initialModel?.organizationId;
+
   useEffect(() => {
-    if (!dataSource.loadTemplates || !organizationId) return;
+    if (!dataSource.loadTemplates || !effectiveOrgId) return;
     let isMounted = true;
     void dataSource
-      .loadTemplates(organizationId)
+      .loadTemplates(effectiveOrgId)
       .then((nextTemplates) => {
         if (!isMounted) return;
         setTemplates(nextTemplates);
@@ -149,7 +151,7 @@ export function CommunicationsInboxProvider({
     return () => {
       isMounted = false;
     };
-  }, [dataSource, organizationId, reloadVersion]);
+  }, [dataSource, effectiveOrgId, reloadVersion]);
 
   const visibleConversations = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();

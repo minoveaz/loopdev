@@ -35,7 +35,7 @@ export function CreateContactFromLead() {
         },
         {
           name: 'lastName',
-          label: 'Apellidos',
+          label: 'Primer Apellido',
           render: ({ field, invalid, id, describedBy }) => (
             <Input
               {...field}
@@ -43,6 +43,19 @@ export function CreateContactFromLead() {
               aria-describedby={describedBy}
               aria-invalid={invalid}
               autoComplete="family-name"
+            />
+          ),
+        },
+        {
+          name: 'secondLastName',
+          label: 'Segundo Apellido',
+          render: ({ field, invalid, id, describedBy }) => (
+            <Input
+              {...field}
+              id={id}
+              aria-describedby={describedBy}
+              aria-invalid={invalid}
+              placeholder="Opcional"
             />
           ),
         },
@@ -68,7 +81,7 @@ export function CreateContactFromLead() {
             <PhoneInput
               ref={field.ref}
               id={id}
-              value={field.value}
+              value={typeof field.value === 'string' ? field.value : undefined}
               onChange={field.onChange}
               onBlur={field.onBlur}
               name={field.name}

@@ -8,6 +8,7 @@ import {
   Heading,
   ModuleHeader,
   ResponsiveTable,
+  Select,
   SuiteCanvas,
   TechnicalSurface,
   type ResponsiveTableColumn,
@@ -603,20 +604,20 @@ export default function TasksPage() {
               ) : null}
             </div>
 
-            <div className="relative shrink-0">
-              <select
-                value={status}
-                onChange={(event) => setStatus(event.target.value as 'all' | TaskStatus)}
-                className="appearance-none rounded-lg border border-border-subtle bg-background py-1.5 pl-3 pr-7 text-xs text-text-main outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
-              >
-                <option value="all">Todos los estados</option>
-                <option value="open">Abierta</option>
-                <option value="in_progress">En progreso</option>
-                <option value="completed">Completada</option>
-                <option value="cancelled">Cancelada</option>
-              </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 size-3 text-text-muted pointer-events-none opacity-70" />
-            </div>
+            <Select
+              size="sm"
+              fullWidth={false}
+              className="w-44 shrink-0"
+              value={status}
+              onValueChange={(val) => setStatus(val as 'all' | TaskStatus)}
+              options={[
+                { value: 'all', label: 'Todos los estados' },
+                { value: 'open', label: 'Abierta' },
+                { value: 'in_progress', label: 'En progreso' },
+                { value: 'completed', label: 'Completada' },
+                { value: 'cancelled', label: 'Cancelada' },
+              ]}
+            />
           </div>
         </div>
 

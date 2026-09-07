@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Badge, Button, ContextBar, Heading, ModuleHeader, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
+import { Badge, Button, ContextBar, Heading, ModuleHeader, Select, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
 import type {
   Task,
   TaskPage,
@@ -300,18 +300,12 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
               />
               {isEditing ? (
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                  <label className="text-text-muted text-xs font-medium">
-                    Priority
-                    <select
-                      value={draftPriority}
-                      onChange={(event) => setDraftPriority(event.target.value as TaskPriority)}
-                      className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm"
-                    >
-                      {priorities.map((item) => (
-                        <option key={item}>{item}</option>
-                      ))}
-                    </select>
-                  </label>
+                  <Select
+                    label="Priority"
+                    value={draftPriority}
+                    onValueChange={(val) => setDraftPriority(val as TaskPriority)}
+                    options={priorities.map((item) => ({ value: item, label: item.toUpperCase() }))}
+                  />
                   <label className="text-text-muted text-xs font-medium">
                     Due date
                     <input
@@ -535,18 +529,12 @@ export function TaskForm() {
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Title" required value={title} onChange={setTitle} />
               <Field label="Task type" value={type} onChange={setType} placeholder="call" />
-              <label className="text-text-muted text-xs font-medium">
-                Priority
-                <select
-                  value={priority}
-                  onChange={(event) => setPriority(event.target.value as TaskPriority)}
-                  className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm"
-                >
-                  {priorities.map((item) => (
-                    <option key={item}>{item}</option>
-                  ))}
-                </select>
-              </label>
+              <Select
+                label="Priority"
+                value={priority}
+                onValueChange={(val) => setPriority(val as TaskPriority)}
+                options={priorities.map((item) => ({ value: item, label: item.toUpperCase() }))}
+              />
               <Field
                 label="Due date"
                 required
@@ -554,19 +542,13 @@ export function TaskForm() {
                 onChange={setDueAt}
                 type="datetime-local"
               />
-              <label className="text-text-muted text-xs font-medium">
-                Related entity
-                <select
-                  disabled={Boolean(searchParams.get('relationType'))}
-                  value={relationType}
-                  onChange={(event) => setRelationType(event.target.value as TaskRelationType)}
-                  className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm"
-                >
-                  {relationTypes.map((item) => (
-                    <option key={item}>{item}</option>
-                  ))}
-                </select>
-              </label>
+              <Select
+                label="Related entity"
+                disabled={Boolean(searchParams.get('relationType'))}
+                value={relationType}
+                onValueChange={(val) => setRelationType(val as TaskRelationType)}
+                options={relationTypes.map((item) => ({ value: item, label: item.toUpperCase() }))}
+              />
               <Field
                 label="Related record ID"
                 required
