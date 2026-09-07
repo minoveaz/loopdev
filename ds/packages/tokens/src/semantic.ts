@@ -68,3 +68,16 @@ export const touchTargets = {
 export type SemanticColorRole = keyof typeof semanticColors;
 export type SpacingToken = keyof typeof spacing;
 export type RadiusToken = keyof typeof radii;
+
+export const brandThemes = {
+  estarProtegidos: {
+    primary: '#57c19a',
+    accent: '#00745a',
+    energy: '#57c19a',
+  },
+  protegeTuSalud: {
+    primary: '#22c7a9',
+    accent: '#6baf9d',
+    energy: '#22c7a9',
+  },
+} as const;

@@ -49,4 +49,5 @@ export interface SuiteRuntimeProps {
   appShellProps?: SuiteShellProps['appShellProps'];
   scrollResetKey?: string;
   canvasProps?: Omit<SuiteCanvasProps, 'children'>;
+  mobileBottomSlot?: SuiteShellProps['mobileBottomSlot'];
 }

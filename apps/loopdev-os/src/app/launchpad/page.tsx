@@ -132,6 +132,7 @@ export default function LaunchpadPage() {
                 illustration={<Icon name="groups" size="md" />}
                 href="/sales-crm"
                 version="0.8.2"
+                onNavigate={(targetHref) => router.push(targetHref)}
               />
             )}
             {isPlatformScope && (
@@ -153,6 +154,7 @@ export default function LaunchpadPage() {
                 version="0.0.1"
                 status="lab"
                 isLocked={isLocked('quant.read', 'quant')}
+                onNavigate={(targetHref) => router.push(targetHref)}
               />
             )}
             {shouldShowSuite('health') && (

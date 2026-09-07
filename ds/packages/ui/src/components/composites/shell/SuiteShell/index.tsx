@@ -31,6 +31,7 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
   moduleContextPanelWidth = 'standard',
   platformHeaderProps,
   mobileNavigation,
+  mobileBottomSlot,
   onNavigate,
   contextualSidebarAction,
   onNavModeChange,
@@ -95,6 +96,10 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
           hasMobileNavigation={Boolean(appShellProps?.onToggleLeftSidebar || schema)}
           hideProfileOnMobile={Boolean(mobileSidebarActions)}
           identitySlot={leftSlot}
+          onNavigateHome={
+            platformHeaderProps?.onNavigateHome ?? (() => onNavigate({ routeId: '/launchpad' }))
+          }
+          homeHref={platformHeaderProps?.homeHref ?? '/launchpad'}
           searchSlot={platformHeaderProps?.searchSlot ?? centerSlot}
           controlsSlot={platformHeaderProps?.controlsSlot ?? rightSlot}
           profileSlot={platformHeaderProps?.profileSlot ?? profileSlot}
@@ -103,7 +108,9 @@ export const SuiteShell: React.FC<SuiteShellProps> = ({
         />
       }
       mobileBottomSlot={
-        mobileNavigation
+        mobileBottomSlot !== undefined
+          ? mobileBottomSlot
+          : mobileNavigation
           ? (openMobileNav) => (
               <MobileSuiteNav
                 items={mobileNavigation.items}

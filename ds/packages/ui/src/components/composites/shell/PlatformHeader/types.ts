@@ -3,7 +3,11 @@ import type { LayoutContext } from '@loopdev/contracts';
 
 export interface PlatformHeaderProps {
   /** Identidad estable de LoopDev y acceso al Launchpad. */
-  identitySlot: ReactNode;
+  identitySlot?: ReactNode;
+  /** Callback para navegar al Launchpad al hacer clic en la identidad */
+  onNavigateHome?: () => void;
+  /** Ruta canónica de retorno al Launchpad (por defecto '/launchpad') */
+  homeHref?: string;
   /** Organización, proyecto o workspace activo. */
   contextSlot?: ReactNode;
   /** Entorno, rama y estado operativo. */

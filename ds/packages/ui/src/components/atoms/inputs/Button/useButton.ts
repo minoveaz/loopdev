@@ -24,7 +24,7 @@ export const useButton = (props: any) => {
   const isAllowed = permission ? hasPermission(permission) : true;
 
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-sm text-lpd-sm leading-normal transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed max-w-full overflow-hidden';
+    'inline-flex items-center justify-center font-medium rounded-lg text-lpd-sm leading-normal transition-all duration-150 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed max-w-full overflow-hidden';
 
   const variantStyles = useMemo(() => {
     switch (variant) {

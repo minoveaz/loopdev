@@ -12,6 +12,7 @@ import {
   SuiteSwitcher,
   ThemeToggle,
   UserMenu,
+  PlatformMobileBottomBar,
   type PlatformContextPanelMode,
 } from '@loopdev/ui';
 import type { NavMode, NavRouteRef } from '@loopdev/contracts';
@@ -176,7 +177,13 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
                     currentSuite={SALES_CRM_SUITE_CONFIG.identity}
                     availableSuites={[SALES_CRM_SUITE_CONFIG.identity]}
                     showIcon={false}
-                    onSuiteChange={() => router.push('/sales-crm')}
+                    onSuiteChange={(suiteId) => {
+                      if (suiteId === 'os.home') {
+                        router.push('/launchpad');
+                      } else {
+                        router.push('/sales-crm');
+                      }
+                    }}
                   />
                 </div>
               ),
@@ -231,6 +238,21 @@ function SalesCrmRuntime({ children }: { children: ReactNode }) {
                 />
               ) : undefined,
             }}
+            mobileBottomSlot={(openMobileNav) => (
+              <PlatformMobileBottomBar
+                onOpenNavigation={openMobileNav}
+                onOpenSearch={() => {
+                  /* Can trigger search modal or command palette */
+                }}
+                onQuickAction={() => {
+                  /* Dispatch custom event or open quick action sheet */
+                  window.dispatchEvent(new CustomEvent('loopdev:quick-action'));
+                }}
+                onOpenAI={() => setContextMode((current) => (current === 'assistant' ? null : 'assistant'))}
+                onOpenProfile={() => setContextMode((current) => (current === 'profile' ? null : 'profile'))}
+                activeContext={contextMode === 'assistant' ? 'ai' : contextMode === 'profile' ? 'profile' : null}
+              />
+            )}
             onNavigate={(route: NavRouteRef) => router.push(route.routeId)}
           >
             {children}

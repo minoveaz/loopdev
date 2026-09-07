@@ -1,7 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { DynamicThemeProvider, type ThemeConfig } from '@loopdev/ui';
-import { semanticColors } from '@loopdev/tokens';
+import { brandThemes, semanticColors } from '@loopdev/tokens';
 import { useOrganization } from '@/hooks/useOrganization';
 
 const ORGANIZATION_THEMES: Record<string, ThemeConfig> = {
@@ -13,25 +14,13 @@ const ORGANIZATION_THEMES: Record<string, ThemeConfig> = {
     },
   },
   'estar-protegidos': {
-    colors: {
-      primary: 'var(--lpd-color-brand-primary)',
-      accent: 'var(--lpd-color-brand-secondary)',
-      energy: 'var(--lpd-color-brand-primary)',
-    },
+    colors: brandThemes.estarProtegidos,
   },
   'protege-tu-salud': {
-    colors: {
-      primary: 'var(--lpd-color-brand-primary)',
-      accent: 'var(--lpd-color-brand-primary)',
-      energy: 'var(--lpd-color-brand-primary)',
-    },
+    colors: brandThemes.protegeTuSalud,
   },
   'protege-salud': {
-    colors: {
-      primary: 'var(--lpd-color-brand-primary)',
-      accent: 'var(--lpd-color-brand-primary)',
-      energy: 'var(--lpd-color-brand-primary)',
-    },
+    colors: brandThemes.protegeTuSalud,
   },
 };
 
@@ -45,7 +34,18 @@ const DEFAULT_THEME: ThemeConfig = {
 
 export function OrganizationThemeProvider({ children }: { children: React.ReactNode }) {
   const { activeOrganization } = useOrganization();
-  const config = ORGANIZATION_THEMES[activeOrganization?.slug ?? ''] ?? DEFAULT_THEME;
+  const slug = activeOrganization?.slug ?? '';
+  const config = ORGANIZATION_THEMES[slug] ?? DEFAULT_THEME;
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.remove('theme-estar-protegidos', 'theme-protege-tu-salud');
+    if (slug === 'estar-protegidos') {
+      root.classList.add('theme-estar-protegidos');
+    } else if (slug === 'protege-tu-salud' || slug === 'protege-salud') {
+      root.classList.add('theme-protege-tu-salud');
+    }
+  }, [slug]);
 
   return <DynamicThemeProvider config={config}>{children}</DynamicThemeProvider>;
 }

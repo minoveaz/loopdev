@@ -33,7 +33,7 @@ export const ButtonContent: React.FC<ButtonContentProps> = ({
         <Icon name={startIcon} size="md" className="mr-2 shrink-0" />
       )}
       
-      <span className="truncate min-w-0">{children}</span>
+      <span className="truncate min-w-0 inline-flex items-center justify-center gap-1.5">{children}</span>
 
       {endIcon && (
         <Icon name={endIcon} size="md" className="ml-2 shrink-0" />

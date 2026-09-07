@@ -130,10 +130,10 @@ export function CommunicationsInboxProvider({
   }, [dataSource, organizationId, requestKey, useFixtureModel]);
 
   useEffect(() => {
-    if (!dataSource.loadTemplates) return;
+    if (!dataSource.loadTemplates || !organizationId) return;
     let isMounted = true;
     void dataSource
-      .loadTemplates(organizationId ?? '')
+      .loadTemplates(organizationId)
       .then((nextTemplates) => {
         if (!isMounted) return;
         setTemplates(nextTemplates);

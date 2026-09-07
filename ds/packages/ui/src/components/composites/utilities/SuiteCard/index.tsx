@@ -19,12 +19,7 @@ export const SuiteCard: React.FC<SuiteCardProps> = (props) => {
   const { illustrationWrapperClasses, titleClasses } = useSuiteCard(props);
 
   const CardContent = (
-    <TechnicalSurface 
-      depth="raised" 
-      withGrid 
-      withHoverAura={!isLocked}
-      className="h-full"
-    >
+    <TechnicalSurface depth="raised" withGrid withHoverAura={!isLocked} className="h-full">
       <div className="p-6 relative z-10 flex flex-col h-full">
         {/* Header: Sello y Estado */}
         <div className="flex justify-between items-start mb-8">
@@ -43,11 +38,11 @@ export const SuiteCard: React.FC<SuiteCardProps> = (props) => {
               {illustration}
             </div>
           </div>
-          
+
           <Heading size="lg" weight="bold" className={titleClasses}>
             {title}
           </Heading>
-          
+
           <LpdText size="sm" className="text-text-muted leading-relaxed mb-8">
             {description}
           </LpdText>
@@ -56,15 +51,21 @@ export const SuiteCard: React.FC<SuiteCardProps> = (props) => {
         {/* Footer: Status Pulse y Acción */}
         <div className="mt-auto pt-6 border-t border-black/5 dark:border-white/5 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className={`w-1.5 h-1.5 rounded-full ${isLocked ? 'bg-slate-300 dark:bg-white/10' : 'bg-energy-yellow animate-pulse'}`}></div>
-            <LpdText size="nano" weight="black" className="font-mono uppercase tracking-[0.2em] text-text-muted">
+            <div
+              className={`w-1.5 h-1.5 rounded-full ${isLocked ? 'bg-slate-300 dark:bg-white/10' : 'bg-energy-yellow animate-pulse'}`}
+            ></div>
+            <LpdText
+              size="nano"
+              weight="black"
+              className="font-mono uppercase tracking-[0.2em] text-text-muted"
+            >
               {isLocked ? 'Auth_Required' : 'System_Ready'}
             </LpdText>
           </div>
           {!isLocked && (
-            <ArrowRight 
-              size={18} 
-              className="text-primary opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300" 
+            <ArrowRight
+              size={18}
+              className="text-primary opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300"
             />
           )}
         </div>
@@ -74,8 +75,18 @@ export const SuiteCard: React.FC<SuiteCardProps> = (props) => {
 
   if (isLocked) return CardContent;
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (props.onClick) {
+      props.onClick(e);
+    }
+    if (props.onNavigate && !e.defaultPrevented) {
+      e.preventDefault();
+      props.onNavigate(href);
+    }
+  };
+
   return (
-    <a href={href} className="block h-full no-underline">
+    <a href={href} onClick={handleClick} className="block h-full no-underline">
       {CardContent}
     </a>
   );

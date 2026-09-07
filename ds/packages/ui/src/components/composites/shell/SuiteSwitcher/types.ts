@@ -14,6 +14,10 @@ export interface SuiteSwitcherProps {
   accessMap?: Record<string, 'enabled' | 'disabled' | 'hidden'>;
   /** Callback al seleccionar una nueva suite */
   onSuiteChange: (suiteId: string) => void;
+  /** Callback opcional directo para volver al Launchpad */
+  onLaunchpadNavigate?: () => void;
+  /** URL de retorno al Launchpad (por defecto '/launchpad') */
+  launchpadHref?: string;
   /** Callback al cambiar el estado de apertura */
   onOpenChange?: (open: boolean) => void;
   /** Muestra el icono de la suite en el trigger */

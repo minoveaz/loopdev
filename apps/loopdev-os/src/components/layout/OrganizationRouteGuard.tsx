@@ -2,6 +2,7 @@
 
 import { useEffect, useSyncExternalStore, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { LogoSpinner } from '@loopdev/ui';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useAuth } from '@/hooks/useAuth';
 import { canAccessOrganizationRoute, resolveAccessState } from '@/core/access/accessState';
@@ -42,8 +43,16 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
 
   if (requiresOrganization && (!hasMounted || accessState === 'loading')) {
     return (
-      <main className="bg-shell-canvas flex min-h-screen items-center justify-center p-6 text-sm text-slate-500">
-        Checking your secure workspace access…
+      <main
+        className="bg-shell-canvas flex min-h-screen flex-col items-center justify-center gap-4 p-6"
+        role="status"
+        aria-live="polite"
+        aria-label="Checking your secure workspace access"
+      >
+        <LogoSpinner size={48} />
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+          Checking your secure workspace access…
+        </span>
       </main>
     );
   }

@@ -17,8 +17,8 @@ export const NavGroup: React.FC<NavGroupProps> = (props) => {
 
   return (
     <div className={containerClasses}>
-      {/* Etiqueta Técnica (Oculta en Rail Mode) */}
-      {!isRail && (
+      {/* Etiqueta Técnica (Oculta en Rail Mode o si no hay label) */}
+      {!isRail && Boolean(label) && (
         <div className="px-4 mb-1">
           <TechnicalLabel
             variant="muted"
@@ -32,11 +32,9 @@ export const NavGroup: React.FC<NavGroupProps> = (props) => {
           </TechnicalLabel>
         </div>
       )}
-      
+
       {/* Contenedor de Items */}
-      <div className="space-y-0.5">
-        {children}
-      </div>
+      <div className="space-y-0.5">{children}</div>
     </div>
   );
 };

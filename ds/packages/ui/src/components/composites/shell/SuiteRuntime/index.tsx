@@ -57,6 +57,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
   appShellProps,
   scrollResetKey,
   canvasProps,
+  mobileBottomSlot,
 }) => {
   const handleNavigate = (route: NavRouteRef) => {
     appShellProps?.onRequestCloseNav?.('route-change');
@@ -131,6 +132,7 @@ export const SuiteRuntime: React.FC<SuiteRuntimeProps> = ({
       contextualSidebarAction={contextualSidebarAction}
       onNavModeChange={onNavModeChange}
       appShellProps={appShellProps}
+      mobileBottomSlot={mobileBottomSlot}
     >
       <SuiteCanvas
         {...canvasProps}

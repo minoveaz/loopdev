@@ -9,6 +9,7 @@ import { OrganizationRouteGuard } from "@/components/layout/OrganizationRouteGua
 import { TransitionOverlay } from "@/components/layout/TransitionOverlay";
 import { OrganizationThemeProvider } from "@/providers/OrganizationThemeProvider";
 import { AppFeedbackProvider } from "@/providers/AppFeedbackProvider";
+import { SimulationProvider } from "@/providers/SimulationProvider";
 
 // Importamos los estilos globales de nuestro Design System
 import "@loopdev/ui/styles/globals.css";
@@ -33,21 +34,23 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <TransitionOverlay />
         <AppFeedbackProvider>
-          <QueryProvider>
-            <AuthProvider>
-              <OrganizationProvider>
-                <PermissionProvider>
-                  <BrandProvider>
-                    <WorkspaceProvider>
-                      <OrganizationRouteGuard>
-                        <OrganizationThemeProvider>{children}</OrganizationThemeProvider>
-                      </OrganizationRouteGuard>
-                    </WorkspaceProvider>
-                  </BrandProvider>
-                </PermissionProvider>
-              </OrganizationProvider>
-            </AuthProvider>
-          </QueryProvider>
+          <SimulationProvider>
+            <QueryProvider>
+              <AuthProvider>
+                <OrganizationProvider>
+                  <PermissionProvider>
+                    <BrandProvider>
+                      <WorkspaceProvider>
+                        <OrganizationRouteGuard>
+                          <OrganizationThemeProvider>{children}</OrganizationThemeProvider>
+                        </OrganizationRouteGuard>
+                      </WorkspaceProvider>
+                    </BrandProvider>
+                  </PermissionProvider>
+                </OrganizationProvider>
+              </AuthProvider>
+            </QueryProvider>
+          </SimulationProvider>
         </AppFeedbackProvider>
       </body>
     </html>
