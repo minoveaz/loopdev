@@ -7,6 +7,8 @@ import {
   Customer360RecordViewSchema,
   PipelineStageSchema,
   type CrmContact,
+  type CrmCreateContactCommand,
+  type CrmUpdateContactCommand,
   type CrmContactPage,
   type CrmLead,
   type CrmLeadPage,
@@ -22,7 +24,6 @@ const SEED_LEAD = '22222222-2222-4222-8222-222222222222';
 const SEED_OPPORTUNITY = '33333333-3333-4333-8333-333333333333';
 const SEED_STAGE = '44444444-4444-4444-8444-444444444444';
 const SEED_TIME = '2026-01-01T00:00:00.000Z';
-const LOCAL_ENTITY_ORGANIZATION = '00000000-0000-4000-8000-000000000000';
 
 type LocalState = {
   contacts: CrmContact[];
@@ -31,20 +32,19 @@ type LocalState = {
   stages: PipelineStage[];
 };
 const stores = new Map<string, LocalState>();
-
-function entityOrganizationId(organizationId: string) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    organizationId,
-  )
-    ? organizationId
-    : LOCAL_ENTITY_ORGANIZATION;
+function localOrganizationId(organizationId: string) {
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(organizationId)) {
+    return organizationId;
+  }
+  const hex = Array.from(organizationId).reduce((value, char) => ((value * 31 + char.charCodeAt(0)) >>> 0), 2166136261).toString(16).padStart(8, '0');
+  return `${hex}-0000-4000-8000-${hex}${hex.slice(0, 4)}`;
 }
 
 function localState(organizationId: string, workspaceId: string | null = null): LocalState {
   const key = `${organizationId}:${workspaceId ?? 'global'}`;
   const existing = stores.get(key);
   if (existing) return existing;
-  const storedOrganizationId = entityOrganizationId(organizationId);
+  const storedOrganizationId = localOrganizationId(organizationId);
   const contact = CrmContactSchema.parse({
     id: SEED_CONTACT,
     organizationId: storedOrganizationId,
@@ -150,6 +150,46 @@ export async function crmContacts(
           .includes(normalized),
   );
   return { items, nextCursor: null, hasMore: false };
+}
+
+export function createCrmContact(
+  mode: PlatformEnvironmentMode,
+  input: CrmCreateContactCommand,
+): CrmContact {
+  if (mode === 'preview') throw new Error('Preview is read-only.');
+  const state = localState(input.organizationId);
+  const contact = CrmContactSchema.parse({
+    id: `99999999-9999-4999-8999-${String(state.contacts.length + 1).padStart(12, '0')}`,
+    organizationId: localOrganizationId(input.organizationId),
+    firstName: input.firstName,
+    lastName: input.lastName ?? null,
+    email: input.email ?? null,
+    phone: input.phone ?? null,
+    companyName: input.companyName ?? null,
+    identityStatus: 'verified',
+    createdAt: SEED_TIME,
+    updatedAt: SEED_TIME,
+  });
+  state.contacts.push(contact);
+  return contact;
+}
+
+export function updateCrmContact(
+  mode: PlatformEnvironmentMode,
+  input: CrmUpdateContactCommand,
+): CrmContact {
+  if (mode === 'preview') throw new Error('Preview is read-only.');
+  const state = localState(input.organizationId);
+  const index = state.contacts.findIndex((item) => item.id === input.contactId);
+  if (index < 0) throw new Error('Contact not found.');
+  const updated = CrmContactSchema.parse({
+    ...state.contacts[index],
+    ...input,
+    organizationId: localOrganizationId(input.organizationId),
+    updatedAt: SEED_TIME,
+  });
+  state.contacts[index] = updated;
+  return updated;
 }
 
 export async function crmLeads(

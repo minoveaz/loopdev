@@ -6,6 +6,7 @@ import { Button } from '@loopdev/ui';
 import { Check } from 'lucide-react';
 import { FieldGroupSection } from '@/suites/sales-crm/crm/FieldGroupSection';
 import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { updateCrmContact } from '@/suites/sales-crm/runtimeAdapter';
 
 interface ContactDetailDrawerContentProps {
   contact: CrmContact;
@@ -57,7 +58,7 @@ export function ContactDetailDrawerContent({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mode !== 'real') {
+    if (mode === 'preview') {
       setErrorMessage(
         mode === 'preview'
           ? 'Preview is read-only. Contact updates are disabled.'
@@ -69,6 +70,25 @@ export function ContactDetailDrawerContent({
     setErrorMessage(null);
 
     try {
+      if (mode === 'sandbox') {
+        const updatedContact = updateCrmContact(mode, {
+          organizationId,
+          contactId: contact.id,
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim() || null,
+          email: formData.email.trim() || null,
+          phone: formData.phone.trim() || null,
+          companyName: formData.companyName.trim() || null,
+          expectedUpdatedAt: contact.updatedAt,
+        });
+        onContactUpdated(updatedContact);
+        setSaveSuccess(true);
+        setTimeout(() => {
+          setSaveSuccess(false);
+          onClose();
+        }, 1000);
+        return;
+      }
       const response = await fetch('/api/crm/contacts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },

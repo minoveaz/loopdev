@@ -18,6 +18,7 @@ import {
 import type { FormSectionDefinition } from '@loopdev/ui';
 import type { CrmContact } from '@loopdev/contracts';
 import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { createCrmContact } from '@/suites/sales-crm/runtimeAdapter';
 
 const contactFormSchema = z
   .object({
@@ -87,12 +88,23 @@ export function ContactFormDialog({
   });
 
   const submit = async (values: ContactFormValues) => {
-    if (mode !== 'real') {
-      feedback.warning(
-        mode === 'preview'
-          ? 'Preview is read-only. Contact creation is disabled.'
-          : 'Contact creation is not available in this sandbox slice yet.',
-      );
+    if (mode === 'preview') {
+      feedback.warning('Preview is read-only. Contact creation is disabled.');
+      return;
+    }
+    if (mode === 'sandbox') {
+      const contact = createCrmContact(mode, {
+        organizationId,
+        firstName: values.firstName,
+        lastName: values.lastName || null,
+        email: values.email || null,
+        phone: values.phone || null,
+        companyName: values.companyName || null,
+      });
+      onSuccess(contact);
+      form.reset();
+      onClose();
+      feedback.success('Contact created in sandbox.');
       return;
     }
 

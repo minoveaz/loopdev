@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { crmContacts, crmCustomer360, crmLeads, createCrmLead, moveCrmOpportunity, resetCrmRuntime } from './runtimeAdapter';
+import { crmContacts, crmCustomer360, crmLeads, createCrmContact, createCrmLead, moveCrmOpportunity, resetCrmRuntime, updateCrmContact } from './runtimeAdapter';
 
 describe('CRM runtime adapter', () => {
   it('provides valid deterministic local CRM records', async () => {
@@ -31,12 +31,43 @@ describe('CRM runtime adapter', () => {
       interest: 'New opportunity',
       source: { kind: 'manual', utm: {} },
     });
+
     expect(result.lead.contactId).toBe(result.contact.id);
     await expect(crmCustomer360('sandbox', organizationId, '99999999-9999-4999-8999-999999999999')).rejects.toThrow(
       'could not be found',
     );
   });
 
+  it('creates and updates contacts locally while blocking Preview', async () => {
+      resetCrmRuntime();
+      const organizationId = 'local-org-key';
+      const contact = createCrmContact('sandbox', {
+        organizationId,
+        firstName: 'Marta',
+        email: 'marta@example.com',
+        phone: null,
+      });
+      const updated = updateCrmContact('sandbox', {
+        organizationId,
+        contactId: contact.id,
+        firstName: 'Marta Updated',
+        expectedUpdatedAt: contact.updatedAt,
+      });
+      expect(updated.firstName).toBe('Marta Updated');
+      expect(updated.organizationId).toMatch(/^[0-9a-f-]{36}$/);
+      expect(() => createCrmContact('preview', {
+        organizationId,
+        firstName: 'Blocked',
+        email: 'blocked@example.com',
+        phone: null,
+      })).toThrow('read-only');
+      expect(() => updateCrmContact('preview', {
+        organizationId,
+        contactId: contact.id,
+        firstName: 'Blocked',
+        expectedUpdatedAt: updated.updatedAt,
+      })).toThrow('read-only');
+    });
   it('keeps preview read-only while sandbox mutations stay local', async () => {
     resetCrmRuntime();
     const organizationId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';

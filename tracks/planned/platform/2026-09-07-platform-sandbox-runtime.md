@@ -173,6 +173,7 @@ de validación antes de implementar.
 | 2026-09-07 | Corrección del seed y del comando `createLead` local | Contacto sin Lead/Opportunity, namespace organización/workspace, Customer 360 rechaza IDs desconocidos | CRM adapter |
 | 2026-09-07 | Tests focalizados posteriores a la corrección | 6/6 correctos; typecheck y lint correctos | `runtimeAdapter.test.ts` |
 | 2026-09-07 | Revisión de notas iniciales en captura de Lead | Real conserva `POST /api/crm/notes`; Sandbox/Preview dejan la nota como pendiente local sin request remoto | `useLeadCaptureForm.ts` |
+| 2026-09-07 | Comandos locales de Contact | Sandbox crea/actualiza Contactos, Preview bloquea, y claves de organización no UUID se normalizan para contratos | `runtimeAdapter.ts`, formularios de Contacts |
 
 ## Handoff de sesión
 

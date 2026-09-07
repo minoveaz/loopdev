@@ -19,6 +19,7 @@ import { useOrganization } from '@/hooks/useOrganization';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import type { CrmContact } from '@loopdev/contracts';
 import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { createCrmContact } from '@/suites/sales-crm/runtimeAdapter';
 
 export default function NewContactPage() {
   const router = useRouter();
@@ -61,11 +62,8 @@ export default function NewContactPage() {
       return;
     }
 
-    if (mode !== 'real') {
-      const message =
-        mode === 'preview'
-          ? 'Preview is read-only. Contact creation is disabled.'
-          : 'Contact creation is not available in this sandbox slice yet.';
+    if (mode === 'preview') {
+      const message = 'Preview is read-only. Contact creation is disabled.';
       setErrorMessage(message);
       feedback.warning(message);
       return;
@@ -74,6 +72,20 @@ export default function NewContactPage() {
     setIsSaving(true);
 
     try {
+      if (mode === 'sandbox') {
+        const newContact = createCrmContact(mode, {
+          organizationId: activeOrganizationId,
+          firstName: firstName.trim(),
+          lastName: lastName.trim() || null,
+          email: email.trim() || null,
+          phone: phone.trim() || null,
+          companyName: companyName.trim() || null,
+          jobTitle: jobTitle.trim() || null,
+        });
+        feedback.success('Contact created in Sandbox.');
+        router.push(`/sales-crm/contacts/${newContact.id}`);
+        return;
+      }
       const response = await fetch('/api/crm/contacts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
