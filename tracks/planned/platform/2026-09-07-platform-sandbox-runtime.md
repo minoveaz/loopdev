@@ -174,6 +174,7 @@ de validación antes de implementar.
 | 2026-09-07 | Tests focalizados posteriores a la corrección | 6/6 correctos; typecheck y lint correctos | `runtimeAdapter.test.ts` |
 | 2026-09-07 | Revisión de notas iniciales en captura de Lead | Real conserva `POST /api/crm/notes`; Sandbox/Preview dejan la nota como pendiente local sin request remoto | `useLeadCaptureForm.ts` |
 | 2026-09-07 | Comandos locales de Contact | Sandbox crea/actualiza Contactos, Preview bloquea, y claves de organización no UUID se normalizan para contratos | `runtimeAdapter.ts`, formularios de Contacts |
+| 2026-09-07 | Persistencia del estado Sandbox | El estado CRM local se conserva tras refresh en almacenamiento versionado del navegador y Reset lo elimina | `runtimeAdapter.ts` |
 
 ## Handoff de sesión
 

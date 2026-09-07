@@ -112,8 +112,10 @@ selected mode under a versioned platform key.
 
 The CRM pilot now consumes the selected mode through a suite-owned adapter:
 Real delegates to the existing Supabase API routes, Sandbox uses a namespaced
-in-memory CRM seed with schema-valid UUIDs and local mutations, and Preview
-uses the same local fixtures without mutation support. Contacts, Leads,
+local CRM seed with schema-valid UUIDs and local mutations. Sandbox state is
+persisted in versioned browser storage so a page refresh does not discard the
+current workflow. Preview uses the same local fixtures without mutation
+support. Contacts, Leads,
 Pipeline and Customer 360 use the adapter for this slice; Customer 360 no
 longer fills individual sections from a second simulation fixture.
 

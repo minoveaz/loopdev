@@ -24,6 +24,7 @@ const SEED_LEAD = '22222222-2222-4222-8222-222222222222';
 const SEED_OPPORTUNITY = '33333333-3333-4333-8333-333333333333';
 const SEED_STAGE = '44444444-4444-4444-8444-444444444444';
 const SEED_TIME = '2026-01-01T00:00:00.000Z';
+const LOCAL_STORAGE_PREFIX = 'loopdev:crm-sandbox-state:v1:';
 
 type LocalState = {
   contacts: CrmContact[];
@@ -32,6 +33,43 @@ type LocalState = {
   stages: PipelineStage[];
 };
 const stores = new Map<string, LocalState>();
+
+function storageKey(key: string) {
+  return `${LOCAL_STORAGE_PREFIX}${encodeURIComponent(key)}`;
+}
+
+function readPersistedState(key: string): LocalState | null {
+  if (typeof window === 'undefined') return null;
+  const raw = window.localStorage.getItem(storageKey(key));
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Partial<LocalState>;
+    const contacts = CrmContactSchema.array().safeParse(parsed.contacts);
+    const leads = CrmLeadSchema.array().safeParse(parsed.leads);
+    const opportunities = CrmOpportunitySchema.array().safeParse(parsed.opportunities);
+    const stages = PipelineStageSchema.array().safeParse(parsed.stages);
+    if (!contacts.success || !leads.success || !opportunities.success || !stages.success) {
+      window.localStorage.removeItem(storageKey(key));
+      return null;
+    }
+    return {
+      contacts: contacts.data,
+      leads: leads.data,
+      opportunities: opportunities.data,
+      stages: stages.data,
+    };
+  } catch {
+    window.localStorage.removeItem(storageKey(key));
+    return null;
+  }
+}
+
+function persistState(key: string, state: LocalState) {
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(storageKey(key), JSON.stringify(state));
+  }
+}
+
 function localOrganizationId(organizationId: string) {
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(organizationId)) {
     return organizationId;
@@ -44,6 +82,11 @@ function localState(organizationId: string, workspaceId: string | null = null): 
   const key = `${organizationId}:${workspaceId ?? 'global'}`;
   const existing = stores.get(key);
   if (existing) return existing;
+  const persisted = readPersistedState(key);
+  if (persisted) {
+    stores.set(key, persisted);
+    return persisted;
+  }
   const storedOrganizationId = localOrganizationId(organizationId);
   const contact = CrmContactSchema.parse({
     id: SEED_CONTACT,
@@ -120,6 +163,7 @@ function localState(organizationId: string, workspaceId: string | null = null): 
     ),
   } satisfies LocalState;
   stores.set(key, state);
+  persistState(key, state);
   return state;
 }
 
@@ -171,6 +215,7 @@ export function createCrmContact(
     updatedAt: SEED_TIME,
   });
   state.contacts.push(contact);
+  persistState(`${input.organizationId}:global`, state);
   return contact;
 }
 
@@ -189,6 +234,7 @@ export function updateCrmContact(
     updatedAt: SEED_TIME,
   });
   state.contacts[index] = updated;
+  persistState(`${input.organizationId}:global`, state);
   return updated;
 }
 
@@ -252,6 +298,7 @@ export function createCrmLead(
     updatedAt: SEED_TIME,
   });
   state.leads.push(lead);
+  persistState(`${input.organizationId}:${input.workspaceId ?? 'global'}`, state);
   return { contact, lead, reused: false, attribution: null };
 }
 
@@ -261,6 +308,7 @@ export function updateCrmLead(mode: PlatformEnvironmentMode, organizationId: str
   const index = state.leads.findIndex((lead) => lead.id === leadId);
   if (index < 0) throw new Error('Lead not found.');
   state.leads[index] = CrmLeadSchema.parse({ ...state.leads[index], ...changes, updatedAt: SEED_TIME });
+  persistState(`${organizationId}:global`, state);
   return state.leads[index];
 }
 
@@ -270,6 +318,7 @@ export function moveCrmLead(mode: PlatformEnvironmentMode, organizationId: strin
   const index = state.leads.findIndex((lead) => lead.id === leadId);
   if (index < 0) throw new Error('Lead not found.');
   state.leads[index] = CrmLeadSchema.parse({ ...state.leads[index], status, updatedAt: SEED_TIME });
+  persistState(`${organizationId}:global`, state);
   return state.leads[index];
 }
 
@@ -279,6 +328,7 @@ export function moveCrmOpportunity(mode: PlatformEnvironmentMode, organizationId
   const index = state.opportunities.findIndex((item) => item.id === opportunityId);
   if (index < 0) throw new Error('Opportunity not found.');
   state.opportunities[index] = CrmOpportunitySchema.parse({ ...state.opportunities[index], stageKey, version: state.opportunities[index].version + 1 });
+  persistState(`${organizationId}:global`, state);
   return state.opportunities[index];
 }
 
@@ -305,6 +355,7 @@ export function createCrmOpportunityFromLead(
     updatedAt: SEED_TIME,
   });
   state.opportunities.push(opportunity);
+  persistState(`${organizationId}:global`, state);
   return opportunity;
 }
 
@@ -355,6 +406,12 @@ export async function crmCustomer360(
 
 export function resetCrmRuntime() {
   stores.clear();
+  if (typeof window !== 'undefined') {
+    for (let index = window.localStorage.length - 1; index >= 0; index -= 1) {
+      const key = window.localStorage.key(index);
+      if (key?.startsWith(LOCAL_STORAGE_PREFIX)) window.localStorage.removeItem(key);
+    }
+  }
 }
 
 export const CRM_SEED_IDS = { contact: SEED_CONTACT, lead: SEED_LEAD, opportunity: SEED_OPPORTUNITY };
