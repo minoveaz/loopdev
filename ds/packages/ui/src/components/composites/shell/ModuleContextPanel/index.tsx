@@ -42,6 +42,15 @@ export const ModuleContextPanel: React.FC<ModuleContextPanelProps> = ({
   if (!visible) return null;
 
   const isOverlay = presentation === 'overlay';
+  const panelClassName = [
+    'border-border-subtle bg-white dark:bg-surface-dark flex min-h-0 flex-col overflow-hidden border-l',
+    isOverlay
+      ? `fixed inset-y-0 right-0 z-50 h-full max-w-full shadow-2xl animate-in slide-in-from-right duration-300 ease-out shadow-[-4px_0_16px_rgba(15,23,42,0.08)] ${widthClasses[width]}`
+      : `z-30 h-full shrink-0 self-stretch max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:h-full max-lg:w-full max-lg:border-b max-lg:border-l-0 ${widthClasses[width]}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const panelMarkup = (
     <>
@@ -62,11 +71,7 @@ export const ModuleContextPanel: React.FC<ModuleContextPanelProps> = ({
         data-width={width}
         data-presentation={presentation}
         data-content-scrollable={contentScrollable}
-        className={`border-border-subtle bg-white dark:bg-surface-dark flex min-h-0 flex-col overflow-hidden border-l ${
-          isOverlay
-            ? `fixed inset-y-0 right-0 z-50 h-full max-w-full shadow-2xl animate-in slide-in-from-right duration-300 ease-out shadow-[-4px_0_16px_rgba(15,23,42,0.08)] ${widthClasses[width]}`
-            : `z-30 h-full shrink-0 self-stretch max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:h-full max-lg:w-full max-lg:border-b max-lg:border-l-0 ${widthClasses[width]}`
-        } ${className}`}
+        className={panelClassName}
       >
         {/* Header with iOS native pattern on mobile and Untitled UI on desktop */}
         <div
