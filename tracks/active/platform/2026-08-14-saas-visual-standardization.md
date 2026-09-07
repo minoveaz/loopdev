@@ -7,7 +7,7 @@ updated: 2026-08-17
 owner: platform
 lead: null
 branch: null
-branches: [docs/platform-shell-mode-inventory, feature/crm-ui-foundation]
+branches: [docs/platform-shell-mode-inventory, feature/crm-ui-foundation, fix/platform-header-theming-launchpad]
 phase: 2
 pull_requests: []
 issues: []

@@ -61,7 +61,15 @@ create policy crm_section_field_configs_read on public.crm_section_field_configs
   for select to authenticated
   using (public.has_organization_permission(organization_id, 'crm.read'));
 
-create policy crm_section_field_configs_write on public.crm_section_field_configs
-  for all to authenticated
+create policy crm_section_field_configs_insert on public.crm_section_field_configs
+  for insert to authenticated
+  with check (public.has_organization_permission(organization_id, 'crm.manage'));
+
+create policy crm_section_field_configs_update on public.crm_section_field_configs
+  for update to authenticated
   using (public.has_organization_permission(organization_id, 'crm.manage'))
   with check (public.has_organization_permission(organization_id, 'crm.manage'));
+
+create policy crm_section_field_configs_delete on public.crm_section_field_configs
+  for delete to authenticated
+  using (public.has_organization_permission(organization_id, 'crm.manage'));
