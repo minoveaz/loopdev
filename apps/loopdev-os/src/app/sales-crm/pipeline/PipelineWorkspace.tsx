@@ -9,9 +9,11 @@ import {
   KanbanBoard,
   ModuleHeader,
   ResponsiveTable,
+  SuiteCanvas,
   TechnicalSurface,
   type ResponsiveTableColumn,
 } from '@loopdev/ui';
+import { Plus, TrendingUp, Calendar, User, ArrowUpRight } from 'lucide-react';
 import type { CrmOpportunity, PipelineStage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
@@ -50,10 +52,17 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
   const [opportunities, setOpportunities] = useState<CrmOpportunity[]>([]);
   const [query, setQuery] = useState('');
   const [stageFilter, setStageFilter] = useState('all');
+  const [mobileActiveStageKey, setMobileActiveStageKey] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (stages.length > 0 && !mobileActiveStageKey) {
+      setMobileActiveStageKey(stages[0].key);
+    }
+  }, [stages, mobileActiveStageKey]);
 
   const loadBoard = async (signal?: AbortSignal) => {
     if (!activeOrganizationId) return;
@@ -186,35 +195,40 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     );
 
   return (
-    <div className="bg-shell-canvas flex min-h-full min-w-0 flex-1 flex-col">
-      <ModuleHeader
-        segments={[{ id: 'pipeline', label: 'Pipeline', href: '/sales-crm/pipeline' }]}
-        leftSlot={
-          <Heading as="h1" size="lg" weight="semibold">
-            {mode === 'list' ? 'Opportunity list' : 'Pipeline'}
-          </Heading>
-        }
-        rightSlot={
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={mode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
-              className="text-primary text-sm underline-offset-2 hover:underline"
-            >
-              {mode === 'list' ? 'Board view' : 'List view'}
-            </Link>
-            {canManage ? (
+    <SuiteCanvas
+      mode={mode === 'list' ? 'data' : 'board'}
+      header={
+        <ModuleHeader
+          segments={[{ id: 'pipeline', label: 'Pipeline', href: '/sales-crm/pipeline' }]}
+          leftSlot={
+            <Heading as="h1" size="lg" weight="semibold">
+              {mode === 'list' ? 'Opportunity list' : 'Pipeline'}
+            </Heading>
+          }
+          rightSlot={
+            <div className="flex flex-wrap items-center gap-2.5">
               <Link
-                href="/sales-crm/opportunities/new"
-                className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+                href={mode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
+                className="text-primary text-xs font-medium px-2.5 py-1.5 rounded-lg border border-border-subtle bg-surface hover:bg-surface-hover transition-colors"
               >
-                New opportunity
+                {mode === 'list' ? 'Board view' : 'List view'}
               </Link>
-            ) : null}
-          </div>
-        }
-        ariaLabel="Pipeline header"
-      />
-      <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
+              {canManage ? (
+                <Link
+                  href="/sales-crm/opportunities/new"
+                  className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
+                >
+                  <Plus size={14} />
+                  <span>New opportunity</span>
+                </Link>
+              ) : null}
+            </div>
+          }
+          ariaLabel="Pipeline header"
+        />
+      }
+    >
+      <div className="w-full space-y-4">
         <TechnicalSurface variant="surface" radius="md" border="technical" className="mb-4 p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
             <label className="min-w-0 flex-1 text-xs font-medium text-text-muted">
@@ -357,9 +371,21 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                     const opportunity = visibleOpportunities.find((item) => item.id === itemId);
                     if (opportunity) return moveOpportunity(opportunity, targetStageKey);
                   }}
-                  getColumnMetrics={(columnId, items) => ({
-                    count: items.filter((item) => item.stageKey === columnId).length,
-                  })}
+                  getColumnMetrics={(columnId, items) => {
+                    const stageItems = items.filter((item) => item.stageKey === columnId);
+                    const totalSum = stageItems.reduce((acc, curr) => acc + (curr.amount ?? 0), 0);
+                    return {
+                      count: stageItems.length,
+                      description:
+                        totalSum > 0
+                          ? new Intl.NumberFormat('es-ES', {
+                              style: 'currency',
+                              currency: 'EUR',
+                              maximumFractionDigits: 0,
+                            }).format(totalSum)
+                          : undefined,
+                    };
+                  }}
                   isLoading={isLoading}
                   emptyStateSlot={
                     <span className="text-text-muted text-sm">No opportunities in this stage</span>
@@ -474,7 +500,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
             ) : null}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </SuiteCanvas>
   );
 }

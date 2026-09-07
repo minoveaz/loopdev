@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
+import Link from 'next/link';
+import { Button, Heading, ModuleHeader, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
+import { Plus } from 'lucide-react';
 import type { CrmLead } from '@loopdev/contracts';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
@@ -10,7 +12,6 @@ import { getLeads, LeadApiError } from './api';
 import { LeadFilters } from './LeadFilters';
 import { LeadTable } from './LeadTable';
 import { mapLeadsToRowViewModels } from './mapper';
-import { QuickLeadCapture } from './QuickLeadCapture';
 import { useLeadsRuntime } from './runtime';
 import type { LeadFilterKey, LeadFilterValues, LeadListState, LeadRowViewModel } from './types';
 
@@ -170,44 +171,37 @@ export function LeadListWidget() {
   };
 
   return (
-    <div className="bg-shell-canvas flex min-h-full min-w-0 flex-1 flex-col">
-      <ModuleHeader
-        segments={[{ id: 'leads', label: 'Leads', href: '/sales-crm/leads' }]}
-        leftSlot={
-          <Heading as="h1" size="lg" weight="semibold">
-            Leads
-          </Heading>
-        }
-        rightSlot={
-          canManage ? (
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                size="sm"
-                variant="secondary"
-                onClick={() => setIsQuickCaptureOpen(true)}
+    <SuiteCanvas
+      mode="data"
+      header={
+        <ModuleHeader
+          segments={[{ id: 'leads', label: 'Leads', href: '/sales-crm/leads' }]}
+          leftSlot={
+            <Heading as="h1" size="lg" weight="semibold">
+              Leads
+            </Heading>
+          }
+          rightSlot={
+            canManage ? (
+              <Link
+                href="/sales-crm/leads/new"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
               >
-                Captura rápida
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="primary"
-                onClick={() => router.push('/sales-crm/leads/new')}
-              >
-                Crear lead
-              </Button>
-            </div>
-          ) : null
-        }
-        ariaLabel="Leads header"
-      />
-      <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
+                <Plus size={14} strokeWidth={2} />
+                <span>Crear lead</span>
+              </Link>
+            ) : null
+          }
+          ariaLabel="Leads header"
+        />
+      }
+    >
+      <div className="w-full space-y-4">
         <TechnicalSurface
           variant="surface"
           radius="md"
           border="technical"
-          className="mb-4 w-full p-4"
+          className="w-full p-4"
         >
           <LeadFilters
             query={queryDraft}
@@ -264,15 +258,7 @@ export function LeadListWidget() {
             }
           />
         </TechnicalSurface>
-      </main>
-      {canManage && activeOrganizationId && (
-        <QuickLeadCapture
-          open={isQuickCaptureOpen}
-          organizationId={activeOrganizationId}
-          onClose={() => setIsQuickCaptureOpen(false)}
-          onSuccess={() => setReloadToken((value) => value + 1)}
-        />
-      )}
-    </div>
+      </div>
+    </SuiteCanvas>
   );
 }

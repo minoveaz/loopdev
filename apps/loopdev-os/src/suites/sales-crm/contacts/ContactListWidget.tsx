@@ -322,16 +322,13 @@ export function ContactListWidget() {
         }
         rightSlot={
           canManage ? (
-            <Button
-              type="button"
-              size="sm"
-              variant="primary"
-              onClick={() => setIsCreateDialogOpen(true)}
-              className="gap-1.5"
+            <Link
+              href="/sales-crm/contacts/new"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
             >
               <Plus size={14} strokeWidth={2} />
               <span>Crear contacto</span>
-            </Button>
+            </Link>
           ) : null
         }
         ariaLabel="Cabecera de contactos"

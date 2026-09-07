@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, FormActions, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
+import { Button, FormActions, Heading, ModuleHeader, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import type { LeadCaptureCompletion } from './api';
@@ -13,11 +13,7 @@ import { useLeadCaptureForm } from './useLeadCaptureForm';
 const CAPTURE_FORM_ID = 'lead-capture-workspace-form';
 
 /**
- * `/sales-crm/leads/new` full capture workflow
- * (CRM_LEADS_UI_IMPLEMENTATION_PLAN.md Fase 2, `ImmersiveWorkflow` recipe /
- * `full-bleed` canvas). Shares `LeadForm` and `useLeadCaptureForm` with
- * `QuickLeadCapture` so both surfaces apply identical validation and error
- * handling.
+ * `/sales-crm/leads/new` full capture workflow in SuiteCanvas mode workspace
  */
 export function LeadCaptureWorkspace() {
   const router = useRouter();
@@ -46,25 +42,29 @@ export function LeadCaptureWorkspace() {
   }
 
   return (
-    <div className="bg-shell-canvas flex min-h-full flex-1 flex-col">
-      <ModuleHeader
-        segments={[
-          { id: 'leads', label: 'Leads', href: '/sales-crm/leads' },
-          { id: 'leads-new', label: 'Nuevo lead' },
-        ]}
-        leftSlot={
-          <Heading as="h1" size="lg" weight="semibold">
-            Nuevo lead
-          </Heading>
-        }
-        rightSlot={
-          <Button type="button" variant="ghost" onClick={() => router.push('/sales-crm/leads')}>
-            Volver a la lista
-          </Button>
-        }
-        ariaLabel="Nuevo lead"
-      />
-      <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
+    <SuiteCanvas
+      mode="workspace"
+      header={
+        <ModuleHeader
+          segments={[
+            { id: 'leads', label: 'Leads', href: '/sales-crm/leads' },
+            { id: 'leads-new', label: 'Nuevo lead' },
+          ]}
+          leftSlot={
+            <Heading as="h1" size="lg" weight="semibold">
+              Nuevo lead
+            </Heading>
+          }
+          rightSlot={
+            <Button type="button" variant="ghost" onClick={() => router.push('/sales-crm/leads')}>
+              Volver a la lista
+            </Button>
+          }
+          ariaLabel="Nuevo lead"
+        />
+      }
+    >
+      <div className="w-full max-w-4xl mx-auto py-4">
         {result ? (
           <LeadCaptureResultPanel
             result={result}
@@ -103,7 +103,7 @@ export function LeadCaptureWorkspace() {
             </FormActions>
           </TechnicalSurface>
         )}
-      </main>
-    </div>
+      </div>
+    </SuiteCanvas>
   );
 }

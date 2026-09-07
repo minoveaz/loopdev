@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Badge, Button, ContextBar, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
+import { Badge, Button, ContextBar, Heading, ModuleHeader, SuiteCanvas, TechnicalSurface } from '@loopdev/ui';
 import type {
   Task,
   TaskPage,
@@ -219,20 +219,23 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
       </div>
     );
   return (
-    <div className="bg-shell-canvas flex min-h-full min-w-0 flex-1 flex-col">
-      <ModuleHeader
-        segments={[
-          { id: 'tasks', label: 'Tasks', href: '/sales-crm/tasks' },
-          { id: 'task', label: task?.title ?? 'Task' },
-        ]}
-        leftSlot={
-          <Heading as="h1" size="lg" weight="semibold" className="truncate">
-            {task?.title ?? 'Task workspace'}
-          </Heading>
-        }
-        ariaLabel="Task workspace header"
-      />
-      <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
+    <SuiteCanvas
+      mode="workspace"
+      header={
+        <ModuleHeader
+          segments={[
+            { id: 'tasks', label: 'Tasks', href: '/sales-crm/tasks' },
+            { id: 'task', label: task?.title ?? 'Task' },
+          ]}
+          leftSlot={
+            <Heading as="h1" size="lg" weight="semibold" className="truncate">
+              {task?.title ?? 'Task workspace'}
+            </Heading>
+          }
+          ariaLabel="Task workspace header"
+        />
+      }
+    >
         {isLoading ? (
           <div role="status" className="text-text-muted p-8 text-center text-sm">
             Loading task…
@@ -426,8 +429,7 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
             </TechnicalSurface>
           </div>
         ) : null}
-      </main>
-    </div>
+    </SuiteCanvas>
   );
 }
 
@@ -497,21 +499,25 @@ export function TaskForm() {
       </div>
     );
   return (
-    <div className="bg-shell-canvas flex min-h-full min-w-0 flex-1 flex-col">
-      <ModuleHeader
-        segments={[
-          { id: 'tasks', label: 'Tasks', href: '/sales-crm/tasks' },
-          { id: 'new-task', label: 'New task' },
-        ]}
-        leftSlot={
-          <Heading as="h1" size="lg" weight="semibold">
-            Create task
-          </Heading>
-        }
-        ariaLabel="Create task header"
-      />
-      <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-8">
-        <form onSubmit={submit} className="mx-auto max-w-3xl">
+    <SuiteCanvas
+      mode="workspace"
+      header={
+        <ModuleHeader
+          segments={[
+            { id: 'tasks', label: 'Tasks', href: '/sales-crm/tasks' },
+            { id: 'new-task', label: 'New task' },
+          ]}
+          leftSlot={
+            <Heading as="h1" size="lg" weight="semibold">
+              Create task
+            </Heading>
+          }
+          ariaLabel="Create task header"
+        />
+      }
+    >
+      <div className="mx-auto max-w-3xl w-full">
+        <form onSubmit={submit}>
           <TechnicalSurface
             variant="surface"
             radius="md"
@@ -601,8 +607,8 @@ export function TaskForm() {
             </div>
           </TechnicalSurface>
         </form>
-      </main>
-    </div>
+      </div>
+    </SuiteCanvas>
   );
 }
 
@@ -669,32 +675,36 @@ export function MyDayPage() {
       </div>
     );
   return (
-    <div className="bg-shell-canvas flex min-h-full min-w-0 flex-1 flex-col">
-      <ModuleHeader
-        segments={[
-          { id: 'tasks', label: 'Tasks', href: '/sales-crm/tasks' },
-          { id: 'today', label: 'My Day' },
-        ]}
-        leftSlot={
-          <Heading as="h1" size="lg" weight="semibold">
-            My Day
-          </Heading>
-        }
-        rightSlot={
-          <Link
-            href="/sales-crm/tasks/new"
-            className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
-          >
-            New task
-          </Link>
-        }
-        ariaLabel="My Day header"
-      />
-      <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
+    <SuiteCanvas
+      mode="data"
+      header={
+        <ModuleHeader
+          segments={[
+            { id: 'tasks', label: 'Tasks', href: '/sales-crm/tasks' },
+            { id: 'today', label: 'My Day' },
+          ]}
+          leftSlot={
+            <Heading as="h1" size="lg" weight="semibold">
+              My Day
+            </Heading>
+          }
+          rightSlot={
+            <Link
+              href="/sales-crm/tasks/new"
+              className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+            >
+              New task
+            </Link>
+          }
+          ariaLabel="My Day header"
+        />
+      }
+    >
+      <div className="space-y-4">
         {error ? (
           <div
             role="alert"
-            className="border-status-error/40 bg-status-error/10 text-status-error mb-4 rounded-md border p-3 text-sm"
+            className="border-status-error/40 bg-status-error/10 text-status-error rounded-md border p-3 text-sm"
           >
             {error}
           </div>
@@ -753,8 +763,8 @@ export function MyDayPage() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </SuiteCanvas>
   );
 }
 
