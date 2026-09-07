@@ -72,8 +72,8 @@ async function readLeadApiError(response: Response, fallback: string): Promise<L
 }
 
 export async function getLeads(input: CrmLeadQuery, signal?: AbortSignal, mode: PlatformEnvironmentMode = 'real'): Promise<CrmLeadPage> {
+  if (mode !== 'real') return crmLeads(mode, input.organizationId, input);
   const query = CrmLeadQuerySchema.parse(input);
-  if (mode !== 'real') return crmLeads(mode, query.organizationId, query);
   const params = new URLSearchParams({
     organizationId: query.organizationId,
     limit: String(query.limit),
@@ -250,8 +250,8 @@ export async function searchLeadContacts(
   signal?: AbortSignal,
   mode: PlatformEnvironmentMode = 'real',
 ): Promise<CrmContactPage> {
+  if (mode !== 'real') return crmContacts(mode, input.organizationId, input.query);
   const query = CrmContactQuerySchema.parse(input);
-  if (mode !== 'real') return crmContacts(mode, query.organizationId, query.query);
   const params = new URLSearchParams({
     organizationId: query.organizationId,
     limit: String(query.limit),
@@ -300,8 +300,8 @@ export async function captureLead(
   signal?: AbortSignal,
   mode: PlatformEnvironmentMode = 'real',
 ): Promise<LeadCaptureResult> {
+  if (mode !== 'real') return createCrmLead(mode, input);
   const command = CrmCaptureLeadCommandSchema.parse(input);
-  if (mode !== 'real') return createCrmLead(mode, command);
   const response = await fetch('/api/crm/capture', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
