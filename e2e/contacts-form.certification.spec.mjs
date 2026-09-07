@@ -11,7 +11,7 @@ test.describe('Contacts table and create form', () => {
     ).toBeVisible();
     const contactName =
       page.viewportSize().width < 768
-        ? page.getByLabel('Contacts mobile list').getByText('Ana Garcia')
+        ? page.getByLabel('Contacts mobile list').getByRole('link', { name: 'Ana Garcia' })
         : page.locator('tbody').getByText('Ana Garcia');
     await expect(contactName).toBeVisible();
 
