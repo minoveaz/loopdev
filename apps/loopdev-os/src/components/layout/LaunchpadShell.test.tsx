@@ -3,8 +3,14 @@ import { describe, expect, it, vi } from 'vitest';
 import type { NavRouteRef } from '@loopdev/contracts';
 import { LaunchpadShell } from './LaunchpadShell';
 
-vi.mock('./ContextSwitcher', () => ({
-  ContextSwitcher: () => null,
+vi.mock('@/hooks/useOrganization', () => ({
+  useOrganization: () => ({
+    organizations: [{ id: 'org-1', name: 'LoopDev', slug: 'loopdev' }],
+    activeOrganizationId: 'org-1',
+    activeOrganization: { id: 'org-1', name: 'LoopDev', slug: 'loopdev' },
+    setActiveOrganizationId: vi.fn(),
+    isLoading: false,
+  }),
 }));
 
 describe('LaunchpadShell', () => {

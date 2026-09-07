@@ -8,6 +8,7 @@ export function ResponsiveTable<Row extends object>({
   rows,
   getRowKey = (_, index) => index,
   caption,
+  mobileListLabel,
   emptyState,
   loading = false,
   loadingState,
@@ -373,7 +374,8 @@ export function ResponsiveTable<Row extends object>({
         {renderMobileRow && !showAllColumnsOnMobile && !isStateOnly && (
           <div
             className="space-y-2 md:hidden"
-            aria-label={caption ? `${caption} mobile list` : 'Mobile list'}
+            role="region"
+            aria-label={mobileListLabel ?? (caption ? `${caption} mobile list` : 'Mobile list')}
           >
             {showMobileHeader && (
               <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 border-b-2 border-border-technical bg-shell-canvas px-3 py-2 text-xs text-text-muted">
@@ -431,7 +433,7 @@ export function ResponsiveTable<Row extends object>({
                 disabled={!canInteract}
                 className={
                   paginationVariant === 'compact'
-                    ? 'min-w-0 [&_button]:min-h-8 [&_button]:w-full [&_button]:min-w-0 [&_button]:rounded-sm [&_button]:px-1 [&_button]:py-1 [&_button]:pr-4 [&_button]:text-xs [&_button_span]:truncate [&_button_span]:text-xs [&_button_svg]:h-3 [&_button_svg]:w-3'
+                    ? 'min-w-0 [&_button]:h-8 [&_button]:min-h-8 [&_button]:w-full [&_button]:min-w-0 [&_button]:rounded-sm [&_button]:px-1 [&_button]:py-1 [&_button]:pr-4 [&_button]:text-xs [&_button_span]:truncate [&_button_span]:text-xs [&_button_svg]:h-3 [&_button_svg]:w-3'
                     : undefined
                 }
                 value={String(activePage)}
@@ -451,7 +453,7 @@ export function ResponsiveTable<Row extends object>({
                   disabled={!canInteract}
                   className={
                     paginationVariant === 'compact'
-                      ? 'min-w-0 [&_button]:min-h-8 [&_button]:w-full [&_button]:min-w-0 [&_button]:rounded-sm [&_button]:px-1 [&_button]:py-1 [&_button]:pr-4 [&_button]:text-xs [&_button_span]:truncate [&_button_span]:text-xs [&_button_svg]:h-3 [&_button_svg]:w-3'
+                      ? 'min-w-0 [&_button]:h-8 [&_button]:min-h-8 [&_button]:w-full [&_button]:min-w-0 [&_button]:rounded-sm [&_button]:px-1 [&_button]:py-1 [&_button]:pr-4 [&_button]:text-xs [&_button_span]:truncate [&_button_span]:text-xs [&_button_svg]:h-3 [&_button_svg]:w-3'
                       : undefined
                   }
                   value={String(pageSize)}

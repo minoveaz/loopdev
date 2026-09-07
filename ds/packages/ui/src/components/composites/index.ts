@@ -11,6 +11,7 @@ export * from './shell/ModuleShell';
 export * from './shell/SuiteSwitcher';
 export * from './shell/SidebarFooter';
 export * from './shell/SidebarIdentity';
+export * from './shell/PlatformMobileBottomBar';
 
 // workspace
 export * from './workspace/ModuleWorkspace';

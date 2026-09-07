@@ -9,9 +9,12 @@ import {
   KanbanBoard,
   ModuleHeader,
   ResponsiveTable,
+  Select,
+  SuiteCanvas,
   TechnicalSurface,
   type ResponsiveTableColumn,
 } from '@loopdev/ui';
+import { Plus, TrendingUp, Calendar, User, ArrowUpRight } from 'lucide-react';
 import type { CrmOpportunity, PipelineStage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
@@ -19,6 +22,7 @@ import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 
 const PAGE_SIZE = 100;
 type OpportunityPage = { items: CrmOpportunity[]; nextCursor: string | null; hasMore: boolean };
+type ContactLookup = { name: string; email?: string | null; company?: string | null };
 export type PipelinePageProps = { mode?: 'board' | 'list' };
 
 function stageName(stage: PipelineStage) {
@@ -48,12 +52,20 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
   const canManage = hasPermission('crm.manage');
   const [stages, setStages] = useState<PipelineStage[]>([]);
   const [opportunities, setOpportunities] = useState<CrmOpportunity[]>([]);
+  const [contactsMap, setContactsMap] = useState<Map<string, ContactLookup>>(new Map());
   const [query, setQuery] = useState('');
   const [stageFilter, setStageFilter] = useState('all');
+  const [mobileActiveStageKey, setMobileActiveStageKey] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (stages.length > 0 && !mobileActiveStageKey) {
+      setMobileActiveStageKey(stages[0].key);
+    }
+  }, [stages, mobileActiveStageKey]);
 
   const loadBoard = async (signal?: AbortSignal) => {
     if (!activeOrganizationId) return;
@@ -71,6 +83,43 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
       const nextOpportunities = (await opportunitiesResponse.json()) as OpportunityPage;
       setStages(nextStages.filter((stage) => stage.active));
       setOpportunities(nextOpportunities.items);
+
+      // Resolve contact names for human-readable display
+      const contactsPromise = fetch(`/api/crm/contacts?${scope}&limit=100`, { signal });
+      if (contactsPromise && typeof contactsPromise.then === 'function') {
+        void contactsPromise
+          .then((res) => (res && res.ok ? res.json() : null))
+          .then(
+            (
+              page: {
+                items?: Array<{
+                  id: string;
+                  firstName?: string;
+                  lastName?: string;
+                  companyName?: string | null;
+                  email?: string | null;
+                }>;
+              } | null,
+            ) => {
+              if (!page?.items) return;
+              const map = new Map<string, ContactLookup>();
+              page.items.forEach((c) => {
+                const fullName =
+                  [c.firstName, c.lastName].filter(Boolean).join(' ').trim() ||
+                  c.companyName ||
+                  c.email ||
+                  c.id;
+                map.set(c.id, {
+                  name: fullName,
+                  email: c.email,
+                  company: c.companyName,
+                });
+              });
+              setContactsMap(map);
+            },
+          )
+          .catch(() => {});
+      }
     } catch (requestError: unknown) {
       if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
       setError(
@@ -95,10 +144,13 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     const normalized = query.trim().toLocaleLowerCase();
     return opportunities.filter((opportunity) => {
       const matchesStage = stageFilter === 'all' || opportunity.stageKey === stageFilter;
+      const contactInfo = contactsMap.get(opportunity.contactId);
       const haystack = [
         opportunity.name,
         opportunity.productKey,
         opportunity.contactId,
+        contactInfo?.name,
+        contactInfo?.company,
         opportunity.assignedUserId,
       ]
         .filter(Boolean)
@@ -106,7 +158,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
         .toLocaleLowerCase();
       return matchesStage && (!normalized || haystack.includes(normalized));
     });
-  }, [opportunities, query, stageFilter]);
+  }, [contactsMap, opportunities, query, stageFilter]);
 
   const moveOpportunity = async (opportunity: CrmOpportunity, nextStageKey: string) => {
     if (!activeOrganizationId || nextStageKey === opportunity.stageKey || !canManage) return;
@@ -155,7 +207,25 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
         sortAccessor: (opportunity) => opportunity.name,
       },
       { key: 'stage', header: 'Stage', render: (opportunity) => opportunity.stageKey },
-      { key: 'contact', header: 'Contact', render: (opportunity) => opportunity.contactId },
+      {
+        key: 'contact',
+        header: 'Contact',
+        render: (opportunity) => {
+          const contact = contactsMap.get(opportunity.contactId);
+          return (
+            <div className="min-w-0">
+              <p className="text-text-main truncate font-medium">
+                {contact?.name || opportunity.contactId}
+              </p>
+              {contact?.company || contact?.email ? (
+                <p className="text-text-muted truncate text-xs">
+                  {contact.company || contact.email}
+                </p>
+              ) : null}
+            </div>
+          );
+        },
+      },
       { key: 'amount', header: 'Amount', render: (opportunity) => opportunityAmount(opportunity) },
       {
         key: 'origin',
@@ -169,7 +239,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
         render: (opportunity) => formatDate(opportunity.expectedCloseAt),
       },
     ],
-    [],
+    [contactsMap],
   );
 
   const selectedOpportunity = selectedId
@@ -186,35 +256,40 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     );
 
   return (
-    <div className="bg-shell-canvas flex min-h-full min-w-0 flex-1 flex-col">
-      <ModuleHeader
-        segments={[{ id: 'pipeline', label: 'Pipeline', href: '/sales-crm/pipeline' }]}
-        leftSlot={
-          <Heading as="h1" size="lg" weight="semibold">
-            {mode === 'list' ? 'Opportunity list' : 'Pipeline'}
-          </Heading>
-        }
-        rightSlot={
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={mode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
-              className="text-primary text-sm underline-offset-2 hover:underline"
-            >
-              {mode === 'list' ? 'Board view' : 'List view'}
-            </Link>
-            {canManage ? (
+    <SuiteCanvas
+      mode={mode === 'list' ? 'data' : 'board'}
+      header={
+        <ModuleHeader
+          segments={[{ id: 'pipeline', label: 'Pipeline', href: '/sales-crm/pipeline' }]}
+          leftSlot={
+            <Heading as="h1" size="lg" weight="semibold">
+              {mode === 'list' ? 'Opportunity list' : 'Pipeline'}
+            </Heading>
+          }
+          rightSlot={
+            <div className="flex flex-wrap items-center gap-2.5">
               <Link
-                href="/sales-crm/opportunities/new"
-                className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+                href={mode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
+                className="text-primary text-xs font-medium px-2.5 py-1.5 rounded-lg border border-border-subtle bg-surface hover:bg-surface-hover transition-colors"
               >
-                New opportunity
+                {mode === 'list' ? 'Board view' : 'List view'}
               </Link>
-            ) : null}
-          </div>
-        }
-        ariaLabel="Pipeline header"
-      />
-      <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
+              {canManage ? (
+                <Link
+                  href="/sales-crm/opportunities/new"
+                  className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
+                >
+                  <Plus size={14} />
+                  <span>New opportunity</span>
+                </Link>
+              ) : null}
+            </div>
+          }
+          ariaLabel="Pipeline header"
+        />
+      }
+    >
+      <div className="w-full space-y-4">
         <TechnicalSurface variant="surface" radius="md" border="technical" className="mb-4 p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
             <label className="min-w-0 flex-1 text-xs font-medium text-text-muted">
@@ -226,21 +301,21 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                 placeholder="Name, product or contact"
               />
             </label>
-            <label className="text-xs font-medium text-text-muted">
-              Stage
-              <select
-                value={stageFilter}
-                onChange={(event) => setStageFilter(event.target.value)}
-                className="border-border-subtle bg-background text-text-main mt-1 min-h-9 min-w-40 rounded-md border px-3 text-sm"
-              >
-                <option value="all">All stages</option>
-                {stages.map((stage) => (
-                  <option key={stage.key} value={stage.key}>
-                    {stageName(stage)}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <Select
+              label="Stage"
+              size="sm"
+              fullWidth={false}
+              className="min-w-44"
+              value={stageFilter}
+              onValueChange={setStageFilter}
+              options={[
+                { value: 'all', label: 'All stages' },
+                ...stages.map((stage) => ({
+                  value: stage.key,
+                  label: stageName(stage),
+                })),
+              ]}
+            />
           </div>
         </TechnicalSurface>
         {error ? (
@@ -320,23 +395,31 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                       </Link>
                     </div>
                   )}
-                  renderMobileRow={(opportunity) => (
-                    <div className="border-border-subtle bg-background rounded-lg border p-3">
-                      <p className="text-text-main font-medium">{opportunity.name}</p>
-                      <p className="text-text-muted mt-1 text-xs">
-                        {opportunity.stageKey} · {opportunityAmount(opportunity)}
-                      </p>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="secondary"
-                        className="mt-3"
-                        onClick={() => setSelectedId(opportunity.id)}
-                      >
-                        Preview
-                      </Button>
-                    </div>
-                  )}
+                  renderMobileRow={(opportunity) => {
+                    const contact = contactsMap.get(opportunity.contactId);
+                    return (
+                      <div className="border-border-subtle bg-background rounded-lg border p-3">
+                        <p className="text-text-main font-medium">{opportunity.name}</p>
+                        <p className="text-text-muted mt-1 text-xs">
+                          {opportunity.stageKey} · {opportunityAmount(opportunity)}
+                        </p>
+                        {contact ? (
+                          <p className="text-text-muted mt-0.5 truncate text-xs">
+                            {contact.name} {contact.company ? `(${contact.company})` : ''}
+                          </p>
+                        ) : null}
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          className="mt-3"
+                          onClick={() => setSelectedId(opportunity.id)}
+                        >
+                          Preview
+                        </Button>
+                      </div>
+                    );
+                  }}
                 />
               ) : (
                 <KanbanBoard
@@ -357,9 +440,21 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                     const opportunity = visibleOpportunities.find((item) => item.id === itemId);
                     if (opportunity) return moveOpportunity(opportunity, targetStageKey);
                   }}
-                  getColumnMetrics={(columnId, items) => ({
-                    count: items.filter((item) => item.stageKey === columnId).length,
-                  })}
+                  getColumnMetrics={(columnId, items) => {
+                    const stageItems = items.filter((item) => item.stageKey === columnId);
+                    const totalSum = stageItems.reduce((acc, curr) => acc + (curr.amount ?? 0), 0);
+                    return {
+                      count: stageItems.length,
+                      description:
+                        totalSum > 0
+                          ? new Intl.NumberFormat('es-ES', {
+                              style: 'currency',
+                              currency: 'EUR',
+                              maximumFractionDigits: 0,
+                            }).format(totalSum)
+                          : undefined,
+                    };
+                  }}
                   isLoading={isLoading}
                   emptyStateSlot={
                     <span className="text-text-muted text-sm">No opportunities in this stage</span>
@@ -394,9 +489,14 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                       <p className="text-text-muted mt-1 truncate text-xs">
                         {opportunity.productKey} · {opportunityAmount(opportunity)}
                       </p>
-                      <p className="text-text-muted mt-1 truncate text-xs">
-                        Contact {opportunity.contactId.slice(0, 8)} ·{' '}
-                        {formatDate(opportunity.expectedCloseAt)}
+                      <p className="text-text-muted mt-1 flex items-center gap-1.5 truncate text-xs">
+                        <User className="h-3.5 w-3.5 shrink-0 opacity-70" />
+                        <span className="truncate font-medium text-text-main">
+                          {contactsMap.get(opportunity.contactId)?.name ||
+                            `Contact ${opportunity.contactId.slice(0, 8)}`}
+                        </span>
+                        <span>·</span>
+                        <span>{formatDate(opportunity.expectedCloseAt)}</span>
                       </p>
                       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                         <Link
@@ -412,24 +512,22 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                           Open Customer 360
                         </Link>
                         {canManage && stages.length > 1 ? (
-                          <label className="text-text-muted text-xs">
-                            Move{' '}
-                            <select
-                              aria-label={`Move ${opportunity.name}`}
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-text-muted text-xs">Move</span>
+                            <Select
+                              size="sm"
+                              fullWidth={false}
+                              triggerClassName="h-7 min-h-7 text-xs px-2 py-0.5"
                               disabled={pendingId === opportunity.id}
                               value={opportunity.stageKey}
-                              onChange={(event) =>
-                                void moveOpportunity(opportunity, event.target.value)
-                              }
-                              className="border-border-subtle bg-background text-text-main ml-1 min-h-8 max-w-28 rounded border px-1 text-xs"
-                            >
-                              {stages.map((target) => (
-                                <option key={target.key} value={target.key}>
-                                  {stageName(target)}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
+                              onValueChange={(val) => void moveOpportunity(opportunity, val)}
+                              aria-label={`Move ${opportunity.name}`}
+                              options={stages.map((target) => ({
+                                value: target.key,
+                                label: stageName(target),
+                              }))}
+                            />
+                          </div>
                         ) : null}
                       </div>
                     </TechnicalSurface>
@@ -461,7 +559,12 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                 <p className="text-text-muted mt-1 text-sm">
                   {selectedOpportunity.productKey} · {opportunityAmount(selectedOpportunity)}
                 </p>
-                <p className="text-text-muted mt-3 text-xs">
+                <p className="text-text-muted mt-2 text-xs">
+                  <span className="font-medium text-text-main">Contact:</span>{' '}
+                  {contactsMap.get(selectedOpportunity.contactId)?.name ||
+                    selectedOpportunity.contactId}
+                </p>
+                <p className="text-text-muted mt-1 text-xs">
                   Stage: {selectedOpportunity.stageKey}
                 </p>
                 <Link
@@ -474,7 +577,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
             ) : null}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </SuiteCanvas>
   );
 }

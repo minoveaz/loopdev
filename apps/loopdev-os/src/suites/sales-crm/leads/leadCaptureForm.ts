@@ -34,6 +34,11 @@ export const leadCaptureFormSchema = z
     contactLabel: z.string().optional(),
     firstName: z.string().trim().max(120, 'First name must be 120 characters or fewer.').optional(),
     lastName: z.string().trim().max(120, 'Last name must be 120 characters or fewer.').optional(),
+    secondLastName: z
+      .string()
+      .trim()
+      .max(120, 'Second last name must be 120 characters or fewer.')
+      .optional(),
     email: z.string().trim().email('Enter a valid email address.').optional().or(z.literal('')),
     phone: z
       .string()
@@ -55,6 +60,8 @@ export const leadCaptureFormSchema = z
       .trim()
       .min(1, 'Interest is required.')
       .max(240, 'Interest must be 240 characters or fewer.'),
+    estimatedBudget: z.string().trim().optional(),
+    purchaseTimeline: z.string().trim().max(80).optional(),
     sourceKind: leadSourceKindSchema,
     provider: z.string().trim().max(120, 'Provider must be 120 characters or fewer.').optional(),
     externalId: z
@@ -111,10 +118,13 @@ export const DEFAULT_LEAD_CAPTURE_VALUES: LeadCaptureFormValues = {
   contactLabel: undefined,
   firstName: '',
   lastName: '',
+  secondLastName: '',
   email: '',
   phone: '',
   companyName: '',
   interest: '',
+  estimatedBudget: '',
+  purchaseTimeline: '',
   sourceKind: 'manual',
   provider: '',
   externalId: '',
@@ -141,6 +151,7 @@ export function buildCaptureLeadCommand(
       : {
           firstName: values.firstName,
           lastName: values.lastName || null,
+          secondLastName: values.secondLastName || null,
           email: values.email || null,
           phone: values.phone || null,
           companyName: values.companyName || null,
@@ -150,6 +161,8 @@ export function buildCaptureLeadCommand(
     organizationId,
     ...contact,
     interest: values.interest,
+    estimatedBudget: values.estimatedBudget ? Number(values.estimatedBudget) : null,
+    purchaseTimeline: values.purchaseTimeline || null,
     assignedUserId: values.assignedUserId || null,
     source: {
       kind: values.sourceKind,

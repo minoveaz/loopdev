@@ -64,4 +64,74 @@ describe('Customer 360 view', () => {
     expect(screen.getByText('No related leads.')).toBeInTheDocument();
     expect(screen.getByText('No activity yet.')).toBeInTheDocument();
   });
+
+  it('opens the slide-over detail drawer when clicking Editar contacto', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            view: 'record',
+            contact: {
+              id: '00000000-0000-4000-9000-000000000002',
+              organizationId,
+              firstName: 'Ana',
+              lastName: 'Garcia',
+              email: 'ana@example.test',
+              phone: '+34600112233',
+              companyName: 'Acme Corp',
+              createdAt: '2026-09-01T00:00:00.000Z',
+              updatedAt: '2026-09-01T00:00:00.000Z',
+            },
+            leads: [],
+            opportunities: [],
+            tasks: [],
+            notes: [],
+            timeline: [],
+            cursors: { leads: null, opportunities: null, tasks: null, notes: null, timeline: null },
+            sectionState: {
+              profile: 'fresh',
+              leads: 'fresh',
+              opportunities: 'fresh',
+              tasks: 'fresh',
+              notes: 'fresh',
+              timeline: 'fresh',
+            },
+            sectionPermissions: {
+              profile: true,
+              leads: true,
+              opportunities: true,
+              tasks: true,
+              notes: true,
+              timeline: true,
+            },
+          }),
+        ),
+      ),
+    );
+
+    render(<Customer360View contactId="00000000-0000-4000-9000-000000000002" />);
+
+    expect((await screen.findAllByRole('heading', { name: 'Ana Garcia' })).length).toBeGreaterThan(
+      0,
+    );
+
+    // Initial state: drawer is not visible
+    expect(screen.queryByLabelText('Ficha Técnica · Ana Garcia')).not.toBeInTheDocument();
+
+    // Click "Editar contacto" button
+    const editButton = screen.getAllByRole('button', { name: /editar contacto/i })[0];
+    editButton.click();
+
+    // Drawer should open and be mounted
+    const drawer = await screen.findByRole('complementary', { name: 'Ficha Técnica · Ana Garcia' });
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveAttribute('data-presentation', 'overlay');
+    expect(drawer).toHaveClass('fixed', 'inset-y-0', 'right-0');
+
+    // Drawer form fields should contain current contact values
+    expect(screen.getByDisplayValue('Ana')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Garcia')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('ana@example.test')).toBeInTheDocument();
+  });
 });

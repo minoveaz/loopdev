@@ -145,7 +145,13 @@ export function DocumentIntelligenceShell({ children }: { children: ReactNode })
               currentSuite={DOCUMENT_INTELLIGENCE_SUITE_CONFIG.identity}
               availableSuites={[DOCUMENT_INTELLIGENCE_SUITE_CONFIG.identity]}
               showIcon={false}
-              onSuiteChange={() => router.push('/document-intelligence')}
+              onSuiteChange={(suiteId) => {
+                if (suiteId === 'os.home') {
+                  router.push('/launchpad');
+                } else {
+                  router.push('/document-intelligence');
+                }
+              }}
             />
           </div>
         ),

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import {
   AppShell,
   BrandLogo,
+  OrganizationSwitcher,
   PlatformHeader,
   SuiteSidebar,
   SystemStatus,
@@ -13,7 +14,7 @@ import {
 } from '@loopdev/ui';
 import type { AccessMap, NavMode, NavRouteRef } from '@loopdev/contracts';
 
-import { ContextSwitcher } from './ContextSwitcher';
+import { useOrganization } from '@/hooks/useOrganization';
 import { ContextPanelHost } from './ContextPanelHost';
 import { PLATFORM_TOOL_NAVIGATION_SCHEMA } from '@/core/platform/platformTools';
 
@@ -45,6 +46,12 @@ export function LaunchpadShell({
   const displayName = userEmail?.split('@')[0] ?? 'User';
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const {
+    organizations,
+    activeOrganizationId,
+    setActiveOrganizationId,
+    isLoading: isLoadingOrganizations,
+  } = useOrganization();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 1024px)');
@@ -99,7 +106,22 @@ export function LaunchpadShell({
         <PlatformHeader
           hasMobileNavigation={platformToolsAvailable}
           identitySlot={<BrandLogo variant="full" size="md" />}
-          contextSlot={<ContextSwitcher />}
+          onNavigateHome={() => onNavigate({ routeId: '/launchpad' })}
+          contextSlot={
+            <OrganizationSwitcher
+              organizations={organizations.map(({ id, name }) => ({
+                id,
+                name,
+                planLabel: 'PRO',
+              }))}
+              activeOrganizationId={activeOrganizationId}
+              isLoading={isLoadingOrganizations}
+              onOrganizationNavigate={() => onNavigate({ routeId: '/launchpad' })}
+              onOrganizationChange={setActiveOrganizationId}
+              onAllOrganizations={() => onNavigate({ routeId: '/launchpad' })}
+              onCreateOrganization={() => undefined}
+            />
+          }
           environmentSlot={<SystemStatus state="operational" id={userId} label="ID" />}
           controlsSlot={<ThemeToggle variant="technical" size="md" />}
           profileSlot={

@@ -38,6 +38,7 @@ export interface ResponsiveTableProps<Row> extends React.HTMLAttributes<HTMLDivE
   rows: Row[];
   getRowKey?: (row: Row, index: number) => React.Key;
   caption?: string;
+  mobileListLabel?: string;
   emptyState?: React.ReactNode;
   loading?: boolean;
   loadingState?: React.ReactNode;

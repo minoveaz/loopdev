@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Heading, ModuleHeader, TechnicalSurface } from '@loopdev/ui';
+import { Button, Heading, ModuleHeader, Select, TechnicalSurface } from '@loopdev/ui';
 import type { CrmContact, CrmContactPage, PipelineStage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
@@ -179,36 +179,28 @@ export function OpportunityForm() {
                 onChange={setProductKey}
                 placeholder="health"
               />
-              <label className="text-text-muted text-xs font-medium">
-                Contact <span aria-hidden="true">*</span>
-                <select
-                  required
-                  value={contactId}
-                  onChange={(event) => setContactId(event.target.value)}
-                  className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm"
-                >
-                  <option value="">Select an authorized contact</option>
-                  {contacts.map((contact) => (
-                    <option key={contact.id} value={contact.id}>
-                      {contactLabel(contact)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="text-text-muted text-xs font-medium">
-                Default stage
-                <select
-                  disabled
-                  value={stageKey}
-                  className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm"
-                >
-                  {stages.map((stage) => (
-                    <option key={stage.key} value={stage.key}>
-                      {stage.name ?? stage.label ?? stage.key}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <Select
+                label="Contact"
+                required
+                searchable
+                placeholder="Select an authorized contact"
+                value={contactId}
+                onValueChange={setContactId}
+                options={contacts.map((contact) => ({
+                  value: contact.id,
+                  label: contactLabel(contact),
+                  description: contact.email || undefined,
+                }))}
+              />
+              <Select
+                label="Default stage"
+                disabled
+                value={stageKey}
+                options={stages.map((stage) => ({
+                  value: stage.key,
+                  label: stage.name ?? stage.label ?? stage.key,
+                }))}
+              />
               <Field label="Amount" value={amount} onChange={setAmount} type="number" min="0" />
               <Field label="Currency" value={currency} onChange={setCurrency} maxLength={3} />
               <Field

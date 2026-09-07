@@ -23,4 +23,8 @@ export interface SuiteCardProps {
   isLocked?: boolean;
   /** Clase CSS adicional */
   className?: string;
+  /** Callback de navegación personalizada (ej. router SPA) */
+  onNavigate?: (href: string) => void;
+  /** Callback para evento clic en el enlace */
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }

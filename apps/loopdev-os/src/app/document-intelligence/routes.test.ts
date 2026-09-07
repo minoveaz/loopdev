@@ -2,7 +2,9 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const routeRoot = path.resolve(process.cwd(), 'apps/loopdev-os/src/app/document-intelligence');
+const routeRoot = process.cwd().endsWith('apps/loopdev-os')
+  ? path.resolve(process.cwd(), 'src/app/document-intelligence')
+  : path.resolve(process.cwd(), 'apps/loopdev-os/src/app/document-intelligence');
 
 describe('Document Intelligence public routes', () => {
   it.each([

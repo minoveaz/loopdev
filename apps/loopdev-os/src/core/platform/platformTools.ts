@@ -29,7 +29,7 @@ export const PLATFORM_TOOL_NAVIGATION_SCHEMA = {
   groups: [
     {
       id: 'platform-tools',
-      label: 'Capabilities',
+      label: '',
       priority: 1,
       items: PLATFORM_TOOL_ENTRIES.map((entry) => ({
         ...entry,

@@ -143,6 +143,7 @@ using (
       from public.workspaces workspace
       where workspace.id = public.document_intelligence_documents.workspace_id
         and workspace.organization_id = public.document_intelligence_documents.organization_id
+        and public.can_access_workspace(workspace.id)
     )
   )
 );
@@ -203,6 +204,10 @@ using (
     from public.document_intelligence_documents document
     where document.id = public.document_intelligence_versions.document_id
       and document.organization_id = public.document_intelligence_versions.organization_id
+      and (
+        document.workspace_id is null
+        or public.can_access_workspace(document.workspace_id)
+      )
   )
 );
 
@@ -242,8 +247,15 @@ using (
   and exists (
     select 1
     from public.document_intelligence_versions version_row
+    join public.document_intelligence_documents document
+      on document.id = version_row.document_id
+      and document.organization_id = version_row.organization_id
     where version_row.id = public.document_intelligence_extractions.document_version_id
       and version_row.organization_id = public.document_intelligence_extractions.organization_id
+      and (
+        document.workspace_id is null
+        or public.can_access_workspace(document.workspace_id)
+      )
   )
 );
 

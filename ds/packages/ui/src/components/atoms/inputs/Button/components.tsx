@@ -8,11 +8,11 @@ interface ButtonContentProps {
   children?: React.ReactNode;
 }
 
-export const ButtonContent: React.FC<ButtonContentProps> = ({ 
-  isLoading, 
-  startIcon, 
-  endIcon, 
-  children 
+export const ButtonContent: React.FC<ButtonContentProps> = ({
+  isLoading,
+  startIcon,
+  endIcon,
+  children,
 }) => {
   // Loading tiene prioridad sobre startIcon
   const showStartIcon = !isLoading && startIcon;
@@ -21,23 +21,17 @@ export const ButtonContent: React.FC<ButtonContentProps> = ({
     <>
       {isLoading && (
         <div role="status" aria-label="Cargando" className="flex items-center justify-center">
-          <Icon 
-            name="progress_activity" 
-            size="md" 
-            className="animate-spin mr-2 shrink-0"
-          />
+          <Icon name="progress_activity" size="md" className="animate-spin mr-2 shrink-0" />
         </div>
       )}
-      
-      {showStartIcon && (
-        <Icon name={startIcon} size="md" className="mr-2 shrink-0" />
-      )}
-      
-      <span className="truncate min-w-0">{children}</span>
 
-      {endIcon && (
-        <Icon name={endIcon} size="md" className="ml-2 shrink-0" />
-      )}
+      {showStartIcon && <Icon name={startIcon} size="md" className="mr-2 shrink-0" />}
+
+      <span className="truncate min-w-0 inline-flex items-center justify-center gap-1.5">
+        {children}
+      </span>
+
+      {endIcon && <Icon name={endIcon} size="md" className="ml-2 shrink-0" />}
     </>
   );
 };
