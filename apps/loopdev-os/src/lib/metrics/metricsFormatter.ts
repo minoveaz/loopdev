@@ -33,27 +33,6 @@ export const formatPercentage = (value: number, precision: number = 2): string =
   return `${sign}${value.toFixed(precision)}%`;
 };
 
-const formatDistance = (
-  value: number,
-  type: 'price' | 'percentage',
-  precision?: number,
-): string => {
-  if (!isFinite(value)) return '—';
-
-  const decimals = precision ?? 2;
-
-  if (type === 'percentage') {
-    return `${value >= 0 ? '+' : ''}${value.toFixed(decimals)}%`;
-  }
-
-  return `${value >= 0 ? '+' : ''}$${Math.abs(value).toFixed(decimals)}`;
-};
-
-const formatRSI = (value: number): string => {
-  if (!isFinite(value)) return '—';
-  return value.toFixed(1);
-};
-
 export const formatATR = (value: number, precision: number = 4): string => {
   if (!isFinite(value)) return '—';
   return value.toFixed(precision);
@@ -84,32 +63,4 @@ export const formatTimeAgo = (isoDateString: string): string => {
   } catch {
     return '—';
   }
-};
-
-const getRelativeValue = (
-  current: number,
-  threshold: number,
-  type: 'gap' | 'distance',
-): { value: number; direction: 'up' | 'down' | 'neutral' } => {
-  const diff = current - threshold;
-
-  if (Math.abs(diff) < 0.01) {
-    return { value: 0, direction: 'neutral' };
-  }
-
-  return {
-    value: Math.abs(diff),
-    direction: diff > 0 ? 'up' : 'down',
-  };
-};
-
-/**
- * Format signal readiness as a percentage (0-100%)
- * Shows how close the signal is to triggering
- */
-const formatSignalReadiness = (gap: number, threshold: number): number => {
-  if (Math.abs(threshold) < 0.01) return 0;
-
-  const readiness = Math.max(0, Math.min(100, 100 - (Math.abs(gap) / Math.abs(threshold)) * 100));
-  return Math.round(readiness);
 };

@@ -51,18 +51,3 @@ export const getWCAGStatus = (ratio: number): 'AAA' | 'AA' | 'AA_LARGE' | 'FAIL'
   if (ratio >= 3) return 'AA_LARGE';
   return 'FAIL';
 };
-
-/**
- * Recommends a text color (White or Black) based on background luminance.
- */
-const getContrastColor = (hex: string): 'white' | 'black' => {
-  const luminance = getLuminance(hex);
-  return luminance > 0.179 ? 'black' : 'white';
-};
-
-/**
- * Simple HEX validation.
- */
-const isValidHex = (hex: string): boolean => {
-  return /^#([A-Fa-f0-9]{3}){1,2}([A-Fa-f0-9]{2})?$/.test(hex);
-};

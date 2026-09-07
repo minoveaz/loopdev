@@ -24,14 +24,14 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
     return (
       <div
         className={`
-          border rounded-lg backdrop-blur-sm
+          rounded-lg border backdrop-blur-sm
           ${statusColor.border} ${statusColor.bg}
           ${sizeClasses.padding}
           animate-pulse
         `}
       >
-        <div className="h-4 bg-primary-light bg-opacity-20 rounded w-1/3 mb-2" />
-        <div className="h-6 bg-primary-light bg-opacity-20 rounded w-2/3" />
+        <div className="bg-primary-light mb-2 h-4 w-1/3 rounded bg-opacity-20" />
+        <div className="bg-primary-light h-6 w-2/3 rounded bg-opacity-20" />
       </div>
     );
   }
@@ -39,7 +39,7 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
   return (
     <div
       className={`
-        border rounded-lg backdrop-blur-sm transition-colors duration-200
+        rounded-lg border backdrop-blur-sm transition-colors duration-200
         ${statusColor.border} ${statusColor.bg}
         ${sizeClasses.padding}
         ${props.className ?? ''}
@@ -48,9 +48,9 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
       aria-label={`${label}: ${value} ${unit}`}
     >
       {/* Header: Label + Direction */}
-      <div className="flex items-center justify-between mb-1">
+      <div className="mb-1 flex items-center justify-between">
         <p
-          className={`${sizeClasses.textLabel} font-mono uppercase tracking-wider text-primary-light opacity-70`}
+          className={`${sizeClasses.textLabel} text-primary-light font-mono uppercase tracking-wider opacity-70`}
         >
           {label}
         </p>
@@ -71,7 +71,7 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
 
       {/* Main value */}
       <div className="flex items-baseline gap-1">
-        <p className={`${sizeClasses.textValue} font-mono font-bold text-primary`}>
+        <p className={`${sizeClasses.textValue} text-primary font-mono font-bold`}>
           {typeof value === 'number' ? value.toFixed(2) : value}
         </p>
         {unit && <span className="text-nano text-primary-light opacity-70">{unit}</span>}
@@ -79,13 +79,13 @@ export const MetricCard: React.FC<MetricCardProps> = (props) => {
 
       {/* Secondary value (if provided) */}
       {secondaryValue && (
-        <p className={`${sizeClasses.textLabel} text-primary-light opacity-60 mt-1`}>
+        <p className={`${sizeClasses.textLabel} text-primary-light mt-1 opacity-60`}>
           {typeof secondaryValue === 'number' ? secondaryValue.toFixed(2) : secondaryValue}
         </p>
       )}
 
       {/* Description */}
-      {description && <p className="text-nano text-primary-light opacity-50 mt-2">{description}</p>}
+      {description && <p className="text-nano text-primary-light mt-2 opacity-50">{description}</p>}
     </div>
   );
 };

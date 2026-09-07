@@ -1,18 +1,10 @@
 import React from 'react';
 import {
-  Bell,
   CheckCircle2,
   Clock,
-  Filter,
-  Flame,
   MessageCircle,
-  MessageSquare,
   Radio,
-  Search,
   ShieldCheck,
-  Sparkles,
-  Users,
-  Zap,
 } from 'lucide-react';
 import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
 
@@ -33,34 +25,34 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
 
   return (
     <aside
-      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      className="border-[#1F4E5F]/12 flex h-full w-full flex-col gap-3.5 overflow-y-auto rounded-3xl border bg-[#FCFDFD] p-5 text-[#1F4E5F] shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)]"
       aria-label="Canales de Chat"
     >
       {/* 1. Cabecera */}
-      <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
+      <div className="border-[#1F4E5F]/8 flex items-center justify-between border-b pb-2">
         <div className="flex items-center gap-1.5">
-          <MessageCircle className="w-3.5 h-3.5 text-[#7FB77E]" />
+          <MessageCircle className="h-3.5 w-3.5 text-[#7FB77E]" />
           <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
             Mensajería de Crew
           </span>
         </div>
-        <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+        <span className="py-0.2 rounded-full bg-[#7FB77E]/10 px-2 text-[9px] font-black text-[#7FB77E]">
           {joinedActivities.length} Activos
         </span>
       </div>
 
       {/* 2. Resumen de Canales */}
-      <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2">
+      <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2 rounded-2xl border bg-white p-3.5">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase text-[#1F4E5F]/60 tracking-wider">
+          <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
             Tus Grupos de Quedada
           </span>
-          <Radio className="w-3 h-3 text-[#7FB77E] animate-pulse" />
+          <Radio className="h-3 w-3 animate-pulse text-[#7FB77E]" />
         </div>
 
         <div className="flex flex-col gap-1.5">
           {joinedActivities.length === 0 ? (
-            <p className="text-[11px] text-[#1F4E5F]/60 font-medium py-2 text-center">
+            <p className="py-2 text-center text-[11px] font-medium text-[#1F4E5F]/60">
               Únete a un entreno para activar su chat de coordinación.
             </p>
           ) : (
@@ -74,31 +66,31 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
                   key={act.id}
                   type="button"
                   onClick={() => onSelectChat(act.id)}
-                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
+                  className={`flex cursor-pointer items-center justify-between gap-2.5 rounded-xl border p-2.5 text-left transition-all ${
                     isSelected
-                      ? 'bg-[#EEF2F2] border-[#7FB77E] shadow-2xs'
-                      : 'bg-white border-[#1F4E5F]/8 hover:border-[#7FB77E]/40 hover:bg-[#EEF2F2]/40'
+                      ? 'shadow-2xs border-[#7FB77E] bg-[#EEF2F2]'
+                      : 'border-[#1F4E5F]/8 bg-white hover:border-[#7FB77E]/40 hover:bg-[#EEF2F2]/40'
                   }`}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-black text-[#1F4E5F] truncate">
+                      <span className="truncate text-xs font-black text-[#1F4E5F]">
                         {act.title}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <p className="text-[10px] text-[#1F4E5F]/60 truncate font-medium flex-1">
+                    <div className="mt-0.5 flex items-center gap-2">
+                      <p className="flex-1 truncate text-[10px] font-medium text-[#1F4E5F]/60">
                         {lastMsg
                           ? `${lastMsg.senderName}: ${lastMsg.text}`
                           : `${act.date} • ${act.time}`}
                       </p>
-                      <span className="text-[9px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-1.5 py-0.2 rounded-full shrink-0">
+                      <span className="py-0.2 shrink-0 rounded-full bg-[#7FB77E]/10 px-1.5 text-[9px] font-bold text-[#7FB77E]">
                         ⏳ 24h
                       </span>
                     </div>
                   </div>
                   {msgs.length > 0 && (
-                    <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-[#7FB77E] text-white shrink-0">
+                    <span className="shrink-0 rounded-full bg-[#7FB77E] px-1.5 py-0.5 text-[9px] font-black text-white">
                       {msgs.length}
                     </span>
                   )}
@@ -110,28 +102,28 @@ export const CimoChatChannelsWidget: React.FC<CimoChatChannelsWidgetProps> = ({
       </div>
 
       {/* 3. Normas de Convivencia en el Chat */}
-      <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2">
-        <span className="text-[10px] font-black uppercase text-[#1F4E5F]/60 tracking-wider">
+      <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2 rounded-2xl border bg-white p-3.5">
+        <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
           Protocolo CIMO
         </span>
         <div className="flex flex-col gap-1.5 text-[11px] font-bold text-[#1F4E5F]">
-          <div className="flex items-center gap-2 p-1.5 bg-[#EEF2F2]/50 rounded-xl">
-            <Clock className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+          <div className="flex items-center gap-2 rounded-xl bg-[#EEF2F2]/50 p-1.5">
+            <Clock className="h-3.5 w-3.5 shrink-0 text-[#7FB77E]" />
             <span className="text-[10px]">Avisar con 2h si hay dudas o retrasos</span>
           </div>
-          <div className="flex items-center gap-2 p-1.5 bg-[#EEF2F2]/50 rounded-xl">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />
+          <div className="flex items-center gap-2 rounded-xl bg-[#EEF2F2]/50 p-1.5">
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#7FB77E]" />
             <span className="text-[10px]">Confirmar asistencia al tercer tiempo</span>
           </div>
         </div>
       </div>
 
       {/* 4. Archivo Inteligente */}
-      <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
-        <ShieldCheck className="w-4 h-4 text-[#7FB77E] flex-shrink-0 mt-0.5" />
+      <div className="mt-auto flex items-start gap-2.5 rounded-2xl border border-[#7FB77E]/20 bg-[#EEF2F2]/40 p-3 text-[#1F4E5F]">
+        <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#7FB77E]" />
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Chat de Duración Limitada</h4>
-          <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
+          <p className="mt-0.5 text-[10px] font-medium leading-relaxed text-[#1F4E5F]/75">
             Los chats de eventos son efímeros y se archivan automáticamente 24h tras el entreno para
             proteger la privacidad y evitar grupos zombis.
           </p>

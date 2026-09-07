@@ -17,7 +17,7 @@ export const SessionPulse: React.FC<SessionPulseProps> = ({ bot }) => {
 
   return (
     <section className="flex flex-col gap-4">
-      <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em] text-text-muted opacity-40 px-1">Session_Pulse_Ledger</LpdText>
+      <LpdText size="nano" weight="black" className="text-text-muted px-1 uppercase tracking-[0.2em] opacity-40">Session_Pulse_Ledger</LpdText>
       <div className="grid grid-cols-2 gap-3">
         <IndustrialMetric 
           label="Net_Session_PnL" 

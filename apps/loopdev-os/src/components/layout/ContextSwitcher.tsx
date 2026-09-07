@@ -18,23 +18,23 @@ export function ContextSwitcher() {
   if (isStillLoading) {
     return (
       <div
-        className="flex min-w-48 flex-col justify-center gap-1.5 rounded-lg border border-border-technical bg-background-subtle px-3 py-2 animate-pulse"
+        className="border-border-technical bg-background-subtle flex min-w-48 animate-pulse flex-col justify-center gap-1.5 rounded-lg border px-3 py-2"
         aria-busy="true"
         aria-label="Loading organization context"
       >
-        <div className="h-2 w-28 rounded bg-border-technical/70" />
-        <div className="h-4 w-36 rounded bg-border-technical/40" />
+        <div className="bg-border-technical/70 h-2 w-28 rounded" />
+        <div className="bg-border-technical/40 h-4 w-36 rounded" />
       </div>
     );
   }
 
   if (organizations.length === 0) {
     return (
-      <div className="flex min-w-48 flex-col gap-1 rounded-lg border border-border-technical bg-background-subtle px-3 py-2">
-        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
+      <div className="border-border-technical bg-background-subtle flex min-w-48 flex-col gap-1 rounded-lg border px-3 py-2">
+        <span className="text-text-muted text-[9px] font-bold uppercase tracking-[0.18em]">
           Active organization
         </span>
-        <span className="text-xs font-medium text-text-muted">No organization assigned</span>
+        <span className="text-text-muted text-xs font-medium">No organization assigned</span>
       </div>
     );
   }
@@ -43,18 +43,18 @@ export function ContextSwitcher() {
 
   if (organizations.length === 1) {
     return (
-      <div className="flex min-w-48 flex-col gap-1 rounded-lg border border-border-technical bg-background-subtle px-3 py-2">
-        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
+      <div className="border-border-technical bg-background-subtle flex min-w-48 flex-col gap-1 rounded-lg border px-3 py-2">
+        <span className="text-text-muted text-[9px] font-bold uppercase tracking-[0.18em]">
           Active organization · {role}
         </span>
-        <span className="text-sm font-semibold text-text-main">{organizations[0].name}</span>
+        <span className="text-text-main text-sm font-semibold">{organizations[0].name}</span>
       </div>
     );
   }
 
   return (
-    <label className="flex min-w-48 flex-col gap-1 rounded-lg border border-border-technical bg-background-subtle px-3 py-2">
-      <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
+    <label className="border-border-technical bg-background-subtle flex min-w-48 flex-col gap-1 rounded-lg border px-3 py-2">
+      <span className="text-text-muted text-[9px] font-bold uppercase tracking-[0.18em]">
         Active organization · {role}
       </span>
       <select
@@ -65,7 +65,7 @@ export function ContextSwitcher() {
           window.sessionStorage.setItem('loopdev.organizationTransition', 'pending');
           window.location.reload();
         }}
-        className="w-full cursor-pointer bg-transparent text-sm font-semibold text-text-main outline-none"
+        className="text-text-main w-full cursor-pointer bg-transparent text-sm font-semibold outline-none"
       >
         {organizations.map((organization) => (
           <option

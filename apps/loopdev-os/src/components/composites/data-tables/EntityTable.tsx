@@ -118,7 +118,7 @@ export function EntityTable({
       )}
       renderMobileRow={(row, index) => (
         <div
-          className={`flex w-full items-start gap-3 border-b border-border-subtle px-3 py-3 hover:bg-primary/5 ${selectedRowKeys?.includes(row.id) ? 'bg-primary/10' : ''}`}
+          className={`border-border-subtle hover:bg-primary/5 flex w-full items-start gap-3 border-b px-3 py-3 ${selectedRowKeys?.includes(row.id) ? 'bg-primary/10' : ''}`}
         >
           {!readOnly && (
             <Checkbox
@@ -142,8 +142,8 @@ export function EntityTable({
               if (contextPanelEnabled) onRowClick?.(row, index);
             }}
           >
-            <span className="block truncate font-medium text-text-main">{row.name}</span>
-            <span className="mt-1 block text-xs text-text-muted">
+            <span className="text-text-main block truncate font-medium">{row.name}</span>
+            <span className="text-text-muted mt-1 block text-xs">
               {row.segment} · {row.owner}
             </span>
           </Button>

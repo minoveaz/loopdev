@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bookmark, Check, FileText, Plus, RotateCcw, Sparkles, X, Zap } from 'lucide-react';
+import { Bookmark, Check, Plus, X, Zap } from 'lucide-react';
 
 export interface CimoCaptainInstructionsFieldProps {
   value: string;
@@ -102,12 +102,12 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
       {/* Unified Step Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="w-6 h-6 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-xs font-black flex items-center justify-center shrink-0">
+          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-xs font-black text-[#7FB77E]">
             {stepNumber}
           </span>
           <span className="text-sm font-black uppercase tracking-wider text-[#1F4E5F]/85">
             Consejos e indicaciones del Capitán{' '}
-            <span className="text-[#1F4E5F]/40 font-bold lowercase">(opcional)</span>
+            <span className="font-bold lowercase text-[#1F4E5F]/40">(opcional)</span>
           </span>
         </div>
 
@@ -116,10 +116,10 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
             <button
               type="button"
               onClick={() => onChange('')}
-              className="text-[11px] font-black text-rose-600 hover:text-rose-700 transition-colors flex items-center gap-1 cursor-pointer"
+              className="flex cursor-pointer items-center gap-1 text-[11px] font-black text-rose-600 transition-colors hover:text-rose-700"
               title="Borrar todo el texto"
             >
-              <X className="w-3 h-3" />
+              <X className="h-3 w-3" />
               <span>Limpiar</span>
             </button>
           )}
@@ -130,7 +130,7 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
       {/* Suggested Quick Chips with Interactive Toggle */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-black text-[#1F4E5F]/60 uppercase tracking-wider">
+          <span className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
             Ideas rápidas con 1 clic
           </span>
 
@@ -138,9 +138,9 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
             <button
               type="button"
               onClick={handleLoadTemplate}
-              className="text-[11px] font-black text-[#7FB77E] hover:text-[#6ea26d] transition-colors flex items-center gap-1 cursor-pointer"
+              className="flex cursor-pointer items-center gap-1 text-[11px] font-black text-[#7FB77E] transition-colors hover:text-[#6ea26d]"
             >
-              <Zap className="w-3 h-3 fill-[#7FB77E]" />
+              <Zap className="h-3 w-3 fill-[#7FB77E]" />
               <span>Usar mi plantilla habitual</span>
             </button>
           )}
@@ -154,16 +154,16 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
                 key={c}
                 type="button"
                 onClick={() => handleToggleChip(c)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${
                   isAdded
-                    ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] font-black shadow-2xs'
-                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                    ? 'shadow-2xs border-[#7FB77E] bg-[#7FB77E]/15 font-black text-[#1F4E5F]'
+                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                 }`}
               >
                 {isAdded ? (
-                  <Check className="w-3.5 h-3.5 text-[#7FB77E] stroke-[3]" />
+                  <Check className="h-3.5 w-3.5 stroke-[3] text-[#7FB77E]" />
                 ) : (
-                  <Plus className="w-3.5 h-3.5 text-[#7FB77E]" />
+                  <Plus className="h-3.5 w-3.5 text-[#7FB77E]" />
                 )}
                 <span>{c}</span>
               </button>
@@ -180,16 +180,16 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="Escribe recomendaciones para el Crew: punto exacto de encuentro, qué llevar, coste compartido de pistas..."
-          className="w-full p-4 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7]/50 focus:bg-white shadow-2xs resize-none leading-relaxed transition-all"
+          className="shadow-2xs w-full resize-none rounded-2xl border border-[#1F4E5F]/20 bg-[#F7F7F7]/50 p-4 text-xs font-bold leading-relaxed text-[#1F4E5F] outline-none transition-all focus:border-[#7FB77E] focus:bg-white focus:ring-2 focus:ring-[#7FB77E]/20"
         />
 
         {/* Action to Save current text as Captain Template */}
         {value.trim().length >= 10 && (
           <div className="flex items-center justify-between px-1">
-            <span className="text-[10px] text-[#1F4E5F]/50 font-medium">
+            <span className="text-[10px] font-medium text-[#1F4E5F]/50">
               {showSavedNotification ? (
-                <span className="text-[#7FB77E] font-black flex items-center gap-1 animate-in fade-in">
-                  <Check className="w-3 h-3" /> ¡Plantilla guardada para tus próximos entrenos!
+                <span className="animate-in fade-in flex items-center gap-1 font-black text-[#7FB77E]">
+                  <Check className="h-3 w-3" /> ¡Plantilla guardada para tus próximos entrenos!
                 </span>
               ) : (
                 '¿Sueles dar siempre estas mismas normas?'
@@ -199,9 +199,9 @@ export const CimoCaptainInstructionsField: React.FC<CimoCaptainInstructionsField
             <button
               type="button"
               onClick={handleSaveAsTemplate}
-              className="text-[11px] font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors flex items-center gap-1 cursor-pointer"
+              className="flex cursor-pointer items-center gap-1 text-[11px] font-black text-[#1F4E5F]/70 transition-colors hover:text-[#1F4E5F]"
             >
-              <Bookmark className="w-3 h-3 text-[#7FB77E]" />
+              <Bookmark className="h-3 w-3 text-[#7FB77E]" />
               <span>Guardar como mi plantilla habitual</span>
             </button>
           </div>

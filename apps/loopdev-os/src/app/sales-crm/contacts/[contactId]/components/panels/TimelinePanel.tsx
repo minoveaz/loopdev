@@ -12,43 +12,43 @@ interface TimelinePanelProps {
 
 export function TimelinePanel({ displayedTimeline }: TimelinePanelProps) {
   return (
-    <div className="space-y-6 flex-1 flex flex-col min-w-0 w-full">
-      <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
+    <div className="flex w-full min-w-0 flex-1 flex-col space-y-6">
+      <div className="border-border-subtle flex items-center justify-between border-b pb-3">
         <div>
-          <h3 className="text-sm font-semibold text-text-main">Activity Timeline</h3>
-          <p className="text-xs text-text-muted mt-0.5">
+          <h3 className="text-text-main text-sm font-semibold">Activity Timeline</h3>
+          <p className="text-text-muted mt-0.5 text-xs">
             Real-time audit log of interactions, system state transitions, and touchpoints.
           </p>
         </div>
-        <span className="text-xs font-medium text-text-muted">
+        <span className="text-text-muted text-xs font-medium">
           {displayedTimeline.length} events
         </span>
       </div>
 
       {displayedTimeline.length ? (
-        <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-border-subtle flex-1 min-w-0 w-full">
+        <div className="before:bg-border-subtle relative w-full min-w-0 flex-1 space-y-6 pl-6 before:absolute before:bottom-2 before:left-2.5 before:top-2 before:w-0.5">
           {displayedTimeline.map((item, index) => {
             const isSimulated = Boolean(item.isSimulated);
             const key = `${item.source.sourceId}-${index}`;
 
             return (
-              <div key={key} className="relative group min-w-0 w-full">
-                <div className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-surface-light dark:border-surface-dark bg-primary ring-4 ring-surface-light dark:ring-surface-dark group-hover:scale-125 transition-transform" />
+              <div key={key} className="group relative w-full min-w-0">
+                <div className="border-surface-light dark:border-surface-dark bg-primary ring-surface-light dark:ring-surface-dark absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 ring-4 transition-transform group-hover:scale-125" />
                 <div
-                  className={`rounded-xl p-4 transition-all min-w-0 w-full ${
+                  className={`w-full min-w-0 rounded-xl p-4 transition-all ${
                     isSimulated
                       ? 'border border-dashed border-amber-500/40 bg-amber-500/[0.03]'
-                      : 'border border-border-subtle bg-surface-muted/20 hover:border-border-subtle/80 hover:bg-surface-muted/30'
+                      : 'border-border-subtle bg-surface-muted/20 hover:border-border-subtle/80 hover:bg-surface-muted/30 border'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-xs font-semibold text-text-main capitalize truncate">
+                  <div className="mb-1 flex items-center justify-between gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="text-text-main truncate text-xs font-semibold capitalize">
                         {item.kind}
                       </span>
                       {isSimulated && <SimulatedBadge />}
                     </div>
-                    <span className="text-[11px] font-mono text-text-muted shrink-0">
+                    <span className="text-text-muted shrink-0 font-mono text-[11px]">
                       {'event' in item && item.event?.occurredAt
                         ? formatDate(item.event.occurredAt)
                         : 'task' in item && item.task?.createdAt
@@ -58,7 +58,7 @@ export function TimelinePanel({ displayedTimeline }: TimelinePanelProps) {
                             : ''}
                     </span>
                   </div>
-                  <p className="text-xs text-text-muted leading-relaxed break-words">
+                  <p className="text-text-muted break-words text-xs leading-relaxed">
                     {'event' in item && item.event?.summary
                       ? item.event.summary
                       : 'task' in item && item.task?.title
@@ -74,7 +74,7 @@ export function TimelinePanel({ displayedTimeline }: TimelinePanelProps) {
         </div>
       ) : (
         <EmptyState
-          icon={<Clock className="h-8 w-8 text-text-muted" />}
+          icon={<Clock className="text-text-muted h-8 w-8" />}
           title="No activity yet."
           description="Timeline events and customer interactions will be indexed here automatically."
         />

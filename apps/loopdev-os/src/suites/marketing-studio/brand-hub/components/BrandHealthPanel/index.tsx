@@ -16,7 +16,7 @@ export const BrandHealthPanel: React.FC<BrandHealthPanelProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 w-full rounded-xl" />)}
       </div>
     );
@@ -35,7 +35,7 @@ export const BrandHealthPanel: React.FC<BrandHealthPanelProps> = ({
         System Health
       </LpdText>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {metrics.map((metric) => (
           <MetricTile
             key={metric.id}

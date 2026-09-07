@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Badge,
@@ -128,41 +128,46 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
   const [draftDueAt, setDraftDueAt] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  async function load(signal?: AbortSignal) {
-    if (!activeOrganizationId) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
-      const nextTask = await crmTask(mode, activeOrganizationId, taskId, signal);
-      if (!nextTask) throw new Error('This task could not be found.');
-      setTask(nextTask);
-      setDraftTitle(nextTask.title);
-      setDraftDescription(nextTask.description ?? '');
-      setDraftPriority(nextTask.priority);
-      setDraftDueAt(nextTask.dueAt ? nextTask.dueAt.slice(0, 16) : '');
-      if (mode === 'real') {
-        const timelineResponse = await fetch(
-          `/api/crm/timeline?${scope}&relationType=${nextTask.relationType}&relationId=${encodeURIComponent(nextTask.relationId)}&limit=25`,
-          { signal },
+  const load = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!activeOrganizationId) return;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
+        const nextTask = await crmTask(mode, activeOrganizationId, taskId, signal);
+        if (!nextTask) throw new Error('This task could not be found.');
+        setTask(nextTask);
+        setDraftTitle(nextTask.title);
+        setDraftDescription(nextTask.description ?? '');
+        setDraftPriority(nextTask.priority);
+        setDraftDueAt(nextTask.dueAt ? nextTask.dueAt.slice(0, 16) : '');
+        if (mode === 'real') {
+          const timelineResponse = await fetch(
+            `/api/crm/timeline?${scope}&relationType=${nextTask.relationType}&relationId=${encodeURIComponent(nextTask.relationId)}&limit=25`,
+            { signal },
+          );
+          if (timelineResponse.ok)
+            setTimeline(((await timelineResponse.json()) as TimelinePage).items);
+        } else {
+          setTimeline([]);
+        }
+      } catch (requestError: unknown) {
+        if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
+        setError(
+          requestError instanceof Error ? requestError.message : 'Task could not be loaded.',
         );
-        if (timelineResponse.ok)
-          setTimeline(((await timelineResponse.json()) as TimelinePage).items);
-      } else {
-        setTimeline([]);
+      } finally {
+        if (!signal?.aborted) setIsLoading(false);
       }
-    } catch (requestError: unknown) {
-      if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-      setError(requestError instanceof Error ? requestError.message : 'Task could not be loaded.');
-    } finally {
-      if (!signal?.aborted) setIsLoading(false);
-    }
-  }
+    },
+    [activeOrganizationId, mode, taskId],
+  );
   useEffect(() => {
     const controller = new AbortController();
     void load(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, taskId, mode]);
+  }, [load]);
 
   async function changeStatus(action: 'complete' | 'reopen') {
     if (!activeOrganizationId || !task || !canManage) return;
@@ -219,7 +224,7 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
     return <div className="text-text-muted p-6 text-sm">Preparing task workspace...</div>;
   if (!hasPermission('crm.read'))
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to view Tasks.
       </div>
     );
@@ -483,7 +488,7 @@ export function TaskForm() {
     return <div className="text-text-muted p-6 text-sm">Preparing task form...</div>;
   if (!canManage)
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to create tasks.
       </div>
     );
@@ -505,7 +510,7 @@ export function TaskForm() {
         />
       }
     >
-      <div className="mx-auto max-w-3xl w-full">
+      <div className="mx-auto w-full max-w-3xl">
         <form onSubmit={submit}>
           <TechnicalSurface
             variant="surface"
@@ -596,11 +601,12 @@ export function MyDayPage() {
     'crm.read',
     'crm.manage',
   ]);
+  const canRead = hasPermission('crm.read');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    if (!activeOrganizationId || isLoadingPermissions || !hasPermission('crm.read')) return;
+    if (!activeOrganizationId || isLoadingPermissions || !canRead) return;
     const controller = new AbortController();
     crmTasks(mode, { organizationId: activeOrganizationId, limit: 100 }, controller.signal)
       .then((page) => setTasks(page.items))
@@ -614,7 +620,7 @@ export function MyDayPage() {
         if (!controller.signal.aborted) setIsLoading(false);
       });
     return () => controller.abort();
-  }, [activeOrganizationId, isLoadingPermissions, mode]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, mode]);
   const groups = useMemo(() => {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
@@ -642,7 +648,7 @@ export function MyDayPage() {
     return <div className="text-text-muted p-6 text-sm">Preparing My Day...</div>;
   if (!hasPermission('crm.read'))
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to view My Day.
       </div>
     );
@@ -762,7 +768,7 @@ function Field({
         required={required}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="border-border-subtle bg-background text-text-main focus-visible:ring-primary mt-1 min-h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2"
       />
     </label>
   );

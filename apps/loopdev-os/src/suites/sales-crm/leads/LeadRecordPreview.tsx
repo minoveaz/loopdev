@@ -115,7 +115,12 @@ export function LeadRecordPreview({
     );
     try {
       const loadedLead = await getLeadById(organizationId, lead.id, undefined, mode);
-      const context = await getLeadCustomer360(organizationId, loadedLead.contactId, undefined, mode);
+      const context = await getLeadCustomer360(
+        organizationId,
+        loadedLead.contactId,
+        undefined,
+        mode,
+      );
       setDetail({
         lead: loadedLead,
         contact: context.contact,

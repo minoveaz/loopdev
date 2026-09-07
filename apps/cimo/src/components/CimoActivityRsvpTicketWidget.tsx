@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
 import {
-  Award,
   Beer,
   Calendar,
   Check,
-  CheckCircle2,
   CloudSun,
   Coffee,
   Copy,
   ExternalLink,
-  Flame,
-  Heart,
-  MapPin,
   MessageCircle,
   Plus,
-  Share2,
   ShieldCheck,
   Sparkles,
   Star,
   Sun,
   Ticket,
   Users,
-  Wind,
   X,
   Zap,
 } from 'lucide-react';
-import { CrewAvatarGroup, type ActivityCardData } from '@loopdev/public-blocks';
+import { type ActivityCardData } from '@loopdev/public-blocks';
 
 export interface CimoActivityRsvpTicketWidgetProps {
   activity: ActivityCardData;
@@ -129,61 +122,61 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
   return (
     <>
       <aside
-        className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+        className="border-[#1F4E5F]/12 flex h-full w-full flex-col gap-3.5 overflow-y-auto rounded-3xl border bg-[#FCFDFD] p-5 text-[#1F4E5F] shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)]"
         aria-label="Panel del Entreno"
       >
         {/* 1. 🛡️ Credencial del Capitán Verificado */}
-        <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-3">
+        <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-3 rounded-2xl border bg-white p-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E] flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-[#7FB77E]">
+              <ShieldCheck className="h-3.5 w-3.5" />
               Capitán Verificado
             </span>
-            <span className="text-[9px] font-black text-amber-700 bg-amber-500/15 px-2 py-0.2 rounded-full flex items-center gap-0.5">
-              <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
+            <span className="py-0.2 flex items-center gap-0.5 rounded-full bg-amber-500/15 px-2 text-[9px] font-black text-amber-700">
+              <Star className="h-2.5 w-2.5 fill-amber-500 text-amber-500" />
               4.9 (28 liderados)
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-[#7FB77E] shrink-0 shadow-xs">
+            <div className="shadow-xs h-12 w-12 shrink-0 overflow-hidden rounded-2xl border-2 border-[#7FB77E]">
               <img
                 src={activity.captain.avatarUrl}
                 alt={activity.captain.name}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
             <div className="min-w-0 flex-1">
-              <h4 className="text-xs font-black text-[#1F4E5F] truncate">
+              <h4 className="truncate text-xs font-black text-[#1F4E5F]">
                 {activity.captain.name}
               </h4>
-              <p className="text-[10px] font-bold text-[#7FB77E] truncate">
+              <p className="truncate text-[10px] font-bold text-[#7FB77E]">
                 Capitán 5 Estrellas • Nivel Oro
               </p>
-              <p className="text-[9px] text-[#1F4E5F]/60 font-medium">100% Asistencia Puntual</p>
+              <p className="text-[9px] font-medium text-[#1F4E5F]/60">100% Asistencia Puntual</p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={() => onNavigateToProfile?.(activity.captain.id)}
-            className="w-full py-1.5 px-3 rounded-xl bg-[#EEF2F2]/60 hover:bg-[#7FB77E]/15 text-[#1F4E5F] font-bold text-[11px] transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-[#1F4E5F]/8"
+            className="border-[#1F4E5F]/8 flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl border bg-[#EEF2F2]/60 px-3 py-1.5 text-[11px] font-bold text-[#1F4E5F] transition-all hover:bg-[#7FB77E]/15"
           >
             <span>Ver Pasaporte Deportivo</span>
-            <ExternalLink className="w-3 h-3 text-[#7FB77E]" />
+            <ExternalLink className="h-3 w-3 text-[#7FB77E]" />
           </button>
         </div>
 
         {/* 2. 👥 El Crew: 8 Plazas Visibles Sin Scroll */}
-        <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2.5">
+        <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2.5 rounded-2xl border bg-white p-3.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-[#7FB77E]" />
+              <Users className="h-3.5 w-3.5 text-[#7FB77E]" />
               <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
                 Asistentes Confirmados ({activity.currentMembers.length}/{activity.maxMembers})
               </span>
             </div>
-            <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+            <span className="py-0.2 rounded-full bg-[#7FB77E]/10 px-2 text-[9px] font-black text-[#7FB77E]">
               {spotsLeft} libres
             </span>
           </div>
@@ -194,16 +187,16 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
               <div
                 key={m.id}
                 onClick={() => onNavigateToProfile?.(m.id)}
-                className="flex items-center gap-2 p-1.5 bg-[#EEF2F2]/50 hover:bg-[#7FB77E]/15 rounded-xl border border-[#1F4E5F]/5 transition-all cursor-pointer group min-w-0"
+                className="group flex min-w-0 cursor-pointer items-center gap-2 rounded-xl border border-[#1F4E5F]/5 bg-[#EEF2F2]/50 p-1.5 transition-all hover:bg-[#7FB77E]/15"
               >
-                <div className="w-7 h-7 rounded-full overflow-hidden border border-[#1F4E5F]/15 shrink-0 group-hover:border-[#7FB77E]">
-                  <img src={m.avatarUrl} alt={m.name} className="w-full h-full object-cover" />
+                <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full border border-[#1F4E5F]/15 group-hover:border-[#7FB77E]">
+                  <img src={m.avatarUrl} alt={m.name} className="h-full w-full object-cover" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <span className="text-[11px] font-black text-[#1F4E5F] truncate block group-hover:text-[#7FB77E] transition-colors leading-tight">
+                  <span className="block truncate text-[11px] font-black leading-tight text-[#1F4E5F] transition-colors group-hover:text-[#7FB77E]">
                     {m.name}
                   </span>
-                  <span className="text-[8.5px] text-[#7FB77E] font-bold uppercase block truncate">
+                  <span className="block truncate text-[8.5px] font-bold uppercase text-[#7FB77E]">
                     {m.isCaptain ? 'Capitán' : 'Confirmado'}
                   </span>
                 </div>
@@ -217,9 +210,9 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
                 type="button"
                 onClick={() => !isJoined && onJoin(activity.id)}
                 disabled={isJoined}
-                className="flex items-center justify-center gap-1 p-2 rounded-xl border border-dashed border-[#7FB77E]/40 hover:border-[#7FB77E] bg-[#7FB77E]/5 hover:bg-[#7FB77E]/15 transition-all text-[10px] font-bold text-[#7FB77E] cursor-pointer"
+                className="flex cursor-pointer items-center justify-center gap-1 rounded-xl border border-dashed border-[#7FB77E]/40 bg-[#7FB77E]/5 p-2 text-[10px] font-bold text-[#7FB77E] transition-all hover:border-[#7FB77E] hover:bg-[#7FB77E]/15"
               >
-                <Plus className="w-3 h-3 stroke-[2.5]" />
+                <Plus className="h-3 w-3 stroke-[2.5]" />
                 <span>Plaza libre</span>
               </button>
             ))}
@@ -230,34 +223,34 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
             <button
               type="button"
               onClick={() => setShowRosterModal(true)}
-              className="w-full py-1.5 px-3 rounded-xl bg-[#EEF2F2]/70 hover:bg-[#7FB77E]/20 text-[#1F4E5F] text-[10px] font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-0.5"
+              className="mt-0.5 flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-[#EEF2F2]/70 px-3 py-1.5 text-[10px] font-black text-[#1F4E5F] transition-all hover:bg-[#7FB77E]/20"
             >
               <span>Ver todos los asistentes (+{remainingCount} más)</span>
-              <ExternalLink className="w-3 h-3 text-[#7FB77E]" />
+              <ExternalLink className="h-3 w-3 text-[#7FB77E]" />
             </button>
           )}
         </div>
 
         {/* 3. 🌤️ Clima & Vibe Social */}
         <div className="grid grid-cols-2 gap-2">
-          <div className="bg-white p-2.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex items-center gap-2">
-            <div className="p-1.5 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F]">
-              <CloudSun className="w-3.5 h-3.5" />
+          <div className="border-[#1F4E5F]/8 shadow-2xs flex items-center gap-2 rounded-2xl border bg-white p-2.5">
+            <div className="rounded-xl bg-[#7FB77E]/15 p-1.5 text-[#1F4E5F]">
+              <CloudSun className="h-3.5 w-3.5" />
             </div>
             <div>
-              <span className="text-[9px] font-black uppercase text-[#1F4E5F]/60 block leading-tight">
+              <span className="block text-[9px] font-black uppercase leading-tight text-[#1F4E5F]/60">
                 Condiciones Previstas
               </span>
               <span className="text-[11px] font-black text-[#1F4E5F]">19ºC Despejado</span>
             </div>
           </div>
 
-          <div className="bg-white p-2.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex items-center gap-2">
-            <div className="p-1.5 rounded-xl bg-[#7FB77E]/15 text-[#1F4E5F]">
-              <Sparkles className="w-3.5 h-3.5 text-[#7FB77E]" />
+          <div className="border-[#1F4E5F]/8 shadow-2xs flex items-center gap-2 rounded-2xl border bg-white p-2.5">
+            <div className="rounded-xl bg-[#7FB77E]/15 p-1.5 text-[#1F4E5F]">
+              <Sparkles className="h-3.5 w-3.5 text-[#7FB77E]" />
             </div>
             <div>
-              <span className="text-[9px] font-black uppercase text-[#1F4E5F]/60 block leading-tight">
+              <span className="block text-[9px] font-black uppercase leading-tight text-[#1F4E5F]/60">
                 Vibe
               </span>
               <span className="text-[11px] font-black text-[#1F4E5F]">Conversacional</span>
@@ -266,10 +259,10 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
         </div>
 
         {/* 4. 🎟️ Ticket de Reserva & Plazas */}
-        <div className="bg-white p-4 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-3">
+        <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-3 rounded-2xl border bg-white p-4">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#7FB77E] flex items-center gap-1">
-              <Ticket className="w-3.5 h-3.5" />
+            <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-[#7FB77E]">
+              <Ticket className="h-3.5 w-3.5" />
               Convocatoria Abierta
             </span>
             <span className="text-xs font-black text-[#1F4E5F]">
@@ -285,7 +278,7 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
                 {activity.currentMembers.length} / {activity.maxMembers} ({spotsLeft} libres)
               </span>
             </div>
-            <div className="w-full h-2 bg-[#1F4E5F]/10 rounded-full overflow-hidden">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[#1F4E5F]/10">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
                   fillPercentage > 85 ? 'bg-amber-500' : 'bg-[#7FB77E]'
@@ -300,24 +293,24 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
             type="button"
             onClick={() => onJoin(activity.id)}
             disabled={isFull && !isJoined}
-            className={`w-full py-3 px-4 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 shadow-sm min-h-[42px] ${
+            className={`active:scale-98 flex min-h-[42px] w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-black shadow-sm transition-all ${
               isJoined
                 ? 'bg-[#1F4E5F] text-white hover:bg-[#163a47]'
                 : isFull
-                  ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
-                  : 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white hover:shadow-md'
+                  ? 'cursor-not-allowed bg-slate-200 text-slate-500'
+                  : 'bg-[#7FB77E] text-white hover:bg-[#6ea26d] hover:shadow-md'
             }`}
           >
             {isJoined ? (
               <>
-                <Check className="w-3.5 h-3.5 text-[#7FB77E] stroke-[3]" />
+                <Check className="h-3.5 w-3.5 stroke-[3] text-[#7FB77E]" />
                 <span>¡Estás dentro! (Cancelar plaza)</span>
               </>
             ) : isFull ? (
               <span>Plazas agotadas</span>
             ) : (
               <>
-                <Zap className="w-3.5 h-3.5 fill-current" />
+                <Zap className="h-3.5 w-3.5 fill-current" />
                 <span>Unirme al Crew</span>
               </>
             )}
@@ -329,42 +322,42 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
               <button
                 type="button"
                 onClick={handleAddToGoogleCalendar}
-                className="flex-1 py-2 px-2.5 rounded-xl bg-[#EEF2F2] hover:bg-[#7FB77E]/20 text-[#1F4E5F] font-bold text-[10px] transition-all flex items-center justify-center gap-1 cursor-pointer"
+                className="flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-xl bg-[#EEF2F2] px-2.5 py-2 text-[10px] font-bold text-[#1F4E5F] transition-all hover:bg-[#7FB77E]/20"
               >
-                <Calendar className="w-3 h-3 text-[#7FB77E]" />
+                <Calendar className="h-3 w-3 text-[#7FB77E]" />
                 <span>{calendarAdded ? '¡Guardado!' : 'Google Cal'}</span>
               </button>
               <button
                 type="button"
                 onClick={handleDownloadIcs}
-                className="flex-1 py-2 px-2.5 rounded-xl bg-[#EEF2F2] hover:bg-[#7FB77E]/20 text-[#1F4E5F] font-bold text-[10px] transition-all flex items-center justify-center gap-1 cursor-pointer"
+                className="flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-xl bg-[#EEF2F2] px-2.5 py-2 text-[10px] font-bold text-[#1F4E5F] transition-all hover:bg-[#7FB77E]/20"
               >
-                <Calendar className="w-3 h-3 text-[#7FB77E]" />
+                <Calendar className="h-3 w-3 text-[#7FB77E]" />
                 <span>Descargar .ICS</span>
               </button>
             </div>
           )}
 
           {/* [Issue #36] Compartir por WhatsApp & Copiar Enlace */}
-          <div className="pt-2 border-t border-[#1F4E5F]/8 flex gap-2">
+          <div className="border-[#1F4E5F]/8 flex gap-2 border-t pt-2">
             <button
               type="button"
               onClick={handleShareWhatsApp}
-              className="flex-1 py-2.5 px-3 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#128C7E] font-black text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-[#25D366]/30 shadow-2xs"
+              className="shadow-2xs flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-[#25D366]/30 bg-[#25D366]/15 px-3 py-2.5 text-xs font-black text-[#128C7E] transition-all hover:bg-[#25D366]/25"
             >
-              <MessageCircle className="w-3.5 h-3.5 fill-[#25D366] text-[#25D366]" />
+              <MessageCircle className="h-3.5 w-3.5 fill-[#25D366] text-[#25D366]" />
               <span>Compartir WhatsApp</span>
             </button>
             <button
               type="button"
               onClick={handleCopyLink}
               aria-label="Copiar enlace"
-              className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-[#1F4E5F] border border-[#1F4E5F]/15 font-bold text-xs transition-all flex items-center justify-center cursor-pointer"
+              className="flex cursor-pointer items-center justify-center rounded-xl border border-[#1F4E5F]/15 bg-white p-2.5 text-xs font-bold text-[#1F4E5F] transition-all hover:bg-slate-50"
             >
               {linkCopied ? (
-                <Check className="w-3.5 h-3.5 text-[#7FB77E]" />
+                <Check className="h-3.5 w-3.5 text-[#7FB77E]" />
               ) : (
-                <Copy className="w-3.5 h-3.5" />
+                <Copy className="h-3.5 w-3.5" />
               )}
             </button>
           </div>
@@ -372,27 +365,27 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
 
         {/* 5. Tercer Tiempo Post-Entreno (CIMO Social Blue) */}
         {activity.thirdHalf && activity.thirdHalf.enabled && (
-          <div className="p-3 bg-[#EEF2F2]/60 rounded-2xl border border-[#1F4E5F]/15 text-[#1F4E5F] flex items-center gap-2.5 mt-auto">
-            <div className="w-7 h-7 rounded-xl bg-[#1F4E5F]/15 text-[#1F4E5F] flex items-center justify-center shrink-0">
+          <div className="mt-auto flex items-center gap-2.5 rounded-2xl border border-[#1F4E5F]/15 bg-[#EEF2F2]/60 p-3 text-[#1F4E5F]">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#1F4E5F]/15 text-[#1F4E5F]">
               {activity.thirdHalf.type === 'beer' ? (
-                <Beer className="w-3.5 h-3.5" />
+                <Beer className="h-3.5 w-3.5" />
               ) : activity.thirdHalf.type === 'smoothie' ? (
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="h-3.5 w-3.5" />
               ) : activity.thirdHalf.type === 'picnic' ? (
-                <Sun className="w-3.5 h-3.5" />
+                <Sun className="h-3.5 w-3.5" />
               ) : (
-                <Coffee className="w-3.5 h-3.5" />
+                <Coffee className="h-3.5 w-3.5" />
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-[10px] font-black text-[#1F4E5F] uppercase block">
+              <span className="block text-[10px] font-black uppercase text-[#1F4E5F]">
                 Tercer Tiempo Confirmado
               </span>
-              <p className="text-[11px] font-black text-[#1F4E5F] truncate">
+              <p className="truncate text-[11px] font-black text-[#1F4E5F]">
                 {activity.thirdHalf.venue || 'Café / Terraza'}
               </p>
               {activity.thirdHalf.notes && (
-                <p className="text-[10px] text-[#1F4E5F]/70 font-medium truncate mt-0.2">
+                <p className="mt-0.2 truncate text-[10px] font-medium text-[#1F4E5F]/70">
                   {activity.thirdHalf.notes}
                 </p>
               )}
@@ -403,11 +396,11 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
 
       {/* 👥 Modal del Crew Completo (Si hay más de 8 deportistas) */}
       {showRosterModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-[#1F4E5F]/15 flex flex-col gap-4 text-[#1F4E5F] max-h-[85vh] overflow-hidden">
-            <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+        <div className="backdrop-blur-xs animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 duration-200">
+          <div className="flex max-h-[85vh] w-full max-w-md flex-col gap-4 overflow-hidden rounded-3xl border border-[#1F4E5F]/15 bg-white p-6 text-[#1F4E5F] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#1F4E5F]/10 pb-3">
               <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-[#7FB77E]" />
+                <Users className="h-5 w-5 text-[#7FB77E]" />
                 <h3 className="text-base font-black text-[#1F4E5F]">
                   El Crew Completo ({activity.currentMembers.length} de {activity.maxMembers})
                 </h3>
@@ -415,13 +408,13 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
               <button
                 type="button"
                 onClick={() => setShowRosterModal(false)}
-                className="p-1.5 rounded-full hover:bg-slate-100 text-[#1F4E5F]/60 hover:text-[#1F4E5F] cursor-pointer"
+                className="cursor-pointer rounded-full p-1.5 text-[#1F4E5F]/60 hover:bg-slate-100 hover:text-[#1F4E5F]"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto flex flex-col gap-2 pr-1">
+            <div className="flex flex-1 flex-col gap-2 overflow-y-auto pr-1">
               {activity.currentMembers.map((m) => (
                 <div
                   key={`modal-${m.id}`}
@@ -429,17 +422,17 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
                     setShowRosterModal(false);
                     onNavigateToProfile?.(m.id);
                   }}
-                  className="flex items-center justify-between p-3 bg-[#EEF2F2]/50 hover:bg-[#7FB77E]/15 rounded-2xl border border-[#1F4E5F]/5 transition-all cursor-pointer group"
+                  className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[#1F4E5F]/5 bg-[#EEF2F2]/50 p-3 transition-all hover:bg-[#7FB77E]/15"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#1F4E5F]/10 group-hover:border-[#7FB77E] shrink-0">
-                      <img src={m.avatarUrl} alt={m.name} className="w-full h-full object-cover" />
+                    <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-[#1F4E5F]/10 group-hover:border-[#7FB77E]">
+                      <img src={m.avatarUrl} alt={m.name} className="h-full w-full object-cover" />
                     </div>
                     <div>
-                      <span className="text-xs font-black text-[#1F4E5F] group-hover:text-[#7FB77E] transition-colors block">
+                      <span className="block text-xs font-black text-[#1F4E5F] transition-colors group-hover:text-[#7FB77E]">
                         {m.name}
                       </span>
-                      <span className="text-[10px] text-[#1F4E5F]/60 font-bold">
+                      <span className="text-[10px] font-bold text-[#1F4E5F]/60">
                         {m.isCaptain ? 'Capitán del Crew' : 'Deportista Verificado'}
                       </span>
                     </div>
@@ -447,25 +440,25 @@ export const CimoActivityRsvpTicketWidget: React.FC<CimoActivityRsvpTicketWidget
 
                   <div className="flex items-center gap-2">
                     {m.isCaptain ? (
-                      <span className="text-[10px] font-black text-[#7FB77E] bg-[#7FB77E]/15 px-2.5 py-0.5 rounded-full">
+                      <span className="rounded-full bg-[#7FB77E]/15 px-2.5 py-0.5 text-[10px] font-black text-[#7FB77E]">
                         Capitán
                       </span>
                     ) : (
-                      <span className="text-[10px] font-bold text-[#1F4E5F]/70 bg-white px-2.5 py-0.5 rounded-full border border-[#1F4E5F]/10">
+                      <span className="rounded-full border border-[#1F4E5F]/10 bg-white px-2.5 py-0.5 text-[10px] font-bold text-[#1F4E5F]/70">
                         Confirmado
                       </span>
                     )}
-                    <ExternalLink className="w-3.5 h-3.5 text-[#1F4E5F]/40 group-hover:text-[#7FB77E]" />
+                    <ExternalLink className="h-3.5 w-3.5 text-[#1F4E5F]/40 group-hover:text-[#7FB77E]" />
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="pt-3 border-t border-[#1F4E5F]/10 flex justify-end">
+            <div className="flex justify-end border-t border-[#1F4E5F]/10 pt-3">
               <button
                 type="button"
                 onClick={() => setShowRosterModal(false)}
-                className="px-5 py-2.5 rounded-xl bg-[#1F4E5F] text-white text-xs font-black hover:bg-[#163a47] transition-colors cursor-pointer"
+                className="cursor-pointer rounded-xl bg-[#1F4E5F] px-5 py-2.5 text-xs font-black text-white transition-colors hover:bg-[#163a47]"
               >
                 Cerrar
               </button>

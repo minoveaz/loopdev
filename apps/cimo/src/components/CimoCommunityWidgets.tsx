@@ -1,17 +1,12 @@
 import React from 'react';
 import {
   Calendar,
-  CheckCircle2,
   ChevronRight,
   Coffee,
-  Flame,
   MessageSquare,
   ShieldCheck,
   Sparkles,
-  Target,
   Trophy,
-  Users,
-  Zap,
 } from 'lucide-react';
 import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
 
@@ -57,30 +52,29 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
   joinedActivities,
   chats,
   onSelectActivity,
-  onOpenChatTab,
   onNavigateToProfile,
 }) => {
   return (
     <aside
       aria-label="Radar Comunitario y Entrenos Activos"
-      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      className="border-[#1F4E5F]/12 flex h-full w-full flex-col gap-3.5 overflow-y-auto rounded-3xl border bg-[#FCFDFD] p-5 text-[#1F4E5F] shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)]"
     >
       {/* 1. Tus Próximos Entrenos Confirmados */}
       <div className="flex flex-col gap-2.5">
-        <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/8">
+        <div className="border-[#1F4E5F]/8 flex items-center justify-between border-b pb-2">
           <div className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <Calendar className="h-3.5 w-3.5 text-[#7FB77E]" />
             <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
               Tus Próximos Entrenos
             </span>
           </div>
-          <span className="text-[9px] font-black bg-[#7FB77E]/15 text-[#7FB77E] px-2 py-0.2 rounded-full">
+          <span className="py-0.2 rounded-full bg-[#7FB77E]/15 px-2 text-[9px] font-black text-[#7FB77E]">
             {joinedActivities.length} activo(s)
           </span>
         </div>
 
         {joinedActivities.length === 0 ? (
-          <div className="p-3 bg-white rounded-2xl border border-[#1F4E5F]/8 text-center text-[11px] text-[#1F4E5F]/60 font-medium shadow-2xs">
+          <div className="border-[#1F4E5F]/8 shadow-2xs rounded-2xl border bg-white p-3 text-center text-[11px] font-medium text-[#1F4E5F]/60">
             No te has unido a ningún entreno todavía. Pulsa{' '}
             <strong className="text-[#1F4E5F]">"Unirme"</strong> en el feed para reservar plaza.
           </div>
@@ -92,7 +86,7 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                 <div
                   key={act.id}
                   onClick={() => onSelectActivity(act.id)}
-                  className="p-2.5 bg-white hover:bg-[#7FB77E]/5 rounded-2xl border border-[#1F4E5F]/8 hover:border-[#7FB77E]/40 transition-all cursor-pointer flex items-center justify-between gap-2 shadow-2xs"
+                  className="border-[#1F4E5F]/8 shadow-2xs flex cursor-pointer items-center justify-between gap-2 rounded-2xl border bg-white p-2.5 transition-all hover:border-[#7FB77E]/40 hover:bg-[#7FB77E]/5"
                 >
                   <div className="truncate">
                     <div className="flex items-center gap-1.5">
@@ -104,15 +98,15 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
                         {act.date} {act.time}h
                       </span>
                     </div>
-                    <p className="text-xs font-black text-[#1F4E5F] truncate mt-0.5">{act.title}</p>
+                    <p className="mt-0.5 truncate text-xs font-black text-[#1F4E5F]">{act.title}</p>
                   </div>
 
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <div className="flex items-center gap-1 text-[11px] font-black text-[#1F4E5F] bg-[#EEF2F2] px-2 py-1 rounded-xl">
-                      <MessageSquare className="w-3 h-3 text-[#7FB77E]" />
+                  <div className="flex flex-shrink-0 items-center gap-1">
+                    <div className="flex items-center gap-1 rounded-xl bg-[#EEF2F2] px-2 py-1 text-[11px] font-black text-[#1F4E5F]">
+                      <MessageSquare className="h-3 w-3 text-[#7FB77E]" />
                       <span>{msgs.length || 3}</span>
                     </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[#1F4E5F]/40" />
+                    <ChevronRight className="h-3.5 w-3.5 text-[#1F4E5F]/40" />
                   </div>
                 </div>
               );
@@ -122,10 +116,10 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
       </div>
 
       {/* 2. Desafío de la Comunidad (Gamificación Activa) */}
-      <div className="p-3.5 bg-white rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2">
+      <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2 rounded-2xl border bg-white p-3.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Trophy className="w-3.5 h-3.5 text-[#E0A96D]" />
+            <Trophy className="h-3.5 w-3.5 text-[#E0A96D]" />
             <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
               Desafío Madrid 2.000 KM
             </span>
@@ -134,9 +128,9 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
         </div>
 
         {/* Progress bar */}
-        <div className="w-full bg-[#EEF2F2] h-2 rounded-full overflow-hidden">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-[#EEF2F2]">
           <div
-            className="bg-gradient-to-r from-[#7FB77E] to-[#E0A96D] h-full rounded-full transition-all duration-1000"
+            className="h-full rounded-full bg-gradient-to-r from-[#7FB77E] to-[#E0A96D] transition-all duration-1000"
             style={{ width: '71%' }}
           />
         </div>
@@ -149,14 +143,14 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
 
       {/* 3. Capitanes Top de la Comunidad */}
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between pb-1.5 border-b border-[#1F4E5F]/8">
+        <div className="border-[#1F4E5F]/8 flex items-center justify-between border-b pb-1.5">
           <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#7FB77E]" />
             <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
               Capitanes de la Comunidad
             </span>
           </div>
-          <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+          <span className="py-0.2 rounded-full bg-[#7FB77E]/10 px-2 text-[9px] font-black text-[#7FB77E]">
             Verificados
           </span>
         </div>
@@ -166,22 +160,22 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
             <div
               key={cap.id}
               onClick={() => onNavigateToProfile && onNavigateToProfile(cap.id)}
-              className="p-2 bg-white hover:bg-[#7FB77E]/5 rounded-xl border border-[#1F4E5F]/8 flex items-center justify-between transition-all cursor-pointer shadow-2xs"
+              className="border-[#1F4E5F]/8 shadow-2xs flex cursor-pointer items-center justify-between rounded-xl border bg-white p-2 transition-all hover:bg-[#7FB77E]/5"
             >
               <div className="flex items-center gap-2">
                 <img
                   src={cap.avatarUrl}
                   alt={cap.name}
-                  className="w-7 h-7 rounded-full object-cover ring-2 ring-[#7FB77E]/60"
+                  className="h-7 w-7 rounded-full object-cover ring-2 ring-[#7FB77E]/60"
                 />
                 <div>
-                  <h4 className="text-xs font-black text-[#1F4E5F] leading-tight">{cap.name}</h4>
-                  <span className="text-[10px] text-[#1F4E5F]/60 font-bold block">{cap.sport}</span>
+                  <h4 className="text-xs font-black leading-tight text-[#1F4E5F]">{cap.name}</h4>
+                  <span className="block text-[10px] font-bold text-[#1F4E5F]/60">{cap.sport}</span>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="text-[11px] font-black text-[#1F4E5F] flex items-center gap-0.5 justify-end">
+                <span className="flex items-center justify-end gap-0.5 text-[11px] font-black text-[#1F4E5F]">
                   ★ {cap.rating}
                 </span>
                 <span className="text-[9px] font-bold text-[#7FB77E]">{cap.workouts} planes</span>
@@ -192,29 +186,29 @@ export const CimoCommunityWidgets: React.FC<CimoCommunityWidgetsProps> = ({
       </div>
 
       {/* 4. Hotspots Populares de Tercer Tiempo */}
-      <div className="p-3 bg-white rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-1.5">
+      <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-1.5 rounded-2xl border bg-white p-3">
         <div className="flex items-center gap-1.5">
-          <Coffee className="w-3.5 h-3.5 text-[#7FB77E]" />
+          <Coffee className="h-3.5 w-3.5 text-[#7FB77E]" />
           <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
             Hotspots Tercer Tiempo
           </span>
         </div>
-        <div className="flex flex-wrap gap-1.5 mt-1">
-          <span className="px-2.5 py-1 bg-[#EEF2F2]/60 rounded-lg text-[10px] font-bold text-[#1F4E5F] border border-[#1F4E5F]/6">
+        <div className="mt-1 flex flex-wrap gap-1.5">
+          <span className="border-[#1F4E5F]/6 rounded-lg border bg-[#EEF2F2]/60 px-2.5 py-1 text-[10px] font-bold text-[#1F4E5F]">
             ☕ Café Murillo (Retiro)
           </span>
-          <span className="px-2.5 py-1 bg-[#EEF2F2]/60 rounded-lg text-[10px] font-bold text-[#1F4E5F] border border-[#1F4E5F]/6">
+          <span className="border-[#1F4E5F]/6 rounded-lg border bg-[#EEF2F2]/60 px-2.5 py-1 text-[10px] font-bold text-[#1F4E5F]">
             🍻 Terraza Florida Park
           </span>
         </div>
       </div>
 
       {/* 5. Garantía & Compromiso CIMO */}
-      <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
-        <ShieldCheck className="w-4 h-4 text-[#7FB77E] flex-shrink-0 mt-0.5" />
+      <div className="mt-auto flex items-start gap-2.5 rounded-2xl border border-[#7FB77E]/20 bg-[#EEF2F2]/40 p-3 text-[#1F4E5F]">
+        <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#7FB77E]" />
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Garantía & Compromiso CIMO</h4>
-          <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
+          <p className="mt-0.5 text-[10px] font-medium leading-relaxed text-[#1F4E5F]/75">
             Planes 100% deportivos en microgrupos de 4 a 8 personas con ritmos homogéneos y
             confirmación previa.
           </p>

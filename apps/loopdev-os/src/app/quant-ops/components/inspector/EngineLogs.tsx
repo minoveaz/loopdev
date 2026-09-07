@@ -14,24 +14,24 @@ export const EngineLogs: React.FC<EngineLogsProps> = ({ bot }) => {
 
   return (
     <section className="flex flex-col gap-4">
-      <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em] text-text-muted opacity-40 px-1">Logic_Decision_Logs</LpdText>
-      <div className="bg-slate-950 rounded-2xl p-6 font-mono text-[11px] border border-border-technical/30 shadow-inner">
+      <LpdText size="nano" weight="black" className="text-text-muted px-1 uppercase tracking-[0.2em] opacity-40">Logic_Decision_Logs</LpdText>
+      <div className="border-border-technical/30 rounded-2xl border bg-slate-950 p-6 font-mono text-[11px] shadow-inner">
         <div className="flex flex-col gap-4">
           <div className="flex gap-3">
-            <span className="text-blue-500 font-black opacity-60">[INFO]</span>
+            <span className="font-black text-blue-500 opacity-60">[INFO]</span>
             <p className="text-text-main leading-relaxed">
               {isBullish 
                 ? "Macro trend alignment verified. Scanning liquidity clusters." 
                 : "Macro regime transition detected. All signal generators restricted."}
             </p>
           </div>
-          <div className="flex gap-3 border-t border-white/5 pt-4 items-center">
+          <div className="flex items-center gap-3 border-t border-white/5 pt-4">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-success opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="bg-status-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
             </span>
-            <span className="text-emerald-500 font-black opacity-60">[LIVE]</span>
-            <p className="text-white font-bold">$ {formatPrice(bot.currentPrice)}</p>
+            <span className="font-black text-emerald-500 opacity-60">[LIVE]</span>
+            <p className="font-bold text-white">$ {formatPrice(bot.currentPrice)}</p>
           </div>
         </div>
       </div>

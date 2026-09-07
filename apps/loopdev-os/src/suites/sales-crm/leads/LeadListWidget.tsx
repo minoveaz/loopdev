@@ -255,7 +255,7 @@ export function LeadListWidget() {
             canManage ? (
               <Link
                 href="/sales-crm/leads/new"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
+                className="bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
               >
                 <Plus size={14} strokeWidth={2} />
                 <span>Crear lead</span>

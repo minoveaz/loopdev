@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import {
   Activity,
-  Award,
   Beer,
   Calendar,
   Check,
-  CheckCircle2,
   Clock,
   Coffee,
-  Compass,
-  ExternalLink,
   Flame,
   HelpCircle,
   Layers,
@@ -19,12 +15,9 @@ import {
   Plus,
   Send,
   Sparkles,
-  Star,
   Sun,
   Target,
-  Trophy,
   Users,
-  Utensils,
   X,
   Zap,
 } from 'lucide-react';
@@ -62,14 +55,12 @@ export function getThirdHalfVectorIcon(type?: string, className = 'w-3.5 h-3.5')
 }
 
 export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
-  onBackToExplore,
   onNavigateToProfile,
   onNavigateToSquad,
   onOpenChat,
-  onCreateWorkout,
 }) => {
   const [squads, setSquads] = useState<SportsSquad[]>(INITIAL_SPORTS_SQUADS);
-  const [connections, setConnections] = useState<CrewConnection[]>(INITIAL_CREW_CONNECTIONS);
+  const [connections] = useState<CrewConnection[]>(INITIAL_CREW_CONNECTIONS);
   const [selectedSportFilter, setSelectedSportFilter] = useState<
     'all' | 'running' | 'padel' | 'hiking'
   >('all');
@@ -155,31 +146,31 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
   });
 
   return (
-    <div className="w-full flex flex-col gap-6 animate-in fade-in duration-150 text-[#1F4E5F] pb-16">
+    <div className="animate-in fade-in flex w-full flex-col gap-6 pb-16 text-[#1F4E5F] duration-150">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#1F4E5F] text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 animate-in slide-in-from-bottom-4 duration-150 border border-[#7FB77E]/40">
-          <Sparkles className="w-4 h-4 text-[#7FB77E] shrink-0" />
+        <div className="animate-in slide-in-from-bottom-4 fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-2xl border border-[#7FB77E]/40 bg-[#1F4E5F] px-4 py-3 text-white shadow-xl duration-150">
+          <Sparkles className="h-4 w-4 shrink-0 text-[#7FB77E]" />
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>
       )}
 
       {/* 🌟 1. Compact Header Bar (Clean Professional Design System) */}
-      <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-5 sm:p-6 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="shadow-2xs flex flex-col items-start justify-between gap-4 rounded-3xl border border-[#1F4E5F]/10 bg-white p-5 sm:flex-row sm:items-center sm:p-6">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
-            <Users className="w-5 h-5" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#7FB77E]/10 text-[#7FB77E]">
+            <Users className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-black text-[#1F4E5F] tracking-tight">
+              <h1 className="text-xl font-black tracking-tight text-[#1F4E5F] sm:text-2xl">
                 Mi Red de Crew
               </h1>
-              <span className="text-xs font-extrabold bg-[#7FB77E]/10 text-[#7FB77E] px-2.5 py-0.5 rounded-full border border-[#7FB77E]/20">
+              <span className="rounded-full border border-[#7FB77E]/20 bg-[#7FB77E]/10 px-2.5 py-0.5 text-xs font-extrabold text-[#7FB77E]">
                 {squads.length} squads • {connections.length} compañeros
               </span>
             </div>
-            <p className="text-xs text-[#1F4E5F]/65 font-medium mt-0.5">
+            <p className="mt-0.5 text-xs font-medium text-[#1F4E5F]/65">
               Micro-equipos habituales y círculo de entrenamiento para coordinar sesiones y tercer
               tiempo.
             </p>
@@ -187,53 +178,53 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
         </div>
 
         {/* Sport Filter Tabs with Vector Icons */}
-        <div className="flex items-center gap-1.5 p-1 bg-[#F8FAFC] rounded-2xl border border-slate-200/80 shrink-0">
+        <div className="flex shrink-0 items-center gap-1.5 rounded-2xl border border-slate-200/80 bg-[#F8FAFC] p-1">
           <button
             type="button"
             onClick={() => setSelectedSportFilter('all')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all ${
               selectedSportFilter === 'all'
-                ? 'bg-[#1F4E5F] text-white shadow-2xs'
-                : 'text-slate-600 hover:text-[#1F4E5F] hover:bg-slate-200/50'
+                ? 'shadow-2xs bg-[#1F4E5F] text-white'
+                : 'text-slate-600 hover:bg-slate-200/50 hover:text-[#1F4E5F]'
             }`}
           >
-            <Layers className="w-3.5 h-3.5" />
+            <Layers className="h-3.5 w-3.5" />
             <span>Todos</span>
           </button>
           <button
             type="button"
             onClick={() => setSelectedSportFilter('running')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all ${
               selectedSportFilter === 'running'
-                ? 'bg-[#1F4E5F] text-white shadow-2xs'
-                : 'text-slate-600 hover:text-[#1F4E5F] hover:bg-slate-200/50'
+                ? 'shadow-2xs bg-[#1F4E5F] text-white'
+                : 'text-slate-600 hover:bg-slate-200/50 hover:text-[#1F4E5F]'
             }`}
           >
-            <Activity className="w-3.5 h-3.5 text-emerald-500" />
+            <Activity className="h-3.5 w-3.5 text-emerald-500" />
             <span>Running</span>
           </button>
           <button
             type="button"
             onClick={() => setSelectedSportFilter('padel')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all ${
               selectedSportFilter === 'padel'
-                ? 'bg-[#1F4E5F] text-white shadow-2xs'
-                : 'text-slate-600 hover:text-[#1F4E5F] hover:bg-slate-200/50'
+                ? 'shadow-2xs bg-[#1F4E5F] text-white'
+                : 'text-slate-600 hover:bg-slate-200/50 hover:text-[#1F4E5F]'
             }`}
           >
-            <Target className="w-3.5 h-3.5 text-cyan-500" />
+            <Target className="h-3.5 w-3.5 text-cyan-500" />
             <span>Pádel</span>
           </button>
           <button
             type="button"
             onClick={() => setSelectedSportFilter('hiking')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all ${
               selectedSportFilter === 'hiking'
-                ? 'bg-[#1F4E5F] text-white shadow-2xs'
-                : 'text-slate-600 hover:text-[#1F4E5F] hover:bg-slate-200/50'
+                ? 'shadow-2xs bg-[#1F4E5F] text-white'
+                : 'text-slate-600 hover:bg-slate-200/50 hover:text-[#1F4E5F]'
             }`}
           >
-            <Mountain className="w-3.5 h-3.5 text-amber-500" />
+            <Mountain className="h-3.5 w-3.5 text-amber-500" />
             <span>Hiking</span>
           </button>
         </div>
@@ -243,7 +234,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
       <div className="flex flex-col gap-3.5">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#7FB77E]" />
+            <span className="h-2 w-2 rounded-full bg-[#7FB77E]" />
             <h2 className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/75">
               Tus Squads Habituales
             </h2>
@@ -251,9 +242,9 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
           <button
             type="button"
             onClick={() => handleOpenPropose('squad', 'Nuevo Squad', 'running')}
-            className="text-xs font-bold text-[#7FB77E] hover:underline flex items-center gap-1 cursor-pointer"
+            className="flex cursor-pointer items-center gap-1 text-xs font-bold text-[#7FB77E] hover:underline"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="h-3.5 w-3.5" />
             <span>Crear nuevo Squad</span>
           </button>
         </div>
@@ -275,42 +266,42 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
             return (
               <div
                 key={sq.id}
-                className={`bg-white border border-[#1F4E5F]/15 rounded-3xl p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all flex flex-col gap-4.5 ${
+                className={`shadow-xs gap-4.5 flex flex-col rounded-3xl border border-[#1F4E5F]/15 bg-white p-5 transition-all hover:shadow-sm sm:p-6 ${
                   isDeclined ? 'opacity-70' : ''
                 }`}
               >
                 {/* 1. Header Row (Squad Identity & Meta) */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-[#1F4E5F]/8">
+                <div className="border-[#1F4E5F]/8 flex flex-col justify-between gap-3 border-b pb-3.5 sm:flex-row sm:items-center">
                   <div className="flex items-center gap-3.5">
                     <div
-                      className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border ${sportStyle}`}
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border ${sportStyle}`}
                     >
                       {getSportVectorIcon(sq.sport, 'w-5 h-5')}
                     </div>
                     <div className="flex flex-col">
-                      <div className="flex items-center gap-2 flex-wrap">
+                      <div className="flex flex-wrap items-center gap-2">
                         <h3
                           onClick={() => onNavigateToSquad?.(sq.slug || sq.id)}
-                          className="text-base sm:text-lg font-black text-[#1F4E5F] hover:text-[#7FB77E] transition-colors cursor-pointer"
+                          className="cursor-pointer text-base font-black text-[#1F4E5F] transition-colors hover:text-[#7FB77E] sm:text-lg"
                         >
                           {sq.name}
                         </h3>
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#1F4E5F]/5 text-[#1F4E5F] border border-[#1F4E5F]/10">
+                        <span className="rounded-full border border-[#1F4E5F]/10 bg-[#1F4E5F]/5 px-2.5 py-0.5 text-[10px] font-bold text-[#1F4E5F]">
                           {sq.typicalPaceOrLevel}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#1F4E5F]/60 font-medium mt-0.5">
-                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      <div className="mt-0.5 flex items-center gap-2 text-xs font-medium text-[#1F4E5F]/60">
+                        <Clock className="h-3.5 w-3.5 text-slate-400" />
                         <span>{sq.recurringSchedule}</span>
                         <span>•</span>
-                        <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
+                        <MapPin className="h-3.5 w-3.5 text-[#7FB77E]" />
                         <span>{sq.location}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Actions & Members */}
-                  <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0">
+                  <div className="flex shrink-0 items-center justify-between gap-2.5 sm:justify-end">
                     <div className="flex items-center -space-x-2">
                       {sq.members.map((mem) => (
                         <img
@@ -319,7 +310,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                           alt={mem.name}
                           title={mem.name}
                           onClick={() => onNavigateToProfile?.(mem.id)}
-                          className="w-7 h-7 rounded-full object-cover ring-2 ring-white shadow-2xs cursor-pointer hover:scale-110 transition-transform"
+                          className="shadow-2xs h-7 w-7 cursor-pointer rounded-full object-cover ring-2 ring-white transition-transform hover:scale-110"
                         />
                       ))}
                     </div>
@@ -327,27 +318,27 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     <button
                       type="button"
                       onClick={() => onNavigateToSquad?.(sq.slug || sq.id)}
-                      className="px-3 py-1.5 rounded-xl bg-[#7FB77E]/15 hover:bg-[#7FB77E] text-[#1F4E5F] text-xs font-bold transition-all cursor-pointer flex items-center gap-1 border border-[#7FB77E]/30"
+                      className="flex cursor-pointer items-center gap-1 rounded-xl border border-[#7FB77E]/30 bg-[#7FB77E]/15 px-3 py-1.5 text-xs font-bold text-[#1F4E5F] transition-all hover:bg-[#7FB77E]"
                     >
-                      <Users className="w-3.5 h-3.5" />
+                      <Users className="h-3.5 w-3.5" />
                       <span>Hub</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => onOpenChat?.(sq.id)}
-                      className="px-3 py-1.5 rounded-xl bg-[#F8FAFC] hover:bg-[#1F4E5F] text-[#1F4E5F] hover:text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border border-slate-200"
+                      className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-1.5 text-xs font-bold text-[#1F4E5F] transition-all hover:bg-[#1F4E5F] hover:text-white"
                     >
-                      <MessageSquare className="w-3.5 h-3.5" />
+                      <MessageSquare className="h-3.5 w-3.5" />
                       <span>Chat</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => handleOpenPropose('squad', sq.name, sq.sport)}
-                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-[#7FB77E] hover:bg-[#7FB77E]/10 border border-[#7FB77E]/30 transition-all cursor-pointer flex items-center gap-1"
+                      className="flex cursor-pointer items-center gap-1 rounded-xl border border-[#7FB77E]/30 px-3 py-1.5 text-xs font-bold text-[#7FB77E] transition-all hover:bg-[#7FB77E]/10"
                     >
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="h-3.5 w-3.5" />
                       <span>Convocatoria</span>
                     </button>
                   </div>
@@ -357,29 +348,29 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                 {callout ? (
                   <div className="flex flex-col gap-3">
                     {/* Hero Convocatoria Date & Title */}
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-800 border border-emerald-500/20 flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-emerald-600" />
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className="flex items-center gap-1 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-800">
+                        <Calendar className="h-3 w-3 text-emerald-600" />
                         <span>Próximo Entreno</span>
                       </span>
-                      <span className="text-xs sm:text-sm font-extrabold text-[#1F4E5F]">
+                      <span className="text-xs font-extrabold text-[#1F4E5F] sm:text-sm">
                         {callout.date}, {callout.time} —{' '}
                         <span className="font-bold text-[#1F4E5F]/85">{callout.title}</span>
                       </span>
                     </div>
 
                     {/* Split-Cards (2 Columns): Punto de Encuentro vs. Tercer Tiempo */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {/* Left: Meeting Point */}
-                      <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-slate-200/60 text-[#1F4E5F] flex items-center justify-center shrink-0">
-                          <MapPin className="w-4 h-4 text-[#7FB77E]" />
+                      <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-[#F8FAFC] p-3.5">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-200/60 text-[#1F4E5F]">
+                          <MapPin className="h-4 w-4 text-[#7FB77E]" />
                         </div>
                         <div className="truncate">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
+                          <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">
                             Punto de Encuentro
                           </span>
-                          <span className="text-xs font-extrabold text-[#1F4E5F] truncate block">
+                          <span className="block truncate text-xs font-extrabold text-[#1F4E5F]">
                             {callout.meetingPoint}
                           </span>
                         </div>
@@ -387,35 +378,35 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
 
                       {/* Right: Tercer Tiempo Social (Distinct Warm Amber Identity) */}
                       {callout.hasThirdHalf && callout.thirdHalfVenue ? (
-                        <div className="p-3.5 rounded-2xl bg-[#FFFBEB] border border-[#FDE68A] flex items-center gap-3 shadow-2xs">
-                          <div className="w-8 h-8 rounded-xl bg-amber-100/80 text-amber-800 flex items-center justify-center shrink-0">
+                        <div className="shadow-2xs flex items-center gap-3 rounded-2xl border border-[#FDE68A] bg-[#FFFBEB] p-3.5">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-100/80 text-amber-800">
                             {getThirdHalfVectorIcon(
                               callout.thirdHalfType,
                               'w-4 h-4 text-amber-700',
                             )}
                           </div>
                           <div className="truncate">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 block">
+                            <span className="block text-[10px] font-black uppercase tracking-wider text-amber-800">
                               {callout.thirdHalfType === 'beer'
                                 ? 'Caña & Tapeo Post-Entreno'
                                 : callout.thirdHalfType === 'picnic'
                                   ? 'Picnic al Aire Libre'
                                   : 'Café & Desayuno Post-Entreno'}
                             </span>
-                            <span className="text-xs font-extrabold text-[#78350F] truncate block">
+                            <span className="block truncate text-xs font-extrabold text-[#78350F]">
                               {callout.thirdHalfVenue}
                             </span>
                           </div>
                         </div>
                       ) : (
-                        <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-slate-200 flex items-center gap-3 text-slate-500 text-xs">
+                        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-[#F8FAFC] p-3.5 text-xs text-slate-500">
                           <span>Plan 100% deportivo (sin tercer tiempo agendado)</span>
                         </div>
                       )}
                     </div>
 
                     {/* 3. Bottom Attendance Bar with Segmented Control */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1.5">
+                    <div className="flex flex-col justify-between gap-3 pt-1.5 sm:flex-row sm:items-center">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-[#1F4E5F]/75">
                           Asistencia ({callout.attendingMembers.length}/{callout.maxCapacity}{' '}
@@ -428,64 +419,64 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                               src={m.avatarUrl}
                               alt={m.name}
                               title={m.name}
-                              className="w-5 h-5 rounded-full object-cover ring-2 ring-white"
+                              className="h-5 w-5 rounded-full object-cover ring-2 ring-white"
                             />
                           ))}
                         </div>
                       </div>
 
                       {/* Tactile Segmented Control with Vector Icons */}
-                      <div className="flex items-center p-1 bg-[#F1F5F9] rounded-2xl border border-slate-200/80 shrink-0 self-start sm:self-auto">
+                      <div className="flex shrink-0 items-center self-start rounded-2xl border border-slate-200/80 bg-[#F1F5F9] p-1 sm:self-auto">
                         <button
                           type="button"
                           onClick={() => handleRsvpChange(sq.id, 'going')}
-                          className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                          className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-black transition-all ${
                             myRsvp === 'going'
-                              ? 'bg-[#7FB77E] text-white shadow-xs scale-102'
+                              ? 'shadow-xs scale-102 bg-[#7FB77E] text-white'
                               : 'text-slate-600 hover:text-[#1F4E5F]'
                           }`}
                         >
-                          <Check className="w-3.5 h-3.5 stroke-[3]" />
+                          <Check className="h-3.5 w-3.5 stroke-[3]" />
                           <span>Voy</span>
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleRsvpChange(sq.id, 'maybe')}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                          className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
                             myRsvp === 'maybe'
-                              ? 'bg-amber-500 text-white shadow-xs scale-102'
+                              ? 'shadow-xs scale-102 bg-amber-500 text-white'
                               : 'text-slate-600 hover:text-[#1F4E5F]'
                           }`}
                         >
-                          <HelpCircle className="w-3.5 h-3.5" />
+                          <HelpCircle className="h-3.5 w-3.5" />
                           <span>Duda</span>
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleRsvpChange(sq.id, 'declined')}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                          className={`flex cursor-pointer items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
                             myRsvp === 'declined'
-                              ? 'bg-rose-500 text-white shadow-xs scale-102'
+                              ? 'shadow-xs scale-102 bg-rose-500 text-white'
                               : 'text-slate-600 hover:text-[#1F4E5F]'
                           }`}
                         >
-                          <X className="w-3.5 h-3.5" />
+                          <X className="h-3.5 w-3.5" />
                           <span>No</span>
                         </button>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 bg-[#F8FAFC] rounded-2xl border border-dashed border-slate-300 flex items-center justify-between">
-                    <span className="text-xs text-slate-500 font-medium">
+                  <div className="flex items-center justify-between rounded-2xl border border-dashed border-slate-300 bg-[#F8FAFC] p-4">
+                    <span className="text-xs font-medium text-slate-500">
                       Sin convocatoria activa para los próximos días.
                     </span>
                     <button
                       type="button"
                       onClick={() => handleOpenPropose('squad', sq.name, sq.sport)}
-                      className="px-3 py-1.5 rounded-xl bg-[#7FB77E] text-white text-xs font-black cursor-pointer hover:bg-[#6ea26d]"
+                      className="cursor-pointer rounded-xl bg-[#7FB77E] px-3 py-1.5 text-xs font-black text-white hover:bg-[#6ea26d]"
                     >
                       + Proponer Entreno al Squad
                     </button>
@@ -501,38 +492,38 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
       <div className="flex flex-col gap-3.5 pt-2">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#1F4E5F]" />
+            <span className="h-2 w-2 rounded-full bg-[#1F4E5F]" />
             <h2 className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/75">
               Tu Círculo Íntimo de Compañeros
             </h2>
           </div>
-          <span className="text-xs text-[#1F4E5F]/50 font-bold">
+          <span className="text-xs font-bold text-[#1F4E5F]/50">
             {filteredConnections.length} deportistas
           </span>
         </div>
 
         {/* Clean, spacious rows */}
-        <div className="bg-white border border-[#1F4E5F]/12 rounded-3xl divide-y divide-[#1F4E5F]/8 shadow-2xs overflow-hidden">
+        <div className="border-[#1F4E5F]/12 divide-[#1F4E5F]/8 shadow-2xs divide-y overflow-hidden rounded-3xl border bg-white">
           {filteredConnections.map((conn) => {
             const primarySport = conn.sports[0];
 
             return (
               <div
                 key={conn.id}
-                className="p-4 sm:p-4.5 hover:bg-[#F8FAFC] transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5"
+                className="sm:p-4.5 flex flex-col items-start justify-between gap-3.5 p-4 transition-colors hover:bg-[#F8FAFC] sm:flex-row sm:items-center"
               >
                 {/* Left: Avatar + Identity + Mutual history */}
-                <div className="flex items-center gap-3.5 min-w-0">
+                <div className="flex min-w-0 items-center gap-3.5">
                   <div className="relative shrink-0">
                     <img
                       src={conn.athlete.avatarUrl}
                       alt={conn.athlete.name}
-                      className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow-2xs"
+                      className="shadow-2xs h-11 w-11 rounded-full object-cover ring-2 ring-white"
                     />
                     {conn.athlete.isCaptain && (
                       <span
                         title="Capitán CIMO"
-                        className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#7FB77E] text-white flex items-center justify-center text-[8px] font-black border border-white"
+                        className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-[#7FB77E] text-[8px] font-black text-white"
                       >
                         ★
                       </span>
@@ -542,19 +533,19 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                   <div className="truncate">
                     <div className="flex items-center gap-2">
                       <h3
-                        className="text-sm font-black text-[#1F4E5F] hover:text-[#7FB77E] transition-colors cursor-pointer truncate"
+                        className="cursor-pointer truncate text-sm font-black text-[#1F4E5F] transition-colors hover:text-[#7FB77E]"
                         onClick={() => onNavigateToProfile?.(conn.athlete.id)}
                       >
                         {conn.athlete.name}
                       </h3>
-                      <span className="text-[11px] text-[#1F4E5F]/50 font-bold">
+                      <span className="text-[11px] font-bold text-[#1F4E5F]/50">
                         • {conn.athlete.zone}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 mt-0.5 text-xs text-[#1F4E5F]/65 font-medium">
-                      <span className="font-extrabold text-[#7FB77E] flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#7FB77E]" />
+                    <div className="mt-0.5 flex items-center gap-2 text-xs font-medium text-[#1F4E5F]/65">
+                      <span className="flex items-center gap-1.5 font-extrabold text-[#7FB77E]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#7FB77E]" />
                         <span>{conn.stats.sharedWorkoutsCount} entrenos en común</span>
                       </span>
                       <span>•</span>
@@ -566,9 +557,9 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                 </div>
 
                 {/* Right: Consolidated Metric Chip & Action Buttons */}
-                <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end shrink-0">
+                <div className="flex w-full shrink-0 items-center justify-between gap-3 sm:w-auto sm:justify-end">
                   {/* Consolidated Sports & 3er T Chip with Vector Icons */}
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-[#F8FAFC] rounded-xl border border-slate-200 text-xs font-bold text-[#1F4E5F]/85">
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/85">
                     <span className="text-emerald-600">
                       {getSportVectorIcon(primarySport?.sport ?? 'running', 'w-3.5 h-3.5')}
                     </span>
@@ -590,19 +581,19 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                           primarySport?.sport ?? 'running',
                         )
                       }
-                      className="px-3 py-1.5 rounded-xl border border-[#7FB77E] text-[#7FB77E] hover:bg-[#7FB77E] hover:text-white text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 active:scale-98"
+                      className="active:scale-98 flex cursor-pointer items-center gap-1.5 rounded-xl border border-[#7FB77E] px-3 py-1.5 text-xs font-black text-[#7FB77E] transition-all hover:bg-[#7FB77E] hover:text-white"
                     >
-                      <Zap className="w-3.5 h-3.5" />
+                      <Zap className="h-3.5 w-3.5" />
                       <span>Proponer Entreno</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => onOpenChat?.(conn.athlete.id)}
-                      className="p-2 rounded-xl bg-[#F1F5F9] hover:bg-[#1F4E5F] text-[#1F4E5F] hover:text-white transition-colors cursor-pointer"
+                      className="cursor-pointer rounded-xl bg-[#F1F5F9] p-2 text-[#1F4E5F] transition-colors hover:bg-[#1F4E5F] hover:text-white"
                       title="Abrir conversación"
                     >
-                      <MessageSquare className="w-4 h-4" />
+                      <MessageSquare className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
@@ -615,23 +606,23 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
       {/* ⚡ MINIMAL MODAL: PROPOSE QUICK MEETUP */}
       {isProposeModalOpen && proposeTarget && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1F4E5F]/60 backdrop-blur-xs animate-in fade-in duration-150"
+          className="backdrop-blur-xs animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-[#1F4E5F]/60 p-4 duration-150"
           onClick={() => setIsProposeModalOpen(false)}
         >
           <div
-            className="bg-white border border-[#1F4E5F]/15 rounded-3xl w-full max-w-md shadow-2xl p-6 flex flex-col gap-4 relative animate-in zoom-in-95 duration-150 text-[#1F4E5F]"
+            className="animate-in zoom-in-95 relative flex w-full max-w-md flex-col gap-4 rounded-3xl border border-[#1F4E5F]/15 bg-white p-6 text-[#1F4E5F] shadow-2xl duration-150"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[#1F4E5F]/10">
+            <div className="flex items-center justify-between border-b border-[#1F4E5F]/10 pb-2">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
-                  <Zap className="w-4 h-4" />
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#7FB77E]/10 text-[#7FB77E]">
+                  <Zap className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm sm:text-base font-black text-[#1F4E5F]">
+                  <h3 className="text-sm font-black text-[#1F4E5F] sm:text-base">
                     Proponer Quedada Rápida
                   </h3>
-                  <p className="text-[11px] text-[#1F4E5F]/60 font-medium flex items-center gap-1 mt-0.5">
+                  <p className="mt-0.5 flex items-center gap-1 text-[11px] font-medium text-[#1F4E5F]/60">
                     <span>Para:</span>
                     <span className="font-bold text-[#1F4E5F]">{proposeTarget.name}</span>
                     <span>•</span>
@@ -643,9 +634,9 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsProposeModalOpen(false)}
-                className="p-1 rounded-full text-[#1F4E5F]/40 hover:text-[#1F4E5F] hover:bg-[#F7F7F7] cursor-pointer"
+                className="cursor-pointer rounded-full p-1 text-[#1F4E5F]/40 hover:bg-[#F7F7F7] hover:text-[#1F4E5F]"
               >
-                <X className="w-4 h-4" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
@@ -658,7 +649,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                   <select
                     value={proposeDay}
                     onChange={(e) => setProposeDay(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#F7F7F7] rounded-xl border border-[#1F4E5F]/15 text-xs font-bold text-[#1F4E5F] outline-none"
+                    className="w-full rounded-xl border border-[#1F4E5F]/15 bg-[#F7F7F7] px-3 py-2 text-xs font-bold text-[#1F4E5F] outline-none"
                   >
                     <option value="Hoy">Hoy</option>
                     <option value="Mañana">Mañana</option>
@@ -677,7 +668,7 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                     type="time"
                     value={proposeTime}
                     onChange={(e) => setProposeTime(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#F7F7F7] rounded-xl border border-[#1F4E5F]/15 text-xs font-bold text-[#1F4E5F] outline-none font-mono"
+                    className="w-full rounded-xl border border-[#1F4E5F]/15 bg-[#F7F7F7] px-3 py-2 font-mono text-xs font-bold text-[#1F4E5F] outline-none"
                   />
                 </div>
               </div>
@@ -691,23 +682,23 @@ export const CimoCrewNetworkView: React.FC<CimoCrewNetworkViewProps> = ({
                   value={proposeNote}
                   onChange={(e) => setProposeNote(e.target.value)}
                   placeholder="Ej: ¿Rodaje suave 8K y luego café?"
-                  className="w-full px-3 py-2 bg-[#F7F7F7] focus:bg-white rounded-xl border border-[#1F4E5F]/15 text-xs font-medium text-[#1F4E5F] outline-none"
+                  className="w-full rounded-xl border border-[#1F4E5F]/15 bg-[#F7F7F7] px-3 py-2 text-xs font-medium text-[#1F4E5F] outline-none focus:bg-white"
                 />
               </div>
 
-              <div className="pt-2 flex items-center justify-end gap-2 border-t border-[#1F4E5F]/10">
+              <div className="flex items-center justify-end gap-2 border-t border-[#1F4E5F]/10 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsProposeModalOpen(false)}
-                  className="px-3.5 py-1.5 text-xs font-bold text-[#1F4E5F]/60 hover:text-[#1F4E5F] cursor-pointer"
+                  className="cursor-pointer px-3.5 py-1.5 text-xs font-bold text-[#1F4E5F]/60 hover:text-[#1F4E5F]"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#7FB77E] hover:bg-[#6ea26d] text-white text-xs font-black flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer active:scale-98"
+                  className="shadow-2xs active:scale-98 flex cursor-pointer items-center gap-1.5 rounded-xl bg-[#7FB77E] px-4 py-2 text-xs font-black text-white transition-all hover:bg-[#6ea26d]"
                 >
-                  <Send className="w-3.5 h-3.5" />
+                  <Send className="h-3.5 w-3.5" />
                   <span>Enviar Convocatoria</span>
                 </button>
               </div>

@@ -27,17 +27,8 @@ const contactFormSchema = z
       .trim()
       .min(1, 'First name is required.')
       .max(120, 'First name must be 120 characters or fewer.'),
-    lastName: z
-      .string()
-      .trim()
-      .max(120, 'Last name must be 120 characters or fewer.')
-      .optional(),
-    email: z
-      .string()
-      .trim()
-      .email('Enter a valid email address.')
-      .optional()
-      .or(z.literal('')),
+    lastName: z.string().trim().max(120, 'Last name must be 120 characters or fewer.').optional(),
+    email: z.string().trim().email('Enter a valid email address.').optional().or(z.literal('')),
     phone: z
       .string()
       .trim()
@@ -270,13 +261,18 @@ export function ContactFormDialog({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="primary" form="create-contact-form">Create contact</Button>
+          <Button type="submit" variant="primary" form="create-contact-form">
+            Create contact
+          </Button>
         </FormActions>
       }
     >
       <Form id="create-contact-form" form={form} onSubmit={submit} className="gap-5">
         {form.formState.errors.root?.message && (
-          <p role="alert" className="rounded-md border border-danger/30 bg-danger/10 p-3 text-sm text-danger">
+          <p
+            role="alert"
+            className="border-danger/30 bg-danger/10 text-danger rounded-md border p-3 text-sm"
+          >
             {form.formState.errors.root.message}
           </p>
         )}

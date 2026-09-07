@@ -7,10 +7,12 @@ function retiredWebhookResponse() {
   );
 }
 
-export async function GET(_request: Request) {
+export async function GET(request: Request) {
+  void request;
   return retiredWebhookResponse();
 }
 
-export async function POST(_request: Request) {
+export async function POST(request: Request) {
+  void request;
   return retiredWebhookResponse();
 }

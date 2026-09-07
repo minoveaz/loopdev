@@ -26,7 +26,6 @@ export interface BrandToolbarProps {
 export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
   const { 
     mode, 
-    brandStatus, 
     isReadOnly, 
     viewMode = 'grid',
     onViewModeChange,
@@ -41,13 +40,13 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
           <div className="flex items-center gap-2">
             <IconButton icon="filter_list" size="sm" variant="ghost" aria-label="Filter" />
             <Divider orientation="vertical" className="h-4" />
-            <LpdText size="nano" className="text-text-muted uppercase font-bold tracking-widest opacity-40">
+            <LpdText size="nano" className="text-text-muted font-bold uppercase tracking-widest opacity-40">
               ALL BRANDS
             </LpdText>
           </div>
         }
         centerSlot={
-          <div className="flex items-center bg-background-subtle p-0.5 rounded-lg border border-border-technical">
+          <div className="bg-background-subtle border-border-technical flex items-center rounded-lg border p-0.5">
             <IconButton 
               icon="grid_view" 
               size="sm" 

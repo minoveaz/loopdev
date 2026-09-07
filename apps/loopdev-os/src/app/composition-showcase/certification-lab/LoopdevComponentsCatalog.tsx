@@ -30,13 +30,13 @@ export function LoopdevComponentsCatalog() {
   return (
     <div className="space-y-6" data-testid="loopdev-components-catalog">
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+        <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
           Reusable suite catalog
         </p>
-        <Heading as="h1" size="2xl" weight="bold" className="mt-2 text-text-main">
+        <Heading as="h1" size="2xl" weight="bold" className="text-text-main mt-2">
           Loopdev components
         </Heading>
-        <p className="mt-2 max-w-2xl text-sm leading-5 text-text-muted">
+        <p className="text-text-muted mt-2 max-w-2xl text-sm leading-5">
           Shared components with explicit surface, state, responsive and tenant contracts.
         </p>
       </div>
@@ -57,11 +57,11 @@ export function LoopdevComponentsCatalog() {
               as="h2"
               size="sm"
               weight="bold"
-              className="font-mono uppercase tracking-[0.14em] text-text-main"
+              className="text-text-main font-mono uppercase tracking-[0.14em]"
             >
               FilterBar
             </Heading>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="text-text-muted mt-1 text-xs">
               Controlled search, multi-select filters, clear behavior and actions.
             </p>
           </div>
@@ -93,11 +93,11 @@ export function LoopdevComponentsCatalog() {
               as="h2"
               size="sm"
               weight="bold"
-              className="font-mono uppercase tracking-[0.14em] text-text-main"
+              className="text-text-main font-mono uppercase tracking-[0.14em]"
             >
               Pagination
             </Heading>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="text-text-muted mt-1 text-xs">
               Controlled page navigation with disabled boundaries and labels.
             </p>
           </div>
@@ -109,11 +109,11 @@ export function LoopdevComponentsCatalog() {
               as="h2"
               size="sm"
               weight="bold"
-              className="font-mono uppercase tracking-[0.14em] text-text-main"
+              className="text-text-main font-mono uppercase tracking-[0.14em]"
             >
               QueryToolbar
             </Heading>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="text-text-muted mt-1 text-xs">
               FilterBar plus result count, sorting and view selection.
             </p>
           </div>
@@ -154,11 +154,11 @@ export function LoopdevComponentsCatalog() {
               as="h2"
               size="sm"
               weight="bold"
-              className="font-mono uppercase tracking-[0.14em] text-text-main"
+              className="text-text-main font-mono uppercase tracking-[0.14em]"
             >
               SearchInput
             </Heading>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="text-text-muted mt-1 text-xs">
               Tones, controlled values, clear, loading and tenant color overrides.
             </p>
           </div>
@@ -169,7 +169,7 @@ export function LoopdevComponentsCatalog() {
               ['accent', 'Accent tone', 'Search tenant records'],
             ].map(([tone, label, placeholder]) => (
               <div key={tone} className="space-y-2">
-                <p className="text-xs text-text-muted">{label}</p>
+                <p className="text-text-muted text-xs">{label}</p>
                 <SearchInput
                   value={tone === 'accent' ? accentQuery : query}
                   onValueChange={tone === 'accent' ? setAccentQuery : setQuery}
@@ -181,7 +181,7 @@ export function LoopdevComponentsCatalog() {
               </div>
             ))}
             <div className="space-y-2">
-              <p className="text-xs text-text-muted">Loading</p>
+              <p className="text-text-muted text-xs">Loading</p>
               <SearchInput
                 value="Loading query"
                 onValueChange={() => undefined}
@@ -190,7 +190,7 @@ export function LoopdevComponentsCatalog() {
               />
             </div>
             <div className="space-y-2 md:col-span-2">
-              <p className="text-xs text-text-muted">Tenant color override + clear state</p>
+              <p className="text-text-muted text-xs">Tenant color override + clear state</p>
               <SearchInput
                 value={accentQuery}
                 onValueChange={setAccentQuery}
@@ -205,7 +205,7 @@ export function LoopdevComponentsCatalog() {
               />
             </div>
           </div>
-          <p className="text-xs text-text-muted" aria-live="polite">
+          <p className="text-text-muted text-xs" aria-live="polite">
             Controlled query: {query || 'empty'}
           </p>
         </TechnicalCard>
@@ -217,11 +217,11 @@ export function LoopdevComponentsCatalog() {
                 as="h2"
                 size="sm"
                 weight="bold"
-                className="font-mono uppercase tracking-[0.14em] text-text-main"
+                className="text-text-main font-mono uppercase tracking-[0.14em]"
               >
                 EmptyState
               </Heading>
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="text-text-muted mt-1 text-xs">
                 Sizes, visual variants and error recovery.
               </p>
             </div>
@@ -233,7 +233,7 @@ export function LoopdevComponentsCatalog() {
                 ['sm', 'card', 'Error', 'Could not load components'],
               ].map(([size, variant, label, title]) => (
                 <div key={label} className="space-y-2">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-text-muted">
+                  <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.12em]">
                     {label}
                   </p>
                   <EmptyState
@@ -267,18 +267,18 @@ export function LoopdevComponentsCatalog() {
                 as="h2"
                 size="sm"
                 weight="bold"
-                className="font-mono uppercase tracking-[0.14em] text-text-main"
+                className="text-text-main font-mono uppercase tracking-[0.14em]"
               >
                 LoadingState
               </Heading>
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="text-text-muted mt-1 text-xs">
                 Line counts and density without layout shift.
               </p>
             </div>
             <div className="space-y-5">
               {[1, 2, 4].map((lines) => (
                 <div key={lines} className="space-y-2">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-text-muted">
+                  <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.12em]">
                     {lines} {lines === 1 ? 'line' : 'lines'}
                   </p>
                   <LoadingState
@@ -297,11 +297,11 @@ export function LoopdevComponentsCatalog() {
                 as="h2"
                 size="sm"
                 weight="bold"
-                className="font-mono uppercase tracking-[0.14em] text-text-main"
+                className="text-text-main font-mono uppercase tracking-[0.14em]"
               >
                 StatusBadge
               </Heading>
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="text-text-muted mt-1 text-xs">
                 Semantic status indicator with standardized colors and variants.
               </p>
             </div>

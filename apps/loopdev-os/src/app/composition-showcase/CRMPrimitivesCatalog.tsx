@@ -225,13 +225,13 @@ const CATALOG: CatalogItem[] = [
     usage: 'Search, forms and filters',
     render: () => (
       <>
-        <div className="grid gap-3 font-mono [&_label]:font-mono [&_label]:normal-case sm:grid-cols-2">
+        <div className="grid gap-3 font-mono sm:grid-cols-2 [&_label]:font-mono [&_label]:normal-case">
           {INPUT_STATES.map(({ id, label, props }) => (
             <Input key={id} {...props} label={`${label} {${id}}`} aria-label={`${label} {${id}}`} />
           ))}
         </div>
-        <div className="mt-5 space-y-2 border-t border-border-subtle pt-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Sizes</p>
+        <div className="border-border-subtle mt-5 space-y-2 border-t pt-4">
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">Sizes</p>
           <div className="flex flex-wrap items-end gap-3 font-mono [&_label]:font-mono [&_label]:normal-case">
             {INPUT_SIZES.map(({ id, label, size }) => (
               <Input
@@ -243,8 +243,8 @@ const CATALOG: CatalogItem[] = [
             ))}
           </div>
         </div>
-        <div className="mt-5 space-y-2 border-t border-border-subtle pt-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Icons</p>
+        <div className="border-border-subtle mt-5 space-y-2 border-t pt-4">
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">Icons</p>
           <div className="grid gap-3 sm:grid-cols-2">
             <Input
               label="Start icon {startIcon}"
@@ -269,7 +269,7 @@ const CATALOG: CatalogItem[] = [
     render: () => (
       <div className="space-y-5">
         <div className="space-y-2">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Variants</p>
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">Variants</p>
           <div className="flex flex-wrap gap-2">
             {BUTTON_VARIANTS.map(({ id, label, variant }) => (
               <Button key={id} variant={variant} size="sm">
@@ -282,8 +282,8 @@ const CATALOG: CatalogItem[] = [
             ))}
           </div>
         </div>
-        <div className="space-y-2 border-t border-border-subtle pt-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Sizes</p>
+        <div className="border-border-subtle space-y-2 border-t pt-4">
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">Sizes</p>
           <div className="flex flex-wrap items-end gap-2">
             {BUTTON_SIZES.map(({ id, label, size }) => (
               <Button key={id} variant="secondary" size={size}>
@@ -296,8 +296,8 @@ const CATALOG: CatalogItem[] = [
             ))}
           </div>
         </div>
-        <div className="space-y-2 border-t border-border-subtle pt-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">
+        <div className="border-border-subtle space-y-2 border-t pt-4">
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">
             States and composition
           </p>
           <div className="flex flex-wrap gap-2">
@@ -331,12 +331,12 @@ const CATALOG: CatalogItem[] = [
     render: () => (
       <div className="space-y-5">
         <div className="space-y-2">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Variants</p>
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">Variants</p>
           <div className="flex flex-wrap items-center gap-2">
             {ICON_BUTTON_VARIANTS.map(({ id, label, variant }) => (
               <div
                 key={id}
-                className="flex flex-col items-center gap-1 font-mono text-[10px] text-text-muted"
+                className="text-text-muted flex flex-col items-center gap-1 font-mono text-[10px]"
               >
                 <IconButton
                   icon="more_vert"
@@ -353,13 +353,13 @@ const CATALOG: CatalogItem[] = [
             ))}
           </div>
         </div>
-        <div className="space-y-2 border-t border-border-subtle pt-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Sizes</p>
+        <div className="border-border-subtle space-y-2 border-t pt-4">
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">Sizes</p>
           <div className="flex flex-wrap items-center gap-2">
             {ICON_BUTTON_SIZES.map(({ id, label, size }) => (
               <div
                 key={id}
-                className="flex flex-col items-center gap-1 font-mono text-[10px] text-text-muted"
+                className="text-text-muted flex flex-col items-center gap-1 font-mono text-[10px]"
               >
                 <IconButton
                   icon="more_vert"
@@ -376,8 +376,8 @@ const CATALOG: CatalogItem[] = [
             ))}
           </div>
         </div>
-        <div className="space-y-2 border-t border-border-subtle pt-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">States</p>
+        <div className="border-border-subtle space-y-2 border-t pt-4">
+          <p className="text-text-muted text-xs font-medium uppercase tracking-wider">States</p>
           <div className="flex flex-wrap items-center gap-2">
             <IconButton
               icon="more_vert"
@@ -453,7 +453,7 @@ const CATALOG: CatalogItem[] = [
           checked={contactSelected}
           onChange={(event) => setContactSelected(event.target.checked)}
         />
-        <span className="block pl-6 font-mono text-xs text-text-muted">
+        <span className="text-text-muted block pl-6 font-mono text-xs">
           {contactSelected ? 'checked' : 'unchecked'}
         </span>
       </div>
@@ -484,7 +484,7 @@ const CATALOG: CatalogItem[] = [
       <div className="space-y-4">
         {EMPTY_STATE_CASES.map(({ id, label, title, description, status }) => (
           <div key={id} className="space-y-2">
-            <p className="font-mono text-[10px] uppercase text-text-muted">{label}</p>
+            <p className="text-text-muted font-mono text-[10px] uppercase">{label}</p>
             <EmptyState
               size="sm"
               icon="inbox"
@@ -513,7 +513,7 @@ const CATALOG: CatalogItem[] = [
       <div className="space-y-3">
         {LOADING_CASES.map(({ id, label, lines }) => (
           <div key={id} className="space-y-1">
-            <p className="font-mono text-[10px] uppercase text-text-muted">{label}</p>
+            <p className="text-text-muted font-mono text-[10px] uppercase">{label}</p>
             <LoadingState label="Loading contacts" lines={lines} />
           </div>
         ))}
@@ -529,7 +529,7 @@ const CATALOG: CatalogItem[] = [
       <div className="space-y-5">
         {['Compact context', 'Long content'].map((label, index) => (
           <div key={label} className="space-y-2">
-            <p className="font-mono text-[10px] uppercase text-text-muted">{label}</p>
+            <p className="text-text-muted font-mono text-[10px] uppercase">{label}</p>
             <PageHeader
               eyebrow="CRM"
               title={index === 0 ? 'Contacts' : 'Customer contacts and relationship history'}
@@ -558,7 +558,7 @@ const CATALOG: CatalogItem[] = [
       <div className="space-y-5">
         {['With action', 'Without action'].map((label, index) => (
           <div key={label} className="space-y-2">
-            <p className="font-mono text-[10px] uppercase text-text-muted">{label}</p>
+            <p className="text-text-muted font-mono text-[10px] uppercase">{label}</p>
             <SectionHeader
               title={index === 0 ? 'Recent contacts' : 'Contact activity'}
               action={
@@ -584,7 +584,7 @@ const CATALOG: CatalogItem[] = [
         {AVATAR_CASES.map(({ id, label, props }) => (
           <div key={id} className="flex flex-col items-center gap-1">
             <UserAvatar {...props} />
-            <span className="font-mono text-[10px] uppercase text-text-muted">{label}</span>
+            <span className="text-text-muted font-mono text-[10px] uppercase">{label}</span>
           </div>
         ))}
       </div>
@@ -598,7 +598,7 @@ const CATALOG: CatalogItem[] = [
     render: ({ setCommandDialogOpen }) => (
       <div data-testid="crm-command-bar-fixture" className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1">
-          <p className="font-mono text-[10px] uppercase text-text-muted">Full</p>
+          <p className="text-text-muted font-mono text-[10px] uppercase">Full</p>
           <CommandBarTrigger
             className="w-full"
             placeholder="Search or type a command..."
@@ -606,7 +606,7 @@ const CATALOG: CatalogItem[] = [
           />
         </div>
         <div className="space-y-1">
-          <p className="font-mono text-[10px] uppercase text-text-muted">Icon</p>
+          <p className="text-text-muted font-mono text-[10px] uppercase">Icon</p>
           <CommandBarTrigger
             mode="icon"
             shortcut="⌘K"
@@ -615,7 +615,7 @@ const CATALOG: CatalogItem[] = [
           />
         </div>
         <div className="space-y-1">
-          <p className="font-mono text-[10px] uppercase text-text-muted">Disabled</p>
+          <p className="text-text-muted font-mono text-[10px] uppercase">Disabled</p>
           <CommandBarTrigger
             className="w-full"
             placeholder="Search or type a command..."
@@ -624,7 +624,7 @@ const CATALOG: CatalogItem[] = [
           />
         </div>
         <div className="space-y-1">
-          <p className="font-mono text-[10px] uppercase text-text-muted">Custom shortcut</p>
+          <p className="text-text-muted font-mono text-[10px] uppercase">Custom shortcut</p>
           <CommandBarTrigger
             className="w-full"
             placeholder="Search CRM actions"
@@ -647,7 +647,7 @@ const CATALOG: CatalogItem[] = [
             placeholder="Search or type a command..."
             onOpen={() => setCommandDialogOpen(true)}
           />
-          <span className="font-mono text-[10px] uppercase text-text-muted">
+          <span className="text-text-muted font-mono text-[10px] uppercase">
             Interactive grouped palette
           </span>
         </div>
@@ -708,7 +708,7 @@ export function CRMPrimitivesCatalog() {
                 overflow={item.id === 'filter-dropdown' ? 'visible' : undefined}
                 className="h-full p-4"
               >
-                <div className="mb-4 flex items-start justify-between gap-4 border-b border-border-subtle pb-3">
+                <div className="border-border-subtle mb-4 flex items-start justify-between gap-4 border-b pb-3">
                   <div>
                     <Heading
                       as="h3"
@@ -718,9 +718,9 @@ export function CRMPrimitivesCatalog() {
                     >
                       {item.name}
                     </Heading>
-                    <p className="mt-1 text-xs text-text-muted">{item.usage}</p>
+                    <p className="text-text-muted mt-1 text-xs">{item.usage}</p>
                   </div>
-                  <span className="font-mono text-[10px] uppercase text-text-muted">
+                  <span className="text-text-muted font-mono text-[10px] uppercase">
                     {priority}
                   </span>
                 </div>

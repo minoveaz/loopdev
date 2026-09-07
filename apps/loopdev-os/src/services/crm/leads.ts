@@ -433,8 +433,9 @@ export async function updateLead(input: CrmUpdateLeadCommand): Promise<CrmLead> 
  */
 export async function moveLeadStatus(
   input: CrmMoveLeadStatusCommand,
-  _actorUserId: string,
+  actorUserId: string,
 ): Promise<CrmLead> {
+  void actorUserId;
   const parsed = CrmMoveLeadStatusCommandSchema.parse(input);
   if (!MANUAL_TARGET_STATUSES.has(parsed.status)) {
     throw new Error('CRM lead status transition is not allowed');
@@ -468,8 +469,9 @@ export async function moveLeadStatus(
  */
 export async function createOpportunityFromLead(
   input: CrmCreateOpportunityFromLeadCommand,
-  _actorUserId: string,
+  actorUserId: string,
 ): Promise<{ opportunity: CrmOpportunity; created: boolean }> {
+  void actorUserId;
   const parsed = CrmCreateOpportunityFromLeadCommandSchema.parse(input);
   const productKey = normalizeProductKey(parsed.productKey);
   const supabase = await createServerSupabaseClient();

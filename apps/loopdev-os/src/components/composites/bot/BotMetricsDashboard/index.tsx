@@ -29,16 +29,16 @@ function PositionPreview({
   return (
     <div className="space-y-2">
       <p className="text-micro text-primary-light">{side} Position</p>
-      <div className="bg-surface-elevated rounded p-2 space-y-1 text-nano">
+      <div className="bg-surface-elevated text-nano space-y-1 rounded p-2">
         <div className="flex justify-between">
           <span className="text-primary-light">Entry:</span>
-          <span className="font-mono text-primary">${entry.toFixed(2)}</span>
+          <span className="text-primary font-mono">${entry.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-status-success">
+        <div className="text-status-success flex justify-between">
           <span>Take Profit:</span>
           <span className="font-mono">${takeProfit.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-status-error">
+        <div className="text-status-error flex justify-between">
           <span>Stop Loss:</span>
           <span className="font-mono">${stopLoss.toFixed(2)}</span>
         </div>
@@ -52,25 +52,24 @@ import { MetricCard } from '@/components/atoms/surfaces/MetricCard';
 import { SignalCard } from './SignalCard';
 import { BotMetricsDashboardProps } from './types';
 import {
-  formatPrice,
   formatPercentage,
   formatATR,
   formatTimeAgo,
 } from '@/lib/metrics/metricsFormatter';
 
 export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) => {
-  const { botId, botName = 'Trading Bot', showExtended = false, className = '' } = props;
+  const { botName = 'Trading Bot', showExtended = false, className = '' } = props;
 
   const { metrics, loading, error, isConnected, refresh, health } = useBotMetricsDashboard(props);
 
   // Loading state
   if (loading && !metrics) {
     return (
-      <div className={`space-y-4 animate-pulse ${className}`}>
-        <div className="h-64 bg-surface-dark rounded-lg" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className={`animate-pulse space-y-4 ${className}`}>
+        <div className="bg-surface-dark h-64 rounded-lg" />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-20 bg-surface-dark rounded-lg" />
+            <div key={i} className="bg-surface-dark h-20 rounded-lg" />
           ))}
         </div>
       </div>
@@ -81,12 +80,12 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
   if (error && !metrics) {
     return (
       <div
-        className={`border border-status-error/50 bg-status-error/5 rounded-lg p-4 ${className}`}
+        className={`border-status-error/50 bg-status-error/5 rounded-lg border p-4 ${className}`}
       >
         <p className="text-status-error text-sm">{error}</p>
         <Button variant="ghost" size="sm" type="button"
           onClick={refresh}
-          className="mt-2 text-nano text-status-error underline hover:opacity-70"
+          className="text-nano text-status-error mt-2 underline hover:opacity-70"
         >
           Retry
         </Button>
@@ -96,7 +95,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
   if (!metrics) {
     return (
-      <div className={`text-center text-primary-light opacity-50 py-8 ${className}`}>
+      <div className={`text-primary-light py-8 text-center opacity-50 ${className}`}>
         <p>No metrics available</p>
       </div>
     );
@@ -117,7 +116,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
         {/* Connection status indicator */}
         <div className="flex items-center gap-2">
           <div
-            className={`w-2.5 h-2.5 rounded-full ${
+            className={`h-2.5 w-2.5 rounded-full ${
               isConnected ? 'bg-status-success animate-pulse' : 'bg-status-warning'
             }`}
           />
@@ -127,7 +126,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Health warnings */}
       {health.warnings.length > 0 && (
-        <div className="bg-status-warning/5 border border-status-warning/50 rounded-lg p-3">
+        <div className="bg-status-warning/5 border-status-warning/50 rounded-lg border p-3">
           <ul className="space-y-1">
             {health.warnings.map((warning, idx) => (
               <li key={idx} className="text-nano text-status-warning">
@@ -139,7 +138,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       )}
 
       {/* Main metrics grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* RSI Gauge (full height) */}
         <div className="lg:col-span-1">
           <TechnicalSurface
@@ -161,7 +160,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
         </div>
 
         {/* Right column: Cards */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="space-y-4 lg:col-span-2">
           {/* Current Price + SMA50 */}
           <div className="grid grid-cols-2 gap-4">
             <MetricCard
@@ -256,7 +255,7 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       <Button
         variant="ghost"
         onClick={refresh}
-        className="text-nano text-primary-light hover:text-primary opacity-70 hover:opacity-100 transition-opacity"
+        className="text-nano text-primary-light hover:text-primary opacity-70 transition-opacity hover:opacity-100"
       >
         ↻ Refresh Metrics
       </Button>

@@ -18,8 +18,6 @@ export const useMetricGauge = (props: MetricGaugeProps) => {
     value,
     min = 0,
     max = 100,
-    lowThreshold = 30,
-    highThreshold = 70,
     status,
     size = 'md',
     isStatic = false,

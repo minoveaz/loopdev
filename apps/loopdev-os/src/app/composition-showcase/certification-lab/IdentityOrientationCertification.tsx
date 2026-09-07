@@ -26,32 +26,32 @@ export function IdentityOrientationCertification() {
           as="h2"
           size="sm"
           weight="bold"
-          className="font-mono uppercase tracking-[0.14em] text-text-main"
+          className="text-text-main font-mono uppercase tracking-[0.14em]"
         >
           Identity and orientation
         </Heading>
-        <p className="mt-1 text-xs text-text-muted">
+        <p className="text-text-muted mt-1 text-xs">
           A4 semantic identity and A5 internal navigation boundaries.
         </p>
       </div>
       <section
-        className="space-y-4 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+        className="border-border-subtle bg-surface-elevated/40 space-y-4 rounded-lg border p-4"
         aria-labelledby="identity-examples"
       >
         <h3
           id="identity-examples"
-          className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+          className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
         >
           Identity and semantic status
         </h3>
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
             <UserAvatar name="Alex Morgan" size="md" status="online" withStatus />
-            <span className="text-sm text-text-main">Alex Morgan</span>
+            <span className="text-text-main text-sm">Alex Morgan</span>
           </div>
           <div className="flex items-center gap-2">
             <UserAvatar initials="CM" size="sm" status="busy" withStatus />
-            <span className="text-sm text-text-main">Case manager</span>
+            <span className="text-text-main text-sm">Case manager</span>
           </div>
           <Badge status="success" variant="solid">
             Active
@@ -64,12 +64,12 @@ export function IdentityOrientationCertification() {
         </div>
       </section>
       <section
-        className="space-y-4 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+        className="border-border-subtle bg-surface-elevated/40 space-y-4 rounded-lg border p-4"
         aria-labelledby="orientation-examples"
       >
         <h3
           id="orientation-examples"
-          className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+          className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
         >
           Orientation and local navigation
         </h3>

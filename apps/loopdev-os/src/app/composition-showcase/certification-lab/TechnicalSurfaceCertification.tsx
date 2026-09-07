@@ -14,7 +14,7 @@ export function TechnicalSurfaceCertification() {
           border="technical"
           className="min-h-32 p-4"
         >
-          <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+          <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
             {variant} surface
           </span>
         </TechnicalSurface>

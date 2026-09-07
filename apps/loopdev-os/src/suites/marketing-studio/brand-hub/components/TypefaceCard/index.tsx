@@ -33,12 +33,12 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
       
       {/* WATERMARK BACKGROUND (Aa or </>) */}
       <div className={clsx(
-        "absolute pointer-events-none select-none transition-opacity duration-500",
-        isBrand ? "top-4 right-8 opacity-[0.03] dark:opacity-[0.05] group-hover:opacity-[0.07]" : "-bottom-8 right-4 opacity-[0.04] group-hover:opacity-[0.08]"
+        "pointer-events-none absolute select-none transition-opacity duration-500",
+        isBrand ? "right-8 top-4 opacity-[0.03] group-hover:opacity-[0.07] dark:opacity-[0.05]" : "-bottom-8 right-4 opacity-[0.04] group-hover:opacity-[0.08]"
       )}>
         <span className={clsx(
           "font-black leading-none",
-          isBrand ? "text-text-main" : "text-white font-mono"
+          isBrand ? "text-text-main" : "font-mono text-white"
         )} style={{ 
           fontFamily: font.family,
           fontSize: isBrand ? '220px' : '180px'
@@ -47,16 +47,16 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
         </span>
       </div>
 
-      <div className="relative p-8 flex flex-col justify-between min-h-[300px] z-10">
+      <div className="relative z-10 flex min-h-[300px] flex-col justify-between p-8">
         
         {/* HEADER: Metadata & Badges */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className={clsx(
-              "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest border",
+              "rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest",
               isBrand 
                 ? "bg-primary/5 border-primary/10 text-primary" 
-                : "bg-yellow-500/10 border-yellow-500/20 text-yellow-500 font-mono"
+                : "border-yellow-500/20 bg-yellow-500/10 font-mono text-yellow-500"
             )}>
               {font.type} {'//'} {font.source}
             </div>
@@ -71,8 +71,8 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
             as="h3"
             size="2xl"
             className={clsx(
-              "text-5xl md:text-6xl font-bold tracking-tight",
-              isBrand ? "text-text-main" : "text-white font-mono"
+              "text-5xl font-bold tracking-tight md:text-6xl",
+              isBrand ? "text-text-main" : "font-mono text-white"
             )}
             style={{ fontFamily: font.family }}
           >
@@ -81,7 +81,7 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
           
           <LpdText size="sm" className={clsx(
             "max-w-[240px] leading-relaxed",
-            isBrand ? "text-text-muted" : "text-slate-400 font-mono"
+            isBrand ? "text-text-muted" : "font-mono text-slate-400"
           )}>
             {font.description || font.variants[0]?.usage || "No usage rules defined."}
           </LpdText>
@@ -91,7 +91,7 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
         <div className="mt-8">
           {isBrand ? (
             <div 
-              className="flex gap-2 overflow-hidden text-text-main text-xl font-medium tracking-tight whitespace-nowrap opacity-40 group-hover:opacity-60 transition-opacity"
+              className="text-text-main flex gap-2 overflow-hidden whitespace-nowrap text-xl font-medium tracking-tight opacity-40 transition-opacity group-hover:opacity-60"
               style={{ fontFamily: font.family }}
             >
               <span>ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
@@ -100,9 +100,9 @@ export const TypefaceCard: React.FC<TypefaceCardProps> = ({
           ) : (
             <div className="grid grid-cols-4 gap-3">
               {['{ }', '< >', '( )', '==='].map(sym => (
-                 <div key={sym} className="bg-white/5 rounded-xl p-3 border border-white/5 flex flex-col items-center gap-1 group-hover:border-white/10 transition-colors">
-                    <span className="text-xl text-white font-mono" style={{ fontFamily: font.family }}>{sym}</span>
-                    <LpdText size="nano" className="text-slate-500 uppercase tracking-tighter">
+                 <div key={sym} className="flex flex-col items-center gap-1 rounded-xl border border-white/5 bg-white/5 p-3 transition-colors group-hover:border-white/10">
+                    <span className="font-mono text-xl text-white" style={{ fontFamily: font.family }}>{sym}</span>
+                    <LpdText size="nano" className="uppercase tracking-tighter text-slate-500">
                       {sym === '{ }' ? 'Braces' : sym === '< >' ? 'Tags' : sym === '( )' ? 'Parens' : 'Logic'}
                     </LpdText>
                  </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import NextImage from 'next/image';
 import { Badge, Button, Icon, LpdText, TechnicalSurface } from '@loopdev/ui';
 import {
   DocumentViewer,
@@ -104,9 +105,12 @@ function CropDialog({ file, previewUrl, onCancel, onApply }: CropDialogProps) {
             </LpdText>
           </div>
           <div className="bg-surface-dark relative flex min-h-[280px] flex-1 items-center justify-center overflow-hidden p-6">
-            <img
+            <NextImage
               src={previewUrl}
               alt={`Vista previa para recortar: ${file.name}`}
+              fill
+              unoptimized
+              sizes="(max-width: 768px) 100vw, 768px"
               className="max-h-[55vh] max-w-full object-contain"
               style={{ clipPath: `inset(${Math.round((1 - cropScale) * 50)}%)` }}
             />

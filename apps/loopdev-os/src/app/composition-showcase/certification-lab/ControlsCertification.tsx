@@ -34,28 +34,28 @@ export function ControlsCertification() {
           as="h2"
           size="sm"
           weight="bold"
-          className="font-mono uppercase tracking-[0.14em] text-text-main"
+          className="text-text-main font-mono uppercase tracking-[0.14em]"
         >
           Controls
         </Heading>
-        <p className="mt-1 text-xs text-text-muted">
+        <p className="text-text-muted mt-1 text-xs">
           A2 reference controls: input states and filter selection contracts.
         </p>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-2">
         <section
-          className="space-y-4 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+          className="border-border-subtle bg-surface-elevated/40 space-y-4 rounded-lg border p-4"
           aria-labelledby="controls-inputs"
         >
-          <div className="border-b border-border-subtle pb-3">
+          <div className="border-border-subtle border-b pb-3">
             <h3
               id="controls-inputs"
-              className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+              className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
             >
               Text input states
             </h3>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="text-text-muted mt-1 text-xs">
               Input contract and supported feedback states.
             </p>
           </div>
@@ -78,17 +78,17 @@ export function ControlsCertification() {
         </section>
 
         <section
-          className="space-y-4 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+          className="border-border-subtle bg-surface-elevated/40 space-y-4 rounded-lg border p-4"
           aria-labelledby="controls-filters"
         >
-          <div className="border-b border-border-subtle pb-3">
+          <div className="border-border-subtle border-b pb-3">
             <h3
               id="controls-filters"
-              className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+              className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
             >
               Selection controls
             </h3>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="text-text-muted mt-1 text-xs">
               Single, multiple, disabled and read-only selection.
             </p>
           </div>
@@ -130,23 +130,23 @@ export function ControlsCertification() {
               readOnly
             />
           </div>
-          <p className="text-xs text-text-muted" aria-live="polite">
+          <p className="text-text-muted text-xs" aria-live="polite">
             Active filters: {selectedFilters.join(', ') || 'none'}
           </p>
         </section>
 
         <section
-          className="space-y-4 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+          className="border-border-subtle bg-surface-elevated/40 space-y-4 rounded-lg border p-4"
           aria-labelledby="controls-composed"
         >
-          <div className="border-b border-border-subtle pb-3">
+          <div className="border-border-subtle border-b pb-3">
             <h3
               id="controls-composed"
-              className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+              className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
             >
               Text and binary controls
             </h3>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="text-text-muted mt-1 text-xs">
               Multiline input, binary preference and mutually exclusive options.
             </p>
           </div>

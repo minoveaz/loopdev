@@ -32,30 +32,30 @@ export function InteractionFeedbackCertification() {
       <div>
         <h2
           id="interaction-feedback-heading"
-          className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+          className="text-text-main font-mono text-sm uppercase tracking-[0.14em]"
         >
           C12 · Feedback and global context
         </h2>
-        <p className="mt-1 max-w-2xl text-xs text-text-muted">
+        <p className="text-text-muted mt-1 max-w-2xl text-xs">
           Reusable confirmation, recovery, notification and command patterns for operational flows.
         </p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.72fr)]">
         <TechnicalSurface variant="surface" radius="md" border="subtle" className="space-y-4 p-4">
-          <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border-subtle pb-3">
+          <div className="border-border-subtle flex flex-wrap items-start justify-between gap-3 border-b pb-3">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+              <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.16em]">
                 Operational record
               </p>
-              <Heading as="h3" size="sm" weight="bold" className="mt-1 text-text-main">
+              <Heading as="h3" size="sm" weight="bold" className="text-text-main mt-1">
                 {archived ? 'Workspace review · archived' : 'Workspace review'}
               </Heading>
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="text-text-muted mt-1 text-xs">
                 A representative action flow with confirmation, success and recovery states.
               </p>
             </div>
-            <span className="rounded border border-border-subtle px-2 py-1 text-xs text-text-muted">
+            <span className="border-border-subtle text-text-muted rounded border px-2 py-1 text-xs">
               {archived ? 'Archived' : 'Active'}
             </span>
           </div>
@@ -92,7 +92,7 @@ export function InteractionFeedbackCertification() {
               </>
             }
           >
-            <p className="text-sm text-text-muted">
+            <p className="text-text-muted text-sm">
               The item will leave the active workspace view until it is restored.
             </p>
           </TechnicalDialog>
@@ -100,10 +100,10 @@ export function InteractionFeedbackCertification() {
 
         <TechnicalSurface variant="surface" radius="md" border="subtle" className="space-y-4 p-4">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+            <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.16em]">
               Feedback states
             </p>
-            <Heading as="h3" size="sm" weight="bold" className="mt-1 text-text-main">
+            <Heading as="h3" size="sm" weight="bold" className="text-text-main mt-1">
               Status and recovery
             </Heading>
           </div>
@@ -129,7 +129,7 @@ export function InteractionFeedbackCertification() {
               Show success feedback
             </Button>
           )}
-          <div className="border-t border-border-subtle pt-3 text-xs text-text-muted">
+          <div className="border-border-subtle text-text-muted border-t pt-3 text-xs">
             <p>Success offers Undo. Error offers Retry. Dismiss keeps the workflow unobstructed.</p>
           </div>
         </TechnicalSurface>

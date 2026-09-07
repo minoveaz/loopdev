@@ -53,21 +53,21 @@ export function OperationalActionsCertification() {
       <div>
         <h2
           id="operational-actions-heading"
-          className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+          className="text-text-main font-mono text-sm uppercase tracking-[0.14em]"
         >
           C9 · Operational actions
         </h2>
-        <p className="mt-1 text-xs text-text-muted">
+        <p className="text-text-muted mt-1 text-xs">
           Primary, contextual, bulk, destructive and recoverable actions remain controlled by the
           composition.
         </p>
       </div>
 
       <TechnicalSurface variant="surface" radius="md" border="technical" className="space-y-5 p-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle pb-4">
+        <div className="border-border-subtle flex flex-wrap items-center justify-between gap-3 border-b pb-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.14em] text-text-muted">Action toolbar</p>
-            <p className="mt-1 text-sm text-text-main">Reusable controls with explicit ownership</p>
+            <p className="text-text-muted text-xs uppercase tracking-[0.14em]">Action toolbar</p>
+            <p className="text-text-main mt-1 text-sm">Reusable controls with explicit ownership</p>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -113,8 +113,8 @@ export function OperationalActionsCertification() {
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs text-text-muted">Selection</p>
-              <p className="mt-1 text-sm font-medium text-text-main">
+              <p className="text-text-muted text-xs">Selection</p>
+              <p className="text-text-main mt-1 text-sm font-medium">
                 {selectedRecords.length} selected
               </p>
             </div>
@@ -170,9 +170,9 @@ export function OperationalActionsCertification() {
         </div>
 
         <div className="grid gap-3 md:grid-cols-3">
-          <div className="border border-border-subtle bg-surface-elevated/40 p-3">
-            <p className="text-xs text-text-muted">Retry</p>
-            <p className="mt-1 text-sm text-text-main">Recover a failed operation</p>
+          <div className="border-border-subtle bg-surface-elevated/40 border p-3">
+            <p className="text-text-muted text-xs">Retry</p>
+            <p className="text-text-main mt-1 text-sm">Recover a failed operation</p>
             <Button
               size="sm"
               variant="outline"
@@ -184,9 +184,9 @@ export function OperationalActionsCertification() {
               Retry
             </Button>
           </div>
-          <div className="border border-border-subtle bg-surface-elevated/40 p-3">
-            <p className="text-xs text-text-muted">Undo</p>
-            <p className="mt-1 text-sm text-text-main">Restore a reversible action</p>
+          <div className="border-border-subtle bg-surface-elevated/40 border p-3">
+            <p className="text-text-muted text-xs">Undo</p>
+            <p className="text-text-main mt-1 text-sm">Restore a reversible action</p>
             <Button
               size="sm"
               variant="outline"
@@ -198,9 +198,9 @@ export function OperationalActionsCertification() {
               Undo
             </Button>
           </div>
-          <div className="border border-border-subtle bg-surface-elevated/40 p-3">
-            <p className="text-xs text-text-muted">Record menu</p>
-            <p className="mt-1 text-sm text-text-main">Actions for the selected record</p>
+          <div className="border-border-subtle bg-surface-elevated/40 border p-3">
+            <p className="text-text-muted text-xs">Record menu</p>
+            <p className="text-text-main mt-1 text-sm">Actions for the selected record</p>
             <IconButton
               icon="more_vert"
               size="sm"
@@ -255,7 +255,7 @@ export function OperationalActionsCertification() {
           </>
         }
       >
-        <p className="text-sm text-text-muted">
+        <p className="text-text-muted text-sm">
           {selectedRecords.length} selected record(s) will be removed from this fixture.
         </p>
       </TechnicalDialog>

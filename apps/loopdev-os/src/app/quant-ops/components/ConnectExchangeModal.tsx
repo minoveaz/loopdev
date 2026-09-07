@@ -89,7 +89,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-background-canvas/60 backdrop-blur-sm animate-in fade-in duration-300"
+        className="bg-background-canvas/60 animate-in fade-in absolute inset-0 backdrop-blur-sm duration-300"
         onClick={onClose}
       ></div>
 
@@ -97,21 +97,21 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
       <TechnicalSurface
         variant="surface"
         depth="overlay"
-        className="relative z-10 w-full max-w-xl h-full max-h-[70vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-300"
+        className="animate-in zoom-in-95 relative z-10 flex h-full max-h-[70vh] w-full max-w-xl flex-col overflow-hidden shadow-2xl duration-300"
       >
-        <div className="flex flex-col h-full w-full">
-          <header className="p-6 border-b border-border-technical/30 flex items-center justify-between bg-background-subtle/30 shrink-0">
+        <div className="flex h-full w-full flex-col">
+          <header className="border-border-technical/30 bg-background-subtle/30 flex shrink-0 items-center justify-between border-b p-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+              <div className="bg-primary/10 text-primary border-primary/20 flex h-10 w-10 items-center justify-center rounded-xl border">
                 <span className="material-symbols-outlined text-xl font-bold">add_link</span>
               </div>
               <div>
-                <Heading size="xs" weight="bold" className="uppercase tracking-tight italic">
+                <Heading size="xs" weight="bold" className="uppercase italic tracking-tight">
                   {initialData ? 'Update_Broker_Account' : 'Link_Broker_Account'}
                 </Heading>
                 <LpdText
                   size="nano"
-                  className="text-text-muted uppercase tracking-widest font-mono opacity-60"
+                  className="text-text-muted font-mono uppercase tracking-widest opacity-60"
                 >
                   Vault // Security_Layer
                 </LpdText>
@@ -122,18 +122,18 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
 
           <form
             onSubmit={handleSubmit}
-            className="flex-1 overflow-y-auto p-8 custom-scrollbar flex flex-col gap-8 min-h-0"
+            className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto p-8"
           >
             {/* 0. CRITICAL ENVIRONMENT SELECTOR */}
             <div className="flex flex-col gap-4">
               <LpdText
                 size="nano"
                 weight="black"
-                className="text-amber-500 uppercase tracking-[0.2em] opacity-60 px-1"
+                className="px-1 uppercase tracking-[0.2em] text-amber-500 opacity-60"
               >
                 00. Execution_Environment
               </LpdText>
-              <div className="grid grid-cols-2 gap-2 p-1 bg-background-subtle dark:bg-white/5 rounded-2xl border border-border-technical/30">
+              <div className="bg-background-subtle border-border-technical/30 grid grid-cols-2 gap-2 rounded-2xl border p-1 dark:bg-white/5">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -190,7 +190,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
               <LpdText
                 size="nano"
                 weight="black"
-                className="text-primary uppercase tracking-[0.2em] opacity-60 px-1"
+                className="text-primary px-1 uppercase tracking-[0.2em] opacity-60"
               >
                 01. Account_Identity
               </LpdText>
@@ -203,11 +203,11 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
                   required
                 />
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-text-muted px-1">
+                  <label className="text-text-muted px-1 text-[10px] font-black uppercase tracking-widest">
                     Broker_Provider
                   </label>
                   <select
-                    className="w-full h-10 px-3 rounded-lg bg-white dark:bg-white/5 border border-border-technical/50 text-sm font-bold text-text-main focus:border-primary outline-none transition-all appearance-none cursor-pointer"
+                    className="border-border-technical/50 text-text-main focus:border-primary h-10 w-full cursor-pointer appearance-none rounded-lg border bg-white px-3 text-sm font-bold outline-none transition-all dark:bg-white/5"
                     value={formData.provider}
                     onChange={(e) =>
                       setFormData({
@@ -237,7 +237,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
               <LpdText
                 size="nano"
                 weight="black"
-                className="text-amber-500 uppercase tracking-[0.2em] opacity-60 px-1"
+                className="px-1 uppercase tracking-[0.2em] text-amber-500 opacity-60"
               >
                 02. Encrypted_Credentials
               </LpdText>
@@ -260,7 +260,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
               </div>
             </div>
           </form>
-          <footer className="p-6 border-t border-border-technical/30 flex items-center justify-end gap-4 bg-background-subtle/10 shrink-0">
+          <footer className="border-border-technical/30 bg-background-subtle/10 flex shrink-0 items-center justify-end gap-4 border-t p-6">
             <Button variant="outline" onClick={onClose}>
               Cancel_Action
             </Button>
@@ -268,7 +268,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
               variant="primary"
               type="submit"
               onClick={handleSubmit}
-              className="px-12 shadow-xl shadow-primary/20"
+              className="shadow-primary/20 px-12 shadow-xl"
             >
               {initialData ? 'Update_&_Save' : 'Verify_&_Save'}
             </Button>

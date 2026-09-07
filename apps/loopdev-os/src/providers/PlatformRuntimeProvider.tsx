@@ -19,8 +19,16 @@ type PlatformRuntimeValue = {
 export const PlatformRuntimeContext = createContext<PlatformRuntimeValue | undefined>(undefined);
 
 function policiesForMode(mode: PlatformEnvironmentMode) {
-  if (mode === 'real') return { network: { reads: 'remote', writes: 'remote' } as const, persistence: 'remote' as const };
-  if (mode === 'preview') return { network: { reads: 'local', writes: 'blocked' } as const, persistence: 'none' as const };
+  if (mode === 'real')
+    return {
+      network: { reads: 'remote', writes: 'remote' } as const,
+      persistence: 'remote' as const,
+    };
+  if (mode === 'preview')
+    return {
+      network: { reads: 'local', writes: 'blocked' } as const,
+      persistence: 'none' as const,
+    };
   return { network: { reads: 'local', writes: 'local' } as const, persistence: 'local' as const };
 }
 
@@ -55,7 +63,9 @@ export function PlatformRuntimeProvider({ children }: { children: ReactNode }) {
     [mode, policies, reset, setMode],
   );
 
-  return <PlatformRuntimeContext.Provider value={value}>{children}</PlatformRuntimeContext.Provider>;
+  return (
+    <PlatformRuntimeContext.Provider value={value}>{children}</PlatformRuntimeContext.Provider>
+  );
 }
 
 export function usePlatformRuntime(): PlatformRuntimeValue {

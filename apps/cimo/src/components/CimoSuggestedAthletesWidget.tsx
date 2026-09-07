@@ -1,17 +1,9 @@
 import React from 'react';
 import {
-  Activity,
-  Award,
   Flame,
-  Heart,
-  MapPin,
   ShieldCheck,
   Sparkles,
-  Target,
-  Trophy,
   UserPlus,
-  Users,
-  Zap,
 } from 'lucide-react';
 
 export interface CimoSuggestedAthletesWidgetProps {
@@ -89,19 +81,19 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
 }) => {
   return (
     <aside
-      className="bg-[#FCFDFD] border border-[#1F4E5F]/12 rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)] flex flex-col gap-3.5 text-[#1F4E5F] w-full h-full overflow-y-auto"
+      className="border-[#1F4E5F]/12 flex h-full w-full flex-col gap-3.5 overflow-y-auto rounded-3xl border bg-[#FCFDFD] p-5 text-[#1F4E5F] shadow-[0_4px_24px_-4px_rgba(31,78,95,0.05)]"
       aria-label="Atletas Recomendados"
     >
       {/* 1. Atletas Sugeridos por Afinidad */}
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between pb-1.5 border-b border-[#1F4E5F]/8">
+        <div className="border-[#1F4E5F]/8 flex items-center justify-between border-b pb-1.5">
           <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#7FB77E]" />
             <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]">
               Afinidad Deportiva
             </span>
           </div>
-          <span className="text-[9px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.2 rounded-full">
+          <span className="py-0.2 rounded-full bg-[#7FB77E]/10 px-2 text-[9px] font-black text-[#7FB77E]">
             Tu Zona
           </span>
         </div>
@@ -110,20 +102,20 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
           {SUGGESTED_ATHLETES.map((ath) => (
             <div
               key={ath.id}
-              className="bg-white p-2.5 rounded-2xl border border-[#1F4E5F]/8 flex items-center justify-between gap-2.5 hover:border-[#7FB77E]/50 transition-all shadow-2xs"
+              className="border-[#1F4E5F]/8 shadow-2xs flex items-center justify-between gap-2.5 rounded-2xl border bg-white p-2.5 transition-all hover:border-[#7FB77E]/50"
             >
               <button
                 type="button"
                 onClick={() => onNavigateToProfile?.(ath.id)}
-                className="flex items-center gap-2 min-w-0 text-left cursor-pointer"
+                className="flex min-w-0 cursor-pointer items-center gap-2 text-left"
               >
-                <div className="w-8 h-8 rounded-xl overflow-hidden shrink-0 border border-[#1F4E5F]/10">
-                  <img src={ath.avatar} alt={ath.name} className="w-full h-full object-cover" />
+                <div className="h-8 w-8 shrink-0 overflow-hidden rounded-xl border border-[#1F4E5F]/10">
+                  <img src={ath.avatar} alt={ath.name} className="h-full w-full object-cover" />
                 </div>
                 <div className="min-w-0">
-                  <h4 className="font-black text-xs text-[#1F4E5F] truncate">{ath.name}</h4>
-                  <p className="text-[9px] font-bold text-[#7FB77E] truncate">{ath.sport}</p>
-                  <p className="text-[8px] font-medium text-[#1F4E5F]/60 truncate">{ath.mutual}</p>
+                  <h4 className="truncate text-xs font-black text-[#1F4E5F]">{ath.name}</h4>
+                  <p className="truncate text-[9px] font-bold text-[#7FB77E]">{ath.sport}</p>
+                  <p className="truncate text-[8px] font-medium text-[#1F4E5F]/60">{ath.mutual}</p>
                 </div>
               </button>
 
@@ -131,9 +123,9 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
                 type="button"
                 onClick={() => onNavigateToProfile?.(ath.id)}
                 aria-label={`Ver pasaporte de ${ath.name}`}
-                className="p-1.5 rounded-lg bg-[#7FB77E]/15 hover:bg-[#7FB77E] text-[#1F4E5F] hover:text-white transition-colors cursor-pointer shrink-0"
+                className="shrink-0 cursor-pointer rounded-lg bg-[#7FB77E]/15 p-1.5 text-[#1F4E5F] transition-colors hover:bg-[#7FB77E] hover:text-white"
               >
-                <UserPlus className="w-3.5 h-3.5" />
+                <UserPlus className="h-3.5 w-3.5" />
               </button>
             </div>
           ))}
@@ -141,12 +133,12 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
       </div>
 
       {/* 2. Compañeros más Frecuentes */}
-      <div className="bg-white p-3.5 rounded-2xl border border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2">
+      <div className="border-[#1F4E5F]/8 shadow-2xs flex flex-col gap-2 rounded-2xl border bg-white p-3.5">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase text-[#1F4E5F]/60 tracking-wider">
+          <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
             Compañeros Frecuentes
           </span>
-          <Flame className="w-3.5 h-3.5 text-[#7FB77E]" />
+          <Flame className="h-3.5 w-3.5 text-[#7FB77E]" />
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -154,10 +146,10 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
             <div
               key={tm.id}
               onClick={() => onNavigateToProfile?.(tm.id)}
-              className="flex items-center justify-between p-1.5 bg-[#EEF2F2]/50 rounded-xl hover:bg-[#7FB77E]/10 cursor-pointer transition-all"
+              className="flex cursor-pointer items-center justify-between rounded-xl bg-[#EEF2F2]/50 p-1.5 transition-all hover:bg-[#7FB77E]/10"
             >
               <div className="flex items-center gap-2">
-                <img src={tm.avatar} alt={tm.name} className="w-6 h-6 rounded-full object-cover" />
+                <img src={tm.avatar} alt={tm.name} className="h-6 w-6 rounded-full object-cover" />
                 <span className="text-xs font-black text-[#1F4E5F]">{tm.name}</span>
               </div>
               <span className="text-[10px] font-bold text-[#7FB77E]">{tm.workouts} entrenos</span>
@@ -167,11 +159,11 @@ export const CimoSuggestedAthletesWidget: React.FC<CimoSuggestedAthletesWidgetPr
       </div>
 
       {/* 3. Garantía de Respeto CIMO */}
-      <div className="p-3 bg-[#EEF2F2]/40 rounded-2xl border border-[#7FB77E]/20 text-[#1F4E5F] flex items-start gap-2.5 mt-auto">
-        <ShieldCheck className="w-4 h-4 text-[#7FB77E] flex-shrink-0 mt-0.5" />
+      <div className="mt-auto flex items-start gap-2.5 rounded-2xl border border-[#7FB77E]/20 bg-[#EEF2F2]/40 p-3 text-[#1F4E5F]">
+        <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#7FB77E]" />
         <div>
           <h4 className="text-[11px] font-black text-[#1F4E5F]">Compromiso & Respeto</h4>
-          <p className="text-[10px] text-[#1F4E5F]/75 leading-relaxed mt-0.5 font-medium">
+          <p className="mt-0.5 text-[10px] font-medium leading-relaxed text-[#1F4E5F]/75">
             Entrenamientos seguros, grupos con ritmo compatible y puntualidad garantizada en cada
             sesión.
           </p>

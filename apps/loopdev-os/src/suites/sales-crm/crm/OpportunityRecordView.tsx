@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Badge,
   Button,
@@ -55,48 +55,51 @@ export function OpportunityRecordView({ opportunityId }: OpportunityRecordViewPr
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function load(signal?: AbortSignal) {
-    if (!activeOrganizationId) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
-      const [nextOpportunity, nextStages] = await Promise.all([
-        crmOpportunity(mode, activeOrganizationId, opportunityId, signal),
-        crmPipelineStages(mode, activeOrganizationId, signal),
-      ]);
-      if (!nextOpportunity) throw new Error('This opportunity could not be found.');
-      setOpportunity(nextOpportunity);
-      if (mode === 'real') {
-        const timelineResponse = await fetch(
-          `/api/crm/timeline?${scope}&relationType=opportunity&relationId=${encodeURIComponent(opportunityId)}&limit=25`,
-          { signal },
-        );
-        if (timelineResponse.ok) {
-          const page = (await timelineResponse.json()) as TimelinePage;
-          setTimeline(page.items);
+  const load = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!activeOrganizationId) return;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
+        const [nextOpportunity, nextStages] = await Promise.all([
+          crmOpportunity(mode, activeOrganizationId, opportunityId, signal),
+          crmPipelineStages(mode, activeOrganizationId, signal),
+        ]);
+        if (!nextOpportunity) throw new Error('This opportunity could not be found.');
+        setOpportunity(nextOpportunity);
+        if (mode === 'real') {
+          const timelineResponse = await fetch(
+            `/api/crm/timeline?${scope}&relationType=opportunity&relationId=${encodeURIComponent(opportunityId)}&limit=25`,
+            { signal },
+          );
+          if (timelineResponse.ok) {
+            const page = (await timelineResponse.json()) as TimelinePage;
+            setTimeline(page.items);
+          } else {
+            setTimeline([]);
+          }
         } else {
           setTimeline([]);
         }
-      } else {
-        setTimeline([]);
+        setStages(nextStages.filter((stage) => stage.active));
+      } catch (requestError: unknown) {
+        if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
+        setError(
+          requestError instanceof Error ? requestError.message : 'Opportunity could not be loaded.',
+        );
+      } finally {
+        if (!signal?.aborted) setIsLoading(false);
       }
-      setStages(nextStages.filter((stage) => stage.active));
-    } catch (requestError: unknown) {
-      if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-      setError(
-        requestError instanceof Error ? requestError.message : 'Opportunity could not be loaded.',
-      );
-    } finally {
-      if (!signal?.aborted) setIsLoading(false);
-    }
-  }
+    },
+    [activeOrganizationId, mode, opportunityId],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
     void load(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, opportunityId, mode]);
+  }, [load]);
 
   async function move(nextStageKey: string) {
     if (
@@ -132,7 +135,7 @@ export function OpportunityRecordView({ opportunityId }: OpportunityRecordViewPr
     return <div className="text-text-muted p-6 text-sm">Preparing opportunity workspace...</div>;
   if (!hasPermission('crm.read'))
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to view this opportunity.
       </div>
     );

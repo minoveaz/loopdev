@@ -30,8 +30,8 @@ export const ActionCard: React.FC<ActionCardProps> = ({
         intentStyles[intent]
       )}
     >
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-background-surface border border-border-technical shrink-0">
-        <span className="material-symbols-outlined text-[20px] text-text-muted opacity-80">
+      <div className="bg-background-surface border-border-technical flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border">
+        <span className="material-symbols-outlined text-text-muted text-[20px] opacity-80">
           {icon}
         </span>
       </div>
@@ -40,7 +40,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
         <LpdText size="sm" weight="bold" className="text-text-main">
           {title}
         </LpdText>
-        <LpdText size="xs" className="text-text-muted opacity-60 leading-tight">
+        <LpdText size="xs" className="text-text-muted leading-tight opacity-60">
           {description}
         </LpdText>
       </div>

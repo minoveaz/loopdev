@@ -37,7 +37,7 @@ export const InspectionDoDont: React.FC<InspectionDoDontProps> = ({ items }) => 
               {item.type === 'do' ? 'Recommended Usage' : 'Restricted Usage'}
             </LpdText>
             <LpdText size="xs" className="text-text-muted leading-relaxed">
-              <span className="font-bold text-text-main">{item.label}:</span> {item.description}
+              <span className="text-text-main font-bold">{item.label}:</span> {item.description}
             </LpdText>
           </div>
         </div>

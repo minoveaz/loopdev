@@ -39,7 +39,7 @@ export function ContactMobileCard({
     >
       {/* Top row: Avatar + Identity + Selection */}
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex min-w-0 items-center gap-3">
           <ContactAvatar
             name={fullName}
             size="md"
@@ -47,26 +47,26 @@ export function ContactMobileCard({
             statusDotColor={contact.identityStatus === 'verified' ? 'emerald' : 'amber'}
           />
           <div className="min-w-0">
-            <div className="flex items-center gap-2 min-w-0 truncate">
+            <div className="flex min-w-0 items-center gap-2 truncate">
               <Link
                 href={`/sales-crm/contacts/${contact.id}`}
-                className="font-medium text-text-main text-sm hover:underline hover:text-primary"
+                className="text-text-main hover:text-primary text-sm font-medium hover:underline"
               >
                 {fullName}
               </Link>
             </div>
             {contact.companyName ? (
-              <p className="flex items-center gap-1 text-xs text-text-muted truncate mt-0.5">
-                <Building2 size={12} strokeWidth={1.75} className="shrink-0 text-text-muted" />
+              <p className="text-text-muted mt-0.5 flex items-center gap-1 truncate text-xs">
+                <Building2 size={12} strokeWidth={1.75} className="text-text-muted shrink-0" />
                 <span className="truncate">{contact.companyName}</span>
               </p>
             ) : (
-              <p className="text-xs text-text-muted/70 italic mt-0.5">Sin empresa</p>
+              <p className="text-text-muted/70 mt-0.5 text-xs italic">Sin empresa</p>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex shrink-0 items-center gap-1.5">
           <ContactIdentityBadge status={contact.identityStatus} size="sm" />
           {onToggleSelect && (
             <button
@@ -75,7 +75,7 @@ export function ContactMobileCard({
                 e.stopPropagation();
                 onToggleSelect();
               }}
-              className="p-1 text-text-muted hover:text-text-main transition-colors"
+              className="text-text-muted hover:text-text-main p-1 transition-colors"
               title={isSelected ? 'Deseleccionar' : 'Seleccionar'}
               aria-label="Seleccionar fila"
             >
@@ -90,8 +90,8 @@ export function ContactMobileCard({
       </div>
 
       {/* Middle row: Pipeline metrics pill */}
-      <div className="flex items-center justify-between rounded-lg border border-border-subtle/80 bg-surface/50 px-3 py-2 text-xs">
-        <div className="flex items-center gap-1.5 text-text-muted">
+      <div className="border-border-subtle/80 bg-surface/50 flex items-center justify-between rounded-lg border px-3 py-2 text-xs">
+        <div className="text-text-muted flex items-center gap-1.5">
           <TrendingUp size={13} strokeWidth={1.75} className="text-primary" />
           <span>
             Tratos: <strong className="text-text-main font-semibold">{meta.dealCount}</strong>
@@ -103,17 +103,17 @@ export function ContactMobileCard({
             {formatCurrencyAmount(meta.totalPipelineValue)}
           </strong>
         </div>
-        <div className="text-[11px] text-text-muted">
+        <div className="text-text-muted text-[11px]">
           {formatRelativeActivity(contact.updatedAt)}
         </div>
       </div>
 
       {/* Bottom row: Direct communication channels + 360 Link */}
-      <div className="flex items-center justify-between gap-2 pt-1 border-t border-border-subtle/60">
+      <div className="border-border-subtle/60 flex items-center justify-between gap-2 border-t pt-1">
         <ContactDirectChannels email={contact.email} phone={contact.phone} variant="buttons" />
         <Link
           href={`/sales-crm/contacts/${contact.id}`}
-          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"
+          className="text-primary hover:bg-primary/10 inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors"
         >
           <span>Ver 360</span>
           <ArrowUpRight size={13} strokeWidth={2} />

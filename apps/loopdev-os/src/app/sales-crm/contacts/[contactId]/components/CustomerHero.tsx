@@ -61,23 +61,23 @@ export function CustomerHero({
       radius="xl"
       className={`shrink-0 p-4 sm:p-6 ${isMobileOnlyTab ? 'block' : 'hidden lg:block'}`}
     >
-      <div className="flex flex-col gap-4 lg:gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
         {/* Profile Identity */}
-        <div className="flex items-center sm:items-start justify-between sm:justify-start gap-3 sm:gap-4">
-          <div className="flex items-center sm:items-start gap-3 sm:gap-4 min-w-0">
+        <div className="flex items-center justify-between gap-3 sm:items-start sm:justify-start sm:gap-4">
+          <div className="flex min-w-0 items-center gap-3 sm:items-start sm:gap-4">
             <div className="relative shrink-0">
-              <div className="h-12 w-12 sm:h-20 sm:w-20 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-primary/20 via-primary/10 to-primary/30 border border-primary/20 flex items-center justify-center text-primary font-bold text-base sm:text-2xl shadow-xs">
+              <div className="from-primary/20 via-primary/10 to-primary/30 border-primary/20 text-primary shadow-xs flex h-12 w-12 items-center justify-center rounded-xl border bg-gradient-to-tr text-base font-bold sm:h-20 sm:w-20 sm:rounded-2xl sm:text-2xl">
                 {initials}
               </div>
               <span
-                className="absolute -bottom-0.5 -right-0.5 sm:-bottom-1 sm:-right-1 h-3.5 w-3.5 sm:h-5 sm:w-5 rounded-full bg-emerald-500 border-2 border-surface-light dark:border-surface-dark shadow-xs flex items-center justify-center"
+                className="border-surface-light dark:border-surface-dark shadow-xs absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 bg-emerald-500 sm:-bottom-1 sm:-right-1 sm:h-5 sm:w-5"
                 title="Active contact record"
               >
-                <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-white animate-pulse" />
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white sm:h-2 sm:w-2" />
               </span>
             </div>
 
-            <div className="space-y-0.5 sm:space-y-1 min-w-0">
+            <div className="min-w-0 space-y-0.5 sm:space-y-1">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
                 <Heading
                   as="h1"
@@ -87,23 +87,23 @@ export function CustomerHero({
                 >
                   {name}
                 </Heading>
-                <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800">
+                <span className="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 sm:inline-flex dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   Authorized Contact
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-y-0.5 gap-x-2 sm:gap-x-4 text-xs sm:text-sm text-text-muted">
+              <div className="text-text-muted flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs sm:gap-x-4 sm:text-sm">
                 {view.contact.companyName ? (
-                  <div className="flex items-center gap-1 font-medium text-text-main">
-                    <Building2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-text-muted shrink-0" />
+                  <div className="text-text-main flex items-center gap-1 font-medium">
+                    <Building2 className="text-text-muted h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                     <span className="truncate">{view.contact.companyName}</span>
                   </div>
                 ) : (
                   <span className="text-text-muted italic">Individual Contact</span>
                 )}
-                <span className="hidden sm:inline text-border-subtle">•</span>
-                <span className="hidden sm:inline-flex items-center gap-1 text-xs text-text-muted">
+                <span className="text-border-subtle hidden sm:inline">•</span>
+                <span className="text-text-muted hidden items-center gap-1 text-xs sm:inline-flex">
                   <Clock className="h-3.5 w-3.5" /> ID: {contactId.slice(0, 8)}
                 </span>
               </div>
@@ -111,12 +111,12 @@ export function CustomerHero({
           </div>
 
           {/* Mobile Direct Action Buttons (Thumb zone) */}
-          <div className="flex items-center gap-2 lg:hidden shrink-0">
+          <div className="flex shrink-0 items-center gap-2 lg:hidden">
             {view.contact.phone ? (
               <a
                 href={`tel:${view.contact.phone}`}
                 aria-label="Llamar al contacto"
-                className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs shadow-xs active:scale-95 transition-transform"
+                className="shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xs text-emerald-600 transition-transform active:scale-95 sm:h-9 sm:w-9 dark:text-emerald-400"
                 title="Llamar"
               >
                 <Phone className="h-4 w-4" />
@@ -126,7 +126,7 @@ export function CustomerHero({
               <a
                 href={`mailto:${view.contact.email}`}
                 aria-label="Enviar correo"
-                className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs shadow-xs active:scale-95 transition-transform"
+                className="shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-500/10 text-xs text-blue-600 transition-transform active:scale-95 sm:h-9 sm:w-9 dark:text-blue-400"
                 title="Email"
               >
                 <Mail className="h-4 w-4" />
@@ -137,7 +137,7 @@ export function CustomerHero({
                 type="button"
                 onClick={onEditContact}
                 aria-label="Editar contacto"
-                className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs shadow-xs active:scale-95 transition-transform"
+                className="bg-primary/10 border-primary/20 text-primary shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border text-xs transition-transform active:scale-95 sm:h-9 sm:w-9"
                 title="Editar contacto"
               >
                 <Edit3 className="h-4 w-4" />
@@ -147,7 +147,7 @@ export function CustomerHero({
         </div>
 
         {/* Action Toolbar (Desktop >= 1024px) */}
-        <div className="hidden lg:flex flex-wrap items-center gap-3">
+        <div className="hidden flex-wrap items-center gap-3 lg:flex">
           <div className="w-44">
             <Select
               size="sm"
@@ -165,9 +165,9 @@ export function CustomerHero({
           {view.contact.email ? (
             <a
               href={`mailto:${view.contact.email}`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-light dark:bg-surface-dark px-3 py-2 text-xs font-medium text-text-main shadow-xs hover:bg-surface-muted/60 transition-all"
+              className="border-border-subtle bg-surface-light dark:bg-surface-dark text-text-main shadow-xs hover:bg-surface-muted/60 inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all"
             >
-              <Mail className="h-3.5 w-3.5 text-text-muted" />
+              <Mail className="text-text-muted h-3.5 w-3.5" />
               Email
             </a>
           ) : null}
@@ -175,9 +175,9 @@ export function CustomerHero({
           {view.contact.phone ? (
             <a
               href={`tel:${view.contact.phone}`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-light dark:bg-surface-dark px-3 py-2 text-xs font-medium text-text-main shadow-xs hover:bg-surface-muted/60 transition-all"
+              className="border-border-subtle bg-surface-light dark:bg-surface-dark text-text-main shadow-xs hover:bg-surface-muted/60 inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all"
             >
-              <Phone className="h-3.5 w-3.5 text-text-muted" />
+              <Phone className="text-text-muted h-3.5 w-3.5" />
               Call
             </a>
           ) : null}
@@ -186,17 +186,17 @@ export function CustomerHero({
             <button
               type="button"
               onClick={onEditContact}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-light dark:bg-surface-dark px-3 py-2 text-xs font-medium text-text-main shadow-xs hover:bg-surface-muted/60 transition-all"
+              className="border-border-subtle bg-surface-light dark:bg-surface-dark text-text-main shadow-xs hover:bg-surface-muted/60 inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all"
               title="Editar ficha completa"
             >
-              <Edit3 className="h-3.5 w-3.5 text-text-muted" />
+              <Edit3 className="text-text-muted h-3.5 w-3.5" />
               <span>Editar contacto</span>
             </button>
           )}
 
           <Link
             href={`/sales-crm/tasks/new?relationType=contact&relationId=${contactId}`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-xs font-medium text-white shadow-xs hover:bg-primary/90 transition-all"
+            className="bg-primary shadow-xs hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-medium text-white transition-all"
           >
             <Plus className="h-3.5 w-3.5" />
             Add Task
@@ -205,55 +205,55 @@ export function CustomerHero({
       </div>
 
       {/* Integrated Metric Strip */}
-      <div className="mt-3 sm:mt-6 pt-3 sm:pt-6 border-t border-border-subtle flex lg:grid items-center gap-2 sm:gap-6 overflow-x-auto pb-1 lg:pb-0 lg:grid-cols-4 no-scrollbar">
-        <div className="shrink-0 px-3 py-1.5 rounded-xl bg-surface-muted/30 lg:bg-transparent lg:p-0 border border-border-subtle/50 lg:border-none">
+      <div className="border-border-subtle no-scrollbar mt-3 flex items-center gap-2 overflow-x-auto border-t pb-1 pt-3 sm:mt-6 sm:gap-6 sm:pt-6 lg:grid lg:grid-cols-4 lg:pb-0">
+        <div className="bg-surface-muted/30 border-border-subtle/50 shrink-0 rounded-xl border px-3 py-1.5 lg:border-none lg:bg-transparent lg:p-0">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-1">
-              <span className="text-[11px] sm:text-xs font-medium text-text-muted">Pipeline</span>
+              <span className="text-text-muted text-[11px] font-medium sm:text-xs">Pipeline</span>
               {isOpportunitiesSimulated && <SimulatedBadge />}
             </div>
-            <TrendingUp className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" />
+            <TrendingUp className="text-primary h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
           </div>
-          <p className="mt-0.5 sm:mt-1 text-sm sm:text-2xl font-bold text-text-main tracking-tight whitespace-nowrap">
+          <p className="text-text-main mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight sm:mt-1 sm:text-2xl">
             {formatCurrency(totalPipelineValue)}
           </p>
         </div>
 
-        <div className="shrink-0 px-3 py-1.5 rounded-xl bg-surface-muted/30 lg:bg-transparent lg:p-0 border border-border-subtle/50 lg:border-none">
+        <div className="bg-surface-muted/30 border-border-subtle/50 shrink-0 rounded-xl border px-3 py-1.5 lg:border-none lg:bg-transparent lg:p-0">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-1">
-              <span className="text-[11px] sm:text-xs font-medium text-text-muted">Tareas</span>
+              <span className="text-text-muted text-[11px] font-medium sm:text-xs">Tareas</span>
               {isTasksSimulated && <SimulatedBadge />}
             </div>
-            <ListTodo className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-500 shrink-0" />
+            <ListTodo className="h-3.5 w-3.5 shrink-0 text-amber-500 sm:h-4 sm:w-4" />
           </div>
-          <p className="mt-0.5 sm:mt-1 text-sm sm:text-2xl font-bold text-amber-500 tracking-tight whitespace-nowrap">
+          <p className="mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight text-amber-500 sm:mt-1 sm:text-2xl">
             {openTasksCount} pend.
           </p>
         </div>
 
-        <div className="shrink-0 px-3 py-1.5 rounded-xl bg-surface-muted/30 lg:bg-transparent lg:p-0 border border-border-subtle/50 lg:border-none">
+        <div className="bg-surface-muted/30 border-border-subtle/50 shrink-0 rounded-xl border px-3 py-1.5 lg:border-none lg:bg-transparent lg:p-0">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-1">
-              <span className="text-[11px] sm:text-xs font-medium text-text-muted">Leads</span>
+              <span className="text-text-muted text-[11px] font-medium sm:text-xs">Leads</span>
               {isLeadsSimulated && <SimulatedBadge />}
             </div>
-            <UserCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-500 shrink-0" />
+            <UserCheck className="h-3.5 w-3.5 shrink-0 text-emerald-500 sm:h-4 sm:w-4" />
           </div>
-          <p className="mt-0.5 sm:mt-1 text-sm sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight whitespace-nowrap">
+          <p className="mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight text-emerald-600 sm:mt-1 sm:text-2xl dark:text-emerald-400">
             {leadsCount} cualif.
           </p>
         </div>
 
-        <div className="shrink-0 px-3 py-1.5 rounded-xl bg-surface-muted/30 lg:bg-transparent lg:p-0 border border-border-subtle/50 lg:border-none">
+        <div className="bg-surface-muted/30 border-border-subtle/50 shrink-0 rounded-xl border px-3 py-1.5 lg:border-none lg:bg-transparent lg:p-0">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-1">
-              <span className="text-[11px] sm:text-xs font-medium text-text-muted">Eventos</span>
+              <span className="text-text-muted text-[11px] font-medium sm:text-xs">Eventos</span>
               {isTimelineSimulated && <SimulatedBadge />}
             </div>
-            <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-purple-500 shrink-0" />
+            <Clock className="h-3.5 w-3.5 shrink-0 text-purple-500 sm:h-4 sm:w-4" />
           </div>
-          <p className="mt-0.5 sm:mt-1 text-sm sm:text-2xl font-bold text-text-main tracking-tight whitespace-nowrap">
+          <p className="text-text-main mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight sm:mt-1 sm:text-2xl">
             {timelineCount} hist.
           </p>
         </div>

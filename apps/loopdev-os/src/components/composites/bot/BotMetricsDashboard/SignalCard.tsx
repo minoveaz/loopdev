@@ -12,29 +12,29 @@ export function SignalCard({ label, signal, readyColor, gradient }: SignalCardPr
   return (
     <div className="space-y-2">
       <p className="text-micro text-primary-light">{label} Entry</p>
-      <div className="bg-surface-elevated rounded p-2 space-y-1">
-        <div className="flex justify-between text-nano">
+      <div className="bg-surface-elevated space-y-1 rounded p-2">
+        <div className="text-nano flex justify-between">
           <span className="text-primary-light">Trigger RSI:</span>
-          <span className="font-mono text-primary">{signal.required_level}</span>
+          <span className="text-primary font-mono">{signal.required_level}</span>
         </div>
-        <div className="flex justify-between text-nano">
+        <div className="text-nano flex justify-between">
           <span className="text-primary-light">Current RSI:</span>
-          <span className="font-mono text-primary">{signal.current_value.toFixed(1)}</span>
+          <span className="text-primary font-mono">{signal.current_value.toFixed(1)}</span>
         </div>
-        <div className="flex justify-between text-nano">
+        <div className="text-nano flex justify-between">
           <span className="text-primary-light">Gap:</span>
           <span className={`font-mono ${signal.ready ? readyColor : 'text-yellow-500'}`}>
             {formatPercentage(signal.gap_pct)}
           </span>
         </div>
-        <div className="flex items-center gap-2 mt-2">
-          <div className="flex-1 bg-surface-dark rounded h-1.5 overflow-hidden">
+        <div className="mt-2 flex items-center gap-2">
+          <div className="bg-surface-dark h-1.5 flex-1 overflow-hidden rounded">
             <div
               className={`h-full bg-gradient-to-r ${signal.ready ? gradient : 'from-yellow-500 to-orange-500'}`}
               style={{ width: `${progress}%` }}
             />
           </div>
-          <span className="text-nano font-mono text-primary-light">{progress.toFixed(0)}%</span>
+          <span className="text-nano text-primary-light font-mono">{progress.toFixed(0)}%</span>
         </div>
       </div>
     </div>

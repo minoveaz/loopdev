@@ -145,12 +145,12 @@ export function ContactDetailDrawerContent({
     <form
       id="customer-360-contact-edit-form"
       onSubmit={handleSubmit}
-      className="flex flex-col h-full space-y-4 sm:space-y-6 pb-20 sm:pb-0"
+      className="flex h-full flex-col space-y-4 pb-20 sm:space-y-6 sm:pb-0"
     >
       {errorMessage && (
         <div
           role="alert"
-          className="rounded-xl border border-status-error/40 bg-status-error/10 p-3.5 text-xs text-status-error font-medium"
+          className="border-status-error/40 bg-status-error/10 text-status-error rounded-xl border p-3.5 text-xs font-medium"
         >
           {errorMessage}
         </div>
@@ -159,7 +159,7 @@ export function ContactDetailDrawerContent({
       {saveSuccess && (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 text-xs text-emerald-700 dark:text-emerald-300 font-medium animate-in fade-in"
+          className="animate-in fade-in flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 text-xs font-medium text-emerald-700 dark:text-emerald-300"
         >
           <Check size={16} className="text-emerald-600" />
           <span>¡Contacto actualizado con éxito!</span>
@@ -188,7 +188,7 @@ export function ContactDetailDrawerContent({
       <FieldGroupSection groupKey="professional" values={formData} onChange={handleFieldChange} />
 
       {/* Footer desktop actions */}
-      <div className="hidden sm:flex items-center justify-end gap-3 pt-4 border-t border-border-subtle sticky bottom-0 bg-surface-light dark:bg-surface-dark pb-2">
+      <div className="border-border-subtle bg-surface-light dark:bg-surface-dark sticky bottom-0 hidden items-center justify-end gap-3 border-t pb-2 pt-4 sm:flex">
         <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={isSaving}>
           Cancelar
         </Button>

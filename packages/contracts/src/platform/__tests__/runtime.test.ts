@@ -11,9 +11,10 @@ describe('Platform runtime contracts', () => {
   });
 
   it('keeps network and persistence policies explicit', () => {
-    expect(
-      PlatformNetworkPolicySchema.parse({ reads: 'local', writes: 'blocked' }),
-    ).toEqual({ reads: 'local', writes: 'blocked' });
+    expect(PlatformNetworkPolicySchema.parse({ reads: 'local', writes: 'blocked' })).toEqual({
+      reads: 'local',
+      writes: 'blocked',
+    });
     expect(PlatformPersistencePolicySchema.safeParse('server').success).toBe(false);
   });
 });

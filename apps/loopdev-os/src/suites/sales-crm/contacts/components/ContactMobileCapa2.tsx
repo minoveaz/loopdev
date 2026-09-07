@@ -55,9 +55,9 @@ export function ContactMobileCapa2({
   ];
 
   return (
-    <div className="fixed bottom-16 left-0 right-0 z-40 block lg:hidden px-3 pointer-events-none">
-      <div className="mx-auto max-w-lg rounded-2xl border border-border-subtle/80 bg-background/95 p-1.5 shadow-lg backdrop-blur-md pointer-events-auto">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+    <div className="pointer-events-none fixed bottom-16 left-0 right-0 z-40 block px-3 lg:hidden">
+      <div className="border-border-subtle/80 bg-background/95 pointer-events-auto mx-auto max-w-lg rounded-2xl border p-1.5 shadow-lg backdrop-blur-md">
+        <div className="no-scrollbar flex items-center gap-1.5 overflow-x-auto py-0.5">
           {segments.map((seg) => {
             const isActive = activeSegment === seg.id;
             return (
@@ -74,7 +74,7 @@ export function ContactMobileCapa2({
                 {seg.icon}
                 <span>{seg.label}</span>
                 <span
-                  className={`ml-0.5 rounded-full px-1.5 py-0.2 text-[10px] font-semibold ${
+                  className={`py-0.2 ml-0.5 rounded-full px-1.5 text-[10px] font-semibold ${
                     isActive ? 'bg-white/20 text-white' : 'bg-surface-active text-text-muted'
                   }`}
                 >

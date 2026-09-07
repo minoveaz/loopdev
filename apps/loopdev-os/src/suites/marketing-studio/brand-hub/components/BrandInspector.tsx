@@ -33,7 +33,7 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
 
   if (isLoading) {
     return (
-      <div className="p-6 space-y-4">
+      <div className="space-y-4 p-6">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-32 w-full" />
         <Skeleton className="h-4 w-2/3" />
@@ -43,7 +43,7 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
 
   if (!entity) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-12 text-center opacity-40">
+      <div className="flex h-full flex-col items-center justify-center p-12 text-center opacity-40">
         <Heading as="h2" size="sm" weight="bold" className="font-mono uppercase tracking-widest">
           No Entity Selected
         </Heading>
@@ -62,7 +62,7 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
     if (token) {
       const colorToken = token as unknown as ColorToken;
       return (
-        <div className="p-6 h-full overflow-y-auto">
+        <div className="h-full overflow-y-auto p-6">
           <ColorTokenInspector token={colorToken} theme={previewTheme} activeTab={tab} />
         </div>
       );
@@ -93,7 +93,7 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
           <LpdText
             size="nano"
             weight="bold"
-            className="text-text-muted uppercase tracking-widest opacity-80 mb-2"
+            className="text-text-muted mb-2 uppercase tracking-widest opacity-80"
           >
             Description
           </LpdText>
@@ -108,7 +108,7 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
 
   if (tab === 'impact') {
     return (
-      <div className="p-6 space-y-4">
+      <div className="space-y-4 p-6">
         <ImpactBlock
           severity="high"
           title="High Impact Detected"
@@ -139,7 +139,7 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
         <LpdText
           size="nano"
           weight="bold"
-          className="text-text-muted uppercase tracking-widest opacity-80 mb-4"
+          className="text-text-muted mb-4 uppercase tracking-widest opacity-80"
         >
           Approval Chain
         </LpdText>
@@ -155,7 +155,7 @@ export const BrandInspector: React.FC<BrandInspectorProps> = ({ tab, context, is
   }
 
   return (
-    <div className="p-12 text-center opacity-40 italic">
+    <div className="p-12 text-center italic opacity-40">
       <LpdText size="xs">
         Content for &quot;{tab}&quot; tab not implemented yet for this entity.
       </LpdText>

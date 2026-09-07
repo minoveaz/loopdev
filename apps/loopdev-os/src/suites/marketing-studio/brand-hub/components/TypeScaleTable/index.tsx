@@ -3,7 +3,6 @@
 import React from 'react';
 import { LpdText } from '@loopdev/ui';
 import { calculateTypeScale } from './utils';
-import { clsx } from 'clsx';
 
 interface ScaleLevel {
   label: string;
@@ -39,26 +38,26 @@ export const TypeScaleTable: React.FC<TypeScaleTableProps> = ({
 }) => {
   
   return (
-    <div className="w-full bg-background-surface dark:bg-background-laboratory border border-border-technical/50 rounded-3xl overflow-hidden shadow-sm">
+    <div className="bg-background-surface dark:bg-background-laboratory border-border-technical/50 w-full overflow-hidden rounded-3xl border shadow-sm">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead className="bg-background-subtle/30 dark:bg-surface-glass border-b border-border-technical/30 text-[10px] uppercase text-text-muted font-bold tracking-widest">
+        <table className="w-full border-collapse text-left">
+          <thead className="bg-background-subtle/30 dark:bg-surface-glass border-border-technical/30 text-text-muted border-b text-[10px] font-bold uppercase tracking-widest">
             <tr>
-              <th className="px-8 py-5 w-1/3">Scale & Preview</th>
+              <th className="w-1/3 px-8 py-5">Scale & Preview</th>
               <th className="px-8 py-5">Technical Specs</th>
               <th className="px-8 py-5">Operational Usage</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border-technical/20">
+          <tbody className="divide-border-technical/20 divide-y">
             {SCALE_LEVELS.map((level) => {
               const sizes = calculateTypeScale(baseSize, scaleRatio, level.power);
               
               return (
-                <tr key={level.tag} className="hover:bg-background-subtle/20 dark:hover:bg-white/5 transition-colors group">
+                <tr key={level.tag} className="hover:bg-background-subtle/20 group transition-colors dark:hover:bg-white/5">
                   {/* PREVIEW COLUMN */}
                   <td className="px-8 py-8">
                     <div 
-                      className="text-text-main truncate max-w-sm"
+                      className="text-text-main max-w-sm truncate"
                       style={{ 
                         fontFamily: primaryFont,
                         fontSize: `${sizes.px}px`,
@@ -74,16 +73,16 @@ export const TypeScaleTable: React.FC<TypeScaleTableProps> = ({
                   <td className="px-8 py-8">
                     <div className="flex flex-col gap-1.5 font-mono">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-text-muted/60 uppercase">Size:</span>
-                        <span className="text-xs font-bold text-text-main">{sizes.px}px / {sizes.rem}rem</span>
+                        <span className="text-text-muted/60 text-[10px] uppercase">Size:</span>
+                        <span className="text-text-main text-xs font-bold">{sizes.px}px / {sizes.rem}rem</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-text-muted/60 uppercase">Weight:</span>
-                        <span className="text-xs text-text-muted">{level.weight}</span>
+                        <span className="text-text-muted/60 text-[10px] uppercase">Weight:</span>
+                        <span className="text-text-muted text-xs">{level.weight}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-text-muted/60 uppercase">Token:</span>
-                        <span className="px-1.5 py-0.5 rounded bg-primary/5 text-primary text-[9px] font-bold border border-primary/10">
+                        <span className="text-text-muted/60 text-[10px] uppercase">Token:</span>
+                        <span className="bg-primary/5 text-primary border-primary/10 rounded border px-1.5 py-0.5 text-[9px] font-bold">
                           text-{level.tag.toLowerCase()}
                         </span>
                       </div>
@@ -92,7 +91,7 @@ export const TypeScaleTable: React.FC<TypeScaleTableProps> = ({
 
                   {/* USAGE COLUMN */}
                   <td className="px-8 py-8">
-                    <LpdText size="sm" className="text-text-muted max-w-xs leading-relaxed italic">
+                    <LpdText size="sm" className="text-text-muted max-w-xs italic leading-relaxed">
                       {level.usage}
                     </LpdText>
                   </td>

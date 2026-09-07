@@ -21,7 +21,6 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
   targetPrice,
   atr,
   recentVolatility = 0.002, // Default 0.2% volatility per period
-  botName,
 }) => {
   // Calculate distance metrics
   const distance = Math.abs(targetPrice - currentPrice);
@@ -55,7 +54,7 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
     <TechnicalSurface
       variant="surface"
       depth="flat"
-      className="p-4 gap-3 flex flex-col bg-background-subtle/40"
+      className="bg-background-subtle/40 flex flex-col gap-3 p-4"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -102,22 +101,22 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
             {progressPercentage.toFixed(1)}%
           </LpdText>
         </div>
-        <div className="w-full h-1.5 bg-background-stronger rounded-full overflow-hidden">
+        <div className="bg-background-stronger h-1.5 w-full overflow-hidden rounded-full">
           <div
-            className={`h-full ${progressColor} transition-all duration-500 rounded-full`}
+            className={`h-full ${progressColor} rounded-full transition-all duration-500`}
             style={{ width: `${Math.min(progressPercentage, 100)}%` }}
           />
         </div>
       </div>
 
       {/* Time Estimate */}
-      <div className="flex items-center justify-between p-2 bg-background-strongest/30 rounded-lg border border-border-technical/20">
+      <div className="bg-background-strongest/30 border-border-technical/20 flex items-center justify-between rounded-lg border p-2">
         <LpdText size="nano" className="text-text-muted">
           Est. Execution Time
         </LpdText>
         <div className="flex items-center gap-3">
           {estimatedHours > 0 && (
-            <LpdText size="sm" weight="bold" className="font-mono text-text-main">
+            <LpdText size="sm" weight="bold" className="text-text-main font-mono">
               {estimatedHours}h {estimatedMinutes}m
             </LpdText>
           )}
@@ -132,7 +131,7 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
 
       {/* Price Range Info */}
       <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="flex flex-col gap-1 p-2 bg-background-strongest/20 rounded">
+        <div className="bg-background-strongest/20 flex flex-col gap-1 rounded p-2">
           <LpdText size="nano" className="text-text-muted">
             Current
           </LpdText>
@@ -140,7 +139,7 @@ export const BotExecutionMetrics: React.FC<BotExecutionMetricsProps> = ({
             ${currentPrice.toFixed(2)}
           </LpdText>
         </div>
-        <div className="flex flex-col gap-1 p-2 bg-background-strongest/20 rounded">
+        <div className="bg-background-strongest/20 flex flex-col gap-1 rounded p-2">
           <LpdText size="nano" className="text-text-muted">
             Target
           </LpdText>

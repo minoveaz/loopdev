@@ -83,13 +83,13 @@ export function ContextPanelHost({
         <div className="flex flex-col gap-4 overflow-y-auto p-4">
           <div className="border-border-technical flex flex-col gap-1.5 border-b pb-4">
             <span className="text-text-main text-lg font-bold dark:text-white">{displayName}</span>
-            <span className="text-text-muted text-xs truncate">{email}</span>
+            <span className="text-text-muted truncate text-xs">{email}</span>
             <div className="mt-1 flex items-center gap-2">
               <span className="border-primary/20 bg-primary/10 text-primary flex shrink-0 items-center rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                 {role}
               </span>
               {tenantName && (
-                <span className="border-border-technical bg-background-subtle text-text-muted flex shrink-0 items-center rounded border px-2 py-0.5 text-[10px] font-medium truncate max-w-[180px]">
+                <span className="border-border-technical bg-background-subtle text-text-muted flex max-w-[180px] shrink-0 items-center truncate rounded border px-2 py-0.5 text-[10px] font-medium">
                   {tenantName}
                 </span>
               )}
@@ -97,7 +97,7 @@ export function ContextPanelHost({
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-text-muted">
+            <span className="text-text-muted text-[10px] font-bold uppercase tracking-[0.16em]">
               Preferences & Settings
             </span>
             {['Profile', 'Account Settings', 'Billing'].map((item) => (
@@ -105,10 +105,10 @@ export function ContextPanelHost({
                 key={item}
                 type="button"
                 variant="outline"
-                className="justify-between text-xs opacity-75 cursor-default hover:bg-transparent"
+                className="cursor-default justify-between text-xs opacity-75 hover:bg-transparent"
               >
                 <span>{item}</span>
-                <span className="text-[9px] font-mono uppercase tracking-wider text-text-muted/60">
+                <span className="text-text-muted/60 font-mono text-[9px] uppercase tracking-wider">
                   Placeholder
                 </span>
               </Button>
@@ -117,7 +117,7 @@ export function ContextPanelHost({
 
           <div className="border-border-technical border-t pt-4">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-text-muted">
+              <span className="text-text-muted text-[10px] font-bold uppercase tracking-[0.16em]">
                 Timezone
               </span>
               <span className="border-border-technical bg-background-subtle text-primary flex items-center gap-1 rounded border px-1.5 py-0.5 text-[9px] font-medium">
@@ -125,7 +125,7 @@ export function ContextPanelHost({
                 Auto-detected
               </span>
             </div>
-            <div className="rounded-md border border-border-technical bg-background-subtle p-2.5 text-xs text-text-main dark:text-slate-200">
+            <div className="border-border-technical bg-background-subtle text-text-main rounded-md border p-2.5 text-xs dark:text-slate-200">
               <p className="font-mono text-xs">{detectedTimezone}</p>
             </div>
           </div>

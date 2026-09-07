@@ -32,10 +32,10 @@ export default function TradeHistoryPage() {
   };
 
   return (
-    <main className="h-full overflow-y-auto flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
+    <main className="animate-in fade-in custom-scrollbar mx-auto flex h-full max-w-[1600px] flex-col gap-8 overflow-y-auto p-8 pb-32 duration-700">
       {/* Header */}
       <header className="flex flex-col gap-2">
-        <LpdText size="2xl" weight="bold" className="text-text-main tracking-tight uppercase italic">
+        <LpdText size="2xl" weight="bold" className="text-text-main uppercase italic tracking-tight">
           Trade_Audit_History
         </LpdText>
         <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">

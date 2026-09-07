@@ -36,26 +36,26 @@ trigger within the existing header control height.
 
 ## Interaction contract
 
-| Capability | Pointer/touch | Keyboard/focus | Close behavior | Feedback |
-| --- | --- | --- | --- | --- |
-| Open environments | Activate trigger | Enter, Space or ArrowDown | Escape/outside closes | Menu opens beside trigger |
-| Select mode | Activate one item | Arrow navigation and Enter | Closes after selection | Trigger label and indicator update |
-| Current mode | Inspect indicator and checked item | `aria-checked` on active item | No separate action | Active item uses semantic accent |
+| Capability        | Pointer/touch                      | Keyboard/focus                | Close behavior         | Feedback                           |
+| ----------------- | ---------------------------------- | ----------------------------- | ---------------------- | ---------------------------------- |
+| Open environments | Activate trigger                   | Enter, Space or ArrowDown     | Escape/outside closes  | Menu opens beside trigger          |
+| Select mode       | Activate one item                  | Arrow navigation and Enter    | Closes after selection | Trigger label and indicator update |
+| Current mode      | Inspect indicator and checked item | `aria-checked` on active item | No separate action     | Active item uses semantic accent   |
 
 The menu is single-select. Selecting an item closes it. There is no clear
 action because one environment must always be active.
 
 ## States
 
-| State | Applicability | Required behavior |
-| --- | --- | --- |
-| `ready` | required | Shows current environment and opens menu |
-| `loading` | not-applicable | Runtime mode resolves synchronously |
-| `empty` | not-applicable | Three modes are fixed |
-| `error` | applicable | Runtime surfaces the error; selector does not invent a fallback |
-| `read-only` | applicable | Selector is hidden or disabled by the permission owner |
-| `disabled` | applicable | Trigger cannot open and communicates disabled state |
-| `forbidden` | applicable | Selector is not rendered for unauthorized users |
+| State       | Applicability  | Required behavior                                               |
+| ----------- | -------------- | --------------------------------------------------------------- |
+| `ready`     | required       | Shows current environment and opens menu                        |
+| `loading`   | not-applicable | Runtime mode resolves synchronously                             |
+| `empty`     | not-applicable | Three modes are fixed                                           |
+| `error`     | applicable     | Runtime surfaces the error; selector does not invent a fallback |
+| `read-only` | applicable     | Selector is hidden or disabled by the permission owner          |
+| `disabled`  | applicable     | Trigger cannot open and communicates disabled state             |
+| `forbidden` | applicable     | Selector is not rendered for unauthorized users                 |
 
 ## Responsive and accessibility contract
 

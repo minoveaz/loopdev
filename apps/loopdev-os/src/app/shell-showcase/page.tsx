@@ -521,7 +521,7 @@ function SplitModuleFixture({ onOpenPanel }: { onOpenPanel?: () => void }) {
                   }
                 : undefined
             }
-            className={`border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0 ${onOpenPanel ? 'cursor-pointer hover:bg-primary/5 focus-visible:bg-primary/5 focus-visible:outline-primary focus-visible:outline-2' : ''}`}
+            className={`border-border-technical text-text-main grid min-w-[62rem] grid-cols-[2rem_minmax(12rem,1fr)_minmax(10rem,1fr)_minmax(12rem,1fr)_7rem_8rem_9rem] gap-4 border-b px-4 py-3 text-sm last:border-b-0 ${onOpenPanel ? 'hover:bg-primary/5 focus-visible:bg-primary/5 focus-visible:outline-primary cursor-pointer focus-visible:outline-2' : ''}`}
           >
             <span className="text-text-muted">□</span>
             <span>{email}</span>
@@ -569,7 +569,7 @@ function SplitModuleToolbar({
         visibleOnDesktop={false}
         className="px-3"
         leftSlot={
-          <div className="flex min-w-0 w-full items-center gap-2">
+          <div className="flex w-full min-w-0 items-center gap-2">
             {onToggleContext ? (
               <IconButton
                 icon="menu"
@@ -588,7 +588,7 @@ function SplitModuleToolbar({
               startIcon={<Icon name="search" size="sm" />}
               variant="ghost"
               size="sm"
-              className="min-w-0 w-full"
+              className="w-full min-w-0"
             />
           </div>
         }
@@ -798,7 +798,7 @@ export default function ShellShowcasePage() {
               <ThemeToggle
                 variant="technical"
                 size="md"
-                className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
+                className="!border-border-technical !text-text-main !h-10 !w-full !rounded-md"
               />
             </div>
             <Button
@@ -825,7 +825,7 @@ export default function ShellShowcasePage() {
               size="sm"
               aria-label="Open module context"
               onClick={() => setIsSplitContextOpen(true)}
-              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary hover:text-white flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors"
+              className="text-primary border-primary/30 bg-primary/10 hover:bg-primary flex min-w-0 items-center gap-3 rounded-md border p-2 text-left text-xs font-semibold transition-colors hover:text-white"
             >
               <Menu aria-hidden="true" size={18} className="shrink-0" />
               {!isRail ? <span className="truncate">Open module context</span> : null}

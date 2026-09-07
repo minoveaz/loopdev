@@ -29,22 +29,22 @@ export const CimoFeedView: React.FC<CimoFeedViewProps> = ({
   return (
     <div className="flex flex-col gap-4">
       {/* Banner Philosophy */}
-      <div className="p-4 bg-white border border-[#1F4E5F]/10 rounded-3xl flex items-center gap-3.5 shadow-2xs">
-        <div className="w-10 h-10 rounded-2xl bg-[#7FB77E]/20 text-[#1F4E5F] flex items-center justify-center shrink-0 font-bold text-lg">
+      <div className="shadow-2xs flex items-center gap-3.5 rounded-3xl border border-[#1F4E5F]/10 bg-white p-4">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#7FB77E]/20 text-lg font-bold text-[#1F4E5F]">
           💡
         </div>
         <div className="text-xs">
-          <span className="font-extrabold text-[#1F4E5F] block text-sm">
+          <span className="block text-sm font-extrabold text-[#1F4E5F]">
             Match con entrenos, no con personas
           </span>
-          <span className="text-[#1F4E5F]/70 text-xs">
+          <span className="text-xs text-[#1F4E5F]/70">
             Únete a un Crew y conoce gente practicando deporte real en Madrid.
           </span>
         </div>
       </div>
 
       {/* Quick Sport Selector Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+      <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-1">
         {quickSports.map((sport) => {
           const isSelected = selectedSport.toLowerCase() === sport.id.toLowerCase();
           return (
@@ -52,10 +52,10 @@ export const CimoFeedView: React.FC<CimoFeedViewProps> = ({
               key={sport.id}
               type="button"
               onClick={() => onSelectSport(sport.id)}
-              className={`px-4 py-2 rounded-full text-xs font-extrabold whitespace-nowrap flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-xs font-extrabold transition-all ${
                 isSelected
-                  ? 'bg-[#1F4E5F] text-white shadow-xs'
-                  : 'bg-white border border-[#1F4E5F]/15 text-[#1F4E5F]/70 hover:bg-white'
+                  ? 'shadow-xs bg-[#1F4E5F] text-white'
+                  : 'border border-[#1F4E5F]/15 bg-white text-[#1F4E5F]/70 hover:bg-white'
               }`}
             >
               {sport.emoji && <span>{sport.emoji}</span>}
@@ -68,7 +68,7 @@ export const CimoFeedView: React.FC<CimoFeedViewProps> = ({
       {/* Activity Cards List */}
       <div className="flex flex-col gap-4">
         {activities.length === 0 ? (
-          <div className="p-12 text-center bg-white rounded-3xl border border-[#1F4E5F]/10 text-slate-400 text-xs">
+          <div className="rounded-3xl border border-[#1F4E5F]/10 bg-white p-12 text-center text-xs text-slate-400">
             No se encontraron planes para los filtros seleccionados.
           </div>
         ) : (

@@ -11,7 +11,6 @@ import { ActionLauncherProps } from './types';
  */
 export const ActionLauncher: React.FC<ActionLauncherProps> = ({
   brandStatus,
-  mode,
   onAction,
   isLoading
 }) => {

@@ -15,16 +15,13 @@ import {
   Clock,
   Coffee,
   Droplets,
-  Eye,
   FileText,
   Flame,
   Footprints,
-  Image as ImageIcon,
   MapPin,
   Minus,
   Plus,
   RefreshCw,
-  Search,
   Send,
   ShieldCheck,
   ShoppingBag,
@@ -33,10 +30,7 @@ import {
   Sun,
   Sunrise,
   Sunset,
-  Timer,
   Upload,
-  Users,
-  Wand2,
   Wrench,
   X,
   Zap,
@@ -105,15 +99,6 @@ const THIRD_HALF_TYPES = [
   },
 ];
 
-const THIRD_HALF_NOTES_SUGGESTIONS = [
-  'Mesa en terraza soleada',
-  'Café de especialidad y desayuno',
-  'Cañas y picoteo para comentar los puntos',
-  'Batidos proteicos y fruta fresca',
-  'Charla distendida de 30-40 min tras entrenar',
-  'Cada asistente paga su consumición',
-];
-
 export const TennisBallIcon: React.FC<{ className?: string }> = ({ className = 'w-6 h-6' }) => (
   <svg
     viewBox="0 0 24 24"
@@ -131,17 +116,6 @@ export const TennisBallIcon: React.FC<{ className?: string }> = ({ className = '
 );
 
 const sportsList = CIMO_SPORTS_CATALOG;
-
-const spanishCities = [
-  'Madrid',
-  'Barcelona',
-  'Valencia',
-  'Sevilla',
-  'Málaga',
-  'Bilbao',
-  'Zaragoza',
-  'Otra',
-];
 
 const cityLocationsMap: Record<string, string[]> = {
   Madrid: [
@@ -309,7 +283,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
   const [isCustomTimeOpen, setIsCustomTimeOpen] = useState(false);
   const [isMobilePreviewOpen, setIsMobilePreviewOpen] = useState(false);
   const [customCoords, setCustomCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const [customThirdHalfCoords, setCustomThirdHalfCoords] = useState<{
+  const [, setCustomThirdHalfCoords] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
@@ -323,7 +297,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
     location,
     selectedCity,
   );
-  const { results: liveThirdHalfResults, isLoading: isSearchingThirdHalf } = useSpainLocationSearch(
+  const { results: liveThirdHalfResults } = useSpainLocationSearch(
     thirdHalfVenue,
     selectedCity,
   );
@@ -348,7 +322,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const [calendarMonth, setCalendarMonth] = useState('Septiembre 2026');
+  const [calendarMonth] = useState('Septiembre 2026');
   const [selectedHour, setSelectedHour] = useState('19');
   const [selectedMinute, setSelectedMinute] = useState('30');
 
@@ -563,23 +537,6 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
     }
   };
 
-  const handleAddThirdHalfChip = (chipText: string) => {
-    if (thirdHalfNotes.includes(chipText)) {
-      const cleaned = thirdHalfNotes
-        .replace(
-          new RegExp(`\\.?\\s*${chipText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.?`, 'g'),
-          '',
-        )
-        .replace(/\s+/g, ' ')
-        .replace(/^\s*\.\s*/, '')
-        .trim();
-      setThirdHalfNotes(cleaned);
-    } else {
-      const updated = thirdHalfNotes.trim() ? `${thirdHalfNotes.trim()}. ${chipText}` : chipText;
-      setThirdHalfNotes(updated.slice(0, 300));
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -668,30 +625,30 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
   ];
 
   return (
-    <div className="flex flex-col gap-8 text-[#1F4E5F] w-full max-w-4xl mx-auto pb-20 min-w-0 animate-in fade-in duration-200">
+    <div className="animate-in fade-in mx-auto flex w-full min-w-0 max-w-4xl flex-col gap-8 pb-20 text-[#1F4E5F] duration-200">
       {/* 🧭 Top Navigation Header */}
-      <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-4">
-        <div className="flex items-center justify-between pb-3 border-b border-[#1F4E5F]/10">
+      <div className="shadow-xs flex flex-col gap-4 rounded-3xl border border-[#1F4E5F]/10 bg-white p-6 sm:p-9">
+        <div className="flex items-center justify-between border-b border-[#1F4E5F]/10 pb-3">
           <button
             type="button"
             onClick={onBack}
-            className="flex items-center gap-2 text-xs font-black text-[#1F4E5F]/70 hover:text-[#1F4E5F] transition-colors cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 text-xs font-black text-[#1F4E5F]/70 transition-colors hover:text-[#1F4E5F]"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="h-4 w-4" />
             <span>Volver a Explorar</span>
           </button>
 
-          <div className="flex items-center gap-1.5 text-xs font-black text-[#7FB77E] uppercase tracking-wider bg-[#7FB77E]/10 px-3 py-1 rounded-full">
-            <Award className="w-4 h-4" />
+          <div className="flex items-center gap-1.5 rounded-full bg-[#7FB77E]/10 px-3 py-1 text-xs font-black uppercase tracking-wider text-[#7FB77E]">
+            <Award className="h-4 w-4" />
             <span>Estudio de Capitán</span>
           </div>
         </div>
 
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-[#1F4E5F] tracking-tight">
+          <h1 className="text-2xl font-black tracking-tight text-[#1F4E5F] sm:text-3xl">
             Crea tu Entrenamiento Grupal
           </h1>
-          <p className="text-xs sm:text-sm text-[#1F4E5F]/70 mt-1.5 font-medium leading-relaxed">
+          <p className="mt-1.5 text-xs font-medium leading-relaxed text-[#1F4E5F]/70 sm:text-sm">
             Monta tu quedada en 5 pasos sencillos: elige deporte, cuándo y dónde, qué traer, si os
             tomáis algo después y listo.
           </p>
@@ -702,13 +659,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           <button
             type="button"
             onClick={() => setIsMobilePreviewOpen(true)}
-            className="w-full py-2.5 px-4 rounded-2xl bg-[#1F4E5F] hover:bg-[#163a47] text-white text-xs font-black flex items-center justify-between shadow-xs cursor-pointer active:scale-98 transition-all"
+            className="shadow-xs active:scale-98 flex w-full cursor-pointer items-center justify-between rounded-2xl bg-[#1F4E5F] px-4 py-2.5 text-xs font-black text-white transition-all hover:bg-[#163a47]"
           >
             <div className="flex items-center gap-2">
-              <Smartphone className="w-4 h-4 text-[#7FB77E]" />
+              <Smartphone className="h-4 w-4 text-[#7FB77E]" />
               <span>Ver Live Preview & Co-Piloto</span>
             </div>
-            <span className="bg-[#7FB77E] text-[#1F4E5F] text-[10px] font-black px-2 py-0.5 rounded-full">
+            <span className="rounded-full bg-[#7FB77E] px-2 py-0.5 text-[10px] font-black text-[#1F4E5F]">
               {previewScore}% Atractivo
             </span>
           </button>
@@ -719,21 +676,21 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* ========================================================================= */}
         {/* 🟢 BLOQUE 1: DEPORTE, NIVEL Y PLAZAS                                      */}
         {/* ========================================================================= */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8">
-          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
+        <div className="shadow-xs flex flex-col gap-7 rounded-3xl border border-[#1F4E5F]/10 bg-white p-6 sm:gap-8 sm:p-9">
+          <div className="flex flex-col gap-2.5 border-b border-[#1F4E5F]/10 pb-3.5">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+              <span className="shadow-2xs flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#7FB77E] text-xs font-black text-white">
                 1
               </span>
-              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm font-black uppercase tracking-wider text-[#1F4E5F] sm:text-base">
                 ¿Qué deporte practicamos?
               </h3>
             </div>
-            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
-              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+            <div className="pl-9.5 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-medium text-[#1F4E5F]/60">
                 Configura el deporte, ritmo sugerido y tamaño del grupo
               </span>
-              <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full shrink-0">
+              <span className="shrink-0 rounded-full bg-[#7FB77E]/10 px-3 py-1 text-xs font-black text-[#7FB77E]">
                 {selectedSportObj.label} • {maxMembers} plazas
               </span>
             </div>
@@ -742,16 +699,16 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           {/* 1.1 Deporte */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
+              <span className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[11px] font-black text-[#7FB77E]">
                   1.1
                 </span>
                 <span>Elige el deporte</span>
               </span>
-              <span className="text-xs font-bold text-[#7FB77E] capitalize">{sport}</span>
+              <span className="text-xs font-bold capitalize text-[#7FB77E]">{sport}</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
               {sportsList.map((s) => {
                 const isSelected = sport === s.id;
                 return (
@@ -763,27 +720,27 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       setSelectedPaceIndex(1);
                       setIsCustomImageMode(false);
                     }}
-                    className={`p-4 sm:p-5 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer ${
+                    className={`flex cursor-pointer flex-col items-center justify-center gap-2.5 rounded-2xl border p-4 text-center transition-all sm:p-5 ${
                       isSelected
-                        ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-md scale-[1.02]'
-                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white hover:border-[#1F4E5F]/25 shadow-2xs'
+                        ? 'scale-[1.02] border-[#7FB77E] bg-[#7FB77E] text-white shadow-md'
+                        : 'shadow-2xs border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:border-[#1F4E5F]/25 hover:bg-white'
                     }`}
                   >
                     <div
-                      className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#1F4E5F]'}`}
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/15 text-[#1F4E5F]'}`}
                     >
                       {s.id === 'hiking' ? (
-                        <Footprints className="w-6 h-6" />
+                        <Footprints className="h-6 w-6" />
                       ) : s.id === 'padel' ? (
-                        <TennisBallIcon className="w-6 h-6" />
+                        <TennisBallIcon className="h-6 w-6" />
                       ) : (
-                        <Flame className="w-6 h-6" />
+                        <Flame className="h-6 w-6" />
                       )}
                     </div>
                     <div className="flex flex-col items-center">
                       <span className="text-sm font-black">{s.label}</span>
                       <span
-                        className={`text-[11px] font-medium mt-0.5 line-clamp-1 ${isSelected ? 'text-white/90' : 'text-[#1F4E5F]/60'}`}
+                        className={`mt-0.5 line-clamp-1 text-[11px] font-medium ${isSelected ? 'text-white/90' : 'text-[#1F4E5F]/60'}`}
                       >
                         {s.description}
                       </span>
@@ -795,7 +752,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           </div>
 
           {/* 1.2 Nivel & Ritmo */}
-          <div className="pt-6 sm:pt-7 border-t border-[#1F4E5F]/10">
+          <div className="border-t border-[#1F4E5F]/10 pt-6 sm:pt-7">
             <CimoSportPaceSelector
               sport={sport}
               selectedIndex={selectedPaceIndex}
@@ -805,43 +762,43 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           </div>
 
           {/* 1.3 Cupo de Plazas */}
-          <div className="pt-6 sm:pt-7 border-t border-[#1F4E5F]/10 flex flex-col gap-3">
+          <div className="flex flex-col gap-3 border-t border-[#1F4E5F]/10 pt-6 sm:pt-7">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
+              <span className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[11px] font-black text-[#7FB77E]">
                   1.3
                 </span>
                 <span>¿Cuántas personas como máximo?</span>
               </span>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-2xl border border-[#1F4E5F]/10 bg-[#F7F7F7] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#1F4E5F]/10 bg-[#F7F7F7] p-4 sm:flex-row sm:items-center sm:p-5">
               <div>
-                <span className="text-xs font-black text-[#1F4E5F] block">
+                <span className="block text-xs font-black text-[#1F4E5F]">
                   Límite de asistentes al entreno
                 </span>
-                <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5 max-w-md">
+                <p className="mt-0.5 max-w-md text-xs font-medium text-[#1F4E5F]/70">
                   Recomendamos grupitos de 4 a 8 personas para asegurar buen ambiente, cercanía y
                   que nadie se quede atrás.
                 </p>
               </div>
 
-              <div className="flex items-center justify-between sm:justify-center gap-3 w-full sm:w-auto sm:min-w-[200px] bg-white px-4 py-2 rounded-2xl border border-[#1F4E5F]/15 shadow-2xs">
+              <div className="shadow-2xs flex w-full items-center justify-between gap-3 rounded-2xl border border-[#1F4E5F]/15 bg-white px-4 py-2 sm:w-auto sm:min-w-[200px] sm:justify-center">
                 <button
                   type="button"
                   disabled={maxMembers <= 2}
                   onClick={() => setMaxMembers(Math.max(2, maxMembers - 1))}
-                  className="w-9 h-9 rounded-xl bg-[#F7F7F7] hover:bg-[#7FB77E]/20 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors active:scale-95 shrink-0"
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-[#F7F7F7] font-bold text-[#1F4E5F] transition-colors hover:bg-[#7FB77E]/20 active:scale-95 disabled:opacity-30"
                   aria-label="Reducir plazas"
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className="h-4 w-4" />
                 </button>
 
-                <div className="flex flex-col items-center px-3 flex-1 sm:flex-initial sm:min-w-[95px]">
-                  <span className="text-sm sm:text-base font-black text-[#1F4E5F] text-center leading-none">
+                <div className="flex flex-1 flex-col items-center px-3 sm:min-w-[95px] sm:flex-initial">
+                  <span className="text-center text-sm font-black leading-none text-[#1F4E5F] sm:text-base">
                     {maxMembers} plazas
                   </span>
-                  <span className="text-[9px] font-black text-[#7FB77E] uppercase tracking-wider mt-0.5">
+                  <span className="mt-0.5 text-[9px] font-black uppercase tracking-wider text-[#7FB77E]">
                     {maxMembers <= 4 ? 'Íntimo' : maxMembers <= 8 ? 'Óptimo' : 'Amplio'}
                   </span>
                 </div>
@@ -850,10 +807,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   type="button"
                   disabled={maxMembers >= 16}
                   onClick={() => setMaxMembers(Math.min(16, maxMembers + 1))}
-                  className="w-9 h-9 rounded-xl bg-[#F7F7F7] hover:bg-[#7FB77E]/20 flex items-center justify-center text-[#1F4E5F] disabled:opacity-30 cursor-pointer font-bold transition-colors active:scale-95 shrink-0"
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-[#F7F7F7] font-bold text-[#1F4E5F] transition-colors hover:bg-[#7FB77E]/20 active:scale-95 disabled:opacity-30"
                   aria-label="Aumentar plazas"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="h-4 w-4" />
                 </button>
               </div>
             </div>
@@ -863,21 +820,21 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* ========================================================================= */}
         {/* 🟢 BLOQUE 2: CUÁNDO Y DÓNDE QUEDAMOS                                      */}
         {/* ========================================================================= */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8">
-          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
+        <div className="shadow-xs flex flex-col gap-7 rounded-3xl border border-[#1F4E5F]/10 bg-white p-6 sm:gap-8 sm:p-9">
+          <div className="flex flex-col gap-2.5 border-b border-[#1F4E5F]/10 pb-3.5">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+              <span className="shadow-2xs flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#7FB77E] text-xs font-black text-white">
                 2
               </span>
-              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm font-black uppercase tracking-wider text-[#1F4E5F] sm:text-base">
                 ¿Cuándo y dónde quedamos?
               </h3>
             </div>
-            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
-              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+            <div className="pl-9.5 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-medium text-[#1F4E5F]/60">
                 Fecha, horario y punto de encuentro con GPS
               </span>
-              <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full shrink-0">
+              <span className="shrink-0 rounded-full bg-[#7FB77E]/10 px-3 py-1 text-xs font-black text-[#7FB77E]">
                 {date} a las {time}h
               </span>
             </div>
@@ -886,8 +843,8 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           {/* 2.1 Fecha */}
           <div className="flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
+              <span className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[11px] font-black text-[#7FB77E]">
                   2.1
                 </span>
                 <span>¿Qué día entrenamos?</span>
@@ -895,7 +852,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               <span className="text-xs font-extrabold text-[#7FB77E]">{date}</span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
               {quickDates.map((qd) => {
                 const isSelected = date === qd.value && !isCustomCalendarOpen;
                 return (
@@ -906,15 +863,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       setDate(qd.value);
                       setIsCustomCalendarOpen(false);
                     }}
-                    className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
+                    className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border p-2.5 text-center transition-all ${
                       isSelected
-                        ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-xs scale-[1.02]'
+                        ? 'shadow-xs scale-[1.02] border-[#7FB77E] bg-[#7FB77E] text-white'
                         : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
                     }`}
                   >
                     <span className="text-xs font-black leading-tight">{qd.label}</span>
                     <span
-                      className={`text-[10px] font-bold mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}
+                      className={`mt-0.5 text-[10px] font-bold ${isSelected ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}
                     >
                       {qd.sub}
                     </span>
@@ -925,14 +882,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsCustomCalendarOpen(!isCustomCalendarOpen)}
-                className={`col-span-2 sm:col-span-2 lg:col-span-1 p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-row lg:flex-col items-center justify-center gap-2 lg:gap-0.5 ${
+                className={`col-span-2 flex cursor-pointer flex-row items-center justify-center gap-2 rounded-2xl border p-2.5 transition-all sm:col-span-2 lg:col-span-1 lg:flex-col lg:gap-0.5 ${
                   isCustomCalendarOpen
-                    ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-xs scale-[1.01]'
+                    ? 'shadow-xs scale-[1.01] border-[#7FB77E] bg-[#7FB77E] text-white'
                     : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
                 }`}
               >
                 <Calendar
-                  className={`w-4 h-4 shrink-0 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`}
+                  className={`h-4 w-4 shrink-0 ${isCustomCalendarOpen ? 'text-white' : 'text-[#7FB77E]'}`}
                 />
                 <div className="flex items-center gap-1.5 lg:flex-col lg:gap-0">
                   <span className="text-xs font-black leading-tight">Otro día</span>
@@ -946,30 +903,30 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             </div>
 
             {isCustomCalendarOpen && (
-              <div className="p-4 sm:p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-3 animate-in fade-in zoom-in-98 duration-200">
+              <div className="animate-in fade-in zoom-in-98 flex flex-col gap-3 rounded-3xl border border-[#1F4E5F]/15 bg-[#F7F7F7] p-4 duration-200 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
+                  <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
                     {calendarMonth}
                   </span>
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
-                      className="p-1.5 rounded-xl hover:bg-white text-[#1F4E5F] cursor-pointer"
+                      className="cursor-pointer rounded-xl p-1.5 text-[#1F4E5F] hover:bg-white"
                     >
-                      <ChevronLeft className="w-4 h-4" />
+                      <ChevronLeft className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
-                      className="p-1.5 rounded-xl hover:bg-white text-[#1F4E5F] cursor-pointer"
+                      className="cursor-pointer rounded-xl p-1.5 text-[#1F4E5F] hover:bg-white"
                     >
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-7 gap-1 text-center">
                   {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((day) => (
-                    <span key={day} className="text-[10px] font-black text-[#1F4E5F]/40 py-1">
+                    <span key={day} className="py-1 text-[10px] font-black text-[#1F4E5F]/40">
                       {day}
                     </span>
                   ))}
@@ -985,10 +942,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                         onClick={() => {
                           if (cd.dateStr) setDate(cd.dateStr);
                         }}
-                        className={`p-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                        className={`cursor-pointer rounded-xl p-2 text-xs font-black transition-all ${
                           isSelected
-                            ? 'bg-[#7FB77E] text-white shadow-xs'
-                            : 'hover:bg-white text-[#1F4E5F]'
+                            ? 'shadow-xs bg-[#7FB77E] text-white'
+                            : 'text-[#1F4E5F] hover:bg-white'
                         }`}
                       >
                         {cd.day}
@@ -1001,10 +958,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           </div>
 
           {/* 2.2 Hora */}
-          <div className="border-t border-[#1F4E5F]/10 pt-6 sm:pt-7 flex flex-col gap-3.5">
+          <div className="flex flex-col gap-3.5 border-t border-[#1F4E5F]/10 pt-6 sm:pt-7">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
+              <span className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[11px] font-black text-[#7FB77E]">
                   2.2
                 </span>
                 <span>¿A qué hora nos vemos?</span>
@@ -1012,7 +969,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               <span className="text-xs font-extrabold text-[#7FB77E]">{time}h</span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8">
               {quickTimes.map((qt) => {
                 const isSelected = time === qt.value && !isCustomTimeOpen;
                 return (
@@ -1023,26 +980,26 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       setTime(qt.value);
                       setIsCustomTimeOpen(false);
                     }}
-                    className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
+                    className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border p-2.5 text-center transition-all ${
                       isSelected
-                        ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-xs scale-[1.02]'
+                        ? 'shadow-xs scale-[1.02] border-[#7FB77E] bg-[#7FB77E] text-white'
                         : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
                     }`}
                   >
                     <div className="flex items-center gap-1">
                       {qt.period === 'Mañana' ? (
                         <Sunrise
-                          className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#7FB77E]'}`}
+                          className={`h-3.5 w-3.5 ${isSelected ? 'text-white' : 'text-[#7FB77E]'}`}
                         />
                       ) : (
                         <Sunset
-                          className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#7FB77E]'}`}
+                          className={`h-3.5 w-3.5 ${isSelected ? 'text-white' : 'text-[#7FB77E]'}`}
                         />
                       )}
                       <span className="text-xs font-black">{qt.label}</span>
                     </div>
                     <span
-                      className={`text-[9px] font-bold mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}
+                      className={`mt-0.5 text-[9px] font-bold ${isSelected ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}
                     >
                       {qt.period}
                     </span>
@@ -1053,18 +1010,18 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsCustomTimeOpen(!isCustomTimeOpen)}
-                className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center ${
+                className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border p-2.5 transition-all ${
                   isCustomTimeOpen
-                    ? 'border-[#7FB77E] bg-[#7FB77E] text-white shadow-xs scale-[1.02]'
+                    ? 'shadow-xs scale-[1.02] border-[#7FB77E] bg-[#7FB77E] text-white'
                     : 'border-dashed border-[#1F4E5F]/30 bg-white text-[#1F4E5F] hover:bg-[#F7F7F7]'
                 }`}
               >
                 <Clock
-                  className={`w-4 h-4 mb-0.5 ${isCustomTimeOpen ? 'text-white' : 'text-[#7FB77E]'}`}
+                  className={`mb-0.5 h-4 w-4 ${isCustomTimeOpen ? 'text-white' : 'text-[#7FB77E]'}`}
                 />
                 <span className="text-xs font-black leading-tight">Otra hora</span>
                 <span
-                  className={`text-[9px] font-bold mt-0.5 ${isCustomTimeOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}
+                  className={`mt-0.5 text-[9px] font-bold ${isCustomTimeOpen ? 'text-white/80' : 'text-[#1F4E5F]/50'}`}
                 >
                   Manual
                 </span>
@@ -1072,12 +1029,12 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             </div>
 
             {isCustomTimeOpen && (
-              <div className="p-5 bg-[#F7F7F7] rounded-3xl border border-[#1F4E5F]/15 flex flex-col gap-4 animate-in fade-in zoom-in-98 duration-200">
+              <div className="animate-in fade-in zoom-in-98 flex flex-col gap-4 rounded-3xl border border-[#1F4E5F]/15 bg-[#F7F7F7] p-5 duration-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-[#1F4E5F] uppercase tracking-wider">
+                  <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
                     Configura la hora exacta
                   </span>
-                  <span className="text-sm font-black bg-[#7FB77E] text-white px-3 py-1 rounded-full">
+                  <span className="rounded-full bg-[#7FB77E] px-3 py-1 text-sm font-black text-white">
                     {selectedHour}:{selectedMinute} h
                   </span>
                 </div>
@@ -1097,10 +1054,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                             setSelectedHour(hr);
                             setTime(`${hr}:${selectedMinute}`);
                           }}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                          className={`cursor-pointer rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all ${
                             isSelected
-                              ? 'bg-[#7FB77E] text-white font-black shadow-xs'
-                              : 'bg-white text-[#1F4E5F] hover:bg-[#7FB77E]/10 border border-[#1F4E5F]/10'
+                              ? 'shadow-xs bg-[#7FB77E] font-black text-white'
+                              : 'border border-[#1F4E5F]/10 bg-white text-[#1F4E5F] hover:bg-[#7FB77E]/10'
                           }`}
                         >
                           {hr}:00
@@ -1110,7 +1067,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1.5 pt-2 border-t border-[#1F4E5F]/10">
+                <div className="flex flex-col gap-1.5 border-t border-[#1F4E5F]/10 pt-2">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
                     Minutos:
                   </span>
@@ -1125,10 +1082,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                             setSelectedMinute(min);
                             setTime(`${selectedHour}:${min}`);
                           }}
-                          className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer text-center ${
+                          className={`flex-1 cursor-pointer rounded-xl py-2 text-center text-xs font-extrabold transition-all ${
                             isSelected
-                              ? 'bg-[#7FB77E] text-white font-black shadow-xs'
-                              : 'bg-white text-[#1F4E5F] hover:bg-[#7FB77E]/10 border border-[#1F4E5F]/10'
+                              ? 'shadow-xs bg-[#7FB77E] font-black text-white'
+                              : 'border border-[#1F4E5F]/10 bg-white text-[#1F4E5F] hover:bg-[#7FB77E]/10'
                           }`}
                         >
                           :{min}
@@ -1142,10 +1099,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           </div>
 
           {/* 2.3 Ciudad & Punto de Encuentro */}
-          <div className="border-t border-[#1F4E5F]/10 pt-6 sm:pt-7 flex flex-col gap-3.5">
+          <div className="flex flex-col gap-3.5 border-t border-[#1F4E5F]/10 pt-6 sm:pt-7">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
+              <span className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[11px] font-black text-[#7FB77E]">
                   2.3
                 </span>
                 <span>Ciudad y punto de encuentro</span>
@@ -1153,7 +1110,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               <span className="text-xs font-extrabold text-[#7FB77E]">{selectedCity}</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
                   Ciudad o Municipio
@@ -1161,22 +1118,22 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsCityComboboxOpen(true)}
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 hover:border-[#7FB77E] cursor-pointer bg-[#F7F7F7] hover:bg-white flex items-center justify-between text-xs font-extrabold text-[#1F4E5F] transition-all relative text-left shadow-2xs"
+                  className="shadow-2xs relative flex w-full cursor-pointer items-center justify-between rounded-xl border border-[#1F4E5F]/20 bg-[#F7F7F7] py-2.5 pl-9 pr-4 text-left text-xs font-extrabold text-[#1F4E5F] transition-all hover:border-[#7FB77E] hover:bg-white"
                 >
-                  <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3" />
+                  <MapPin className="absolute left-3 h-4 w-4 text-[#7FB77E]" />
                   <span className="truncate">{selectedCity}</span>
-                  <span className="text-[10px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2 py-0.5 rounded-full shrink-0">
+                  <span className="shrink-0 rounded-full bg-[#7FB77E]/10 px-2 py-0.5 text-[10px] font-black text-[#7FB77E]">
                     Cambiar
                   </span>
                 </button>
               </div>
 
-              <div className="flex flex-col gap-1.5 relative" ref={locationContainerRef}>
+              <div className="relative flex flex-col gap-1.5" ref={locationContainerRef}>
                 <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/60">
                   Punto o Lugar de encuentro
                 </label>
                 <div className="relative flex items-center">
-                  <MapPin className="w-4 h-4 text-[#7FB77E] absolute left-3 pointer-events-none" />
+                  <MapPin className="pointer-events-none absolute left-3 h-4 w-4 text-[#7FB77E]" />
                   <input
                     id="custom-location-input"
                     type="text"
@@ -1187,7 +1144,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       setIsLocationDropdownOpen(true);
                     }}
                     placeholder="Ej: Estatua del Ángel Caído (Retiro)"
-                    className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-black text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white shadow-2xs"
+                    className="shadow-2xs w-full rounded-xl border border-[#1F4E5F]/20 bg-[#F7F7F7] py-2.5 pl-9 pr-8 text-xs font-black text-[#1F4E5F] outline-none focus:border-[#7FB77E] focus:bg-white focus:ring-2 focus:ring-[#7FB77E]/20"
                   />
                   {location && (
                     <button
@@ -1196,9 +1153,9 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                         setLocation('');
                         setCustomCoords(null);
                       }}
-                      className="p-1 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
+                      className="absolute right-2.5 top-2.5 cursor-pointer rounded-full p-1 text-[#1F4E5F]/40 transition-colors hover:bg-[#F7F7F7] hover:text-[#1F4E5F]"
                     >
-                      <X className="w-3.5 h-3.5" />
+                      <X className="h-3.5 w-3.5" />
                     </button>
                   )}
                 </div>
@@ -1215,7 +1172,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                           );
 
                     return (
-                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/15 shadow-xl p-2.5 z-30 max-h-72 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
+                      <div className="animate-in fade-in zoom-in-98 absolute left-0 right-0 top-full z-30 mt-1.5 flex max-h-72 flex-col gap-1.5 overflow-y-auto rounded-2xl border border-[#1F4E5F]/15 bg-white p-2.5 shadow-xl duration-150">
                         {liveResults.length > 0 && (
                           <div className="flex flex-col gap-1 pb-1">
                             {liveResults.map((place) => (
@@ -1227,15 +1184,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                                   setCustomCoords({ lat: place.lat, lng: place.lng });
                                   setIsLocationDropdownOpen(false);
                                 }}
-                                className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#F7F7F7] text-[#1F4E5F]"
+                                className="flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-2 text-left text-[#1F4E5F] transition-all hover:bg-[#F7F7F7]"
                               >
-                                <div className="flex items-center gap-2.5 min-w-0">
-                                  <MapPin className="w-4 h-4 text-[#7FB77E] shrink-0" />
+                                <div className="flex min-w-0 items-center gap-2.5">
+                                  <MapPin className="h-4 w-4 shrink-0 text-[#7FB77E]" />
                                   <div className="truncate">
-                                    <span className="text-xs font-black block truncate leading-tight">
+                                    <span className="block truncate text-xs font-black leading-tight">
                                       {place.name}
                                     </span>
-                                    <span className="text-[10px] text-[#1F4E5F]/50 block truncate">
+                                    <span className="block truncate text-[10px] text-[#1F4E5F]/50">
                                       {place.address}
                                     </span>
                                   </div>
@@ -1246,15 +1203,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                         )}
 
                         {isSearchingPlaces && (
-                          <div className="px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/60 flex items-center gap-2 animate-pulse">
-                            <div className="w-3 h-3 rounded-full border-2 border-[#7FB77E] border-t-transparent animate-spin" />
+                          <div className="flex animate-pulse items-center gap-2 px-3 py-1.5 text-xs font-bold text-[#1F4E5F]/60">
+                            <div className="h-3 w-3 animate-spin rounded-full border-2 border-[#7FB77E] border-t-transparent" />
                             <span>Buscando en Google & OpenStreetMap...</span>
                           </div>
                         )}
 
-                        <div className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50 flex items-center justify-between">
+                        <div className="flex items-center justify-between px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1F4E5F]/50">
                           <span>Puntos frecuentes en {selectedCity}</span>
-                          <span className="text-[#7FB77E] font-black">
+                          <span className="font-black text-[#7FB77E]">
                             {displayPoints.length} sugeridos
                           </span>
                         </div>
@@ -1270,19 +1227,19 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                                 setCustomCoords(null);
                                 setIsLocationDropdownOpen(false);
                               }}
-                              className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
+                              className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-2 text-left text-xs font-extrabold transition-all ${
                                 isSelected
                                   ? 'bg-[#7FB77E] text-white'
-                                  : 'hover:bg-[#F7F7F7] text-[#1F4E5F]'
+                                  : 'text-[#1F4E5F] hover:bg-[#F7F7F7]'
                               }`}
                             >
                               <div className="flex items-center gap-2 truncate">
                                 <MapPin
-                                  className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#7FB77E]'} shrink-0`}
+                                  className={`h-3.5 w-3.5 ${isSelected ? 'text-white' : 'text-[#7FB77E]'} shrink-0`}
                                 />
                                 <span className="truncate">{pt}</span>
                               </div>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-white shrink-0" />}
+                              {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-white" />}
                             </button>
                           );
                         })}
@@ -1324,21 +1281,21 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* ========================================================================= */}
         {/* 🟢 BLOQUE 3: CONSEJOS DEL CAPITÁN Y QUÉ LLEVAR                            */}
         {/* ========================================================================= */}
-        <div className="bg-white border border-[#1F4E5F]/10 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8">
-          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
+        <div className="shadow-xs flex flex-col gap-7 rounded-3xl border border-[#1F4E5F]/10 bg-white p-6 sm:gap-8 sm:p-9">
+          <div className="flex flex-col gap-2.5 border-b border-[#1F4E5F]/10 pb-3.5">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+              <span className="shadow-2xs flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#7FB77E] text-xs font-black text-white">
                 3
               </span>
-              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm font-black uppercase tracking-wider text-[#1F4E5F] sm:text-base">
                 Consejos del Capitán y qué llevar
               </h3>
             </div>
-            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
-              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+            <div className="pl-9.5 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-medium text-[#1F4E5F]/60">
                 Instrucciones de ruta y checklist de equipamiento
               </span>
-              <span className="text-xs font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full shrink-0">
+              <span className="shrink-0 rounded-full bg-[#7FB77E]/10 px-3 py-1 text-xs font-black text-[#7FB77E]">
                 {selectedGearIds.length} recomendados
               </span>
             </div>
@@ -1353,25 +1310,25 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
           />
 
           {/* 3.2 Material Recomendado */}
-          <div className="border-t border-[#1F4E5F]/10 pt-6 sm:pt-7 flex flex-col gap-3.5 sm:gap-4">
+          <div className="flex flex-col gap-3.5 border-t border-[#1F4E5F]/10 pt-6 sm:gap-4 sm:pt-7">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
+              <span className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[11px] font-black text-[#7FB77E]">
                   3.2
                 </span>
-                <ShoppingBag className="w-4 h-4 text-[#7FB77E]" />
+                <ShoppingBag className="h-4 w-4 text-[#7FB77E]" />
                 <span>¿Qué material deben traer? ({selectedSportObj.label})</span>
               </span>
-              <span className="text-[11px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+              <span className="rounded-full bg-[#7FB77E]/10 px-2.5 py-0.5 text-[11px] font-bold text-[#7FB77E]">
                 Checklist
               </span>
             </div>
 
-            <p className="text-xs text-[#1F4E5F]/70 font-medium">
+            <p className="text-xs font-medium text-[#1F4E5F]/70">
               Marca el equipamiento recomendado para los asistentes:
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-2">
               {getSportGear(sport).map((item) => {
                 const isSelected = selectedGearIds.includes(item.id);
                 return (
@@ -1385,58 +1342,58 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                           : [...prev, item.id],
                       );
                     }}
-                    className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3.5 ${
+                    className={`flex cursor-pointer items-center justify-between gap-3.5 rounded-2xl border p-4 text-left transition-all ${
                       isSelected
-                        ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/20 shadow-2xs'
+                        ? 'shadow-2xs border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/20'
                         : 'border-[#1F4E5F]/10 bg-[#F7F7F7] opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex min-w-0 items-center gap-3">
                       <div
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-2xs ${
+                        className={`shadow-2xs flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${
                           isSelected ? 'bg-[#7FB77E] text-white' : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'
                         }`}
                       >
                         {item.icon === 'Footprints' ? (
-                          <Footprints className="w-5 h-5" />
+                          <Footprints className="h-5 w-5" />
                         ) : item.icon === 'Droplets' ? (
-                          <Droplets className="w-5 h-5" />
+                          <Droplets className="h-5 w-5" />
                         ) : item.icon === 'Apple' ? (
-                          <Apple className="w-5 h-5" />
+                          <Apple className="h-5 w-5" />
                         ) : item.icon === 'Sun' ? (
-                          <Sun className="w-5 h-5" />
+                          <Sun className="h-5 w-5" />
                         ) : item.icon === 'Activity' ? (
-                          <Activity className="w-5 h-5" />
+                          <Activity className="h-5 w-5" />
                         ) : item.icon === 'CheckCircle2' ? (
-                          <CheckCircle2 className="w-5 h-5" />
+                          <CheckCircle2 className="h-5 w-5" />
                         ) : item.icon === 'Bike' ? (
-                          <Bike className="w-5 h-5" />
+                          <Bike className="h-5 w-5" />
                         ) : item.icon === 'ShieldCheck' ? (
-                          <ShieldCheck className="w-5 h-5" />
+                          <ShieldCheck className="h-5 w-5" />
                         ) : item.icon === 'Wrench' ? (
-                          <Wrench className="w-5 h-5" />
+                          <Wrench className="h-5 w-5" />
                         ) : item.icon === 'Flame' ? (
-                          <Flame className="w-5 h-5" />
+                          <Flame className="h-5 w-5" />
                         ) : (
-                          <Zap className="w-5 h-5" />
+                          <Zap className="h-5 w-5" />
                         )}
                       </div>
                       <div className="min-w-0">
-                        <span className="text-xs sm:text-sm font-black text-[#1F4E5F] block leading-snug">
+                        <span className="block text-xs font-black leading-snug text-[#1F4E5F] sm:text-sm">
                           {item.label}
                         </span>
-                        <span className="text-xs text-[#1F4E5F]/70 font-medium block leading-snug mt-0.5">
+                        <span className="mt-0.5 block text-xs font-medium leading-snug text-[#1F4E5F]/70">
                           {item.sub}
                         </span>
                       </div>
                     </div>
 
                     <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors ${
                         isSelected ? 'bg-[#7FB77E] text-white' : 'border-2 border-[#1F4E5F]/20'
                       }`}
                     >
-                      {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                      {isSelected && <Check className="h-3.5 w-3.5 stroke-[3]" />}
                     </div>
                   </button>
                 );
@@ -1448,63 +1405,63 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* ========================================================================= */}
         {/* 🔵 BLOQUE 4: TERCER TIEMPO SOCIAL                                         */}
         {/* ========================================================================= */}
-        <div className="border-2 border-[#1F4E5F]/30 bg-gradient-to-br from-[#1F4E5F]/10 via-white to-[#1F4E5F]/5 rounded-3xl p-6 sm:p-9 shadow-xs flex flex-col gap-7 sm:gap-8 text-[#1F4E5F]">
-          <div className="flex flex-col gap-3 pb-3.5 border-b border-[#1F4E5F]/15">
+        <div className="shadow-xs flex flex-col gap-7 rounded-3xl border-2 border-[#1F4E5F]/30 bg-gradient-to-br from-[#1F4E5F]/10 via-white to-[#1F4E5F]/5 p-6 text-[#1F4E5F] sm:gap-8 sm:p-9">
+          <div className="flex flex-col gap-3 border-b border-[#1F4E5F]/15 pb-3.5">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-full bg-[#1F4E5F] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+              <span className="shadow-2xs flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1F4E5F] text-xs font-black text-white">
                 4
               </span>
-              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm font-black uppercase tracking-wider text-[#1F4E5F] sm:text-base">
                 Tercer Tiempo Social
               </h3>
             </div>
 
-            <div className="flex items-center justify-between gap-3 pl-9.5">
+            <div className="pl-9.5 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-black text-[#1F4E5F] bg-[#1F4E5F]/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                  <Coffee className="w-3.5 h-3.5 text-[#1F4E5F] shrink-0" />
+                <span className="flex items-center gap-1.5 rounded-full bg-[#1F4E5F]/10 px-3 py-1.5 text-xs font-black text-[#1F4E5F]">
+                  <Coffee className="h-3.5 w-3.5 shrink-0 text-[#1F4E5F]" />
                   <span>
                     {hasThirdHalf ? 'Activado • Tomar algo post-entreno' : 'Opcional (Desactivado)'}
                   </span>
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-[11px] font-bold text-[#1F4E5F]/70 hidden sm:inline">
+              <div className="flex shrink-0 items-center gap-2">
+                <span className="hidden text-[11px] font-bold text-[#1F4E5F]/70 sm:inline">
                   {hasThirdHalf ? 'Incluir en el plan' : 'Desactivado'}
                 </span>
                 <button
                   type="button"
                   onClick={() => setHasThirdHalf(!hasThirdHalf)}
-                  className={`w-12 h-6 rounded-full transition-colors p-1 cursor-pointer flex items-center shrink-0 ${
-                    hasThirdHalf ? 'bg-[#1F4E5F] justify-end' : 'bg-[#1F4E5F]/20 justify-start'
+                  className={`flex h-6 w-12 shrink-0 cursor-pointer items-center rounded-full p-1 transition-colors ${
+                    hasThirdHalf ? 'justify-end bg-[#1F4E5F]' : 'justify-start bg-[#1F4E5F]/20'
                   }`}
                   aria-label="Activar o desactivar tercer tiempo"
                 >
-                  <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                  <div className="shadow-xs h-4 w-4 rounded-full bg-white" />
                 </button>
               </div>
             </div>
           </div>
 
           <div>
-            <span className="text-xs font-black text-[#1F4E5F] block">
+            <span className="block text-xs font-black text-[#1F4E5F]">
               ¿Nos tomamos algo después de entrenar?
             </span>
-            <p className="text-xs text-[#1F4E5F]/75 font-medium mt-0.5 leading-relaxed">
+            <p className="mt-0.5 text-xs font-medium leading-relaxed text-[#1F4E5F]/75">
               El post-entreno perfecto para charlar, reponer fuerzas y conocer a los demás miembros
               del grupo.
             </p>
           </div>
 
           {hasThirdHalf && (
-            <div className="flex flex-col gap-6 pt-1 animate-in fade-in zoom-in-98 duration-150">
+            <div className="animate-in fade-in zoom-in-98 flex flex-col gap-6 pt-1 duration-150">
               {/* Type selector pills */}
               <div className="flex flex-col gap-2">
                 <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/80">
                   4.1 ¿Qué os apetece tomar?
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {THIRD_HALF_TYPES.map((tht) => {
                     const isSelected = thirdHalfType === tht.id;
                     return (
@@ -1520,16 +1477,16 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                             setThirdHalfVenue(tht.defaultVenue);
                           }
                         }}
-                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                        className={`flex cursor-pointer flex-col items-center gap-1 rounded-2xl border p-3 text-center transition-all ${
                           isSelected
-                            ? 'border-[#1F4E5F] bg-[#1F4E5F] text-white ring-2 ring-[#1F4E5F]/30 shadow-2xs scale-[1.02]'
-                            : 'border-[#1F4E5F]/15 bg-white hover:bg-[#1F4E5F]/5 text-[#1F4E5F]'
+                            ? 'shadow-2xs scale-[1.02] border-[#1F4E5F] bg-[#1F4E5F] text-white ring-2 ring-[#1F4E5F]/30'
+                            : 'border-[#1F4E5F]/15 bg-white text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
                         }`}
                       >
                         <div
-                          className={`w-8 h-8 rounded-xl flex items-center justify-center ${isSelected ? 'bg-white/20 text-white' : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'}`}
+                          className={`flex h-8 w-8 items-center justify-center rounded-xl ${isSelected ? 'bg-white/20 text-white' : 'bg-[#1F4E5F]/10 text-[#1F4E5F]'}`}
                         >
-                          <tht.icon className="w-4 h-4" />
+                          <tht.icon className="h-4 w-4" />
                         </div>
                         <span className="text-xs font-black">{tht.label}</span>
                       </button>
@@ -1539,7 +1496,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               </div>
 
               {/* 4.2 Ciudad & Local / Terraza con buscador Maps GPS */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/80">
                     Ciudad o Municipio
@@ -1547,22 +1504,22 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsCityComboboxOpen(true)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 hover:border-[#1F4E5F] cursor-pointer bg-white flex items-center justify-between text-xs font-extrabold text-[#1F4E5F] transition-all relative text-left shadow-2xs"
+                    className="shadow-2xs relative flex w-full cursor-pointer items-center justify-between rounded-xl border border-[#1F4E5F]/20 bg-white py-2.5 pl-9 pr-4 text-left text-xs font-extrabold text-[#1F4E5F] transition-all hover:border-[#1F4E5F]"
                   >
-                    <MapPin className="w-4 h-4 text-[#1F4E5F] absolute left-3" />
+                    <MapPin className="absolute left-3 h-4 w-4 text-[#1F4E5F]" />
                     <span className="truncate">{selectedCity}</span>
-                    <span className="text-[10px] font-black text-[#1F4E5F] bg-[#1F4E5F]/10 px-2 py-0.5 rounded-full shrink-0">
+                    <span className="shrink-0 rounded-full bg-[#1F4E5F]/10 px-2 py-0.5 text-[10px] font-black text-[#1F4E5F]">
                       Cambiar
                     </span>
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-1.5 relative" ref={thirdHalfContainerRef}>
+                <div className="relative flex flex-col gap-1.5" ref={thirdHalfContainerRef}>
                   <label className="text-[11px] font-black uppercase tracking-wider text-[#1F4E5F]/80">
                     4.2 Lugar o local previsto en {selectedCity}
                   </label>
                   <div className="relative flex items-center">
-                    <MapPin className="w-4 h-4 text-[#1F4E5F] absolute left-3 pointer-events-none" />
+                    <MapPin className="pointer-events-none absolute left-3 h-4 w-4 text-[#1F4E5F]" />
                     <input
                       type="text"
                       value={thirdHalfVenue}
@@ -1572,7 +1529,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                         setIsThirdHalfDropdownOpen(true);
                       }}
                       placeholder="Ej: Café Murillo, Terraza Florida Park, Honest Greens..."
-                      className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#1F4E5F]/25 focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 text-xs font-black text-[#1F4E5F] outline-none bg-white shadow-2xs"
+                      className="shadow-2xs w-full rounded-xl border border-[#1F4E5F]/25 bg-white py-2.5 pl-9 pr-8 text-xs font-black text-[#1F4E5F] outline-none focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20"
                     />
                     {thirdHalfVenue && (
                       <button
@@ -1581,9 +1538,9 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                           setThirdHalfVenue('');
                           setCustomThirdHalfCoords(null);
                         }}
-                        className="p-1 rounded-full hover:bg-[#1F4E5F]/10 text-[#1F4E5F]/40 hover:text-[#1F4E5F] absolute right-2.5 top-2.5 transition-colors cursor-pointer"
+                        className="absolute right-2.5 top-2.5 cursor-pointer rounded-full p-1 text-[#1F4E5F]/40 transition-colors hover:bg-[#1F4E5F]/10 hover:text-[#1F4E5F]"
                       >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="h-3.5 w-3.5" />
                       </button>
                     )}
                   </div>
@@ -1592,7 +1549,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                     (() => {
                       const spots = getThirdHalfSpots(selectedCity, thirdHalfType);
                       return (
-                        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl border border-[#1F4E5F]/20 shadow-xl p-2.5 z-30 max-h-60 overflow-y-auto flex flex-col gap-1.5 animate-in fade-in zoom-in-98 duration-150">
+                        <div className="animate-in fade-in zoom-in-98 absolute left-0 right-0 top-full z-30 mt-1.5 flex max-h-60 flex-col gap-1.5 overflow-y-auto rounded-2xl border border-[#1F4E5F]/20 bg-white p-2.5 shadow-xl duration-150">
                           {liveThirdHalfResults.length > 0 && (
                             <div className="flex flex-col gap-1 pb-1">
                               {liveThirdHalfResults.map((place) => (
@@ -1604,15 +1561,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                                     setCustomThirdHalfCoords({ lat: place.lat, lng: place.lng });
                                     setIsThirdHalfDropdownOpen(false);
                                   }}
-                                  className="w-full px-3 py-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between hover:bg-[#1F4E5F]/5 text-[#1F4E5F]"
+                                  className="flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-2 text-left text-[#1F4E5F] transition-all hover:bg-[#1F4E5F]/5"
                                 >
-                                  <div className="flex items-center gap-2.5 min-w-0">
-                                    <MapPin className="w-4 h-4 text-[#1F4E5F] shrink-0" />
+                                  <div className="flex min-w-0 items-center gap-2.5">
+                                    <MapPin className="h-4 w-4 shrink-0 text-[#1F4E5F]" />
                                     <div className="truncate">
-                                      <span className="text-xs font-black block truncate leading-tight">
+                                      <span className="block truncate text-xs font-black leading-tight">
                                         {place.name}
                                       </span>
-                                      <span className="text-[10px] text-[#1F4E5F]/50 block truncate">
+                                      <span className="block truncate text-[10px] text-[#1F4E5F]/50">
                                         {place.address}
                                       </span>
                                     </div>
@@ -1637,15 +1594,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                                   setCustomThirdHalfCoords(null);
                                   setIsThirdHalfDropdownOpen(false);
                                 }}
-                                className={`w-full px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer flex items-center justify-between ${
+                                className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-2 text-left text-xs font-extrabold transition-all ${
                                   isSelected
                                     ? 'bg-[#1F4E5F] text-white'
-                                    : 'hover:bg-[#1F4E5F]/5 text-[#1F4E5F]'
+                                    : 'text-[#1F4E5F] hover:bg-[#1F4E5F]/5'
                                 }`}
                               >
                                 <span className="truncate">{spot}</span>
                                 {isSelected && (
-                                  <Check className="w-3.5 h-3.5 text-white shrink-0" />
+                                  <Check className="h-3.5 w-3.5 shrink-0 text-white" />
                                 )}
                               </button>
                             );
@@ -1672,8 +1629,8 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                     ];
 
                     return (
-                      <div className="flex flex-wrap gap-1.5 mt-2">
-                        <span className="text-[10px] font-bold text-[#1F4E5F]/60 self-center mr-0.5">
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        <span className="mr-0.5 self-center text-[10px] font-bold text-[#1F4E5F]/60">
                           Sugerencias en {selectedCity}:
                         </span>
                         {cityPointSuggestions.map((venue) => {
@@ -1686,13 +1643,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                                 setThirdHalfVenue(venue.label);
                                 setCustomThirdHalfCoords(venue.coords);
                               }}
-                              className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                              className={`flex cursor-pointer items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold transition-all ${
                                 isSelected
-                                  ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-2xs'
-                                  : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border-[#1F4E5F]/15 shadow-2xs'
+                                  ? 'shadow-2xs border-[#1F4E5F] bg-[#1F4E5F] text-white'
+                                  : 'shadow-2xs border-[#1F4E5F]/15 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                               }`}
                             >
-                              <Plus className="w-3 h-3 text-[#1F4E5F]" />
+                              <Plus className="h-3 w-3 text-[#1F4E5F]" />
                               <span>{venue.label.split(',')[0]}</span>
                             </button>
                           );
@@ -1726,13 +1683,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       key={chip}
                       type="button"
                       onClick={() => setThirdHalfNotes(chip)}
-                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                      className={`flex cursor-pointer items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold transition-all ${
                         thirdHalfNotes === chip
-                          ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-2xs'
-                          : 'bg-[#F7F7F7] hover:bg-white text-[#1F4E5F] border-[#1F4E5F]/15 shadow-2xs'
+                          ? 'shadow-2xs border-[#1F4E5F] bg-[#1F4E5F] text-white'
+                          : 'shadow-2xs border-[#1F4E5F]/15 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                       }`}
                     >
-                      <Plus className="w-3 h-3 text-[#1F4E5F]" />
+                      <Plus className="h-3 w-3 text-[#1F4E5F]" />
                       <span>{chip}</span>
                     </button>
                   ))}
@@ -1743,7 +1700,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   value={thirdHalfNotes}
                   onChange={(e) => setThirdHalfNotes(e.target.value)}
                   placeholder="Escribe detalles del tercer tiempo: duración aproximada, tipo de consumición, reserva de mesa o terraza, buen rollo post-entreno..."
-                  className="w-full p-4 rounded-2xl border border-[#1F4E5F]/25 focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 text-xs sm:text-sm font-medium text-[#1F4E5F] outline-none bg-white shadow-2xs resize-none leading-relaxed transition-all"
+                  className="shadow-2xs w-full resize-none rounded-2xl border border-[#1F4E5F]/25 bg-white p-4 text-xs font-medium leading-relaxed text-[#1F4E5F] outline-none transition-all focus:border-[#1F4E5F] focus:ring-2 focus:ring-[#1F4E5F]/20 sm:text-sm"
                 />
               </div>
             </div>
@@ -1753,24 +1710,24 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
         {/* ========================================================================= */}
         {/* ✨ BLOQUE 5: DALE EL TOQUE FINAL Y PUBLICA                                 */}
         {/* ========================================================================= */}
-        <div className="bg-white border-2 border-[#7FB77E]/40 rounded-3xl p-6 sm:p-9 shadow-sm flex flex-col gap-7 sm:gap-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-[#7FB77E] via-[#1F4E5F] to-[#7FB77E]" />
+        <div className="relative flex flex-col gap-7 overflow-hidden rounded-3xl border-2 border-[#7FB77E]/40 bg-white p-6 shadow-sm sm:gap-8 sm:p-9">
+          <div className="absolute left-0 right-0 top-0 h-1.5 bg-gradient-to-r from-[#7FB77E] via-[#1F4E5F] to-[#7FB77E]" />
 
-          <div className="flex flex-col gap-2.5 pb-3.5 border-b border-[#1F4E5F]/10">
+          <div className="flex flex-col gap-2.5 border-b border-[#1F4E5F]/10 pb-3.5">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-full bg-[#7FB77E] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-2xs">
+              <span className="shadow-2xs flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#7FB77E] text-xs font-black text-white">
                 5
               </span>
-              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-[#1F4E5F]">
+              <h3 className="text-sm font-black uppercase tracking-wider text-[#1F4E5F] sm:text-base">
                 Dale el toque final y publica
               </h3>
             </div>
-            <div className="flex items-center justify-between gap-2 flex-wrap pl-9.5">
-              <span className="text-xs text-[#1F4E5F]/60 font-medium">
+            <div className="pl-9.5 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-medium text-[#1F4E5F]/60">
                 Revisa el título, descripción y foto de portada antes de lanzar
               </span>
-              <span className="text-[11px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-3 py-1 rounded-full flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#7FB77E]" />
+              <span className="flex shrink-0 items-center gap-1 rounded-full bg-[#7FB77E]/10 px-3 py-1 text-[11px] font-black text-[#7FB77E]">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#7FB77E]" />
                 <span>Paso Final</span>
               </span>
             </div>
@@ -1788,34 +1745,34 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   setIsTitleManuallyEdited(false);
                   setTitle('');
                 }}
-                className="text-[11px] font-black text-[#7FB77E] hover:text-[#6ea26d] flex items-center gap-1 cursor-pointer"
+                className="flex cursor-pointer items-center gap-1 text-[11px] font-black text-[#7FB77E] hover:text-[#6ea26d]"
               >
-                <RefreshCw className="w-3 h-3" />
+                <RefreshCw className="h-3 w-3" />
                 <span>Restaurar sugerencia</span>
               </button>
             </div>
 
-            <p className="text-xs text-[#1F4E5F]/60 font-medium">
+            <p className="text-xs font-medium text-[#1F4E5F]/60">
               Hemos pensado 3 opciones automáticas con tus datos. Elige una con 1 clic o escribe la
               tuya:
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               <button
                 type="button"
                 onClick={() => {
                   setTitle(titleVariants.dynamic);
                   setIsTitleManuallyEdited(true);
                 }}
-                className={`p-3 rounded-2xl border text-left text-xs font-black transition-all cursor-pointer flex flex-col gap-1 ${
+                className={`flex cursor-pointer flex-col gap-1 rounded-2xl border p-3 text-left text-xs font-black transition-all ${
                   effectiveTitle === titleVariants.dynamic
                     ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] ring-2 ring-[#7FB77E]/30'
-                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                 }`}
               >
                 <div className="flex items-center justify-between text-[10px] font-black uppercase text-[#7FB77E]">
                   <span>Opción Dinámica</span>
-                  <Plus className="w-3 h-3 text-[#7FB77E]" />
+                  <Plus className="h-3 w-3 text-[#7FB77E]" />
                 </div>
                 <span className="line-clamp-2 leading-snug">{titleVariants.dynamic}</span>
               </button>
@@ -1826,15 +1783,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   setTitle(titleVariants.social);
                   setIsTitleManuallyEdited(true);
                 }}
-                className={`p-3 rounded-2xl border text-left text-xs font-black transition-all cursor-pointer flex flex-col gap-1 ${
+                className={`flex cursor-pointer flex-col gap-1 rounded-2xl border p-3 text-left text-xs font-black transition-all ${
                   effectiveTitle === titleVariants.social
                     ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] ring-2 ring-[#7FB77E]/30'
-                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                 }`}
               >
                 <div className="flex items-center justify-between text-[10px] font-black uppercase text-[#7FB77E]">
                   <span>Opción Social</span>
-                  <Plus className="w-3 h-3 text-[#7FB77E]" />
+                  <Plus className="h-3 w-3 text-[#7FB77E]" />
                 </div>
                 <span className="line-clamp-2 leading-snug">{titleVariants.social}</span>
               </button>
@@ -1845,15 +1802,15 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                   setTitle(titleVariants.technical);
                   setIsTitleManuallyEdited(true);
                 }}
-                className={`p-3 rounded-2xl border text-left text-xs font-black transition-all cursor-pointer flex flex-col gap-1 ${
+                className={`flex cursor-pointer flex-col gap-1 rounded-2xl border p-3 text-left text-xs font-black transition-all ${
                   effectiveTitle === titleVariants.technical
                     ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] ring-2 ring-[#7FB77E]/30'
-                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                    : 'border-[#1F4E5F]/15 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                 }`}
               >
                 <div className="flex items-center justify-between text-[10px] font-black uppercase text-[#7FB77E]">
                   <span>Opción Técnica</span>
-                  <Plus className="w-3 h-3 text-[#7FB77E]" />
+                  <Plus className="h-3 w-3 text-[#7FB77E]" />
                 </div>
                 <span className="line-clamp-2 leading-snug">{titleVariants.technical}</span>
               </button>
@@ -1867,19 +1824,19 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 setIsTitleManuallyEdited(true);
               }}
               placeholder={titleVariants.dynamic}
-              className="w-full px-4 py-3 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-sm font-black text-[#1F4E5F] outline-none bg-white shadow-2xs mt-1"
+              className="shadow-2xs mt-1 w-full rounded-2xl border border-[#1F4E5F]/20 bg-white px-4 py-3 text-sm font-black text-[#1F4E5F] outline-none focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20"
             />
           </div>
 
           {/* 5.2 Descripción Inteligente con Chips Estandarizados '+' */}
-          <div className="flex flex-col gap-2.5 pt-6 sm:pt-7 border-t border-[#1F4E5F]/10">
+          <div className="flex flex-col gap-2.5 border-t border-[#1F4E5F]/10 pt-6 sm:pt-7">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
                   5.2 Resumen de lo que vais a hacer
                 </label>
-                <span className="text-[10px] font-black text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                  <FileText className="w-3 h-3 text-[#7FB77E]" />
+                <span className="flex items-center gap-1 rounded-full bg-[#7FB77E]/10 px-2.5 py-0.5 text-[10px] font-black text-[#7FB77E]">
+                  <FileText className="h-3 w-3 text-[#7FB77E]" />
                   <span>Generado con tus datos</span>
                 </span>
               </div>
@@ -1891,10 +1848,10 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                     setIsDescriptionManuallyEdited(false);
                     setDescription('');
                   }}
-                  className="text-[11px] font-black text-[#7FB77E] hover:text-[#6ea26d] flex items-center gap-1 cursor-pointer"
+                  className="flex cursor-pointer items-center gap-1 text-[11px] font-black text-[#7FB77E] hover:text-[#6ea26d]"
                   title="Restaurar el texto recopilado automáticamente a partir de todos tus campos"
                 >
-                  <RefreshCw className="w-3 h-3 text-[#7FB77E]" />
+                  <RefreshCw className="h-3 w-3 text-[#7FB77E]" />
                   <span>Regenerar con mis datos</span>
                 </button>
                 <span className="text-[11px] font-bold text-[#1F4E5F]/40">
@@ -1903,7 +1860,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               </div>
             </div>
 
-            <p className="text-xs text-[#1F4E5F]/60 font-medium">
+            <p className="text-xs font-medium text-[#1F4E5F]/60">
               Hemos redactado este resumen con todo lo que has rellenado. ¡Léelo, cámbiale lo que
               quieras o acéptalo tal cual!
             </p>
@@ -1919,16 +1876,16 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       key={chip}
                       type="button"
                       onClick={() => handleAddDescriptionChip(chip)}
-                      className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      className={`flex cursor-pointer items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                         isAdded
-                          ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F] font-black shadow-2xs'
-                          : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white text-[#1F4E5F]'
+                          ? 'shadow-2xs border-[#7FB77E] bg-[#7FB77E]/15 font-black text-[#1F4E5F]'
+                          : 'border-[#1F4E5F]/15 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                       }`}
                     >
                       {isAdded ? (
-                        <Check className="w-3.5 h-3.5 text-[#7FB77E] stroke-[3]" />
+                        <Check className="h-3.5 w-3.5 stroke-[3] text-[#7FB77E]" />
                       ) : (
-                        <Plus className="w-3.5 h-3.5 text-[#7FB77E]" />
+                        <Plus className="h-3.5 w-3.5 text-[#7FB77E]" />
                       )}
                       <span>{chip}</span>
                     </button>
@@ -1948,27 +1905,27 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               }}
               maxLength={600}
               placeholder="Descripción completa de tu convocatoria deportiva..."
-              className="w-full p-4.5 sm:p-5 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs sm:text-sm font-medium text-[#1F4E5F] outline-none bg-white shadow-2xs resize-none leading-relaxed transition-all min-h-[140px]"
+              className="p-4.5 shadow-2xs min-h-[140px] w-full resize-none rounded-2xl border border-[#1F4E5F]/20 bg-white text-xs font-medium leading-relaxed text-[#1F4E5F] outline-none transition-all focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 sm:p-5 sm:text-sm"
             />
           </div>
 
           {/* 5.3 Selector de Foto Real de Portada & Subida Personalizada */}
-          <div className="flex flex-col gap-3 pt-6 sm:pt-7 border-t border-[#1F4E5F]/10">
+          <div className="flex flex-col gap-3 border-t border-[#1F4E5F]/10 pt-6 sm:pt-7">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F] flex items-center gap-2">
-                <Camera className="w-4 h-4 text-[#7FB77E]" />
+              <label className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#1F4E5F]">
+                <Camera className="h-4 w-4 text-[#7FB77E]" />
                 <span>5.3 Elige la foto de portada ({selectedSportObj.label})</span>
               </label>
-              <span className="text-[10px] font-bold text-[#7FB77E] bg-[#7FB77E]/10 px-2.5 py-0.5 rounded-full">
+              <span className="rounded-full bg-[#7FB77E]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#7FB77E]">
                 Fotografías Reales
               </span>
             </div>
 
-            <p className="text-xs text-[#1F4E5F]/60 font-medium">
+            <p className="text-xs font-medium text-[#1F4E5F]/60">
               Elige una foto chula para tu convocatoria o sube una propia:
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {realPhotos.map((photo) => {
                 const isSelected = !isCustomImageMode && selectedCoverUrl === photo.url;
                 return (
@@ -1979,27 +1936,27 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                       setSelectedCoverUrl(photo.url);
                       setIsCustomImageMode(false);
                     }}
-                    className={`relative rounded-2xl overflow-hidden aspect-[16/10] border-2 transition-all cursor-pointer group text-left ${
+                    className={`group relative aspect-[16/10] cursor-pointer overflow-hidden rounded-2xl border-2 text-left transition-all ${
                       isSelected
-                        ? 'border-[#7FB77E] ring-4 ring-[#7FB77E]/20 shadow-md scale-[1.02]'
+                        ? 'scale-[1.02] border-[#7FB77E] shadow-md ring-4 ring-[#7FB77E]/20'
                         : 'border-[#1F4E5F]/15 opacity-75 hover:opacity-100'
                     }`}
                   >
-                    <img src={photo.url} alt={photo.title} className="w-full h-full object-cover" />
+                    <img src={photo.url} alt={photo.title} className="h-full w-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                     <div className="absolute bottom-2 left-2 right-2 flex flex-col text-white">
-                      <span className="text-[11px] font-black leading-tight line-clamp-1">
+                      <span className="line-clamp-1 text-[11px] font-black leading-tight">
                         {photo.title}
                       </span>
-                      <span className="text-[9px] text-[#7FB77E] font-bold leading-tight line-clamp-1">
+                      <span className="line-clamp-1 text-[9px] font-bold leading-tight text-[#7FB77E]">
                         {photo.locationTag}
                       </span>
                     </div>
 
                     {isSelected && (
-                      <div className="absolute top-2 right-2 bg-[#7FB77E] text-white p-1 rounded-full shadow-xs">
-                        <Check className="w-3 h-3 stroke-[3]" />
+                      <div className="shadow-xs absolute right-2 top-2 rounded-full bg-[#7FB77E] p-1 text-white">
+                        <Check className="h-3 w-3 stroke-[3]" />
                       </div>
                     )}
                   </button>
@@ -2007,7 +1964,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               })}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+            <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -2018,13 +1975,13 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className={`w-full sm:w-auto px-4 py-2.5 rounded-xl border text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-black transition-all sm:w-auto ${
                   isCustomImageMode && customImageUrl
                     ? 'border-[#7FB77E] bg-[#7FB77E]/15 text-[#1F4E5F]'
-                    : 'border-dashed border-[#1F4E5F]/30 hover:border-[#7FB77E] bg-[#F7F7F7] text-[#1F4E5F]'
+                    : 'border-dashed border-[#1F4E5F]/30 bg-[#F7F7F7] text-[#1F4E5F] hover:border-[#7FB77E]'
                 }`}
               >
-                <Upload className="w-3.5 h-3.5 text-[#7FB77E]" />
+                <Upload className="h-3.5 w-3.5 text-[#7FB77E]" />
                 <span>
                   {isCustomImageMode && customImageUrl
                     ? 'Foto subida correctamente'
@@ -2032,9 +1989,9 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 </span>
               </button>
 
-              <span className="text-xs font-bold text-[#1F4E5F]/40 hidden sm:inline">o</span>
+              <span className="hidden text-xs font-bold text-[#1F4E5F]/40 sm:inline">o</span>
 
-              <div className="relative flex-1 w-full">
+              <div className="relative w-full flex-1">
                 <input
                   type="text"
                   value={isCustomImageMode ? customImageUrl : ''}
@@ -2043,19 +2000,19 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                     setIsCustomImageMode(Boolean(e.target.value.trim()));
                   }}
                   placeholder="Pegar URL de foto personalizada..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#1F4E5F]/20 text-xs font-medium text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white"
+                  className="w-full rounded-xl border border-[#1F4E5F]/20 bg-[#F7F7F7] px-3.5 py-2.5 text-xs font-medium text-[#1F4E5F] outline-none focus:bg-white"
                 />
               </div>
             </div>
           </div>
 
           {/* Action Buttons: 1st Publicar, 2nd Cancelar on the same row */}
-          <div className="flex items-center gap-2.5 sm:gap-4 pt-6 sm:pt-8 border-t border-[#1F4E5F]/10 w-full">
+          <div className="flex w-full items-center gap-2.5 border-t border-[#1F4E5F]/10 pt-6 sm:gap-4 sm:pt-8">
             <button
               type="submit"
-              className="flex-1 py-3.5 sm:py-4 px-4 sm:px-6 rounded-2xl bg-[#7FB77E] hover:bg-[#6ea26d] text-white font-black text-xs sm:text-base shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 text-center min-h-[46px] sm:min-h-[52px]"
+              className="active:scale-98 flex min-h-[46px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl bg-[#7FB77E] px-4 py-3.5 text-center text-xs font-black text-white shadow-md transition-all hover:bg-[#6ea26d] hover:shadow-lg sm:min-h-[52px] sm:px-6 sm:py-4 sm:text-base"
             >
-              <Send className="w-4 h-4 text-white shrink-0" />
+              <Send className="h-4 w-4 shrink-0 text-white" />
               <span className="hidden sm:inline">Publicar Convocatoria Grupal</span>
               <span className="sm:hidden">Publicar Convocatoria</span>
             </button>
@@ -2063,7 +2020,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="px-4 sm:px-8 py-3.5 sm:py-4 rounded-2xl border border-[#1F4E5F]/20 text-xs sm:text-sm font-black text-[#1F4E5F] hover:bg-[#F7F7F7] transition-all cursor-pointer text-center shrink-0 min-h-[46px] sm:min-h-[52px] flex items-center justify-center"
+              className="flex min-h-[46px] shrink-0 cursor-pointer items-center justify-center rounded-2xl border border-[#1F4E5F]/20 px-4 py-3.5 text-center text-xs font-black text-[#1F4E5F] transition-all hover:bg-[#F7F7F7] sm:min-h-[52px] sm:px-8 sm:py-4 sm:text-sm"
             >
               Cancelar
             </button>
@@ -2072,16 +2029,16 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
       </form>
 
       {/* 📱 Mobile Floating Preview Trigger (lg:hidden) */}
-      <div className="fixed bottom-20 right-4 sm:right-6 z-50 lg:hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="animate-in fade-in slide-in-from-bottom-4 fixed bottom-20 right-4 z-50 duration-300 sm:right-6 lg:hidden">
         <button
           type="button"
           onClick={() => setIsMobilePreviewOpen(true)}
           aria-label="Abrir vista previa del plan"
-          className="px-4 py-3 bg-[#1F4E5F] hover:bg-[#163a47] text-white rounded-full font-black text-xs shadow-2xl flex items-center gap-2.5 border-2 border-white/30 active:scale-95 cursor-pointer backdrop-blur-md transition-all"
+          className="flex cursor-pointer items-center gap-2.5 rounded-full border-2 border-white/30 bg-[#1F4E5F] px-4 py-3 text-xs font-black text-white shadow-2xl backdrop-blur-md transition-all hover:bg-[#163a47] active:scale-95"
         >
-          <Smartphone className="w-4 h-4 text-[#7FB77E]" />
+          <Smartphone className="h-4 w-4 text-[#7FB77E]" />
           <span>Ver Preview</span>
-          <span className="bg-[#7FB77E] text-[#1F4E5F] text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-2xs">
+          <span className="shadow-2xs rounded-full bg-[#7FB77E] px-1.5 py-0.5 text-[10px] font-black text-[#1F4E5F]">
             {previewScore}%
           </span>
         </button>
@@ -2090,30 +2047,30 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
       {/* 📱 Mobile Bottom Sheet Modal (Option A: h-[96vh] Top-Edge Sheet) */}
       {isMobilePreviewOpen && (
         <div
-          className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+          className="backdrop-blur-xs animate-in fade-in fixed inset-0 z-50 flex flex-col justify-end bg-black/60 duration-200 lg:hidden"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setIsMobilePreviewOpen(false);
             }
           }}
         >
-          <div className="bg-[#FCFDFD] rounded-t-3xl h-[96vh] max-h-[96vh] flex flex-col shadow-2xl border-t border-[#1F4E5F]/15 animate-in slide-in-from-bottom duration-250">
+          <div className="animate-in slide-in-from-bottom duration-250 flex h-[96vh] max-h-[96vh] flex-col rounded-t-3xl border-t border-[#1F4E5F]/15 bg-[#FCFDFD] shadow-2xl">
             {/* Grab Handle */}
-            <div className="pt-3 pb-1 flex justify-center shrink-0">
-              <div className="w-12 h-1.5 rounded-full bg-slate-300" />
+            <div className="flex shrink-0 justify-center pb-1 pt-3">
+              <div className="h-1.5 w-12 rounded-full bg-slate-300" />
             </div>
 
             {/* Unified Top Header Bar */}
-            <div className="px-4 py-2.5 border-b border-[#1F4E5F]/10 flex items-center justify-between shrink-0">
+            <div className="flex shrink-0 items-center justify-between border-b border-[#1F4E5F]/10 px-4 py-2.5">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] flex items-center justify-center shrink-0">
-                  <Smartphone className="w-4 h-4 text-[#7FB77E]" />
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[#7FB77E]">
+                  <Smartphone className="h-4 w-4 text-[#7FB77E]" />
                 </span>
                 <div>
-                  <span className="text-xs font-black uppercase text-[#1F4E5F] tracking-wider block leading-tight">
+                  <span className="block text-xs font-black uppercase leading-tight tracking-wider text-[#1F4E5F]">
                     Vista Previa Móvil
                   </span>
-                  <span className="text-[10px] text-[#1F4E5F]/60 font-semibold block">
+                  <span className="block text-[10px] font-semibold text-[#1F4E5F]/60">
                     Score del plan: <strong className="text-[#2E7D32]">{previewScore}%</strong>
                   </span>
                 </div>
@@ -2123,14 +2080,14 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
                 type="button"
                 onClick={() => setIsMobilePreviewOpen(false)}
                 aria-label="Cerrar vista previa móvil"
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center cursor-pointer transition-colors"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-900"
               >
-                <X className="w-4 h-4" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
             {/* Scrollable Content: Live Preview Widget without duplicate header */}
-            <div className="p-4 overflow-y-auto flex-1">
+            <div className="flex-1 overflow-y-auto p-4">
               <CimoLivePlanPreviewWidget
                 formData={{
                   sport: selectedSportObj.label,

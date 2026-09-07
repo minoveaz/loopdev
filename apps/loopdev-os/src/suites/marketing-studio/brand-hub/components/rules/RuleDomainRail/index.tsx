@@ -5,15 +5,6 @@ import { RuleDomain } from '@loopdev/contracts';
 import { Heading, LpdText, Button } from '@loopdev/ui';
 import { clsx } from 'clsx';
 
-interface DomainStats {
-  id: RuleDomain | 'all';
-  label: string;
-  count: number;
-  blockers: number;
-  warnings: number;
-  icon: string;
-}
-
 interface RuleDomainRailProps {
   activeDomain: RuleDomain | 'all';
   onDomainChange: (domain: RuleDomain | 'all') => void;
@@ -38,8 +29,8 @@ export const RuleDomainRail: React.FC<RuleDomainRailProps> = ({
   stats
 }) => {
   return (
-    <div className="w-64 flex flex-col gap-2 border-r border-border-technical/50 pr-6">
-      <Heading as="h2" size="sm" weight="bold" className="text-text-muted uppercase tracking-widest mb-4 px-4">
+    <div className="border-border-technical/50 flex w-64 flex-col gap-2 border-r pr-6">
+      <Heading as="h2" size="sm" weight="bold" className="text-text-muted mb-4 px-4 uppercase tracking-widest">
         Rule Domains
       </Heading>
 
@@ -53,10 +44,10 @@ export const RuleDomainRail: React.FC<RuleDomainRailProps> = ({
             variant="ghost"
             onClick={() => onDomainChange(domain.id)}
             className={clsx(
-              "group flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 text-left",
-              isActive 
-                ? "bg-primary text-white shadow-lg shadow-primary/20" 
-                : "bg-transparent text-text-muted hover:bg-background-subtle hover:text-text-main"
+              "group flex items-center justify-between rounded-xl px-4 py-3 text-left transition-all duration-200",
+              isActive
+                ? "bg-primary shadow-primary/20 text-white shadow-lg"
+                : "text-text-muted hover:bg-background-subtle hover:text-text-main bg-transparent"
             )}
           >
             <div className="flex items-center gap-3">
@@ -74,12 +65,12 @@ export const RuleDomainRail: React.FC<RuleDomainRailProps> = ({
             <div className="flex items-center gap-1.5">
               {domainStats.blockers > 0 && (
                 <span className={clsx(
-                  "w-1.5 h-1.5 rounded-full bg-red-500",
+                  "h-1.5 w-1.5 rounded-full bg-red-500",
                   isActive && "bg-white ring-2 ring-red-500"
                 )}></span>
               )}
               <span className={clsx(
-                "text-[10px] font-mono font-bold px-1.5 py-0.5 rounded",
+                "rounded px-1.5 py-0.5 font-mono text-[10px] font-bold",
                 isActive ? "bg-white/20 text-white" : "bg-background-subtle text-text-muted"
               )}>
                 {domainStats.count}
@@ -89,8 +80,8 @@ export const RuleDomainRail: React.FC<RuleDomainRailProps> = ({
         );
       })}
 
-      <div className="mt-8 pt-8 border-t border-border-technical/30 px-4">
-        <div className="flex flex-col gap-4 p-4 rounded-2xl bg-background-subtle/50 border border-border-technical border-dashed">
+      <div className="border-border-technical/30 mt-8 border-t px-4 pt-8">
+        <div className="bg-background-subtle/50 border-border-technical flex flex-col gap-4 rounded-2xl border border-dashed p-4">
           <Heading as="h3" size="sm" weight="bold" className="text-text-muted uppercase">Health Summary</Heading>
           <div className="flex items-center justify-between">
             <LpdText size="xs" className="text-text-muted">Blocking</LpdText>

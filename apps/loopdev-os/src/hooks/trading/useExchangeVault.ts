@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useOrganization } from '@/hooks/useOrganization';
 
@@ -76,15 +77,20 @@ export const useExchangeVault = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
 
+  const fetchBalance = useCallback(async (accountId: string): Promise<BalanceResponse> => {
+    void accountId;
+    return {
+      success: false,
+      available_trading_usdt: 0,
+    };
+  }, []);
+
   return {
     accounts, isLoading, error,
     connectExchange: connectExchange.mutate, isConnecting: connectExchange.isPending,
     testConnection: (id: string, callbacks?: TestConnectionCallbacks) => testConnection.mutate(id, callbacks),
     isTesting: testConnection.isPending, testResult: testConnection.data,
-    fetchBalance: async (_accountId: string): Promise<BalanceResponse> => ({
-      success: false,
-      available_trading_usdt: 0,
-    }),
+    fetchBalance,
     isFetchingBalance: false,
   };
 };

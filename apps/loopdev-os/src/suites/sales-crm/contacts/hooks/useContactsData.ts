@@ -99,7 +99,9 @@ export function useContactsData({
         }
       } catch (requestError: unknown) {
         if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-        setError(requestError instanceof Error ? requestError.message : 'Contacts could not be loaded.');
+        setError(
+          requestError instanceof Error ? requestError.message : 'Contacts could not be loaded.',
+        );
       } finally {
         if (!signal?.aborted) setIsLoading(false);
       }

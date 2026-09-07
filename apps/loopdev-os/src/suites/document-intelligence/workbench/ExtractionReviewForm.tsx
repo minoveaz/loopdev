@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import {
   Badge,
   Button,
@@ -57,11 +57,11 @@ export function ExtractionReviewForm() {
   }, [result]);
 
   const form = useForm<ReviewFormValues>({ values: defaultValues });
+  const values = useWatch({ control: form.control });
 
   if (!result) return null;
 
   const profile = getExportProfile(profileId);
-  const values = form.watch();
 
   const updateField = (field: ExportProfileField, value: string) => {
     form.setValue(field, value, { shouldDirty: true });
@@ -69,8 +69,8 @@ export function ExtractionReviewForm() {
       form.setValue(
         'surnames',
         buildSurnames(
-          field === 'firstSurname' ? value : values.firstSurname,
-          field === 'secondSurname' ? value : values.secondSurname,
+          field === 'firstSurname' ? value : (values.firstSurname ?? ''),
+          field === 'secondSurname' ? value : (values.secondSurname ?? ''),
         ) ?? '',
         { shouldDirty: true },
       );

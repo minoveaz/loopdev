@@ -28,6 +28,7 @@ export function OpportunityForm() {
     'crm.read',
     'crm.manage',
   ]);
+  const canRead = hasPermission('crm.read');
   const canManage = hasPermission('crm.manage');
   const [contacts, setContacts] = useState<CrmContact[]>([]);
   const [stages, setStages] = useState<PipelineStage[]>([]);
@@ -44,7 +45,7 @@ export function OpportunityForm() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!activeOrganizationId || isLoadingPermissions || !hasPermission('crm.read')) {
+    if (!activeOrganizationId || isLoadingPermissions || !canRead) {
       setIsLoading(false);
       return;
     }
@@ -75,7 +76,7 @@ export function OpportunityForm() {
         if (!controller.signal.aborted) setIsLoading(false);
       });
     return () => controller.abort();
-  }, [activeOrganizationId, isLoadingPermissions, mode]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, mode]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -111,7 +112,7 @@ export function OpportunityForm() {
   }
   if (!canManage) {
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to create opportunities.
       </div>
     );
@@ -260,7 +261,7 @@ function Field({
         required={required}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="border-border-subtle bg-background text-text-main focus-visible:ring-primary mt-1 min-h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2"
       />
     </label>
   );

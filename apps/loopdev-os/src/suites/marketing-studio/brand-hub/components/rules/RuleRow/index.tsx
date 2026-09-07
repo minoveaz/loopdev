@@ -19,18 +19,18 @@ export const RuleRow: React.FC<RuleRowProps> = ({ rule, isSelected, onClick }) =
     <div 
       onClick={onClick}
       className={clsx(
-        "group flex items-center justify-between p-4 rounded-xl border transition-all duration-200 cursor-pointer",
+        "group flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all duration-200",
         isSelected 
           ? "bg-primary/5 border-primary shadow-sm" 
           : "bg-background-surface border-border-technical hover:border-primary/30",
         isDisabled && "opacity-50 grayscale"
       )}
     >
-      <div className="flex items-center gap-4 flex-1">
+      <div className="flex flex-1 items-center gap-4">
         {/* Status indicator */}
         <div className={clsx(
-          "w-1 h-10 rounded-full",
-          isSelected ? "bg-primary" : "bg-transparent group-hover:bg-primary/20"
+          "h-10 w-1 rounded-full",
+          isSelected ? "bg-primary" : "group-hover:bg-primary/20 bg-transparent"
         )} />
 
         <div className="flex flex-col gap-1">
@@ -41,12 +41,12 @@ export const RuleRow: React.FC<RuleRowProps> = ({ rule, isSelected, onClick }) =
             <DomainBadge domain={rule.domain} />
           </div>
           
-          <div className="flex items-center gap-2 font-mono text-[10px] text-text-muted">
+          <div className="text-text-muted flex items-center gap-2 font-mono text-[10px]">
             <span className="uppercase tracking-widest">{rule.scope.target}</span>
             <span className="opacity-30">|</span>
             <span className="text-primary font-bold">{rule.logic.metric}</span>
             <span className="text-text-main">{rule.logic.operator}</span>
-            <span className="bg-background-subtle px-1 rounded border border-border-technical">
+            <span className="bg-background-subtle border-border-technical rounded border px-1">
               {String(rule.logic.threshold)}
             </span>
           </div>

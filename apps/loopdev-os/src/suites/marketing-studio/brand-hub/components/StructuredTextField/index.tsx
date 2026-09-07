@@ -27,7 +27,7 @@ export const StructuredTextField: React.FC<StructuredTextFieldProps> = ({
           {label}
         </LpdText>
         {description && (
-          <LpdText size="xs" className="text-text-muted opacity-40 leading-tight">
+          <LpdText size="xs" className="text-text-muted leading-tight opacity-40">
             {description}
           </LpdText>
         )}
@@ -43,11 +43,11 @@ export const StructuredTextField: React.FC<StructuredTextFieldProps> = ({
           <textarea
             value={value}
             onChange={(e) => onValueChange?.(e.target.value)}
-            className="w-full min-h-[100px] bg-transparent border-none focus:ring-0 text-sm text-text-main p-3 resize-none scrollbar-none"
+            className="text-text-main scrollbar-none min-h-[100px] w-full resize-none border-none bg-transparent p-3 text-sm focus:ring-0"
             placeholder={`Enter ${label.toLowerCase()}...`}
           />
         ) : (
-          <LpdText size="sm" className="text-text-main leading-relaxed p-1">
+          <LpdText size="sm" className="text-text-main p-1 leading-relaxed">
             {value || `// ${label.toLowerCase()}_not_defined`}
           </LpdText>
         )}

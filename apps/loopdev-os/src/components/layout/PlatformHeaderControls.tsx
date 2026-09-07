@@ -37,7 +37,7 @@ export function PlatformHeaderActionButton({
       title={title}
       ariaLabel={label}
       tooltip={title}
-      className={`${active ? '!border-transparent !bg-[var(--lpd-color-brand-primary)] !text-white hover:!border-transparent hover:!bg-[var(--lpd-color-brand-primary)] hover:!text-white focus-visible:!border-transparent focus-visible:!bg-[var(--lpd-color-brand-primary)] focus-visible:!text-white focus-visible:!ring-[var(--lpd-color-brand-primary)]' : `${danger ? 'border-danger dark:border-danger' : 'border-black/10 dark:border-white/10'} text-text-muted bg-white/50 dark:bg-black/20 hover:bg-primary/10 hover:text-primary focus-visible:border-primary/50`} group relative flex !size-9 items-center justify-center !rounded-full border transition-all duration-300 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2`}
+      className={`${active ? '!border-transparent !bg-[var(--lpd-color-brand-primary)] !text-white hover:!border-transparent hover:!bg-[var(--lpd-color-brand-primary)] hover:!text-white focus-visible:!border-transparent focus-visible:!bg-[var(--lpd-color-brand-primary)] focus-visible:!text-white focus-visible:!ring-[var(--lpd-color-brand-primary)]' : `${danger ? 'border-danger dark:border-danger' : 'border-black/10 dark:border-white/10'} text-text-muted hover:bg-primary/10 hover:text-primary focus-visible:border-primary/50 bg-white/50 dark:bg-black/20`} group relative flex !size-9 items-center justify-center !rounded-full border transition-all duration-300 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2`}
       onClick={onClick}
     >
       {children}

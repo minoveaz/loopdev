@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { LogoVariantCardProps } from './types';
 import { LpdText, Button, IconButton } from '@loopdev/ui';
 import { clsx } from 'clsx';
@@ -21,35 +22,38 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
   const isBrandTheme = theme === 'brand';
 
   return (
-    <div className="group flex flex-col bg-background-surface border border-border-technical rounded-3xl overflow-hidden shadow-sm transition-all hover:border-primary/30">
+    <div className="bg-background-surface border-border-technical hover:border-primary/30 group flex flex-col overflow-hidden rounded-3xl border shadow-sm transition-all">
       
       {/* PREVIEW STAGE */}
       <div className={clsx(
-        "relative h-48 flex items-center justify-center overflow-hidden",
+        "relative flex h-48 items-center justify-center overflow-hidden",
         isLightTheme ? "bg-white" : isBrandTheme ? "bg-primary" : "bg-background-dark"
       )}>
         {/* Grid Background */}
         <div className={clsx(
-          "absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(rgba(120,120,120,1)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,1)_1px,transparent_1px)] bg-[size:20px_20px]",
+          "pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(120,120,120,1)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,1)_1px,transparent_1px)] bg-[length:20px_20px] opacity-[0.03]",
           isLightTheme && "opacity-[0.05]"
         )}></div>
 
         {/* The Logo */}
-        <div className="relative z-10 p-8 max-w-full max-h-full transition-transform duration-500 group-hover:scale-110">
+        <div className="relative z-10 max-h-full max-w-full p-8 transition-transform duration-500 group-hover:scale-110">
           {logoNode ? (
             <div className="scale-[1.5]">{logoNode}</div>
           ) : logo?.rawSvg ? (
             <div 
               className={clsx(
-                "w-auto h-auto max-h-32",
-                isLightTheme ? "text-slate-900 fill-slate-900" : "text-white fill-white"
+                "h-auto max-h-32 w-auto",
+                isLightTheme ? "fill-slate-900 text-slate-900" : "fill-white text-white"
               )}
               dangerouslySetInnerHTML={{ __html: logo.rawSvg }} 
             />
-          ) : logo ? (
-            <img 
-              src={logo.url} 
-              alt={logo.alt || label} 
+          ) : logo?.url ? (
+            <Image
+              src={logo.url}
+              alt={logo.alt || label}
+              width={logo.width ?? 128}
+              height={logo.height ?? 128}
+              unoptimized
               className="max-h-32 object-contain"
             />
           ) : null}
@@ -57,8 +61,8 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
       </div>
 
       {/* INFO & ACTIONS */}
-      <div className="p-5 flex flex-col gap-4">
-        <div className="flex justify-between items-start">
+      <div className="flex flex-col gap-4 p-5">
+        <div className="flex items-start justify-between">
           <div className="flex flex-col gap-1">
             <LpdText size="sm" weight="bold" className="text-text-main leading-none">
               {label}
@@ -76,7 +80,7 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
               type="button"
               variant="outline"
               size="sm"
-              className="text-[10px] font-bold text-primary hover:text-primary-foreground uppercase tracking-wide px-2 py-1 rounded border border-primary/20 hover:bg-primary transition-colors"
+              className="text-primary hover:text-primary-foreground border-primary/20 hover:bg-primary rounded border px-2 py-1 text-[10px] font-bold uppercase tracking-wide transition-colors"
               onClick={() => {
                 if (logo?.rawSvg) {
                   navigator.clipboard.writeText(logo.rawSvg);
@@ -90,7 +94,7 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
               icon="download"
               size="sm"
               aria-label="Descargar variante de logo"
-              className="p-1.5 rounded-lg bg-background-subtle hover:bg-background-surface text-text-muted hover:text-primary border border-border-technical transition-colors"
+              className="bg-background-subtle hover:bg-background-surface text-text-muted hover:text-primary border-border-technical rounded-lg border p-1.5 transition-colors"
             />
           </div>
         </div>

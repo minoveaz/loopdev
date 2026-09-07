@@ -16,27 +16,27 @@ export function NotesPanel({ displayedNotes }: NotesPanelProps) {
   const [quickNote, setQuickNote] = useState('');
 
   return (
-    <div className="space-y-4 flex-1 flex flex-col min-w-0 w-full">
-      <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
+    <div className="flex w-full min-w-0 flex-1 flex-col space-y-4">
+      <div className="border-border-subtle flex items-center justify-between border-b pb-3">
         <div>
-          <h3 className="text-sm font-semibold text-text-main">Internal Notes</h3>
-          <p className="text-xs text-text-muted mt-0.5">
+          <h3 className="text-text-main text-sm font-semibold">Internal Notes</h3>
+          <p className="text-text-muted mt-0.5 text-xs">
             Clearance-governed executive notes, call recaps, and account intelligence.
           </p>
         </div>
       </div>
 
       {/* Note Composer Box */}
-      <div className="rounded-xl border border-border-subtle bg-surface-muted/20 p-3 space-y-3 min-w-0 w-full">
+      <div className="border-border-subtle bg-surface-muted/20 w-full min-w-0 space-y-3 rounded-xl border p-3">
         <textarea
           rows={3}
           value={quickNote}
           onChange={(e) => setQuickNote(e.target.value)}
           placeholder="Añadir una nota rápida de reunión o llamada..."
-          className="w-full resize-none bg-transparent text-xs text-text-main placeholder:text-text-muted focus:outline-none"
+          className="text-text-main placeholder:text-text-muted w-full resize-none bg-transparent text-xs focus:outline-none"
         />
-        <div className="flex items-center justify-between pt-2 border-t border-border-subtle/50">
-          <span className="text-[11px] text-text-muted">Visibilidad: Equipo CRM</span>
+        <div className="border-border-subtle/50 flex items-center justify-between border-t pt-2">
+          <span className="text-text-muted text-[11px]">Visibilidad: Equipo CRM</span>
           <Button
             size="sm"
             disabled={!quickNote.trim()}
@@ -53,30 +53,30 @@ export function NotesPanel({ displayedNotes }: NotesPanelProps) {
 
       {/* Notes Feed */}
       {displayedNotes.length ? (
-        <div className="space-y-3 pt-2 min-w-0 w-full">
+        <div className="w-full min-w-0 space-y-3 pt-2">
           {displayedNotes.map((note) => {
             const isSimulated = Boolean(note.isSimulated);
             return (
               <div
                 key={note.id}
-                className={`p-4 rounded-xl transition-all space-y-2 min-w-0 w-full ${
+                className={`w-full min-w-0 space-y-2 rounded-xl p-4 transition-all ${
                   isSimulated
                     ? 'border border-dashed border-amber-500/40 bg-amber-500/[0.03]'
-                    : 'border border-border-subtle bg-surface-muted/20 hover:border-border-subtle/80'
+                    : 'border-border-subtle bg-surface-muted/20 hover:border-border-subtle/80 border'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-text-main">
+                    <span className="text-text-main text-xs font-semibold">
                       LoopDev Team Member
                     </span>
                     {isSimulated && <SimulatedBadge />}
                   </div>
-                  <span className="text-[11px] font-mono text-text-muted">
+                  <span className="text-text-muted font-mono text-[11px]">
                     {formatDate(note.createdAt)}
                   </span>
                 </div>
-                <p className="text-xs text-text-muted leading-relaxed whitespace-pre-wrap break-words">
+                <p className="text-text-muted whitespace-pre-wrap break-words text-xs leading-relaxed">
                   {note.body}
                 </p>
               </div>
@@ -85,7 +85,7 @@ export function NotesPanel({ displayedNotes }: NotesPanelProps) {
         </div>
       ) : (
         <EmptyState
-          icon={<FileText className="h-8 w-8 text-text-muted" />}
+          icon={<FileText className="text-text-muted h-8 w-8" />}
           title="No authorized notes"
           description="Internal notes will appear here once saved by team members with appropriate clearance."
         />

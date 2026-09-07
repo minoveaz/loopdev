@@ -82,14 +82,14 @@ export const ColorTokenCard: React.FC<ColorTokenCardProps> = ({
     >
       {/* FAIL SIGNAL (Corner Accent) */}
       {wcagStatus === 'FAIL' && (
-        <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden pointer-events-none z-10">
-          <div className="absolute top-0 right-0 w-full h-full bg-red-500 rotate-45 translate-x-1/2 -translate-y-1/2 opacity-20" />
+        <div className="pointer-events-none absolute right-0 top-0 z-10 h-8 w-8 overflow-hidden">
+          <div className="absolute right-0 top-0 h-full w-full -translate-y-1/2 translate-x-1/2 rotate-45 bg-red-500 opacity-20" />
         </div>
       )}
 
       {/* SWATCH AREA */}
       <div 
-        className="h-32 w-full relative transition-transform duration-500 group-hover:scale-105"
+        className="relative h-32 w-full transition-transform duration-500 group-hover:scale-105"
         style={{ backgroundColor: resolvedHex }}
       >
         <div className="absolute bottom-2 right-2 flex gap-2">
@@ -109,7 +109,7 @@ export const ColorTokenCard: React.FC<ColorTokenCardProps> = ({
       </div>
 
       {/* METADATA AREA */}
-      <div className="p-4 flex flex-col gap-3">
+      <div className="flex flex-col gap-3 p-4">
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between gap-2">
             <Heading as="h3" size="sm" weight="bold" className="text-text-main truncate">
@@ -130,24 +130,24 @@ export const ColorTokenCard: React.FC<ColorTokenCardProps> = ({
               {`role: ${roleLabel}`}
             </LpdText>
             <TechnicalTooltip content="Contrast is measured against the primary surface or text color to ensure accessibility.">
-              <span className="material-symbols-outlined text-[10px] cursor-help">help</span>
+              <span className="material-symbols-outlined cursor-help text-[10px]">help</span>
             </TechnicalTooltip>
           </div>
         </div>
 
-        <div className="flex flex-col gap-1.5 font-mono text-[11px] text-text-muted">
+        <div className="text-text-muted flex flex-col gap-1.5 font-mono text-[11px]">
           <TechnicalTooltip content="Click to copy HEX">
             <div 
               onClick={handleHexClick}
-              className="flex justify-between border-b border-border-technical/50 pb-1.5 hover:text-text-main transition-colors group/hex"
+              className="border-border-technical/50 hover:text-text-main group/hex flex justify-between border-b pb-1.5 transition-colors"
             >
               <span>HEX</span>
-              <span className="font-bold group-hover/hex:text-primary transition-colors">{resolvedHex.toUpperCase()}</span>
+              <span className="group-hover/hex:text-primary font-bold transition-colors">{resolvedHex.toUpperCase()}</span>
             </div>
           </TechnicalTooltip>
           <TechnicalTooltip content={ratio > 7 ? "High contrast ensures maximum readability for all text sizes." : undefined}>
             <div className="flex justify-between pt-0.5">
-              <span className="opacity-40 uppercase">Legibility</span>
+              <span className="uppercase opacity-40">Legibility</span>
               <span className={cn(
                 "font-bold",
                 wcagStatus === 'FAIL' ? "text-red-500" : (wcagStatus === 'AA_LARGE' ? "text-orange-500" : "text-text-main opacity-60")

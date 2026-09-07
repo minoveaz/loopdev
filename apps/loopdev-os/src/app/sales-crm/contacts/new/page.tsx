@@ -129,7 +129,7 @@ export default function NewContactPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/sales-crm/contacts"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-surface-light dark:bg-surface-dark text-text-muted hover:text-text-main transition-colors shadow-xs"
+                className="border-border-subtle bg-surface-light dark:bg-surface-dark text-text-muted hover:text-text-main shadow-xs flex h-9 w-9 items-center justify-center rounded-xl border transition-colors"
                 title="Volver a contactos"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -138,7 +138,7 @@ export default function NewContactPage() {
                 <Heading as="h1" size="lg" weight="bold" className="text-text-main">
                   Crear Nuevo Contacto
                 </Heading>
-                <p className="text-xs text-text-muted hidden sm:block">
+                <p className="text-text-muted hidden text-xs sm:block">
                   Registra la ficha técnica y canales de un prospecto o cliente en el CRM
                 </p>
               </div>
@@ -148,7 +148,7 @@ export default function NewContactPage() {
             <div className="flex items-center gap-2.5">
               <Link
                 href="/sales-crm/contacts"
-                className="inline-flex items-center justify-center rounded-xl border border-border-subtle bg-surface-light dark:bg-surface-dark px-3.5 py-2 text-xs font-medium text-text-main shadow-xs hover:bg-surface-muted/60 transition-all"
+                className="border-border-subtle bg-surface-light dark:bg-surface-dark text-text-main shadow-xs hover:bg-surface-muted/60 inline-flex items-center justify-center rounded-xl border px-3.5 py-2 text-xs font-medium transition-all"
               >
                 Cancelar
               </Link>
@@ -171,18 +171,18 @@ export default function NewContactPage() {
       <form
         id="create-contact-page-form"
         onSubmit={handleSubmit}
-        className="w-full max-w-5xl mx-auto pb-16 space-y-6"
+        className="mx-auto w-full max-w-5xl space-y-6 pb-16"
       >
         {errorMessage && (
           <div
             role="alert"
-            className="rounded-2xl border border-status-error/40 bg-status-error/10 p-4 text-sm text-status-error font-medium"
+            className="border-status-error/40 bg-status-error/10 text-status-error rounded-2xl border p-4 text-sm font-medium"
           >
             {errorMessage}
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-6 items-start">
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
           {/* Columna Principal Izquierda: Datos de Identidad y Canales */}
           <div className="space-y-6">
             {/* 1. Identidad */}
@@ -190,25 +190,25 @@ export default function NewContactPage() {
               variant="surface"
               border="subtle"
               radius="xl"
-              className="p-5 sm:p-6 space-y-5"
+              className="space-y-5 p-5 sm:p-6"
             >
-              <div className="flex items-center gap-2.5 border-b border-border-subtle pb-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <div className="border-border-subtle flex items-center gap-2.5 border-b pb-3">
+                <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-lg">
                   <User size={16} />
                 </div>
                 <div>
-                  <h2 className="text-sm font-semibold text-text-main">Identidad del Contacto</h2>
-                  <p className="text-xs text-text-muted">
+                  <h2 className="text-text-main text-sm font-semibold">Identidad del Contacto</h2>
+                  <p className="text-text-muted text-xs">
                     Nombre y apellidos para identificar al registro
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <label
                     htmlFor="contact-firstname"
-                    className="text-xs font-semibold text-text-main"
+                    className="text-text-main text-xs font-semibold"
                   >
                     Nombre <span className="text-status-error">*</span>
                   </label>
@@ -218,7 +218,7 @@ export default function NewContactPage() {
                     onChange={(e) => setFirstName(e.target.value)}
                     required
                     size="md"
-                    className="h-11 sm:h-9 text-base sm:text-sm"
+                    className="h-11 text-base sm:h-9 sm:text-sm"
                     placeholder="Ej. Martín"
                     autoFocus
                   />
@@ -227,7 +227,7 @@ export default function NewContactPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor="contact-lastname"
-                    className="text-xs font-semibold text-text-main"
+                    className="text-text-main text-xs font-semibold"
                   >
                     Apellidos
                   </label>
@@ -236,14 +236,14 @@ export default function NewContactPage() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     size="md"
-                    className="h-11 sm:h-9 text-base sm:text-sm"
+                    className="h-11 text-base sm:h-9 sm:text-sm"
                     placeholder="Ej. González Ruiz"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5 pt-1">
-                <label htmlFor="contact-jobtitle" className="text-xs font-semibold text-text-main">
+                <label htmlFor="contact-jobtitle" className="text-text-main text-xs font-semibold">
                   Cargo / Puesto
                 </label>
                 <Input
@@ -251,7 +251,7 @@ export default function NewContactPage() {
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   size="md"
-                  className="h-11 sm:h-9 text-base sm:text-sm"
+                  className="h-11 text-base sm:h-9 sm:text-sm"
                   startIcon={<Briefcase size={15} className="text-text-muted" />}
                   placeholder="Ej. Director Financiero, VP Engineering..."
                 />
@@ -263,23 +263,23 @@ export default function NewContactPage() {
               variant="surface"
               border="subtle"
               radius="xl"
-              className="p-5 sm:p-6 space-y-5"
+              className="space-y-5 p-5 sm:p-6"
             >
-              <div className="flex items-center gap-2.5 border-b border-border-subtle pb-3">
+              <div className="border-border-subtle flex items-center gap-2.5 border-b pb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
                   <Mail size={16} />
                 </div>
                 <div>
-                  <h2 className="text-sm font-semibold text-text-main">Canales de Comunicación</h2>
-                  <p className="text-xs text-text-muted">
+                  <h2 className="text-text-main text-sm font-semibold">Canales de Comunicación</h2>
+                  <p className="text-text-muted text-xs">
                     Introduce al menos un correo o número de contacto
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-email" className="text-xs font-semibold text-text-main">
+                  <label htmlFor="contact-email" className="text-text-main text-xs font-semibold">
                     Correo Electrónico Directo
                   </label>
                   <Input
@@ -288,14 +288,14 @@ export default function NewContactPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     size="md"
-                    className="h-11 sm:h-9 text-base sm:text-sm"
+                    className="h-11 text-base sm:h-9 sm:text-sm"
                     startIcon={<Mail size={15} className="text-text-muted" />}
                     placeholder="martin@empresa.com"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-phone" className="text-xs font-semibold text-text-main">
+                  <label htmlFor="contact-phone" className="text-text-main text-xs font-semibold">
                     Teléfono Directo / Móvil
                   </label>
                   <PhoneInput
@@ -318,22 +318,22 @@ export default function NewContactPage() {
               variant="surface"
               border="subtle"
               radius="xl"
-              className="p-5 sm:p-6 space-y-5"
+              className="space-y-5 p-5 sm:p-6"
             >
-              <div className="flex items-center gap-2.5 border-b border-border-subtle pb-3">
+              <div className="border-border-subtle flex items-center gap-2.5 border-b pb-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
                   <Building2 size={16} />
                 </div>
                 <div>
-                  <h2 className="text-sm font-semibold text-text-main">Empresa & Razón Social</h2>
-                  <p className="text-xs text-text-muted">
+                  <h2 className="text-text-main text-sm font-semibold">Empresa & Razón Social</h2>
+                  <p className="text-text-muted text-xs">
                     Vincular a una cuenta comercial u organización
                   </p>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="contact-company" className="text-xs font-semibold text-text-main">
+                <label htmlFor="contact-company" className="text-text-main text-xs font-semibold">
                   Nombre de la Empresa
                 </label>
                 <Input
@@ -341,14 +341,14 @@ export default function NewContactPage() {
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   size="md"
-                  className="h-11 sm:h-9 text-base sm:text-sm"
+                  className="h-11 text-base sm:h-9 sm:text-sm"
                   startIcon={<Building2 size={15} className="text-text-muted" />}
                   placeholder="Ej. Santander, Innova Tech S.L."
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="contact-notes" className="text-xs font-semibold text-text-main">
+                <label htmlFor="contact-notes" className="text-text-main text-xs font-semibold">
                   Notas iniciales de contexto
                 </label>
                 <textarea
@@ -356,7 +356,7 @@ export default function NewContactPage() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={3}
-                  className="w-full rounded-xl border border-border-subtle bg-surface-light dark:bg-surface-dark px-3.5 py-2.5 text-base sm:text-sm text-text-main outline-none focus:border-primary transition-all custom-scrollbar resize-none"
+                  className="border-border-subtle bg-surface-light dark:bg-surface-dark text-text-main focus:border-primary custom-scrollbar w-full resize-none rounded-xl border px-3.5 py-2.5 text-base outline-none transition-all sm:text-sm"
                   placeholder="Añade antecedentes, origen de la reunión o detalles clave de este contacto..."
                 />
               </div>
@@ -370,11 +370,11 @@ export default function NewContactPage() {
               variant="surface"
               border="subtle"
               radius="xl"
-              className="p-5 sm:p-6 space-y-4"
+              className="space-y-4 p-5 sm:p-6"
             >
-              <h2 className="text-sm font-semibold text-text-main">Ciclo de Vida del Contacto</h2>
+              <h2 className="text-text-main text-sm font-semibold">Ciclo de Vida del Contacto</h2>
               <div className="space-y-1.5">
-                <label htmlFor="contact-lifecycle" className="text-xs font-medium text-text-muted">
+                <label htmlFor="contact-lifecycle" className="text-text-muted text-xs font-medium">
                   Etapa Comercial
                 </label>
                 <Select
@@ -392,8 +392,8 @@ export default function NewContactPage() {
                 </Select>
               </div>
 
-              <div className="rounded-xl border border-border-subtle bg-surface-muted/30 p-3 text-xs text-text-muted space-y-1 leading-relaxed">
-                <span className="font-semibold text-text-main block">
+              <div className="border-border-subtle bg-surface-muted/30 text-text-muted space-y-1 rounded-xl border p-3 text-xs leading-relaxed">
+                <span className="text-text-main block font-semibold">
                   Sincronización Automática
                 </span>
                 Este contacto se indexará inmediatamente en el buscador global y estará disponible
@@ -406,29 +406,29 @@ export default function NewContactPage() {
               variant="surface"
               border="subtle"
               radius="xl"
-              className="p-5 sm:p-6 space-y-3"
+              className="space-y-3 p-5 sm:p-6"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-text-muted">Verificación Inicial</span>
+                <span className="text-text-muted text-xs font-medium">Verificación Inicial</span>
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
                   <ShieldCheck size={13} className="text-emerald-600" />
                   <span>Conforme</span>
                 </span>
               </div>
-              <p className="text-xs text-text-muted leading-relaxed">
+              <p className="text-text-muted text-xs leading-relaxed">
                 Los datos ingresados se auditan conforme a la normativa de protección de datos
                 (RGPD) y quedarán vinculados a tu organización activa.
               </p>
             </TechnicalSurface>
 
             {/* Botón de acción móvil */}
-            <div className="lg:hidden pt-2">
+            <div className="pt-2 lg:hidden">
               <Button
                 type="submit"
                 variant="primary"
                 size="md"
                 disabled={isSaving}
-                className="w-full h-12 text-sm font-semibold rounded-xl shadow-md"
+                className="h-12 w-full rounded-xl text-sm font-semibold shadow-md"
               >
                 <UserPlus size={16} className="mr-2" />
                 {isSaving ? 'Guardando contacto...' : 'Crear Contacto'}

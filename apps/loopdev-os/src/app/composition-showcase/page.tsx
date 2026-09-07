@@ -56,7 +56,6 @@ import { TechnicalSurfaceCertification } from './certification-lab/TechnicalSurf
 import { TechnicalCardCertification } from './certification-lab/TechnicalCardCertification';
 import { SearchInputCertification } from './certification-lab/SearchInputCertification';
 import { LoopdevComponentsCatalog } from './certification-lab/LoopdevComponentsCatalog';
-import { ResponsiveTableCertification } from './certification-lab/ResponsiveTableCertification';
 import { SuiteCompositionPatternsCertification } from './certification-lab/SuiteCompositionPatternsCertification';
 import { OperationalActionsCertification } from './certification-lab/OperationalActionsCertification';
 import { DashboardSummaryCertification } from './certification-lab/DashboardSummaryCertification';
@@ -373,7 +372,7 @@ const CertificationLabToolbar = ({ onOpenComponents }: { onOpenComponents: () =>
       />
     }
     leftSlot={
-      <div className="flex min-w-0 w-full items-center gap-2">
+      <div className="flex w-full min-w-0 items-center gap-2">
         <ModuleSearch placeholder="Search resources" className="max-w-none" />
       </div>
     }
@@ -443,7 +442,7 @@ const SuiteOverviewCanvas = ({
         <p className="text-text-muted text-xs font-semibold uppercase tracking-[0.16em]">
           {isContactsFixture ? 'Relationship map' : 'Workspace map'}
         </p>
-        <div className="relative mt-4 flex min-h-40 items-center justify-center overflow-hidden rounded-md border border-dashed border-primary/40 bg-primary/5">
+        <div className="border-primary/40 bg-primary/5 relative mt-4 flex min-h-40 items-center justify-center overflow-hidden rounded-md border border-dashed">
           <TechnicalCanvas variant="blueprint" intensity="medium" size={40} showSubgrid />
           <span className="text-primary relative z-10 text-xs font-medium">
             {isContactsFixture ? 'Relationship map' : 'Workspace map'}
@@ -518,8 +517,8 @@ const SuiteOverviewCanvas = ({
               border="subtle"
               className="flex items-center justify-between gap-3 px-3 py-3 text-sm"
             >
-              <span className="min-w-0 flex-1 text-text-main">{item}</span>
-              <span className="ml-3 min-w-[3rem] shrink-0 text-right text-text-muted text-xs">
+              <span className="text-text-main min-w-0 flex-1">{item}</span>
+              <span className="text-text-muted ml-3 min-w-[3rem] shrink-0 text-right text-xs">
                 Today
               </span>
             </TechnicalSurface>
@@ -783,7 +782,7 @@ const DataWorkspaceCanvas = ({
               sortable: true,
               className: 'whitespace-nowrap',
               render: (row) => (
-                <span className="rounded border border-brand-cyan/40 bg-brand-cyan/10 px-2 py-1 text-xs text-text-main">
+                <span className="border-brand-cyan/40 bg-brand-cyan/10 text-text-main rounded border px-2 py-1 text-xs">
                   {row.status}
                 </span>
               ),
@@ -858,7 +857,7 @@ const RecordWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
                   Edit record
                 </Button>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2 border-b border-border-technical pb-3 text-sm">
+              <div className="border-border-technical mt-5 flex flex-wrap gap-2 border-b pb-3 text-sm">
                 {['Overview', 'Activity', 'Files', 'Notes'].map((tab, index) => (
                   <Button key={tab} variant={index === 0 ? 'primary' : 'ghost'} size="sm">
                     {tab}
@@ -930,7 +929,7 @@ const RecordWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
                     ['Last touch', 'Today, 09:42'],
                     ['Source', 'Account team'],
                   ].map(([label, value]) => (
-                    <div key={label} className="border-b border-border-subtle pb-3">
+                    <div key={label} className="border-border-subtle border-b pb-3">
                       <span className="text-text-muted block text-xs">{label}</span>
                       <span className="text-text-main mt-1 block text-sm">{value}</span>
                     </div>
@@ -1111,7 +1110,7 @@ const BoardWorkspaceCanvas = ({ state }: { state: ShowcaseState }) => {
                   ['At risk', '4'],
                   ['Completed', '62%'],
                 ].map(([label, value]) => (
-                  <div key={label} className="border-b border-border-subtle pb-3">
+                  <div key={label} className="border-border-subtle border-b pb-3">
                     <span className="text-text-muted block text-xs">{label}</span>
                     <strong className="text-text-main mt-1 block text-xl">{value}</strong>
                   </div>
@@ -1273,9 +1272,9 @@ const ImmersiveWorkflowCanvas = ({ state }: { state: ShowcaseState }) => {
                 </span>
                 <div className="flex-1">
                   <span className="text-text-main block text-sm font-medium">{step}</span>
-                  <div className="mt-2 h-1 overflow-hidden rounded bg-border-technical">
+                  <div className="bg-border-technical mt-2 h-1 overflow-hidden rounded">
                     <span
-                      className={`block h-full ${index < 2 ? 'w-full bg-brand-cyan' : 'w-1/3 bg-primary'}`}
+                      className={`block h-full ${index < 2 ? 'bg-brand-cyan w-full' : 'bg-primary w-1/3'}`}
                     />
                   </div>
                 </div>
@@ -1341,7 +1340,7 @@ const ImmersiveWorkflowCanvas = ({ state }: { state: ShowcaseState }) => {
   };
 
   return (
-    <div className="relative min-h-full overflow-hidden bg-shell-canvas p-4 font-sans sm:p-6">
+    <div className="bg-shell-canvas relative min-h-full overflow-hidden p-4 font-sans sm:p-6">
       <TechnicalCanvas variant="blueprint" intensity="low" size={48} showSubgrid />
       <div className="relative z-10 min-h-[32rem]">
         <CompositionGrid composition={IMMERSIVE_WORKFLOW_COMPOSITION} regions={regions} />
@@ -1357,9 +1356,9 @@ const CreativeEditorCanvas = ({
   regions: Record<string, ReactNode>;
   state: ShowcaseState;
 }) => (
-  <div className="flex h-full min-h-0 flex-col overflow-hidden bg-shell-canvas">
-    <section className="relative min-h-0 flex-1 overflow-hidden bg-surface-dark">
-      <div className="border-border-technical flex min-h-12 items-center gap-2 overflow-x-auto border-b bg-surface-elevated px-3 py-2">
+  <div className="bg-shell-canvas flex h-full min-h-0 flex-col overflow-hidden">
+    <section className="bg-surface-dark relative min-h-0 flex-1 overflow-hidden">
+      <div className="border-border-technical bg-surface-elevated flex min-h-12 items-center gap-2 overflow-x-auto border-b px-3 py-2">
         <span className="text-primary shrink-0 font-mono text-[10px] uppercase tracking-[0.16em]">
           StageToolBar
         </span>
@@ -1388,14 +1387,14 @@ const CreativeEditorCanvas = ({
         ))}
       </div>
       <div className="flex min-h-0 flex-1 items-center justify-center p-2 sm:p-3">
-        <div className="relative aspect-video h-full max-h-full w-full max-w-7xl overflow-hidden border-2 border-primary/60 bg-black/30 shadow-inner">
+        <div className="border-primary/60 relative aspect-video h-full max-h-full w-full max-w-7xl overflow-hidden border-2 bg-black/30 shadow-inner">
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center">
             <span className="text-primary font-mono text-[10px] uppercase tracking-[0.18em]">
               VideoStage
             </span>
-            <strong className="text-sm font-semibold text-text-main">Preview frame</strong>
-            <span className="text-xs text-text-muted">Module-owned renderer insertion point</span>
-            <span className="text-[10px] text-text-muted">
+            <strong className="text-text-main text-sm font-semibold">Preview frame</strong>
+            <span className="text-text-muted text-xs">Module-owned renderer insertion point</span>
+            <span className="text-text-muted text-[10px]">
               16:9 reference / zoom controlled by module
             </span>
           </div>
@@ -1425,8 +1424,8 @@ const CreativeEditorCanvas = ({
       </div>
       <span className="text-text-muted text-xs">100%</span>
     </TechnicalSurface>
-    <section className="h-[clamp(10rem,22vh,18rem)] min-h-40 shrink-0 overflow-auto border-x-0 border-t border-border-technical bg-surface-dark">
-      <div className="border-border-technical bg-surface-dark sticky top-0 z-10 flex min-h-10 items-center justify-between gap-3 border-x-0 border-b px-3 py-2 text-xs text-text-muted">
+    <section className="border-border-technical bg-surface-dark h-[clamp(10rem,22vh,18rem)] min-h-40 shrink-0 overflow-auto border-x-0 border-t">
+      <div className="border-border-technical bg-surface-dark text-text-muted sticky top-0 z-10 flex min-h-10 items-center justify-between gap-3 border-x-0 border-b px-3 py-2 text-xs">
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="ghost" size="sm">
             Play
@@ -1444,7 +1443,7 @@ const CreativeEditorCanvas = ({
       <div
         tabIndex={0}
         aria-label="Timeline tracks"
-        className="outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="focus-visible:ring-primary outline-none focus-visible:ring-2"
       >
         {regions.timeline}
       </div>
@@ -1649,10 +1648,10 @@ const CertificationSidebar = ({
 }) => (
   <div className="flex h-full min-h-0 flex-col gap-4 p-4">
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+      <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
         Component inventory
       </p>
-      <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
+      <Heading as="h2" size="lg" weight="bold" className="text-text-main mt-2">
         Certification Lab
       </Heading>
     </div>
@@ -1674,10 +1673,10 @@ const CertificationSidebar = ({
               aria-current={isGroupSelected ? 'true' : undefined}
               onClick={() => onSelect(group.entryComponent as CertificationComponent)}
             >
-              <span className="block font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+              <span className="text-text-main block font-mono text-xs uppercase tracking-[0.14em]">
                 {group.label}
               </span>
-              <span className="mt-2 block text-[11px] leading-4 text-text-muted">
+              <span className="text-text-muted mt-2 block text-[11px] leading-4">
                 {group.description}
               </span>
               <span
@@ -1688,7 +1687,7 @@ const CertificationSidebar = ({
             </Button>
             {childComponents.length > 1 && (
               <div
-                className="ml-3 border-l border-border-subtle pl-2"
+                className="border-border-subtle ml-3 border-l pl-2"
                 aria-label={`${group.label} components`}
               >
                 {childComponents.map((component) => (
@@ -1718,15 +1717,15 @@ const CertificationPanel = ({ selected }: { selected: CertificationComponent }) 
   return (
     <div className="space-y-5 p-4">
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+        <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
           Evidence record
         </p>
-        <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
+        <Heading as="h2" size="lg" weight="bold" className="text-text-main mt-2">
           {component?.label}
         </Heading>
-        <p className="mt-1 text-sm text-text-muted">{component?.action}</p>
+        <p className="text-text-muted mt-1 text-sm">{component?.action}</p>
       </div>
-      <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
+      <dl className="divide-border-subtle border-border-subtle divide-y border-y text-sm">
         {[
           ['Contract', selected === 'TechnicalCanvas' ? 'verified' : 'partial'],
           ['Tests', selected === 'TechnicalCanvas' ? 'verified' : 'pending'],
@@ -1736,11 +1735,11 @@ const CertificationPanel = ({ selected }: { selected: CertificationComponent }) 
         ].map(([label, value]) => (
           <div key={label} className="flex items-center justify-between gap-4 py-3">
             <dt className="text-text-muted">{label}</dt>
-            <dd className="font-mono text-xs uppercase text-text-main">{value}</dd>
+            <dd className="text-text-main font-mono text-xs uppercase">{value}</dd>
           </div>
         ))}
       </dl>
-      <p className="text-xs leading-5 text-text-muted">
+      <p className="text-text-muted text-xs leading-5">
         Certification is contextual. This panel records evidence; it does not certify a component by
         itself.
       </p>
@@ -1751,13 +1750,13 @@ const CertificationPanel = ({ selected }: { selected: CertificationComponent }) 
 const CertificationFoundationCatalog = () => (
   <div className="space-y-5">
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+      <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
         Certification section
       </p>
-      <Heading as="h1" size="2xl" weight="bold" className="mt-2 text-text-main">
+      <Heading as="h1" size="2xl" weight="bold" className="text-text-main mt-2">
         UI Foundation
       </Heading>
-      <p className="mt-1 text-sm text-text-muted">
+      <p className="text-text-muted mt-1 text-sm">
         Shared layout, surfaces and interaction contracts
       </p>
     </div>
@@ -1772,7 +1771,7 @@ const CertificationFoundationCatalog = () => (
         >
           TechnicalCanvas
         </Heading>
-        <p className="text-sm text-text-muted">Canonical grid primitive · all variants</p>
+        <p className="text-text-muted text-sm">Canonical grid primitive · all variants</p>
       </div>
       <TechnicalCanvasCertification />
     </section>
@@ -1787,7 +1786,7 @@ const CertificationFoundationCatalog = () => (
         >
           TechnicalSurface
         </Heading>
-        <p className="text-sm text-text-muted">Surface contract · all variants</p>
+        <p className="text-text-muted text-sm">Surface contract · all variants</p>
       </div>
       <TechnicalSurfaceCertification />
     </section>
@@ -1802,7 +1801,7 @@ const CertificationFoundationCatalog = () => (
         >
           TechnicalCard
         </Heading>
-        <p className="text-sm text-text-muted">Thin surface composition · all states</p>
+        <p className="text-text-muted text-sm">Thin surface composition · all states</p>
       </div>
       <TechnicalCardCertification />
     </section>
@@ -1857,14 +1856,14 @@ const CertificationLabCanvas = ({
     <div className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+          <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
             Component Certification Lab
           </p>
-          <Heading as="h1" size="2xl" weight="bold" className="mt-2 text-text-main">
+          <Heading as="h1" size="2xl" weight="bold" className="text-text-main mt-2">
             {selected}
           </Heading>
         </div>
-        <span className="border border-warning/40 bg-warning/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-warning">
+        <span className="border-warning/40 bg-warning/10 text-warning border px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em]">
           Evidence pending
         </span>
       </div>
@@ -1891,13 +1890,13 @@ const CertificationLabCanvas = ({
             />
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
-                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">
+                <p className="text-text-muted mb-3 font-mono text-[10px] uppercase tracking-[0.14em]">
                   Loading
                 </p>
                 <LoadingState label="Loading customer activity" lines={3} />
               </TechnicalSurface>
               <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
-                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">
+                <p className="text-text-muted mb-3 font-mono text-[10px] uppercase tracking-[0.14em]">
                   Empty
                 </p>
                 <EmptyState
@@ -1914,7 +1913,7 @@ const CertificationLabCanvas = ({
                 />
               </TechnicalSurface>
               <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
-                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-warning">
+                <p className="text-warning mb-3 font-mono text-[10px] uppercase tracking-[0.14em]">
                   Error
                 </p>
                 <EmptyState
@@ -1932,7 +1931,7 @@ const CertificationLabCanvas = ({
                 />
               </TechnicalSurface>
               <TechnicalSurface variant="surface" radius="sm" border="subtle" className="p-4">
-                <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">
+                <p className="text-text-muted mb-3 font-mono text-[10px] uppercase tracking-[0.14em]">
                   Forbidden / read-only
                 </p>
                 <EmptyState
@@ -1957,7 +1956,7 @@ const CertificationLabCanvas = ({
               border="technical"
               className="min-h-32 p-4"
             >
-              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+              <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
                 {variant} surface
               </span>
             </TechnicalSurface>
@@ -1965,40 +1964,40 @@ const CertificationLabCanvas = ({
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
-          <TechnicalCard className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
-            <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+          <TechnicalCard className="min-h-32 p-4 max-lg:min-h-24 max-lg:p-3">
+            <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
               flat card
             </span>
           </TechnicalCard>
-          <TechnicalCard variant="interactive" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
-            <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+          <TechnicalCard variant="interactive" className="min-h-32 p-4 max-lg:min-h-24 max-lg:p-3">
+            <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
               interactive card
             </span>
           </TechnicalCard>
-          <TechnicalCard variant="warning" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+          <TechnicalCard variant="warning" className="min-h-32 p-4 max-lg:min-h-24 max-lg:p-3">
             <div className="flex h-full flex-col justify-between gap-2">
-              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+              <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
                 warning card
               </span>
-              <span className="text-xs text-warning">
+              <span className="text-warning text-xs">
                 Warning semantics belong to the consuming state.
               </span>
             </div>
           </TechnicalCard>
-          <TechnicalCard variant="disabled" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+          <TechnicalCard variant="disabled" className="min-h-32 p-4 max-lg:min-h-24 max-lg:p-3">
             <div className="flex h-full flex-col justify-between gap-2">
-              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+              <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
                 disabled card
               </span>
-              <span className="text-xs text-text-muted">Unavailable for interaction.</span>
+              <span className="text-text-muted text-xs">Unavailable for interaction.</span>
             </div>
           </TechnicalCard>
-          <TechnicalCard data-read-only="true" className="min-h-32 max-lg:min-h-24 p-4 max-lg:p-3">
+          <TechnicalCard data-read-only="true" className="min-h-32 p-4 max-lg:min-h-24 max-lg:p-3">
             <div className="flex h-full flex-col justify-between gap-2">
-              <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+              <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
                 read-only card
               </span>
-              <span className="text-xs text-text-muted">Readable; mutations are disabled.</span>
+              <span className="text-text-muted text-xs">Readable; mutations are disabled.</span>
             </div>
           </TechnicalCard>
         </div>
@@ -2161,7 +2160,7 @@ export default function CompositionShowcasePage() {
                 <TechnicalCanvas variant="blueprint" intensity="medium" size={40} showSubgrid />
               )}
               <div className="flex h-full min-h-[inherit] flex-col justify-between gap-3 p-4">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+                <span className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
                   {region.slot}
                 </span>
                 {state === 'loading' ? (
@@ -2211,9 +2210,9 @@ export default function CompositionShowcasePage() {
                 ) : null}
                 {!['loading', 'empty', 'error', 'forbidden'].includes(state) ? (
                   <>
-                    <strong className="text-sm text-text-main">{region.component}</strong>
+                    <strong className="text-text-main text-sm">{region.component}</strong>
                     {state === 'read-only' && (
-                      <span className="text-xs text-text-muted">
+                      <span className="text-text-muted text-xs">
                         Read-only view · actions disabled
                       </span>
                     )}
@@ -2294,24 +2293,24 @@ export default function CompositionShowcasePage() {
               selectedActivity ? (
                 <div className="space-y-4 p-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-text-muted">
+                    <p className="text-text-muted text-xs uppercase tracking-[0.16em]">
                       Activity detail
                     </p>
-                    <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
+                    <Heading as="h2" size="lg" weight="bold" className="text-text-main mt-2">
                       {selectedActivity.event}
                     </Heading>
                   </div>
-                  <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
+                  <dl className="divide-border-subtle border-border-subtle divide-y border-y text-sm">
                     <div className="flex items-center justify-between gap-4 py-3">
                       <dt className="text-text-muted">Actor</dt>
-                      <dd className="flex items-center gap-2 font-medium text-text-main">
+                      <dd className="text-text-main flex items-center gap-2 font-medium">
                         <UserAvatar name={selectedActivity.actor} size="sm" />
                         {selectedActivity.actor}
                       </dd>
                     </div>
                     <div className="flex items-center justify-between gap-4 py-3">
                       <dt className="text-text-muted">Date</dt>
-                      <dd className="font-mono text-xs text-text-main">{selectedActivity.date}</dd>
+                      <dd className="text-text-main font-mono text-xs">{selectedActivity.date}</dd>
                     </div>
                     <div className="flex items-center justify-between gap-4 py-3">
                       <dt className="text-text-muted">Status</dt>
@@ -2345,7 +2344,7 @@ export default function CompositionShowcasePage() {
                   <p className="text-text-muted text-xs uppercase tracking-[0.16em]">
                     Workspace detail
                   </p>
-                  <Heading as="h2" size="lg" weight="bold" className="mt-2 text-text-main">
+                  <Heading as="h2" size="lg" weight="bold" className="text-text-main mt-2">
                     {selectedWorkspace}
                   </Heading>
                 </div>
@@ -2355,7 +2354,7 @@ export default function CompositionShowcasePage() {
                   );
                   if (!selectedRow) return null;
                   return (
-                    <dl className="divide-y divide-border-subtle border-y border-border-subtle text-sm">
+                    <dl className="divide-border-subtle border-border-subtle divide-y border-y text-sm">
                       {[
                         ['Plan', selectedRow.plan],
                         ['Status', selectedRow.status],
@@ -2364,13 +2363,13 @@ export default function CompositionShowcasePage() {
                       ].map(([label, value]) => (
                         <div key={label} className="flex items-center justify-between gap-4 py-3">
                           <dt className="text-text-muted">{label}</dt>
-                          <dd className="font-medium text-text-main">{value}</dd>
+                          <dd className="text-text-main font-medium">{value}</dd>
                         </div>
                       ))}
                     </dl>
                   );
                 })()}
-                <p className="text-sm text-text-muted">Selected from the workspace table.</p>
+                <p className="text-text-muted text-sm">Selected from the workspace table.</p>
                 <div className="flex flex-wrap gap-2">
                   <Button variant="primary" size="sm">
                     Open workspace
@@ -2566,7 +2565,7 @@ export default function CompositionShowcasePage() {
               <ThemeToggle
                 variant="technical"
                 size="md"
-                className="!h-10 !w-full !rounded-md !border-border-technical !text-text-main"
+                className="!border-border-technical !text-text-main !h-10 !w-full !rounded-md"
               />
             </div>
             <Button
@@ -2640,19 +2639,19 @@ export default function CompositionShowcasePage() {
                       >
                         {composition.recipe}
                       </Heading>
-                      <span className="text-xs text-text-muted">
+                      <span className="text-text-muted text-xs">
                         {composition.grid.columns} columns / {composition.grid.gap} gap
                       </span>
                     </>
                   ) : null}
                 </div>
-                <label className="flex items-center gap-2 text-xs text-text-muted">
+                <label className="text-text-muted flex items-center gap-2 text-xs">
                   <span>Review state</span>
                   <select
                     aria-label="Review state"
                     value={state}
                     onChange={(event) => setState(event.target.value as ShowcaseState)}
-                    className="rounded-md border border-border-technical bg-shell-canvas px-2 py-1.5 text-text-main"
+                    className="border-border-technical bg-shell-canvas text-text-main rounded-md border px-2 py-1.5"
                   >
                     {STATES.map((nextState) => (
                       <option key={nextState} value={nextState}>
@@ -2664,7 +2663,7 @@ export default function CompositionShowcasePage() {
                 <span
                   aria-live="polite"
                   data-testid="showcase-state-status"
-                  className="text-xs text-text-muted"
+                  className="text-text-muted text-xs"
                 >
                   State: {state}
                 </span>

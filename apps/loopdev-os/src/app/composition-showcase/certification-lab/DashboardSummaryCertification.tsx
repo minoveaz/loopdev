@@ -48,23 +48,23 @@ export function DashboardSummaryCertification() {
       <div>
         <h2
           id="dashboard-summary-heading"
-          className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+          className="text-text-main font-mono text-sm uppercase tracking-[0.14em]"
         >
           C10 · Dashboard and summary
         </h2>
-        <p className="mt-1 text-xs text-text-muted">
+        <p className="text-text-muted mt-1 text-xs">
           Reusable metrics, activity, quick actions, progress and next steps in one suite-neutral
           composition.
         </p>
       </div>
 
       <div className="space-y-6">
-        <div className="flex flex-col gap-3 border-b border-border-subtle pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-border-subtle flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-text-muted">
+            <p className="text-text-muted font-mono text-xs uppercase tracking-[0.14em]">
               Workspace pulse
             </p>
-            <p className="mt-1 text-sm text-text-main">
+            <p className="text-text-main mt-1 text-sm">
               A compact operational pulse for the current suite
             </p>
           </div>
@@ -125,26 +125,26 @@ export function DashboardSummaryCertification() {
               className="p-4"
             >
               <div className="flex flex-wrap items-start justify-between gap-2">
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
+                <p className="text-text-muted text-xs font-bold uppercase tracking-[0.14em]">
                   Next steps
                 </p>
-                <span className="text-xs text-text-muted">2 of 4 complete</span>
+                <span className="text-text-muted text-xs">2 of 4 complete</span>
               </div>
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-background-subtle">
-                <div className="h-full w-1/2 rounded-full bg-primary" />
+              <div className="bg-background-subtle mt-3 h-2 overflow-hidden rounded-full">
+                <div className="bg-primary h-full w-1/2 rounded-full" />
               </div>
               <div className="mt-4 space-y-3">
                 {NEXT_STEPS.map(([label, detail, tone]) => (
                   <div
                     key={label}
-                    className="flex items-center justify-between gap-3 border-b border-border-subtle pb-3 last:border-0 last:pb-0"
+                    className="border-border-subtle flex items-center justify-between gap-3 border-b pb-3 last:border-0 last:pb-0"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-sm text-text-main">{label}</p>
-                      <p className="mt-0.5 text-xs text-text-muted">{detail}</p>
+                      <p className="text-text-main truncate text-sm">{label}</p>
+                      <p className="text-text-muted mt-0.5 text-xs">{detail}</p>
                     </div>
                     <span
-                      className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-text-muted"
+                      className="text-text-muted flex shrink-0 items-center gap-1.5 text-xs font-medium"
                       aria-label={`${tone === 'warning' ? 'Needs review' : tone === 'primary' ? 'In progress' : 'Optional'} status`}
                     >
                       <span
@@ -183,7 +183,7 @@ export function DashboardSummaryCertification() {
               className="p-4"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
+                <p className="text-text-muted text-xs font-bold uppercase tracking-[0.14em]">
                   Calendar
                 </p>
                 <Button size="sm" variant="ghost">
@@ -195,15 +195,15 @@ export function DashboardSummaryCertification() {
                 className="mt-3 flex h-auto w-full flex-wrap items-start justify-start gap-3 p-2 text-left"
                 aria-label="Open weekly operations review"
               >
-                <div className="rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-center">
-                  <p className="text-[10px] uppercase text-primary">Aug</p>
-                  <p className="text-xl font-bold text-primary">19</p>
+                <div className="border-primary/30 bg-primary/10 rounded-md border px-3 py-2 text-center">
+                  <p className="text-primary text-[10px] uppercase">Aug</p>
+                  <p className="text-primary text-xl font-bold">19</p>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="break-words text-sm font-medium text-text-main">
+                  <p className="text-text-main break-words text-sm font-medium">
                     Weekly operations review
                   </p>
-                  <p className="mt-1 text-xs text-text-muted">Today · 14:00 · 5 attendees</p>
+                  <p className="text-text-muted mt-1 text-xs">Today · 14:00 · 5 attendees</p>
                 </div>
               </Button>
             </TechnicalSurface>

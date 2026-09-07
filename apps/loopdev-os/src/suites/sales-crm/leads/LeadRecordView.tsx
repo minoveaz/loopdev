@@ -57,7 +57,8 @@ export function LeadRecordView() {
       const context = await getLeadCustomer360(
         activeOrganizationId,
         lead.contactId,
-        controller.signal, mode,
+        controller.signal,
+        mode,
       );
       const next: LeadDetailViewModel = {
         lead,
@@ -122,13 +123,16 @@ export function LeadRecordView() {
     setIsSaving(true);
     setErrorMessage(null);
     try {
-      const lead = await updateLead({
-        organizationId: activeOrganizationId,
-        leadId: detail.lead.id,
-        interest: interest.trim() || null,
-        assignedUserId: assignedUserId.trim() || null,
-        expectedUpdatedAt: detail.lead.updatedAt,
-      }, mode);
+      const lead = await updateLead(
+        {
+          organizationId: activeOrganizationId,
+          leadId: detail.lead.id,
+          interest: interest.trim() || null,
+          assignedUserId: assignedUserId.trim() || null,
+          expectedUpdatedAt: detail.lead.updatedAt,
+        },
+        mode,
+      );
       setDetail((current) => (current ? { ...current, lead, state: 'ready' } : current));
       setIsEditing(false);
     } catch (error: unknown) {
@@ -152,12 +156,15 @@ export function LeadRecordView() {
     setIsSaving(true);
     setErrorMessage(null);
     try {
-      const lead = await moveLeadStatus({
-        organizationId: activeOrganizationId,
-        leadId: detail.lead.id,
-        status,
-        expectedUpdatedAt: detail.lead.updatedAt,
-      }, mode);
+      const lead = await moveLeadStatus(
+        {
+          organizationId: activeOrganizationId,
+          leadId: detail.lead.id,
+          status,
+          expectedUpdatedAt: detail.lead.updatedAt,
+        },
+        mode,
+      );
       setDetail((current) => (current ? { ...current, lead, state: 'ready' } : current));
     } catch (error: unknown) {
       if (error instanceof LeadApiError && error.code === 'CONFLICT') {

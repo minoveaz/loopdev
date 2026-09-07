@@ -31,11 +31,11 @@ const FixtureSection = ({
     <div>
       <h2
         id={`${title.replaceAll(' ', '-').toLowerCase()}-heading`}
-        className="text-lg font-semibold text-text-main"
+        className="text-text-main text-lg font-semibold"
       >
         {title}
       </h2>
-      <p className="text-sm text-text-muted">{description}</p>
+      <p className="text-text-muted text-sm">{description}</p>
     </div>
     {children}
   </section>
@@ -53,13 +53,13 @@ export function DataTablesCatalog({
   return (
     <div className="min-w-0 max-w-full space-y-8 p-4 md:p-6">
       <header>
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+        <p className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
           Certification section
         </p>
-        <div className="mt-2 text-2xl font-semibold text-text-main">
+        <div className="text-text-main mt-2 text-2xl font-semibold">
           <h1>Data tables and filters</h1>
         </div>
-        <p className="mt-1 max-w-2xl text-sm text-text-muted">
+        <p className="text-text-muted mt-1 max-w-2xl text-sm">
           Responsive data patterns for CRM records, metrics, activity and selection workflows.
         </p>
       </header>

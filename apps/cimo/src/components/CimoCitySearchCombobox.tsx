@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Check, MapPin, Plus, Search, X } from 'lucide-react';
-import { SPANISH_CITIES, type SpanishCity } from '../data/spanishCitiesCatalog';
+import { SPANISH_CITIES } from '../data/spanishCitiesCatalog';
 
 export interface CimoCitySearchComboboxProps {
   selectedCity: string;
@@ -42,19 +42,19 @@ export const CimoCitySearchCombobox: React.FC<CimoCitySearchComboboxProps> = ({
   );
 
   return (
-    <div className="p-4 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/15 flex flex-col gap-3 animate-in fade-in zoom-in-98 duration-150 text-[#1F4E5F]">
+    <div className="animate-in fade-in zoom-in-98 flex flex-col gap-3 rounded-2xl border border-[#1F4E5F]/15 bg-[#F7F7F7] p-4 text-[#1F4E5F] duration-150">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70 flex items-center gap-1.5">
-          <Search className="w-3.5 h-3.5 text-[#7FB77E]" />
+        <span className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
+          <Search className="h-3.5 w-3.5 text-[#7FB77E]" />
           <span>Buscar ciudad o municipio de España</span>
         </span>
         {onClose && (
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-white text-[#1F4E5F]/60 hover:text-[#1F4E5F] transition-colors cursor-pointer"
+            className="cursor-pointer rounded-full p-1 text-[#1F4E5F]/60 transition-colors hover:bg-white hover:text-[#1F4E5F]"
           >
-            <X className="w-4 h-4" />
+            <X className="h-4 w-4" />
           </button>
         )}
       </div>
@@ -66,14 +66,14 @@ export const CimoCitySearchCombobox: React.FC<CimoCitySearchComboboxProps> = ({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Escribe tu ciudad (ej. Granada, Santander, Marbella, Alcobendas...)"
-          className="w-full pl-9 pr-4 py-2 bg-white rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none shadow-2xs"
+          className="shadow-2xs w-full rounded-xl border border-[#1F4E5F]/20 bg-white py-2 pl-9 pr-4 text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20"
           autoFocus
         />
-        <Search className="w-4 h-4 text-[#1F4E5F]/40 absolute left-3 top-2.5" />
+        <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#1F4E5F]/40" />
       </div>
 
       {/* Suggested Results List */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-56 overflow-y-auto">
+      <div className="grid max-h-56 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
         {filteredCities.map((c) => {
           const isSelected = selectedCity === c.name;
           return (
@@ -81,26 +81,26 @@ export const CimoCitySearchCombobox: React.FC<CimoCitySearchComboboxProps> = ({
               key={`${c.name}-${c.province}`}
               type="button"
               onClick={() => onSelectCity(c.name)}
-              className={`p-2.5 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between ${
+              className={`flex cursor-pointer items-center justify-between rounded-xl p-2.5 text-left transition-all ${
                 isSelected
-                  ? 'bg-[#1F4E5F] text-white shadow-xs font-black'
-                  : 'bg-white hover:bg-[#7FB77E]/10 border border-[#1F4E5F]/10 text-[#1F4E5F]'
+                  ? 'shadow-xs bg-[#1F4E5F] font-black text-white'
+                  : 'border border-[#1F4E5F]/10 bg-white text-[#1F4E5F] hover:bg-[#7FB77E]/10'
               }`}
             >
-              <div className="flex items-center gap-2 min-w-0">
+              <div className="flex min-w-0 items-center gap-2">
                 <MapPin
-                  className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#7FB77E]' : 'text-[#7FB77E]'}`}
+                  className={`h-3.5 w-3.5 shrink-0 ${isSelected ? 'text-[#7FB77E]' : 'text-[#7FB77E]'}`}
                 />
                 <div className="truncate">
-                  <span className="text-xs font-extrabold block truncate">{c.name}</span>
+                  <span className="block truncate text-xs font-extrabold">{c.name}</span>
                   <span
-                    className={`text-[10px] block truncate ${isSelected ? 'text-white/70' : 'text-[#1F4E5F]/50'}`}
+                    className={`block truncate text-[10px] ${isSelected ? 'text-white/70' : 'text-[#1F4E5F]/50'}`}
                   >
                     {c.province} • {c.region}
                   </span>
                 </div>
               </div>
-              {isSelected && <Check className="w-3.5 h-3.5 text-[#7FB77E] shrink-0" />}
+              {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-[#7FB77E]" />}
             </button>
           );
         })}
@@ -110,12 +110,12 @@ export const CimoCitySearchCombobox: React.FC<CimoCitySearchComboboxProps> = ({
           <button
             type="button"
             onClick={() => onSelectCity(query.trim())}
-            className="p-2.5 rounded-xl text-left transition-all cursor-pointer flex items-center gap-2 bg-white hover:bg-[#7FB77E]/10 border border-dashed border-[#7FB77E] text-[#1F4E5F]"
+            className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-[#7FB77E] bg-white p-2.5 text-left text-[#1F4E5F] transition-all hover:bg-[#7FB77E]/10"
           >
-            <Plus className="w-4 h-4 text-[#7FB77E] shrink-0" />
+            <Plus className="h-4 w-4 shrink-0 text-[#7FB77E]" />
             <div className="truncate">
-              <span className="text-xs font-black block truncate">Usar "{query.trim()}"</span>
-              <span className="text-[10px] text-[#1F4E5F]/50 block">
+              <span className="block truncate text-xs font-black">Usar "{query.trim()}"</span>
+              <span className="block text-[10px] text-[#1F4E5F]/50">
                 Municipio personalizado de España
               </span>
             </div>

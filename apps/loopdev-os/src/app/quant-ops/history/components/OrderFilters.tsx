@@ -27,7 +27,7 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
   };
 
   return (
-    <div className="bg-background-surface border border-border-technical/30 rounded-lg p-4 flex flex-wrap items-center gap-4">
+    <div className="bg-background-surface border-border-technical/30 flex flex-wrap items-center gap-4 rounded-lg border p-4">
       <div className="flex items-center gap-2">
         <LpdText size="sm" className="text-text-muted">
           Filter by:
@@ -38,7 +38,7 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
       <div className="flex gap-2">
         <Button variant="outline" size="sm" type="button"
           onClick={() => handleSideChange(undefined)}
-          className={`px-3 py-1 text-sm rounded border transition-colors ${
+          className={`rounded border px-3 py-1 text-sm transition-colors ${
             !filters.side
               ? 'bg-primary/10 border-primary text-primary'
               : 'border-border-technical/30 hover:border-border-technical/50'
@@ -48,9 +48,9 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
         </Button>
         <Button variant="outline" size="sm" type="button"
           onClick={() => handleSideChange('buy')}
-          className={`px-3 py-1 text-sm rounded border transition-colors ${
+          className={`rounded border px-3 py-1 text-sm transition-colors ${
             filters.side === 'buy'
-              ? 'bg-green-500/10 border-green-500 text-green-500'
+              ? 'border-green-500 bg-green-500/10 text-green-500'
               : 'border-border-technical/30 hover:border-border-technical/50'
           }`}
         >
@@ -58,9 +58,9 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
         </Button>
         <Button variant="outline" size="sm" type="button"
           onClick={() => handleSideChange('sell')}
-          className={`px-3 py-1 text-sm rounded border transition-colors ${
+          className={`rounded border px-3 py-1 text-sm transition-colors ${
             filters.side === 'sell'
-              ? 'bg-red-500/10 border-red-500 text-red-500'
+              ? 'border-red-500 bg-red-500/10 text-red-500'
               : 'border-border-technical/30 hover:border-border-technical/50'
           }`}
         >
@@ -71,7 +71,7 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
       {/* Reset Button */}
       <Button variant="ghost" size="sm" type="button"
         onClick={handleReset}
-        className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated transition-colors ml-auto"
+        className="border-border-technical/30 hover:bg-background-elevated ml-auto rounded border px-3 py-1 text-sm transition-colors"
       >
         Reset Filters
       </Button>

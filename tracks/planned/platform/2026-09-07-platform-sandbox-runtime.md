@@ -70,11 +70,11 @@ segura. La issue #218 se amplía desde CRM hacia una capacidad transversal de pl
 
 ## Decisiones aprobadas
 
-| Fecha | Decisión | Motivo | Impacto | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-09-07 | El alcance es un Platform Sandbox Runtime transversal; CRM es el primer piloto | Evitar una solución CRM aislada que se replique de forma inconsistente | Owner platform, áreas CRM y demás suites | Usuario |
-| 2026-09-07 | El selector de entorno será visible para usuarios autorizados | Permitir revisar y usar los flujos sin flags manuales | Requiere contrato de permisos, accesibilidad y persistencia | Usuario |
-| 2026-09-07 | Real, Sandbox y Preview tendrán adaptadores explícitos | Eliminar fallbacks híbridos y conservar contratos de producción | UI independiente del origen de datos | Usuario |
+| Fecha      | Decisión                                                                       | Motivo                                                                 | Impacto                                                     | Aprobado por |
+| ---------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ----------------------------------------------------------- | ------------ |
+| 2026-09-07 | El alcance es un Platform Sandbox Runtime transversal; CRM es el primer piloto | Evitar una solución CRM aislada que se replique de forma inconsistente | Owner platform, áreas CRM y demás suites                    | Usuario      |
+| 2026-09-07 | El selector de entorno será visible para usuarios autorizados                  | Permitir revisar y usar los flujos sin flags manuales                  | Requiere contrato de permisos, accesibilidad y persistencia | Usuario      |
+| 2026-09-07 | Real, Sandbox y Preview tendrán adaptadores explícitos                         | Eliminar fallbacks híbridos y conservar contratos de producción        | UI independiente del origen de datos                        | Usuario      |
 
 ## Arquitectura y contratos
 
@@ -108,6 +108,7 @@ referenciadas aquí sin duplicar el contrato.
 de validación antes de implementar.
 
 **Definition of Ready**
+
 - [x] Issue #218 ampliada al Platform Sandbox Runtime.
 - [x] Owner platform y estrategia transversal definidos.
 - [x] Inventario de providers, flags, fixtures y adaptadores documentado.
@@ -116,6 +117,7 @@ de validación antes de implementar.
 - [ ] Contratos revisados con tests de esquema antes de promoción a implementación.
 
 **Entregables**
+
 - [x] `docs/03-platform/PLATFORM_SANDBOX_RUNTIME.md`.
 - [x] Este track registrado en `tracks/planned/platform/`.
 - [x] Contratos públicos, store local y provider base implementados sin conectar CRM.
@@ -125,6 +127,7 @@ de validación antes de implementar.
 - [ ] Decisión de implementación aprobada para Fase 1.
 
 **Validación**
+
 - `node scripts/tracks/validate-tracks.mjs`.
 - `node scripts/tracks/generate-tracks-index.mjs`.
 - `pnpm validate:plan`.
@@ -136,18 +139,18 @@ de validación antes de implementar.
 
 ## Registro de cambios de enfoque
 
-| Fecha | Cambio | Motivo | Impacto en alcance/fases | Aprobado por |
-| --- | --- | --- | --- | --- |
-| 2026-09-07 | De sandbox CRM a runtime de plataforma | El mismo problema existe en todas las suites y debe resolverse en una capa común | Fase 0 añade inventario transversal; CRM continúa como piloto | Usuario |
+| Fecha      | Cambio                                 | Motivo                                                                           | Impacto en alcance/fases                                      | Aprobado por |
+| ---------- | -------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------ |
+| 2026-09-07 | De sandbox CRM a runtime de plataforma | El mismo problema existe en todas las suites y debe resolverse en una capa común | Fase 0 añade inventario transversal; CRM continúa como piloto | Usuario      |
 
 ## Riesgos y bloqueos
 
-| Riesgo o bloqueo | Impacto | Mitigación | Responsable | Estado |
-| --- | --- | --- | --- | --- |
-| Fixtures actuales tienen contratos e identificadores heterogéneos | El adapter sandbox puede divergir de Real | Validación de schemas y seed packs versionados | platform | abierto |
-| Persistencia local puede filtrar datos entre organizaciones | Riesgo de aislamiento y tests no deterministas | Namespace por organización/workspace/versión y reset obligatorio | platform | abierto |
-| Selector visible puede afectar shell responsive | Regresión visual o de accesibilidad | Declararlo como control de PlatformHeader y cubrir estados responsive | platform | abierto |
-| Suite unitaria completa tiene un bloqueo local conocido en Windows | Feedback local incompleto | Usar validaciones focalizadas y no cambiar dependencias sin reproducción en CI | governance | conocido |
+| Riesgo o bloqueo                                                   | Impacto                                        | Mitigación                                                                     | Responsable | Estado   |
+| ------------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------ | ----------- | -------- |
+| Fixtures actuales tienen contratos e identificadores heterogéneos  | El adapter sandbox puede divergir de Real      | Validación de schemas y seed packs versionados                                 | platform    | abierto  |
+| Persistencia local puede filtrar datos entre organizaciones        | Riesgo de aislamiento y tests no deterministas | Namespace por organización/workspace/versión y reset obligatorio               | platform    | abierto  |
+| Selector visible puede afectar shell responsive                    | Regresión visual o de accesibilidad            | Declararlo como control de PlatformHeader y cubrir estados responsive          | platform    | abierto  |
+| Suite unitaria completa tiene un bloqueo local conocido en Windows | Feedback local incompleto                      | Usar validaciones focalizadas y no cambiar dependencias sin reproducción en CI | governance  | conocido |
 
 ## Criterios de cierre
 
@@ -159,23 +162,23 @@ de validación antes de implementar.
 
 ## Evidencia de validación
 
-| Fecha | Validación | Resultado | Referencia |
-| --- | --- | --- | --- |
-| 2026-09-07 | `pnpm --filter @loopdev/contracts typecheck` | Correcto | Contratos de runtime |
-| 2026-09-07 | Tests focalizados de contratos (2) y store (3) | 5/5 correctos | `packages/contracts/src/platform/__tests__/runtime.test.ts`, `apps/loopdev-os/src/core/platform/runtimeStore.test.ts` |
-| 2026-09-07 | `pnpm --filter loopdev-os exec tsc --noEmit` | Correcto tras reconstruir `@loopdev/contracts` | Provider y layout |
-| 2026-09-07 | ESLint focalizado | 0 errores; 2 warnings preexistentes de fuente Next | Provider, store y layout |
-| 2026-09-07 | `node scripts/tracks/validate-tracks.mjs` | Correcto | Track y dashboard |
-| 2026-09-07 | `pnpm --filter @loopdev/contracts typecheck` | Correcto | Contratos CRM/runtime |
-| 2026-09-07 | `pnpm --filter loopdev-os exec tsc --noEmit` | Correcto | Adaptador y consumidores CRM |
-| 2026-09-07 | `pnpm --filter loopdev-os exec vitest run src/suites/sales-crm/runtimeAdapter.test.ts src/core/platform/runtimeStore.test.ts` | 5/5 correctos | Seguridad de modo, UUIDs y mutación local |
-| 2026-09-07 | ESLint focalizado de consumidores CRM | 0 errores; warnings existentes de PipelineWorkspace | Adaptador y routing de Contacts/Leads/Pipeline/Customer 360 |
-| 2026-09-07 | Corrección del seed y del comando `createLead` local | Contacto sin Lead/Opportunity, namespace organización/workspace, Customer 360 rechaza IDs desconocidos | CRM adapter |
-| 2026-09-07 | Tests focalizados posteriores a la corrección | 6/6 correctos; typecheck y lint correctos | `runtimeAdapter.test.ts` |
-| 2026-09-07 | Revisión de notas iniciales en captura de Lead | Real conserva `POST /api/crm/notes`; Sandbox/Preview dejan la nota como pendiente local sin request remoto | `useLeadCaptureForm.ts` |
-| 2026-09-07 | Comandos locales de Contact | Sandbox crea/actualiza Contactos, Preview bloquea, y claves de organización no UUID se normalizan para contratos | `runtimeAdapter.ts`, formularios de Contacts |
-| 2026-09-07 | Persistencia del estado Sandbox | El estado CRM local se conserva tras refresh en almacenamiento versionado del navegador y Reset lo elimina | `runtimeAdapter.ts` |
-| 2026-09-07 | Opportunities y Tasks locales | Sandbox usa lecturas y mutaciones locales para Opportunities y Tasks; Preview bloquea mutaciones y Real conserva las APIs existentes | `runtimeAdapter.ts`, `OpportunityForm.tsx`, `OpportunityRecordView.tsx`, `TaskWorkspace.tsx` |
+| Fecha      | Validación                                                                                                                    | Resultado                                                                                                                            | Referencia                                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-07 | `pnpm --filter @loopdev/contracts typecheck`                                                                                  | Correcto                                                                                                                             | Contratos de runtime                                                                                                  |
+| 2026-09-07 | Tests focalizados de contratos (2) y store (3)                                                                                | 5/5 correctos                                                                                                                        | `packages/contracts/src/platform/__tests__/runtime.test.ts`, `apps/loopdev-os/src/core/platform/runtimeStore.test.ts` |
+| 2026-09-07 | `pnpm --filter loopdev-os exec tsc --noEmit`                                                                                  | Correcto tras reconstruir `@loopdev/contracts`                                                                                       | Provider y layout                                                                                                     |
+| 2026-09-07 | ESLint focalizado                                                                                                             | 0 errores; 2 warnings preexistentes de fuente Next                                                                                   | Provider, store y layout                                                                                              |
+| 2026-09-07 | `node scripts/tracks/validate-tracks.mjs`                                                                                     | Correcto                                                                                                                             | Track y dashboard                                                                                                     |
+| 2026-09-07 | `pnpm --filter @loopdev/contracts typecheck`                                                                                  | Correcto                                                                                                                             | Contratos CRM/runtime                                                                                                 |
+| 2026-09-07 | `pnpm --filter loopdev-os exec tsc --noEmit`                                                                                  | Correcto                                                                                                                             | Adaptador y consumidores CRM                                                                                          |
+| 2026-09-07 | `pnpm --filter loopdev-os exec vitest run src/suites/sales-crm/runtimeAdapter.test.ts src/core/platform/runtimeStore.test.ts` | 5/5 correctos                                                                                                                        | Seguridad de modo, UUIDs y mutación local                                                                             |
+| 2026-09-07 | ESLint focalizado de consumidores CRM                                                                                         | 0 errores; warnings existentes de PipelineWorkspace                                                                                  | Adaptador y routing de Contacts/Leads/Pipeline/Customer 360                                                           |
+| 2026-09-07 | Corrección del seed y del comando `createLead` local                                                                          | Contacto sin Lead/Opportunity, namespace organización/workspace, Customer 360 rechaza IDs desconocidos                               | CRM adapter                                                                                                           |
+| 2026-09-07 | Tests focalizados posteriores a la corrección                                                                                 | 6/6 correctos; typecheck y lint correctos                                                                                            | `runtimeAdapter.test.ts`                                                                                              |
+| 2026-09-07 | Revisión de notas iniciales en captura de Lead                                                                                | Real conserva `POST /api/crm/notes`; Sandbox/Preview dejan la nota como pendiente local sin request remoto                           | `useLeadCaptureForm.ts`                                                                                               |
+| 2026-09-07 | Comandos locales de Contact                                                                                                   | Sandbox crea/actualiza Contactos, Preview bloquea, y claves de organización no UUID se normalizan para contratos                     | `runtimeAdapter.ts`, formularios de Contacts                                                                          |
+| 2026-09-07 | Persistencia del estado Sandbox                                                                                               | El estado CRM local se conserva tras refresh en almacenamiento versionado del navegador y Reset lo elimina                           | `runtimeAdapter.ts`                                                                                                   |
+| 2026-09-07 | Opportunities y Tasks locales                                                                                                 | Sandbox usa lecturas y mutaciones locales para Opportunities y Tasks; Preview bloquea mutaciones y Real conserva las APIs existentes | `runtimeAdapter.ts`, `OpportunityForm.tsx`, `OpportunityRecordView.tsx`, `TaskWorkspace.tsx`                          |
 
 ## Handoff de sesión
 

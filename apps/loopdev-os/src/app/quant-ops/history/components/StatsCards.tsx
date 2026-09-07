@@ -13,9 +13,9 @@ interface StatsCardsProps {
 export function StatsCards({ stats, isLoading, error }: StatsCardsProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-24 bg-background-surface rounded-lg border border-border-technical/30 animate-pulse" />
+          <div key={i} className="bg-background-surface border-border-technical/30 h-24 animate-pulse rounded-lg border" />
         ))}
       </div>
     );
@@ -23,7 +23,7 @@ export function StatsCards({ stats, isLoading, error }: StatsCardsProps) {
 
   if (error || !stats) {
     return (
-      <div className="bg-status-error/10 border border-status-error/30 rounded-lg p-4">
+      <div className="bg-status-error/10 border-status-error/30 rounded-lg border p-4">
         <LpdText size="sm" className="text-red-500">
           Failed to load statistics
         </LpdText>
@@ -58,13 +58,13 @@ export function StatsCards({ stats, isLoading, error }: StatsCardsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
       {statItems.map((item) => (
         <div
           key={item.label}
-          className="bg-background-surface border border-border-technical/30 rounded-lg p-4 hover:border-border-technical/50 transition-colors"
+          className="bg-background-surface border-border-technical/30 hover:border-border-technical/50 rounded-lg border p-4 transition-colors"
         >
-          <LpdText size="xs" className="text-text-muted uppercase tracking-wide mb-2">
+          <LpdText size="xs" className="text-text-muted mb-2 uppercase tracking-wide">
             {item.label}
           </LpdText>
           <LpdText size="2xl" weight="bold" className={item.className || 'text-text-main'}>

@@ -29,7 +29,7 @@ export const ClaimList: React.FC<ClaimListProps> = ({
               key={i}
               variant="ghost"
               onClick={() => onItemClick?.(term)}
-              className="px-3 py-1 rounded-full bg-status-error/5 border border-status-error/20 text-status-error text-xs font-mono hover:bg-status-error/10 transition-colors"
+              className="bg-status-error/5 border-status-error/20 text-status-error hover:bg-status-error/10 rounded-full border px-3 py-1 font-mono text-xs transition-colors"
             >
               {term}
             </Button>
@@ -42,7 +42,7 @@ export const ClaimList: React.FC<ClaimListProps> = ({
               key={claim.id}
               variant="secondary"
               onClick={() => onItemClick?.(claim.id)}
-              className="flex items-center justify-between p-3 rounded-xl border border-border-technical bg-background-surface hover:border-primary/20 transition-all text-left group"
+              className="border-border-technical bg-background-surface hover:border-primary/20 group flex items-center justify-between rounded-xl border p-3 text-left transition-all"
             >
               <div className="flex flex-col gap-0.5">
                 <LpdText size="sm" weight="bold" className="text-text-main group-hover:text-primary transition-colors">
@@ -60,7 +60,7 @@ export const ClaimList: React.FC<ClaimListProps> = ({
                   label={claim.severity.toUpperCase()}
                   severity={claim.severity === 'block' ? 'danger' : 'warning'}
                   variant="glass"
-                  className="scale-75 origin-right"
+                  className="origin-right scale-75"
                 />
               </div>
             </Button>

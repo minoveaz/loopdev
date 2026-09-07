@@ -42,12 +42,15 @@ export function CreateOpportunityFromLead({
     setValidationMessage(null);
     setIsSubmitting(true);
     try {
-      const conversion = await createOpportunityFromLead({
-        organizationId,
-        leadId: lead.id,
-        productKey: value,
-        name: value,
-      }, mode);
+      const conversion = await createOpportunityFromLead(
+        {
+          organizationId,
+          leadId: lead.id,
+          productKey: value,
+          name: value,
+        },
+        mode,
+      );
       setResult({ kind: 'success', conversion });
       onSuccess(conversion);
     } catch (error: unknown) {

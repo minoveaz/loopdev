@@ -20,7 +20,7 @@ export function TechnicalCanvasCertification() {
             showSubgrid={variant === 'blueprint'}
           />
           <div className="relative z-10 flex h-full min-h-32 items-end">
-            <span className="font-mono text-xs uppercase tracking-[0.14em] text-text-main">
+            <span className="text-text-main font-mono text-xs uppercase tracking-[0.14em]">
               {variant}
             </span>
           </div>

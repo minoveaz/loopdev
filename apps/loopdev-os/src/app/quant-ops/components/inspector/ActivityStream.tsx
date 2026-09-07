@@ -17,7 +17,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({ botId, pair }) =
       <LpdText
         size="nano"
         weight="black"
-        className="uppercase tracking-[0.2em] text-text-muted opacity-40 px-1"
+        className="text-text-muted px-1 uppercase tracking-[0.2em] opacity-40"
       >
         Live_Execution_Stream
       </LpdText>
@@ -26,7 +26,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({ botId, pair }) =
           recentOrders.map((order) => (
             <div
               key={order.id}
-              className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/5 rounded-xl"
+              className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-3"
             >
               <div className="flex flex-col">
                 <LpdText
@@ -56,12 +56,12 @@ export const ActivityStream: React.FC<ActivityStreamProps> = ({ botId, pair }) =
             </div>
           ))
         ) : (
-          <div className="p-10 border border-dashed border-white/10 rounded-2xl flex flex-col items-center gap-3 opacity-30 text-center">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 p-10 text-center opacity-30">
             <Icon name="Activity" size="lg" />
             <LpdText size="nano" weight="black" className="uppercase tracking-widest">
               No_Recent_Orders
             </LpdText>
-            <LpdText size="nano" className="italic text-[8px]">
+            <LpdText size="nano" className="text-[8px] italic">
               Scanning timeframe confluence...
             </LpdText>
           </div>

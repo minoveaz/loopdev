@@ -1,10 +1,7 @@
 'use client';
 
 import { Check, ChevronDown, Cloud, Eye, FlaskConical } from 'lucide-react';
-import {
-  TechnicalDropdown,
-  TechnicalDropdownItem,
-} from '@loopdev/ui';
+import { TechnicalDropdown, TechnicalDropdownItem } from '@loopdev/ui';
 import type { PlatformEnvironmentMode } from '@loopdev/contracts';
 import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
@@ -51,17 +48,17 @@ export function PlatformEnvironmentSelector() {
           type="button"
           aria-label={`Environment: ${currentLabel}`}
           aria-haspopup="menu"
-          className="flex h-9 items-center gap-1.5 rounded-full border border-black/10 bg-white/50 px-2.5 text-xs font-semibold text-text-muted transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:border-white/10 dark:bg-black/20"
+          className="text-text-muted hover:border-primary/40 hover:text-primary focus-visible:ring-primary/40 flex h-9 items-center gap-1.5 rounded-full border border-black/10 bg-white/50 px-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 dark:border-white/10 dark:bg-black/20"
         >
-          <span className="size-2 rounded-full bg-primary" aria-hidden="true" />
+          <span className="bg-primary size-2 rounded-full" aria-hidden="true" />
           <span className="hidden xl:inline">{currentLabel}</span>
           <ChevronDown size={14} aria-hidden="true" />
         </button>
       }
     >
       <div className="px-3 py-2">
-        <p className="text-xs font-semibold text-text-main">Environment</p>
-        <p className="text-xs text-text-muted">Choose how this workspace loads data</p>
+        <p className="text-text-main text-xs font-semibold">Environment</p>
+        <p className="text-text-muted text-xs">Choose how this workspace loads data</p>
       </div>
       {ENVIRONMENT_OPTIONS.map(({ mode: optionMode, label, description, icon: Icon }) => {
         const isActive = optionMode === mode;
@@ -74,7 +71,7 @@ export function PlatformEnvironmentSelector() {
             <Icon size={15} aria-hidden="true" />
             <span className="min-w-0 flex-1">
               <span className="block truncate">{label}</span>
-              <span className="block truncate text-xs text-text-muted">{description}</span>
+              <span className="text-text-muted block truncate text-xs">{description}</span>
             </span>
             {isActive ? <Check size={15} aria-hidden="true" /> : null}
           </TechnicalDropdownItem>

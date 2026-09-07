@@ -41,18 +41,18 @@ export const MetricTile: React.FC<MetricTileProps> = ({
         statusStyles[status]
       )}
     >
-      <div className="flex items-center justify-between w-full">
+      <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
-          <LpdText size="nano" weight="bold" className="uppercase tracking-widest opacity-60 text-text-muted">
+          <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
             {label}
           </LpdText>
-          <div className="px-1.5 py-0.5 rounded-sm bg-current/10 border border-current/20">
-            <LpdText size="nano" weight="bold" className="uppercase text-[8px] tracking-[0.2em] inherit-color">
+          <div className="bg-current/10 border-current/20 rounded-sm border px-1.5 py-0.5">
+            <LpdText size="nano" weight="bold" className="inherit-color text-[8px] uppercase tracking-[0.2em]">
               {`STATUS: ${status}`}
             </LpdText>
           </div>
         </div>
-        <span className="material-symbols-outlined text-[16px] opacity-40 group-hover:opacity-100 transition-opacity">
+        <span className="material-symbols-outlined text-[16px] opacity-40 transition-opacity group-hover:opacity-100">
           {statusIcon[status]}
         </span>
       </div>
