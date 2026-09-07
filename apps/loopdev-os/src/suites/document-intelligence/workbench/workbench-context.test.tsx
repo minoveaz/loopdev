@@ -12,6 +12,7 @@ function Harness() {
   return (
     <div>
       <output data-testid="state">{workbench.flowState}</output>
+      <output data-testid="result-provider">{workbench.result?.provider ?? ''}</output>
       <output data-testid="history-count">{workbench.history.length}</output>
       <button type="button" onClick={() => workbench.loadDemoDocument()}>
         fixture
@@ -174,5 +175,46 @@ describe('WorkbenchPrototypeProvider', () => {
       vi.advanceTimersByTime(3000);
     });
     expect(screen.getByTestId('state')).toHaveTextContent('review');
+  });
+
+  it('ignores a real extraction response after switching documents', async () => {
+    let resolveResponse!: (response: Response) => void;
+    const fetchMock = vi.fn(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveResponse = resolve;
+        }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(
+      <WorkbenchPrototypeProvider>
+        <Harness />
+      </WorkbenchPrototypeProvider>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'extract real' }));
+    fireEvent.click(screen.getByRole('button', { name: 'fixture' }));
+    expect(screen.getByTestId('result-provider')).toHaveTextContent('');
+
+    await act(async () => {
+      resolveResponse({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          classification: { type: 'unknown', confidence: null },
+          fields: {},
+          validations: [],
+          provider: 'gemini',
+          usage: null,
+        }),
+      } as Response);
+      await Promise.resolve();
+    });
+
+    expect(screen.getByTestId('state')).toHaveTextContent('preparation');
+    expect(screen.getByTestId('result-provider')).toHaveTextContent('');
+    expect(fetchMock.mock.calls[0]?.[1]?.signal).toBeInstanceOf(AbortSignal);
+    expect((fetchMock.mock.calls[0]?.[1]?.signal as AbortSignal).aborted).toBe(true);
   });
 });

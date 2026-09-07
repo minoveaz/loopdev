@@ -122,6 +122,8 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
   const processingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastRealExtraction = useRef<RealExtractionInput | null>(null);
+  const realExtractionController = useRef<AbortController | null>(null);
+  const realExtractionRequestId = useRef(0);
   const [providerReady, setProviderReady] = useState(false);
   const [visualProcessingComplete, setVisualProcessingComplete] = useState(false);
 
@@ -138,6 +140,9 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
   }, [history]);
 
   const clearTimer = useCallback(() => {
+    realExtractionRequestId.current += 1;
+    realExtractionController.current?.abort();
+    realExtractionController.current = null;
     if (processingTimer.current) {
       clearTimeout(processingTimer.current);
       processingTimer.current = null;
@@ -243,6 +248,9 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
         lastRealExtraction.current = realExtraction;
       }
       if (realExtraction) {
+        const requestId = realExtractionRequestId.current;
+        const controller = new AbortController();
+        realExtractionController.current = controller;
         const body = new FormData();
         body.append('front', realExtraction.front);
         if (realExtraction.back) body.append('back', realExtraction.back);
@@ -250,6 +258,7 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
           method: 'POST',
           headers: { 'x-loopdev-organization-id': realExtraction.organizationId },
           body,
+          signal: controller.signal,
         })
           .then(async (response) => {
             const payload = (await response.json()) as {
@@ -271,10 +280,12 @@ export function WorkbenchPrototypeProvider({ children }: { children: ReactNode }
             return toPrototypeResult(payload as DocumentExtractionResult);
           })
           .then((nextResult) => {
+            if (requestId !== realExtractionRequestId.current) return;
             setResult(nextResult);
             setProviderReady(true);
           })
           .catch((nextError: DocumentExtractionError) => {
+            if (requestId !== realExtractionRequestId.current) return;
             setError({
               status: nextError.status ?? 502,
               message: nextError.message ?? 'No se pudo completar la extracción.',
