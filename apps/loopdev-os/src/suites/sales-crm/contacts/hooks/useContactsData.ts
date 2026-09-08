@@ -56,6 +56,20 @@ export function useContactsData({
       setIsLoading(true);
       setError(null);
 
+      if (process.env.NEXT_PUBLIC_CRM_CONTACTS_FIXTURE === 'true') {
+        const fixturePage = getContactsDesignFixturePage({
+          organizationId: orgId,
+          query,
+          cursor: activeCursor,
+          limit: PAGE_SIZE,
+        });
+        setContacts(fixturePage.items);
+        setNextCursor(fixturePage.nextCursor);
+        setHasMore(fixturePage.hasMore);
+        setIsLoading(false);
+        return;
+      }
+
       if (mode !== 'real') {
         const page = await crmContacts(mode, orgId, query);
         setContacts(page.items);
