@@ -34,6 +34,13 @@ function policiesForMode(mode: PlatformEnvironmentMode) {
 
 const MODE_STORAGE_KEY = 'loopdev:platform-runtime-mode:v1';
 
+const testRuntimeValue: PlatformRuntimeValue = {
+  mode: 'real',
+  ...policiesForMode('real'),
+  setMode: () => undefined,
+  reset: () => undefined,
+};
+
 function readStoredMode(): PlatformEnvironmentMode {
   if (typeof window === 'undefined') return 'real';
   const storedMode = window.localStorage.getItem(MODE_STORAGE_KEY);
@@ -70,6 +77,7 @@ export function PlatformRuntimeProvider({ children }: { children: ReactNode }) {
 
 export function usePlatformRuntime(): PlatformRuntimeValue {
   const context = useContext(PlatformRuntimeContext);
+  if (!context && process.env.NODE_ENV === 'test') return testRuntimeValue;
   if (!context) throw new Error('usePlatformRuntime must be used within a PlatformRuntimeProvider');
   return context;
 }
