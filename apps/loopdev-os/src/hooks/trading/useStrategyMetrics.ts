@@ -120,6 +120,17 @@ export const useStrategyMetrics = (botId: string): UseStrategyMetricsReturn => {
     }
   }, [botId]);
 
+  // Start polling fallback
+  const startPolling = useCallback(() => {
+    if (pollingIntervalRef.current) return; // Already polling
+
+    console.log('[useStrategyMetrics] Starting REST polling mode');
+
+    pollingIntervalRef.current = setInterval(() => {
+      fetchMetrics();
+    }, POLLING_INTERVAL_MS);
+  }, [fetchMetrics]);
+
   // WebSocket connection
   const connectWebSocket = useCallback(() => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -191,18 +202,7 @@ export const useStrategyMetrics = (botId: string): UseStrategyMetricsReturn => {
       setIsConnected(false);
       startPolling();
     }
-  }, [botId]);
-
-  // Start polling fallback
-  const startPolling = useCallback(() => {
-    if (pollingIntervalRef.current) return; // Already polling
-
-    console.log('[useStrategyMetrics] Starting REST polling mode');
-
-    pollingIntervalRef.current = setInterval(() => {
-      fetchMetrics();
-    }, POLLING_INTERVAL_MS);
-  }, [fetchMetrics]);
+  }, [botId, startPolling]);
 
   // Stop polling
   const stopPolling = useCallback(() => {

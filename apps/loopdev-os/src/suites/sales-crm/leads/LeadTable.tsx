@@ -36,7 +36,7 @@ export function LeadTable({
         const subtext = lead.contactCompany || lead.contactEmail || 'Contact 360 disponible';
         return (
           <div className="min-w-0">
-            <p className="text-text-main truncate font-semibold hover:text-primary transition-colors">
+            <p className="text-text-main hover:text-primary truncate font-semibold transition-colors">
               {displayName}
             </p>
             <p className="text-text-muted truncate text-xs">{subtext}</p>

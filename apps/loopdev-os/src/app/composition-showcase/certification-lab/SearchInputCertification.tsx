@@ -21,13 +21,13 @@ export function SearchInputCertification() {
         >
           SearchInput
         </Heading>
-        <p className="text-sm text-text-muted">
+        <p className="text-text-muted text-sm">
           Controlled query entry with semantic tenant colors, clear, submit and loading states.
         </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label htmlFor="certification-search-default" className="text-xs text-text-muted">
+          <label htmlFor="certification-search-default" className="text-text-muted text-xs">
             Default semantic tokens
           </label>
           <SearchInput
@@ -38,12 +38,12 @@ export function SearchInputCertification() {
             aria-label="Search records"
             onSubmit={() => undefined}
           />
-          <p className="text-xs text-text-muted" aria-live="polite">
+          <p className="text-text-muted text-xs" aria-live="polite">
             Query: {query || 'empty'}
           </p>
         </div>
         <div className="space-y-2">
-          <label htmlFor="certification-search-themed" className="text-xs text-text-muted">
+          <label htmlFor="certification-search-themed" className="text-text-muted text-xs">
             Tenant override props
           </label>
           <SearchInput
@@ -63,7 +63,7 @@ export function SearchInputCertification() {
           />
         </div>
         <div className="space-y-2">
-          <label htmlFor="certification-search-loading" className="text-xs text-text-muted">
+          <label htmlFor="certification-search-loading" className="text-text-muted text-xs">
             Loading state
           </label>
           <SearchInput

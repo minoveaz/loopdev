@@ -16,7 +16,7 @@ export default function SalesCrmHomePage() {
         <Heading as="h1" size="2xl" weight="semibold" className="text-text-main mt-3">
           Tu espacio comercial
         </Heading>
-        <p className="text-text-muted mx-auto mt-3 max-w-xl text-lpd-sm leading-relaxed">
+        <p className="text-text-muted text-lpd-sm mx-auto mt-3 max-w-xl leading-relaxed">
           Selecciona un módulo en la navegación para comenzar. La suite se está preparando con los
           flujos autorizados de Contactos, Leads, Pipeline y Tareas.
         </p>

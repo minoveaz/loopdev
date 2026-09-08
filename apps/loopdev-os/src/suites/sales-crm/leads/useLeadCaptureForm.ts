@@ -17,6 +17,7 @@ import {
   leadCaptureFormSchema,
   type LeadCaptureFormValues,
 } from './leadCaptureForm';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 type UseLeadCaptureFormOptions = {
   organizationId: string;
@@ -31,6 +32,7 @@ type UseLeadCaptureFormOptions = {
  * form populated so the user can retry explicitly.
  */
 export function useLeadCaptureForm({ organizationId, onSuccess }: UseLeadCaptureFormOptions) {
+  const { mode } = usePlatformRuntime();
   const feedback = useFeedback();
   const [isRetryingInitialNote, setIsRetryingInitialNote] = useState(false);
   const form = useForm<LeadCaptureFormValues>({
@@ -42,7 +44,7 @@ export function useLeadCaptureForm({ organizationId, onSuccess }: UseLeadCapture
     const command = buildCaptureLeadCommand(organizationId, values);
     let result: LeadCaptureResult;
     try {
-      result = await captureLead(command);
+      result = await captureLead(command, undefined, mode);
     } catch (error) {
       const code =
         error instanceof Error && 'code' in error ? (error as { code?: string }).code : undefined;
@@ -89,6 +91,14 @@ export function useLeadCaptureForm({ organizationId, onSuccess }: UseLeadCapture
       idempotencyKey: `lead-capture-note-${result.lead.id}`,
     };
     try {
+      if (mode !== 'real') {
+        onSuccess({
+          ...result,
+          initialNote: { status: 'failed', command: noteCommand, errorCode: 'UNKNOWN' },
+        });
+        feedback.warning('The lead was created; the initial note remains pending locally.');
+        return;
+      }
       await createLeadNote(noteCommand);
       onSuccess({ ...result, initialNote: { status: 'saved' } });
       feedback.success(
@@ -113,6 +123,10 @@ export function useLeadCaptureForm({ organizationId, onSuccess }: UseLeadCapture
 
     setIsRetryingInitialNote(true);
     try {
+      if (mode !== 'real') {
+        feedback.warning('La nota inicial permanece pendiente en el entorno local.');
+        return completion;
+      }
       await createLeadNote(completion.initialNote.command);
       feedback.success('Nota inicial guardada correctamente.');
       return { ...completion, initialNote: { status: 'saved' } };

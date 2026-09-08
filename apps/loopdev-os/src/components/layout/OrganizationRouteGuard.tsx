@@ -50,7 +50,7 @@ export function OrganizationRouteGuard({ children }: { children: ReactNode }) {
         aria-label="Checking your secure workspace access"
       >
         <LogoSpinner size={48} />
-        <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+        <span className="text-text-muted font-mono text-xs font-semibold uppercase tracking-[0.2em]">
           Checking your secure workspace access…
         </span>
       </main>

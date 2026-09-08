@@ -127,10 +127,10 @@ const defaultColumns: ResponsiveTableColumn<DenseOperationalRow>[] = [
 const defaultMobileRow: NonNullable<
   ResponsiveTableProps<DenseOperationalRow>['renderMobileRow']
 > = (row) => (
-  <div className="flex w-full items-start justify-between gap-3 border-b border-border-subtle px-3 py-3">
+  <div className="border-border-subtle flex w-full items-start justify-between gap-3 border-b px-3 py-3">
     <div className="min-w-0">
-      <span className="block truncate font-medium text-text-main">{row.name}</span>
-      <span className="mt-1 block text-xs text-text-muted">
+      <span className="text-text-main block truncate font-medium">{row.name}</span>
+      <span className="text-text-muted mt-1 block text-xs">
         {row.segment} · {row.owner}
       </span>
     </div>
@@ -139,7 +139,7 @@ const defaultMobileRow: NonNullable<
       <Button
         variant="ghost"
         size="sm"
-        className="min-h-8 rounded border border-border-subtle bg-background px-2 py-1 text-text-main"
+        className="border-border-subtle bg-background text-text-main min-h-8 rounded border px-2 py-1"
         aria-label={`Open ${row.name}`}
       >
         Open
@@ -179,7 +179,7 @@ export function DenseOperationalTable({
       <ResponsiveTable
         surface={false}
         {...tableProps}
-        className={`[&_thead_tr]:bg-background-subtle [&_thead_tr]:border-b [&_thead_tr]:border-border-subtle [&_tbody_tr:hover]:bg-background-subtle [&_button]:min-h-8 [&_button]:px-2 ${tableProps.className ?? ''}`}
+        className={`[&_thead_tr]:bg-background-subtle [&_thead_tr]:border-border-subtle [&_tbody_tr:hover]:bg-background-subtle [&_button]:min-h-8 [&_button]:px-2 [&_thead_tr]:border-b ${tableProps.className ?? ''}`}
         caption="Operational records"
         rows={rows}
         columns={columns}
@@ -205,7 +205,7 @@ export function DenseOperationalTable({
           <Button
             variant="ghost"
             size="sm"
-            className="min-h-8 rounded border border-border-subtle bg-background px-2 py-1 text-text-main hover:bg-background-subtle"
+            className="border-border-subtle bg-background text-text-main hover:bg-background-subtle min-h-8 rounded border px-2 py-1"
             aria-label={`Open ${row.name}`}
           >
             Open

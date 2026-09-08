@@ -7,7 +7,7 @@ import { DomainBadge } from '../DomainBadge';
 import { clsx } from 'clsx';
 
 const FieldLabel = ({ children }: { children: React.ReactNode }) => (
-  <LpdText size="xs" weight="bold" className="text-text-muted uppercase tracking-widest mb-2 block">
+  <LpdText size="xs" weight="bold" className="text-text-muted mb-2 block uppercase tracking-widest">
     {children}
   </LpdText>
 );
@@ -17,50 +17,64 @@ const FieldLabel = ({ children }: { children: React.ReactNode }) => (
  * @description Declarative configuration panel for governance rules.
  * Handles both "Published" (Read-only) and "Draft" (Editable) states.
  */
-export const RuleEditor: React.FC<RuleEditorProps> = ({
-  rule,
-  isEditable = false,
-  onSave
-}) => {
+export const RuleEditor: React.FC<RuleEditorProps> = ({ rule, isEditable = false, onSave }) => {
   const [localRule] = useState(rule);
 
   return (
-    <div className="flex flex-col gap-10 p-8 bg-background-surface rounded-3xl border border-border-technical shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
-      
+    <div className="bg-background-surface border-border-technical animate-in fade-in slide-in-from-right-4 flex flex-col gap-10 rounded-3xl border p-8 shadow-sm duration-500">
       {/* 1. HEADER: Metadata & Main Switch */}
       <header className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <Heading as="h2" size="2xl" weight="bold" className="text-text-main tracking-tight">{localRule.name}</Heading>
+            <Heading as="h2" size="2xl" weight="bold" className="text-text-main tracking-tight">
+              {localRule.name}
+            </Heading>
             <DomainBadge domain={localRule.domain} size="sm" />
           </div>
           <LpdText size="xs" className="text-text-muted font-mono uppercase opacity-60">
-            ID: {localRule.id}{' // Updated by '}{localRule.updatedBy || 'System'}
+            ID: {localRule.id}
+            {' // Updated by '}
+            {localRule.updatedBy || 'System'}
           </LpdText>
         </div>
 
         <div className="flex items-center gap-4">
           <div className="flex flex-col items-end gap-1">
-             <LpdText size="nano" weight="bold" className="text-text-muted uppercase">Status</LpdText>
-             <div className="flex items-center gap-2">
-                <span className={clsx(
-                  "w-2 h-2 rounded-full",
-                  localRule.status === 'active' ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" : "bg-slate-400"
-                )} />
-                <LpdText size="sm" weight="bold" className="text-text-main capitalize">{localRule.status}</LpdText>
-             </div>
+            <LpdText size="nano" weight="bold" className="text-text-muted uppercase">
+              Status
+            </LpdText>
+            <div className="flex items-center gap-2">
+              <span
+                className={clsx(
+                  'h-2 w-2 rounded-full',
+                  localRule.status === 'active'
+                    ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]'
+                    : 'bg-slate-400',
+                )}
+              />
+              <LpdText size="sm" weight="bold" className="text-text-main capitalize">
+                {localRule.status}
+              </LpdText>
+            </div>
           </div>
         </div>
       </header>
 
       {/* 2. LOGIC CONSTRUCTION (The "Brain") */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border-technical/30">
+      <section className="border-border-technical/30 grid grid-cols-1 gap-8 border-t pt-8 md:grid-cols-2">
         <div className="flex flex-col gap-6">
-          <Heading as="h2" size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">01. Logic Definition</Heading>
-          
+          <Heading
+            as="h2"
+            size="sm"
+            weight="bold"
+            className="text-primary uppercase italic tracking-tighter"
+          >
+            01. Logic Definition
+          </Heading>
+
           <div>
             <FieldLabel>Applies To (Target)</FieldLabel>
-            <div className="p-3 rounded-xl bg-background-subtle border border-border-technical font-mono text-xs text-text-main">
+            <div className="bg-background-subtle border-border-technical text-text-main rounded-xl border p-3 font-mono text-xs">
               {localRule.scope.target} {localRule.scope.filter && `where ${localRule.scope.filter}`}
             </div>
           </div>
@@ -68,17 +82,17 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
           <div>
             <FieldLabel>Condition (Metric & Operator)</FieldLabel>
             <div className="flex items-center gap-2">
-              <div className="flex-1 p-3 rounded-xl bg-background-subtle border border-border-technical font-mono text-xs text-primary font-bold">
+              <div className="bg-background-subtle border-border-technical text-primary flex-1 rounded-xl border p-3 font-mono text-xs font-bold">
                 {localRule.logic.metric}
               </div>
-              <div className="px-3 py-2 rounded-lg bg-background-surface border border-border-technical font-bold text-text-main">
+              <div className="bg-background-surface border-border-technical text-text-main rounded-lg border px-3 py-2 font-bold">
                 {localRule.logic.operator}
               </div>
               <div className="w-24">
-                <Input 
-                  value={String(localRule.logic.threshold)} 
+                <Input
+                  value={String(localRule.logic.threshold)}
                   disabled={!isEditable}
-                  className="font-mono text-center h-10"
+                  className="h-10 text-center font-mono"
                 />
               </div>
             </div>
@@ -86,8 +100,15 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
         </div>
 
         <div className="flex flex-col gap-6">
-          <Heading as="h2" size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">02. Enforcement & Severity</Heading>
-          
+          <Heading
+            as="h2"
+            size="sm"
+            weight="bold"
+            className="text-primary uppercase italic tracking-tighter"
+          >
+            02. Enforcement & Severity
+          </Heading>
+
           <div>
             <FieldLabel>Outcome Severity</FieldLabel>
             <div className="flex gap-3">
@@ -97,10 +118,12 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
                   variant="ghost"
                   disabled={!isEditable}
                   className={clsx(
-                    "flex-1 py-2 rounded-xl border font-bold text-xs transition-all",
-                    localRule.enforcement.severity === s 
-                      ? (s === 'BLOCK' ? "bg-red-500 border-red-600 text-white" : "bg-yellow-500 border-yellow-600 text-black")
-                      : "bg-background-subtle border-border-technical text-text-muted opacity-40"
+                    'flex-1 rounded-xl border py-2 text-xs font-bold transition-all',
+                    localRule.enforcement.severity === s
+                      ? s === 'BLOCK'
+                        ? 'border-red-600 bg-red-500 text-white'
+                        : 'border-yellow-600 bg-yellow-500 text-black'
+                      : 'bg-background-subtle border-border-technical text-text-muted opacity-40',
                   )}
                 >
                   {s}
@@ -110,48 +133,63 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-2xl bg-background-subtle/50 border border-border-technical">
-              <LpdText size="nano" weight="bold" className="text-text-muted uppercase mb-2">Block Publish</LpdText>
-              <div className="text-sm font-bold text-text-main">{localRule.enforcement.blockPublish ? 'YES' : 'NO'}</div>
+            <div className="bg-background-subtle/50 border-border-technical rounded-2xl border p-4">
+              <LpdText size="nano" weight="bold" className="text-text-muted mb-2 uppercase">
+                Block Publish
+              </LpdText>
+              <div className="text-text-main text-sm font-bold">
+                {localRule.enforcement.blockPublish ? 'YES' : 'NO'}
+              </div>
             </div>
-            <div className="p-4 rounded-2xl bg-background-subtle/50 border border-border-technical">
-              <LpdText size="nano" weight="bold" className="text-text-muted uppercase mb-2">Requires Sign-off</LpdText>
-              <div className="text-sm font-bold text-text-main">{localRule.approval.required ? 'YES' : 'NO'}</div>
+            <div className="bg-background-subtle/50 border-border-technical rounded-2xl border p-4">
+              <LpdText size="nano" weight="bold" className="text-text-muted mb-2 uppercase">
+                Requires Sign-off
+              </LpdText>
+              <div className="text-text-main text-sm font-bold">
+                {localRule.approval.required ? 'YES' : 'NO'}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* 3. EXPLAINABILITY (The "Meaning") */}
-      <section className="flex flex-col gap-6 pt-8 border-t border-border-technical/30">
-        <Heading as="h2" size="sm" weight="bold" className="text-primary uppercase tracking-tighter italic">03. Explainability Templates</Heading>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-1 flex flex-col gap-4">
+      <section className="border-border-technical/30 flex flex-col gap-6 border-t pt-8">
+        <Heading
+          as="h2"
+          size="sm"
+          weight="bold"
+          className="text-primary uppercase italic tracking-tighter"
+        >
+          03. Explainability Templates
+        </Heading>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="flex flex-col gap-4 md:col-span-1">
             <div>
               <FieldLabel>The &quot;Why&quot; (Reasoning)</FieldLabel>
-              <textarea 
+              <textarea
                 readOnly={!isEditable}
                 value={localRule.explain.why}
-                className="w-full h-32 p-4 rounded-2xl bg-background-subtle border border-border-technical text-xs text-text-muted leading-relaxed resize-none focus:border-primary outline-none transition-colors"
+                className="bg-background-subtle border-border-technical text-text-muted focus:border-primary h-32 w-full resize-none rounded-2xl border p-4 text-xs leading-relaxed outline-none transition-colors"
               />
             </div>
           </div>
-          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:col-span-2 md:grid-cols-2">
             <div>
               <FieldLabel>The Risk (Impact)</FieldLabel>
-              <textarea 
+              <textarea
                 readOnly={!isEditable}
                 value={localRule.explain.risk}
-                className="w-full h-32 p-4 rounded-2xl bg-background-subtle border border-border-technical text-xs text-text-muted leading-relaxed resize-none outline-none focus:border-primary transition-colors"
+                className="bg-background-subtle border-border-technical text-text-muted focus:border-primary h-32 w-full resize-none rounded-2xl border p-4 text-xs leading-relaxed outline-none transition-colors"
               />
             </div>
             <div>
               <FieldLabel>How to Fix (Remediation)</FieldLabel>
-              <textarea 
+              <textarea
                 readOnly={!isEditable}
                 value={localRule.explain.howToFix}
-                className="w-full h-32 p-4 rounded-2xl bg-background-subtle border border-border-technical text-xs text-text-muted leading-relaxed resize-none outline-none focus:border-primary transition-colors"
+                className="bg-background-subtle border-border-technical text-text-muted focus:border-primary h-32 w-full resize-none rounded-2xl border p-4 text-xs leading-relaxed outline-none transition-colors"
               />
             </div>
           </div>
@@ -160,28 +198,29 @@ export const RuleEditor: React.FC<RuleEditorProps> = ({
 
       {/* 4. DRAFT ACTIONS */}
       {isEditable && (
-        <footer className="flex justify-end gap-4 pt-8 border-t border-border-technical/30">
-          <Button variant="ghost" size="sm">Discard Changes</Button>
-          <Button 
-            variant="primary" 
-            size="sm" 
-            onClick={() => onSave?.(localRule)}
-          >
+        <footer className="border-border-technical/30 flex justify-end gap-4 border-t pt-8">
+          <Button variant="ghost" size="sm">
+            Discard Changes
+          </Button>
+          <Button variant="primary" size="sm" onClick={() => onSave?.(localRule)}>
             Update Rule Logic
           </Button>
         </footer>
       )}
 
       {!isEditable && (
-        <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-between">
-          <div className="flex items-center gap-3 text-primary">
+        <div className="bg-primary/5 border-primary/10 flex items-center justify-between rounded-2xl border p-4">
+          <div className="text-primary flex items-center gap-3">
             <span className="material-symbols-outlined">lock</span>
-            <LpdText size="xs" weight="bold">Rule is currently PUBLISHED and read-only.</LpdText>
+            <LpdText size="xs" weight="bold">
+              Rule is currently PUBLISHED and read-only.
+            </LpdText>
           </div>
-          <Button variant="ghost" size="sm" className="text-primary font-bold">CREATE DRAFT TO EDIT</Button>
+          <Button variant="ghost" size="sm" className="text-primary font-bold">
+            CREATE DRAFT TO EDIT
+          </Button>
         </div>
       )}
-
     </div>
   );
 };

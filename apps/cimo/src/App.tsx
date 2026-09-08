@@ -32,9 +32,7 @@ import {
 } from './components/CimoEditProfileView';
 import { CimoCrewNetworkView } from './components/CimoCrewNetworkView';
 import { CimoSquadHubView } from './components/CimoSquadHubView';
-import { CimoCaptainBadgeInspector } from './components/CimoCaptainBadgeInspector';
 import { CimoActivityRsvpTicketWidget } from './components/CimoActivityRsvpTicketWidget';
-import { CimoCaptainGuideTipsWidget } from './components/CimoCaptainGuideTipsWidget';
 import { CimoLivePlanPreviewWidget } from './components/CimoLivePlanPreviewWidget';
 import { CimoAthleteMetricsWidget } from './components/CimoAthleteMetricsWidget';
 import { CimoBadgesShowcaseWidget } from './components/CimoBadgesShowcaseWidget';
@@ -52,7 +50,7 @@ export function App() {
   const [selectedDay, setSelectedDay] = useState('Cualquier día');
   const [selectedZone, setSelectedZone] = useState('Toda la ciudad');
   const [selectedLevel, setSelectedLevel] = useState('Cualquier nivel');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
   const [currentRoute, setCurrentRoute] = useState('feed');
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -631,18 +629,18 @@ export function App() {
                     type="button"
                     onClick={() => navigateTo('crew')}
                     aria-label="Abrir mi red de Crew"
-                    className={`hidden md:flex px-3 py-2 text-xs font-black rounded-full transition-all items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 ${
+                    className={`hidden min-h-[38px] shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 text-xs font-black transition-all active:scale-95 md:flex ${
                       currentRoute === 'crew'
-                        ? 'bg-[#1F4E5F] text-white shadow-xs'
-                        : 'bg-white/90 hover:bg-white text-[#1F4E5F] border border-slate-200/90 shadow-2xs'
+                        ? 'shadow-xs bg-[#1F4E5F] text-white'
+                        : 'shadow-2xs border border-slate-200/90 bg-white/90 text-[#1F4E5F] hover:bg-white'
                     }`}
                   >
                     <Users
-                      className={`w-3.5 h-3.5 ${currentRoute === 'crew' ? 'text-[#7FB77E]' : 'text-[#1F4E5F]'}`}
+                      className={`h-3.5 w-3.5 ${currentRoute === 'crew' ? 'text-[#7FB77E]' : 'text-[#1F4E5F]'}`}
                     />
                     <span>Mi Crew</span>
                     <span
-                      className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${currentRoute === 'crew' ? 'bg-[#7FB77E] text-[#1F4E5F]' : 'bg-[#7FB77E]/20 text-[#1F4E5F]'}`}
+                      className={`py-0.2 rounded-full px-1.5 text-[10px] font-black ${currentRoute === 'crew' ? 'bg-[#7FB77E] text-[#1F4E5F]' : 'bg-[#7FB77E]/20 text-[#1F4E5F]'}`}
                     >
                       7
                     </span>
@@ -658,13 +656,13 @@ export function App() {
                       }
                       navigateTo('create');
                     }}
-                    className={`px-3.5 py-2 text-xs font-black rounded-full transition-all flex items-center gap-1.5 min-h-[38px] cursor-pointer active:scale-95 shrink-0 shadow-xs ${
+                    className={`shadow-xs flex min-h-[38px] shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-black transition-all active:scale-95 ${
                       currentRoute === 'create'
                         ? 'bg-[#7FB77E] text-[#1F4E5F]'
-                        : 'bg-[#1F4E5F] hover:bg-[#163a47] text-white'
+                        : 'bg-[#1F4E5F] text-white hover:bg-[#163a47]'
                     }`}
                   >
-                    <Plus className="w-4 h-4 stroke-[3]" />
+                    <Plus className="h-4 w-4 stroke-[3]" />
                     <span className="hidden sm:inline">Crear Plan</span>
                     <span className="sm:hidden">Crear</span>
                   </button>
@@ -674,14 +672,14 @@ export function App() {
                     type="button"
                     onClick={() => navigateTo('chats')}
                     aria-label="Abrir chats"
-                    className={`hidden md:flex relative p-2.5 rounded-full border transition-all cursor-pointer min-h-[38px] min-w-[38px] items-center justify-center shrink-0 ${
+                    className={`relative hidden min-h-[38px] min-w-[38px] shrink-0 cursor-pointer items-center justify-center rounded-full border p-2.5 transition-all md:flex ${
                       currentRoute === 'chats'
-                        ? 'bg-[#1F4E5F] text-white border-[#1F4E5F] shadow-xs'
-                        : 'bg-white/90 border-slate-200/90 text-[#1F4E5F] hover:bg-white shadow-2xs'
+                        ? 'shadow-xs border-[#1F4E5F] bg-[#1F4E5F] text-white'
+                        : 'shadow-2xs border-slate-200/90 bg-white/90 text-[#1F4E5F] hover:bg-white'
                     }`}
                   >
-                    <MessageSquare className="w-4 h-4" />
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#7FB77E] text-[#1F4E5F] text-[9px] font-black flex items-center justify-center border-2 border-white shadow-2xs">
+                    <MessageSquare className="h-4 w-4" />
+                    <span className="shadow-2xs absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-[#7FB77E] text-[9px] font-black text-[#1F4E5F]">
                       3
                     </span>
                   </button>
@@ -691,16 +689,16 @@ export function App() {
                       type="button"
                       onClick={() => navigateTo('profile')}
                       aria-label="Ver mi perfil"
-                      className="hidden sm:flex w-9 h-9 rounded-full overflow-hidden border-2 border-[#1F4E5F]/20 cursor-pointer hover:border-[#1F4E5F] transition-colors shadow-xs shrink-0"
+                      className="shadow-xs hidden h-9 w-9 shrink-0 cursor-pointer overflow-hidden rounded-full border-2 border-[#1F4E5F]/20 transition-colors hover:border-[#1F4E5F] sm:flex"
                     >
                       {currentUser.avatarUrl ? (
                         <img
                           src={currentUser.avatarUrl}
                           alt={currentUser.name}
-                          className="w-full h-full object-cover"
+                          className="h-full w-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full bg-[#1F4E5F] text-white font-extrabold text-xs flex items-center justify-center">
+                        <div className="flex h-full w-full items-center justify-center bg-[#1F4E5F] text-xs font-extrabold text-white">
                           {currentUser.name.charAt(0)}
                         </div>
                       )}
@@ -709,9 +707,9 @@ export function App() {
                     <button
                       type="button"
                       onClick={() => setIsAuthOpen(true)}
-                      className="px-4 py-2 text-xs font-bold text-[#1F4E5F] bg-[#F7F7F7] border border-[#1F4E5F]/15 hover:bg-white rounded-full transition-all min-h-[38px] cursor-pointer"
+                      className="min-h-[38px] cursor-pointer rounded-full border border-[#1F4E5F]/15 bg-[#F7F7F7] px-4 py-2 text-xs font-bold text-[#1F4E5F] transition-all hover:bg-white"
                     >
-                      <LogIn className="w-3.5 h-3.5" />
+                      <LogIn className="h-3.5 w-3.5" />
                       <span>Entrar</span>
                     </button>
                   )}

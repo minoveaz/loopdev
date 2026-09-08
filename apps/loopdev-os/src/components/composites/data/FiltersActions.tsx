@@ -170,7 +170,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
           action={
             <div className="flex items-center gap-3">
               <span
-                className="text-xs text-text-muted"
+                className="text-text-muted text-xs"
                 aria-label={labels.resultCount(rows.length)}
               >
                 {labels.resultCount(rows.length)}
@@ -185,7 +185,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
           className="mt-4 grid grid-cols-1 items-end gap-2 lg:grid-cols-[minmax(16rem,1fr)_repeat(3,minmax(9rem,auto))_auto_auto]"
         >
           {search ? (
-            <div className="min-w-0 w-full">
+            <div className="w-full min-w-0">
               <Input
                 aria-label={labels.searchLabel}
                 placeholder={labels.searchPlaceholder}
@@ -213,7 +213,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
           {primaryFilters.map((filter) => {
             const selected = filterValues[filter.id] ?? [];
             return (
-              <div className="min-w-0 w-full" key={filter.id}>
+              <div className="w-full min-w-0" key={filter.id}>
                 <FilterDropdown
                   icon="filter_alt"
                   label={
@@ -268,7 +268,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
         {showAdvancedFilters ? (
           <div
             id="filters-actions-advanced"
-            className="mt-3 flex flex-wrap items-end gap-2 border border-border-subtle bg-background-subtle p-3"
+            className="border-border-subtle bg-background-subtle mt-3 flex flex-wrap items-end gap-2 border p-3"
             aria-label={labels.moreFilters}
           >
             {advancedFilters.map((filter) => {
@@ -314,7 +314,7 @@ export function FiltersActions<Row extends Record<string, unknown>>({
             role="group"
             aria-label={labels.activeFilters}
           >
-            <span className="text-xs font-medium text-text-muted">{labels.activeFilters}:</span>
+            <span className="text-text-muted text-xs font-medium">{labels.activeFilters}:</span>
             {Object.entries(filterValues).flatMap(([id, values]) =>
               values
                 .filter((value) => value !== 'all')

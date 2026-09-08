@@ -5,6 +5,7 @@ import { Button, FormActions, Input, TechnicalDialog } from '@loopdev/ui';
 import type { CrmLead } from '@loopdev/contracts';
 import { createOpportunityFromLead, LeadApiError, type LeadConversionResult } from './api';
 import { OpportunityResultPanel } from './OpportunityResultPanel';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 type CreateOpportunityFromLeadProps = {
   open: boolean;
@@ -24,6 +25,7 @@ export function CreateOpportunityFromLead({
   const [product, setProduct] = useState(lead.interest ?? '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
+  const { mode } = usePlatformRuntime();
   const [result, setResult] = useState<
     { kind: 'success'; conversion: LeadConversionResult } | { kind: 'conflict'; message: string }
   >();
@@ -40,12 +42,15 @@ export function CreateOpportunityFromLead({
     setValidationMessage(null);
     setIsSubmitting(true);
     try {
-      const conversion = await createOpportunityFromLead({
-        organizationId,
-        leadId: lead.id,
-        productKey: value,
-        name: value,
-      });
+      const conversion = await createOpportunityFromLead(
+        {
+          organizationId,
+          leadId: lead.id,
+          productKey: value,
+          name: value,
+        },
+        mode,
+      );
       setResult({ kind: 'success', conversion });
       onSuccess(conversion);
     } catch (error: unknown) {

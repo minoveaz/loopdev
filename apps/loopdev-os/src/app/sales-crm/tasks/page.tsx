@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  Badge,
   Button,
   Heading,
+  IconButton,
   ModuleHeader,
   ResponsiveTable,
   Select,
@@ -19,7 +19,6 @@ import {
   Check,
   CheckCircle2,
   CheckSquare,
-  ChevronDown,
   Clock,
   Eye,
   FileText,
@@ -36,17 +35,13 @@ import {
   User,
   X,
 } from 'lucide-react';
-import type {
-  Task,
-  TaskPage,
-  TaskPriority,
-  TaskRelationType,
-  TaskStatus,
-} from '@loopdev/contracts';
+import type { Task, TaskPriority, TaskRelationType, TaskStatus } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
 import { TaskPreview } from '@/suites/sales-crm/crm';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { completeCrmTask, crmTasks } from '@/suites/sales-crm/runtimeAdapter';
 
 const PAGE_SIZE = 100;
 
@@ -100,20 +95,20 @@ function getRelationHref(task: Task) {
 }
 
 function getRelationBadge(task: Task) {
-  let icon = <User className="size-3 text-text-muted shrink-0" />;
+  let icon = <User className="text-text-muted size-3 shrink-0" />;
   let label = 'Contacto';
   if (task.relationType === 'lead') {
-    icon = <Sparkles className="size-3 text-amber-500 shrink-0" />;
+    icon = <Sparkles className="size-3 shrink-0 text-status-warning" />;
     label = 'Lead';
   } else if (task.relationType === 'opportunity') {
-    icon = <TrendingUp className="size-3 text-emerald-500 shrink-0" />;
+    icon = <TrendingUp className="size-3 shrink-0 text-status-success" />;
     label = 'Trato';
   }
 
   return (
     <Link
       href={getRelationHref(task)}
-      className="inline-flex items-center gap-1 rounded-md bg-secondary/80 hover:bg-secondary px-2 py-0.5 text-[11px] font-medium text-text-main hover:text-primary transition-colors border border-border-subtle/60"
+      className="bg-secondary/80 hover:bg-secondary text-text-main hover:text-primary border-border-subtle/60 inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-medium transition-colors"
       onClick={(e) => e.stopPropagation()}
     >
       {icon}
@@ -125,28 +120,28 @@ function getRelationBadge(task: Task) {
 function getTypeBadge(type: string | null | undefined) {
   if (!type) return null;
   const normalized = type.toLowerCase();
-  let icon = <CheckSquare className="size-3 text-text-muted shrink-0" />;
+  let icon = <CheckSquare className="text-text-muted size-3 shrink-0" />;
   let label = type;
 
   if (normalized.includes('call') || normalized.includes('llamada')) {
-    icon = <Phone className="size-3 text-blue-500 shrink-0" />;
+    icon = <Phone className="size-3 shrink-0 text-status-info" />;
     label = 'Llamada';
   } else if (normalized.includes('email') || normalized.includes('correo')) {
-    icon = <Mail className="size-3 text-purple-500 shrink-0" />;
+    icon = <Mail className="size-3 shrink-0 text-accent" />;
     label = 'Correo';
   } else if (normalized.includes('meeting') || normalized.includes('reunion')) {
-    icon = <Calendar className="size-3 text-amber-500 shrink-0" />;
+    icon = <Calendar className="size-3 shrink-0 text-status-warning" />;
     label = 'Reunión';
   } else if (normalized.includes('contract') || normalized.includes('contrato')) {
-    icon = <FileText className="size-3 text-emerald-500 shrink-0" />;
+    icon = <FileText className="size-3 shrink-0 text-status-success" />;
     label = 'Contrato';
   } else if (normalized.includes('verification') || normalized.includes('revision')) {
-    icon = <CheckCircle2 className="size-3 text-indigo-500 shrink-0" />;
+    icon = <CheckCircle2 className="size-3 shrink-0 text-primary" />;
     label = 'Revisión';
   }
 
   return (
-    <span className="inline-flex items-center gap-1 rounded-md bg-secondary/60 px-2 py-0.5 text-[11px] font-medium text-text-main border border-border-subtle/50">
+    <span className="bg-secondary/60 text-text-main border-border-subtle/50 inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-medium">
       {icon}
       <span>{label}</span>
     </span>
@@ -157,35 +152,35 @@ function getLinearPriorityBadge(priority: TaskPriority) {
   switch (priority) {
     case 'urgent':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-red-500/25 bg-red-500/10 px-2 py-0.5 text-[11px] font-semibold text-red-600 dark:text-red-400">
-          <AlertCircle className="size-3 text-red-500 shrink-0" />
+        <span className="border-status-error/25 bg-status-error/10 text-status-error inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-semibold">
+          <AlertCircle className="text-status-error size-3 shrink-0" />
           <span>Urgente</span>
         </span>
       );
     case 'high':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:text-amber-400">
-          <SignalHigh className="size-3 text-amber-500 shrink-0" />
+        <span className="border-status-warning/25 bg-status-warning/10 text-status-warning inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-medium">
+          <SignalHigh className="text-status-warning size-3 shrink-0" />
           <span>Alta</span>
         </span>
       );
     case 'normal':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-border-subtle bg-secondary/60 px-2 py-0.5 text-[11px] font-medium text-text-muted">
-          <SignalMedium className="size-3 opacity-70 shrink-0" />
+        <span className="border-border-subtle bg-secondary/60 text-text-muted inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-medium">
+          <SignalMedium className="size-3 shrink-0 opacity-70" />
           <span>Media</span>
         </span>
       );
     case 'low':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-border-subtle/50 bg-secondary/30 px-2 py-0.5 text-[11px] font-medium text-text-muted/80">
-          <SignalLow className="size-3 opacity-50 shrink-0" />
+        <span className="border-border-subtle/50 bg-secondary/30 text-text-muted/80 inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-medium">
+          <SignalLow className="size-3 shrink-0 opacity-50" />
           <span>Baja</span>
         </span>
       );
     default:
       return (
-        <span className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2 py-0.5 text-[11px] text-text-muted">
+        <span className="border-border-subtle text-text-muted inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px]">
           {priority}
         </span>
       );
@@ -196,21 +191,21 @@ function getStatusBadge(status: TaskStatus, overdue: boolean) {
   switch (status) {
     case 'completed':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+        <span className="border-status-success/20 bg-status-success/10 text-status-success inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-medium">
           <CheckCircle2 className="size-3 shrink-0" />
           <span>Completada</span>
         </span>
       );
     case 'in_progress':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-medium text-blue-600 dark:text-blue-400">
+        <span className="border-status-info/20 bg-status-info/10 text-status-info inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-medium">
           <Clock className="size-3 shrink-0" />
           <span>En progreso</span>
         </span>
       );
     case 'cancelled':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-border-subtle bg-secondary px-2.5 py-0.5 text-[11px] font-medium text-text-muted">
+        <span className="border-border-subtle bg-secondary text-text-muted inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-medium">
           <X className="size-3 shrink-0" />
           <span>Cancelada</span>
         </span>
@@ -218,15 +213,15 @@ function getStatusBadge(status: TaskStatus, overdue: boolean) {
     default:
       if (overdue) {
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-rose-500/25 bg-rose-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
-            <AlertCircle className="size-3 text-rose-500 shrink-0" />
+          <span className="border-status-error/25 bg-status-error/10 text-status-error inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-semibold">
+            <AlertCircle className="text-status-error size-3 shrink-0" />
             <span>Pendiente</span>
           </span>
         );
       }
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-border-subtle bg-surface px-2.5 py-0.5 text-[11px] font-medium text-text-muted">
-          <span className="size-1.5 rounded-full bg-primary/70 shrink-0" />
+        <span className="border-border-subtle bg-surface text-text-muted inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-medium">
+          <span className="bg-primary/70 size-1.5 shrink-0 rounded-full" />
           <span>Abierta</span>
         </span>
       );
@@ -244,8 +239,8 @@ function formatDueBadge(dueAt: string | null, isDone: boolean) {
 
   if (overdue) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-md border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
-        <Clock className="size-3 text-rose-500 shrink-0" />
+      <span className="border-status-error/20 bg-status-error/10 text-status-error inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-semibold">
+        <Clock className="text-status-error size-3 shrink-0" />
         <span>{formatDate(dueAt)} (Vencida)</span>
       </span>
     );
@@ -253,16 +248,16 @@ function formatDueBadge(dueAt: string | null, isDone: boolean) {
 
   if (today) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-600 dark:text-amber-400">
-        <Calendar className="size-3 text-amber-500 shrink-0" />
+      <span className="border-status-warning/20 bg-status-warning/10 text-status-warning inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-semibold">
+        <Calendar className="text-status-warning size-3 shrink-0" />
         <span>Hoy</span>
       </span>
     );
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs text-text-muted">
-      <Calendar className="size-3 opacity-60 shrink-0" />
+    <span className="text-text-muted inline-flex items-center gap-1.5 text-xs">
+      <Calendar className="size-3 shrink-0 opacity-60" />
       <span>{formatDate(dueAt)}</span>
     </span>
   );
@@ -286,7 +281,7 @@ function TaskStatusButton({
   if (isCompleted) {
     return (
       <div
-        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-xs mt-0.5"
+        className="bg-status-success text-primary-foreground shadow-xs mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
         title="Tarea completada"
       >
         <Check className="size-3 stroke-[3]" />
@@ -295,32 +290,33 @@ function TaskStatusButton({
   }
 
   return (
-    <button
+    <IconButton
       type="button"
-      role="button"
-      name="Complete"
-      aria-label="Complete"
+      ariaLabel="Marcar como completada"
+      variant="ghost"
+      size="sm"
       disabled={pending || !canManage || isCancelled}
       onClick={(e) => {
         e.stopPropagation();
         onComplete(task);
       }}
-      className={`group/chk flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all duration-150 mt-0.5 ${
+      className={`group/chk mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all duration-150 ${
         isInProgress
           ? 'border-primary/80 bg-primary/10 text-primary'
-          : 'border-border-subtle hover:border-emerald-500 hover:bg-emerald-500/10 text-transparent hover:text-emerald-600'
+          : 'border-border-subtle text-transparent hover:border-emerald-500 hover:bg-emerald-500/10 hover:text-emerald-600'
       } disabled:cursor-not-allowed disabled:opacity-50`}
       title={canManage ? 'Marcar como completada' : 'Tarea pendiente'}
     >
       <Check
         className={`size-3 stroke-[2.5] transition-transform group-hover/chk:scale-100 ${isInProgress ? 'scale-0' : 'scale-75'}`}
       />
-    </button>
+    </IconButton>
   );
 }
 
 export default function TasksPage() {
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
     'crm.manage',
@@ -336,25 +332,29 @@ export default function TasksPage() {
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const loadTasks = async (signal?: AbortSignal) => {
-    if (!activeOrganizationId) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        `/api/crm/tasks?organizationId=${encodeURIComponent(activeOrganizationId)}&limit=${PAGE_SIZE}`,
-        { signal },
-      );
-      if (!response.ok) throw new Error('Tasks could not be loaded.');
-      const page = (await response.json()) as TaskPage;
-      setTasks(page.items);
-    } catch (requestError: unknown) {
-      if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-      setError(requestError instanceof Error ? requestError.message : 'Tasks could not be loaded.');
-    } finally {
-      if (!signal?.aborted) setIsLoading(false);
-    }
-  };
+  const loadTasks = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!activeOrganizationId) return;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const page = await crmTasks(
+          mode,
+          { organizationId: activeOrganizationId, limit: PAGE_SIZE },
+          signal,
+        );
+        setTasks(page.items);
+      } catch (requestError: unknown) {
+        if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
+        setError(
+          requestError instanceof Error ? requestError.message : 'Tasks could not be loaded.',
+        );
+      } finally {
+        if (!signal?.aborted) setIsLoading(false);
+      }
+    },
+    [activeOrganizationId, mode],
+  );
 
   useEffect(() => {
     if (!activeOrganizationId || isLoadingPermissions || !canRead) {
@@ -364,7 +364,7 @@ export default function TasksPage() {
     const controller = new AbortController();
     void loadTasks(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, canRead, isLoadingPermissions]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, loadTasks]);
 
   const slaCounts = useMemo(() => {
     let today = 0;
@@ -411,34 +411,29 @@ export default function TasksPage() {
     });
   }, [query, slaFilter, status, tasks]);
 
-  const completeTask = async (task: Task) => {
-    if (!activeOrganizationId || !canManage) return;
-    setPendingId(task.id);
-    setError(null);
-    try {
-      const response = await fetch(`/api/crm/tasks/${task.id}/complete`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
+  const completeTask = useCallback(
+    async (task: Task) => {
+      if (!activeOrganizationId || !canManage) return;
+      setPendingId(task.id);
+      setError(null);
+      try {
+        const updated = await completeCrmTask(mode, {
           organizationId: activeOrganizationId,
+          taskId: task.id,
           expectedVersion: task.version,
           idempotencyKey: `crm-ui-complete-${task.id}-${task.version}`,
-        }),
-      });
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error ?? 'Task could not be completed.');
+        });
+        setTasks((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+      } catch (requestError: unknown) {
+        setError(
+          requestError instanceof Error ? requestError.message : 'Task could not be completed.',
+        );
+      } finally {
+        setPendingId(null);
       }
-      const updated = (await response.json()) as Task;
-      setTasks((current) => current.map((item) => (item.id === updated.id ? updated : item)));
-    } catch (requestError: unknown) {
-      setError(
-        requestError instanceof Error ? requestError.message : 'Task could not be completed.',
-      );
-    } finally {
-      setPendingId(null);
-    }
-  };
+    },
+    [activeOrganizationId, canManage, mode],
+  );
 
   const columns = useMemo<ResponsiveTableColumn<Task>[]>(
     () => [
@@ -449,7 +444,7 @@ export default function TasksPage() {
         render: (task) => {
           const isDone = task.status === 'completed';
           return (
-            <div className="flex items-start gap-3 min-w-0 py-0.5">
+            <div className="flex min-w-0 items-start gap-3 py-0.5">
               <TaskStatusButton
                 task={task}
                 pending={pendingId === task.id}
@@ -457,15 +452,17 @@ export default function TasksPage() {
                 canManage={canManage}
               />
               <div className="min-w-0 flex-1">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setSelectedId(task.id)}
-                  className="group/title flex items-center gap-1.5 text-left text-sm font-medium text-text-main hover:text-primary transition-colors cursor-pointer"
+                  className="group/title text-text-main hover:text-primary flex cursor-pointer items-center gap-1.5 text-left text-sm font-medium transition-colors"
                 >
-                  <span className={isDone ? 'line-through text-text-muted/60' : ''}>
+                  <span className={isDone ? 'text-text-muted/60 line-through' : ''}>
                     {task.title}
                   </span>
-                </button>
+                </Button>
                 <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs">
                   {getRelationBadge(task)}
                   {getTypeBadge(task.type)}
@@ -495,7 +492,7 @@ export default function TasksPage() {
         sortAccessor: (task) => task.dueAt ?? '',
       },
     ],
-    [canManage, pendingId],
+    [canManage, completeTask, pendingId],
   );
 
   if (isLoadingPermissions || !activeOrganizationId) {
@@ -527,7 +524,7 @@ export default function TasksPage() {
               <Heading as="h1" size="lg" weight="semibold">
                 Tareas
               </Heading>
-              <span className="hidden sm:inline-flex items-center rounded-full bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-semibold">
+              <span className="bg-primary/10 text-primary hidden items-center rounded-full px-2.5 py-0.5 text-xs font-semibold sm:inline-flex">
                 {slaCounts.all - slaCounts.completed} pendientes
               </span>
             </div>
@@ -536,7 +533,7 @@ export default function TasksPage() {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 href="/sales-crm/tasks/today"
-                className="text-text-muted hover:text-text-main text-xs font-medium px-3 py-1.5 rounded-lg border border-border-subtle bg-surface hover:bg-surface-hover transition-colors inline-flex items-center gap-1.5"
+                className="text-text-muted hover:text-text-main border-border-subtle bg-surface hover:bg-surface-hover inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors"
               >
                 <Sun className="size-3.5 text-amber-500" />
                 <span>Mi Día</span>
@@ -544,7 +541,7 @@ export default function TasksPage() {
               {canManage ? (
                 <Link
                   href="/sales-crm/tasks/new"
-                  className="bg-primary text-primary-foreground inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold shadow-xs hover:bg-primary/90 transition-all"
+                  className="bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
                 >
                   <Plus className="size-3.5" />
                   <span>Nueva tarea</span>
@@ -560,23 +557,25 @@ export default function TasksPage() {
         {/* Modern Linear-style Toolbar: SLA Tabs + Unified Search & Filters */}
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           {/* SLA Filter Segmented Pills */}
-          <div className="inline-flex flex-wrap items-center gap-1.5 rounded-xl border border-border-subtle bg-surface dark:bg-surface-dark p-1 shadow-xs">
+          <div className="border-border-subtle bg-surface dark:bg-surface-dark shadow-xs inline-flex flex-wrap items-center gap-1.5 rounded-xl border p-1">
             {slaTabs.map((tab) => {
               const isActive = slaFilter === tab.id;
               return (
-                <button
+                <Button
                   key={tab.id}
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setSlaFilter(tab.id)}
                   className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                     isActive
-                      ? 'bg-background text-text-main font-semibold shadow-xs border border-border-subtle'
+                      ? 'bg-background text-text-main shadow-xs border-border-subtle border font-semibold'
                       : 'text-text-muted hover:text-text-main hover:bg-surface-hover/60'
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span
-                    className={`rounded-full px-1.5 py-0.2 text-[10px] font-mono font-semibold ${
+                    className={`py-0.2 rounded-full px-1.5 font-mono text-[10px] font-semibold ${
                       isActive
                         ? 'bg-primary/10 text-primary'
                         : tab.alert
@@ -586,7 +585,7 @@ export default function TasksPage() {
                   >
                     {tab.count}
                   </span>
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -594,22 +593,25 @@ export default function TasksPage() {
           {/* Search and Status Select */}
           <div className="flex flex-1 items-center gap-2 lg:max-w-md">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-text-muted pointer-events-none" />
+              <Search className="text-text-muted pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2" />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Buscar tareas..."
-                className="w-full rounded-lg border border-border-subtle bg-background py-1.5 pl-8 pr-7 text-xs text-text-main placeholder:text-text-muted outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary shadow-xs"
+                className="border-border-subtle bg-background text-text-main placeholder:text-text-muted focus:border-primary focus:ring-primary shadow-xs w-full rounded-lg border py-1.5 pl-8 pr-7 text-xs outline-none transition-all focus:ring-1"
               />
               {query ? (
-                <button
+                <IconButton
                   type="button"
+                  variant="ghost"
+                  size="sm"
+                  ariaLabel="Limpiar búsqueda"
                   onClick={() => setQuery('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-main p-0.5"
+                  className="text-text-muted hover:text-text-main absolute right-2 top-1/2 -translate-y-1/2 p-0.5"
                   title="Limpiar búsqueda"
                 >
                   <X className="size-3" />
-                </button>
+                </IconButton>
               ) : null}
             </div>
 
@@ -648,7 +650,7 @@ export default function TasksPage() {
             variant="surface"
             radius="lg"
             border="subtle"
-            className="overflow-hidden p-0 shadow-xs"
+            className="shadow-xs overflow-hidden p-0"
           >
             <ResponsiveTable
               caption="Tareas CRM"
@@ -674,7 +676,7 @@ export default function TasksPage() {
                       type="button"
                       size="sm"
                       variant="secondary"
-                      className="h-7 text-xs px-2.5 rounded-md hover:bg-surface-hover transition-colors inline-flex items-center gap-1"
+                      className="hover:bg-surface-hover inline-flex h-7 items-center gap-1 rounded-md px-2.5 text-xs transition-colors"
                       onClick={() => setSelectedId(task.id)}
                     >
                       <Eye className="size-3" />
@@ -685,7 +687,7 @@ export default function TasksPage() {
                         type="button"
                         size="sm"
                         variant="primary"
-                        className="h-7 text-xs px-2.5 rounded-md font-medium shadow-xs inline-flex items-center gap-1"
+                        className="shadow-xs inline-flex h-7 items-center gap-1 rounded-md px-2.5 text-xs font-medium"
                         disabled={pendingId === task.id}
                         onClick={() => void completeTask(task)}
                       >
@@ -702,10 +704,10 @@ export default function TasksPage() {
                   <div
                     key={task.id}
                     onClick={() => setSelectedId(task.id)}
-                    className="group relative flex flex-col gap-2.5 rounded-xl border border-border-subtle bg-surface hover:bg-surface-hover/50 p-3.5 shadow-xs transition-all cursor-pointer"
+                    className="border-border-subtle bg-surface hover:bg-surface-hover/50 shadow-xs group relative flex cursor-pointer flex-col gap-2.5 rounded-xl border p-3.5 transition-all"
                   >
-                    <div className="flex items-start gap-3 justify-between">
-                      <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex min-w-0 flex-1 items-start gap-2.5">
                         <TaskStatusButton
                           task={task}
                           pending={pendingId === task.id}
@@ -714,7 +716,7 @@ export default function TasksPage() {
                         />
                         <div className="min-w-0 flex-1">
                           <p
-                            className={`text-sm font-semibold text-text-main leading-snug ${isDone ? 'line-through text-text-muted/60' : ''}`}
+                            className={`text-text-main text-sm font-semibold leading-snug ${isDone ? 'text-text-muted/60 line-through' : ''}`}
                           >
                             {task.title}
                           </p>
@@ -729,12 +731,12 @@ export default function TasksPage() {
                       {formatDueBadge(task.dueAt, isDone)}
                     </div>
 
-                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-border-subtle/50">
+                    <div className="border-border-subtle/50 flex items-center justify-end gap-2 border-t pt-2">
                       <Button
                         type="button"
                         size="sm"
                         variant="secondary"
-                        className="h-8 text-xs px-3"
+                        className="h-8 px-3 text-xs"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedId(task.id);
@@ -747,7 +749,7 @@ export default function TasksPage() {
                           type="button"
                           size="sm"
                           variant="primary"
-                          className="h-8 text-xs px-3"
+                          className="h-8 px-3 text-xs"
                           disabled={pendingId === task.id}
                           onClick={(e) => {
                             e.stopPropagation();

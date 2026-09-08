@@ -10,15 +10,11 @@ import {
   ModuleWorkspace,
   SuiteSidebar,
   QUANT_OPS_SCHEMA,
-  ThemeToggle,
-  SystemStatus,
   SuiteHeader,
   CommandBarTrigger,
   SuiteSwitcher,
   ContextPath,
   AVAILABLE_SUITES_FIXTURES,
-  UserMenu,
-  NotificationCenter,
   Divider,
   TenantProvider,
   ToastViewport,
@@ -134,7 +130,9 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
                 />
               </div>
             }
-            centerSlot={<CommandBarTrigger placeholder="Search or type a command..." onOpen={() => {}} />}
+            centerSlot={
+              <CommandBarTrigger placeholder="Search or type a command..." onOpen={() => {}} />
+            }
             rightSlot={
               <SuiteHeaderRight
                 userName={user?.email || 'Quant User'}
@@ -183,7 +181,7 @@ function QuantOpsLayoutInner({ children }: { children: React.ReactNode }) {
         <BlueprintBackground
           variant="monochrome"
           intensity="low"
-          className="fixed inset-0 pointer-events-none opacity-40"
+          className="pointer-events-none fixed inset-0 opacity-40"
         />
         <TenantProvider tenant="loopdev">
           <LayoutProvider>

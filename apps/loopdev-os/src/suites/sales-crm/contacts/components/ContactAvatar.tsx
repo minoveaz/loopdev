@@ -41,7 +41,7 @@ export function ContactAvatar({
 
   return (
     <div
-      className={`relative inline-flex shrink-0 items-center justify-center rounded-full border font-medium select-none transition-transform duration-200 ${colorStyles.bg} ${colorStyles.text} ${colorStyles.border} ${sizeClasses} ${className}`}
+      className={`relative inline-flex shrink-0 select-none items-center justify-center rounded-full border font-medium transition-transform duration-200 ${colorStyles.bg} ${colorStyles.text} ${colorStyles.border} ${sizeClasses} ${className}`}
       title={name}
       aria-label={name}
     >

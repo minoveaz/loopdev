@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { execFileSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
+import path from 'node:path';
 import process from 'node:process';
 import {
   changedFilesFromCommit,
@@ -14,6 +15,10 @@ const ignoredPathPattern =
   /(^|[\\/])(node_modules|\.next|\.turbo|coverage|dist|build|storybook-static)([\\/]|$)/;
 const isWindows = process.platform === 'win32';
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm';
+const prettierCli = path.resolve('node_modules/prettier/bin/prettier.cjs');
+const eslintCli = path.resolve('node_modules/eslint/bin/eslint.js');
+const windowsPrettierCommandLength = 7000;
+const windowsLintCommandLength = 7000;
 const generatedFiles = new Set(['tracks/README.md']);
 
 function changedFilesForScope(scope, revision) {
@@ -37,23 +42,65 @@ function classifyStaticFiles(files) {
 }
 
 function run(command, args) {
-  const result = spawnSync(command, args, { stdio: 'inherit', shell: isWindows });
+  const isPrettierCommand = args[0] === 'exec' && args[1] === 'prettier';
+  const isEslintCommand = args[0] === 'exec' && args[1] === 'eslint';
+  const localCli = isPrettierCommand ? prettierCli : isEslintCommand ? eslintCli : null;
+  const executable = localCli ? process.execPath : command;
+  const executableArgs = localCli ? [localCli, ...args.slice(2)] : args;
+  const result = spawnSync(executable, executableArgs, {
+    stdio: 'inherit',
+    // Run local CLIs directly so changed paths never pass through a shell.
+    shell: localCli ? false : isWindows,
+  });
   if (result.error) throw result.error;
   if (result.status !== 0) process.exit(result.status ?? 1);
+}
+
+function fileBatches(files, commandPrefixLength, maxCommandLength) {
+  const batches = [];
+  let batch = [];
+  let commandLength = commandPrefixLength;
+
+  for (const file of files) {
+    // Leave room for quoting and the separator added by the Windows shell.
+    const fileLength = file.length + 3;
+    if (isWindows && batch.length > 0 && commandLength + fileLength > maxCommandLength) {
+      batches.push(batch);
+      batch = [];
+      commandLength = commandPrefixLength;
+    }
+    batch.push(file);
+    commandLength += fileLength;
+  }
+
+  if (batch.length > 0) batches.push(batch);
+  return batches;
+}
+
+function prettierFileBatches(files) {
+  return fileBatches(
+    files,
+    `${pnpmCommand} exec prettier --check `.length,
+    windowsPrettierCommandLength,
+  );
+}
+
+function lintFileBatches(files) {
+  return fileBatches(files, `${pnpmCommand} exec eslint `.length, windowsLintCommandLength);
 }
 
 function localCommands(classification) {
   const commands = [];
   if (classification.files.length > 0) {
-    commands.push([
-      'exec',
-      'prettier',
-      '--check',
-      ...classification.files.filter((file) => file !== 'pnpm-lock.yaml'),
-    ]);
+    const prettierFiles = classification.files.filter((file) => file !== 'pnpm-lock.yaml');
+    for (const batch of prettierFileBatches(prettierFiles)) {
+      commands.push(['exec', 'prettier', '--check', ...batch]);
+    }
   }
   if (classification.lintFiles.length > 0) {
-    commands.push(['exec', 'eslint', ...classification.lintFiles]);
+    for (const batch of lintFileBatches(classification.lintFiles)) {
+      commands.push(['exec', 'eslint', ...batch]);
+    }
   }
   return commands;
 }
@@ -92,6 +139,13 @@ function main() {
   }
 }
 
-export { branchCommands, classifyStaticFiles, commandsForScope, localCommands };
+export {
+  branchCommands,
+  classifyStaticFiles,
+  commandsForScope,
+  localCommands,
+  lintFileBatches,
+  prettierFileBatches,
+};
 
 if (process.argv[1]?.endsWith('validate-static-controls.mjs')) main();

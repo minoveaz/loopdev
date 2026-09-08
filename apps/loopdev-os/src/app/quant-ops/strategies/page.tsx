@@ -174,7 +174,7 @@ export default function StrategiesPage() {
 
   if (isLoading) {
     return (
-      <div className="p-8 max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-8 p-8 md:grid-cols-3">
         <TechnicalSurface variant="surface" className="h-[340px] animate-pulse rounded-3xl" />
         <TechnicalSurface variant="surface" className="h-[340px] animate-pulse rounded-3xl" />
         <TechnicalSurface variant="surface" className="h-[340px] animate-pulse rounded-3xl" />
@@ -183,11 +183,11 @@ export default function StrategiesPage() {
   }
 
   return (
-    <main className="h-full overflow-y-auto flex flex-col gap-12 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
+    <main className="animate-in fade-in custom-scrollbar mx-auto flex h-full max-w-[1600px] flex-col gap-12 overflow-y-auto p-8 pb-32 duration-700">
       {/* 1. STANDARDIZED HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 text-primary">
+          <div className="text-primary flex items-center gap-3">
             <span className="material-symbols-outlined text-sm font-bold">psychology</span>
             <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">
               Algorithmic_Protocol_Vault
@@ -196,7 +196,7 @@ export default function StrategiesPage() {
           <Heading
             size="2xl"
             weight="bold"
-            className="text-text-main tracking-tight uppercase italic"
+            className="text-text-main uppercase italic tracking-tight"
           >
             Strategies_Lab<span className="text-primary">.</span>
           </Heading>
@@ -219,7 +219,7 @@ export default function StrategiesPage() {
 
       {/* 2. FLEET OVERVIEW */}
       {strategies.length > 0 ? (
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <section className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
           {strategies.map((strategy) => (
             <StrategyCard
               key={strategy.id}
@@ -246,14 +246,14 @@ export default function StrategiesPage() {
           ))}
         </section>
       ) : (
-        <section className="flex flex-col items-center justify-center p-24 border border-dashed border-border-technical/50 rounded-[2.5rem] bg-background-surface/50 backdrop-blur-sm">
-          <div className="w-16 h-16 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary/40 mb-6">
+        <section className="border-border-technical/50 bg-background-surface/50 flex flex-col items-center justify-center rounded-[2.5rem] border border-dashed p-24 backdrop-blur-sm">
+          <div className="bg-primary/5 border-primary/10 text-primary/40 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border">
             <span className="material-symbols-outlined text-3xl font-bold">biotech</span>
           </div>
           <Heading size="lg" weight="bold" className="text-text-main mb-2">
             No Protocols Defined
           </Heading>
-          <LpdText size="sm" className="text-text-muted text-center max-w-sm mb-8">
+          <LpdText size="sm" className="text-text-muted mb-8 max-w-sm text-center">
             Your laboratory is empty. Start by creating a strategy blueprint based on mathematical
             signals or price action.
           </LpdText>
@@ -267,21 +267,21 @@ export default function StrategiesPage() {
       {backtestResult && selectedStrategyForBacktest && (
         <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 md:p-8">
           <div
-            className="absolute inset-0 bg-background-canvas/80 backdrop-blur-md animate-in fade-in duration-300"
+            className="bg-background-canvas/80 animate-in fade-in absolute inset-0 backdrop-blur-md duration-300"
             onClick={() => setSelectedStrategyForBacktest(null)}
           />
 
           <TechnicalSurface
             variant="surface"
             depth="overlay"
-            className="relative z-10 w-full max-w-2xl h-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden rounded-3xl border-primary/20"
+            className="border-primary/20 relative z-10 flex h-full max-h-[80vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl shadow-2xl"
           >
-            <header className="p-6 border-b border-border-technical/30 flex items-center justify-between bg-background-subtle/30">
+            <header className="border-border-technical/30 bg-background-subtle/30 flex items-center justify-between border-b p-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-status-success/10 flex items-center justify-center text-status-success border border-status-success/20">
+                <div className="bg-status-success/10 text-status-success border-status-success/20 flex h-10 w-10 items-center justify-center rounded-xl border">
                   <span className="material-symbols-outlined text-xl font-bold">query_stats</span>
                 </div>
-                <Heading size="xs" weight="bold" className="uppercase tracking-tight italic">
+                <Heading size="xs" weight="bold" className="uppercase italic tracking-tight">
                   Simulation_Audit_Report
                 </Heading>
               </div>
@@ -292,8 +292,8 @@ export default function StrategiesPage() {
               />
             </header>
 
-            <div className="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="custom-scrollbar flex-1 space-y-8 overflow-y-auto p-8">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 {[
                   { label: 'Total_Trades', value: backtestResult.totalTrades, icon: 'analytics' },
                   { label: 'Win_Rate', value: `${backtestResult.winRate}%`, icon: 'check_circle' },
@@ -322,9 +322,9 @@ export default function StrategiesPage() {
                 ].map((stat, i) => (
                   <div
                     key={i}
-                    className="p-4 rounded-2xl bg-background-subtle/50 border border-border-technical/30"
+                    className="bg-background-subtle/50 border-border-technical/30 rounded-2xl border p-4"
                   >
-                    <div className="flex items-center gap-2 mb-2 opacity-40">
+                    <div className="mb-2 flex items-center gap-2 opacity-40">
                       <span className="material-symbols-outlined text-xs">{stat.icon}</span>
                       <LpdText size="nano" weight="bold" className="uppercase tracking-widest">
                         {stat.label}
@@ -347,7 +347,7 @@ export default function StrategiesPage() {
                 <LpdText
                   size="nano"
                   weight="black"
-                  className="uppercase tracking-[0.2em] opacity-40 px-1"
+                  className="px-1 uppercase tracking-[0.2em] opacity-40"
                 >
                   Detailed_Trade_Log
                 </LpdText>
@@ -355,7 +355,7 @@ export default function StrategiesPage() {
                   {backtestResult.trades.slice(0, 5).map((trade, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-white/5 border border-border-technical/20"
+                      className="border-border-technical/20 flex items-center justify-between rounded-xl border bg-white p-3 dark:bg-white/5"
                     >
                       <div className="flex flex-col">
                         <LpdText size="xs" weight="bold" className="uppercase">
@@ -378,7 +378,7 @@ export default function StrategiesPage() {
                         </LpdText>
                         <LpdText
                           size="nano"
-                          className="text-text-muted opacity-40 uppercase font-bold"
+                          className="text-text-muted font-bold uppercase opacity-40"
                         >
                           {trade.reason}
                         </LpdText>
@@ -386,7 +386,7 @@ export default function StrategiesPage() {
                     </div>
                   ))}
                   {backtestResult.trades.length > 5 && (
-                    <LpdText size="nano" className="text-center text-text-muted italic block py-2">
+                    <LpdText size="nano" className="text-text-muted block py-2 text-center italic">
                       + {backtestResult.trades.length - 5} additional trades in full report
                     </LpdText>
                   )}
@@ -394,11 +394,11 @@ export default function StrategiesPage() {
               </div>
             </div>
 
-            <footer className="p-6 border-t border-border-technical/30 flex items-center justify-end gap-4 bg-background-subtle/10">
+            <footer className="border-border-technical/30 bg-background-subtle/10 flex items-center justify-end gap-4 border-t p-6">
               <Button variant="outline" onClick={() => setSelectedStrategyForBacktest(null)}>
                 Dismiss_Report
               </Button>
-              <Button variant="primary" className="px-8 shadow-xl shadow-primary/20">
+              <Button variant="primary" className="shadow-primary/20 px-8 shadow-xl">
                 Download_CSV
               </Button>
             </footer>
@@ -438,9 +438,9 @@ export default function StrategiesPage() {
           </>
         }
       >
-        <div className="p-4 bg-status-error/5 border border-status-error/10 rounded-xl flex gap-3">
+        <div className="bg-status-error/5 border-status-error/10 flex gap-3 rounded-xl border p-4">
           <span className="material-symbols-outlined text-status-error">warning</span>
-          <LpdText size="xs" className="text-status-error/80 leading-relaxed font-medium">
+          <LpdText size="xs" className="text-status-error/80 font-medium leading-relaxed">
             Warning: If this strategy is currently active on any bot, those bots will be stopped
             immediately to prevent undefined behavior.
           </LpdText>

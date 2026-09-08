@@ -35,8 +35,8 @@ export function ClosedTradesTable({
 
   return (
     <div className="space-y-4">
-      <div className="bg-background-surface rounded-lg border border-border-technical/30 overflow-hidden">
-        <div className="grid grid-cols-8 gap-3 p-4 bg-background-elevated border-b border-border-technical/30">
+      <div className="bg-background-surface border-border-technical/30 overflow-hidden rounded-lg border">
+        <div className="bg-background-elevated border-border-technical/30 grid grid-cols-8 gap-3 border-b p-4">
           {[
             'Entry Date',
             'Entry Price',
@@ -60,7 +60,7 @@ export function ClosedTradesTable({
         {data.data.map((trade: ClosedTrade, idx: number) => (
           <div
             key={`${trade.entry_order.id}-${idx}`}
-            className="grid grid-cols-8 gap-3 p-4 border-b border-border-technical/10 hover:bg-background-elevated/50 transition-colors"
+            className="border-border-technical/10 hover:bg-background-elevated/50 grid grid-cols-8 gap-3 border-b p-4 transition-colors"
           >
             <LpdText size="sm" className="text-text-main font-mono">
               {new Date(trade.entry_order.created_at).toLocaleDateString()}

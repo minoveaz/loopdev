@@ -103,7 +103,7 @@ export function CommunicationsInboxContext() {
       <div className="space-y-2">
         <Link
           href={`/sales-crm/contacts/${selectedConversation.contactId}`}
-          className="border-border-subtle text-primary flex min-h-9 w-full items-center justify-center rounded-md border px-3 text-xs font-medium underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+          className="border-border-subtle text-primary focus-visible:outline-primary flex min-h-9 w-full items-center justify-center rounded-md border px-3 text-xs font-medium underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2"
         >
           Open Customer 360
         </Link>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { LogoAsset } from '@loopdev/contracts';
 import { Heading, LpdText } from '@loopdev/ui';
 
@@ -21,37 +22,42 @@ export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo, logoNode }) 
   ];
 
   return (
-    <div className="flex flex-col gap-6 p-8 rounded-3xl bg-background-surface border border-border-technical items-center justify-center">
+    <div className="bg-background-surface border-border-technical flex flex-col items-center justify-center gap-6 rounded-3xl border p-8">
       <div className="flex items-center gap-12">
         {scales.map((scale) => (
           <div key={scale.label} className="flex flex-col items-center gap-3">
-            <div 
-              className="bg-white rounded-lg border border-border-technical flex items-center justify-center overflow-hidden"
+            <div
+              className="border-border-technical relative flex items-center justify-center overflow-hidden rounded-lg border bg-white"
               style={{ width: `${scale.size}px`, height: `${scale.size}px` }}
             >
               {logoNode || logo.rawSvg ? (
                 logoNode || (
-                <div 
-                  className="w-full h-full p-[15%] text-black fill-black"
-                  dangerouslySetInnerHTML={{ __html: logo.rawSvg ?? '' }}
-                />
+                  <div
+                    className="h-full w-full fill-black p-[15%] text-black"
+                    dangerouslySetInnerHTML={{ __html: logo.rawSvg ?? '' }}
+                  />
                 )
-              ) : (
-                <img 
-                  src={logo.url} 
-                  alt={`${scale.label} scale`} 
-                  className="w-full h-full object-contain p-[15%]"
+              ) : logo.url ? (
+                <Image
+                  src={logo.url}
+                  alt={`${scale.label} scale`}
+                  fill
+                  unoptimized
+                  sizes={`${scale.size}px`}
+                  className="h-full w-full object-contain p-[15%]"
                 />
-              )}
+              ) : null}
             </div>
-            <span className="text-[10px] font-mono text-text-muted uppercase tracking-tighter">
+            <span className="text-text-muted font-mono text-[10px] uppercase tracking-tighter">
               {scale.label}
             </span>
           </div>
         ))}
       </div>
       <div className="text-center">
-        <Heading as="h3" size="sm" weight="bold" className="text-text-main">Scale Integrity Check</Heading>
+        <Heading as="h3" size="sm" weight="bold" className="text-text-main">
+          Scale Integrity Check
+        </Heading>
         <LpdText size="nano" className="text-text-muted mt-1 italic">
           Verify symbol recognition at favicon and micro-header sizes.
         </LpdText>

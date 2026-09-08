@@ -5,6 +5,8 @@ import type { CrmContact } from '@loopdev/contracts';
 import { Button } from '@loopdev/ui';
 import { Check } from 'lucide-react';
 import { FieldGroupSection } from '@/suites/sales-crm/crm/FieldGroupSection';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { updateCrmContact } from '@/suites/sales-crm/runtimeAdapter';
 
 interface ContactDetailDrawerContentProps {
   contact: CrmContact;
@@ -19,6 +21,7 @@ export function ContactDetailDrawerContent({
   onClose,
   onContactUpdated,
 }: ContactDetailDrawerContentProps) {
+  const { mode } = usePlatformRuntime();
   const [formData, setFormData] = useState<Record<string, string>>({
     firstName: contact.firstName || '',
     lastName: contact.lastName || '',
@@ -55,10 +58,37 @@ export function ContactDetailDrawerContent({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (mode === 'preview') {
+      setErrorMessage(
+        mode === 'preview'
+          ? 'Preview is read-only. Contact updates are disabled.'
+          : 'Contact updates are not available in this sandbox slice yet.',
+      );
+      return;
+    }
     setIsSaving(true);
     setErrorMessage(null);
 
     try {
+      if (mode === 'sandbox') {
+        const updatedContact = updateCrmContact(mode, {
+          organizationId,
+          contactId: contact.id,
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim() || null,
+          email: formData.email.trim() || null,
+          phone: formData.phone.trim() || null,
+          companyName: formData.companyName.trim() || null,
+          expectedUpdatedAt: contact.updatedAt,
+        });
+        onContactUpdated(updatedContact);
+        setSaveSuccess(true);
+        setTimeout(() => {
+          setSaveSuccess(false);
+          onClose();
+        }, 1000);
+        return;
+      }
       const response = await fetch('/api/crm/contacts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -115,12 +145,12 @@ export function ContactDetailDrawerContent({
     <form
       id="customer-360-contact-edit-form"
       onSubmit={handleSubmit}
-      className="flex flex-col h-full space-y-4 sm:space-y-6 pb-20 sm:pb-0"
+      className="flex h-full flex-col space-y-4 pb-20 sm:space-y-6 sm:pb-0"
     >
       {errorMessage && (
         <div
           role="alert"
-          className="rounded-xl border border-status-error/40 bg-status-error/10 p-3.5 text-xs text-status-error font-medium"
+          className="border-status-error/40 bg-status-error/10 text-status-error rounded-xl border p-3.5 text-xs font-medium"
         >
           {errorMessage}
         </div>
@@ -129,9 +159,9 @@ export function ContactDetailDrawerContent({
       {saveSuccess && (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 text-xs text-emerald-700 dark:text-emerald-300 font-medium animate-in fade-in"
+          className="animate-in fade-in border-status-success/40 bg-status-success/10 text-status-success flex items-center gap-2 rounded-xl border p-3.5 text-xs font-medium"
         >
-          <Check size={16} className="text-emerald-600" />
+          <Check size={16} className="text-status-success" />
           <span>¡Contacto actualizado con éxito!</span>
         </div>
       )}
@@ -158,7 +188,7 @@ export function ContactDetailDrawerContent({
       <FieldGroupSection groupKey="professional" values={formData} onChange={handleFieldChange} />
 
       {/* Footer desktop actions */}
-      <div className="hidden sm:flex items-center justify-end gap-3 pt-4 border-t border-border-subtle sticky bottom-0 bg-surface-light dark:bg-surface-dark pb-2">
+      <div className="border-border-subtle bg-surface-light dark:bg-surface-dark sticky bottom-0 hidden items-center justify-end gap-3 border-t pb-2 pt-4 sm:flex">
         <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={isSaving}>
           Cancelar
         </Button>

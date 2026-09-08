@@ -35,7 +35,7 @@ function Checklist({ items }: { items: string[] }) {
         <li
           key={item}
           title={`Check: ${item}`}
-          className="border-border-technical bg-background flex items-center gap-2 rounded-md border px-3 py-2 text-xs text-text-muted"
+          className="border-border-technical bg-background text-text-muted flex items-center gap-2 rounded-md border px-3 py-2 text-xs"
         >
           <span className="text-accent" aria-hidden="true">
             □
@@ -58,22 +58,22 @@ function RecipesView() {
             </Heading>
             <span className="text-accent font-mono text-[10px] uppercase">{mode}</span>
           </div>
-          <p className="mt-2 text-sm text-text-muted">{purpose}</p>
-          <div className="mt-4 grid min-h-24 grid-cols-12 gap-1 rounded-md bg-shell-canvas p-2">
-            <span className="col-span-12 rounded bg-primary/30" />
-            <span className="col-span-7 rounded bg-accent/30" />
-            <span className="col-span-5 rounded bg-primary/20" />
-            <span className="col-span-12 rounded bg-surface-elevated" />
+          <p className="text-text-muted mt-2 text-sm">{purpose}</p>
+          <div className="bg-shell-canvas mt-4 grid min-h-24 grid-cols-12 gap-1 rounded-md p-2">
+            <span className="bg-primary/30 col-span-12 rounded" />
+            <span className="bg-accent/30 col-span-7 rounded" />
+            <span className="bg-primary/20 col-span-5 rounded" />
+            <span className="bg-surface-elevated col-span-12 rounded" />
           </div>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-[11px] text-text-muted">
+            <p className="text-text-muted text-[11px]">
               Review: zones, spans, density, scroll and responsive transformation.
             </p>
             <a
               href={`/composition-showcase?recipe=${name}`}
               title={`Open real ${name} fixture`}
               aria-label={`Open real ${name} fixture`}
-              className="text-accent hover:bg-primary hover:text-white rounded-md border border-accent/40 px-3 py-2 text-xs font-semibold transition-colors"
+              className="text-accent hover:bg-primary border-accent/40 rounded-md border px-3 py-2 text-xs font-semibold transition-colors hover:text-white"
             >
               Open real fixture
             </a>
@@ -195,7 +195,7 @@ function SurfacesView() {
             </p>
           </TechnicalSurface>
         ))}
-        <div className="border-border-technical bg-surface-dark col-span-full rounded-md border p-4 text-xs text-text-muted">
+        <div className="border-border-technical bg-surface-dark text-text-muted col-span-full rounded-md border p-4 text-xs">
           Background rule: data-heavy views stay plain or subtle; grids and immersive treatments
           require evidence.
         </div>
@@ -353,42 +353,42 @@ function StatesView({
   const isEmptyState = state === 'empty' || state === 'error' || state === 'forbidden';
 
   const composition = (
-    <div className="grid min-h-56 grid-cols-12 gap-3 rounded-md bg-shell-canvas/60 p-4">
+    <div className="bg-shell-canvas/60 grid min-h-56 grid-cols-12 gap-3 rounded-md p-4">
       {isLoading ? (
         <>
-          <div className="col-span-7 rounded-md bg-surface-elevated/80 p-4">
+          <div className="bg-surface-elevated/80 col-span-7 rounded-md p-4">
             <Skeleton className="h-3 w-20" />
             <Skeleton className="mt-4 h-8 w-16" />
             <LoadingState label="Loading summary" lines={2} className="mt-4" />
           </div>
-          <div className="col-span-5 rounded-md bg-surface-elevated/50 p-4">
+          <div className="bg-surface-elevated/50 col-span-5 rounded-md p-4">
             <Skeleton className="h-full min-h-24 w-full" />
           </div>
-          <div className="col-span-12 rounded-md bg-surface-elevated/50 p-4">
+          <div className="bg-surface-elevated/50 col-span-12 rounded-md p-4">
             <LoadingState label="Loading activity" lines={3} />
           </div>
         </>
       ) : (
         <>
-          <div className="col-span-7 rounded-md bg-surface-elevated/80 p-4">
+          <div className="bg-surface-elevated/80 col-span-7 rounded-md p-4">
             <span className="text-text-muted text-xs">Summary</span>
             <strong className="text-text-main mt-3 block text-2xl">24</strong>
           </div>
-          <div className="col-span-5 rounded-md bg-surface-elevated/50 p-4">
+          <div className="bg-surface-elevated/50 col-span-5 rounded-md p-4">
             <span className="text-text-muted text-xs">Visual canvas</span>
           </div>
-          <div className="col-span-12 rounded-md bg-surface-elevated/50 p-4">
+          <div className="bg-surface-elevated/50 col-span-12 rounded-md p-4">
             <span className="text-text-muted text-xs">Activity feed</span>
           </div>
         </>
       )}
       {state === 'offline' && (
-        <div className="col-span-12 rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">
+        <div className="border-danger/40 bg-danger/10 text-danger col-span-12 rounded-md border px-3 py-2 text-xs">
           Connection unavailable · showing cached data
         </div>
       )}
       {state === 'stale' && (
-        <div className="col-span-12 rounded-md border border-accent/40 bg-accent/10 px-3 py-2 text-xs text-accent">
+        <div className="border-accent/40 bg-accent/10 text-accent col-span-12 rounded-md border px-3 py-2 text-xs">
           Last synchronized recently · refresh before acting
         </div>
       )}
@@ -397,11 +397,11 @@ function StatesView({
 
   return (
     <div className="space-y-4">
-      <div className="border-border-technical bg-background rounded-lg border p-4 text-sm text-text-muted">
+      <div className="border-border-technical bg-background text-text-muted rounded-lg border p-4 text-sm">
         Each state is applied to the same SuiteOverview geometry. Compare message, action, contrast
         and zone visibility without layout jumps.
       </div>
-      <section className={`border-2 rounded-lg p-6 ${activeState.tone}`}>
+      <section className={`rounded-lg border-2 p-6 ${activeState.tone}`}>
         {isEmptyState ? (
           <EmptyState
             icon={state === 'error' ? 'error' : state === 'forbidden' ? 'lock' : 'inbox'}
@@ -490,7 +490,7 @@ function ResponsiveView() {
 
   return (
     <div className="space-y-4">
-      <div className="border-border-technical bg-background rounded-lg border p-4 text-sm text-text-muted">
+      <div className="border-border-technical bg-background text-text-muted rounded-lg border p-4 text-sm">
         These are real viewport targets. Resize the browser or use Playwright at each width; the
         cards below are review instructions, not substitutes for the real fixtures.
       </div>
@@ -510,9 +510,9 @@ function ResponsiveView() {
             className={`border-border-technical bg-shell-canvas mx-auto mt-4 overflow-hidden rounded-lg border-2 p-2 shadow-xl ${width}`}
           >
             <div className="border-border-technical bg-surface-dark flex h-8 items-center gap-1 rounded-t-md border px-3">
-              <span className="size-2 rounded-full bg-danger" />
-              <span className="size-2 rounded-full bg-accent" />
-              <span className="size-2 rounded-full bg-brand-cyan" />
+              <span className="bg-danger size-2 rounded-full" />
+              <span className="bg-accent size-2 rounded-full" />
+              <span className="bg-brand-cyan size-2 rounded-full" />
               <span className="text-text-muted ml-2 text-[9px]">
                 loopdev.local / suite-overview
               </span>
@@ -594,7 +594,7 @@ export default function VisualSystemShowcasePage() {
 
   return (
     <main
-      className={`${theme === 'dark' ? 'dark' : 'light'} min-h-screen bg-shell-canvas p-4 text-text-main sm:p-6 lg:p-8`}
+      className={`${theme === 'dark' ? 'dark' : 'light'} bg-shell-canvas text-text-main min-h-screen p-4 sm:p-6 lg:p-8`}
     >
       <div className="mx-auto max-w-7xl">
         <header className="mb-6 flex flex-wrap items-start justify-between gap-4">

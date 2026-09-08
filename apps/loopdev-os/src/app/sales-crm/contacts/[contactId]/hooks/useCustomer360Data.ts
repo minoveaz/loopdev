@@ -3,14 +3,8 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { Customer360RecordView } from '@loopdev/contracts';
 import { useOrganization } from '@/hooks/useOrganization';
-import { useSimulation } from '@/providers/SimulationProvider';
-import {
-  MOCK_OPPORTUNITIES,
-  MOCK_TASKS,
-  MOCK_TIMELINE,
-  MOCK_NOTES,
-  MOCK_LEADS,
-} from '../mocks/customer360Mocks';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { crmCustomer360 } from '@/suites/sales-crm/runtimeAdapter';
 
 export function useCustomer360Data(contactId: string) {
   const { activeOrganizationId } = useOrganization();
@@ -20,8 +14,7 @@ export function useCustomer360Data(contactId: string) {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [lifecycleStage, setLifecycleStage] = useState('customer');
-
-  const { isSimulationActive, toggleSimulation } = useSimulation();
+  const { mode } = usePlatformRuntime();
 
   const loadCustomer360 = useCallback(
     async (signal?: AbortSignal) => {
@@ -29,22 +22,7 @@ export function useCustomer360Data(contactId: string) {
       setIsLoading(true);
       setError(null);
       try {
-        const params = new URLSearchParams({
-          organizationId: activeOrganizationId,
-          view: 'record',
-          sections: 'profile,leads,opportunities,tasks,notes,timeline',
-        });
-        const response = await fetch(
-          `/api/crm/contacts/${encodeURIComponent(contactId)}/customer-360?${params.toString()}`,
-          { signal },
-        );
-        if (!response.ok) {
-          if (response.status === 403)
-            throw new Error('You do not have permission to view this customer.');
-          if (response.status === 404) throw new Error('This contact could not be found.');
-          throw new Error('Customer 360 could not be loaded.');
-        }
-        setView((await response.json()) as Customer360RecordView);
+        setView(await crmCustomer360(mode, activeOrganizationId, contactId));
       } catch (requestError: unknown) {
         if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
         setError(
@@ -56,7 +34,7 @@ export function useCustomer360Data(contactId: string) {
         if (!signal?.aborted) setIsLoading(false);
       }
     },
-    [activeOrganizationId, contactId],
+    [activeOrganizationId, contactId, mode],
   );
 
   useEffect(() => {
@@ -76,62 +54,31 @@ export function useCustomer360Data(contactId: string) {
     }
   };
 
-  const displayedOpportunities = useMemo(() => {
-    if (view?.opportunities?.length) return view.opportunities;
-    if (isSimulationActive) return MOCK_OPPORTUNITIES;
-    return [];
-  }, [view?.opportunities, isSimulationActive]);
-
-  const displayedTasks = useMemo(() => {
-    if (view?.tasks?.length) return view.tasks;
-    if (isSimulationActive) return MOCK_TASKS;
-    return [];
-  }, [view?.tasks, isSimulationActive]);
-
-  const displayedTimeline = useMemo(() => {
-    if (view?.timeline?.length) return view.timeline;
-    if (isSimulationActive) return MOCK_TIMELINE;
-    return [];
-  }, [view?.timeline, isSimulationActive]);
-
-  const displayedNotes = useMemo(() => {
-    if (view?.notes?.length) return view.notes;
-    if (isSimulationActive) return MOCK_NOTES;
-    return [];
-  }, [view?.notes, isSimulationActive]);
-
-  const displayedLeads = useMemo(() => {
-    if (view?.leads?.length) return view.leads;
-    if (isSimulationActive) return MOCK_LEADS;
-    return [];
-  }, [view?.leads, isSimulationActive]);
+  const displayedOpportunities = useMemo(() => view?.opportunities ?? [], [view?.opportunities]);
+  const displayedTasks = useMemo(() => view?.tasks ?? [], [view?.tasks]);
+  const displayedTimeline = useMemo(() => view?.timeline ?? [], [view?.timeline]);
+  const displayedNotes = useMemo(() => view?.notes ?? [], [view?.notes]);
+  const displayedLeads = useMemo(() => view?.leads ?? [], [view?.leads]);
 
   const totalPipelineValue = useMemo(() => {
     if (view?.opportunities?.length) {
       return view.opportunities.reduce((acc, opp) => acc + (opp.amount ?? 0), 0);
     }
-    if (isSimulationActive) {
-      return MOCK_OPPORTUNITIES.reduce((acc, opp) => acc + opp.amount, 0);
-    }
     return 0;
-  }, [view?.opportunities, isSimulationActive]);
+  }, [view?.opportunities]);
 
   const openTasksCount = useMemo(() => {
     if (view?.tasks?.length) {
       return view.tasks.filter((t) => t.status !== 'completed').length;
     }
-    if (isSimulationActive) {
-      return MOCK_TASKS.filter((t) => t.status !== 'completed').length;
-    }
     return 0;
-  }, [view?.tasks, isSimulationActive]);
+  }, [view?.tasks]);
 
-  const isOpportunitiesSimulated =
-    !view?.opportunities?.length && displayedOpportunities.length > 0;
-  const isTasksSimulated = !view?.tasks?.length && displayedTasks.length > 0;
-  const isTimelineSimulated = !view?.timeline?.length && displayedTimeline.length > 0;
-  const isNotesSimulated = !view?.notes?.length && displayedNotes.length > 0;
-  const isLeadsSimulated = !view?.leads?.length && displayedLeads.length > 0;
+  const isOpportunitiesSimulated = mode !== 'real';
+  const isTasksSimulated = mode !== 'real';
+  const isTimelineSimulated = mode !== 'real';
+  const isNotesSimulated = mode !== 'real';
+  const isLeadsSimulated = mode !== 'real';
 
   return {
     activeOrganizationId,
@@ -145,8 +92,8 @@ export function useCustomer360Data(contactId: string) {
     copyToClipboard,
     lifecycleStage,
     setLifecycleStage,
-    isSimulationActive,
-    toggleSimulation,
+    isSimulationActive: mode !== 'real',
+    toggleSimulation: () => undefined,
     displayedOpportunities,
     displayedTasks,
     displayedTimeline,

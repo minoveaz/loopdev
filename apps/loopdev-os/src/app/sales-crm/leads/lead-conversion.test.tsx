@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { CrmLead } from '@loopdev/contracts';
 import { CreateOpportunityFromLead } from '@/suites/sales-crm/leads/CreateOpportunityFromLead';
 import {
@@ -32,6 +32,10 @@ const lead = {
 } as CrmLead;
 
 describe('Lead conversion UI', () => {
+  afterEach(() => {
+    createOpportunityFromLead.mockClear();
+  });
+
   it('enables conversion for managed qualified or converted Leads', () => {
     const onConvert = vi.fn();
     const { rerender } = render(<QualifiedLeadGuard lead={lead} canManage onConvert={onConvert} />);
@@ -74,6 +78,7 @@ describe('Lead conversion UI', () => {
     expect(await screen.findByText('Opportunity creada')).toBeInTheDocument();
     expect(createOpportunityFromLead).toHaveBeenCalledWith(
       expect.objectContaining({ productKey: 'Seguro de salud' }),
+      'real',
     );
   });
 
@@ -122,12 +127,15 @@ describe('Lead conversion UI', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: 'Crear Opportunity' }));
     expect(await screen.findByText('Opportunity existente reutilizada')).toBeInTheDocument();
-    expect(createOpportunityFromLead).toHaveBeenCalledWith({
-      organizationId: lead.organizationId,
-      leadId: lead.id,
-      productKey: 'Seguro de hogar',
-      name: 'Seguro de hogar',
-    });
+    expect(createOpportunityFromLead).toHaveBeenCalledWith(
+      {
+        organizationId: lead.organizationId,
+        leadId: lead.id,
+        productKey: 'Seguro de hogar',
+        name: 'Seguro de hogar',
+      },
+      'real',
+    );
     expect(createOpportunityFromLead.mock.calls[0]?.[0]).not.toHaveProperty('contactId');
   });
 });

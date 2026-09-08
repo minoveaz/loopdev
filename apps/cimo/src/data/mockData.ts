@@ -1,8 +1,4 @@
 import type { ActivityCardData, ChatMessage } from '@loopdev/public-blocks';
-import retiroRunningImg from '../assets/images/retiro_running_8k_1785941041754.jpg';
-import padelMatchImg from '../assets/images/padel_mixto_match_1785941057074.jpg';
-import crossfitImg from '../assets/images/cimo_community_hero_1785924771208.jpg';
-import hikingImg from '../assets/images/running_group_hug_1785923312353.jpg';
 
 export const INITIAL_ACTIVITIES: ActivityCardData[] = [
   {

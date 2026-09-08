@@ -153,9 +153,9 @@ export default function BotFleetPage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-12 p-8 max-w-[1600px] mx-auto">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-12 p-8">
         <Skeleton className="h-20 w-1/3 rounded-xl" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <Skeleton className="h-[340px] w-full rounded-3xl" />
           <Skeleton className="h-[340px] w-full rounded-3xl" />
           <Skeleton className="h-[340px] w-full rounded-3xl" />
@@ -165,7 +165,7 @@ export default function BotFleetPage() {
   }
 
   return (
-    <main className="h-full overflow-y-auto flex flex-col gap-12 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
+    <main className="animate-in fade-in custom-scrollbar mx-auto flex h-full max-w-[1600px] flex-col gap-12 overflow-y-auto p-8 pb-32 duration-700">
       <DeployBotModal
         isOpen={isDeployModalOpen}
         onClose={() => {
@@ -177,7 +177,7 @@ export default function BotFleetPage() {
       />
 
       {/* 1. STANDARDIZED HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3 text-amber-500">
             <span className="material-symbols-outlined text-sm font-bold">hub</span>
@@ -188,7 +188,7 @@ export default function BotFleetPage() {
           <Heading
             size="2xl"
             weight="bold"
-            className="text-text-main tracking-tight uppercase italic"
+            className="text-text-main uppercase italic tracking-tight"
           >
             Bot_Fleet_Control<span className="text-amber-500">.</span>
           </Heading>
@@ -210,7 +210,7 @@ export default function BotFleetPage() {
 
       {/* 2. FLEET GRID */}
       {bots.length > 0 ? (
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <section className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
           {bots.map((bot) => (
             <BotCardItem
               key={bot.id}
@@ -226,14 +226,14 @@ export default function BotFleetPage() {
           ))}
         </section>
       ) : (
-        <section className="flex flex-col items-center justify-center p-24 border border-dashed border-border-technical/50 rounded-[2.5rem] bg-background-surface/50 backdrop-blur-sm">
-          <div className="w-16 h-16 rounded-2xl bg-energy-yellow/5 border border-energy-yellow/10 flex items-center justify-center text-energy-yellow/40 mb-6">
+        <section className="border-border-technical/50 bg-background-surface/50 flex flex-col items-center justify-center rounded-[2.5rem] border border-dashed p-24 backdrop-blur-sm">
+          <div className="bg-energy-yellow/5 border-energy-yellow/10 text-energy-yellow/40 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border">
             <Icon name="Bot" size="lg" />
           </div>
           <Heading size="lg" weight="bold" className="text-text-main mb-2">
             No Bots Deployed
           </Heading>
-          <LpdText size="sm" className="text-text-muted text-center max-w-sm mb-8">
+          <LpdText size="sm" className="text-text-muted mb-8 max-w-sm text-center">
             Your fleet is currently offline. Start by deploying your first trading agent using a
             certified strategy logic.
           </LpdText>
@@ -264,9 +264,9 @@ export default function BotFleetPage() {
           </>
         }
       >
-        <div className="p-4 bg-status-error/5 border border-status-error/10 rounded-xl flex gap-3">
+        <div className="bg-status-error/5 border-status-error/10 flex gap-3 rounded-xl border p-4">
           <span className="material-symbols-outlined text-status-error">warning</span>
-          <LpdText size="xs" className="text-status-error/80 leading-relaxed font-medium">
+          <LpdText size="xs" className="text-status-error/80 font-medium leading-relaxed">
             Confirming this action will purge the bot&apos;s configuration from the active fleet.
             Open positions linked to this bot might need manual intervention.
           </LpdText>

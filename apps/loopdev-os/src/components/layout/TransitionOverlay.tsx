@@ -28,10 +28,17 @@ export function TransitionOverlay() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white dark:bg-surface-elevated" role="status" aria-live="polite" aria-label="Loading work context">
+    <div
+      className="dark:bg-surface-elevated fixed inset-0 z-[100] flex items-center justify-center bg-white"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading work context"
+    >
       <div className="flex flex-col items-center gap-4">
         <LogoSpinner size={64} />
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-text-muted">Loading work context</span>
+        <span className="text-text-muted font-mono text-[10px] font-bold uppercase tracking-[0.28em]">
+          Loading work context
+        </span>
       </div>
     </div>
   );

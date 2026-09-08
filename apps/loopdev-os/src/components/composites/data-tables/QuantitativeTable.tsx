@@ -98,14 +98,14 @@ export function QuantitativeTable({
         getRowKey={(row) => row.id}
         onRowClick={contextPanelEnabled ? onRowClick : undefined}
         activeRowKey={contextPanelEnabled ? activeRowKey : undefined}
-        className="[&_thead_tr]:bg-background-subtle [&_thead_tr]:border-b [&_thead_tr]:border-border-subtle [&_tbody_tr:hover]:bg-background-subtle [&_tbody_td]:py-3"
+        className="[&_thead_tr]:bg-background-subtle [&_thead_tr]:border-border-subtle [&_tbody_tr:hover]:bg-background-subtle [&_tbody_td]:py-3 [&_thead_tr]:border-b"
         renderMobileRow={(row) => {
           const progress = getGoalProgress(row);
           return (
-            <div className="border-b border-border-subtle px-3 py-3">
+            <div className="border-border-subtle border-b px-3 py-3">
               <div className="flex items-start justify-between gap-3">
-                <span className="min-w-0 font-medium text-text-main">{row.metric}</span>
-                <span className="shrink-0 font-semibold tabular-nums text-text-main">
+                <span className="text-text-main min-w-0 font-medium">{row.metric}</span>
+                <span className="text-text-main shrink-0 font-semibold tabular-nums">
                   {row.current}
                 </span>
               </div>
@@ -125,19 +125,19 @@ export function QuantitativeTable({
                 >
                   {row.change}
                 </Badge>
-                <span className="text-right text-xs tabular-nums text-text-muted">
+                <span className="text-text-muted text-right text-xs tabular-nums">
                   Target {row.target} ({formatProgress(progress)})
                 </span>
               </div>
               <div
-                className="mt-2 h-1 w-full overflow-hidden rounded-full bg-border-subtle"
+                className="bg-border-subtle mt-2 h-1 w-full overflow-hidden rounded-full"
                 role="progressbar"
                 aria-label={`${row.metric} target progress`}
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={progress}
               >
-                <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
+                <div className="bg-primary h-full rounded-full" style={{ width: `${progress}%` }} />
               </div>
             </div>
           );
@@ -154,7 +154,7 @@ export function QuantitativeTable({
             header: (
               <span className="flex w-full flex-col items-end text-right">
                 <span>Change</span>
-                <span className="font-sans text-[10px] normal-case tracking-normal text-text-muted">
+                <span className="text-text-muted font-sans text-[10px] normal-case tracking-normal">
                   vs last month
                 </span>
               </span>
@@ -188,7 +188,7 @@ export function QuantitativeTable({
                 <div className="ml-auto flex w-full max-w-[180px] flex-col items-end gap-1">
                   <div className="flex w-full items-baseline justify-end gap-2">
                     <span className="text-text-main">{row.target}</span>
-                    <span className="text-xs text-text-muted">({formatProgress(progress)})</span>
+                    <span className="text-text-muted text-xs">({formatProgress(progress)})</span>
                   </div>
                   <div
                     role="progressbar"
@@ -196,10 +196,10 @@ export function QuantitativeTable({
                     aria-valuemin={0}
                     aria-valuemax={100}
                     aria-valuenow={progress}
-                    className="mt-1 h-1 w-full overflow-hidden rounded-full bg-border-subtle"
+                    className="bg-border-subtle mt-1 h-1 w-full overflow-hidden rounded-full"
                   >
                     <div
-                      className="h-full rounded-full bg-primary"
+                      className="bg-primary h-full rounded-full"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
@@ -209,7 +209,7 @@ export function QuantitativeTable({
           },
         ]}
       />
-      <footer className="flex items-center justify-between gap-3 border-t border-border-technical bg-background-subtle px-3 py-2 text-xs text-text-muted">
+      <footer className="border-border-technical bg-background-subtle text-text-muted flex items-center justify-between gap-3 border-t px-3 py-2 text-xs">
         <span>Last calculated: Today at 08:00 AM</span>
         <a href="#detailed-analytics" className="text-text-main underline-offset-2 hover:underline">
           View detailed analytics ↗

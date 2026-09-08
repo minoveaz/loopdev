@@ -1,6 +1,7 @@
 'use client';
 
 import { Clock, Briefcase, ListTodo, FileText } from 'lucide-react';
+import { Button } from '@loopdev/ui';
 import type { CustomerTabKey } from './types';
 
 interface CustomerDesktopTabsProps {
@@ -29,18 +30,20 @@ export function CustomerDesktopTabs({
   isNotesSimulated,
 }: CustomerDesktopTabsProps) {
   return (
-    <div className="shrink-0 border-b border-border-subtle bg-surface-muted/20 px-4 sm:px-6 hidden lg:block">
+    <div className="bg-surface-muted/20 hidden shrink-0 px-4 sm:px-6 lg:block">
       <nav
-        className="-mb-px flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar"
+        className="no-scrollbar -mb-px flex gap-4 overflow-x-auto sm:gap-6"
         aria-label="Customer workspace tabs"
       >
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('timeline')}
-          className={`flex items-center gap-2 border-b-2 py-4 text-sm font-medium transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'timeline'
               ? 'border-primary text-primary font-semibold'
-              : 'border-transparent text-text-muted hover:border-border-subtle hover:text-text-main'
+              : 'text-text-muted hover:border-border-subtle hover:text-text-main border-transparent'
           }`}
         >
           <Clock className="h-4 w-4" />
@@ -48,21 +51,23 @@ export function CustomerDesktopTabs({
           <span
             className={`rounded-full px-2 py-0.5 text-xs font-medium ${
               isTimelineSimulated
-                ? 'bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300'
+                ? 'border border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-300'
                 : 'bg-surface-muted text-text-muted'
             }`}
           >
             {timelineCount}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('opportunities')}
-          className={`flex items-center gap-2 border-b-2 py-4 text-sm font-medium transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'opportunities'
               ? 'border-primary text-primary font-semibold'
-              : 'border-transparent text-text-muted hover:border-border-subtle hover:text-text-main'
+              : 'text-text-muted hover:border-border-subtle hover:text-text-main border-transparent'
           }`}
         >
           <Briefcase className="h-4 w-4" />
@@ -70,21 +75,23 @@ export function CustomerDesktopTabs({
           <span
             className={`rounded-full px-2 py-0.5 text-xs font-medium ${
               isOpportunitiesSimulated
-                ? 'bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300'
+                ? 'border border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-300'
                 : 'bg-surface-muted text-text-muted'
             }`}
           >
             {opportunitiesCount}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('tasks')}
-          className={`flex items-center gap-2 border-b-2 py-4 text-sm font-medium transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'tasks'
               ? 'border-primary text-primary font-semibold'
-              : 'border-transparent text-text-muted hover:border-border-subtle hover:text-text-main'
+              : 'text-text-muted hover:border-border-subtle hover:text-text-main border-transparent'
           }`}
         >
           <ListTodo className="h-4 w-4" />
@@ -92,21 +99,23 @@ export function CustomerDesktopTabs({
           <span
             className={`rounded-full px-2 py-0.5 text-xs font-medium ${
               isTasksSimulated
-                ? 'bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300'
+                ? 'border border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-300'
                 : 'bg-surface-muted text-text-muted'
             }`}
           >
             {tasksCount}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('notes')}
-          className={`flex items-center gap-2 border-b-2 py-4 text-sm font-medium transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'notes'
               ? 'border-primary text-primary font-semibold'
-              : 'border-transparent text-text-muted hover:border-border-subtle hover:text-text-main'
+              : 'text-text-muted hover:border-border-subtle hover:text-text-main border-transparent'
           }`}
         >
           <FileText className="h-4 w-4" />
@@ -114,13 +123,13 @@ export function CustomerDesktopTabs({
           <span
             className={`rounded-full px-2 py-0.5 text-xs font-medium ${
               isNotesSimulated
-                ? 'bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300'
+                ? 'border border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-300'
                 : 'bg-surface-muted text-text-muted'
             }`}
           >
             {notesCount}
           </span>
-        </button>
+        </Button>
       </nav>
     </div>
   );

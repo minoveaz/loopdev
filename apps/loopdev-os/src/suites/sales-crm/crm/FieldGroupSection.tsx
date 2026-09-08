@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CrmFieldGroupKey, CRM_FIELD_GROUPS, CRM_FIELD_CATALOG } from '@loopdev/contracts';
-import { Input, Select } from '@loopdev/ui';
+import { Heading, Input, Select } from '@loopdev/ui';
 import {
   User,
   Mail,
@@ -57,21 +57,26 @@ export function FieldGroupSection({
 
   return (
     <section
-      className={`rounded-2xl border border-border-subtle bg-slate-50/50 dark:bg-white/[0.02] p-4 sm:p-5 space-y-4 ${className}`}
+      className={`border-border-subtle space-y-4 rounded-2xl border bg-slate-50/50 p-4 sm:p-5 dark:bg-white/[0.02] ${className}`}
     >
-      <div className="flex items-center gap-2.5 border-b border-border-subtle pb-2.5">
-        <div className="flex items-center justify-center size-7 rounded-lg bg-primary/10 text-primary">
+      <div className="border-border-subtle flex items-center gap-2.5 border-b pb-2.5">
+        <div className="bg-primary/10 text-primary flex size-7 items-center justify-center rounded-lg">
           <Icon size={16} />
         </div>
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-text-main">
+          <Heading
+            as="h3"
+            size="xs"
+            weight="bold"
+            className="text-text-main uppercase tracking-wider"
+          >
             {meta.label}
-          </h3>
-          {!isCompact && <p className="text-[11px] text-text-muted mt-0.5">{meta.description}</p>}
+          </Heading>
+          {!isCompact && <p className="text-text-muted mt-0.5 text-[11px]">{meta.description}</p>}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         {groupFields.map((field) => {
           const isRequired = requiredFields.includes(field.key);
           const value = values[field.key];
@@ -98,7 +103,7 @@ export function FieldGroupSection({
               <div key={field.key} className="space-y-1">
                 <label
                   htmlFor={`field-${field.key}`}
-                  className="text-xs font-medium text-text-main block"
+                  className="text-text-main block text-xs font-medium"
                 >
                   {field.label} {isRequired && <span className="text-status-error">*</span>}
                 </label>
@@ -120,7 +125,7 @@ export function FieldGroupSection({
               <div key={field.key} className="space-y-1">
                 <label
                   htmlFor={`field-${field.key}`}
-                  className="text-xs font-medium text-text-main block"
+                  className="text-text-main block text-xs font-medium"
                 >
                   {field.label} {isRequired && <span className="text-status-error">*</span>}
                 </label>
@@ -141,7 +146,7 @@ export function FieldGroupSection({
               <div key={field.key} className="space-y-1">
                 <label
                   htmlFor={`field-${field.key}`}
-                  className="text-xs font-medium text-text-main block"
+                  className="text-text-main block text-xs font-medium"
                 >
                   {field.label} {isRequired && <span className="text-status-error">*</span>}
                 </label>
@@ -162,7 +167,7 @@ export function FieldGroupSection({
             <div key={field.key} className="space-y-1">
               <label
                 htmlFor={`field-${field.key}`}
-                className="text-xs font-medium text-text-main block"
+                className="text-text-main block text-xs font-medium"
               >
                 {field.label} {isRequired && <span className="text-status-error">*</span>}
               </label>

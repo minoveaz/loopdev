@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { CrmContact, CrmContactPage } from '@loopdev/contracts';
 import { getContactsDesignFixturePage } from '../contacts-design.fixture';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { crmContacts } from '../../runtimeAdapter';
 
 const PAGE_SIZE = 25;
 
@@ -21,6 +23,7 @@ export function useContactsData({
   query,
   refreshKey,
 }: UseContactsDataOptions) {
+  const { mode } = usePlatformRuntime();
   const [contacts, setContacts] = useState<CrmContact[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [cursorHistory, setCursorHistory] = useState<string[]>([]);
@@ -53,8 +56,29 @@ export function useContactsData({
       setIsLoading(true);
       setError(null);
 
-      const useFixture = process.env.NEXT_PUBLIC_CRM_CONTACTS_FIXTURE === 'true';
-      if (useFixture || !organizationId) {
+      if (process.env.NEXT_PUBLIC_CRM_CONTACTS_FIXTURE === 'true') {
+        const fixturePage = getContactsDesignFixturePage({
+          organizationId: orgId,
+          query,
+          cursor: activeCursor,
+          limit: PAGE_SIZE,
+        });
+        setContacts(fixturePage.items);
+        setNextCursor(fixturePage.nextCursor);
+        setHasMore(fixturePage.hasMore);
+        setIsLoading(false);
+        return;
+      }
+
+      if (mode !== 'real') {
+        const page = await crmContacts(mode, orgId, query);
+        setContacts(page.items);
+        setNextCursor(page.nextCursor);
+        setHasMore(page.hasMore);
+        setIsLoading(false);
+        return;
+      }
+      if (!organizationId) {
         const page = getContactsDesignFixturePage({
           organizationId: orgId,
           query,
@@ -89,20 +113,14 @@ export function useContactsData({
         }
       } catch (requestError: unknown) {
         if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-        const fixturePage = getContactsDesignFixturePage({
-          organizationId: orgId,
-          query,
-          cursor: activeCursor,
-          limit: PAGE_SIZE,
-        });
-        setContacts(fixturePage.items);
-        setNextCursor(fixturePage.nextCursor);
-        setHasMore(fixturePage.hasMore);
+        setError(
+          requestError instanceof Error ? requestError.message : 'Contacts could not be loaded.',
+        );
       } finally {
         if (!signal?.aborted) setIsLoading(false);
       }
     },
-    [activeCursor, canRead, isLoadingPermissions, organizationId, query],
+    [activeCursor, canRead, isLoadingPermissions, mode, organizationId, query],
   );
 
   useEffect(() => {

@@ -113,7 +113,7 @@ describe('Pipeline page', () => {
           new Response(
             JSON.stringify([
               {
-                id: 'stage',
+                id: '00000000-0000-4000-9000-000000000020',
                 organizationId,
                 key: 'qualified',
                 name: 'Qualified',
@@ -130,9 +130,9 @@ describe('Pipeline page', () => {
             JSON.stringify({
               items: [
                 {
-                  id: 'opportunity',
+                  id: '00000000-0000-4000-9000-000000000021',
                   organizationId,
-                  contactId: 'contact',
+                  contactId: '00000000-0000-4000-9000-000000000022',
                   name: 'Family cover',
                   productKey: 'health',
                   stageKey: 'qualified',
@@ -144,6 +144,15 @@ describe('Pipeline page', () => {
                   updatedAt: '2026-09-01T00:00:00.000Z',
                 },
               ],
+              nextCursor: null,
+              hasMore: false,
+            }),
+          ),
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              items: [],
               nextCursor: null,
               hasMore: false,
             }),

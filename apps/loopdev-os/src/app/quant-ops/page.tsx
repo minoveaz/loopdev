@@ -62,7 +62,7 @@ export default function QuantOpsOverview() {
 
   if (isLoading) {
     return (
-      <div className="p-8 space-y-8 animate-pulse">
+      <div className="animate-pulse space-y-8 p-8">
         <div className="grid grid-cols-6 gap-4">
           <Skeleton className="h-24 rounded-2xl" />
         </div>
@@ -72,9 +72,9 @@ export default function QuantOpsOverview() {
   }
 
   return (
-    <main className="h-full overflow-y-auto flex flex-col gap-8 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
+    <main className="animate-in fade-in custom-scrollbar mx-auto flex h-full max-w-[1600px] flex-col gap-8 overflow-y-auto p-8 pb-32 duration-700">
       {/* 1. HERO METRICS */}
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <section className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
         <MetricCard
           label="Net Equity"
           value={`$${totalEquity.toLocaleString()}`}
@@ -118,18 +118,18 @@ export default function QuantOpsOverview() {
       </section>
 
       {/* 2. ANALYTICS & GOVERNANCE */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
-          <TechnicalSurface variant="surface" className="h-[450px] p-6 flex flex-col gap-6">
+          <TechnicalSurface variant="surface" className="flex h-[450px] flex-col gap-6 p-6">
             <Heading size="sm" weight="bold" className="uppercase italic tracking-tighter">
               Equity_Growth_Analysis
             </Heading>
-            <div className="flex-1 relative bg-slate-950/20 rounded-2xl border border-border-technical/30 overflow-hidden"></div>
+            <div className="border-border-technical/30 relative flex-1 overflow-hidden rounded-2xl border bg-slate-950/20"></div>
           </TechnicalSurface>
         </div>
-        <div className="lg:col-span-4 flex flex-col gap-8">
-          <TechnicalSurface variant="surface" className="p-6 flex flex-col gap-8">
-            <div className="flex justify-between items-center">
+        <div className="flex flex-col gap-8 lg:col-span-4">
+          <TechnicalSurface variant="surface" className="flex flex-col gap-8 p-6">
+            <div className="flex items-center justify-between">
               <Heading size="xs" weight="bold" className="opacity-60">
                 Fleet_Governance
               </Heading>
@@ -139,7 +139,7 @@ export default function QuantOpsOverview() {
               variant="danger"
               startIcon="warning"
               onClick={() => setIsKillSwitchConfirmOpen(true)}
-              className="w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
+              className="w-full rounded-xl py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all"
             >
               EMERGENCY_KILL_SWITCH
             </Button>
@@ -162,12 +162,12 @@ export default function QuantOpsOverview() {
           </Heading>
           <LpdText
             size="nano"
-            className="font-mono text-text-muted opacity-40 uppercase tracking-widest"
+            className="text-text-muted font-mono uppercase tracking-widest opacity-40"
           >
             Live_Indexing_Active
           </LpdText>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {bots.map((bot) => (
             <BotCardIndustrial
               key={bot.id}
@@ -230,7 +230,7 @@ export default function QuantOpsOverview() {
       </section>
 
       {/* 4. POSITION LEDGER */}
-      <section className="flex flex-col gap-4 mt-8">
+      <section className="mt-8 flex flex-col gap-4">
         <Heading size="sm" weight="bold" className="uppercase italic tracking-tighter opacity-60">
           Live_Position_Ledger
         </Heading>

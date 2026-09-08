@@ -26,7 +26,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
     <div className={`flex flex-col gap-3 ${className}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-5 h-5 rounded-full bg-[#7FB77E]/20 text-[#7FB77E] text-[11px] font-black flex items-center justify-center shrink-0">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#7FB77E]/20 text-[11px] font-black text-[#7FB77E]">
             {stepNumber}
           </span>
           <span className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/80">
@@ -36,7 +36,7 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
         <span className="text-[11px] font-bold text-[#7FB77E]">{currentPace.level}</span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {activePaces.map((p, idx) => {
           const isSelected = selectedIndex === idx;
 
@@ -55,47 +55,47 @@ export const CimoSportPaceSelector: React.FC<CimoSportPaceSelectorProps> = ({
               key={p.label}
               type="button"
               onClick={() => onSelectIndex(idx)}
-              className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 relative group ${
+              className={`group relative flex cursor-pointer flex-col justify-between gap-3 rounded-2xl border p-4 text-left transition-all ${
                 isSelected
-                  ? 'border-[#7FB77E] bg-[#7FB77E]/10 ring-2 ring-[#7FB77E]/30 shadow-sm'
-                  : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:bg-white hover:border-[#1F4E5F]/30'
+                  ? 'border-[#7FB77E] bg-[#7FB77E]/10 shadow-sm ring-2 ring-[#7FB77E]/30'
+                  : 'border-[#1F4E5F]/15 bg-[#F7F7F7] hover:border-[#1F4E5F]/30 hover:bg-white'
               }`}
             >
-              <div className="flex flex-col gap-2 w-full">
+              <div className="flex w-full flex-col gap-2">
                 {/* Top Row: Title + Metric + Radio Check */}
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <span
-                      className={`text-sm font-black leading-tight block ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}
+                      className={`block text-sm font-black leading-tight ${isSelected ? 'text-[#1F4E5F]' : 'text-[#1F4E5F]/90'}`}
                     >
                       {p.title}
                     </span>
-                    <span className="text-xs font-black text-[#7FB77E] flex items-center gap-1 mt-0.5">
-                      <Timer className="w-3.5 h-3.5 shrink-0" />
+                    <span className="mt-0.5 flex items-center gap-1 text-xs font-black text-[#7FB77E]">
+                      <Timer className="h-3.5 w-3.5 shrink-0" />
                       <span>{p.metric}</span>
                     </span>
                   </div>
 
                   <div
-                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all mt-0.5 ${
+                    className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-all ${
                       isSelected
-                        ? 'bg-[#7FB77E] text-white shadow-xs'
+                        ? 'shadow-xs bg-[#7FB77E] text-white'
                         : 'border-2 border-[#1F4E5F]/20 group-hover:border-[#1F4E5F]/40'
                     }`}
                   >
-                    {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                    {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
                   </div>
                 </div>
 
                 {/* Difficulty Badge */}
                 <span
-                  className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border w-fit ${levelBadgeStyle}`}
+                  className={`w-fit rounded-full border px-2 py-0.5 text-[9px] font-black uppercase ${levelBadgeStyle}`}
                 >
                   {p.level}
                 </span>
               </div>
 
-              <p className="text-[11px] text-[#1F4E5F]/70 leading-relaxed font-medium">{p.desc}</p>
+              <p className="text-[11px] font-medium leading-relaxed text-[#1F4E5F]/70">{p.desc}</p>
             </button>
           );
         })}

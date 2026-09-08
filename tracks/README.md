@@ -34,7 +34,7 @@
 - [CRM multi-tenant y comunicaciones de Estar Protegidos](./active/crm/2026-08-08-estar-protegidos-crm-platform.md) · fase 6
 - [CRM Pilot Execution](./active/crm/2026-08-13-crm-pilot-execution.md) · fase 1 · bloqueado
 - [Implementación de Communications Core para WhatsApp CRM](./active/crm/2026-08-29-communications-core-implementation.md) · `feature/communications-core-implementation` · fase 0
-- [Implementacion de CRM Communications Inbox](./active/crm/2026-08-30-communications-inbox-implementation.md) · `feature/crm-communications-inbox-implementation` · fase 0
+- [Implementacion de CRM Communications Inbox](./active/crm/2026-08-30-communications-inbox-implementation.md) · `feature/crm-communications-inbox-implementation` · fase 0 · bloqueado
 - [CRM Suite closure and pilot release](./active/crm/2026-09-06-crm-suite-closure.md) · `loopdev-io-crm-suite-closure-plan` · fase 4 · bloqueado
 
 ### Marketing Studio
@@ -57,6 +57,7 @@
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
 - [Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Universal Multi-Client Surface System](./active/platform/2026-08-28-public-shell-foundation.md) · `feature/public-shell-foundation` · fase 1
 - [Estandarización del Drawer de Usuario y Contexto de Plataforma](./active/platform/2026-09-06-platform-user-drawer-context.md) · `feature/platform-shell-user-context-standardization` · fase 1
+- [Platform Sandbox Runtime](./active/platform/2026-09-07-platform-sandbox-runtime.md) · fase 0
 
 ### Governance
 

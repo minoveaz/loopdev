@@ -141,11 +141,11 @@ export function SuiteCompositionPatternsCertification() {
         <div>
           <h2
             id="phase-b-query-toolbar"
-            className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+            className="text-text-main font-mono text-sm uppercase tracking-[0.14em]"
           >
             B6 · Query and toolbar
           </h2>
-          <p className="mt-1 text-xs text-text-muted">
+          <p className="text-text-muted mt-1 text-xs">
             Search, active filters, reset, sort, view and pagination remain controlled by the
             composition.
           </p>
@@ -238,11 +238,11 @@ export function SuiteCompositionPatternsCertification() {
         <div>
           <h2
             id="phase-b-data-listings"
-            className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+            className="text-text-main font-mono text-sm uppercase tracking-[0.14em]"
           >
             B7 · Data surface handoff
           </h2>
-          <p className="mt-1 text-xs text-text-muted">
+          <p className="text-text-muted mt-1 text-xs">
             The query composition hands a stable result set to the existing data-listing patterns;
             table certification remains owned by the dedicated data catalog.
           </p>
@@ -262,10 +262,10 @@ export function SuiteCompositionPatternsCertification() {
                 'Consumed by B8 inspector',
               ],
             ].map(([label, value, detail]) => (
-              <div key={label} className="border border-border-subtle bg-surface-elevated/40 p-3">
-                <p className="text-xs text-text-muted">{label}</p>
-                <p className="mt-1 text-sm font-medium text-text-main">{value}</p>
-                <p className="mt-1 text-xs text-text-muted">{detail}</p>
+              <div key={label} className="border-border-subtle bg-surface-elevated/40 border p-3">
+                <p className="text-text-muted text-xs">{label}</p>
+                <p className="text-text-main mt-1 text-sm font-medium">{value}</p>
+                <p className="text-text-muted mt-1 text-xs">{detail}</p>
               </div>
             ))}
           </div>
@@ -276,11 +276,11 @@ export function SuiteCompositionPatternsCertification() {
         <div>
           <h2
             id="phase-b-record-workspace"
-            className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+            className="text-text-main font-mono text-sm uppercase tracking-[0.14em]"
           >
             B8 · Workspace and record detail
           </h2>
-          <p className="mt-1 text-xs text-text-muted">
+          <p className="text-text-muted mt-1 text-xs">
             List-detail selection, inspector closure, focus-safe actions and dirty state are owned
             by the composition.
           </p>
@@ -295,16 +295,16 @@ export function SuiteCompositionPatternsCertification() {
             <div className="min-w-0 space-y-4 p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-text-muted">
+                  <p className="text-text-muted text-xs uppercase tracking-[0.14em]">
                     Selected record
                   </p>
-                  <Heading as="h3" size="lg" weight="bold" className="mt-1 text-text-main">
+                  <Heading as="h3" size="lg" weight="bold" className="text-text-main mt-1">
                     {selectedContact?.name ?? 'No contact selected'}
                   </Heading>
                 </div>
                 {dirty ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-warning">Unsaved changes</span>
+                    <span className="text-warning text-xs font-medium">Unsaved changes</span>
                     <Button size="sm" variant="outline" onClick={() => setDirty(false)}>
                       Discard
                     </Button>
@@ -315,10 +315,10 @@ export function SuiteCompositionPatternsCertification() {
                   </Button>
                 )}
               </div>
-              <div className="border-y border-border-subtle py-2">
+              <div className="border-border-subtle border-y py-2">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs text-text-muted">Contacts in current result</p>
-                  <p className="text-xs text-text-muted">{filteredContacts.length} records</p>
+                  <p className="text-text-muted text-xs">Contacts in current result</p>
+                  <p className="text-text-muted text-xs">{filteredContacts.length} records</p>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {filteredContacts.map((contact) => (
@@ -335,15 +335,15 @@ export function SuiteCompositionPatternsCertification() {
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="border border-border-subtle bg-surface-elevated/40 p-3">
-                  <p className="text-xs text-text-muted">Company</p>
-                  <p className="mt-1 text-sm text-text-main">
+                <div className="border-border-subtle bg-surface-elevated/40 border p-3">
+                  <p className="text-text-muted text-xs">Company</p>
+                  <p className="text-text-main mt-1 text-sm">
                     {selectedContact?.company ?? 'Select a row'}
                   </p>
                 </div>
-                <div className="border border-border-subtle bg-surface-elevated/40 p-3">
-                  <p className="text-xs text-text-muted">Owner</p>
-                  <p className="mt-1 text-sm text-text-main">
+                <div className="border-border-subtle bg-surface-elevated/40 border p-3">
+                  <p className="text-text-muted text-xs">Owner</p>
+                  <p className="text-text-main mt-1 text-sm">
                     {selectedContact?.owner ?? 'Select a row'}
                   </p>
                 </div>
@@ -357,11 +357,11 @@ export function SuiteCompositionPatternsCertification() {
               >
                 <div className="space-y-3 text-sm">
                   <div>
-                    <p className="text-xs text-text-muted">Record ID</p>
-                    <p className="font-mono text-xs text-text-main">{selectedContact.id}</p>
+                    <p className="text-text-muted text-xs">Record ID</p>
+                    <p className="text-text-main font-mono text-xs">{selectedContact.id}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-text-muted">Company</p>
+                    <p className="text-text-muted text-xs">Company</p>
                     <p className="text-text-main">{selectedContact.company}</p>
                   </div>
                   <StatusBadge
@@ -369,14 +369,14 @@ export function SuiteCompositionPatternsCertification() {
                     label={selectedContact.status}
                   />
                   {dirty ? (
-                    <p className="border border-warning/30 bg-warning/10 p-3 text-warning">
+                    <p className="border-warning/30 bg-warning/10 text-warning border p-3">
                       Unsaved changes
                     </p>
                   ) : null}
                 </div>
               </InspectorPanel>
             ) : (
-              <div className="flex items-center justify-center border-l border-border-technical p-4 text-sm text-text-muted">
+              <div className="border-border-technical text-text-muted flex items-center justify-center border-l p-4 text-sm">
                 Select a record to open the inspector.
               </div>
             )}

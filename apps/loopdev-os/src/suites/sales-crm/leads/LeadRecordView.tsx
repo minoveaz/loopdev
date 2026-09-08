@@ -10,6 +10,7 @@ import { getLeadById, getLeadCustomer360, LeadApiError, moveLeadStatus, updateLe
 import { LeadRecordPreview } from './LeadRecordPreview';
 import { getLeadSourceLabel, getLeadStatusLabel } from './mapper';
 import type { LeadDetailViewModel } from './types';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
 const EDITABLE_STATUSES: CrmLead['status'][] = [
   'nuevo',
@@ -42,6 +43,7 @@ export function LeadRecordView() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
   const canRead = hasPermission('crm.read');
+  const { mode } = usePlatformRuntime();
 
   const load = useCallback(async () => {
     if (!activeOrganizationId || !params.leadId || isLoadingPermissions || !canRead) return;
@@ -51,11 +53,12 @@ export function LeadRecordView() {
     setDetail((current) => (current ? { ...current, state: 'loading' } : null));
     setErrorMessage(null);
     try {
-      const lead = await getLeadById(activeOrganizationId, params.leadId, controller.signal);
+      const lead = await getLeadById(activeOrganizationId, params.leadId, controller.signal, mode);
       const context = await getLeadCustomer360(
         activeOrganizationId,
         lead.contactId,
         controller.signal,
+        mode,
       );
       const next: LeadDetailViewModel = {
         lead,
@@ -82,7 +85,7 @@ export function LeadRecordView() {
       }));
       setErrorMessage(error instanceof LeadApiError ? error.message : 'No se pudo cargar el Lead.');
     }
-  }, [activeOrganizationId, canRead, isLoadingPermissions, params.leadId]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, params.leadId, mode]);
 
   useEffect(() => {
     void load();
@@ -120,13 +123,16 @@ export function LeadRecordView() {
     setIsSaving(true);
     setErrorMessage(null);
     try {
-      const lead = await updateLead({
-        organizationId: activeOrganizationId,
-        leadId: detail.lead.id,
-        interest: interest.trim() || null,
-        assignedUserId: assignedUserId.trim() || null,
-        expectedUpdatedAt: detail.lead.updatedAt,
-      });
+      const lead = await updateLead(
+        {
+          organizationId: activeOrganizationId,
+          leadId: detail.lead.id,
+          interest: interest.trim() || null,
+          assignedUserId: assignedUserId.trim() || null,
+          expectedUpdatedAt: detail.lead.updatedAt,
+        },
+        mode,
+      );
       setDetail((current) => (current ? { ...current, lead, state: 'ready' } : current));
       setIsEditing(false);
     } catch (error: unknown) {
@@ -150,12 +156,15 @@ export function LeadRecordView() {
     setIsSaving(true);
     setErrorMessage(null);
     try {
-      const lead = await moveLeadStatus({
-        organizationId: activeOrganizationId,
-        leadId: detail.lead.id,
-        status,
-        expectedUpdatedAt: detail.lead.updatedAt,
-      });
+      const lead = await moveLeadStatus(
+        {
+          organizationId: activeOrganizationId,
+          leadId: detail.lead.id,
+          status,
+          expectedUpdatedAt: detail.lead.updatedAt,
+        },
+        mode,
+      );
       setDetail((current) => (current ? { ...current, lead, state: 'ready' } : current));
     } catch (error: unknown) {
       if (error instanceof LeadApiError && error.code === 'CONFLICT') {

@@ -2,19 +2,6 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
-// Unified Entity Types for the entire suite
-type EntityType =
-  | 'brand'
-  | 'token'
-  | 'rule'
-  | 'version'
-  | 'dependency'
-  | 'color.token'
-  | 'identity.mission'
-  | 'identity.vision'
-  | 'identity.tone'
-  | 'identity.claim';
-
 interface SelectedEntity {
   type: string; // Use string to allow dots (e.g. color.token)
   id: string;

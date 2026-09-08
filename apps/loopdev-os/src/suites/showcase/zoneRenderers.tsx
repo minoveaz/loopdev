@@ -3,11 +3,11 @@ import { Button, Heading } from '@loopdev/ui';
 
 const SplitContextSidebar = () => (
   <div className="flex h-full min-h-0 flex-col gap-3 p-4">
-    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+    <span className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
       context sidebar
     </span>
-    <strong className="text-sm text-text-main">Selection context</strong>
-    <p className="text-xs leading-5 text-text-muted">
+    <strong className="text-text-main text-sm">Selection context</strong>
+    <p className="text-text-muted text-xs leading-5">
       The shell-owned context region stays outside the recipe grid.
     </p>
   </div>
@@ -15,11 +15,11 @@ const SplitContextSidebar = () => (
 
 const SplitContextPanel = () => (
   <div className="flex h-full min-h-0 flex-col gap-3 p-4">
-    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+    <span className="text-text-muted font-mono text-[10px] uppercase tracking-[0.18em]">
       context panel
     </span>
-    <strong className="text-sm text-text-main">Record details</strong>
-    <div className="border-border-technical bg-background rounded-md border p-3 text-xs leading-5 text-text-muted">
+    <strong className="text-text-main text-sm">Record details</strong>
+    <div className="border-border-technical bg-background text-text-muted rounded-md border p-3 text-xs leading-5">
       The shell-owned detail panel complements the recipe&apos;s list and detail slots.
     </div>
   </div>
@@ -32,7 +32,7 @@ const CreativeEditorAssetSidebar = () => (
         <Heading as="h2" size="sm" weight="bold" className="text-text-main">
           Media Library
         </Heading>
-        <p className="mt-1 text-xs text-text-muted">Assets for the editor canvas</p>
+        <p className="text-text-muted mt-1 text-xs">Assets for the editor canvas</p>
       </div>
     </div>
     <div className="grid grid-cols-2 gap-2">
@@ -51,17 +51,17 @@ const CreativeEditorAssetSidebar = () => (
           <span className="text-primary block font-mono text-[10px] uppercase tracking-[0.14em]">
             {type}
           </span>
-          <strong className="mt-2 block text-xs text-text-main">{label}</strong>
+          <strong className="text-text-main mt-2 block text-xs">{label}</strong>
         </Button>
       ))}
     </div>
     <div className="border-border-technical bg-background flex-1 rounded-md border p-3">
-      <span className="text-xs text-text-muted">Recent assets</span>
+      <span className="text-text-muted text-xs">Recent assets</span>
       <div className="mt-3 space-y-2">
         {['Product launch.mp4', 'Northstar still.png', 'Intro music.wav'].map((asset) => (
           <div
             key={asset}
-            className="border-border-technical rounded border px-2 py-2 text-xs text-text-main"
+            className="border-border-technical text-text-main rounded border px-2 py-2 text-xs"
           >
             {asset}
           </div>
@@ -77,7 +77,7 @@ const CreativeEditorMediaDetails = () => (
       <Heading as="h2" size="sm" weight="bold" className="text-text-main">
         Media Details
       </Heading>
-      <p className="mt-1 text-xs leading-5 text-text-muted">
+      <p className="text-text-muted mt-1 text-xs leading-5">
         Properties for the selected canvas asset.
       </p>
     </div>
@@ -90,7 +90,7 @@ const CreativeEditorMediaDetails = () => (
       ].map(([label, value]) => (
         <div key={label} className="px-3 py-2">
           <dt className="text-text-muted">{label}</dt>
-          <dd className="mt-1 text-text-main">{value}</dd>
+          <dd className="text-text-main mt-1">{value}</dd>
         </div>
       ))}
     </dl>

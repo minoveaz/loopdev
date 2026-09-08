@@ -92,9 +92,9 @@ export default function ExchangeVaultPage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-12 p-8 max-w-[1600px] mx-auto">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-12 p-8">
         <Skeleton className="h-20 w-1/3 rounded-xl" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <Skeleton className="h-[220px] w-full rounded-3xl" />
           <Skeleton className="h-[220px] w-full rounded-3xl" />
         </div>
@@ -103,7 +103,7 @@ export default function ExchangeVaultPage() {
   }
 
   return (
-    <main className="h-full overflow-y-auto flex flex-col gap-12 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-700 pb-32 custom-scrollbar">
+    <main className="animate-in fade-in custom-scrollbar mx-auto flex h-full max-w-[1600px] flex-col gap-12 overflow-y-auto p-8 pb-32 duration-700">
       <ConnectExchangeModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -124,9 +124,9 @@ export default function ExchangeVaultPage() {
       />
 
       {/* 1. STANDARDIZED HEADER */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 text-primary">
+          <div className="text-primary flex items-center gap-3">
             <span className="material-symbols-outlined text-sm font-bold">lock</span>
             <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">
               Secure_Credential_Vault
@@ -135,7 +135,7 @@ export default function ExchangeVaultPage() {
           <Heading
             size="2xl"
             weight="bold"
-            className="text-text-main tracking-tight uppercase italic"
+            className="text-text-main uppercase italic tracking-tight"
           >
             Exchange_Vault<span className="text-primary">.</span>
           </Heading>
@@ -149,7 +149,7 @@ export default function ExchangeVaultPage() {
           variant="primary"
           startIcon="add_link"
           onClick={() => setIsModalOpen(true)}
-          className="px-8 shadow-xl shadow-primary/20"
+          className="shadow-primary/20 px-8 shadow-xl"
         >
           Connect_New_Exchange
         </Button>
@@ -159,7 +159,7 @@ export default function ExchangeVaultPage() {
       <TechnicalSurface
         variant="surface"
         depth="flat"
-        className="p-6 bg-primary/5 border-primary/20 rounded-2xl flex items-start gap-4"
+        className="bg-primary/5 border-primary/20 flex items-start gap-4 rounded-2xl p-6"
       >
         <span className="material-symbols-outlined text-primary font-bold">shield</span>
         <div className="flex flex-col gap-1">
@@ -175,7 +175,7 @@ export default function ExchangeVaultPage() {
 
       {/* 3. ACCOUNTS GRID */}
       {accounts.length > 0 ? (
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <section className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
           {accounts.map((acc) => (
             <ExchangeAccountCard
               key={acc.id}
@@ -187,14 +187,14 @@ export default function ExchangeVaultPage() {
           ))}
         </section>
       ) : (
-        <section className="flex flex-col items-center justify-center p-24 border border-dashed border-border-technical/50 rounded-[2.5rem] bg-background-surface/50 backdrop-blur-sm">
-          <div className="w-16 h-16 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary/40 mb-6">
+        <section className="border-border-technical/50 bg-background-surface/50 flex flex-col items-center justify-center rounded-[2.5rem] border border-dashed p-24 backdrop-blur-sm">
+          <div className="bg-primary/5 border-primary/10 text-primary/40 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border">
             <span className="material-symbols-outlined text-3xl font-bold">account_balance</span>
           </div>
           <Heading size="lg" weight="bold" className="text-text-main mb-2">
             No Exchanges Connected
           </Heading>
-          <LpdText size="sm" className="text-text-muted text-center max-w-sm mb-8">
+          <LpdText size="sm" className="text-text-muted mb-8 max-w-sm text-center">
             The Quant Core needs a bridge to execute your algorithmic logic. Connect your first
             exchange to begin trading.
           </LpdText>

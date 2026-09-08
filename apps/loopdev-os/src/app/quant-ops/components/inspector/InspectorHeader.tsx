@@ -17,23 +17,35 @@ export const InspectorHeader: React.FC<InspectorHeaderProps> = ({ bot }) => {
     <section className="flex flex-col gap-4">
       <div className="flex items-start justify-between">
         <div className="flex flex-col">
-          <LpdText size="xl" weight="black" className="text-text-main font-mono tracking-tighter leading-none">
+          <LpdText
+            size="xl"
+            weight="black"
+            className="text-text-main font-mono leading-none tracking-tighter"
+          >
             {bot.pair}
           </LpdText>
-          <LpdText size="xs" weight="black" className="text-primary mt-1 uppercase italic tracking-widest opacity-80">
-            {bot.id.substring(0,8)}{' // '}{bot.strategyId}
+          <LpdText
+            size="xs"
+            weight="black"
+            className="text-primary mt-1 uppercase italic tracking-widest opacity-80"
+          >
+            {bot.id.substring(0, 8)}
+            {' // '}
+            {bot.strategyId}
           </LpdText>
         </div>
         <div className="flex flex-col items-end gap-2">
-          <TechnicalStatusBadge 
-            label={bot.status.toUpperCase()} 
-            severity={bot.status === 'active' ? 'success' : 'warning'} 
-            variant="glass" 
+          <TechnicalStatusBadge
+            label={bot.status.toUpperCase()}
+            severity={bot.status === 'active' ? 'success' : 'warning'}
+            variant="glass"
             withPulse={bot.status === 'active'}
           />
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/5 border border-white/10">
-            <span className="w-1 h-1 bg-status-success rounded-full" />
-            <LpdText size="nano" className="font-mono text-status-success opacity-80">12ms_OK</LpdText>
+          <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-0.5">
+            <span className="bg-status-success h-1 w-1 rounded-full" />
+            <LpdText size="nano" className="text-status-success font-mono opacity-80">
+              12ms_OK
+            </LpdText>
           </div>
         </div>
       </div>

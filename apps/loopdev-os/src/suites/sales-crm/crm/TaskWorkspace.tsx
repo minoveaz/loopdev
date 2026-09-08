@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Badge,
@@ -15,7 +15,6 @@ import {
 } from '@loopdev/ui';
 import type {
   Task,
-  TaskPage,
   TaskPriority,
   TaskRelationType,
   TaskStatus,
@@ -24,6 +23,15 @@ import type {
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import {
+  completeCrmTask,
+  createCrmTask,
+  crmTask,
+  crmTasks,
+  reopenCrmTask,
+  updateCrmTask,
+} from '@/suites/sales-crm/runtimeAdapter';
 
 const relationTypes: TaskRelationType[] = ['contact', 'lead', 'opportunity'];
 const priorities: TaskPriority[] = ['low', 'normal', 'high', 'urgent'];
@@ -103,6 +111,7 @@ export function TaskPreview({ task, onClose }: { task: Task; onClose?: () => voi
 
 export function TaskRecordView({ taskId }: { taskId: string }) {
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
     'crm.manage',
@@ -119,66 +128,67 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
   const [draftDueAt, setDraftDueAt] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  async function load(signal?: AbortSignal) {
-    if (!activeOrganizationId) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
-      const taskResponse = await fetch(`/api/crm/tasks/${encodeURIComponent(taskId)}?${scope}`, {
-        signal,
-      });
-      if (!taskResponse.ok) {
-        if (taskResponse.status === 403)
-          throw new Error('You do not have permission to view this task.');
-        if (taskResponse.status === 404) throw new Error('This task could not be found.');
-        throw new Error('Task could not be loaded.');
+  const load = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!activeOrganizationId) return;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
+        const nextTask = await crmTask(mode, activeOrganizationId, taskId, signal);
+        if (!nextTask) throw new Error('This task could not be found.');
+        setTask(nextTask);
+        setDraftTitle(nextTask.title);
+        setDraftDescription(nextTask.description ?? '');
+        setDraftPriority(nextTask.priority);
+        setDraftDueAt(nextTask.dueAt ? nextTask.dueAt.slice(0, 16) : '');
+        if (mode === 'real') {
+          const timelineResponse = await fetch(
+            `/api/crm/timeline?${scope}&relationType=${nextTask.relationType}&relationId=${encodeURIComponent(nextTask.relationId)}&limit=25`,
+            { signal },
+          );
+          if (timelineResponse.ok)
+            setTimeline(((await timelineResponse.json()) as TimelinePage).items);
+        } else {
+          setTimeline([]);
+        }
+      } catch (requestError: unknown) {
+        if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
+        setError(
+          requestError instanceof Error ? requestError.message : 'Task could not be loaded.',
+        );
+      } finally {
+        if (!signal?.aborted) setIsLoading(false);
       }
-      const nextTask = (await taskResponse.json()) as Task;
-      setTask(nextTask);
-      setDraftTitle(nextTask.title);
-      setDraftDescription(nextTask.description ?? '');
-      setDraftPriority(nextTask.priority);
-      setDraftDueAt(nextTask.dueAt ? nextTask.dueAt.slice(0, 16) : '');
-      const timelineResponse = await fetch(
-        `/api/crm/timeline?${scope}&relationType=${nextTask.relationType}&relationId=${encodeURIComponent(nextTask.relationId)}&limit=25`,
-        { signal },
-      );
-      if (timelineResponse.ok) setTimeline(((await timelineResponse.json()) as TimelinePage).items);
-    } catch (requestError: unknown) {
-      if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-      setError(requestError instanceof Error ? requestError.message : 'Task could not be loaded.');
-    } finally {
-      if (!signal?.aborted) setIsLoading(false);
-    }
-  }
+    },
+    [activeOrganizationId, mode, taskId],
+  );
   useEffect(() => {
     const controller = new AbortController();
     void load(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, taskId]);
+  }, [load]);
 
   async function changeStatus(action: 'complete' | 'reopen') {
     if (!activeOrganizationId || !task || !canManage) return;
     setIsPending(true);
     setError(null);
     try {
-      const response = await fetch(`/api/crm/tasks/${task.id}/${action}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          organizationId: activeOrganizationId,
-          expectedVersion: task.version,
-          reason: action === 'reopen' ? 'Reopened from task workspace' : undefined,
-          idempotencyKey: `crm-ui-${action}-${task.id}-${task.version}`,
-        }),
-      });
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error ?? `Task could not be ${action}d.`);
-      }
-
-      setTask((await response.json()) as Task);
+      const command = {
+        organizationId: activeOrganizationId,
+        taskId: task.id,
+        expectedVersion: task.version,
+        reason: action === 'reopen' ? 'Reopened from task workspace' : undefined,
+        idempotencyKey: `crm-ui-${action}-${task.id}-${task.version}`,
+      };
+      setTask(
+        action === 'complete'
+          ? await completeCrmTask(mode, command)
+          : await reopenCrmTask(mode, {
+              ...command,
+              reason: 'Reopened from task workspace',
+            }),
+      );
     } catch (requestError: unknown) {
       setError(requestError instanceof Error ? requestError.message : 'Task action failed.');
     } finally {
@@ -191,26 +201,17 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
     setIsPending(true);
     setError(null);
     try {
-      const response = await fetch(`/api/crm/tasks/${task.id}`, {
-        method: 'PATCH',
-        headers: {
-          'content-type': 'application/json',
-          'idempotency-key': `crm-ui-task-update-${task.id}-${task.version}`,
-        },
-        body: JSON.stringify({
-          organizationId: activeOrganizationId,
-          title: draftTitle,
-          description: draftDescription || null,
-          priority: draftPriority,
-          dueAt: draftDueAt ? new Date(draftDueAt).toISOString() : null,
-          expectedVersion: task.version,
-        }),
+      const updated = await updateCrmTask(mode, {
+        organizationId: activeOrganizationId,
+        taskId: task.id,
+        title: draftTitle,
+        description: draftDescription || null,
+        priority: draftPriority,
+        dueAt: draftDueAt ? new Date(draftDueAt).toISOString() : null,
+        expectedVersion: task.version,
+        idempotencyKey: `crm-ui-task-update-${task.id}-${task.version}`,
       });
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error ?? 'Task could not be updated.');
-      }
-      setTask((await response.json()) as Task);
+      setTask(updated);
       setIsEditing(false);
     } catch (requestError: unknown) {
       setError(requestError instanceof Error ? requestError.message : 'Task could not be updated.');
@@ -223,7 +224,7 @@ export function TaskRecordView({ taskId }: { taskId: string }) {
     return <div className="text-text-muted p-6 text-sm">Preparing task workspace...</div>;
   if (!hasPermission('crm.read'))
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to view Tasks.
       </div>
     );
@@ -440,6 +441,7 @@ export function TaskForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.manage',
   ]);
@@ -463,29 +465,18 @@ export function TaskForm() {
     setIsSaving(true);
     setError(null);
     try {
-      const response = await fetch('/api/crm/tasks', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'idempotency-key': `crm-ui-task-${crypto.randomUUID()}`,
-        },
-        body: JSON.stringify({
-          organizationId: activeOrganizationId,
-          title,
-          description: description || null,
-          priority,
-          type: type || null,
-          assignedUserId: assignedUserId || null,
-          dueAt: dueAt ? new Date(dueAt).toISOString() : null,
-          relationType,
-          relationId,
-        }),
+      const task = await createCrmTask(mode, {
+        organizationId: activeOrganizationId,
+        title,
+        description: description || null,
+        priority,
+        type: type || null,
+        assignedUserId: assignedUserId || null,
+        dueAt: dueAt ? new Date(dueAt).toISOString() : null,
+        relationType,
+        relationId,
+        idempotencyKey: `crm-ui-task-${crypto.randomUUID()}`,
       });
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error ?? 'Task could not be created.');
-      }
-      const task = (await response.json()) as Task;
       router.push(`/sales-crm/tasks/${task.id}`);
     } catch (requestError: unknown) {
       setError(requestError instanceof Error ? requestError.message : 'Task could not be created.');
@@ -497,7 +488,7 @@ export function TaskForm() {
     return <div className="text-text-muted p-6 text-sm">Preparing task form...</div>;
   if (!canManage)
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to create tasks.
       </div>
     );
@@ -519,7 +510,7 @@ export function TaskForm() {
         />
       }
     >
-      <div className="mx-auto max-w-3xl w-full">
+      <div className="mx-auto w-full max-w-3xl">
         <form onSubmit={submit}>
           <TechnicalSurface
             variant="surface"
@@ -605,23 +596,19 @@ export function TaskForm() {
 
 export function MyDayPage() {
   const { activeOrganizationId } = useOrganization();
+  const { mode } = usePlatformRuntime();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
     'crm.manage',
   ]);
+  const canRead = hasPermission('crm.read');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    if (!activeOrganizationId || isLoadingPermissions || !hasPermission('crm.read')) return;
+    if (!activeOrganizationId || isLoadingPermissions || !canRead) return;
     const controller = new AbortController();
-    fetch(`/api/crm/tasks?organizationId=${encodeURIComponent(activeOrganizationId)}&limit=100`, {
-      signal: controller.signal,
-    })
-      .then(async (response) => {
-        if (!response.ok) throw new Error('My Day could not be loaded.');
-        return (await response.json()) as TaskPage;
-      })
+    crmTasks(mode, { organizationId: activeOrganizationId, limit: 100 }, controller.signal)
       .then((page) => setTasks(page.items))
       .catch((requestError: unknown) => {
         if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
@@ -633,7 +620,7 @@ export function MyDayPage() {
         if (!controller.signal.aborted) setIsLoading(false);
       });
     return () => controller.abort();
-  }, [activeOrganizationId, isLoadingPermissions]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, mode]);
   const groups = useMemo(() => {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
@@ -661,7 +648,7 @@ export function MyDayPage() {
     return <div className="text-text-muted p-6 text-sm">Preparing My Day...</div>;
   if (!hasPermission('crm.read'))
     return (
-      <div className="flex min-h-full items-center justify-center p-6 text-sm text-text-muted">
+      <div className="text-text-muted flex min-h-full items-center justify-center p-6 text-sm">
         You do not have permission to view My Day.
       </div>
     );
@@ -781,7 +768,7 @@ function Field({
         required={required}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="border-border-subtle bg-background text-text-main mt-1 min-h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="border-border-subtle bg-background text-text-main focus-visible:ring-primary mt-1 min-h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2"
       />
     </label>
   );

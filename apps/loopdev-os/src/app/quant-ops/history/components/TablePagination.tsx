@@ -28,7 +28,7 @@ export function TablePagination({
           size="sm"
           onClick={() => onPageChange?.(Math.max(0, currentOffset - limit))}
           disabled={currentOffset === 0}
-          className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="border-border-technical/30 hover:bg-background-elevated rounded border px-3 py-1 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           ← Previous
         </Button>
@@ -37,7 +37,7 @@ export function TablePagination({
           size="sm"
           onClick={() => onPageChange?.(currentOffset + limit)}
           disabled={currentOffset + limit >= total}
-          className="px-3 py-1 text-sm border border-border-technical/30 rounded hover:bg-background-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="border-border-technical/30 hover:bg-background-elevated rounded border px-3 py-1 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           Next →
         </Button>

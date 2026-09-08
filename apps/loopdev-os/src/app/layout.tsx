@@ -10,6 +10,7 @@ import { TransitionOverlay } from '@/components/layout/TransitionOverlay';
 import { OrganizationThemeProvider } from '@/providers/OrganizationThemeProvider';
 import { AppFeedbackProvider } from '@/providers/AppFeedbackProvider';
 import { SimulationProvider } from '@/providers/SimulationProvider';
+import { PlatformRuntimeProvider } from '@/providers/PlatformRuntimeProvider';
 
 // Importamos los estilos globales de nuestro Design System
 import '@loopdev/ui/styles/globals.css';
@@ -28,12 +29,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-        />
-      </head>
       <body className="font-sans antialiased">
         <TransitionOverlay />
         <AppFeedbackProvider>
@@ -44,9 +39,11 @@ export default function RootLayout({
                   <PermissionProvider>
                     <BrandProvider>
                       <WorkspaceProvider>
-                        <OrganizationRouteGuard>
-                          <OrganizationThemeProvider>{children}</OrganizationThemeProvider>
-                        </OrganizationRouteGuard>
+                        <PlatformRuntimeProvider>
+                          <OrganizationRouteGuard>
+                            <OrganizationThemeProvider>{children}</OrganizationThemeProvider>
+                          </OrganizationRouteGuard>
+                        </PlatformRuntimeProvider>
                       </WorkspaceProvider>
                     </BrandProvider>
                   </PermissionProvider>

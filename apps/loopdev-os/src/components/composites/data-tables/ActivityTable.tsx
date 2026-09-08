@@ -93,8 +93,8 @@ const renderMobileRow = (
         onClick={() => onRowClick?.(row, index)}
       >
         <div className="min-w-0">
-          <span className="block truncate font-semibold text-text-main">{row.event}</span>
-          <span className="mt-1 flex items-center gap-2 text-xs text-text-muted">
+          <span className="text-text-main block truncate font-semibold">{row.event}</span>
+          <span className="text-text-muted mt-1 flex items-center gap-2 text-xs">
             <UserAvatar name={row.actor} size="xs" />
             <span className="truncate">
               {row.actor} · {row.date}
@@ -121,7 +121,7 @@ export function ActivityTable({
     <TechnicalSurface variant="surface" radius="md" border="subtle" className="w-full min-w-0">
       <ResponsiveTable
         surface={false}
-        className="[&_thead_tr]:bg-background-subtle [&_tbody_td]:py-3 [&_tbody_tr:hover]:bg-background-subtle"
+        className="[&_thead_tr]:bg-background-subtle [&_tbody_tr:hover]:bg-background-subtle [&_tbody_td]:py-3"
         caption="Activity events"
         rows={rows}
         columns={columns}
@@ -137,10 +137,10 @@ export function ActivityTable({
         onRowClick={handleRowClick}
         renderMobileRow={renderMobileRow(handleRowClick)}
       />
-      <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle bg-background-subtle px-4 py-3 text-xs text-text-muted">
+      <footer className="border-border-subtle bg-background-subtle text-text-muted flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 text-xs">
         <span>Showing recent 3 events</span>
         <a
-          className="font-medium text-text-main underline-offset-2 hover:underline"
+          className="text-text-main font-medium underline-offset-2 hover:underline"
           href="#audit-trail"
         >
           View full audit trail ↗

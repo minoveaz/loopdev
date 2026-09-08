@@ -99,12 +99,12 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
             <div className="flex min-w-0 items-center gap-2 text-sm">
               <Link
                 href="/sales-crm/contacts"
-                className="text-text-muted hover:text-text-main transition-colors font-medium"
+                className="text-text-muted hover:text-text-main font-medium transition-colors"
               >
                 Contacts
               </Link>
-              <ChevronRight className="h-4 w-4 text-text-muted" aria-hidden="true" />
-              <span className="font-semibold text-text-main truncate max-w-[200px] sm:max-w-xs">
+              <ChevronRight className="text-text-muted h-4 w-4" aria-hidden="true" />
+              <span className="text-text-main max-w-[200px] truncate font-semibold sm:max-w-xs">
                 {name}
               </span>
             </div>
@@ -115,15 +115,15 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
     >
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mb-4" />
-          <p className="text-sm font-medium text-text-muted">Loading customer record...</p>
+          <div className="border-primary mb-4 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
+          <p className="text-text-muted text-sm font-medium">Loading customer record...</p>
         </div>
       ) : null}
 
       {error ? (
         <div
           role="alert"
-          className="border-status-error/40 bg-status-error/10 text-status-error flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4 text-sm shadow-xs"
+          className="border-status-error/40 bg-status-error/10 text-status-error shadow-xs flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4 text-sm"
         >
           <div className="flex items-center gap-2.5">
             <AlertCircle className="h-5 w-5 shrink-0" />
@@ -141,28 +141,30 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
       ) : null}
 
       {view && !isLoading ? (
-        <div className="flex-1 min-h-0 flex flex-col gap-4 sm:gap-6">
+        <div className="flex min-h-0 flex-1 flex-col gap-4 sm:gap-6">
           {/* Simulation Mode Info Banner */}
           {isSimulationActive && (
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed border-amber-500/50 bg-amber-500/10 px-4 py-2.5 text-xs text-amber-700 dark:text-amber-300 shadow-xs">
+            <div className="border-status-warning/50 bg-status-warning/10 text-status-warning shadow-xs flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed px-4 py-2.5 text-xs">
               <div className="flex items-center gap-2">
-                <FlaskConical className="h-4 w-4 text-amber-500 shrink-0" />
+                <FlaskConical className="h-4 w-4 shrink-0 text-amber-500" />
                 <span>
                   <strong>Modo Simulación Activo:</strong> Los elementos con borde discontinuo y
                   etiqueta{' '}
-                  <span className="rounded bg-amber-500/20 px-1 py-0.5 font-mono font-bold">
+                  <span className="bg-status-warning/20 rounded px-1 py-0.5 font-mono font-bold">
                     SIM
                   </span>{' '}
                   son datos proyectados para verificar la experiencia visual y geométrica del OS.
                 </span>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={toggleSimulation}
-                className="shrink-0 font-medium underline hover:text-amber-900 dark:hover:text-amber-100 transition-colors"
+                className="text-status-warning shrink-0 font-medium underline transition-colors hover:text-status-warning/80"
               >
                 Desactivar
-              </button>
+              </Button>
             </div>
           )}
 
@@ -186,13 +188,13 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
           />
 
           {/* 2. TWO EQUAL-HEIGHT PANELS (Desktop) / Active Tab Pane (Mobile) */}
-          <div className="flex-1 min-h-[480px] grid min-w-0 gap-6 lg:grid-cols-[340px_minmax(0,1fr)] items-stretch">
+          <div className="grid min-h-[480px] min-w-0 flex-1 items-stretch gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
             {/* LEFT PANEL: Permanent Contact Record on Desktop (hidden on mobile) */}
             <TechnicalSurface
               variant="surface"
               border="subtle"
               radius="xl"
-              className="hidden lg:flex h-full flex-col min-h-0 divide-y divide-border-subtle p-6 overflow-y-auto"
+              className="divide-border-subtle hidden h-full min-h-0 flex-col divide-y overflow-y-auto p-6 lg:flex"
             >
               <ContactDetailsPanel
                 view={view}
@@ -211,7 +213,7 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
               variant="surface"
               border="subtle"
               radius="xl"
-              className="h-full flex flex-col min-h-0 overflow-hidden"
+              className="flex h-full min-h-0 flex-col overflow-hidden"
             >
               {/* Desktop Tabs Header (>= 1024px) */}
               <CustomerDesktopTabs
@@ -228,10 +230,10 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
               />
 
               {/* Workspace Content Pane */}
-              <div className="p-4 sm:p-6 pb-28 lg:pb-6 flex-1 min-h-0 overflow-y-auto flex flex-col min-w-0 w-full">
+              <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-y-auto p-4 pb-28 sm:p-6 lg:pb-6">
                 {/* Mobile 'contact' tab */}
                 {activeTab === 'contact' ? (
-                  <div className="lg:hidden flex-1 flex flex-col min-w-0 w-full">
+                  <div className="flex w-full min-w-0 flex-1 flex-col lg:hidden">
                     <ContactDetailsPanel
                       view={view}
                       displayedLeads={displayedLeads}
@@ -311,13 +313,15 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
           presentation="overlay"
           width="drawer"
           headerSlot={
-            <button
+            <Button
               type="submit"
+              variant="ghost"
+              size="sm"
               form="customer-360-contact-edit-form"
-              className="sm:hidden text-primary font-bold text-sm hover:opacity-80 active:opacity-50 transition-opacity"
+              className="text-primary text-sm font-bold transition-opacity hover:opacity-80 active:opacity-50 sm:hidden"
             >
               Guardar
-            </button>
+            </Button>
           }
         >
           <ContactDetailDrawerContent

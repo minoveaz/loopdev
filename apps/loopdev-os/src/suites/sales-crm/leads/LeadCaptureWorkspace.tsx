@@ -71,7 +71,7 @@ export function LeadCaptureWorkspace() {
         />
       }
     >
-      <div className="w-full max-w-4xl mx-auto py-4">
+      <div className="mx-auto w-full max-w-4xl py-4">
         {result ? (
           <LeadCaptureResultPanel
             result={result}

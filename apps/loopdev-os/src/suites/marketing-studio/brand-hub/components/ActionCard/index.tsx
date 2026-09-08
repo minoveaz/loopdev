@@ -13,12 +13,14 @@ export const ActionCard: React.FC<ActionCardProps> = ({
   description,
   icon,
   intent = 'neutral',
-  onClick
+  onClick,
 }) => {
   const intentStyles = {
     primary: 'border-primary/20 hover:border-primary/40 bg-primary/5 shadow-sm',
-    secondary: 'border-border-technical hover:border-text-muted/40 bg-background-surface shadow-none',
-    neutral: 'border-border-technical/50 hover:border-border-technical bg-transparent opacity-80 hover:opacity-100'
+    secondary:
+      'border-border-technical hover:border-text-muted/40 bg-background-surface shadow-none',
+    neutral:
+      'border-border-technical/50 hover:border-border-technical bg-transparent opacity-80 hover:opacity-100',
   };
 
   return (
@@ -26,12 +28,12 @@ export const ActionCard: React.FC<ActionCardProps> = ({
       variant="secondary"
       onClick={onClick}
       className={cn(
-        "flex items-center gap-4 p-4 rounded-xl border transition-all text-left",
-        intentStyles[intent]
+        'flex items-center gap-4 p-4 rounded-xl border transition-all text-left',
+        intentStyles[intent],
       )}
     >
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-background-surface border border-border-technical shrink-0">
-        <span className="material-symbols-outlined text-[20px] text-text-muted opacity-80">
+      <div className="bg-background-surface border-border-technical flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border">
+        <span className="material-symbols-outlined text-text-muted text-[20px] opacity-80">
           {icon}
         </span>
       </div>
@@ -40,7 +42,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
         <LpdText size="sm" weight="bold" className="text-text-main">
           {title}
         </LpdText>
-        <LpdText size="xs" className="text-text-muted opacity-60 leading-tight">
+        <LpdText size="xs" className="text-text-muted leading-tight opacity-60">
           {description}
         </LpdText>
       </div>

@@ -5,12 +5,7 @@ import { cn } from '../../../../helpers/cn';
  * @description Estilos oficiales para la primitiva Icon en producción.
  */
 export const useIcon = (props: any) => {
-  const { 
-    size = 'md', 
-    variant = 'standard', 
-    color, 
-    className = '' 
-  } = props;
+  const { size = 'md', variant = 'standard', color, className = '' } = props;
 
   const sizeMap: Record<string, string> = {
     sm: '!text-[12px]',
@@ -27,20 +22,23 @@ export const useIcon = (props: any) => {
   };
 
   const iconClassName = cn(
-    'material-symbols-outlined select-none block leading-none',
+    'material-symbols-outlined pointer-events-none select-none block leading-none',
     sizeMap[size] || sizeMap.md,
     variant === 'boxed' ? 'text-white' : '',
-    className
+    className,
   );
 
-  const containerClassName = variant === 'boxed' ? cn(
-    'bg-[var(--lpd-color-brand-primary)] flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20 ring-1 ring-white/10',
-    containerSizes[size] || containerSizes.md
-  ) : '';
+  const containerClassName =
+    variant === 'boxed'
+      ? cn(
+          'bg-[var(--lpd-color-brand-primary)] flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20 ring-1 ring-white/10',
+          containerSizes[size] || containerSizes.md,
+        )
+      : '';
 
   return {
     iconClassName,
     containerClassName,
-    finalColor: color || (variant === 'boxed' ? '#FFFFFF' : 'currentColor')
+    finalColor: color || (variant === 'boxed' ? '#FFFFFF' : 'currentColor'),
   };
 };

@@ -22,7 +22,7 @@ export const CimoSportCategoryBar: React.FC<CimoSportCategoryBarProps> = ({
   className,
 }) => {
   return (
-    <div className={clsx('flex items-center flex-wrap gap-3 py-2', className)}>
+    <div className={clsx('flex flex-wrap items-center gap-3 py-2', className)}>
       {categories.map((cat) => {
         const isSelected = selectedSport.toLowerCase() === cat.id.toLowerCase();
         return (
@@ -31,10 +31,10 @@ export const CimoSportCategoryBar: React.FC<CimoSportCategoryBarProps> = ({
             type="button"
             onClick={() => onSelectSport(cat.id)}
             className={clsx(
-              'flex flex-col items-center gap-1.5 pb-2 border-b-2 transition-all cursor-pointer whitespace-nowrap min-w-[64px] shrink-0',
+              'flex min-w-[64px] shrink-0 cursor-pointer flex-col items-center gap-1.5 whitespace-nowrap border-b-2 pb-2 transition-all',
               isSelected
-                ? 'border-[#1F4E5F] text-[#1F4E5F] font-black'
-                : 'border-transparent text-[#1F4E5F]/60 hover:text-[#1F4E5F] hover:border-[#1F4E5F]/30 font-bold',
+                ? 'border-[#1F4E5F] font-black text-[#1F4E5F]'
+                : 'border-transparent font-bold text-[#1F4E5F]/60 hover:border-[#1F4E5F]/30 hover:text-[#1F4E5F]',
             )}
           >
             <span className="text-xl">{cat.emoji}</span>

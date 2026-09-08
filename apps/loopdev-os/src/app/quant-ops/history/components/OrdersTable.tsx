@@ -35,8 +35,8 @@ export function OrdersTable({
 
   return (
     <div className="space-y-4">
-      <div className="bg-background-surface rounded-lg border border-border-technical/30 overflow-hidden">
-        <div className="grid grid-cols-7 gap-4 p-4 bg-background-elevated border-b border-border-technical/30">
+      <div className="bg-background-surface border-border-technical/30 overflow-hidden rounded-lg border">
+        <div className="bg-background-elevated border-border-technical/30 grid grid-cols-7 gap-4 border-b p-4">
           {['Date', 'Bot', 'Side', 'Price', 'Qty', 'Signal', 'Status'].map((label) => (
             <LpdText
               key={label}
@@ -51,7 +51,7 @@ export function OrdersTable({
         {data.data.map((order: Order) => (
           <div
             key={order.id}
-            className="grid grid-cols-7 gap-4 p-4 border-b border-border-technical/10 hover:bg-background-elevated/50 transition-colors"
+            className="border-border-technical/10 hover:bg-background-elevated/50 grid grid-cols-7 gap-4 border-b p-4 transition-colors"
           >
             <LpdText size="sm" className="text-text-main font-mono">
               {new Date(order.created_at).toLocaleDateString()}

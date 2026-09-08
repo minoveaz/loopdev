@@ -137,8 +137,8 @@ export function KanbanBoardCertification() {
       className: 'min-w-[18rem]',
       render: (item) => (
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold leading-5 text-text-main">{item.title}</p>
-          <p className="mt-0.5 truncate text-xs leading-4 text-text-muted">{item.description}</p>
+          <p className="text-text-main truncate text-sm font-semibold leading-5">{item.title}</p>
+          <p className="text-text-muted mt-0.5 truncate text-xs leading-4">{item.description}</p>
         </div>
       ),
     },
@@ -164,21 +164,21 @@ export function KanbanBoardCertification() {
     {
       key: 'group',
       header: 'Category',
-      render: (item) => <span className="text-xs text-text-muted">{item.group}</span>,
+      render: (item) => <span className="text-text-muted text-xs">{item.group}</span>,
     },
   ];
 
   const renderMobileRow = (item: WorkflowItem) => (
-    <article className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 rounded-sm border border-border-subtle bg-surface-elevated px-3 py-3 shadow-sm">
+    <article className="border-border-subtle bg-surface-elevated grid grid-cols-[minmax(0,1fr)_auto] gap-3 rounded-sm border px-3 py-3 shadow-sm">
       <div className="min-w-0">
-        <p className="break-words text-sm font-semibold leading-5 text-text-main">{item.title}</p>
-        <p className="mt-1 break-words text-xs leading-4 text-text-muted">{item.description}</p>
+        <p className="text-text-main break-words text-sm font-semibold leading-5">{item.title}</p>
+        <p className="text-text-muted mt-1 break-words text-xs leading-4">{item.description}</p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Badge variant="outline">{getColumnTitle(item)}</Badge>
           <Badge status={PRIORITY_BADGE_STATUS[item.priority]} variant="solid" showDot={false}>
             {item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}
           </Badge>
-          <span className="text-xs text-text-muted">{item.group}</span>
+          <span className="text-text-muted text-xs">{item.group}</span>
         </div>
       </div>
       <div className="flex shrink-0 flex-col items-end justify-between gap-2">
@@ -198,8 +198,8 @@ export function KanbanBoardCertification() {
     <TechnicalSurface variant="surface" radius="sm" border="subtle" className="space-y-3 p-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="break-words text-sm font-semibold text-text-main">{item.title}</p>
-          <p className="mt-1 break-words text-xs text-text-muted">{item.description}</p>
+          <p className="text-text-main break-words text-sm font-semibold">{item.title}</p>
+          <p className="text-text-muted mt-1 break-words text-xs">{item.description}</p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
           <Badge variant="outline">{item.owner}</Badge>
@@ -217,7 +217,7 @@ export function KanbanBoardCertification() {
           severity={PRIORITY_TONE[item.priority]}
           label={item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}
         />
-        <span className="text-xs text-text-muted">{item.group}</span>
+        <span className="text-text-muted text-xs">{item.group}</span>
       </div>
     </TechnicalSurface>
   );
@@ -227,18 +227,18 @@ export function KanbanBoardCertification() {
       <div>
         <h2
           id="kanban-board-heading"
-          className="font-mono text-sm uppercase tracking-[0.14em] text-text-main"
+          className="text-text-main font-mono text-sm uppercase tracking-[0.14em]"
         >
           C11 · Generic Kanban board
         </h2>
-        <p className="mt-1 text-xs text-text-muted">
+        <p className="text-text-muted mt-1 text-xs">
           Domain-neutral stages, semantic column tones, optional metrics and custom cards.
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 border-b border-border-subtle pb-3">
+      <div className="border-border-subtle flex flex-wrap items-center justify-end gap-2 border-b pb-3">
         <div
-          className="flex items-center gap-0.5 rounded-lg border border-border-subtle bg-surface-elevated/60 p-1"
+          className="border-border-subtle bg-surface-elevated/60 flex items-center gap-0.5 rounded-lg border p-1"
           role="group"
           aria-label="View"
         >
@@ -249,7 +249,7 @@ export function KanbanBoardCertification() {
               variant="ghost"
               className={
                 view === option
-                  ? 'bg-surface-light text-text-main shadow-sm dark:bg-surface-dark'
+                  ? 'bg-surface-light text-text-main dark:bg-surface-dark shadow-sm'
                   : 'text-text-muted'
               }
               aria-pressed={view === option}
@@ -270,7 +270,7 @@ export function KanbanBoardCertification() {
         aria-label="Kanban filters"
       >
         <span
-          className="order-first w-full text-xs text-text-muted lg:order-none lg:ml-auto lg:w-auto"
+          className="text-text-muted order-first w-full text-xs lg:order-none lg:ml-auto lg:w-auto"
           aria-live="polite"
         >
           {filteredItems.length} items
@@ -352,7 +352,7 @@ export function KanbanBoardCertification() {
           )}
         />
       ) : (
-        <div className="overflow-hidden rounded-md border border-border-technical bg-shell-canvas p-3">
+        <div className="border-border-technical bg-shell-canvas overflow-hidden rounded-md border p-3">
           <KanbanBoard
             columns={COLUMNS.map((column) => ({
               ...column,

@@ -10,34 +10,34 @@ export function StatesCertification() {
           as="h2"
           size="sm"
           weight="bold"
-          className="font-mono uppercase tracking-[0.14em] text-text-main"
+          className="text-text-main font-mono uppercase tracking-[0.14em]"
         >
           Content states
         </Heading>
-        <p className="mt-1 text-xs text-text-muted">
+        <p className="text-text-muted mt-1 text-xs">
           A3 shared states for loading, empty, error, forbidden and read-only boundaries.
         </p>
       </div>
       <div className="grid gap-4 xl:grid-cols-2">
         <section
-          className="space-y-3 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+          className="border-border-subtle bg-surface-elevated/40 space-y-3 rounded-lg border p-4"
           aria-labelledby="states-loading"
         >
           <h3
             id="states-loading"
-            className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+            className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
           >
             Loading
           </h3>
           <LoadingState label="Loading contacts" lines={3} />
         </section>
         <section
-          className="space-y-3 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+          className="border-border-subtle bg-surface-elevated/40 space-y-3 rounded-lg border p-4"
           aria-labelledby="states-empty"
         >
           <h3
             id="states-empty"
-            className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+            className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
           >
             Empty
           </h3>
@@ -55,12 +55,12 @@ export function StatesCertification() {
           />
         </section>
         <section
-          className="space-y-3 rounded-lg border border-danger/30 bg-danger/5 p-4"
+          className="border-danger/30 bg-danger/5 space-y-3 rounded-lg border p-4"
           aria-labelledby="states-error"
         >
           <h3
             id="states-error"
-            className="text-xs font-semibold uppercase tracking-[0.12em] text-danger"
+            className="text-danger text-xs font-semibold uppercase tracking-[0.12em]"
           >
             Error and recovery
           </h3>
@@ -79,27 +79,27 @@ export function StatesCertification() {
           />
         </section>
         <section
-          className="space-y-3 rounded-lg border border-border-subtle bg-surface-elevated/40 p-4"
+          className="border-border-subtle bg-surface-elevated/40 space-y-3 rounded-lg border p-4"
           aria-labelledby="states-boundary"
         >
           <h3
             id="states-boundary"
-            className="text-xs font-semibold uppercase tracking-[0.12em] text-text-main"
+            className="text-text-main text-xs font-semibold uppercase tracking-[0.12em]"
           >
             Access boundaries
           </h3>
-          <div className="space-y-3 rounded-md border border-border-subtle p-4">
-            <p className="text-sm font-semibold text-text-main">Read-only workspace</p>
-            <p className="text-xs leading-5 text-text-muted">
+          <div className="border-border-subtle space-y-3 rounded-md border p-4">
+            <p className="text-text-main text-sm font-semibold">Read-only workspace</p>
+            <p className="text-text-muted text-xs leading-5">
               You can inspect these records, but editing is disabled for this role.
             </p>
             <Button size="sm" variant="outline" disabled>
               Edit contact
             </Button>
           </div>
-          <div className="space-y-2 rounded-md border border-border-subtle p-4">
-            <p className="text-sm font-semibold text-text-main">Access restricted</p>
-            <p className="text-xs leading-5 text-text-muted">
+          <div className="border-border-subtle space-y-2 rounded-md border p-4">
+            <p className="text-text-main text-sm font-semibold">Access restricted</p>
+            <p className="text-text-muted text-xs leading-5">
               Request access from a workspace administrator to continue.
             </p>
           </div>

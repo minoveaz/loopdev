@@ -153,7 +153,7 @@ export function ContactListWidget() {
           const fullName = contactFullName(contact);
           const meta = getMeta(contact.id);
           return (
-            <div className="flex items-center gap-3 min-w-0 py-1">
+            <div className="flex min-w-0 items-center gap-3 py-1">
               <ContactAvatar
                 name={fullName}
                 size="md"
@@ -164,16 +164,16 @@ export function ContactListWidget() {
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/sales-crm/contacts/${contact.id}`}
-                    className="font-medium text-text-main truncate text-sm hover:underline hover:text-primary"
+                    className="text-text-main hover:text-primary truncate text-sm font-medium hover:underline"
                   >
                     {fullName}
                   </Link>
                   <ContactIdentityBadge status={contact.identityStatus} size="sm" />
                 </div>
-                <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
+                <div className="text-text-muted mt-0.5 flex items-center gap-2 text-xs">
                   <span className="truncate">{contact.email ?? 'Sin email'}</span>
                   {meta.dealCount > 0 && (
-                    <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.2 text-[10px] font-medium bg-primary/10 text-primary">
+                    <span className="py-0.2 bg-primary/10 text-primary inline-flex items-center gap-0.5 rounded px-1.5 text-[10px] font-medium">
                       {meta.dealCount} tratos
                     </span>
                   )}
@@ -197,16 +197,16 @@ export function ContactListWidget() {
         sortable: true,
         render: (contact) => {
           if (!contact.companyName) {
-            return <span className="text-xs text-text-muted italic">Particular</span>;
+            return <span className="text-text-muted text-xs italic">Particular</span>;
           }
           return (
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-surface text-text-muted">
+            <div className="flex min-w-0 items-center gap-2">
+              <span className="border-border-subtle bg-surface text-text-muted flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border">
                 <Building2 size={13} strokeWidth={1.75} />
               </span>
               <div className="min-w-0">
-                <p className="text-xs font-medium text-text-main truncate">{contact.companyName}</p>
-                <span className="text-[11px] text-text-muted truncate">Corporativo</span>
+                <p className="text-text-main truncate text-xs font-medium">{contact.companyName}</p>
+                <span className="text-text-muted truncate text-[11px]">Corporativo</span>
               </div>
             </div>
           );
@@ -218,14 +218,14 @@ export function ContactListWidget() {
         render: (contact) => {
           const meta = getMeta(contact.id);
           if (meta.dealCount === 0) {
-            return <span className="text-xs text-text-muted">Sin tratos</span>;
+            return <span className="text-text-muted text-xs">Sin tratos</span>;
           }
           return (
             <div className="flex flex-col gap-0.5">
-              <span className="font-medium text-xs text-text-main">
+              <span className="text-text-main text-xs font-medium">
                 {formatCurrencyAmount(meta.totalPipelineValue)}
               </span>
-              <span className="text-[11px] text-text-muted flex items-center gap-1">
+              <span className="text-text-muted flex items-center gap-1 text-[11px]">
                 <TrendingUp size={11} className="text-emerald-500" />
                 {meta.dealCount} en curso
               </span>
@@ -238,11 +238,11 @@ export function ContactListWidget() {
         header: 'Última actividad',
         sortable: true,
         render: (contact) => (
-          <div className="text-xs text-text-muted">
+          <div className="text-text-muted text-xs">
             <p className="text-text-main font-medium">
               {formatRelativeActivity(contact.updatedAt)}
             </p>
-            <p className="text-[11px] text-text-muted">Actualizado</p>
+            <p className="text-text-muted text-[11px]">Actualizado</p>
           </div>
         ),
         sortAccessor: (contact) => contact.updatedAt,
@@ -303,7 +303,7 @@ export function ContactListWidget() {
   }
 
   return (
-    <div className="bg-shell-canvas flex min-h-full flex-1 flex-col relative pb-36 lg:pb-6">
+    <div className="bg-shell-canvas relative flex min-h-full flex-1 flex-col pb-36 lg:pb-6">
       <ModuleHeader
         segments={[{ id: 'contacts', label: 'Contacts', href: '/sales-crm/contacts' }]}
         leftSlot={
@@ -317,11 +317,11 @@ export function ContactListWidget() {
           canManage ? (
             <Button
               type="button"
-              onClick={() => setIsCreateDialogOpen(true)}
               variant="primary"
+              onClick={() => setIsCreateDialogOpen(true)}
               size="sm"
               aria-label="Create contact"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
+              className="bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
             >
               <Plus size={14} strokeWidth={2} />
               <span>Crear contacto</span>
@@ -333,7 +333,7 @@ export function ContactListWidget() {
 
       <main className="min-h-0 flex-1 overflow-auto p-4 lg:p-6">
         {/* Desktop Segments Bar (Untitled UI Tabs) */}
-        <div className="hidden lg:flex items-center gap-2 mb-4 border-b border-border-subtle pb-3">
+        <div className="border-border-subtle mb-4 hidden items-center gap-2 border-b pb-3 lg:flex">
           {(
             [
               { id: 'all', label: 'Todos los contactos', count: segmentCounts.all },
@@ -345,19 +345,21 @@ export function ContactListWidget() {
           ).map((seg) => {
             const isActive = activeSegment === seg.id;
             return (
-              <button
+              <Button
                 key={seg.id}
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => handleSelectSegment(seg.id)}
                 className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                   isActive
-                    ? 'bg-surface-active text-text-main font-semibold shadow-xs'
+                    ? 'bg-surface-active text-text-main shadow-xs font-semibold'
                     : 'text-text-muted hover:bg-surface hover:text-text-main'
                 }`}
               >
                 <span>{seg.label}</span>
                 <span
-                  className={`rounded-full px-1.5 py-0.2 text-[10px] ${
+                  className={`py-0.2 rounded-full px-1.5 text-[10px] ${
                     isActive
                       ? 'bg-primary text-primary-foreground font-semibold'
                       : 'bg-surface-subtle text-text-muted'
@@ -365,7 +367,7 @@ export function ContactListWidget() {
                 >
                   {seg.count}
                 </span>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -403,7 +405,7 @@ export function ContactListWidget() {
           rowActions={(contact) => (
             <Link
               href={`/sales-crm/contacts/${contact.id}`}
-              className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"
+              className="text-primary hover:bg-primary/10 inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition-colors"
             >
               <span>Ver 360</span>
               <ArrowUpRight size={13} strokeWidth={2} />

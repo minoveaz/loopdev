@@ -12,34 +12,34 @@ export const ProductShowcaseGrid: React.FC<ProductShowcaseGridProps> = ({
   className,
 }) => {
   return (
-    <section className={clsx('w-full py-8 flex flex-col gap-6', className)}>
-      <div className="text-center max-w-2xl mx-auto">
+    <section className={clsx('flex w-full flex-col gap-6 py-8', className)}>
+      <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-2xl font-bold tracking-tight text-slate-900">{title}</h2>
-        {subtitle && <p className="text-sm text-slate-500 mt-1.5">{subtitle}</p>}
+        {subtitle && <p className="mt-1.5 text-sm text-slate-500">{subtitle}</p>}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (
           <div
             key={product.id}
-            className="group bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between"
+            className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div className="flex items-center justify-between gap-2 mb-4">
-                <div className="p-2.5 rounded-xl bg-slate-100 text-[var(--lpd-brand-primary)] group-hover:bg-[var(--lpd-brand-primary)] group-hover:text-white transition-colors">
-                  <Layers className="w-5 h-5" />
+              <div className="mb-4 flex items-center justify-between gap-2">
+                <div className="rounded-xl bg-slate-100 p-2.5 text-[var(--lpd-brand-primary)] transition-colors group-hover:bg-[var(--lpd-brand-primary)] group-hover:text-white">
+                  <Layers className="h-5 w-5" />
                 </div>
                 {product.badge && (
-                  <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 rounded-full">
+                  <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-700">
                     {product.badge}
                   </span>
                 )}
               </div>
 
-              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[var(--lpd-brand-primary)] transition-colors">
+              <h3 className="text-lg font-bold text-slate-900 transition-colors group-hover:text-[var(--lpd-brand-primary)]">
                 {product.title}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              <p className="mt-2 text-xs leading-relaxed text-slate-600 sm:text-sm">
                 {product.description}
               </p>
             </div>
@@ -47,10 +47,10 @@ export const ProductShowcaseGrid: React.FC<ProductShowcaseGridProps> = ({
             <button
               type="button"
               onClick={product.onAction}
-              className="flex items-center gap-1.5 text-xs font-bold text-[var(--lpd-brand-primary)] group-hover:translate-x-1 transition-transform pt-4 mt-4 border-t border-slate-100"
+              className="mt-4 flex items-center gap-1.5 border-t border-slate-100 pt-4 text-xs font-bold text-[var(--lpd-brand-primary)] transition-transform group-hover:translate-x-1"
             >
               <span>{product.actionLabel ?? 'Conocer más'}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         ))}

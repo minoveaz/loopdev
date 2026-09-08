@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, CheckCircle2, MapPin, Send, Sparkles, Users, X, Zap } from 'lucide-react';
+import { Check, CheckCircle2, Send, Users, X } from 'lucide-react';
 import type { CrewConnection } from '../data/mockCrewNetwork';
 
 export interface CimoInviteCrewModalProps {
@@ -16,7 +16,6 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
   onClose,
   connections,
   targetActivityTitle = 'Próximo Entrenamiento',
-  targetSport = 'running',
   onSendInvites,
 }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -51,24 +50,24 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1F4E5F]/60 backdrop-blur-xs animate-in fade-in duration-200"
+      className="backdrop-blur-xs animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-[#1F4E5F]/60 p-4 duration-200"
       onClick={onClose}
     >
       <div
-        className="bg-white border border-[#1F4E5F]/15 rounded-3xl w-full max-w-lg shadow-2xl p-6 sm:p-7 flex flex-col gap-5 relative animate-in zoom-in-95 duration-200 text-[#1F4E5F]"
+        className="animate-in zoom-in-95 relative flex w-full max-w-lg flex-col gap-5 rounded-3xl border border-[#1F4E5F]/15 bg-white p-6 text-[#1F4E5F] shadow-2xl duration-200 sm:p-7"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-start justify-between pb-3 border-b border-[#1F4E5F]/10">
+        <div className="flex items-start justify-between border-b border-[#1F4E5F]/10 pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#7FB77E]/10 text-[#7FB77E] flex items-center justify-center shrink-0">
-              <Users className="w-5 h-5" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#7FB77E]/10 text-[#7FB77E]">
+              <Users className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-black text-[#1F4E5F]">
+              <h3 className="text-base font-black text-[#1F4E5F] sm:text-lg">
                 Invitar a tu Crew Habitual
               </h3>
-              <p className="text-xs text-[#1F4E5F]/70 font-medium mt-0.5 truncate max-w-xs">
+              <p className="mt-0.5 max-w-xs truncate text-xs font-medium text-[#1F4E5F]/70">
                 {targetActivityTitle}
               </p>
             </div>
@@ -76,23 +75,23 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/50 hover:text-[#1F4E5F] transition-colors cursor-pointer"
+            className="cursor-pointer rounded-full p-1.5 text-[#1F4E5F]/50 transition-colors hover:bg-[#F7F7F7] hover:text-[#1F4E5F]"
           >
-            <X className="w-5 h-5" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Success State */}
         {sentSuccess ? (
-          <div className="py-10 flex flex-col items-center justify-center text-center gap-3 animate-in fade-in duration-200">
-            <div className="w-14 h-14 rounded-full bg-[#7FB77E]/15 text-[#7FB77E] flex items-center justify-center scale-110">
-              <CheckCircle2 className="w-8 h-8" />
+          <div className="animate-in fade-in flex flex-col items-center justify-center gap-3 py-10 text-center duration-200">
+            <div className="flex h-14 w-14 scale-110 items-center justify-center rounded-full bg-[#7FB77E]/15 text-[#7FB77E]">
+              <CheckCircle2 className="h-8 w-8" />
             </div>
             <div>
               <h4 className="text-base font-black text-[#1F4E5F]">
                 ¡Invitaciones enviadas con éxito!
               </h4>
-              <p className="text-xs text-[#1F4E5F]/70 font-medium mt-1">
+              <p className="mt-1 text-xs font-medium text-[#1F4E5F]/70">
                 Tus compañeros de Crew recibirán el enlace prioritario para unirse.
               </p>
             </div>
@@ -107,7 +106,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
               <button
                 type="button"
                 onClick={handleSelectAll}
-                className="text-[11px] font-black text-[#7FB77E] hover:underline cursor-pointer"
+                className="cursor-pointer text-[11px] font-black text-[#7FB77E] hover:underline"
               >
                 {selectedIds.length === connections.length
                   ? 'Deseleccionar todos'
@@ -116,7 +115,7 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
             </div>
 
             {/* Connections List */}
-            <div className="flex flex-col gap-2 max-h-72 overflow-y-auto pr-1">
+            <div className="flex max-h-72 flex-col gap-2 overflow-y-auto pr-1">
               {connections.map((conn) => {
                 const isSelected = selectedIds.includes(conn.athlete.id);
                 return (
@@ -124,31 +123,31 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                     key={conn.id}
                     type="button"
                     onClick={() => toggleSelect(conn.athlete.id)}
-                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                    className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-3 text-left transition-all ${
                       isSelected
-                        ? 'bg-[#1F4E5F] text-white border-transparent shadow-xs ring-2 ring-[#7FB77E]/40'
-                        : 'bg-[#F7F7F7] hover:bg-white border-[#1F4E5F]/10 text-[#1F4E5F]'
+                        ? 'shadow-xs border-transparent bg-[#1F4E5F] text-white ring-2 ring-[#7FB77E]/40'
+                        : 'border-[#1F4E5F]/10 bg-[#F7F7F7] text-[#1F4E5F] hover:bg-white'
                     }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex min-w-0 items-center gap-3">
                       <img
                         src={conn.athlete.avatarUrl}
                         alt={conn.athlete.name}
-                        className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-white/50"
+                        className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-white/50"
                       />
                       <div className="truncate">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black truncate">{conn.athlete.name}</span>
+                          <span className="truncate text-xs font-black">{conn.athlete.name}</span>
                           {conn.athlete.isCaptain && (
                             <span
-                              className={`text-[9px] font-black px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/10 text-[#7FB77E]'}`}
+                              className={`py-0.2 rounded-full px-1.5 text-[9px] font-black ${isSelected ? 'bg-white/20 text-white' : 'bg-[#7FB77E]/10 text-[#7FB77E]'}`}
                             >
                               Capitán
                             </span>
                           )}
                         </div>
                         <span
-                          className={`text-[10px] block truncate mt-0.5 ${isSelected ? 'text-white/75' : 'text-[#1F4E5F]/60'}`}
+                          className={`mt-0.5 block truncate text-[10px] ${isSelected ? 'text-white/75' : 'text-[#1F4E5F]/60'}`}
                         >
                           {conn.stats.sharedWorkoutsCount} entrenos juntos • {conn.athlete.zone}
                         </span>
@@ -156,13 +155,13 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                     </div>
 
                     <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 border transition-all ${
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-all ${
                         isSelected
-                          ? 'bg-[#7FB77E] border-[#7FB77E] text-white'
+                          ? 'border-[#7FB77E] bg-[#7FB77E] text-white'
                           : 'border-[#1F4E5F]/20 bg-white text-transparent'
                       }`}
                     >
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      <Check className="h-3.5 w-3.5 stroke-[3]" />
                     </div>
                   </button>
                 );
@@ -170,11 +169,11 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
             </div>
 
             {/* Footer Buttons */}
-            <div className="pt-2 border-t border-[#1F4E5F]/10 flex items-center justify-end gap-2.5">
+            <div className="flex items-center justify-end gap-2.5 border-t border-[#1F4E5F]/10 pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-full text-xs font-black text-[#1F4E5F]/70 hover:bg-[#F7F7F7] cursor-pointer transition-colors"
+                className="cursor-pointer rounded-full px-4 py-2 text-xs font-black text-[#1F4E5F]/70 transition-colors hover:bg-[#F7F7F7]"
               >
                 Cancelar
               </button>
@@ -182,13 +181,13 @@ export const CimoInviteCrewModal: React.FC<CimoInviteCrewModalProps> = ({
                 type="button"
                 disabled={selectedIds.length === 0}
                 onClick={handleSend}
-                className={`px-5 py-2.5 rounded-full text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
+                className={`flex cursor-pointer items-center gap-2 rounded-full px-5 py-2.5 text-xs font-black transition-all ${
                   selectedIds.length > 0
-                    ? 'bg-[#7FB77E] hover:bg-[#6ea26d] text-white shadow-xs hover:scale-102 active:scale-98'
-                    : 'bg-[#1F4E5F]/10 text-[#1F4E5F]/40 cursor-not-allowed'
+                    ? 'shadow-xs hover:scale-102 active:scale-98 bg-[#7FB77E] text-white hover:bg-[#6ea26d]'
+                    : 'cursor-not-allowed bg-[#1F4E5F]/10 text-[#1F4E5F]/40'
                 }`}
               >
-                <Send className="w-3.5 h-3.5" />
+                <Send className="h-3.5 w-3.5" />
                 <span>
                   Enviar {selectedIds.length > 0 ? `${selectedIds.length} ` : ''}Invitación
                   {selectedIds.length === 1 ? '' : 'es'}

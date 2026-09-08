@@ -16,22 +16,21 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
   search,
   onSearchChange,
   activeCategory,
-  onCategoryChange
+  onCategoryChange,
 }) => {
   const categories = [
     { id: 'all', label: 'All' },
     { id: 'core', label: 'Core' },
     { id: 'semantic', label: 'Semantic' },
-    { id: 'neutral', label: 'Neutral' }
+    { id: 'neutral', label: 'Neutral' },
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-6 p-4 rounded-2xl border border-border-technical bg-background-surface/50 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
-      
+    <div className="border-border-technical bg-background-surface/50 sticky top-0 z-10 flex flex-wrap items-center justify-between gap-6 rounded-2xl border p-4 shadow-sm backdrop-blur-sm">
       {/* LEFT: FILTERS & SEARCH */}
-      <div className="flex items-center gap-6 flex-1 min-w-[300px]">
+      <div className="flex min-w-[300px] flex-1 items-center gap-6">
         {/* CATEGORY TABS */}
-        <div className="flex bg-background-subtle rounded-lg p-1 border border-border-technical/50">
+        <div className="bg-background-subtle border-border-technical/50 flex rounded-lg border p-1">
           {categories.map((cat) => (
             <Button
               type="button"
@@ -39,10 +38,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               variant="ghost"
               onClick={() => onCategoryChange(cat.id)}
               className={cn(
-                "px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                activeCategory === cat.id 
-                  ? "bg-white text-primary shadow-sm ring-1 ring-black/5" 
-                  : "text-text-muted hover:text-text-main"
+                'px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all',
+                activeCategory === cat.id
+                  ? 'bg-white text-primary shadow-sm ring-1 ring-black/5'
+                  : 'text-text-muted hover:text-text-main',
               )}
             >
               {cat.label}
@@ -51,16 +50,16 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
         </div>
 
         {/* SEARCH */}
-        <div className="relative flex-1 max-w-xs">
+        <div className="relative max-w-xs flex-1">
           <input
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="SEARCH TOKENS (e.g. brand.primary)..."
-            className="w-full bg-transparent border-none text-[11px] font-mono text-text-main placeholder:text-text-muted/40 focus:ring-0"
+            className="text-text-main placeholder:text-text-muted/40 w-full border-none bg-transparent font-mono text-[11px] focus:ring-0"
           />
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2 pr-2 opacity-20 pointer-events-none">
-            <span className="text-[10px] font-mono">⌘F</span>
+          <div className="pointer-events-none absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-2 pr-2 opacity-20">
+            <span className="font-mono text-[10px]">⌘F</span>
           </div>
         </div>
       </div>
@@ -68,20 +67,32 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
       {/* RIGHT: CONTEXT SELECTORS */}
       <div className="flex items-center gap-4">
         {/* THEME TOGGLE */}
-        <div className="flex items-center gap-2 px-3 py-1.5 border-r border-border-technical/50 pr-4">
+        <div className="border-border-technical/50 flex items-center gap-2 border-r px-3 py-1.5 pr-4">
           <div className="flex flex-col items-end pr-2">
-            <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40">Context</LpdText>
-            <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40">Theme</LpdText>
+            <LpdText
+              size="nano"
+              className="text-text-muted font-mono uppercase tracking-tighter opacity-40"
+            >
+              Context
+            </LpdText>
+            <LpdText
+              size="nano"
+              className="text-text-muted font-mono uppercase tracking-tighter opacity-40"
+            >
+              Theme
+            </LpdText>
           </div>
-          <div className="flex bg-background-subtle rounded-lg p-0.5 border border-border-technical/30">
+          <div className="bg-background-subtle border-border-technical/30 flex rounded-lg border p-0.5">
             <Button
               type="button"
               variant="ghost"
               size="sm"
               onClick={() => onThemeChange('light')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                theme === 'light' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                theme === 'light'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">light_mode</span>
@@ -92,29 +103,33 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               size="sm"
               onClick={() => onThemeChange('dark')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                theme === 'dark' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                theme === 'dark'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">dark_mode</span>
             </Button>
           </div>
-          <LpdText size="nano" weight="bold" className="text-primary font-mono pl-1">
+          <LpdText size="nano" weight="bold" className="text-primary pl-1 font-mono">
             {`{ ${theme.toUpperCase()} }`}
           </LpdText>
         </div>
 
         {/* VIEW MODE */}
         <div className="flex items-center gap-2">
-          <div className="flex bg-background-subtle rounded-lg p-0.5 border border-border-technical/30">
+          <div className="bg-background-subtle border-border-technical/30 flex rounded-lg border p-0.5">
             <Button
               type="button"
               variant="ghost"
               size="sm"
               onClick={() => onViewModeChange('grid')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                viewMode === 'grid' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                viewMode === 'grid'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">grid_view</span>
@@ -125,8 +140,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               size="sm"
               onClick={() => onViewModeChange('table')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                viewMode === 'table' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                viewMode === 'table'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">table_rows</span>

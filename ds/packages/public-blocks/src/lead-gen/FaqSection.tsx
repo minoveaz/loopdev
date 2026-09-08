@@ -20,37 +20,37 @@ export const FaqSection: React.FC<FaqSectionProps> = ({
   };
 
   return (
-    <section className={clsx('w-full py-6 flex flex-col gap-6', className)}>
-      <div className="text-center max-w-2xl mx-auto">
+    <section className={clsx('flex w-full flex-col gap-6 py-6', className)}>
+      <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-2xl font-bold tracking-tight text-slate-900">{title}</h2>
-        {subtitle && <p className="text-sm text-slate-500 mt-1.5">{subtitle}</p>}
+        {subtitle && <p className="mt-1.5 text-sm text-slate-500">{subtitle}</p>}
       </div>
 
-      <div className="max-w-3xl mx-auto w-full flex flex-col gap-3">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-3">
         {faqs.map((faq, index) => {
           const isOpen = openIndexes.includes(index);
           return (
             <div
               key={index}
-              className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden transition-shadow duration-200 shadow-sm"
+              className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-shadow duration-200"
             >
               <button
                 type="button"
                 onClick={() => toggleFaq(index)}
                 aria-expanded={isOpen}
-                className="w-full px-5 py-4 flex items-center justify-between text-left gap-4 hover:bg-slate-50/50 transition-colors focus:outline-none min-h-[48px]"
+                className="flex min-h-[48px] w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-slate-50/50 focus:outline-none"
               >
                 <span className="text-sm font-semibold text-slate-900">{faq.question}</span>
                 <ChevronDown
                   className={clsx(
-                    'w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0',
-                    isOpen && 'transform rotate-180 text-[var(--lpd-brand-primary)]',
+                    'h-4 w-4 flex-shrink-0 text-slate-400 transition-transform duration-200',
+                    isOpen && 'rotate-180 transform text-[var(--lpd-brand-primary)]',
                   )}
                 />
               </button>
 
               {isOpen && (
-                <div className="px-5 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                <div className="border-t border-slate-100 px-5 pb-4 pt-1 text-xs leading-relaxed text-slate-600 sm:text-sm">
                   {faq.answer}
                 </div>
               )}

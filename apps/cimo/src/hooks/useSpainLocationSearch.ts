@@ -98,7 +98,7 @@ export function useSpainLocationSearch(query: string, city: string) {
           }
           return;
         }
-      } catch (err) {
+      } catch {
         // Fallback gracefully to local matches
       }
 

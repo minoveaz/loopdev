@@ -23,7 +23,7 @@ export async function GET(request: Request) {
   try {
     const config = await getSectionFieldConfig(parsed.data.organizationId, parsed.data.sectionKey);
     return NextResponse.json(config);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Unable to load section field config' }, { status: 500 });
   }
 }
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   try {
     const saved = await saveSectionFieldConfig(parsed.data.organizationId, parsed.data);
     return NextResponse.json(saved);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Unable to save section field config' }, { status: 500 });
   }
 }

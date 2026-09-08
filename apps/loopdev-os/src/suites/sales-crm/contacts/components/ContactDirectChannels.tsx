@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Mail, Phone, Copy, Check } from 'lucide-react';
+import { IconButton } from '@loopdev/ui';
 
 interface ContactDirectChannelsProps {
   email?: string | null;
@@ -27,7 +28,7 @@ export function ContactDirectChannels({
   };
 
   if (!email && !phone) {
-    return <span className="text-xs text-text-muted italic">Sin canales</span>;
+    return <span className="text-text-muted text-xs italic">Sin canales</span>;
   }
 
   if (variant === 'buttons') {
@@ -37,7 +38,7 @@ export function ContactDirectChannels({
           <a
             href={`tel:${phone}`}
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border-subtle bg-surface text-text-muted transition-colors hover:border-border-strong hover:bg-surface-hover hover:text-text-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="border-border-subtle bg-surface text-text-muted hover:border-border-strong hover:bg-surface-hover hover:text-text-main focus-visible:ring-primary inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors focus-visible:outline-none focus-visible:ring-2"
             title={`Llamar a ${phone}`}
             aria-label={`Llamar a ${phone}`}
           >
@@ -48,7 +49,7 @@ export function ContactDirectChannels({
           <a
             href={`mailto:${email}`}
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border-subtle bg-surface text-text-muted transition-colors hover:border-border-strong hover:bg-surface-hover hover:text-text-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="border-border-subtle bg-surface text-text-muted hover:border-border-strong hover:bg-surface-hover hover:text-text-main focus-visible:ring-primary inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors focus-visible:outline-none focus-visible:ring-2"
             title={`Enviar email a ${email}`}
             aria-label={`Enviar email a ${email}`}
           >
@@ -56,19 +57,21 @@ export function ContactDirectChannels({
           </a>
         )}
         {email && (
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Copiar email al portapapeles"
             onClick={(e) => handleCopy(email, 'email', e)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border-subtle bg-surface text-text-muted transition-colors hover:border-border-strong hover:bg-surface-hover hover:text-text-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="border-border-subtle bg-surface text-text-muted hover:border-border-strong hover:bg-surface-hover hover:text-text-main focus-visible:ring-primary inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors focus-visible:outline-none focus-visible:ring-2"
             title="Copiar email"
-            aria-label="Copiar email al portapapeles"
           >
             {copiedKey === 'email' ? (
               <Check size={14} strokeWidth={2} className="text-emerald-600" />
             ) : (
               <Copy size={14} strokeWidth={1.75} />
             )}
-          </button>
+          </IconButton>
         )}
       </div>
     );
@@ -77,8 +80,8 @@ export function ContactDirectChannels({
   return (
     <div className={`flex flex-col gap-1 text-xs ${className}`}>
       {email && (
-        <div className="group/item flex items-center gap-1.5 text-text-muted hover:text-text-main">
-          <Mail size={13} strokeWidth={1.75} className="shrink-0 text-text-muted" />
+        <div className="group/item text-text-muted hover:text-text-main flex items-center gap-1.5">
+          <Mail size={13} strokeWidth={1.75} className="text-text-muted shrink-0" />
           <a
             href={`mailto:${email}`}
             onClick={(e) => e.stopPropagation()}
@@ -87,10 +90,13 @@ export function ContactDirectChannels({
           >
             {email}
           </a>
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Copiar email al portapapeles"
             onClick={(e) => handleCopy(email, 'email', e)}
-            className="opacity-0 group-hover/item:opacity-100 p-0.5 rounded text-text-muted hover:text-text-main transition-opacity"
+            className="text-text-muted hover:text-text-main rounded p-0.5 opacity-0 transition-opacity group-hover/item:opacity-100"
             title="Copiar email"
           >
             {copiedKey === 'email' ? (
@@ -98,12 +104,12 @@ export function ContactDirectChannels({
             ) : (
               <Copy size={12} strokeWidth={1.75} />
             )}
-          </button>
+          </IconButton>
         </div>
       )}
       {phone && (
-        <div className="group/item flex items-center gap-1.5 text-text-muted hover:text-text-main">
-          <Phone size={13} strokeWidth={1.75} className="shrink-0 text-text-muted" />
+        <div className="group/item text-text-muted hover:text-text-main flex items-center gap-1.5">
+          <Phone size={13} strokeWidth={1.75} className="text-text-muted shrink-0" />
           <a
             href={`tel:${phone}`}
             onClick={(e) => e.stopPropagation()}
@@ -112,10 +118,13 @@ export function ContactDirectChannels({
           >
             {phone}
           </a>
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Copiar teléfono al portapapeles"
             onClick={(e) => handleCopy(phone, 'phone', e)}
-            className="opacity-0 group-hover/item:opacity-100 p-0.5 rounded text-text-muted hover:text-text-main transition-opacity"
+            className="text-text-muted hover:text-text-main rounded p-0.5 opacity-0 transition-opacity group-hover/item:opacity-100"
             title="Copiar teléfono"
           >
             {copiedKey === 'phone' ? (
@@ -123,7 +132,7 @@ export function ContactDirectChannels({
             ) : (
               <Copy size={12} strokeWidth={1.75} />
             )}
-          </button>
+          </IconButton>
         </div>
       )}
     </div>

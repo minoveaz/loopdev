@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Camera, Check, MapPin, Sparkles, User, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 export interface UserProfileData {
   name: string;
@@ -95,29 +95,29 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1F4E5F]/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl border border-[#1F4E5F]/15 shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto flex flex-col text-[#1F4E5F]">
+    <div className="backdrop-blur-xs animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-[#1F4E5F]/60 p-4 duration-200">
+      <div className="flex max-h-[90vh] w-full max-w-xl flex-col overflow-y-auto rounded-3xl border border-[#1F4E5F]/15 bg-white text-[#1F4E5F] shadow-2xl">
         {/* Header */}
-        <div className="p-5 sm:p-6 border-b border-[#1F4E5F]/10 flex items-center justify-between sticky top-0 bg-white z-10">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#1F4E5F]/10 bg-white p-5 sm:p-6">
           <div>
-            <h2 className="text-lg sm:text-xl font-black text-[#1F4E5F]">
+            <h2 className="text-lg font-black text-[#1F4E5F] sm:text-xl">
               Editar Perfil de Atleta
             </h2>
-            <p className="text-xs text-[#1F4E5F]/70 mt-0.5">
+            <p className="mt-0.5 text-xs text-[#1F4E5F]/70">
               Personaliza tu identidad deportiva en la comunidad CIMO.
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-[#F7F7F7] text-[#1F4E5F]/60 hover:text-[#1F4E5F] transition-colors cursor-pointer"
+            className="cursor-pointer rounded-full p-2 text-[#1F4E5F]/60 transition-colors hover:bg-[#F7F7F7] hover:text-[#1F4E5F]"
           >
-            <X className="w-5 h-5" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-5 sm:p-6 flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-5 sm:p-6">
           {/* Avatar Selector */}
           <div className="flex flex-col gap-3">
             <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
@@ -127,9 +127,9 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
               <img
                 src={avatarUrl}
                 alt={name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-[#7FB77E] shadow-md shrink-0"
+                className="h-16 w-16 shrink-0 rounded-full border-2 border-[#7FB77E] object-cover shadow-md"
               />
-              <div className="flex flex-col gap-1.5 flex-1">
+              <div className="flex flex-1 flex-col gap-1.5">
                 <span className="text-[11px] font-extrabold text-[#1F4E5F]/70">
                   Elige un avatar o pega una URL:
                 </span>
@@ -139,16 +139,16 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
                       key={idx}
                       type="button"
                       onClick={() => setAvatarUrl(preset)}
-                      className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
+                      className={`h-8 w-8 cursor-pointer overflow-hidden rounded-full border-2 transition-all ${
                         avatarUrl === preset
-                          ? 'border-[#7FB77E] ring-2 ring-[#7FB77E]/30 scale-110'
+                          ? 'scale-110 border-[#7FB77E] ring-2 ring-[#7FB77E]/30'
                           : 'border-transparent opacity-70 hover:opacity-100'
                       }`}
                     >
                       <img
                         src={preset}
                         alt={`Preset ${idx}`}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </button>
                   ))}
@@ -158,7 +158,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
           </div>
 
           {/* Name & City */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-black uppercase tracking-wider text-[#1F4E5F]/70">
                 Nombre y Apellidos
@@ -169,7 +169,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Tu nombre completo"
                 required
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white"
+                className="w-full rounded-xl border border-[#1F4E5F]/20 bg-[#F7F7F7] px-4 py-2.5 text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#7FB77E] focus:bg-white focus:ring-2 focus:ring-[#7FB77E]/20"
               />
             </div>
 
@@ -183,7 +183,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="Ej: Madrid, España"
                 required
-                className="w-full px-4 py-2.5 rounded-xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white"
+                className="w-full rounded-xl border border-[#1F4E5F]/20 bg-[#F7F7F7] px-4 py-2.5 text-xs font-bold text-[#1F4E5F] outline-none focus:border-[#7FB77E] focus:bg-white focus:ring-2 focus:ring-[#7FB77E]/20"
               />
             </div>
           </div>
@@ -199,7 +199,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {AVAILABLE_SPORTS.map((sp) => {
                 const isSelected = selectedSports.some((s) => s.sport === sp.id);
                 const currentObj = selectedSports.find((s) => s.sport === sp.id);
@@ -207,7 +207,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
                 return (
                   <div
                     key={sp.id}
-                    className={`p-3 rounded-2xl border transition-all flex flex-col gap-2 ${
+                    className={`flex flex-col gap-2 rounded-2xl border p-3 transition-all ${
                       isSelected
                         ? 'border-[#7FB77E] bg-[#7FB77E]/5'
                         : 'border-[#1F4E5F]/15 bg-[#F7F7F7]'
@@ -217,16 +217,16 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
                       <button
                         type="button"
                         onClick={() => handleToggleSport(sp)}
-                        className="flex items-center gap-2 cursor-pointer text-left"
+                        className="flex cursor-pointer items-center gap-2 text-left"
                       >
                         <div
-                          className={`w-4 h-4 rounded-md flex items-center justify-center border text-xs ${
+                          className={`flex h-4 w-4 items-center justify-center rounded-md border text-xs ${
                             isSelected
-                              ? 'bg-[#7FB77E] text-white border-[#7FB77E]'
+                              ? 'border-[#7FB77E] bg-[#7FB77E] text-white'
                               : 'border-[#1F4E5F]/30 bg-white'
                           }`}
                         >
-                          {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                          {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
                         </div>
                         <span className="text-xs font-black text-[#1F4E5F]">{sp.id}</span>
                       </button>
@@ -238,7 +238,7 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
                         value={currentObj?.pace ?? sp.defaultPace}
                         onChange={(e) => handleUpdateSportPace(sp.id, e.target.value)}
                         placeholder="Ej: 5:15 min/km o Nivel 3.5"
-                        className="w-full px-2.5 py-1 text-[11px] font-extrabold rounded-lg border border-[#1F4E5F]/15 bg-white text-[#1F4E5F] outline-none focus:border-[#7FB77E]"
+                        className="w-full rounded-lg border border-[#1F4E5F]/15 bg-white px-2.5 py-1 text-[11px] font-extrabold text-[#1F4E5F] outline-none focus:border-[#7FB77E]"
                       />
                     )}
                   </div>
@@ -261,24 +261,24 @@ export const CimoEditProfileModal: React.FC<CimoEditProfileModalProps> = ({
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Cuéntale al Crew qué te gusta del deporte, tus metas o tu estilo de entrenamiento..."
-              className="w-full p-3.5 rounded-2xl border border-[#1F4E5F]/20 focus:border-[#7FB77E] focus:ring-2 focus:ring-[#7FB77E]/20 text-xs font-bold text-[#1F4E5F] outline-none bg-[#F7F7F7] focus:bg-white resize-none leading-relaxed"
+              className="w-full resize-none rounded-2xl border border-[#1F4E5F]/20 bg-[#F7F7F7] p-3.5 text-xs font-bold leading-relaxed text-[#1F4E5F] outline-none focus:border-[#7FB77E] focus:bg-white focus:ring-2 focus:ring-[#7FB77E]/20"
             />
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#1F4E5F]/10">
+          <div className="flex items-center justify-end gap-3 border-t border-[#1F4E5F]/10 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full text-xs font-extrabold text-[#1F4E5F] hover:bg-[#F7F7F7] transition-colors cursor-pointer"
+              className="cursor-pointer rounded-full px-5 py-2.5 text-xs font-extrabold text-[#1F4E5F] transition-colors hover:bg-[#F7F7F7]"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-7 py-2.5 rounded-full text-xs font-black bg-[#7FB77E] hover:bg-[#6ea26d] text-white transition-all shadow-md flex items-center gap-2 cursor-pointer active:scale-95"
+              className="flex cursor-pointer items-center gap-2 rounded-full bg-[#7FB77E] px-7 py-2.5 text-xs font-black text-white shadow-md transition-all hover:bg-[#6ea26d] active:scale-95"
             >
-              <Check className="w-4 h-4 stroke-[3]" />
+              <Check className="h-4 w-4 stroke-[3]" />
               <span>Guardar Perfil</span>
             </button>
           </div>

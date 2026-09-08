@@ -11,22 +11,26 @@ import { GovernanceSummaryProps } from './types';
 export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
   domains,
   isLoading,
-  onDomainClick
+  onDomainClick,
 }) => {
   if (isLoading) {
     return <Skeleton className="h-64 w-full rounded-xl" />;
   }
 
   const accessMapping = {
-    'allowed': { label: 'ALLOWED', severity: 'success' },
+    allowed: { label: 'ALLOWED', severity: 'success' },
     'approval-required': { label: 'APPROVAL REQ', severity: 'warning' },
-    'restricted': { label: 'RESTRICTED', severity: 'danger' },
+    restricted: { label: 'RESTRICTED', severity: 'danger' },
   } as const;
 
   return (
-    <div className="flex flex-col gap-4 p-5 rounded-xl border border-border-technical bg-background-surface/50">
+    <div className="border-border-technical bg-background-surface/50 flex flex-col gap-4 rounded-xl border p-5">
       <div className="flex flex-col gap-1">
-        <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+        <LpdText
+          size="nano"
+          weight="bold"
+          className="text-text-muted uppercase tracking-widest opacity-60"
+        >
           Governance Profile
         </LpdText>
         <LpdText size="sm" weight="bold" className="text-text-main">
@@ -34,22 +38,22 @@ export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
         </LpdText>
       </div>
 
-      <div className="flex flex-col gap-2 mt-2">
+      <div className="mt-2 flex flex-col gap-2">
         {domains.map((domain) => (
           <Button
             key={domain.id}
             variant="ghost"
             onClick={() => onDomainClick?.(domain.id)}
-            className="flex items-center justify-between py-2 border-b border-border-technical/30 last:border-0 hover:bg-background-subtle rounded px-2 -mx-2 transition-colors"
+            className="border-border-technical/30 hover:bg-background-subtle -mx-2 flex items-center justify-between rounded border-b px-2 py-2 transition-colors last:border-0"
           >
             <LpdText size="xs" className="text-text-muted capitalize">
               {domain.label}
             </LpdText>
-            <TechnicalStatusBadge 
+            <TechnicalStatusBadge
               label={accessMapping[domain.access].label}
               severity={accessMapping[domain.access].severity}
               variant="ghost"
-              className="scale-90 origin-right"
+              className="origin-right scale-90"
             />
           </Button>
         ))}

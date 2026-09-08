@@ -18,34 +18,34 @@ export const FeatureSpotlight: React.FC<FeatureSpotlightProps> = ({
   return (
     <section
       className={clsx(
-        'w-full py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center',
+        'grid w-full grid-cols-1 items-center gap-8 py-10 lg:grid-cols-12 lg:gap-12',
         className,
       )}
     >
       {/* Content Column */}
       <div
         className={clsx(
-          'lg:col-span-6 flex flex-col gap-4',
+          'flex flex-col gap-4 lg:col-span-6',
           reversed ? 'lg:order-2' : 'lg:order-1',
         )}
       >
         {badge && (
-          <span className="inline-block self-start px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--lpd-brand-primary)] bg-[var(--lpd-brand-primary)]/10 rounded-full">
+          <span className="bg-[var(--lpd-brand-primary)]/10 inline-block self-start rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--lpd-brand-primary)]">
             {badge}
           </span>
         )}
 
-        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
+        <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl">
           {title}
         </h2>
 
-        <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
+        <p className="text-sm leading-relaxed text-slate-600">{description}</p>
 
         {bullets.length > 0 && (
           <div className="flex flex-col gap-2.5 pt-2">
             {bullets.map((bullet, idx) => (
-              <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+              <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 sm:text-sm">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-500" />
                 <span>{bullet}</span>
               </div>
             ))}
@@ -58,7 +58,7 @@ export const FeatureSpotlight: React.FC<FeatureSpotlightProps> = ({
       {/* Visual / Mockup Column */}
       <div
         className={clsx(
-          'lg:col-span-6 rounded-3xl overflow-hidden border border-slate-200/80 bg-slate-50/50 shadow-inner flex items-center justify-center min-h-[300px]',
+          'flex min-h-[300px] items-center justify-center overflow-hidden rounded-3xl border border-slate-200/80 bg-slate-50/50 shadow-inner lg:col-span-6',
           reversed ? 'lg:order-1' : 'lg:order-2',
         )}
       >

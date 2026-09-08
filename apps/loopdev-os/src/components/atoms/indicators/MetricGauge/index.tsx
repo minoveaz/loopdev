@@ -16,7 +16,7 @@ import { useMetricGauge } from './useMetricGauge';
 import { MetricGaugeProps } from './types';
 
 export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
-  const { value, label = 'RSI', unit = '', lowThreshold = 30, highThreshold = 70 } = props;
+  const { label = 'RSI', unit = '', lowThreshold = 30, highThreshold = 70 } = props;
 
   const { normalizedValue, percentage, rotation, color, sizes, isStatic, className } =
     useMetricGauge(props);
@@ -37,7 +37,7 @@ export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
     >
       {/* SVG Gauge */}
       <div style={{ width: sizes.container, height: sizes.container }}>
-        <svg viewBox="0 0 120 120" className="w-full h-full">
+        <svg viewBox="0 0 120 120" className="h-full w-full">
           {/* Background circle */}
           <circle
             cx="60"
@@ -157,7 +157,7 @@ export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
       {/* Label below gauge */}
       {label && (
         <div className="flex flex-col items-center gap-1">
-          <p className="text-technical font-medium text-primary">{label}</p>
+          <p className="text-technical text-primary font-medium">{label}</p>
           <p className="text-nano text-primary-light opacity-70">
             {percentage.toFixed(0)}% of range
           </p>
@@ -167,7 +167,7 @@ export const MetricGauge: React.FC<MetricGaugeProps> = (props) => {
       {/* Status indicator */}
       <div className="flex items-center gap-1.5">
         <div
-          className="w-2 h-2 rounded-full animate-pulse"
+          className="h-2 w-2 animate-pulse rounded-full"
           style={{
             backgroundColor:
               props.status === 'oversold'

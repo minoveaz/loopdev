@@ -105,7 +105,7 @@ export function SelectionTable({
     <TechnicalSurface variant="surface" radius="md" border="subtle" className="w-full min-w-0">
       <ResponsiveTable
         surface={false}
-        className="[&_thead_tr]:bg-background-subtle [&_tbody_td]:py-3 [&_tbody_tr:hover]:bg-background-subtle [&_tbody_tr[aria-selected='true']]:border-l-2 [&_tbody_tr[aria-selected='true']]:border-primary [&_tbody_tr[aria-selected='true']]:bg-primary/5"
+        className="[&_thead_tr]:bg-background-subtle [&_tbody_tr:hover]:bg-background-subtle [&_tbody_tr[aria-selected='true']]:border-primary [&_tbody_tr[aria-selected='true']]:bg-primary/5 [&_tbody_td]:py-3 [&_tbody_tr[aria-selected='true']]:border-l-2"
         caption="Selection workflows"
         rows={tableRows}
         columns={columns}
@@ -125,10 +125,10 @@ export function SelectionTable({
         }
         clearSelectionLabel="Clear selection"
         renderMobileRow={(row) => (
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 border-b border-border-subtle px-3 py-3 last:border-b-0">
+          <div className="border-border-subtle grid grid-cols-[minmax(0,1fr)_auto] gap-3 border-b px-3 py-3 last:border-b-0">
             <div className="min-w-0 space-y-1">
-              <strong className="block truncate text-sm text-text-main">{row.name}</strong>
-              <span className="block text-xs text-text-muted">
+              <strong className="text-text-main block truncate text-sm">{row.name}</strong>
+              <span className="text-text-muted block text-xs">
                 {row.segment} · {row.owner}
               </span>
             </div>
@@ -145,7 +145,7 @@ export function SelectionTable({
         selectOnRowClick
         onRowClick={contextPanelEnabled ? onRowClick : undefined}
       />
-      <footer className="border-t border-border-subtle bg-background-subtle px-4 py-3 text-xs text-text-muted">
+      <footer className="border-border-subtle bg-background-subtle text-text-muted border-t px-4 py-3 text-xs">
         Showing 1-3 of 3 records
       </footer>
       <TechnicalDialog

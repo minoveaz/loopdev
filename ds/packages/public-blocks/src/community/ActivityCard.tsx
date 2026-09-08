@@ -31,10 +31,10 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
     <div
       onClick={() => onSelect?.(data.id)}
       className={clsx(
-        'bg-white rounded-3xl overflow-hidden border transition-all duration-200 cursor-pointer group',
+        'group cursor-pointer overflow-hidden rounded-3xl border bg-white transition-all duration-200',
         isSelected
-          ? 'border-[var(--lpd-brand-secondary,#1F4E5F)] ring-2 ring-[var(--lpd-brand-secondary,#1F4E5F)]/20 shadow-md'
-          : 'border-[#1F4E5F]/10 shadow-xs hover:border-[#1F4E5F]/30',
+          ? 'ring-[var(--lpd-brand-secondary,#1F4E5F)]/20 border-[var(--lpd-brand-secondary,#1F4E5F)] shadow-md ring-2'
+          : 'shadow-xs border-[#1F4E5F]/10 hover:border-[#1F4E5F]/30',
         className,
       )}
     >
@@ -44,54 +44,54 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           <img
             src={data.image}
             alt={data.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#1F4E5F]/80 to-[#1F4E5F] flex items-center justify-center text-4xl">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#1F4E5F]/80 to-[#1F4E5F] text-4xl">
             {sportEmoji}
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#1F4E5F]/85 via-transparent to-transparent" />
 
         {/* Sport & Level Tag */}
-        <div className="absolute top-3 left-3 flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full font-black text-xs bg-white text-[#1F4E5F] shadow-xs flex items-center gap-1">
+        <div className="absolute left-3 top-3 flex items-center gap-2">
+          <span className="shadow-xs flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-black text-[#1F4E5F]">
             <span>{sportEmoji}</span>
             <span className="capitalize">{data.sport}</span>
           </span>
-          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#1F4E5F]/80 text-white backdrop-blur-md">
+          <span className="rounded-full bg-[#1F4E5F]/80 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md">
             {data.level}
           </span>
         </div>
 
         {/* Title & Location on Image */}
         <div className="absolute bottom-3 left-3 right-3 text-white">
-          <h3 className="font-extrabold text-base leading-tight drop-shadow-xs">{data.title}</h3>
-          <div className="flex items-center gap-1.5 text-xs text-white/90 mt-1">
-            <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
+          <h3 className="drop-shadow-xs text-base font-extrabold leading-tight">{data.title}</h3>
+          <div className="mt-1 flex items-center gap-1.5 text-xs text-white/90">
+            <MapPin className="h-3.5 w-3.5 text-[#7FB77E]" />
             <span className="truncate">{data.location}</span>
           </div>
         </div>
       </div>
 
       {/* Card Body */}
-      <div className="p-4 space-y-3">
+      <div className="space-y-3 p-4">
         {/* Captain & Date Row */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#F7F7F7]">
+        <div className="flex items-center justify-between border-b border-[#F7F7F7] pb-3">
           <div className="flex items-center gap-2.5">
             {data.captain.avatarUrl ? (
               <img
                 src={data.captain.avatarUrl}
                 alt={data.captain.name}
-                className="w-9 h-9 rounded-full object-cover border-2 border-[#1F4E5F]/20"
+                className="h-9 w-9 rounded-full border-2 border-[#1F4E5F]/20 object-cover"
               />
             ) : (
-              <div className="w-9 h-9 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] font-extrabold text-xs flex items-center justify-center border-2 border-[#1F4E5F]/20">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#1F4E5F]/20 bg-[#1F4E5F]/10 text-xs font-extrabold text-[#1F4E5F]">
                 {data.captain.name.charAt(0)}
               </div>
             )}
             <div>
-              <span className="text-[10px] font-extrabold text-[#7FB77E] uppercase tracking-wider block leading-none">
+              <span className="block text-[10px] font-extrabold uppercase leading-none tracking-wider text-[#7FB77E]">
                 Captain
               </span>
               <span className="text-xs font-bold text-[#1F4E5F]">
@@ -103,11 +103,11 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
 
           <div className="text-right">
             <div className="flex items-center gap-1 text-xs font-bold text-[#1F4E5F]">
-              <Calendar className="w-3.5 h-3.5 text-[#7FB77E]" />
+              <Calendar className="h-3.5 w-3.5 text-[#7FB77E]" />
               <span>{data.date}</span>
             </div>
-            <div className="flex items-center gap-1 text-xs text-[#1F4E5F]/60 justify-end mt-0.5">
-              <Clock className="w-3 h-3" />
+            <div className="mt-0.5 flex items-center justify-end gap-1 text-xs text-[#1F4E5F]/60">
+              <Clock className="h-3 w-3" />
               <span>{data.time} h</span>
             </div>
           </div>
@@ -115,7 +115,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
 
         {/* Pace / Details pill */}
         {data.paceOrDetails && (
-          <div className="text-xs font-semibold text-[#1F4E5F] bg-[#F7F7F7] px-3 py-1.5 rounded-xl inline-block border border-[#1F4E5F]/5">
+          <div className="inline-block rounded-xl border border-[#1F4E5F]/5 bg-[#F7F7F7] px-3 py-1.5 text-xs font-semibold text-[#1F4E5F]">
             ⚡ {data.paceOrDetails}
           </div>
         )}
@@ -137,17 +137,17 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               onJoin?.(data.id);
             }}
             className={clsx(
-              'px-4 py-2.5 rounded-full text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer',
+              'shadow-xs flex cursor-pointer items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-extrabold transition-all',
               isUserInCrew
                 ? 'bg-[#7FB77E] text-white shadow-[#7FB77E]/20'
                 : isFull
-                  ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-                  : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95 shadow-[#1F4E5F]/15',
+                  ? 'cursor-not-allowed bg-[#1F4E5F]/10 text-[#1F4E5F]/50'
+                  : 'bg-[#1F4E5F] text-white shadow-[#1F4E5F]/15 hover:bg-[#183e4c] active:scale-95',
             )}
           >
             {isUserInCrew ? (
               <>
-                <Check className="w-3.5 h-3.5 stroke-[3]" />
+                <Check className="h-3.5 w-3.5 stroke-[3]" />
                 <span>You're In</span>
               </>
             ) : isFull ? (
@@ -155,7 +155,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             ) : (
               <>
                 <span>Join Crew</span>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="h-4 w-4" />
               </>
             )}
           </button>

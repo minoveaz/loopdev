@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Badge,
   Button,
@@ -14,14 +14,14 @@ import {
   TechnicalSurface,
   type ResponsiveTableColumn,
 } from '@loopdev/ui';
-import { Plus, TrendingUp, Calendar, User, ArrowUpRight } from 'lucide-react';
+import { Plus, User } from 'lucide-react';
 import type { CrmOpportunity, PipelineStage } from '@loopdev/contracts';
 
 import { useOrganization } from '@/hooks/useOrganization';
 import { useOrganizationPermissions } from '@/hooks/useOrganizationPermissions';
+import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
+import { crmContacts, crmPipeline, moveCrmOpportunity } from '@/suites/sales-crm/runtimeAdapter';
 
-const PAGE_SIZE = 100;
-type OpportunityPage = { items: CrmOpportunity[]; nextCursor: string | null; hasMore: boolean };
 type ContactLookup = { name: string; email?: string | null; company?: string | null };
 export type PipelinePageProps = { mode?: 'board' | 'list' };
 
@@ -42,7 +42,7 @@ function formatDate(value: string | null | undefined) {
     : 'No close date';
 }
 
-export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
+export default function PipelinePage({ mode: viewMode = 'board' }: PipelinePageProps) {
   const { activeOrganizationId } = useOrganization();
   const { isLoading: isLoadingPermissions, hasPermission } = useOrganizationPermissions([
     'crm.read',
@@ -50,6 +50,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
   ]);
   const canRead = hasPermission('crm.read');
   const canManage = hasPermission('crm.manage');
+  const { mode } = usePlatformRuntime();
   const [stages, setStages] = useState<PipelineStage[]>([]);
   const [opportunities, setOpportunities] = useState<CrmOpportunity[]>([]);
   const [contactsMap, setContactsMap] = useState<Map<string, ContactLookup>>(new Map());
@@ -67,68 +68,69 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     }
   }, [stages, mobileActiveStageKey]);
 
-  const loadBoard = async (signal?: AbortSignal) => {
-    if (!activeOrganizationId) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
-      const [stagesResponse, opportunitiesResponse] = await Promise.all([
-        fetch(`/api/crm/pipeline/stages?${scope}`, { signal }),
-        fetch(`/api/crm/opportunities?${scope}&limit=${PAGE_SIZE}`, { signal }),
-      ]);
-      if (!stagesResponse.ok || !opportunitiesResponse.ok)
-        throw new Error('Pipeline could not be loaded.');
-      const nextStages = (await stagesResponse.json()) as PipelineStage[];
-      const nextOpportunities = (await opportunitiesResponse.json()) as OpportunityPage;
-      setStages(nextStages.filter((stage) => stage.active));
-      setOpportunities(nextOpportunities.items);
+  const loadBoard = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!activeOrganizationId) return;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const scope = `organizationId=${encodeURIComponent(activeOrganizationId)}`;
+        const pipeline = await crmPipeline(mode, activeOrganizationId);
+        setStages(pipeline.stages.filter((stage) => stage.active));
+        setOpportunities(pipeline.opportunities);
 
-      // Resolve contact names for human-readable display
-      const contactsPromise = fetch(`/api/crm/contacts?${scope}&limit=100`, { signal });
-      if (contactsPromise && typeof contactsPromise.then === 'function') {
-        void contactsPromise
-          .then((res) => (res && res.ok ? res.json() : null))
-          .then(
-            (
-              page: {
-                items?: Array<{
-                  id: string;
-                  firstName?: string;
-                  lastName?: string;
-                  companyName?: string | null;
-                  email?: string | null;
-                }>;
-              } | null,
-            ) => {
-              if (!page?.items) return;
-              const map = new Map<string, ContactLookup>();
-              page.items.forEach((c) => {
-                const fullName =
-                  [c.firstName, c.lastName].filter(Boolean).join(' ').trim() ||
-                  c.companyName ||
-                  c.email ||
-                  c.id;
-                map.set(c.id, {
-                  name: fullName,
-                  email: c.email,
-                  company: c.companyName,
+        // Resolve contact names for human-readable display
+        const contactsPromise =
+          mode === 'real'
+            ? fetch(`/api/crm/contacts?${scope}&limit=100`, { signal }).then((res) =>
+                res && res.ok ? res.json() : null,
+              )
+            : crmContacts(mode, activeOrganizationId);
+        if (contactsPromise && typeof contactsPromise.then === 'function') {
+          void contactsPromise
+            .then((res) => (mode === 'real' ? res : res))
+            .then(
+              (
+                page: {
+                  items?: Array<{
+                    id: string;
+                    firstName?: string;
+                    lastName?: string;
+                    companyName?: string | null;
+                    email?: string | null;
+                  }>;
+                } | null,
+              ) => {
+                if (!page?.items) return;
+                const map = new Map<string, ContactLookup>();
+                page.items.forEach((c) => {
+                  const fullName =
+                    [c.firstName, c.lastName].filter(Boolean).join(' ').trim() ||
+                    c.companyName ||
+                    c.email ||
+                    c.id;
+                  map.set(c.id, {
+                    name: fullName,
+                    email: c.email,
+                    company: c.companyName,
+                  });
                 });
-              });
-              setContactsMap(map);
-            },
-          )
-          .catch(() => {});
+                setContactsMap(map);
+              },
+            )
+            .catch(() => {});
+        }
+      } catch (requestError: unknown) {
+        if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
+        setError(
+          requestError instanceof Error ? requestError.message : 'Pipeline could not be loaded.',
+        );
+      } finally {
+        if (!signal?.aborted) setIsLoading(false);
       }
-    } catch (requestError: unknown) {
-      if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-      setError(
-        requestError instanceof Error ? requestError.message : 'Pipeline could not be loaded.',
-      );
-    } finally {
-      if (!signal?.aborted) setIsLoading(false);
-    }
-  };
+    },
+    [activeOrganizationId, mode],
+  );
 
   useEffect(() => {
     if (!activeOrganizationId || isLoadingPermissions || !canRead) {
@@ -138,7 +140,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     const controller = new AbortController();
     void loadBoard(controller.signal);
     return () => controller.abort();
-  }, [activeOrganizationId, canRead, isLoadingPermissions]);
+  }, [activeOrganizationId, canRead, isLoadingPermissions, loadBoard]);
 
   const visibleOpportunities = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
@@ -165,6 +167,18 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
     setPendingId(opportunity.id);
     setError(null);
     try {
+      if (mode !== 'real') {
+        const updated = moveCrmOpportunity(
+          mode,
+          activeOrganizationId,
+          opportunity.id,
+          nextStageKey,
+        );
+        setOpportunities((current) =>
+          current.map((item) => (item.id === updated.id ? updated : item)),
+        );
+        return;
+      }
       const response = await fetch(`/api/crm/opportunities/${opportunity.id}/stage`, {
         method: 'PATCH',
         headers: { 'content-type': 'application/json' },
@@ -257,27 +271,27 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
 
   return (
     <SuiteCanvas
-      mode={mode === 'list' ? 'data' : 'board'}
+      mode={viewMode === 'list' ? 'data' : 'board'}
       header={
         <ModuleHeader
           segments={[{ id: 'pipeline', label: 'Pipeline', href: '/sales-crm/pipeline' }]}
           leftSlot={
             <Heading as="h1" size="lg" weight="semibold">
-              {mode === 'list' ? 'Opportunity list' : 'Pipeline'}
+              {viewMode === 'list' ? 'Opportunity list' : 'Pipeline'}
             </Heading>
           }
           rightSlot={
             <div className="flex flex-wrap items-center gap-2.5">
               <Link
-                href={mode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
-                className="text-primary text-xs font-medium px-2.5 py-1.5 rounded-lg border border-border-subtle bg-surface hover:bg-surface-hover transition-colors"
+                href={viewMode === 'list' ? '/sales-crm/pipeline' : '/sales-crm/pipeline/list'}
+                className="text-primary border-border-subtle bg-surface hover:bg-surface-hover rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors"
               >
-                {mode === 'list' ? 'Board view' : 'List view'}
+                {viewMode === 'list' ? 'Board view' : 'List view'}
               </Link>
               {canManage ? (
                 <Link
                   href="/sales-crm/opportunities/new"
-                  className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all"
+                  className="bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
                 >
                   <Plus size={14} />
                   <span>New opportunity</span>
@@ -292,12 +306,12 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
       <div className="w-full space-y-4">
         <TechnicalSurface variant="surface" radius="md" border="technical" className="mb-4 p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-            <label className="min-w-0 flex-1 text-xs font-medium text-text-muted">
+            <label className="text-text-muted min-w-0 flex-1 text-xs font-medium">
               Search opportunities
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="border-border-subtle bg-background text-text-main mt-1 min-h-9 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="border-border-subtle bg-background text-text-main focus-visible:ring-primary mt-1 min-h-9 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-2"
                 placeholder="Name, product or contact"
               />
             </label>
@@ -366,7 +380,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
             }
           >
             <div className="min-w-0">
-              {mode === 'list' ? (
+              {viewMode === 'list' ? (
                 <ResponsiveTable
                   caption="CRM opportunities"
                   columns={tableColumns}
@@ -491,7 +505,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                       </p>
                       <p className="text-text-muted mt-1 flex items-center gap-1.5 truncate text-xs">
                         <User className="h-3.5 w-3.5 shrink-0 opacity-70" />
-                        <span className="truncate font-medium text-text-main">
+                        <span className="text-text-main truncate font-medium">
                           {contactsMap.get(opportunity.contactId)?.name ||
                             `Contact ${opportunity.contactId.slice(0, 8)}`}
                         </span>
@@ -560,7 +574,7 @@ export default function PipelinePage({ mode = 'board' }: PipelinePageProps) {
                   {selectedOpportunity.productKey} · {opportunityAmount(selectedOpportunity)}
                 </p>
                 <p className="text-text-muted mt-2 text-xs">
-                  <span className="font-medium text-text-main">Contact:</span>{' '}
+                  <span className="text-text-main font-medium">Contact:</span>{' '}
                   {contactsMap.get(selectedOpportunity.contactId)?.name ||
                     selectedOpportunity.contactId}
                 </p>

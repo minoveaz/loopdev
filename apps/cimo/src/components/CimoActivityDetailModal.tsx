@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
-import { Calendar, Check, ChevronRight, Clock, MapPin, Sparkles, User, X } from 'lucide-react';
-import { CrewAvatarGroup, type ActivityCardData } from '@loopdev/public-blocks';
+import { Calendar, Check, ChevronRight, Clock, MapPin, Sparkles, X } from 'lucide-react';
+import { type ActivityCardData } from '@loopdev/public-blocks';
 
 export interface CimoActivityDetailModalProps {
   activity: ActivityCardData | null;
@@ -22,17 +22,17 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
   const isJoined = Boolean(activity.isJoined);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm duration-200">
       <div
-        className="bg-white border border-[#1F4E5F]/15 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh] text-[#1F4E5F] animate-in zoom-in-95 duration-200"
+        className="animate-in zoom-in-95 flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#1F4E5F]/15 bg-white text-[#1F4E5F] shadow-2xl duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Cover Image */}
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#1F4E5F]/10 shrink-0">
+        <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[#1F4E5F]/10">
           {activity.image ? (
-            <img src={activity.image} alt={activity.title} className="w-full h-full object-cover" />
+            <img src={activity.image} alt={activity.title} className="h-full w-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-[#1F4E5F] text-white flex items-center justify-center text-3xl font-black">
+            <div className="flex h-full w-full items-center justify-center bg-[#1F4E5F] text-3xl font-black text-white">
               CIMO
             </div>
           )}
@@ -43,49 +43,49 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
             type="button"
             onClick={onClose}
             aria-label="Cerrar detalle"
-            className="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-white/80 hover:bg-white text-slate-800 flex items-center justify-center backdrop-blur-md transition-colors cursor-pointer"
+            className="absolute right-3.5 top-3.5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-white/80 text-slate-800 backdrop-blur-md transition-colors hover:bg-white"
           >
-            <X className="w-4 h-4" />
+            <X className="h-4 w-4" />
           </button>
 
           {/* Badges on Image */}
-          <div className="absolute top-3.5 left-3.5 flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full font-black text-xs bg-white text-[#1F4E5F] shadow-xs capitalize">
+          <div className="absolute left-3.5 top-3.5 flex items-center gap-2">
+            <span className="shadow-xs rounded-full bg-white px-3 py-1 text-xs font-black capitalize text-[#1F4E5F]">
               {activity.sport}
             </span>
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#1F4E5F]/80 text-white backdrop-blur-md">
+            <span className="rounded-full bg-[#1F4E5F]/80 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md">
               {activity.level}
             </span>
           </div>
 
           <div className="absolute bottom-3.5 left-4 right-4 text-white">
-            <h2 className="font-extrabold text-lg sm:text-xl leading-tight drop-shadow-xs">
+            <h2 className="drop-shadow-xs text-lg font-extrabold leading-tight sm:text-xl">
               {activity.title}
             </h2>
-            <div className="flex items-center gap-1.5 text-xs text-white/90 mt-1">
-              <MapPin className="w-3.5 h-3.5 text-[#7FB77E]" />
+            <div className="mt-1 flex items-center gap-1.5 text-xs text-white/90">
+              <MapPin className="h-3.5 w-3.5 text-[#7FB77E]" />
               <span>{activity.location}</span>
             </div>
           </div>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-5 overflow-y-auto flex flex-col gap-5">
+        <div className="flex flex-col gap-5 overflow-y-auto p-5">
           {/* Details Row: Date, Time & Pace */}
-          <div className="grid grid-cols-2 gap-3 p-3.5 bg-[#F7F7F7] rounded-2xl border border-[#1F4E5F]/5">
+          <div className="grid grid-cols-2 gap-3 rounded-2xl border border-[#1F4E5F]/5 bg-[#F7F7F7] p-3.5">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-[#7FB77E]" />
+              <Calendar className="h-4 w-4 text-[#7FB77E]" />
               <div>
-                <span className="text-[10px] uppercase font-extrabold text-[#1F4E5F]/60 block">
+                <span className="block text-[10px] font-extrabold uppercase text-[#1F4E5F]/60">
                   Fecha
                 </span>
                 <span className="text-xs font-bold text-[#1F4E5F]">{activity.date}</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#7FB77E]" />
+              <Clock className="h-4 w-4 text-[#7FB77E]" />
               <div>
-                <span className="text-[10px] uppercase font-extrabold text-[#1F4E5F]/60 block">
+                <span className="block text-[10px] font-extrabold uppercase text-[#1F4E5F]/60">
                   Hora
                 </span>
                 <span className="text-xs font-bold text-[#1F4E5F]">{activity.time} h</span>
@@ -95,28 +95,28 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
 
           {/* Pace Pill */}
           {activity.paceOrDetails && (
-            <div className="p-3 bg-[#7FB77E]/10 rounded-2xl border border-[#7FB77E]/20 text-xs font-semibold text-[#1F4E5F] flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#7FB77E] shrink-0" />
+            <div className="flex items-center gap-2 rounded-2xl border border-[#7FB77E]/20 bg-[#7FB77E]/10 p-3 text-xs font-semibold text-[#1F4E5F]">
+              <Sparkles className="h-4 w-4 shrink-0 text-[#7FB77E]" />
               <span>{activity.paceOrDetails}</span>
             </div>
           )}
 
           {/* Captain Section */}
-          <div className="border border-[#1F4E5F]/10 rounded-2xl p-4 flex items-center justify-between">
+          <div className="flex items-center justify-between rounded-2xl border border-[#1F4E5F]/10 p-4">
             <div className="flex items-center gap-3">
               {activity.captain.avatarUrl ? (
                 <img
                   src={activity.captain.avatarUrl}
                   alt={activity.captain.name}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-[#1F4E5F]/20"
+                  className="h-12 w-12 rounded-full border-2 border-[#1F4E5F]/20 object-cover"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-[#1F4E5F]/10 text-[#1F4E5F] font-black text-sm flex items-center justify-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1F4E5F]/10 text-sm font-black text-[#1F4E5F]">
                   {activity.captain.name.charAt(0)}
                 </div>
               )}
               <div>
-                <span className="text-[10px] font-extrabold text-[#7FB77E] uppercase tracking-wider block">
+                <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#7FB77E]">
                   Capitán del Crew
                 </span>
                 <h4 className="text-sm font-extrabold text-[#1F4E5F]">
@@ -130,7 +130,7 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
 
           {/* Crew Members List */}
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#1F4E5F]">
                 Integrantes del Crew ({activity.currentMembers.length}/{activity.maxMembers})
               </span>
@@ -142,25 +142,25 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
               {activity.currentMembers.map((member) => (
                 <div
                   key={member.id}
-                  className="p-2.5 bg-[#F7F7F7] rounded-xl border border-[#1F4E5F]/5 flex items-center gap-2.5"
+                  className="flex items-center gap-2.5 rounded-xl border border-[#1F4E5F]/5 bg-[#F7F7F7] p-2.5"
                 >
                   {member.avatarUrl ? (
                     <img
                       src={member.avatarUrl}
                       alt={member.name}
-                      className="w-8 h-8 rounded-full object-cover"
+                      className="h-8 w-8 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-[#1F4E5F]/10 font-bold text-xs flex items-center justify-center">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1F4E5F]/10 text-xs font-bold">
                       {member.name.charAt(0)}
                     </div>
                   )}
                   <div className="truncate">
-                    <span className="text-xs font-bold text-[#1F4E5F] block truncate">
+                    <span className="block truncate text-xs font-bold text-[#1F4E5F]">
                       {member.name}
                     </span>
                     {member.isCaptain && (
-                      <span className="text-[9px] font-black text-[#7FB77E] uppercase">
+                      <span className="text-[9px] font-black uppercase text-[#7FB77E]">
                         Capitán
                       </span>
                     )}
@@ -172,9 +172,9 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
         </div>
 
         {/* Modal Footer CTA */}
-        <div className="p-4 border-t border-[#1F4E5F]/10 bg-white flex items-center justify-between shrink-0">
+        <div className="flex shrink-0 items-center justify-between border-t border-[#1F4E5F]/10 bg-white p-4">
           <div>
-            <span className="text-[10px] font-bold text-[#1F4E5F]/60 block uppercase">
+            <span className="block text-[10px] font-bold uppercase text-[#1F4E5F]/60">
               Participación
             </span>
             <span className="text-xs font-extrabold text-[#7FB77E]">100% Gratis</span>
@@ -187,17 +187,17 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
               onJoin(activity.id);
             }}
             className={clsx(
-              'px-6 py-3 rounded-full text-xs font-extrabold transition-all flex items-center gap-2 shadow-sm cursor-pointer min-h-[44px]',
+              'flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full px-6 py-3 text-xs font-extrabold shadow-sm transition-all',
               isJoined
                 ? 'bg-[#7FB77E] text-white'
                 : isFull
-                  ? 'bg-[#1F4E5F]/10 text-[#1F4E5F]/50 cursor-not-allowed'
-                  : 'bg-[#1F4E5F] hover:bg-[#183e4c] text-white active:scale-95',
+                  ? 'cursor-not-allowed bg-[#1F4E5F]/10 text-[#1F4E5F]/50'
+                  : 'bg-[#1F4E5F] text-white hover:bg-[#183e4c] active:scale-95',
             )}
           >
             {isJoined ? (
               <>
-                <Check className="w-4 h-4 stroke-[3]" />
+                <Check className="h-4 w-4 stroke-[3]" />
                 <span>Ya estás dentro del Crew</span>
               </>
             ) : isFull ? (
@@ -205,7 +205,7 @@ export const CimoActivityDetailModal: React.FC<CimoActivityDetailModalProps> = (
             ) : (
               <>
                 <span>Unirme a este Crew</span>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="h-4 w-4" />
               </>
             )}
           </button>

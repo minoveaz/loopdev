@@ -1,7 +1,7 @@
 /**
  * @file useMetricGauge.ts
  * @description Brain: Logic for gauge visualization
- * 
+ *
  * Calculates:
  * - Gauge arc position (0-360 degrees)
  * - Color based on zone (oversold/neutral/overbought)
@@ -18,8 +18,6 @@ export const useMetricGauge = (props: MetricGaugeProps) => {
     value,
     min = 0,
     max = 100,
-    lowThreshold = 30,
-    highThreshold = 70,
     status,
     size = 'md',
     isStatic = false,
@@ -34,7 +32,7 @@ export const useMetricGauge = (props: MetricGaugeProps) => {
 
   // Calculate arc rotation (0-360 degrees, starting from top-left)
   // 0% = 225° (bottom-left), 100% = -45° (bottom-right)
-  const rotation = 225 + (percentage * 270);
+  const rotation = 225 + percentage * 270;
 
   // Determine color based on status or threshold
   const getColor = useMemo(() => {

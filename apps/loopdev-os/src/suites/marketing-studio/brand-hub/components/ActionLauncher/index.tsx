@@ -11,21 +11,26 @@ import { ActionLauncherProps } from './types';
  */
 export const ActionLauncher: React.FC<ActionLauncherProps> = ({
   brandStatus,
-  mode,
   onAction,
-  isLoading
+  isLoading,
 }) => {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-3">
-        {[1, 2, 3].map(i => <Skeleton key={i} className="h-20 w-full rounded-xl" />)}
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-20 w-full rounded-xl" />
+        ))}
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+      <LpdText
+        size="nano"
+        weight="bold"
+        className="text-text-muted uppercase tracking-widest opacity-60"
+      >
         Recommended Actions
       </LpdText>
 
