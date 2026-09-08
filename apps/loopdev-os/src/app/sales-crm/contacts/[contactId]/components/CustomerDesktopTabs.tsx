@@ -1,6 +1,7 @@
 'use client';
 
 import { Clock, Briefcase, ListTodo, FileText } from 'lucide-react';
+import { Button } from '@loopdev/ui';
 import type { CustomerTabKey } from './types';
 
 interface CustomerDesktopTabsProps {
@@ -29,13 +30,15 @@ export function CustomerDesktopTabs({
   isNotesSimulated,
 }: CustomerDesktopTabsProps) {
   return (
-    <div className="border-border-subtle bg-surface-muted/20 hidden shrink-0 border-b px-4 sm:px-6 lg:block">
+    <div className="bg-surface-muted/20 hidden shrink-0 px-4 sm:px-6 lg:block">
       <nav
         className="no-scrollbar -mb-px flex gap-4 overflow-x-auto sm:gap-6"
         aria-label="Customer workspace tabs"
       >
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('timeline')}
           className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'timeline'
@@ -54,10 +57,12 @@ export function CustomerDesktopTabs({
           >
             {timelineCount}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('opportunities')}
           className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'opportunities'
@@ -76,10 +81,12 @@ export function CustomerDesktopTabs({
           >
             {opportunitiesCount}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('tasks')}
           className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'tasks'
@@ -98,10 +105,12 @@ export function CustomerDesktopTabs({
           >
             {tasksCount}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('notes')}
           className={`flex items-center gap-2 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-all ${
             activeTab === 'notes'
@@ -120,7 +129,7 @@ export function CustomerDesktopTabs({
           >
             {notesCount}
           </span>
-        </button>
+        </Button>
       </nav>
     </div>
   );

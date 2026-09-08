@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, ChevronDown, Cloud, Eye, FlaskConical } from 'lucide-react';
-import { TechnicalDropdown, TechnicalDropdownItem } from '@loopdev/ui';
+import { Button, TechnicalDropdown, TechnicalDropdownItem } from '@loopdev/ui';
 import type { PlatformEnvironmentMode } from '@loopdev/contracts';
 import { usePlatformRuntime } from '@/providers/PlatformRuntimeProvider';
 
@@ -44,8 +44,10 @@ export function PlatformEnvironmentSelector() {
       sideOffset={6}
       className="w-[min(320px,calc(100vw-2rem))]"
       trigger={
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           aria-label={`Environment: ${currentLabel}`}
           aria-haspopup="menu"
           className="text-text-muted hover:border-primary/40 hover:text-primary focus-visible:ring-primary/40 flex h-9 items-center gap-1.5 rounded-full border border-black/10 bg-white/50 px-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 dark:border-white/10 dark:bg-black/20"
@@ -53,7 +55,7 @@ export function PlatformEnvironmentSelector() {
           <span className="bg-primary size-2 rounded-full" aria-hidden="true" />
           <span className="hidden xl:inline">{currentLabel}</span>
           <ChevronDown size={14} aria-hidden="true" />
-        </button>
+        </Button>
       }
     >
       <div className="px-3 py-2">

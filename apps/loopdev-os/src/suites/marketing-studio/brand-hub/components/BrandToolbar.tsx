@@ -1,13 +1,7 @@
 'use client';
 
 import React from 'react';
-import { 
-  ModuleToolbar, 
-  Button, 
-  IconButton, 
-  Divider, 
-  LpdText 
-} from '@loopdev/ui';
+import { ModuleToolbar, Button, IconButton, Divider, LpdText } from '@loopdev/ui';
 
 export interface BrandToolbarProps {
   mode: 'module' | 'brand';
@@ -24,13 +18,7 @@ export interface BrandToolbarProps {
  * Gestiona 4 estados: Directory, Read-Only, Draft, Governance.
  */
 export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
-  const { 
-    mode, 
-    isReadOnly, 
-    viewMode = 'grid',
-    onViewModeChange,
-    onAction 
-  } = props;
+  const { mode, isReadOnly, viewMode = 'grid', onViewModeChange, onAction } = props;
 
   // 1. MODULE MODE (Directorio)
   if (mode === 'module') {
@@ -40,33 +28,36 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
           <div className="flex items-center gap-2">
             <IconButton icon="filter_list" size="sm" variant="ghost" aria-label="Filter" />
             <Divider orientation="vertical" className="h-4" />
-            <LpdText size="nano" className="text-text-muted font-bold uppercase tracking-widest opacity-40">
+            <LpdText
+              size="nano"
+              className="text-text-muted font-bold uppercase tracking-widest opacity-40"
+            >
               ALL BRANDS
             </LpdText>
           </div>
         }
         centerSlot={
           <div className="bg-background-subtle border-border-technical flex items-center rounded-lg border p-0.5">
-            <IconButton 
-              icon="grid_view" 
-              size="sm" 
-              variant={viewMode === 'grid' ? 'primary' : 'ghost'} 
+            <IconButton
+              icon="grid_view"
+              size="sm"
+              variant={viewMode === 'grid' ? 'primary' : 'ghost'}
               onClick={() => onViewModeChange?.('grid')}
               aria-label="Grid View"
             />
-            <IconButton 
-              icon="view_list" 
-              size="sm" 
-              variant={viewMode === 'list' ? 'primary' : 'ghost'} 
+            <IconButton
+              icon="view_list"
+              size="sm"
+              variant={viewMode === 'list' ? 'primary' : 'ghost'}
               onClick={() => onViewModeChange?.('list')}
               aria-label="List View"
             />
           </div>
         }
         rightSlot={
-          <Button 
-            variant="primary" 
-            size="sm" 
+          <Button
+            variant="primary"
+            size="sm"
             startIcon="add"
             onClick={() => onAction?.('create_brand')}
           >
@@ -88,28 +79,28 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
         }
         rightSlot={
           <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              startIcon="compare_arrows" 
+            <Button
+              variant="ghost"
+              size="sm"
+              startIcon="compare_arrows"
               onClick={() => onAction?.('compare')}
               title="Compare with previous versions"
             >
               Compare
             </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              startIcon="hub" 
+            <Button
+              variant="ghost"
+              size="sm"
+              startIcon="hub"
               onClick={() => onAction?.('dependencies')}
               title="View system impact analysis"
             >
               Impact
             </Button>
             <Divider orientation="vertical" className="h-4" />
-            <Button 
-              variant="primary" 
-              size="sm" 
+            <Button
+              variant="primary"
+              size="sm"
               startIcon="edit_note"
               onClick={() => onAction?.('create_draft')}
               title="Create a new draft version to edit"
@@ -127,28 +118,34 @@ export const BrandToolbar: React.FC<BrandToolbarProps> = (props) => {
     <ModuleToolbar
       leftSlot={
         <div className="flex items-center gap-2">
-          <LpdText size="nano" className="text-primary font-mono font-bold uppercase tracking-widest">
+          <LpdText
+            size="nano"
+            className="text-primary font-mono font-bold uppercase tracking-widest"
+          >
             {'// EDITING DRAFT'}
           </LpdText>
         </div>
       }
       centerSlot={
-        <div className="flex items-center gap-2">
-           {/* Zoom controls could go here */}
-        </div>
+        <div className="flex items-center gap-2">{/* Zoom controls could go here */}</div>
       }
       rightSlot={
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => onAction?.('discard_draft')}>
             Discard
           </Button>
-          <Button variant="secondary" size="sm" startIcon="save" onClick={() => onAction?.('save_draft')}>
+          <Button
+            variant="secondary"
+            size="sm"
+            startIcon="save"
+            onClick={() => onAction?.('save_draft')}
+          >
             Save
           </Button>
           <Divider orientation="vertical" className="h-4" />
-          <Button 
-            variant="primary" 
-            size="sm" 
+          <Button
+            variant="primary"
+            size="sm"
             startIcon="gavel"
             onClick={() => onAction?.('request_approval')}
           >

@@ -11,22 +11,26 @@ import { GovernanceSummaryProps } from './types';
 export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
   domains,
   isLoading,
-  onDomainClick
+  onDomainClick,
 }) => {
   if (isLoading) {
     return <Skeleton className="h-64 w-full rounded-xl" />;
   }
 
   const accessMapping = {
-    'allowed': { label: 'ALLOWED', severity: 'success' },
+    allowed: { label: 'ALLOWED', severity: 'success' },
     'approval-required': { label: 'APPROVAL REQ', severity: 'warning' },
-    'restricted': { label: 'RESTRICTED', severity: 'danger' },
+    restricted: { label: 'RESTRICTED', severity: 'danger' },
   } as const;
 
   return (
     <div className="border-border-technical bg-background-surface/50 flex flex-col gap-4 rounded-xl border p-5">
       <div className="flex flex-col gap-1">
-        <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+        <LpdText
+          size="nano"
+          weight="bold"
+          className="text-text-muted uppercase tracking-widest opacity-60"
+        >
           Governance Profile
         </LpdText>
         <LpdText size="sm" weight="bold" className="text-text-main">
@@ -45,7 +49,7 @@ export const GovernanceSummary: React.FC<GovernanceSummaryProps> = ({
             <LpdText size="xs" className="text-text-muted capitalize">
               {domain.label}
             </LpdText>
-            <TechnicalStatusBadge 
+            <TechnicalStatusBadge
               label={accessMapping[domain.access].label}
               severity={accessMapping[domain.access].severity}
               variant="ghost"

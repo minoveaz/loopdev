@@ -36,7 +36,10 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
 
       {/* Side Filter */}
       <div className="flex gap-2">
-        <Button variant="outline" size="sm" type="button"
+        <Button
+          variant="outline"
+          size="sm"
+          type="button"
           onClick={() => handleSideChange(undefined)}
           className={`rounded border px-3 py-1 text-sm transition-colors ${
             !filters.side
@@ -46,7 +49,10 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
         >
           All
         </Button>
-        <Button variant="outline" size="sm" type="button"
+        <Button
+          variant="outline"
+          size="sm"
+          type="button"
           onClick={() => handleSideChange('buy')}
           className={`rounded border px-3 py-1 text-sm transition-colors ${
             filters.side === 'buy'
@@ -56,7 +62,10 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
         >
           Buy Only
         </Button>
-        <Button variant="outline" size="sm" type="button"
+        <Button
+          variant="outline"
+          size="sm"
+          type="button"
           onClick={() => handleSideChange('sell')}
           className={`rounded border px-3 py-1 text-sm transition-colors ${
             filters.side === 'sell'
@@ -69,7 +78,10 @@ export function OrderFilters({ onFiltersChange }: OrderFiltersProps) {
       </div>
 
       {/* Reset Button */}
-      <Button variant="ghost" size="sm" type="button"
+      <Button
+        variant="ghost"
+        size="sm"
+        type="button"
         onClick={handleReset}
         className="border-border-technical/30 hover:bg-background-elevated ml-auto rounded border px-3 py-1 text-sm transition-colors"
       >

@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Activity,
-  Calendar,
-  Compass,
-  Plus,
-  Sparkles,
-  Target,
-  Users,
-} from 'lucide-react';
+import { Activity, Calendar, Compass, Plus, Sparkles, Target, Users } from 'lucide-react';
 
 export const CimoCrewNetworkStatsWidget: React.FC = () => {
   return (

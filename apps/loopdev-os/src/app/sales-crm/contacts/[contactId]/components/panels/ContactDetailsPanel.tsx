@@ -11,7 +11,9 @@ import {
   MapPin,
   Briefcase,
   Mail,
+  Edit3,
 } from 'lucide-react';
+import { Button, Heading, IconButton } from '@loopdev/ui';
 import type { Customer360RecordView } from '@loopdev/contracts';
 import { SimulatedBadge } from '../sharedComponents';
 import type { ContactLeadSummary } from '../customer360DisplayTypes';
@@ -42,16 +44,20 @@ export function ContactDetailsPanel({
     <div className="flex w-full min-w-0 flex-1 flex-col space-y-6">
       {/* Header with edit trigger */}
       <div className="flex items-center justify-between">
-        <h3 className="text-text-main text-sm font-semibold">Ficha del Cliente</h3>
+        <Heading as="h3" size="sm" weight="semibold" className="text-text-main">
+          Ficha del Cliente
+        </Heading>
         {onEditContact ? (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={onEditContact}
             className="text-primary bg-primary/10 hover:bg-primary/20 inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors hover:underline active:scale-95"
           >
             <span>Editar datos</span>
-            <span aria-hidden="true">✎</span>
-          </button>
+            <Edit3 className="h-3.5 w-3.5" aria-hidden="true" />
+          </Button>
         ) : (
           <span className="text-text-muted text-xs">Verified</span>
         )}
@@ -104,8 +110,11 @@ export function ContactDetailsPanel({
               </span>
             </div>
             {contact.email ? (
-              <button
+              <IconButton
                 type="button"
+                variant="ghost"
+                size="sm"
+                ariaLabel="Copiar email"
                 onClick={() => copyToClipboard(contact.email!, 'email')}
                 className="text-text-muted hover:text-text-main ml-2 p-1 transition-colors"
                 title="Copiar email"
@@ -115,7 +124,7 @@ export function ContactDetailsPanel({
                 ) : (
                   <Copy className="h-3.5 w-3.5" />
                 )}
-              </button>
+              </IconButton>
             ) : null}
           </div>
 
@@ -128,8 +137,11 @@ export function ContactDetailsPanel({
               </span>
             </div>
             {contact.phone ? (
-              <button
+              <IconButton
                 type="button"
+                variant="ghost"
+                size="sm"
+                ariaLabel="Copiar teléfono"
                 onClick={() => copyToClipboard(contact.phone!, 'phone')}
                 className="text-text-muted hover:text-text-main ml-2 p-1 transition-colors"
                 title="Copiar teléfono"
@@ -139,7 +151,7 @@ export function ContactDetailsPanel({
                 ) : (
                   <Copy className="h-3.5 w-3.5" />
                 )}
-              </button>
+              </IconButton>
             ) : null}
           </div>
 
@@ -208,7 +220,9 @@ export function ContactDetailsPanel({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <UserCheck className="text-text-muted h-4 w-4" />
-            <h3 className="text-text-main text-sm font-semibold">Leads Asociados</h3>
+            <Heading as="h3" size="sm" weight="semibold" className="text-text-main">
+              Leads Asociados
+            </Heading>
           </div>
           <span
             className={`rounded-full px-2 py-0.5 text-xs font-medium ${

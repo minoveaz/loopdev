@@ -1,16 +1,16 @@
 'use client';
 
 import React from 'react';
-import { 
-  LpdText, 
-  Heading, 
-  TechnicalSurface, 
-  Button, 
-  Divider, 
-  RiskMeter, 
-  Input, 
+import {
+  LpdText,
+  Heading,
+  TechnicalSurface,
+  Button,
+  Divider,
+  RiskMeter,
+  Input,
   Skeleton,
-  cn 
+  cn,
 } from '@loopdev/ui';
 import { useRiskSettings } from '@/hooks/trading/useRiskSettings';
 
@@ -25,7 +25,11 @@ export default function RiskControlPage() {
   const handleKillSwitch = () => {
     const nextState = !settings?.killSwitchActive;
     if (nextState) {
-      if (confirm('ACTIVATE GLOBAL KILL SWITCH? This will stop ALL active loops and close positions if configured.')) {
+      if (
+        confirm(
+          'ACTIVATE GLOBAL KILL SWITCH? This will stop ALL active loops and close positions if configured.',
+        )
+      ) {
         updateSettings({ killSwitchActive: true });
       }
     } else {
@@ -47,55 +51,71 @@ export default function RiskControlPage() {
 
   return (
     <main className="animate-in fade-in custom-scrollbar mx-auto flex h-full max-w-[1200px] flex-col gap-12 overflow-y-auto p-8 pb-32 duration-700">
-      
       {/* 1. STANDARDIZED HEADER */}
       <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3 text-rose-500">
             <span className="material-symbols-outlined text-sm font-bold">gavel</span>
-            <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">Safety_&_Governance_Center</LpdText>
+            <LpdText size="nano" weight="black" className="uppercase tracking-[0.2em]">
+              Safety_&_Governance_Center
+            </LpdText>
           </div>
-          <Heading size="2xl" weight="bold" className="text-text-main uppercase italic tracking-tight">
+          <Heading
+            size="2xl"
+            weight="bold"
+            className="text-text-main uppercase italic tracking-tight"
+          >
             Risk_Control<span className="text-rose-500">.</span>
           </Heading>
           <LpdText size="sm" className="text-text-muted max-w-2xl leading-relaxed">
-            Configure account-wide protection layers. These parameters override individual bot settings to ensure total capital preservation.
+            Configure account-wide protection layers. These parameters override individual bot
+            settings to ensure total capital preservation.
           </LpdText>
         </div>
       </header>
 
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        
         {/* 2. EMERGENCY KILL SWITCH (The Hero Action) */}
-        <TechnicalSurface 
-          variant="surface" 
+        <TechnicalSurface
+          variant="surface"
           className={cn(
-            "lg:col-span-12 p-8 border-2 transition-all flex flex-col md:flex-row items-center justify-between gap-8 rounded-[2.5rem]",
-            settings?.killSwitchActive 
-              ? "bg-rose-500/10 border-rose-500 shadow-[0_0_30px_rgba(244,63,94,0.2)]" 
-              : "border-border-technical hover:border-rose-500/30"
+            'lg:col-span-12 p-8 border-2 transition-all flex flex-col md:flex-row items-center justify-between gap-8 rounded-[2.5rem]',
+            settings?.killSwitchActive
+              ? 'bg-rose-500/10 border-rose-500 shadow-[0_0_30px_rgba(244,63,94,0.2)]'
+              : 'border-border-technical hover:border-rose-500/30',
           )}
         >
           <div className="flex items-center gap-6">
-            <div className={cn(
-              "w-20 h-20 rounded-full flex items-center justify-center border-4",
-              settings?.killSwitchActive ? "bg-rose-500 border-rose-400 animate-pulse" : "bg-background-subtle border-border-technical"
-            )}>
-              <span className={cn(
-                "material-symbols-outlined text-4xl",
-                settings?.killSwitchActive ? "text-white" : "text-text-muted"
-              )}>power_settings_new</span>
+            <div
+              className={cn(
+                'w-20 h-20 rounded-full flex items-center justify-center border-4',
+                settings?.killSwitchActive
+                  ? 'bg-rose-500 border-rose-400 animate-pulse'
+                  : 'bg-background-subtle border-border-technical',
+              )}
+            >
+              <span
+                className={cn(
+                  'material-symbols-outlined text-4xl',
+                  settings?.killSwitchActive ? 'text-white' : 'text-text-muted',
+                )}
+              >
+                power_settings_new
+              </span>
             </div>
             <div className="flex flex-col gap-1">
-              <Heading size="sm" weight="black" className="uppercase italic">Global_Execution_Kill_Switch</Heading>
+              <Heading size="sm" weight="black" className="uppercase italic">
+                Global_Execution_Kill_Switch
+              </Heading>
               <LpdText size="sm" className="text-text-muted max-w-md">
-                Immediately halts all core engine loops. No new trades will be opened and existing orders will be frozen.
+                Immediately halts all core engine loops. No new trades will be opened and existing
+                orders will be frozen.
               </LpdText>
             </div>
           </div>
-          
-          <Button 
-            variant={settings?.killSwitchActive ? "energy" : "danger"}
+
+          <Button
+            variant={settings?.killSwitchActive ? 'energy' : 'danger'}
             size="lg"
             onClick={handleKillSwitch}
             isLoading={isUpdating}
@@ -107,13 +127,19 @@ export default function RiskControlPage() {
 
         {/* 3. ACCOUNT LIMITS & METRICS */}
         <div className="flex flex-col gap-8 lg:col-span-7">
-          <TechnicalSurface variant="surface" depth="flat" className="border-border-technical/30 flex flex-col gap-8 rounded-[2.5rem] p-8">
+          <TechnicalSurface
+            variant="surface"
+            depth="flat"
+            className="border-border-technical/30 flex flex-col gap-8 rounded-[2.5rem] p-8"
+          >
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-primary">analytics</span>
-                <Heading size="xs" weight="bold" className="uppercase">Account_Level_Exposure</Heading>
+                <Heading size="xs" weight="bold" className="uppercase">
+                  Account_Level_Exposure
+                </Heading>
               </div>
-              <RiskMeter 
+              <RiskMeter
                 title="Capital_At_Risk"
                 value={1250} // Mock current exposure
                 maxValue={settings?.maxTotalExposureUsdt || 5000}
@@ -122,15 +148,17 @@ export default function RiskControlPage() {
                 subtitle="Live Portfolio Exposure"
               />
             </div>
-            
+
             <Divider thickness="technical" className="opacity-30" />
 
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-rose-500">trending_down</span>
-                <Heading size="xs" weight="bold" className="uppercase">Daily_Drawdown_Guard</Heading>
+                <Heading size="xs" weight="bold" className="uppercase">
+                  Daily_Drawdown_Guard
+                </Heading>
               </div>
-              <RiskMeter 
+              <RiskMeter
                 title="Today_Loss_Limit"
                 value={45} // Mock current loss
                 maxValue={settings?.maxDailyLossUsdt || 500}
@@ -144,31 +172,39 @@ export default function RiskControlPage() {
 
         {/* 4. CONFIGURATION PANEL */}
         <div className="flex flex-col gap-8 lg:col-span-5">
-          <TechnicalSurface variant="surface" depth="raised" className="border-border-technical/30 flex flex-col gap-8 rounded-[2.5rem] p-8">
+          <TechnicalSurface
+            variant="surface"
+            depth="raised"
+            className="border-border-technical/30 flex flex-col gap-8 rounded-[2.5rem] p-8"
+          >
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-text-muted">settings_applications</span>
-              <Heading size="xs" weight="bold" className="uppercase">Hard_Limit_Config</Heading>
+              <span className="material-symbols-outlined text-text-muted">
+                settings_applications
+              </span>
+              <Heading size="xs" weight="bold" className="uppercase">
+                Hard_Limit_Config
+              </Heading>
             </div>
-            
+
             <div className="space-y-6">
-              <Input 
-                label="Max Daily Loss (USDT)" 
-                type="number" 
-                value={settings?.maxDailyLossUsdt} 
+              <Input
+                label="Max Daily Loss (USDT)"
+                type="number"
+                value={settings?.maxDailyLossUsdt}
                 onChange={(e) => updateSettings({ maxDailyLossUsdt: Number(e.target.value) })}
                 helperText="Shutdown engine if realized loss exceeds this value."
               />
-              <Input 
-                label="Max Total Exposure (USDT)" 
-                type="number" 
-                value={settings?.maxTotalExposureUsdt} 
+              <Input
+                label="Max Total Exposure (USDT)"
+                type="number"
+                value={settings?.maxTotalExposureUsdt}
                 onChange={(e) => updateSettings({ maxTotalExposureUsdt: Number(e.target.value) })}
                 helperText="Maximum capital allowed across all active bots."
               />
-              <Input 
-                label="Max Concurrent Bots" 
-                type="number" 
-                value={settings?.maxConcurrentBots} 
+              <Input
+                label="Max Concurrent Bots"
+                type="number"
+                value={settings?.maxConcurrentBots}
                 onChange={(e) => updateSettings({ maxConcurrentBots: Number(e.target.value) })}
                 helperText="Maximum number of bots allowed to run in parallel."
               />
@@ -176,14 +212,14 @@ export default function RiskControlPage() {
 
             <div className="bg-background-subtle border-border-technical/20 rounded-xl border p-4">
               <LpdText size="nano" className="text-text-muted italic leading-relaxed">
-                {'// System_Note: All changes are applied in real-time to the orquestrator heartbeat.'}
+                {
+                  '// System_Note: All changes are applied in real-time to the orquestrator heartbeat.'
+                }
               </LpdText>
             </div>
           </TechnicalSurface>
         </div>
-
       </section>
-
     </main>
   );
 }

@@ -16,7 +16,7 @@ export const TokenGroupSection: React.FC<TokenGroupSectionProps> = ({
   theme,
   selectedTokenId,
   onTokenClick,
-  onCopy
+  onCopy,
 }) => {
   if (tokens.length === 0) return null;
 
@@ -25,7 +25,12 @@ export const TokenGroupSection: React.FC<TokenGroupSectionProps> = ({
       {/* GROUP HEADER */}
       <div className="border-border-technical/30 flex flex-col gap-2 border-b pb-4">
         <div className="flex items-center justify-between">
-          <Heading as="h2" size="lg" weight="bold" className="text-text-main uppercase tracking-tight">
+          <Heading
+            as="h2"
+            size="lg"
+            weight="bold"
+            className="text-text-main uppercase tracking-tight"
+          >
             {title}
           </Heading>
           <LpdText size="nano" className="text-text-muted font-mono opacity-60">

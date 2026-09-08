@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Flame,
-  ShieldCheck,
-  Sparkles,
-  UserPlus,
-} from 'lucide-react';
+import { Flame, ShieldCheck, Sparkles, UserPlus } from 'lucide-react';
 
 export interface CimoSuggestedAthletesWidgetProps {
   onNavigateToProfile?: (athleteId: string) => void;

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { IconButton } from '@loopdev/ui';
 import Link from 'next/link';
 import type { CrmContact } from '@loopdev/contracts';
 import { Building2, ArrowUpRight, TrendingUp, CheckSquare, Square } from 'lucide-react';
@@ -69,22 +70,24 @@ export function ContactMobileCard({
         <div className="flex shrink-0 items-center gap-1.5">
           <ContactIdentityBadge status={contact.identityStatus} size="sm" />
           {onToggleSelect && (
-            <button
+            <IconButton
               type="button"
+              variant="ghost"
+              size="sm"
+              ariaLabel="Seleccionar fila"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleSelect();
               }}
               className="text-text-muted hover:text-text-main p-1 transition-colors"
               title={isSelected ? 'Deseleccionar' : 'Seleccionar'}
-              aria-label="Seleccionar fila"
             >
               {isSelected ? (
                 <CheckSquare size={18} className="text-primary" />
               ) : (
                 <Square size={18} />
               )}
-            </button>
+            </IconButton>
           )}
         </div>
       </div>

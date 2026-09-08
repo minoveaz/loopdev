@@ -187,9 +187,7 @@ export const CimoEditProfileView: React.FC<CimoEditProfileViewProps> = ({
   );
 
   // Community & Social Preferences
-  const [groupSizePreference] = useState<'micro' | 'medium'>(
-    user.groupSizePreference ?? 'micro',
-  );
+  const [groupSizePreference] = useState<'micro' | 'medium'>(user.groupSizePreference ?? 'micro');
   const [goals, setGoals] = useState<string[]>(
     user.goals ?? [
       '🤝 Conocer deportistas activos',

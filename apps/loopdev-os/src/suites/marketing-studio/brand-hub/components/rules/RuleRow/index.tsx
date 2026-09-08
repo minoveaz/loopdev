@@ -16,22 +16,24 @@ export const RuleRow: React.FC<RuleRowProps> = ({ rule, isSelected, onClick }) =
   const isDisabled = rule.status === 'disabled';
 
   return (
-    <div 
+    <div
       onClick={onClick}
       className={clsx(
-        "group flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all duration-200",
-        isSelected 
-          ? "bg-primary/5 border-primary shadow-sm" 
-          : "bg-background-surface border-border-technical hover:border-primary/30",
-        isDisabled && "opacity-50 grayscale"
+        'group flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all duration-200',
+        isSelected
+          ? 'bg-primary/5 border-primary shadow-sm'
+          : 'bg-background-surface border-border-technical hover:border-primary/30',
+        isDisabled && 'opacity-50 grayscale',
       )}
     >
       <div className="flex flex-1 items-center gap-4">
         {/* Status indicator */}
-        <div className={clsx(
-          "h-10 w-1 rounded-full",
-          isSelected ? "bg-primary" : "group-hover:bg-primary/20 bg-transparent"
-        )} />
+        <div
+          className={clsx(
+            'h-10 w-1 rounded-full',
+            isSelected ? 'bg-primary' : 'group-hover:bg-primary/20 bg-transparent',
+          )}
+        />
 
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -40,7 +42,7 @@ export const RuleRow: React.FC<RuleRowProps> = ({ rule, isSelected, onClick }) =
             </Heading>
             <DomainBadge domain={rule.domain} />
           </div>
-          
+
           <div className="text-text-muted flex items-center gap-2 font-mono text-[10px]">
             <span className="uppercase tracking-widest">{rule.scope.target}</span>
             <span className="opacity-30">|</span>
@@ -60,11 +62,13 @@ export const RuleRow: React.FC<RuleRowProps> = ({ rule, isSelected, onClick }) =
             Updated {new Date(rule.updatedAt).toLocaleDateString()}
           </LpdText>
         </div>
-        
-        <span className={clsx(
-          "material-symbols-outlined text-sm transition-transform group-hover:translate-x-1",
-          isSelected ? "text-primary" : "text-text-muted/30"
-        )}>
+
+        <span
+          className={clsx(
+            'material-symbols-outlined text-sm transition-transform group-hover:translate-x-1',
+            isSelected ? 'text-primary' : 'text-text-muted/30',
+          )}
+        >
           chevron_right
         </span>
       </div>

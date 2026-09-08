@@ -23,6 +23,11 @@ vi.mock('@loopdev/ui', () => ({
   Button: ({ children, ...props }: { children: ReactNode }) => (
     <button {...props}>{children}</button>
   ),
+  IconButton: ({ children, ariaLabel, ...props }: { children: ReactNode; ariaLabel: string }) => (
+    <button aria-label={ariaLabel} {...props}>
+      {children}
+    </button>
+  ),
   Heading: ({ as: Tag = 'h2', children, ...props }: { as?: ElementType; children: ReactNode }) => (
     <Tag {...props}>{children}</Tag>
   ),

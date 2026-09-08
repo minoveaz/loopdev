@@ -51,11 +51,7 @@ import { MetricGauge } from '@/components/atoms/indicators/MetricGauge';
 import { MetricCard } from '@/components/atoms/surfaces/MetricCard';
 import { SignalCard } from './SignalCard';
 import { BotMetricsDashboardProps } from './types';
-import {
-  formatPercentage,
-  formatATR,
-  formatTimeAgo,
-} from '@/lib/metrics/metricsFormatter';
+import { formatPercentage, formatATR, formatTimeAgo } from '@/lib/metrics/metricsFormatter';
 
 export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) => {
   const { botName = 'Trading Bot', showExtended = false, className = '' } = props;
@@ -83,7 +79,10 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
         className={`border-status-error/50 bg-status-error/5 rounded-lg border p-4 ${className}`}
       >
         <p className="text-status-error text-sm">{error}</p>
-        <Button variant="ghost" size="sm" type="button"
+        <Button
+          variant="ghost"
+          size="sm"
+          type="button"
           onClick={refresh}
           className="text-nano text-status-error mt-2 underline hover:opacity-70"
         >
@@ -106,7 +105,9 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Heading as="h2" size="lg" weight="bold" className="text-primary">{botName}</Heading>
+          <Heading as="h2" size="lg" weight="bold" className="text-primary">
+            {botName}
+          </Heading>
           <p className="text-nano text-primary-light opacity-70">
             Updated {formatTimeAgo(metrics.last_updated)}
             {isConnected ? ' • Live' : ' • Polling'}
@@ -211,7 +212,9 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Signal Analysis Section */}
       <TechnicalSurface variant="surface" radius="md" border="technical" className="space-y-3 p-4">
-        <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Entry Signals</Heading>
+        <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">
+          Entry Signals
+        </Heading>
 
         <div className="grid grid-cols-2 gap-4">
           <SignalCard
@@ -231,8 +234,15 @@ export const BotMetricsDashboard: React.FC<BotMetricsDashboardProps> = (props) =
 
       {/* Position Preview Section */}
       {showExtended && (
-        <TechnicalSurface variant="surface" radius="md" border="technical" className="space-y-3 p-4">
-          <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">Position Preview</Heading>
+        <TechnicalSurface
+          variant="surface"
+          radius="md"
+          border="technical"
+          className="space-y-3 p-4"
+        >
+          <Heading as="h3" size="sm" weight="medium" className="text-technical text-primary">
+            Position Preview
+          </Heading>
 
           <div className="grid grid-cols-2 gap-4">
             <PositionPreview

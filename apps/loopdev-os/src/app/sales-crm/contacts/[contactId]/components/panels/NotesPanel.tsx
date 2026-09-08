@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FileText, Plus } from 'lucide-react';
-import { Button } from '@loopdev/ui';
+import { Button, Heading } from '@loopdev/ui';
 import { formatDate } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
 import type { NoteDisplayItem } from '../customer360DisplayTypes';
@@ -19,7 +19,9 @@ export function NotesPanel({ displayedNotes }: NotesPanelProps) {
     <div className="flex w-full min-w-0 flex-1 flex-col space-y-4">
       <div className="border-border-subtle flex items-center justify-between border-b pb-3">
         <div>
-          <h3 className="text-text-main text-sm font-semibold">Internal Notes</h3>
+          <Heading as="h3" size="sm" weight="semibold" className="text-text-main">
+            Internal Notes
+          </Heading>
           <p className="text-text-muted mt-0.5 text-xs">
             Clearance-governed executive notes, call recaps, and account intelligence.
           </p>
@@ -39,6 +41,7 @@ export function NotesPanel({ displayedNotes }: NotesPanelProps) {
           <span className="text-text-muted text-[11px]">Visibilidad: Equipo CRM</span>
           <Button
             size="sm"
+            variant="primary"
             disabled={!quickNote.trim()}
             onClick={() => {
               setQuickNote('');

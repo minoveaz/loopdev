@@ -12,7 +12,7 @@ import {
   ListTodo,
   Edit3,
 } from 'lucide-react';
-import { Heading, Select, TechnicalSurface } from '@loopdev/ui';
+import { Button, Heading, IconButton, Select, TechnicalSurface } from '@loopdev/ui';
 import type { Customer360RecordView } from '@loopdev/contracts';
 import { formatCurrency, getInitials } from './types';
 import { SimulatedBadge } from './sharedComponents';
@@ -70,7 +70,7 @@ export function CustomerHero({
                 {initials}
               </div>
               <span
-                className="border-surface-light dark:border-surface-dark shadow-xs absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 bg-emerald-500 sm:-bottom-1 sm:-right-1 sm:h-5 sm:w-5"
+                className="border-surface-light dark:border-surface-dark bg-status-success shadow-xs absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 sm:-bottom-1 sm:-right-1 sm:h-5 sm:w-5"
                 title="Active contact record"
               >
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white sm:h-2 sm:w-2" />
@@ -87,8 +87,8 @@ export function CustomerHero({
                 >
                   {name}
                 </Heading>
-                <span className="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 sm:inline-flex dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <span className="border-status-success/30 bg-status-success/10 text-status-success hidden items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium sm:inline-flex">
+                  <span className="bg-status-success h-1.5 w-1.5 rounded-full" />
                   Authorized Contact
                 </span>
               </div>
@@ -116,7 +116,7 @@ export function CustomerHero({
               <a
                 href={`tel:${view.contact.phone}`}
                 aria-label="Llamar al contacto"
-                className="shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xs text-emerald-600 transition-transform active:scale-95 sm:h-9 sm:w-9 dark:text-emerald-400"
+                className="border-status-success/30 bg-status-success/10 text-status-success shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border text-xs transition-transform active:scale-95 sm:h-9 sm:w-9"
                 title="Llamar"
               >
                 <Phone className="h-4 w-4" />
@@ -126,22 +126,25 @@ export function CustomerHero({
               <a
                 href={`mailto:${view.contact.email}`}
                 aria-label="Enviar correo"
-                className="shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-500/10 text-xs text-blue-600 transition-transform active:scale-95 sm:h-9 sm:w-9 dark:text-blue-400"
+                className="border-status-info/30 bg-status-info/10 text-status-info shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border text-xs transition-transform active:scale-95 sm:h-9 sm:w-9"
                 title="Email"
               >
                 <Mail className="h-4 w-4" />
               </a>
             ) : null}
             {onEditContact && (
-              <button
+              <IconButton
                 type="button"
+                variant="ghost"
+                size="md"
+                ariaLabel="Editar contacto"
                 onClick={onEditContact}
                 aria-label="Editar contacto"
                 className="bg-primary/10 border-primary/20 text-primary shadow-xs flex h-10 w-10 items-center justify-center rounded-xl border text-xs transition-transform active:scale-95 sm:h-9 sm:w-9"
                 title="Editar contacto"
               >
                 <Edit3 className="h-4 w-4" />
-              </button>
+              </IconButton>
             )}
           </div>
         </div>
@@ -183,15 +186,17 @@ export function CustomerHero({
           ) : null}
 
           {onEditContact && (
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              size="sm"
               onClick={onEditContact}
               className="border-border-subtle bg-surface-light dark:bg-surface-dark text-text-main shadow-xs hover:bg-surface-muted/60 inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all"
               title="Editar ficha completa"
             >
               <Edit3 className="text-text-muted h-3.5 w-3.5" />
               <span>Editar contacto</span>
-            </button>
+            </Button>
           )}
 
           <Link
@@ -225,9 +230,9 @@ export function CustomerHero({
               <span className="text-text-muted text-[11px] font-medium sm:text-xs">Tareas</span>
               {isTasksSimulated && <SimulatedBadge />}
             </div>
-            <ListTodo className="h-3.5 w-3.5 shrink-0 text-amber-500 sm:h-4 sm:w-4" />
+            <ListTodo className="text-status-warning h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
           </div>
-          <p className="mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight text-amber-500 sm:mt-1 sm:text-2xl">
+          <p className="text-status-warning mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight sm:mt-1 sm:text-2xl">
             {openTasksCount} pend.
           </p>
         </div>
@@ -238,9 +243,9 @@ export function CustomerHero({
               <span className="text-text-muted text-[11px] font-medium sm:text-xs">Leads</span>
               {isLeadsSimulated && <SimulatedBadge />}
             </div>
-            <UserCheck className="h-3.5 w-3.5 shrink-0 text-emerald-500 sm:h-4 sm:w-4" />
+            <UserCheck className="text-status-success h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
           </div>
-          <p className="mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight text-emerald-600 sm:mt-1 sm:text-2xl dark:text-emerald-400">
+          <p className="text-status-success mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight sm:mt-1 sm:text-2xl">
             {leadsCount} cualif.
           </p>
         </div>
@@ -251,7 +256,7 @@ export function CustomerHero({
               <span className="text-text-muted text-[11px] font-medium sm:text-xs">Eventos</span>
               {isTimelineSimulated && <SimulatedBadge />}
             </div>
-            <Clock className="h-3.5 w-3.5 shrink-0 text-purple-500 sm:h-4 sm:w-4" />
+            <Clock className="text-accent h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
           </div>
           <p className="text-text-main mt-0.5 whitespace-nowrap text-sm font-bold tracking-tight sm:mt-1 sm:text-2xl">
             {timelineCount} hist.

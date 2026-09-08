@@ -15,15 +15,19 @@ export const StructuredTextField: React.FC<StructuredTextFieldProps> = ({
   isEditable,
   onValueChange,
   onClick,
-  className
+  className,
 }) => {
   return (
-    <div 
-      className={cn("flex flex-col gap-3 group", className)}
+    <div
+      className={cn('flex flex-col gap-3 group', className)}
       onClick={!isEditable ? onClick : undefined}
     >
       <div className="flex flex-col gap-1">
-        <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+        <LpdText
+          size="nano"
+          weight="bold"
+          className="text-text-muted uppercase tracking-widest opacity-60"
+        >
           {label}
         </LpdText>
         {description && (
@@ -33,12 +37,14 @@ export const StructuredTextField: React.FC<StructuredTextFieldProps> = ({
         )}
       </div>
 
-      <div className={cn(
-        "relative rounded-xl transition-all duration-300",
-        isEditable 
-          ? "bg-background-surface border border-border-technical focus-within:border-primary/40 p-1" 
-          : "hover:bg-background-subtle/50 cursor-pointer p-0"
-      )}>
+      <div
+        className={cn(
+          'relative rounded-xl transition-all duration-300',
+          isEditable
+            ? 'bg-background-surface border border-border-technical focus-within:border-primary/40 p-1'
+            : 'hover:bg-background-subtle/50 cursor-pointer p-0',
+        )}
+      >
         {isEditable ? (
           <textarea
             value={value}

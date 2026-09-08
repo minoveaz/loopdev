@@ -79,7 +79,7 @@ body {
 }
 
 .isotipo-gradient {
-  background: linear-gradient(135deg, #135bec, #8B5CF6, #FFD700);
+  background: linear-gradient(135deg, #135bec, #8b5cf6, #ffd700);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

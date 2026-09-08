@@ -12,12 +12,14 @@ import { RecentActivityFeedProps } from './types';
 export const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
   events,
   isLoading,
-  onEventClick
+  onEventClick,
 }) => {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-2">
-        {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-14 w-full rounded-lg" />)}
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Skeleton key={i} className="h-14 w-full rounded-lg" />
+        ))}
       </div>
     );
   }
@@ -25,20 +27,23 @@ export const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Heading as="h2" size="sm" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+        <Heading
+          as="h2"
+          size="sm"
+          weight="bold"
+          className="text-text-muted uppercase tracking-widest opacity-60"
+        >
           Recent Activity
         </Heading>
-        <Button variant="ghost" size="sm" className="text-[10px]">View Full Audit</Button>
+        <Button variant="ghost" size="sm" className="text-[10px]">
+          View Full Audit
+        </Button>
       </div>
 
       <div className="flex flex-col gap-1">
         {events.length > 0 ? (
           events.map((event) => (
-            <AuditEventRow
-              key={event.id}
-              event={event}
-              onClick={() => onEventClick?.(event)}
-            />
+            <AuditEventRow key={event.id} event={event} onClick={() => onEventClick?.(event)} />
           ))
         ) : (
           <div className="border-border-technical rounded-xl border border-dashed py-12 text-center opacity-40">

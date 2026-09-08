@@ -2,11 +2,12 @@
 
 import type { ReactNode } from 'react';
 import { FlaskConical } from 'lucide-react';
+import { Heading } from '@loopdev/ui';
 
 export function SimulatedBadge({ className = '' }: { className?: string }) {
   return (
     <span
-      className={`inline-flex shrink-0 select-none items-center gap-1 rounded border border-amber-500/30 bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 ${className}`}
+      className={`border-status-warning/30 bg-status-warning/15 text-status-warning inline-flex shrink-0 select-none items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${className}`}
       title="Dato simulado para pruebas de interfaz y diseño"
     >
       <FlaskConical className="h-2.5 w-2.5" />
@@ -31,7 +32,9 @@ export function EmptyState({
       <div className="bg-surface-muted/60 border-border-subtle shadow-xs mb-3.5 flex h-12 w-12 items-center justify-center rounded-2xl border">
         {icon}
       </div>
-      <h4 className="text-text-main text-sm font-semibold">{title}</h4>
+      <Heading as="h4" size="sm" weight="semibold" className="text-text-main">
+        {title}
+      </Heading>
       <p className="text-text-muted mt-1 max-w-sm text-xs leading-relaxed">{description}</p>
       {action && <div className="mt-4">{action}</div>}
     </div>

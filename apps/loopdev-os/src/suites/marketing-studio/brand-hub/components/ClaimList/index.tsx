@@ -14,11 +14,16 @@ export const ClaimList: React.FC<ClaimListProps> = ({
   items,
   type,
   onItemClick,
-  className
+  className,
 }) => {
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
-      <Heading as="h3" size="sm" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+    <div className={cn('flex flex-col gap-4', className)}>
+      <Heading
+        as="h3"
+        size="sm"
+        weight="bold"
+        className="text-text-muted uppercase tracking-widest opacity-60"
+      >
         {title}
       </Heading>
 
@@ -45,7 +50,11 @@ export const ClaimList: React.FC<ClaimListProps> = ({
               className="border-border-technical bg-background-surface hover:border-primary/20 group flex items-center justify-between rounded-xl border p-3 text-left transition-all"
             >
               <div className="flex flex-col gap-0.5">
-                <LpdText size="sm" weight="bold" className="text-text-main group-hover:text-primary transition-colors">
+                <LpdText
+                  size="sm"
+                  weight="bold"
+                  className="text-text-main group-hover:text-primary transition-colors"
+                >
                   {claim.text}
                 </LpdText>
                 <LpdText size="xs" className="text-text-muted opacity-40">
@@ -53,10 +62,13 @@ export const ClaimList: React.FC<ClaimListProps> = ({
                 </LpdText>
               </div>
               <div className="flex items-center gap-2">
-                <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-widest opacity-40">
+                <LpdText
+                  size="nano"
+                  className="text-text-muted font-mono uppercase tracking-widest opacity-40"
+                >
                   {claim.jurisdiction}
                 </LpdText>
-                <TechnicalStatusBadge 
+                <TechnicalStatusBadge
                   label={claim.severity.toUpperCase()}
                   severity={claim.severity === 'block' ? 'danger' : 'warning'}
                   variant="glass"

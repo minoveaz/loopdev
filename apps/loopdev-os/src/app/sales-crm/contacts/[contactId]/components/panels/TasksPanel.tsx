@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { ListTodo, Plus, ChevronRight } from 'lucide-react';
+import { Heading } from '@loopdev/ui';
 import { formatDate } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
 import type { TaskDisplayItem } from '../customer360DisplayTypes';
@@ -18,7 +19,9 @@ export function TasksPanel({ name, contactId, displayedTasks }: TasksPanelProps)
     <div className="flex w-full min-w-0 flex-1 flex-col space-y-4">
       <div className="border-border-subtle flex items-center justify-between border-b pb-3">
         <div>
-          <h3 className="text-text-main text-sm font-semibold">Tasks & Follow-ups</h3>
+          <Heading as="h3" size="sm" weight="semibold" className="text-text-main">
+            Tasks & Follow-ups
+          </Heading>
           <p className="text-text-muted mt-0.5 text-xs">
             Pending action items, internal commitments, and follow-ups.
           </p>

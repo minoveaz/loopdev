@@ -12,47 +12,47 @@ export const PricingComparisonTable: React.FC<PricingComparisonTableProps> = ({
   className,
 }) => {
   return (
-    <section className={clsx('w-full py-8 flex flex-col gap-8', className)}>
-      <div className="text-center max-w-2xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">{title}</h2>
-        {subtitle && <p className="text-sm text-slate-500 mt-2">{subtitle}</p>}
+    <section className={clsx('flex w-full flex-col gap-8 py-8', className)}>
+      <div className="mx-auto max-w-2xl text-center">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{title}</h2>
+        {subtitle && <p className="mt-2 text-sm text-slate-500">{subtitle}</p>}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full items-stretch">
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-stretch gap-6 md:grid-cols-3">
         {tiers.map((tier) => (
           <div
             key={tier.id}
             className={clsx(
-              'bg-white border rounded-3xl p-6 sm:p-8 flex flex-col justify-between relative transition-all duration-200',
+              'relative flex flex-col justify-between rounded-3xl border bg-white p-6 transition-all duration-200 sm:p-8',
               tier.isPopular
-                ? 'border-[var(--lpd-brand-primary)] shadow-xl ring-2 ring-[var(--lpd-brand-primary)]/20 md:-translate-y-2'
+                ? 'ring-[var(--lpd-brand-primary)]/20 border-[var(--lpd-brand-primary)] shadow-xl ring-2 md:-translate-y-2'
                 : 'border-slate-200/90 shadow-sm hover:shadow-md',
             )}
           >
             {tier.isPopular && (
-              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-[var(--lpd-brand-primary)] text-white text-[11px] font-bold uppercase tracking-wider rounded-full shadow-sm">
+              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--lpd-brand-primary)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm">
                 Más popular
               </span>
             )}
 
             <div>
               <h3 className="text-lg font-bold text-slate-900">{tier.name}</h3>
-              <p className="text-xs text-slate-500 mt-1">{tier.description}</p>
+              <p className="mt-1 text-xs text-slate-500">{tier.description}</p>
 
-              <div className="mt-4 mb-6 flex items-baseline gap-1">
-                <span className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+              <div className="mb-6 mt-4 flex items-baseline gap-1">
+                <span className="text-3xl font-extrabold text-slate-900 sm:text-4xl">
                   {tier.price}
                 </span>
                 {tier.period && <span className="text-xs text-slate-500">/{tier.period}</span>}
               </div>
 
-              <div className="border-t border-slate-100 pt-5 flex flex-col gap-3">
+              <div className="flex flex-col gap-3 border-t border-slate-100 pt-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   Incluye:
                 </p>
                 {tier.features.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700">
-                    <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-500" />
                     <span>{feature}</span>
                   </div>
                 ))}
@@ -63,10 +63,10 @@ export const PricingComparisonTable: React.FC<PricingComparisonTableProps> = ({
               type="button"
               onClick={tier.onSelect}
               className={clsx(
-                'w-full py-3 px-4 text-xs font-bold rounded-xl transition-all mt-8 min-h-[44px]',
+                'mt-8 min-h-[44px] w-full rounded-xl px-4 py-3 text-xs font-bold transition-all',
                 tier.isPopular
-                  ? 'bg-[var(--lpd-brand-primary)] hover:bg-[var(--lpd-brand-primary-hover)] text-white shadow-md'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-800',
+                  ? 'bg-[var(--lpd-brand-primary)] text-white shadow-md hover:bg-[var(--lpd-brand-primary-hover)]'
+                  : 'bg-slate-100 text-slate-800 hover:bg-slate-200',
               )}
             >
               {tier.ctaLabel}

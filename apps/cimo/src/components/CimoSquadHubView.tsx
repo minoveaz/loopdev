@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
-import {
-  ArrowLeft,
-  Check,
-  Coffee,
-  MapPin,
-  Plus,
-  Send,
-  Share2,
-} from 'lucide-react';
-import type {  } from '../data/mockCrewNetwork';
+import { ArrowLeft, Check, Coffee, MapPin, Plus, Send, Share2 } from 'lucide-react';
+import type {} from '../data/mockCrewNetwork';
 import { getSquadBySlugOrId } from '../data/mockCrewNetwork';
 
 export interface CimoSquadHubViewProps {

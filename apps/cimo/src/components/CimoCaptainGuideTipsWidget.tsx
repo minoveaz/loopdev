@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  CheckCircle2,
-  Lightbulb,
-  ShieldCheck,
-} from 'lucide-react';
+import { CheckCircle2, Lightbulb, ShieldCheck } from 'lucide-react';
 
 export const CimoCaptainGuideTipsWidget: React.FC = () => {
   return (

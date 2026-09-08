@@ -159,9 +159,9 @@ export function ContactDetailDrawerContent({
       {saveSuccess && (
         <div
           role="status"
-          className="animate-in fade-in flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 text-xs font-medium text-emerald-700 dark:text-emerald-300"
+          className="animate-in fade-in border-status-success/40 bg-status-success/10 text-status-success flex items-center gap-2 rounded-xl border p-3.5 text-xs font-medium"
         >
-          <Check size={16} className="text-emerald-600" />
+          <Check size={16} className="text-status-success" />
           <span>¡Contacto actualizado con éxito!</span>
         </div>
       )}

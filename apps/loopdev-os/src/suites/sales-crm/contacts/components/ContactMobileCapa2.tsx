@@ -3,6 +3,7 @@
 import React from 'react';
 import type { ContactSegmentFilter } from '../types';
 import { Users, ShieldCheck, Clock, Flame, Phone } from 'lucide-react';
+import { Button } from '@loopdev/ui';
 
 interface ContactMobileCapa2Props {
   activeSegment: ContactSegmentFilter;
@@ -61,9 +62,11 @@ export function ContactMobileCapa2({
           {segments.map((seg) => {
             const isActive = activeSegment === seg.id;
             return (
-              <button
+              <Button
                 key={seg.id}
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => onSelectSegment(seg.id)}
                 className={`flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
                   isActive
@@ -80,7 +83,7 @@ export function ContactMobileCapa2({
                 >
                   {seg.count}
                 </span>
-              </button>
+              </Button>
             );
           })}
         </div>

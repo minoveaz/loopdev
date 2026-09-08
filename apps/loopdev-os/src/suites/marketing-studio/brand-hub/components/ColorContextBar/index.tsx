@@ -16,18 +16,17 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
   search,
   onSearchChange,
   activeCategory,
-  onCategoryChange
+  onCategoryChange,
 }) => {
   const categories = [
     { id: 'all', label: 'All' },
     { id: 'core', label: 'Core' },
     { id: 'semantic', label: 'Semantic' },
-    { id: 'neutral', label: 'Neutral' }
+    { id: 'neutral', label: 'Neutral' },
   ];
 
   return (
     <div className="border-border-technical bg-background-surface/50 sticky top-0 z-10 flex flex-wrap items-center justify-between gap-6 rounded-2xl border p-4 shadow-sm backdrop-blur-sm">
-      
       {/* LEFT: FILTERS & SEARCH */}
       <div className="flex min-w-[300px] flex-1 items-center gap-6">
         {/* CATEGORY TABS */}
@@ -39,10 +38,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               variant="ghost"
               onClick={() => onCategoryChange(cat.id)}
               className={cn(
-                "px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                activeCategory === cat.id 
-                  ? "bg-white text-primary shadow-sm ring-1 ring-black/5" 
-                  : "text-text-muted hover:text-text-main"
+                'px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all',
+                activeCategory === cat.id
+                  ? 'bg-white text-primary shadow-sm ring-1 ring-black/5'
+                  : 'text-text-muted hover:text-text-main',
               )}
             >
               {cat.label}
@@ -70,8 +69,18 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
         {/* THEME TOGGLE */}
         <div className="border-border-technical/50 flex items-center gap-2 border-r px-3 py-1.5 pr-4">
           <div className="flex flex-col items-end pr-2">
-            <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40">Context</LpdText>
-            <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-tighter opacity-40">Theme</LpdText>
+            <LpdText
+              size="nano"
+              className="text-text-muted font-mono uppercase tracking-tighter opacity-40"
+            >
+              Context
+            </LpdText>
+            <LpdText
+              size="nano"
+              className="text-text-muted font-mono uppercase tracking-tighter opacity-40"
+            >
+              Theme
+            </LpdText>
           </div>
           <div className="bg-background-subtle border-border-technical/30 flex rounded-lg border p-0.5">
             <Button
@@ -80,8 +89,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               size="sm"
               onClick={() => onThemeChange('light')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                theme === 'light' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                theme === 'light'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">light_mode</span>
@@ -92,8 +103,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               size="sm"
               onClick={() => onThemeChange('dark')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                theme === 'dark' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                theme === 'dark'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">dark_mode</span>
@@ -113,8 +126,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               size="sm"
               onClick={() => onViewModeChange('grid')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                viewMode === 'grid' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                viewMode === 'grid'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">grid_view</span>
@@ -125,8 +140,10 @@ export const ColorContextBar: React.FC<ColorContextBarProps> = ({
               size="sm"
               onClick={() => onViewModeChange('table')}
               className={cn(
-                "p-1.5 rounded-md transition-all",
-                viewMode === 'table' ? "bg-white text-primary shadow-sm" : "text-text-muted opacity-40 hover:opacity-100"
+                'p-1.5 rounded-md transition-all',
+                viewMode === 'table'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-text-muted opacity-40 hover:opacity-100',
               )}
             >
               <span className="material-symbols-outlined text-sm">table_rows</span>

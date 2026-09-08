@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Award,
-  Lock,
-  ShieldCheck,
-  Sunrise,
-  Trophy,
-} from 'lucide-react';
+import { Award, Lock, ShieldCheck, Sunrise, Trophy } from 'lucide-react';
 
 export interface CimoBadgesShowcaseWidgetProps {
   onNavigateToLeaderboard?: () => void;

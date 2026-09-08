@@ -24,18 +24,14 @@ export function ContactIdentityBadge({
   if (isVerified) {
     return (
       <span
-        className={`inline-flex items-center rounded-full border border-emerald-200/80 bg-emerald-50 font-medium text-emerald-700 dark:border-emerald-800/40 dark:bg-emerald-950/40 dark:text-emerald-300 ${sizeClasses} ${className}`}
+        className={`border-status-success/30 bg-status-success/10 text-status-success inline-flex items-center rounded-full border font-medium ${sizeClasses} ${className}`}
         title="Identidad verificada"
       >
         <span
-          className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"
+          className="bg-status-success h-1.5 w-1.5 animate-pulse rounded-full"
           aria-hidden="true"
         />
-        <ShieldCheck
-          size={iconSize}
-          strokeWidth={2}
-          className="text-emerald-600 dark:text-emerald-400"
-        />
+        <ShieldCheck size={iconSize} strokeWidth={2} className="text-status-success" />
         <span>Verificado</span>
       </span>
     );
@@ -43,11 +39,11 @@ export function ContactIdentityBadge({
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border border-amber-200/80 bg-amber-50 font-medium text-amber-700 dark:border-amber-800/40 dark:bg-amber-950/40 dark:text-amber-300 ${sizeClasses} ${className}`}
+      className={`border-status-warning/30 bg-status-warning/10 text-status-warning inline-flex items-center rounded-full border font-medium ${sizeClasses} ${className}`}
       title="Identidad pendiente de validación"
     >
-      <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />
-      <Clock size={iconSize} strokeWidth={2} className="text-amber-600 dark:text-amber-400" />
+      <span className="bg-status-warning h-1.5 w-1.5 rounded-full" aria-hidden="true" />
+      <Clock size={iconSize} strokeWidth={2} className="text-status-warning" />
       <span>Pendiente</span>
     </span>
   );

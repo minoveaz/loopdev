@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Briefcase, ChevronRight, Plus } from 'lucide-react';
+import { Heading } from '@loopdev/ui';
 import { formatCurrency } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
 import type { OpportunityDisplayItem } from '../customer360DisplayTypes';
@@ -17,7 +18,9 @@ export function OpportunitiesPanel({ name, displayedOpportunities }: Opportuniti
     <div className="flex w-full min-w-0 flex-1 flex-col space-y-4 overflow-x-hidden">
       <div className="border-border-subtle flex items-center justify-between gap-2 border-b pb-3">
         <div className="min-w-0">
-          <h3 className="text-text-main truncate text-sm font-semibold">Commercial Deals</h3>
+          <Heading as="h3" size="sm" weight="semibold" className="text-text-main truncate">
+            Commercial Deals
+          </Heading>
           <p className="text-text-muted mt-0.5 line-clamp-1 text-xs sm:line-clamp-none">
             Active negotiations, pipeline stages, and expected value.
           </p>
@@ -48,7 +51,14 @@ export function OpportunitiesPanel({ name, displayedOpportunities }: Opportuniti
                 <div className="flex min-w-0 items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex min-w-0 items-center gap-1.5">
-                      <h4 className="text-text-main truncate text-sm font-semibold">{opp.name}</h4>
+                      <Heading
+                        as="h4"
+                        size="sm"
+                        weight="semibold"
+                        className="text-text-main truncate"
+                      >
+                        {opp.name}
+                      </Heading>
                       {isSimulated && <SimulatedBadge />}
                     </div>
                     <span className="text-text-muted mt-0.5 block text-xs">

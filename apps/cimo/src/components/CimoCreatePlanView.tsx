@@ -297,10 +297,7 @@ export const CimoCreatePlanView: React.FC<CimoCreatePlanViewProps> = ({
     location,
     selectedCity,
   );
-  const { results: liveThirdHalfResults } = useSpainLocationSearch(
-    thirdHalfVenue,
-    selectedCity,
-  );
+  const { results: liveThirdHalfResults } = useSpainLocationSearch(thirdHalfVenue, selectedCity);
 
   // Click outside listener for dropdowns
   useEffect(() => {

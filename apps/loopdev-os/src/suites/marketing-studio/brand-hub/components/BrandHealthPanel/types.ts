@@ -1,4 +1,4 @@
-import { BrandHealth } from "../../types";
+import { BrandHealth } from '../../types';
 
 export interface BrandHealthPanelProps {
   health: BrandHealth;

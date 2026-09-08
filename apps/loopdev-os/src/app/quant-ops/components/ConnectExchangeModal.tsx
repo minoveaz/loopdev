@@ -129,7 +129,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
               <LpdText
                 size="nano"
                 weight="black"
-                className="px-1 uppercase tracking-[0.2em] text-amber-500 opacity-60"
+                className="px-1 uppercase tracking-[0.2em] text-status-warning opacity-60"
               >
                 00. Execution_Environment
               </LpdText>
@@ -237,7 +237,7 @@ export const ConnectExchangeModal: React.FC<ConnectExchangeModalProps> = ({
               <LpdText
                 size="nano"
                 weight="black"
-                className="px-1 uppercase tracking-[0.2em] text-amber-500 opacity-60"
+                className="px-1 uppercase tracking-[0.2em] text-status-warning opacity-60"
               >
                 02. Encrypted_Credentials
               </LpdText>

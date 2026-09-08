@@ -14,7 +14,7 @@ export const ClaimsGovernanceBlock: React.FC<ClaimsGovernanceBlockProps> = ({
   regulated,
   isLoading,
   onClaimClick,
-  onForbiddenClick
+  onForbiddenClick,
 }) => {
   if (isLoading) {
     return <Skeleton className="h-96 w-full rounded-2xl" />;
@@ -49,7 +49,7 @@ export const ClaimsGovernanceBlock: React.FC<ClaimsGovernanceBlockProps> = ({
             items={regulated}
             type="regulated"
             onItemClick={(id) => {
-              const claim = regulated.find(c => c.id === id);
+              const claim = regulated.find((c) => c.id === id);
               if (claim) onClaimClick?.(claim);
             }}
           />

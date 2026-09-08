@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Button,
   Heading,
+  IconButton,
   ModuleHeader,
   ResponsiveTable,
   Select,
@@ -97,10 +98,10 @@ function getRelationBadge(task: Task) {
   let icon = <User className="text-text-muted size-3 shrink-0" />;
   let label = 'Contacto';
   if (task.relationType === 'lead') {
-    icon = <Sparkles className="size-3 shrink-0 text-amber-500" />;
+    icon = <Sparkles className="size-3 shrink-0 text-status-warning" />;
     label = 'Lead';
   } else if (task.relationType === 'opportunity') {
-    icon = <TrendingUp className="size-3 shrink-0 text-emerald-500" />;
+    icon = <TrendingUp className="size-3 shrink-0 text-status-success" />;
     label = 'Trato';
   }
 
@@ -123,19 +124,19 @@ function getTypeBadge(type: string | null | undefined) {
   let label = type;
 
   if (normalized.includes('call') || normalized.includes('llamada')) {
-    icon = <Phone className="size-3 shrink-0 text-blue-500" />;
+    icon = <Phone className="size-3 shrink-0 text-status-info" />;
     label = 'Llamada';
   } else if (normalized.includes('email') || normalized.includes('correo')) {
-    icon = <Mail className="size-3 shrink-0 text-purple-500" />;
+    icon = <Mail className="size-3 shrink-0 text-accent" />;
     label = 'Correo';
   } else if (normalized.includes('meeting') || normalized.includes('reunion')) {
-    icon = <Calendar className="size-3 shrink-0 text-amber-500" />;
+    icon = <Calendar className="size-3 shrink-0 text-status-warning" />;
     label = 'Reunión';
   } else if (normalized.includes('contract') || normalized.includes('contrato')) {
-    icon = <FileText className="size-3 shrink-0 text-emerald-500" />;
+    icon = <FileText className="size-3 shrink-0 text-status-success" />;
     label = 'Contrato';
   } else if (normalized.includes('verification') || normalized.includes('revision')) {
-    icon = <CheckCircle2 className="size-3 shrink-0 text-indigo-500" />;
+    icon = <CheckCircle2 className="size-3 shrink-0 text-primary" />;
     label = 'Revisión';
   }
 
@@ -151,15 +152,15 @@ function getLinearPriorityBadge(priority: TaskPriority) {
   switch (priority) {
     case 'urgent':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-red-500/25 bg-red-500/10 px-2 py-0.5 text-[11px] font-semibold text-red-600 dark:text-red-400">
-          <AlertCircle className="size-3 shrink-0 text-red-500" />
+        <span className="border-status-error/25 bg-status-error/10 text-status-error inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-semibold">
+          <AlertCircle className="text-status-error size-3 shrink-0" />
           <span>Urgente</span>
         </span>
       );
     case 'high':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:text-amber-400">
-          <SignalHigh className="size-3 shrink-0 text-amber-500" />
+        <span className="border-status-warning/25 bg-status-warning/10 text-status-warning inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-medium">
+          <SignalHigh className="text-status-warning size-3 shrink-0" />
           <span>Alta</span>
         </span>
       );
@@ -190,14 +191,14 @@ function getStatusBadge(status: TaskStatus, overdue: boolean) {
   switch (status) {
     case 'completed':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+        <span className="border-status-success/20 bg-status-success/10 text-status-success inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-medium">
           <CheckCircle2 className="size-3 shrink-0" />
           <span>Completada</span>
         </span>
       );
     case 'in_progress':
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-medium text-blue-600 dark:text-blue-400">
+        <span className="border-status-info/20 bg-status-info/10 text-status-info inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-medium">
           <Clock className="size-3 shrink-0" />
           <span>En progreso</span>
         </span>
@@ -212,8 +213,8 @@ function getStatusBadge(status: TaskStatus, overdue: boolean) {
     default:
       if (overdue) {
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-rose-500/25 bg-rose-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
-            <AlertCircle className="size-3 shrink-0 text-rose-500" />
+          <span className="border-status-error/25 bg-status-error/10 text-status-error inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[11px] font-semibold">
+            <AlertCircle className="text-status-error size-3 shrink-0" />
             <span>Pendiente</span>
           </span>
         );
@@ -238,8 +239,8 @@ function formatDueBadge(dueAt: string | null, isDone: boolean) {
 
   if (overdue) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-md border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
-        <Clock className="size-3 shrink-0 text-rose-500" />
+      <span className="border-status-error/20 bg-status-error/10 text-status-error inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-semibold">
+        <Clock className="text-status-error size-3 shrink-0" />
         <span>{formatDate(dueAt)} (Vencida)</span>
       </span>
     );
@@ -247,8 +248,8 @@ function formatDueBadge(dueAt: string | null, isDone: boolean) {
 
   if (today) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-600 dark:text-amber-400">
-        <Calendar className="size-3 shrink-0 text-amber-500" />
+      <span className="border-status-warning/20 bg-status-warning/10 text-status-warning inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-semibold">
+        <Calendar className="text-status-warning size-3 shrink-0" />
         <span>Hoy</span>
       </span>
     );
@@ -280,7 +281,7 @@ function TaskStatusButton({
   if (isCompleted) {
     return (
       <div
-        className="shadow-xs mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white"
+        className="bg-status-success text-primary-foreground shadow-xs mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
         title="Tarea completada"
       >
         <Check className="size-3 stroke-[3]" />
@@ -289,11 +290,11 @@ function TaskStatusButton({
   }
 
   return (
-    <button
+    <IconButton
       type="button"
-      role="button"
-      name="Complete"
-      aria-label="Complete"
+      ariaLabel="Marcar como completada"
+      variant="ghost"
+      size="sm"
       disabled={pending || !canManage || isCancelled}
       onClick={(e) => {
         e.stopPropagation();
@@ -309,7 +310,7 @@ function TaskStatusButton({
       <Check
         className={`size-3 stroke-[2.5] transition-transform group-hover/chk:scale-100 ${isInProgress ? 'scale-0' : 'scale-75'}`}
       />
-    </button>
+    </IconButton>
   );
 }
 
@@ -451,15 +452,17 @@ export default function TasksPage() {
                 canManage={canManage}
               />
               <div className="min-w-0 flex-1">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setSelectedId(task.id)}
                   className="group/title text-text-main hover:text-primary flex cursor-pointer items-center gap-1.5 text-left text-sm font-medium transition-colors"
                 >
                   <span className={isDone ? 'text-text-muted/60 line-through' : ''}>
                     {task.title}
                   </span>
-                </button>
+                </Button>
                 <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs">
                   {getRelationBadge(task)}
                   {getTypeBadge(task.type)}
@@ -558,9 +561,11 @@ export default function TasksPage() {
             {slaTabs.map((tab) => {
               const isActive = slaFilter === tab.id;
               return (
-                <button
+                <Button
                   key={tab.id}
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setSlaFilter(tab.id)}
                   className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                     isActive
@@ -580,7 +585,7 @@ export default function TasksPage() {
                   >
                     {tab.count}
                   </span>
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -596,14 +601,17 @@ export default function TasksPage() {
                 className="border-border-subtle bg-background text-text-main placeholder:text-text-muted focus:border-primary focus:ring-primary shadow-xs w-full rounded-lg border py-1.5 pl-8 pr-7 text-xs outline-none transition-all focus:ring-1"
               />
               {query ? (
-                <button
+                <IconButton
                   type="button"
+                  variant="ghost"
+                  size="sm"
+                  ariaLabel="Limpiar búsqueda"
                   onClick={() => setQuery('')}
                   className="text-text-muted hover:text-text-main absolute right-2 top-1/2 -translate-y-1/2 p-0.5"
                   title="Limpiar búsqueda"
                 >
                   <X className="size-3" />
-                </button>
+                </IconButton>
               ) : null}
             </div>
 

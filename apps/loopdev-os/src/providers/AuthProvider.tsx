@@ -71,48 +71,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     pathnameRef.current = pathname;
   }, [pathname]);
 
-  const loadMemberships = useCallback(async (userId: string | undefined) => {
-    if (!userId) {
-      setMemberships([]);
-      return;
-    }
+  const loadMemberships = useCallback(
+    async (userId: string | undefined) => {
+      if (!userId) {
+        setMemberships([]);
+        return;
+      }
 
-    const { data, error } = await supabase
-      .from('organization_memberships')
-      .select('organization_id, user_id, role, status, created_at')
-      .eq('user_id', userId);
+      const { data, error } = await supabase
+        .from('organization_memberships')
+        .select('organization_id, user_id, role, status, created_at')
+        .eq('user_id', userId);
 
-    if (error) {
-      // The Platform Core migration is deployed through CI first. Until it is
-      // applied to the remote project, authentication must remain usable.
-      console.warn('Memberships are not available yet:', error.message);
-      setMemberships([]);
-      return;
-    }
+      if (error) {
+        // The Platform Core migration is deployed through CI first. Until it is
+        // applied to the remote project, authentication must remain usable.
+        console.warn('Memberships are not available yet:', error.message);
+        setMemberships([]);
+        return;
+      }
 
-    const parsedMemberships = (data ?? [])
-      .map((row) =>
-        OrganizationMembershipSchema.safeParse({
-          organizationId: row.organization_id,
-          userId: row.user_id,
-          role: row.role,
-          status: row.status,
-          createdAt: row.created_at,
-        }),
-      )
-      .flatMap((result) => (result.success ? [result.data] : []));
+      const parsedMemberships = (data ?? [])
+        .map((row) =>
+          OrganizationMembershipSchema.safeParse({
+            organizationId: row.organization_id,
+            userId: row.user_id,
+            role: row.role,
+            status: row.status,
+            createdAt: row.created_at,
+          }),
+        )
+        .flatMap((result) => (result.success ? [result.data] : []));
 
-    setMemberships(parsedMemberships);
-  }, [supabase]);
+      setMemberships(parsedMemberships);
+    },
+    [supabase],
+  );
 
-  const loadPlatformAdministrator = useCallback(async (userId: string | undefined) => {
-    if (!userId) {
-      setIsPlatformAdministrator(false);
-      return;
-    }
-    const { data, error } = await supabase.rpc('is_platform_administrator');
-    setIsPlatformAdministrator(!error && data === true);
-  }, [supabase]);
+  const loadPlatformAdministrator = useCallback(
+    async (userId: string | undefined) => {
+      if (!userId) {
+        setIsPlatformAdministrator(false);
+        return;
+      }
+      const { data, error } = await supabase.rpc('is_platform_administrator');
+      setIsPlatformAdministrator(!error && data === true);
+    },
+    [supabase],
+  );
 
   useEffect(() => {
     if (isE2EAuthBypassEnabled) return;

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { ListTodo, Briefcase, PhoneCall, Mail, X, UserCheck } from 'lucide-react';
+import { Button, IconButton } from '@loopdev/ui';
 
 interface CustomerQuickActionSheetProps {
   isOpen: boolean;
@@ -35,13 +36,16 @@ export function CustomerQuickActionSheet({
       >
         <div className="border-border-subtle flex items-center justify-between border-b pb-2">
           <span className="text-text-main text-sm font-semibold">Acción Rápida - {name}</span>
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Cerrar acciones rápidas"
             onClick={onClose}
             className="text-text-muted hover:text-text-main p-1 transition-colors"
           >
             <X className="h-4 w-4" />
-          </button>
+          </IconButton>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Link
@@ -59,25 +63,27 @@ export function CustomerQuickActionSheet({
             onClick={onClose}
             className="border-border-subtle bg-surface-muted/20 hover:border-primary/40 flex flex-col items-center gap-2 rounded-xl border p-3 text-center transition-all"
           >
-            <div className="rounded-xl bg-emerald-500/10 p-2.5 text-emerald-600 dark:text-emerald-400">
+            <div className="bg-status-success/10 text-status-success rounded-xl p-2.5">
               <Briefcase className="h-5 w-5" />
             </div>
             <span className="text-text-main text-xs font-medium">Nuevo Trato</span>
           </Link>
           {onEditContact && (
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => {
                 onClose();
                 onEditContact();
               }}
               className="border-border-subtle bg-surface-muted/20 hover:border-primary/40 flex flex-col items-center gap-2 rounded-xl border p-3 text-center transition-all"
             >
-              <div className="rounded-xl bg-amber-500/10 p-2.5 text-amber-600 dark:text-amber-400">
+              <div className="bg-status-warning/10 text-status-warning rounded-xl p-2.5">
                 <UserCheck className="h-5 w-5" />
               </div>
               <span className="text-text-main text-xs font-medium">Editar Ficha</span>
-            </button>
+            </Button>
           )}
           {phone ? (
             <a
@@ -85,7 +91,7 @@ export function CustomerQuickActionSheet({
               onClick={onClose}
               className="border-border-subtle bg-surface-muted/20 hover:border-primary/40 flex flex-col items-center gap-2 rounded-xl border p-3 text-center transition-all"
             >
-              <div className="rounded-xl bg-blue-500/10 p-2.5 text-blue-600 dark:text-blue-400">
+              <div className="bg-status-info/10 text-status-info rounded-xl p-2.5">
                 <PhoneCall className="h-5 w-5" />
               </div>
               <span className="text-text-main text-xs font-medium">Llamar</span>
@@ -97,7 +103,7 @@ export function CustomerQuickActionSheet({
               onClick={onClose}
               className="border-border-subtle bg-surface-muted/20 hover:border-primary/40 flex flex-col items-center gap-2 rounded-xl border p-3 text-center transition-all"
             >
-              <div className="rounded-xl bg-purple-500/10 p-2.5 text-purple-600 dark:text-purple-400">
+              <div className="bg-accent/10 text-accent rounded-xl p-2.5">
                 <Mail className="h-5 w-5" />
               </div>
               <span className="text-text-main text-xs font-medium">Enviar Email</span>

@@ -1,6 +1,7 @@
 'use client';
 
 import { User, Clock, Briefcase, ListTodo, FileText } from 'lucide-react';
+import { Button } from '@loopdev/ui';
 import type { CustomerTabKey } from './types';
 
 interface CustomerMobileTabBarProps {
@@ -21,8 +22,10 @@ export function CustomerMobileTabBar({
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] z-30 flex justify-center px-3 py-1 lg:hidden">
       <div className="bg-surface-light/95 dark:bg-surface-dark/95 border-border-subtle pointer-events-auto flex w-full max-w-sm items-center justify-between gap-0.5 rounded-2xl border p-1 shadow-lg backdrop-blur-xl">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('contact')}
           className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-center text-[10px] font-medium outline-none transition-all focus:outline-none sm:text-[11px] ${
             activeTab === 'contact'
@@ -32,10 +35,12 @@ export function CustomerMobileTabBar({
         >
           <User className="h-3.5 w-3.5 shrink-0" strokeWidth={activeTab === 'contact' ? 2 : 1.75} />
           <span className="truncate">Contacto</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('timeline')}
           className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-center text-[10px] font-medium outline-none transition-all focus:outline-none sm:text-[11px] ${
             activeTab === 'timeline'
@@ -59,10 +64,12 @@ export function CustomerMobileTabBar({
               {timelineCount}
             </span>
           )}
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('opportunities')}
           className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-center text-[10px] font-medium outline-none transition-all focus:outline-none sm:text-[11px] ${
             activeTab === 'opportunities'
@@ -86,10 +93,12 @@ export function CustomerMobileTabBar({
               {opportunitiesCount}
             </span>
           )}
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('tasks')}
           className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-center text-[10px] font-medium outline-none transition-all focus:outline-none sm:text-[11px] ${
             activeTab === 'tasks'
@@ -113,10 +122,12 @@ export function CustomerMobileTabBar({
               {openTasksCount}
             </span>
           )}
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => onSelectTab('notes')}
           className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-center text-[10px] font-medium outline-none transition-all focus:outline-none sm:text-[11px] ${
             activeTab === 'notes'
@@ -129,7 +140,7 @@ export function CustomerMobileTabBar({
             strokeWidth={activeTab === 'notes' ? 2 : 1.75}
           />
           <span className="truncate">Notas</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

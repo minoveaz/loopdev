@@ -15,7 +15,10 @@ export function StatsCards({ stats, isLoading, error }: StatsCardsProps) {
     return (
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-background-surface border-border-technical/30 h-24 animate-pulse rounded-lg border" />
+          <div
+            key={i}
+            className="bg-background-surface border-border-technical/30 h-24 animate-pulse rounded-lg border"
+          />
         ))}
       </div>
     );

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Calendar,
-  Clock,
-  Coffee,
-  Info,
-  MapPin,
-  Users,
-} from 'lucide-react';
+import { Calendar, Clock, Coffee, Info, MapPin, Users } from 'lucide-react';
 import type { ActivityCardData } from '@loopdev/public-blocks';
 
 export interface CimoChatContextInspectorWidgetProps {

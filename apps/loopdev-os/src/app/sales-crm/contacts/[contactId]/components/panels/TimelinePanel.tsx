@@ -1,6 +1,7 @@
 'use client';
 
 import { Clock } from 'lucide-react';
+import { Heading } from '@loopdev/ui';
 import { formatDate } from '../types';
 import { SimulatedBadge, EmptyState } from '../sharedComponents';
 import type { TimelineDisplayItem } from '../customer360DisplayTypes';
@@ -15,7 +16,9 @@ export function TimelinePanel({ displayedTimeline }: TimelinePanelProps) {
     <div className="flex w-full min-w-0 flex-1 flex-col space-y-6">
       <div className="border-border-subtle flex items-center justify-between border-b pb-3">
         <div>
-          <h3 className="text-text-main text-sm font-semibold">Activity Timeline</h3>
+          <Heading as="h3" size="sm" weight="semibold" className="text-text-main">
+            Activity Timeline
+          </Heading>
           <p className="text-text-muted mt-0.5 text-xs">
             Real-time audit log of interactions, system state transitions, and touchpoints.
           </p>

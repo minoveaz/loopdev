@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Mail, Phone, Copy, Check } from 'lucide-react';
+import { IconButton } from '@loopdev/ui';
 
 interface ContactDirectChannelsProps {
   email?: string | null;
@@ -56,19 +57,21 @@ export function ContactDirectChannels({
           </a>
         )}
         {email && (
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Copiar email al portapapeles"
             onClick={(e) => handleCopy(email, 'email', e)}
             className="border-border-subtle bg-surface text-text-muted hover:border-border-strong hover:bg-surface-hover hover:text-text-main focus-visible:ring-primary inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors focus-visible:outline-none focus-visible:ring-2"
             title="Copiar email"
-            aria-label="Copiar email al portapapeles"
           >
             {copiedKey === 'email' ? (
               <Check size={14} strokeWidth={2} className="text-emerald-600" />
             ) : (
               <Copy size={14} strokeWidth={1.75} />
             )}
-          </button>
+          </IconButton>
         )}
       </div>
     );
@@ -87,8 +90,11 @@ export function ContactDirectChannels({
           >
             {email}
           </a>
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Copiar email al portapapeles"
             onClick={(e) => handleCopy(email, 'email', e)}
             className="text-text-muted hover:text-text-main rounded p-0.5 opacity-0 transition-opacity group-hover/item:opacity-100"
             title="Copiar email"
@@ -98,7 +104,7 @@ export function ContactDirectChannels({
             ) : (
               <Copy size={12} strokeWidth={1.75} />
             )}
-          </button>
+          </IconButton>
         </div>
       )}
       {phone && (
@@ -112,8 +118,11 @@ export function ContactDirectChannels({
           >
             {phone}
           </a>
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Copiar teléfono al portapapeles"
             onClick={(e) => handleCopy(phone, 'phone', e)}
             className="text-text-muted hover:text-text-main rounded p-0.5 opacity-0 transition-opacity group-hover/item:opacity-100"
             title="Copiar teléfono"
@@ -123,7 +132,7 @@ export function ContactDirectChannels({
             ) : (
               <Copy size={12} strokeWidth={1.75} />
             )}
-          </button>
+          </IconButton>
         </div>
       )}
     </div>

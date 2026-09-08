@@ -12,7 +12,7 @@ import { VoiceToneBlockProps } from './types';
 export const VoiceToneBlock: React.FC<VoiceToneBlockProps> = ({
   profiles,
   isLoading,
-  onProfileClick
+  onProfileClick,
 }) => {
   if (isLoading) {
     return (

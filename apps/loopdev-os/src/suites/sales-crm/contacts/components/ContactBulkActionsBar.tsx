@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CheckCircle2, Download, FolderKanban, X } from 'lucide-react';
-import { Button } from '@loopdev/ui';
+import { Button, IconButton } from '@loopdev/ui';
 
 interface ContactBulkActionsBarProps {
   selectedCount: number;
@@ -66,7 +66,7 @@ export function ContactBulkActionsBar({
               size="sm"
               variant="secondary"
               onClick={onMarkVerified}
-              className="h-8 gap-1.5 px-2.5 text-xs text-emerald-700 dark:text-emerald-300"
+              className="text-status-success h-8 gap-1.5 px-2.5 text-xs"
             >
               <CheckCircle2 size={13} strokeWidth={1.75} />
               <span className="hidden md:inline">Verificar</span>
@@ -75,15 +75,17 @@ export function ContactBulkActionsBar({
 
           <div className="bg-border-subtle mx-1 h-4 w-px" />
 
-          <button
+          <IconButton
             type="button"
+            variant="ghost"
+            size="sm"
+            ariaLabel="Deseleccionar todos"
             onClick={onClearSelection}
             className="text-text-muted hover:bg-surface hover:text-text-main inline-flex h-7 w-7 items-center justify-center rounded-lg transition-colors"
             title="Deseleccionar todos"
-            aria-label="Deseleccionar todos"
           >
             <X size={14} strokeWidth={2} />
-          </button>
+          </IconButton>
         </div>
       </div>
     </div>

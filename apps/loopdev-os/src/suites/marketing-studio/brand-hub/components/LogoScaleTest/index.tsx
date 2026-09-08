@@ -32,23 +32,21 @@ export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo, logoNode }) 
             >
               {logoNode || logo.rawSvg ? (
                 logoNode || (
-                <div 
-                  className="h-full w-full fill-black p-[15%] text-black"
-                  dangerouslySetInnerHTML={{ __html: logo.rawSvg ?? '' }}
-                />
-                )
-              ) : (
-                logo.url ? (
-                  <Image
-                    src={logo.url}
-                    alt={`${scale.label} scale`}
-                    fill
-                    unoptimized
-                    sizes={`${scale.size}px`}
-                    className="h-full w-full object-contain p-[15%]"
+                  <div
+                    className="h-full w-full fill-black p-[15%] text-black"
+                    dangerouslySetInnerHTML={{ __html: logo.rawSvg ?? '' }}
                   />
-                ) : null
-              )}
+                )
+              ) : logo.url ? (
+                <Image
+                  src={logo.url}
+                  alt={`${scale.label} scale`}
+                  fill
+                  unoptimized
+                  sizes={`${scale.size}px`}
+                  className="h-full w-full object-contain p-[15%]"
+                />
+              ) : null}
             </div>
             <span className="text-text-muted font-mono text-[10px] uppercase tracking-tighter">
               {scale.label}
@@ -57,7 +55,9 @@ export const LogoScaleTest: React.FC<LogoScaleTestProps> = ({ logo, logoNode }) 
         ))}
       </div>
       <div className="text-center">
-        <Heading as="h3" size="sm" weight="bold" className="text-text-main">Scale Integrity Check</Heading>
+        <Heading as="h3" size="sm" weight="bold" className="text-text-main">
+          Scale Integrity Check
+        </Heading>
         <LpdText size="nano" className="text-text-muted mt-1 italic">
           Verify symbol recognition at favicon and micro-header sizes.
         </LpdText>

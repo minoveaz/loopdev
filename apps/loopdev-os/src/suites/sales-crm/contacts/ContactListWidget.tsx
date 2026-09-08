@@ -317,8 +317,8 @@ export function ContactListWidget() {
           canManage ? (
             <Button
               type="button"
-              onClick={() => setIsCreateDialogOpen(true)}
               variant="primary"
+              onClick={() => setIsCreateDialogOpen(true)}
               size="sm"
               aria-label="Create contact"
               className="bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
@@ -345,9 +345,11 @@ export function ContactListWidget() {
           ).map((seg) => {
             const isActive = activeSegment === seg.id;
             return (
-              <button
+              <Button
                 key={seg.id}
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => handleSelectSegment(seg.id)}
                 className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                   isActive
@@ -365,7 +367,7 @@ export function ContactListWidget() {
                 >
                   {seg.count}
                 </span>
-              </button>
+              </Button>
             );
           })}
         </div>

@@ -16,36 +16,39 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
   logoNode,
   label,
   description,
-  theme = 'dark'
+  theme = 'dark',
 }) => {
   const isLightTheme = theme === 'light';
   const isBrandTheme = theme === 'brand';
 
   return (
     <div className="bg-background-surface border-border-technical hover:border-primary/30 group flex flex-col overflow-hidden rounded-3xl border shadow-sm transition-all">
-      
       {/* PREVIEW STAGE */}
-      <div className={clsx(
-        "relative flex h-48 items-center justify-center overflow-hidden",
-        isLightTheme ? "bg-white" : isBrandTheme ? "bg-primary" : "bg-background-dark"
-      )}>
+      <div
+        className={clsx(
+          'relative flex h-48 items-center justify-center overflow-hidden',
+          isLightTheme ? 'bg-white' : isBrandTheme ? 'bg-primary' : 'bg-background-dark',
+        )}
+      >
         {/* Grid Background */}
-        <div className={clsx(
-          "pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(120,120,120,1)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,1)_1px,transparent_1px)] bg-[length:20px_20px] opacity-[0.03]",
-          isLightTheme && "opacity-[0.05]"
-        )}></div>
+        <div
+          className={clsx(
+            'pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(120,120,120,1)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,1)_1px,transparent_1px)] bg-[length:20px_20px] opacity-[0.03]',
+            isLightTheme && 'opacity-[0.05]',
+          )}
+        ></div>
 
         {/* The Logo */}
         <div className="relative z-10 max-h-full max-w-full p-8 transition-transform duration-500 group-hover:scale-110">
           {logoNode ? (
             <div className="scale-[1.5]">{logoNode}</div>
           ) : logo?.rawSvg ? (
-            <div 
+            <div
               className={clsx(
-                "h-auto max-h-32 w-auto",
-                isLightTheme ? "fill-slate-900 text-slate-900" : "fill-white text-white"
+                'h-auto max-h-32 w-auto',
+                isLightTheme ? 'fill-slate-900 text-slate-900' : 'fill-white text-white',
               )}
-              dangerouslySetInnerHTML={{ __html: logo.rawSvg }} 
+              dangerouslySetInnerHTML={{ __html: logo.rawSvg }}
             />
           ) : logo?.url ? (
             <Image
@@ -73,7 +76,7 @@ export const LogoVariantCard: React.FC<LogoVariantCardProps> = ({
               </LpdText>
             )}
           </div>
-          
+
           <div className="flex items-center gap-2">
             {/* SVG Action */}
             <Button

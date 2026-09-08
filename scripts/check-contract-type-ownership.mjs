@@ -4,8 +4,30 @@ import ts from 'typescript';
 
 const roots = ['apps', 'modules'];
 const extensions = new Set(['.ts', '.tsx']);
-const contractTypes = ['Organization', 'OrganizationMembership', 'Workspace', 'Permission', 'CrmContact', 'CrmLead', 'CrmOpportunity', 'CrmActivity', 'CrmTask', 'MarketingCampaign', 'MarketingAsset', 'MarketingCopy', 'SocialConnection', 'InsuranceProduct', 'EligibilityResult', 'Quote', 'Onboarding', 'Policy'];
-const forbidden = new RegExp(`^(?!\\s*import\\b)\\s*(?:export\\s+)?(?:interface|type)\\s+(${contractTypes.join('|')})\\b`, 'gm');
+const contractTypes = [
+  'Organization',
+  'OrganizationMembership',
+  'Workspace',
+  'Permission',
+  'CrmContact',
+  'CrmLead',
+  'CrmOpportunity',
+  'CrmActivity',
+  'CrmTask',
+  'MarketingCampaign',
+  'MarketingAsset',
+  'MarketingCopy',
+  'SocialConnection',
+  'InsuranceProduct',
+  'EligibilityResult',
+  'Quote',
+  'Onboarding',
+  'Policy',
+];
+const forbidden = new RegExp(
+  `^(?!\\s*import\\b)\\s*(?:export\\s+)?(?:interface|type)\\s+(${contractTypes.join('|')})\\b`,
+  'gm',
+);
 const violations = [];
 
 function walk(directory) {

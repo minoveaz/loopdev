@@ -45,15 +45,15 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
     return (
       <div
         className={clsx(
-          'bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-sm',
+          'rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm',
           className,
         )}
       >
-        <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
-          <Star className="w-6 h-6 fill-current" />
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+          <Star className="h-6 w-6 fill-current" />
         </div>
         <h3 className="text-base font-bold text-slate-900">¡Gracias por tu valoración!</h3>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="mt-1 text-xs text-slate-500">
           Tu feedback ayuda a mejorar la comunidad de deportistas.
         </p>
       </div>
@@ -64,7 +64,7 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
     <form
       onSubmit={handleSubmit}
       className={clsx(
-        'bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col gap-4',
+        'flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm',
         className,
       )}
     >
@@ -72,8 +72,8 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
         <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--lpd-brand-primary)]">
           Valoración Post-Actividad
         </span>
-        <h3 className="text-base font-bold text-slate-900 mt-0.5">{activityTitle}</h3>
-        <p className="text-xs text-slate-500 mt-1">¿Cómo fue tu experiencia con el Crew?</p>
+        <h3 className="mt-0.5 text-base font-bold text-slate-900">{activityTitle}</h3>
+        <p className="mt-1 text-xs text-slate-500">¿Cómo fue tu experiencia con el Crew?</p>
       </div>
 
       {/* Stars Interactive Rating */}
@@ -88,9 +88,9 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
               onMouseEnter={() => setHoverRating(star)}
               onMouseLeave={() => setHoverRating(null)}
               aria-label={`${star} estrellas`}
-              className="p-1 text-amber-400 hover:scale-110 transition-transform focus:outline-none min-h-[36px] min-w-[36px] flex items-center justify-center"
+              className="flex min-h-[36px] min-w-[36px] items-center justify-center p-1 text-amber-400 transition-transform hover:scale-110 focus:outline-none"
             >
-              <Star className={clsx('w-6 h-6', isFilled ? 'fill-current' : 'text-slate-300')} />
+              <Star className={clsx('h-6 w-6', isFilled ? 'fill-current' : 'text-slate-300')} />
             </button>
           );
         })}
@@ -106,10 +106,10 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
               type="button"
               onClick={() => toggleTag(tag)}
               className={clsx(
-                'px-3 py-1.5 text-xs font-medium rounded-full border transition-colors min-h-[32px]',
+                'min-h-[32px] rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
                 isSelected
-                  ? 'bg-[var(--lpd-brand-primary)]/10 text-[var(--lpd-brand-primary)] border-[var(--lpd-brand-primary)] font-semibold'
-                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100',
+                  ? 'bg-[var(--lpd-brand-primary)]/10 border-[var(--lpd-brand-primary)] font-semibold text-[var(--lpd-brand-primary)]'
+                  : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100',
               )}
             >
               {tag}
@@ -124,12 +124,12 @@ export const FeedbackRatingBlock: React.FC<FeedbackRatingBlockProps> = ({
         onChange={(e) => setComment(e.target.value)}
         placeholder="Comentario adicional para el capitán o la comunidad (opcional)..."
         rows={3}
-        className="w-full px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--lpd-brand-primary)] focus:bg-white transition-all resize-none"
+        className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--lpd-brand-primary)]"
       />
 
       <button
         type="submit"
-        className="w-full py-2.5 px-4 text-xs font-bold text-white bg-[var(--lpd-brand-primary)] hover:bg-[var(--lpd-brand-primary-hover)] rounded-xl transition-colors shadow-sm min-h-[40px]"
+        className="min-h-[40px] w-full rounded-xl bg-[var(--lpd-brand-primary)] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[var(--lpd-brand-primary-hover)]"
       >
         Enviar valoración
       </button>

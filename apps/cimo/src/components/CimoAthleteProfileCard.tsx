@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Activity,
-  Award,
-  Edit3,
-  Flame,
-  MapPin,
-  Mountain,
-  Plus,
-  Target,
-  Users,
-} from 'lucide-react';
+import { Activity, Award, Edit3, Flame, MapPin, Mountain, Plus, Target, Users } from 'lucide-react';
 
 export interface CimoAthleteProfileCardProps {
   user: {

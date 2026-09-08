@@ -20,10 +20,34 @@ interface TypeScaleTableProps {
 
 const SCALE_LEVELS: ScaleLevel[] = [
   { label: 'Display H1', tag: 'H1', power: 3, weight: 900, usage: 'Page titles, Hero sections.' },
-  { label: 'Heading H2', tag: 'H2', power: 2, weight: 700, usage: 'Section titles, Major divisions.' },
-  { label: 'Heading H3', tag: 'H3', power: 1, weight: 700, usage: 'Card titles, Subsection headers.' },
-  { label: 'Body Text', tag: 'P', power: 0, weight: 400, usage: 'Standard content, Articles, Main UI.' },
-  { label: 'Caption / Label', tag: 'Small', power: -1, weight: 500, usage: 'Form labels, Metadata, Tooltips.' },
+  {
+    label: 'Heading H2',
+    tag: 'H2',
+    power: 2,
+    weight: 700,
+    usage: 'Section titles, Major divisions.',
+  },
+  {
+    label: 'Heading H3',
+    tag: 'H3',
+    power: 1,
+    weight: 700,
+    usage: 'Card titles, Subsection headers.',
+  },
+  {
+    label: 'Body Text',
+    tag: 'P',
+    power: 0,
+    weight: 400,
+    usage: 'Standard content, Articles, Main UI.',
+  },
+  {
+    label: 'Caption / Label',
+    tag: 'Small',
+    power: -1,
+    weight: 500,
+    usage: 'Form labels, Metadata, Tooltips.',
+  },
 ];
 
 /**
@@ -34,9 +58,8 @@ const SCALE_LEVELS: ScaleLevel[] = [
 export const TypeScaleTable: React.FC<TypeScaleTableProps> = ({
   baseSize,
   scaleRatio,
-  primaryFont
+  primaryFont,
 }) => {
-  
   return (
     <div className="bg-background-surface dark:bg-background-laboratory border-border-technical/50 w-full overflow-hidden rounded-3xl border shadow-sm">
       <div className="overflow-x-auto">
@@ -51,18 +74,21 @@ export const TypeScaleTable: React.FC<TypeScaleTableProps> = ({
           <tbody className="divide-border-technical/20 divide-y">
             {SCALE_LEVELS.map((level) => {
               const sizes = calculateTypeScale(baseSize, scaleRatio, level.power);
-              
+
               return (
-                <tr key={level.tag} className="hover:bg-background-subtle/20 group transition-colors dark:hover:bg-white/5">
+                <tr
+                  key={level.tag}
+                  className="hover:bg-background-subtle/20 group transition-colors dark:hover:bg-white/5"
+                >
                   {/* PREVIEW COLUMN */}
                   <td className="px-8 py-8">
-                    <div 
+                    <div
                       className="text-text-main max-w-sm truncate"
-                      style={{ 
+                      style={{
                         fontFamily: primaryFont,
                         fontSize: `${sizes.px}px`,
                         fontWeight: level.weight,
-                        lineHeight: 1.2
+                        lineHeight: 1.2,
                       }}
                     >
                       {level.label}
@@ -74,7 +100,9 @@ export const TypeScaleTable: React.FC<TypeScaleTableProps> = ({
                     <div className="flex flex-col gap-1.5 font-mono">
                       <div className="flex items-center gap-2">
                         <span className="text-text-muted/60 text-[10px] uppercase">Size:</span>
-                        <span className="text-text-main text-xs font-bold">{sizes.px}px / {sizes.rem}rem</span>
+                        <span className="text-text-main text-xs font-bold">
+                          {sizes.px}px / {sizes.rem}rem
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-text-muted/60 text-[10px] uppercase">Weight:</span>

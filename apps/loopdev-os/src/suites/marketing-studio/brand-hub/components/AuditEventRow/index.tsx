@@ -14,7 +14,7 @@ export const AuditEventRow: React.FC<AuditEventRowProps> = ({ event, onClick }) 
     token_change: 'palette',
     rule_change: 'shield',
     override: 'layers',
-    metadata_change: 'edit_note'
+    metadata_change: 'edit_note',
   };
 
   return (

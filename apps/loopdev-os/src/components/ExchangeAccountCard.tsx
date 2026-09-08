@@ -26,7 +26,7 @@ export const ExchangeAccountCard: React.FC<ExchangeAccountCardProps> = ({
   account,
   isLoading = false,
   onTestConnection,
-  onSettings
+  onSettings,
 }) => {
   // Determine status color and icon
   const statusConfig = {
@@ -34,26 +34,26 @@ export const ExchangeAccountCard: React.FC<ExchangeAccountCardProps> = ({
       color: 'bg-status-success/10 border-status-success/20',
       textColor: 'text-status-success',
       icon: <CheckCircle className="text-status-success h-5 w-5" />,
-      label: 'Connected'
+      label: 'Connected',
     },
     error: {
       color: 'bg-status-error/10 border-status-error/20',
       textColor: 'text-status-error',
       icon: <AlertCircle className="text-status-error h-5 w-5" />,
-      label: 'Connection Error'
+      label: 'Connection Error',
     },
     disconnected: {
       color: 'bg-background-subtle border-border-technical',
       textColor: 'text-text-muted',
       icon: <AlertCircle className="text-text-muted h-5 w-5" />,
-      label: 'Disconnected'
+      label: 'Disconnected',
     },
     unknown: {
       color: 'bg-status-info/10 border-status-info/20',
       textColor: 'text-status-info',
       icon: <LinkIcon className="text-status-info h-5 w-5" />,
-      label: 'Not Tested'
-    }
+      label: 'Not Tested',
+    },
   };
 
   const currentStatus = statusConfig[account.status];
@@ -69,7 +69,9 @@ export const ExchangeAccountCard: React.FC<ExchangeAccountCardProps> = ({
             </span>
           </div>
           <div className="flex flex-col">
-            <Heading as="h3" size="sm" weight="bold" className="text-text-main">{account.name}</Heading>
+            <Heading as="h3" size="sm" weight="bold" className="text-text-main">
+              {account.name}
+            </Heading>
             <p className="text-text-muted text-xs">{account.provider}</p>
           </div>
         </div>
@@ -125,7 +127,9 @@ export const ExchangeAccountCard: React.FC<ExchangeAccountCardProps> = ({
 
       {/* Actions */}
       <div className="flex gap-2">
-        <Button variant="primary" size="sm"
+        <Button
+          variant="primary"
+          size="sm"
           onClick={() => onTestConnection?.(account.id)}
           disabled={isLoading}
           className="flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors"

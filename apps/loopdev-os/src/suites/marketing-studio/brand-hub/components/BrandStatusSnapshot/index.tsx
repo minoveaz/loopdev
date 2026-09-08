@@ -8,10 +8,7 @@ import { BrandStatusSnapshotProps } from './types';
  * @component BrandStatusSnapshot
  * @description Operational anchor for the brand canvas.
  */
-export const BrandStatusSnapshot: React.FC<BrandStatusSnapshotProps> = ({
-  brand,
-  isLoading
-}) => {
+export const BrandStatusSnapshot: React.FC<BrandStatusSnapshotProps> = ({ brand, isLoading }) => {
   if (isLoading) {
     return (
       <div className="border-border-technical flex flex-col gap-4 border-b py-6">
@@ -28,35 +25,52 @@ export const BrandStatusSnapshot: React.FC<BrandStatusSnapshotProps> = ({
     <div className="border-border-technical flex flex-col gap-4 border-b py-8">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="flex flex-col gap-3">
-          <Heading as="h1" size="2xl" weight="bold" className="text-text-main leading-none tracking-tight">
+          <Heading
+            as="h1"
+            size="2xl"
+            weight="bold"
+            className="text-text-main leading-none tracking-tight"
+          >
             {brand.name}
           </Heading>
-          
+
           {/* BRAND STATUS CLUSTER */}
           <div className="flex flex-wrap items-center gap-2">
             <div className="bg-background-subtle border-border-technical divide-border-technical flex items-center divide-x rounded-md border px-2 py-0.5">
               <div className="pr-2">
-                <LpdText size="nano" weight="bold" className={cn(
-                  "uppercase tracking-widest",
-                  brand.status === 'published' ? 'text-emerald-500' : 'text-yellow-500'
-                )}>
+                <LpdText
+                  size="nano"
+                  weight="bold"
+                  className={cn(
+                    'uppercase tracking-widest',
+                    brand.status === 'published' ? 'text-emerald-500' : 'text-yellow-500',
+                  )}
+                >
                   {brand.status}
                 </LpdText>
               </div>
               <div className="px-2">
-                <LpdText size="nano" weight="bold" className="text-text-muted uppercase tracking-widest opacity-60">
+                <LpdText
+                  size="nano"
+                  weight="bold"
+                  className="text-text-muted uppercase tracking-widest opacity-60"
+                >
                   {brand.mode.replace('-', ' ')}
                 </LpdText>
               </div>
               <div className="pl-2">
-                <LpdText size="nano" weight="bold" className="text-primary font-mono tracking-widest">
+                <LpdText
+                  size="nano"
+                  weight="bold"
+                  className="text-primary font-mono tracking-widest"
+                >
                   {brand.activeVersion}
                 </LpdText>
               </div>
             </div>
 
             {brand.draftVersion && (
-              <TechnicalStatusBadge 
+              <TechnicalStatusBadge
                 label={`DRAFT: ${brand.draftVersion}`}
                 severity="warning"
                 variant="glass"
@@ -67,7 +81,10 @@ export const BrandStatusSnapshot: React.FC<BrandStatusSnapshotProps> = ({
         </div>
 
         <div className="border-border-technical flex flex-col gap-1 border-l pl-4 md:items-end md:border-l-0 md:pl-0">
-          <LpdText size="nano" className="text-text-muted font-mono uppercase tracking-widest opacity-40">
+          <LpdText
+            size="nano"
+            className="text-text-muted font-mono uppercase tracking-widest opacity-40"
+          >
             Last change
           </LpdText>
           <div className="flex items-center gap-2">

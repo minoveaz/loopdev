@@ -197,7 +197,9 @@ export default function NewContactPage() {
                   <User size={16} />
                 </div>
                 <div>
-                  <h2 className="text-text-main text-sm font-semibold">Identidad del Contacto</h2>
+                  <Heading as="h2" size="sm" weight="semibold" className="text-text-main">
+                    Identidad del Contacto
+                  </Heading>
                   <p className="text-text-muted text-xs">
                     Nombre y apellidos para identificar al registro
                   </p>
@@ -266,11 +268,13 @@ export default function NewContactPage() {
               className="space-y-5 p-5 sm:p-6"
             >
               <div className="border-border-subtle flex items-center gap-2.5 border-b pb-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                <div className="bg-status-info/10 text-status-info flex h-8 w-8 items-center justify-center rounded-lg">
                   <Mail size={16} />
                 </div>
                 <div>
-                  <h2 className="text-text-main text-sm font-semibold">Canales de Comunicación</h2>
+                  <Heading as="h2" size="sm" weight="semibold" className="text-text-main">
+                    Canales de Comunicación
+                  </Heading>
                   <p className="text-text-muted text-xs">
                     Introduce al menos un correo o número de contacto
                   </p>
@@ -321,11 +325,13 @@ export default function NewContactPage() {
               className="space-y-5 p-5 sm:p-6"
             >
               <div className="border-border-subtle flex items-center gap-2.5 border-b pb-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                <div className="bg-accent/10 text-accent flex h-8 w-8 items-center justify-center rounded-lg">
                   <Building2 size={16} />
                 </div>
                 <div>
-                  <h2 className="text-text-main text-sm font-semibold">Empresa & Razón Social</h2>
+                  <Heading as="h2" size="sm" weight="semibold" className="text-text-main">
+                    Empresa & Razón Social
+                  </Heading>
                   <p className="text-text-muted text-xs">
                     Vincular a una cuenta comercial u organización
                   </p>
@@ -372,7 +378,9 @@ export default function NewContactPage() {
               radius="xl"
               className="space-y-4 p-5 sm:p-6"
             >
-              <h2 className="text-text-main text-sm font-semibold">Ciclo de Vida del Contacto</h2>
+              <Heading as="h2" size="sm" weight="semibold" className="text-text-main">
+                Ciclo de Vida del Contacto
+              </Heading>
               <div className="space-y-1.5">
                 <label htmlFor="contact-lifecycle" className="text-text-muted text-xs font-medium">
                   Etapa Comercial
@@ -410,8 +418,8 @@ export default function NewContactPage() {
             >
               <div className="flex items-center justify-between">
                 <span className="text-text-muted text-xs font-medium">Verificación Inicial</span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-                  <ShieldCheck size={13} className="text-emerald-600" />
+                <span className="bg-status-success/10 text-status-success inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium">
+                  <ShieldCheck size={13} className="text-status-success" />
                   <span>Conforme</span>
                 </span>
               </div>

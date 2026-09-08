@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CrmFieldGroupKey, CRM_FIELD_GROUPS, CRM_FIELD_CATALOG } from '@loopdev/contracts';
-import { Input, Select } from '@loopdev/ui';
+import { Heading, Input, Select } from '@loopdev/ui';
 import {
   User,
   Mail,
@@ -64,9 +64,14 @@ export function FieldGroupSection({
           <Icon size={16} />
         </div>
         <div>
-          <h3 className="text-text-main text-xs font-bold uppercase tracking-wider">
+          <Heading
+            as="h3"
+            size="xs"
+            weight="bold"
+            className="text-text-main uppercase tracking-wider"
+          >
             {meta.label}
-          </h3>
+          </Heading>
           {!isCompact && <p className="text-text-muted mt-0.5 text-[11px]">{meta.description}</p>}
         </div>
       </div>

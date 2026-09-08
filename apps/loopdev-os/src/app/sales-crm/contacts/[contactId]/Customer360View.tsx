@@ -144,25 +144,27 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
         <div className="flex min-h-0 flex-1 flex-col gap-4 sm:gap-6">
           {/* Simulation Mode Info Banner */}
           {isSimulationActive && (
-            <div className="shadow-xs flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed border-amber-500/50 bg-amber-500/10 px-4 py-2.5 text-xs text-amber-700 dark:text-amber-300">
+            <div className="border-status-warning/50 bg-status-warning/10 text-status-warning shadow-xs flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed px-4 py-2.5 text-xs">
               <div className="flex items-center gap-2">
                 <FlaskConical className="h-4 w-4 shrink-0 text-amber-500" />
                 <span>
                   <strong>Modo Simulación Activo:</strong> Los elementos con borde discontinuo y
                   etiqueta{' '}
-                  <span className="rounded bg-amber-500/20 px-1 py-0.5 font-mono font-bold">
+                  <span className="bg-status-warning/20 rounded px-1 py-0.5 font-mono font-bold">
                     SIM
                   </span>{' '}
                   son datos proyectados para verificar la experiencia visual y geométrica del OS.
                 </span>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={toggleSimulation}
-                className="shrink-0 font-medium underline transition-colors hover:text-amber-900 dark:hover:text-amber-100"
+                className="text-status-warning shrink-0 font-medium underline transition-colors hover:text-status-warning/80"
               >
                 Desactivar
-              </button>
+              </Button>
             </div>
           )}
 
@@ -311,13 +313,15 @@ export function Customer360View({ contactId }: Customer360ViewProps) {
           presentation="overlay"
           width="drawer"
           headerSlot={
-            <button
+            <Button
               type="submit"
+              variant="ghost"
+              size="sm"
               form="customer-360-contact-edit-form"
               className="text-primary text-sm font-bold transition-opacity hover:opacity-80 active:opacity-50 sm:hidden"
             >
               Guardar
-            </button>
+            </Button>
           }
         >
           <ContactDetailDrawerContent

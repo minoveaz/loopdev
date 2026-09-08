@@ -16,8 +16,8 @@ export const TrustBadgeBar: React.FC<TrustBadgeBarProps> = ({ badges, className 
   return (
     <div
       className={clsx(
-        'w-full py-4 px-6 bg-slate-50 border border-slate-200/80 rounded-2xl',
-        'grid grid-cols-2 md:grid-cols-4 gap-4 items-center justify-items-center',
+        'w-full rounded-2xl border border-slate-200/80 bg-slate-50 px-6 py-4',
+        'grid grid-cols-2 items-center justify-items-center gap-4 md:grid-cols-4',
         className,
       )}
     >
@@ -25,7 +25,7 @@ export const TrustBadgeBar: React.FC<TrustBadgeBarProps> = ({ badges, className 
         const Icon = defaultIconMap[badge.iconName ?? 'check'] ?? CheckCircle2;
         return (
           <div key={badge.id} className="flex items-center gap-2.5 text-slate-700">
-            <Icon className="w-5 h-5 text-[var(--lpd-brand-primary)] flex-shrink-0" />
+            <Icon className="h-5 w-5 flex-shrink-0 text-[var(--lpd-brand-primary)]" />
             <span className="text-xs font-semibold tracking-tight">{badge.label}</span>
           </div>
         );

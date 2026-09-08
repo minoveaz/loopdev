@@ -6,14 +6,7 @@ import {
   type ActivityCardData,
   type ChatMessage,
 } from '@loopdev/public-blocks';
-import {
-  Calendar,
-  Check,
-  ChevronRight,
-  MapPin,
-  MessageSquare,
-  Star,
-} from 'lucide-react';
+import { Calendar, Check, ChevronRight, MapPin, MessageSquare, Star } from 'lucide-react';
 
 export interface CimoCrewDetailInspectorProps {
   activity: ActivityCardData | null;
