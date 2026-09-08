@@ -18,7 +18,6 @@
 - [Suite Definition Workflow](./planned/platform/2026-08-14-suite-definition-workflow.md) · `docs/suite-definition-workflow` · fase 0
 - [Reinicio de suites y limpieza de superficies heredadas](./planned/platform/2026-08-14-suite-reset.md) · `chore/platform-shell-deprecation` · fase 0
 - [Evaluacion de dependencias externas para CRM y suites](./planned/platform/2026-08-19-external-dependency-evaluation.md) · fase 0
-- [Platform Sandbox Runtime](./planned/platform/2026-09-07-platform-sandbox-runtime.md) · fase 0
 
 ### Governance
 
@@ -58,6 +57,7 @@
 - [SaaS visual system and experience standardization](./active/platform/2026-08-14-saas-visual-standardization.md) · fase 2
 - [Public Shell Foundation, Contract-Driven Architecture, Public Blocks, SEO, Analytics & Universal Multi-Client Surface System](./active/platform/2026-08-28-public-shell-foundation.md) · `feature/public-shell-foundation` · fase 1
 - [Estandarización del Drawer de Usuario y Contexto de Plataforma](./active/platform/2026-09-06-platform-user-drawer-context.md) · `feature/platform-shell-user-context-standardization` · fase 1
+- [Platform Sandbox Runtime](./active/platform/2026-09-07-platform-sandbox-runtime.md) · fase 0
 
 ### Governance
 

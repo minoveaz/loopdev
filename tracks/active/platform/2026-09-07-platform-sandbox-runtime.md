@@ -1,14 +1,13 @@
 ---
 id: platform-sandbox-runtime
 title: Platform Sandbox Runtime
-status: planned
+status: active
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-08
 owner: platform
 lead: null
 branch: null
-branches:
-  - feature/crm-untitled-ui-integration
+branches: [feature/crm-untitled-ui-integration]
 phase: 0
 pull_requests: []
 issues:
